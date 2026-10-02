@@ -7,17 +7,19 @@ import { AiModeBadge } from '@/ai/AiModeBadge';
 import { useAiStatus } from '@/ai/useAiStatus';
 import { usePreferences } from '@/app/preferences';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
-import { SCREENS, screenPath } from '@/app/screens';
+import { screenPath } from '@/app/screens';
 import { useRepositories } from '@/data/context';
 import { DATABASE_NAMES } from '@/data/databases';
 import { useLiveData } from '@/data/hooks';
 import { t } from '@/i18n/es-MX';
-import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SimulatedDataLabel } from '@/ui/components/labels';
 import { RadioCards } from '@/ui/components/radio-cards';
 import type { ThemePreference } from '@/ui/theme';
+import { useSession } from '@/app/session';
+import { AccountSettings } from './AccountSettings';
+import { DemoDataPanel } from './DemoDataPanel';
 
 const THEME_OPTIONS = [
   { value: 'system', label: t.theme.system, icon: <Monitor /> },
@@ -47,16 +49,13 @@ export function ProfileScreen() {
   const database = usePreferences((state) => state.database);
   const setDatabase = usePreferences((state) => state.setDatabase);
   const aiStatus = useAiStatus();
+  const session = useSession();
 
   return (
     <>
-      <ScreenHeader
-        title={t.screens.profile.title}
-        description={t.screens.profile.description}
-        badges={<Badge variant="info">{t.phase.builtIn(SCREENS.profile.phase)}</Badge>}
-      />
+      <ScreenHeader title={t.screens.profile.title} description={t.screens.profile.description} />
 
-      {/* En computadora las tarjetas van en dos columnas (D-052) */}
+      {/* En computadora las tarjetas van en dos columnas (D-057) */}
       <div className="grid items-start gap-4 lg:grid-cols-2">
         <Card>
           <RadioCards
@@ -68,6 +67,10 @@ export function ProfileScreen() {
           />
           <DatabaseStatus />
         </Card>
+
+        {database === 'demo' ? <DemoDataPanel /> : null}
+
+        {session.status === 'ready' ? <AccountSettings session={session} /> : null}
 
         <Card aria-labelledby="rol-titulo">
           <CardHeader>

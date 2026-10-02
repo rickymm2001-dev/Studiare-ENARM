@@ -193,7 +193,7 @@
       "branch": "internal_medicine",
       "topic": "cardiology",
       "subtopic": "heart_failure",
-      "vignette": "Hombre de 70 años con insuficiencia cardiaca, que llega con disnea intensa de 6 horas, ortopnea y esputo espumoso. Presión arterial de 170/100 mmHg, frecuencia respiratoria de 32 por minuto, saturación de 86% y estertores crepitantes en ambos campos pulmonares.",
+      "vignette": "Hombre de 70 años con insuficiencia cardiaca, que llega con disnea intensa de 6 horas, ortopnea y esputo espumoso. Presión arterial de 170/100 mmHg, frecuencia respiratoria de 32 por minuto, temperatura de 36.7 °C, saturación de 86% y estertores crepitantes en ambos campos pulmonares.",
       "prompt": "¿Cuál es el tratamiento inicial?",
       "polarity": "affirmative",
       "task": "initial_treatment",
@@ -358,7 +358,7 @@
           "rationale": "Una gasometría normal no descarta la embolia."
         }
       ],
-      "canonical": ["a", "b", "c", "i"],
+      "canonical": ["a", "c", "d", "i"],
       "explanation": "Ante la sospecha de embolia pulmonar en un paciente estable se calcula primero la probabilidad clínica con escalas como la de Wells. Con probabilidad baja o intermedia, el estudio inicial es el dímero D, que tiene alta sensibilidad, y un resultado negativo prácticamente descarta la embolia. Si es positivo, se realiza angiotomografía pulmonar, que confirma el diagnóstico. Con probabilidad alta se va directo a la angiotomografía, porque un dímero D negativo no basta. Si la probabilidad es baja y se cumplen todos los criterios PERC no se necesitan más estudios, pero aquí el uso de estrógenos impide aplicarlos. Pedir imagen sin esta estrategia expone a radiación y contraste innecesarios. La probabilidad de cada paciente depende de sus propios datos, no de los resultados de los pacientes anteriores.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la tromboembolia pulmonar"
@@ -372,7 +372,7 @@
       "topic": "infectious_diseases",
       "subtopic": "tuberculosis",
       "vignette": "",
-      "prompt": "Todos los siguientes efectos adversos corresponden al fármaco antituberculoso señalado, EXCEPTO:",
+      "prompt": "Todas las siguientes asociaciones entre el fármaco antituberculoso y su efecto adverso o interacción son correctas, EXCEPTO:",
       "polarity": "negative",
       "task": "complication_prognosis",
       "difficulty": 3,
@@ -394,7 +394,7 @@
           "key": "c",
           "text": "Isoniazida y hepatitis",
           "correct": false,
-          "bias": "serial_position_effect",
+          "bias": "focusing_illusion",
           "rationale": "Se recuerda la hepatotoxicidad de la pirazinamida y se olvida la de la isoniazida."
         },
         {
@@ -430,14 +430,14 @@
           "text": "Etambutol y neuritis óptica",
           "correct": false,
           "bias": "availability_heuristic",
-          "rationale": "Es menos conocido, pero es el efecto más característico del etambutol."
+          "rationale": "Es el efecto más conocido del etambutol, pero al ver otro par con el mismo fármaco se duda de cuál es el correcto."
         },
         {
           "key": "i",
           "text": "Estreptomicina y ototoxicidad",
           "correct": false,
-          "bias": "base_rate_fallacy",
-          "rationale": "Se usa poco y se olvidan sus efectos adversos."
+          "bias": "availability_heuristic",
+          "rationale": "Al usarse poco, sus efectos se recuerdan menos que los de los fármacos de primera línea."
         },
         {
           "key": "j",
@@ -447,7 +447,7 @@
           "rationale": "Genera duda, aunque es consecuencia directa de la inducción enzimática."
         }
       ],
-      "canonical": ["a", "b", "d", "h"],
+      "canonical": ["a", "c", "e", "i"],
       "explanation": "El tratamiento de la tuberculosis combina isoniazida, rifampicina, pirazinamida y etambutol, y cada fármaco tiene efectos adversos característicos. La isoniazida causa hepatitis y neuropatía periférica por deficiencia de piridoxina, que se previene con vitamina B6. La rifampicina tiñe de naranja la orina, las lágrimas y el sudor, es hepatotóxica y es un potente inductor enzimático que reduce el efecto de anticonceptivos hormonales, anticoagulantes y antirretrovirales. La pirazinamida causa hepatotoxicidad e hiperuricemia. El etambutol causa neuritis óptica, con pérdida de la agudeza visual y de la visión de colores, por lo que se vigila la vista. La estreptomicina es ototóxica y nefrotóxica.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de casos nuevos de tuberculosis pulmonar"
@@ -550,7 +550,7 @@
       "topic": "infectious_diseases",
       "subtopic": "dengue",
       "vignette": "Hombre de 24 años con dengue sin signos de alarma, en el segundo día de fiebre, que se maneja en casa. Pregunta qué medicamentos puede tomar.",
-      "prompt": "¿Cuál de los siguientes medicamentos está contraindicado?",
+      "prompt": "¿Cuál de las siguientes medidas está contraindicada?",
       "polarity": "negative",
       "task": "treatment_of_choice",
       "difficulty": 1,
@@ -579,7 +579,7 @@
           "key": "d",
           "text": "Medios físicos para la fiebre",
           "correct": false,
-          "bias": "premature_closure",
+          "bias": "belief_bias",
           "rationale": "Se descartan como poco útiles, aunque son seguros y recomendados."
         },
         {
@@ -608,7 +608,7 @@
           "text": "Omeprazol",
           "correct": false,
           "bias": "availability_heuristic",
-          "rationale": "Es de uso común y no aumenta el riesgo de sangrado."
+          "rationale": "Se piensa en él porque se usa mucho como protector gástrico, pero no aumenta el riesgo de sangrado ni está contraindicado."
         },
         {
           "key": "i",
@@ -830,7 +830,7 @@
           "key": "b",
           "text": "Deficiencia de vitamina B12",
           "correct": false,
-          "bias": "serial_position_effect",
+          "bias": "inattentional_blindness",
           "rationale": "Se recuerda solo el folato y se olvida la otra causa megaloblástica."
         },
         {
@@ -890,7 +890,7 @@
           "rationale": "Se considera raro, aunque es una causa importante en adultos mayores."
         }
       ],
-      "canonical": ["a", "b", "c", "d"],
+      "canonical": ["a", "e", "h", "i"],
       "explanation": "La anemia macrocítica tiene un volumen corpuscular medio mayor de 100 fL. Se divide en megaloblástica, por deficiencia de vitamina B12 o de ácido fólico o por fármacos que alteran la síntesis de DNA, como metotrexato, hidroxiurea o zidovudina, y no megaloblástica, por alcohol, enfermedad hepática, hipotiroidismo, reticulocitosis por hemólisis o sangrado y síndromes mielodisplásicos. El estudio inicial incluye frotis, reticulocitos, vitamina B12, folato y función hepática y tiroidea. La talasemia menor causa anemia microcítica e hipocrómica, con volumen corpuscular muy bajo para el grado de anemia, eritrocitos normales o elevados y ferritina normal, lo que la distingue de la deficiencia de hierro.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la anemia por deficiencia de vitamina B12"
@@ -903,7 +903,7 @@
       "branch": "internal_medicine",
       "topic": "endocrinology",
       "subtopic": "diabetic_emergencies",
-      "vignette": "Mujer de 76 años con diabetes tipo 2, traída por somnolencia y confusión de 3 días, con poliuria y poca ingesta de líquidos. Glucosa de 950 mg/dL, sodio de 148 mEq/L, osmolaridad sérica efectiva de 345 mOsm/kg, pH de 7.36, bicarbonato de 22 mEq/L y cetonas en sangre negativas.",
+      "vignette": "Mujer de 76 años con diabetes tipo 2, traída por somnolencia y confusión de 3 días, con poliuria y poca ingesta de líquidos. Glucosa de 950 mg/dL, sodio de 148 mEq/L, osmolalidad sérica efectiva de 349 mOsm/kg, pH de 7.36, bicarbonato de 22 mEq/L y cetonas en sangre negativas.",
       "prompt": "¿Cuál es el diagnóstico más probable?",
       "polarity": "affirmative",
       "task": "diagnosis",
@@ -980,7 +980,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "f"],
-      "explanation": "El estado hiperglucémico hiperosmolar es más frecuente en adultos mayores con diabetes tipo 2 y se desarrolla en días, a menudo desencadenado por infección o poca ingesta de líquidos. Se caracteriza por glucosa mayor de 600 mg/dL, osmolaridad sérica efectiva mayor de 320 mOsm/kg, deshidratación grave y alteración del estado mental, sin acidosis importante ni cetonemia significativa, a diferencia de la cetoacidosis diabética. El tratamiento inicial es reponer volumen con solución salina y después iniciar insulina intravenosa en infusión, con corrección del potasio y búsqueda del desencadenante. La glucosa y la osmolaridad deben bajar de forma gradual. Su mortalidad es mayor que la de la cetoacidosis.",
+      "explanation": "El estado hiperglucémico hiperosmolar es más frecuente en adultos mayores con diabetes tipo 2 y se desarrolla en días, a menudo desencadenado por infección o poca ingesta de líquidos. Se caracteriza por glucosa mayor de 600 mg/dL, osmolalidad sérica efectiva mayor de 320 mOsm/kg, o de 300 según el consenso internacional reciente, deshidratación grave y alteración del estado mental, sin acidosis importante ni cetonemia significativa, a diferencia de la cetoacidosis diabética. El tratamiento inicial es reponer volumen con solución salina y después iniciar insulina intravenosa en infusión, con corrección del potasio y búsqueda del desencadenante. La glucosa y la osmolalidad deben bajar de forma gradual. Su mortalidad es mayor que la de la cetoacidosis.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética y el estado hiperosmolar hiperglucémico en el adulto"
       ]
@@ -1023,7 +1023,7 @@
           "text": "Ninguna hasta que los CD4 bajen de 50",
           "correct": false,
           "bias": "serial_position_effect",
-          "rationale": "Confunde el umbral de 200 de Pneumocystis con el de 50 de otras infecciones."
+          "rationale": "Recuerda el último umbral que estudió, el de 50 para Mycobacterium avium, y olvida el de 200 para Pneumocystis."
         },
         {
           "key": "e",
@@ -1747,7 +1747,7 @@
           "text": "Esperar al año de vida para cerrarlo",
           "correct": false,
           "bias": "omission_bias",
-          "rationale": "Un conducto con repercusión en un prematuro causa complicaciones si no se trata."
+          "rationale": "Deja sin tratar un conducto con repercusión hemodinámica en un prematuro sintomático, cuando la guía indica cierre farmacológico."
         },
         {
           "key": "g",
@@ -1843,7 +1843,7 @@
           "text": "Punción traumática",
           "correct": false,
           "bias": "framing_effect",
-          "rationale": "Interpreta los leucocitos como contaminación con sangre, sin eritrocitos que lo apoyen."
+          "rationale": "Atribuye los leucocitos a contaminación con sangre, pero la glucosa baja y los diplococos en el Gram no se explican por una punción traumática."
         },
         {
           "key": "h",
@@ -1863,8 +1863,8 @@
           "key": "j",
           "text": "Líquido normal para la edad",
           "correct": false,
-          "bias": "omission_bias",
-          "rationale": "Pasa por alto alteraciones claras."
+          "bias": "inattentional_blindness",
+          "rationale": "Ignora la pleocitosis neutrofílica, la hiperproteinorraquia y la hipoglucorraquia, que no son normales a ninguna edad."
         }
       ],
       "canonical": ["a", "b", "c", "d"],
@@ -1977,7 +1977,7 @@
       "options": [
         {
           "key": "a",
-          "text": "Edad entre 1 y 10 años",
+          "text": "Edad de 1 a menos de 10 años",
           "correct": true,
           "rationale": "Es un factor de buen pronóstico."
         },
@@ -1990,7 +1990,7 @@
         },
         {
           "key": "c",
-          "text": "Edad mayor de 10 años",
+          "text": "Edad de 10 años o más",
           "correct": false,
           "bias": "serial_position_effect",
           "rationale": "Se recuerda solo el extremo de los lactantes y se olvida el de los adolescentes."
@@ -2041,12 +2041,12 @@
           "key": "j",
           "text": "Reordenamiento del gen KMT2A",
           "correct": false,
-          "bias": "availability_heuristic",
-          "rationale": "Es poco conocido, aunque es frecuente en lactantes y de mal pronóstico."
+          "bias": "ambiguity_effect",
+          "rationale": "Genera duda por ser un marcador molecular poco familiar, aunque es frecuente en lactantes y de mal pronóstico."
         }
       ],
       "canonical": ["a", "b", "c", "d"],
-      "explanation": "El pronóstico de la leucemia linfoblástica aguda en niños es bueno, con curación en la mayoría de los casos, y el tratamiento se ajusta al riesgo. Son factores favorables la edad entre 1 y 10 años, leucocitos menores de 50,000/µL, linaje B, hiperdiploidía, la translocación ETV6-RUNX1 y la respuesta rápida al tratamiento. Son factores de mal pronóstico la edad menor de 1 año o mayor de 10, leucocitos de 50,000/µL o más, infiltración del sistema nervioso central, linaje T, hipodiploidía, cromosoma Filadelfia, reordenamientos de KMT2A y enfermedad residual mínima positiva al final de la inducción. La respuesta temprana al tratamiento es el factor pronóstico más importante.",
+      "explanation": "El pronóstico de la leucemia linfoblástica aguda en niños es bueno, con curación en la mayoría de los casos, y el tratamiento se ajusta al riesgo. Son factores favorables la edad de 1 a menos de 10 años, leucocitos menores de 50,000/µL, linaje B, hiperdiploidía, la translocación ETV6-RUNX1 y la respuesta rápida al tratamiento. Son factores de mal pronóstico la edad menor de 1 año o de 10 años o más, leucocitos de 50,000/µL o más, infiltración del sistema nervioso central, linaje T, hipodiploidía, cromosoma Filadelfia, reordenamientos de KMT2A y enfermedad residual mínima positiva al final de la inducción. La respuesta temprana al tratamiento es el factor pronóstico más importante.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la leucemia linfoblástica aguda en niños"
       ]
@@ -2093,10 +2093,10 @@
         },
         {
           "key": "e",
-          "text": "Enema de bario sin guía de imagen",
+          "text": "Reducción a ciegas con enema rectal evacuante, sin control de imagen",
           "correct": false,
           "bias": "status_quo_bias",
-          "rationale": "Es una técnica antigua y menos segura."
+          "rationale": "No permite ver la reducción ni detectar a tiempo una perforación, y no es un método válido."
         },
         {
           "key": "f",
@@ -2223,7 +2223,7 @@
           "rationale": "Se ancla en la escarlatina como enfermedad aparte, aunque la causa el mismo estreptococo."
         }
       ],
-      "canonical": ["a", "b", "c", "g"],
+      "canonical": ["a", "b", "c", "d"],
       "explanation": "La faringitis por estreptococo beta hemolítico del grupo A es más frecuente entre los 5 y 15 años y suele iniciar de forma súbita con odinofagia, fiebre, exudado amigdalino, adenopatías cervicales anteriores dolorosas y, en ocasiones, petequias en el paladar, cefalea, dolor abdominal o exantema escarlatiniforme. La ausencia de tos también apoya el origen bacteriano. Escalas como la de Centor modificada combinan estos datos para decidir quién requiere prueba rápida o cultivo. La tos, la rinorrea, la conjuntivitis, la disfonía y las úlceras orales sugieren una infección viral, que es la causa de la mayoría de las faringitis y no requiere antibiótico.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la faringoamigdalitis aguda"
@@ -2331,7 +2331,7 @@
       "options": [
         {
           "key": "a",
-          "text": "Vigilancia con indicaciones de alarma, ultrasonido de control y cesárea programada entre las semanas 36 y 37 si persiste",
+          "text": "Cesárea programada entre las semanas 36 y 37 si persiste en el ultrasonido de control",
           "correct": true,
           "rationale": "Evita el sangrado del trabajo de parto con un nacimiento planeado cerca del término."
         },
@@ -2344,7 +2344,7 @@
         },
         {
           "key": "c",
-          "text": "Cesárea inmediata",
+          "text": "Hospitalización y cesárea inmediata para evitar el primer sangrado",
           "correct": false,
           "bias": "loss_aversion",
           "rationale": "Busca evitar el sangrado con un nacimiento prematuro innecesario."
@@ -2396,7 +2396,7 @@
           "text": "Planear parto vaginal porque la placenta seguramente migrará",
           "correct": false,
           "bias": "belief_bias",
-          "rationale": "Se cree que la placenta siempre sube, aunque una placenta previa total rara vez se resuelve a esta edad."
+          "rationale": "Supone que la placenta siempre migra, aunque una placenta previa total a las 32 semanas persiste con frecuencia y solo el ultrasonido de control decide la vía de nacimiento."
         }
       ],
       "canonical": ["a", "b", "c", "d"],
@@ -2594,7 +2594,7 @@
       "options": [
         {
           "key": "a",
-          "text": "Vigilancia con libertad de movimiento, hidratación y revaloración, sin intervenciones de rutina",
+          "text": "Vigilancia expectante con auscultación fetal intermitente y libertad de movimiento",
           "correct": true,
           "rationale": "Es una fase latente normal que no requiere intervenciones."
         },
@@ -2607,7 +2607,7 @@
         },
         {
           "key": "c",
-          "text": "Conducción con oxitocina",
+          "text": "Conducción con oxitocina para acortar la fase latente",
           "correct": false,
           "bias": "framing_effect",
           "rationale": "Interpreta la fase latente lenta como falta de progreso."
@@ -2747,8 +2747,8 @@
           "key": "j",
           "text": "Analgésico y alta porque el desmayo fue por nervios",
           "correct": false,
-          "bias": "halo_horn_effect",
-          "rationale": "Atribuye el desmayo a nervios por la edad de la paciente y pasa por alto el choque."
+          "bias": "premature_closure",
+          "rationale": "Atribuye el desmayo a una causa emocional y pasa por alto la hipotensión, la taquicardia y el hemoperitoneo."
         }
       ],
       "canonical": ["a", "b", "c", "d"],
@@ -2763,7 +2763,7 @@
       "topic": "gynecologic_infections",
       "subtopic": "vaginitis",
       "vignette": "Mujer de 29 años con flujo vaginal fétido y poco prurito. Se sospecha vaginosis bacteriana.",
-      "prompt": "¿Cuál de los siguientes hallazgos NO corresponde a vaginosis bacteriana?",
+      "prompt": "¿Cuál de los siguientes enunciados NO corresponde a la vaginosis bacteriana?",
       "polarity": "negative",
       "task": "diagnosis",
       "difficulty": 2,
@@ -2827,8 +2827,8 @@
           "key": "i",
           "text": "Asociación con parto pretérmino en el embarazo",
           "correct": false,
-          "bias": "base_rate_fallacy",
-          "rationale": "Se subestima una complicación conocida."
+          "bias": "inattentional_blindness",
+          "rationale": "Se pasa por alto que la vaginosis en el embarazo se asocia con parto pretérmino."
         },
         {
           "key": "j",
@@ -2838,7 +2838,7 @@
           "rationale": "La falta de un síntoma parece descartar la infección, aunque es lo esperado."
         }
       ],
-      "canonical": ["a", "b", "c", "d"],
+      "canonical": ["a", "d", "e", "j"],
       "explanation": "La vaginosis bacteriana es la causa más frecuente de flujo vaginal anormal en mujeres en edad reproductiva. Se debe a la disminución de lactobacilos con sobrecrecimiento de Gardnerella vaginalis y anaerobios, y no es propiamente una infección de transmisión sexual. Se manifiesta con flujo grisáceo, homogéneo y fétido, con poco prurito e inflamación. El diagnóstico clínico usa los criterios de Amsel, que requieren tres de cuatro datos, flujo característico, pH mayor de 4.5, olor a pescado con hidróxido de potasio y células clave. La tinción de Gram con la puntuación de Nugent es el estándar de laboratorio. Se trata con metronidazol y en el embarazo se asocia con parto pretérmino.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la vaginitis infecciosa en mujeres en edad reproductiva"
@@ -2868,7 +2868,7 @@
           "text": "Cáncer de ovario",
           "correct": false,
           "bias": "clustering_illusion",
-          "rationale": "Une la infección pélvica con un cáncer sin relación causal."
+          "rationale": "Se ha descrito una asociación débil y no establecida, pero no es una secuela reconocida de la enfermedad pélvica inflamatoria como el daño tubario."
         },
         {
           "key": "c",
@@ -2881,8 +2881,8 @@
           "key": "d",
           "text": "Embarazo molar",
           "correct": false,
-          "bias": "base_rate_fallacy",
-          "rationale": "No tiene relación con la infección pélvica."
+          "bias": "clustering_illusion",
+          "rationale": "Une la infección pélvica previa con una alteración del embarazo sin relación causal."
         },
         {
           "key": "e",
@@ -3101,8 +3101,8 @@
           "key": "j",
           "text": "Infección previa por Chlamydia trachomatis",
           "correct": false,
-          "bias": "base_rate_fallacy",
-          "rationale": "Se subestima su papel como cofactor."
+          "bias": "availability_heuristic",
+          "rationale": "Se recuerda la clamidia solo como causa de infertilidad y no como cofactor de la persistencia del virus del papiloma humano."
         }
       ],
       "canonical": ["a", "b", "c", "g"],
@@ -3190,8 +3190,8 @@
           "key": "j",
           "text": "Tabique vaginal transverso",
           "correct": false,
-          "bias": "confirmation_bias",
-          "rationale": "Busca confirmar una obstrucción vaginal, aunque el ultrasonido no muestra útero."
+          "bias": "inattentional_blindness",
+          "rationale": "Ignora que el ultrasonido no muestra útero. En el tabique transverso el útero existe y hay hematocolpos."
         }
       ],
       "canonical": ["a", "b", "c", "d"],
@@ -3573,8 +3573,8 @@
           "key": "b",
           "text": "Hernia inguinal indirecta",
           "correct": false,
-          "bias": "base_rate_fallacy",
-          "rationale": "Es la hernia más frecuente incluso en mujeres, pero sale por arriba del ligamento inguinal."
+          "bias": "availability_heuristic",
+          "rationale": "Es la hernia más frecuente, incluso en mujeres, pero sale por arriba del ligamento inguinal y no por debajo."
         },
         {
           "key": "c",
@@ -3615,8 +3615,8 @@
           "key": "h",
           "text": "Quiste del conducto de Nuck",
           "correct": false,
-          "bias": "ambiguity_effect",
-          "rationale": "Elige una entidad poco clara que no causa oclusión intestinal."
+          "bias": "complexity_bias",
+          "rationale": "Elige una entidad rara cuando la hernia femoral explica el abultamiento y la oclusión intestinal."
         },
         {
           "key": "i",
@@ -3683,8 +3683,8 @@
           "key": "e",
           "text": "Valorar primero la circulación y colocar dos accesos venosos",
           "correct": false,
-          "bias": "serial_position_effect",
-          "rationale": "Altera el orden de la revisión primaria, que inicia con la vía aérea."
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la circulación y descuida una vía aérea obstruida, que es la primera prioridad de la revisión primaria."
         },
         {
           "key": "f",
@@ -3763,8 +3763,8 @@
           "key": "d",
           "text": "Equimosis periorbitaria o retroauricular",
           "correct": false,
-          "bias": "complexity_bias",
-          "rationale": "Parecen hallazgos menores, aunque sugieren fractura de la base del cráneo."
+          "bias": "inattentional_blindness",
+          "rationale": "Se pasan por alto signos que sugieren fractura de la base del cráneo."
         },
         {
           "key": "e",
@@ -3928,7 +3928,7 @@
           "text": "Quemadura de espesor parcial mayor de 10% de la superficie corporal",
           "correct": false,
           "bias": "anchoring",
-          "rationale": "Se ancla en porcentajes mayores, aunque desde 10% se refiere."
+          "rationale": "Se ancla en porcentajes mayores, aunque basta con más de 10% de la superficie corporal para referir."
         },
         {
           "key": "c",
@@ -4297,8 +4297,8 @@
           "key": "d",
           "text": "Amputación inmediata",
           "correct": false,
-          "bias": "loss_aversion",
-          "rationale": "Se reserva para la extremidad no viable, con parálisis y rigidez."
+          "bias": "complexity_bias",
+          "rationale": "Elige la medida más drástica cuando la extremidad todavía es viable y puede salvarse con revascularización."
         },
         {
           "key": "e",
@@ -4414,7 +4414,7 @@
           "key": "h",
           "text": "Nefrectomía",
           "correct": false,
-          "bias": "loss_aversion",
+          "bias": "complexity_bias",
           "rationale": "Busca eliminar el foco con una cirugía desproporcionada."
         },
         {

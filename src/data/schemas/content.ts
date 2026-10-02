@@ -164,3 +164,48 @@ export const DemoQuestionBatchSchema = z.strictObject({
   questions: z.array(DemoQuestionSchema).min(1),
 });
 export type DemoQuestionBatch = z.infer<typeof DemoQuestionBatchSchema>;
+
+/** Nota de un mazo precargado de la demo, ya saneada (D-053) */
+const DemoDeckNoteBase = {
+  key: z.string().regex(/^[a-z0-9-]+$/),
+  /** Etiqueta original del mazo, por ejemplo Medicina-Interna::Hematología::Anemias */
+  sourceTag: z.string().max(200),
+  tags: z.array(z.string().min(1).max(80)).max(20),
+  /** Rama y tema de la taxonomía, o null si el mazo no corresponde a ninguno, como Urgencias */
+  branch: TaxonomyKeySchema.nullable(),
+  topic: TaxonomyKeySchema.nullable(),
+};
+
+export const DemoDeckNoteSchema = z.discriminatedUnion('kind', [
+  z.strictObject({
+    ...DemoDeckNoteBase,
+    kind: z.literal('basic'),
+    front: z.string().min(1).max(20_000),
+    back: z.string().max(20_000),
+  }),
+  z.strictObject({
+    ...DemoDeckNoteBase,
+    kind: z.literal('cloze'),
+    text: z.string().min(1).max(20_000),
+    extra: z.string().max(20_000),
+    /** Números de hueco, una tarjeta por cada uno */
+    ordinals: z.array(z.int().min(1).max(100)).min(1),
+  }),
+]);
+export type DemoDeckNote = z.infer<typeof DemoDeckNoteSchema>;
+
+export const DemoDeckFileSchema = z.strictObject({
+  version: z.literal(1),
+  key: z.string().regex(/^[a-z0-9-]+$/),
+  name: z.string().min(1).max(120),
+  description: z.string().max(1000),
+  /** Autor del mazo, con crédito visible (D-053) */
+  author: z.string().min(1).max(80),
+  status: ReviewStatusSchema,
+  /** Imágenes del mazo, servidas desde public. Ruta absoluta desde la raíz del sitio */
+  media: z.array(
+    z.string().regex(/^\/demo-media\/[a-z0-9-]+\/m-\d{4}\.(?:jpg|jpeg|png|gif|webp)$/),
+  ),
+  notes: z.array(DemoDeckNoteSchema).min(1),
+});
+export type DemoDeckFile = z.infer<typeof DemoDeckFileSchema>;

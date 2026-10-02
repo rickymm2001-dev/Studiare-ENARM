@@ -52,11 +52,12 @@ function simulateStudent(
   return result;
 }
 
-describe('análisis por sesgo (7.4)', () => {
+describe('análisis por sesgo con el método original de 7.4', () => {
   const population = Array.from({ length: 100 }, (_, index) =>
     simulateStudent(`pob-${index}`, 200),
   );
-  const baseline = populationBaseline(population, 'simulated');
+  const baseline = populationBaseline(population, 'simulated', 'exposure');
+  const exposure = { method: 'exposure', familywise: false } as const;
 
   it('la línea base viene de la población y dice su fuente', () => {
     expect(baseline.source).toBe('simulated');
@@ -64,7 +65,12 @@ describe('análisis por sesgo (7.4)', () => {
   });
 
   it('calibra hasta tener 40 errores con etiqueta', () => {
-    const analysis = analyzeBias({ exposures: simulateStudent('pocos', 30), baseline, thresholds });
+    const analysis = analyzeBias({
+      exposures: simulateStudent('pocos', 30),
+      baseline,
+      thresholds,
+      ...exposure,
+    });
     expect(analysis.taggedErrors).toBeLessThan(40);
     expect(analysis.tags.every((tag) => tag.status.kind === 'calibrating')).toBe(true);
     expect(analysis.patterns).toEqual([]);
@@ -75,6 +81,7 @@ describe('análisis por sesgo (7.4)', () => {
       exposures: simulateStudent('anclado', 300, { anchoring: 4 }),
       baseline,
       thresholds,
+      ...exposure,
     });
     expect(biased.patterns).toEqual(['anchoring']);
     const anchoring = biased.tags.find((tag) => tag.tag === 'anchoring');
@@ -83,6 +90,7 @@ describe('análisis por sesgo (7.4)', () => {
       exposures: simulateStudent('neutral', 300),
       baseline,
       thresholds,
+      ...exposure,
     });
     expect(neutral.patterns).toEqual([]);
   });
@@ -98,6 +106,76 @@ describe('análisis por sesgo (7.4)', () => {
       baseline: null,
       status: { kind: 'no_pattern' },
     });
+  });
+});
+
+describe('método por defecto, parte de los errores con Bonferroni (D-051)', () => {
+  it('es el que usan analyzeBias y populationBaseline sin opciones', () => {
+    const population = Array.from({ length: 50 }, (_, index) => simulateStudent(`d-${index}`, 200));
+    const baseline = populationBaseline(population, 'simulated');
+    expect(baseline.method).toBe('error_share');
+    const analysis = analyzeBias({
+      exposures: simulateStudent('anclado', 300, { anchoring: 4 }),
+      baseline,
+      thresholds,
+    });
+    expect(analysis.patterns).toEqual(['anchoring']);
+  });
+
+  /** Alumno que falla mucho, pero reparte sus errores como la población */
+  function weakStudent(seed: string): BiasExposure[] {
+    const rng = createRng(seed);
+    return Array.from({ length: 400 }, () => {
+      const visible = [rng.pick(TAGS), rng.pick(TAGS), rng.pick(TAGS)];
+      return { visibleTags: visible, chosenTag: rng.chance(0.75) ? rng.pick(visible) : null };
+    });
+  }
+  const population = Array.from({ length: 100 }, (_, index) =>
+    simulateStudent(`pob-${index}`, 200),
+  );
+
+  it('el método de 7.4 confunde fallar mucho con atracción y la variante no', () => {
+    const exposureBase = populationBaseline(population, 'simulated', 'exposure');
+    const shareBase = populationBaseline(population, 'simulated', 'error_share');
+    expect(shareBase.method).toBe('error_share');
+    const weak = weakStudent('d1');
+    expect(
+      analyzeBias({
+        exposures: weak,
+        baseline: exposureBase,
+        thresholds,
+        method: 'exposure',
+        familywise: false,
+      }).patterns.length,
+    ).toBeGreaterThan(0);
+    expect(
+      analyzeBias({
+        exposures: weak,
+        baseline: shareBase,
+        thresholds,
+        method: 'error_share',
+        familywise: true,
+      }).patterns,
+    ).toEqual([]);
+  });
+
+  it('la variante con corrección sigue detectando un sesgo sembrado', () => {
+    const shareBase = populationBaseline(population, 'simulated', 'error_share');
+    const analysis = analyzeBias({
+      exposures: simulateStudent('anclado', 300, { anchoring: 4 }),
+      baseline: shareBase,
+      thresholds,
+      method: 'error_share',
+      familywise: true,
+    });
+    expect(analysis.patterns).toEqual(['anchoring']);
+  });
+
+  it('rechaza una línea base calculada con otro método', () => {
+    const exposureBase = populationBaseline(population, 'simulated', 'exposure');
+    expect(() =>
+      analyzeBias({ exposures: [], baseline: exposureBase, thresholds, method: 'error_share' }),
+    ).toThrow(RangeError);
   });
 });
 

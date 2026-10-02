@@ -45,9 +45,9 @@ describe('esquemas y tablas', () => {
     expect(Object.keys(storesFor('demo'))).toHaveLength(TABLE_NAMES.length);
   });
 
-  it('hay un esquema para cada uno de los 30 tipos de evento de 6.3', () => {
-    expect(EVENT_TYPES).toHaveLength(30);
-    expect(AppEventSchema.options).toHaveLength(30);
+  it('hay un esquema para los 30 tipos de evento de 6.3 más el cambio de suscripción simulada', () => {
+    expect(EVENT_TYPES).toHaveLength(31);
+    expect(AppEventSchema.options).toHaveLength(31);
   });
 
   it('los ajustes por defecto siguen la especificación', () => {
@@ -60,6 +60,18 @@ describe('esquemas y tablas', () => {
       negationHighlightExam: false,
       errorsToReview: true,
       optionsShown: 4,
+      branches: ['internal_medicine', 'pediatrics', 'obstetrics_gynecology', 'general_surgery'],
+      // Racha con 20 tarjetas (9.4) y Pomodoro de 25, 5 y 15 cada 4 ciclos (9.2)
+      dailyGoal: { metric: 'cards', value: 20 },
+      followedDecks: [],
+      pomodoro: {
+        focusMinutes: 25,
+        shortBreakMinutes: 5,
+        longBreakMinutes: 15,
+        cyclesBeforeLong: 4,
+        sound: true,
+        notifications: false,
+      },
     });
     expect(() => UserSettingsSchema.parse({ desiredRetention: 0.99 })).toThrow();
     expect(UserSchema.parse(makeUser()).timeZone).toBe('America/Merida');

@@ -1,5 +1,5 @@
 // Genera los íconos provisionales de la PWA (D-016) a partir de un SVG.
-// El ícono de la pestaña ya es el símbolo de Studiare (public/favicon-*.png, D-053) y no sale de aquí.
+// El ícono de la pestaña ya es el símbolo de Studiare (public/favicon-*.png, D-058) y no sale de aquí.
 // Usa el Chromium de Playwright que vive dentro del proyecto. Se corre una vez y el resultado
 // queda en public/. Para regenerarlos: node scripts/generate-icons.ts
 import { join } from 'node:path';

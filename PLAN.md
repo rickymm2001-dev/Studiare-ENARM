@@ -38,7 +38,7 @@ IA (src/ai → server)                        cliente del proxy, esquemas, fixtu
 2. El caso de uso arma el payload, lo valida con zod y lo agrega a la bitácora con `eventRepo.append`
 3. En la misma transacción de Dexie actualiza las cachés derivadas (estado FSRS, Elo, XP, racha) llamando a los motores puros
 4. Si una caché se corrompe o cambia un motor, `rebuildDerivedState` la recalcula desde cero leyendo la bitácora
-5. Nada edita ni borra eventos. La única excepción es Borrar mis datos, que elimina la base completa del alumno por petición suya (4.5)
+5. Nada edita ni borra eventos. Hay dos excepciones, y las dos eliminan una base completa, nunca eventos sueltos. Borrar mis datos elimina la base del alumno por petición suya (4.5). Regenerar desde cero elimina la base de demostración, que no tiene datos reales, con confirmación y solo en enarm_demo (11.3, D-052)
 
 ### 2.3 Proxy de IA
 

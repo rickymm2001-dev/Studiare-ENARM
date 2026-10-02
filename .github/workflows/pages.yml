@@ -1,4 +1,4 @@
-# Publica la app en GitHub Pages en cada push a main (D-050).
+# Publica la app en GitHub Pages en cada push a main (D-055).
 # La demo publicada corre con la IA en modo simulado. No usa secretos y la clave nunca llega aquí.
 name: pages
 

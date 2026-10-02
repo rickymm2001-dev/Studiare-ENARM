@@ -245,6 +245,66 @@ export function fatigueSignal(
   };
 }
 
+/**
+ * Patrón de fatiga por tendencia dentro de las sesiones largas (variante probada tras 14.2). En
+ * lugar de comparar tercios, ajusta una recta de la exactitud ajustada por dificultad contra el
+ * minuto de la sesión, con cada sesión centrada en su propia media para no mezclar sesiones
+ * buenas y malas. Patrón probable si la pendiente queda por debajo de −1.64 errores estándar (una
+ * cola, J) y el tiempo por palabra sube con los minutos. Usa todas las respuestas de la sesión.
+ * accuracyDrop, standardError y timeIncrease se expresan como cambio en 30 minutos
+ */
+export function fatigueTrendSignal(
+  responses: readonly ResponseRecord[],
+  thresholds: Thresholds['behavior'],
+): FatigueSignal {
+  const bySession = new Map<string, ResponseRecord[]>();
+  for (const response of responses) {
+    const list = bySession.get(response.sessionId) ?? [];
+    list.push(response);
+    bySession.set(response.sessionId, list);
+  }
+  const points: { x: number; y: number; t: number }[] = [];
+  let sessions = 0;
+  for (const list of bySession.values()) {
+    const minutes = Math.max(...list.map((response) => response.minuteInSession));
+    if (minutes <= thresholds.fatigueMinSessionMinutes || list.length < 6) continue;
+    sessions += 1;
+    const mean = (values: readonly number[]) =>
+      values.reduce((sum, value) => sum + value, 0) / values.length;
+    const xs = list.map((response) => response.minuteInSession);
+    const ys = list.map((response) => (response.correct ? 1 : 0) - response.expected);
+    const ts = list.map(logPace);
+    const mx = mean(xs);
+    const my = mean(ys);
+    const mt = mean(ts);
+    list.forEach((_, index) => {
+      points.push({
+        x: (xs[index] as number) - mx,
+        y: (ys[index] as number) - my,
+        t: (ts[index] as number) - mt,
+      });
+    });
+  }
+  const sxx = points.reduce((sum, point) => sum + point.x * point.x, 0);
+  const slope = sxx === 0 ? 0 : points.reduce((sum, point) => sum + point.x * point.y, 0) / sxx;
+  const timeSlope = sxx === 0 ? 0 : points.reduce((sum, point) => sum + point.x * point.t, 0) / sxx;
+  const residualVariance =
+    points.length > 2
+      ? points.reduce((sum, point) => sum + (point.y - slope * point.x) ** 2, 0) /
+        (points.length - 2)
+      : Number.POSITIVE_INFINITY;
+  const standardError = sxx === 0 ? Number.POSITIVE_INFINITY : Math.sqrt(residualVariance / sxx);
+  const ready = sessions >= MIN_LONG_SESSIONS_FOR_FATIGUE;
+  return {
+    sessions,
+    accuracyDrop: slope * 30,
+    standardError: standardError * 30,
+    timeIncrease: timeSlope * 30,
+    fatigued: ready ? slope < -1.64 * standardError && timeSlope > 0 : null,
+    sessionsNeeded: Math.max(0, MIN_LONG_SESSIONS_FOR_FATIGUE - sessions),
+  };
+}
+
 export interface DistractionSummary {
   /** Veces que salió de la pestaña */
   tabSwitches: number;
@@ -345,5 +405,74 @@ export function calibrationReport(
       .length,
     calibrationGap: n === 0 ? 0 : weightedGap / n,
     label,
+  };
+}
+
+export interface NegationResponse {
+  polarity: 'affirmative' | 'negative';
+  correct: boolean;
+  /** Probabilidad de acierto esperada por la dificultad y la habilidad */
+  expected: number;
+}
+
+export interface NegationSignal {
+  negative: number;
+  affirmative: number;
+  /** Exactitud ajustada por dificultad (acierto menos esperado) en cada polaridad */
+  negativeResidual: number;
+  affirmativeResidual: number;
+  /** Negativas menos afirmativas. Negativo si rinde peor en las negativas */
+  difference: number;
+  standardError: number;
+  /** Patrón probable de mala lectura de negaciones. null si sigue calibrando */
+  misreads: boolean | null;
+  /** Respuestas negativas que faltan para dejar de calibrar */
+  negativeNeeded: number;
+  /** Respuestas afirmativas que faltan para dejar de calibrar */
+  affirmativeNeeded: number;
+}
+
+/**
+ * Patrón de mala lectura de negaciones (7.5, 14.2). Compara la exactitud ajustada por dificultad
+ * en preguntas negativas contra la de afirmativas. Patrón probable si la diferencia queda por
+ * debajo de −1.64 errores estándar (una cola, J) y hay el mínimo de respuestas por categoría del
+ * análisis por estructura en ambas polaridades. Complementa al hallazgo de probable mala lectura
+ * de cada error, que necesita rapidez o reporte del alumno
+ */
+export function negationSignal(
+  responses: readonly NegationResponse[],
+  minResponsesPerCategory: number,
+): NegationSignal {
+  const residuals = (polarity: NegationResponse['polarity']) =>
+    responses
+      .filter((response) => response.polarity === polarity)
+      .map((response) => (response.correct ? 1 : 0) - response.expected);
+  const negative = residuals('negative');
+  const affirmative = residuals('affirmative');
+  const mean = (values: readonly number[]) =>
+    values.length === 0 ? 0 : values.reduce((sum, value) => sum + value, 0) / values.length;
+  const variance = (values: readonly number[], m: number) =>
+    values.length < 2
+      ? 0.25
+      : values.reduce((sum, value) => sum + (value - m) ** 2, 0) / (values.length - 1);
+  const negativeResidual = mean(negative);
+  const affirmativeResidual = mean(affirmative);
+  const standardError = Math.sqrt(
+    variance(negative, negativeResidual) / Math.max(negative.length, 1) +
+      variance(affirmative, affirmativeResidual) / Math.max(affirmative.length, 1),
+  );
+  const difference = negativeResidual - affirmativeResidual;
+  const ready =
+    negative.length >= minResponsesPerCategory && affirmative.length >= minResponsesPerCategory;
+  return {
+    negative: negative.length,
+    affirmative: affirmative.length,
+    negativeResidual,
+    affirmativeResidual,
+    difference,
+    standardError,
+    misreads: ready ? difference < -1.64 * standardError : null,
+    negativeNeeded: Math.max(0, minResponsesPerCategory - negative.length),
+    affirmativeNeeded: Math.max(0, minResponsesPerCategory - affirmative.length),
   };
 }

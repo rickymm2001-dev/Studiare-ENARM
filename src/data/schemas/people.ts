@@ -25,6 +25,38 @@ export const UserSettingsSchema = z.strictObject({
   errorsToReview: z.boolean().default(true),
   /** Opciones mostradas por pregunta, 4 por defecto (7.8, D-011) */
   optionsShown: z.int().min(2).max(10).default(4),
+  /** Ramas que estudia, elegidas en el onboarding (10.1) */
+  branches: z
+    .array(z.string().min(1).max(60))
+    .max(10)
+    .default(['internal_medicine', 'pediatrics', 'obstetrics_gynecology', 'general_surgery']),
+  /** Meta mínima diaria de la racha (9.4) */
+  dailyGoal: z
+    .strictObject({
+      metric: z.enum(['cards', 'questions', 'focusMinutes']),
+      value: z.int().min(1).max(1000),
+    })
+    .default({ metric: 'cards', value: 20 }),
+  /** Mazos precargados que sigue, por clave del mazo (3.1) */
+  followedDecks: z.array(z.string().min(1).max(60)).max(50).default([]),
+  /** Pomodoro configurable (9.2) */
+  pomodoro: z
+    .strictObject({
+      focusMinutes: z.int().min(1).max(180),
+      shortBreakMinutes: z.int().min(1).max(60),
+      longBreakMinutes: z.int().min(1).max(90),
+      cyclesBeforeLong: z.int().min(1).max(12),
+      sound: z.boolean(),
+      notifications: z.boolean(),
+    })
+    .default({
+      focusMinutes: 25,
+      shortBreakMinutes: 5,
+      longBreakMinutes: 15,
+      cyclesBeforeLong: 4,
+      sound: true,
+      notifications: false,
+    }),
 });
 export type UserSettings = z.infer<typeof UserSettingsSchema>;
 

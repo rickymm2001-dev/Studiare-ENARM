@@ -9,12 +9,17 @@ import { BRAND } from './src/config/brand.ts';
 const PROXY_TARGET = 'http://127.0.0.1:8787';
 
 // Ruta donde vive la app publicada. En local y con dominio propio es /.
-// En GitHub Pages sin dominio propio es /Studiare-ENARM/. La pone el workflow de Pages (D-050)
+// En GitHub Pages sin dominio propio es /Studiare-ENARM/. La pone el workflow de Pages (D-055)
 const BASE_PATH = normalizeBase(process.env.BASE_PATH);
 
 function normalizeBase(value: string | undefined): string {
   const trimmed = (value ?? '').trim().replace(/^\/+|\/+$/g, '');
   return trimmed === '' ? '/' : `/${trimmed}/`;
+}
+
+// Workbox copia los patrones al service worker como texto, así que van como RegExp ya armadas
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 const apiProxy = {
@@ -58,6 +63,24 @@ export default defineConfig({
       workbox: {
         // La app completa queda en caché para abrir sin conexión después de la primera carga
         globPatterns: ['**/*.{js,css,html,svg,png,webmanifest}'],
+        // Las imágenes de los mazos demo (unos 47 MB) y el worker de simulación, que trae los mazos
+        // y pesa varios MB, no se precargan. Se guardan la primera vez que se usan (D-053)
+        globIgnores: ['demo-media/**', 'assets/simulate.worker-*.js'],
+        runtimeCaching: [
+          {
+            urlPattern: new RegExp(`${escapeRegExp(BASE_PATH)}assets/simulate\\.worker-.*\\.js$`),
+            handler: 'CacheFirst',
+            options: { cacheName: 'simulate-worker', expiration: { maxEntries: 2 } },
+          },
+          {
+            urlPattern: new RegExp(`${escapeRegExp(BASE_PATH)}demo-media/`),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'demo-media',
+              expiration: { maxEntries: 400 },
+            },
+          },
+        ],
         navigateFallback: `${BASE_PATH}index.html`,
         // Las llamadas al proxy de IA nunca se sirven desde caché
         navigateFallbackDenylist: [/^\/api\//],

@@ -1,8 +1,18 @@
 // Rutas de las 26 pantallas. Las que todavía son esqueleto usan ScreenPlaceholder.
 import type { ComponentType } from 'react';
 import { createBrowserRouter, type RouteObject } from 'react-router';
+import { SubscriptionScreen } from '@/features/billing/SubscriptionScreen';
+import { DecksScreen } from '@/features/decks/DecksScreen';
+import { HomeScreen } from '@/features/home/HomeScreen';
+import { ReviewScreen } from '@/features/review/ReviewScreen';
+import { OnboardingScreen } from '@/features/onboarding/OnboardingScreen';
+import { PartyScreen } from '@/features/party/PartyScreen';
 import { ProfileScreen } from '@/features/profile/ProfileScreen';
 import { RoleSelectorScreen } from '@/features/role/RoleSelectorScreen';
+import { FeedbackScreen } from '@/features/simulator/FeedbackScreen';
+import { QuestionScreen } from '@/features/simulator/QuestionScreen';
+import { SessionSummaryScreen } from '@/features/simulator/SessionSummaryScreen';
+import { SimulatorSetupScreen } from '@/features/simulator/SimulatorSetupScreen';
 import { AppShell } from './layout/AppShell';
 import { InitialLoadingScreen, NotFoundScreen, RouteErrorScreen } from './layout/RouteFallbacks';
 import { ScreenPlaceholder } from './layout/ScreenPlaceholder';
@@ -10,6 +20,16 @@ import { SCREEN_KEYS, SCREENS, type ScreenKey } from './screens';
 
 /** Pantallas que ya tienen componente propio. Las demás muestran el esqueleto */
 const BUILT_SCREENS: Partial<Record<ScreenKey, ComponentType>> = {
+  onboarding: OnboardingScreen,
+  home: HomeScreen,
+  review: ReviewScreen,
+  question: QuestionScreen,
+  feedback: FeedbackScreen,
+  sessionSummary: SessionSummaryScreen,
+  simulatorSetup: SimulatorSetupScreen,
+  decks: DecksScreen,
+  subscription: SubscriptionScreen,
+  party: PartyScreen,
   profile: ProfileScreen,
   roleSelector: RoleSelectorScreen,
 };

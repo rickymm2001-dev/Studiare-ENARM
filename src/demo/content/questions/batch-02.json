@@ -261,7 +261,7 @@
           "key": "j",
           "text": "Metoprolol de liberación prolongada",
           "correct": false,
-          "bias": "serial_position_effect",
+          "bias": "representativeness_heuristic",
           "rationale": "Se recuerda el metoprolol de liberación inmediata, que no es el probado."
         }
       ],
@@ -329,7 +329,7 @@
           "key": "g",
           "text": "Evento vascular cerebral o isquemia transitoria previos",
           "correct": false,
-          "bias": "serial_position_effect",
+          "bias": "framing_effect",
           "rationale": "Se confunde con el desenlace que la escala predice y no con un componente."
         },
         {
@@ -355,7 +355,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "d"],
-      "explanation": "La escala CHA2DS2-VASc estima el riesgo de evento vascular cerebral en la fibrilación auricular no valvular. Suma un punto por insuficiencia cardiaca o disfunción ventricular izquierda, hipertensión, diabetes, enfermedad vascular, edad de 65 a 74 años y sexo femenino, y dos puntos por edad de 75 años o más y por evento vascular cerebral, isquemia transitoria o tromboembolia previos. Con 2 puntos o más en hombres, o 3 o más en mujeres, se recomienda anticoagulación. El tabaquismo es un factor de riesgo cardiovascular, pero no forma parte de la escala. El riesgo de sangrado se valora por separado con la escala HAS-BLED.",
+      "explanation": "La escala CHA2DS2-VASc estima el riesgo de evento vascular cerebral en la fibrilación auricular no valvular. Suma un punto por insuficiencia cardiaca o disfunción ventricular izquierda, hipertensión, diabetes, enfermedad vascular, edad de 65 a 74 años y sexo femenino, y dos puntos por edad de 75 años o más y por evento vascular cerebral, isquemia transitoria o tromboembolia previos. Con 2 puntos o más en hombres, o 3 o más en mujeres, se recomienda anticoagulación. Algunas guías recientes ya usan la versión CHA2DS2-VA, que omite el sexo, con anticoagulación a partir de 2 puntos. El tabaquismo es un factor de riesgo cardiovascular, pero no forma parte de la escala. El riesgo de sangrado se valora por separado con la escala HAS-BLED.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la fibrilación auricular"
       ]
@@ -404,8 +404,8 @@
           "key": "e",
           "text": "Piel seca",
           "correct": false,
-          "bias": "information_bias",
-          "rationale": "Parece un dato menor, pero es frecuente en el hipotiroidismo."
+          "bias": "focusing_illusion",
+          "rationale": "Se subestima un dato de la piel y se buscan solo datos de laboratorio."
         },
         {
           "key": "f",
@@ -470,10 +470,10 @@
         },
         {
           "key": "b",
-          "text": "Oxígeno a flujo alto hasta llegar a 100% de saturación",
+          "text": "Broncodilatadores de acción corta, corticoesteroide sistémico y oxígeno a flujo alto hasta llegar a 100% de saturación",
           "correct": false,
           "bias": "focusing_illusion",
-          "rationale": "Se fija en la saturación y puede aumentar la retención de dióxido de carbono."
+          "rationale": "Se fija en normalizar la saturación, y el oxígeno en exceso puede aumentar la retención de dióxido de carbono."
         },
         {
           "key": "c",
@@ -498,7 +498,7 @@
         },
         {
           "key": "f",
-          "text": "Iniciar corticoesteroide inhalado y dar de alta",
+          "text": "Broncodilatadores de acción corta y corticoesteroide inhalado, con alta a domicilio",
           "correct": false,
           "bias": "omission_bias",
           "rationale": "Con hipoxemia y exacerbación no basta el tratamiento de mantenimiento."
@@ -568,7 +568,7 @@
           "key": "c",
           "text": "Acidosis metabólica grave que no responde",
           "correct": false,
-          "bias": "complexity_bias",
+          "bias": "belief_bias",
           "rationale": "Se piensa que la acidosis siempre se corrige con bicarbonato."
         },
         {
@@ -596,7 +596,7 @@
           "key": "g",
           "text": "Intoxicación por litio o metanol",
           "correct": false,
-          "bias": "base_rate_fallacy",
+          "bias": "belief_bias",
           "rationale": "Se piensa que la intoxicación no tiene relación con la diálisis, aunque estas sustancias se dializan."
         },
         {
@@ -632,7 +632,7 @@
       "branch": "internal_medicine",
       "topic": "gastroenterology",
       "subtopic": "cirrhosis",
-      "vignette": "Hombre de 58 años con cirrosis y ascitis, con fiebre, dolor abdominal difuso y confusión leve. La paracentesis muestra 450 polimorfonucleares/mm³ en el líquido de ascitis.",
+      "vignette": "Hombre de 58 años con cirrosis y ascitis, con fiebre, dolor abdominal difuso y confusión leve. Creatinina de 1.6 mg/dL y bilirrubina total de 4.5 mg/dL. La paracentesis muestra 450 polimorfonucleares/mm³ en el líquido de ascitis.",
       "prompt": "¿Cuál es el tratamiento inicial?",
       "polarity": "affirmative",
       "task": "initial_treatment",
@@ -1037,15 +1037,15 @@
           "key": "g",
           "text": "Hipoglucemia",
           "correct": false,
-          "bias": "base_rate_fallacy",
-          "rationale": "Sin diabetes y con glucosa normal es muy poco probable."
+          "bias": "inattentional_blindness",
+          "rationale": "Pasa por alto que la glucosa es normal."
         },
         {
           "key": "h",
           "text": "Trastorno por estrés postraumático",
           "correct": false,
-          "bias": "clustering_illusion",
-          "rationale": "Busca un trauma que explique las crisis sin antecedente que lo apoye."
+          "bias": "representativeness_heuristic",
+          "rationale": "Comparte crisis de ansiedad y evitación, pero falta el antecedente traumático que exige el diagnóstico."
         },
         {
           "key": "i",
@@ -1106,7 +1106,7 @@
           "text": "Hipotiroidismo congénito",
           "correct": false,
           "bias": "base_rate_fallacy",
-          "rationale": "Es menos probable a esta edad y no explica los cambios de cabello y piel."
+          "rationale": "Suele detectarse con el tamiz neonatal. Su mixedema no deja fóvea y no explica el cabello despigmentado que se desprende ni la dermatosis descamativa ligada a una dieta pobre en proteínas."
         },
         {
           "key": "e",
@@ -1165,7 +1165,7 @@
       "topic": "growth_development",
       "subtopic": "breastfeeding",
       "vignette": "",
-      "prompt": "Todas las siguientes situaciones impiden la lactancia materna, EXCEPTO:",
+      "prompt": "Todas las siguientes situaciones impiden la lactancia materna, de forma total, parcial o temporal, EXCEPTO:",
       "polarity": "negative",
       "task": "prevention_screening",
       "difficulty": 3,
@@ -1213,7 +1213,7 @@
         },
         {
           "key": "g",
-          "text": "Lesiones activas de herpes en la mama",
+          "text": "Lesiones activas de herpes en la mama, para amamantar de ese lado",
           "correct": false,
           "bias": "focusing_illusion",
           "rationale": "Se fija en que el herpes no pasa por la leche y olvida el contacto con la lesión."
@@ -1289,7 +1289,7 @@
           "text": "Antecedente de invaginación intestinal, para la vacuna de rotavirus",
           "correct": false,
           "bias": "inattentional_blindness",
-          "rationale": "Se olvida el antecedente quirúrgico al revisar la vacuna oral."
+          "rationale": "Se olvida que el antecedente de invaginación intestinal, operada o no, contraindica la vacuna de rotavirus."
         },
         {
           "key": "f",
@@ -1415,7 +1415,7 @@
         }
       ],
       "canonical": ["a", "b", "d", "e"],
-      "explanation": "La otitis media aguda se diagnostica con inicio agudo, abombamiento de la membrana timpánica y signos de inflamación del oído medio. En niños mayores de 2 años con enfermedad leve y unilateral puede vigilarse sin antibiótico por 48 a 72 horas, pero con fiebre de 39 °C o más u otalgia intensa se indica antibiótico. El de elección es amoxicilina a dosis altas por vía oral, porque cubre al neumococo, que es el germen más frecuente. La amoxicilina con clavulanato se usa si recibió amoxicilina en los últimos 30 días o si hay falla al tratamiento. El dolor se trata con paracetamol o ibuprofeno.",
+      "explanation": "La otitis media aguda se diagnostica con inicio agudo, abombamiento de la membrana timpánica y signos de inflamación del oído medio. En niños de 2 años o más con enfermedad no grave, uni o bilateral, puede vigilarse sin antibiótico por 48 a 72 horas, pero con fiebre de 39 °C o más u otalgia intensa se indica antibiótico. El de elección es amoxicilina a dosis altas por vía oral, porque cubre al neumococo, que es el germen más frecuente. La amoxicilina con clavulanato se usa si recibió amoxicilina en los últimos 30 días o si hay falla al tratamiento. El dolor se trata con paracetamol o ibuprofeno.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la otitis media aguda en la edad pediátrica"
       ]
@@ -1537,7 +1537,7 @@
         },
         {
           "key": "c",
-          "text": "Corticoesteroide inhalado como único tratamiento",
+          "text": "Corticoesteroide inhalado a dosis altas y oxígeno, sin salbutamol",
           "correct": false,
           "bias": "status_quo_bias",
           "rationale": "Es su tratamiento de control, pero no resuelve la crisis."
@@ -1551,7 +1551,7 @@
         },
         {
           "key": "e",
-          "text": "Sulfato de magnesio intravenoso de entrada",
+          "text": "Sulfato de magnesio intravenoso y oxígeno, sin broncodilatador inhalado",
           "correct": false,
           "bias": "complexity_bias",
           "rationale": "Se reserva para la crisis grave que no responde al tratamiento inicial."
@@ -1588,12 +1588,12 @@
           "key": "j",
           "text": "Teofilina por vía oral",
           "correct": false,
-          "bias": "anchoring",
-          "rationale": "Se ancla en un broncodilatador antiguo, lento y con toxicidad."
+          "bias": "belief_bias",
+          "rationale": "Suena lógico como broncodilatador, pero la guía vigente no lo usa por su inicio lento y su toxicidad."
         }
       ],
       "canonical": ["a", "c", "e", "h"],
-      "explanation": "La crisis asmática moderada a grave se reconoce por dificultad para hablar, uso de músculos accesorios, taquipnea y saturación menor de 92 a 94%. El tratamiento inicial es salbutamol inhalado con espaciador o nebulizado, repetido cada 20 minutos en la primera hora, corticoesteroide sistémico como prednisona o prednisolona por vía oral, que reduce las recaídas y las hospitalizaciones, y oxígeno para mantener la saturación entre 94 y 98%. El bromuro de ipratropio se agrega en las crisis graves. El sulfato de magnesio intravenoso se reserva para la crisis grave que no responde. Los antibióticos no están indicados sin datos de infección bacteriana.",
+      "explanation": "La crisis asmática moderada a grave se reconoce por dificultad para hablar, uso de músculos accesorios, taquipnea y saturación de oxígeno menor de 95%, que en la crisis grave baja de 90%. El tratamiento inicial es salbutamol inhalado con espaciador o nebulizado, repetido cada 20 minutos en la primera hora, corticoesteroide sistémico como prednisona o prednisolona por vía oral, que reduce las recaídas y las hospitalizaciones, y oxígeno para mantener la saturación entre 94 y 98%. El bromuro de ipratropio se agrega en las crisis moderadas a graves. El sulfato de magnesio intravenoso se reserva para la crisis grave que no responde. Los antibióticos no están indicados sin datos de infección bacteriana.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en menores de 18 años"
       ]
@@ -1694,7 +1694,7 @@
       "branch": "pediatrics",
       "topic": "pediatric_cardiology",
       "subtopic": "congenital_heart_disease",
-      "vignette": "Lactante de 6 meses con cianosis que empeora con el llanto y episodios en los que se pone muy morado e irritable, que mejoran al flexionarle las piernas. Tiene un soplo sistólico expulsivo en el borde esternal izquierdo. La radiografía muestra corazón en forma de bota.",
+      "vignette": "Lactante de 6 meses con cianosis que empeora con el llanto y episodios en los que se pone muy morado e irritable, que mejoran al flexionarle las piernas. Sin fiebre ni tos, con pulsos simétricos en las cuatro extremidades. Tiene un soplo sistólico expulsivo en el borde esternal izquierdo. La radiografía muestra corazón en forma de bota.",
       "prompt": "¿Cuál es el diagnóstico más probable?",
       "polarity": "affirmative",
       "task": "diagnosis",
@@ -1766,8 +1766,8 @@
           "key": "j",
           "text": "Síndrome de Eisenmenger",
           "correct": false,
-          "bias": "confirmation_bias",
-          "rationale": "Es una complicación tardía de cortocircuitos, no un cuadro del lactante."
+          "bias": "base_rate_fallacy",
+          "rationale": "Causa cianosis, pero es una complicación tardía de cortocircuitos no corregidos y es muy improbable a los 6 meses."
         }
       ],
       "canonical": ["a", "b", "c", "d"],
@@ -1895,15 +1895,15 @@
           "key": "c",
           "text": "Hipoalbuminemia",
           "correct": false,
-          "bias": "information_bias",
-          "rationale": "Parece un dato de laboratorio secundario, pero es un criterio."
+          "bias": "focusing_illusion",
+          "rationale": "Se considera un dato de laboratorio accesorio y se olvida que es criterio diagnóstico."
         },
         {
           "key": "d",
           "text": "Edema",
           "correct": false,
-          "bias": "availability_heuristic",
-          "rationale": "Es tan obvio que se duda de que sea parte de la definición."
+          "bias": "framing_effect",
+          "rationale": "Al ser el dato que motivó la consulta, se duda de que forme parte de la definición."
         },
         {
           "key": "e",
@@ -2038,7 +2038,7 @@
         }
       ],
       "canonical": ["a", "b", "d", "h"],
-      "explanation": "La leucemia linfoblástica aguda es el cáncer más frecuente en la infancia, con pico entre los 2 y 5 años. Se presenta con datos de falla medular, como anemia, sangrado por plaquetopenia e infecciones, además de dolor óseo, hepatoesplenomegalia y adenopatías. La biometría y el frotis orientan al mostrar citopenias y blastos, pero el diagnóstico se confirma con el aspirado de médula ósea, con 20% o más de blastos, y el inmunofenotipo por citometría de flujo, que define el linaje. La punción lumbar se realiza después para valorar la infiltración del sistema nervioso central. El pronóstico en niños es bueno con tratamiento oportuno.",
+      "explanation": "La leucemia linfoblástica aguda es el cáncer más frecuente en la infancia, con pico entre los 2 y 5 años. Se presenta con datos de falla medular, como anemia, sangrado por plaquetopenia e infecciones, además de dolor óseo, hepatoesplenomegalia y adenopatías. La biometría y el frotis orientan al mostrar citopenias y blastos, pero el diagnóstico se confirma con el aspirado de médula ósea, con 20 a 25% o más de blastos según el protocolo, y el inmunofenotipo por citometría de flujo, que define el linaje. La punción lumbar se realiza después para valorar la infiltración del sistema nervioso central. El pronóstico en niños es bueno con tratamiento oportuno.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la leucemia linfoblástica aguda en niños"
       ]
@@ -2139,7 +2139,7 @@
       "branch": "pediatrics",
       "topic": "neonatology",
       "subtopic": "neonatal_respiratory_distress",
-      "vignette": "Recién nacido de 30 semanas y 1,300 g, cuya madre no recibió esteroides prenatales. A los minutos de nacer presenta quejido, aleteo nasal, tiraje y cianosis, con dificultad respiratoria progresiva. La radiografía muestra un patrón reticulogranular con broncograma aéreo.",
+      "vignette": "Recién nacido de 30 semanas y 1,300 g, cuya madre no recibió esteroides prenatales. Membranas íntegras hasta el nacimiento, sin fiebre materna ni datos de corioamnionitis. A los minutos de nacer presenta quejido, aleteo nasal, tiraje y cianosis, con dificultad respiratoria progresiva. La radiografía muestra un patrón reticulogranular con broncograma aéreo.",
       "prompt": "¿Cuál es el diagnóstico más probable?",
       "polarity": "affirmative",
       "task": "diagnosis",
@@ -2197,15 +2197,15 @@
           "key": "h",
           "text": "Hipertensión pulmonar persistente",
           "correct": false,
-          "bias": "confirmation_bias",
-          "rationale": "Busca confirmar una complicación sin descartar la causa principal."
+          "bias": "complexity_bias",
+          "rationale": "Elige una complicación grave y menos frecuente cuando la deficiencia de surfactante explica el cuadro."
         },
         {
           "key": "i",
           "text": "Displasia broncopulmonar",
           "correct": false,
-          "bias": "serial_position_effect",
-          "rationale": "Es una complicación tardía de la prematurez, no del primer día."
+          "bias": "anchoring",
+          "rationale": "Se ancla en la prematurez y elige su complicación crónica, que no aparece en el primer día de vida."
         },
         {
           "key": "j",
@@ -2825,8 +2825,8 @@
           "key": "i",
           "text": "Cáncer de mama en la madre o una hermana",
           "correct": false,
-          "bias": "clustering_illusion",
-          "rationale": "Se cree que los casos en la familia coinciden por azar, aunque aumentan el riesgo."
+          "bias": "base_rate_fallacy",
+          "rationale": "Se piensa que el riesgo familiar solo importa con mutación demostrada, aunque el antecedente en primer grado aumenta el riesgo por sí mismo."
         },
         {
           "key": "j",
@@ -2981,7 +2981,7 @@
           "text": "Prueba de progestágeno",
           "correct": false,
           "bias": "status_quo_bias",
-          "rationale": "Se usaba como paso inicial, pero hoy no es indispensable."
+          "rationale": "Formaba parte del algoritmo clásico después de descartar embarazo, pero nunca antecede a la prueba de embarazo y hoy no es indispensable."
         },
         {
           "key": "g",
@@ -3824,7 +3824,7 @@
       "branch": "general_surgery",
       "topic": "trauma",
       "subtopic": "abdominal_trauma",
-      "vignette": "Hombre de 30 años que choca en motocicleta. En urgencias tiene presión arterial de 80/50 mmHg y frecuencia cardiaca de 130 por minuto. Después de un litro de cristaloide sigue inestable. La vía aérea y la ventilación están aseguradas, la radiografía de tórax es normal y el FAST muestra líquido libre en el espacio hepatorrenal.",
+      "vignette": "Hombre de 30 años que choca en motocicleta. En urgencias tiene presión arterial de 80/50 mmHg y frecuencia cardiaca de 130 por minuto. Después de un litro de cristaloide sigue inestable. La vía aérea y la ventilación están aseguradas, la radiografía de tórax es normal, la pelvis es estable a la exploración y su radiografía es normal y el FAST muestra líquido libre en el espacio hepatorrenal.",
       "prompt": "¿Cuál es la conducta a seguir?",
       "polarity": "affirmative",
       "task": "next_step",
@@ -3883,7 +3883,7 @@
           "text": "Radiografía de pelvis y esperar",
           "correct": false,
           "bias": "anchoring",
-          "rationale": "Se ancla en la pelvis cuando el FAST muestra la fuente abdominal."
+          "rationale": "La radiografía de pelvis es un auxiliar de la revisión primaria, pero esperar retrasa la cirugía cuando el FAST ya muestra la fuente abdominal."
         },
         {
           "key": "i",
@@ -4044,10 +4044,10 @@
         },
         {
           "key": "f",
-          "text": "Rasurar el área la noche previa",
+          "text": "Clindamicina intravenosa de rutina en lugar de cefazolina",
           "correct": false,
-          "bias": "status_quo_bias",
-          "rationale": "Es una práctica tradicional que aumenta la infección. Si se requiere, se recorta el vello justo antes."
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para alergia grave a betalactámicos. En este paciente sin alergias la cefazolina es de elección."
         },
         {
           "key": "g",
@@ -4079,7 +4079,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "e"],
-      "explanation": "La profilaxis antibiótica reduce la infección del sitio quirúrgico en cirugías limpias contaminadas, como la colecistectomía abierta, y en cirugías limpias con implantes o en pacientes de alto riesgo. El fármaco de elección para la mayoría de las cirugías es la cefazolina intravenosa en dosis única, administrada dentro de los 60 minutos previos a la incisión para que haya concentraciones adecuadas en el tejido. Se repite la dosis si la cirugía se prolonga o hay sangrado abundante, y no debe extenderse más de 24 horas. Otras medidas incluyen control de la glucosa, normotermia, baño previo y retiro del vello con recortadora justo antes de la cirugía, no con rastrillo.",
+      "explanation": "La profilaxis antibiótica reduce la infección del sitio quirúrgico en cirugías limpias contaminadas, como la colecistectomía abierta, y en cirugías limpias con implantes o en pacientes de alto riesgo. El fármaco de elección para la mayoría de las cirugías es la cefazolina intravenosa en dosis única, administrada dentro de los 60 minutos previos a la incisión para que haya concentraciones adecuadas en el tejido. Se repite la dosis si la cirugía se prolonga o hay sangrado abundante, y no se continúa después del cierre de la herida, en ningún caso más de 24 horas. Otras medidas incluyen control de la glucosa, normotermia, baño previo y retiro del vello con recortadora justo antes de la cirugía, no con rastrillo.",
       "gpcRefs": [
         "Guía de Práctica Clínica de prevención y diagnóstico de la infección de sitio quirúrgico"
       ]
@@ -4163,8 +4163,8 @@
           "key": "j",
           "text": "Equivale a una quemadura de tercer grado",
           "correct": false,
-          "bias": "serial_position_effect",
-          "rationale": "Se confunde la nomenclatura antigua por grados con la actual."
+          "bias": "belief_bias",
+          "rationale": "Se cree que la clasificación por grados ya no equivale a la actual, aunque el tercer grado corresponde al espesor total."
         }
       ],
       "canonical": ["a", "b", "c", "f"],
@@ -4194,7 +4194,7 @@
         },
         {
           "key": "b",
-          "text": "Colonoscopia cada año, porque después de un estudio normal es más probable que el siguiente encuentre lesiones",
+          "text": "Colonoscopia cada año",
           "correct": false,
           "bias": "gamblers_fallacy",
           "rationale": "Supone que un resultado normal se compensa con uno anormal, aunque cada estudio es independiente."
@@ -4299,15 +4299,15 @@
           "key": "d",
           "text": "Proteína C reactiva",
           "correct": false,
-          "bias": "complexity_bias",
-          "rationale": "Parece un estudio de más, pero ayuda a valorar la gravedad."
+          "bias": "availability_heuristic",
+          "rationale": "Se asocia la proteína C reactiva con otras infecciones, aunque también ayuda a valorar la gravedad de la diverticulitis."
         },
         {
           "key": "e",
           "text": "Examen general de orina",
           "correct": false,
-          "bias": "representativeness_heuristic",
-          "rationale": "Parece no aportar, pero ayuda a descartar infección urinaria o fístula colovesical."
+          "bias": "focusing_illusion",
+          "rationale": "Se asocia el dolor abdominal solo con causas digestivas, aunque el examen de orina ayuda a descartar infección urinaria o fístula colovesical."
         },
         {
           "key": "f",
@@ -4334,8 +4334,8 @@
           "key": "i",
           "text": "Creatinina sérica",
           "correct": false,
-          "bias": "premature_closure",
-          "rationale": "Se considera innecesaria, aunque se requiere antes del contraste y para dosificar fármacos."
+          "bias": "inattentional_blindness",
+          "rationale": "Se pasa por alto que se requiere antes del contraste y para ajustar la dosis de los fármacos."
         },
         {
           "key": "j",

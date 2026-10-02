@@ -1,0 +1,1046 @@
+[
+  {
+    "key": "b5-q14",
+    "caseKey": "case-b5-iron-deficiency",
+    "caseOrder": 1,
+    "branch": "pediatrics",
+    "topic": "pediatric_hematology_oncology",
+    "subtopic": "iron_deficiency_child",
+    "vignette": "La biometría muestra hemoglobina de 8.9 g/dL, volumen corpuscular medio de 62 fL, amplitud de distribución eritrocitaria de 18% y reticulocitos bajos. Leucocitos y plaquetas normales.",
+    "prompt": "¿Cuál es el estudio que confirma el diagnóstico?",
+    "polarity": "affirmative",
+    "task": "confirmatory_study",
+    "difficulty": 2,
+    "options": [
+      {
+        "key": "a",
+        "text": "Ferritina sérica",
+        "correct": true,
+        "rationale": "La ferritina baja confirma la depleción de las reservas de hierro."
+      },
+      {
+        "key": "b",
+        "text": "Electroforesis de hemoglobina",
+        "correct": false,
+        "bias": "representativeness_heuristic",
+        "rationale": "La microcitosis evoca talasemia, pero a este cuadro le sobran la dieta rica en leche y la amplitud de distribución alta."
+      },
+      {
+        "key": "c",
+        "text": "Aspirado de médula ósea con tinción de hierro",
+        "correct": false,
+        "bias": "complexity_bias",
+        "rationale": "Es invasivo y se reserva para casos dudosos, cuando un estudio en sangre basta."
+      },
+      {
+        "key": "d",
+        "text": "Sangre oculta en heces como estudio confirmatorio",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en buscar pérdidas intestinales, que sirve para la causa, pero no confirma la deficiencia de hierro."
+      },
+      {
+        "key": "e",
+        "text": "Niveles de plomo en sangre",
+        "correct": false,
+        "bias": "base_rate_fallacy",
+        "rationale": "La intoxicación por plomo da microcitosis, pero sin exposición conocida es mucho menos probable que la deficiencia de hierro."
+      },
+      {
+        "key": "f",
+        "text": "Frotis de sangre periférica",
+        "correct": false,
+        "bias": "confirmation_bias",
+        "rationale": "Mostraría hipocromía y microcitosis, que apoyan la sospecha, pero no distinguen la deficiencia de hierro de otras causas."
+      },
+      {
+        "key": "g",
+        "text": "Vitamina B12 y ácido fólico",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Son estudios conocidos para anemia, pero sus deficiencias causan macrocitosis y aquí hay microcitosis."
+      },
+      {
+        "key": "h",
+        "text": "Prueba de Coombs directa",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en la palidez y piensa en hemólisis, aunque los reticulocitos bajos no la apoyan."
+      },
+      {
+        "key": "i",
+        "text": "Repetir la biometría en 3 meses",
+        "correct": false,
+        "bias": "omission_bias",
+        "rationale": "Espera ante una anemia moderada que ya debe estudiarse y tratarse."
+      },
+      {
+        "key": "j",
+        "text": "Perfil tiroideo",
+        "correct": false,
+        "bias": "information_bias",
+        "rationale": "No cambia el diagnóstico de una anemia microcítica con dieta y cuadro tan sugestivos."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "La anemia por deficiencia de hierro es la más frecuente en la infancia y tiene su pico entre los 6 meses y los 3 años, cuando las reservas del nacimiento se agotan y el crecimiento es rápido. La biometría muestra anemia microcítica e hipocrómica, con amplitud de distribución eritrocitaria alta y reticulocitos bajos. La ferritina sérica baja confirma la deficiencia, aunque puede subir con infecciones porque es un reactante de fase aguda. La saturación de transferrina baja y la transferrina alta la apoyan. En la talasemia menor la amplitud de distribución suele ser normal y el número de eritrocitos está conservado o alto. El aspirado de médula ósea casi nunca es necesario.",
+    "gpcRefs": ["Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la anemia por deficiencia de hierro en niños y adultos"]
+  },
+  {
+    "key": "b5-q15",
+    "caseKey": "case-b5-iron-deficiency",
+    "caseOrder": 2,
+    "branch": "pediatrics",
+    "topic": "pediatric_hematology_oncology",
+    "subtopic": "iron_deficiency_child",
+    "vignette": "La ferritina sérica es de 5 ng/mL. La madre pregunta qué causó la anemia.",
+    "prompt": "¿Cuál es el principal factor de riesgo de la anemia en este lactante?",
+    "polarity": "affirmative",
+    "task": "risk_factor",
+    "difficulty": 2,
+    "options": [
+      {
+        "key": "a",
+        "text": "Consumo excesivo de leche entera de vaca con poca alimentación complementaria",
+        "correct": true,
+        "rationale": "La leche de vaca tiene poco hierro, desplaza a los alimentos ricos en hierro y puede causar pérdidas intestinales microscópicas."
+      },
+      {
+        "key": "b",
+        "text": "Parasitosis intestinal por uncinarias",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Es una causa conocida de deficiencia de hierro, pero en un lactante de 12 meses con esta dieta la leche explica el cuadro."
+      },
+      {
+        "key": "c",
+        "text": "Enfermedad celiaca",
+        "correct": false,
+        "bias": "complexity_bias",
+        "rationale": "Elige una causa de malabsorción menos frecuente cuando la dieta basta para explicar la anemia."
+      },
+      {
+        "key": "d",
+        "text": "Prematurez",
+        "correct": false,
+        "bias": "inattentional_blindness",
+        "rationale": "Es un factor de riesgo real, pero se pasa por alto que el lactante nació a término con peso adecuado."
+      },
+      {
+        "key": "e",
+        "text": "Divertículo de Meckel con sangrado oculto",
+        "correct": false,
+        "bias": "base_rate_fallacy",
+        "rationale": "Puede causar anemia, pero es mucho menos probable que la causa dietética en este contexto."
+      },
+      {
+        "key": "f",
+        "text": "Talasemia heredada de los padres",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en la microcitosis y olvida que la ferritina baja confirma la deficiencia de hierro."
+      },
+      {
+        "key": "g",
+        "text": "Lactancia materna exclusiva hasta los 6 meses",
+        "correct": false,
+        "bias": "belief_bias",
+        "rationale": "Se cree que la leche materna causa anemia por tener poco hierro, aunque su hierro se absorbe bien y la lactancia exclusiva es lo recomendado."
+      },
+      {
+        "key": "h",
+        "text": "Infecciones respiratorias repetidas",
+        "correct": false,
+        "bias": "clustering_illusion",
+        "rationale": "Relaciona episodios de infección que coinciden con la palidez, aunque no explican una ferritina tan baja."
+      },
+      {
+        "key": "i",
+        "text": "Exceso de cereales en la dieta",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en los fitatos de los cereales y olvida que el lactante come pocos sólidos y mucha leche."
+      },
+      {
+        "key": "j",
+        "text": "Descuido de la madre en la alimentación",
+        "correct": false,
+        "bias": "halo_horn_effect",
+        "rationale": "Juzga el caso por una idea sobre la madre en lugar de identificar el factor dietético concreto que se puede corregir."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "En los lactantes, el principal factor de riesgo de deficiencia de hierro es una dieta pobre en hierro durante la etapa de crecimiento rápido. La leche entera de vaca antes del año y en volúmenes mayores de 500 a 700 mL al día aporta poco hierro, de baja absorción, sacia y desplaza a los alimentos complementarios ricos en hierro, y puede causar pérdidas de sangre microscópicas en el intestino. Otros factores son la prematurez, el bajo peso al nacer, el pinzamiento temprano del cordón y la introducción tardía de alimentos con hierro. La lactancia materna exclusiva hasta los 6 meses es lo recomendado. Después se agregan carnes, leguminosas y cereales fortificados.",
+    "gpcRefs": ["Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la anemia por deficiencia de hierro en niños y adultos"]
+  },
+  {
+    "key": "b5-q16",
+    "caseKey": "case-b5-iron-deficiency",
+    "caseOrder": 3,
+    "branch": "pediatrics",
+    "topic": "pediatric_hematology_oncology",
+    "subtopic": "iron_deficiency_child",
+    "vignette": "Se inicia hierro elemental por vía oral, se limita la leche de vaca y se orienta sobre la alimentación complementaria.",
+    "prompt": "¿Cuál es el primer dato de laboratorio que indica respuesta al tratamiento?",
+    "polarity": "affirmative",
+    "task": "data_interpretation",
+    "difficulty": 3,
+    "options": [
+      {
+        "key": "a",
+        "text": "Aumento de los reticulocitos entre los 5 y 10 días",
+        "correct": true,
+        "rationale": "La médula responde pronto al hierro y la reticulocitosis es el primer signo objetivo de respuesta."
+      },
+      {
+        "key": "b",
+        "text": "Normalización de la ferritina en la primera semana",
+        "correct": false,
+        "bias": "serial_position_effect",
+        "rationale": "Da más peso al último estudio que se pidió, la ferritina, aunque las reservas se llenan al final del tratamiento."
+      },
+      {
+        "key": "c",
+        "text": "Normalización de la hemoglobina en 7 días",
+        "correct": false,
+        "bias": "belief_bias",
+        "rationale": "Se espera una corrección rápida, pero la hemoglobina sube alrededor de 1 a 2 g/dL en 4 semanas."
+      },
+      {
+        "key": "d",
+        "text": "Normalización del volumen corpuscular medio en 3 días",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en la microcitosis inicial, que tarda semanas en corregirse."
+      },
+      {
+        "key": "e",
+        "text": "Aumento de la amplitud de distribución eritrocitaria como signo de falla",
+        "correct": false,
+        "bias": "framing_effect",
+        "rationale": "Un aumento parece un mal dato, pero al principio la amplitud sube porque salen eritrocitos nuevos de tamaño normal."
+      },
+      {
+        "key": "f",
+        "text": "Elevación de las plaquetas como único marcador útil",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en la trombocitosis que puede acompañar a la deficiencia y olvida a los reticulocitos."
+      },
+      {
+        "key": "g",
+        "text": "No hay datos útiles antes de 3 meses de tratamiento",
+        "correct": false,
+        "bias": "omission_bias",
+        "rationale": "Pospone toda valoración y pierde la oportunidad de detectar pronto una falta de respuesta."
+      },
+      {
+        "key": "h",
+        "text": "Mejoría del apetito y de la irritabilidad como único dato de respuesta",
+        "correct": false,
+        "bias": "representativeness_heuristic",
+        "rationale": "Los síntomas mejoran pronto, pero no son un dato de laboratorio ni confirman la respuesta medular."
+      },
+      {
+        "key": "i",
+        "text": "Descenso de la transferrina sérica a las 24 horas",
+        "correct": false,
+        "bias": "ambiguity_effect",
+        "rationale": "Prefiere un parámetro del metabolismo del hierro que parece más preciso, aunque no cambia tan pronto."
+      },
+      {
+        "key": "j",
+        "text": "Aspirado de médula ósea al mes",
+        "correct": false,
+        "bias": "information_bias",
+        "rationale": "Agrega un estudio invasivo que no cambia el manejo si la biometría muestra respuesta."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "El tratamiento de la anemia ferropénica en niños es hierro elemental por vía oral, de 3 a 6 mg/kg/día, junto con la corrección de la dieta. La respuesta sigue una secuencia. En días mejoran la irritabilidad y el apetito. Entre los 5 y 10 días aumentan los reticulocitos, que es el primer dato de laboratorio de respuesta. En 4 semanas la hemoglobina sube al menos 1 a 2 g/dL, y si no lo hace se revisan el apego, la dosis, las pérdidas ocultas y la absorción. El tratamiento se mantiene de 2 a 3 meses después de normalizar la hemoglobina para llenar las reservas, que se verifican con la ferritina.",
+    "gpcRefs": ["Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la anemia por deficiencia de hierro en niños y adultos"]
+  },
+  {
+    "key": "b5-q17",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "pediatrics",
+    "topic": "neonatology",
+    "subtopic": "neonatal_respiratory_distress",
+    "vignette": "Recién nacido de 39 semanas, nacido por cesárea electiva sin trabajo de parto, con Apgar de 8 y 9. A las 2 horas tiene frecuencia respiratoria de 80 por minuto, quejido leve y saturación de 94% con oxígeno a flujo bajo. La radiografía muestra líquido en las cisuras y trama vascular prominente, con buen volumen pulmonar.",
+    "prompt": "¿Cuál es el diagnóstico más probable?",
+    "polarity": "affirmative",
+    "task": "diagnosis",
+    "difficulty": 2,
+    "options": [
+      {
+        "key": "a",
+        "text": "Taquipnea transitoria del recién nacido",
+        "correct": true,
+        "rationale": "Es el retraso en la reabsorción del líquido pulmonar, típico del recién nacido de término por cesárea sin trabajo de parto."
+      },
+      {
+        "key": "b",
+        "text": "Síndrome de dificultad respiratoria por deficiencia de surfactante",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Es la causa de dificultad respiratoria neonatal más estudiada, pero predomina en prematuros y da un patrón reticulogranular."
+      },
+      {
+        "key": "c",
+        "text": "Síndrome de aspiración de meconio",
+        "correct": false,
+        "bias": "inattentional_blindness",
+        "rationale": "Se pasa por alto que no hubo líquido teñido de meconio y que fue una cesárea sin trabajo de parto."
+      },
+      {
+        "key": "d",
+        "text": "Neumonía neonatal",
+        "correct": false,
+        "bias": "loss_aversion",
+        "rationale": "Teme no tratar una infección, aunque no hay factores de riesgo y la radiografía es típica de líquido pulmonar retenido."
+      },
+      {
+        "key": "e",
+        "text": "Hipertensión pulmonar persistente",
+        "correct": false,
+        "bias": "complexity_bias",
+        "rationale": "Elige una entidad grave cuando la hipoxemia es leve y responde a oxígeno a flujo bajo."
+      },
+      {
+        "key": "f",
+        "text": "Cardiopatía congénita cianógena",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en la saturación baja y olvida que mejora con oxígeno y que la radiografía explica el cuadro."
+      },
+      {
+        "key": "g",
+        "text": "Hernia diafragmática congénita",
+        "correct": false,
+        "bias": "base_rate_fallacy",
+        "rationale": "Causa dificultad respiratoria al nacer, pero es rara y la radiografía mostraría asas intestinales en el tórax."
+      },
+      {
+        "key": "h",
+        "text": "Neumotórax espontáneo",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en la dificultad respiratoria súbita, pero la radiografía no muestra aire libre en la pleura."
+      },
+      {
+        "key": "i",
+        "text": "Displasia broncopulmonar",
+        "correct": false,
+        "bias": "representativeness_heuristic",
+        "rationale": "Es una enfermedad pulmonar neonatal conocida, pero es crónica y propia del prematuro con ventilación prolongada."
+      },
+      {
+        "key": "j",
+        "text": "Hipoglucemia neonatal",
+        "correct": false,
+        "bias": "clustering_illusion",
+        "rationale": "Agrupa la taquipnea con otros datos neonatales inespecíficos, aunque la radiografía muestra una causa pulmonar."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "La taquipnea transitoria del recién nacido se debe al retraso en la reabsorción del líquido pulmonar fetal. Es más frecuente en recién nacidos de término o cerca del término nacidos por cesárea sin trabajo de parto, porque no reciben el estímulo hormonal que activa los canales de sodio del epitelio pulmonar. Se manifiesta en las primeras horas con taquipnea, a veces con quejido leve y necesidad baja de oxígeno. La radiografía muestra líquido en las cisuras, trama vascular prominente y buen volumen pulmonar. Mejora en 24 a 72 horas con soporte. El síndrome por deficiencia de surfactante predomina en prematuros y tiene un patrón reticulogranular con broncograma aéreo.",
+    "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento de la taquipnea transitoria del recién nacido"]
+  },
+  {
+    "key": "b5-q18",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "pediatrics",
+    "topic": "neonatology",
+    "subtopic": "neonatal_sepsis",
+    "vignette": "En el cunero se revisan los antecedentes maternos y perinatales para decidir qué recién nacidos requieren vigilancia por riesgo de sepsis temprana.",
+    "prompt": "Todos los siguientes son factores de riesgo de sepsis neonatal temprana, EXCEPTO:",
+    "polarity": "negative",
+    "task": "risk_factor",
+    "difficulty": 3,
+    "options": [
+      {
+        "key": "a",
+        "text": "Nacimiento por cesárea electiva con membranas íntegras y sin trabajo de parto",
+        "correct": true,
+        "rationale": "Sin trabajo de parto ni ruptura de membranas la exposición a la flora vaginal es mínima."
+      },
+      {
+        "key": "b",
+        "text": "Ruptura de membranas de 18 horas o más antes del nacimiento",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en que el parto fue normal y subestima el tiempo con membranas rotas."
+      },
+      {
+        "key": "c",
+        "text": "Fiebre materna de 38 °C o más durante el trabajo de parto",
+        "correct": false,
+        "bias": "framing_effect",
+        "rationale": "La fiebre se ve como un problema de la madre y no del bebé, aunque señala infección intraamniótica."
+      },
+      {
+        "key": "d",
+        "text": "Colonización materna por estreptococo del grupo B sin profilaxis adecuada",
+        "correct": false,
+        "bias": "omission_bias",
+        "rationale": "Se piensa que la colonización sin síntomas no importa, aunque sin profilaxis el riesgo para el bebé aumenta."
+      },
+      {
+        "key": "e",
+        "text": "Prematurez menor de 37 semanas",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en los antecedentes infecciosos de la madre y olvida que la inmadurez inmunológica del bebé es un factor mayor."
+      },
+      {
+        "key": "f",
+        "text": "Bacteriuria por estreptococo del grupo B durante el embarazo",
+        "correct": false,
+        "bias": "ambiguity_effect",
+        "rationale": "Genera duda si una infección urinaria cuenta, aunque indica colonización intensa y obliga a dar profilaxis."
+      },
+      {
+        "key": "g",
+        "text": "Hijo previo con enfermedad invasiva por estreptococo del grupo B",
+        "correct": false,
+        "bias": "gamblers_fallacy",
+        "rationale": "Supone que después de un hijo enfermo es menos probable que se repita, aunque el riesgo se mantiene en cada embarazo."
+      },
+      {
+        "key": "h",
+        "text": "Peso al nacer menor de 2,500 g",
+        "correct": false,
+        "bias": "inattentional_blindness",
+        "rationale": "Se pasa por alto que el bajo peso, como la prematurez, aumenta el riesgo de infección."
+      },
+      {
+        "key": "i",
+        "text": "Corioamnionitis",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Se recuerda solo como complicación materna y no como el factor de riesgo neonatal más fuerte."
+      },
+      {
+        "key": "j",
+        "text": "Infección urinaria materna sin tratamiento al final del embarazo",
+        "correct": false,
+        "bias": "belief_bias",
+        "rationale": "Se cree que una infección urinaria no afecta al bebé, aunque se asocia con parto pretérmino e infección neonatal."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "La sepsis neonatal temprana aparece en las primeras 72 horas de vida y se adquiere por transmisión vertical, sobre todo de estreptococo del grupo B y Escherichia coli. Sus factores de riesgo incluyen ruptura de membranas de 18 horas o más, fiebre materna intraparto, corioamnionitis, colonización por estreptococo del grupo B sin profilaxis adecuada, bacteriuria por este germen en el embarazo, un hijo previo con enfermedad invasiva, infección urinaria materna sin tratamiento, prematurez y bajo peso al nacer. La profilaxis intraparto con penicilina o ampicilina reduce la enfermedad temprana. La cesárea electiva sin trabajo de parto y con membranas íntegras casi no expone al bebé a la flora vaginal.",
+    "gpcRefs": ["Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la sepsis neonatal"]
+  },
+  {
+    "key": "b5-q19",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "pediatrics",
+    "topic": "immunizations",
+    "subtopic": "vaccine_contraindications",
+    "vignette": "Niño de 12 meses que acude a recibir la vacuna triple viral contra sarampión, rubéola y parotiditis. Su madre pregunta si alguna condición impide aplicarla hoy.",
+    "prompt": "¿Cuál de las siguientes es una contraindicación para aplicar la vacuna triple viral?",
+    "polarity": "negative",
+    "task": "prevention_screening",
+    "difficulty": 3,
+    "options": [
+      {
+        "key": "a",
+        "text": "Leucemia en tratamiento con quimioterapia",
+        "correct": true,
+        "rationale": "La inmunosupresión grave contraindica las vacunas de virus vivos atenuados."
+      },
+      {
+        "key": "b",
+        "text": "Alergia al huevo con urticaria",
+        "correct": false,
+        "bias": "belief_bias",
+        "rationale": "Se cree que la vacuna contiene proteína de huevo en cantidad peligrosa, aunque puede aplicarse a niños alérgicos al huevo."
+      },
+      {
+        "key": "c",
+        "text": "Resfriado común sin fiebre",
+        "correct": false,
+        "bias": "loss_aversion",
+        "rationale": "Teme una reacción por la infección leve, aunque no es contraindicación y posponer deja al niño sin protección."
+      },
+      {
+        "key": "d",
+        "text": "Madre embarazada que vive en la misma casa",
+        "correct": false,
+        "bias": "framing_effect",
+        "rationale": "El embarazo de la madre suena a riesgo, pero la vacuna del niño no se transmite y lo protege a ella de forma indirecta."
+      },
+      {
+        "key": "e",
+        "text": "Tratamiento actual con amoxicilina por otitis",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Usar antibiótico es una falsa contraindicación muy difundida que no afecta la respuesta a la vacuna."
+      },
+      {
+        "key": "f",
+        "text": "Antecedente familiar de crisis convulsivas",
+        "correct": false,
+        "bias": "clustering_illusion",
+        "rationale": "Relaciona las crisis de un familiar con un riesgo propio de la vacuna, aunque no es contraindicación."
+      },
+      {
+        "key": "g",
+        "text": "Antecedente de prematurez",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en el nacimiento prematuro, aunque las vacunas se aplican según la edad cronológica."
+      },
+      {
+        "key": "h",
+        "text": "Desnutrición leve",
+        "correct": false,
+        "bias": "halo_horn_effect",
+        "rationale": "Juzga por el aspecto delgado del niño, aunque la desnutrición aumenta la gravedad del sarampión y hace más importante vacunar."
+      },
+      {
+        "key": "i",
+        "text": "Lactancia materna actual",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en una posible interferencia de los anticuerpos maternos, que no impide aplicar la vacuna."
+      },
+      {
+        "key": "j",
+        "text": "Convivir con un abuelo en tratamiento con quimioterapia",
+        "correct": false,
+        "bias": "omission_bias",
+        "rationale": "Prefiere no vacunar por miedo a contagiar al abuelo, aunque vacunar a los convivientes es lo que lo protege."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "La vacuna triple viral contiene virus vivos atenuados de sarampión, rubéola y parotiditis. Sus contraindicaciones verdaderas son la anafilaxia a una dosis previa o a un componente, como la neomicina o la gelatina, la inmunodeficiencia grave, incluidas la leucemia en quimioterapia y el uso de esteroides a dosis altas, y el embarazo de la persona que se vacuna. La alergia al huevo no la contraindica. Son falsas contraindicaciones las enfermedades leves, el uso de antibióticos, la prematurez, la lactancia, la desnutrición, los antecedentes familiares de convulsiones y convivir con una embarazada o con una persona inmunodeprimida. Vacunar a los convivientes protege a quienes no pueden recibir la vacuna.",
+    "gpcRefs": ["Lineamientos generales del Programa de Vacunación Universal"]
+  },
+  {
+    "key": "b5-q20",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "pediatrics",
+    "topic": "pediatric_infectious",
+    "subtopic": "acute_otitis_media",
+    "vignette": "Niño de 4 años con otitis media aguda derecha hace 10 días, que no completó el tratamiento con amoxicilina. Hoy tiene fiebre de 39 °C, dolor, eritema y aumento de volumen detrás de la oreja derecha, con el pabellón auricular desplazado hacia adelante y abajo.",
+    "prompt": "¿Cuál es la complicación que presenta?",
+    "polarity": "affirmative",
+    "task": "complication_prognosis",
+    "difficulty": 2,
+    "options": [
+      {
+        "key": "a",
+        "text": "Mastoiditis aguda",
+        "correct": true,
+        "rationale": "La inflamación retroauricular con desplazamiento del pabellón después de una otitis es típica de la mastoiditis."
+      },
+      {
+        "key": "b",
+        "text": "Otitis externa",
+        "correct": false,
+        "bias": "representativeness_heuristic",
+        "rationale": "Comparte dolor de oído, pero afecta el conducto auditivo y no produce aumento de volumen retroauricular."
+      },
+      {
+        "key": "c",
+        "text": "Adenitis retroauricular reactiva",
+        "correct": false,
+        "bias": "premature_closure",
+        "rationale": "Es una primera idea razonable ante una masa detrás de la oreja, pero el desplazamiento del pabellón y la fiebre alta indican mastoiditis."
+      },
+      {
+        "key": "d",
+        "text": "Absceso cerebral",
+        "correct": false,
+        "bias": "complexity_bias",
+        "rationale": "Elige una complicación intracraneal grave sin datos neurológicos que la sugieran."
+      },
+      {
+        "key": "e",
+        "text": "Parotiditis",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Es una causa muy conocida de aumento de volumen cerca de la oreja, pero se localiza por delante y debajo de ella."
+      },
+      {
+        "key": "f",
+        "text": "Otitis media con derrame",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en el antecedente de otitis y lo ve como derrame residual, sin valorar los signos retroauriculares."
+      },
+      {
+        "key": "g",
+        "text": "Parálisis facial periférica",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en otra complicación conocida de la otitis que el niño no tiene."
+      },
+      {
+        "key": "h",
+        "text": "Celulitis del pabellón auricular",
+        "correct": false,
+        "bias": "inattentional_blindness",
+        "rationale": "Pasa por alto que el pabellón está desplazado, no inflamado, y que el foco está en la mastoides."
+      },
+      {
+        "key": "i",
+        "text": "Colesteatoma",
+        "correct": false,
+        "bias": "base_rate_fallacy",
+        "rationale": "Es una complicación de la otitis crónica, poco probable en un cuadro agudo de 10 días."
+      },
+      {
+        "key": "j",
+        "text": "Falla del antibiótico sin complicación",
+        "correct": false,
+        "bias": "status_quo_bias",
+        "rationale": "Mantiene el diagnóstico inicial de otitis y solo cambiaría el antibiótico, aunque los datos nuevos indican una complicación."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "La mastoiditis aguda es la complicación más frecuente de la otitis media aguda. Ocurre cuando la infección se extiende a las celdillas mastoideas y se manifiesta con fiebre, otalgia, dolor, eritema y aumento de volumen retroauricular, con desplazamiento del pabellón auricular hacia adelante y abajo. Es más frecuente en niños pequeños y en tratamientos incompletos. Requiere hospitalización, antibiótico intravenoso y valoración por otorrinolaringología, y la tomografía se indica si se sospecha absceso subperióstico o complicación intracraneal. Puede requerir drenaje o mastoidectomía. Otras complicaciones de la otitis son la parálisis facial, la laberintitis, la trombosis del seno sigmoideo, la meningitis y el absceso cerebral.",
+    "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento de la otitis media aguda en la edad pediátrica"]
+  },
+  {
+    "key": "b5-q21",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "pediatrics",
+    "topic": "pediatric_respiratory",
+    "subtopic": "pediatric_pneumonia",
+    "vignette": "Lactante de 4 meses con fiebre y tos de 3 días. Frecuencia respiratoria de 64 por minuto, tiraje subcostal, saturación de 88% al aire ambiente y rechazo a la vía oral. La radiografía muestra una consolidación en el lóbulo superior derecho. Tiene su esquema de vacunación completo.",
+    "prompt": "¿Cuál es la conducta a seguir?",
+    "polarity": "affirmative",
+    "task": "next_step",
+    "difficulty": 3,
+    "options": [
+      {
+        "key": "a",
+        "text": "Hospitalizar, dar oxígeno e iniciar ampicilina intravenosa",
+        "correct": true,
+        "rationale": "La hipoxemia, el tiraje y el rechazo a la vía oral son criterios de hospitalización y de antibiótico intravenoso."
+      },
+      {
+        "key": "b",
+        "text": "Amoxicilina oral a dosis altas y control en 48 horas en casa",
+        "correct": false,
+        "bias": "representativeness_heuristic",
+        "rationale": "Es el manejo de libro de la neumonía no grave, pero a este lactante le sobran la hipoxemia y el rechazo a la vía oral."
+      },
+      {
+        "key": "c",
+        "text": "Nebulizaciones con salbutamol y alta",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Se recuerda el manejo de la bronquiolitis o el asma, aunque la consolidación lobar indica neumonía bacteriana."
+      },
+      {
+        "key": "d",
+        "text": "Ceftriaxona con vancomicina en terapia intensiva",
+        "correct": false,
+        "bias": "complexity_bias",
+        "rationale": "Escala a un esquema de amplio espectro sin datos de choque, falla respiratoria ni complicaciones."
+      },
+      {
+        "key": "e",
+        "text": "Claritromicina oral como único tratamiento",
+        "correct": false,
+        "bias": "base_rate_fallacy",
+        "rationale": "Cubre gérmenes atípicos, que son poco frecuentes a los 4 meses frente al neumococo."
+      },
+      {
+        "key": "f",
+        "text": "Tomografía de tórax antes de iniciar el antibiótico",
+        "correct": false,
+        "bias": "information_bias",
+        "rationale": "La radiografía ya muestra la neumonía y otro estudio no cambia el manejo inicial."
+      },
+      {
+        "key": "g",
+        "text": "Oxígeno en casa y vigilancia sin antibiótico",
+        "correct": false,
+        "bias": "omission_bias",
+        "rationale": "Trata solo la hipoxemia y deja sin tratar una neumonía bacteriana grave."
+      },
+      {
+        "key": "h",
+        "text": "Hospitalizar solo si la fiebre persiste 72 horas más",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en la fiebre y pasa por alto que la saturación de 88% ya obliga a hospitalizar."
+      },
+      {
+        "key": "i",
+        "text": "Esperar el hemocultivo para elegir el antibiótico",
+        "correct": false,
+        "bias": "ambiguity_effect",
+        "rationale": "Prefiere un resultado seguro antes de tratar, aunque el antibiótico empírico no debe retrasarse."
+      },
+      {
+        "key": "j",
+        "text": "Esteroide sistémico por el tiraje",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en la dificultad respiratoria y elige un tratamiento propio de las crisis asmáticas."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "En la neumonía adquirida en la comunidad en niños, la decisión de hospitalizar depende de la gravedad. Son criterios de hospitalización la edad menor de 3 a 6 meses, la saturación menor de 90 a 92%, la dificultad respiratoria importante con tiraje o quejido, el rechazo a la vía oral o la deshidratación, el aspecto tóxico y las complicaciones como el derrame pleural. En el lactante hospitalizado con esquema de vacunación completo se usa ampicilina o penicilina intravenosa, porque el neumococo es el germen más frecuente, y se da oxígeno para mantener la saturación por arriba de 92%. La neumonía no grave se trata en casa con amoxicilina oral a dosis altas.",
+    "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento de la neumonía adquirida en la comunidad en pacientes de 3 meses a 18 años"]
+  },
+  {
+    "key": "b5-q22",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "pediatrics",
+    "topic": "pediatric_surgery",
+    "subtopic": "pyloric_stenosis",
+    "vignette": "Lactante masculino de 4 semanas, primogénito, con vómito no biliar en proyectil después de cada toma desde hace 5 días. Queda con hambre después de vomitar y ha perdido peso. En la exploración no se palpa masa abdominal.",
+    "prompt": "¿Cuál es el estudio de elección para confirmar el diagnóstico?",
+    "polarity": "affirmative",
+    "task": "confirmatory_study",
+    "difficulty": 2,
+    "options": [
+      {
+        "key": "a",
+        "text": "Ultrasonido abdominal para medir el grosor y la longitud del músculo pilórico",
+        "correct": true,
+        "rationale": "Confirma la hipertrofia del píloro con alta sensibilidad, sin radiación."
+      },
+      {
+        "key": "b",
+        "text": "Serie esofagogastroduodenal con bario",
+        "correct": false,
+        "bias": "status_quo_bias",
+        "rationale": "Fue el estudio habitual, con el signo de la cuerda, pero el ultrasonido lo sustituyó por ser igual de preciso y sin radiación."
+      },
+      {
+        "key": "c",
+        "text": "Radiografía simple de abdomen",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Es el estudio de abdomen más pedido, pero solo muestra un estómago distendido y no confirma la hipertrofia."
+      },
+      {
+        "key": "d",
+        "text": "Tomografía de abdomen",
+        "correct": false,
+        "bias": "complexity_bias",
+        "rationale": "Agrega radiación y sedación cuando el ultrasonido basta."
+      },
+      {
+        "key": "e",
+        "text": "Endoscopia alta",
+        "correct": false,
+        "bias": "information_bias",
+        "rationale": "Es invasiva y no mide el músculo pilórico, que es lo que define el diagnóstico."
+      },
+      {
+        "key": "f",
+        "text": "pH esofágico de 24 horas",
+        "correct": false,
+        "bias": "representativeness_heuristic",
+        "rationale": "El vómito del lactante evoca reflujo gastroesofágico, pero el reflujo no es en proyectil ni causa pérdida de peso con hambre."
+      },
+      {
+        "key": "g",
+        "text": "Gasometría venosa como estudio confirmatorio",
+        "correct": false,
+        "bias": "confirmation_bias",
+        "rationale": "La alcalosis hipoclorémica apoya la sospecha y debe corregirse, pero no confirma la hipertrofia."
+      },
+      {
+        "key": "h",
+        "text": "Prueba terapéutica con fórmula hidrolizada",
+        "correct": false,
+        "bias": "belief_bias",
+        "rationale": "Se cree que el vómito del lactante suele ser alergia a la leche, pero el cuadro es obstructivo."
+      },
+      {
+        "key": "i",
+        "text": "Observación una semana más porque no se palpa la oliva",
+        "correct": false,
+        "bias": "omission_bias",
+        "rationale": "Espera un signo que no siempre se palpa mientras el lactante se deshidrata y pierde peso."
+      },
+      {
+        "key": "j",
+        "text": "Serie esofagogastroduodenal con contraste para descartar malrotación",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en la idea de obstrucción intestinal del lactante, aunque el vómito no es biliar y orienta al píloro."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "La estenosis hipertrófica del píloro se presenta entre las 2 y 8 semanas de vida, con más frecuencia en varones primogénitos. Causa vómito no biliar en proyectil después de las tomas, con un lactante que queda hambriento, pierde peso y se deshidrata. A veces se palpa una masa en forma de oliva en el epigastrio. El estudio de elección es el ultrasonido, que confirma el diagnóstico con un músculo pilórico de 3 a 4 mm de grosor o más y de 15 a 18 mm de longitud o más. La alcalosis metabólica hipoclorémica e hipopotasémica se corrige antes de la cirugía, que es la piloromiotomía. La serie con bario se reserva para casos dudosos.",
+    "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento de la estenosis hipertrófica de píloro"]
+  },
+  {
+    "key": "b5-q23",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "pediatrics",
+    "topic": "pediatric_neurology",
+    "subtopic": "bacterial_meningitis_child",
+    "vignette": "Niña de 5 años hospitalizada con meningitis por Neisseria meningitidis confirmada en el cultivo de líquido cefalorraquídeo. Su hermano de 3 años vive en la misma casa, está asintomático y tiene la exploración normal.",
+    "prompt": "¿Cuál es la medida de prevención más apropiada para el hermano?",
+    "polarity": "affirmative",
+    "task": "prevention_screening",
+    "difficulty": 3,
+    "options": [
+      {
+        "key": "a",
+        "text": "Quimioprofilaxis con rifampicina oral durante 2 días",
+        "correct": true,
+        "rationale": "Los contactos cercanos de un caso de enfermedad meningocócica requieren quimioprofilaxis lo antes posible."
+      },
+      {
+        "key": "b",
+        "text": "Vigilancia y tratar solo si aparece fiebre",
+        "correct": false,
+        "bias": "omission_bias",
+        "rationale": "Espera los síntomas, cuando la enfermedad meningocócica avanza en horas y la profilaxis la previene."
+      },
+      {
+        "key": "c",
+        "text": "Punción lumbar al hermano",
+        "correct": false,
+        "bias": "information_bias",
+        "rationale": "Un estudio invasivo en un niño sin síntomas no cambia la indicación de profilaxis."
+      },
+      {
+        "key": "d",
+        "text": "Amoxicilina oral durante 10 días",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Es el antibiótico pediátrico más usado, pero no erradica al meningococo de la nasofaringe."
+      },
+      {
+        "key": "e",
+        "text": "Esperar el cultivo faríngeo del hermano para decidir",
+        "correct": false,
+        "bias": "confirmation_bias",
+        "rationale": "Busca confirmar que el hermano es portador, aunque la profilaxis se indica por el contacto, sin esperar cultivos."
+      },
+      {
+        "key": "f",
+        "text": "Vacuna contra meningococo como única medida",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en la prevención a largo plazo y olvida que la vacuna tarda en proteger y no sustituye a la profilaxis inmediata."
+      },
+      {
+        "key": "g",
+        "text": "Dexametasona oral",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en el tratamiento de la meningitis de la hermana y lo aplica a un contacto sano."
+      },
+      {
+        "key": "h",
+        "text": "Profilaxis solo si el hermano compartió cama con la paciente",
+        "correct": false,
+        "bias": "framing_effect",
+        "rationale": "Se deja llevar por la idea de contacto íntimo, aunque convivir en la misma casa ya es contacto cercano."
+      },
+      {
+        "key": "i",
+        "text": "Aislar al hermano en casa por 14 días sin antibiótico",
+        "correct": false,
+        "bias": "belief_bias",
+        "rationale": "Suena lógico aislar, pero lo que previene la enfermedad es erradicar la colonización con antibiótico."
+      },
+      {
+        "key": "j",
+        "text": "Gammaglobulina intramuscular",
+        "correct": false,
+        "bias": "complexity_bias",
+        "rationale": "Elige una medida inmunológica sin utilidad para el meningococo cuando un antibiótico oral basta."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "La enfermedad meningocócica se transmite por secreciones respiratorias y los contactos cercanos tienen un riesgo mucho mayor que la población general. Se consideran contactos cercanos las personas que viven en la misma casa, los compañeros de guardería y quienes tuvieron contacto directo con secreciones en los 7 días previos. La quimioprofilaxis debe darse lo antes posible, de preferencia en las primeras 24 horas. En niños se usa rifampicina oral durante 2 días o ceftriaxona intramuscular en dosis única, y en adultos también ciprofloxacino en dosis única. No se esperan cultivos faríngeos. La vacuna complementa a la profilaxis cuando el serogrupo es prevenible, pero no la sustituye.",
+    "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento de la meningitis bacteriana aguda en niños"]
+  },
+  {
+    "key": "b5-q24",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "pediatrics",
+    "topic": "pediatric_cardiology",
+    "subtopic": "congenital_heart_disease",
+    "vignette": "Lactante de 2 meses con taquipnea y sudoración al comer, que se cansa durante las tomas y ha subido poco de peso. Tiene un soplo holosistólico rudo en el borde esternal izquierdo bajo y hepatomegalia de 3 cm, sin cianosis. La radiografía muestra cardiomegalia con flujo pulmonar aumentado.",
+    "prompt": "¿Cuál es el diagnóstico más probable?",
+    "polarity": "affirmative",
+    "task": "diagnosis",
+    "difficulty": 3,
+    "options": [
+      {
+        "key": "a",
+        "text": "Comunicación interventricular amplia",
+        "correct": true,
+        "rationale": "El soplo holosistólico en el borde esternal izquierdo bajo con insuficiencia cardiaca y flujo pulmonar aumentado es típico."
+      },
+      {
+        "key": "b",
+        "text": "Tetralogía de Fallot",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Es la cardiopatía congénita más recordada, pero es cianógena y tiene flujo pulmonar disminuido."
+      },
+      {
+        "key": "c",
+        "text": "Comunicación interauricular",
+        "correct": false,
+        "bias": "representativeness_heuristic",
+        "rationale": "También es un cortocircuito de izquierda a derecha, pero suele ser asintomática en lactantes y da un soplo expulsivo pulmonar con desdoblamiento fijo del segundo ruido."
+      },
+      {
+        "key": "d",
+        "text": "Coartación de aorta",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en la insuficiencia cardiaca del lactante y olvida que la coartación se sospecha por diferencia de pulsos y presión entre brazos y piernas."
+      },
+      {
+        "key": "e",
+        "text": "Persistencia del conducto arterioso",
+        "correct": false,
+        "bias": "premature_closure",
+        "rationale": "Es una hipótesis razonable de cortocircuito, pero su soplo es continuo en la región infraclavicular izquierda."
+      },
+      {
+        "key": "f",
+        "text": "Transposición de grandes arterias",
+        "correct": false,
+        "bias": "inattentional_blindness",
+        "rationale": "Pasa por alto que el lactante no tiene cianosis, que en la transposición es intensa desde el nacimiento."
+      },
+      {
+        "key": "g",
+        "text": "Estenosis aórtica valvular",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en el soplo sistólico y lo atribuye a la válvula aórtica, aunque su foco y la radiografía no corresponden."
+      },
+      {
+        "key": "h",
+        "text": "Bronquiolitis",
+        "correct": false,
+        "bias": "clustering_illusion",
+        "rationale": "Agrupa la taquipnea y la mala alimentación como un cuadro respiratorio, aunque el soplo y la cardiomegalia apuntan al corazón."
+      },
+      {
+        "key": "i",
+        "text": "Miocardiopatía hipertrófica",
+        "correct": false,
+        "bias": "base_rate_fallacy",
+        "rationale": "Es rara en lactantes sin antecedentes familiares ni madre diabética."
+      },
+      {
+        "key": "j",
+        "text": "Soplo inocente",
+        "correct": false,
+        "bias": "omission_bias",
+        "rationale": "Prefiere vigilar sin estudiar, aunque un soplo holosistólico con insuficiencia cardiaca nunca es inocente."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "La comunicación interventricular es la cardiopatía congénita más frecuente. Produce un cortocircuito de izquierda a derecha con un soplo holosistólico rudo en el borde esternal izquierdo bajo. Cuando es amplia, el cortocircuito aumenta al bajar las resistencias pulmonares en las primeras semanas, y entre el primer y el tercer mes aparece insuficiencia cardiaca con taquipnea, sudoración y cansancio al comer, poco aumento de peso y hepatomegalia. La radiografía muestra cardiomegalia y flujo pulmonar aumentado. El ecocardiograma confirma el diagnóstico. Las comunicaciones pequeñas suelen cerrar solas. Las amplias se tratan con diuréticos y cierre quirúrgico temprano para evitar la hipertensión pulmonar.",
+    "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento de la comunicación interventricular"]
+  },
+  {
+    "key": "b5-q25",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "pediatrics",
+    "topic": "pediatric_nephrology",
+    "subtopic": "nephrotic_syndrome_child",
+    "vignette": "Niño de 5 años con síndrome nefrótico de cambios mínimos en tratamiento con prednisona. Tiene edema generalizado, proteinuria en rango nefrótico y albúmina de 1.8 g/dL. Se explica a la familia qué complicaciones vigilar.",
+    "prompt": "Todas las siguientes son complicaciones del síndrome nefrótico o de su tratamiento, EXCEPTO:",
+    "polarity": "negative",
+    "task": "complication_prognosis",
+    "difficulty": 4,
+    "options": [
+      {
+        "key": "a",
+        "text": "Sangrado por pérdida urinaria de factores de coagulación",
+        "correct": true,
+        "rationale": "La pérdida urinaria de antitrombina y el aumento de factores hepáticos causan hipercoagulabilidad, no sangrado."
+      },
+      {
+        "key": "b",
+        "text": "Peritonitis bacteriana espontánea",
+        "correct": false,
+        "bias": "representativeness_heuristic",
+        "rationale": "Se asocia la peritonitis espontánea solo con la cirrosis del adulto, aunque la ascitis del niño nefrótico también se infecta."
+      },
+      {
+        "key": "c",
+        "text": "Trombosis venosa, como la de la vena renal",
+        "correct": false,
+        "bias": "belief_bias",
+        "rationale": "Se cree que la trombosis es rara en niños, aunque el estado de hipercoagulabilidad la favorece."
+      },
+      {
+        "key": "d",
+        "text": "Hipovolemia con riesgo de choque",
+        "correct": false,
+        "bias": "framing_effect",
+        "rationale": "El edema da la impresión de exceso de líquido, aunque el volumen intravascular puede estar bajo."
+      },
+      {
+        "key": "e",
+        "text": "Celulitis",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en las complicaciones renales y olvida que la piel edematosa se infecta con facilidad."
+      },
+      {
+        "key": "f",
+        "text": "Lesión renal aguda",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en que la función renal suele ser normal en la enfermedad de cambios mínimos, aunque la hipovolemia puede dañarla."
+      },
+      {
+        "key": "g",
+        "text": "Hiperlipidemia",
+        "correct": false,
+        "bias": "inattentional_blindness",
+        "rationale": "Se pasa por alto que forma parte del propio síndrome por el aumento de la síntesis hepática de lipoproteínas."
+      },
+      {
+        "key": "h",
+        "text": "Hipotiroidismo por pérdida urinaria de proteínas transportadoras",
+        "correct": false,
+        "bias": "ambiguity_effect",
+        "rationale": "Genera duda por ser una complicación poco familiar, aunque la pérdida de la proteína que transporta la tiroxina puede causarlo."
+      },
+      {
+        "key": "i",
+        "text": "Retraso del crecimiento por uso prolongado de esteroides",
+        "correct": false,
+        "bias": "omission_bias",
+        "rationale": "Se subestiman los efectos del tratamiento y solo se vigila la enfermedad."
+      },
+      {
+        "key": "j",
+        "text": "Sepsis por neumococo",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Se recuerdan solo las infecciones virales comunes, aunque la pérdida de inmunoglobulinas favorece las bacterias encapsuladas."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "El síndrome nefrótico se caracteriza por proteinuria en rango nefrótico, hipoalbuminemia, edema e hiperlipidemia. En niños la causa más frecuente es la enfermedad de cambios mínimos, que responde a la prednisona. Sus complicaciones derivan de la pérdida urinaria de proteínas. La pérdida de inmunoglobulinas y de factores del complemento favorece infecciones por bacterias encapsuladas, como la peritonitis bacteriana espontánea por neumococo, la sepsis y la celulitis. La pérdida de antitrombina con aumento de factores hepáticos causa hipercoagulabilidad y trombosis. También pueden aparecer hipovolemia, lesión renal aguda e hipotiroidismo. El uso prolongado de esteroides causa retraso del crecimiento, hipertensión, osteopenia y cambios de conducta.",
+    "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome nefrótico primario en niños"]
+  }
+]

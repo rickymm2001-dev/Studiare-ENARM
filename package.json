@@ -28,8 +28,9 @@
     "e2e:install": "node scripts/playwright.ts install chromium",
     "screenshots": "node scripts/playwright.ts test --config playwright.screenshots.config.ts",
     "eval-ai": "node scripts/not-yet.ts eval-ai D",
-    "demo-seed": "node scripts/not-yet.ts demo-seed B",
-    "demo-reset": "node scripts/not-yet.ts demo-reset B"
+    "demo-seed": "DEMO_SEED_DRY_RUN=1 vitest run tests/demo --silent=false",
+    "demo-reset": "node scripts/demo-reset.ts",
+    "recovery-report": "RECOVERY_REPORT=1 vitest run tests/recovery && prettier --write docs/recovery-report.md"
   },
   "dependencies": {
     "@date-fns/tz": "1.5.0",
@@ -40,6 +41,8 @@
     "date-fns": "4.4.0",
     "dexie": "4.4.6",
     "dexie-react-hooks": "4.4.0",
+    "dompurify": "3.4.16",
+    "fflate": "0.8.3",
     "hono": "4.13.12",
     "lucide-react": "1.49.0",
     "radix-ui": "1.6.7",
@@ -63,6 +66,7 @@
     "@testing-library/jest-dom": "7.0.1",
     "@testing-library/react": "16.3.3",
     "@testing-library/user-event": "14.6.7",
+    "@types/jsdom": "30.0.0",
     "@types/node": "26.6.4",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",

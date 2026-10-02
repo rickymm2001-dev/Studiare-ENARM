@@ -18,6 +18,8 @@ describe('DataProvider', () => {
         <ContextKeys />
       </DataProvider>,
     );
-    expect(screen.getByText('rebuildDerivedState,recordEvent,repos')).toBeInTheDocument();
+    expect(
+      screen.getByText('deleteAllData,demo,rebuildDerivedState,recordEvent,repos'),
+    ).toBeInTheDocument();
   });
 });

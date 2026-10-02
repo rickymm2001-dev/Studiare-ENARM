@@ -1,0 +1,477 @@
+// Party (pantalla 14). Grupos con código de invitación, tabla semanal por XP desde el lunes a las
+// 4 a. m. y retos colectivos. Solo se comparte alias, XP, nivel y racha (9.6). Los duelos llegan
+// después. Sin servidor, todo vive en este navegador y los compañeros simulados van marcados.
+import { Copy, LogOut, Plus, Trophy, Users } from 'lucide-react';
+import { useState, type SyntheticEvent } from 'react';
+import { ScreenHeader } from '@/app/layout/ScreenHeader';
+import { useDataApi } from '@/data/context';
+import { createEvent } from '@/data/events/createEvent';
+import { useLiveData } from '@/data/hooks';
+import type { Challenge, Group, Membership } from '@/data/schemas/activity';
+import type { AppEvent } from '@/data/schemas/events';
+import {
+  createChallenge,
+  createGroup,
+  joinGroupByCode,
+  leaveGroup,
+  type JoinResult,
+} from '@/data/usecases/party';
+import { collectiveProgress, weeklyLeaderboard } from '@/engines/party';
+import { studyDayOf } from '@/engines/studyDay';
+import { awardXp } from '@/engines/xp';
+import { t } from '@/i18n/es-MX';
+import { Button } from '@/ui/components/button';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
+import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
+import { SimulatedDataLabel } from '@/ui/components/labels';
+import { LoadingState } from '@/ui/states/states';
+import { buildSnapshot, type Snapshot } from '../home/snapshot';
+import { RequireSession, type ReadySession } from '../shared/RequireSession';
+import { useUserEvents } from '../shared/useUserEvents';
+import { challengeContributions, memberStats, type ChallengeMetric } from './stats';
+
+export function PartyScreen() {
+  return <RequireSession screen="party">{(session) => <Party session={session} />}</RequireSession>;
+}
+
+function Party({ session }: { session: ReadySession }) {
+  const api = useDataApi();
+  const { user, settings } = session;
+  const events = useUserEvents(user.id);
+  const data = useLiveData(async () => {
+    const [groups, memberships, challenges] = await Promise.all([
+      api.repos.groups.list(),
+      api.repos.memberships.list(),
+      api.repos.challenges.list(),
+    ]);
+    return { groups, memberships, challenges };
+  }, [api.repos]);
+
+  const header = (
+    <ScreenHeader title={t.screens.party.title} description={t.screens.party.description} />
+  );
+  if (events === undefined || data === undefined) {
+    return (
+      <>
+        {header}
+        <LoadingState />
+      </>
+    );
+  }
+  const snapshot = buildSnapshot({ events, user, settings, now: new Date() });
+  const mine = data.memberships.filter((item) => item.userId === user.id && item.leftAt === null);
+  const myGroups = mine
+    .map((membership) => ({
+      membership,
+      group: data.groups.find((group) => group.id === membership.groupId),
+    }))
+    .filter((entry): entry is { membership: Membership; group: Group } => Boolean(entry.group));
+
+  return (
+    <>
+      {header}
+      <p className="text-sm text-fg-muted">{t.party.privacy}</p>
+      {myGroups.map(({ group, membership }) => (
+        <GroupCard
+          key={group.id}
+          group={group}
+          membership={membership}
+          members={data.memberships.filter(
+            (item) => item.groupId === group.id && item.leftAt === null,
+          )}
+          challenges={data.challenges.filter((item) => item.groupId === group.id)}
+          snapshot={snapshot}
+          events={events}
+          session={session}
+        />
+      ))}
+      <div className="grid gap-4 md:grid-cols-2">
+        <CreateGroupCard session={session} first={myGroups.length === 0} />
+        <JoinGroupCard session={session} />
+      </div>
+    </>
+  );
+}
+
+function CreateGroupCard({ session, first }: { session: ReadySession; first: boolean }) {
+  const api = useDataApi();
+  const [name, setName] = useState('');
+  const [withFriends, setWithFriends] = useState(true);
+  const submit = async (event: SyntheticEvent) => {
+    event.preventDefault();
+    if (!name.trim()) return;
+    await createGroup(api, session.user, { name, withSimulatedFriends: withFriends });
+    setName('');
+  };
+  return (
+    <Card aria-labelledby="crear-grupo">
+      <CardHeader>
+        <CardTitle id="crear-grupo">{t.party.createTitle}</CardTitle>
+        {first ? <CardDescription>{t.party.createHint}</CardDescription> : null}
+      </CardHeader>
+      <form
+        className="flex flex-col gap-3"
+        onSubmit={(event) => {
+          void submit(event);
+        }}
+      >
+        <TextField
+          label={t.party.groupName}
+          value={name}
+          maxLength={60}
+          required
+          onChange={(event) => {
+            setName(event.target.value);
+          }}
+        />
+        <CheckboxField
+          label={t.party.withFriends}
+          checked={withFriends}
+          onChange={(event) => {
+            setWithFriends(event.target.checked);
+          }}
+        />
+        <Button type="submit" className="self-start">
+          <Plus aria-hidden />
+          {t.party.create}
+        </Button>
+      </form>
+    </Card>
+  );
+}
+
+function JoinGroupCard({ session }: { session: ReadySession }) {
+  const api = useDataApi();
+  const [code, setCode] = useState('');
+  const [result, setResult] = useState<JoinResult | null>(null);
+  const submit = async (event: SyntheticEvent) => {
+    event.preventDefault();
+    setResult(await joinGroupByCode(api, session.user, code));
+  };
+  return (
+    <Card aria-labelledby="unirse-grupo">
+      <CardHeader>
+        <CardTitle id="unirse-grupo">{t.party.joinTitle}</CardTitle>
+        <CardDescription>{t.party.joinHint}</CardDescription>
+      </CardHeader>
+      <form
+        className="flex flex-col gap-3"
+        onSubmit={(event) => {
+          void submit(event);
+        }}
+      >
+        <TextField
+          label={t.party.code}
+          value={code}
+          maxLength={6}
+          autoCapitalize="characters"
+          spellCheck={false}
+          onChange={(event) => {
+            setCode(event.target.value.toUpperCase());
+            setResult(null);
+          }}
+        />
+        <Button type="submit" variant="secondary" className="self-start">
+          <Users aria-hidden />
+          {t.party.join}
+        </Button>
+        {result ? (
+          <p role="status" className="text-sm">
+            {t.party.joinResults[result]}
+          </p>
+        ) : null}
+      </form>
+    </Card>
+  );
+}
+
+function GroupCard({
+  group,
+  membership,
+  members,
+  challenges,
+  snapshot,
+  events,
+  session,
+}: {
+  group: Group;
+  membership: Membership;
+  members: Membership[];
+  challenges: Challenge[];
+  snapshot: Snapshot;
+  events: AppEvent[];
+  session: ReadySession;
+}) {
+  const api = useDataApi();
+  const { user } = session;
+  const [copied, setCopied] = useState(false);
+  const rows = weeklyLeaderboard(memberStats(members, { userId: user.id, snapshot }));
+
+  return (
+    <Card aria-labelledby={`grupo-${group.id}`}>
+      <CardHeader>
+        <div className="flex flex-wrap items-center gap-2">
+          <CardTitle id={`grupo-${group.id}`}>{group.name}</CardTitle>
+          {group.isSimulated ? <SimulatedDataLabel /> : null}
+        </div>
+        <div className="flex flex-wrap items-center gap-2 text-sm">
+          <span>
+            {t.party.inviteCode}{' '}
+            <strong className="font-mono tracking-widest">{group.inviteCode}</strong>
+          </span>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => {
+              void navigator.clipboard.writeText(group.inviteCode).then(() => {
+                setCopied(true);
+              });
+            }}
+          >
+            <Copy aria-hidden />
+            {copied ? t.party.copied : t.party.copy}
+          </Button>
+        </div>
+      </CardHeader>
+
+      <h3 className="font-medium">{t.party.leaderboard}</h3>
+      <p className="mb-2 text-sm text-fg-muted">{t.party.weekNote}</p>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="text-left text-fg-muted">
+              <th scope="col" className="py-1 pr-2">
+                #
+              </th>
+              <th scope="col" className="py-1 pr-2">
+                {t.party.alias}
+              </th>
+              <th scope="col" className="py-1 pr-2 text-right">
+                {t.party.level}
+              </th>
+              <th scope="col" className="py-1 pr-2 text-right">
+                {t.party.streak}
+              </th>
+              <th scope="col" className="py-1 text-right">
+                {t.party.weeklyXp}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr
+                key={row.memberId}
+                className={row.memberId === membership.id ? 'bg-primary-soft font-semibold' : ''}
+              >
+                <td className="py-1 pr-2">{row.rank}</td>
+                <td className="py-1 pr-2">
+                  {row.alias}
+                  {row.memberId === membership.id ? ` (${t.party.you})` : ''}
+                  {row.isSimulated ? (
+                    <span className="ml-1 text-xs text-fg-muted">· {t.party.simulated}</span>
+                  ) : null}
+                </td>
+                <td className="py-1 pr-2 text-right">{row.level}</td>
+                <td className="py-1 pr-2 text-right">{row.streak}</td>
+                <td className="py-1 text-right">{row.weeklyXp.toLocaleString('es-MX')}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 className="mt-4 font-medium">{t.party.challenges}</h3>
+      {challenges.length === 0 ? (
+        <p className="text-sm text-fg-muted">{t.party.noChallenges}</p>
+      ) : null}
+      <ul className="flex flex-col gap-3">
+        {challenges.map((challenge) => (
+          <ChallengeRow
+            key={challenge.id}
+            challenge={challenge}
+            members={members}
+            snapshot={snapshot}
+            events={events}
+            session={session}
+          />
+        ))}
+      </ul>
+      <NewChallengeForm group={group} />
+
+      <Button
+        variant="ghost"
+        size="sm"
+        className="mt-4 self-start"
+        onClick={() => {
+          void leaveGroup(api, user, membership);
+        }}
+      >
+        <LogOut aria-hidden />
+        {t.party.leave}
+      </Button>
+    </Card>
+  );
+}
+
+function ChallengeRow({
+  challenge,
+  members,
+  snapshot,
+  events,
+  session,
+}: {
+  challenge: Challenge;
+  members: Membership[];
+  snapshot: Snapshot;
+  events: AppEvent[];
+  session: ReadySession;
+}) {
+  const api = useDataApi();
+  const { user } = session;
+  const startDay = studyDayOf(new Date(challenge.startsAt), user.timeZone);
+  const progress = collectiveProgress(
+    challengeContributions(challenge, members, { userId: user.id, snapshot, startDay }),
+    challenge.target,
+  );
+  const claimed = events.some(
+    (event) => event.type === 'challenge_completed' && event.payload.challengeId === challenge.id,
+  );
+  const claim = async () => {
+    const ctx = { userId: user.id, tz: user.timeZone };
+    const completed = await api.recordEvent(
+      createEvent(
+        'challenge_completed',
+        { challengeId: challenge.id, groupId: challenge.groupId },
+        ctx,
+      ),
+    );
+    for (const award of awardXp({
+      activity: { kind: 'challenge', eventId: completed.id },
+      streakDays: snapshot.streak.current,
+      volumeXpToday: 0,
+    })) {
+      await api.recordEvent(createEvent('xp_awarded', award, ctx));
+    }
+  };
+  const percent = Math.round(progress.fraction * 100);
+  return (
+    <li className="rounded-md bg-muted p-3">
+      <p className="flex items-center gap-2 font-medium">
+        <Trophy aria-hidden className="size-4" />
+        {challenge.title}
+      </p>
+      <div
+        className="mt-2 h-2 w-full overflow-hidden rounded-full bg-surface"
+        role="progressbar"
+        aria-label={challenge.title}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={percent}
+      >
+        <div className="h-full bg-primary" style={{ width: `${percent}%` }} />
+      </div>
+      <p className="mt-1 text-sm text-fg-muted">
+        {t.party.progress(progress.total, progress.target, t.party.metrics[challenge.metric])}
+      </p>
+      {progress.completed ? (
+        claimed ? (
+          <p className="text-sm text-success">{t.party.claimed}</p>
+        ) : (
+          <Button
+            size="sm"
+            className="mt-2"
+            onClick={() => {
+              void claim();
+            }}
+          >
+            {t.party.claim}
+          </Button>
+        )
+      ) : null}
+    </li>
+  );
+}
+
+function NewChallengeForm({ group }: { group: Group }) {
+  const api = useDataApi();
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState('');
+  const [metric, setMetric] = useState<ChallengeMetric>('cards');
+  const [target, setTarget] = useState('500');
+  if (!open) {
+    return (
+      <Button
+        variant="secondary"
+        size="sm"
+        className="mt-3 self-start"
+        onClick={() => {
+          setOpen(true);
+        }}
+      >
+        <Plus aria-hidden />
+        {t.party.newChallenge}
+      </Button>
+    );
+  }
+  const submit = async (event: SyntheticEvent) => {
+    event.preventDefault();
+    const value = Number(target);
+    if (!title.trim() || !(value > 0)) return;
+    await createChallenge(api, group, { title, metric, target: value });
+    setOpen(false);
+    setTitle('');
+  };
+  return (
+    <form
+      className="mt-3 grid gap-3 rounded-md border border-line p-3 sm:grid-cols-3"
+      onSubmit={(event) => {
+        void submit(event);
+      }}
+    >
+      <TextField
+        label={t.party.challengeTitle}
+        value={title}
+        maxLength={80}
+        required
+        onChange={(event) => {
+          setTitle(event.target.value);
+        }}
+      />
+      <SelectField
+        label={t.party.metric}
+        value={metric}
+        options={(['cards', 'questions', 'xp'] as const).map((value) => ({
+          value,
+          label: t.party.metrics[value],
+        }))}
+        onChange={(event) => {
+          setMetric(event.target.value as ChallengeMetric);
+        }}
+      />
+      <TextField
+        label={t.party.target}
+        type="number"
+        min={1}
+        value={target}
+        onChange={(event) => {
+          setTarget(event.target.value);
+        }}
+      />
+      <div className="flex gap-2 sm:col-span-3">
+        <Button type="submit" size="sm">
+          {t.party.createChallenge}
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            setOpen(false);
+          }}
+        >
+          {t.party.cancel}
+        </Button>
+      </div>
+    </form>
+  );
+}

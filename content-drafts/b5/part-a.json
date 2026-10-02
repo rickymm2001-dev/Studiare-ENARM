@@ -1,0 +1,1133 @@
+[
+  {
+    "key": "b5-q01",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "internal_medicine",
+    "topic": "cardiology",
+    "subtopic": "atrial_fibrillation",
+    "vignette": "Mujer de 66 años con hipertensión que acude por palpitaciones de 2 días. Presión arterial de 132/80 mmHg, frecuencia cardiaca irregular de 128 por minuto, sin disnea, dolor torácico ni datos de insuficiencia cardiaca. El electrocardiograma muestra fibrilación auricular sin ondas P. El ecocardiograma reporta fracción de expulsión de 60%.",
+    "prompt": "¿Cuál es el tratamiento inicial para controlar la frecuencia cardiaca?",
+    "polarity": "affirmative",
+    "task": "initial_treatment",
+    "difficulty": 2,
+    "options": [
+      {
+        "key": "a",
+        "text": "Un betabloqueador por vía oral, como metoprolol",
+        "correct": true,
+        "rationale": "En la fibrilación auricular estable con función ventricular conservada, el betabloqueador controla la frecuencia con eficacia."
+      },
+      {
+        "key": "b",
+        "text": "Cardioversión eléctrica sincronizada de urgencia",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en la frecuencia de 128 por minuto, aunque la paciente está estable y lleva más de 48 horas sin anticoagulación."
+      },
+      {
+        "key": "c",
+        "text": "Amiodarona intravenosa en bolo como primera elección",
+        "correct": false,
+        "bias": "complexity_bias",
+        "rationale": "Elige un antiarrítmico potente y con muchos efectos adversos cuando un betabloqueador basta."
+      },
+      {
+        "key": "d",
+        "text": "Digoxina como único fármaco",
+        "correct": false,
+        "bias": "status_quo_bias",
+        "rationale": "Fue el fármaco habitual por décadas, pero controla mal la frecuencia con la actividad y hoy es de segunda línea."
+      },
+      {
+        "key": "e",
+        "text": "Verapamilo y metoprolol intravenosos juntos",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en bajar la frecuencia rápido y olvida que combinar ambos por vía intravenosa puede causar bradicardia grave e hipotensión."
+      },
+      {
+        "key": "f",
+        "text": "Observación sin fármacos hasta que revierta sola",
+        "correct": false,
+        "bias": "omission_bias",
+        "rationale": "Espera la reversión espontánea cuando la frecuencia rápida ya causa síntomas y requiere control."
+      },
+      {
+        "key": "g",
+        "text": "Adenosina intravenosa para revertir el ritmo",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Es el fármaco más recordado para las taquicardias, pero no revierte la fibrilación auricular."
+      },
+      {
+        "key": "h",
+        "text": "Ecocardiograma transesofágico antes de cualquier fármaco",
+        "correct": false,
+        "bias": "information_bias",
+        "rationale": "Solo se necesita antes de una cardioversión, no para iniciar el control de la frecuencia."
+      },
+      {
+        "key": "i",
+        "text": "Flecainida por vía oral para controlar la frecuencia",
+        "correct": false,
+        "bias": "belief_bias",
+        "rationale": "Suena lógico usar un antiarrítmico, pero la flecainida sirve para controlar el ritmo y no la frecuencia."
+      },
+      {
+        "key": "j",
+        "text": "Repetir el electrocardiograma cada hora y decidir según el último trazo",
+        "correct": false,
+        "bias": "serial_position_effect",
+        "rationale": "Da más peso al trazo más reciente que al cuadro completo, aunque el diagnóstico ya está hecho y el tratamiento no depende de esperar."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "En la fibrilación auricular con respuesta ventricular rápida y estabilidad hemodinámica, el primer objetivo es controlar la frecuencia. Con fracción de expulsión conservada se usan betabloqueadores o calcioantagonistas no dihidropiridínicos, como diltiazem o verapamilo, sin combinarlos por vía intravenosa. La digoxina es de segunda línea o se agrega cuando hay insuficiencia cardiaca. La cardioversión eléctrica urgente se reserva para la inestabilidad, y una cardioversión programada en un episodio de más de 48 horas requiere anticoagulación previa o descartar trombo con ecocardiograma transesofágico. Además del control de la frecuencia, se calcula el riesgo de embolia con la escala CHA2DS2-VASc para decidir la anticoagulación.",
+    "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento de la fibrilación auricular"]
+  },
+  {
+    "key": "b5-q02",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "internal_medicine",
+    "topic": "endocrinology",
+    "subtopic": "thyroid_disease",
+    "vignette": "Hombre de 74 años con cardiopatía isquémica estable que refiere cansancio, intolerancia al frío, estreñimiento y aumento de peso. Tiene piel seca y reflejos con relajación lenta. La TSH es de 18 mUI/L y la T4 libre está baja.",
+    "prompt": "¿Cuál es el tratamiento de elección?",
+    "polarity": "affirmative",
+    "task": "treatment_of_choice",
+    "difficulty": 3,
+    "options": [
+      {
+        "key": "a",
+        "text": "Levotiroxina a dosis inicial baja, con aumentos graduales según la TSH",
+        "correct": true,
+        "rationale": "En el adulto mayor con cardiopatía se inicia con dosis baja para no desencadenar isquemia o arritmias."
+      },
+      {
+        "key": "b",
+        "text": "Levotiroxina a la dosis completa calculada por peso desde el primer día",
+        "correct": false,
+        "bias": "representativeness_heuristic",
+        "rationale": "Es la pauta de libro del adulto joven y sano, pero a este paciente le sobra la cardiopatía isquémica."
+      },
+      {
+        "key": "c",
+        "text": "Liotironina como fármaco único",
+        "correct": false,
+        "bias": "complexity_bias",
+        "rationale": "Busca una hormona más activa y rápida cuando la levotiroxina basta y es más segura."
+      },
+      {
+        "key": "d",
+        "text": "Repetir las pruebas tiroideas en 6 meses antes de tratar",
+        "correct": false,
+        "bias": "omission_bias",
+        "rationale": "Pospone el tratamiento de un hipotiroidismo franco con síntomas y T4 libre baja."
+      },
+      {
+        "key": "e",
+        "text": "Metimazol",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Es el fármaco tiroideo más recordado, pero trata el hipertiroidismo y empeoraría el cuadro."
+      },
+      {
+        "key": "f",
+        "text": "Suplemento de yodo por vía oral",
+        "correct": false,
+        "bias": "belief_bias",
+        "rationale": "Suena lógico dar yodo a una tiroides que produce poca hormona, pero en zonas sin deficiencia no corrige el hipotiroidismo autoinmune."
+      },
+      {
+        "key": "g",
+        "text": "Ultrasonido tiroideo y gammagrama antes de iniciar el tratamiento",
+        "correct": false,
+        "bias": "information_bias",
+        "rationale": "No cambia el tratamiento de un hipotiroidismo primario sin nódulos palpables."
+      },
+      {
+        "key": "h",
+        "text": "Suspender el ácido acetilsalicílico por el riesgo de interacción",
+        "correct": false,
+        "bias": "loss_aversion",
+        "rationale": "Teme una interacción poco relevante y deja sin protección a un paciente con cardiopatía isquémica."
+      },
+      {
+        "key": "i",
+        "text": "Levotiroxina solo si la TSH supera 20 mUI/L",
+        "correct": false,
+        "bias": "framing_effect",
+        "rationale": "Se deja llevar por una cifra de corte, cuando la T4 libre baja y los síntomas ya definen un hipotiroidismo que se trata."
+      },
+      {
+        "key": "j",
+        "text": "Atribuir los síntomas a la edad y no tratar",
+        "correct": false,
+        "bias": "halo_horn_effect",
+        "rationale": "Juzga el cuadro por la edad del paciente y pasa por alto que los estudios confirman hipotiroidismo."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "El hipotiroidismo primario se confirma con TSH elevada y T4 libre baja, y la causa más frecuente en zonas sin deficiencia de yodo es la tiroiditis autoinmune. El tratamiento es levotiroxina por vía oral en ayuno. En adultos jóvenes y sanos puede iniciarse la dosis completa calculada por peso, pero en adultos mayores y en personas con cardiopatía isquémica se empieza con una dosis baja y se aumenta poco a poco, porque el aumento brusco del metabolismo puede causar angina, infarto o arritmias. La TSH se mide de 6 a 8 semanas después de cada ajuste. La liotironina sola no se recomienda por sus picos de concentración y el yodo no corrige la enfermedad autoinmune.",
+    "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo primario y subclínico en el adulto"]
+  },
+  {
+    "key": "b5-q03",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "internal_medicine",
+    "topic": "pulmonology",
+    "subtopic": "asthma_adult",
+    "vignette": "Mujer de 27 años con episodios de tos nocturna, sibilancias y opresión torácica desde hace un año, que empeoran con el frío y el ejercicio. Entre episodios está asintomática. La exploración física hoy es normal.",
+    "prompt": "¿Cuál es el estudio que confirma el diagnóstico?",
+    "polarity": "affirmative",
+    "task": "confirmatory_study",
+    "difficulty": 2,
+    "options": [
+      {
+        "key": "a",
+        "text": "Espirometría con prueba broncodilatadora que muestre aumento del FEV1 de 12% o más y 200 mL o más",
+        "correct": true,
+        "rationale": "Demuestra la obstrucción variable y reversible que define al asma."
+      },
+      {
+        "key": "b",
+        "text": "Radiografía de tórax",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Es el estudio más pedido ante síntomas respiratorios, pero en el asma suele ser normal y no confirma nada."
+      },
+      {
+        "key": "c",
+        "text": "Biometría hemática con eosinofilia",
+        "correct": false,
+        "bias": "confirmation_bias",
+        "rationale": "Busca un dato que apoya la idea de asma alérgica, pero no distingue el asma de otras causas de tos ni la confirma."
+      },
+      {
+        "key": "d",
+        "text": "Espirometría sin prueba broncodilatadora",
+        "correct": false,
+        "bias": "premature_closure",
+        "rationale": "Parece suficiente para ver obstrucción, pero sin la prueba broncodilatadora no se demuestra la reversibilidad."
+      },
+      {
+        "key": "e",
+        "text": "Gasometría arterial",
+        "correct": false,
+        "bias": "information_bias",
+        "rationale": "Se usa en crisis graves, pero no aporta al diagnóstico en una paciente estable."
+      },
+      {
+        "key": "f",
+        "text": "Tomografía de tórax de alta resolución",
+        "correct": false,
+        "bias": "complexity_bias",
+        "rationale": "Busca una enfermedad estructural rara cuando la función pulmonar basta para el diagnóstico."
+      },
+      {
+        "key": "g",
+        "text": "Pruebas cutáneas de alergia",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en el posible origen alérgico, que ayuda a identificar desencadenantes pero no confirma el asma."
+      },
+      {
+        "key": "h",
+        "text": "Prueba terapéutica con antibiótico",
+        "correct": false,
+        "bias": "representativeness_heuristic",
+        "rationale": "La tos con sibilancias evoca bronquitis infecciosa, pero el cuadro es episódico y sin fiebre."
+      },
+      {
+        "key": "i",
+        "text": "Medición de alfa 1 antitripsina",
+        "correct": false,
+        "bias": "base_rate_fallacy",
+        "rationale": "Su deficiencia es una causa rara de obstrucción, poco probable en una joven con síntomas episódicos."
+      },
+      {
+        "key": "j",
+        "text": "Ecocardiograma",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en la opresión torácica y piensa en el corazón, ignorando el patrón respiratorio episódico."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "El asma se sospecha por síntomas respiratorios variables, como sibilancias, disnea, opresión torácica y tos, que empeoran de noche o con desencadenantes como el frío, el ejercicio o los alérgenos. El diagnóstico se confirma al demostrar limitación variable del flujo aéreo. La prueba de elección es la espirometría con prueba broncodilatadora, y se considera positiva cuando el FEV1 aumenta 12% o más y al menos 200 mL. Si la espirometría es normal y la sospecha persiste, se usan la variabilidad del flujo espiratorio máximo o una prueba de reto bronquial. La radiografía suele ser normal y sirve para descartar otras causas. Las pruebas de alergia orientan sobre desencadenantes, pero no confirman el diagnóstico.",
+    "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años"]
+  },
+  {
+    "key": "b5-q04",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "internal_medicine",
+    "topic": "pulmonology",
+    "subtopic": "community_pneumonia",
+    "vignette": "Hombre de 34 años, sano y sin uso reciente de antibióticos, con fiebre de 38.8 °C, tos productiva y dolor pleurítico de 3 días. Está orientado, con frecuencia respiratoria de 20 por minuto, presión arterial de 124/78 mmHg y saturación de 96%. La urea es normal y la radiografía muestra una consolidación en el lóbulo inferior derecho.",
+    "prompt": "¿Cuál es el tratamiento de elección?",
+    "polarity": "affirmative",
+    "task": "treatment_of_choice",
+    "difficulty": 2,
+    "options": [
+      {
+        "key": "a",
+        "text": "Amoxicilina por vía oral y manejo ambulatorio",
+        "correct": true,
+        "rationale": "Con CURB-65 de 0 y sin comorbilidades se trata en casa con un antibiótico oral que cubre al neumococo."
+      },
+      {
+        "key": "b",
+        "text": "Hospitalizar y dar ceftriaxona intravenosa",
+        "correct": false,
+        "bias": "loss_aversion",
+        "rationale": "Teme una evolución grave y hospitaliza a un paciente de bajo riesgo que se beneficia del manejo en casa."
+      },
+      {
+        "key": "c",
+        "text": "Levofloxacino por vía oral como primera elección",
+        "correct": false,
+        "bias": "complexity_bias",
+        "rationale": "Elige un antibiótico de espectro más amplio que se reserva para comorbilidades o alergia, cuando la amoxicilina basta."
+      },
+      {
+        "key": "d",
+        "text": "Tratamiento sintomático sin antibiótico",
+        "correct": false,
+        "bias": "omission_bias",
+        "rationale": "Trata el cuadro como viral, aunque la consolidación radiográfica con fiebre requiere antibiótico."
+      },
+      {
+        "key": "e",
+        "text": "Esperar el cultivo de expectoración para elegir el antibiótico",
+        "correct": false,
+        "bias": "information_bias",
+        "rationale": "En el paciente ambulatorio de bajo riesgo el cultivo no cambia el tratamiento empírico y retrasarlo es perjudicial."
+      },
+      {
+        "key": "f",
+        "text": "Vancomicina con piperacilina y tazobactam",
+        "correct": false,
+        "bias": "base_rate_fallacy",
+        "rationale": "Cubre gérmenes resistentes que son muy poco probables en un joven sano de la comunidad."
+      },
+      {
+        "key": "g",
+        "text": "Oseltamivir como único tratamiento",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "La influenza es una causa muy conocida de fiebre y tos, pero la consolidación lobar sugiere neumonía bacteriana."
+      },
+      {
+        "key": "h",
+        "text": "Tomografía de tórax antes de iniciar el antibiótico",
+        "correct": false,
+        "bias": "confirmation_bias",
+        "rationale": "Busca confirmar con más imagen una neumonía que la radiografía ya demuestra."
+      },
+      {
+        "key": "i",
+        "text": "Antitusivo con codeína y reposo",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en la tos y no trata la infección que la causa."
+      },
+      {
+        "key": "j",
+        "text": "Esteroide sistémico junto con el antibiótico",
+        "correct": false,
+        "bias": "belief_bias",
+        "rationale": "Suena lógico reducir la inflamación, pero el esteroide solo se considera en la neumonía grave."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "En la neumonía adquirida en la comunidad, la gravedad se estima con escalas como CURB-65, que suma un punto por confusión, urea elevada, frecuencia respiratoria de 30 o más, presión baja y edad de 65 años o más. Con 0 o 1 punto y sin otros datos de riesgo el paciente puede tratarse en casa. En adultos sanos sin uso reciente de antibióticos se recomienda amoxicilina oral, porque el neumococo es el germen más frecuente. Las fluoroquinolonas y las combinaciones con betalactámico se reservan para comorbilidades, alergia o uso reciente de antibióticos. Los cultivos no son necesarios en el paciente ambulatorio de bajo riesgo. Se revalora a las 48 a 72 horas.",
+    "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento de la neumonía adquirida en la comunidad en adultos"]
+  },
+  {
+    "key": "b5-q05",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "internal_medicine",
+    "topic": "nephrology",
+    "subtopic": "acute_kidney_injury",
+    "vignette": "Hombre de 70 años con 3 días de diarrea y poca ingesta de líquidos. Presión arterial de 96/60 mmHg y mucosas secas. Creatinina de 2.4 mg/dL, que hace un mes era de 1.0 mg/dL. Se analizan los estudios de orina para clasificar la lesión renal aguda.",
+    "prompt": "Todos los siguientes hallazgos apoyan una lesión renal aguda prerrenal, EXCEPTO:",
+    "polarity": "negative",
+    "task": "data_interpretation",
+    "difficulty": 3,
+    "options": [
+      {
+        "key": "a",
+        "text": "Cilindros granulosos pardos abundantes en el sedimento",
+        "correct": true,
+        "rationale": "Son típicos de la necrosis tubular aguda, una lesión intrínseca."
+      },
+      {
+        "key": "b",
+        "text": "Fracción excretada de sodio menor de 1%",
+        "correct": false,
+        "bias": "framing_effect",
+        "rationale": "Una cifra baja parece indicar mala función, pero significa que el túbulo conserva sodio, como en la lesión prerrenal."
+      },
+      {
+        "key": "c",
+        "text": "Sodio urinario menor de 20 mEq/L",
+        "correct": false,
+        "bias": "belief_bias",
+        "rationale": "Se cree que un riñón dañado pierde sodio, pero en la lesión prerrenal el túbulo sano lo retiene."
+      },
+      {
+        "key": "d",
+        "text": "Osmolaridad urinaria mayor de 500 mOsm/kg",
+        "correct": false,
+        "bias": "inattentional_blindness",
+        "rationale": "Se pasa por alto que la orina concentrada muestra que el túbulo conserva su función."
+      },
+      {
+        "key": "e",
+        "text": "Relación nitrógeno ureico y creatinina mayor de 20",
+        "correct": false,
+        "bias": "representativeness_heuristic",
+        "rationale": "Se asocia la urea alta con daño renal grave, aunque la desproporción con la creatinina es típica de la hipovolemia."
+      },
+      {
+        "key": "f",
+        "text": "Sedimento con cilindros hialinos aislados",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en la palabra cilindros, aunque los hialinos aislados no indican daño tubular."
+      },
+      {
+        "key": "g",
+        "text": "Mejoría de la creatinina después de reponer volumen",
+        "correct": false,
+        "bias": "premature_closure",
+        "rationale": "Parece un dato de evolución y no de diagnóstico, pero la respuesta al volumen es el criterio que confirma la causa prerrenal."
+      },
+      {
+        "key": "h",
+        "text": "Fracción excretada de urea menor de 35%",
+        "correct": false,
+        "bias": "ambiguity_effect",
+        "rationale": "Genera duda por ser un índice menos usado, aunque apoya la lesión prerrenal y sirve si el paciente recibió diuréticos."
+      },
+      {
+        "key": "i",
+        "text": "Densidad urinaria elevada",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en los índices de sodio y olvida que la orina densa también refleja conservación de agua."
+      },
+      {
+        "key": "j",
+        "text": "Antecedente de pérdidas gastrointestinales con hipotensión",
+        "correct": false,
+        "bias": "serial_position_effect",
+        "rationale": "Da más peso a los últimos datos de laboratorio y olvida el primer dato del caso, que explica la hipoperfusión."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "La lesión renal aguda prerrenal se debe a hipoperfusión renal con túbulos sanos, que conservan sodio y agua. Por eso la fracción excretada de sodio es menor de 1%, el sodio urinario es menor de 20 mEq/L, la orina está concentrada, con osmolaridad mayor de 500 mOsm/kg y densidad alta, y la relación nitrógeno ureico y creatinina supera 20. El sedimento es inocente o tiene cilindros hialinos. Si el paciente recibió diuréticos, la fracción excretada de urea menor de 35% es más útil. La mejoría con la reposición de volumen confirma la causa. Los cilindros granulosos pardos indican necrosis tubular aguda, que puede aparecer si la hipoperfusión se prolonga.",
+    "gpcRefs": ["Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la lesión renal aguda"]
+  },
+  {
+    "key": "b5-q06",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "internal_medicine",
+    "topic": "nephrology",
+    "subtopic": "chronic_kidney_disease",
+    "vignette": "Mujer de 61 años con enfermedad renal crónica por diabetes, con tasa de filtración glomerular de 22 mL/min. Refiere prurito y dolor óseo difuso. Calcio sérico de 8.1 mg/dL, fósforo de 6.4 mg/dL y hormona paratiroidea de 480 pg/mL.",
+    "prompt": "¿Cuál es el diagnóstico más probable?",
+    "polarity": "affirmative",
+    "task": "diagnosis",
+    "difficulty": 3,
+    "options": [
+      {
+        "key": "a",
+        "text": "Hiperparatiroidismo secundario por enfermedad renal crónica",
+        "correct": true,
+        "rationale": "La retención de fósforo, el calcio bajo y la falta de vitamina D activa estimulan la paratiroides."
+      },
+      {
+        "key": "b",
+        "text": "Hiperparatiroidismo primario por adenoma",
+        "correct": false,
+        "bias": "representativeness_heuristic",
+        "rationale": "Comparte la hormona paratiroidea alta, pero el adenoma cursa con calcio alto y fósforo bajo."
+      },
+      {
+        "key": "c",
+        "text": "Hiperparatiroidismo terciario",
+        "correct": false,
+        "bias": "complexity_bias",
+        "rationale": "Elige una forma avanzada y menos frecuente, que se caracteriza por calcio alto, cuando el calcio aquí está bajo."
+      },
+      {
+        "key": "d",
+        "text": "Metástasis óseas",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en el dolor óseo y olvida que los estudios explican el cuadro por la enfermedad renal."
+      },
+      {
+        "key": "e",
+        "text": "Hipoparatiroidismo",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en el calcio bajo y pasa por alto que la hormona paratiroidea está muy elevada."
+      },
+      {
+        "key": "f",
+        "text": "Osteoporosis posmenopáusica",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Es la enfermedad ósea más conocida en mujeres mayores, pero no explica el fósforo alto ni la hormona paratiroidea elevada."
+      },
+      {
+        "key": "g",
+        "text": "Deficiencia de vitamina D por falta de sol como causa única",
+        "correct": false,
+        "bias": "premature_closure",
+        "rationale": "La deficiencia de vitamina D contribuye, pero el fósforo alto y la filtración baja muestran que la causa principal es renal."
+      },
+      {
+        "key": "h",
+        "text": "Mieloma múltiple",
+        "correct": false,
+        "bias": "clustering_illusion",
+        "rationale": "Une dolor óseo y falla renal en una sola enfermedad, aunque en esta paciente cada dato se explica por la diabetes y la enfermedad renal."
+      },
+      {
+        "key": "i",
+        "text": "Seudohipoparatiroidismo",
+        "correct": false,
+        "bias": "base_rate_fallacy",
+        "rationale": "Es una enfermedad genética rara que se manifiesta desde la infancia, muy poco probable en este contexto."
+      },
+      {
+        "key": "j",
+        "text": "Prurito urémico sin alteración del metabolismo mineral",
+        "correct": false,
+        "bias": "inattentional_blindness",
+        "rationale": "Atribuye todo a la uremia y pasa por alto el calcio, el fósforo y la hormona paratiroidea alterados."
+      }
+    ],
+    "canonical": ["a", "b", "c", "e"],
+    "explanation": "La enfermedad renal crónica altera el metabolismo mineral y óseo desde etapas intermedias. Al bajar la filtración se retiene fósforo, disminuye la producción de calcitriol y baja el calcio, y todo esto estimula la secreción de hormona paratiroidea. El resultado es el hiperparatiroidismo secundario, con calcio normal o bajo, fósforo alto y hormona paratiroidea elevada, que causa dolor óseo, fracturas, prurito y calcificaciones vasculares. El manejo incluye restringir el fósforo de la dieta, quelantes de fósforo, vitamina D activa o análogos y calcimiméticos. En el hiperparatiroidismo primario el calcio está alto y el fósforo bajo. El terciario aparece tras años de estimulación, con calcio alto y secreción autónoma.",
+    "gpcRefs": ["Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la enfermedad renal crónica"]
+  },
+  {
+    "key": "b5-q07",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "internal_medicine",
+    "topic": "gastroenterology",
+    "subtopic": "viral_hepatitis",
+    "vignette": "Hombre de 22 años con ictericia, coluria, náusea y dolor en el hipocondrio derecho de 5 días. Hace un mes comió mariscos en un puesto ambulante durante un viaje. Las aminotransferasas superan 2,000 UI/L y el tiempo de protrombina es normal. La IgM contra el virus de la hepatitis A es positiva.",
+    "prompt": "Todas las siguientes son características de la hepatitis A, EXCEPTO:",
+    "polarity": "negative",
+    "task": "diagnosis",
+    "difficulty": 2,
+    "options": [
+      {
+        "key": "a",
+        "text": "Evoluciona a infección crónica en una parte de los casos",
+        "correct": true,
+        "rationale": "La hepatitis A no se cronifica. La cronicidad es propia de las hepatitis B y C."
+      },
+      {
+        "key": "b",
+        "text": "Se transmite por vía fecal oral",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Se recuerda la transmisión sexual o sanguínea de otras hepatitis más conocidas y se duda de este dato."
+      },
+      {
+        "key": "c",
+        "text": "La IgM contra el virus confirma la infección aguda",
+        "correct": false,
+        "bias": "confirmation_bias",
+        "rationale": "Se piensa que hace falta un estudio de carga viral para confirmar, aunque la IgM basta."
+      },
+      {
+        "key": "d",
+        "text": "En niños pequeños suele ser asintomática",
+        "correct": false,
+        "bias": "representativeness_heuristic",
+        "rationale": "Se espera el cuadro de libro con ictericia a cualquier edad, aunque en los niños pequeños casi siempre es leve o silenciosa."
+      },
+      {
+        "key": "e",
+        "text": "No tiene tratamiento antiviral específico",
+        "correct": false,
+        "bias": "belief_bias",
+        "rationale": "Se cree que toda hepatitis viral se trata con antivirales, pero en la A el manejo es de soporte."
+      },
+      {
+        "key": "f",
+        "text": "Existe una vacuna eficaz para prevenirla",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en la vacuna de la hepatitis B y olvida que también hay vacuna contra la A."
+      },
+      {
+        "key": "g",
+        "text": "Su periodo de incubación es de alrededor de 4 semanas",
+        "correct": false,
+        "bias": "serial_position_effect",
+        "rationale": "Recuerda el último periodo de incubación que estudió, el de la hepatitis B, más largo, y duda de este."
+      },
+      {
+        "key": "h",
+        "text": "Puede causar falla hepática fulminante en una minoría de casos",
+        "correct": false,
+        "bias": "framing_effect",
+        "rationale": "Como se presenta siempre como una hepatitis benigna, se rechaza que pueda ser grave, aunque la falla fulminante es rara pero posible."
+      },
+      {
+        "key": "i",
+        "text": "La higiene y el agua potable reducen su transmisión",
+        "correct": false,
+        "bias": "omission_bias",
+        "rationale": "Se subestiman las medidas generales y se piensa que solo la vacuna previene."
+      },
+      {
+        "key": "j",
+        "text": "Es más sintomática en adultos que en niños",
+        "correct": false,
+        "bias": "inattentional_blindness",
+        "rationale": "Se pasa por alto que el paciente del caso es un adulto con ictericia franca, como suele ocurrir a esa edad."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "La hepatitis A es causada por un virus de ARN que se transmite por vía fecal oral, con agua o alimentos contaminados, como los mariscos crudos. Su incubación es de alrededor de 4 semanas. En niños pequeños suele ser asintomática, mientras que en adultos produce ictericia, coluria, náusea y aminotransferasas muy elevadas. El diagnóstico se confirma con IgM contra el virus. Es autolimitada, no tiene tratamiento antiviral y no evoluciona a la cronicidad, aunque rara vez causa falla hepática fulminante, sobre todo en personas mayores o con hepatopatía previa. Se previene con vacuna, higiene y agua potable. El tiempo de protrombina sirve para vigilar la función hepática.",
+    "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento de la hepatitis A"]
+  },
+  {
+    "key": "b5-q08",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "internal_medicine",
+    "topic": "gastroenterology",
+    "subtopic": "peptic_ulcer",
+    "vignette": "Hombre de 45 años con dolor epigástrico urente que mejora con los alimentos y lo despierta en la madrugada desde hace 2 meses. No toma antiinflamatorios ni fuma. La endoscopia muestra una úlcera en el bulbo duodenal.",
+    "prompt": "¿Cuál es la causa más frecuente de esta úlcera?",
+    "polarity": "affirmative",
+    "task": "risk_factor",
+    "difficulty": 1,
+    "options": [
+      {
+        "key": "a",
+        "text": "Infección por Helicobacter pylori",
+        "correct": true,
+        "rationale": "Es la causa más frecuente de úlcera duodenal en personas que no usan antiinflamatorios."
+      },
+      {
+        "key": "b",
+        "text": "Estrés psicológico",
+        "correct": false,
+        "bias": "belief_bias",
+        "rationale": "Coincide con la creencia popular, pero el estrés emocional no es la causa principal de la úlcera."
+      },
+      {
+        "key": "c",
+        "text": "Síndrome de Zollinger-Ellison",
+        "correct": false,
+        "bias": "complexity_bias",
+        "rationale": "Elige una causa rara y llamativa cuando la infección explica la mayoría de las úlceras."
+      },
+      {
+        "key": "d",
+        "text": "Uso de antiinflamatorios no esteroideos",
+        "correct": false,
+        "bias": "inattentional_blindness",
+        "rationale": "Es una causa muy frecuente, pero se pasa por alto que el paciente no los toma."
+      },
+      {
+        "key": "e",
+        "text": "Consumo de alimentos picantes",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Es la explicación que más se escucha, pero el picante no causa úlceras."
+      },
+      {
+        "key": "f",
+        "text": "Hiperparatiroidismo con hipercalcemia",
+        "correct": false,
+        "bias": "base_rate_fallacy",
+        "rationale": "La hipercalcemia aumenta la secreción ácida, pero es una causa muy poco frecuente."
+      },
+      {
+        "key": "g",
+        "text": "Enfermedad de Crohn duodenal",
+        "correct": false,
+        "bias": "representativeness_heuristic",
+        "rationale": "Puede dar úlceras en el duodeno, pero sin diarrea ni otros datos de enfermedad inflamatoria es muy improbable."
+      },
+      {
+        "key": "h",
+        "text": "Consumo de café",
+        "correct": false,
+        "bias": "halo_horn_effect",
+        "rationale": "Juzga el cuadro por un hábito del paciente que no está demostrado como causa."
+      },
+      {
+        "key": "i",
+        "text": "Insuficiencia pancreática",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en el dolor epigástrico y piensa en el páncreas, aunque la endoscopia ya muestra la úlcera."
+      },
+      {
+        "key": "j",
+        "text": "Reflujo biliar duodenogástrico",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en un mecanismo de irritación de la mucosa gástrica que no explica una úlcera duodenal."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "La úlcera péptica se debe al desequilibrio entre el ácido y los mecanismos de defensa de la mucosa. Las dos causas principales son la infección por Helicobacter pylori y el uso de antiinflamatorios no esteroideos. En una persona que no los toma, la infección es la causa más frecuente, sobre todo de la úlcera duodenal, que se manifiesta con dolor epigástrico que mejora con los alimentos y aparece de madrugada. Toda úlcera requiere buscar la bacteria, con biopsia durante la endoscopia, prueba de aliento o antígeno en heces, y tratarla para evitar recurrencias. Las causas raras, como el síndrome de Zollinger-Ellison, se sospechan con úlceras múltiples, recurrentes o en sitios atípicos.",
+    "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad ulcerosa péptica"]
+  },
+  {
+    "key": "b5-q09",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "internal_medicine",
+    "topic": "infectious_diseases",
+    "subtopic": "sepsis",
+    "vignette": "Mujer de 68 años con fiebre, disuria y confusión de un día. Presión arterial de 82/48 mmHg, frecuencia cardiaca de 118 por minuto, frecuencia respiratoria de 26 por minuto y lactato de 4.6 mmol/L. El examen de orina muestra abundantes leucocitos y nitritos.",
+    "prompt": "¿Cuál es el siguiente paso en la primera hora de atención?",
+    "polarity": "affirmative",
+    "task": "next_step",
+    "difficulty": 3,
+    "options": [
+      {
+        "key": "a",
+        "text": "Tomar hemocultivos, iniciar antibiótico intravenoso de amplio espectro y dar 30 mL/kg de cristaloide",
+        "correct": true,
+        "rationale": "Son las medidas de la primera hora en la sepsis con hipotensión y lactato elevado."
+      },
+      {
+        "key": "b",
+        "text": "Esperar el urocultivo para elegir el antibiótico adecuado",
+        "correct": false,
+        "bias": "information_bias",
+        "rationale": "Cada hora sin antibiótico aumenta la mortalidad. El cultivo se toma, pero no se espera."
+      },
+      {
+        "key": "c",
+        "text": "Iniciar norepinefrina sin dar líquidos",
+        "correct": false,
+        "bias": "premature_closure",
+        "rationale": "La norepinefrina es correcta para la hipotensión de la sepsis, pero se inicia sin reponer antes el volumen."
+      },
+      {
+        "key": "d",
+        "text": "Antibiótico por vía oral y vigilancia en casa",
+        "correct": false,
+        "bias": "representativeness_heuristic",
+        "rationale": "Trata el caso como una cistitis de libro, aunque tiene hipotensión, confusión y lactato alto."
+      },
+      {
+        "key": "e",
+        "text": "Hidrocortisona intravenosa como primera medida",
+        "correct": false,
+        "bias": "complexity_bias",
+        "rationale": "Se reserva para el choque que no responde a líquidos y vasopresores."
+      },
+      {
+        "key": "f",
+        "text": "Tomografía de abdomen antes de iniciar el antibiótico",
+        "correct": false,
+        "bias": "confirmation_bias",
+        "rationale": "Busca confirmar el foco con imagen cuando el examen de orina ya lo muestra y el antibiótico no debe retrasarse."
+      },
+      {
+        "key": "g",
+        "text": "Solución glucosada al 5% para reponer volumen",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Es una solución de uso común, pero expande muy poco el volumen intravascular."
+      },
+      {
+        "key": "h",
+        "text": "Transfundir concentrados eritrocitarios",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en mejorar el transporte de oxígeno sin que haya anemia que lo indique."
+      },
+      {
+        "key": "i",
+        "text": "Bicarbonato de sodio para corregir la acidosis láctica",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en el lactato alto, que se corrige al tratar la infección y la hipoperfusión."
+      },
+      {
+        "key": "j",
+        "text": "Antipirético y revalorar en 6 horas",
+        "correct": false,
+        "bias": "omission_bias",
+        "rationale": "Trata solo la fiebre y retrasa medidas que salvan la vida."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "La sepsis es una disfunción orgánica que pone en riesgo la vida, causada por una respuesta desregulada a la infección. Ante hipotensión o lactato de 4 mmol/L o más, en la primera hora se mide el lactato, se toman hemocultivos antes del antibiótico sin retrasarlo, se inicia un antibiótico intravenoso de amplio espectro y se administran 30 mL/kg de cristaloide. Si la presión arterial media sigue por debajo de 65 mmHg durante o después de los líquidos, se inicia norepinefrina. La hidrocortisona se reserva para el choque que requiere vasopresores de forma persistente. Además se busca y controla el foco. En esta paciente el origen probable es urinario.",
+    "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento de sepsis grave y choque séptico en el adulto"]
+  },
+  {
+    "key": "b5-q10",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "internal_medicine",
+    "topic": "hematology",
+    "subtopic": "anticoagulation",
+    "vignette": "Hombre de 64 años hospitalizado por reemplazo de cadera que recibe heparina no fraccionada como tromboprofilaxis. Al octavo día sus plaquetas bajaron de 240,000 a 90,000/µL y presenta edema doloroso de la pierna izquierda.",
+    "prompt": "Todas las siguientes son características de la trombocitopenia inducida por heparina, EXCEPTO:",
+    "polarity": "negative",
+    "task": "diagnosis",
+    "difficulty": 4,
+    "options": [
+      {
+        "key": "a",
+        "text": "Su manifestación principal es el sangrado",
+        "correct": true,
+        "rationale": "A pesar de la trombocitopenia, la complicación característica es la trombosis, no el sangrado."
+      },
+      {
+        "key": "b",
+        "text": "Suele aparecer entre 5 y 10 días después de iniciar la heparina",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en la idea de una reacción inmediata, aunque los anticuerpos tardan días en formarse."
+      },
+      {
+        "key": "c",
+        "text": "Se debe a anticuerpos contra el complejo del factor plaquetario 4 y la heparina",
+        "correct": false,
+        "bias": "ambiguity_effect",
+        "rationale": "Genera duda por ser un mecanismo inmunológico poco familiar, aunque es la base de la enfermedad."
+      },
+      {
+        "key": "d",
+        "text": "Las plaquetas bajan más de 50% respecto a la cifra basal",
+        "correct": false,
+        "bias": "framing_effect",
+        "rationale": "Como la cifra final no es muy baja, se duda de la enfermedad, aunque el criterio es la caída relativa."
+      },
+      {
+        "key": "e",
+        "text": "Es más frecuente con heparina no fraccionada que con heparina de bajo peso molecular",
+        "correct": false,
+        "bias": "belief_bias",
+        "rationale": "Se cree que ambas heparinas tienen el mismo riesgo, aunque la no fraccionada lo tiene mayor."
+      },
+      {
+        "key": "f",
+        "text": "Obliga a suspender toda heparina, incluida la de lavado de catéteres",
+        "correct": false,
+        "bias": "omission_bias",
+        "rationale": "Se subestima la heparina de lavado y se deja una exposición que mantiene la enfermedad."
+      },
+      {
+        "key": "g",
+        "text": "Requiere iniciar un anticoagulante no heparínico, como argatrobán o fondaparinux",
+        "correct": false,
+        "bias": "loss_aversion",
+        "rationale": "Teme anticoagular a un paciente con plaquetas bajas, aunque el riesgo de trombosis es mucho mayor que el de sangrado."
+      },
+      {
+        "key": "h",
+        "text": "No se transfunden plaquetas de forma rutinaria",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en la cifra de plaquetas y olvida que transfundirlas puede aumentar la trombosis."
+      },
+      {
+        "key": "i",
+        "text": "La warfarina no se inicia hasta que las plaquetas se recuperan",
+        "correct": false,
+        "bias": "sunk_cost_fallacy",
+        "rationale": "Se quiere seguir con el plan de anticoagulación oral ya decidido, aunque iniciarla temprano puede causar gangrena venosa."
+      },
+      {
+        "key": "j",
+        "text": "Se estima su probabilidad clínica con la escala 4T",
+        "correct": false,
+        "bias": "information_bias",
+        "rationale": "Se cree que solo cuenta la prueba de anticuerpos, aunque la escala 4T es el primer paso del diagnóstico."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "La trombocitopenia inducida por heparina es una reacción inmunológica en la que se forman anticuerpos contra el complejo del factor plaquetario 4 y la heparina, que activan las plaquetas. Aparece de 5 a 10 días después de iniciar la heparina, antes si hubo exposición reciente, y las plaquetas bajan más de 50%. Es más frecuente con heparina no fraccionada y en pacientes quirúrgicos. Su complicación característica es la trombosis venosa o arterial, no el sangrado. La probabilidad se estima con la escala 4T y se confirma con anticuerpos. Se suspende toda heparina, se inicia un anticoagulante no heparínico y la warfarina se pospone hasta recuperar las plaquetas.",
+    "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento de la trombocitopenia inducida por heparina"]
+  },
+  {
+    "key": "b5-q11",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "internal_medicine",
+    "topic": "neurology",
+    "subtopic": "epilepsy",
+    "vignette": "Mujer de 24 años con dos crisis tónico-clónicas generalizadas en los últimos 4 meses, sin desencadenante. El electroencefalograma muestra descargas generalizadas y la resonancia magnética es normal. Planea embarazarse en los próximos años y no usa anticonceptivos hormonales.",
+    "prompt": "¿Cuál es el fármaco de elección?",
+    "polarity": "affirmative",
+    "task": "treatment_of_choice",
+    "difficulty": 3,
+    "options": [
+      {
+        "key": "a",
+        "text": "Levetiracetam o lamotrigina",
+        "correct": true,
+        "rationale": "Son eficaces en la epilepsia generalizada y tienen bajo riesgo de malformaciones congénitas."
+      },
+      {
+        "key": "b",
+        "text": "Ácido valproico",
+        "correct": false,
+        "bias": "representativeness_heuristic",
+        "rationale": "Es el fármaco de libro para la epilepsia generalizada, pero en una mujer que planea embarazarse se evita por su alto riesgo de malformaciones."
+      },
+      {
+        "key": "c",
+        "text": "No iniciar tratamiento hasta que tenga una tercera crisis",
+        "correct": false,
+        "bias": "omission_bias",
+        "rationale": "Espera más crisis cuando dos crisis no provocadas ya establecen el diagnóstico de epilepsia."
+      },
+      {
+        "key": "d",
+        "text": "Fenitoína",
+        "correct": false,
+        "bias": "status_quo_bias",
+        "rationale": "Fue un anticonvulsivo habitual, pero tiene más efectos adversos y riesgo teratogénico que las opciones actuales."
+      },
+      {
+        "key": "e",
+        "text": "Carbamazepina",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Es muy conocida, pero puede empeorar algunas epilepsias generalizadas y es inductora enzimática."
+      },
+      {
+        "key": "f",
+        "text": "Clonazepam como único tratamiento a largo plazo",
+        "correct": false,
+        "bias": "belief_bias",
+        "rationale": "Suena lógico por su efecto anticonvulsivo, pero genera tolerancia y dependencia y no es un tratamiento de base."
+      },
+      {
+        "key": "g",
+        "text": "Fenobarbital",
+        "correct": false,
+        "bias": "loss_aversion",
+        "rationale": "Busca el control más seguro de las crisis con un fármaco antiguo, aunque su sedación y su riesgo fetal superan el beneficio."
+      },
+      {
+        "key": "h",
+        "text": "Repetir el electroencefalograma con privación de sueño antes de decidir",
+        "correct": false,
+        "bias": "information_bias",
+        "rationale": "El diagnóstico ya está hecho y otro estudio no cambia la indicación de tratar."
+      },
+      {
+        "key": "i",
+        "text": "Cirugía de epilepsia",
+        "correct": false,
+        "bias": "complexity_bias",
+        "rationale": "Se reserva para la epilepsia focal resistente a fármacos, no para el inicio del tratamiento."
+      },
+      {
+        "key": "j",
+        "text": "Dos anticonvulsivos desde el inicio",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en lograr el control total de inmediato y olvida que se empieza con monoterapia."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "Dos crisis no provocadas separadas por más de 24 horas establecen el diagnóstico de epilepsia y justifican el tratamiento. En la epilepsia generalizada el valproato es muy eficaz, pero en mujeres en edad fértil se evita porque causa malformaciones del tubo neural y alteraciones del neurodesarrollo. Por eso se prefieren levetiracetam o lamotrigina, con menor riesgo teratogénico. Se inicia con un solo fármaco y se ajusta la dosis según la respuesta. Carbamazepina y fenitoína pueden empeorar algunas crisis generalizadas y son inductores enzimáticos. Se recomienda ácido fólico antes de la concepción y planear el embarazo con el neurólogo. La cirugía se reserva para la epilepsia resistente.",
+    "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento de la epilepsia en el adulto"]
+  },
+  {
+    "key": "b5-q12",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "internal_medicine",
+    "topic": "rheumatology",
+    "subtopic": "gout",
+    "vignette": "Hombre de 48 años, con sobrepeso, que acude a revisión de rutina. Nunca ha tenido dolor articular, litiasis renal ni tofos. Su ácido úrico sérico es de 8.6 mg/dL, con función renal normal.",
+    "prompt": "¿Cuál es la conducta más apropiada?",
+    "polarity": "affirmative",
+    "task": "next_step",
+    "difficulty": 2,
+    "options": [
+      {
+        "key": "a",
+        "text": "Recomendar cambios en la dieta, bajar de peso y moderar el alcohol, sin fármacos hipouricemiantes",
+        "correct": true,
+        "rationale": "La hiperuricemia asintomática no se trata con fármacos de forma rutinaria."
+      },
+      {
+        "key": "b",
+        "text": "Iniciar alopurinol",
+        "correct": false,
+        "bias": "loss_aversion",
+        "rationale": "Busca evitar un futuro ataque de gota con un fármaco que tiene efectos adversos y no está indicado sin síntomas."
+      },
+      {
+        "key": "c",
+        "text": "Colchicina diaria como profilaxis",
+        "correct": false,
+        "bias": "focusing_illusion",
+        "rationale": "Se fija en prevenir ataques que nunca ha tenido y olvida que la profilaxis solo acompaña al inicio de un hipouricemiante."
+      },
+      {
+        "key": "d",
+        "text": "Febuxostat",
+        "correct": false,
+        "bias": "complexity_bias",
+        "rationale": "Elige un fármaco más nuevo para una situación que no requiere tratamiento farmacológico."
+      },
+      {
+        "key": "e",
+        "text": "Iniciar alopurinol si una nueva medición supera 7 mg/dL",
+        "correct": false,
+        "bias": "framing_effect",
+        "rationale": "Toma la meta de tratamiento de la gota como umbral para tratar, aunque el paciente no tiene gota."
+      },
+      {
+        "key": "f",
+        "text": "Artrocentesis para buscar cristales",
+        "correct": false,
+        "bias": "information_bias",
+        "rationale": "No hay articulación inflamada que puncionar y el resultado no cambiaría la conducta."
+      },
+      {
+        "key": "g",
+        "text": "Antiinflamatorio no esteroideo diario",
+        "correct": false,
+        "bias": "belief_bias",
+        "rationale": "Se cree que prevenir la inflamación evita la gota, pero sin síntomas solo expone a efectos adversos."
+      },
+      {
+        "key": "h",
+        "text": "Probenecid",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Es un uricosúrico conocido, pero tampoco está indicado en la hiperuricemia sin síntomas."
+      },
+      {
+        "key": "i",
+        "text": "Radiografía de manos y pies para buscar erosiones",
+        "correct": false,
+        "bias": "confirmation_bias",
+        "rationale": "Busca un daño que apoye tratar, cuando no hay síntomas que lo sugieran."
+      },
+      {
+        "key": "j",
+        "text": "Restricción total de proteínas",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en la cifra de ácido úrico y propone una dieta extrema e innecesaria en lugar de medidas moderadas."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "La hiperuricemia asintomática es frecuente y la mayoría de las personas con ella nunca presentan gota. Por eso no se recomienda tratarla con fármacos hipouricemiantes de forma rutinaria. El manejo consiste en reducir peso, limitar el alcohol, sobre todo la cerveza, las bebidas con fructosa y las carnes rojas y mariscos en exceso, y controlar los factores de riesgo cardiovascular. El tratamiento hipouricemiante se indica en la gota con ataques frecuentes, tofos, daño articular o litiasis. La meta en la gota es un ácido úrico menor de 6 mg/dL. La colchicina se usa como profilaxis solo durante los primeros meses de un hipouricemiante.",
+    "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento de la gota"]
+  },
+  {
+    "key": "b5-q13",
+    "caseKey": null,
+    "caseOrder": null,
+    "branch": "internal_medicine",
+    "topic": "rheumatology",
+    "subtopic": "rheumatoid_arthritis",
+    "vignette": "Mujer de 39 años con dolor e inflamación simétrica de las articulaciones metacarpofalángicas e interfalángicas proximales de ambas manos desde hace 10 semanas, con rigidez matutina de 90 minutos. La velocidad de sedimentación globular está elevada.",
+    "prompt": "¿Cuál es el estudio de laboratorio más específico para el diagnóstico?",
+    "polarity": "affirmative",
+    "task": "diagnosis",
+    "difficulty": 2,
+    "options": [
+      {
+        "key": "a",
+        "text": "Anticuerpos contra péptidos cíclicos citrulinados",
+        "correct": true,
+        "rationale": "Tienen especificidad mayor de 95% para artritis reumatoide y se asocian con enfermedad erosiva."
+      },
+      {
+        "key": "b",
+        "text": "Factor reumatoide",
+        "correct": false,
+        "bias": "availability_heuristic",
+        "rationale": "Es el estudio más conocido, pero es menos específico y aparece en infecciones, otras enfermedades autoinmunes y adultos mayores."
+      },
+      {
+        "key": "c",
+        "text": "Anticuerpos antinucleares",
+        "correct": false,
+        "bias": "representativeness_heuristic",
+        "rationale": "Se asocian con lupus, que también da artritis de manos, pero son poco específicos para artritis reumatoide."
+      },
+      {
+        "key": "d",
+        "text": "Proteína C reactiva",
+        "correct": false,
+        "bias": "confirmation_bias",
+        "rationale": "Confirma que hay inflamación, pero no distingue la artritis reumatoide de otras artritis."
+      },
+      {
+        "key": "e",
+        "text": "Ácido úrico sérico",
+        "correct": false,
+        "bias": "base_rate_fallacy",
+        "rationale": "La gota poliarticular simétrica es poco probable en una mujer joven premenopáusica."
+      },
+      {
+        "key": "f",
+        "text": "Antígeno HLA-B27",
+        "correct": false,
+        "bias": "clustering_illusion",
+        "rationale": "Agrupa toda artritis inflamatoria bajo una sola causa genética, aunque el HLA-B27 se asocia con espondiloartritis axial."
+      },
+      {
+        "key": "g",
+        "text": "Anticuerpos anti DNA de doble cadena",
+        "correct": false,
+        "bias": "anchoring",
+        "rationale": "Se ancla en que es una mujer joven con artritis y piensa en lupus, sin otros datos que lo sugieran."
+      },
+      {
+        "key": "h",
+        "text": "Antiestreptolisinas",
+        "correct": false,
+        "bias": "premature_closure",
+        "rationale": "Piensa en artritis reactiva postestreptocócica, pero el patrón simétrico y crónico de manos la descarta."
+      },
+      {
+        "key": "i",
+        "text": "Biometría hemática",
+        "correct": false,
+        "bias": "information_bias",
+        "rationale": "Puede mostrar anemia de enfermedad crónica, pero no aporta especificidad al diagnóstico."
+      },
+      {
+        "key": "j",
+        "text": "Velocidad de sedimentación globular repetida",
+        "correct": false,
+        "bias": "status_quo_bias",
+        "rationale": "Repite el estudio que ya se tiene, aunque no es específico y no cambiará el diagnóstico."
+      }
+    ],
+    "canonical": ["a", "b", "c", "d"],
+    "explanation": "La artritis reumatoide se manifiesta con poliartritis simétrica de articulaciones pequeñas de manos y pies, rigidez matutina de más de una hora y reactantes de fase aguda elevados. El factor reumatoide es positivo en la mayoría de los pacientes, pero es poco específico porque aparece en infecciones crónicas, otras enfermedades autoinmunes y personas mayores sanas. Los anticuerpos contra péptidos cíclicos citrulinados tienen una especificidad mayor de 95%, pueden aparecer antes de los síntomas y predicen enfermedad erosiva. Ambos forman parte de los criterios de clasificación. El diagnóstico temprano permite iniciar un fármaco modificador de la enfermedad, como metotrexato, para evitar el daño articular.",
+    "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento de la artritis reumatoide del adulto"]
+  }
+]

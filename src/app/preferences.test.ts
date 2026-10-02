@@ -7,13 +7,18 @@ function storageWith(value: string | null) {
 
 describe('preferencias del dispositivo', () => {
   it('por defecto es alumno, Mi cuenta y tema del sistema', () => {
-    expect(DEFAULT_PREFERENCES).toEqual({ theme: 'system', role: 'student', database: 'real' });
+    expect(DEFAULT_PREFERENCES).toEqual({
+      theme: 'system',
+      role: 'student',
+      database: 'real',
+      sessionUserId: null,
+    });
     expect(readStoredPreferences(undefined)).toEqual(DEFAULT_PREFERENCES);
     expect(readStoredPreferences(storageWith(null))).toEqual(DEFAULT_PREFERENCES);
   });
 
   it('lee lo guardado', () => {
-    const stored = { theme: 'dark', role: 'physician', database: 'demo' };
+    const stored = { theme: 'dark', role: 'physician', database: 'demo', sessionUserId: 'abc' };
     expect(readStoredPreferences(storageWith(JSON.stringify(stored)))).toEqual(stored);
   });
 
@@ -23,6 +28,7 @@ describe('preferencias del dispositivo', () => {
       theme: 'system',
       role: 'admin',
       database: 'real',
+      sessionUserId: null,
     });
   });
 

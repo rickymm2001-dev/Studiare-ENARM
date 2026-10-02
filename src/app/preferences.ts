@@ -11,6 +11,11 @@ export const DevicePreferencesSchema = z.object({
   role: RoleSchema.catch('student'),
   /** Base activa. real es Mi cuenta (enarm_real) y demo es Demostración (enarm_demo), D-024 */
   database: z.enum(['real', 'demo']).catch('real'),
+  /**
+   * Perfil con sesión abierta en Mi cuenta. Inicio de sesión simulado y local, sin contraseña
+   * (3.2). En producción lo dará la cuenta real. En la demo siempre es el alumno de demostración
+   */
+  sessionUserId: z.string().max(40).nullable().catch(null),
 });
 export type DevicePreferences = z.infer<typeof DevicePreferencesSchema>;
 
@@ -52,13 +57,15 @@ interface PreferencesState extends DevicePreferences {
   setTheme: (theme: DevicePreferences['theme']) => void;
   setRole: (role: DevicePreferences['role']) => void;
   setDatabase: (database: DevicePreferences['database']) => void;
+  signIn: (userId: string) => void;
+  signOut: () => void;
 }
 
 export const usePreferences = create<PreferencesState>()((set, get) => {
   const update = (patch: Partial<DevicePreferences>) => {
     set(patch);
-    const { theme, role, database } = get();
-    writeStoredPreferences({ theme, role, database });
+    const { theme, role, database, sessionUserId } = get();
+    writeStoredPreferences({ theme, role, database, sessionUserId });
   };
   return {
     ...readStoredPreferences(safeLocalStorage()),
@@ -70,6 +77,12 @@ export const usePreferences = create<PreferencesState>()((set, get) => {
     },
     setDatabase: (database) => {
       update({ database });
+    },
+    signIn: (userId) => {
+      update({ sessionUserId: userId });
+    },
+    signOut: () => {
+      update({ sessionUserId: null });
     },
   };
 });

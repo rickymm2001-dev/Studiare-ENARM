@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import {
+  fatigueTrendSignal,
+  negationSignal,
   accuracyBy,
   calibrationReport,
   fatigueSignal,
@@ -138,6 +140,31 @@ describe('fatiga', () => {
   });
 });
 
+describe('fatiga por tendencia (D-054)', () => {
+  it('detecta la caída con los minutos en sesiones largas', () => {
+    const signal = fatigueTrendSignal(sessions(6, true, 'tendencia-si'), thresholds);
+    expect(signal.sessions).toBe(6);
+    expect(signal.accuracyDrop).toBeLessThan(0);
+    expect(signal.timeIncrease).toBeGreaterThan(0);
+    expect(signal.fatigued).toBe(true);
+  });
+
+  it('no marca fatiga si no la hay', () => {
+    // Con datos sin fatiga marca cerca de 4% por azar (400 simulaciones). Esta semilla no cae ahí
+    expect(fatigueTrendSignal(sessions(6, false, 'fatiga-no'), thresholds).fatigued).toBe(false);
+  });
+
+  it('calibra hasta tener 3 sesiones largas y tolera no tener ninguna', () => {
+    expect(fatigueTrendSignal(sessions(2, true, 'tendencia-pocas'), thresholds)).toMatchObject({
+      sessions: 2,
+      fatigued: null,
+      sessionsNeeded: 1,
+    });
+    const none = fatigueTrendSignal([], thresholds);
+    expect(none).toMatchObject({ sessions: 0, fatigued: null, accuracyDrop: 0 });
+  });
+});
+
 describe('distracción, franjas y exactitud por grupo', () => {
   it('resume salidas de pestaña y pausas largas', () => {
     expect(
@@ -200,5 +227,53 @@ describe('calibración metacognitiva', () => {
     const few = calibrationReport(build([5, 10], [2, 5], [1, 5]));
     expect(few).toMatchObject({ ready: false, responsesNeeded: 10, label: null });
     expect(calibrationReport([]).calibrationGap).toBe(0);
+  });
+});
+
+describe('mala lectura de negaciones (7.5, 14.2)', () => {
+  const block = (polarity: 'affirmative' | 'negative', n: number, rate: number) =>
+    Array.from({ length: n }, (_, index) => ({
+      polarity,
+      correct: index < Math.round(n * rate),
+      expected: 0.7,
+    }));
+
+  it('calibra hasta tener el mínimo en ambas polaridades', () => {
+    const signal = negationSignal(
+      [...block('negative', 10, 0.2), ...block('affirmative', 40, 0.7)],
+      20,
+    );
+    expect(signal.misreads).toBeNull();
+    expect(signal.negativeNeeded).toBe(10);
+    expect(signal.affirmativeNeeded).toBe(0);
+    const fewAffirmative = negationSignal(
+      [...block('negative', 40, 0.2), ...block('affirmative', 5, 0.7)],
+      20,
+    );
+    expect(fewAffirmative.misreads).toBeNull();
+    expect(fewAffirmative.affirmativeNeeded).toBe(15);
+  });
+
+  it('marca el patrón cuando rinde claramente peor en las negativas', () => {
+    const signal = negationSignal(
+      [...block('negative', 40, 0.35), ...block('affirmative', 120, 0.7)],
+      20,
+    );
+    expect(signal.misreads).toBe(true);
+    expect(signal.difference).toBeCloseTo(-0.35, 2);
+  });
+
+  it('no marca nada con el mismo rendimiento en ambas', () => {
+    const signal = negationSignal(
+      [...block('negative', 40, 0.7), ...block('affirmative', 120, 0.7)],
+      20,
+    );
+    expect(signal.misreads).toBe(false);
+  });
+
+  it('tolera listas vacías', () => {
+    const signal = negationSignal([], 20);
+    expect(signal.misreads).toBeNull();
+    expect(signal.difference).toBe(0);
   });
 });

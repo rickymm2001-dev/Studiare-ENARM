@@ -92,7 +92,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "d"],
-      "explanation": "Una presión arterial de 180/120 mmHg o más sin daño agudo a órgano blanco corresponde a una urgencia hipertensiva. Este paciente no tiene datos de encefalopatía, síndrome coronario, edema pulmonar, disección aórtica ni lesión renal aguda, y su fondo de ojo es normal. El manejo es reiniciar o ajustar antihipertensivos orales y bajar la presión de forma gradual en 24 a 48 horas, con revisión cercana. El descenso rápido, con fármacos intravenosos o con nifedipino sublingual, puede causar isquemia cerebral, coronaria o renal. Las metas de reducción en la primera hora y los fármacos intravenosos se reservan para la emergencia hipertensiva, que exige daño agudo a órgano blanco.",
+      "explanation": "Una presión sistólica de 180 mmHg o más, o una diastólica de 120 mmHg o más, sin daño agudo a órgano blanco corresponde a una urgencia hipertensiva. Este paciente no tiene datos de encefalopatía, síndrome coronario, edema pulmonar, disección aórtica ni lesión renal aguda, y su fondo de ojo es normal. El manejo es reiniciar o ajustar antihipertensivos orales y bajar la presión de forma gradual en 24 a 48 horas, con revisión cercana. El descenso rápido, con fármacos intravenosos o con nifedipino sublingual, puede causar isquemia cerebral, coronaria o renal. Las metas de reducción en la primera hora y los fármacos intravenosos se reservan para la emergencia hipertensiva, que exige daño agudo a órgano blanco.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial"
       ]
@@ -230,7 +230,7 @@
           "key": "e",
           "text": "Glucosa al azar de 200 mg/dL o más con síntomas clásicos de hiperglucemia",
           "correct": false,
-          "bias": "premature_closure",
+          "bias": "belief_bias",
           "rationale": "Se descarta porque se piensa que siempre hay que confirmar, aunque con síntomas basta un valor."
         },
         {
@@ -242,7 +242,7 @@
         },
         {
           "key": "g",
-          "text": "Glucosa en ayuno de 130 mg/dL repetida otro día",
+          "text": "Glucosa en ayuno de 130 mg/dL y de 134 mg/dL en dos días distintos",
           "correct": false,
           "bias": "anchoring",
           "rationale": "Se ancla en que el valor apenas pasa el corte y lo considera dudoso."
@@ -306,7 +306,7 @@
           "text": "Bicarbonato de sodio intravenoso",
           "correct": false,
           "bias": "anchoring",
-          "rationale": "Se ancla en el pH bajo, aunque el bicarbonato solo se considera con pH menor de 6.9."
+          "rationale": "Se ancla en el pH bajo, aunque el bicarbonato solo se considera con acidosis muy grave, con pH menor de 6.9 a 7.0."
         },
         {
           "key": "d",
@@ -359,7 +359,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "e"],
-      "explanation": "En la cetoacidosis diabética la prioridad es reponer el volumen con solución salina al 0.9%, porque la deshidratación es grave y la reposición mejora la perfusión y baja la glucosa. Después se inicia insulina en infusión intravenosa, siempre que el potasio sea mayor de 3.3 mEq/L, y se repone potasio cuando está normal o bajo, porque la insulina lo introduce a la célula. El bicarbonato solo se considera con pH menor de 6.9. Cuando la glucosa baja a cerca de 200 a 250 mg/dL se agrega solución glucosada para continuar con insulina hasta resolver la cetosis sin causar hipoglucemia.",
+      "explanation": "En la cetoacidosis diabética la prioridad es reponer el volumen con solución salina al 0.9%, porque la deshidratación es grave y la reposición mejora la perfusión y baja la glucosa. Después se inicia insulina en infusión intravenosa, siempre que el potasio sea mayor de 3.3 mEq/L, o de 3.5 según el consenso internacional reciente, y se repone potasio cuando está normal o bajo, porque la insulina lo introduce a la célula. El bicarbonato solo se considera con acidosis muy grave, con pH menor de 6.9 a 7.0. Cuando la glucosa baja a cerca de 200 a 250 mg/dL se agrega solución glucosada para continuar con insulina hasta resolver la cetosis sin causar hipoglucemia.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética"
       ]
@@ -477,7 +477,7 @@
           "text": "Dímero D",
           "correct": false,
           "bias": "availability_heuristic",
-          "rationale": "Es la prueba más conocida en tromboembolia, pero sirve para descartar con probabilidad baja, no para confirmar."
+          "rationale": "Es la prueba más conocida en tromboembolia, pero sirve para descartar con probabilidad baja o intermedia, no para confirmar."
         },
         {
           "key": "c",
@@ -675,8 +675,8 @@
           "key": "e",
           "text": "Colocar dos accesos venosos de gran calibre",
           "correct": false,
-          "bias": "information_bias",
-          "rationale": "Parece obvio y por eso se duda, pero es parte esencial de la reanimación."
+          "bias": "framing_effect",
+          "rationale": "Por estar redactada como una medida básica parece demasiado obvia para ser correcta, pero es parte esencial de la reanimación."
         },
         {
           "key": "f",
@@ -891,7 +891,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "g"],
-      "explanation": "El tratamiento de la tuberculosis pulmonar sensible en un caso nuevo tiene dos fases. La fase intensiva dura 2 meses con isoniazida, rifampicina, pirazinamida y etambutol, y la fase de sostén dura 4 meses con isoniazida y rifampicina, de preferencia con tratamiento supervisado. La monoterapia o los esquemas incompletos favorecen la resistencia. La isoniazida sola se usa en la infección latente y no en la enfermedad activa. Los fármacos de segunda línea se reservan para tuberculosis resistente. Con baciloscopia positiva y cuadro compatible el tratamiento no debe retrasarse, aunque se envíen cultivo y prueba de sensibilidad.",
+      "explanation": "El tratamiento de la tuberculosis pulmonar sensible en un caso nuevo tiene dos fases. La fase intensiva dura 2 meses con isoniazida, rifampicina, pirazinamida y etambutol, y la fase de sostén dura 4 meses con isoniazida y rifampicina, siempre con tratamiento estrictamente supervisado, que la norma mexicana expresa como 60 dosis diarias en la fase intensiva y 45 intermitentes en la de sostén. La monoterapia o los esquemas incompletos favorecen la resistencia. La isoniazida sola se usa en la infección latente y no en la enfermedad activa. Los fármacos de segunda línea se reservan para tuberculosis resistente. Con baciloscopia positiva y cuadro compatible el tratamiento no debe retrasarse, aunque se envíen cultivo y prueba de sensibilidad.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la tuberculosis pulmonar"
       ]
@@ -954,8 +954,8 @@
           "key": "g",
           "text": "Aplasia medular",
           "correct": false,
-          "bias": "loss_aversion",
-          "rationale": "Teme lo más grave aunque no hay afección de otras líneas celulares."
+          "bias": "complexity_bias",
+          "rationale": "Busca una causa rara y grave cuando la anemia aislada y microcítica con ferritina baja se explica por deficiencia de hierro."
         },
         {
           "key": "h",
@@ -1069,7 +1069,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "d"],
-      "explanation": "En el infarto cerebral agudo, la trombólisis intravenosa con alteplasa está indicada en las primeras 4.5 horas desde el inicio de los síntomas, una vez que la tomografía simple descarta hemorragia y no hay contraindicaciones, como anticoagulación, cirugía mayor reciente o presión mayor de 185/110 mmHg que no se controla. Esta paciente cumple los criterios. La glucosa capilar se mide antes para descartar hipoglucemia, que puede simular un evento vascular. La resonancia u otros estudios no deben retrasar el tratamiento. La antiagregación se inicia 24 horas después de la trombólisis y el estudio de la causa se hace después de la reperfusión.",
+      "explanation": "En el infarto cerebral agudo, la trombólisis intravenosa con alteplasa, o con tenecteplasa como alternativa, está indicada en las primeras 4.5 horas desde el inicio de los síntomas, una vez que la tomografía simple descarta hemorragia y no hay contraindicaciones, como anticoagulación, cirugía mayor reciente o presión mayor de 185/110 mmHg que no se controla. Esta paciente cumple los criterios. La glucosa capilar se mide antes para descartar hipoglucemia, que puede simular un evento vascular. La resonancia u otros estudios no deben retrasar el tratamiento. La afasia con hemiparesia sugiere oclusión de un vaso grande, por lo que se pide angiotomografía para valorar trombectomía mecánica sin retrasar el trombolítico. La antiagregación se inicia 24 horas después de la trombólisis y el estudio de la causa se hace después de la reperfusión.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica"
       ]
@@ -1089,9 +1089,9 @@
       "options": [
         {
           "key": "a",
-          "text": "Un inhibidor selectivo de la recaptura de serotonina, como sertralina o fluoxetina",
+          "text": "Sertralina",
           "correct": true,
-          "rationale": "Son de primera línea por su eficacia y su perfil de seguridad."
+          "rationale": "Es un inhibidor selectivo de la recaptura de serotonina, de primera línea por su eficacia y su perfil de seguridad."
         },
         {
           "key": "b",
@@ -1118,8 +1118,8 @@
           "key": "e",
           "text": "Haloperidol",
           "correct": false,
-          "bias": "base_rate_fallacy",
-          "rationale": "Es un antipsicótico sin indicación en una depresión moderada sin psicosis."
+          "bias": "representativeness_heuristic",
+          "rationale": "Asocia el trastorno del ánimo con fármacos psiquiátricos de cuadros graves, aunque aquí no hay psicosis."
         },
         {
           "key": "f",
@@ -1139,8 +1139,8 @@
           "key": "h",
           "text": "Inhibidor de la monoaminooxidasa",
           "correct": false,
-          "bias": "ambiguity_effect",
-          "rationale": "Tiene muchas interacciones y restricciones. No es de primera línea."
+          "bias": "complexity_bias",
+          "rationale": "Elige un antidepresivo antiguo y complejo, con muchas interacciones y restricciones dietéticas, cuando un inhibidor selectivo basta."
         },
         {
           "key": "i",
@@ -1242,11 +1242,11 @@
           "key": "j",
           "text": "Ausencia de datos de hemólisis",
           "correct": false,
-          "bias": "omission_bias",
-          "rationale": "Se descarta porque no hay nada que hacer, aunque justamente define a la fisiológica."
+          "bias": "inattentional_blindness",
+          "rationale": "Se pasa por alto que la ausencia de hemólisis es justamente uno de los criterios que definen la ictericia fisiológica."
         }
       ],
-      "canonical": ["a", "b", "c", "d"],
+      "canonical": ["a", "c", "d", "h"],
       "explanation": "La ictericia fisiológica aparece después de las primeras 24 horas de vida, tiene un pico entre el tercero y el quinto día y se resuelve en la primera o segunda semana en el recién nacido de término. Predomina la bilirrubina indirecta, sube menos de 5 mg/dL por día, la bilirrubina directa es menor de 1 mg/dL y el bebé tiene buen estado general. Se debe a la inmadurez de la conjugación hepática y a la mayor producción de bilirrubina. La ictericia en las primeras 24 horas es patológica y obliga a buscar hemólisis, como incompatibilidad de grupo o de Rh, o infección.",
       "gpcRefs": [
         "Guía de Práctica Clínica de detección oportuna, diagnóstico y tratamiento de la hiperbilirrubinemia en niños mayores de 35 semanas de gestación"
@@ -1507,8 +1507,8 @@
           "key": "j",
           "text": "BCG, hepatitis B y hexavalente",
           "correct": false,
-          "bias": "information_bias",
-          "rationale": "Agrega una vacuna de más, como si más dosis dieran más protección."
+          "bias": "serial_position_effect",
+          "rationale": "Junta las vacunas del nacimiento con la primera del siguiente punto del esquema, la hexavalente de los 2 meses."
         }
       ],
       "canonical": ["a", "b", "d", "h"],
@@ -1676,8 +1676,8 @@
           "key": "i",
           "text": "Periodo de incubación de alrededor de 10 a 12 días",
           "correct": false,
-          "bias": "information_bias",
-          "rationale": "Parece un dato secundario, pero corresponde al sarampión."
+          "bias": "availability_heuristic",
+          "rationale": "Se recuerda el periodo de incubación de otra enfermedad exantemática más conocida, como la varicela, de 14 a 16 días, y se duda del dato."
         },
         {
           "key": "j",
@@ -1818,7 +1818,7 @@
           "text": "Oxígeno si la saturación baja de 90 a 92%",
           "correct": false,
           "bias": "anchoring",
-          "rationale": "Se ancla en que el oxígeno siempre es necesario, aunque solo se indica con hipoxemia."
+          "rationale": "Se ancla en la saturación de 94% del caso y concluye que el oxígeno no forma parte del manejo, aunque sí se indica cuando la saturación baja de 90 a 92%."
         },
         {
           "key": "e",
@@ -1843,10 +1843,10 @@
         },
         {
           "key": "h",
-          "text": "Posición semisentada para facilitar la respiración",
+          "text": "Evitar la exposición al humo de tabaco en casa",
           "correct": false,
           "bias": "belief_bias",
-          "rationale": "Parece una medida casera, pero es parte del cuidado de soporte."
+          "rationale": "Parece un consejo general, pero la exposición al humo empeora la evolución y se recomienda evitarla."
         },
         {
           "key": "i",
@@ -1884,7 +1884,7 @@
       "options": [
         {
           "key": "a",
-          "text": "Tratar la causa de la fiebre, explicar el buen pronóstico a los padres y orientar sobre qué hacer ante una nueva crisis",
+          "text": "Tratar la causa de la fiebre y orientar a los padres",
           "correct": true,
           "rationale": "Es una crisis febril simple. No requiere estudios ni anticonvulsivos."
         },
@@ -1899,15 +1899,15 @@
           "key": "c",
           "text": "Tomografía de cráneo",
           "correct": false,
-          "bias": "loss_aversion",
-          "rationale": "Busca descartar lo grave aunque no hay datos neurológicos."
+          "bias": "availability_heuristic",
+          "rationale": "La tomografía es el estudio de imagen más conocido ante una crisis, aunque no hay datos neurológicos."
         },
         {
           "key": "d",
           "text": "Iniciar ácido valproico de forma profiláctica",
           "correct": false,
-          "bias": "omission_bias",
-          "rationale": "Teme no prevenir otra crisis, pero los anticonvulsivos no están indicados y tienen riesgos."
+          "bias": "loss_aversion",
+          "rationale": "Evita a toda costa el riesgo de otra crisis, aunque el anticonvulsivo tiene más riesgos que beneficio neto."
         },
         {
           "key": "e",
@@ -1932,7 +1932,7 @@
         },
         {
           "key": "h",
-          "text": "Hospitalizar 72 horas para vigilancia",
+          "text": "Hospitalizar 72 horas para vigilancia neurológica y repetir la exploración",
           "correct": false,
           "bias": "status_quo_bias",
           "rationale": "Se hospitaliza por costumbre cuando la niña está bien y no hay complicaciones."
@@ -2113,7 +2113,7 @@
           "text": "Laparotomía exploradora de inicio",
           "correct": false,
           "bias": "loss_aversion",
-          "rationale": "Busca resolver todo con cirugía sin confirmar y sin intentar la reducción."
+          "rationale": "Teme que la reducción con enema perfore el intestino y prefiere ir directo a cirugía, aunque la reducción guiada por imagen sin perforación ni peritonitis da más beneficio neto."
         },
         {
           "key": "i",
@@ -2144,7 +2144,7 @@
       "topic": "pediatric_nephrology",
       "subtopic": "pediatric_uti",
       "vignette": "Lactante de 10 meses, sin control de esfínteres, con fiebre de 39 °C de 2 días sin foco aparente. Está irritable y come menos. Se sospecha infección de vías urinarias.",
-      "prompt": "¿Qué método de recolección de orina es el adecuado para confirmar el diagnóstico?",
+      "prompt": "¿Cuál es el estudio adecuado para confirmar el diagnóstico?",
       "polarity": "affirmative",
       "task": "confirmatory_study",
       "difficulty": 3,
@@ -2387,7 +2387,7 @@
           "text": "Furosemida",
           "correct": false,
           "bias": "framing_effect",
-          "rationale": "El edema se interpreta como exceso de líquido, aunque el volumen intravascular está reducido."
+          "rationale": "Se piensa en reducir líquidos para bajar la presión, aunque en la preeclampsia el volumen intravascular está reducido y el diurético no previene convulsiones."
         },
         {
           "key": "j",
@@ -2398,7 +2398,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "d"],
-      "explanation": "La preeclampsia con datos de severidad, como presión de 160/110 mmHg o más, cefalea, alteraciones visuales o hiperreflexia, requiere prevenir la eclampsia. El fármaco de elección es el sulfato de magnesio, con dosis de impregnación intravenosa y mantenimiento, porque es superior a la fenitoína y al diazepam para prevenir y tratar las convulsiones. Durante su uso se vigilan reflejos, frecuencia respiratoria y diuresis por el riesgo de toxicidad, y el gluconato de calcio es su antídoto. La hipertensión grave se trata además con labetalol, hidralazina o nifedipino, y la resolución del embarazo es el tratamiento definitivo.",
+      "explanation": "La preeclampsia con datos de severidad, como presión de 160/110 mmHg o más, cefalea intensa o alteraciones visuales, requiere prevenir la eclampsia. La hiperreflexia apoya el riesgo de convulsión. El fármaco de elección es el sulfato de magnesio, con dosis de impregnación intravenosa y mantenimiento, porque es superior a la fenitoína y al diazepam para prevenir y tratar las convulsiones. Durante su uso se vigilan reflejos, frecuencia respiratoria y diuresis por el riesgo de toxicidad, y el gluconato de calcio es su antídoto. La hipertensión grave se trata además con labetalol, hidralazina o nifedipino, y la resolución del embarazo es el tratamiento definitivo.",
       "gpcRefs": [
         "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel de atención"
       ]
@@ -2483,7 +2483,7 @@
           "text": "Síndrome urémico hemolítico",
           "correct": false,
           "bias": "confirmation_bias",
-          "rationale": "Busca encajar la hemólisis en otra microangiopatía sin datos de lesión renal."
+          "rationale": "Se queda con la hemólisis y la plaquetopenia que apoyan una microangiopatía primaria e ignora la preeclampsia y la falta de lesión renal, que la descartan."
         }
       ],
       "canonical": ["a", "b", "c", "f"],
@@ -2500,7 +2500,7 @@
       "topic": "obstetric_hemorrhage",
       "subtopic": "placenta_previa",
       "vignette": "Mujer de 32 años, multigesta, con 32 semanas de gestación, que presenta sangrado transvaginal rojo brillante, abundante e indoloro, sin contracciones. El útero está blando y no doloroso. Frecuencia cardiaca fetal normal.",
-      "prompt": "¿Qué maniobra está CONTRAINDICADA en la evaluación inicial?",
+      "prompt": "¿Cuál de las siguientes acciones está CONTRAINDICADA en la atención inicial?",
       "polarity": "negative",
       "task": "next_step",
       "difficulty": 2,
@@ -2661,11 +2661,11 @@
           "text": "Desprendimiento prematuro de placenta",
           "correct": false,
           "bias": "serial_position_effect",
-          "rationale": "Recuerda una causa del sangrado antes del parto y no del posparto."
+          "rationale": "Da más peso a la última causa de sangrado obstétrico que estudió, el desprendimiento de placenta, aunque ocurre antes del alumbramiento y no después."
         }
       ],
       "canonical": ["a", "b", "c", "d"],
-      "explanation": "La hemorragia posparto se recuerda con las cuatro T, que son tono, trauma, tejido y trombina. La causa más frecuente es la atonía uterina, responsable de la mayoría de los casos. Sus factores de riesgo incluyen sobredistensión uterina por macrosomía, embarazo múltiple o polihidramnios, trabajo de parto prolongado o precipitado, uso de oxitocina e infección. Se reconoce por un útero blando, mal contraído y por arriba de lo esperado. El manejo inicial incluye masaje uterino bimanual, uterotónicos como la oxitocina, vaciamiento vesical y reanimación, mientras se revisan el canal de parto y la placenta para descartar las otras causas.",
+      "explanation": "La hemorragia posparto se recuerda con las cuatro T, que son tono, trauma, tejido y trombina. La causa más frecuente es la atonía uterina, responsable de la mayoría de los casos. Sus factores de riesgo incluyen sobredistensión uterina por macrosomía, embarazo múltiple o polihidramnios, trabajo de parto prolongado o precipitado, uso de oxitocina e infección. Se reconoce por un útero blando, mal contraído y por arriba de lo esperado. El manejo inicial incluye masaje uterino externo, uterotónicos como la oxitocina, vaciamiento vesical y reanimación, con compresión bimanual si el útero no se contrae, mientras se revisan el canal de parto y la placenta para descartar las otras causas.",
       "gpcRefs": ["Guía de Práctica Clínica de prevención y manejo de la hemorragia posparto"]
     },
     {
@@ -2712,8 +2712,8 @@
           "key": "e",
           "text": "Tocólisis prolongada hasta la semana 37",
           "correct": false,
-          "bias": "sunk_cost_fallacy",
-          "rationale": "Se empeña en prolongar el embarazo a toda costa, aunque la tocólisis prolongada no mejora el pronóstico."
+          "bias": "belief_bias",
+          "rationale": "Suena lógico prolongar el embarazo con tocolíticos, pero en la ruptura de membranas la tocólisis prolongada no mejora el pronóstico y aumenta el riesgo de infección."
         },
         {
           "key": "f",
@@ -2740,8 +2740,8 @@
           "key": "i",
           "text": "Esperar a que aparezca fiebre para dar antibiótico",
           "correct": false,
-          "bias": "confirmation_bias",
-          "rationale": "Espera la prueba clínica de infección en lugar de prevenirla."
+          "bias": "omission_bias",
+          "rationale": "Prefiere esperar la fiebre para dar antibiótico, cuando el antibiótico profiláctico prolonga la latencia y reduce infecciones."
         },
         {
           "key": "j",
@@ -2820,7 +2820,7 @@
         },
         {
           "key": "h",
-          "text": "Ausencia de lactancia e inmunodeficiencia",
+          "text": "Ausencia de lactancia y de inmunodeficiencia",
           "correct": false,
           "bias": "belief_bias",
           "rationale": "Se cree que no influyen, aunque son contraindicaciones del metotrexato."
@@ -3017,9 +3017,10 @@
         }
       ],
       "canonical": ["a", "b", "c", "e"],
-      "explanation": "En México, la detección de cáncer cervicouterino con citología cervical se realiza en mujeres de 25 a 64 años, y la prueba de virus del papiloma humano se usa entre los 35 y 64 años según la normativa vigente. En menores de 25 años el cáncer es raro y las infecciones por el virus suelen resolverse solas, por lo que el tamizaje temprano lleva a estudios y tratamientos innecesarios. La vacunación contra el virus no sustituye al tamizaje. La citología se repite con la periodicidad que marca la norma y un resultado anormal se envía a colposcopia. Iniciar al comienzo de la vida sexual era una recomendación anterior.",
+      "explanation": "En México, la detección de cáncer cervicouterino inicia a los 25 años con citología cervical, y entre los 35 y 64 años se prefiere la prueba de virus del papiloma humano, con citología como prueba complementaria, según la normativa vigente. En menores de 25 años el cáncer es raro y las infecciones por el virus suelen resolverse solas, por lo que el tamizaje temprano lleva a estudios y tratamientos innecesarios. La vacunación contra el virus no sustituye al tamizaje. La citología se repite con la periodicidad que marca la norma y un resultado anormal se envía a colposcopia. Iniciar al comienzo de la vida sexual era una recomendación anterior.",
       "gpcRefs": [
-        "Guía de Práctica Clínica de prevención y detección oportuna del cáncer cervicouterino en el primer nivel de atención"
+        "Guía de Práctica Clínica de prevención y detección oportuna del cáncer cervicouterino en el primer nivel de atención",
+        "Norma Oficial Mexicana para la prevención, detección, diagnóstico, tratamiento, control y vigilancia epidemiológica del cáncer cérvico uterino"
       ]
     },
     {
@@ -3067,7 +3068,7 @@
           "text": "Múltiples folículos ováricos en el ultrasonido",
           "correct": false,
           "bias": "representativeness_heuristic",
-          "rationale": "Se cree que el nombre del síndrome lo vuelve obligatorio, aunque es uno de tres criterios."
+          "rationale": "Se cree que el ultrasonido solo apoya el diagnóstico y no cuenta como criterio, aunque la morfología poliquística es uno de los tres."
         },
         {
           "key": "f",
@@ -3517,7 +3518,7 @@
           "key": "g",
           "text": "Colangiorresonancia",
           "correct": false,
-          "bias": "ambiguity_effect",
+          "bias": "information_bias",
           "rationale": "Busca más detalle de la vía biliar sin indicación."
         },
         {
@@ -3621,14 +3622,14 @@
           "text": "Esperar la expulsión espontánea del lito",
           "correct": false,
           "bias": "ambiguity_effect",
-          "rationale": "Prefiere esperar una evolución incierta en un paciente séptico."
+          "rationale": "Prefiere esperar una evolución incierta en un paciente con colangitis que requiere drenaje."
         },
         {
           "key": "j",
           "text": "Tomar hemocultivos y esperar el resultado para tratar",
           "correct": false,
-          "bias": "confirmation_bias",
-          "rationale": "Busca confirmar el germen y retrasa el tratamiento."
+          "bias": "omission_bias",
+          "rationale": "Espera el resultado del cultivo en lugar de iniciar antibiótico y drenaje en un paciente con colangitis."
         }
       ],
       "canonical": ["a", "b", "c", "g"],
@@ -3773,8 +3774,8 @@
           "key": "f",
           "text": "Valorar la escala de coma de Glasgow detallada",
           "correct": false,
-          "bias": "serial_position_effect",
-          "rationale": "Corresponde a la evaluación neurológica, que va después."
+          "bias": "focusing_illusion",
+          "rationale": "Se fija en la confusión y salta a la evaluación neurológica antes de la vía aérea."
         },
         {
           "key": "g",
@@ -3837,7 +3838,7 @@
         },
         {
           "key": "c",
-          "text": "Localizar el sitio de punción en el segundo espacio intercostal en la línea medioclavicular o en el cuarto o quinto espacio anterior a la línea media axilar",
+          "text": "Localizar el sitio de punción en el segundo espacio intercostal en la línea medioclavicular o en el cuarto o quinto espacio anterior a la línea axilar media",
           "correct": false,
           "bias": "complexity_bias",
           "rationale": "Parece un detalle técnico que retrasa, pero es parte de la descompresión correcta."
@@ -3881,19 +3882,19 @@
           "key": "i",
           "text": "Colocar al paciente en la posición más cómoda para respirar",
           "correct": false,
-          "bias": "status_quo_bias",
-          "rationale": "Se ve como algo menor, pero ayuda mientras se descomprime."
+          "bias": "focusing_illusion",
+          "rationale": "Se fija solo en la aguja y descuida las medidas de soporte."
         },
         {
           "key": "j",
           "text": "Pedir ayuda y activar al equipo de trauma",
           "correct": false,
-          "bias": "availability_heuristic",
-          "rationale": "Parece un trámite, aunque coordinar al equipo es parte de la atención."
+          "bias": "belief_bias",
+          "rationale": "Se cree que pedir ayuda retrasa, aunque las guías de trauma lo indican desde el inicio."
         }
       ],
       "canonical": ["a", "b", "c", "h"],
-      "explanation": "El neumotórax a tensión es un diagnóstico clínico que pone en riesgo la vida de inmediato. Se reconoce por dificultad respiratoria grave, ausencia de ruidos respiratorios del lado afectado, desviación de la tráquea al lado opuesto, ingurgitación yugular e hipotensión. No debe esperarse una radiografía para confirmarlo, porque el retraso puede causar paro cardiaco. El tratamiento inmediato es la descompresión con aguja en el segundo espacio intercostal en la línea medioclavicular o en el cuarto o quinto espacio intercostal anterior a la línea media axilar, seguida de la colocación de una sonda pleural. Mientras tanto se da oxígeno y se vigilan los signos vitales.",
+      "explanation": "El neumotórax a tensión es un diagnóstico clínico que pone en riesgo la vida de inmediato. Se reconoce por dificultad respiratoria grave, ausencia de ruidos respiratorios del lado afectado, desviación de la tráquea al lado opuesto, ingurgitación yugular e hipotensión. No debe esperarse una radiografía para confirmarlo, porque el retraso puede causar paro cardiaco. El tratamiento inmediato es la descompresión con aguja en el segundo espacio intercostal en la línea medioclavicular o en el cuarto o quinto espacio intercostal anterior a la línea axilar media, seguida de la colocación de una sonda pleural. Mientras tanto se da oxígeno y se vigilan los signos vitales.",
       "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento del trauma de tórax"]
     },
     {
@@ -3927,7 +3928,7 @@
           "text": "2,100 mL",
           "correct": false,
           "bias": "availability_heuristic",
-          "rationale": "Usa 2 mL por kilogramo, una cifra de otras fórmulas, y luego toma la mitad."
+          "rationale": "Usa 2 mL por kilogramo, el volumen inicial que proponen algunas guías actuales, pero la pregunta pide la fórmula de Parkland, que usa 4 mL."
         },
         {
           "key": "d",
@@ -4130,15 +4131,15 @@
           "key": "g",
           "text": "Resonancia magnética",
           "correct": false,
-          "bias": "ambiguity_effect",
-          "rationale": "Busca un estudio sin radiación con menor rendimiento para litos."
+          "bias": "loss_aversion",
+          "rationale": "Evita la radiación aunque la resonancia rinde menos para litos."
         },
         {
           "key": "h",
           "text": "Pielografía retrógrada",
           "correct": false,
           "bias": "focusing_illusion",
-          "rationale": "Es invasiva y se reserva para casos seleccionados."
+          "rationale": "Se fija en ver el uréter directamente y olvida que hay un estudio no invasivo mejor."
         },
         {
           "key": "i",
@@ -4152,7 +4153,7 @@
           "text": "Gammagrama renal",
           "correct": false,
           "bias": "confirmation_bias",
-          "rationale": "Valora función renal, no confirma la presencia del lito."
+          "rationale": "Busca confirmar daño renal por obstrucción en lugar de identificar el lito."
         }
       ],
       "canonical": ["a", "b", "c", "d"],
@@ -4331,7 +4332,7 @@
           "rationale": "Asocia los síntomas con el descenso hormonal de la edad, aunque los andrógenos estimulan la próstata."
         }
       ],
-      "canonical": ["a", "b", "c", "i"],
+      "canonical": ["a", "b", "c", "e"],
       "explanation": "Cuando la próstata es grande, por lo general mayor de 30 a 40 mL, y los síntomas persisten con un bloqueador alfa, se recomienda agregar un inhibidor de la 5 alfa reductasa, como finasterida o dutasterida. Estos fármacos reducen el volumen prostático entre 20 y 30% en 6 a 12 meses, disminuyen el riesgo de retención urinaria aguda y de cirugía, y su combinación con un bloqueador alfa es más eficaz que cada uno por separado. Pueden causar disminución de la libido y disfunción eyaculatoria, y reducen el antígeno prostático específico a la mitad, lo que debe considerarse al interpretarlo.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperplasia prostática benigna"

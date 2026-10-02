@@ -400,9 +400,53 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Las revisiones de IA se guardan en docs/revisiones. Son ayuda para el autor y no sustituyen la revisión médica de D-031
 - Se quitó .claude.zip. Solo traía .claude/launch.json, que ya está en el repositorio, y un archivo de bloqueo local
 
+### D-050. Banco al final y trabajo verificable en GitHub
+- Fecha 2026-10-02. Decisión de Ricardo
+- El banco de preguntas (lotes 5 y 6) y los 4 mazos se pausan y se terminan al final del proyecto. El desarrollo de la aplicación sigue con los bloques 9 y 10 de la Fase B y las fases siguientes
+- Todo el trabajo vive en el repositorio de GitHub. Cada bloque termina con commit y push, y el CI corre npm run check en cada push a cualquier rama, no solo en main
+- Mientras no existan los mazos, la simulación de FSRS de los alumnos simulados usa tarjetas sintéticas por tema, marcadas como tales. Se cambian por las tarjetas reales cuando se escriban los mazos
 
-### D-050. Demo publicada en GitHub Pages
+### D-051. Ajuste al análisis por sesgo tras la recuperación de 14.2
+- Fecha 2026-10-02. Propuesta de Claude, aprobada por Ricardo el mismo día
+- Con 300 alumnos simulados en 3 semillas, el método de 7.4 detecta 100% de los sesgos sembrados, pero marca entre 47% y 54% de los alumnos sin propensión. La meta es 10% o menos
+- Causas. La atracción se mide contra todas las preguntas con la etiqueta a la vista, así que quien falla mucho parece atraído por todas. Y se prueban unas 20 etiquetas por alumno con 95% cada una
+- Propuesta. Medir qué parte de los errores con la etiqueta a la vista fue a esa etiqueta, con la línea base calculada igual, y corregir el nivel por Bonferroni según las etiquetas evaluadas. Con eso detecta 100% y marca entre 3% y 6%
+- Límite señalado por la revisión independiente. La variante se diseñó viendo las mismas semillas, y el modelo principal del generador simula el sesgo de una forma que favorece a la variante. Por eso se validó además con 3 semillas nuevas (marca 3 a 6%) y con un modelo de sesgo distinto, que solo atrae cuando el alumno sabía la respuesta (detecta 88 a 98% y marca 3 a 5%)
+- Estado. Es el método por defecto de src/engines/bias.ts (method error_share con familywise). El método original de 7.4 queda como opción (method exposure). Detalle en docs/recovery-report.md
+
+### D-052. Siembra de la demo en el navegador
+- Fecha 2026-10-02. Decisión de Claude
+- La base demo vive en IndexedDB dentro del navegador. Por eso la siembra real se hace en la app, en Perfil con Demostración activa, con los botones Generar datos de demostración y Regenerar desde cero. En la Fase D también vivirán en la pantalla de admin 24
+- La generación corre en un Web Worker (src/workers/simulate.worker.ts) que se carga bajo demanda, así no traba la interfaz ni entra al JavaScript inicial
+- Se guardan el contenido demo con IDs estables, 301 perfiles (alumno de la demo y 300 simulados), el SimTruth de todos y la bitácora completa del alumno de la demo. Las bitácoras de los 300 simulados no se guardan porque serían cerca de 900 mil eventos. La línea base de la población y las estadísticas de las preguntas se resuelven en la Fase C con la misma generación determinista
+- Las fechas dependen del último día de la siembra. Por eso el SimTruth del alumno de la demo guarda las opciones de la siembra, incluido ese día, y con ellas la generación reproduce exactamente lo sembrado
+- Nada de la bitácora simulada queda en el futuro. La app pasa el momento actual y se descartan las sesiones que terminarían después
+- Desviación de 11.2 aprobada por Ricardo por ahora. En la siembra, los 300 alumnos simulados no traen su historial de tarjetas, porque pesaría demasiado en el navegador. La estructura queda lista. La opción cohortCardHistory de la siembra simula y guarda sus repasos con las mismas tarjetas, y tiene prueba
+- Regenerar desde cero borra la base demo completa. Es la segunda excepción a la bitácora de solo agregar y quedó escrita en PLAN.md 2.2
+- npm run demo-seed genera la siembra por defecto completa fuera del navegador, valida cada registro y reporta conteos. npm run demo-reset explica cómo regenerar desde la app, porque un script de Node no puede borrar una base del navegador
+- Mientras no existan los mazos se usa una baraja de 200 tarjetas sintéticas sin contenido médico, marcada como datos simulados (D-050)
+- Las pruebas de punta a punta aceptan PW_CHROMIUM_PATH para usar un Chromium ya instalado en entornos en la nube. En la computadora de Ricardo no se define
+
+### D-053. Mazos de Paco completos en la demo
+- Fecha 2026-10-02. Decisión de Ricardo, con autorización de Paco
+- Reemplaza a D-008 para los mazos de Paco. El mazo de Fer sigue fuera del repositorio
+- Los mazos de Medicina interna (2,122 notas), Ginecología y obstetricia (1,526) y Urgencias (123) entran completos al repositorio privado, con las 302 imágenes que usan sus notas, como mazos precargados de la demo con etiqueta Demostración y crédito visible a Paco. Solo se quitó una imagen externa
+- La clave de cada nota sale del guid de Anki, así no cambia si Paco agrega o borra otras notas y se vuelve a convertir. Las imágenes se guardan con ruta absoluta (/demo-media/...)
+- Todos los modelos de los 3 mazos tienen una sola plantilla, así que no hay tarjetas inversas. El script se detiene si llega un modelo con varias plantillas
+- Ni las imágenes ni el worker de simulación, que trae los mazos, entran a la precarga del service worker. Se guardan al usarse
+- fflate se queda en dependencies porque el importador de .apkg de la Fase E lo usará en la app (D-023)
+- Sustituyen a las tarjetas sintéticas en la simulación de repasos del alumno de la demo (D-050)
+
+### D-054. Fatiga por tendencia dentro de la sesión
+- Fecha 2026-10-02. Prueba pedida por Ricardo. Propuesta de Claude, pendiente de aprobación
+- Se agregó fatigueTrendSignal a src/engines/behavior.ts. Ajusta una recta de la exactitud ajustada por dificultad contra el minuto de la sesión, con cada sesión centrada en su media, y pide además que el tiempo por palabra suba. El método de tercios de 7.6 sigue siendo el que usa la app
+- Con todos los alumnos con fatiga sembrada, ninguno de los dos llega a 80% (tercios 52 a 73%, tendencia 63 a 75%). La causa es que cerca de un tercio de esos alumnos casi no siente la fatiga, con un efecto medio cercano a un punto de acierto, que no es detectable con ningún método
+- Entre los alumnos cuya fatiga sí pesa (efecto medio de 0.15 logits o más por respuesta), los dos cumplen. Tercios 83 a 97% y tendencia 94 a 97%, con 2 a 3% de falsos positivos para la tendencia
+- Propuesta. Adoptar la tendencia como método por defecto, porque es más estable y marca menos, y medir la meta de 14.2 sobre los alumnos cuya fatiga pesa en sus respuestas
+
+### D-055. Demo publicada en GitHub Pages
 - Fecha 2026-10-02. Origen R
+- Numeración. Se escribió en otra sesión al mismo tiempo que D-050 a D-054 y se renumeró al juntar las ramas
 - Ricardo pidió ver la página en vivo y que se actualice sola con cada cambio. Eligió GitHub Pages en lugar de Cloudflare Pages (ajusta D-017 y la Fase F del PLAN) y dejar el repositorio público. El repo ahora se llama rickymm2001-dev/Studiare-ENARM
 - Esta petición cuenta como su aprobación explícita para publicar la demo (D-017). La demo corre con la IA en modo simulado porque en Pages no hay proxy. /api/health responde 404 y la app muestra IA simulada
 - El workflow .github/workflows/pages.yml construye y publica en cada push a main, con actions/configure-pages v6, upload-pages-artifact v5 y deploy-pages v5. No usa secretos y el build sigue revisándose contra secretos
@@ -411,22 +455,25 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Ricardo todavía no tiene dominio propio. Cuando lo compre se agrega en Settings, Pages, Custom domain, y el siguiente push ya usa la base /
 - Probado en Chromium sirviendo el build bajo /Studiare-ENARM/. Abre el inicio y /perfil directo, la navegación conserva la base, el service worker queda con alcance /Studiare-ENARM/, Chromium la marca instalable y la etiqueta dice IA simulada
 
-### D-051. Logo de Studiare en el encabezado
+### D-056. Logo de Studiare en el encabezado
 - Fecha 2026-10-02. Origen R
+- Numeración. Se escribió en otra sesión al mismo tiempo que D-050 a D-054 y se renumeró al juntar las ramas
 - Ricardo compartió el logo de Studiare y pidió ponerlo en la página. Va en el encabezado en lugar del texto del nombre, como enlace al inicio
 - Se usa sin el lema "Impulsamos tu aprendizaje", porque a la altura del encabezado (32 px) sería ilegible
 - Dos versiones en src/assets/brand. La original para modo claro y otra con las letras en blanco para modo oscuro, porque el azul marino no se lee sobre fondo oscuro
 - El nombre de la app (BRAND.name en src/config/brand.ts), el título de la pestaña, el manifest y los íconos de la PWA siguen provisionales (D-016) hasta que Ricardo confirme el cambio
 
-### D-052. Marco más ancho en computadora
+### D-057. Marco más ancho en computadora
 - Fecha 2026-10-02. Origen R
+- Numeración. Se escribió en otra sesión al mismo tiempo que D-050 a D-054 y se renumeró al juntar las ramas
 - A Ricardo no le gustaron las franjas vacías a los lados en computadora. Eligió un marco más ancho con tarjetas en dos columnas
 - El encabezado y el contenido usan el nuevo ancho max-w-app de 88rem (unos 1,400 px) en lugar de 44rem. En el teléfono no cambia nada
 - Perfil acomoda sus 4 tarjetas en 2 columnas desde lg. El índice de pantallas del inicio pasa a 3 columnas
 - Los textos largos siguen en el ancho de lectura de 44rem para no cansar la vista, como la descripción de cada pantalla. Las pantallas de pregunta y retroalimentación de la Fase C deben usar ese ancho para el texto
 
-### D-053. Ícono de la pestaña con el símbolo de Studiare
+### D-058. Ícono de la pestaña con el símbolo de Studiare
 - Fecha 2026-10-02. Origen R
+- Numeración. Se escribió en otra sesión al mismo tiempo que D-050 a D-054 y se renumeró al juntar las ramas
 - Ricardo pidió que la pestaña del navegador muestre el símbolo de play de Studiare
 - public/favicon-32x32.png y public/favicon-64x64.png salen del logo que compartió, solo el símbolo, centrado y sin fondo. Se probó sobre pestaña clara y oscura y se distingue en ambas
 - Se quitó public/favicon.svg con la E provisional. scripts/generate-icons.ts ya no lo genera
