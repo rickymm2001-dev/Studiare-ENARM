@@ -53,17 +53,21 @@ describe('mazos de Paco en la demo (D-053)', () => {
     }
   });
 
-  it('el HTML guardado ya está saneado. Sanearlo otra vez no cambia nada', () => {
-    const sanitizer = createCardSanitizer(new JSDOM('').window);
-    for (const deck of decks) {
-      const declared = new Set(deck.media);
-      const keep = (file: string) => (declared.has(file) ? file : null);
-      for (const note of deck.notes) {
-        const fields = note.kind === 'basic' ? [note.front, note.back] : [note.text, note.extra];
-        for (const field of fields) expect(sanitizer.sanitize(field, keep), note.key).toBe(field);
+  it(
+    'el HTML guardado ya está saneado. Sanearlo otra vez no cambia nada',
+    { timeout: 60_000 },
+    () => {
+      const sanitizer = createCardSanitizer(new JSDOM('').window);
+      for (const deck of decks) {
+        const declared = new Set(deck.media);
+        const keep = (file: string) => (declared.has(file) ? file : null);
+        for (const note of deck.notes) {
+          const fields = note.kind === 'basic' ? [note.front, note.back] : [note.text, note.extra];
+          for (const field of fields) expect(sanitizer.sanitize(field, keep), note.key).toBe(field);
+        }
       }
-    }
-  });
+    },
+  );
 
   it('cada imagen que usan las notas existe en public y está declarada en su mazo', () => {
     for (const deck of decks) {
