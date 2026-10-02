@@ -63,6 +63,7 @@ describe('esquemas y tablas', () => {
       branches: ['internal_medicine', 'pediatrics', 'obstetrics_gynecology', 'general_surgery'],
       // Racha con 20 tarjetas (9.4) y Pomodoro de 25, 5 y 15 cada 4 ciclos (9.2)
       dailyGoal: { metric: 'cards', value: 20 },
+      followedDecks: [],
       pomodoro: {
         focusMinutes: 25,
         shortBreakMinutes: 5,

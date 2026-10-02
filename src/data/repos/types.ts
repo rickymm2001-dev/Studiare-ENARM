@@ -57,6 +57,8 @@ export interface EntityRepo<T, K extends string = Id> {
   list(): Promise<T[]>;
   /** Valida con zod y guarda, creando o reemplazando */
   put(entity: T): Promise<T>;
+  /** Valida con zod y guarda varios en una sola operación. Devuelve cuántos guardó */
+  putMany(entities: readonly T[]): Promise<number>;
   remove(key: K): Promise<void>;
 }
 

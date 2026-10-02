@@ -37,6 +37,8 @@ export const UserSettingsSchema = z.strictObject({
       value: z.int().min(1).max(1000),
     })
     .default({ metric: 'cards', value: 20 }),
+  /** Mazos precargados que sigue, por clave del mazo (3.1) */
+  followedDecks: z.array(z.string().min(1).max(60)).max(50).default([]),
   /** Pomodoro configurable (9.2) */
   pomodoro: z
     .strictObject({

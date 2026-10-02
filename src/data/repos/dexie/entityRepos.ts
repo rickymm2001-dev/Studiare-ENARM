@@ -17,6 +17,11 @@ export function createDexieEntityRepo<T, K extends string>(
       await table.put(parsed);
       return parsed;
     },
+    async putMany(entities) {
+      const parsed = entities.map((entity) => schema.parse(entity));
+      await table.bulkPut(parsed);
+      return parsed.length;
+    },
     async remove(key) {
       await table.delete(key);
     },

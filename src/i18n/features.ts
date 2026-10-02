@@ -250,4 +250,62 @@ export const featureText = {
     receiptsTitle: 'Recibos',
     noReceipts: 'Todavía no tienes recibos.',
   },
+  decks: {
+    preloadedTitle: 'Mazos precargados',
+    preloadedDescription:
+      'Mazos de demostración que puedes seguir o dejar. No están validados por médicos.',
+    author: (name: string) => `De ${name}, compartido con su autorización`,
+    stats: (notes: number, media: number) =>
+      `${plural(notes, 'nota', 'notas')} · ${plural(media, 'imagen', 'imágenes')}`,
+    progress: (studied: number, total: number) =>
+      `${studied.toLocaleString('es-MX')} de ${total.toLocaleString('es-MX')} tarjetas vistas`,
+    follow: 'Seguir mazo',
+    following: 'Siguiendo',
+    unfollow: 'Dejar de seguir',
+    adding: 'Agregando…',
+    loading: 'Cargando mazos…',
+    importTitle: 'Importar tus mazos',
+    importBody:
+      'El importador de .apkg de Anki llega en la Fase E. Tus mazos importados serán privados.',
+    createTitle: 'Crear mazo',
+    createBody: 'La creación manual de mazos llega en una fase siguiente.',
+  },
+  review: {
+    noDecksTitle: 'Todavía no sigues ningún mazo',
+    noDecksBody: 'Sigue un mazo precargado para empezar a repasar.',
+    goToDecks: 'Ir a Mazos',
+    doneTitle: 'Terminaste por hoy',
+    doneBody: (cards: number, xp: number) =>
+      `Repasaste ${plural(cards, 'tarjeta', 'tarjetas')} y ganaste ${xp.toLocaleString('es-MX')} XP.`,
+    nothingDue:
+      'No tienes tarjetas pendientes por ahora. Vuelve mañana o sube tu límite de nuevas en Perfil.',
+    remaining: (reviews: number, fresh: number) =>
+      `Quedan ${plural(reviews, 'repaso', 'repasos')} y ${plural(fresh, 'nueva', 'nuevas')}`,
+    newCard: 'Nueva',
+    reviewCard: 'Repaso',
+    confidenceQuestion: '¿Qué tan seguro estás antes de ver la respuesta?',
+    confidence: { dont_know: 'No lo sé', unsure: 'Dudo', sure: 'Seguro' },
+    show: 'Mostrar respuesta',
+    rateQuestion: '¿Qué tan bien la recordaste?',
+    ratings: { again: 'Otra vez', hard: 'Difícil', good: 'Bien', easy: 'Fácil' },
+    interval: (text: string) => `en ${text}`,
+    minutes: (n: number) => `${n} min`,
+    hours: (n: number) => `${n} h`,
+    days: (n: number) => (n === 1 ? '1 día' : `${n} días`),
+    causeQuestion: '¿Por qué crees que fallaste?',
+    causes: {
+      not_studied: 'No lo había estudiado',
+      forgot: 'Lo olvidé',
+      confused: 'Lo confundí con otra cosa',
+      misread: 'Leí mal',
+      missed_detail: 'Se me pasó un detalle',
+      rushed_or_tired: 'Fui muy rápido o estaba cansado',
+      changed_answer: 'Cambié mi respuesta',
+      other: 'Otra razón',
+    },
+    skipCause: 'Omitir',
+    finish: 'Terminar sesión',
+    xpGained: (xp: number) => `+${xp} XP`,
+    deck: (name: string) => `Mazo ${name}`,
+  },
 } as const;
