@@ -10,6 +10,7 @@
 - Trabajo desde GitHub listo (D-049). CI con npm run check en cada push, scripts de contenido en scripts/content y workflow de revisión en .claude/workflows
 - Repo remoto en https://github.com/rickymm2001-dev/Studiare-ENARM, público por decisión de Ricardo (D-048 y D-050)
 - Demo publicada en GitHub Pages en https://rickymm2001-dev.github.io/Studiare-ENARM/ y se actualiza sola con cada push a main (D-050). Falta el dominio propio, que Ricardo todavía no compra
+- Logo de Studiare en el encabezado, en modo claro y oscuro (D-051)
 
 ## Fase B. Motores núcleo, alumnos simulados y contenido demo
 

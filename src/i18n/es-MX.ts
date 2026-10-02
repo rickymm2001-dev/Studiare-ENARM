@@ -131,6 +131,7 @@ const screens: Record<ScreenKey, ScreenText> = {
 export const t = {
   app: {
     name: BRAND.name,
+    logoAlt: 'Studiare, ir al inicio',
     skipToContent: 'Saltar al contenido',
     documentTitle: (screenTitle: string) => `${screenTitle} · ${BRAND.name}`,
   },
