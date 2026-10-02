@@ -347,3 +347,69 @@ export function calibrationReport(
     label,
   };
 }
+
+export interface NegationResponse {
+  polarity: 'affirmative' | 'negative';
+  correct: boolean;
+  /** Probabilidad de acierto esperada por la dificultad y la habilidad */
+  expected: number;
+}
+
+export interface NegationSignal {
+  negative: number;
+  affirmative: number;
+  /** Exactitud ajustada por dificultad (acierto menos esperado) en cada polaridad */
+  negativeResidual: number;
+  affirmativeResidual: number;
+  /** Negativas menos afirmativas. Negativo si rinde peor en las negativas */
+  difference: number;
+  standardError: number;
+  /** Patrón probable de mala lectura de negaciones. null si sigue calibrando */
+  misreads: boolean | null;
+  /** Respuestas negativas que faltan para dejar de calibrar */
+  negativeNeeded: number;
+}
+
+/**
+ * Patrón de mala lectura de negaciones (7.5, 14.2). Compara la exactitud ajustada por dificultad
+ * en preguntas negativas contra la de afirmativas. Patrón probable si la diferencia queda por
+ * debajo de −1.64 errores estándar (una cola, J) y hay el mínimo de respuestas por categoría del
+ * análisis por estructura en ambas polaridades. Complementa al hallazgo de probable mala lectura
+ * de cada error, que necesita rapidez o reporte del alumno
+ */
+export function negationSignal(
+  responses: readonly NegationResponse[],
+  minResponsesPerCategory: number,
+): NegationSignal {
+  const residuals = (polarity: NegationResponse['polarity']) =>
+    responses
+      .filter((response) => response.polarity === polarity)
+      .map((response) => (response.correct ? 1 : 0) - response.expected);
+  const negative = residuals('negative');
+  const affirmative = residuals('affirmative');
+  const mean = (values: readonly number[]) =>
+    values.length === 0 ? 0 : values.reduce((sum, value) => sum + value, 0) / values.length;
+  const variance = (values: readonly number[], m: number) =>
+    values.length < 2
+      ? 0.25
+      : values.reduce((sum, value) => sum + (value - m) ** 2, 0) / (values.length - 1);
+  const negativeResidual = mean(negative);
+  const affirmativeResidual = mean(affirmative);
+  const standardError = Math.sqrt(
+    variance(negative, negativeResidual) / Math.max(negative.length, 1) +
+      variance(affirmative, affirmativeResidual) / Math.max(affirmative.length, 1),
+  );
+  const difference = negativeResidual - affirmativeResidual;
+  const ready =
+    negative.length >= minResponsesPerCategory && affirmative.length >= minResponsesPerCategory;
+  return {
+    negative: negative.length,
+    affirmative: affirmative.length,
+    negativeResidual,
+    affirmativeResidual,
+    difference,
+    standardError,
+    misreads: ready ? difference < -1.64 * standardError : null,
+    negativeNeeded: Math.max(0, minResponsesPerCategory - negative.length),
+  };
+}

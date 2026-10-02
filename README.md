@@ -41,10 +41,13 @@ La clave se llama ENARM_ANTHROPIC_KEY y vive solo en server/.env.local, que no s
 - npm run check corre typecheck, lint y pruebas unitarias con cobertura. Es lo mismo que corre el CI
 - npm run e2e corre Playwright. La primera vez instala Chromium con npm run e2e:install
 - npm run screenshots genera las capturas de las pantallas
+- npm run recovery-report corre la recuperación de parámetros con 3 semillas y escribe docs/recovery-report.md
+- npm run demo-seed genera la siembra de la demo fuera del navegador y reporta conteos. La siembra real se hace en la app, en Perfil con Demostración activa
+- npm run demo-reset explica cómo regenerar la demo desde la app
 - node scripts/content/check-draft.ts valida borradores de preguntas demo
 
 ## Trabajar desde GitHub
 
-- Cada push a main y cada pull request corre npm run check en GitHub Actions (.github/workflows/check.yml)
+- Cada push a cualquier rama y cada pull request corre npm run check en GitHub Actions (.github/workflows/check.yml)
 - Para editar desde otra computadora, clona el repositorio, corre npm ci y, si quieres el modo real de IA, crea server/.env.local
 - Para usar Claude Code en la web o en sesiones en la nube, la cuenta de GitHub debe dar acceso a este repositorio a la app de Claude. El workflow de revisión de contenido está en .claude/workflows y viaja con el repositorio

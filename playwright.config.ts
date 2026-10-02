@@ -17,6 +17,11 @@ export default defineConfig({
     timezoneId: 'America/Merida',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
+    // Solo en entornos con un Chromium ya instalado fuera del proyecto, por ejemplo una sesión en
+    // la nube. En la computadora de Ricardo no se define y se usa el navegador del proyecto
+    ...(process.env.PW_CHROMIUM_PATH
+      ? { launchOptions: { executablePath: process.env.PW_CHROMIUM_PATH } }
+      : {}),
   },
   projects: [
     {

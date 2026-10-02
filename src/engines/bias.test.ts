@@ -101,6 +101,58 @@ describe('análisis por sesgo (7.4)', () => {
   });
 });
 
+describe('variante por parte de los errores (D-051)', () => {
+  /** Alumno que falla mucho, pero reparte sus errores como la población */
+  function weakStudent(seed: string): BiasExposure[] {
+    const rng = createRng(seed);
+    return Array.from({ length: 400 }, () => {
+      const visible = [rng.pick(TAGS), rng.pick(TAGS), rng.pick(TAGS)];
+      return { visibleTags: visible, chosenTag: rng.chance(0.75) ? rng.pick(visible) : null };
+    });
+  }
+  const population = Array.from({ length: 100 }, (_, index) =>
+    simulateStudent(`pob-${index}`, 200),
+  );
+
+  it('el método de 7.4 confunde fallar mucho con atracción y la variante no', () => {
+    const exposureBase = populationBaseline(population, 'simulated');
+    const shareBase = populationBaseline(population, 'simulated', 'error_share');
+    expect(shareBase.method).toBe('error_share');
+    const weak = weakStudent('d1');
+    expect(
+      analyzeBias({ exposures: weak, baseline: exposureBase, thresholds }).patterns.length,
+    ).toBeGreaterThan(0);
+    expect(
+      analyzeBias({
+        exposures: weak,
+        baseline: shareBase,
+        thresholds,
+        method: 'error_share',
+        familywise: true,
+      }).patterns,
+    ).toEqual([]);
+  });
+
+  it('la variante con corrección sigue detectando un sesgo sembrado', () => {
+    const shareBase = populationBaseline(population, 'simulated', 'error_share');
+    const analysis = analyzeBias({
+      exposures: simulateStudent('anclado', 300, { anchoring: 4 }),
+      baseline: shareBase,
+      thresholds,
+      method: 'error_share',
+      familywise: true,
+    });
+    expect(analysis.patterns).toEqual(['anchoring']);
+  });
+
+  it('rechaza una línea base calculada con otro método', () => {
+    const exposureBase = populationBaseline(population, 'simulated');
+    expect(() =>
+      analyzeBias({ exposures: [], baseline: exposureBase, thresholds, method: 'error_share' }),
+    ).toThrow(RangeError);
+  });
+});
+
 function facts(overrides: Partial<ResponseFacts>[], sessionId = 's'): ResponseFacts[] {
   return overrides.map((override, order) => ({
     sessionId,

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import {
+  negationSignal,
   accuracyBy,
   calibrationReport,
   fatigueSignal,
@@ -200,5 +201,46 @@ describe('calibración metacognitiva', () => {
     const few = calibrationReport(build([5, 10], [2, 5], [1, 5]));
     expect(few).toMatchObject({ ready: false, responsesNeeded: 10, label: null });
     expect(calibrationReport([]).calibrationGap).toBe(0);
+  });
+});
+
+describe('mala lectura de negaciones (7.5, 14.2)', () => {
+  const block = (polarity: 'affirmative' | 'negative', n: number, rate: number) =>
+    Array.from({ length: n }, (_, index) => ({
+      polarity,
+      correct: index < Math.round(n * rate),
+      expected: 0.7,
+    }));
+
+  it('calibra hasta tener el mínimo en ambas polaridades', () => {
+    const signal = negationSignal(
+      [...block('negative', 10, 0.2), ...block('affirmative', 40, 0.7)],
+      20,
+    );
+    expect(signal.misreads).toBeNull();
+    expect(signal.negativeNeeded).toBe(10);
+  });
+
+  it('marca el patrón cuando rinde claramente peor en las negativas', () => {
+    const signal = negationSignal(
+      [...block('negative', 40, 0.35), ...block('affirmative', 120, 0.7)],
+      20,
+    );
+    expect(signal.misreads).toBe(true);
+    expect(signal.difference).toBeCloseTo(-0.35, 2);
+  });
+
+  it('no marca nada con el mismo rendimiento en ambas', () => {
+    const signal = negationSignal(
+      [...block('negative', 40, 0.7), ...block('affirmative', 120, 0.7)],
+      20,
+    );
+    expect(signal.misreads).toBe(false);
+  });
+
+  it('tolera listas vacías', () => {
+    const signal = negationSignal([], 20);
+    expect(signal.misreads).toBeNull();
+    expect(signal.difference).toBe(0);
   });
 });

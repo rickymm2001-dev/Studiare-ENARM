@@ -28,8 +28,9 @@
     "e2e:install": "node scripts/playwright.ts install chromium",
     "screenshots": "node scripts/playwright.ts test --config playwright.screenshots.config.ts",
     "eval-ai": "node scripts/not-yet.ts eval-ai D",
-    "demo-seed": "node scripts/not-yet.ts demo-seed B",
-    "demo-reset": "node scripts/not-yet.ts demo-reset B"
+    "demo-seed": "DEMO_SEED_DRY_RUN=1 vitest run tests/demo --silent=false",
+    "demo-reset": "node scripts/demo-reset.ts",
+    "recovery-report": "RECOVERY_REPORT=1 vitest run tests/recovery && prettier --write docs/recovery-report.md"
   },
   "dependencies": {
     "@date-fns/tz": "1.5.0",

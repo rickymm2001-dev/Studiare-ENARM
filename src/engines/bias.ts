@@ -17,6 +17,11 @@
  *     supera la línea base. Solo cuenta la etiqueta primaria de cada distractor (D-029)
  *   - Indicadores de conducta. Cada uno es una proporción k/n con su propia línea base y una
  *     dirección. Patrón probable si el intervalo de Wilson queda del lado de la dirección
+ *   - Variante propuesta tras la recuperación de 14.2 (D-051), con la opción method. En lugar de
+ *     elecciones entre exposiciones, mide qué parte de sus errores con S a la vista fue a S, y la
+ *     línea base se calcula igual. Así un alumno que se equivoca mucho no parece atraído por todas
+ *     las etiquetas. Con familywise, el nivel del intervalo se corrige por Bonferroni según cuántas
+ *     etiquetas se evalúan. Por defecto el motor sigue el método de 7.4 hasta que Ricardo decida
  * Umbrales. 40 errores con etiqueta (J). Mínimos por indicador de conducta (J).
  */
 import type { Thresholds } from '@/config/thresholds';
@@ -29,8 +34,16 @@ export interface BiasExposure {
   chosenTag: string | null;
 }
 
+/**
+ * exposure. Atracción de 7.4, elecciones de S entre las preguntas con S a la vista.
+ * error_share. Parte de los errores con S a la vista que fue a S (D-051)
+ */
+export type BiasMethod = 'exposure' | 'error_share';
+
 export interface Baseline {
   attraction: Readonly<Record<string, number>>;
+  /** Método con que se calculó. exposure si falta */
+  method?: BiasMethod;
   /** La línea base viene de alumnos simulados mientras no haya población real (7.4) */
   source: 'real' | 'simulated';
 }
@@ -59,31 +72,51 @@ export interface BiasAnalysis {
   patterns: string[];
 }
 
-export function analyzeBias(input: {
-  exposures: readonly BiasExposure[];
-  baseline: Baseline;
-  thresholds: Thresholds['bias'];
-}): BiasAnalysis {
+/** Cuenta exposiciones y elecciones por etiqueta según el método */
+function countByTag(
+  exposures: readonly BiasExposure[],
+  method: BiasMethod,
+): Map<string, { exposures: number; choices: number }> {
   const counts = new Map<string, { exposures: number; choices: number }>();
-  let taggedErrors = 0;
-  for (const exposure of input.exposures) {
+  for (const exposure of exposures) {
+    // En error_share solo cuentan las preguntas falladas
+    if (method === 'error_share' && exposure.chosenTag === null) continue;
     for (const tag of new Set(exposure.visibleTags)) {
       const entry = counts.get(tag) ?? { exposures: 0, choices: 0 };
       entry.exposures += 1;
       counts.set(tag, entry);
     }
     if (exposure.chosenTag !== null) {
-      taggedErrors += 1;
       const entry = counts.get(exposure.chosenTag) ?? { exposures: 0, choices: 0 };
       entry.choices += 1;
       counts.set(exposure.chosenTag, entry);
     }
   }
+  return counts;
+}
+
+export function analyzeBias(input: {
+  exposures: readonly BiasExposure[];
+  baseline: Baseline;
+  thresholds: Thresholds['bias'];
+  /** exposure por defecto (7.4). error_share es la variante propuesta (D-051) */
+  method?: BiasMethod;
+  /** Corrige el nivel del intervalo por el número de etiquetas evaluadas (Bonferroni, D-051) */
+  familywise?: boolean;
+}): BiasAnalysis {
+  const method = input.method ?? 'exposure';
+  if ((input.baseline.method ?? 'exposure') !== method) {
+    throw new RangeError('La línea base se calculó con otro método');
+  }
+  const counts = countByTag(input.exposures, method);
+  const taggedErrors = input.exposures.filter((exposure) => exposure.chosenTag !== null).length;
   const missing = Math.max(0, input.thresholds.minTaggedErrors - taggedErrors);
+  // Una cola de 2.5% en el método de 7.4. Con familywise se reparte entre las etiquetas
+  const level = input.familywise ? 1 - 0.05 / Math.max(counts.size, 1) : 0.95;
   const tags = [...counts.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([tag, { exposures, choices }]): TagAnalysis => {
-      const interval = wilsonInterval(Math.min(choices, exposures), exposures);
+      const interval = wilsonInterval(Math.min(choices, exposures), exposures, level);
       const baseline = input.baseline.attraction[tag] ?? null;
       let status: PatternStatus;
       if (missing > 0) status = { kind: 'calibrating', needed: missing, unit: 'tagged_errors' };
@@ -111,26 +144,13 @@ export function analyzeBias(input: {
 export function populationBaseline(
   students: readonly (readonly BiasExposure[])[],
   source: Baseline['source'],
+  method: BiasMethod = 'exposure',
 ): Baseline {
-  const counts = new Map<string, { exposures: number; choices: number }>();
-  for (const exposures of students) {
-    for (const exposure of exposures) {
-      for (const tag of new Set(exposure.visibleTags)) {
-        const entry = counts.get(tag) ?? { exposures: 0, choices: 0 };
-        entry.exposures += 1;
-        counts.set(tag, entry);
-      }
-      if (exposure.chosenTag !== null) {
-        const entry = counts.get(exposure.chosenTag) ?? { exposures: 0, choices: 0 };
-        entry.choices += 1;
-        counts.set(exposure.chosenTag, entry);
-      }
-    }
-  }
+  const counts = countByTag(students.flat(), method);
   const attraction: Record<string, number> = {};
   for (const [tag, { exposures, choices }] of counts)
     attraction[tag] = exposures === 0 ? 0 : choices / exposures;
-  return { attraction, source };
+  return { attraction, source, method };
 }
 
 /** Hechos de una respuesta que usan los indicadores de conducta */

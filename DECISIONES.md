@@ -406,3 +406,19 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Todo el trabajo vive en el repositorio de GitHub. Cada bloque termina con commit y push, y el CI corre npm run check en cada push a cualquier rama, no solo en main
 - Mientras no existan los mazos, la simulación de FSRS de los alumnos simulados usa tarjetas sintéticas por tema, marcadas como tales. Se cambian por las tarjetas reales cuando se escriban los mazos
 
+### D-051. Ajuste propuesto al análisis por sesgo tras la recuperación de 14.2
+- Fecha 2026-10-02. Propuesta de Claude, pendiente de aprobación de Ricardo
+- Con 300 alumnos simulados en 3 semillas, el método de 7.4 detecta 100% de los sesgos sembrados, pero marca entre 47% y 54% de los alumnos sin propensión. La meta es 10% o menos
+- Causas. La atracción se mide contra todas las preguntas con la etiqueta a la vista, así que quien falla mucho parece atraído por todas. Y se prueban unas 20 etiquetas por alumno con 95% cada una
+- Propuesta. Medir qué parte de los errores con la etiqueta a la vista fue a esa etiqueta, con la línea base calculada igual, y corregir el nivel por Bonferroni según las etiquetas evaluadas. Con eso detecta 100% y marca entre 3% y 6%
+- Estado. Está en src/engines/bias.ts como opción (method error_share y familywise). El valor por defecto sigue siendo el de 7.4 hasta que Ricardo decida. Detalle en docs/recovery-report.md
+
+### D-052. Siembra de la demo en el navegador
+- Fecha 2026-10-02. Decisión de Claude
+- La base demo vive en IndexedDB dentro del navegador. Por eso la siembra real se hace en la app, en Perfil con Demostración activa, con los botones Generar datos de demostración y Regenerar desde cero. En la Fase D también vivirán en la pantalla de admin 24
+- La generación corre en un Web Worker (src/workers/simulate.worker.ts) que se carga bajo demanda, así no traba la interfaz ni entra al JavaScript inicial
+- Se guardan el contenido demo con IDs estables, 301 perfiles (alumno de la demo y 300 simulados), el SimTruth de todos y la bitácora completa del alumno de la demo. Las bitácoras de los 300 simulados no se guardan porque serían cerca de 900 mil eventos. La línea base de la población y las estadísticas de las preguntas se resuelven en la Fase C con la misma generación determinista
+- npm run demo-seed genera la siembra por defecto completa fuera del navegador, valida cada registro y reporta conteos. npm run demo-reset explica cómo regenerar desde la app, porque un script de Node no puede borrar una base del navegador
+- Mientras no existan los mazos se usa una baraja de 200 tarjetas sintéticas sin contenido médico, marcada como datos simulados (D-050)
+- Las pruebas de punta a punta aceptan PW_CHROMIUM_PATH para usar un Chromium ya instalado en entornos en la nube. En la computadora de Ricardo no se define
+

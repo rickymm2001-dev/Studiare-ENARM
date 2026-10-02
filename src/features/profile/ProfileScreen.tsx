@@ -18,6 +18,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/ca
 import { SimulatedDataLabel } from '@/ui/components/labels';
 import { RadioCards } from '@/ui/components/radio-cards';
 import type { ThemePreference } from '@/ui/theme';
+import { DemoDataPanel } from './DemoDataPanel';
 
 const THEME_OPTIONS = [
   { value: 'system', label: t.theme.system, icon: <Monitor /> },
@@ -66,6 +67,8 @@ export function ProfileScreen() {
         />
         <DatabaseStatus />
       </Card>
+
+      {database === 'demo' ? <DemoDataPanel /> : null}
 
       <Card aria-labelledby="rol-titulo">
         <CardHeader>
