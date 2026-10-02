@@ -1,0 +1,1040 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-02b-endocrinologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "thyroid_disease",
+      "vignette": "Mujer de 34 años con nerviosismo, palpitaciones, pérdida de 6 kg pese a buen apetito e intolerancia al calor. Tiene bocio difuso, exoftalmos bilateral y temblor fino. TSH suprimida y T4 libre elevada.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Adenoma tóxico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da nódulo único, no bocio difuso con exoftalmos."
+        },
+        {
+          "key": "b",
+          "text": "Adenoma hipofisario productor de TSH",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rarísimo y daría TSH alta."
+        },
+        {
+          "key": "c",
+          "text": "Bocio multinodular tóxico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Causa hipertiroidismo, pero en mayores y sin oftalmopatía."
+        },
+        {
+          "key": "d",
+          "text": "Feocromocitoma",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta la TSH suprimida y el bocio."
+        },
+        {
+          "key": "e",
+          "text": "Trastorno de ansiedad generalizada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Atribuye los síntomas a ansiedad sin ver las pruebas tiroideas."
+        },
+        {
+          "key": "f",
+          "text": "Hipertiroidismo por yodo de contraste",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo hipertiroidismo es por yodo."
+        },
+        {
+          "key": "g",
+          "text": "Tiroiditis de Hashimoto",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es autoinmune también, pero suele causar hipotiroidismo."
+        },
+        {
+          "key": "h",
+          "text": "Tiroiditis subaguda de De Quervain",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el hipertiroidismo, pero esa tiroiditis duele y no da exoftalmos."
+        },
+        {
+          "key": "i",
+          "text": "Enfermedad de Graves",
+          "correct": true,
+          "rationale": "Hipertiroidismo con bocio difuso y oftalmopatía."
+        },
+        {
+          "key": "j",
+          "text": "Ingesta excesiva de hormona tiroidea",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la T4 alta, pero el exoftalmos no ocurre en la tirotoxicosis facticia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "La enfermedad de Graves es la causa más frecuente de hipertiroidismo, sobre todo en mujeres jóvenes. Es autoinmune, mediada por anticuerpos que estimulan el receptor de TSH. Se caracteriza por tirotoxicosis, bocio difuso y manifestaciones extratiroideas como la oftalmopatía con exoftalmos y, con menor frecuencia, el mixedema pretibial. Bioquímicamente hay TSH suprimida con T4 o T3 libres elevadas. Los anticuerpos contra el receptor de TSH confirman el diagnóstico y la gammagrafía muestra captación difusa aumentada. El tratamiento incluye betabloqueador para los síntomas y metimazol, yodo radiactivo o cirugía como tratamiento definitivo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del hipertiroidismo"
+      ]
+    },
+    {
+      "key": "mi-02b-endocrinologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "thyroid_disease",
+      "vignette": "Mujer de 46 años con fatiga, aumento de peso, estreñimiento, piel seca e intolerancia al frío. TSH de 18 mUI/L y T4 libre baja. Anticuerpos antiperoxidasa positivos.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Levotiroxina oral en ayunas, ajustada según la TSH",
+          "correct": true,
+          "rationale": "Hipotiroidismo primario por tiroiditis de Hashimoto."
+        },
+        {
+          "key": "b",
+          "text": "Yodo oral en dosis altas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la tiroides, pero el yodo no trata la tiroiditis autoinmune."
+        },
+        {
+          "key": "c",
+          "text": "Vigilar TSH cada año sin tratar",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Deja un hipotiroidismo manifiesto sin tratar."
+        },
+        {
+          "key": "d",
+          "text": "Tiroidectomía total",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada en el hipotiroidismo."
+        },
+        {
+          "key": "e",
+          "text": "Corticosteroides para la autoinmunidad",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La tiroiditis de Hashimoto no se trata con esteroides."
+        },
+        {
+          "key": "f",
+          "text": "Solo dieta y ejercicio para el peso",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Trata un síntoma y deja la causa."
+        },
+        {
+          "key": "g",
+          "text": "Extracto de tiroides desecada por ser natural",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Lo natural suena mejor, pero su contenido es variable."
+        },
+        {
+          "key": "h",
+          "text": "Liotironina como fármaco base",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tiene vida media corta y no es primera elección."
+        },
+        {
+          "key": "i",
+          "text": "Selenio como único tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el suplemento sustituye la hormona."
+        },
+        {
+          "key": "j",
+          "text": "Combinación de T4 y T3 desde el inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Agrega complejidad sin beneficio demostrado."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "h",
+        "j"
+      ],
+      "explanation": "El hipotiroidismo primario se caracteriza por TSH elevada y T4 libre baja. En zonas sin deficiencia de yodo la causa más frecuente es la tiroiditis de Hashimoto, con anticuerpos antiperoxidasa positivos. El tratamiento de elección es la levotiroxina, que se toma en ayunas, 30 a 60 minutos antes del desayuno y separada de calcio y hierro. En adultos jóvenes sin cardiopatía se inicia a dosis plena de 1.6 microgramos por kilogramo al día, y en ancianos o cardiópatas a dosis baja con incremento gradual. La TSH se revisa a las seis a ocho semanas para ajustar la dosis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo primario en adultos"
+      ]
+    },
+    {
+      "key": "mi-02b-endocrinologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "thyroid_disease",
+      "vignette": "Hombre de 42 años con un nódulo tiroideo de 2.2 cm palpable, detectado incidentalmente. Sin síntomas. TSH normal.",
+      "prompt": "¿Cuál es el estudio inicial más adecuado para evaluar el nódulo?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Gammagrafía tiroidea",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se usa cuando la TSH está baja para buscar nódulo hiperfuncionante."
+        },
+        {
+          "key": "b",
+          "text": "Tiroidectomía diagnóstica de inmediato",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el tamaño y salta a la cirugía."
+        },
+        {
+          "key": "c",
+          "text": "Tomografía por emisión de positrones",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es costosa y no es el estudio inicial."
+        },
+        {
+          "key": "d",
+          "text": "Medir calcitonina y tiroglobulina como estudio principal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La tiroglobulina no diagnostica cáncer en el nódulo."
+        },
+        {
+          "key": "e",
+          "text": "Iniciar levotiroxina para reducir el nódulo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La supresión con levotiroxina ya no se recomienda."
+        },
+        {
+          "key": "f",
+          "text": "Biopsia con aguja gruesa como primer paso",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la biopsia gruesa es la norma, cuando se usa aguja fina guiada por ultrasonido."
+        },
+        {
+          "key": "g",
+          "text": "Tomografía de cuello y tórax con contraste",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Agrega estudios sin indicación inicial."
+        },
+        {
+          "key": "h",
+          "text": "Ultrasonido de tiroides para clasificar el riesgo del nódulo",
+          "correct": true,
+          "rationale": "Con TSH normal el ultrasonido define si se requiere biopsia."
+        },
+        {
+          "key": "i",
+          "text": "Repetir TSH en tres meses y observar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Esperar suena prudente, pero el nódulo debe evaluarse."
+        },
+        {
+          "key": "j",
+          "text": "Asumir que es benigno porque la mayoría lo son",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Usa la frecuencia general para omitir la evaluación de un nódulo mayor de 1 cm."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "Ante un nódulo tiroideo, el primer paso es medir la TSH. Si la TSH es baja, se realiza gammagrafía para identificar un nódulo hiperfuncionante, que rara vez es maligno. Si la TSH es normal o alta, se realiza ultrasonido de tiroides, que describe tamaño, composición, ecogenicidad, márgenes, calcificaciones y forma, y permite clasificar el riesgo con sistemas como TI-RADS. Según el riesgo y el tamaño se indica biopsia por aspiración con aguja fina guiada por ultrasonido. El resultado se informa con el sistema Bethesda, que orienta seguimiento, repetición de la biopsia o cirugía.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del nódulo tiroideo"
+      ]
+    },
+    {
+      "key": "mi-02b-endocrinologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "thyroid_disease",
+      "vignette": "Mujer de 39 años con enfermedad de Graves sin tratamiento que desarrolla neumonía. Llega con fiebre de 40.2 grados, frecuencia cardiaca de 164 lpm en fibrilación auricular, agitación, vómito y diarrea. T4 libre muy elevada.",
+      "prompt": "¿Cuál es la conducta a seguir?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cardioversión eléctrica como tratamiento principal",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "La fibrilación responde al control de la tirotoxicosis."
+        },
+        {
+          "key": "b",
+          "text": "Ácido acetilsalicílico para la fiebre",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Desplaza la hormona de su proteína y empeora la crisis."
+        },
+        {
+          "key": "c",
+          "text": "Manejo en terapia intensiva con betabloqueador, tionamida, yodo una hora después de la tionamida, corticosteroide y tratamiento de la neumonía",
+          "correct": true,
+          "rationale": "Es una tormenta tiroidea."
+        },
+        {
+          "key": "d",
+          "text": "Benzodiacepinas como manejo principal de la agitación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Trata un síntoma y no la causa."
+        },
+        {
+          "key": "e",
+          "text": "Tiroidectomía de urgencia como primera medida",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Cirugía en un paciente inestable sin preparación."
+        },
+        {
+          "key": "f",
+          "text": "Observación y líquidos hasta tener perfil tiroideo completo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasa el tratamiento de una urgencia letal."
+        },
+        {
+          "key": "g",
+          "text": "Yodo radiactivo urgente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Su efecto es tardío y no se usa en la crisis."
+        },
+        {
+          "key": "h",
+          "text": "Levotiroxina para regular la tiroides",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la levotiroxina regula, cuando empeora el cuadro."
+        },
+        {
+          "key": "i",
+          "text": "Dar solo antibiótico y paracetamol por la neumonía",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la infección e ignora la tormenta."
+        },
+        {
+          "key": "j",
+          "text": "Dar yodo antes de la tionamida para frenar rápido la hormona",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Frenar rápido suena bien, pero el yodo antes de la tionamida aumenta la síntesis."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "La tormenta tiroidea es una forma extrema de tirotoxicosis con mortalidad elevada, desencadenada por infecciones, cirugía o suspensión del tratamiento. Cursa con fiebre alta, taquicardia o fibrilación auricular, insuficiencia cardiaca, síntomas gastrointestinales y alteración neurológica. La escala de Burch y Wartofsky apoya el diagnóstico. El tratamiento es en terapia intensiva e incluye betabloqueador como propranolol, tionamida, de preferencia propiltiouracilo en este escenario, yodo inorgánico al menos una hora después de la tionamida, hidrocortisona, enfriamiento con paracetamol y manejo del desencadenante. Los salicilatos están contraindicados porque aumentan la hormona libre.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del hipertiroidismo"
+      ]
+    },
+    {
+      "key": "mi-02b-endocrinologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "thyroid_disease",
+      "vignette": "Mujer de 30 años con enfermedad de Graves que inicia tratamiento con metimazol.",
+      "prompt": "¿Cuál es el mecanismo de acción del metimazol?",
+      "polarity": "affirmative",
+      "task": "mechanism",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Bloquea la liberación de hormona ya formada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ese es el efecto principal del yodo inorgánico."
+        },
+        {
+          "key": "b",
+          "text": "Disminuye la producción de TSH en la hipófisis",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Actúa en la tiroides, no en la hipófisis."
+        },
+        {
+          "key": "c",
+          "text": "Inhibe la conversión periférica de T4 a T3 como acción principal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es un efecto del propiltiouracilo, no del metimazol."
+        },
+        {
+          "key": "d",
+          "text": "Bloquea el receptor de TSH en la tiroides",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El metimazol no actúa sobre el receptor."
+        },
+        {
+          "key": "e",
+          "text": "Modula a los linfocitos T para frenar la autoinmunidad como acción principal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Tiene efecto inmunomodulador menor, no es su acción principal."
+        },
+        {
+          "key": "f",
+          "text": "Bloquea los receptores adrenérgicos beta",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a control de síntomas, pero es el mecanismo de los betabloqueadores."
+        },
+        {
+          "key": "g",
+          "text": "Destruye las células foliculares por radiación",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ese es el mecanismo del yodo radiactivo."
+        },
+        {
+          "key": "h",
+          "text": "Aumenta la eliminación renal de hormona tiroidea",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree en un mecanismo renal inexistente."
+        },
+        {
+          "key": "i",
+          "text": "Inhibe la peroxidasa tiroidea y bloquea la organificación del yodo y el acoplamiento de yodotirosinas",
+          "correct": true,
+          "rationale": "Disminuye la síntesis de hormona tiroidea."
+        },
+        {
+          "key": "j",
+          "text": "Inhibe la captación de yodo por el simportador sodio yodo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Ese es el efecto del perclorato."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "Las tionamidas, metimazol y propiltiouracilo, son los fármacos antitiroideos. Ambas inhiben la peroxidasa tiroidea, enzima que oxida el yoduro, lo incorpora a los residuos de tirosina de la tiroglobulina y acopla las yodotirosinas para formar T4 y T3. Así disminuyen la síntesis de hormona nueva, pero no la liberación de la ya almacenada, por lo que su efecto tarda varias semanas. El propiltiouracilo además inhibe la conversión periférica de T4 a T3. Se prefiere metimazol por su dosis única diaria y menor hepatotoxicidad, salvo en el primer trimestre del embarazo y en la tormenta tiroidea.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del hipertiroidismo"
+      ]
+    },
+    {
+      "key": "mi-02b-endocrinologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "thyroid_disease",
+      "vignette": "Mujer de 33 años con enfermedad de Graves en tratamiento con metimazol desde hace 6 semanas. Acude con fiebre de 39 grados y dolor de garganta intenso.",
+      "prompt": "¿Cuál es la complicación grave del tratamiento que debe descartarse de inmediato?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Agranulocitosis",
+          "correct": true,
+          "rationale": "Fiebre y odinofagia con tionamida obligan a medir neutrófilos y suspender el fármaco."
+        },
+        {
+          "key": "b",
+          "text": "Tormenta tiroidea",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No nota que la paciente está en tratamiento y solo tiene fiebre y faringitis."
+        },
+        {
+          "key": "c",
+          "text": "Recaída de hipertiroidismo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Atribuye la fiebre a la enfermedad de base."
+        },
+        {
+          "key": "d",
+          "text": "Faringitis estreptocócica simple",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es frecuente, pero en esta paciente primero se descarta agranulocitosis."
+        },
+        {
+          "key": "e",
+          "text": "Hipotiroidismo por exceso de tratamiento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El exceso de dosis no causa fiebre."
+        },
+        {
+          "key": "f",
+          "text": "Anemia aplásica por levotiroxina",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Confunde el fármaco y el efecto."
+        },
+        {
+          "key": "g",
+          "text": "Hepatotoxicidad fulminante",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se asocia más al propiltiouracilo y no explica el cuadro."
+        },
+        {
+          "key": "h",
+          "text": "Vasculitis ANCA positiva",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es posible, pero mucho menos frecuente."
+        },
+        {
+          "key": "i",
+          "text": "Mononucleosis infecciosa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la faringitis."
+        },
+        {
+          "key": "j",
+          "text": "Exantema alérgico leve",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es un efecto adverso común, pero no se manifiesta así."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "g",
+        "j"
+      ],
+      "explanation": "La agranulocitosis es la complicación más grave de las tionamidas y ocurre con mayor frecuencia en los primeros tres meses de tratamiento. Se define por neutrófilos menores de 500 por microlitro. Se manifiesta con fiebre y faringitis u otras infecciones. Por eso se instruye a todo paciente a suspender el fármaco y solicitar una biometría hemática urgente ante fiebre o dolor de garganta. Si se confirma, el fármaco se suspende de forma definitiva, se dan antibióticos de amplio espectro si hay fiebre y puede usarse factor estimulante de colonias. Después se elige yodo radiactivo o cirugía como tratamiento definitivo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del hipertiroidismo"
+      ]
+    },
+    {
+      "key": "mi-02b-endocrinologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "dyslipidemia",
+      "vignette": "Hombre de 40 años sin enfermedades conocidas acude a revisión. Su padre tuvo un infarto a los 50 años. Fuma 10 cigarros al día.",
+      "prompt": "¿Cuál es el estudio inicial para evaluar su riesgo cardiovascular por lípidos?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo colesterol total",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es insuficiente para clasificar el riesgo."
+        },
+        {
+          "key": "b",
+          "text": "Esperar a los 45 años para medir lípidos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasa la evaluación pese a factores de riesgo."
+        },
+        {
+          "key": "c",
+          "text": "Proteína C reactiva ultrasensible antes del perfil",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Agrega un estudio antes del básico."
+        },
+        {
+          "key": "d",
+          "text": "Ecocardiograma para ver el corazón",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Ver el corazón suena útil, pero no evalúa lípidos."
+        },
+        {
+          "key": "e",
+          "text": "Prueba de esfuerzo por el antecedente familiar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el infarto del padre sin evaluar lípidos."
+        },
+        {
+          "key": "f",
+          "text": "Perfil de lípidos con colesterol total, LDL, HDL y triglicéridos",
+          "correct": true,
+          "rationale": "Permite estimar el riesgo y decidir el tratamiento."
+        },
+        {
+          "key": "g",
+          "text": "Angiotomografía coronaria de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es avanzada y no es el estudio inicial."
+        },
+        {
+          "key": "h",
+          "text": "Lipoproteína a y apolipoproteínas como único estudio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Son complementarias y no sustituyen el perfil."
+        },
+        {
+          "key": "i",
+          "text": "Iniciar estatina sin estudios por el antecedente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Trata sin medir."
+        },
+        {
+          "key": "j",
+          "text": "Medir colesterol en sangre capilar como estudio definitivo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el capilar basta para decidir."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "El perfil de lípidos completo incluye colesterol total, colesterol LDL, colesterol HDL y triglicéridos, y es el estudio inicial para evaluar el riesgo cardiovascular relacionado con lípidos. Se recomienda a partir de los 20 años en personas con factores de riesgo, como tabaquismo, antecedente familiar de cardiopatía isquémica prematura, hipertensión, diabetes u obesidad. Con estos datos y otros factores se estima el riesgo cardiovascular global, que define la meta de LDL y la necesidad de estatina. La suspensión del tabaco es una de las intervenciones más importantes. Estudios como la lipoproteína a o el calcio coronario se usan para reclasificar el riesgo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las dislipidemias"
+      ]
+    },
+    {
+      "key": "mi-02b-endocrinologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "dyslipidemia",
+      "vignette": "Mujer de 50 años sin otras enfermedades. Sus triglicéridos en ayuno son de 1,250 mg/dL en dos ocasiones. Refiere dolor epigástrico ocasional. Consume alcohol los fines de semana.",
+      "prompt": "¿Cuál es el tratamiento farmacológico de elección para reducir su riesgo inmediato?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Un fibrato, como fenofibrato, junto con suspensión del alcohol y dieta baja en grasas",
+          "correct": true,
+          "rationale": "Triglicéridos mayores de 1,000 mg/dL aumentan el riesgo de pancreatitis."
+        },
+        {
+          "key": "b",
+          "text": "Ezetimiba sola",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Reduce LDL y casi no actúa sobre triglicéridos."
+        },
+        {
+          "key": "c",
+          "text": "Niacina por su efecto en todo el perfil",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Tiene efectos adversos y poco beneficio clínico."
+        },
+        {
+          "key": "d",
+          "text": "Suplemento de ajo y linaza como tratamiento único",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que los suplementos bastan."
+        },
+        {
+          "key": "e",
+          "text": "Aféresis de lípidos como primera medida",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para casos graves refractarios."
+        },
+        {
+          "key": "f",
+          "text": "Pancreatectomía preventiva",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Medida absurda."
+        },
+        {
+          "key": "g",
+          "text": "Resinas secuestradoras de ácidos biliares",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Pueden elevar los triglicéridos."
+        },
+        {
+          "key": "h",
+          "text": "Esperar a que tenga pancreatitis para tratar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Espera el daño para actuar."
+        },
+        {
+          "key": "i",
+          "text": "Estatina de alta intensidad como fármaco principal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el tratamiento clásico de lípidos, pero la prioridad son los triglicéridos."
+        },
+        {
+          "key": "j",
+          "text": "Solo dieta durante seis meses",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Deja un riesgo alto de pancreatitis."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "La hipertrigliceridemia grave, con triglicéridos mayores de 1,000 mg/dL, aumenta de forma importante el riesgo de pancreatitis aguda, por lo que la prioridad es reducirlos con rapidez. El tratamiento incluye eliminar el alcohol, dieta muy baja en grasas y carbohidratos simples, control de diabetes y suspender fármacos que los elevan, y un fibrato como fármaco de elección. Los ácidos grasos omega 3 a dosis altas son complemento. Una vez que los triglicéridos bajan, se evalúa el riesgo cardiovascular y la necesidad de estatina. En la pancreatitis por hipertrigliceridemia se usa insulina en infusión o plasmaféresis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las dislipidemias"
+      ]
+    },
+    {
+      "key": "mi-02b-endocrinologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "dyslipidemia",
+      "vignette": "Hombre de 66 años con cardiopatía isquémica en tratamiento con atorvastatina 80 mg. Se agregó claritromicina por una neumonía. A los 5 días presenta dolor muscular difuso intenso, debilidad y orina oscura. CPK de 18,000 U/L y creatinina de 2.1 mg/dL.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Infarto agudo de miocardio por la elevación de CPK",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Asocia CPK con infarto, pero el patrón es muscular esquelético."
+        },
+        {
+          "key": "b",
+          "text": "Hipotiroidismo con miopatía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede elevar CPK, pero la relación temporal con el antibiótico es clara."
+        },
+        {
+          "key": "c",
+          "text": "Mialgia simple por estatina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el dolor, pero la CPK y la orina indican rabdomiólisis."
+        },
+        {
+          "key": "d",
+          "text": "Neumonía grave con sepsis como única causa",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No considera la interacción farmacológica."
+        },
+        {
+          "key": "e",
+          "text": "Deshidratación por la fiebre",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la fiebre basta para esta CPK."
+        },
+        {
+          "key": "f",
+          "text": "Nefritis intersticial por claritromicina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Explica la creatinina pero no la CPK."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome neuroléptico maligno",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay fármacos antipsicóticos."
+        },
+        {
+          "key": "h",
+          "text": "Polimiositis idiopática",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es inflamatoria y no se relaciona con el fármaco."
+        },
+        {
+          "key": "i",
+          "text": "Rabdomiólisis por interacción entre estatina y claritromicina",
+          "correct": true,
+          "rationale": "La claritromicina inhibe CYP3A4 y eleva la estatina."
+        },
+        {
+          "key": "j",
+          "text": "Hepatitis por estatina",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la estatina y elige otro órgano."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "Las estatinas pueden causar desde mialgias hasta miopatía y rabdomiólisis, que es rara pero grave. El riesgo aumenta con dosis altas, edad avanzada, hipotiroidismo, insuficiencia renal y fármacos que inhiben el citocromo CYP3A4, como claritromicina, eritromicina, antifúngicos azólicos e inhibidores de proteasa, porque elevan los niveles de atorvastatina y simvastatina. La rabdomiólisis se manifiesta con dolor y debilidad muscular, orina oscura por mioglobinuria, CPK mayor de diez veces el límite y lesión renal aguda. El manejo incluye suspender la estatina y el fármaco interactuante, hidratación intravenosa abundante y vigilancia de potasio y función renal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las dislipidemias"
+      ]
+    },
+    {
+      "key": "mi-02b-endocrinologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "dyslipidemia",
+      "vignette": "Hombre de 35 años con colesterol LDL de 260 mg/dL. Tiene xantomas tendinosos en tendones de Aquiles y arco corneal. Su madre y su hermano tienen colesterol muy alto.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo dieta y ejercicio por su juventud",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la edad y subestima el riesgo."
+        },
+        {
+          "key": "b",
+          "text": "Fibrato como fármaco principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es para triglicéridos."
+        },
+        {
+          "key": "c",
+          "text": "Resección quirúrgica de los xantomas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Trata un signo, no la enfermedad."
+        },
+        {
+          "key": "d",
+          "text": "Trasplante hepático",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para formas homocigotas graves."
+        },
+        {
+          "key": "e",
+          "text": "Iniciar tratamiento solo si aparece angina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Espera a que haya daño."
+        },
+        {
+          "key": "f",
+          "text": "Omega 3 a dosis altas como único tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que bajan LDL de forma importante."
+        },
+        {
+          "key": "g",
+          "text": "Estatina de baja intensidad para evitar efectos adversos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Evitar efectos suena prudente, pero el riesgo exige alta intensidad."
+        },
+        {
+          "key": "h",
+          "text": "Evitar fármacos hasta tener estudio genético",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La prueba genética no debe retrasar el tratamiento."
+        },
+        {
+          "key": "i",
+          "text": "Vigilar el LDL cada año sin fármacos",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Deja al paciente expuesto a enfermedad coronaria prematura."
+        },
+        {
+          "key": "j",
+          "text": "Estatina de alta intensidad desde ahora, con ezetimiba si no alcanza la meta",
+          "correct": true,
+          "rationale": "Sugiere hipercolesterolemia familiar, de muy alto riesgo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "La hipercolesterolemia familiar es un trastorno genético, generalmente autosómico dominante, que causa LDL muy elevado desde el nacimiento y enfermedad coronaria prematura. Se sospecha con LDL mayor de 190 mg/dL en adultos, xantomas tendinosos, arco corneal antes de los 45 años y antecedentes familiares de colesterol alto o infarto prematuro, y se clasifica con criterios como los de la red holandesa. El tratamiento de elección es la estatina de alta intensidad desde el diagnóstico, con meta de reducir el LDL al menos 50%. Si no se alcanza, se agrega ezetimiba y después un inhibidor de PCSK9. Se debe hacer tamizaje en cascada a los familiares.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las dislipidemias"
+      ]
+    },
+    {
+      "key": "mi-02b-endocrinologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "dyslipidemia",
+      "vignette": "Mujer de 48 años con colesterol LDL de 190 mg/dL y triglicéridos normales. Refiere fatiga, estreñimiento y aumento de peso en el último año. Tiene piel seca y bradicardia leve.",
+      "prompt": "¿Cuál es la causa secundaria más probable de su dislipidemia que debe descartarse?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hipercolesterolemia familiar sin buscar otra causa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el LDL alto y omite causas secundarias."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de Cushing",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el aumento de peso, sin otros datos de Cushing."
+        },
+        {
+          "key": "c",
+          "text": "Hipotiroidismo",
+          "correct": true,
+          "rationale": "Causa frecuente de LDL elevado reversible con levotiroxina."
+        },
+        {
+          "key": "d",
+          "text": "Uso de anticonceptivos orales",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Pueden alterar lípidos, pero no explican los síntomas."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome nefrótico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Eleva lípidos, pero cursa con edema y proteinuria."
+        },
+        {
+          "key": "f",
+          "text": "Alcoholismo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Eleva más los triglicéridos y no hay consumo descrito."
+        },
+        {
+          "key": "g",
+          "text": "Colestasis por cirrosis biliar primaria",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente y daría prurito e ictericia."
+        },
+        {
+          "key": "h",
+          "text": "Diabetes tipo 2",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Eleva más los triglicéridos y no explica los síntomas."
+        },
+        {
+          "key": "i",
+          "text": "Dieta alta en grasas saturadas como única explicación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Cierra con la dieta pese a síntomas sistémicos."
+        },
+        {
+          "key": "j",
+          "text": "Anorexia nerviosa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo cambio de peso tiene la misma causa."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "Antes de atribuir una dislipidemia a causas primarias se deben descartar causas secundarias, como hipotiroidismo, diabetes descontrolada, síndrome nefrótico, enfermedad renal crónica, colestasis, alcohol y fármacos como corticosteroides, diuréticos, retinoides o antirretrovirales. El hipotiroidismo es una causa frecuente de elevación del LDL porque disminuye la expresión del receptor hepático de LDL. Los síntomas de esta paciente, como fatiga, estreñimiento, aumento de peso, piel seca y bradicardia, orientan a hipotiroidismo. Se debe medir la TSH. Al corregir el hipotiroidismo con levotiroxina el LDL puede disminuir de forma importante, y después se reevalúa la necesidad de estatina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las dislipidemias",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo primario en adultos"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1321 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-04-nefrologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "nephrology",
+      "subtopic": "acute_kidney_injury",
+      "vignette": "Hombre de 72 años con diarrea abundante de 4 días y poca ingesta de líquidos. Presión arterial de 92/60 mmHg, mucosas secas. Creatinina de 2.6 mg/dL, previamente de 1.0. Relación BUN sobre creatinina de 28, sodio urinario de 10 mEq/L y fracción excretada de sodio de 0.5%. Sedimento urinario sin alteraciones.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Enfermedad renal crónica avanzada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la edad, pero la creatinina previa era normal."
+        },
+        {
+          "key": "b",
+          "text": "Rabdomiólisis",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay datos musculares descritos."
+        },
+        {
+          "key": "c",
+          "text": "Glomerulonefritis rápidamente progresiva",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye una causa grave sin hematuria ni proteinuria."
+        },
+        {
+          "key": "d",
+          "text": "Nefropatía por contraste",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la creatinina sin exposición a contraste."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome hepatorrenal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "También tiene sodio urinario bajo, pero no hay cirrosis."
+        },
+        {
+          "key": "f",
+          "text": "Uropatía obstructiva por próstata",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es frecuente en hombres mayores, pero el cuadro sugiere hipovolemia."
+        },
+        {
+          "key": "g",
+          "text": "Lesión renal aguda prerrenal por hipovolemia",
+          "correct": true,
+          "rationale": "Fracción excretada de sodio menor de 1%, sodio urinario bajo y sedimento normal."
+        },
+        {
+          "key": "h",
+          "text": "Ateroembolia renal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo anciano tiene causa vascular."
+        },
+        {
+          "key": "i",
+          "text": "Necrosis tubular aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También es lesión aguda, pero da fracción excretada mayor de 2% y cilindros granulosos."
+        },
+        {
+          "key": "j",
+          "text": "Nefritis intersticial aguda",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay fármaco desencadenante ni eosinofiluria."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "La lesión renal aguda prerrenal es la forma más frecuente y se debe a hipoperfusión renal con estructura tubular conservada, por hipovolemia, insuficiencia cardiaca, sepsis o fármacos. Los túbulos funcionan, por lo que retienen sodio y agua, y se observan sodio urinario menor de 20 mEq/L, fracción excretada de sodio menor de 1%, osmolaridad urinaria alta, relación BUN sobre creatinina mayor de 20 y sedimento sin alteraciones. En la necrosis tubular aguda la fracción excretada de sodio es mayor de 2% y hay cilindros granulosos pardos. El tratamiento prerrenal es corregir la causa, en este caso con reposición de volumen intravenoso.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la lesión renal aguda"
+      ]
+    },
+    {
+      "key": "mi-04-nefrologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "nephrology",
+      "subtopic": "acute_kidney_injury",
+      "vignette": "Hombre de 66 años con lesión renal aguda. Presenta potasio de 7.1 mEq/L con cambios en el electrocardiograma que no responde a tratamiento médico, pH de 7.08 con bicarbonato de 9 mEq/L, edema pulmonar pese a diuréticos y BUN de 110 mg/dL con somnolencia.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aumentar la dosis de furosemida y revalorar en 24 horas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el diurético pese a refractariedad."
+        },
+        {
+          "key": "b",
+          "text": "Resinas de potasio como solución definitiva",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el quelante resuelve todo el cuadro."
+        },
+        {
+          "key": "c",
+          "text": "Biopsia renal antes de cualquier tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retrasa una medida que salva la vida."
+        },
+        {
+          "key": "d",
+          "text": "Bicarbonato oral",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Insuficiente en una acidosis grave con otras indicaciones."
+        },
+        {
+          "key": "e",
+          "text": "Continuar el manejo conservador",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Ignora indicaciones urgentes de diálisis."
+        },
+        {
+          "key": "f",
+          "text": "Esperar a que la creatinina supere 8 mg/dL",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Usa un umbral de laboratorio en lugar de las indicaciones clínicas."
+        },
+        {
+          "key": "g",
+          "text": "Restricción de potasio en la dieta como medida principal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena preventivo, pero el potasio ya es peligroso."
+        },
+        {
+          "key": "h",
+          "text": "Trasplante renal de urgencia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es un tratamiento agudo."
+        },
+        {
+          "key": "i",
+          "text": "Diálisis peritoneal crónica ambulatoria programada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es un tratamiento crónico, no la medida urgente."
+        },
+        {
+          "key": "j",
+          "text": "Terapia de reemplazo renal urgente con hemodiálisis",
+          "correct": true,
+          "rationale": "Hiperpotasemia refractaria, acidosis grave, sobrecarga y uremia son indicaciones urgentes."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "g",
+        "j"
+      ],
+      "explanation": "Las indicaciones urgentes de terapia de reemplazo renal en la lesión renal aguda se recuerdan con el acrónimo AEIOU, que significa acidosis metabólica grave refractaria, alteraciones electrolíticas como hiperpotasemia refractaria, intoxicaciones por sustancias dializables, sobrecarga de volumen refractaria a diuréticos y uremia sintomática con encefalopatía, pericarditis o sangrado. La decisión no depende de un valor aislado de creatinina sino del cuadro clínico. En el paciente hemodinámicamente inestable se prefieren técnicas continuas. Mientras se prepara la diálisis se mantienen medidas para la hiperpotasemia, como calcio, insulina con glucosa y salbutamol.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la lesión renal aguda"
+      ]
+    },
+    {
+      "key": "mi-04-nefrologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "nephrology",
+      "subtopic": "acute_kidney_injury",
+      "vignette": "Hombre de 68 años con diabetes y filtración glomerular de 38 mL/min. Será sometido a tomografía con contraste yodado por sospecha de cáncer de colon. Toma metformina y un AINE para dolor de rodilla.",
+      "prompt": "¿Cuál es la medida de prevención más útil para evitar lesión renal por contraste?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Suspender todos los fármacos una semana antes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en suspender sin distinguir cuáles importan."
+        },
+        {
+          "key": "b",
+          "text": "N acetilcisteína como única medida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No ha demostrado beneficio consistente."
+        },
+        {
+          "key": "c",
+          "text": "Hidratación intravenosa con solución isotónica y suspender temporalmente el AINE",
+          "correct": true,
+          "rationale": "Reduce el riesgo en pacientes con filtración disminuida."
+        },
+        {
+          "key": "d",
+          "text": "Evitar cualquier hidratación por la diabetes",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Teme una sobrecarga improbable."
+        },
+        {
+          "key": "e",
+          "text": "Hemodiálisis profiláctica después del estudio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No previene la lesión."
+        },
+        {
+          "key": "f",
+          "text": "Realizar el estudio sin ninguna preparación",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Ignora factores de riesgo claros."
+        },
+        {
+          "key": "g",
+          "text": "Dar furosemida para eliminar el contraste más rápido",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Eliminar rápido suena bien, pero el diurético aumenta el riesgo."
+        },
+        {
+          "key": "h",
+          "text": "Cancelar el estudio por el riesgo renal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retrasa un diagnóstico importante."
+        },
+        {
+          "key": "i",
+          "text": "Aumentar la dosis de contraste para mejorar la imagen y hacer una sola toma",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que una sola toma compensa más contraste."
+        },
+        {
+          "key": "j",
+          "text": "Bicarbonato de sodio oral en dosis altas como medida principal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No supera a la hidratación con solución salina."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "g"
+      ],
+      "explanation": "La lesión renal aguda asociada a contraste es más probable con filtración glomerular menor de 45 mL/min, diabetes, deshidratación, insuficiencia cardiaca, edad avanzada, dosis altas de contraste y fármacos nefrotóxicos. La medida preventiva con mejor evidencia es la hidratación intravenosa con solución salina isotónica antes y después del estudio en pacientes de riesgo. También se recomienda usar la menor dosis posible de contraste de baja osmolaridad, suspender AINE y otros nefrotóxicos, y valorar suspender metformina el día del estudio y reanudarla tras confirmar función renal estable. La N acetilcisteína y el bicarbonato no han mostrado beneficio claro.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la lesión renal aguda"
+      ]
+    },
+    {
+      "key": "mi-04-nefrologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "nephrology",
+      "subtopic": "acute_kidney_injury",
+      "vignette": "Mujer de 54 años que inicia omeprazol por gastritis. A las 3 semanas presenta fiebre, exantema maculopapular y artralgias. Creatinina de 2.3 mg/dL, previamente normal. Examen de orina con leucocitos, cilindros leucocitarios estériles y eosinofilia.",
+      "prompt": "¿Cuál es la causa más probable de su lesión renal?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Mieloma múltiple",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable y no explica el cuadro alérgico."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome nefrótico por cambios mínimos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Comparte causa farmacológica en algunos casos, pero cursa con proteinuria masiva."
+        },
+        {
+          "key": "c",
+          "text": "Pielonefritis aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También da fiebre y leucocituria, pero los cultivos serían positivos."
+        },
+        {
+          "key": "d",
+          "text": "Lesión prerrenal por gastritis",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta los hallazgos urinarios."
+        },
+        {
+          "key": "e",
+          "text": "Necrosis tubular por deshidratación",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es frecuente, pero no explica exantema ni eosinofilia."
+        },
+        {
+          "key": "f",
+          "text": "Glomerulonefritis posinfecciosa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la fiebre, pero no hay hematuria con cilindros eritrocitarios."
+        },
+        {
+          "key": "g",
+          "text": "Lupus eritematoso sistémico de inicio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye una enfermedad autoinmune sin buscar el fármaco."
+        },
+        {
+          "key": "h",
+          "text": "Infección viral sistémica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la fiebre."
+        },
+        {
+          "key": "i",
+          "text": "Nefropatía por ácido úrico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que toda lesión renal se relaciona con ácido úrico."
+        },
+        {
+          "key": "j",
+          "text": "Nefritis intersticial aguda por fármaco",
+          "correct": true,
+          "rationale": "Fiebre, exantema, eosinofilia y leucocituria estéril tras un fármaco nuevo."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "La nefritis intersticial aguda es una causa de lesión renal aguda intrínseca, producida con mayor frecuencia por fármacos, como betalactámicos, AINE, inhibidores de la bomba de protones, sulfonamidas y rifampicina, y con menor frecuencia por infecciones o enfermedades autoinmunes. La tríada clásica de fiebre, exantema y eosinofilia aparece en una minoría de pacientes. En la orina hay leucocituria estéril, cilindros leucocitarios y puede haber eosinofiluria. El diagnóstico definitivo es por biopsia. El tratamiento es suspender el fármaco, y en casos sin mejoría en pocos días se usan corticosteroides.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la lesión renal aguda"
+      ]
+    },
+    {
+      "key": "mi-04-nefrologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "nephrology",
+      "subtopic": "acute_kidney_injury",
+      "vignette": "Hombre de 74 años con creatinina de 2.9 mg/dL, previamente de 1.1. Refiere chorro urinario débil, goteo terminal y sensación de vaciamiento incompleto de años. Hoy tiene dolor suprapúbico y globo vesical palpable.",
+      "prompt": "¿Cuál es el estudio inicial más útil?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ultrasonido renal y vesical para buscar hidronefrosis y orina residual",
+          "correct": true,
+          "rationale": "Sospecha de lesión renal posrenal por obstrucción."
+        },
+        {
+          "key": "b",
+          "text": "Resonancia magnética de pelvis como primer paso",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la imagen más avanzada es mejor."
+        },
+        {
+          "key": "c",
+          "text": "Biopsia renal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Invasiva e innecesaria."
+        },
+        {
+          "key": "d",
+          "text": "Electroforesis de proteínas",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Busca otra causa sin datos."
+        },
+        {
+          "key": "e",
+          "text": "Antígeno prostático específico como primer estudio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la próstata sin confirmar la obstrucción."
+        },
+        {
+          "key": "f",
+          "text": "Anticuerpos antinucleares",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No considera la probabilidad alta de obstrucción."
+        },
+        {
+          "key": "g",
+          "text": "Urografía excretora",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Usa contraste y fue sustituida."
+        },
+        {
+          "key": "h",
+          "text": "Tomografía abdominal con contraste",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Expone al contraste a un riñón lesionado sin necesidad."
+        },
+        {
+          "key": "i",
+          "text": "Cistoscopia inmediata",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es posterior y no el estudio inicial."
+        },
+        {
+          "key": "j",
+          "text": "Gammagrama renal para medir función por separado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena preciso, pero no es el estudio inicial."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "La lesión renal aguda posrenal se debe a obstrucción del flujo urinario y debe sospecharse en hombres mayores con síntomas prostáticos, en pacientes con cáncer pélvico, cálculos o vejiga neurógena. El estudio inicial es el ultrasonido renal y vesical, que identifica hidronefrosis y mide la orina residual, sin riesgo para el riñón. El tratamiento inmediato es aliviar la obstrucción, como colocar una sonda vesical en la retención urinaria por hiperplasia prostática. Tras desobstruir puede presentarse diuresis posobstructiva con pérdida importante de agua y electrolitos, por lo que se vigilan volumen urinario y electrolitos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la lesión renal aguda"
+      ]
+    },
+    {
+      "key": "mi-04-nefrologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "nephrology",
+      "subtopic": "chronic_kidney_disease",
+      "vignette": "Mujer de 60 años con diabetes. En dos mediciones con 4 meses de diferencia su filtración glomerular estimada es de 42 y 40 mL/min/1.73 m2. El cociente albúmina creatinina es de 180 mg/g en ambas.",
+      "prompt": "¿Cuál es la interpretación correcta de su función renal según la clasificación KDIGO?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Lesión renal aguda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la cifra baja, pero persiste más de 3 meses."
+        },
+        {
+          "key": "b",
+          "text": "Sin enfermedad renal porque la creatinina es casi normal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Usa la creatinina en lugar de la filtración y la albuminuria."
+        },
+        {
+          "key": "c",
+          "text": "Enfermedad renal crónica G4 A3",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Sobreestima la gravedad."
+        },
+        {
+          "key": "d",
+          "text": "Función renal normal para su edad",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Atribuye la filtración baja a la edad."
+        },
+        {
+          "key": "e",
+          "text": "Enfermedad renal terminal que requiere diálisis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Confunde la etapa."
+        },
+        {
+          "key": "f",
+          "text": "Solo hay enfermedad renal si hay síntomas urémicos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la enfermedad renal siempre da síntomas."
+        },
+        {
+          "key": "g",
+          "text": "Se requiere biopsia antes de clasificar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La clasificación no requiere biopsia."
+        },
+        {
+          "key": "h",
+          "text": "Enfermedad renal crónica G3a A1",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Se equivoca de categoría y no toma en cuenta la albuminuria."
+        },
+        {
+          "key": "i",
+          "text": "Enfermedad renal crónica G2 A2",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Calcula mal la categoría de filtración."
+        },
+        {
+          "key": "j",
+          "text": "Enfermedad renal crónica G3b A2",
+          "correct": true,
+          "rationale": "Filtración de 30 a 44 y albuminuria de 30 a 300 mg/g por más de 3 meses."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "La enfermedad renal crónica se define por alteraciones de la estructura o la función renal durante más de tres meses, con implicaciones para la salud. Se diagnostica con filtración glomerular menor de 60 mL/min/1.73 m2 o marcadores de daño, como albuminuria de 30 mg/g o más. La clasificación KDIGO usa la causa, la filtración y la albuminuria. Las categorías de filtración son G1 de 90 o más, G2 de 60 a 89, G3a de 45 a 59, G3b de 30 a 44, G4 de 15 a 29 y G5 menor de 15. La albuminuria se divide en A1 menor de 30, A2 de 30 a 300 y A3 mayor de 300 mg/g.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la enfermedad renal crónica"
+      ]
+    },
+    {
+      "key": "mi-04-nefrologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "nephrology",
+      "subtopic": "chronic_kidney_disease",
+      "vignette": "Hombre de 58 años con enfermedad renal crónica G4. Refiere fatiga y disnea de esfuerzo. Hemoglobina de 8.6 g/dL, normocítica normocrómica. Ferritina de 380 ng/mL y saturación de transferrina de 28%.",
+      "prompt": "¿Cuál es la causa principal de esta complicación?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Anemia por la dieta baja en proteínas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena lógico, pero no es la causa principal."
+        },
+        {
+          "key": "b",
+          "text": "Mielodisplasia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye una causa hematológica grave sin explorar la causa renal."
+        },
+        {
+          "key": "c",
+          "text": "Sangrado digestivo oculto como causa principal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la anemia y busca una pérdida sin datos."
+        },
+        {
+          "key": "d",
+          "text": "Talasemia menor",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Daría microcitosis."
+        },
+        {
+          "key": "e",
+          "text": "Deficiencia de hierro",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es frecuente, pero su ferritina y saturación son adecuadas."
+        },
+        {
+          "key": "f",
+          "text": "Toxicidad por fármacos antihipertensivos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que los antihipertensivos causan anemia de este grado."
+        },
+        {
+          "key": "g",
+          "text": "Deficiencia en la producción renal de eritropoyetina",
+          "correct": true,
+          "rationale": "La anemia de la enfermedad renal crónica es normocítica y responde a eritropoyetina."
+        },
+        {
+          "key": "h",
+          "text": "Deficiencia de vitamina B12",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Daría anemia macrocítica."
+        },
+        {
+          "key": "i",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la fatiga."
+        },
+        {
+          "key": "j",
+          "text": "Hemólisis autoinmune",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es poco frecuente y no hay datos de hemólisis."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "La anemia es una complicación frecuente de la enfermedad renal crónica y se vuelve más común conforme disminuye la filtración. Su causa principal es la producción insuficiente de eritropoyetina por el riñón, aunque contribuyen la deficiencia de hierro, la inflamación, el acortamiento de la vida del eritrocito y las pérdidas sanguíneas. Típicamente es normocítica y normocrómica. Antes de iniciar agentes estimulantes de eritropoyesis se corrige la deficiencia de hierro, con meta de ferritina mayor de 100 a 200 ng/mL y saturación mayor de 20%. La meta de hemoglobina con eritropoyetina es de 10 a 11.5 g/dL, sin buscar normalizarla.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la anemia en la enfermedad renal crónica"
+      ]
+    },
+    {
+      "key": "mi-04-nefrologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "nephrology",
+      "subtopic": "chronic_kidney_disease",
+      "vignette": "Hombre de 56 años con enfermedad renal crónica G3b A3 por diabetes. Ya recibe losartán a dosis máxima. Presión arterial de 132/80 mmHg. Filtración de 38 mL/min y potasio de 4.6 mEq/L.",
+      "prompt": "¿Cuál es el fármaco de elección para agregar y retrasar la progresión renal?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Evitar nuevos fármacos por la filtración baja",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La filtración actual permite usarlos."
+        },
+        {
+          "key": "b",
+          "text": "Furosemida diaria para proteger el riñón",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El diurético no protege el riñón."
+        },
+        {
+          "key": "c",
+          "text": "Glibenclamida para mejorar el control glucémico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Causa hipoglucemia en la enfermedad renal."
+        },
+        {
+          "key": "d",
+          "text": "Dieta sin proteínas estricta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que eliminar las proteínas es mejor, con riesgo de desnutrición."
+        },
+        {
+          "key": "e",
+          "text": "Un inhibidor de SGLT2, como dapagliflozina o empagliflozina",
+          "correct": true,
+          "rationale": "Reduce la progresión y el riesgo cardiovascular con filtración mayor de 20 mL/min."
+        },
+        {
+          "key": "f",
+          "text": "Agregar aliskireno",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Combinación contraindicada en diabetes."
+        },
+        {
+          "key": "g",
+          "text": "Agregar enalapril al losartán",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el bloqueo del sistema renina angiotensina y cae en el doble bloqueo."
+        },
+        {
+          "key": "h",
+          "text": "Suspender losartán para no bajar más la filtración",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena protector, pero se pierde el beneficio renal."
+        },
+        {
+          "key": "i",
+          "text": "Mantener igual y revalorar en un año",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Pierde una oportunidad de frenar la progresión."
+        },
+        {
+          "key": "j",
+          "text": "Iniciar diálisis preventiva",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La diálisis no es preventiva."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "g"
+      ],
+      "explanation": "En la enfermedad renal crónica por diabetes con albuminuria, además del IECA o ARA II a dosis máxima tolerada, los inhibidores de SGLT2 han demostrado reducir la progresión a enfermedad renal terminal, la muerte cardiovascular y la hospitalización por insuficiencia cardiaca. Se pueden iniciar con filtración de 20 mL/min o más y continuar hasta la diálisis. Al inicio puede haber una caída leve y transitoria de la filtración, esperada y no dañina. La finerenona es otra opción para reducir albuminuria. Se debe evitar el doble bloqueo del sistema renina angiotensina y ajustar fármacos según la filtración.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la enfermedad renal crónica"
+      ]
+    },
+    {
+      "key": "mi-04-nefrologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "nephrology",
+      "subtopic": "chronic_kidney_disease",
+      "vignette": "Mujer de 62 años con enfermedad renal crónica G4. Fósforo de 6.4 mg/dL, calcio de 8.1 mg/dL y paratohormona muy elevada. Refiere dolores óseos.",
+      "prompt": "¿Cuál es el mecanismo principal del hiperparatiroidismo en esta paciente?",
+      "polarity": "affirmative",
+      "task": "mechanism",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Exceso de vitamina D en la dieta",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría hipercalcemia y PTH suprimida."
+        },
+        {
+          "key": "b",
+          "text": "Carcinoma de paratiroides",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es raro y daría hipercalcemia grave."
+        },
+        {
+          "key": "c",
+          "text": "Pérdida renal excesiva de fósforo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena renal, pero en la enfermedad avanzada el fósforo se retiene."
+        },
+        {
+          "key": "d",
+          "text": "Metástasis óseas",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No relaciona los datos con la enfermedad renal."
+        },
+        {
+          "key": "e",
+          "text": "Retención de fósforo, déficit de calcitriol e hipocalcemia que estimulan la paratiroides",
+          "correct": true,
+          "rationale": "Corresponde al hiperparatiroidismo secundario de la enfermedad renal."
+        },
+        {
+          "key": "f",
+          "text": "Osteoporosis posmenopáusica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en los dolores óseos."
+        },
+        {
+          "key": "g",
+          "text": "Exceso de calcio en la dieta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el calcio alto en la dieta eleva la PTH."
+        },
+        {
+          "key": "h",
+          "text": "Hipercalcemia por inmovilización",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye otra causa pese al calcio bajo."
+        },
+        {
+          "key": "i",
+          "text": "Neoplasia endocrina múltiple tipo 1",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es poco frecuente y no explica el contexto renal."
+        },
+        {
+          "key": "j",
+          "text": "Adenoma paratiroideo productor autónomo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la PTH alta, pero el calcio está bajo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "j"
+      ],
+      "explanation": "En la enfermedad renal crónica avanzada, la disminución de la filtración provoca retención de fósforo y aumento del factor de crecimiento fibroblástico 23, que reduce la activación renal de vitamina D. El déficit de calcitriol disminuye la absorción intestinal de calcio, y la hipocalcemia, la hiperfosfatemia y el déficit de calcitriol estimulan la producción de paratohormona y la hiperplasia de las paratiroides. Este hiperparatiroidismo secundario produce enfermedad ósea y calcificaciones vasculares. El tratamiento incluye restricción de fósforo en la dieta, quelantes de fósforo, análogos de vitamina D y calcimiméticos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la enfermedad renal crónica"
+      ]
+    },
+    {
+      "key": "mi-04-nefrologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "nephrology",
+      "subtopic": "chronic_kidney_disease",
+      "vignette": "Hombre de 55 años con enfermedad renal crónica G5, filtración de 9 mL/min. Presenta náusea persistente, anorexia, prurito, pérdida de peso y frote pericárdico.",
+      "prompt": "¿Cuál es la conducta a seguir?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Iniciar terapia de reemplazo renal",
+          "correct": true,
+          "rationale": "Síntomas urémicos y pericarditis indican diálisis."
+        },
+        {
+          "key": "b",
+          "text": "Antieméticos y antihistamínicos como manejo principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Trata síntomas sin la causa."
+        },
+        {
+          "key": "c",
+          "text": "Trasplante renal de donante cadavérico esta semana",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es una opción inmediata realista."
+        },
+        {
+          "key": "d",
+          "text": "Diurético a dosis altas para eliminar toxinas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el diurético depura toxinas urémicas."
+        },
+        {
+          "key": "e",
+          "text": "Esperar a que la filtración baje de 5 mL/min",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en un número y no en los síntomas."
+        },
+        {
+          "key": "f",
+          "text": "Mantener tratamiento conservador",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Ignora la uremia sintomática."
+        },
+        {
+          "key": "g",
+          "text": "Pericardiocentesis como único tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Trata una complicación sin la causa."
+        },
+        {
+          "key": "h",
+          "text": "Antiinflamatorios para la pericarditis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "En la pericarditis urémica el tratamiento es la diálisis."
+        },
+        {
+          "key": "i",
+          "text": "Dieta muy baja en proteínas para retrasar la diálisis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Retrasar suena conservador, pero no es adecuado con uremia sintomática."
+        },
+        {
+          "key": "j",
+          "text": "Cuidados paliativos sin ofrecer diálisis",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Evita una opción indicada sin hablar con el paciente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "i"
+      ],
+      "explanation": "La terapia de reemplazo renal en la enfermedad renal crónica se inicia por síntomas y complicaciones más que por un valor de filtración. Las indicaciones incluyen síntomas urémicos, como náusea, vómito, anorexia, prurito, alteración neurológica o pérdida de peso, pericarditis o serositis, sobrecarga de volumen o hipertensión refractarias, hiperpotasemia o acidosis refractarias y deterioro nutricional. Suele ocurrir con filtración entre 5 y 10 mL/min. La pericarditis urémica es una indicación urgente. Idealmente el paciente debe prepararse con anticipación, con fístula arteriovenosa o catéter peritoneal, y evaluarse para trasplante.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de tratamiento sustitutivo de la función renal"
+      ]
+    },
+    {
+      "key": "mi-04-nefrologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "nephrology",
+      "subtopic": "electrolyte_disorders",
+      "vignette": "Mujer de 70 años con cáncer pulmonar de células pequeñas. Presenta confusión leve. Sodio sérico de 122 mEq/L, osmolaridad sérica de 255 mOsm/kg, osmolaridad urinaria de 520 mOsm/kg y sodio urinario de 48 mEq/L. Está euvolémica, con función tiroidea y suprarrenal normales.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Exceso de sal en la dieta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la dieta altera así el sodio."
+        },
+        {
+          "key": "b",
+          "text": "Insuficiencia suprarrenal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede dar un cuadro similar, pero su función es normal."
+        },
+        {
+          "key": "c",
+          "text": "Síndrome de secreción inadecuada de hormona antidiurética",
+          "correct": true,
+          "rationale": "Hiponatremia hipotónica euvolémica con orina concentrada y sodio urinario alto."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome cerebral perdedor de sal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es raro y cursa con hipovolemia."
+        },
+        {
+          "key": "e",
+          "text": "Hiponatremia por hiperglucemia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay glucosa elevada y la osmolaridad es baja."
+        },
+        {
+          "key": "f",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la confusión pese a función tiroidea normal."
+        },
+        {
+          "key": "g",
+          "text": "Hiponatremia por hipovolemia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También tiene sodio bajo, pero la paciente está euvolémica y con sodio urinario alto."
+        },
+        {
+          "key": "h",
+          "text": "Seudohiponatremia por hiperlipidemia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El sodio bajo confunde, pero la osmolaridad está baja."
+        },
+        {
+          "key": "i",
+          "text": "Polidipsia primaria",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la hiponatremia, pero la orina estaría diluida."
+        },
+        {
+          "key": "j",
+          "text": "Hiponatremia por insuficiencia cardiaca",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye sin datos de sobrecarga."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "El síndrome de secreción inadecuada de hormona antidiurética es la causa más frecuente de hiponatremia euvolémica. Se diagnostica con hiponatremia hipotónica, osmolaridad urinaria mayor de 100 mOsm/kg, sodio urinario mayor de 30 mEq/L con ingesta normal, euvolemia clínica y función tiroidea y suprarrenal normales, sin diuréticos. Las causas incluyen neoplasias, sobre todo el cáncer pulmonar de células pequeñas, enfermedades pulmonares y del sistema nervioso central, fármacos como antidepresivos y carbamazepina, y dolor o náusea posoperatorios. El tratamiento es restricción de líquidos y, en casos sintomáticos graves, solución salina hipertónica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hiponatremia"
+      ]
+    },
+    {
+      "key": "mi-04-nefrologia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "nephrology",
+      "subtopic": "electrolyte_disorders",
+      "vignette": "Hombre de 50 años con alcoholismo y sodio de 108 mEq/L. Se le administró solución salina hipertónica y su sodio subió a 126 mEq/L en 24 horas. Tres días después presenta disartria, disfagia, cuadriparesia y alteración del estado de alerta.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de abstinencia alcohólica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye por el antecedente de alcohol."
+        },
+        {
+          "key": "b",
+          "text": "Evento vascular cerebral del tallo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Comparte síntomas, pero la relación con la corrección rápida es clave."
+        },
+        {
+          "key": "c",
+          "text": "Síndrome de desmielinización osmótica",
+          "correct": true,
+          "rationale": "Corrección rápida de una hiponatremia crónica."
+        },
+        {
+          "key": "d",
+          "text": "Hipernatremia por exceso de corrección",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena relacionado, pero el sodio final es normal bajo."
+        },
+        {
+          "key": "e",
+          "text": "Encefalopatía de Wernicke",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es frecuente en alcohólicos, pero da oftalmoplejía, ataxia y confusión."
+        },
+        {
+          "key": "f",
+          "text": "Encefalopatía hepática",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No relaciona el cuadro con la velocidad de corrección."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome de Guillain Barré",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la debilidad."
+        },
+        {
+          "key": "h",
+          "text": "Esclerosis múltiple de inicio tardío",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es poco probable en este contexto."
+        },
+        {
+          "key": "i",
+          "text": "Edema cerebral por la hiponatremia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la hiponatremia, pero los síntomas aparecen tras la corrección."
+        },
+        {
+          "key": "j",
+          "text": "Intoxicación por metanol",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo alcohólico con síntomas neurológicos se intoxicó."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "i"
+      ],
+      "explanation": "El síndrome de desmielinización osmótica, antes llamado mielinólisis pontina central, ocurre cuando una hiponatremia crónica se corrige demasiado rápido. Las neuronas adaptadas a la hipotonía pierden agua de forma brusca y se produce desmielinización, sobre todo en la protuberancia. Aparece de dos a seis días después de la corrección, con disartria, disfagia, cuadriparesia, síndrome de enclaustramiento o alteración del estado de alerta. El riesgo es mayor en alcohólicos, desnutridos, hipopotasémicos y con sodio menor de 120 mEq/L. Para prevenirlo se recomienda no elevar el sodio más de 8 a 10 mEq/L en 24 horas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hiponatremia"
+      ]
+    },
+    {
+      "key": "mi-04-nefrologia-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "nephrology",
+      "subtopic": "electrolyte_disorders",
+      "vignette": "Mujer de 64 años con náusea, vómito, poliuria, estreñimiento y somnolencia. Calcio sérico de 14.2 mg/dL con albúmina normal, creatinina de 1.6 mg/dL y PTH suprimida. Tiene un tumor de mama metastásico.",
+      "prompt": "¿Cuál es el tratamiento inicial más importante?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Observación y repetir calcio mañana",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Retrasa el tratamiento de una urgencia."
+        },
+        {
+          "key": "b",
+          "text": "Hemodiálisis como primera medida en todos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para casos refractarios o con insuficiencia renal grave."
+        },
+        {
+          "key": "c",
+          "text": "Restringir el calcio en la dieta como medida principal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena lógico, pero es insuficiente en la hipercalcemia tumoral."
+        },
+        {
+          "key": "d",
+          "text": "Hidratación intravenosa abundante con solución salina seguida de un bifosfonato intravenoso",
+          "correct": true,
+          "rationale": "Hipercalcemia grave asociada a cáncer."
+        },
+        {
+          "key": "e",
+          "text": "Tiazida para bajar el calcio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Las tiazidas aumentan el calcio."
+        },
+        {
+          "key": "f",
+          "text": "Calcitonina como único tratamiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Actúa rápido pero su efecto es breve."
+        },
+        {
+          "key": "g",
+          "text": "Furosemida como primera medida antes de hidratar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el diurético, que empeora la deshidratación."
+        },
+        {
+          "key": "h",
+          "text": "Suplemento de vitamina D para equilibrar el calcio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Empeora la hipercalcemia."
+        },
+        {
+          "key": "i",
+          "text": "Suspender todos los líquidos por la náusea",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Agrava la deshidratación."
+        },
+        {
+          "key": "j",
+          "text": "Paratiroidectomía urgente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La PTH está suprimida."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "f",
+        "g"
+      ],
+      "explanation": "La hipercalcemia grave, con calcio mayor de 14 mg/dL o síntomas importantes, es una urgencia. En pacientes hospitalizados la causa más frecuente es el cáncer, por péptido relacionado con la PTH, metástasis óseas o producción de calcitriol, con PTH suprimida. El tratamiento inicial es la hidratación intravenosa con solución salina, porque la hipercalcemia causa diuresis osmótica y deshidratación. La calcitonina tiene efecto rápido pero transitorio. Los bifosfonatos intravenosos, como ácido zoledrónico, o el denosumab son el tratamiento de base, con efecto en dos a cuatro días. La furosemida solo se usa si hay sobrecarga de volumen después de hidratar.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipercalcemia"
+      ]
+    },
+    {
+      "key": "mi-04-nefrologia-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "nephrology",
+      "subtopic": "electrolyte_disorders",
+      "vignette": "Hombre de 40 años con diarrea crónica. Gasometría con pH de 7.29, bicarbonato de 14 mEq/L y PaCO2 de 29 mmHg. Sodio de 138 mEq/L y cloro de 114 mEq/L.",
+      "prompt": "¿Cuál es la interpretación correcta del trastorno ácido base?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Acidosis metabólica con brecha aniónica normal, hiperclorémica, por pérdida intestinal de bicarbonato",
+          "correct": true,
+          "rationale": "Brecha aniónica de 10 con cloro elevado."
+        },
+        {
+          "key": "b",
+          "text": "Acidosis tubular renal tipo 1 como causa más probable",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable que la diarrea crónica descrita."
+        },
+        {
+          "key": "c",
+          "text": "Acidosis respiratoria",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La PaCO2 está baja, no alta."
+        },
+        {
+          "key": "d",
+          "text": "Acidosis mixta metabólica y respiratoria",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La PaCO2 baja es compensación esperada, no un segundo trastorno."
+        },
+        {
+          "key": "e",
+          "text": "Alcalosis respiratoria primaria",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No nota el pH ácido."
+        },
+        {
+          "key": "f",
+          "text": "Cetoacidosis por ayuno",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Daría brecha aniónica elevada."
+        },
+        {
+          "key": "g",
+          "text": "Acidosis metabólica con brecha aniónica elevada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la acidosis sin calcular la brecha."
+        },
+        {
+          "key": "h",
+          "text": "Acidosis láctica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la gravedad sin calcular la brecha."
+        },
+        {
+          "key": "i",
+          "text": "Alcalosis metabólica por vómito",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El pH está bajo."
+        },
+        {
+          "key": "j",
+          "text": "Intoxicación por salicilatos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que toda acidosis con PaCO2 baja es por salicilatos, que daría brecha alta."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "Para interpretar un trastorno ácido base se evalúa el pH, el trastorno primario, la compensación y la brecha aniónica. Aquí el pH bajo con bicarbonato bajo indica acidosis metabólica. La PaCO2 esperada por la fórmula de Winter es 1.5 por 14 más 8, más o menos 2, es decir 27 a 31, por lo que la compensación respiratoria es adecuada. La brecha aniónica es 138 menos la suma de 114 y 14, igual a 10, normal. La acidosis metabólica con brecha normal e hiperclorémica se debe a pérdidas de bicarbonato por diarrea o fístulas, o a acidosis tubular renal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos del equilibrio ácido base"
+      ]
+    }
+  ]
+}

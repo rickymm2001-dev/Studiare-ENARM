@@ -1,0 +1,175 @@
+@ mi|endocrinology|thyroid_disease|2|diagnosis
+V: Mujer de 34 años con nerviosismo, palpitaciones, pérdida de 6 kg pese a buen apetito e intolerancia al calor. Tiene bocio difuso, exoftalmos bilateral y temblor fino. TSH suprimida y T4 libre elevada.
+P: ¿Cuál es el diagnóstico más probable?
++ Enfermedad de Graves || Hipertiroidismo con bocio difuso y oftalmopatía.
+- representativeness_heuristic | Bocio multinodular tóxico || Causa hipertiroidismo, pero en mayores y sin oftalmopatía.
+- anchoring | Tiroiditis subaguda de De Quervain || Se ancla en el hipertiroidismo, pero esa tiroiditis duele y no da exoftalmos.
+- availability_heuristic | Adenoma tóxico || Da nódulo único, no bocio difuso con exoftalmos.
+- premature_closure | Trastorno de ansiedad generalizada || Atribuye los síntomas a ansiedad sin ver las pruebas tiroideas.
+- base_rate_fallacy | Adenoma hipofisario productor de TSH || Es rarísimo y daría TSH alta.
+- framing_effect | Tiroiditis de Hashimoto || Es autoinmune también, pero suele causar hipotiroidismo.
+- inattentional_blindness | Feocromocitoma || No toma en cuenta la TSH suprimida y el bocio.
+- focusing_illusion | Ingesta excesiva de hormona tiroidea || Se centra en la T4 alta, pero el exoftalmos no ocurre en la tirotoxicosis facticia.
+- belief_bias | Hipertiroidismo por yodo de contraste || Cree que todo hipertiroidismo es por yodo.
+E: La enfermedad de Graves es la causa más frecuente de hipertiroidismo, sobre todo en mujeres jóvenes. Es autoinmune, mediada por anticuerpos que estimulan el receptor de TSH. Se caracteriza por tirotoxicosis, bocio difuso y manifestaciones extratiroideas como la oftalmopatía con exoftalmos y, con menor frecuencia, el mixedema pretibial. Bioquímicamente hay TSH suprimida con T4 o T3 libres elevadas. Los anticuerpos contra el receptor de TSH confirman el diagnóstico y la gammagrafía muestra captación difusa aumentada. El tratamiento incluye betabloqueador para los síntomas y metimazol, yodo radiactivo o cirugía como tratamiento definitivo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del hipertiroidismo
+
+@ mi|endocrinology|thyroid_disease|2|treatment_of_choice
+V: Mujer de 46 años con fatiga, aumento de peso, estreñimiento, piel seca e intolerancia al frío. TSH de 18 mUI/L y T4 libre baja. Anticuerpos antiperoxidasa positivos.
+P: ¿Cuál es el tratamiento de elección?
++ Levotiroxina oral en ayunas, ajustada según la TSH || Hipotiroidismo primario por tiroiditis de Hashimoto.
+- availability_heuristic | Liotironina como fármaco base || Tiene vida media corta y no es primera elección.
+- anchoring | Yodo oral en dosis altas || Se ancla en la tiroides, pero el yodo no trata la tiroiditis autoinmune.
+- complexity_bias | Combinación de T4 y T3 desde el inicio || Agrega complejidad sin beneficio demostrado.
+- representativeness_heuristic | Corticosteroides para la autoinmunidad || La tiroiditis de Hashimoto no se trata con esteroides.
+- status_quo_bias | Vigilar TSH cada año sin tratar || Deja un hipotiroidismo manifiesto sin tratar.
+- framing_effect | Extracto de tiroides desecada por ser natural || Lo natural suena mejor, pero su contenido es variable.
+- premature_closure | Tiroidectomía total || No está indicada en el hipotiroidismo.
+- belief_bias | Selenio como único tratamiento || Cree que el suplemento sustituye la hormona.
+- omission_bias | Solo dieta y ejercicio para el peso || Trata un síntoma y deja la causa.
+E: El hipotiroidismo primario se caracteriza por TSH elevada y T4 libre baja. En zonas sin deficiencia de yodo la causa más frecuente es la tiroiditis de Hashimoto, con anticuerpos antiperoxidasa positivos. El tratamiento de elección es la levotiroxina, que se toma en ayunas, 30 a 60 minutos antes del desayuno y separada de calcio y hierro. En adultos jóvenes sin cardiopatía se inicia a dosis plena de 1.6 microgramos por kilogramo al día, y en ancianos o cardiópatas a dosis baja con incremento gradual. La TSH se revisa a las seis a ocho semanas para ajustar la dosis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo primario en adultos
+
+@ mi|endocrinology|thyroid_disease|3|initial_study
+V: Hombre de 42 años con un nódulo tiroideo de 2.2 cm palpable, detectado incidentalmente. Sin síntomas. TSH normal.
+P: ¿Cuál es el estudio inicial más adecuado para evaluar el nódulo?
++ Ultrasonido de tiroides para clasificar el riesgo del nódulo || Con TSH normal el ultrasonido define si se requiere biopsia.
+- availability_heuristic | Gammagrafía tiroidea || Se usa cuando la TSH está baja para buscar nódulo hiperfuncionante.
+- anchoring | Tiroidectomía diagnóstica de inmediato || Se ancla en el tamaño y salta a la cirugía.
+- complexity_bias | Tomografía por emisión de positrones || Es costosa y no es el estudio inicial.
+- representativeness_heuristic | Medir calcitonina y tiroglobulina como estudio principal || La tiroglobulina no diagnostica cáncer en el nódulo.
+- premature_closure | Iniciar levotiroxina para reducir el nódulo || La supresión con levotiroxina ya no se recomienda.
+- information_bias | Tomografía de cuello y tórax con contraste || Agrega estudios sin indicación inicial.
+- framing_effect | Repetir TSH en tres meses y observar || Esperar suena prudente, pero el nódulo debe evaluarse.
+- base_rate_fallacy | Asumir que es benigno porque la mayoría lo son || Usa la frecuencia general para omitir la evaluación de un nódulo mayor de 1 cm.
+- belief_bias | Biopsia con aguja gruesa como primer paso || Cree que la biopsia gruesa es la norma, cuando se usa aguja fina guiada por ultrasonido.
+E: Ante un nódulo tiroideo, el primer paso es medir la TSH. Si la TSH es baja, se realiza gammagrafía para identificar un nódulo hiperfuncionante, que rara vez es maligno. Si la TSH es normal o alta, se realiza ultrasonido de tiroides, que describe tamaño, composición, ecogenicidad, márgenes, calcificaciones y forma, y permite clasificar el riesgo con sistemas como TI-RADS. Según el riesgo y el tamaño se indica biopsia por aspiración con aguja fina guiada por ultrasonido. El resultado se informa con el sistema Bethesda, que orienta seguimiento, repetición de la biopsia o cirugía.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del nódulo tiroideo
+
+@ mi|endocrinology|thyroid_disease|4|next_step
+V: Mujer de 39 años con enfermedad de Graves sin tratamiento que desarrolla neumonía. Llega con fiebre de 40.2 grados, frecuencia cardiaca de 164 lpm en fibrilación auricular, agitación, vómito y diarrea. T4 libre muy elevada.
+P: ¿Cuál es la conducta a seguir?
++ Manejo en terapia intensiva con betabloqueador, tionamida, yodo una hora después de la tionamida, corticosteroide y tratamiento de la neumonía || Es una tormenta tiroidea.
+- anchoring | Dar solo antibiótico y paracetamol por la neumonía || Se ancla en la infección e ignora la tormenta.
+- premature_closure | Yodo radiactivo urgente || Su efecto es tardío y no se usa en la crisis.
+- framing_effect | Dar yodo antes de la tionamida para frenar rápido la hormona || Frenar rápido suena bien, pero el yodo antes de la tionamida aumenta la síntesis.
+- availability_heuristic | Ácido acetilsalicílico para la fiebre || Desplaza la hormona de su proteína y empeora la crisis.
+- complexity_bias | Tiroidectomía de urgencia como primera medida || Cirugía en un paciente inestable sin preparación.
+- status_quo_bias | Cardioversión eléctrica como tratamiento principal || La fibrilación responde al control de la tirotoxicosis.
+- belief_bias | Levotiroxina para regular la tiroides || Cree que la levotiroxina regula, cuando empeora el cuadro.
+- omission_bias | Observación y líquidos hasta tener perfil tiroideo completo || Retrasa el tratamiento de una urgencia letal.
+- representativeness_heuristic | Benzodiacepinas como manejo principal de la agitación || Trata un síntoma y no la causa.
+E: La tormenta tiroidea es una forma extrema de tirotoxicosis con mortalidad elevada, desencadenada por infecciones, cirugía o suspensión del tratamiento. Cursa con fiebre alta, taquicardia o fibrilación auricular, insuficiencia cardiaca, síntomas gastrointestinales y alteración neurológica. La escala de Burch y Wartofsky apoya el diagnóstico. El tratamiento es en terapia intensiva e incluye betabloqueador como propranolol, tionamida, de preferencia propiltiouracilo en este escenario, yodo inorgánico al menos una hora después de la tionamida, hidrocortisona, enfriamiento con paracetamol y manejo del desencadenante. Los salicilatos están contraindicados porque aumentan la hormona libre.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del hipertiroidismo
+
+@ mi|endocrinology|thyroid_disease|3|mechanism
+V: Mujer de 30 años con enfermedad de Graves que inicia tratamiento con metimazol.
+P: ¿Cuál es el mecanismo de acción del metimazol?
++ Inhibe la peroxidasa tiroidea y bloquea la organificación del yodo y el acoplamiento de yodotirosinas || Disminuye la síntesis de hormona tiroidea.
+- anchoring | Bloquea la liberación de hormona ya formada || Ese es el efecto principal del yodo inorgánico.
+- availability_heuristic | Destruye las células foliculares por radiación || Ese es el mecanismo del yodo radiactivo.
+- representativeness_heuristic | Inhibe la conversión periférica de T4 a T3 como acción principal || Es un efecto del propiltiouracilo, no del metimazol.
+- framing_effect | Bloquea los receptores adrenérgicos beta || Suena a control de síntomas, pero es el mecanismo de los betabloqueadores.
+- premature_closure | Bloquea el receptor de TSH en la tiroides || El metimazol no actúa sobre el receptor.
+- belief_bias | Aumenta la eliminación renal de hormona tiroidea || Cree en un mecanismo renal inexistente.
+- complexity_bias | Modula a los linfocitos T para frenar la autoinmunidad como acción principal || Tiene efecto inmunomodulador menor, no es su acción principal.
+- focusing_illusion | Inhibe la captación de yodo por el simportador sodio yodo || Ese es el efecto del perclorato.
+- status_quo_bias | Disminuye la producción de TSH en la hipófisis || Actúa en la tiroides, no en la hipófisis.
+E: Las tionamidas, metimazol y propiltiouracilo, son los fármacos antitiroideos. Ambas inhiben la peroxidasa tiroidea, enzima que oxida el yoduro, lo incorpora a los residuos de tirosina de la tiroglobulina y acopla las yodotirosinas para formar T4 y T3. Así disminuyen la síntesis de hormona nueva, pero no la liberación de la ya almacenada, por lo que su efecto tarda varias semanas. El propiltiouracilo además inhibe la conversión periférica de T4 a T3. Se prefiere metimazol por su dosis única diaria y menor hepatotoxicidad, salvo en el primer trimestre del embarazo y en la tormenta tiroidea.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del hipertiroidismo
+
+@ mi|endocrinology|thyroid_disease|3|complication_prognosis
+V: Mujer de 33 años con enfermedad de Graves en tratamiento con metimazol desde hace 6 semanas. Acude con fiebre de 39 grados y dolor de garganta intenso.
+P: ¿Cuál es la complicación grave del tratamiento que debe descartarse de inmediato?
++ Agranulocitosis || Fiebre y odinofagia con tionamida obligan a medir neutrófilos y suspender el fármaco.
+- availability_heuristic | Faringitis estreptocócica simple || Es frecuente, pero en esta paciente primero se descarta agranulocitosis.
+- anchoring | Hepatotoxicidad fulminante || Se asocia más al propiltiouracilo y no explica el cuadro.
+- representativeness_heuristic | Exantema alérgico leve || Es un efecto adverso común, pero no se manifiesta así.
+- premature_closure | Recaída de hipertiroidismo || Atribuye la fiebre a la enfermedad de base.
+- base_rate_fallacy | Vasculitis ANCA positiva || Es posible, pero mucho menos frecuente.
+- framing_effect | Hipotiroidismo por exceso de tratamiento || El exceso de dosis no causa fiebre.
+- inattentional_blindness | Tormenta tiroidea || No nota que la paciente está en tratamiento y solo tiene fiebre y faringitis.
+- focusing_illusion | Mononucleosis infecciosa || Se centra en la faringitis.
+- belief_bias | Anemia aplásica por levotiroxina || Confunde el fármaco y el efecto.
+E: La agranulocitosis es la complicación más grave de las tionamidas y ocurre con mayor frecuencia en los primeros tres meses de tratamiento. Se define por neutrófilos menores de 500 por microlitro. Se manifiesta con fiebre y faringitis u otras infecciones. Por eso se instruye a todo paciente a suspender el fármaco y solicitar una biometría hemática urgente ante fiebre o dolor de garganta. Si se confirma, el fármaco se suspende de forma definitiva, se dan antibióticos de amplio espectro si hay fiebre y puede usarse factor estimulante de colonias. Después se elige yodo radiactivo o cirugía como tratamiento definitivo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del hipertiroidismo
+
+@ mi|endocrinology|dyslipidemia|2|initial_study
+V: Hombre de 40 años sin enfermedades conocidas acude a revisión. Su padre tuvo un infarto a los 50 años. Fuma 10 cigarros al día.
+P: ¿Cuál es el estudio inicial para evaluar su riesgo cardiovascular por lípidos?
++ Perfil de lípidos con colesterol total, LDL, HDL y triglicéridos || Permite estimar el riesgo y decidir el tratamiento.
+- availability_heuristic | Solo colesterol total || Es insuficiente para clasificar el riesgo.
+- complexity_bias | Angiotomografía coronaria de inicio || Es avanzada y no es el estudio inicial.
+- anchoring | Prueba de esfuerzo por el antecedente familiar || Se ancla en el infarto del padre sin evaluar lípidos.
+- representativeness_heuristic | Lipoproteína a y apolipoproteínas como único estudio || Son complementarias y no sustituyen el perfil.
+- framing_effect | Ecocardiograma para ver el corazón || Ver el corazón suena útil, pero no evalúa lípidos.
+- information_bias | Proteína C reactiva ultrasensible antes del perfil || Agrega un estudio antes del básico.
+- premature_closure | Iniciar estatina sin estudios por el antecedente || Trata sin medir.
+- belief_bias | Medir colesterol en sangre capilar como estudio definitivo || Cree que el capilar basta para decidir.
+- omission_bias | Esperar a los 45 años para medir lípidos || Retrasa la evaluación pese a factores de riesgo.
+E: El perfil de lípidos completo incluye colesterol total, colesterol LDL, colesterol HDL y triglicéridos, y es el estudio inicial para evaluar el riesgo cardiovascular relacionado con lípidos. Se recomienda a partir de los 20 años en personas con factores de riesgo, como tabaquismo, antecedente familiar de cardiopatía isquémica prematura, hipertensión, diabetes u obesidad. Con estos datos y otros factores se estima el riesgo cardiovascular global, que define la meta de LDL y la necesidad de estatina. La suspensión del tabaco es una de las intervenciones más importantes. Estudios como la lipoproteína a o el calcio coronario se usan para reclasificar el riesgo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las dislipidemias
+
+@ mi|endocrinology|dyslipidemia|3|treatment_of_choice
+V: Mujer de 50 años sin otras enfermedades. Sus triglicéridos en ayuno son de 1,250 mg/dL en dos ocasiones. Refiere dolor epigástrico ocasional. Consume alcohol los fines de semana.
+P: ¿Cuál es el tratamiento farmacológico de elección para reducir su riesgo inmediato?
++ Un fibrato, como fenofibrato, junto con suspensión del alcohol y dieta baja en grasas || Triglicéridos mayores de 1,000 mg/dL aumentan el riesgo de pancreatitis.
+- anchoring | Estatina de alta intensidad como fármaco principal || Se ancla en el tratamiento clásico de lípidos, pero la prioridad son los triglicéridos.
+- availability_heuristic | Ezetimiba sola || Reduce LDL y casi no actúa sobre triglicéridos.
+- status_quo_bias | Solo dieta durante seis meses || Deja un riesgo alto de pancreatitis.
+- complexity_bias | Aféresis de lípidos como primera medida || Se reserva para casos graves refractarios.
+- representativeness_heuristic | Resinas secuestradoras de ácidos biliares || Pueden elevar los triglicéridos.
+- framing_effect | Niacina por su efecto en todo el perfil || Tiene efectos adversos y poco beneficio clínico.
+- belief_bias | Suplemento de ajo y linaza como tratamiento único || Cree que los suplementos bastan.
+- premature_closure | Pancreatectomía preventiva || Medida absurda.
+- omission_bias | Esperar a que tenga pancreatitis para tratar || Espera el daño para actuar.
+E: La hipertrigliceridemia grave, con triglicéridos mayores de 1,000 mg/dL, aumenta de forma importante el riesgo de pancreatitis aguda, por lo que la prioridad es reducirlos con rapidez. El tratamiento incluye eliminar el alcohol, dieta muy baja en grasas y carbohidratos simples, control de diabetes y suspender fármacos que los elevan, y un fibrato como fármaco de elección. Los ácidos grasos omega 3 a dosis altas son complemento. Una vez que los triglicéridos bajan, se evalúa el riesgo cardiovascular y la necesidad de estatina. En la pancreatitis por hipertrigliceridemia se usa insulina en infusión o plasmaféresis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las dislipidemias
+
+@ mi|endocrinology|dyslipidemia|4|complication_prognosis
+V: Hombre de 66 años con cardiopatía isquémica en tratamiento con atorvastatina 80 mg. Se agregó claritromicina por una neumonía. A los 5 días presenta dolor muscular difuso intenso, debilidad y orina oscura. CPK de 18,000 U/L y creatinina de 2.1 mg/dL.
+P: ¿Cuál es la complicación que presenta?
++ Rabdomiólisis por interacción entre estatina y claritromicina || La claritromicina inhibe CYP3A4 y eleva la estatina.
+- anchoring | Mialgia simple por estatina || Se ancla en el dolor, pero la CPK y la orina indican rabdomiólisis.
+- availability_heuristic | Polimiositis idiopática || Es inflamatoria y no se relaciona con el fármaco.
+- representativeness_heuristic | Infarto agudo de miocardio por la elevación de CPK || Asocia CPK con infarto, pero el patrón es muscular esquelético.
+- premature_closure | Nefritis intersticial por claritromicina || Explica la creatinina pero no la CPK.
+- base_rate_fallacy | Síndrome neuroléptico maligno || No hay fármacos antipsicóticos.
+- framing_effect | Hipotiroidismo con miopatía || Puede elevar CPK, pero la relación temporal con el antibiótico es clara.
+- inattentional_blindness | Neumonía grave con sepsis como única causa || No considera la interacción farmacológica.
+- focusing_illusion | Hepatitis por estatina || Se centra en la estatina y elige otro órgano.
+- belief_bias | Deshidratación por la fiebre || Cree que la fiebre basta para esta CPK.
+E: Las estatinas pueden causar desde mialgias hasta miopatía y rabdomiólisis, que es rara pero grave. El riesgo aumenta con dosis altas, edad avanzada, hipotiroidismo, insuficiencia renal y fármacos que inhiben el citocromo CYP3A4, como claritromicina, eritromicina, antifúngicos azólicos e inhibidores de proteasa, porque elevan los niveles de atorvastatina y simvastatina. La rabdomiólisis se manifiesta con dolor y debilidad muscular, orina oscura por mioglobinuria, CPK mayor de diez veces el límite y lesión renal aguda. El manejo incluye suspender la estatina y el fármaco interactuante, hidratación intravenosa abundante y vigilancia de potasio y función renal.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las dislipidemias
+
+@ mi|endocrinology|dyslipidemia|3|treatment_of_choice
+V: Hombre de 35 años con colesterol LDL de 260 mg/dL. Tiene xantomas tendinosos en tendones de Aquiles y arco corneal. Su madre y su hermano tienen colesterol muy alto.
+P: ¿Cuál es el tratamiento de elección?
++ Estatina de alta intensidad desde ahora, con ezetimiba si no alcanza la meta || Sugiere hipercolesterolemia familiar, de muy alto riesgo.
+- anchoring | Solo dieta y ejercicio por su juventud || Se ancla en la edad y subestima el riesgo.
+- availability_heuristic | Fibrato como fármaco principal || Es para triglicéridos.
+- status_quo_bias | Vigilar el LDL cada año sin fármacos || Deja al paciente expuesto a enfermedad coronaria prematura.
+- representativeness_heuristic | Resección quirúrgica de los xantomas || Trata un signo, no la enfermedad.
+- framing_effect | Estatina de baja intensidad para evitar efectos adversos || Evitar efectos suena prudente, pero el riesgo exige alta intensidad.
+- complexity_bias | Trasplante hepático || Se reserva para formas homocigotas graves.
+- belief_bias | Omega 3 a dosis altas como único tratamiento || Cree que bajan LDL de forma importante.
+- premature_closure | Iniciar tratamiento solo si aparece angina || Espera a que haya daño.
+- omission_bias | Evitar fármacos hasta tener estudio genético || La prueba genética no debe retrasar el tratamiento.
+E: La hipercolesterolemia familiar es un trastorno genético, generalmente autosómico dominante, que causa LDL muy elevado desde el nacimiento y enfermedad coronaria prematura. Se sospecha con LDL mayor de 190 mg/dL en adultos, xantomas tendinosos, arco corneal antes de los 45 años y antecedentes familiares de colesterol alto o infarto prematuro, y se clasifica con criterios como los de la red holandesa. El tratamiento de elección es la estatina de alta intensidad desde el diagnóstico, con meta de reducir el LDL al menos 50%. Si no se alcanza, se agrega ezetimiba y después un inhibidor de PCSK9. Se debe hacer tamizaje en cascada a los familiares.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las dislipidemias
+
+@ mi|endocrinology|dyslipidemia|2|risk_factor
+V: Mujer de 48 años con colesterol LDL de 190 mg/dL y triglicéridos normales. Refiere fatiga, estreñimiento y aumento de peso en el último año. Tiene piel seca y bradicardia leve.
+P: ¿Cuál es la causa secundaria más probable de su dislipidemia que debe descartarse?
++ Hipotiroidismo || Causa frecuente de LDL elevado reversible con levotiroxina.
+- availability_heuristic | Diabetes tipo 2 || Eleva más los triglicéridos y no explica los síntomas.
+- anchoring | Hipercolesterolemia familiar sin buscar otra causa || Se ancla en el LDL alto y omite causas secundarias.
+- representativeness_heuristic | Síndrome nefrótico || Eleva lípidos, pero cursa con edema y proteinuria.
+- premature_closure | Dieta alta en grasas saturadas como única explicación || Cierra con la dieta pese a síntomas sistémicos.
+- base_rate_fallacy | Colestasis por cirrosis biliar primaria || Es menos frecuente y daría prurito e ictericia.
+- framing_effect | Uso de anticonceptivos orales || Pueden alterar lípidos, pero no explican los síntomas.
+- inattentional_blindness | Alcoholismo || Eleva más los triglicéridos y no hay consumo descrito.
+- focusing_illusion | Síndrome de Cushing || Se centra en el aumento de peso, sin otros datos de Cushing.
+- belief_bias | Anorexia nerviosa || Cree que todo cambio de peso tiene la misma causa.
+E: Antes de atribuir una dislipidemia a causas primarias se deben descartar causas secundarias, como hipotiroidismo, diabetes descontrolada, síndrome nefrótico, enfermedad renal crónica, colestasis, alcohol y fármacos como corticosteroides, diuréticos, retinoides o antirretrovirales. El hipotiroidismo es una causa frecuente de elevación del LDL porque disminuye la expresión del receptor hepático de LDL. Los síntomas de esta paciente, como fatiga, estreñimiento, aumento de peso, piel seca y bradicardia, orientan a hipotiroidismo. Se debe medir la TSH. Al corregir el hipotiroidismo con levotiroxina el LDL puede disminuir de forma importante, y después se reevalúa la necesidad de estatina.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las dislipidemias ;; Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo primario en adultos

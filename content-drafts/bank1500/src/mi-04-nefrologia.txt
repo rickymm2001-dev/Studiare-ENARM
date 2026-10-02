@@ -1,0 +1,223 @@
+@ mi|nephrology|acute_kidney_injury|3|diagnosis
+V: Hombre de 72 años con diarrea abundante de 4 días y poca ingesta de líquidos. Presión arterial de 92/60 mmHg, mucosas secas. Creatinina de 2.6 mg/dL, previamente de 1.0. Relación BUN sobre creatinina de 28, sodio urinario de 10 mEq/L y fracción excretada de sodio de 0.5%. Sedimento urinario sin alteraciones.
+P: ¿Cuál es el diagnóstico más probable?
++ Lesión renal aguda prerrenal por hipovolemia || Fracción excretada de sodio menor de 1%, sodio urinario bajo y sedimento normal.
+- representativeness_heuristic | Necrosis tubular aguda || También es lesión aguda, pero da fracción excretada mayor de 2% y cilindros granulosos.
+- anchoring | Enfermedad renal crónica avanzada || Se ancla en la edad, pero la creatinina previa era normal.
+- availability_heuristic | Uropatía obstructiva por próstata || Es frecuente en hombres mayores, pero el cuadro sugiere hipovolemia.
+- premature_closure | Glomerulonefritis rápidamente progresiva || Concluye una causa grave sin hematuria ni proteinuria.
+- base_rate_fallacy | Nefritis intersticial aguda || No hay fármaco desencadenante ni eosinofiluria.
+- framing_effect | Síndrome hepatorrenal || También tiene sodio urinario bajo, pero no hay cirrosis.
+- inattentional_blindness | Rabdomiólisis || No hay datos musculares descritos.
+- focusing_illusion | Nefropatía por contraste || Se centra en la creatinina sin exposición a contraste.
+- belief_bias | Ateroembolia renal || Cree que todo anciano tiene causa vascular.
+E: La lesión renal aguda prerrenal es la forma más frecuente y se debe a hipoperfusión renal con estructura tubular conservada, por hipovolemia, insuficiencia cardiaca, sepsis o fármacos. Los túbulos funcionan, por lo que retienen sodio y agua, y se observan sodio urinario menor de 20 mEq/L, fracción excretada de sodio menor de 1%, osmolaridad urinaria alta, relación BUN sobre creatinina mayor de 20 y sedimento sin alteraciones. En la necrosis tubular aguda la fracción excretada de sodio es mayor de 2% y hay cilindros granulosos pardos. El tratamiento prerrenal es corregir la causa, en este caso con reposición de volumen intravenoso.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la lesión renal aguda
+
+@ mi|nephrology|acute_kidney_injury|4|next_step
+V: Hombre de 66 años con lesión renal aguda. Presenta potasio de 7.1 mEq/L con cambios en el electrocardiograma que no responde a tratamiento médico, pH de 7.08 con bicarbonato de 9 mEq/L, edema pulmonar pese a diuréticos y BUN de 110 mg/dL con somnolencia.
+P: ¿Cuál es el siguiente paso?
++ Terapia de reemplazo renal urgente con hemodiálisis || Hiperpotasemia refractaria, acidosis grave, sobrecarga y uremia son indicaciones urgentes.
+- anchoring | Aumentar la dosis de furosemida y revalorar en 24 horas || Se ancla en el diurético pese a refractariedad.
+- availability_heuristic | Bicarbonato oral || Insuficiente en una acidosis grave con otras indicaciones.
+- framing_effect | Restricción de potasio en la dieta como medida principal || Suena preventivo, pero el potasio ya es peligroso.
+- premature_closure | Biopsia renal antes de cualquier tratamiento || Retrasa una medida que salva la vida.
+- status_quo_bias | Continuar el manejo conservador || Ignora indicaciones urgentes de diálisis.
+- complexity_bias | Trasplante renal de urgencia || No es un tratamiento agudo.
+- representativeness_heuristic | Diálisis peritoneal crónica ambulatoria programada || Es un tratamiento crónico, no la medida urgente.
+- belief_bias | Resinas de potasio como solución definitiva || Cree que el quelante resuelve todo el cuadro.
+- omission_bias | Esperar a que la creatinina supere 8 mg/dL || Usa un umbral de laboratorio en lugar de las indicaciones clínicas.
+E: Las indicaciones urgentes de terapia de reemplazo renal en la lesión renal aguda se recuerdan con el acrónimo AEIOU, que significa acidosis metabólica grave refractaria, alteraciones electrolíticas como hiperpotasemia refractaria, intoxicaciones por sustancias dializables, sobrecarga de volumen refractaria a diuréticos y uremia sintomática con encefalopatía, pericarditis o sangrado. La decisión no depende de un valor aislado de creatinina sino del cuadro clínico. En el paciente hemodinámicamente inestable se prefieren técnicas continuas. Mientras se prepara la diálisis se mantienen medidas para la hiperpotasemia, como calcio, insulina con glucosa y salbutamol.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la lesión renal aguda
+
+@ mi|nephrology|acute_kidney_injury|3|prevention_screening
+V: Hombre de 68 años con diabetes y filtración glomerular de 38 mL/min. Será sometido a tomografía con contraste yodado por sospecha de cáncer de colon. Toma metformina y un AINE para dolor de rodilla.
+P: ¿Cuál es la medida de prevención más útil para evitar lesión renal por contraste?
++ Hidratación intravenosa con solución isotónica y suspender temporalmente el AINE || Reduce el riesgo en pacientes con filtración disminuida.
+- availability_heuristic | N acetilcisteína como única medida || No ha demostrado beneficio consistente.
+- anchoring | Suspender todos los fármacos una semana antes || Se ancla en suspender sin distinguir cuáles importan.
+- framing_effect | Dar furosemida para eliminar el contraste más rápido || Eliminar rápido suena bien, pero el diurético aumenta el riesgo.
+- complexity_bias | Hemodiálisis profiláctica después del estudio || No previene la lesión.
+- representativeness_heuristic | Bicarbonato de sodio oral en dosis altas como medida principal || No supera a la hidratación con solución salina.
+- status_quo_bias | Realizar el estudio sin ninguna preparación || Ignora factores de riesgo claros.
+- premature_closure | Cancelar el estudio por el riesgo renal || Retrasa un diagnóstico importante.
+- belief_bias | Aumentar la dosis de contraste para mejorar la imagen y hacer una sola toma || Cree que una sola toma compensa más contraste.
+- omission_bias | Evitar cualquier hidratación por la diabetes || Teme una sobrecarga improbable.
+E: La lesión renal aguda asociada a contraste es más probable con filtración glomerular menor de 45 mL/min, diabetes, deshidratación, insuficiencia cardiaca, edad avanzada, dosis altas de contraste y fármacos nefrotóxicos. La medida preventiva con mejor evidencia es la hidratación intravenosa con solución salina isotónica antes y después del estudio en pacientes de riesgo. También se recomienda usar la menor dosis posible de contraste de baja osmolaridad, suspender AINE y otros nefrotóxicos, y valorar suspender metformina el día del estudio y reanudarla tras confirmar función renal estable. La N acetilcisteína y el bicarbonato no han mostrado beneficio claro.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la lesión renal aguda
+
+@ mi|nephrology|acute_kidney_injury|3|risk_factor
+V: Mujer de 54 años que inicia omeprazol por gastritis. A las 3 semanas presenta fiebre, exantema maculopapular y artralgias. Creatinina de 2.3 mg/dL, previamente normal. Examen de orina con leucocitos, cilindros leucocitarios estériles y eosinofilia.
+P: ¿Cuál es la causa más probable de su lesión renal?
++ Nefritis intersticial aguda por fármaco || Fiebre, exantema, eosinofilia y leucocituria estéril tras un fármaco nuevo.
+- representativeness_heuristic | Pielonefritis aguda || También da fiebre y leucocituria, pero los cultivos serían positivos.
+- anchoring | Glomerulonefritis posinfecciosa || Se ancla en la fiebre, pero no hay hematuria con cilindros eritrocitarios.
+- availability_heuristic | Necrosis tubular por deshidratación || Es frecuente, pero no explica exantema ni eosinofilia.
+- premature_closure | Lupus eritematoso sistémico de inicio || Concluye una enfermedad autoinmune sin buscar el fármaco.
+- base_rate_fallacy | Mieloma múltiple || Es menos probable y no explica el cuadro alérgico.
+- framing_effect | Síndrome nefrótico por cambios mínimos || Comparte causa farmacológica en algunos casos, pero cursa con proteinuria masiva.
+- inattentional_blindness | Lesión prerrenal por gastritis || No toma en cuenta los hallazgos urinarios.
+- focusing_illusion | Infección viral sistémica || Se centra en la fiebre.
+- belief_bias | Nefropatía por ácido úrico || Cree que toda lesión renal se relaciona con ácido úrico.
+E: La nefritis intersticial aguda es una causa de lesión renal aguda intrínseca, producida con mayor frecuencia por fármacos, como betalactámicos, AINE, inhibidores de la bomba de protones, sulfonamidas y rifampicina, y con menor frecuencia por infecciones o enfermedades autoinmunes. La tríada clásica de fiebre, exantema y eosinofilia aparece en una minoría de pacientes. En la orina hay leucocituria estéril, cilindros leucocitarios y puede haber eosinofiluria. El diagnóstico definitivo es por biopsia. El tratamiento es suspender el fármaco, y en casos sin mejoría en pocos días se usan corticosteroides.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la lesión renal aguda
+
+@ mi|nephrology|acute_kidney_injury|2|initial_study
+V: Hombre de 74 años con creatinina de 2.9 mg/dL, previamente de 1.1. Refiere chorro urinario débil, goteo terminal y sensación de vaciamiento incompleto de años. Hoy tiene dolor suprapúbico y globo vesical palpable.
+P: ¿Cuál es el estudio inicial más útil?
++ Ultrasonido renal y vesical para buscar hidronefrosis y orina residual || Sospecha de lesión renal posrenal por obstrucción.
+- availability_heuristic | Tomografía abdominal con contraste || Expone al contraste a un riñón lesionado sin necesidad.
+- anchoring | Antígeno prostático específico como primer estudio || Se ancla en la próstata sin confirmar la obstrucción.
+- complexity_bias | Biopsia renal || Invasiva e innecesaria.
+- representativeness_heuristic | Urografía excretora || Usa contraste y fue sustituida.
+- framing_effect | Gammagrama renal para medir función por separado || Suena preciso, pero no es el estudio inicial.
+- premature_closure | Cistoscopia inmediata || Es posterior y no el estudio inicial.
+- information_bias | Electroforesis de proteínas || Busca otra causa sin datos.
+- belief_bias | Resonancia magnética de pelvis como primer paso || Cree que la imagen más avanzada es mejor.
+- base_rate_fallacy | Anticuerpos antinucleares || No considera la probabilidad alta de obstrucción.
+E: La lesión renal aguda posrenal se debe a obstrucción del flujo urinario y debe sospecharse en hombres mayores con síntomas prostáticos, en pacientes con cáncer pélvico, cálculos o vejiga neurógena. El estudio inicial es el ultrasonido renal y vesical, que identifica hidronefrosis y mide la orina residual, sin riesgo para el riñón. El tratamiento inmediato es aliviar la obstrucción, como colocar una sonda vesical en la retención urinaria por hiperplasia prostática. Tras desobstruir puede presentarse diuresis posobstructiva con pérdida importante de agua y electrolitos, por lo que se vigilan volumen urinario y electrolitos.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la lesión renal aguda
+
+@ mi|nephrology|chronic_kidney_disease|2|data_interpretation
+V: Mujer de 60 años con diabetes. En dos mediciones con 4 meses de diferencia su filtración glomerular estimada es de 42 y 40 mL/min/1.73 m2. El cociente albúmina creatinina es de 180 mg/g en ambas.
+P: ¿Cuál es la interpretación correcta de su función renal según la clasificación KDIGO?
++ Enfermedad renal crónica G3b A2 || Filtración de 30 a 44 y albuminuria de 30 a 300 mg/g por más de 3 meses.
+- anchoring | Lesión renal aguda || Se ancla en la cifra baja, pero persiste más de 3 meses.
+- inattentional_blindness | Enfermedad renal crónica G3a A1 || Se equivoca de categoría y no toma en cuenta la albuminuria.
+- framing_effect | Enfermedad renal crónica G4 A3 || Sobreestima la gravedad.
+- availability_heuristic | Función renal normal para su edad || Atribuye la filtración baja a la edad.
+- representativeness_heuristic | Enfermedad renal terminal que requiere diálisis || Confunde la etapa.
+- base_rate_fallacy | Sin enfermedad renal porque la creatinina es casi normal || Usa la creatinina en lugar de la filtración y la albuminuria.
+- premature_closure | Enfermedad renal crónica G2 A2 || Calcula mal la categoría de filtración.
+- belief_bias | Solo hay enfermedad renal si hay síntomas urémicos || Cree que la enfermedad renal siempre da síntomas.
+- omission_bias | Se requiere biopsia antes de clasificar || La clasificación no requiere biopsia.
+E: La enfermedad renal crónica se define por alteraciones de la estructura o la función renal durante más de tres meses, con implicaciones para la salud. Se diagnostica con filtración glomerular menor de 60 mL/min/1.73 m2 o marcadores de daño, como albuminuria de 30 mg/g o más. La clasificación KDIGO usa la causa, la filtración y la albuminuria. Las categorías de filtración son G1 de 90 o más, G2 de 60 a 89, G3a de 45 a 59, G3b de 30 a 44, G4 de 15 a 29 y G5 menor de 15. La albuminuria se divide en A1 menor de 30, A2 de 30 a 300 y A3 mayor de 300 mg/g.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la enfermedad renal crónica
+
+@ mi|nephrology|chronic_kidney_disease|3|complication_prognosis
+V: Hombre de 58 años con enfermedad renal crónica G4. Refiere fatiga y disnea de esfuerzo. Hemoglobina de 8.6 g/dL, normocítica normocrómica. Ferritina de 380 ng/mL y saturación de transferrina de 28%.
+P: ¿Cuál es la causa principal de esta complicación?
++ Deficiencia en la producción renal de eritropoyetina || La anemia de la enfermedad renal crónica es normocítica y responde a eritropoyetina.
+- availability_heuristic | Deficiencia de hierro || Es frecuente, pero su ferritina y saturación son adecuadas.
+- anchoring | Sangrado digestivo oculto como causa principal || Se ancla en la anemia y busca una pérdida sin datos.
+- representativeness_heuristic | Deficiencia de vitamina B12 || Daría anemia macrocítica.
+- premature_closure | Mielodisplasia || Concluye una causa hematológica grave sin explorar la causa renal.
+- base_rate_fallacy | Hemólisis autoinmune || Es poco frecuente y no hay datos de hemólisis.
+- framing_effect | Anemia por la dieta baja en proteínas || Suena lógico, pero no es la causa principal.
+- inattentional_blindness | Talasemia menor || Daría microcitosis.
+- focusing_illusion | Hipotiroidismo || Se centra en la fatiga.
+- belief_bias | Toxicidad por fármacos antihipertensivos || Cree que los antihipertensivos causan anemia de este grado.
+E: La anemia es una complicación frecuente de la enfermedad renal crónica y se vuelve más común conforme disminuye la filtración. Su causa principal es la producción insuficiente de eritropoyetina por el riñón, aunque contribuyen la deficiencia de hierro, la inflamación, el acortamiento de la vida del eritrocito y las pérdidas sanguíneas. Típicamente es normocítica y normocrómica. Antes de iniciar agentes estimulantes de eritropoyesis se corrige la deficiencia de hierro, con meta de ferritina mayor de 100 a 200 ng/mL y saturación mayor de 20%. La meta de hemoglobina con eritropoyetina es de 10 a 11.5 g/dL, sin buscar normalizarla.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la anemia en la enfermedad renal crónica
+
+@ mi|nephrology|chronic_kidney_disease|3|treatment_of_choice
+V: Hombre de 56 años con enfermedad renal crónica G3b A3 por diabetes. Ya recibe losartán a dosis máxima. Presión arterial de 132/80 mmHg. Filtración de 38 mL/min y potasio de 4.6 mEq/L.
+P: ¿Cuál es el fármaco de elección para agregar y retrasar la progresión renal?
++ Un inhibidor de SGLT2, como dapagliflozina o empagliflozina || Reduce la progresión y el riesgo cardiovascular con filtración mayor de 20 mL/min.
+- anchoring | Agregar enalapril al losartán || Se ancla en el bloqueo del sistema renina angiotensina y cae en el doble bloqueo.
+- availability_heuristic | Glibenclamida para mejorar el control glucémico || Causa hipoglucemia en la enfermedad renal.
+- representativeness_heuristic | Furosemida diaria para proteger el riñón || El diurético no protege el riñón.
+- framing_effect | Suspender losartán para no bajar más la filtración || Suena protector, pero se pierde el beneficio renal.
+- status_quo_bias | Mantener igual y revalorar en un año || Pierde una oportunidad de frenar la progresión.
+- premature_closure | Iniciar diálisis preventiva || La diálisis no es preventiva.
+- complexity_bias | Agregar aliskireno || Combinación contraindicada en diabetes.
+- belief_bias | Dieta sin proteínas estricta || Cree que eliminar las proteínas es mejor, con riesgo de desnutrición.
+- omission_bias | Evitar nuevos fármacos por la filtración baja || La filtración actual permite usarlos.
+E: En la enfermedad renal crónica por diabetes con albuminuria, además del IECA o ARA II a dosis máxima tolerada, los inhibidores de SGLT2 han demostrado reducir la progresión a enfermedad renal terminal, la muerte cardiovascular y la hospitalización por insuficiencia cardiaca. Se pueden iniciar con filtración de 20 mL/min o más y continuar hasta la diálisis. Al inicio puede haber una caída leve y transitoria de la filtración, esperada y no dañina. La finerenona es otra opción para reducir albuminuria. Se debe evitar el doble bloqueo del sistema renina angiotensina y ajustar fármacos según la filtración.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la enfermedad renal crónica
+
+@ mi|nephrology|chronic_kidney_disease|4|mechanism
+V: Mujer de 62 años con enfermedad renal crónica G4. Fósforo de 6.4 mg/dL, calcio de 8.1 mg/dL y paratohormona muy elevada. Refiere dolores óseos.
+P: ¿Cuál es el mecanismo principal del hiperparatiroidismo en esta paciente?
++ Retención de fósforo, déficit de calcitriol e hipocalcemia que estimulan la paratiroides || Corresponde al hiperparatiroidismo secundario de la enfermedad renal.
+- anchoring | Adenoma paratiroideo productor autónomo || Se ancla en la PTH alta, pero el calcio está bajo.
+- availability_heuristic | Exceso de vitamina D en la dieta || Daría hipercalcemia y PTH suprimida.
+- representativeness_heuristic | Carcinoma de paratiroides || Es raro y daría hipercalcemia grave.
+- framing_effect | Pérdida renal excesiva de fósforo || Suena renal, pero en la enfermedad avanzada el fósforo se retiene.
+- premature_closure | Hipercalcemia por inmovilización || Concluye otra causa pese al calcio bajo.
+- base_rate_fallacy | Neoplasia endocrina múltiple tipo 1 || Es poco frecuente y no explica el contexto renal.
+- inattentional_blindness | Metástasis óseas || No relaciona los datos con la enfermedad renal.
+- focusing_illusion | Osteoporosis posmenopáusica || Se centra en los dolores óseos.
+- belief_bias | Exceso de calcio en la dieta || Cree que el calcio alto en la dieta eleva la PTH.
+E: En la enfermedad renal crónica avanzada, la disminución de la filtración provoca retención de fósforo y aumento del factor de crecimiento fibroblástico 23, que reduce la activación renal de vitamina D. El déficit de calcitriol disminuye la absorción intestinal de calcio, y la hipocalcemia, la hiperfosfatemia y el déficit de calcitriol estimulan la producción de paratohormona y la hiperplasia de las paratiroides. Este hiperparatiroidismo secundario produce enfermedad ósea y calcificaciones vasculares. El tratamiento incluye restricción de fósforo en la dieta, quelantes de fósforo, análogos de vitamina D y calcimiméticos.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la enfermedad renal crónica
+
+@ mi|nephrology|chronic_kidney_disease|3|next_step
+V: Hombre de 55 años con enfermedad renal crónica G5, filtración de 9 mL/min. Presenta náusea persistente, anorexia, prurito, pérdida de peso y frote pericárdico.
+P: ¿Cuál es la conducta a seguir?
++ Iniciar terapia de reemplazo renal || Síntomas urémicos y pericarditis indican diálisis.
+- anchoring | Esperar a que la filtración baje de 5 mL/min || Se ancla en un número y no en los síntomas.
+- availability_heuristic | Antieméticos y antihistamínicos como manejo principal || Trata síntomas sin la causa.
+- framing_effect | Dieta muy baja en proteínas para retrasar la diálisis || Retrasar suena conservador, pero no es adecuado con uremia sintomática.
+- premature_closure | Pericardiocentesis como único tratamiento || Trata una complicación sin la causa.
+- status_quo_bias | Mantener tratamiento conservador || Ignora la uremia sintomática.
+- complexity_bias | Trasplante renal de donante cadavérico esta semana || No es una opción inmediata realista.
+- representativeness_heuristic | Antiinflamatorios para la pericarditis || En la pericarditis urémica el tratamiento es la diálisis.
+- belief_bias | Diurético a dosis altas para eliminar toxinas || Cree que el diurético depura toxinas urémicas.
+- omission_bias | Cuidados paliativos sin ofrecer diálisis || Evita una opción indicada sin hablar con el paciente.
+E: La terapia de reemplazo renal en la enfermedad renal crónica se inicia por síntomas y complicaciones más que por un valor de filtración. Las indicaciones incluyen síntomas urémicos, como náusea, vómito, anorexia, prurito, alteración neurológica o pérdida de peso, pericarditis o serositis, sobrecarga de volumen o hipertensión refractarias, hiperpotasemia o acidosis refractarias y deterioro nutricional. Suele ocurrir con filtración entre 5 y 10 mL/min. La pericarditis urémica es una indicación urgente. Idealmente el paciente debe prepararse con anticipación, con fístula arteriovenosa o catéter peritoneal, y evaluarse para trasplante.
+R: Guía de Práctica Clínica de tratamiento sustitutivo de la función renal
+
+@ mi|nephrology|electrolyte_disorders|3|diagnosis
+V: Mujer de 70 años con cáncer pulmonar de células pequeñas. Presenta confusión leve. Sodio sérico de 122 mEq/L, osmolaridad sérica de 255 mOsm/kg, osmolaridad urinaria de 520 mOsm/kg y sodio urinario de 48 mEq/L. Está euvolémica, con función tiroidea y suprarrenal normales.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome de secreción inadecuada de hormona antidiurética || Hiponatremia hipotónica euvolémica con orina concentrada y sodio urinario alto.
+- representativeness_heuristic | Hiponatremia por hipovolemia || También tiene sodio bajo, pero la paciente está euvolémica y con sodio urinario alto.
+- anchoring | Polidipsia primaria || Se ancla en la hiponatremia, pero la orina estaría diluida.
+- availability_heuristic | Insuficiencia suprarrenal || Puede dar un cuadro similar, pero su función es normal.
+- premature_closure | Hiponatremia por insuficiencia cardiaca || Concluye sin datos de sobrecarga.
+- base_rate_fallacy | Síndrome cerebral perdedor de sal || Es raro y cursa con hipovolemia.
+- framing_effect | Seudohiponatremia por hiperlipidemia || El sodio bajo confunde, pero la osmolaridad está baja.
+- inattentional_blindness | Hiponatremia por hiperglucemia || No hay glucosa elevada y la osmolaridad es baja.
+- focusing_illusion | Hipotiroidismo || Se centra en la confusión pese a función tiroidea normal.
+- belief_bias | Exceso de sal en la dieta || Cree que la dieta altera así el sodio.
+E: El síndrome de secreción inadecuada de hormona antidiurética es la causa más frecuente de hiponatremia euvolémica. Se diagnostica con hiponatremia hipotónica, osmolaridad urinaria mayor de 100 mOsm/kg, sodio urinario mayor de 30 mEq/L con ingesta normal, euvolemia clínica y función tiroidea y suprarrenal normales, sin diuréticos. Las causas incluyen neoplasias, sobre todo el cáncer pulmonar de células pequeñas, enfermedades pulmonares y del sistema nervioso central, fármacos como antidepresivos y carbamazepina, y dolor o náusea posoperatorios. El tratamiento es restricción de líquidos y, en casos sintomáticos graves, solución salina hipertónica.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hiponatremia
+
+@ mi|nephrology|electrolyte_disorders|4|complication_prognosis
+V: Hombre de 50 años con alcoholismo y sodio de 108 mEq/L. Se le administró solución salina hipertónica y su sodio subió a 126 mEq/L en 24 horas. Tres días después presenta disartria, disfagia, cuadriparesia y alteración del estado de alerta.
+P: ¿Cuál es la complicación que presenta?
++ Síndrome de desmielinización osmótica || Corrección rápida de una hiponatremia crónica.
+- anchoring | Edema cerebral por la hiponatremia || Se ancla en la hiponatremia, pero los síntomas aparecen tras la corrección.
+- availability_heuristic | Encefalopatía de Wernicke || Es frecuente en alcohólicos, pero da oftalmoplejía, ataxia y confusión.
+- representativeness_heuristic | Evento vascular cerebral del tallo || Comparte síntomas, pero la relación con la corrección rápida es clave.
+- premature_closure | Síndrome de abstinencia alcohólica || Concluye por el antecedente de alcohol.
+- base_rate_fallacy | Esclerosis múltiple de inicio tardío || Es poco probable en este contexto.
+- framing_effect | Hipernatremia por exceso de corrección || Suena relacionado, pero el sodio final es normal bajo.
+- inattentional_blindness | Encefalopatía hepática || No relaciona el cuadro con la velocidad de corrección.
+- focusing_illusion | Síndrome de Guillain Barré || Se centra en la debilidad.
+- belief_bias | Intoxicación por metanol || Cree que todo alcohólico con síntomas neurológicos se intoxicó.
+E: El síndrome de desmielinización osmótica, antes llamado mielinólisis pontina central, ocurre cuando una hiponatremia crónica se corrige demasiado rápido. Las neuronas adaptadas a la hipotonía pierden agua de forma brusca y se produce desmielinización, sobre todo en la protuberancia. Aparece de dos a seis días después de la corrección, con disartria, disfagia, cuadriparesia, síndrome de enclaustramiento o alteración del estado de alerta. El riesgo es mayor en alcohólicos, desnutridos, hipopotasémicos y con sodio menor de 120 mEq/L. Para prevenirlo se recomienda no elevar el sodio más de 8 a 10 mEq/L en 24 horas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hiponatremia
+
+@ mi|nephrology|electrolyte_disorders|3|initial_treatment
+V: Mujer de 64 años con náusea, vómito, poliuria, estreñimiento y somnolencia. Calcio sérico de 14.2 mg/dL con albúmina normal, creatinina de 1.6 mg/dL y PTH suprimida. Tiene un tumor de mama metastásico.
+P: ¿Cuál es el tratamiento inicial más importante?
++ Hidratación intravenosa abundante con solución salina seguida de un bifosfonato intravenoso || Hipercalcemia grave asociada a cáncer.
+- anchoring | Furosemida como primera medida antes de hidratar || Se ancla en el diurético, que empeora la deshidratación.
+- availability_heuristic | Calcitonina como único tratamiento || Actúa rápido pero su efecto es breve.
+- framing_effect | Restringir el calcio en la dieta como medida principal || Suena lógico, pero es insuficiente en la hipercalcemia tumoral.
+- premature_closure | Paratiroidectomía urgente || La PTH está suprimida.
+- representativeness_heuristic | Tiazida para bajar el calcio || Las tiazidas aumentan el calcio.
+- status_quo_bias | Observación y repetir calcio mañana || Retrasa el tratamiento de una urgencia.
+- complexity_bias | Hemodiálisis como primera medida en todos || Se reserva para casos refractarios o con insuficiencia renal grave.
+- belief_bias | Suplemento de vitamina D para equilibrar el calcio || Empeora la hipercalcemia.
+- omission_bias | Suspender todos los líquidos por la náusea || Agrava la deshidratación.
+E: La hipercalcemia grave, con calcio mayor de 14 mg/dL o síntomas importantes, es una urgencia. En pacientes hospitalizados la causa más frecuente es el cáncer, por péptido relacionado con la PTH, metástasis óseas o producción de calcitriol, con PTH suprimida. El tratamiento inicial es la hidratación intravenosa con solución salina, porque la hipercalcemia causa diuresis osmótica y deshidratación. La calcitonina tiene efecto rápido pero transitorio. Los bifosfonatos intravenosos, como ácido zoledrónico, o el denosumab son el tratamiento de base, con efecto en dos a cuatro días. La furosemida solo se usa si hay sobrecarga de volumen después de hidratar.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipercalcemia
+
+@ mi|nephrology|electrolyte_disorders|3|data_interpretation
+V: Hombre de 40 años con diarrea crónica. Gasometría con pH de 7.29, bicarbonato de 14 mEq/L y PaCO2 de 29 mmHg. Sodio de 138 mEq/L y cloro de 114 mEq/L.
+P: ¿Cuál es la interpretación correcta del trastorno ácido base?
++ Acidosis metabólica con brecha aniónica normal, hiperclorémica, por pérdida intestinal de bicarbonato || Brecha aniónica de 10 con cloro elevado.
+- anchoring | Acidosis metabólica con brecha aniónica elevada || Se ancla en la acidosis sin calcular la brecha.
+- availability_heuristic | Acidosis respiratoria || La PaCO2 está baja, no alta.
+- representativeness_heuristic | Alcalosis metabólica por vómito || El pH está bajo.
+- framing_effect | Acidosis mixta metabólica y respiratoria || La PaCO2 baja es compensación esperada, no un segundo trastorno.
+- premature_closure | Cetoacidosis por ayuno || Daría brecha aniónica elevada.
+- base_rate_fallacy | Acidosis tubular renal tipo 1 como causa más probable || Es menos probable que la diarrea crónica descrita.
+- inattentional_blindness | Alcalosis respiratoria primaria || No nota el pH ácido.
+- focusing_illusion | Acidosis láctica || Se centra en la gravedad sin calcular la brecha.
+- belief_bias | Intoxicación por salicilatos || Cree que toda acidosis con PaCO2 baja es por salicilatos, que daría brecha alta.
+E: Para interpretar un trastorno ácido base se evalúa el pH, el trastorno primario, la compensación y la brecha aniónica. Aquí el pH bajo con bicarbonato bajo indica acidosis metabólica. La PaCO2 esperada por la fórmula de Winter es 1.5 por 14 más 8, más o menos 2, es decir 27 a 31, por lo que la compensación respiratoria es adecuada. La brecha aniónica es 138 menos la suma de 114 y 14, igual a 10, normal. La acidosis metabólica con brecha normal e hiperclorémica se debe a pérdidas de bicarbonato por diarrea o fístulas, o a acidosis tubular renal.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos del equilibrio ácido base

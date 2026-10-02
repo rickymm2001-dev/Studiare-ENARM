@@ -1,0 +1,175 @@
+@ mi|pulmonology|community_pneumonia|2|diagnosis
+V: Hombre de 58 años con fiebre de 39 grados, tos con expectoración herrumbrosa y dolor pleurítico derecho de 3 días. Frecuencia respiratoria de 24 rpm. Estertores crepitantes y soplo tubario en base derecha. La radiografía muestra consolidación lobar con broncograma aéreo.
+P: ¿Cuál es el diagnóstico más probable?
++ Neumonía adquirida en la comunidad, probablemente neumocócica || Fiebre, tos productiva, consolidación lobar y esputo herrumbroso.
+- representativeness_heuristic | Tromboembolia pulmonar con infarto pulmonar || También da dolor pleurítico, pero no consolidación lobar con broncograma y fiebre alta.
+- anchoring | Bronquitis aguda || Se ancla en la tos, pero hay consolidación.
+- availability_heuristic | Tuberculosis pulmonar || Es frecuente en México, pero el cuadro agudo lobar sugiere neumococo.
+- premature_closure | Derrame pleural paraneumónico como diagnóstico principal || Puede coexistir, pero la imagen describe consolidación.
+- base_rate_fallacy | Neumonía por Pneumocystis || Ocurre en inmunosuprimidos y da infiltrado intersticial.
+- framing_effect | Exacerbación de EPOC || Suena respiratorio, pero no hay antecedente.
+- inattentional_blindness | Insuficiencia cardiaca con congestión || No nota la fiebre y la consolidación unilateral.
+- focusing_illusion | Cáncer pulmonar obstructivo || Se centra en la consolidación sin considerar el cuadro agudo febril.
+- belief_bias | Absceso pulmonar || Cree que toda neumonía con fiebre alta es absceso, que daría cavitación.
+E: La neumonía adquirida en la comunidad se diagnostica con síntomas respiratorios agudos, como tos, expectoración, disnea o dolor pleurítico, más fiebre y un infiltrado nuevo en la radiografía de tórax. El Streptococcus pneumoniae es la causa bacteriana más frecuente y suele producir consolidación lobar con broncograma aéreo, inicio brusco, fiebre alta, escalofríos y esputo herrumbroso. Una vez establecido el diagnóstico, se estima la gravedad con escalas como CURB-65 o el índice de gravedad de neumonía para decidir tratamiento ambulatorio, hospitalización o terapia intensiva. La tuberculosis se sospecha con evolución subaguda, pérdida de peso y lesiones apicales.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la neumonía adquirida en la comunidad en adultos
+
+@ mi|pulmonology|community_pneumonia|3|data_interpretation
+V: Mujer de 79 años con neumonía adquirida en la comunidad. Está confusa, urea de 52 mg/dL (BUN de 24 mg/dL), frecuencia respiratoria de 32 rpm y presión arterial de 96/58 mmHg.
+P: ¿Cuál es la interpretación correcta de su gravedad con la escala CURB-65?
++ Puntaje de 5, neumonía grave que requiere hospitalización y valorar terapia intensiva || Confusión, urea elevada, frecuencia mayor de 30, presión baja y edad de 65 o más.
+- anchoring | Puntaje de 2, puede tratarse en casa con vigilancia || Subestima varios criterios presentes.
+- inattentional_blindness | Puntaje de 3 sin contar la confusión ni la edad || Pasa por alto criterios.
+- framing_effect | Puntaje de 4, tratamiento ambulatorio con antibiótico oral || Calcula casi bien, pero propone un manejo inseguro.
+- availability_heuristic | La escala solo aplica a menores de 65 años || Confunde un criterio con una restricción.
+- representativeness_heuristic | La presión de 96/58 no cuenta porque la sistólica es mayor de 90 || La diastólica de 60 o menos sí cuenta.
+- base_rate_fallacy | Riesgo bajo porque la mayoría de las neumonías son leves || Usa la frecuencia general en vez de los datos de la paciente.
+- premature_closure | Puntaje de 5, pero basta observación en urgencias 6 horas || Calcula bien y subestima el manejo.
+- belief_bias | La confusión es por la edad y no se toma en cuenta || Cree que la confusión del anciano es basal.
+- omission_bias | Se requiere procalcitonina antes de decidir el sitio de tratamiento || Retrasa una decisión clara.
+E: La escala CURB-65 asigna un punto a cada criterio, que son confusión, urea mayor de 42 mg/dL o BUN mayor de 19 mg/dL, frecuencia respiratoria de 30 o más, presión sistólica menor de 90 o diastólica de 60 o menos, y edad de 65 años o más. Un puntaje de 0 a 1 permite tratamiento ambulatorio, 2 sugiere hospitalización breve o ambulatorio vigilado, y 3 o más indica neumonía grave con hospitalización y valoración de terapia intensiva cuando el puntaje es 4 o 5. La escala apoya, pero no sustituye, el juicio clínico, que considera saturación, comorbilidades y situación social.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la neumonía adquirida en la comunidad en adultos
+
+@ mi|pulmonology|community_pneumonia|3|treatment_of_choice
+V: Hombre de 40 años previamente sano, sin uso reciente de antibióticos. Tiene neumonía adquirida en la comunidad con CURB-65 de 0 y saturación de 96%.
+P: ¿Cuál es el tratamiento de elección ambulatorio?
++ Amoxicilina oral a dosis altas, o un macrólido si la resistencia local lo permite || Neumonía leve en adulto sano sin comorbilidades.
+- complexity_bias | Ceftriaxona intravenosa con azitromicina en hospitalización || Es el esquema del paciente hospitalizado.
+- availability_heuristic | Levofloxacino como primera opción en todos || Se reserva para comorbilidades o alergia, por resistencia y efectos adversos.
+- anchoring | Vancomicina por miedo a resistencia || Se ancla en la resistencia sin factores de riesgo.
+- representativeness_heuristic | Oseltamivir como único tratamiento || Asocia neumonía con influenza sin datos que la sugieran.
+- framing_effect | Antibiótico solo si el cultivo de esputo es positivo || Esperar confirmación suena riguroso, pero retrasa el tratamiento.
+- status_quo_bias | Tratamiento sintomático sin antibiótico || Deja una infección bacteriana sin tratar.
+- premature_closure | Meropenem oral || Es un carbapenémico de uso hospitalario.
+- belief_bias | Trimetoprim con sulfametoxazol como fármaco de elección || Cree que es útil para neumococo, con alta resistencia.
+- omission_bias | Esperar 48 horas para ver si se resuelve sola || Retrasa el tratamiento.
+E: En el adulto sano con neumonía adquirida en la comunidad leve, sin comorbilidades ni uso reciente de antibióticos, el tratamiento ambulatorio de elección es amoxicilina oral a dosis altas, o doxiciclina, o un macrólido como azitromicina o claritromicina si la resistencia local del neumococo a macrólidos es menor de 25%. En pacientes con comorbilidades se usa amoxicilina con clavulanato o una cefalosporina más un macrólido, o una fluoroquinolona respiratoria en monoterapia. La duración habitual es de 5 a 7 días si hay estabilidad clínica. Se revalora a las 48 a 72 horas para confirmar la mejoría.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la neumonía adquirida en la comunidad en adultos
+
+@ mi|pulmonology|community_pneumonia|4|complication_prognosis
+V: Hombre de 55 años con neumonía en tratamiento con ceftriaxona y claritromicina. Al quinto día persiste la fiebre y el dolor pleurítico. La radiografía muestra derrame pleural. La toracocentesis obtiene líquido turbio con pH de 6.9, glucosa de 30 mg/dL y tinción de Gram con cocos grampositivos.
+P: ¿Cuál es la complicación que presenta?
++ Empiema pleural || Líquido turbio con pH menor de 7.2, glucosa baja y gérmenes en el Gram.
+- representativeness_heuristic | Derrame paraneumónico simple || También es un derrame asociado a neumonía, pero el pH y la glucosa son normales.
+- anchoring | Falla del antibiótico por resistencia como única explicación || Se ancla en el antibiótico e ignora la colección.
+- availability_heuristic | Absceso pulmonar || Es otra complicación, pero da cavitación con nivel hidroaéreo.
+- premature_closure | Derrame por insuficiencia cardiaca || Atribuye el líquido a otra causa pese a las características del exudado.
+- base_rate_fallacy | Mesotelioma pleural || Es raro y no explica el cuadro agudo infeccioso.
+- framing_effect | Pleuritis tuberculosa || Suena a infección pleural, pero el Gram muestra cocos.
+- inattentional_blindness | Fiebre por fármaco || No toma en cuenta el líquido pleural infectado.
+- focusing_illusion | Tromboembolia pulmonar intrahospitalaria || Se centra en el dolor pleurítico.
+- belief_bias | Quilotórax || Cree que todo líquido turbio es quilo.
+E: El derrame pleural paraneumónico se presenta en una proporción importante de las neumonías bacterianas. Se clasifica como simple, complicado o empiema. El empiema es la presencia de pus franco en la cavidad pleural o de gérmenes en la tinción o el cultivo. El derrame complicado se sospecha con pH menor de 7.2, glucosa menor de 60 mg/dL o deshidrogenasa láctica muy elevada. La persistencia de fiebre pese a antibiótico adecuado obliga a buscar estas complicaciones. El tratamiento del empiema y del derrame complicado es el drenaje con sonda pleural, con fibrinolíticos intrapleurales o cirugía si hay loculaciones.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del derrame pleural
+
+@ mi|pulmonology|community_pneumonia|2|prevention_screening
+V: Mujer de 67 años con diabetes y EPOC acude a su revisión anual. Nunca ha recibido vacunas en la edad adulta.
+P: ¿Cuál es la medida de prevención más importante contra la neumonía en esta paciente?
++ Vacunación contra neumococo y vacuna anual contra influenza || Reducen la neumonía y sus complicaciones en adultos mayores con comorbilidades.
+- availability_heuristic | Antibiótico profiláctico en invierno || Promueve resistencias sin beneficio demostrado.
+- anchoring | Solo vacuna contra influenza || Se ancla en una vacuna y omite el neumococo.
+- framing_effect | Vitamina C diaria para fortalecer defensas || Suena preventivo, sin evidencia.
+- representativeness_heuristic | Vacuna BCG de refuerzo || La asocia con enfermedades respiratorias, pero no previene neumonía.
+- status_quo_bias | Sin vacunas por su edad avanzada || Es precisamente el grupo que más se beneficia.
+- complexity_bias | Inmunoglobulina intravenosa mensual || Es para inmunodeficiencias.
+- belief_bias | Evitar salir de casa en invierno como medida principal || Cree que el aislamiento sustituye la vacuna.
+- premature_closure | Vacunar solo si tiene una neumonía previa || Espera al evento para prevenir.
+- omission_bias | Evitar vacunas por posibles reacciones || Sobreestima efectos leves.
+E: La vacunación es la principal medida preventiva contra la neumonía en adultos mayores y en personas con enfermedades crónicas como diabetes, EPOC, cardiopatía, enfermedad renal o hepática. Se recomienda la vacuna antineumocócica en todos los adultos de 65 años o más y en menores con factores de riesgo, con esquemas que combinan vacuna conjugada y polisacárida según disponibilidad. La vacuna contra influenza se aplica cada año en temporada invernal, porque la influenza predispone a neumonía bacteriana secundaria. Otras medidas son dejar de fumar, buen control de comorbilidades y vacunación contra COVID-19 según las recomendaciones vigentes.
+R: Guía de Práctica Clínica de vacunación en el adulto ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la neumonía adquirida en la comunidad en adultos
+
+@ mi|pulmonology|community_pneumonia|3|risk_factor
+V: Hombre de 52 años con alcoholismo crónico. Lo encontraron en la calle tras una intoxicación. Una semana después presenta fiebre, tos con expectoración fétida y una cavidad con nivel hidroaéreo en el segmento posterior del lóbulo superior derecho.
+P: ¿Cuál es el factor de riesgo principal de su cuadro?
++ Broncoaspiración de flora orofaríngea por alteración del estado de conciencia || La aspiración en un paciente alcohólico causa absceso pulmonar anaerobio.
+- availability_heuristic | Inmunosupresión por VIH || Puede predisponer, pero el antecedente de intoxicación y la localización sugieren aspiración.
+- anchoring | Tabaquismo || Se ancla en un factor común sin relación directa.
+- representativeness_heuristic | Exposición a tuberculosis || La cavidad la sugiere, pero el esputo fétido y la aspiración apuntan a anaerobios.
+- premature_closure | Neumonía viral previa || Concluye otra causa sin datos.
+- base_rate_fallacy | Fibrosis quística no diagnosticada || Es improbable en un adulto de esta edad.
+- framing_effect | Exposición a palomas || Suena a infección respiratoria, pero es otra entidad.
+- inattentional_blindness | Diabetes no diagnosticada || No considera el antecedente de intoxicación.
+- focusing_illusion | Contaminación ambiental de la ciudad || Se centra en un factor general.
+- belief_bias | Desnutrición como causa única || Cree que la desnutrición explica el absceso por sí sola.
+E: El absceso pulmonar es una cavidad necrótica con pus en el parénquima, causada con mayor frecuencia por aspiración de flora orofaríngea anaerobia y estreptococos. Los factores de riesgo son la alteración del estado de conciencia por alcohol, fármacos, crisis convulsivas o anestesia, los trastornos de la deglución y la mala higiene dental. Se localiza en segmentos dependientes, como el posterior del lóbulo superior y el superior del lóbulo inferior, sobre todo del lado derecho. Se presenta con fiebre, tos con esputo fétido y cavidad con nivel hidroaéreo. Se trata con clindamicina o ampicilina con sulbactam por varias semanas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la neumonía adquirida en la comunidad en adultos
+
+@ mi|pulmonology|pulmonary_embolism|3|diagnosis
+V: Mujer de 34 años que toma anticonceptivos orales y regresó de un vuelo de 14 horas. Presenta disnea súbita, dolor pleurítico y taquicardia de 118 lpm. Saturación de 90%. Pantorrilla izquierda con edema y dolor.
+P: ¿Cuál es el diagnóstico más probable?
++ Tromboembolia pulmonar || Disnea súbita, taquicardia, hipoxemia y datos de trombosis venosa profunda con factores de riesgo.
+- availability_heuristic | Neumonía adquirida en la comunidad || Es frecuente, pero no hay fiebre ni tos productiva.
+- anchoring | Crisis de ansiedad por el viaje || Se ancla en el estrés del viaje y pasa por alto la hipoxemia.
+- representativeness_heuristic | Neumotórax espontáneo || Da disnea súbita y dolor, pero no edema de pantorrilla.
+- premature_closure | Crisis asmática || Concluye una causa respiratoria sin sibilancias.
+- base_rate_fallacy | Síndrome coronario agudo || Es menos probable en una mujer joven sin factores coronarios.
+- framing_effect | Pericarditis aguda || El dolor pleurítico confunde, pero no explica la hipoxemia ni la pierna.
+- inattentional_blindness | Celulitis de la pierna || No relaciona la pierna con la disnea.
+- focusing_illusion | Deshidratación por el vuelo || Se centra en el viaje.
+- belief_bias | Reacción alérgica a los anticonceptivos || Cree que los anticonceptivos causan alergia, cuando su riesgo es trombótico.
+E: La tromboembolia pulmonar se produce casi siempre por un trombo originado en las venas profundas de las piernas. Los factores de riesgo incluyen inmovilización prolongada, viajes largos, cirugía reciente, cáncer, embarazo y puerperio, anticonceptivos con estrógenos, trombofilias y antecedente de trombosis. Se manifiesta con disnea súbita, dolor pleurítico, taquicardia, hipoxemia, tos o hemoptisis y, en los casos graves, síncope o choque. La probabilidad clínica se estima con escalas como Wells o Ginebra. Con probabilidad alta se solicita angiotomografía pulmonar, y con probabilidad baja o intermedia primero el dímero D.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa
+
+@ mi|pulmonology|pulmonary_embolism|3|confirmatory_study
+V: Hombre de 56 años operado de rodilla hace 10 días. Presenta disnea súbita y taquicardia. Su probabilidad clínica por escala de Wells es alta. Presión arterial normal y función renal normal.
+P: ¿Cuál es el estudio de elección para confirmar el diagnóstico de tromboembolia pulmonar?
++ Angiotomografía pulmonar || Con probabilidad clínica alta se realiza directamente.
+- anchoring | Dímero D y decidir según el resultado || Se ancla en el dímero D, útil solo para descartar con probabilidad baja o intermedia.
+- availability_heuristic | Radiografía de tórax || Suele ser normal o inespecífica.
+- representativeness_heuristic | Electrocardiograma con patrón S1Q3T3 || Es poco sensible y no confirma.
+- complexity_bias | Angiografía pulmonar convencional de inicio || Es invasiva y fue sustituida por la tomografía.
+- framing_effect | Gasometría arterial con hipoxemia || La hipoxemia apoya, pero no confirma.
+- premature_closure | Ecocardiograma como prueba confirmatoria en el paciente estable || Muestra sobrecarga derecha, pero no confirma en el estable.
+- information_bias | Ultrasonido de ambas piernas antes que cualquier estudio de tórax || Puede apoyar, pero no es el estudio de elección.
+- belief_bias | Troponina como prueba diagnóstica || Cree que la troponina confirma la embolia.
+- base_rate_fallacy | Gammagrama ventilación perfusión como primera opción en todos || Se reserva para contraindicación al contraste o embarazo.
+E: En la sospecha de tromboembolia pulmonar en un paciente estable, la decisión se basa en la probabilidad clínica. Si es baja o intermedia, se mide el dímero D, y un valor normal descarta el diagnóstico. Si es alta o el dímero D es positivo, se realiza angiotomografía pulmonar, que es el estudio de elección porque es rápida, disponible y muestra los defectos de llenado. El gammagrama de ventilación y perfusión se usa con alergia al contraste, insuficiencia renal grave o embarazo. En el paciente inestable que no puede trasladarse, el ecocardiograma con disfunción del ventrículo derecho justifica el tratamiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa
+
+@ mi|pulmonology|pulmonary_embolism|3|treatment_of_choice
+V: Mujer de 45 años con tromboembolia pulmonar confirmada por angiotomografía. Está estable, presión arterial de 124/78 mmHg, sin disfunción del ventrículo derecho y con troponina normal. Función renal normal, sin cáncer ni embarazo.
+P: ¿Cuál es el tratamiento de elección?
++ Anticoagulación con un anticoagulante oral directo, como rivaroxabán o apixabán || Embolia de riesgo bajo sin contraindicaciones.
+- anchoring | Trombólisis sistémica con alteplasa || Se ancla en la embolia, pero se reserva para el paciente inestable.
+- complexity_bias | Embolectomía quirúrgica || Se reserva para inestabilidad con contraindicación a trombólisis.
+- availability_heuristic | Filtro de vena cava como tratamiento inicial || Solo si la anticoagulación está contraindicada.
+- representativeness_heuristic | Ácido acetilsalicílico como tratamiento || No es suficiente para tratar trombosis venosa.
+- framing_effect | Heparina no fraccionada indefinida por ser más segura || Suena segura, pero no es el tratamiento crónico de elección.
+- status_quo_bias | Observación sin tratamiento si no hay síntomas || Deja expuesta a la paciente a recurrencia.
+- premature_closure | Anticoagular solo 2 semanas || El mínimo habitual es de tres meses.
+- belief_bias | Medias de compresión como único tratamiento || Cree que la compresión trata la embolia.
+- omission_bias | Evitar anticoagulantes por miedo a sangrado || Sobreestima el riesgo en una paciente sin factores de sangrado.
+E: El tratamiento de la tromboembolia pulmonar se basa en la estratificación del riesgo. En pacientes hemodinámicamente estables sin disfunción del ventrículo derecho ni elevación de troponina, el tratamiento es la anticoagulación, y se prefieren los anticoagulantes orales directos, como rivaroxabán o apixabán, sobre la heparina seguida de antagonista de vitamina K, salvo en cáncer activo con ciertas condiciones, embarazo, síndrome antifosfolípido o insuficiencia renal grave. La duración mínima es de tres meses y se prolonga si el factor de riesgo persiste o no hay causa identificada. La trombólisis sistémica se reserva para el paciente con choque o hipotensión.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa
+
+@ mi|pulmonology|pulmonary_embolism|4|next_step
+V: Hombre de 60 años con tromboembolia pulmonar confirmada. Presión arterial de 76/50 mmHg pese a líquidos, frecuencia cardiaca de 132 lpm y ventrículo derecho dilatado en el ecocardiograma. Sin contraindicaciones para trombólisis.
+P: ¿Cuál es el siguiente paso?
++ Trombólisis sistémica con alteplasa más anticoagulación || Embolia de alto riesgo con choque.
+- anchoring | Solo anticoagulación con heparina de bajo peso molecular || Se ancla en el tratamiento estándar del estable.
+- availability_heuristic | Grandes cargas de líquidos hasta normalizar la presión || El exceso de volumen empeora el ventrículo derecho.
+- framing_effect | Anticoagulante oral directo para iniciar rápido || Lo rápido suena bien, pero no reperfunde en el choque.
+- premature_closure | Filtro de vena cava inferior como medida principal || No resuelve el émbolo actual.
+- complexity_bias | Trasplante pulmonar de urgencia || Medida inexistente en este escenario.
+- representativeness_heuristic | Nitroglicerina para mejorar el gasto || Empeora la hipotensión.
+- status_quo_bias | Esperar a ver si responde a vasopresores sin reperfusión || Retrasa el tratamiento que salva la vida.
+- belief_bias | Dobutamina como tratamiento definitivo || Cree que el apoyo inotrópico resuelve la obstrucción.
+- omission_bias | Evitar trombólisis por riesgo de sangrado || Sobreestima el riesgo frente a la mortalidad del choque.
+E: La tromboembolia pulmonar de alto riesgo se define por inestabilidad hemodinámica, como paro cardiaco, choque obstructivo con presión sistólica menor de 90 mmHg o necesidad de vasopresores, o hipotensión persistente. Su mortalidad es muy alta. El tratamiento es la reperfusión con trombólisis sistémica, de preferencia alteplasa, junto con anticoagulación con heparina no fraccionada. Si la trombólisis está contraindicada o fracasa, se realiza embolectomía quirúrgica o tratamiento dirigido por catéter. La reposición de líquidos debe ser cautelosa porque la sobrecarga del ventrículo derecho empeora el gasto. La norepinefrina es el vasopresor de elección.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa
+
+@ mi|pulmonology|pulmonary_embolism|2|prevention_screening
+V: Hombre de 70 años hospitalizado por neumonía, con movilidad reducida. Sin sangrado activo, plaquetas normales y función renal normal.
+P: ¿Cuál es la medida de prevención de tromboembolia venosa indicada?
++ Heparina de bajo peso molecular a dosis profiláctica, como enoxaparina 40 mg al día || Paciente médico hospitalizado con riesgo alto y sin contraindicaciones.
+- anchoring | Medias de compresión como única medida en todos || Se reservan para contraindicación de anticoagulantes.
+- availability_heuristic | Ácido acetilsalicílico diario || No es la profilaxis recomendada en pacientes médicos.
+- framing_effect | Dosis terapéutica de enoxaparina para mayor protección || Suena más seguro, pero aumenta el sangrado.
+- status_quo_bias | Sin profilaxis porque la estancia será corta || Subestima el riesgo.
+- representativeness_heuristic | Warfarina con meta de INR de 2 a 3 || Es tratamiento, no profilaxis hospitalaria.
+- complexity_bias | Filtro de vena cava profiláctico || No está indicado.
+- belief_bias | Hidratación abundante como medida suficiente || Cree que el líquido previene trombos.
+- premature_closure | Solicitar ultrasonido de piernas antes de decidir || El ultrasonido no sustituye la profilaxis.
+- omission_bias | Evitar anticoagular por su edad || La edad avanzada aumenta el riesgo trombótico.
+E: Los pacientes médicos hospitalizados con movilidad reducida y factores de riesgo, como edad avanzada, infección aguda, insuficiencia cardiaca o respiratoria, cáncer o antecedente de trombosis, tienen riesgo alto de enfermedad tromboembólica venosa. La escala de Padua ayuda a identificarlos. Si no hay contraindicación, se indica profilaxis farmacológica con heparina de bajo peso molecular, como enoxaparina 40 mg subcutánea al día, heparina no fraccionada o fondaparinux. Si hay sangrado activo o riesgo hemorrágico alto, se usan métodos mecánicos, como la compresión neumática intermitente. La profilaxis se mantiene mientras persista el riesgo durante la hospitalización.
+R: Guía de Práctica Clínica de prevención de la enfermedad tromboembólica venosa en el paciente hospitalizado
