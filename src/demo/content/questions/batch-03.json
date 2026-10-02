@@ -87,12 +87,12 @@
           "key": "j",
           "text": "Estatina solo si el LDL supera 190 mg/dL",
           "correct": false,
-          "bias": "framing_effect",
-          "rationale": "Aplica un umbral de prevención primaria a un paciente de muy alto riesgo."
+          "bias": "representativeness_heuristic",
+          "rationale": "Aplica el umbral clásico de prevención primaria a un paciente de muy alto riesgo después de un infarto."
         }
       ],
       "canonical": ["a", "b", "c", "e"],
-      "explanation": "En prevención secundaria, como después de un infarto, el riesgo cardiovascular es muy alto y se indica una estatina de alta intensidad, como atorvastatina de 40 a 80 mg o rosuvastatina de 20 a 40 mg, sin importar la cifra inicial de colesterol LDL. Se busca reducir el LDL al menos 50% y llevarlo por debajo de 55 a 70 mg/dL según el riesgo. Si no se alcanza la meta con la dosis máxima tolerada, se agrega ezetimiba y después un inhibidor de PCSK9. Los cambios en el estilo de vida acompañan al fármaco, pero no lo sustituyen. Los fibratos se consideran cuando los triglicéridos son muy altos.",
+      "explanation": "En prevención secundaria, como después de un infarto, el riesgo cardiovascular es muy alto y se indica una estatina de alta intensidad, como atorvastatina de 40 a 80 mg o rosuvastatina de 20 a 40 mg, sin importar la cifra inicial de colesterol LDL. Se busca reducir el LDL al menos 50% y llevarlo por debajo de 55 mg/dL, porque después de un infarto el riesgo es muy alto. Si no se alcanza la meta con la dosis máxima tolerada, se agrega ezetimiba y después un inhibidor de PCSK9. Los cambios en el estilo de vida acompañan al fármaco, pero no lo sustituyen. Los fibratos se consideran cuando los triglicéridos son muy altos.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de las dislipidemias en el adulto"
       ]
@@ -324,8 +324,8 @@
           "key": "f",
           "text": "Portador inactivo",
           "correct": false,
-          "bias": "premature_closure",
-          "rationale": "Confunde el término con inmunidad, aunque implica antígeno de superficie positivo."
+          "bias": "framing_effect",
+          "rationale": "El término portador inactivo suena a infección resuelta o inmunidad, pero implica antígeno de superficie positivo, que aquí es negativo."
         },
         {
           "key": "g",
@@ -339,7 +339,7 @@
           "text": "Infección oculta",
           "correct": false,
           "bias": "ambiguity_effect",
-          "rationale": "Genera duda, pero requiere anticuerpo central positivo y DNA viral detectable."
+          "rationale": "Genera duda, pero se define por DNA viral detectable con antígeno de superficie negativo, casi siempre con anticuerpo central positivo, y aquí no hay ningún dato que la sugiera."
         },
         {
           "key": "i",
@@ -515,7 +515,7 @@
           "text": "Transfundir concentrados eritrocitarios",
           "correct": false,
           "bias": "availability_heuristic",
-          "rationale": "Es una medida común en pacientes graves, pero sin anemia no mejora la perfusión."
+          "rationale": "Es una medida común en pacientes graves, pero solo se indica con hemoglobina menor de 7 g/dL y no corrige la hipotensión que persiste después de los líquidos."
         },
         {
           "key": "i",
@@ -603,8 +603,8 @@
           "key": "h",
           "text": "Antibiótico de amplio espectro como único tratamiento",
           "correct": false,
-          "bias": "base_rate_fallacy",
-          "rationale": "Atribuye las citopenias a una infección común."
+          "bias": "inattentional_blindness",
+          "rationale": "Atribuye las citopenias a una infección y pasa por alto los promielocitos con bastones de Auer y la coagulopatía."
         },
         {
           "key": "i",
@@ -774,8 +774,8 @@
           "key": "g",
           "text": "Anticuerpos anti péptido cíclico citrulinado",
           "correct": false,
-          "bias": "clustering_illusion",
-          "rationale": "Une la artritis de manos con artritis reumatoide sin considerar el resto del cuadro."
+          "bias": "anchoring",
+          "rationale": "Se ancla en la artritis de manos y la relaciona con artritis reumatoide sin considerar el eritema malar, la nefritis y el complemento bajo."
         },
         {
           "key": "h",
@@ -870,8 +870,8 @@
           "key": "h",
           "text": "Naltrexona",
           "correct": false,
-          "bias": "premature_closure",
-          "rationale": "Es útil para mantener la abstinencia, no para tratar el síndrome agudo."
+          "bias": "availability_heuristic",
+          "rationale": "Es un fármaco conocido para el trastorno por consumo de alcohol, pero sirve para mantener la abstinencia, no para tratar el síndrome agudo."
         },
         {
           "key": "i",
@@ -884,8 +884,8 @@
           "key": "j",
           "text": "Fenitoína para prevenir convulsiones",
           "correct": false,
-          "bias": "status_quo_bias",
-          "rationale": "Es un anticonvulsivo habitual, pero no previene las convulsiones por abstinencia."
+          "bias": "belief_bias",
+          "rationale": "Suena lógico usar un anticonvulsivo habitual para prevenir convulsiones, pero la fenitoína no previene las convulsiones por abstinencia y las benzodiacepinas sí."
         }
       ],
       "canonical": ["a", "b", "c", "f"],
@@ -1006,7 +1006,7 @@
           "key": "b",
           "text": "Hidroclorotiazida como único fármaco",
           "correct": false,
-          "bias": "status_quo_bias",
+          "bias": "availability_heuristic",
           "rationale": "Es un antihipertensivo de uso común, pero no protege el riñón como los bloqueadores del sistema renina angiotensina."
         },
         {
@@ -1020,8 +1020,8 @@
           "key": "d",
           "text": "Atenolol",
           "correct": false,
-          "bias": "availability_heuristic",
-          "rationale": "Es un antihipertensivo conocido, pero no es de primera elección sin una indicación específica."
+          "bias": "belief_bias",
+          "rationale": "Se cree que cualquier antihipertensivo protege igual, pero el atenolol no es de primera elección sin una indicación específica."
         },
         {
           "key": "e",
@@ -1354,7 +1354,7 @@
       "options": [
         {
           "key": "a",
-          "text": "Orquidopexia, idealmente antes de los 18 meses",
+          "text": "Orquidopexia, idealmente entre los 6 y 12 meses y a más tardar a los 18 meses",
           "correct": true,
           "rationale": "Mejora la fertilidad y facilita la vigilancia del cáncer testicular."
         },
@@ -1423,7 +1423,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "f"],
-      "explanation": "La criptorquidia es la falta de descenso testicular y es más frecuente en prematuros. Muchos testículos descienden solos en los primeros 6 meses, pero después es poco probable. Si el testículo es palpable, el diagnóstico es clínico y no se requiere ultrasonido. El tratamiento es la orquidopexia, que se recomienda a partir de los 6 meses y antes de los 18 meses, porque la cirugía temprana mejora la fertilidad y facilita la detección del cáncer testicular, cuyo riesgo aumenta. El tratamiento hormonal tiene baja eficacia. Si el testículo no es palpable, se realiza laparoscopia. El testículo retráctil desciende con maniobras y solo requiere vigilancia.",
+      "explanation": "La criptorquidia es la falta de descenso testicular y es más frecuente en prematuros. Muchos testículos descienden solos en los primeros 6 meses, pero después es poco probable. Si el testículo es palpable, el diagnóstico es clínico y no se requiere ultrasonido. El tratamiento es la orquidopexia, que se recomienda entre los 6 y 12 meses y a más tardar a los 18 meses, porque la cirugía temprana mejora la fertilidad y facilita la detección del cáncer testicular, cuyo riesgo aumenta. El tratamiento hormonal tiene baja eficacia. Si el testículo no es palpable, se realiza laparoscopia. El testículo retráctil desciende con maniobras y solo requiere vigilancia.",
       "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento de la criptorquidia"]
     },
     {
@@ -1498,8 +1498,8 @@
           "key": "i",
           "text": "Evitar refrescos y jugos azucarados",
           "correct": false,
-          "bias": "ambiguity_effect",
-          "rationale": "Genera duda si es una indicación real, pero estas bebidas empeoran la diarrea por su osmolaridad."
+          "bias": "belief_bias",
+          "rationale": "Se cree que los jugos y refrescos hidratan, pero su alta osmolaridad empeora la diarrea, por lo que evitarlos sí es una indicación."
         },
         {
           "key": "j",
@@ -1522,7 +1522,7 @@
       "branch": "pediatrics",
       "topic": "pediatric_infectious",
       "subtopic": "exanthematous_diseases",
-      "vignette": "Niño de 6 años con fiebre de 39 °C, odinofagia y vómito desde ayer. Hoy aparece un exantema eritematoso, áspero al tacto como lija, que inició en el cuello y se extendió al tronco, más intenso en los pliegues. Tiene lengua en fresa, palidez alrededor de la boca y amígdalas con exudado.",
+      "vignette": "Niño de 6 años con fiebre de 39 °C, odinofagia y vómito desde ayer. Hoy aparece un exantema eritematoso, áspero al tacto como lija, que inició en el cuello y se extendió al tronco, más intenso en los pliegues. Tiene lengua en fresa, palidez alrededor de la boca y amígdalas con exudado. No ha recibido medicamentos. Frecuencia cardiaca de 110 por minuto y presión arterial normal para su edad, con buen estado de alerta.",
       "prompt": "¿Cuál es el diagnóstico más probable?",
       "polarity": "affirmative",
       "task": "diagnosis",
@@ -1689,7 +1689,10 @@
       ],
       "canonical": ["a", "b", "c", "d"],
       "explanation": "El esquema nacional de vacunación de México inicia al nacimiento con BCG y hepatitis B. A los 2 meses se aplican la vacuna hexavalente, que protege contra difteria, tos ferina, tétanos, poliomielitis, Haemophilus influenzae tipo b y hepatitis B, la neumocócica conjugada y la vacuna contra rotavirus. La hexavalente se repite a los 4, 6 y 18 meses, la de rotavirus a los 4 meses y, según la vacuna, a los 6 meses, y la neumocócica a los 4 y 12 meses. La influenza se aplica a partir de los 6 meses y la triple viral al año y a los 18 meses. Las dosis atrasadas se aplican sin reiniciar el esquema.",
-      "gpcRefs": ["Lineamientos del esquema nacional de vacunación"]
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la aplicación de vacunas, toxoides, faboterápicos e inmunoglobulinas en el humano",
+        "Lineamientos generales del Programa de Vacunación Universal"
+      ]
     },
     {
       "key": "b3-q20",
@@ -1770,8 +1773,8 @@
           "key": "j",
           "text": "Pérdida auditiva permanente",
           "correct": false,
-          "bias": "ambiguity_effect",
-          "rationale": "Es una secuela rara y genera duda, pero no es la más importante."
+          "bias": "complexity_bias",
+          "rationale": "Elige una secuela rara y llamativa, aunque la complicación más importante y frecuente es la coronaria."
         }
       ],
       "canonical": ["a", "b", "c", "e"],
@@ -1884,27 +1887,27 @@
       "options": [
         {
           "key": "a",
-          "text": "No camina solo a los 11 meses",
+          "text": "Ausencia de marcha independiente a los 11 meses",
           "correct": true,
           "rationale": "La marcha independiente puede aparecer hasta los 15 a 18 meses."
         },
         {
           "key": "b",
-          "text": "No tiene sostén cefálico a los 4 meses",
+          "text": "Ausencia de sostén cefálico a los 4 meses",
           "correct": false,
           "bias": "belief_bias",
           "rationale": "Se cree que cada niño tiene su ritmo, aunque este retraso ya es significativo."
         },
         {
           "key": "c",
-          "text": "No se sienta sin apoyo a los 9 meses",
+          "text": "Ausencia de sedestación sin apoyo a los 9 meses",
           "correct": false,
           "bias": "framing_effect",
           "rationale": "Se percibe como un retraso leve, aunque ya es dato de alarma."
         },
         {
           "key": "d",
-          "text": "No dice ninguna palabra a los 16 meses",
+          "text": "Ausencia de palabras a los 16 meses",
           "correct": false,
           "bias": "omission_bias",
           "rationale": "Se espera a que hable solo y se retrasa la valoración."
@@ -1932,21 +1935,21 @@
         },
         {
           "key": "h",
-          "text": "No hay sonrisa social a los 3 meses",
+          "text": "Ausencia de sonrisa social a los 3 meses",
           "correct": false,
           "bias": "anchoring",
           "rationale": "Se ancla en el desarrollo motor y olvida el social."
         },
         {
           "key": "i",
-          "text": "No responde a su nombre a los 12 meses",
+          "text": "Falta de respuesta a su nombre a los 12 meses",
           "correct": false,
           "bias": "focusing_illusion",
           "rationale": "Se fija en el lenguaje expresivo y olvida la respuesta social."
         },
         {
           "key": "j",
-          "text": "No balbucea a los 12 meses",
+          "text": "Ausencia de balbuceo a los 12 meses",
           "correct": false,
           "bias": "availability_heuristic",
           "rationale": "Se atribuye a que algunos niños hablan tarde."
@@ -2208,8 +2211,8 @@
           "key": "i",
           "text": "Haemophilus influenzae tipo b",
           "correct": false,
-          "bias": "inattentional_blindness",
-          "rationale": "Pasa por alto que es una bacteria que la vacunación volvió rara."
+          "bias": "base_rate_fallacy",
+          "rationale": "Es una bacteria que la vacunación volvió rara y no causa bronquiolitis."
         },
         {
           "key": "j",
@@ -2335,24 +2338,24 @@
         },
         {
           "key": "b",
-          "text": "Prueba de VIH solo si tiene factores de riesgo",
+          "text": "Biometría hemática, glucosa, examen general de orina con urocultivo, prueba de sífilis y Coombs indirecto, con prueba de VIH solo si tiene factores de riesgo",
           "correct": false,
           "bias": "halo_horn_effect",
           "rationale": "Decide por la imagen de la paciente. La prueba se ofrece a todas las embarazadas."
         },
         {
           "key": "c",
-          "text": "Curva de tolerancia a la glucosa de 75 g en esta consulta en todas las pacientes",
+          "text": "Biometría hemática, urocultivo, pruebas de VIH y sífilis, y curva de tolerancia a la glucosa de 75 g en esta consulta",
           "correct": false,
-          "bias": "serial_position_effect",
-          "rationale": "Confunde el momento. Sin factores de riesgo se realiza entre las semanas 24 y 28."
+          "bias": "belief_bias",
+          "rationale": "Suena lógico detectar la diabetes lo antes posible, pero sin factores de riesgo la curva se realiza entre las semanas 24 y 28."
         },
         {
           "key": "d",
-          "text": "Perfil TORCH completo de rutina",
+          "text": "Biometría hemática, glucosa, examen general de orina y perfil TORCH, sin pruebas de VIH ni sífilis",
           "correct": false,
           "bias": "information_bias",
-          "rationale": "Agrega estudios que no cambian el manejo en una paciente sin datos que lo sugieran."
+          "rationale": "Agrega un perfil que no cambia el manejo en una paciente sin datos que lo sugieran y omite las pruebas de VIH y sífilis."
         },
         {
           "key": "e",
@@ -2391,7 +2394,7 @@
         },
         {
           "key": "j",
-          "text": "Prueba de sífilis solo en el tercer trimestre",
+          "text": "Biometría hemática, glucosa, examen general de orina con urocultivo, prueba de VIH y Coombs indirecto, y la de sífilis hasta el tercer trimestre",
           "correct": false,
           "bias": "premature_closure",
           "rationale": "Deja para después una prueba que se hace desde la primera consulta y se repite."
@@ -2424,14 +2427,14 @@
         },
         {
           "key": "b",
-          "text": "Aplicarla solo después del parto",
+          "text": "Aplicar inmunoglobulina anti D solo después del parto",
           "correct": false,
           "bias": "premature_closure",
           "rationale": "Olvida la dosis prenatal, que reduce la sensibilización en el tercer trimestre."
         },
         {
           "key": "c",
-          "text": "No aplicarla porque es su primer embarazo",
+          "text": "No aplicar inmunoglobulina anti D porque es su primer embarazo",
           "correct": false,
           "bias": "belief_bias",
           "rationale": "Se cree que en el primer embarazo no hay riesgo, aunque la profilaxis protege los embarazos siguientes."
@@ -2452,7 +2455,7 @@
         },
         {
           "key": "f",
-          "text": "Aplicarla solo si el Coombs indirecto es positivo",
+          "text": "Aplicar inmunoglobulina anti D solo si el Coombs indirecto es positivo",
           "correct": false,
           "bias": "framing_effect",
           "rationale": "Confunde a la paciente sensibilizada, en la que la profilaxis ya no sirve, con la no sensibilizada."
@@ -2473,7 +2476,7 @@
         },
         {
           "key": "i",
-          "text": "No aplicarla porque la pareja podría ser heterocigota",
+          "text": "No aplicar inmunoglobulina anti D porque la pareja podría ser heterocigota",
           "correct": false,
           "bias": "ambiguity_effect",
           "rationale": "La duda sobre el genotipo de la pareja no elimina el riesgo."
@@ -2782,8 +2785,8 @@
           "key": "b",
           "text": "Embarazo ectópico previo",
           "correct": false,
-          "bias": "premature_closure",
-          "rationale": "Se olvida que es el factor de mayor riesgo."
+          "bias": "availability_heuristic",
+          "rationale": "Al buscar factores poco conocidos, se descarta el antecedente más obvio y de mayor riesgo."
         },
         {
           "key": "c",
@@ -2825,7 +2828,7 @@
           "text": "Salpingoclasia previa",
           "correct": false,
           "bias": "representativeness_heuristic",
-          "rationale": "Se piensa que la esterilización elimina el riesgo, aunque si falla el embarazo suele ser ectópico."
+          "rationale": "Se piensa que la esterilización elimina el riesgo, aunque si falla, la proporción de embarazos ectópicos es mucho mayor que en la población general."
         },
         {
           "key": "i",
@@ -2838,8 +2841,8 @@
           "key": "j",
           "text": "Infección previa por Chlamydia trachomatis",
           "correct": false,
-          "bias": "serial_position_effect",
-          "rationale": "Se recuerda la enfermedad pélvica y se olvida la infección que la causa."
+          "bias": "focusing_illusion",
+          "rationale": "Se fija en la enfermedad pélvica inflamatoria y no reconoce que la infección por clamidia daña la trompa aun sin enfermedad pélvica clínica."
         }
       ],
       "canonical": ["a", "b", "c", "e"],
@@ -2956,10 +2959,10 @@
         },
         {
           "key": "b",
-          "text": "Repetir la citología varias veces, porque después de un resultado anormal el siguiente debe salir normal",
+          "text": "Repetir la citología en 6 meses y referir a colposcopia solo si vuelve a salir anormal",
           "correct": false,
           "bias": "gamblers_fallacy",
-          "rationale": "Supone que un resultado anormal se compensa con uno normal, aunque cada estudio es independiente."
+          "rationale": "Espera que la siguiente citología salga normal, como si un resultado anormal hiciera más probable uno normal después, y retrasa la colposcopia que indica la norma."
         },
         {
           "key": "c",
@@ -3045,10 +3048,10 @@
         },
         {
           "key": "b",
-          "text": "Seguir intentando sin tratamiento, porque después de tantos ciclos sin embarazo ya es más probable que ocurra",
+          "text": "Continuar con coito programado sin fármacos durante 6 meses más",
           "correct": false,
           "bias": "gamblers_fallacy",
-          "rationale": "Supone que los ciclos sin embarazo hacen más probable el siguiente, aunque cada ciclo anovulatorio es independiente."
+          "rationale": "Supone que tras tantos ciclos sin embarazo ya toca que ocurra, aunque con ciclos anovulatorios la probabilidad por ciclo no aumenta con el tiempo."
         },
         {
           "key": "c",
@@ -3232,8 +3235,8 @@
           "key": "c",
           "text": "Plaquetas menores de 100,000/µL",
           "correct": false,
-          "bias": "complexity_bias",
-          "rationale": "Parece un dato hematológico aparte, aunque es criterio de severidad."
+          "bias": "focusing_illusion",
+          "rationale": "Se fija en la presión y los síntomas y olvida que la trombocitopenia también es criterio de severidad."
         },
         {
           "key": "d",
@@ -3281,8 +3284,8 @@
           "key": "j",
           "text": "Deshidrogenasa láctica mayor de 600 UI/L por hemólisis",
           "correct": false,
-          "bias": "information_bias",
-          "rationale": "Parece un laboratorio de más, aunque indica hemólisis."
+          "bias": "inattentional_blindness",
+          "rationale": "Se pasa por alto que la hemólisis forma parte del síndrome HELLP, una forma grave de preeclampsia."
         }
       ],
       "canonical": ["a", "b", "c", "g"],
@@ -3306,7 +3309,7 @@
       "options": [
         {
           "key": "a",
-          "text": "Pedir ayuda, masaje uterino bimanual, oxitocina intravenosa y reposición de volumen por dos accesos venosos",
+          "text": "Pedir ayuda, masaje uterino, oxitocina intravenosa y reposición de volumen por dos accesos venosos",
           "correct": true,
           "rationale": "Atiende la atonía uterina y el choque de forma simultánea."
         },
@@ -3340,10 +3343,10 @@
         },
         {
           "key": "f",
-          "text": "Solo líquidos intravenosos",
+          "text": "Pedir ayuda, dos accesos venosos con cristaloides y vigilar el sangrado antes de dar uterotónicos",
           "correct": false,
           "bias": "premature_closure",
-          "rationale": "Repone volumen, pero no trata la causa del sangrado."
+          "rationale": "Repone volumen, pero retrasa el uterotónico que trata la causa del sangrado."
         },
         {
           "key": "g",
@@ -3361,10 +3364,10 @@
         },
         {
           "key": "i",
-          "text": "Ácido tranexámico como única medida",
+          "text": "Ácido tranexámico y líquidos intravenosos, sin uterotónicos",
           "correct": false,
           "bias": "focusing_illusion",
-          "rationale": "Se fija en la coagulación y no trata la atonía."
+          "rationale": "Se fija en la coagulación y el volumen y no trata la atonía."
         },
         {
           "key": "j",
@@ -3375,7 +3378,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "d"],
-      "explanation": "La hemorragia posparto se define por una pérdida de 500 mL o más después de un parto vaginal o de 1,000 mL o más después de una cesárea, o por cualquier sangrado con inestabilidad hemodinámica. La causa más frecuente es la atonía uterina, que se sospecha con un útero blando y por arriba de la cicatriz umbilical. El manejo inicial es simultáneo, con pedir ayuda, dos accesos venosos, reposición de volumen, masaje uterino bimanual y uterotónicos, empezando por oxitocina. Se agrega ácido tranexámico en las primeras 3 horas y otros uterotónicos si no responde. Si persiste, se usa balón intrauterino y después cirugía, como suturas compresivas, ligaduras arteriales o histerectomía.",
+      "explanation": "La hemorragia posparto se define por una pérdida de 500 mL o más después de un parto vaginal o de 1,000 mL o más después de una cesárea, o por cualquier sangrado con inestabilidad hemodinámica. La causa más frecuente es la atonía uterina, que se sospecha con un útero blando y por arriba de la cicatriz umbilical. El manejo inicial es simultáneo, con pedir ayuda, dos accesos venosos, reposición de volumen, masaje uterino, con compresión bimanual si no responde, y uterotónicos, empezando por oxitocina. Se agrega ácido tranexámico en las primeras 3 horas y otros uterotónicos si no responde. Si persiste, se usa balón intrauterino y después cirugía, como suturas compresivas, ligaduras arteriales o histerectomía.",
       "gpcRefs": ["Guía de Práctica Clínica de prevención y manejo de la hemorragia posparto"]
     },
     {
@@ -3490,8 +3493,8 @@
           "key": "b",
           "text": "Infección del sitio quirúrgico",
           "correct": false,
-          "bias": "premature_closure",
-          "rationale": "Se ve como una complicación aparte, aunque es el principal factor de riesgo."
+          "bias": "inattentional_blindness",
+          "rationale": "Se pasa por alto que la infección del sitio quirúrgico debilita la cicatrización de la aponeurosis y es el principal factor de riesgo."
         },
         {
           "key": "c",
@@ -3639,7 +3642,7 @@
           "rationale": "Se fija en el problema anal, pero corresponde a la fístula."
         }
       ],
-      "canonical": ["a", "b", "c", "d"],
+      "canonical": ["a", "b", "c", "e"],
       "explanation": "La enfermedad hemorroidal se clasifica en grados. En el grado I hay sangrado sin prolapso, en el II el prolapso se reduce solo, en el III requiere reducción manual y en el IV es irreductible. El tratamiento inicial en todos los grados incluye fibra, líquidos y evitar el pujo. Si persisten los síntomas en los grados I a III, el tratamiento de elección es la ligadura con banda elástica en el consultorio, que es eficaz y segura. La hemorroidectomía se reserva para el grado III o IV o la falla de los procedimientos en el consultorio. Antes de atribuir el sangrado a hemorroides se descarta cáncer colorrectal según la edad y los factores de riesgo.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad hemorroidal"
@@ -3669,7 +3672,7 @@
           "text": "Esfinterotomía lateral interna como primer paso",
           "correct": false,
           "bias": "complexity_bias",
-          "rationale": "Es eficaz, pero se reserva para cuando falla el tratamiento farmacológico."
+          "rationale": "Es el tratamiento más eficaz, pero por el riesgo de incontinencia se suele reservar para la falla del tratamiento farmacológico."
         },
         {
           "key": "c",
@@ -3798,7 +3801,7 @@
           "text": "Anticoagulación",
           "correct": false,
           "bias": "focusing_illusion",
-          "rationale": "Se fija en el trombo mural, que no requiere anticoagulación."
+          "rationale": "Supone que el trombo mural que suele acompañar al aneurisma requiere anticoagulación, pero no la requiere ni evita la rotura."
         },
         {
           "key": "i",
@@ -3990,7 +3993,7 @@
           "text": "Solución glucosada al 5% en bolo",
           "correct": false,
           "bias": "availability_heuristic",
-          "rationale": "Es una solución de uso común, pero no expande el volumen intravascular."
+          "rationale": "Es una solución de uso común, pero se distribuye en el agua corporal total y expande muy poco el volumen intravascular."
         }
       ],
       "canonical": ["a", "b", "e", "g"],
@@ -4082,7 +4085,7 @@
           "rationale": "Se cree que ayuda a ver el apéndice, pero puede causar perforación."
         }
       ],
-      "canonical": ["a", "b", "c", "f"],
+      "canonical": ["a", "b", "c", "i"],
       "explanation": "La apendicitis complicada con absceso periapendicular se presenta después de varios días de evolución, con fiebre, dolor y masa en la fosa iliaca derecha. En pacientes estables y sin peritonitis generalizada, el manejo inicial es no quirúrgico, con antibiótico intravenoso y drenaje percutáneo guiado por imagen si el absceso es mayor de 3 a 4 cm y accesible. Los abscesos pequeños pueden responder solo al antibiótico. Si hay peritonitis generalizada, inestabilidad o falla del manejo, se opera. La apendicectomía de intervalo no es obligatoria en todos los casos. En mayores de 40 años se recomienda colonoscopia o tomografía de control para descartar una neoplasia.",
       "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento de la apendicitis aguda"]
     },
