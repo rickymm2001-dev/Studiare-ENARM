@@ -4,8 +4,8 @@
 
 - Fase 0 aprobada por Ricardo el 2026-10-01
 - Fase A en curso desde el 2026-10-01. Ricardo la aprobó y pidió ejecutar solo la Fase A y detenerse al terminar
-- Bloque terminado más reciente. Bloque 1 (herramientas)
-- Siguiente paso. Bloque 2 (Tailwind, tokens, navegación y las 26 rutas)
+- Bloque terminado más reciente. Bloque 2 (interfaz base y 26 rutas)
+- Siguiente paso. Bloque 3 (esquemas, Dexie, repositorios y bitácora)
 
 ## Fase A. Esqueleto, datos y proxy
 
@@ -16,7 +16,7 @@
 
 ### Bloques
 - [x] 1. git, Vite con React y TypeScript estricto, ESLint, Prettier, Vitest y Playwright, scripts de 5.2
-- [ ] 2. Tailwind con tokens, modo claro y oscuro, componentes base, navegación inferior y 26 rutas con sus estados
+- [x] 2. Tailwind con tokens, modo claro y oscuro, componentes base, navegación inferior y 26 rutas con sus estados
 - [ ] 3. Esquemas zod, Dexie para enarm_real y enarm_demo, repositorios, bitácora de solo agregar y derivación
 - [ ] 4. PWA instalable con modo sin conexión básico
 - [ ] 5. Proxy Hono con /health, modo simulado y lectura de server/.env.local
@@ -25,6 +25,7 @@
 
 ### Bitácora por bloque
 - Bloque 1. Versiones verificadas con npm view, iguales a D-020. Dependencias nuevas en D-032. Chromium de Playwright dentro del proyecto (D-033). Tres proyectos de TypeScript (D-034). typecheck, lint, 1 prueba unitaria y 1 prueba e2e en teléfono y escritorio pasan. eval-ai, demo-seed y demo-reset existen como marcadores que fallan con un aviso de la fase en que llegan
+- Bloque 2. Tokens en src/ui/tokens.css (D-037), claro, oscuro y según el sistema, con selector en Perfil que se recuerda. Componentes base al estilo shadcn sobre Radix (botón, tarjeta, etiqueta, opciones y barra de progreso), etiquetas Demostración y Datos simulados. Navegación inferior de 5 secciones que en escritorio pasa a riel lateral. Registro de las 26 pantallas con rutas en español (D-035). Estados vacío, cargando, error, sin conexión y calibrando con cuánto falta, visibles en cada esqueleto con ?estado=. Áreas de médico y admin con carga diferida. Foco al título al navegar y salto al contenido. 4 pruebas unitarias y 60 e2e (26 rutas, navegación, estados, tema y ruta desconocida, cada una en teléfono y escritorio, con axe sin violaciones serias)
 
 ## Fase 0. Entrevista, entorno y plan
 

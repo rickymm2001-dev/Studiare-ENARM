@@ -5,6 +5,7 @@ const PREVIEW_URL = 'http://127.0.0.1:4173';
 // Los navegadores viven dentro del proyecto (PLAYWRIGHT_BROWSERS_PATH=0). Ver scripts/playwright.ts
 export default defineConfig({
   testDir: './tests/e2e',
+  tsconfig: './tsconfig.tests.json',
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,

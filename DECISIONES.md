@@ -261,3 +261,20 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Fecha 2026-10-01. Origen C
 - tsconfig.app.json para src (navegador, sin tipos de Node), tsconfig.node.json para server, scripts y configuración de Vite (Node con su soporte nativo de TypeScript) y tsconfig.tests.json para tests y Playwright
 - TypeScript 6 cambió valores por defecto (strict activo, types vacío, rootDir). Cada proyecto declara sus types de forma explícita
+
+### D-035. Rutas visibles en español
+- Fecha 2026-10-01. Origen C
+- Las direcciones que ve el alumno van en español (por ejemplo /repasar, /simular/examen y /medico/banco) porque son parte de la interfaz. Las claves y los nombres en el código siguen en inglés (por ejemplo la pantalla review vive en /repasar)
+- El registro de las 26 pantallas con su ruta, área y fase vive en src/app/screens.ts
+
+### D-036. Preferencias del dispositivo en localStorage
+- Fecha 2026-10-01. Origen C
+- Tema visual, rol activo y base activa (real o demo) se guardan en localStorage, validados con zod al leer y con valores por defecto si algo falla
+- Motivo. Hacen falta antes de abrir IndexedDB, son de este dispositivo y no son datos del alumno. Los datos del alumno viven solo en IndexedDB
+
+### D-037. Paleta y tokens
+- Fecha 2026-10-01. Origen C, cambia con una palabra
+- Tokens en src/ui/tokens.css. Fondo hueso, superficies blancas y un azul petróleo como color principal. En oscuro, fondo grafito y azul petróleo claro
+- Se borran los colores por defecto de Tailwind para que toda la interfaz use la paleta
+- Ámbar para Demostración y violeta para Datos simulados, siempre con texto e ícono, nunca solo color
+- Tipografía del sistema, sin fuentes web, para cargar rápido y funcionar sin conexión

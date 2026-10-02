@@ -1,0 +1,40 @@
+// Fixtures compartidas de las pruebas de punta a punta.
+// Cada prueba falla si la página escribe errores en la consola o lanza excepciones.
+import AxeBuilder from '@axe-core/playwright';
+import { test as base, expect, type Page } from '@playwright/test';
+
+export const test = base.extend<{ consoleErrors: string[] }>({
+  consoleErrors: [
+    async ({ page }, use) => {
+      const errors: string[] = [];
+      page.on('console', (message) => {
+        if (message.type() === 'error') errors.push(message.text());
+      });
+      page.on('pageerror', (error) => {
+        errors.push(error.message);
+      });
+      await use(errors);
+      expect(errors, 'errores en la consola del navegador').toEqual([]);
+    },
+    { auto: true },
+  ],
+});
+
+export { expect };
+
+/** Cero violaciones serias o críticas de accesibilidad (14.1) */
+export async function expectNoSeriousA11yViolations(page: Page): Promise<void> {
+  const results = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+    .analyze();
+  const serious = results.violations.filter(
+    (violation) => violation.impact === 'serious' || violation.impact === 'critical',
+  );
+  expect(
+    serious.map(
+      (violation) =>
+        `${violation.id}: ${violation.nodes.map((node) => node.target.join(' ')).join(', ')}`,
+    ),
+    'violaciones serias o críticas de axe',
+  ).toEqual([]);
+}

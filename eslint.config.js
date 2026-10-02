@@ -87,6 +87,12 @@ export default defineConfig([
     },
   },
 
+  // El router es configuración, no un módulo de componentes con recarga en caliente
+  {
+    files: ['src/app/router.tsx'],
+    rules: { 'react-refresh/only-export-components': 'off' },
+  },
+
   // Las pantallas y la app no tocan Dexie directo, solo repositorios y hooks (PLAN.md 2.1)
   {
     files: ['src/app/**/*.{ts,tsx}', 'src/features/**/*.{ts,tsx}', 'src/ui/**/*.{ts,tsx}'],
