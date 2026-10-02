@@ -410,3 +410,10 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - GitHub Pages no sabe de rutas de una app de una sola página. Se copia index.html a 404.html para que un enlace directo como /perfil abra la app. Esa primera carga responde con código 404, sin efecto para quien la usa
 - Ricardo todavía no tiene dominio propio. Cuando lo compre se agrega en Settings, Pages, Custom domain, y el siguiente push ya usa la base /
 - Probado en Chromium sirviendo el build bajo /Studiare-ENARM/. Abre el inicio y /perfil directo, la navegación conserva la base, el service worker queda con alcance /Studiare-ENARM/, Chromium la marca instalable y la etiqueta dice IA simulada
+
+### D-051. Logo de Studiare en el encabezado
+- Fecha 2026-10-02. Origen R
+- Ricardo compartió el logo de Studiare y pidió ponerlo en la página. Va en el encabezado en lugar del texto del nombre, como enlace al inicio
+- Se usa sin el lema "Impulsamos tu aprendizaje", porque a la altura del encabezado (32 px) sería ilegible
+- Dos versiones en src/assets/brand. La original para modo claro y otra con las letras en blanco para modo oscuro, porque el azul marino no se lee sobre fondo oscuro
+- El nombre de la app (BRAND.name en src/config/brand.ts), el título de la pestaña, el manifest y los íconos de la PWA siguen provisionales (D-016) hasta que Ricardo confirme el cambio

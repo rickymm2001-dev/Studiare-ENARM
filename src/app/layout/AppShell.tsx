@@ -3,6 +3,8 @@ import { FlaskConical, WifiOff } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { Link, Outlet, useLocation } from 'react-router';
 import { AiModeBadge } from '@/ai/AiModeBadge';
+import logoDarkUrl from '@/assets/brand/studiare-logo-dark.png';
+import logoUrl from '@/assets/brand/studiare-logo.png';
 import { useAiStatus } from '@/ai/useAiStatus';
 import { t } from '@/i18n/es-MX';
 import { useOnlineStatus } from '@/ui/hooks/use-online-status';
@@ -33,8 +35,22 @@ export function AppShell() {
 
       <header className="sticky top-0 z-10 border-b border-line bg-surface/95 backdrop-blur lg:pl-rail">
         <div className="mx-auto flex min-h-14 max-w-reading flex-wrap items-center gap-2 px-4 py-2">
-          <Link to={HOME_BY_ROLE[role]} className="mr-auto rounded-sm font-semibold text-fg">
-            {t.app.name}
+          <Link to={HOME_BY_ROLE[role]} className="mr-auto rounded-sm">
+            {/* Logo de Studiare. En modo oscuro se usa la versión con letras blancas */}
+            <img
+              src={logoUrl}
+              alt={t.app.logoAlt}
+              width={148}
+              height={32}
+              className="h-8 w-auto dark:hidden"
+            />
+            <img
+              src={logoDarkUrl}
+              alt={t.app.logoAlt}
+              width={148}
+              height={32}
+              className="hidden h-8 w-auto dark:block"
+            />
           </Link>
           <AiModeBadge status={aiStatus} />
         </div>
