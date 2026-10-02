@@ -8,11 +8,26 @@ import { BRAND } from './src/config/brand.ts';
 // Puerto local del proxy de IA. Debe coincidir con server/src/config.ts
 const PROXY_TARGET = 'http://127.0.0.1:8787';
 
+// Ruta donde vive la app publicada. En local y con dominio propio es /.
+// En GitHub Pages sin dominio propio es /Studiare-ENARM/. La pone el workflow de Pages (D-055)
+const BASE_PATH = normalizeBase(process.env.BASE_PATH);
+
+function normalizeBase(value: string | undefined): string {
+  const trimmed = (value ?? '').trim().replace(/^\/+|\/+$/g, '');
+  return trimmed === '' ? '/' : `/${trimmed}/`;
+}
+
+// Workbox copia los patrones al service worker como texto, así que van como RegExp ya armadas
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 const apiProxy = {
   '/api': { target: PROXY_TARGET, rewrite: (path: string) => path.replace(/^\/api/, '') },
 };
 
 export default defineConfig({
+  base: BASE_PATH,
   plugins: [
     react(),
     tailwindcss(),
@@ -21,16 +36,16 @@ export default defineConfig({
       registerType: 'prompt',
       // El registro lo hace src/app/layout/PwaUpdatePrompt.tsx con useRegisterSW
       injectRegister: false,
-      includeAssets: ['favicon.svg', 'apple-touch-icon-180x180.png'],
+      includeAssets: ['favicon-32x32.png', 'favicon-64x64.png', 'apple-touch-icon-180x180.png'],
       manifest: {
-        id: '/',
+        id: BASE_PATH,
         name: BRAND.name,
         short_name: BRAND.shortName,
         description: BRAND.description,
         lang: 'es-MX',
         dir: 'ltr',
-        start_url: '/',
-        scope: '/',
+        start_url: BASE_PATH,
+        scope: BASE_PATH,
         display: 'standalone',
         theme_color: BRAND.themeColor,
         background_color: BRAND.backgroundColor,
@@ -53,12 +68,12 @@ export default defineConfig({
         globIgnores: ['demo-media/**', 'assets/simulate.worker-*.js'],
         runtimeCaching: [
           {
-            urlPattern: ({ url }) => /^\/assets\/simulate\.worker-.*\.js$/.test(url.pathname),
+            urlPattern: new RegExp(`${escapeRegExp(BASE_PATH)}assets/simulate\\.worker-.*\\.js$`),
             handler: 'CacheFirst',
             options: { cacheName: 'simulate-worker', expiration: { maxEntries: 2 } },
           },
           {
-            urlPattern: ({ url }) => url.pathname.startsWith('/demo-media/'),
+            urlPattern: new RegExp(`${escapeRegExp(BASE_PATH)}demo-media/`),
             handler: 'CacheFirst',
             options: {
               cacheName: 'demo-media',
@@ -66,7 +81,7 @@ export default defineConfig({
             },
           },
         ],
-        navigateFallback: '/index.html',
+        navigateFallback: `${BASE_PATH}index.html`,
         // Las llamadas al proxy de IA nunca se sirven desde caché
         navigateFallbackDenylist: [/^\/api\//],
         cleanupOutdatedCaches: true,

@@ -55,52 +55,55 @@ export function ProfileScreen() {
     <>
       <ScreenHeader title={t.screens.profile.title} description={t.screens.profile.description} />
 
-      <Card>
-        <RadioCards
-          legend={t.database.legend}
-          description={t.database.description}
-          value={database}
-          options={DATABASE_OPTIONS}
-          onValueChange={setDatabase}
-        />
-        <DatabaseStatus />
-      </Card>
+      {/* En computadora las tarjetas van en dos columnas (D-057) */}
+      <div className="grid items-start gap-4 lg:grid-cols-2">
+        <Card>
+          <RadioCards
+            legend={t.database.legend}
+            description={t.database.description}
+            value={database}
+            options={DATABASE_OPTIONS}
+            onValueChange={setDatabase}
+          />
+          <DatabaseStatus />
+        </Card>
 
-      {database === 'demo' ? <DemoDataPanel /> : null}
+        {database === 'demo' ? <DemoDataPanel /> : null}
 
-      {session.status === 'ready' ? <AccountSettings session={session} /> : null}
+        {session.status === 'ready' ? <AccountSettings session={session} /> : null}
 
-      <Card aria-labelledby="rol-titulo">
-        <CardHeader>
-          <CardTitle id="rol-titulo">{t.roles.cardTitle}</CardTitle>
-          <CardDescription>{t.roles.current(t.roles.names[role])}</CardDescription>
-        </CardHeader>
-        <Button asChild variant="secondary" className="self-start">
-          <Link to={screenPath('roleSelector')}>
-            <ShieldCheck aria-hidden />
-            {t.roles.change}
-          </Link>
-        </Button>
-      </Card>
+        <Card aria-labelledby="rol-titulo">
+          <CardHeader>
+            <CardTitle id="rol-titulo">{t.roles.cardTitle}</CardTitle>
+            <CardDescription>{t.roles.current(t.roles.names[role])}</CardDescription>
+          </CardHeader>
+          <Button asChild variant="secondary" className="self-start">
+            <Link to={screenPath('roleSelector')}>
+              <ShieldCheck aria-hidden />
+              {t.roles.change}
+            </Link>
+          </Button>
+        </Card>
 
-      <Card>
-        <RadioCards
-          legend={t.theme.legend}
-          value={theme}
-          options={THEME_OPTIONS}
-          onValueChange={setTheme}
-        />
-      </Card>
+        <Card>
+          <RadioCards
+            legend={t.theme.legend}
+            value={theme}
+            options={THEME_OPTIONS}
+            onValueChange={setTheme}
+          />
+        </Card>
 
-      <Card aria-labelledby="ia-titulo">
-        <CardHeader>
-          <div className="flex flex-wrap items-center gap-2">
-            <CardTitle id="ia-titulo">{t.ai.cardTitle}</CardTitle>
-            <AiModeBadge status={aiStatus} />
-          </div>
-          <CardDescription>{t.ai.detail[aiStatus.kind]}</CardDescription>
-        </CardHeader>
-      </Card>
+        <Card aria-labelledby="ia-titulo">
+          <CardHeader>
+            <div className="flex flex-wrap items-center gap-2">
+              <CardTitle id="ia-titulo">{t.ai.cardTitle}</CardTitle>
+              <AiModeBadge status={aiStatus} />
+            </div>
+            <CardDescription>{t.ai.detail[aiStatus.kind]}</CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
     </>
   );
 }

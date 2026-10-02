@@ -175,4 +175,6 @@
   --spacing-nav: 4.25rem;
   --spacing-rail: 5.5rem;
   --container-reading: 44rem;
+  /* Ancho máximo del marco de la app en computadora. Los textos largos siguen en el ancho de lectura (D-057) */
+  --container-app: 88rem;
 }

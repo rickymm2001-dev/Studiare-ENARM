@@ -10,7 +10,11 @@
 - Pendiente de la Fase B. Cierre según 15.1, con el banco y los mazos pendientes para el final (D-050). Antes del cierre Ricardo decide el ajuste de sesgos (D-051) y si se prueba el cambio del método de fatiga. El lote 5 quedó a medias en content-drafts/b5, con Medicina interna (13) y Pediatría (12) validadas
 - Todo el trabajo se sube a GitHub con push frecuente y el CI corre npm run check en cada push a cualquier rama (D-050)
 - Trabajo desde GitHub listo (D-049). CI con npm run check en cada push, scripts de contenido en scripts/content y workflow de revisión en .claude/workflows
-- Repo remoto privado en https://github.com/rickymm2001-dev/Studiare-ENARM (antes enarm-prototipo, GitHub redirige el nombre viejo). El trabajo en la nube va a la rama main-y84jz2 (D-048, D-050)
+- Repo remoto en https://github.com/rickymm2001-dev/Studiare-ENARM, público por decisión de Ricardo (D-048 y D-055)
+- Demo publicada en GitHub Pages en https://rickymm2001-dev.github.io/Studiare-ENARM/ y se actualiza sola con cada push a main (D-055). Falta el dominio propio, que Ricardo todavía no compra
+- Logo de Studiare en el encabezado, en modo claro y oscuro (D-056)
+- Marco más ancho en computadora con tarjetas en dos columnas (D-057)
+- Ícono de la pestaña con el símbolo de Studiare (D-058)
 
 ## Fase C. Pantallas del alumno (esqueleto funcionando)
 

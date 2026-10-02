@@ -5,7 +5,9 @@ import { createCardSanitizer } from '@/data/content/cardHtml';
 import { cn } from '@/ui/cn';
 
 let sanitizer: ReturnType<typeof createCardSanitizer> | null = null;
-const keepLocal = (file: string) => (file.startsWith('/demo-media/') ? file : null);
+// En GitHub Pages la app vive bajo una ruta base, así que la imagen se sirve desde ahí
+const keepLocal = (file: string) =>
+  file.startsWith('/demo-media/') ? `${import.meta.env.BASE_URL}${file.slice(1)}` : null;
 
 export function CardHtml({ html, className }: { html: string; className?: string }) {
   const clean = useMemo(() => {

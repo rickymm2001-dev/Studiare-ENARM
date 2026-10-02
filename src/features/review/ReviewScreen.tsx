@@ -332,7 +332,10 @@ function ReviewSession({
         </span>
         <span aria-live="polite">{lastXp > 0 ? t.review.xpGained(lastXp) : ''}</span>
       </div>
-      <Card aria-label={t.review.deck(deckNames.get(card.deckId) ?? '')}>
+      <Card
+        aria-label={t.review.deck(deckNames.get(card.deckId) ?? '')}
+        className="w-full max-w-reading"
+      >
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <Badge variant={isNew ? 'info' : 'neutral'}>
             {isNew ? t.review.newCard : t.review.reviewCard}

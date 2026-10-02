@@ -133,6 +133,7 @@ export const t = {
   ...featureText,
   app: {
     name: BRAND.name,
+    logoAlt: 'Studiare, ir al inicio',
     skipToContent: 'Saltar al contenido',
     documentTitle: (screenTitle: string) => `${screenTitle} · ${BRAND.name}`,
   },

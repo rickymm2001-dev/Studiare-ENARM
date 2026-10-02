@@ -141,7 +141,8 @@ function FeedbackBody({
   };
 
   return (
-    <>
+    // Ancho de lectura para el texto clínico (D-057)
+    <div className="flex w-full max-w-reading flex-col gap-4">
       <Card aria-labelledby="resultado">
         <CardHeader>
           <CardTitle id="resultado" className="flex items-center gap-2">
@@ -278,6 +279,6 @@ function FeedbackBody({
       <Button className="self-start" onClick={next}>
         {isLast ? t.simulator.finish : t.simulator.next}
       </Button>
-    </>
+    </div>
   );
 }
