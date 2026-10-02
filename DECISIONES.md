@@ -424,3 +424,10 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - El encabezado y el contenido usan el nuevo ancho max-w-app de 88rem (unos 1,400 px) en lugar de 44rem. En el teléfono no cambia nada
 - Perfil acomoda sus 4 tarjetas en 2 columnas desde lg. El índice de pantallas del inicio pasa a 3 columnas
 - Los textos largos siguen en el ancho de lectura de 44rem para no cansar la vista, como la descripción de cada pantalla. Las pantallas de pregunta y retroalimentación de la Fase C deben usar ese ancho para el texto
+
+### D-053. Ícono de la pestaña con el símbolo de Studiare
+- Fecha 2026-10-02. Origen R
+- Ricardo pidió que la pestaña del navegador muestre el símbolo de play de Studiare
+- public/favicon-32x32.png y public/favicon-64x64.png salen del logo que compartió, solo el símbolo, centrado y sin fondo. Se probó sobre pestaña clara y oscura y se distingue en ambas
+- Se quitó public/favicon.svg con la E provisional. scripts/generate-icons.ts ya no lo genera
+- Los íconos de la PWA instalada (pwa-*, maskable y apple-touch-icon) y el nombre de la app siguen provisionales (D-016) hasta que Ricardo confirme el cambio

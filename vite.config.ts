@@ -31,7 +31,7 @@ export default defineConfig({
       registerType: 'prompt',
       // El registro lo hace src/app/layout/PwaUpdatePrompt.tsx con useRegisterSW
       injectRegister: false,
-      includeAssets: ['favicon.svg', 'apple-touch-icon-180x180.png'],
+      includeAssets: ['favicon-32x32.png', 'favicon-64x64.png', 'apple-touch-icon-180x180.png'],
       manifest: {
         id: BASE_PATH,
         name: BRAND.name,

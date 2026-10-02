@@ -12,6 +12,7 @@
 - Demo publicada en GitHub Pages en https://rickymm2001-dev.github.io/Studiare-ENARM/ y se actualiza sola con cada push a main (D-050). Falta el dominio propio, que Ricardo todavía no compra
 - Logo de Studiare en el encabezado, en modo claro y oscuro (D-051)
 - Marco más ancho en computadora con tarjetas en dos columnas (D-052)
+- Ícono de la pestaña con el símbolo de Studiare (D-053)
 
 ## Fase B. Motores núcleo, alumnos simulados y contenido demo
 
