@@ -4,7 +4,10 @@ import { cn } from '@/ui/cn';
 export function Card({ className, ...props }: ComponentProps<'section'>) {
   return (
     <section
-      className={cn('rounded-lg border border-line bg-surface p-4 shadow-card sm:p-5', className)}
+      className={cn(
+        'animate-rise rounded-xl border border-line/70 bg-surface p-4 shadow-card sm:p-5',
+        className,
+      )}
       {...props}
     />
   );

@@ -57,15 +57,13 @@ describe('rutas', () => {
     expect(nav).not.toHaveTextContent(t.navItems.review);
   });
 
-  it('un alumno no entra al área de admin y ve cómo cambiar de rol', async () => {
+  it('un alumno no entra al área de admin ni puede cambiarse de rol él mismo', async () => {
     renderAt(SCREENS.aiCosts.path);
     expect(
       await screen.findByRole('heading', { level: 1, name: t.access.adminTitle }),
     ).toBeVisible();
-    expect(screen.getByRole('link', { name: t.roles.change })).toHaveAttribute(
-      'href',
-      SCREENS.roleSelector.path,
-    );
+    expect(screen.getByText(t.access.description)).toBeVisible();
+    expect(screen.queryByRole('link', { name: t.roles.change })).toBeNull();
   });
 
   it('un médico no entra al área de admin', async () => {

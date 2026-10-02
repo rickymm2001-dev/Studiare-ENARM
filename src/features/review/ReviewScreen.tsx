@@ -23,7 +23,10 @@ import {
 } from '@/engines/fsrs';
 import { studyDayOf } from '@/engines/studyDay';
 import { awardXp } from '@/engines/xp';
+import { examDateFor } from '@/config/exam';
 import { t } from '@/i18n/es-MX';
+import { PomodoroNotice, PomodoroPill } from '../pomodoro/Pomodoro';
+import { celebrate } from '@/ui/celebrate';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -122,7 +125,7 @@ function ReviewSession({
   const config: SchedulerConfig = useMemo(
     () => ({
       desiredRetention: settings.desiredRetention,
-      examDate: user.examDate,
+      examDate: examDateFor(user),
       timeZone: user.timeZone,
       thresholds: {
         ...DEFAULT_THRESHOLDS.fsrs,
@@ -204,6 +207,7 @@ function ReviewSession({
         ),
       );
       sessionId.current = null;
+      celebrate('session');
     }
     setStep('done');
   };
@@ -280,11 +284,15 @@ function ReviewSession({
   };
 
   const header = (
-    <ScreenHeader
-      title={t.screens.review.title}
-      description={t.screens.review.description}
-      badges={session.isDemo ? <SimulatedDataLabel /> : undefined}
-    />
+    <>
+      <ScreenHeader
+        title={t.screens.review.title}
+        description={t.screens.review.description}
+        badges={session.isDemo ? <SimulatedDataLabel /> : undefined}
+        actions={<PomodoroPill session={session} autoStart={queue.length > 0} />}
+      />
+      <PomodoroNotice session={session} />
+    </>
   );
 
   if (step === 'done' || !card || !note) {

@@ -1,6 +1,7 @@
 /*
   Tokens de diseño. Único lugar donde viven colores, tipografía, radios y medidas (10.4, D-016).
-  Paleta sobria para sesiones largas, con contraste AA o mejor en claro y oscuro.
+  Paleta premium con color por rama y acento oro para el juego, con contraste AA o mejor en claro
+  y oscuro (D-061).
   El modo se elige así
   - Sin clase en <html>, manda la preferencia del sistema (primer pintado, antes de que cargue JS)
   - Con clase light o dark en <html>, manda la elección del alumno (src/ui/theme.ts)
@@ -9,108 +10,172 @@
 :root {
   color-scheme: light;
 
-  /* Superficies */
-  --enarm-canvas: #f6f6f3;
+  /* Superficies. Marfil cálido con tarjetas blancas, look premium y descansado */
+  --enarm-canvas: #f5f2ec;
   --enarm-surface: #ffffff;
-  --enarm-muted: #ecece7;
-  --enarm-line: #d3d3cb;
-  --enarm-line-strong: #8f9089;
+  --enarm-muted: #efebe3;
+  --enarm-line: #e0d9cc;
+  --enarm-line-strong: #9a9284;
 
-  /* Texto */
-  --enarm-fg: #1d2125;
-  --enarm-fg-muted: #535a63;
+  /* Texto en tinta azul profunda */
+  --enarm-fg: #14202b;
+  --enarm-fg-muted: #4f5b67;
 
-  /* Marca y acción principal */
-  --enarm-primary: #1f5f73;
-  --enarm-primary-hover: #184c5c;
+  /* Marca. Azul petróleo profundo */
+  --enarm-primary: #0e5a6b;
+  --enarm-primary-hover: #0a4755;
   --enarm-primary-fg: #ffffff;
-  --enarm-primary-soft: #e1edf0;
-  --enarm-focus: #1f5f73;
+  --enarm-primary-soft: #dcebee;
+  --enarm-focus: #0e5a6b;
+
+  /* Acento de juego. Oro para XP, niveles y logros */
+  --enarm-accent: #b7791f;
+  --enarm-accent-soft: #fbefd6;
+  --enarm-accent-fg: #ffffff;
+  /* Racha */
+  --enarm-streak: #e2541b;
+  --enarm-streak-soft: #fde4d8;
 
   /* Estados */
-  --enarm-success: #1e6b45;
-  --enarm-success-soft: #e2f1e8;
-  --enarm-warning: #7f5300;
-  --enarm-warning-soft: #fbf0d9;
-  --enarm-danger: #b42318;
-  --enarm-danger-soft: #fbe6e3;
+  --enarm-success: #1c7a4b;
+  --enarm-success-soft: #ddf3e6;
+  --enarm-warning: #8a5a00;
+  --enarm-warning-soft: #fcefd2;
+  --enarm-danger: #c0281d;
+  --enarm-danger-soft: #fde4e1;
   --enarm-danger-fg: #ffffff;
 
+  /* Color por rama. Fuerte para texto e íconos y suave para fondos */
+  --enarm-mi: #d94f2b;
+  --enarm-mi-soft: #fde5dc;
+  --enarm-ped: #0e8fa3;
+  --enarm-ped-soft: #d6f1f5;
+  --enarm-gyo: #b92b74;
+  --enarm-gyo-soft: #f9dfec;
+  --enarm-cir: #1f8a57;
+  --enarm-cir-soft: #dbf2e5;
+  --enarm-urg: #c27c0e;
+  --enarm-urg-soft: #fbeccf;
+
   /* Etiquetas obligatorias (4.6). Demostración en ámbar y Datos simulados en violeta */
-  --enarm-demo: #fbf0d9;
+  --enarm-demo: #fbefd6;
   --enarm-demo-fg: #6e4600;
   --enarm-demo-line: #e2bf73;
   --enarm-sim: #ece8fb;
   --enarm-sim-fg: #45358a;
   --enarm-sim-line: #b9acec;
 
-  /* Sombras discretas */
-  --enarm-shadow-card: 0 1px 2px rgb(29 33 37 / 0.06), 0 1px 1px rgb(29 33 37 / 0.04);
-  --enarm-shadow-nav: 0 -1px 0 rgb(29 33 37 / 0.08);
+  /* Sombras con un toque del color de marca */
+  --enarm-shadow-card: 0 1px 2px rgb(20 32 43 / 0.05), 0 8px 24px -12px rgb(14 90 107 / 0.18);
+  --enarm-shadow-raised: 0 12px 32px -12px rgb(14 90 107 / 0.35);
+  --enarm-shadow-nav: 0 -8px 24px -16px rgb(20 32 43 / 0.25);
+
+  /* Degradados de marca */
+  --enarm-hero: linear-gradient(135deg, #0e5a6b 0%, #12406e 55%, #3a2a7a 100%);
+  --enarm-gold: linear-gradient(135deg, #f2c14e 0%, #d4952b 100%);
+  --enarm-flame: linear-gradient(135deg, #ff9a3c 0%, #e2541b 100%);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
     color-scheme: dark;
-    --enarm-canvas: #111417;
-    --enarm-surface: #181c20;
-    --enarm-muted: #21262b;
-    --enarm-line: #343b43;
-    --enarm-line-strong: #6b7480;
-    --enarm-fg: #e7e9ec;
-    --enarm-fg-muted: #a7afb9;
-    --enarm-primary: #7cc4d6;
-    --enarm-primary-hover: #9ad3e1;
-    --enarm-primary-fg: #0b2730;
-    --enarm-primary-soft: #1b343e;
-    --enarm-focus: #9ad3e1;
-    --enarm-success: #79d39f;
-    --enarm-success-soft: #173326;
-    --enarm-warning: #f0c56f;
+    --enarm-canvas: #0a0f15;
+    --enarm-surface: #121a23;
+    --enarm-muted: #1a2430;
+    --enarm-line: #26323f;
+    --enarm-line-strong: #5c6b7b;
+    --enarm-fg: #eef2f6;
+    --enarm-fg-muted: #a5b1be;
+    --enarm-primary: #4fd1c5;
+    --enarm-primary-hover: #7ee0d6;
+    --enarm-primary-fg: #04201e;
+    --enarm-primary-soft: #11302f;
+    --enarm-focus: #7ee0d6;
+    --enarm-accent: #f2c14e;
+    --enarm-accent-soft: #3a2c0d;
+    --enarm-accent-fg: #241900;
+    --enarm-streak: #ff8a4c;
+    --enarm-streak-soft: #3d1d0e;
+    --enarm-success: #6ee0a0;
+    --enarm-success-soft: #123224;
+    --enarm-warning: #f5c86a;
     --enarm-warning-soft: #362a12;
-    --enarm-danger: #f3968e;
-    --enarm-danger-soft: #3b1d1a;
+    --enarm-danger: #ff8f86;
+    --enarm-danger-soft: #3d1a17;
     --enarm-danger-fg: #2b0d0a;
+    --enarm-mi: #ff8a6b;
+    --enarm-mi-soft: #3a1c14;
+    --enarm-ped: #4fd3e6;
+    --enarm-ped-soft: #0f2f36;
+    --enarm-gyo: #f27bb5;
+    --enarm-gyo-soft: #3a1529;
+    --enarm-cir: #5fd99a;
+    --enarm-cir-soft: #12301f;
+    --enarm-urg: #f5b84a;
+    --enarm-urg-soft: #38280c;
     --enarm-demo: #362a12;
     --enarm-demo-fg: #f0c56f;
     --enarm-demo-line: #6b5321;
     --enarm-sim: #29233f;
     --enarm-sim-fg: #c9bcfb;
     --enarm-sim-line: #5a4c96;
-    --enarm-shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
-    --enarm-shadow-nav: 0 -1px 0 rgb(255 255 255 / 0.06);
+    --enarm-shadow-card: 0 1px 2px rgb(0 0 0 / 0.5), 0 10px 30px -14px rgb(0 0 0 / 0.7);
+    --enarm-shadow-raised: 0 14px 36px -12px rgb(79 209 197 / 0.25);
+    --enarm-shadow-nav: 0 -8px 24px -16px rgb(0 0 0 / 0.8);
+    --enarm-hero: linear-gradient(135deg, #0f3d47 0%, #142a52 55%, #2c1f5c 100%);
+    --enarm-gold: linear-gradient(135deg, #f7d27a 0%, #e0a73a 100%);
+    --enarm-flame: linear-gradient(135deg, #ffb066 0%, #ff6a2b 100%);
   }
 }
 
 :root.dark {
   color-scheme: dark;
-  --enarm-canvas: #111417;
-  --enarm-surface: #181c20;
-  --enarm-muted: #21262b;
-  --enarm-line: #343b43;
-  --enarm-line-strong: #6b7480;
-  --enarm-fg: #e7e9ec;
-  --enarm-fg-muted: #a7afb9;
-  --enarm-primary: #7cc4d6;
-  --enarm-primary-hover: #9ad3e1;
-  --enarm-primary-fg: #0b2730;
-  --enarm-primary-soft: #1b343e;
-  --enarm-focus: #9ad3e1;
-  --enarm-success: #79d39f;
-  --enarm-success-soft: #173326;
-  --enarm-warning: #f0c56f;
+  --enarm-canvas: #0a0f15;
+  --enarm-surface: #121a23;
+  --enarm-muted: #1a2430;
+  --enarm-line: #26323f;
+  --enarm-line-strong: #5c6b7b;
+  --enarm-fg: #eef2f6;
+  --enarm-fg-muted: #a5b1be;
+  --enarm-primary: #4fd1c5;
+  --enarm-primary-hover: #7ee0d6;
+  --enarm-primary-fg: #04201e;
+  --enarm-primary-soft: #11302f;
+  --enarm-focus: #7ee0d6;
+  --enarm-accent: #f2c14e;
+  --enarm-accent-soft: #3a2c0d;
+  --enarm-accent-fg: #241900;
+  --enarm-streak: #ff8a4c;
+  --enarm-streak-soft: #3d1d0e;
+  --enarm-success: #6ee0a0;
+  --enarm-success-soft: #123224;
+  --enarm-warning: #f5c86a;
   --enarm-warning-soft: #362a12;
-  --enarm-danger: #f3968e;
-  --enarm-danger-soft: #3b1d1a;
+  --enarm-danger: #ff8f86;
+  --enarm-danger-soft: #3d1a17;
   --enarm-danger-fg: #2b0d0a;
+  --enarm-mi: #ff8a6b;
+  --enarm-mi-soft: #3a1c14;
+  --enarm-ped: #4fd3e6;
+  --enarm-ped-soft: #0f2f36;
+  --enarm-gyo: #f27bb5;
+  --enarm-gyo-soft: #3a1529;
+  --enarm-cir: #5fd99a;
+  --enarm-cir-soft: #12301f;
+  --enarm-urg: #f5b84a;
+  --enarm-urg-soft: #38280c;
   --enarm-demo: #362a12;
   --enarm-demo-fg: #f0c56f;
   --enarm-demo-line: #6b5321;
   --enarm-sim: #29233f;
   --enarm-sim-fg: #c9bcfb;
   --enarm-sim-line: #5a4c96;
-  --enarm-shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
-  --enarm-shadow-nav: 0 -1px 0 rgb(255 255 255 / 0.06);
+  --enarm-shadow-card: 0 1px 2px rgb(0 0 0 / 0.5), 0 10px 30px -14px rgb(0 0 0 / 0.7);
+  --enarm-shadow-raised: 0 14px 36px -12px rgb(79 209 197 / 0.25);
+  --enarm-shadow-nav: 0 -8px 24px -16px rgb(0 0 0 / 0.8);
+  --enarm-hero: linear-gradient(135deg, #0f3d47 0%, #142a52 55%, #2c1f5c 100%);
+  --enarm-gold: linear-gradient(135deg, #f7d27a 0%, #e0a73a 100%);
+  --enarm-flame: linear-gradient(135deg, #ffb066 0%, #ff6a2b 100%);
 }
 
 /*
@@ -150,14 +215,35 @@
   --color-sim-fg: var(--enarm-sim-fg);
   --color-sim-line: var(--enarm-sim-line);
 
+  --color-accent: var(--enarm-accent);
+  --color-accent-soft: var(--enarm-accent-soft);
+  --color-accent-fg: var(--enarm-accent-fg);
+  --color-streak: var(--enarm-streak);
+  --color-streak-soft: var(--enarm-streak-soft);
+  --color-mi: var(--enarm-mi);
+  --color-mi-soft: var(--enarm-mi-soft);
+  --color-ped: var(--enarm-ped);
+  --color-ped-soft: var(--enarm-ped-soft);
+  --color-gyo: var(--enarm-gyo);
+  --color-gyo-soft: var(--enarm-gyo-soft);
+  --color-cir: var(--enarm-cir);
+  --color-cir-soft: var(--enarm-cir-soft);
+  --color-urg: var(--enarm-urg);
+  --color-urg-soft: var(--enarm-urg-soft);
+
   --shadow-card: var(--enarm-shadow-card);
+  --shadow-raised: var(--enarm-shadow-raised);
   --shadow-nav: var(--enarm-shadow-nav);
 }
 
 @theme {
-  /* Tipografía del sistema. Sin fuentes web para cargar rápido y funcionar sin conexión */
+  /*
+    Tipografía. Las fuentes se sirven desde la propia app, así funcionan sin conexión (D-061).
+    --font-sans es la fuente de lectura que elige el alumno y --font-display la de títulos
+  */
   --font-sans:
-    system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial, sans-serif;
+    var(--enarm-font-body), system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-display: 'Bricolage Grotesque Variable', var(--enarm-font-body), system-ui, sans-serif;
   --font-mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, monospace;
 
   /* Enunciado de pregunta en tamaño grande (10.4) */
@@ -165,10 +251,10 @@
   --text-question--line-height: 1.6;
 
   /* Radios */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.625rem;
-  --radius-lg: 0.875rem;
-  --radius-xl: 1.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.125rem;
+  --radius-xl: 1.5rem;
 
   /* Medidas de interfaz. Objetivo táctil mínimo de 44 px y ancho de lectura */
   --spacing-touch: 2.75rem;

@@ -1,5 +1,6 @@
-// Perfiles locales del alumno. Crear un perfil guarda el usuario, sus consentimientos por finalidad
-// y los eventos de consentimiento (4.5). Sin contraseña, porque el inicio de sesión del prototipo es
+// Perfiles locales del alumno. Crear un perfil guarda el usuario y la aceptación del aviso de
+// privacidad. Un solo aviso cubre todas las finalidades, por decisión de Ricardo (D-059), y se
+// guarda como aceptación de cada finalidad con la versión del aviso. Sin contraseña, porque el inicio de sesión del prototipo es
 // simulado (3.2). En producción lo reemplaza la cuenta real con la misma interfaz.
 import type { DataApi } from '../context';
 import { createEvent } from '../events/createEvent';
@@ -22,12 +23,10 @@ export const PRIVACY_NOTICE_VERSION = '2026-10-01';
 
 export interface NewProfile {
   alias: string;
-  examDate: string | null;
-  dailyMinutes: number | null;
-  branches: string[];
   dailyGoal: UserSettings['dailyGoal'];
-  consents: Record<ConsentPurpose, boolean>;
 }
+
+const PURPOSES: ConsentPurpose[] = ['party', 'ai_analysis', 'anonymized_improvement'];
 
 export async function createProfile(
   api: Pick<DataApi, 'repos' | 'recordEvent'>,
@@ -38,15 +37,15 @@ export async function createProfile(
     id: newId(),
     alias: input.alias,
     role: 'student',
-    examDate: input.examDate,
-    dailyMinutes: input.dailyMinutes,
+    examDate: null,
+    dailyMinutes: null,
     timeZone: DEFAULT_TIME_ZONE,
-    settings: UserSettingsSchema.parse({ branches: input.branches, dailyGoal: input.dailyGoal }),
+    settings: UserSettingsSchema.parse({ dailyGoal: input.dailyGoal }),
     createdAt: now,
   });
   await api.repos.users.put(user);
-  for (const [purpose, granted] of Object.entries(input.consents) as [ConsentPurpose, boolean][]) {
-    const status = granted ? 'granted' : 'revoked';
+  for (const purpose of PURPOSES) {
+    const status = 'granted';
     await api.repos.consents.put(
       ConsentSchema.parse({
         id: newId(),

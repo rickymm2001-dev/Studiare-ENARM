@@ -13,6 +13,7 @@ import { sampleOptions } from '@/engines/sampler';
 import { findNegations, type HighlightRange } from '@/engines/structure';
 import { awardXp } from '@/engines/xp';
 import { t } from '@/i18n/es-MX';
+import { toneClasses } from '@/ui/branches';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -261,7 +262,9 @@ function QuestionCard({
     <Card aria-labelledby="pregunta-frase" className="w-full max-w-reading">
       <CardHeader>
         <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-fg-muted">
-          <span>
+          <span
+            className={`rounded-full px-2.5 py-0.5 font-semibold ${toneClasses(question.branch).chip}`}
+          >
             {t.branchNames[question.branch] ?? question.branch} ·{' '}
             {topicName.get(question.topic) ?? question.topic}
           </span>

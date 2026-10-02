@@ -5,6 +5,10 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
+  :root {
+    --enarm-font-body: 'Plus Jakarta Sans Variable';
+  }
+
   html {
     background-color: var(--color-canvas);
     color: var(--color-fg);
@@ -17,6 +21,48 @@
     font-family: var(--font-sans);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+  }
+
+  /* Títulos con la fuente de marca */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
+  }
+
+  /* Tamaño del texto que elige el alumno (D-061). Todo usa rem, así que escala completo */
+  html[data-size='sm'] {
+    font-size: 93.75%;
+  }
+  html[data-size='lg'] {
+    font-size: 112.5%;
+  }
+  html[data-size='xl'] {
+    font-size: 125%;
+  }
+
+  /* Fondos. Se pintan detrás de todo y no se mueven al hacer scroll */
+  html[data-bg='glow'] body {
+    background:
+      radial-gradient(60rem 30rem at 100% -10%, var(--color-primary-soft), transparent 70%),
+      radial-gradient(40rem 24rem at -10% 10%, var(--color-accent-soft), transparent 70%),
+      var(--color-canvas);
+    background-attachment: fixed;
+  }
+  html[data-bg='mesh'] body {
+    background:
+      radial-gradient(40rem 26rem at 0% 0%, var(--color-ped-soft), transparent 65%),
+      radial-gradient(40rem 26rem at 100% 0%, var(--color-gyo-soft), transparent 65%),
+      radial-gradient(44rem 30rem at 50% 110%, var(--color-cir-soft), transparent 65%),
+      var(--color-canvas);
+    background-attachment: fixed;
+  }
+  html[data-bg='dots'] body {
+    background-color: var(--color-canvas);
+    background-image: radial-gradient(var(--color-line) 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-attachment: fixed;
   }
 
   /* Foco visible y consistente para teclado (4.8) */
@@ -34,5 +80,77 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+  }
+
+  /* El alumno apagó las animaciones (D-061) */
+  html[data-motion='off'] *,
+  html[data-motion='off'] *::before,
+  html[data-motion='off'] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Animaciones de la interfaz */
+@layer utilities {
+  .animate-rise {
+    animation: enarm-rise 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .animate-pop {
+    animation: enarm-pop 520ms cubic-bezier(0.2, 1.4, 0.4, 1) both;
+  }
+  .animate-glow {
+    animation: enarm-glow 2.4s ease-in-out infinite;
+  }
+  .bg-hero {
+    background-image: var(--enarm-hero);
+  }
+  .bg-gold {
+    background-image: var(--enarm-gold);
+  }
+  .bg-flame {
+    background-image: var(--enarm-flame);
+  }
+  .text-gradient-gold {
+    background-image: var(--enarm-gold);
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+@keyframes enarm-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes enarm-pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes enarm-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(242 193 78 / 0);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgb(242 193 78 / 0.25);
   }
 }

@@ -478,3 +478,40 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - public/favicon-32x32.png y public/favicon-64x64.png salen del logo que compartió, solo el símbolo, centrado y sin fondo. Se probó sobre pestaña clara y oscura y se distingue en ambas
 - Se quitó public/favicon.svg con la E provisional. scripts/generate-icons.ts ya no lo genera
 - Los íconos de la PWA instalada (pwa-*, maskable y apple-touch-icon) y el nombre de la app siguen provisionales (D-016) hasta que Ricardo confirme el cambio
+
+### D-059. Bienvenida más simple, un solo aviso de privacidad y roles sin autoservicio
+- Fecha 2026-10-02. Origen R
+- La bienvenida es una página aparte, sin la barra de navegación ni el riel lateral
+- Se quitan de la bienvenida y de Perfil la fecha del ENARM, los minutos al día y las ramas que estudia. La fecha del ENARM es la misma para todos, así que vive en la plataforma (src/config/exam.ts) como fecha provisional que después cambia el administrador. Los minutos al día se van a inferir de la conducta real del alumno
+- Se quitan los consentimientos por finalidad. Un solo aviso de privacidad cubre todas las finalidades y aceptarlo guarda la aceptación de cada una con la versión del aviso. Esto ajusta 4.5 de la especificación
+- El alumno ya no puede cambiar su rol. Toda cuenta nace como alumno y solo un administrador la sube a médico o administrador. En el prototipo la pantalla 26 queda solo para pruebas, sin enlaces. Los roles reales necesitan cuentas con servidor, ver docs/ANALISIS_PLATAFORMA.md
+- La interfaz no menciona Anki. Se habla de subir tu mazo
+
+### D-060. Rumbo a plataforma real, respuestas de la entrevista
+- Fecha 2026-10-02. Origen R, tras el análisis de docs/ANALISIS_PLATAFORMA.md
+- Servidor. Supabase para cuentas, base de datos Postgres, archivos y permisos por fila. Dexie se queda como copia local para estudiar sin conexión. Ajusta 3.2 de la especificación, que pedía inicio de sesión y pagos simulados
+- Pagos. Stripe y Mercado Pago, los dos. Los datos de tarjeta nunca pasan por nuestra base
+- Cuentas. Ricardo crea los proyectos de Supabase, Stripe y Mercado Pago con una guía paso a paso. Mientras tanto todo se construye y se prueba en modo prueba
+- Diseño. Look premium con animaciones al ganar. El alumno personaliza fuente y tamaño, fondo, y enciende o apaga animaciones y sonidos por separado
+- Orden. Diseño, cuentas con pagos y estadísticas de técnica avanzan juntos, sin prisa
+- Perfil. Correo y alias obligatorios. Opcionales año de nacimiento, sexo con prefiero no decir, estado, situación actual, número de intento y especialidad objetivo
+- Foto de perfil subida o avatar generado
+- Juego en la primera versión. Ligas semanales con misiones del día, insignias y niveles con títulos médicos, duelos y tarjetas para compartir en redes
+- Portada de venta antes del registro, con lo que ofrece, precios y botón de registro
+- Inicio abre en el plan del día. Botón grande para empezar, misiones y racha arriba
+- Precios de ejemplo por ahora. Gratis con 20 preguntas al día, mensual 249 pesos y anual 1,990 pesos
+- Mazos de Paco. Ricardo confirma que Paco autoriza que estén públicos
+- Roles. Alumno sin poderes, médico revisa solo lo asignado, administrador todo, dueño fijo que nadie puede quitar
+
+### D-061. Sistema de diseño premium y apariencia personalizable
+- Fecha 2026-10-02. Origen R, con propuesta de Claude
+- Paleta marfil y tinta azul en claro, medianoche en oscuro, azul petróleo de marca, oro para XP y logros, naranja para la racha y un color por rama (Medicina interna coral, Pediatría turquesa, Ginecología y obstetricia magenta, Cirugía esmeralda, Urgencias ámbar)
+- Títulos en Bricolage Grotesque. Cuatro fuentes de lectura a elegir (Plus Jakarta Sans, Atkinson Hyperlegible, Lexend y Source Serif 4). Todas se sirven desde la app con Fontsource, sin CDN, para funcionar sin conexión
+- El alumno elige fuente, tamaño del texto (4 pasos), fondo (liso, resplandor, colores de rama, puntos) y enciende o apaga animaciones, confeti y sonidos por separado. Se guarda en este dispositivo. prefers-reduced-motion siempre se respeta
+- Celebraciones con canvas-confetti (licencia ISC), cargado solo al usarse, y un acorde corto con Web Audio. Suenan al terminar un repaso o una práctica, al reclamar un reto y al terminar un enfoque del Pomodoro
+
+### D-062. Encabezado de juego y Pomodoro en Repasar
+- Fecha 2026-10-02. Origen R
+- Arriba a la derecha siempre se ven la racha, el nivel con su barra de XP y nombre, y la foto de perfil que lleva a Perfil. La etiqueta IA simulada sale del encabezado y queda en Perfil y junto al contenido de IA
+- El Pomodoro sale de Inicio y vive solo en Repasar, como píldora a la altura del título. Arranca solo al empezar a repasar si estaba detenido, y se puede pausar, saltar o minimizar a un ícono que no muestra el tiempo. El minimizado se recuerda en el dispositivo
+- Al terminar una fase suena y aparece un aviso con el botón para empezar la siguiente. La siguiente fase no arranca sola para que el alumno decida

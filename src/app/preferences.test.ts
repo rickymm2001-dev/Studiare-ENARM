@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { DEFAULT_APPEARANCE } from '@/ui/appearance';
 import { DEFAULT_PREFERENCES, PREFERENCES_STORAGE_KEY, readStoredPreferences } from './preferences';
 
 function storageWith(value: string | null) {
@@ -12,6 +13,7 @@ describe('preferencias del dispositivo', () => {
       role: 'student',
       database: 'real',
       sessionUserId: null,
+      appearance: DEFAULT_APPEARANCE,
     });
     expect(readStoredPreferences(undefined)).toEqual(DEFAULT_PREFERENCES);
     expect(readStoredPreferences(storageWith(null))).toEqual(DEFAULT_PREFERENCES);
@@ -19,16 +21,25 @@ describe('preferencias del dispositivo', () => {
 
   it('lee lo guardado', () => {
     const stored = { theme: 'dark', role: 'physician', database: 'demo', sessionUserId: 'abc' };
-    expect(readStoredPreferences(storageWith(JSON.stringify(stored)))).toEqual(stored);
+    expect(readStoredPreferences(storageWith(JSON.stringify(stored)))).toEqual({
+      ...stored,
+      appearance: DEFAULT_APPEARANCE,
+    });
   });
 
   it('un valor inválido vuelve a su valor por defecto sin perder los demás', () => {
-    const stored = { theme: 'neon', role: 'admin', database: 'otra' };
+    const stored = {
+      theme: 'neon',
+      role: 'admin',
+      database: 'otra',
+      appearance: { font: 'comic', size: 'lg', animations: false },
+    };
     expect(readStoredPreferences(storageWith(JSON.stringify(stored)))).toEqual({
       theme: 'system',
       role: 'admin',
       database: 'real',
       sessionUserId: null,
+      appearance: { ...DEFAULT_APPEARANCE, size: 'lg', animations: false },
     });
   });
 

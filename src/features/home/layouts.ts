@@ -6,16 +6,16 @@ export type WidgetType = WidgetLayout['widgets'][number]['type'];
 export type Preset = WidgetLayout['preset'];
 
 export const PRESETS: Record<Exclude<Preset, 'custom'>, WidgetType[]> = {
-  essential: ['today', 'streak', 'daily_goal', 'pomodoro', 'level_xp', 'heatmap', 'exam_countdown'],
+  essential: ['today', 'streak', 'daily_goal', 'level_xp', 'heatmap', 'exam_countdown'],
   analytic: ['today', 'heatmap', 'weak_topics', 'bias_pattern', 'future_load', 'exam_countdown'],
-  competitive: ['level_xp', 'streak', 'party_challenge', 'daily_goal', 'heatmap', 'pomodoro'],
+  competitive: ['level_xp', 'streak', 'party_challenge', 'daily_goal', 'heatmap'],
 };
 
+// El Pomodoro vive en Repasar, no en Inicio (D-062)
 export const ALL_WIDGETS: WidgetType[] = [
   'today',
   'streak',
   'daily_goal',
-  'pomodoro',
   'level_xp',
   'heatmap',
   'exam_countdown',

@@ -10,6 +10,7 @@ import { useLiveData } from '@/data/hooks';
 import { followDeck, unfollowDeck } from '@/data/usecases/decks';
 import { deckIds } from '@/demo/content/deckEntities';
 import { t } from '@/i18n/es-MX';
+import { toneClasses } from '@/ui/branches';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { DemoContentLabel } from '@/ui/components/labels';
@@ -64,10 +65,15 @@ function Decks({ session }: { session: ReadySession }) {
               return (
                 <li
                   key={file.key}
-                  className="flex flex-col gap-2 rounded-md border border-line p-3"
+                  className="flex flex-col gap-2 rounded-lg border border-line bg-surface p-3 shadow-card"
                 >
                   <div className="flex items-start gap-3">
-                    <Layers aria-hidden className="mt-1 size-5 text-primary" />
+                    <span
+                      aria-hidden
+                      className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${toneClasses(file.key).icon}`}
+                    >
+                      <Layers className="size-5" />
+                    </span>
                     <div className="flex flex-1 flex-col">
                       <span className="font-semibold">{file.name}</span>
                       <span className="text-sm text-fg-muted">{t.decks.author(file.author)}</span>

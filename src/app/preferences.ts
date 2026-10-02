@@ -4,6 +4,7 @@
 import { z } from 'zod';
 import { create } from 'zustand';
 import { RoleSchema } from '@/data/schemas/common';
+import { AppearanceSchema, DEFAULT_APPEARANCE } from '@/ui/appearance';
 import { THEME_PREFERENCES } from '@/ui/theme';
 
 export const DevicePreferencesSchema = z.object({
@@ -16,6 +17,8 @@ export const DevicePreferencesSchema = z.object({
    * (3.2). En producción lo dará la cuenta real. En la demo siempre es el alumno de demostración
    */
   sessionUserId: z.string().max(40).nullable().catch(null),
+  /** Fuente, tamaño, fondo y movimiento que elige el alumno (D-061) */
+  appearance: AppearanceSchema.catch(DEFAULT_APPEARANCE),
 });
 export type DevicePreferences = z.infer<typeof DevicePreferencesSchema>;
 
@@ -57,6 +60,7 @@ interface PreferencesState extends DevicePreferences {
   setTheme: (theme: DevicePreferences['theme']) => void;
   setRole: (role: DevicePreferences['role']) => void;
   setDatabase: (database: DevicePreferences['database']) => void;
+  setAppearance: (patch: Partial<DevicePreferences['appearance']>) => void;
   signIn: (userId: string) => void;
   signOut: () => void;
 }
@@ -64,8 +68,8 @@ interface PreferencesState extends DevicePreferences {
 export const usePreferences = create<PreferencesState>()((set, get) => {
   const update = (patch: Partial<DevicePreferences>) => {
     set(patch);
-    const { theme, role, database, sessionUserId } = get();
-    writeStoredPreferences({ theme, role, database, sessionUserId });
+    const { theme, role, database, sessionUserId, appearance } = get();
+    writeStoredPreferences({ theme, role, database, sessionUserId, appearance });
   };
   return {
     ...readStoredPreferences(safeLocalStorage()),
@@ -77,6 +81,9 @@ export const usePreferences = create<PreferencesState>()((set, get) => {
     },
     setDatabase: (database) => {
       update({ database });
+    },
+    setAppearance: (patch) => {
+      update({ appearance: { ...get().appearance, ...patch } });
     },
     signIn: (userId) => {
       update({ sessionUserId: userId });

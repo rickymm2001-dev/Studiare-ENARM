@@ -9,6 +9,7 @@ import { useDataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
 import { useLiveData } from '@/data/hooks';
 import { t } from '@/i18n/es-MX';
+import { celebrate } from '@/ui/celebrate';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { DemoContentLabel } from '@/ui/components/labels';
@@ -48,6 +49,7 @@ function Summary({ session }: { session: ReadySession }) {
     if (state.ended || state.userId !== session.user.id || state.answers.length === 0) return;
     const durationMs = Math.max(0, clock() - state.startedAt);
     state.set({ ended: true, startedAt: state.startedAt, index: state.answers.length });
+    celebrate('session');
     void api.recordEvent(
       createEvent(
         'session_ended',
