@@ -84,6 +84,9 @@ export function TodayWidget({ snapshot }: { snapshot: Snapshot }) {
       {snapshot.errorsToday > 0 ? (
         <p className="text-sm">{t.widgets.today.errors(snapshot.errorsToday)}</p>
       ) : null}
+      {snapshot.dueCards === 0 ? (
+        <p className="text-sm text-fg-muted">{t.widgets.today.nothingDue}</p>
+      ) : null}
       <div className="flex flex-wrap gap-2">
         <Button asChild size="sm">
           <Link to={screenPath('review')}>{t.widgets.today.review}</Link>

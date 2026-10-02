@@ -201,3 +201,21 @@ describe('análisis por estructura (7.5)', () => {
     expect(affirmative?.state.kind).toBe('ready');
   });
 });
+
+describe('piso de respuestas propias (D-076)', () => {
+  it('una rama con una sola respuesta correcta no pinta 100% en temas sin respuestas', () => {
+    const analysis = analyzeTopics({
+      responses: [
+        {
+          branch: taxonomy.branches[0]?.key ?? '',
+          topic: taxonomy.branches[0]?.topics[0]?.key ?? '',
+          correct: true,
+        },
+      ],
+      taxonomy,
+      averageRetrievability: {},
+      thresholds: DEFAULT_THRESHOLDS.topics,
+    });
+    expect(analysis.topics.every((topic) => topic.state.kind === 'calibrating')).toBe(true);
+  });
+});

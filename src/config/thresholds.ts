@@ -32,6 +32,12 @@ export const ThresholdsSchema = z.strictObject({
     maxIntervalWidth: z.number().positive().max(1).default(0.25),
     /** Cuántos temas a reforzar se muestran (7.3) */
     topN: z.int().positive().default(5),
+    /**
+     * Respuestas propias mínimas para mostrar el dominio de un tema (J, D-076). Sin este piso, una
+     * rama con pocas respuestas y media extrema daba un prior tan angosto que temas sin ninguna
+     * respuesta salían como 100% o 0%
+     */
+    minResponsesPerTopic: z.int().nonnegative().default(5),
   }),
   structure: z.strictObject({
     /** Análisis por estructura por alumno desde 20 respuestas por categoría (J) */

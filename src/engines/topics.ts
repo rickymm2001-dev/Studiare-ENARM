@@ -17,8 +17,8 @@
  *     R̄ la retrievability promedio de sus tarjetas, entre 1 y 2. Sin tarjetas el factor es 1 (J)
  *   - Acción. Repasar sus tarjetas si R̄ < 0.85, simulador del tema si el dominio es menor a 0.6, y
  *     si no, un reto del tema (J)
- * Umbrales. Intervalo menor a 0.25, fuerza del prior de 10, 5 temas, y 20 respuestas por
- * categoría de estructura (J, configurables).
+ * Umbrales. Intervalo menor a 0.25 y al menos 5 respuestas propias por tema, fuerza del prior de
+ * 10, 5 temas, y 20 respuestas por categoría de estructura (J, configurables).
  */
 import type { Thresholds } from '@/config/thresholds';
 import type { TopicTaxonomy } from '@/data/schemas/content';
@@ -62,7 +62,14 @@ export interface TopicAnalysis {
   calibrating: number;
 }
 
-function stateOf(tally: Tally, estimate: ShrunkEstimate): MasteryState {
+function stateOf(tally: Tally, estimate: ShrunkEstimate, minTrials = 0): MasteryState {
+  const missingByCount = Math.max(0, minTrials - tally.trials);
+  if (missingByCount > 0)
+    return {
+      kind: 'calibrating',
+      responses: tally.trials,
+      responsesNeeded: Math.max(missingByCount, estimate.responsesNeeded),
+    };
   return estimate.reliable
     ? {
         kind: 'ready',
@@ -122,7 +129,7 @@ export function analyzeTopics(input: {
         topic: topic.key,
         tally,
         estimate,
-        state: stateOf(tally, estimate),
+        state: stateOf(tally, estimate, thresholds.minResponsesPerTopic),
         examWeight: weights.get(`${branch.key}/${topic.key}`) ?? 0,
       });
     });

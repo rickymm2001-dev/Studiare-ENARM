@@ -145,6 +145,9 @@ export function LandingScreen() {
                       <li key={feature} className="flex items-center gap-2">
                         <Check aria-hidden className="size-4 text-success" />
                         {t.billing.access[feature]}
+                        {feature !== 'party' ? (
+                          <span className="text-xs text-fg-muted">({t.billing.comingSoon})</span>
+                        ) : null}
                       </li>
                     ))}
                 </ul>

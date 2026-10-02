@@ -97,7 +97,7 @@ export const featureText = {
     remove: (name: string) => `Quitar ${name}`,
     settings: (name: string) => `Ajustes de ${name}`,
     empty: 'Tu tablero está vacío. Agrega un widget o elige un acomodo.',
-    comingSoon: 'Este widget llega en una fase siguiente.',
+    comingSoon: 'Este widget estará disponible pronto.',
   },
   widgets: {
     party: {
@@ -152,6 +152,8 @@ export const featureText = {
       errors: (n: number) => plural(n, 'error para repasar', 'errores para repasar'),
       review: 'Repasar',
       simulate: 'Simular',
+      nothingDue:
+        'Nada vencido por ahora. Aprende tarjetas nuevas en Repasar o practica preguntas en Simular.',
     },
     goal: {
       progress: (done: number, goal: number, metric: string) => `${done} de ${goal} ${metric}`,
@@ -303,7 +305,7 @@ export const featureText = {
     importBody:
       'Pronto podrás subir tus mazos desde otras apps de tarjetas, Word, Excel o CSV. Tus mazos serán privados.',
     createTitle: 'Crear mazo',
-    createBody: 'La creación manual de mazos llega en una fase siguiente.',
+    createBody: 'Próximamente podrás crear tus propios mazos aquí mismo.',
   },
   review: {
     noDecksTitle: 'Todavía no sigues ningún mazo',
@@ -371,7 +373,8 @@ export const featureText = {
     start: 'Empezar práctica',
     preparing: 'Preparando el banco…',
     exam: 'Examen completo',
-    examSoon: 'El examen completo llega en el siguiente bloque.',
+    examSoon:
+      'Próximamente. Un simulacro con el formato del ENARM, 280 preguntas en dos bloques con reloj.',
     noQuestions: 'No hay preguntas con estos filtros.',
     progress: (n: number, of: number) => `Pregunta ${n} de ${of}`,
     caseLabel: 'Caso clínico',
@@ -386,7 +389,7 @@ export const featureText = {
     yourAnswer: 'Tu respuesta',
     correctAnswer: 'Respuesta correcta',
     whyAttracts: 'Por qué atrae esta opción',
-    biasLabel: (name: string) => `Sesgo probable, ${name}`,
+    biasLabel: (name: string) => `Trampa probable. ${name}`,
     explanation: 'Explicación',
     references: 'Referencias, por verificar',
     next: 'Siguiente pregunta',
@@ -469,7 +472,7 @@ export const featureText = {
     emptyTitle: 'Todavía no tienes preguntas asignadas',
     emptyBody: 'Un admin te asignará subespecialidades para revisar.',
     count: (n: number) => `${n.toLocaleString('es-MX')} preguntas`,
-    branchHint: 'El editor con versiones, etiquetas y decisiones llega en la Fase E.',
+    branchHint: 'Próximamente podrás editar, etiquetar y aprobar cada pregunta desde aquí.',
     difficulty: (n: number) => `Dificultad ${n}`,
     status: {
       draft: 'Borrador',
