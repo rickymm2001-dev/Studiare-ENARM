@@ -345,3 +345,12 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - La cola del día ordena las vencidas por retrievability de menor a mayor, entierra hermanas de la misma nota y respeta 20 nuevas y 200 repasos por día, descontando lo ya hecho hoy
 - La carga futura supone que el alumno califica Bien en cada vencimiento y que introduce nuevas al ritmo de su límite. Es una proyección, no una predicción
 - La calificación automática de opción múltiple (7.1) recibe como datos la adivinanza rápida y el percentil 25, que calcula el motor behavior
+
+### D-045. Conducta, Elo y Rasch
+- Fecha 2026-10-02. Origen C
+- El tiempo se normaliza como logaritmo de milisegundos por palabra contra el ritmo propio del alumno. El ritmo personal se usa desde 20 respuestas. Antes solo cuenta el mínimo plausible de lectura de 6 palabras por segundo (J)
+- Fatiga. Se compara el primer y el último tercio de cada sesión de más de 30 minutos con exactitud ajustada por dificultad (acierto menos probabilidad esperada). El patrón probable exige al menos 3 sesiones largas, una caída mayor a 1.64 errores estándar entre sesiones y que el tiempo suba (J)
+- Calibración de la confianza contra probabilidades nominales de 0.25 para Adiviné, 0.60 para Dudé y 0.90 para Seguro (J), desde 30 respuestas
+- Elo con factor K que baja con las respuestas, K(n) = máx(0.04, 0.4 / √(1 + n/20)) (J). Se ajusta con la recuperación de parámetros si no llega a la meta
+- Escala del médico a logit, 1 → −2, 2 → −1, 3 → 0, 4 → 1 y 5 → 2. Bandas fácil, media, difícil y muy difícil cortadas en −1, 0 y 1 (J)
+- Rasch con JML como dice D-025, con exclusión iterativa de puntajes extremos, dificultades centradas en 0 y corrección de Wright. Corre en un Web Worker con Comlink. La prueba usa un canal de mensajes en el mismo hilo para probar el protocolo. El worker se usa en la interfaz desde la Fase C o D
