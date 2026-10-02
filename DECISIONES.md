@@ -336,3 +336,12 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Azar con semilla propio (cyrb128 y sfc32) en src/engines/random.ts. Los motores nunca usan Math.random
 - La cobertura mínima de 90% en src/engines aplica a líneas, sentencias, funciones y ramas, y npm run check la exige
 - Los umbrales de la sección 12 y de los motores viven en src/config/thresholds.ts con su esquema zod, listos para editarse desde admin en la Fase D
+
+### D-044. Detalles de FSRS
+- Fecha 2026-10-02. Origen C
+- ts-fsrs 5.4.2 con parámetros por defecto, pasos cortos de aprendizaje activos y sin fuzz. Sin fuzz, la misma historia da siempre el mismo vencimiento, que es lo que necesitan las pruebas, la simulación y la recuperación de parámetros
+- Modo examen. Ningún vencimiento pasa del inicio del día del ENARM, a las 4 a. m. locales. En los últimos 30 días la retención sube a 0.93, salvo que el alumno ya tenga una mayor
+- Si el reloj del dispositivo queda antes del último repaso, se programa desde el último repaso. ts-fsrs no acepta tiempo negativo y así la app no se rompe si el alumno cambia la hora
+- La cola del día ordena las vencidas por retrievability de menor a mayor, entierra hermanas de la misma nota y respeta 20 nuevas y 200 repasos por día, descontando lo ya hecho hoy
+- La carga futura supone que el alumno califica Bien en cada vencimiento y que introduce nuevas al ritmo de su límite. Es una proyección, no una predicción
+- La calificación automática de opción múltiple (7.1) recibe como datos la adivinanza rápida y el percentil 25, que calcula el motor behavior
