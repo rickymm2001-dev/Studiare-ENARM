@@ -1,10 +1,10 @@
-# Corre npm run check en cada push y pull request (typecheck, lint y pruebas con cobertura).
+# Corre npm run check en cada push a cualquier rama y en cada pull request (typecheck, lint y pruebas con cobertura).
 # No usa secretos. La clave de la API vive solo en server/.env.local y nunca llega aquí.
 name: check
 
 on:
   push:
-    branches: [main]
+    branches: ['**']
   pull_request:
   workflow_dispatch:
 

@@ -6,7 +6,8 @@
 - Fase A aprobada por Ricardo el 2026-10-02
 - Fase B en curso desde el 2026-10-02. Ricardo la aprobó junto con la Fase A
 - Bloque en curso. Bloque 8 (contenido demo). Lote 4 de 6 escrito. Revisión de IA de los lotes 1 a 4 hecha y sus 194 hallazgos atendidos
-- Siguiente paso. Lote 5, después lote 6 y los 4 mazos. Guía completa en docs/contenido-demo.md
+- Siguiente paso. Bloques 9 y 10 (alumnos simulados y recuperación de parámetros). Por indicación de Ricardo el banco de preguntas y los mazos se pausan y se terminan al final del proyecto (D-050). El lote 5 quedó a medias en content-drafts/b5, con Medicina interna (13) y Pediatría (12, con el caso seriado de anemia ferropénica) validadas y Ginecología y obstetricia y Cirugía general por escribir
+- Todo el trabajo se sube a GitHub con push frecuente y el CI corre npm run check en cada push a cualquier rama (D-050)
 - Trabajo desde GitHub listo (D-049). CI con npm run check en cada push, scripts de contenido en scripts/content y workflow de revisión en .claude/workflows
 - Repo remoto privado en https://github.com/rickymm2001-dev/enarm-prototipo, rama main con seguimiento a origin (D-048)
 
