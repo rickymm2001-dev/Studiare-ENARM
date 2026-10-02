@@ -19,7 +19,15 @@ export default defineConfig({
   tsconfig: './tsconfig.tests.json',
   fullyParallel: true,
   reporter: [['list']],
-  use: { baseURL: PREVIEW_URL, locale: 'es-MX', timezoneId: 'America/Merida' },
+  use: {
+    baseURL: PREVIEW_URL,
+    locale: 'es-MX',
+    timezoneId: 'America/Merida',
+    // Ver playwright.config.ts. Solo en entornos con un Chromium instalado fuera del proyecto
+    ...(process.env.PW_CHROMIUM_PATH
+      ? { launchOptions: { executablePath: process.env.PW_CHROMIUM_PATH } }
+      : {}),
+  },
   projects: [
     { name: 'telefono-claro', use: { ...phone, colorScheme: 'light' } },
     { name: 'telefono-oscuro', use: { ...phone, colorScheme: 'dark' } },
