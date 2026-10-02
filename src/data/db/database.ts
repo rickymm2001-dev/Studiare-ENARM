@@ -14,7 +14,14 @@ import type {
   SimTruth,
   WidgetLayout,
 } from '../schemas/activity';
-import type { BiasLabel, ClinicalCase, ContentReport, Option, Question } from '../schemas/bank';
+import type {
+  BiasLabel,
+  ClinicalCase,
+  ContentReport,
+  Option,
+  Question,
+  ReviewAssignment,
+} from '../schemas/bank';
 import type {
   CardStateCache,
   ItemStatsCache,
@@ -55,6 +62,7 @@ export interface EnarmTables {
   challenges: StrictTable<Challenge, 'id'>;
   widgetLayouts: StrictTable<WidgetLayout, 'userId'>;
   accounts: StrictTable<Account, 'userId'>;
+  reviewAssignments: StrictTable<ReviewAssignment, 'id'>;
   simTruth: StrictTable<SimTruth, 'userId'>;
   cardStateCache: StrictTable<CardStateCache, 'cardId'>;
   itemStatsCache: StrictTable<ItemStatsCache, 'questionVersionId'>;
@@ -73,8 +81,9 @@ export class ImmutableEventError extends Error {
 }
 
 /** Versión actual del esquema de Dexie. Cada cambio de índices sube esta versión con su migración */
-// 2 agrega la tabla accounts (D-068). Dexie crea la tabla nueva sin tocar los datos
-export const DB_VERSION = 2;
+// 2 agrega accounts (D-068) y 3 agrega reviewAssignments (D-070). Dexie crea las tablas nuevas sin
+// tocar los datos
+export const DB_VERSION = 3;
 
 export function createEnarmDb(kind: DatabaseKind, options?: { name?: string }): EnarmDb {
   const db = new Dexie(options?.name ?? DATABASE_NAMES[kind]) as EnarmDb;

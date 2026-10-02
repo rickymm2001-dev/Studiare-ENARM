@@ -453,6 +453,47 @@ export const featureText = {
     saved: 'Apariencia guardada.',
     discarded: 'Volvimos a lo que tenías guardado.',
   },
+  bank: {
+    physicianHint: 'Las preguntas que te asignaron para revisar.',
+    adminHint: 'Todo el banco, con a quién está asignada cada pregunta.',
+    emptyTitle: 'Todavía no tienes preguntas asignadas',
+    emptyBody: 'Un admin te asignará subespecialidades para revisar.',
+    count: (n: number) => `${n.toLocaleString('es-MX')} preguntas`,
+    branchHint: 'El editor con versiones, etiquetas y decisiones llega en la Fase E.',
+    difficulty: (n: number) => `Dificultad ${n}`,
+    status: {
+      draft: 'Borrador',
+      in_review: 'En revisión',
+      approved: 'Aprobada',
+      rejected: 'Rechazada',
+    },
+    assignedTo: (names: string) => `Asignada a ${names}`,
+    unassigned: 'Sin asignar',
+    more: (n: number) => `Y ${n} más`,
+  },
+  admin: {
+    notice:
+      'En el prototipo trabajas sobre las cuentas de este navegador. Con Supabase estas mismas reglas las aplica el servidor y cada cambio queda en la bitácora de auditoría.',
+    role: 'Rol',
+    noEmail: 'Sin correo',
+    roleChanged: (alias: string, role: string) => `${alias} ahora es ${role}.`,
+    denied: {
+      not_admin: 'Solo un admin o el dueño pueden cambiar roles.',
+      self: 'Nadie cambia su propio rol.',
+      owner_not_assignable: 'El rol de dueño no se asigna desde la app.',
+      cannot_remove_owner: 'Nadie puede quitar al dueño.',
+      only_owner_manages_admins: 'Solo el dueño nombra o quita admins.',
+    },
+    assignedCount: (n: number) =>
+      n === 0 ? 'Sin preguntas asignadas' : `${n.toLocaleString('es-MX')} preguntas asignadas`,
+    assign: 'Asignar preguntas',
+    assignTitle: (alias: string) => `Qué revisa ${alias}`,
+    assignHint:
+      'Elige subespecialidades. Se le asignan todas sus preguntas y solo verá esas en su banco.',
+    saveAssignment: 'Guardar asignación',
+    assigned: (alias: string, added: number, removed: number) =>
+      `Asignación de ${alias} guardada. ${added} nuevas y ${removed} retiradas.`,
+  },
   landing: {
     documentTitle: 'Prepara el ENARM',
     badge: 'Para médicos generales que van por su residencia',

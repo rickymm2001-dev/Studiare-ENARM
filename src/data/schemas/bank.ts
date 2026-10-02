@@ -131,3 +131,14 @@ export const ContentReportSchema = z.strictObject({
   resolvedAt: UtcDateTimeSchema.nullable(),
 });
 export type ContentReport = z.infer<typeof ContentReportSchema>;
+
+/** Qué pregunta revisa qué médico (D-070). La misma idea que review_assignments en Supabase */
+export const ReviewAssignmentSchema = z.strictObject({
+  id: IdSchema,
+  /** ID estable de la pregunta, así la asignación sigue en versiones nuevas */
+  questionId: IdSchema,
+  physicianId: IdSchema,
+  assignedBy: IdSchema.nullable(),
+  assignedAt: UtcDateTimeSchema,
+});
+export type ReviewAssignment = z.infer<typeof ReviewAssignmentSchema>;

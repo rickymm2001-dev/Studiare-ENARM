@@ -1,5 +1,5 @@
-// Pantalla 26. Selector de rol sin login para el prototipo.
-import { GraduationCap, ShieldCheck, Stethoscope } from 'lucide-react';
+// Pantalla 26. Selector de rol sin login, solo para probar el prototipo. No tiene enlaces (D-059).
+import { Crown, GraduationCap, ShieldCheck, Stethoscope } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router';
 import { HOME_BY_ROLE } from '@/app/navigation';
@@ -15,9 +15,10 @@ const ROLE_ICONS: Record<Role, ReactNode> = {
   student: <GraduationCap />,
   physician: <Stethoscope />,
   admin: <ShieldCheck />,
+  owner: <Crown />,
 };
 
-const ROLE_OPTIONS = (['student', 'physician', 'admin'] as const).map((role) => ({
+const ROLE_OPTIONS = (['student', 'physician', 'admin', 'owner'] as const).map((role) => ({
   value: role,
   label: t.roles.names[role],
   description: t.roles.descriptions[role],

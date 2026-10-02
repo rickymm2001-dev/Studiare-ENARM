@@ -30,7 +30,8 @@
     "eval-ai": "node scripts/not-yet.ts eval-ai D",
     "demo-seed": "DEMO_SEED_DRY_RUN=1 vitest run tests/demo --silent=false",
     "demo-reset": "node scripts/demo-reset.ts",
-    "recovery-report": "RECOVERY_REPORT=1 vitest run tests/recovery && prettier --write docs/recovery-report.md"
+    "recovery-report": "RECOVERY_REPORT=1 vitest run tests/recovery && prettier --write docs/recovery-report.md",
+    "test:sql": "bash supabase/tests/run.sh"
   },
   "dependencies": {
     "@date-fns/tz": "1.5.0",

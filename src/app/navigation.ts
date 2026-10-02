@@ -8,11 +8,11 @@ import {
   Database,
   FileText,
   Flag,
-  FlaskConical,
   House,
   Scale,
   Settings,
   UserRound,
+  Users,
   type LucideIcon,
 } from 'lucide-react';
 import type { Role } from '@/data/schemas/common';
@@ -34,6 +34,14 @@ const profile: NavItem = {
 };
 const bank: NavItem = { path: screenPath('questionBank'), label: t.navItems.bank, icon: Database };
 
+const adminNav: readonly NavItem[] = [
+  { path: screenPath('adminUsers'), label: t.navItems.users, icon: Users },
+  { path: screenPath('aiCosts'), label: t.navItems.costs, icon: Coins },
+  { path: screenPath('adminSettings'), label: t.navItems.settings, icon: Settings },
+  bank,
+  profile,
+];
+
 export const NAV_BY_ROLE: Record<Role, readonly NavItem[]> = {
   student: [
     { path: screenPath('home'), label: t.navItems.home, icon: House, end: true },
@@ -49,18 +57,14 @@ export const NAV_BY_ROLE: Record<Role, readonly NavItem[]> = {
     { path: screenPath('contentReports'), label: t.navItems.reports, icon: Flag },
     profile,
   ],
-  admin: [
-    { path: screenPath('aiCosts'), label: t.navItems.costs, icon: Coins },
-    { path: screenPath('demoData'), label: t.navItems.demo, icon: FlaskConical },
-    { path: screenPath('adminSettings'), label: t.navItems.settings, icon: Settings },
-    bank,
-    profile,
-  ],
+  admin: adminNav,
+  owner: adminNav,
 };
 
 /** Pantalla de entrada de cada rol */
 export const HOME_BY_ROLE: Record<Role, string> = {
   student: screenPath('home'),
   physician: screenPath('questionBank'),
-  admin: screenPath('aiCosts'),
+  admin: screenPath('adminUsers'),
+  owner: screenPath('adminUsers'),
 };
