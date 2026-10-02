@@ -486,3 +486,19 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Se quitan los consentimientos por finalidad. Un solo aviso de privacidad cubre todas las finalidades y aceptarlo guarda la aceptación de cada una con la versión del aviso. Esto ajusta 4.5 de la especificación
 - El alumno ya no puede cambiar su rol. Toda cuenta nace como alumno y solo un administrador la sube a médico o administrador. En el prototipo la pantalla 26 queda solo para pruebas, sin enlaces. Los roles reales necesitan cuentas con servidor, ver docs/ANALISIS_PLATAFORMA.md
 - La interfaz no menciona Anki. Se habla de subir tu mazo
+
+### D-060. Rumbo a plataforma real, respuestas de la entrevista
+- Fecha 2026-10-02. Origen R, tras el análisis de docs/ANALISIS_PLATAFORMA.md
+- Servidor. Supabase para cuentas, base de datos Postgres, archivos y permisos por fila. Dexie se queda como copia local para estudiar sin conexión. Ajusta 3.2 de la especificación, que pedía inicio de sesión y pagos simulados
+- Pagos. Stripe y Mercado Pago, los dos. Los datos de tarjeta nunca pasan por nuestra base
+- Cuentas. Ricardo crea los proyectos de Supabase, Stripe y Mercado Pago con una guía paso a paso. Mientras tanto todo se construye y se prueba en modo prueba
+- Diseño. Look premium con animaciones al ganar. El alumno personaliza fuente y tamaño, fondo, y enciende o apaga animaciones y sonidos por separado
+- Orden. Diseño, cuentas con pagos y estadísticas de técnica avanzan juntos, sin prisa
+- Perfil. Correo y alias obligatorios. Opcionales año de nacimiento, sexo con prefiero no decir, estado, situación actual, número de intento y especialidad objetivo
+- Foto de perfil subida o avatar generado
+- Juego en la primera versión. Ligas semanales con misiones del día, insignias y niveles con títulos médicos, duelos y tarjetas para compartir en redes
+- Portada de venta antes del registro, con lo que ofrece, precios y botón de registro
+- Inicio abre en el plan del día. Botón grande para empezar, misiones y racha arriba
+- Precios de ejemplo por ahora. Gratis con 20 preguntas al día, mensual 249 pesos y anual 1,990 pesos
+- Mazos de Paco. Ricardo confirma que Paco autoriza que estén públicos
+- Roles. Alumno sin poderes, médico revisa solo lo asignado, administrador todo, dueño fijo que nadie puede quitar

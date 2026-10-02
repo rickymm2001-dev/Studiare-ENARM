@@ -314,6 +314,30 @@ Bloques
 | Revisión OWASP ASVS 5.0 | docs/asvs.md con cada control aplicable y su estado |
 | Ricardo sigue DEMO.md sin ayuda | Ricardo lo recorre |
 
+### Fase P. Plataforma real (D-060)
+
+Convierte el prototipo en un producto vendible. Corre junto a lo que falta de la Fase C. Detalle en docs/ANALISIS_PLATAFORMA.md.
+
+Bloques
+1. Sistema de diseño premium. Paleta con color por rama, tipografías, fondos, animaciones y sonidos apagables, y personalización de fuente, tamaño, fondo y movimiento. Se rehacen el marco y las pantallas actuales
+2. Portada de venta, registro e inicio de sesión con correo, perfil con los datos de D-060, foto o avatar generado
+3. Esquema de Supabase en supabase/migrations con permisos por fila, roles con dueño fijo y bitácora de cambios de rol, probado contra Postgres local
+4. Panel de administración de usuarios y asignación de preguntas a médicos. El médico solo ve lo asignado
+5. Pagos con Stripe y Mercado Pago en modo prueba, con funciones del servidor para checkout y avisos de pago, y guía para Ricardo
+6. Inicio con plan del día, misiones, ligas semanales, insignias, niveles con títulos médicos, duelos y tarjetas para compartir
+7. Progreso con las estadísticas de técnica de examen
+8. Subir mazos desde paquetes de otras apps, CSV, Excel y Word
+9. Sincronización de la bitácora local con el servidor
+
+| Criterio de aceptación | Prueba |
+|---|---|
+| Personalización se guarda y se aplica | Testing Library y e2e de apariencia |
+| Animaciones apagadas respetan la preferencia y prefers-reduced-motion | prueba unitaria del ajuste |
+| Un alumno no puede cambiar roles ni ver preguntas no asignadas | pruebas SQL de permisos por fila en Postgres local |
+| Nadie puede quitar el rol de dueño | prueba SQL |
+| Aviso de pago repetido no activa dos veces | prueba de la función de avisos |
+| Ninguna llave secreta en el repo ni en el bundle | tests/security/no-secrets.test.ts |
+
 ## 7. Umbrales
 
 Valores por defecto en src/config/thresholds.ts, editables desde admin (12).
