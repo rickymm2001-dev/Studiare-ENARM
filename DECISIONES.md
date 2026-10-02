@@ -278,3 +278,13 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Se borran los colores por defecto de Tailwind para que toda la interfaz use la paleta
 - Ámbar para Demostración y violeta para Datos simulados, siempre con texto e ícono, nunca solo color
 - Tipografía del sistema, sin fuentes web, para cargar rápido y funcionar sin conexión
+
+### D-038. Detalles del modelo de datos
+- Fecha 2026-10-01. Origen C
+- La bitácora se protege en dos capas. El repositorio solo expone append, query y stream, y un middleware de Dexie (DBCore) rechaza cualquier put, delete o borrado por rango en la tabla events con ImmutableEventError. Borrar mis datos elimina la base completa y no pasa por ese camino (4.5)
+- Las preguntas guardan por separado la viñeta y la frase de la pregunta (prompt), porque el resaltado de negaciones solo busca en la frase (7.5)
+- Cada versión de pregunta y de opción tiene su propio ID, y un ID estable las une entre versiones. Agregar una versión usa add y nunca reemplaza. Solo el estado editorial cambia sin crear versión
+- Las claves de rama, tema, subtema y sesgo son texto validado contra las taxonomías de datos, no enumeraciones en código (13)
+- Los esquemas rechazan campos desconocidos (strictObject). Así un dato personal como un correo no se cuela por accidente
+- La derivación de ejemplo de la Fase A es xpCache, que suma xp_awarded. Se actualiza en la misma transacción al agregar y se reconstruye desde cero con rebuildDerivedState
+- Las pantallas reciben repositorios y casos de uso por contexto (useRepositories y useDataApi). La base de Dexie no sale de src/data
