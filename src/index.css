@@ -58,6 +58,20 @@
       var(--color-canvas);
     background-attachment: fixed;
   }
+  /* Personalizado. Color mezclado con el fondo del tema para que el texto se lea, y foto opcional
+     con un velo del mismo color del tema encima (D-065) */
+  html[data-bg='custom'] body {
+    background-color: color-mix(in srgb, var(--enarm-custom-color) 30%, var(--color-canvas));
+    background-image:
+      linear-gradient(
+        color-mix(in srgb, var(--color-canvas) 70%, transparent),
+        color-mix(in srgb, var(--color-canvas) 70%, transparent)
+      ),
+      var(--enarm-custom-image, none);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
   html[data-bg='dots'] body {
     background-color: var(--color-canvas);
     background-image: radial-gradient(var(--color-line) 1px, transparent 1px);

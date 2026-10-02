@@ -8,6 +8,7 @@ import { useUserEvents } from '@/features/shared/useUserEvents';
 import { t } from '@/i18n/es-MX';
 import { Avatar } from '@/ui/components/avatar';
 import { screenPath } from '../screens';
+import { LevelLadderDialog } from './LevelLadderDialog';
 import { useSession } from '../session';
 
 export function HeaderStats() {
@@ -19,7 +20,7 @@ export function HeaderStats() {
 function Stats({ user, settings }: { user: User; settings: UserSettings }) {
   const events = useUserEvents(user.id);
   if (events === undefined) return null;
-  const { streak, level } = buildSnapshot({ events, user, settings, now: new Date() });
+  const { streak, level, totalXp } = buildSnapshot({ events, user, settings, now: new Date() });
   const percent = level.xpForNext > 0 ? Math.round((level.xpIntoLevel / level.xpForNext) * 100) : 0;
   return (
     <div className="flex items-center gap-2">
@@ -31,24 +32,27 @@ function Stats({ user, settings }: { user: User; settings: UserSettings }) {
         <Flame aria-hidden className="size-4" />
         {streak.current}
       </span>
-      <div
-        className="flex w-24 flex-col gap-1 sm:w-32"
-        aria-label={t.headerStats.level(
-          level.level,
-          level.title,
-          level.xpIntoLevel,
-          level.xpForNext,
-        )}
-        title={t.headerStats.level(level.level, level.title, level.xpIntoLevel, level.xpForNext)}
-      >
-        <span className="flex items-baseline justify-between gap-1 text-xs leading-none font-bold">
-          <span className="truncate text-accent">{level.title}</span>
-          <span className="text-fg-muted">{t.headerStats.short(level.level)}</span>
-        </span>
-        <span aria-hidden className="h-1.5 overflow-hidden rounded-full bg-muted">
-          <span className="block h-full rounded-full bg-gold" style={{ width: `${percent}%` }} />
-        </span>
-      </div>
+      <LevelLadderDialog totalXp={totalXp}>
+        <button
+          type="button"
+          className="flex w-24 flex-col gap-1 rounded-md text-left sm:w-32"
+          aria-label={`${t.headerStats.openLevels}. ${t.headerStats.level(
+            level.level,
+            level.title,
+            level.xpIntoLevel,
+            level.xpForNext,
+          )}`}
+          title={t.headerStats.level(level.level, level.title, level.xpIntoLevel, level.xpForNext)}
+        >
+          <span className="flex items-baseline justify-between gap-1 text-xs leading-none font-bold">
+            <span className="truncate text-accent">{level.title}</span>
+            <span className="text-fg-muted">{t.headerStats.short(level.level)}</span>
+          </span>
+          <span aria-hidden className="h-1.5 overflow-hidden rounded-full bg-muted">
+            <span className="block h-full rounded-full bg-gold" style={{ width: `${percent}%` }} />
+          </span>
+        </button>
+      </LevelLadderDialog>
       <Link to={screenPath('profile')} aria-label={t.headerStats.profile} className="rounded-full">
         <Avatar name={user.alias} seed={user.id} />
       </Link>

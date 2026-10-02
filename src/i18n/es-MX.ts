@@ -76,7 +76,11 @@ const screens: Record<ScreenKey, ScreenText> = {
   },
   profile: {
     title: 'Perfil',
-    description: 'Tus ajustes, el tema visual, la cuenta activa y tu privacidad.',
+    description: 'Quién eres en Studiare. Tu nivel, tu racha, tu cuenta y tu plan.',
+  },
+  settings: {
+    title: 'Configuración',
+    description: 'Apariencia, metas, repaso, Pomodoro y tus datos.',
   },
   subscription: {
     title: 'Suscripción',

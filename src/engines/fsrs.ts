@@ -16,6 +16,7 @@
  *     límites diarios de nuevas y de repasos
  *   - Carga futura. Simula cada tarjeta suponiendo que el alumno califica Bien en cada vencimiento
  *     y que introduce las nuevas al ritmo de su límite diario
+ *   - Intervalo máximo del alumno con compresión suave, 30 días por defecto (D-064)
  * Umbrales. Retención 0.90 (0.80 a 0.97), 0.93 en los últimos 30 días, sanguijuela con 8 lapsos,
  * 20 nuevas y 200 repasos por día. Optimizar parámetros por alumno desde 1,000 repasos queda fuera
  * del prototipo. El punto de extensión es config.weights.
@@ -39,6 +40,21 @@ export interface SchedulerConfig {
   thresholds: Thresholds['fsrs'];
   /** Pesos optimizados por alumno. Punto de extensión desde 1,000 repasos, fuera del prototipo */
   weights?: readonly number[];
+  /**
+   * Intervalo máximo en días que elige el alumno, con compresión suave (D-064). null o ausente es
+   * sin tope, como FSRS puro
+   */
+  maxIntervalDays?: number | null;
+}
+
+/**
+ * Comprime un intervalo en días hacia el tope sin pasarlo y sin que los botones se empalmen.
+ * d' = tope × (1 − e^(−d / tope)). Casi igual para intervalos cortos, nunca llega al tope y
+ * conserva el orden entre Difícil, Bien y Fácil
+ */
+export function softCapDays(days: number, cap: number): number {
+  if (!(cap > 0) || days <= 0) return days;
+  return cap * (1 - Math.exp(-days / cap));
 }
 
 const GRADE: Record<FsrsRating, Grade> = {
@@ -173,6 +189,19 @@ export function scheduleReview(
   const card = state ? toFsrsCard(state) : createEmptyCard(now);
   const result = schedulerFor(retention, config.weights).next(card, now, GRADE[rating]);
   let next = fromFsrsCard(result.card);
+  // Tope del alumno (D-064). Solo a intervalos de días, los pasos cortos de aprendizaje no cambian
+  const cap = config.maxIntervalDays ?? null;
+  const rawDays = (new Date(next.due).getTime() - now.getTime()) / DAY_MS;
+  if (cap !== null && rawDays >= 1) {
+    const days = Math.max(1, Math.floor(softCapDays(rawDays, cap)));
+    if (days < rawDays) {
+      next = {
+        ...next,
+        due: new Date(now.getTime() + days * DAY_MS).toISOString(),
+        scheduledDays: days,
+      };
+    }
+  }
   let examCapped = false;
   const deadline = examDeadline(config);
   if (deadline && deadline.getTime() > now.getTime() && new Date(next.due) > deadline) {

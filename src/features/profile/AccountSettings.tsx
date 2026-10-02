@@ -1,5 +1,6 @@
-// Ajustes del alumno en Perfil (pantalla 15). Cuenta, metas y repaso, estudio, Pomodoro, privacidad,
-// suscripción, exportar y borrar datos. Cada cambio queda como evento settings_changed.
+// Ajustes del alumno. La cuenta y la suscripción van en Perfil. Metas y repaso, estudio, Pomodoro,
+// exportar y borrar datos van en Configuración (D-065). Cada cambio queda como evento
+// settings_changed.
 import { CreditCard, Download, LogOut, Trash2 } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router';
@@ -8,6 +9,7 @@ import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
 import { exportUserData } from '@/data/usecases/exportData';
 import { updateProfile } from '@/data/usecases/profile';
+import { fromOption, MAX_INTERVAL_OPTIONS, toOption } from '../review/intervalOptions';
 import type { UserSettings } from '@/data/schemas/people';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
@@ -38,7 +40,26 @@ function Section({
   );
 }
 
-export function AccountSettings({ session }: { session: ReadySession }) {
+/** Perfil. Cuenta y suscripción */
+export function AccountSection({ session }: { session: ReadySession }) {
+  const signOut = usePreferences((state) => state.signOut);
+  return (
+    <>
+      <AccountCard session={session} onSignOut={session.isDemo ? null : signOut} />
+      <Section id="suscripcion-titulo" title={t.settings.subscriptionTitle}>
+        <Button asChild variant="secondary" className="self-start">
+          <Link to={screenPath('subscription')}>
+            <CreditCard aria-hidden />
+            {t.settings.subscriptionLink}
+          </Link>
+        </Button>
+      </Section>
+    </>
+  );
+}
+
+/** Configuración. Metas, estudio, Pomodoro, exportar y borrar */
+export function StudySettings({ session }: { session: ReadySession }) {
   const api = useDataApi();
   const { user, settings } = session;
   const signOut = usePreferences((state) => state.signOut);
@@ -47,7 +68,6 @@ export function AccountSettings({ session }: { session: ReadySession }) {
 
   return (
     <>
-      <AccountCard session={session} onSignOut={session.isDemo ? null : signOut} />
       <Section id="metas-titulo" title={t.settings.goalsTitle}>
         <GoalsForm settings={settings} onSave={saveSettings} />
       </Section>
@@ -87,14 +107,6 @@ export function AccountSettings({ session }: { session: ReadySession }) {
             await saveSettings({ pomodoro });
           }}
         />
-      </Section>
-      <Section id="suscripcion-titulo" title={t.settings.subscriptionTitle}>
-        <Button asChild variant="secondary" className="self-start">
-          <Link to={screenPath('subscription')}>
-            <CreditCard aria-hidden />
-            {t.settings.subscriptionLink}
-          </Link>
-        </Button>
       </Section>
       <Section
         id="exportar-titulo"
@@ -185,6 +197,7 @@ function GoalsForm({
   onSave: (patch: Partial<UserSettings>) => Promise<unknown>;
 }) {
   const [retention, setRetention] = useState(String(Math.round(settings.desiredRetention * 100)));
+  const [maxInterval, setMaxInterval] = useState(toOption(settings.maxIntervalDays));
   const [newCards, setNewCards] = useState(String(settings.newCardsPerDay));
   const [reviews, setReviews] = useState(String(settings.reviewsPerDay));
   const [metric, setMetric] = useState(settings.dailyGoal.metric);
@@ -199,6 +212,7 @@ function GoalsForm({
         event.preventDefault();
         void onSave({
           desiredRetention: clamp(retention, 80, 97) / 100,
+          maxIntervalDays: fromOption(maxInterval),
           newCardsPerDay: clamp(newCards, 0, 500),
           reviewsPerDay: clamp(reviews, 0, 5000),
           dailyGoal: { metric, value: clamp(goal, 1, 1000) },
@@ -216,6 +230,18 @@ function GoalsForm({
         value={retention}
         onChange={(event) => {
           setRetention(event.target.value);
+        }}
+      />
+      <SelectField
+        label={t.settings.maxInterval}
+        hint={t.settings.maxIntervalHint}
+        value={maxInterval}
+        options={MAX_INTERVAL_OPTIONS.map((value) => ({
+          value,
+          label: t.settings.maxIntervalOption(fromOption(value)),
+        }))}
+        onChange={(event) => {
+          setMaxInterval(event.target.value);
         }}
       />
       <div className="grid gap-3 sm:grid-cols-2">

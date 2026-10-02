@@ -24,12 +24,12 @@ afterEach(() => {
 });
 
 describe('rutas', () => {
-  it('registra las 26 pantallas de la sección 10 con rutas únicas', () => {
-    expect(SCREEN_KEYS).toHaveLength(26);
+  it('registra las 26 pantallas de la sección 10 más Configuración con rutas únicas', () => {
+    expect(SCREEN_KEYS).toHaveLength(27);
     const paths = SCREEN_KEYS.map((key) => SCREENS[key].path);
-    expect(new Set(paths).size).toBe(26);
+    expect(new Set(paths).size).toBe(27);
     const numbers = SCREEN_KEYS.map((key) => SCREENS[key].number).sort((a, b) => a - b);
-    expect(numbers).toEqual(Array.from({ length: 26 }, (_, index) => index + 1));
+    expect(numbers).toEqual(Array.from({ length: 27 }, (_, index) => index + 1));
   });
 
   it('muestra Inicio con la navegación de 5 secciones', async () => {
