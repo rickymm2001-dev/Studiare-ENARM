@@ -1,0 +1,28 @@
+# Dependencias y builds
+node_modules/
+dist/
+dev-dist/
+coverage/
+*.tsbuildinfo
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Secretos. La clave vive solo en server/.env.local
+server/.env.local
+.env
+.env.*
+!.env.example
+!server/.env.example
+
+# Sistema y editores
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.log
+.vitest/

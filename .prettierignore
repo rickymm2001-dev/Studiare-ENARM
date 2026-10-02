@@ -1,0 +1,11 @@
+# Los documentos de Ricardo y de planeación no se reformatean
+*.md
+dist
+dev-dist
+coverage
+playwright-report
+test-results
+.vitest
+package-lock.json
+public
+docs/screenshots
