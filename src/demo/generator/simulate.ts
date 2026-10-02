@@ -11,7 +11,7 @@ import {
 } from '@/engines/fsrs';
 import { createRng, type Rng } from '@/engines/random';
 import { sampleOptions } from '@/engines/sampler';
-import { addDays, studyDayStart } from '@/engines/studyDay';
+import { addDays, studyDayOf, studyDayStart } from '@/engines/studyDay';
 import { effectiveAbility, respond, sigmoid, type SimItem, type StudentTruth } from './model';
 
 export const SIM_TIME_ZONE = 'America/Merida';
@@ -356,8 +356,11 @@ export function simulateStudent(
   const limit = options.notAfter;
   const kept = sessions.filter((session) => session.endedAt <= limit);
   const keptIds = new Set(kept.map((session) => session.id));
-  const lastDay = limit.slice(0, 10);
-  const daysWithSessions = new Set(kept.map((session) => session.startedAt.slice(0, 10)));
+  // Días de estudio locales de Mérida, no fechas UTC
+  const lastDay = studyDayOf(new Date(limit), SIM_TIME_ZONE);
+  const daysWithSessions = new Set(
+    kept.map((session) => studyDayOf(new Date(session.startedAt), SIM_TIME_ZONE)),
+  );
   return {
     sessions: kept,
     responses: responses.filter((response) => keptIds.has(response.session)),

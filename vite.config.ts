@@ -48,11 +48,15 @@ export default defineConfig({
       workbox: {
         // La app completa queda en caché para abrir sin conexión después de la primera carga
         globPatterns: ['**/*.{js,css,html,svg,png,webmanifest}'],
-        // Las imágenes de los mazos demo (unos 47 MB) no se precargan. Se guardan al verlas (D-053)
-        globIgnores: ['demo-media/**'],
-        // Los mazos demo viajan en el worker de simulación, que pesa varios MB
-        maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
+        // Las imágenes de los mazos demo (unos 47 MB) y el worker de simulación, que trae los mazos
+        // y pesa varios MB, no se precargan. Se guardan la primera vez que se usan (D-053)
+        globIgnores: ['demo-media/**', 'assets/simulate.worker-*.js'],
         runtimeCaching: [
+          {
+            urlPattern: ({ url }) => /^\/assets\/simulate\.worker-.*\.js$/.test(url.pathname),
+            handler: 'CacheFirst',
+            options: { cacheName: 'simulate-worker', expiration: { maxEntries: 2 } },
+          },
           {
             urlPattern: ({ url }) => url.pathname.startsWith('/demo-media/'),
             handler: 'CacheFirst',

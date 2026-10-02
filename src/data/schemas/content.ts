@@ -202,8 +202,10 @@ export const DemoDeckFileSchema = z.strictObject({
   /** Autor del mazo, con crédito visible (D-053) */
   author: z.string().min(1).max(80),
   status: ReviewStatusSchema,
-  /** Imágenes del mazo, servidas desde public. Ruta relativa a la raíz del sitio */
-  media: z.array(z.string().regex(/^demo-media\/[a-z0-9-]+\/m-\d{4}\.(?:jpg|jpeg|png|gif|webp)$/)),
+  /** Imágenes del mazo, servidas desde public. Ruta absoluta desde la raíz del sitio */
+  media: z.array(
+    z.string().regex(/^\/demo-media\/[a-z0-9-]+\/m-\d{4}\.(?:jpg|jpeg|png|gif|webp)$/),
+  ),
   notes: z.array(DemoDeckNoteSchema).min(1),
 });
 export type DemoDeckFile = z.infer<typeof DemoDeckFileSchema>;

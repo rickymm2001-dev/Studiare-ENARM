@@ -1,7 +1,9 @@
 // Mazos precargados de la demo, hoy los de Paco (D-053).
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { JSDOM } from 'jsdom';
 import { describe, expect, it } from 'vitest';
+import { createCardSanitizer } from '@/data/content/cardHtml';
 import { NoteSchema } from '@/data/schemas/decks';
 import { topicTaxonomy } from '@/demo/content';
 import { buildDeckEntities } from '@/demo/content/deckEntities';
@@ -48,6 +50,18 @@ describe('mazos de Paco en la demo (D-053)', () => {
       expect(text, note.key).not.toMatch(
         /<script|<iframe|<a\b|\son\w+=|style=|javascript:|https?:/i,
       );
+    }
+  });
+
+  it('el HTML guardado ya está saneado. Sanearlo otra vez no cambia nada', () => {
+    const sanitizer = createCardSanitizer(new JSDOM('').window);
+    for (const deck of decks) {
+      const declared = new Set(deck.media);
+      const keep = (file: string) => (declared.has(file) ? file : null);
+      for (const note of deck.notes) {
+        const fields = note.kind === 'basic' ? [note.front, note.back] : [note.text, note.extra];
+        for (const field of fields) expect(sanitizer.sanitize(field, keep), note.key).toBe(field);
+      }
     }
   });
 

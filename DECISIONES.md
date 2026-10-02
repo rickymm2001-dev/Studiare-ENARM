@@ -430,6 +430,10 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 ### D-053. Mazos de Paco completos en la demo
 - Fecha 2026-10-02. Decisión de Ricardo, con autorización de Paco
 - Reemplaza a D-008 para los mazos de Paco. El mazo de Fer sigue fuera del repositorio
-- Los mazos de Medicina interna (2,122 tarjetas), Ginecología y obstetricia (1,526) y Urgencias (123) entran completos al repositorio privado, con sus 478 imágenes, como mazos precargados de la demo con etiqueta Demostración y crédito visible a Paco
+- Los mazos de Medicina interna (2,122 notas), Ginecología y obstetricia (1,526) y Urgencias (123) entran completos al repositorio privado, con las 302 imágenes que usan sus notas, como mazos precargados de la demo con etiqueta Demostración y crédito visible a Paco. Solo se quitó una imagen externa
+- La clave de cada nota sale del guid de Anki, así no cambia si Paco agrega o borra otras notas y se vuelve a convertir. Las imágenes se guardan con ruta absoluta (/demo-media/...)
+- Todos los modelos de los 3 mazos tienen una sola plantilla, así que no hay tarjetas inversas. El script se detiene si llega un modelo con varias plantillas
+- Ni las imágenes ni el worker de simulación, que trae los mazos, entran a la precarga del service worker. Se guardan al usarse
+- fflate se queda en dependencies porque el importador de .apkg de la Fase E lo usará en la app (D-023)
 - Sustituyen a las tarjetas sintéticas en la simulación de repasos del alumno de la demo (D-050)
 

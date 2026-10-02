@@ -6,6 +6,7 @@
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { extname, join, resolve } from 'node:path';
+import { createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
 import { unzipSync } from 'fflate';
 import { JSDOM } from 'jsdom';
@@ -67,7 +68,8 @@ const DECKS: DeckConfig[] = [
   {
     key: 'paco-mi',
     name: 'Medicina interna (Paco)',
-    description: 'Mazo de Paco, compartido con su autorización. Demostración, no validado por médicos.',
+    description:
+      'Mazo de Paco, compartido con su autorización. Demostración, no validado por médicos.',
     roots: ['Medicina-Interna'],
     branchOf: (segments) => ({
       branch: 'internal_medicine',
@@ -77,7 +79,8 @@ const DECKS: DeckConfig[] = [
   {
     key: 'paco-gyo',
     name: 'Ginecología y obstetricia (Paco)',
-    description: 'Mazo de Paco, compartido con su autorización. Demostración, no validado por médicos.',
+    description:
+      'Mazo de Paco, compartido con su autorización. Demostración, no validado por médicos.',
     roots: ['Ginecología', 'Obstetricia'],
     branchOf: (segments) => ({
       branch: 'obstetrics_gynecology',
@@ -120,9 +123,17 @@ for (const file of files) {
   const db = new DatabaseSync(dbPath, { readOnly: true });
   const models = JSON.parse(
     (db.prepare('select models from col').get() as { models: string }).models,
-  ) as Record<string, { name: string; type: number }>;
-  const rows = db.prepare('select id, mid, flds, tags from notes order by id').all() as {
+  ) as Record<string, { name: string; type: number; tmpls: unknown[] }>;
+  // Una nota básica da una sola tarjeta. Un modelo con varias plantillas, como Basic (and reversed),
+  // perdería tarjetas, así que se detiene la conversión para decidir qué hacer
+  for (const model of Object.values(models)) {
+    if (model.type !== 1 && model.tmpls.length > 1) {
+      throw new Error(`El modelo ${model.name} tiene ${model.tmpls.length} plantillas`);
+    }
+  }
+  const rows = db.prepare('select id, guid, mid, flds, tags from notes order by id').all() as {
     id: number;
+    guid: string;
     mid: number;
     flds: string;
     tags: string;
@@ -146,14 +157,14 @@ for (const file of files) {
     const bytes = index === undefined ? undefined : zip[index];
     const extension = extname(name).toLowerCase();
     if (!bytes || !/^\.(jpg|jpeg|png|gif|webp)$/.test(extension)) return null;
-    const path = `demo-media/${config.key}/m-${String(media.length + 1).padStart(4, '0')}${extension}`;
-    writeFileSync(join(root, 'public', path), bytes);
+    const path = `/demo-media/${config.key}/m-${String(media.length + 1).padStart(4, '0')}${extension}`;
+    writeFileSync(join(root, 'public', path.slice(1)), bytes);
     media.push(path);
     mediaPath.set(name, path);
     return path;
   };
 
-  const notes = rows.map((row, index) => {
+  const notes = rows.map((row) => {
     const sourceTag = row.tags.trim().split(/\s+/)[0] ?? '';
     const segments = sourceTag.split('::');
     const { branch, topic } = config.branchOf(segments);
@@ -161,7 +172,8 @@ for (const file of files) {
     const model = models[String(row.mid)];
     const isCloze = model?.type === 1 || /cloze/i.test(model?.name ?? '');
     const base = {
-      key: `${config.key}-${String(index + 1).padStart(4, '0')}`,
+      // La clave sale del guid de Anki, que no cambia si Paco agrega o borra otras notas
+      key: `${config.key}-${createHash('sha256').update(row.guid).digest('hex').slice(0, 12)}`,
       sourceTag,
       tags: segments.map((segment) => segment.replace(/[_-]+/g, ' ').trim()).filter(Boolean),
       branch,
@@ -169,9 +181,9 @@ for (const file of files) {
     };
     if (isCloze) {
       const text = sanitizer.sanitize(fields[0] ?? '', resolveMedia);
-      const ordinals = [...new Set([...text.matchAll(/\{\{c(\d+)::/g)].map((m) => Number(m[1])))].sort(
-        (a, b) => a - b,
-      );
+      const ordinals = [
+        ...new Set([...text.matchAll(/\{\{c(\d+)::/g)].map((m) => Number(m[1]))),
+      ].sort((a, b) => a - b);
       return {
         ...base,
         kind: 'cloze' as const,
