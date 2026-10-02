@@ -8,6 +8,10 @@ import { ReviewScreen } from '@/features/review/ReviewScreen';
 import { OnboardingScreen } from '@/features/onboarding/OnboardingScreen';
 import { ProfileScreen } from '@/features/profile/ProfileScreen';
 import { RoleSelectorScreen } from '@/features/role/RoleSelectorScreen';
+import { FeedbackScreen } from '@/features/simulator/FeedbackScreen';
+import { QuestionScreen } from '@/features/simulator/QuestionScreen';
+import { SessionSummaryScreen } from '@/features/simulator/SessionSummaryScreen';
+import { SimulatorSetupScreen } from '@/features/simulator/SimulatorSetupScreen';
 import { AppShell } from './layout/AppShell';
 import { InitialLoadingScreen, NotFoundScreen, RouteErrorScreen } from './layout/RouteFallbacks';
 import { ScreenPlaceholder } from './layout/ScreenPlaceholder';
@@ -18,6 +22,10 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, ComponentType>> = {
   onboarding: OnboardingScreen,
   home: HomeScreen,
   review: ReviewScreen,
+  question: QuestionScreen,
+  feedback: FeedbackScreen,
+  sessionSummary: SessionSummaryScreen,
+  simulatorSetup: SimulatorSetupScreen,
   decks: DecksScreen,
   subscription: SubscriptionScreen,
   profile: ProfileScreen,
