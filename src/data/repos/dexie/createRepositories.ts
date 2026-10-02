@@ -11,7 +11,12 @@ import {
   SimTruthSchema,
   WidgetLayoutSchema,
 } from '../../schemas/activity';
-import { BiasLabelSchema, ClinicalCaseSchema, ContentReportSchema } from '../../schemas/bank';
+import {
+  BiasLabelSchema,
+  ClinicalCaseSchema,
+  ContentReportSchema,
+  ReviewAssignmentSchema,
+} from '../../schemas/bank';
 import { CardSchema, DeckSchema, NoteSchema } from '../../schemas/decks';
 import {
   ConsentSchema,
@@ -47,6 +52,7 @@ export function createDexieRepositories(db: EnarmDb): Repositories {
     options: createDexieOptionRepo(db),
     biasLabels: createDexieEntityRepo(db.biasLabels, BiasLabelSchema),
     contentReports: createDexieEntityRepo(db.contentReports, ContentReportSchema),
+    reviewAssignments: createDexieEntityRepo(db.reviewAssignments, ReviewAssignmentSchema),
     sessions: createDexieEntityRepo(db.sessions, SessionSchema),
     findings: createDexieEntityRepo(db.findings, FindingSchema),
     patterns: createDexieEntityRepo(db.patterns, PatternSchema),

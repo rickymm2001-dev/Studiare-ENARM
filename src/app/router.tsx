@@ -6,7 +6,9 @@ import { DecksScreen } from '@/features/decks/DecksScreen';
 import { HomeScreen } from '@/features/home/HomeScreen';
 import { ReviewScreen } from '@/features/review/ReviewScreen';
 import { OnboardingScreen } from '@/features/onboarding/OnboardingScreen';
+import { AdminUsersScreen } from '@/features/admin/AdminUsersScreen';
 import { PartyScreen } from '@/features/party/PartyScreen';
+import { QuestionBankScreen } from '@/features/physician/QuestionBankScreen';
 import { ProfileScreen } from '@/features/profile/ProfileScreen';
 import { ProgressScreen } from '@/features/progress/ProgressScreen';
 import { SettingsScreen } from '@/features/settings/SettingsScreen';
@@ -35,6 +37,8 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, ComponentType>> = {
   profile: ProfileScreen,
   progress: ProgressScreen,
   settings: SettingsScreen,
+  adminUsers: AdminUsersScreen,
+  questionBank: QuestionBankScreen,
   roleSelector: RoleSelectorScreen,
 };
 

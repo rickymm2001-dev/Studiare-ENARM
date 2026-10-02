@@ -35,6 +35,7 @@ export const SCREEN_KEYS = [
   'adminSettings',
   'roleSelector',
   'settings',
+  'adminUsers',
 ] as const;
 
 export type ScreenKey = (typeof SCREEN_KEYS)[number];
@@ -77,6 +78,8 @@ export const SCREENS: Record<ScreenKey, ScreenDef> = {
   roleSelector: { number: 26, path: '/rol', area: 'shared', phase: 'A' },
   // Configuración separada de Perfil por decisión de Ricardo (D-065)
   settings: { number: 27, path: '/configuracion', area: 'shared', phase: 'C' },
+  // Usuarios, roles y asignaciones a médicos (D-070)
+  adminUsers: { number: 28, path: '/admin/usuarios', area: 'admin', phase: 'C' },
 };
 
 export function screenPath(key: ScreenKey): string {

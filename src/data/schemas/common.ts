@@ -28,7 +28,8 @@ export const TaxonomyKeySchema = z
 /** Valor JSON libre, para configuraciones que cada fase precisa con su propio esquema */
 export const JsonRecordSchema = z.record(z.string(), z.json());
 
-export const RoleSchema = z.enum(['student', 'physician', 'admin']);
+/** Roles por nivel. Alumno sin poderes, médico revisa lo asignado, admin todo, dueño fijo (D-070) */
+export const RoleSchema = z.enum(['student', 'physician', 'admin', 'owner']);
 export type Role = z.infer<typeof RoleSchema>;
 
 /** Estado editorial de contenido. Borrador primero (4.2) */

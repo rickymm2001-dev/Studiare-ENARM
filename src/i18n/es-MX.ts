@@ -78,6 +78,10 @@ const screens: Record<ScreenKey, ScreenText> = {
     title: 'Perfil',
     description: 'Quién eres en Studiare. Tu nivel, tu racha, tu cuenta y tu plan.',
   },
+  adminUsers: {
+    title: 'Usuarios',
+    description: 'Roles y asignaciones de preguntas a médicos.',
+  },
   settings: {
     title: 'Configuración',
     description: 'Apariencia, metas, repaso, Pomodoro y tus datos.',
@@ -158,6 +162,7 @@ export const t = {
     costs: 'Costos',
     demo: 'Demo',
     settings: 'Configuración',
+    users: 'Usuarios',
   },
   screens,
   phase: {
@@ -203,11 +208,13 @@ export const t = {
     },
   },
   roles: {
-    names: { student: 'Alumno', physician: 'Médico', admin: 'Admin' },
+    names: { student: 'Alumno', physician: 'Médico', admin: 'Admin', owner: 'Dueño' },
     descriptions: {
       student: 'Repaso, simuladores, progreso, tutor y Party.',
       physician: 'Banco de preguntas, etiquetado, acuerdo, borradores de IA y reportes.',
-      admin: 'Costos de IA, datos de demostración y configuración. También ve el panel médico.',
+      admin:
+        'Usuarios, asignaciones, costos de IA, datos de demostración y configuración. También ve el panel médico.',
+      owner: 'Todo lo del admin. Además nombra o quita admins y nadie le puede quitar el rol.',
     },
     legend: 'Rol en este dispositivo',
     notice:

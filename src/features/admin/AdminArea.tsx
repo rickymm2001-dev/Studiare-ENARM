@@ -4,7 +4,7 @@ import { RoleGuard } from '@/app/layout/RoleGuard';
 
 export function AdminArea() {
   return (
-    <RoleGuard allow={['admin']} area="admin">
+    <RoleGuard allow={['admin', 'owner']} area="admin">
       <Outlet />
     </RoleGuard>
   );

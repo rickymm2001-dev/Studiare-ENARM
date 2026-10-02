@@ -21,6 +21,7 @@ import {
   ContentReportSchema,
   OptionSchema,
   QuestionSchema,
+  ReviewAssignmentSchema,
 } from '../schemas/bank';
 import {
   CardStateCacheSchema,
@@ -73,6 +74,11 @@ export const TABLES = {
     kind: 'entity',
   },
   contentReports: { schema: ContentReportSchema, indexes: 'id, targetId, status', kind: 'entity' },
+  reviewAssignments: {
+    schema: ReviewAssignmentSchema,
+    indexes: 'id, questionId, physicianId, &[questionId+physicianId]',
+    kind: 'entity',
+  },
 
   events: {
     schema: AppEventSchema,

@@ -576,3 +576,12 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - La llave anon de Supabase es pública por diseño y la protegen los permisos por fila. La llave service_role nunca va al navegador ni al repositorio
 - docs/SUPABASE.md es la guía para que Ricardo cree el proyecto, cargue el esquema, se haga dueño y pase las llaves públicas
 - La app todavía no habla con Supabase. Se conecta cuando Ricardo pase las llaves (bloque 9, sincronización)
+
+### D-070. Usuarios, roles por nivel y asignación de preguntas a médicos
+- Fecha 2026-10-02. Origen R (roles por nivel), implementación de Claude
+- Se agrega el rol de dueño al modelo local. Alumno, médico, admin y dueño. Admin y dueño comparten pantallas
+- src/engines/roles.ts tiene las mismas reglas que set_user_role de Supabase, con pruebas. La interfaz solo ofrece los cambios permitidos
+- Nueva pantalla 28, Usuarios en /admin/usuarios. El admin cambia roles y asigna subespecialidades a cada médico. Al asignar una subespecialidad se le asignan todas sus preguntas
+- Banco de preguntas, primera versión. El médico ve solo lo asignado. El admin ve todo y a quién está asignada cada pregunta. El editor con decisiones llega en la Fase E
+- La base local sube a la versión 3 con la tabla reviewAssignments
+- En el prototipo quien llama usa el rol del selector de pruebas de la pantalla 26 (sin enlaces). Con Supabase el rol sale de la cuenta y lo aplica el servidor

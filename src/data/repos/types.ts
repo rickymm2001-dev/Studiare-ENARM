@@ -12,7 +12,14 @@ import type {
   SimTruth,
   WidgetLayout,
 } from '../schemas/activity';
-import type { BiasLabel, ClinicalCase, ContentReport, Option, Question } from '../schemas/bank';
+import type {
+  BiasLabel,
+  ClinicalCase,
+  ContentReport,
+  Option,
+  Question,
+  ReviewAssignment,
+} from '../schemas/bank';
 import type {
   CardStateCache,
   ItemStatsCache,
@@ -116,6 +123,7 @@ export interface Repositories {
   options: OptionRepo;
   biasLabels: EntityRepo<BiasLabel>;
   contentReports: EntityRepo<ContentReport>;
+  reviewAssignments: EntityRepo<ReviewAssignment>;
   sessions: EntityRepo<Session>;
   findings: EntityRepo<Finding>;
   patterns: EntityRepo<Pattern>;

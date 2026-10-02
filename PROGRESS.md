@@ -23,7 +23,7 @@
 - [x] 1. Sistema de diseño premium (D-061 a D-067)
 - [x] 2. Portada de venta, registro con correo, datos de cuenta y foto o avatar (D-068)
 - [x] 3. Esquema de Supabase con permisos por fila y roles, probado en Postgres local (D-069)
-- [ ] 4. Panel de administración de usuarios y asignaciones a médicos
+- [x] 4. Usuarios con roles por nivel y asignaciones a médicos, banco del médico solo con lo asignado (D-070)
 - [ ] 5. Pagos con Stripe y Mercado Pago en modo prueba
 - [ ] 6. Plan del día, misiones, ligas, insignias, duelos y compartir
 - [ ] 7. Progreso con estadísticas de técnica
@@ -42,7 +42,8 @@
 - Tope de 21 días sobre Bien con botones separados y multiplicador por botón (D-067)
 - Portada de venta, cuenta con correo en tabla aparte, datos opcionales, 12 avatares médicos o foto propia (D-068). 322 pruebas pasan
 - Esquema de Supabase con 12 pruebas de permisos en npm run test:sql y guía en docs/SUPABASE.md (D-069)
-- Siguiente. Bloque 4, panel de administración de usuarios y asignaciones a médicos
+- Usuarios en /admin/usuarios con reglas de roles idénticas a Supabase y banco del médico (D-070). 326 pruebas pasan
+- Siguiente. Bloque 5, pagos con Stripe y Mercado Pago en modo prueba
 - Pendiente de Ricardo. Crear el proyecto de Supabase con docs/SUPABASE.md y pasar las llaves públicas
 
 ## Fase C. Pantallas del alumno (esqueleto funcionando)
