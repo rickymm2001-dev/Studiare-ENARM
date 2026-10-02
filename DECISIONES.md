@@ -602,3 +602,9 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Durante el repaso, Cambiar mazo o tema regresa a la selección. Cada calificación ya quedó guardada, así que no se pierde avance. Al terminar se puede repasar otros temas
 - Agregar mazo lleva a Mazos. Subir mazos propios llega en el bloque P8
 - La última selección se recuerda en el dispositivo
+
+### D-073. Protección del contenido al final y análisis docente
+- Fecha 2026-10-02. Origen R
+- Ricardo pide que nadie pueda descargar el banco ni las tarjetas. Decide dejarlo para el final para seguir viendo la página actualizarse, asumiendo el riesgo porque nadie conoce la página todavía
+- Cuando se haga. Repositorio privado y la demo pública con una muestra pequeña (unas 20 preguntas y 30 tarjetas por mazo). El contenido completo se servirá desde Supabase solo con sesión
+- docs/ANALISIS_DOCENTE_ENARM.md recoge cómo es el examen, qué se ha preguntado, 13 tipos de trampa con el sesgo que explotan y la señal que la app puede medir, lo que dice la evidencia sobre responder y las implicaciones para el banco, Progreso y la IA. No usa preguntas reales ni filtradas
