@@ -6,10 +6,32 @@
 - Fase A aprobada por Ricardo el 2026-10-02
 - Fase B en curso desde el 2026-10-02. Ricardo la aprobó junto con la Fase A
 - Bloques 9 y 10 terminados. Bloque 8 (contenido demo) pausado con 4 de 6 lotes y sin mazos (D-050)
-- Siguiente paso. Cierre de la Fase B según 15.1, con el banco y los mazos pendientes para el final (D-050). Antes del cierre Ricardo decide el ajuste de sesgos (D-051) y si se prueba el cambio del método de fatiga. El lote 5 quedó a medias en content-drafts/b5, con Medicina interna (13) y Pediatría (12) validadas
+- Fase C en curso. Bloques 1 a 8 terminados, ver su sección
+- Pendiente de la Fase B. Cierre según 15.1, con el banco y los mazos pendientes para el final (D-050). Antes del cierre Ricardo decide el ajuste de sesgos (D-051) y si se prueba el cambio del método de fatiga. El lote 5 quedó a medias en content-drafts/b5, con Medicina interna (13) y Pediatría (12) validadas
 - Todo el trabajo se sube a GitHub con push frecuente y el CI corre npm run check en cada push a cualquier rama (D-050)
 - Trabajo desde GitHub listo (D-049). CI con npm run check en cada push, scripts de contenido en scripts/content y workflow de revisión en .claude/workflows
 - Repo remoto privado en https://github.com/rickymm2001-dev/Studiare-ENARM (antes enarm-prototipo, GitHub redirige el nombre viejo). El trabajo en la nube va a la rama main-y84jz2 (D-048, D-050)
+
+## Fase C. Pantallas del alumno (esqueleto funcionando)
+
+Ricardo pidió ver tomar forma la interfaz completa antes de seguir con el banco. Inicio de sesión y pagos son simulados y locales según 3.2, sin contraseña, sin datos de tarjeta y sin cobro real.
+
+### Bloques
+- [x] 1. Bienvenida con perfil local, aviso de privacidad y consentimientos
+- [x] 2. Inicio con widgets programables (heatmap, racha, nivel y XP, para hoy, cuenta regresiva, meta diaria, Party)
+- [x] 3. Pomodoro configurable con sonido y notificaciones opcionales
+- [x] 4. Perfil y ajustes completos, exportar y borrar datos
+- [x] 5. Suscripción y checkout simulados con recibos marcados SIMULADO
+- [x] 6. Mazos de Paco y repaso con FSRS, confianza y causa del error
+- [x] 7. Simulador de práctica con pregunta, retroalimentación y resumen
+- [x] 8. Party con grupos, código de invitación, tabla semanal y retos colectivos
+- [ ] 9. Progreso, planificador y examen completo
+- [ ] 10. Duelos de Party, tutor y pruebas e2e de las pantallas nuevas
+
+### Bitácora por bloque
+- Bloques 1 a 6. Commits 55dc312, 1826448 y 40de8a4. Verificado en el navegador, de la bienvenida al repaso de una tarjeta de Urgencias con sus intervalos de FSRS
+- Bloque 7. Práctica por rama, dificultad y estructura con el límite diario del plan Gratis. Opciones con el muestreo diverso, negaciones resaltadas en la frase de la pregunta, confianza antes de responder, cada cambio de respuesta registrado y XP con el motor xp. La retroalimentación muestra el sesgo probable del distractor elegido, la explicación, las GPC por verificar, la causa del error y el reporte para revisión médica. El banco demo se guarda en la base la primera vez que se abre el simulador
+- Bloque 8. Grupos locales con código de 6 caracteres. Al crear un grupo se pueden sumar 6 compañeros simulados, marcados, con actividad determinista por día. Tabla semanal desde el lunes a las 4 a. m. y retos colectivos que cuentan desde su primer día. Reclamar un reto cumplido registra challenge_completed y 100 XP una sola vez. Solo se comparte alias, XP, nivel y racha (9.6). 311 pruebas pasan
 
 ## Fase B. Motores núcleo, alumnos simulados y contenido demo
 

@@ -14,6 +14,7 @@ import { SimulatedDataLabel } from '@/ui/components/labels';
 import { CalibratingState, LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
+import { PartyWidget } from '../party/PartyWidget';
 import { PomodoroWidget } from '../pomodoro/PomodoroWidget';
 import {
   addWidget,
@@ -193,6 +194,8 @@ function WidgetBody({
       return <DailyGoalWidget snapshot={snapshot} />;
     case 'pomodoro':
       return <PomodoroWidget session={session} />;
+    case 'party_challenge':
+      return <PartyWidget session={session} snapshot={snapshot} />;
     case 'bias_pattern':
       return <CalibratingState current={0} target={40} unit={t.states.exampleUnit} />;
     default:
