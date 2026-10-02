@@ -11,6 +11,7 @@
 - Repo remoto en https://github.com/rickymm2001-dev/Studiare-ENARM, público por decisión de Ricardo (D-048 y D-050)
 - Demo publicada en GitHub Pages en https://rickymm2001-dev.github.io/Studiare-ENARM/ y se actualiza sola con cada push a main (D-050). Falta el dominio propio, que Ricardo todavía no compra
 - Logo de Studiare en el encabezado, en modo claro y oscuro (D-051)
+- Marco más ancho en computadora con tarjetas en dos columnas (D-052)
 
 ## Fase B. Motores núcleo, alumnos simulados y contenido demo
 

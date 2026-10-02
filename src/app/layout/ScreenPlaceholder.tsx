@@ -110,7 +110,7 @@ function AllScreensIndex() {
         <CardTitle id="pantallas-titulo">{t.phase.allScreens}</CardTitle>
       </CardHeader>
       <CardContent>
-        <ol className="grid gap-1 sm:grid-cols-2">
+        <ol className="grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
           {entries
             .sort(([, a], [, b]) => a.number - b.number)
             .map(([key, screen]) => (
