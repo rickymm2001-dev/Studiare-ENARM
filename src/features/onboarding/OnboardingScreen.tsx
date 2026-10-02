@@ -1,5 +1,5 @@
-// Bienvenida y onboarding (pantalla 1). Entrar con un perfil de este dispositivo o crear uno con
-// fecha del ENARM, minutos, ramas, meta diaria, aviso de privacidad simulado y consentimientos.
+// Bienvenida (pantalla 1). Página aparte, sin navegación. Entrar con un perfil de este dispositivo
+// o crear uno con alias, meta diaria y un solo aviso de privacidad (D-059).
 import { LogIn, UserPlus } from 'lucide-react';
 import { useState, type SyntheticEvent } from 'react';
 import { Link, useNavigate } from 'react-router';
@@ -14,8 +14,6 @@ import { Button } from '@/ui/components/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
 
-const BRANCHES = ['internal_medicine', 'pediatrics', 'obstetrics_gynecology', 'general_surgery'];
-const MINUTES = [30, 60, 90, 120, 180, 240];
 type GoalMetric = 'cards' | 'questions' | 'focusMinutes';
 const GOAL_DEFAULTS: Record<GoalMetric, number> = { cards: 20, questions: 10, focusMinutes: 15 };
 
@@ -57,14 +55,7 @@ export function OnboardingScreen() {
                   }}
                 >
                   <LogIn aria-hidden />
-                  <span className="flex flex-col items-start">
-                    <span>{t.onboarding.signInAs(profile.alias)}</span>
-                    <span className="text-sm text-fg-muted">
-                      {profile.examDate
-                        ? t.onboarding.examOn(profile.examDate)
-                        : t.onboarding.noExamDate}
-                    </span>
-                  </span>
+                  <span>{t.onboarding.signInAs(profile.alias)}</span>
                 </Button>
               </li>
             ))}
@@ -90,38 +81,25 @@ function CreateProfileForm({
   onCreated: (userId: string) => void;
 }) {
   const [alias, setAlias] = useState('');
-  const [examDate, setExamDate] = useState('');
-  const [dailyMinutes, setDailyMinutes] = useState('90');
-  const [branches, setBranches] = useState<string[]>(BRANCHES);
   const [goalMetric, setGoalMetric] = useState<GoalMetric>('cards');
   const [goalValue, setGoalValue] = useState(String(GOAL_DEFAULTS.cards));
   const [privacy, setPrivacy] = useState(false);
-  const [consents, setConsents] = useState({
-    party: false,
-    ai_analysis: false,
-    anonymized_improvement: false,
-  });
   const [submitted, setSubmitted] = useState(false);
   const [busy, setBusy] = useState(false);
 
   const aliasError =
     alias.trim().length < 1 || alias.trim().length > 40 ? t.onboarding.aliasError : null;
-  const branchesError = branches.length === 0 ? t.onboarding.branchesError : null;
   const privacyError = privacy ? null : t.onboarding.privacyError;
 
   const onSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
     setSubmitted(true);
-    if (aliasError || branchesError || privacyError) return;
+    if (aliasError || privacyError) return;
     setBusy(true);
     try {
       const user = await create({
         alias: alias.trim(),
-        examDate: examDate || null,
-        dailyMinutes: Number(dailyMinutes),
-        branches,
         dailyGoal: { metric: goalMetric, value: Math.max(1, Number(goalValue) || 1) },
-        consents,
       });
       onCreated(user.id);
     } finally {
@@ -147,43 +125,6 @@ function CreateProfileForm({
             setAlias(event.target.value);
           }}
         />
-        <TextField
-          label={t.onboarding.examDate}
-          hint={t.onboarding.examDateHint}
-          type="date"
-          value={examDate}
-          onChange={(event) => {
-            setExamDate(event.target.value);
-          }}
-        />
-        <SelectField
-          label={t.onboarding.dailyMinutes}
-          value={dailyMinutes}
-          options={MINUTES.map((n) => ({ value: String(n), label: t.onboarding.minutes(n) }))}
-          onChange={(event) => {
-            setDailyMinutes(event.target.value);
-          }}
-        />
-        <fieldset className="flex flex-col gap-2">
-          <legend className="mb-1 font-medium text-fg">{t.onboarding.branches}</legend>
-          {BRANCHES.map((branch) => (
-            <CheckboxField
-              key={branch}
-              label={t.branchNames[branch] ?? branch}
-              checked={branches.includes(branch)}
-              onChange={(event) => {
-                setBranches((current) =>
-                  event.target.checked ? [...current, branch] : current.filter((b) => b !== branch),
-                );
-              }}
-            />
-          ))}
-          {submitted && branchesError ? (
-            <p className="text-sm text-danger" role="alert">
-              {branchesError}
-            </p>
-          ) : null}
-        </fieldset>
         <div className="grid gap-3 sm:grid-cols-2">
           <SelectField
             label={t.onboarding.goalMetric}
@@ -231,21 +172,6 @@ function CreateProfileForm({
             </p>
           ) : null}
         </section>
-        <fieldset className="flex flex-col gap-2">
-          <legend className="font-medium text-fg">{t.onboarding.consentsTitle}</legend>
-          <p className="text-sm text-fg-muted">{t.onboarding.consentsDescription}</p>
-          {(Object.keys(consents) as (keyof typeof consents)[]).map((purpose) => (
-            <CheckboxField
-              key={purpose}
-              label={t.onboarding.consents[purpose][0]}
-              hint={t.onboarding.consents[purpose][1]}
-              checked={consents[purpose]}
-              onChange={(event) => {
-                setConsents((current) => ({ ...current, [purpose]: event.target.checked }));
-              }}
-            />
-          ))}
-        </fieldset>
         <CardContent>
           <Button type="submit" disabled={busy}>
             <UserPlus aria-hidden />

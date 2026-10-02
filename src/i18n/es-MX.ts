@@ -216,7 +216,7 @@ export const t = {
   access: {
     physicianTitle: 'Esta sección es para médicos',
     adminTitle: 'Esta sección es para admin',
-    description: 'Cambia de rol para verla. En el prototipo no hay inicio de sesión.',
+    description: 'Solo un administrador puede darte acceso a esta sección.',
   },
   database: {
     legend: 'Cuenta activa',

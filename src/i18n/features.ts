@@ -48,7 +48,7 @@ export const featureText = {
     goalMetrics: { cards: 'Tarjetas', questions: 'Preguntas', focusMinutes: 'Minutos de enfoque' },
     privacyTitle: 'Aviso de privacidad (simulado)',
     privacyBody:
-      'Tus datos viven en este dispositivo. Al LLM solo viajan IDs seudónimos y texto del banco, nunca tu nombre ni tu correo. Puedes exportar o borrar tus datos cuando quieras. Este aviso es un ejemplo del prototipo.',
+      'Un solo aviso cubre todo. Usamos tus datos para darte tu plan de estudio, tus estadísticas y el análisis de tus respuestas con IA, para mostrar tu alias, XP, nivel y racha en los grupos a los que te unas, y para mejorar la plataforma con datos sin tu identidad. A la IA solo viajan IDs seudónimos y texto del banco, nunca tu nombre ni tu correo. Puedes exportar o borrar tus datos cuando quieras. Este aviso es un ejemplo del prototipo.',
     privacyAccept: 'Leí y acepto el aviso de privacidad',
     privacyError: 'Necesitas aceptar el aviso para continuar.',
     consentsTitle: 'Consentimientos por finalidad',
@@ -203,8 +203,8 @@ export const featureText = {
     errorsToReview: 'Mandar mis errores de preguntas al repaso',
     optionsShown: 'Opciones por pregunta',
     pomodoroTitle: 'Pomodoro',
-    privacyTitle: 'Privacidad y consentimientos',
-    privacyDescription: 'Cada finalidad se puede activar o retirar cuando quieras.',
+    privacyTitle: 'Privacidad',
+    privacyDescription: 'Aceptaste el aviso de privacidad al crear tu perfil.',
     exportTitle: 'Exportar mis datos',
     exportDescription:
       'Descarga tu perfil, consentimientos, bitácora y tablero en un archivo JSON.',
@@ -269,9 +269,9 @@ export const featureText = {
     unfollow: 'Dejar de seguir',
     adding: 'Agregando…',
     loading: 'Cargando mazos…',
-    importTitle: 'Importar tus mazos',
+    importTitle: 'Sube tu mazo',
     importBody:
-      'El importador de .apkg de Anki llega en la Fase E. Tus mazos importados serán privados.',
+      'Pronto podrás subir tus mazos desde otras apps de tarjetas, Word, Excel o CSV. Tus mazos serán privados.',
     createTitle: 'Crear mazo',
     createBody: 'La creación manual de mazos llega en una fase siguiente.',
   },

@@ -478,3 +478,11 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - public/favicon-32x32.png y public/favicon-64x64.png salen del logo que compartió, solo el símbolo, centrado y sin fondo. Se probó sobre pestaña clara y oscura y se distingue en ambas
 - Se quitó public/favicon.svg con la E provisional. scripts/generate-icons.ts ya no lo genera
 - Los íconos de la PWA instalada (pwa-*, maskable y apple-touch-icon) y el nombre de la app siguen provisionales (D-016) hasta que Ricardo confirme el cambio
+
+### D-059. Bienvenida más simple, un solo aviso de privacidad y roles sin autoservicio
+- Fecha 2026-10-02. Origen R
+- La bienvenida es una página aparte, sin la barra de navegación ni el riel lateral
+- Se quitan de la bienvenida y de Perfil la fecha del ENARM, los minutos al día y las ramas que estudia. La fecha del ENARM es la misma para todos, así que vive en la plataforma (src/config/exam.ts) como fecha provisional que después cambia el administrador. Los minutos al día se van a inferir de la conducta real del alumno
+- Se quitan los consentimientos por finalidad. Un solo aviso de privacidad cubre todas las finalidades y aceptarlo guarda la aceptación de cada una con la versión del aviso. Esto ajusta 4.5 de la especificación
+- El alumno ya no puede cambiar su rol. Toda cuenta nace como alumno y solo un administrador la sube a médico o administrador. En el prototipo la pantalla 26 queda solo para pruebas, sin enlaces. Los roles reales necesitan cuentas con servidor, ver docs/ANALISIS_PLATAFORMA.md
+- La interfaz no menciona Anki. Se habla de subir tu mazo

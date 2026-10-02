@@ -1,5 +1,6 @@
 // Proveedor de instantáneas de los widgets (9.1). Lee la bitácora del alumno y arma lo que cada
 // widget muestra, con los motores reales. Agregar un widget nuevo no toca los motores.
+import { examDateFor } from '@/config/exam';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import type { AppEvent } from '@/data/schemas/events';
 import type { FsrsCardState } from '@/data/schemas/common';
@@ -93,7 +94,7 @@ export function buildSnapshot(input: {
     goal: settings.dailyGoal,
     dueCards,
     errorsToday,
-    daysToExam: user.examDate ? daysBetween(today, user.examDate) : null,
+    daysToExam: daysBetween(today, examDateFor(user)),
     weeklyXp,
   };
 }

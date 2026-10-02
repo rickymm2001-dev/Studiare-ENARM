@@ -23,6 +23,7 @@ import {
 } from '@/engines/fsrs';
 import { studyDayOf } from '@/engines/studyDay';
 import { awardXp } from '@/engines/xp';
+import { examDateFor } from '@/config/exam';
 import { t } from '@/i18n/es-MX';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
@@ -122,7 +123,7 @@ function ReviewSession({
   const config: SchedulerConfig = useMemo(
     () => ({
       desiredRetention: settings.desiredRetention,
-      examDate: user.examDate,
+      examDate: examDateFor(user),
       timeZone: user.timeZone,
       thresholds: {
         ...DEFAULT_THRESHOLDS.fsrs,

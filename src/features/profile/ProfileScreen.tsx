@@ -1,18 +1,15 @@
 // Perfil (pantalla 15). En la Fase A trae cuenta activa, rol, tema visual y modo de IA.
 // El resto de los ajustes llega en la Fase C, y exportar, borrar y puntaje oficial en la Fase E.
-import { FlaskConical, Monitor, Moon, ShieldCheck, Sun, UserRound } from 'lucide-react';
+import { FlaskConical, Monitor, Moon, Sun, UserRound } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { Link } from 'react-router';
 import { AiModeBadge } from '@/ai/AiModeBadge';
 import { useAiStatus } from '@/ai/useAiStatus';
 import { usePreferences } from '@/app/preferences';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
-import { screenPath } from '@/app/screens';
 import { useRepositories } from '@/data/context';
 import { DATABASE_NAMES } from '@/data/databases';
 import { useLiveData } from '@/data/hooks';
 import { t } from '@/i18n/es-MX';
-import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SimulatedDataLabel } from '@/ui/components/labels';
 import { RadioCards } from '@/ui/components/radio-cards';
@@ -45,7 +42,6 @@ const DATABASE_OPTIONS = [
 export function ProfileScreen() {
   const theme = usePreferences((state) => state.theme);
   const setTheme = usePreferences((state) => state.setTheme);
-  const role = usePreferences((state) => state.role);
   const database = usePreferences((state) => state.database);
   const setDatabase = usePreferences((state) => state.setDatabase);
   const aiStatus = useAiStatus();
@@ -71,19 +67,6 @@ export function ProfileScreen() {
         {database === 'demo' ? <DemoDataPanel /> : null}
 
         {session.status === 'ready' ? <AccountSettings session={session} /> : null}
-
-        <Card aria-labelledby="rol-titulo">
-          <CardHeader>
-            <CardTitle id="rol-titulo">{t.roles.cardTitle}</CardTitle>
-            <CardDescription>{t.roles.current(t.roles.names[role])}</CardDescription>
-          </CardHeader>
-          <Button asChild variant="secondary" className="self-start">
-            <Link to={screenPath('roleSelector')}>
-              <ShieldCheck aria-hidden />
-              {t.roles.change}
-            </Link>
-          </Button>
-        </Card>
 
         <Card>
           <RadioCards

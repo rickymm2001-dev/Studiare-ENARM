@@ -6,9 +6,8 @@ import { Link } from 'react-router';
 import { usePreferences } from '@/app/preferences';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
-import { useLiveData } from '@/data/hooks';
 import { exportUserData } from '@/data/usecases/exportData';
-import { currentConsents, setConsent, updateProfile } from '@/data/usecases/profile';
+import { updateProfile } from '@/data/usecases/profile';
 import type { UserSettings } from '@/data/schemas/people';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
@@ -89,7 +88,6 @@ export function AccountSettings({ session }: { session: ReadySession }) {
           }}
         />
       </Section>
-      <ConsentsCard session={session} />
       <Section id="suscripcion-titulo" title={t.settings.subscriptionTitle}>
         <Button asChild variant="secondary" className="self-start">
           <Link to={screenPath('subscription')}>
@@ -137,8 +135,6 @@ function AccountCard({
   const api = useDataApi();
   const { user } = session;
   const [alias, setAlias] = useState(user.alias);
-  const [examDate, setExamDate] = useState(user.examDate ?? '');
-  const [minutes, setMinutes] = useState(String(user.dailyMinutes ?? 90));
   const [status, setStatus] = useState('');
   return (
     <Section
@@ -151,11 +147,7 @@ function AccountCard({
         onSubmit={(event) => {
           event.preventDefault();
           if (!alias.trim()) return;
-          void updateProfile(api, user, {
-            alias: alias.trim(),
-            examDate: examDate || null,
-            dailyMinutes: Number(minutes),
-          }).then(() => {
+          void updateProfile(api, user, { alias: alias.trim() }).then(() => {
             setStatus(t.settings.saved);
           });
         }}
@@ -166,25 +158,6 @@ function AccountCard({
           maxLength={40}
           onChange={(event) => {
             setAlias(event.target.value);
-          }}
-        />
-        <TextField
-          label={t.onboarding.examDate}
-          type="date"
-          value={examDate}
-          onChange={(event) => {
-            setExamDate(event.target.value);
-          }}
-        />
-        <SelectField
-          label={t.onboarding.dailyMinutes}
-          value={minutes}
-          options={[30, 60, 90, 120, 180, 240].map((n) => ({
-            value: String(n),
-            label: t.onboarding.minutes(n),
-          }))}
-          onChange={(event) => {
-            setMinutes(event.target.value);
           }}
         />
         <div className="flex flex-wrap gap-2">
@@ -295,37 +268,6 @@ function GoalsForm({
         {status}
       </p>
     </form>
-  );
-}
-
-function ConsentsCard({ session }: { session: ReadySession }) {
-  const api = useDataApi();
-  const consents = useLiveData(
-    () => currentConsents(api, session.user.id),
-    [api.repos, session.user.id],
-  );
-  return (
-    <Section
-      id="privacidad-titulo"
-      title={t.settings.privacyTitle}
-      description={t.settings.privacyDescription}
-    >
-      {consents ? (
-        <div className="flex flex-col gap-3">
-          {(Object.keys(consents) as (keyof typeof consents)[]).map((purpose) => (
-            <CheckboxField
-              key={purpose}
-              label={t.onboarding.consents[purpose][0]}
-              hint={t.onboarding.consents[purpose][1]}
-              checked={consents[purpose]}
-              onChange={(event) => {
-                void setConsent(api, session.user, purpose, event.target.checked);
-              }}
-            />
-          ))}
-        </div>
-      ) : null}
-    </Section>
   );
 }
 

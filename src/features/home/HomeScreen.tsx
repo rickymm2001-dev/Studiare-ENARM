@@ -6,6 +6,7 @@ import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import type { WidgetLayout } from '@/data/schemas/activity';
+import { examDateFor } from '@/config/exam';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
@@ -189,7 +190,7 @@ function WidgetBody({
     case 'today':
       return <TodayWidget snapshot={snapshot} />;
     case 'exam_countdown':
-      return <CountdownWidget snapshot={snapshot} examDate={session.user.examDate} />;
+      return <CountdownWidget snapshot={snapshot} examDate={examDateFor(session.user)} />;
     case 'daily_goal':
       return <DailyGoalWidget snapshot={snapshot} />;
     case 'pomodoro':
