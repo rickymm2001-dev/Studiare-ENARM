@@ -5,8 +5,8 @@
 - Fase 0 aprobada por Ricardo el 2026-10-01
 - Fase A aprobada por Ricardo el 2026-10-02
 - Fase B en curso desde el 2026-10-02. Ricardo la aprobó junto con la Fase A
-- Bloque terminado más reciente. Bloque 2 (fsrs y mcqGrade)
-- Siguiente paso. Bloque 3 (sampler, distractors y structure)
+- Bloque terminado más reciente. Bloque 3 (sampler, distractors y structure)
+- Siguiente paso. Bloque 4 (behavior, difficulty y rasch en Web Worker)
 
 ## Fase B. Motores núcleo, alumnos simulados y contenido demo
 
@@ -20,7 +20,7 @@
 ### Bloques
 - [x] 1. Funciones estadísticas (Wilson, beta-binomial con empirical Bayes y kappa de Cohen con IC)
 - [x] 2. fsrs y mcqGrade
-- [ ] 3. sampler, distractors y structure
+- [x] 3. sampler, distractors y structure
 - [ ] 4. behavior, difficulty (Elo) y rasch en Web Worker
 - [ ] 5. topics, bias, forgetting y agreement
 - [ ] 6. session, planner, streak, xp y party
@@ -32,6 +32,7 @@
 ### Bitácora por bloque
 - Bloque 1. Normal, Wilson, beta, beta-binomial con empirical Bayes y kappa de Cohen con IC en src/engines/stats, más azar con semilla (D-043). Umbrales en src/config/thresholds.ts. 26 pruebas contra valores de referencia, entre ellas la de encogimiento con menor error que la proporción cruda (7.3). Cobertura de src/engines de 100% en líneas y 99% en ramas. npm run check exige 90%. ts-fsrs 5.4.2, comlink 4.4.2 y fast-check 4.10.2 instalados en el proyecto
 - Bloque 2. src/engines/fsrs.ts con ts-fsrs 5, modo examen, retención de 0.93 en los últimos 30 días, sanguijuelas, cola del día con límites y hermanas enterradas, y carga futura a 30 y 60 días (D-044). src/engines/mcqGrade.ts con la tabla de 7.1. src/engines/studyDay.ts con corte a las 4 a. m. de Mérida. Propiedades con fast-check. Otra vez nunca vence después que Bien, nada vence después del ENARM en modo examen, y la tabla de opción múltiple es determinista y completa contra un oráculo escrito desde 7.1. 50 pruebas de motores
+- Bloque 3. src/engines/sampler.ts con los modos canónico, diverso, dirigido y estratificado, correcta en la posición menos usada y regla de 200 exposiciones para variantes en el examen. src/engines/distractors.ts con atracción, intervalo de Wilson y no funcional bajo 5% tras 100 exposiciones. src/engines/structure.ts con polaridad, tarea, formato, doble negación, rangos de resaltado sobre el texto original y probable mala lectura. El diccionario de negaciones y tareas se adelantó del bloque 7 a src/demo/content/structure-dict.json porque el motor lo necesita, marcado pendiente de revisión médica, con su esquema en src/data/schemas/content.ts. Propiedades del muestreo con fast-check. 85 pruebas de motores
 
 ## Fase A. Esqueleto, datos y proxy
 
