@@ -1,14 +1,18 @@
-// Progreso (pantalla 10). Primera versión (D-066). Resumen, dominio por rama troncal y por
-// subespecialidad con el modelo beta-binomial del motor topics. Cada dato muestra calibrando hasta
-// tener respuestas suficientes. Técnica de examen, sesgos y carga futura llegan en el bloque P7.
+// Progreso (pantalla 10). Resumen, dominio por rama troncal y por subespecialidad con el modelo
+// beta-binomial del motor topics (D-066) y Conócete, el informe del motor de autoconocimiento con
+// técnica de examen, trampas y hábitos de estudio (D-074). Cada dato muestra calibrando hasta tener
+// datos suficientes.
 import { BookOpenCheck, Clock, ListChecks, Target } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
+import type { ClinicalCase, Option, Question } from '@/data/schemas/bank';
 import { topicTaxonomy } from '@/demo/content';
 import { deckIds } from '@/demo/content/deckEntities';
+import { buildInsights } from '@/engines/insights';
+import { studyDayOf } from '@/engines/studyDay';
 import { analyzeCategories, analyzeTopics, type MasteryState } from '@/engines/topics';
 import { t } from '@/i18n/es-MX';
 import { toneClasses } from '@/ui/branches';
@@ -22,6 +26,8 @@ import { useDeckCatalog } from '../decks/useDeckCatalog';
 import { buildSnapshot } from '../home/snapshot';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
+import { buildInsightInput } from './insightFacts';
+import { InsightsPanel } from './InsightsPanel';
 
 export function ProgressScreen() {
   return (
@@ -41,15 +47,29 @@ function Progress({ session }: { session: ReadySession }) {
   const answeredIds = (events ?? []).flatMap((event) =>
     event.type === 'question_answered' ? [event.payload.questionVersionId] : [],
   );
-  const questions = useLiveData(async () => {
+  const bank = useLiveData(async () => {
     const ids = [...new Set(answeredIds)];
-    const found = await Promise.all(ids.map((id) => api.repos.questions.get(id)));
-    return new Map(
-      found
-        .filter((question) => question !== undefined)
-        .map((question) => [question.id, { branch: question.branch, topic: question.topic }]),
+    const found = (await Promise.all(ids.map((id) => api.repos.questions.get(id)))).filter(
+      (question) => question !== undefined,
     );
+    const options = (
+      await Promise.all(
+        found.map((question) => api.repos.options.listForQuestionVersion(question.id)),
+      )
+    ).flat();
+    const caseIds = [
+      ...new Set(found.flatMap((question) => (question.caseId ? [question.caseId] : []))),
+    ];
+    const cases = (await Promise.all(caseIds.map((id) => api.repos.cases.get(id)))).filter(
+      (item) => item !== undefined,
+    );
+    return {
+      questions: new Map<string, Question>(found.map((question) => [question.id, question])),
+      options: new Map<string, Option>(options.map((option) => [option.id, option])),
+      cases: new Map<string, ClinicalCase>(cases.map((item) => [item.id, item])),
+    };
   }, [api.repos, answeredIds.join(',')]);
+  const questions = bank?.questions;
 
   const header = (
     <ScreenHeader
@@ -60,6 +80,7 @@ function Progress({ session }: { session: ReadySession }) {
   );
   if (
     events === undefined ||
+    bank === undefined ||
     questions === undefined ||
     catalog === undefined ||
     cardNote === undefined
@@ -76,7 +97,7 @@ function Progress({ session }: { session: ReadySession }) {
   const responses = events.flatMap((event) => {
     if (event.type !== 'question_answered') return [];
     const info = questions.get(event.payload.questionVersionId);
-    return info ? [{ ...info, correct: event.payload.correct }] : [];
+    return info ? [{ branch: info.branch, topic: info.topic, correct: event.payload.correct }] : [];
   });
   // Tarjetas repasadas por rama y subespecialidad, con lo que dicen las notas de cada mazo
   const noteInfo = new Map<string, { branch: string; topic: string | null }>();
@@ -126,6 +147,17 @@ function Progress({ session }: { session: ReadySession }) {
     }).topics.map((entry) => [entry.topic, entry]),
   );
 
+  const report = buildInsights(
+    buildInsightInput({
+      events,
+      bank,
+      timeZone: user.timeZone,
+      today: studyDayOf(new Date(), user.timeZone),
+      desiredRetention: settings.desiredRetention,
+      thresholds: DEFAULT_THRESHOLDS,
+    }),
+  );
+
   return (
     <>
       {header}
@@ -139,6 +171,8 @@ function Progress({ session }: { session: ReadySession }) {
         <Stat icon={<BookOpenCheck />} label={t.progress.cards} value={totals.cards} />
         <Stat icon={<Clock />} label={t.progress.minutes} value={totals.minutes} />
       </div>
+
+      <InsightsPanel report={report} />
 
       <Card aria-labelledby="troncales-titulo">
         <CardHeader>

@@ -1,5 +1,6 @@
 // Textos de las pantallas del alumno de la Fase C, en español de México con trato de tú (4.9).
 // Se integran en t desde es-MX.ts.
+import { insightText } from './insights';
 
 export const branchNames: Record<string, string> = {
   internal_medicine: 'Medicina interna',
@@ -727,4 +728,5 @@ export const featureText = {
     cancel: 'Cancelar',
     leave: 'Salir del grupo',
   },
+  insights: insightText,
 } as const;

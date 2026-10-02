@@ -602,3 +602,20 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Durante el repaso, Cambiar mazo o tema regresa a la selección. Cada calificación ya quedó guardada, así que no se pierde avance. Al terminar se puede repasar otros temas
 - Agregar mazo lleva a Mazos. Subir mazos propios llega en el bloque P8
 - La última selección se recuerda en el dispositivo
+
+### D-073. Protección del contenido al final y análisis docente
+- Fecha 2026-10-02. Origen R
+- Ricardo pide que nadie pueda descargar el banco ni las tarjetas. Decide dejarlo para el final para seguir viendo la página actualizarse, asumiendo el riesgo porque nadie conoce la página todavía
+- Cuando se haga. Repositorio privado y la demo pública con una muestra pequeña (unas 20 preguntas y 30 tarjetas por mazo). El contenido completo se servirá desde Supabase solo con sesión
+- docs/ANALISIS_DOCENTE_ENARM.md recoge cómo es el examen, qué se ha preguntado, 13 tipos de trampa con el sesgo que explotan y la señal que la app puede medir, lo que dice la evidencia sobre responder y las implicaciones para el banco, Progreso y la IA. No usa preguntas reales ni filtradas
+
+### D-074. Motor de autoconocimiento en Progreso (Conócete)
+- Fecha 2026-10-02. Origen R
+- Ricardo pide un espacio de introspección para que el alumno sepa cómo mejorar su estudio y cómo responder mejor. Nuevo motor puro en src/engines/insights.ts que junta conducta, estructura, sesgos y repaso, con las trampas de docs/ANALISIS_DOCENTE_ENARM.md
+- Tres áreas. Cómo respondes (ritmo contra 77 segundos por reactivo, responder sin terminar de leer, preguntas en que te atoras, negativas y mala lectura, tipo de pregunta más débil, casos seriados, casos largos, saldo de cambios de respuesta, confianza, fatiga y mejor horario). Qué trampas te atrapan (patrones por tipo de distractor y perfil de las tres que más atraen). Cómo estudias (constancia, retención real contra la deseada, tarjetas que se resisten, duración de sesiones y causas reportadas)
+- Cada hallazgo es fortaleza, a vigilar o foco, con una frase con sus números y una acción concreta. Mientras no hay datos suficientes dice cuánto falta (calibrando). Arriba va un resumen de dónde enfocarte y lo que ya haces bien
+- Sesgos con error_share (D-051) contra una línea base de azar calculada con los distractores que el propio alumno vio al fallar. No necesita población real y no inventa comparaciones con otros alumnos
+- Responder sin terminar de leer usa el ritmo de lectura plausible (6 palabras por segundo) y no el percentil personal, porque el percentil siempre deja cerca del 10% debajo
+- Fatiga con el método de tercios mientras Ricardo decide D-054
+- Los textos y acciones son borrador pendiente de revisión médica y docente. Aviso visible de que son estimaciones, no diagnóstico ni predicción del puntaje
+- La sección va justo debajo del resumen de Progreso, antes del dominio por rama
