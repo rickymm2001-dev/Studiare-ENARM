@@ -9,3 +9,6 @@ test-results
 package-lock.json
 public
 docs/screenshots
+.claude
+.review
+content-drafts

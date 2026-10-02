@@ -389,3 +389,14 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Sin GitHub CLI. El push usa el administrador de credenciales de Git
 - Antes de subir se revisó que no hubiera secretos en ningún commit. server/.env.local no está en el historial
 - A partir de aquí cada bloque termina con commit y push
+
+### D-049. Trabajo desde GitHub
+- Fecha 2026-10-02. Origen R
+- Ricardo pidió poder seguir editando todo desde su repositorio de GitHub. Todo lo que hacía falta para continuar y que vivía fuera del repositorio ahora está dentro
+- Las herramientas de validación de borradores, que estaban en una carpeta temporal, pasan a scripts/content y usan el motor real de estructura. La importación del motor es dinámica para no mezclar los proyectos de TypeScript de la app y de Node
+- El workflow de revisión adversarial de IA vive en .claude/workflows/enarm-demo-review.js. Si un verificador falla, el hallazgo queda con verdict null y no se pierde. ESLint y Prettier ignoran .claude porque el workflow usa globales de su propio runtime
+- GitHub Actions corre npm run check en cada push a main y en cada pull request, con Node 24, actions/checkout v7 y actions/setup-node v7. No usa secretos. El build se revisa contra secretos dentro de las pruebas
+- Los borradores de contenido se guardan en content-drafts para poder retomar un lote a medias en otra sesión. Los paquetes de revisión van en .review, que no se sube
+- Las revisiones de IA se guardan en docs/revisiones. Son ayuda para el autor y no sustituyen la revisión médica de D-031
+- Se quitó .claude.zip. Solo traía .claude/launch.json, que ya está en el repositorio, y un archivo de bloqueo local
+

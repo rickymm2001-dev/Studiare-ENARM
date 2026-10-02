@@ -1,0 +1,30 @@
+# Corre npm run check en cada push y pull request (typecheck, lint y pruebas con cobertura).
+# No usa secretos. La clave de la API vive solo en server/.env.local y nunca llega aquí.
+name: check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # Incluye tests/security/no-secrets.test.ts, que construye la app y busca secretos en el build
+      - run: npm run check

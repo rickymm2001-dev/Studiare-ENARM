@@ -30,6 +30,9 @@ export default defineConfig([
     'test-results',
     '.vitest',
     'node_modules',
+    // Workflows de Claude Code. Usan globales del runtime de workflows (agent, parallel, args)
+    '.claude',
+    '.review',
   ]),
 
   {
