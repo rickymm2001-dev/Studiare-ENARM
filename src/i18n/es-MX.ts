@@ -163,12 +163,19 @@ export const t = {
     demo: 'Demo',
     settings: 'Configuración',
     users: 'Usuarios',
+    platform: 'Plataforma',
+    decks: 'Mazos',
+    party: 'Party',
+    admin: 'Administración',
   },
   screens,
   phase: {
     builtIn: (phase: Phase) => `Se construye en la Fase ${phase}`,
     skeleton: (screenNumber: number, total: number) => `Esqueleto · ${screenNumber} de ${total}`,
     allScreens: 'Todas las pantallas del esqueleto',
+    comingSoonTitle: 'Próximamente',
+    comingSoonBody:
+      'Estamos construyendo esta sección. Mientras tanto puedes seguir estudiando con Repasar y Simular.',
   },
   states: {
     previewLabel: 'Vista previa de estados',

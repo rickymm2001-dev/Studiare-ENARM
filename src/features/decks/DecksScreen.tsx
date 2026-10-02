@@ -49,6 +49,16 @@ function Decks({ session }: { session: ReadySession }) {
 
   const followed = followedDeckIds(session, stored?.deckIds ?? []);
   const states = latestCardStates(events ?? []);
+  // Mazos en el orden de las ramas troncales y las ramas sin mazos juntas en una línea (D-076)
+  const branchOrder = topicTaxonomy.branches.map((branch) => branch.key);
+  const orderedFiles = [...(catalog ?? [])].sort(
+    (a, b) => branchOrder.indexOf(deckBranch(a)) - branchOrder.indexOf(deckBranch(b)),
+  );
+  const emptyBranches = topicTaxonomy.branches.filter(
+    (branch) => !(catalog ?? []).some((file) => deckBranch(file) === branch.key),
+  );
+  const branchName = (key: string) =>
+    topicTaxonomy.branches.find((branch) => branch.key === key)?.name ?? key;
 
   return (
     <>
@@ -64,115 +74,106 @@ function Decks({ session }: { session: ReadySession }) {
         {catalog === undefined || stored === undefined ? (
           <LoadingState label={t.decks.loading} />
         ) : (
-          <div className="flex flex-col gap-5">
-            {topicTaxonomy.branches.map((branch) => {
-              const files = catalog.filter((file) => deckBranch(file) === branch.key);
-              return (
-                <section key={branch.key} aria-labelledby={`rama-${branch.key}`}>
-                  <h3
-                    id={`rama-${branch.key}`}
-                    className={`mb-2 inline-flex rounded-full px-3 py-1 text-sm font-bold ${toneClasses(branch.key).chip}`}
+          <div className="flex flex-col gap-3">
+            <ul className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+              {orderedFiles.map((file) => {
+                const id = deckIds.deck(file.key);
+                const isFollowed = followed.has(id);
+                const cardIds = stored.cardsByDeck.get(id) ?? [];
+                const studied = cardIds.filter((cardId) => states.has(cardId)).length;
+                return (
+                  <li
+                    key={file.key}
+                    className="flex flex-col gap-2 rounded-lg border border-line bg-surface p-3 shadow-card"
                   >
-                    {branch.name}
-                  </h3>
-                  {files.length === 0 ? (
-                    <p className="text-sm text-fg-muted">{t.decks.noDecksInBranch}</p>
-                  ) : (
-                    <ul className="grid gap-3 lg:grid-cols-2">
-                      {files.map((file) => {
-                        const id = deckIds.deck(file.key);
-                        const isFollowed = followed.has(id);
-                        const cardIds = stored.cardsByDeck.get(id) ?? [];
-                        const studied = cardIds.filter((cardId) => states.has(cardId)).length;
-                        return (
-                          <li
-                            key={file.key}
-                            className="flex flex-col gap-2 rounded-lg border border-line bg-surface p-3 shadow-card"
-                          >
-                            <div className="flex items-start gap-3">
-                              <span
-                                aria-hidden
-                                className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${toneClasses(file.key).icon}`}
-                              >
-                                <Layers className="size-5" />
-                              </span>
-                              <div className="flex flex-1 flex-col">
-                                <span className="font-semibold">{file.name}</span>
-                                <span className="text-sm text-fg-muted">
-                                  {t.decks.author(file.author)}
-                                </span>
-                                <span className="text-sm text-fg-muted">
-                                  {t.decks.stats(file.notes.length, file.media.length)}
-                                </span>
-                                <span className="mt-1 flex flex-wrap gap-1">
-                                  {topTopics(file).map(([topic, count]) => (
-                                    <span
-                                      key={topic}
-                                      className="rounded-full bg-muted px-2 py-0.5 text-xs text-fg-muted"
-                                    >
-                                      {topicName.get(topic) ?? topic} · {count}
-                                    </span>
-                                  ))}
-                                </span>
-                              </div>
-                            </div>
-                            {isFollowed && cardIds.length > 0 ? (
-                              <ProgressBar
-                                value={studied}
-                                max={cardIds.length}
-                                label={t.decks.progress(studied, cardIds.length)}
-                              />
-                            ) : null}
-                            {isFollowed && cardIds.length > 0 ? (
-                              <span className="text-sm text-fg-muted">
-                                {t.decks.progress(studied, cardIds.length)}
-                              </span>
-                            ) : null}
-                            <div className="flex flex-wrap gap-2">
-                              {session.isDemo ? (
-                                <span className="flex items-center gap-1 text-sm font-medium text-success">
-                                  <Check aria-hidden className="size-4" />
-                                  {t.decks.following}
-                                </span>
-                              ) : isFollowed ? (
-                                <Button
-                                  variant="secondary"
-                                  size="sm"
-                                  onClick={() => {
-                                    void unfollowDeck(api, session.user, file.key);
-                                  }}
-                                >
-                                  {t.decks.unfollow}
-                                </Button>
-                              ) : (
-                                <Button
-                                  size="sm"
-                                  disabled={busy !== null}
-                                  onClick={() => {
-                                    setBusy(file.key);
-                                    void followDeck(api, session.user, file).finally(() => {
-                                      setBusy(null);
-                                    });
-                                  }}
-                                >
-                                  <BookPlus aria-hidden />
-                                  {busy === file.key ? t.decks.adding : t.decks.follow}
-                                </Button>
-                              )}
-                              {isFollowed ? (
-                                <Button asChild size="sm" variant="ghost">
-                                  <Link to={screenPath('review')}>{t.widgets.today.review}</Link>
-                                </Button>
-                              ) : null}
-                            </div>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  )}
-                </section>
-              );
-            })}
+                    <span
+                      className={`self-start rounded-full px-2.5 py-0.5 text-xs font-bold ${toneClasses(deckBranch(file)).chip}`}
+                    >
+                      {branchName(deckBranch(file))}
+                    </span>
+                    <div className="flex items-start gap-3">
+                      <span
+                        aria-hidden
+                        className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${toneClasses(file.key).icon}`}
+                      >
+                        <Layers className="size-5" />
+                      </span>
+                      <div className="flex flex-1 flex-col">
+                        <span className="font-semibold">{file.name}</span>
+                        <span className="text-sm text-fg-muted">{t.decks.author(file.author)}</span>
+                        <span className="text-sm text-fg-muted">
+                          {t.decks.stats(file.notes.length, file.media.length)}
+                        </span>
+                        <span className="mt-1 flex flex-wrap gap-1">
+                          {topTopics(file).map(([topic, count]) => (
+                            <span
+                              key={topic}
+                              className="rounded-full bg-muted px-2 py-0.5 text-xs text-fg-muted"
+                            >
+                              {topicName.get(topic) ?? topic} · {count}
+                            </span>
+                          ))}
+                        </span>
+                      </div>
+                    </div>
+                    {isFollowed && cardIds.length > 0 ? (
+                      <ProgressBar
+                        value={studied}
+                        max={cardIds.length}
+                        label={t.decks.progress(studied, cardIds.length)}
+                      />
+                    ) : null}
+                    {isFollowed && cardIds.length > 0 ? (
+                      <span className="text-sm text-fg-muted">
+                        {t.decks.progress(studied, cardIds.length)}
+                      </span>
+                    ) : null}
+                    <div className="flex flex-wrap gap-2">
+                      {session.isDemo ? (
+                        <span className="flex items-center gap-1 text-sm font-medium text-success">
+                          <Check aria-hidden className="size-4" />
+                          {t.decks.following}
+                        </span>
+                      ) : isFollowed ? (
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => {
+                            void unfollowDeck(api, session.user, file.key);
+                          }}
+                        >
+                          {t.decks.unfollow}
+                        </Button>
+                      ) : (
+                        <Button
+                          size="sm"
+                          disabled={busy !== null}
+                          onClick={() => {
+                            setBusy(file.key);
+                            void followDeck(api, session.user, file).finally(() => {
+                              setBusy(null);
+                            });
+                          }}
+                        >
+                          <BookPlus aria-hidden />
+                          {busy === file.key ? t.decks.adding : t.decks.follow}
+                        </Button>
+                      )}
+                      {isFollowed ? (
+                        <Button asChild size="sm" variant="ghost">
+                          <Link to={screenPath('review')}>{t.widgets.today.review}</Link>
+                        </Button>
+                      ) : null}
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+            {emptyBranches.length > 0 ? (
+              <p className="text-sm text-fg-muted">
+                {t.decks.emptyBranches(emptyBranches.map((branch) => branch.name).join(', '))}
+              </p>
+            ) : null}
           </div>
         )}
       </Card>

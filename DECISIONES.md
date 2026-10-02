@@ -629,3 +629,15 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Sin las variables la app funciona igual que antes, completa en el navegador
 - Pendiente para la segunda parte. Subir la bitácora de estudio, administrar usuarios desde Supabase y mover el banco y las tarjetas (protección de D-073)
 - Límite conocido. El correo que trae Supabase de fábrica solo envía a los correos del equipo del proyecto y pocas veces por hora. Antes de abrir a alumnos hay que conectar un proveedor de correo propio (SMTP)
+
+### D-076. Auditoría completa de la página
+- Fecha 2026-10-02. Origen R
+- Ricardo reportó que cambiar las tarjetas nuevas por día no se notaba y pidió una auditoría profunda
+- Tarjetas nuevas. El cambio sí se guardaba, pero solo con el botón y sin aviso. Ahora el formulario avisa si hay cambios sin guardar y los límites diarios se ajustan también en Repasar, con efecto inmediato en el número de tarjetas
+- Navegación. Dueño y administrador ven la app del alumno más su grupo de administración en el riel. Su inicio es Inicio. La configuración de administración se llama Plataforma para no repetir Configuración. Mazos y Party entran al riel. En el teléfono se llega desde Accesos en Perfil
+- Progreso. Error de cálculo corregido. Con pocas respuestas y una media extrema en la rama, temas sin respuestas salían en 100% o 0%. Ahora cada tema necesita al menos 5 respuestas propias además de la regla del intervalo
+- Conócete agrupa lo que sigue calibrando en una lista compacta
+- Pantallas pendientes con aviso de Próximamente. Las etiquetas internas solo con ?estado=
+- Suscripción y portada marcan como Próximamente lo que aún no existe y muestran el ahorro del plan anual
+- Mazos en cuadrícula a todo lo ancho. Banco con búsqueda, filtros, páginas de 25 y detalle de cada pregunta
+- Botones de guardar con el mismo texto, encabezado que no se sale en el teléfono, textos que mandaban a Perfil o hablaban de fases y bloques

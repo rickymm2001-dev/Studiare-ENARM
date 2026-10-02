@@ -55,7 +55,7 @@ export function RequireSession({
             <CardDescription>{t.session.demoEmptyBody}</CardDescription>
           </CardHeader>
           <Button asChild className="self-start">
-            <Link to={screenPath('profile')}>
+            <Link to={screenPath('settings')}>
               <Sparkles aria-hidden />
               {t.session.goToProfile}
             </Link>

@@ -1,5 +1,6 @@
 // Secciones de la navegación inferior (10.4). El alumno tiene las 5 de la especificación.
-// Médico y admin tienen las suyas, porque sus pantallas son otras (10.2 y 10.3).
+// Médico tiene las suyas (10.2). Administrador y dueño también estudian, así que ven lo del alumno
+// y abajo, en el riel, su grupo de administración (D-076).
 import {
   BookOpenCheck,
   ChartLine,
@@ -8,6 +9,8 @@ import {
   Database,
   FileText,
   Flag,
+  Layers,
+  PartyPopper,
   House,
   Scale,
   Settings,
@@ -28,6 +31,8 @@ export interface NavItem {
   end?: boolean;
   /** Solo en el riel de computadora. En el teléfono se llega desde Perfil (D-071) */
   railOnly?: boolean;
+  /** Abre un grupo nuevo en el riel con una línea divisoria */
+  groupStart?: boolean;
 }
 
 const profile: NavItem = {
@@ -43,24 +48,28 @@ const settingsItem: NavItem = {
 };
 const bank: NavItem = { path: screenPath('questionBank'), label: t.navItems.bank, icon: Database };
 
-const adminNav: readonly NavItem[] = [
-  { path: screenPath('adminUsers'), label: t.navItems.users, icon: Users },
-  { path: screenPath('aiCosts'), label: t.navItems.costs, icon: Coins },
-  { path: screenPath('adminSettings'), label: t.navItems.settings, icon: Settings },
-  bank,
+const studentNav: readonly NavItem[] = [
+  { path: screenPath('home'), label: t.navItems.home, icon: House, end: true },
+  { path: screenPath('review'), label: t.navItems.review, icon: BookOpenCheck },
+  { path: screenPath('simulatorSetup'), label: t.navItems.simulate, icon: ClipboardList },
+  { path: screenPath('progress'), label: t.navItems.progress, icon: ChartLine },
+  { path: screenPath('decks'), label: t.navItems.decks, icon: Layers, railOnly: true },
+  { path: screenPath('party'), label: t.navItems.party, icon: PartyPopper, railOnly: true },
   profile,
   settingsItem,
 ];
 
+const adminGroup: readonly NavItem[] = [
+  { path: screenPath('adminUsers'), label: t.navItems.users, icon: Users, groupStart: true },
+  { path: screenPath('aiCosts'), label: t.navItems.costs, icon: Coins },
+  { path: screenPath('adminSettings'), label: t.navItems.platform, icon: Settings },
+  bank,
+].map((item) => ({ ...item, railOnly: true }));
+
+const adminNav: readonly NavItem[] = [...studentNav, ...adminGroup];
+
 export const NAV_BY_ROLE: Record<Role, readonly NavItem[]> = {
-  student: [
-    { path: screenPath('home'), label: t.navItems.home, icon: House, end: true },
-    { path: screenPath('review'), label: t.navItems.review, icon: BookOpenCheck },
-    { path: screenPath('simulatorSetup'), label: t.navItems.simulate, icon: ClipboardList },
-    { path: screenPath('progress'), label: t.navItems.progress, icon: ChartLine },
-    profile,
-    settingsItem,
-  ],
+  student: studentNav,
   physician: [
     bank,
     { path: screenPath('agreement'), label: t.navItems.agreement, icon: Scale },
@@ -73,10 +82,13 @@ export const NAV_BY_ROLE: Record<Role, readonly NavItem[]> = {
   owner: adminNav,
 };
 
+/** Accesos de administración para el teléfono, donde no caben en la barra inferior */
+export const ADMIN_LINKS: readonly NavItem[] = adminGroup;
+
 /** Pantalla de entrada de cada rol */
 export const HOME_BY_ROLE: Record<Role, string> = {
   student: screenPath('home'),
   physician: screenPath('questionBank'),
-  admin: screenPath('adminUsers'),
-  owner: screenPath('adminUsers'),
+  admin: screenPath('home'),
+  owner: screenPath('home'),
 };

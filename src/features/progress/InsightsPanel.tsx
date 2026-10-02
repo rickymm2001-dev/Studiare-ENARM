@@ -93,12 +93,19 @@ export function InsightsPanel({ report }: { report: InsightReport }) {
               <CardTitle id={`area-${area}`}>{text.areas[area].title}</CardTitle>
               <CardDescription>{text.areas[area].hint}</CardDescription>
             </CardHeader>
-            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-              {items.map((insight) => (
-                <InsightItem key={insight.id} insight={insight} />
-              ))}
-            </div>
+            {items.some((insight) => insight.state.kind === 'ready') ? (
+              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                {items
+                  .filter((insight) => insight.state.kind === 'ready')
+                  .map((insight) => (
+                    <InsightItem key={insight.id} insight={insight} />
+                  ))}
+              </div>
+            ) : null}
             {area === 'traps' && profile ? <BiasProfile insight={profile} /> : null}
+            <CalibratingList
+              items={items.filter((insight) => insight.state.kind === 'calibrating')}
+            />
           </Card>
         );
       })}
@@ -223,6 +230,43 @@ function BiasProfile({ insight }: { insight: Insight }) {
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+/** Lecturas que siguen calibrando, en una lista compacta para no llenar la pantalla */
+function CalibratingList({ items }: { items: Insight[] }) {
+  if (items.length === 0) return null;
+  return (
+    <div className="mt-3 rounded-lg border border-dashed border-line p-3">
+      <p className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-fg-muted [&_svg]:size-4">
+        <Hourglass aria-hidden />
+        {text.calibratingLabel}
+      </p>
+      <ul className="grid gap-x-6 gap-y-2 sm:grid-cols-2 xl:grid-cols-3">
+        {items.map((insight) => {
+          if (insight.state.kind !== 'calibrating') return null;
+          const { have, need, unit } = insight.state;
+          const title = insight.id.startsWith('bias')
+            ? text.copy.biases?.title
+            : text.copy[insight.id]?.title;
+          return (
+            <li key={insight.id} className="flex flex-col gap-1 text-sm">
+              <span className="flex justify-between gap-2">
+                <span className="font-medium">{title ?? insight.id}</span>
+                <span className="shrink-0 text-xs text-fg-muted tabular-nums">
+                  {Math.min(have, need)}/{need}
+                </span>
+              </span>
+              <ProgressBar
+                value={Math.min(have, need)}
+                max={Math.max(need, 1)}
+                label={text.calibrating(have, need, unit)}
+              />
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

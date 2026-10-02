@@ -28,8 +28,9 @@ export function ScreenHeader({
         <h1 tabIndex={-1} className="text-2xl font-extrabold text-fg outline-none sm:text-3xl">
           {title}
         </h1>
-        <div className="ml-auto flex shrink-0 items-center gap-2">
-          {actions}
+        {/* En el teléfono la acción baja a su propia línea para no salirse de la pantalla */}
+        <div className="ml-auto flex min-w-0 flex-wrap-reverse items-center justify-end gap-2">
+          {actions ? <div className="flex flex-wrap gap-2">{actions}</div> : null}
           {stats ? <HeaderStats /> : null}
         </div>
       </div>
