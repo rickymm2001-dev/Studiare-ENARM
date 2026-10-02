@@ -1,0 +1,1140 @@
+{
+  "cases": [
+    {
+      "key": "mi-02a-endocrinologia-cad",
+      "vignette": "Hombre de 22 años con diabetes tipo 1 que suspendió su insulina hace 3 días por una gastroenteritis. Llega con náusea, vómito, dolor abdominal y respiración profunda y rápida. Glucosa de 486 mg/dL, pH de 7.08, bicarbonato de 8 mEq/L, cetonas séricas positivas, sodio de 132 mEq/L, cloro de 96 mEq/L y potasio de 5.6 mEq/L."
+    }
+  ],
+  "questions": [
+    {
+      "key": "mi-02a-endocrinologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "diabetes_type_2",
+      "vignette": "Hombre de 46 años con obesidad y antecedente familiar de diabetes. Asintomático. En un chequeo la glucosa plasmática en ayuno fue de 132 mg/dL.",
+      "prompt": "¿Qué se requiere para confirmar el diagnóstico de diabetes en este paciente asintomático?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Repetir una prueba diagnóstica, como otra glucosa en ayuno de 126 mg/dL o más o una HbA1c de 6.5% o más",
+          "correct": true,
+          "rationale": "Sin síntomas, el diagnóstico requiere dos resultados alterados."
+        },
+        {
+          "key": "b",
+          "text": "Insulina en ayuno y curva de insulina",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Más datos que no definen el diagnóstico."
+        },
+        {
+          "key": "c",
+          "text": "Una glucosa capilar posprandial de 160 mg/dL",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en una medición capilar sin valor diagnóstico."
+        },
+        {
+          "key": "d",
+          "text": "Fructosamina mayor de 300 como criterio diagnóstico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la fructosamina diagnostica, cuando solo da seguimiento."
+        },
+        {
+          "key": "e",
+          "text": "Examen general de orina con glucosuria",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La glucosuria sugiere, pero no confirma."
+        },
+        {
+          "key": "f",
+          "text": "Esperar a que tenga síntomas clásicos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Subestima la alta probabilidad en un paciente obeso con antecedente familiar."
+        },
+        {
+          "key": "g",
+          "text": "Con una sola glucosa en ayuno mayor de 126 mg/dL ya está confirmado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Cierra el diagnóstico con un solo valor en un paciente asintomático."
+        },
+        {
+          "key": "h",
+          "text": "Pinza euglucémica hiperinsulinémica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es un método de investigación."
+        },
+        {
+          "key": "i",
+          "text": "Medir péptido C y anticuerpos antiGAD",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Son útiles para tipificar, no para confirmar."
+        },
+        {
+          "key": "j",
+          "text": "Glucosa al azar de 150 mg/dL",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Al azar se requiere 200 mg/dL con síntomas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "Los criterios diagnósticos de diabetes son glucosa plasmática en ayuno de 126 mg/dL o más, glucosa de 200 mg/dL o más a las dos horas de una carga oral de 75 g, hemoglobina glucosilada de 6.5% o más con método estandarizado, o glucosa al azar de 200 mg/dL o más con síntomas clásicos de hiperglucemia. En ausencia de síntomas inequívocos, el diagnóstico requiere dos resultados alterados, ya sea la misma prueba repetida o dos pruebas distintas. Las mediciones capilares no sirven para diagnosticar. El péptido C y los anticuerpos se usan cuando hay duda sobre el tipo de diabetes.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la diabetes mellitus tipo 2 en el primer nivel de atención",
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de la diabetes mellitus"
+      ]
+    },
+    {
+      "key": "mi-02a-endocrinologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "diabetes_type_2",
+      "vignette": "Mujer de 52 años con diabetes tipo 2 recién diagnosticada. HbA1c de 7.8%, IMC de 32, filtración glomerular de 88 mL/min, sin síntomas de hiperglucemia ni enfermedad cardiovascular.",
+      "prompt": "¿Cuál es el tratamiento inicial más adecuado?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Triple terapia oral inmediata para normalizar rápido",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Normalizar rápido suena bien, pero no es necesario con esta HbA1c."
+        },
+        {
+          "key": "b",
+          "text": "Cirugía bariátrica como primer paso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es opción en obesidad grave tras manejo médico."
+        },
+        {
+          "key": "c",
+          "text": "Glibenclamida como monoterapia inicial",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es barata y conocida, pero causa hipoglucemia y aumento de peso."
+        },
+        {
+          "key": "d",
+          "text": "Sin fármacos para evitar efectos adversos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Evita medicar y deja la hiperglucemia."
+        },
+        {
+          "key": "e",
+          "text": "Solo dieta durante seis meses",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Retrasa el fármaco que ya está indicado."
+        },
+        {
+          "key": "f",
+          "text": "Insulina basal más bolos desde el inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Sobretrata a una paciente sin catabolismo ni hiperglucemia grave."
+        },
+        {
+          "key": "g",
+          "text": "Acarbosa como primera opción",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Tiene efecto modesto y mala tolerancia."
+        },
+        {
+          "key": "h",
+          "text": "Suplementos de canela y cromo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree en productos naturales sin evidencia."
+        },
+        {
+          "key": "i",
+          "text": "Pioglitazona por su obesidad",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la resistencia a la insulina, pero aumenta peso y retención de líquidos."
+        },
+        {
+          "key": "j",
+          "text": "Metformina con cambios en el estilo de vida",
+          "correct": true,
+          "rationale": "Es el fármaco de inicio en la mayoría de los pacientes con diabetes tipo 2."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "En la diabetes tipo 2 de reciente diagnóstico sin contraindicaciones, el tratamiento inicial es metformina junto con cambios en el estilo de vida, que incluyen plan de alimentación, actividad física de al menos 150 minutos por semana y reducción de peso. La metformina disminuye la producción hepática de glucosa, no causa hipoglucemia, es neutra o favorable en peso y es de bajo costo. Se inicia a dosis baja con alimentos para reducir efectos gastrointestinales y se ajusta según tolerancia. Se contraindica con filtración menor de 30 mL/min. Si hay enfermedad cardiovascular, insuficiencia cardiaca o renal, se agrega un inhibidor de SGLT2 o un agonista de GLP-1.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la diabetes mellitus tipo 2 en el primer nivel de atención"
+      ]
+    },
+    {
+      "key": "mi-02a-endocrinologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "diabetes_type_2",
+      "vignette": "Hombre de 63 años con diabetes tipo 2 tratado con metformina a dosis plena. Tuvo un infarto hace un año. HbA1c de 7.9%, IMC de 30 y filtración de 70 mL/min.",
+      "prompt": "¿Cuál es el fármaco de elección para agregar a la metformina?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Un agonista del receptor de GLP-1 o un inhibidor de SGLT2 con beneficio cardiovascular demostrado",
+          "correct": true,
+          "rationale": "Reducen eventos cardiovasculares en pacientes con enfermedad aterosclerótica."
+        },
+        {
+          "key": "b",
+          "text": "Insulina en bolos prandiales con cada comida",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es un esquema complejo, no el siguiente paso."
+        },
+        {
+          "key": "c",
+          "text": "Saxagliptina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es un iDPP4 sin beneficio cardiovascular y con más hospitalización por insuficiencia cardiaca."
+        },
+        {
+          "key": "d",
+          "text": "Pioglitazona por su efecto en la resistencia a la insulina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Reduce glucosa, pero no es la opción preferida con este perfil."
+        },
+        {
+          "key": "e",
+          "text": "Aumentar la metformina por encima de la dosis máxima",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el fármaco actual sin ganancia."
+        },
+        {
+          "key": "f",
+          "text": "Acarbosa para proteger el corazón",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo fármaco que baja glucosa protege el corazón."
+        },
+        {
+          "key": "g",
+          "text": "Sulfonilurea de segunda generación por ser más barata",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra solo en el costo."
+        },
+        {
+          "key": "h",
+          "text": "Repaglinida antes de cada comida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No tiene beneficio cardiovascular."
+        },
+        {
+          "key": "i",
+          "text": "Glibenclamida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es común, pero no tiene beneficio cardiovascular y causa hipoglucemia."
+        },
+        {
+          "key": "j",
+          "text": "Mantener solo metformina y reforzar dieta",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Deja sin beneficio cardiovascular a un paciente de muy alto riesgo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "i"
+      ],
+      "explanation": "En pacientes con diabetes tipo 2 y enfermedad cardiovascular aterosclerótica establecida, la elección del segundo fármaco debe priorizar el beneficio cardiovascular, independientemente de la HbA1c. Los agonistas del receptor de GLP-1 con evidencia, como liraglutida, semaglutida o dulaglutida, y los inhibidores de SGLT2, como empagliflozina, canagliflozina o dapagliflozina, reducen eventos cardiovasculares mayores. Los inhibidores de SGLT2 son preferidos si hay insuficiencia cardiaca o enfermedad renal crónica. Las sulfonilureas causan hipoglucemia y aumento de peso sin beneficio cardiovascular. Algunos inhibidores de DPP4 son neutros y la saxagliptina aumentó hospitalización por insuficiencia cardiaca.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la diabetes mellitus tipo 2 en el primer nivel de atención"
+      ]
+    },
+    {
+      "key": "mi-02a-endocrinologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "diabetes_type_2",
+      "vignette": "Mujer de 55 años con diabetes tipo 2 de 8 años de evolución que acude a su consulta anual. No tiene síntomas visuales ni urinarios. Su presión arterial es de 128/78 mmHg.",
+      "prompt": "¿Cuál es el tamizaje anual recomendado para detectar nefropatía diabética?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Examen general de orina con tira reactiva de proteínas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es poco sensible para albuminuria moderada."
+        },
+        {
+          "key": "b",
+          "text": "Biopsia renal anual",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es invasiva y no es tamizaje."
+        },
+        {
+          "key": "c",
+          "text": "Medir ácido úrico como marcador de daño renal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el ácido úrico detecta nefropatía diabética."
+        },
+        {
+          "key": "d",
+          "text": "Solo vigilar la presión arterial",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "No detecta albuminuria."
+        },
+        {
+          "key": "e",
+          "text": "Gammagrama renal para medir filtración real",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena más preciso, pero no es tamizaje."
+        },
+        {
+          "key": "f",
+          "text": "Ultrasonido renal anual",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Evalúa estructura, no detecta nefropatía temprana."
+        },
+        {
+          "key": "g",
+          "text": "Proteínas en orina de 24 horas cada tres meses",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Más engorroso sin ventaja como tamizaje."
+        },
+        {
+          "key": "h",
+          "text": "Iniciar diálisis preventiva si la creatinina sube",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Salta a una medida extrema."
+        },
+        {
+          "key": "i",
+          "text": "Solo creatinina sérica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la creatinina, que se eleva tarde."
+        },
+        {
+          "key": "j",
+          "text": "Cociente albúmina creatinina en orina y tasa de filtración glomerular estimada",
+          "correct": true,
+          "rationale": "Detecta albuminuria y disminución de la filtración de forma temprana."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "La enfermedad renal diabética es una de las principales causas de enfermedad renal crónica terminal. En la diabetes tipo 2 el tamizaje se realiza desde el diagnóstico y después cada año, mediante el cociente albúmina creatinina en una muestra de orina y la estimación de la tasa de filtración glomerular a partir de la creatinina sérica. Un cociente de 30 mg/g o más confirmado en dos de tres muestras en tres a seis meses indica albuminuria. Detectarla temprano permite iniciar IECA o ARA II, inhibidores de SGLT2, optimizar el control glucémico y de presión, y retrasar la progresión.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la diabetes mellitus tipo 2 en el primer nivel de atención",
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la enfermedad renal crónica"
+      ]
+    },
+    {
+      "key": "mi-02a-endocrinologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "diabetes_type_2",
+      "vignette": "Hombre de 49 años con diabetes tipo 2 de 6 años en tratamiento con metformina y glibenclamida. Refiere poliuria, polidipsia y pérdida de 7 kg en dos meses. HbA1c de 11.8% y glucosa en ayuno de 310 mg/dL. Sin cetonuria significativa.",
+      "prompt": "¿Cuál es el tratamiento inicial más adecuado para su descontrol?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aumentar dieta y ejercicio sin cambiar fármacos",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Mantiene un esquema que ya falló."
+        },
+        {
+          "key": "b",
+          "text": "Agregar un tercer fármaco oral y revalorar en tres meses",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la vía oral pese a datos de catabolismo."
+        },
+        {
+          "key": "c",
+          "text": "Iniciar insulina basal y ajustar la dosis según la glucosa en ayuno",
+          "correct": true,
+          "rationale": "Con HbA1c mayor de 10% y síntomas catabólicos se indica insulina."
+        },
+        {
+          "key": "d",
+          "text": "Insulina rápida solo cuando la glucosa supere 300 mg/dL",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La corrección reactiva suena práctica, pero no es tratamiento basal."
+        },
+        {
+          "key": "e",
+          "text": "Suspender metformina al iniciar insulina",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la insulina obliga a quitar la metformina, cuando se recomienda mantenerla."
+        },
+        {
+          "key": "f",
+          "text": "Bomba de insulina como primer paso",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es tecnología compleja, no el inicio habitual."
+        },
+        {
+          "key": "g",
+          "text": "Esperar la siguiente HbA1c antes de modificar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasa el tratamiento de un descontrol grave."
+        },
+        {
+          "key": "h",
+          "text": "Pioglitazona a dosis máxima",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No resuelve el catabolismo."
+        },
+        {
+          "key": "i",
+          "text": "Agregar acarbosa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tiene efecto modesto e insuficiente."
+        },
+        {
+          "key": "j",
+          "text": "Hospitalizar en terapia intensiva para infusión de insulina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Sin cetoacidosis ni estado hiperosmolar no es necesario."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "i"
+      ],
+      "explanation": "Cuando la hemoglobina glucosilada es mayor de 10%, la glucosa es mayor de 300 mg/dL o hay síntomas de catabolismo, como poliuria, polidipsia y pérdida de peso, se recomienda iniciar insulina. Lo habitual es comenzar con insulina basal, como glargina o NPH nocturna, a 10 unidades o 0.1 a 0.2 unidades por kilogramo al día, y ajustar cada tres días según la glucosa en ayuno. Se mantiene la metformina y se considera suspender o reducir la sulfonilurea para evitar hipoglucemia. Si la HbA1c sigue alta pese a glucosa en ayuno en meta, se agregan bolos prandiales o un agonista de GLP-1.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de tratamiento de la diabetes mellitus tipo 2 con insulina"
+      ]
+    },
+    {
+      "key": "mi-02a-endocrinologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "diabetes_type_2",
+      "vignette": "Mujer de 61 años con diabetes de 15 años de evolución y mal control. Refiere ardor y adormecimiento en ambos pies, de predominio nocturno, que asciende hasta los tobillos. Disminución de la sensibilidad vibratoria y al monofilamento en ambos pies.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Enfermedad arterial periférica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También afecta pies, pero da claudicación y pulsos disminuidos."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome del túnel del tarso",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es local y unilateral."
+        },
+        {
+          "key": "c",
+          "text": "Neuropatía autonómica cardiovascular",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Comparte el nombre de neuropatía, pero no explica los síntomas sensitivos."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome de Guillain Barré",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es agudo y motor, poco probable en este contexto."
+        },
+        {
+          "key": "e",
+          "text": "Pie de Charcot agudo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay deformidad, calor ni edema descritos."
+        },
+        {
+          "key": "f",
+          "text": "Radiculopatía lumbar L5",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye por el dolor sin considerar la distribución simétrica."
+        },
+        {
+          "key": "g",
+          "text": "Mononeuropatía del nervio peroneo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el pie, pero es bilateral y simétrica."
+        },
+        {
+          "key": "h",
+          "text": "Deficiencia aislada de vitamina B12 por metformina",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Puede contribuir, pero la causa principal es la diabetes de larga evolución."
+        },
+        {
+          "key": "i",
+          "text": "Gota poliarticular",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo dolor de pies es gota."
+        },
+        {
+          "key": "j",
+          "text": "Polineuropatía diabética sensitiva distal simétrica",
+          "correct": true,
+          "rationale": "Afección sensitiva bilateral en calcetín con pérdida de vibración y monofilamento."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "La polineuropatía diabética sensitiva distal simétrica es la complicación crónica más frecuente de la diabetes. Se presenta con parestesias, ardor, dolor de predominio nocturno y pérdida de sensibilidad en distribución de calcetín y guante, que progresa de distal a proximal. Se detecta con el monofilamento de 10 g, el diapasón de 128 Hz, la sensibilidad térmica y los reflejos aquíleos, y se debe tamizar cada año. Es el principal factor de riesgo de úlceras y amputación. El tratamiento incluye control glucémico, cuidado de los pies y fármacos para el dolor neuropático, como pregabalina, duloxetina o amitriptilina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la neuropatía diabética"
+      ]
+    },
+    {
+      "key": "mi-02a-endocrinologia-q07",
+      "caseKey": "mi-02a-endocrinologia-cad",
+      "caseOrder": 1,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "diabetic_emergencies",
+      "vignette": "",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Gastroenteritis con deshidratación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el desencadenante e ignora la acidosis."
+        },
+        {
+          "key": "b",
+          "text": "Abdomen agudo quirúrgico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El dolor abdominal es frecuente en la cetoacidosis y suele ceder al corregirla."
+        },
+        {
+          "key": "c",
+          "text": "Cetoacidosis diabética grave",
+          "correct": true,
+          "rationale": "Hiperglucemia, cetonas positivas, pH menor de 7.0 a 7.24 y bicarbonato menor de 10 indican cetoacidosis grave."
+        },
+        {
+          "key": "d",
+          "text": "Cetoacidosis alcohólica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable en un paciente con diabetes tipo 1 sin consumo de alcohol."
+        },
+        {
+          "key": "e",
+          "text": "Acidosis láctica por sepsis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye otra acidosis sin explicar las cetonas."
+        },
+        {
+          "key": "f",
+          "text": "Hiperglucemia sin descompensación aguda",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No nota el pH y el bicarbonato."
+        },
+        {
+          "key": "g",
+          "text": "Insuficiencia renal aguda como causa primaria",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la acidosis es siempre renal."
+        },
+        {
+          "key": "h",
+          "text": "Intoxicación por salicilatos",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la respiración rápida sin considerar la hiperglucemia."
+        },
+        {
+          "key": "i",
+          "text": "Estado hiperglucémico hiperosmolar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También hay hiperglucemia, pero ahí no hay acidosis cetósica importante."
+        },
+        {
+          "key": "j",
+          "text": "Cetoacidosis leve",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La palabra cetoacidosis es correcta, pero la gravedad no."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "i"
+      ],
+      "explanation": "La cetoacidosis diabética se define por glucosa mayor de 250 mg/dL, pH menor de 7.30, bicarbonato menor de 18 mEq/L, cetonas positivas y brecha aniónica elevada. Se clasifica como leve con pH de 7.25 a 7.30 y bicarbonato de 15 a 18, moderada con pH de 7.00 a 7.24 y bicarbonato de 10 a 15, y grave con pH menor de 7.00 o bicarbonato menor de 10. Este paciente tiene brecha aniónica de 28, bicarbonato de 8 y respiración de Kussmaul. Los desencadenantes más comunes son la omisión de insulina y las infecciones. El dolor abdominal suele resolverse con el tratamiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en adultos"
+      ]
+    },
+    {
+      "key": "mi-02a-endocrinologia-q08",
+      "caseKey": "mi-02a-endocrinologia-cad",
+      "caseOrder": 2,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "diabetic_emergencies",
+      "vignette": "",
+      "prompt": "¿Cuál es el tratamiento inicial prioritario?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solución glucosada al 5% desde el inicio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se agrega cuando la glucosa baja a 200 mg/dL."
+        },
+        {
+          "key": "b",
+          "text": "Hemodiálisis urgente por la acidosis",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Medida innecesaria en cetoacidosis."
+        },
+        {
+          "key": "c",
+          "text": "Bolo de insulina rápida intravenosa antes de cualquier líquido",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la glucosa, pero la insulina sin volumen puede causar colapso."
+        },
+        {
+          "key": "d",
+          "text": "Bicarbonato intravenoso por el pH bajo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Solo se considera con pH menor de 6.9."
+        },
+        {
+          "key": "e",
+          "text": "Potasio intravenoso de inmediato por ser esencial",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es esencial, pero con potasio de 5.6 no se agrega en este momento."
+        },
+        {
+          "key": "f",
+          "text": "Antibiótico de amplio espectro como primer paso",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El desencadenante fue la omisión de insulina, no una infección grave."
+        },
+        {
+          "key": "g",
+          "text": "Ayuno y observación por 6 horas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasa el tratamiento de una urgencia."
+        },
+        {
+          "key": "h",
+          "text": "Reiniciar su esquema de insulina habitual en casa",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Ignora la gravedad."
+        },
+        {
+          "key": "i",
+          "text": "Insulina subcutánea de acción prolongada como único tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la insulina basal sola resuelve la cetoacidosis grave."
+        },
+        {
+          "key": "j",
+          "text": "Solución salina 0.9% intravenosa de 15 a 20 mL/kg en la primera hora",
+          "correct": true,
+          "rationale": "La reposición de volumen es la primera medida."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "e",
+        "j"
+      ],
+      "explanation": "El tratamiento de la cetoacidosis diabética tiene cuatro pilares, que son líquidos, insulina, potasio y búsqueda del desencadenante. La primera medida es la reposición de volumen con solución salina al 0.9% a 15 a 20 mL/kg en la primera hora, porque el déficit hídrico es grande y mejora la perfusión y la respuesta a la insulina. Antes de la insulina se verifica el potasio. Si es menor de 3.3 mEq/L se repone antes de iniciarla. Luego se da insulina rápida en infusión a 0.1 U/kg/h. Cuando la glucosa llega a 200 mg/dL se agrega solución glucosada. El bicarbonato solo con pH menor de 6.9.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en adultos"
+      ]
+    },
+    {
+      "key": "mi-02a-endocrinologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "diabetic_emergencies",
+      "vignette": "Mujer de 78 años con diabetes tipo 2 que vive sola. Su hija la encuentra somnolienta y desorientada tras una semana de infección urinaria. Glucosa de 980 mg/dL, sodio de 148 mEq/L, pH de 7.36, bicarbonato de 22 mEq/L, cetonas negativas y osmolaridad efectiva de 352 mOsm/kg.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hipernatremia por deshidratación simple",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La deshidratación existe, pero el cuadro es el estado hiperosmolar."
+        },
+        {
+          "key": "b",
+          "text": "Cetoacidosis euglucémica",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo descontrol es cetoacidosis."
+        },
+        {
+          "key": "c",
+          "text": "Demencia avanzada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Atribuye la confusión a la edad."
+        },
+        {
+          "key": "d",
+          "text": "Encefalopatía hepática",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la confusión sin datos hepáticos."
+        },
+        {
+          "key": "e",
+          "text": "Evento vascular cerebral isquémico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la alteración neurológica e ignora la hiperosmolaridad."
+        },
+        {
+          "key": "f",
+          "text": "Cetoacidosis diabética",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Comparte hiperglucemia, pero aquí el pH y el bicarbonato son normales."
+        },
+        {
+          "key": "g",
+          "text": "Estado hiperglucémico hiperosmolar",
+          "correct": true,
+          "rationale": "Hiperglucemia extrema, osmolaridad mayor de 320 y alteración neurológica sin acidosis cetósica."
+        },
+        {
+          "key": "h",
+          "text": "Hipoglucemia por sulfonilureas",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No nota la glucosa muy elevada."
+        },
+        {
+          "key": "i",
+          "text": "Sepsis de origen urinario como diagnóstico único",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La infección es el desencadenante, no explica todo."
+        },
+        {
+          "key": "j",
+          "text": "Coma mixedematoso",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es raro y no explica la hiperglucemia."
+        }
+      ],
+      "canonical": [
+        "e",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "El estado hiperglucémico hiperosmolar es típico de adultos mayores con diabetes tipo 2 y se desencadena con infecciones, deshidratación o fármacos. Se caracteriza por glucosa mayor de 600 mg/dL, osmolaridad sérica efectiva mayor de 320 mOsm/kg, deshidratación grave, ausencia de cetosis significativa, pH mayor de 7.30 y bicarbonato mayor de 18 mEq/L. Las alteraciones neurológicas se correlacionan con la osmolaridad. Tiene mayor mortalidad que la cetoacidosis. El tratamiento prioriza la reposición de líquidos con solución salina, corrección gradual de la osmolaridad, insulina en infusión, potasio y tratamiento del desencadenante, en este caso la infección urinaria.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del estado hiperglucémico hiperosmolar"
+      ]
+    },
+    {
+      "key": "mi-02a-endocrinologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "diabetic_emergencies",
+      "vignette": "Hombre de 68 años con diabetes tipo 2 tratado con glibenclamida. Su esposa lo encuentra sudoroso, tembloroso y confuso. La glucosa capilar es de 42 mg/dL. Está despierto y puede deglutir.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Insulina para estabilizar la glucosa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Estabilizar suena correcto, pero la insulina empeora la hipoglucemia."
+        },
+        {
+          "key": "b",
+          "text": "Benzodiacepina por el temblor",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Asocia el temblor a ansiedad."
+        },
+        {
+          "key": "c",
+          "text": "Dar 15 a 20 g de carbohidratos de absorción rápida por vía oral y repetir la glucosa en 15 minutos",
+          "correct": true,
+          "rationale": "Hipoglucemia con paciente que puede deglutir."
+        },
+        {
+          "key": "d",
+          "text": "Tomografía de cráneo por la confusión antes de tratar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa un tratamiento simple y eficaz."
+        },
+        {
+          "key": "e",
+          "text": "Dejarlo descansar hasta que se le pase",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Deja una hipoglucemia que puede agravarse."
+        },
+        {
+          "key": "f",
+          "text": "Agua con sal para subir la presión",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que los síntomas son por presión baja."
+        },
+        {
+          "key": "g",
+          "text": "Solución glucosada al 50% intravenosa de inmediato",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es útil si no puede deglutir o no hay respuesta oral."
+        },
+        {
+          "key": "h",
+          "text": "Glucagón intramuscular como primera medida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el glucagón, reservado para quien no puede deglutir."
+        },
+        {
+          "key": "i",
+          "text": "Dar la dosis habitual de glibenclamida y observar",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Mantiene el fármaco que la causó."
+        },
+        {
+          "key": "j",
+          "text": "Dar un alimento con grasa y proteína como chocolate o cacahuates",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La grasa retrasa la absorción de glucosa."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "h",
+        "j"
+      ],
+      "explanation": "La hipoglucemia se define en diabetes como glucosa menor de 70 mg/dL, y es grave cuando requiere ayuda de otra persona. En el paciente consciente que puede deglutir se aplica la regla de 15, con 15 a 20 g de glucosa o carbohidratos simples, como jugo o tabletas de glucosa, y se repite la medición a los 15 minutos. Si sigue baja se repite. Una vez corregida se da un refrigerio con carbohidratos complejos. Si no puede deglutir se usa glucagón o glucosa intravenosa. Las sulfonilureas, sobre todo la glibenclamida en ancianos, causan hipoglucemias prolongadas que requieren vigilancia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipoglucemia en el paciente con diabetes"
+      ]
+    },
+    {
+      "key": "mi-02a-endocrinologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "diabetic_emergencies",
+      "vignette": "Niña de 14 años con cetoacidosis diabética que recibe solución salina e insulina en infusión. Seis horas después su glucosa bajó de 620 a 190 mg/dL. Refiere cefalea intensa, presenta bradicardia, hipertensión y somnolencia progresiva.",
+      "prompt": "¿Cuál es la complicación más probable del tratamiento?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hipoglucemia grave",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el descenso de glucosa, pero la glucosa es de 190 mg/dL."
+        },
+        {
+          "key": "b",
+          "text": "Meningitis bacteriana",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La cefalea y somnolencia la sugieren, pero no hay fiebre ni rigidez."
+        },
+        {
+          "key": "c",
+          "text": "Empeoramiento de la cetoacidosis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye progresión cuando la glucosa mejora."
+        },
+        {
+          "key": "d",
+          "text": "Reacción adversa a la insulina",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No reconoce la tríada de hipertensión intracraneal."
+        },
+        {
+          "key": "e",
+          "text": "Trombosis de senos venosos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es mucho menos frecuente."
+        },
+        {
+          "key": "f",
+          "text": "Hiponatremia leve asintomática",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La hiponatremia puede contribuir, pero no explica la hipertensión con bradicardia."
+        },
+        {
+          "key": "g",
+          "text": "Hipopotasemia por la insulina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es frecuente, pero causa debilidad y arritmias, no este cuadro."
+        },
+        {
+          "key": "h",
+          "text": "Edema cerebral",
+          "correct": true,
+          "rationale": "Cefalea, bradicardia, hipertensión y deterioro neurológico durante el tratamiento."
+        },
+        {
+          "key": "i",
+          "text": "Hipofosfatemia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo síntoma tardío es por fósforo."
+        },
+        {
+          "key": "j",
+          "text": "Migraña desencadenada por estrés",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la cefalea."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "h"
+      ],
+      "explanation": "El edema cerebral es la complicación más grave del tratamiento de la cetoacidosis, sobre todo en niños y adolescentes, y suele aparecer entre 4 y 12 horas después de iniciar el manejo. Se asocia a reposición rápida de líquidos hipotónicos, descenso brusco de la osmolaridad, uso de bicarbonato y cetoacidosis grave al diagnóstico. Se manifiesta con cefalea, vómito, cambios conductuales, deterioro del estado de alerta, bradicardia, hipertensión e irregularidad respiratoria, que corresponden a hipertensión intracraneal. Se trata de inmediato con manitol o solución salina hipertónica, reducción de líquidos y elevación de la cabecera, antes de cualquier estudio de imagen.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en niños y adolescentes"
+      ]
+    },
+    {
+      "key": "mi-02a-endocrinologia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "diabetic_emergencies",
+      "vignette": "Hombre de 30 años con cetoacidosis diabética. Tras la primera hora de solución salina, su potasio sérico es de 2.9 mEq/L. Glucosa de 410 mg/dL y pH de 7.15.",
+      "prompt": "¿Cuál es el manejo inicial correcto respecto a la insulina y el potasio?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dar bicarbonato para subir el potasio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El bicarbonato agrava la hipopotasemia."
+        },
+        {
+          "key": "b",
+          "text": "Suspender líquidos para evitar diluir el potasio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retira la medida más importante."
+        },
+        {
+          "key": "c",
+          "text": "Reponer potasio intravenoso y retrasar la infusión de insulina hasta que el potasio sea mayor de 3.3 mEq/L",
+          "correct": true,
+          "rationale": "La insulina mete potasio a la célula y puede causar arritmias graves."
+        },
+        {
+          "key": "d",
+          "text": "Calcio intravenoso para proteger el corazón",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se usa en la hiperpotasemia, no en la hipopotasemia."
+        },
+        {
+          "key": "e",
+          "text": "Iniciar insulina de inmediato porque la glucosa es lo más urgente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la glucosa sin considerar el potasio."
+        },
+        {
+          "key": "f",
+          "text": "Continuar el protocolo estándar sin cambios",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Ignora un hallazgo que modifica el orden del tratamiento."
+        },
+        {
+          "key": "g",
+          "text": "Hemodiálisis para corregir electrolitos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Medida innecesaria."
+        },
+        {
+          "key": "h",
+          "text": "Observar el potasio dos horas más antes de decidir",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasa una corrección necesaria."
+        },
+        {
+          "key": "i",
+          "text": "Agregar insulina subcutánea en lugar de intravenosa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la vía cambia el efecto sobre el potasio."
+        },
+        {
+          "key": "j",
+          "text": "Dar potasio oral y continuar insulina igual",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a reposición, pero es lenta e insuficiente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "Aunque en la cetoacidosis el potasio corporal total está muy disminuido, el potasio sérico inicial puede ser normal o alto por la acidosis y el déficit de insulina. La insulina y la corrección de la acidosis introducen potasio a la célula. Si el potasio es menor de 3.3 mEq/L, se debe reponer por vía intravenosa y retrasar la insulina hasta superar ese valor para evitar arritmias y paro respiratorio. Entre 3.3 y 5.2 se agregan 20 a 30 mEq por litro de solución manteniendo 4 a 5 mEq/L. Si es mayor de 5.2 no se agrega y se vigila cada dos horas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en adultos"
+      ]
+    }
+  ]
+}
