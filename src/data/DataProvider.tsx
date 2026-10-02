@@ -14,7 +14,12 @@ import type { EnarmDb } from './db/database';
 /** El generador corre en un worker que se carga bajo demanda (14.4) */
 async function buildDemoRecords() {
   const { simulateWorker } = await import('@/workers/simulateClient');
-  return simulateWorker().buildSeed({ endDay: studyDayOf(new Date(), DEFAULT_TIME_ZONE) });
+  const now = new Date();
+  // Nada de la bitácora simulada puede quedar en el futuro
+  return simulateWorker().buildSeed({
+    endDay: studyDayOf(now, DEFAULT_TIME_ZONE),
+    notAfter: now.toISOString(),
+  });
 }
 
 function demoActions(db: EnarmDb): DataApi['demo'] {

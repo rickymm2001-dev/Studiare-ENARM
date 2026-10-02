@@ -5,7 +5,13 @@ import { topicTaxonomy } from '@/demo/content';
 import { buildDemoSeed } from '@/demo/generator/seed';
 import type { EnarmDb } from '../db/database';
 import { freshDb } from '../testing/fixtures';
-import { DemoOnlyError, isDemoSeeded, resetDemoDatabase, seedDemoDatabase } from './seedDemo';
+import {
+  DemoAlreadySeededError,
+  DemoOnlyError,
+  isDemoSeeded,
+  resetDemoDatabase,
+  seedDemoDatabase,
+} from './seedDemo';
 
 const openDbs: EnarmDb[] = [];
 afterEach(async () => {
@@ -72,10 +78,23 @@ describe('siembra de la demo (11.2, 11.3)', () => {
     expect(await db.users.count()).toBe(5);
   });
 
-  it('sembrar dos veces sin regenerar falla porque la bitácora no acepta eventos repetidos', async () => {
+  it('sembrar sobre una demo con datos falla, aunque sea con otra fecha', async () => {
     const db = freshDb('demo');
     openDbs.push(db);
     await seedDemoDatabase(db, seed);
-    await expect(seedDemoDatabase(db, seed)).rejects.toThrow();
-  }, 30_000);
+    const otherDay = buildDemoSeed(buildDemoBank(), topicTaxonomy, {
+      ...seed.options,
+      endDay: '2026-10-05',
+    });
+    await expect(seedDemoDatabase(db, otherDay)).rejects.toThrow(DemoAlreadySeededError);
+    expect(await db.events.count()).toBe(seed.events.length);
+  });
+
+  it('con notAfter no deja eventos en el futuro', () => {
+    const notAfter = '2026-10-01T20:00:00.000Z';
+    const cut = buildDemoSeed(buildDemoBank(), topicTaxonomy, { ...seed.options, notAfter });
+    expect(cut.events.length).toBeGreaterThan(0);
+    expect(cut.events.every((event) => event.at <= notAfter)).toBe(true);
+    expect(cut.events.length).toBeLessThanOrEqual(seed.events.length);
+  });
 });

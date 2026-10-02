@@ -31,6 +31,8 @@ export interface DemoSeedOptions {
   cohortSize: number;
   cohortDays: number;
   demoDays: number;
+  /** Momento UTC después del cual no puede haber eventos. Al sembrar desde la app es ahora */
+  notAfter?: string;
 }
 
 export const DEFAULT_DEMO_SEED: Omit<DemoSeedOptions, 'endDay' | 'examDate'> = {
@@ -92,12 +94,14 @@ function userOf(student: SimStudent, examDate: string | null, dailyMinutes: numb
   });
 }
 
-function truthOf(student: SimStudent): SimTruth {
+function truthOf(student: SimStudent, seedOptions?: DemoSeedOptions): SimTruth {
   return SimTruthSchema.parse({
     userId: student.userId,
     seed: student.seed.slice(0, 80),
     generatorVersion: GENERATOR_VERSION,
-    params: JSON.parse(JSON.stringify(student.truth)) as Record<string, unknown>,
+    params: JSON.parse(
+      JSON.stringify(seedOptions ? { ...student.truth, seedOptions } : student.truth),
+    ) as Record<string, unknown>,
   });
 }
 
@@ -111,6 +115,7 @@ export function buildDemoSeed(
     size: options.cohortSize,
     days: options.cohortDays,
     endDay: options.endDay,
+    ...(options.notAfter ? { notAfter: options.notAfter } : {}),
     // Solo el alumno de la demo necesita sus repasos. Los de la cohorte no se guardan (D-052)
     simulateCards: false,
   });
@@ -128,6 +133,7 @@ export function buildDemoSeed(
     examDate: options.examDate,
     difficulties: cohort.difficulties,
     cards: cardSet,
+    ...(options.notAfter ? { notAfter: options.notAfter } : {}),
   });
 
   const topicName = new Map(
@@ -194,7 +200,12 @@ export function buildDemoSeed(
       userOf(demoStudent, options.examDate, 90),
       ...cohort.students.map((student) => userOf(student, null, null)),
     ],
-    simTruth: [truthOf(demoStudent), ...cohort.students.map(truthOf)],
+    // Las opciones de la siembra quedan con el alumno de la demo. Con ellas, incluido el último día,
+    // la misma generación determinista reproduce exactamente lo sembrado (D-052)
+    simTruth: [
+      truthOf(demoStudent, options),
+      ...cohort.students.map((student) => truthOf(student)),
+    ],
     events,
     demoUserId: demoStudent.userId,
     cohort,

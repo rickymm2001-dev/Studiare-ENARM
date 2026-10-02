@@ -7,6 +7,12 @@ import { DEMO_STUDENT_TRUTH, generateCohort, generateDemoStudent, simItemsFrom }
 import { toEvents } from './events';
 import { DEFAULT_MIX, respond, sampleTruth, type SimItem } from './model';
 import { createRng } from '@/engines/random';
+import { analyzeBias, populationBaseline, type BiasExposure } from '@/engines/bias';
+import { fatigueSignal, negationSignal } from '@/engines/behavior';
+import { estimateRasch } from '@/engines/rasch';
+import { analyzeTopics } from '@/engines/topics';
+import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
+import type { SimResponse } from './simulate';
 import { syntheticCards } from './simulate';
 
 const bank = buildDemoBank();
@@ -205,5 +211,99 @@ describe('alumno de la demo', () => {
     expect(events.filter((event) => event.type === 'session_started')).toHaveLength(
       student.history.sessions.length,
     );
+  });
+});
+
+describe('el alumno de la demo con los motores reales (11.3)', () => {
+  const cohort = generateCohort(bank, topicTaxonomy, {
+    seed: 'motores',
+    size: 60,
+    days: 90,
+    endDay: '2026-10-01',
+    simulateCards: false,
+  });
+  const student = generateDemoStudent(bank, {
+    seed: 'motores',
+    endDay: '2026-10-01',
+    examDate: '2027-09-15',
+    difficulties: cohort.difficulties,
+    cards: [],
+  });
+  const responses = student.history.responses;
+  const everyone = [...cohort.students, student];
+  const rasch = estimateRasch(
+    everyone.flatMap((s) =>
+      s.history.responses.map((r) => ({ person: s.userId, item: r.itemKey, correct: r.correct })),
+    ),
+  );
+  const expected = (r: SimResponse) => {
+    const person = rasch.persons[student.userId]?.ability ?? 0;
+    const item = rasch.items[r.itemKey]?.difficulty ?? 0;
+    return 1 / (1 + Math.exp(-(person - item)));
+  };
+  const exposures = (list: readonly SimResponse[]): BiasExposure[] =>
+    list.map((r) => ({
+      visibleTags: r.shown.flatMap((o) => (!o.isCorrect && o.biasTag ? [o.biasTag] : [])),
+      chosenTag: r.chosenTag,
+    }));
+
+  it('el análisis por sesgo encuentra anclaje, y la variante propuesta solo anclaje', () => {
+    const population = cohort.students.map((s) => exposures(s.history.responses));
+    const byDefault = analyzeBias({
+      exposures: exposures(responses),
+      baseline: populationBaseline(population, 'simulated'),
+      thresholds: DEFAULT_THRESHOLDS.bias,
+    });
+    expect(byDefault.patterns).toContain('anchoring');
+    const variant = analyzeBias({
+      exposures: exposures(responses),
+      baseline: populationBaseline(population, 'simulated', 'error_share'),
+      thresholds: DEFAULT_THRESHOLDS.bias,
+      method: 'error_share',
+      familywise: true,
+    });
+    expect(variant.patterns).toEqual(['anchoring']);
+  });
+
+  it('marca mala lectura de negaciones y fatiga', () => {
+    const negation = negationSignal(
+      responses.map((r) => ({ polarity: r.polarity, correct: r.correct, expected: expected(r) })),
+      DEFAULT_THRESHOLDS.structure.minResponsesPerCategory,
+    );
+    expect(negation.misreads).toBe(true);
+    const fatigue = fatigueSignal(
+      responses.map((r, index) => ({
+        id: String(index),
+        sessionId: r.session,
+        at: r.at,
+        msToAnswer: r.msToAnswer,
+        words: r.words,
+        correct: r.correct,
+        confidence: r.confidence,
+        expected: expected(r),
+        changes: [],
+        minuteInSession: r.minuteInSession,
+      })),
+      DEFAULT_THRESHOLDS.behavior,
+    );
+    expect(fatigue.fatigued).toBe(true);
+  });
+
+  it('Pediatría sale como la rama más débil en el análisis por tema', () => {
+    const analysis = analyzeTopics({
+      responses: responses.map((r) => ({ branch: r.branch, topic: r.topic, correct: r.correct })),
+      taxonomy: topicTaxonomy,
+      averageRetrievability: {},
+      thresholds: DEFAULT_THRESHOLDS.topics,
+    });
+    const byBranch = new Map<string, number[]>();
+    for (const topic of analysis.topics) {
+      if (topic.tally.trials === 0) continue;
+      byBranch.set(topic.branch, [...(byBranch.get(topic.branch) ?? []), topic.estimate.mean]);
+    }
+    const mean = (list: number[]) => list.reduce((a, b) => a + b, 0) / list.length;
+    const ranked = [...byBranch].sort((a, b) => mean(a[1]) - mean(b[1]));
+    expect(ranked[0]?.[0]).toBe('pediatrics');
+    expect(analysis.priorities.some((p) => p.branch === 'pediatrics')).toBe(true);
   });
 });

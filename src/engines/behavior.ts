@@ -368,6 +368,8 @@ export interface NegationSignal {
   misreads: boolean | null;
   /** Respuestas negativas que faltan para dejar de calibrar */
   negativeNeeded: number;
+  /** Respuestas afirmativas que faltan para dejar de calibrar */
+  affirmativeNeeded: number;
 }
 
 /**
@@ -411,5 +413,6 @@ export function negationSignal(
     standardError,
     misreads: ready ? difference < -1.64 * standardError : null,
     negativeNeeded: Math.max(0, minResponsesPerCategory - negative.length),
+    affirmativeNeeded: Math.max(0, minResponsesPerCategory - affirmative.length),
   };
 }

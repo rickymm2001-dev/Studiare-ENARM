@@ -5,7 +5,7 @@
 // confianza que se correlaciona con el acierto. Todos los valores son juicio de diseño (J).
 import type { Rng } from '@/engines/random';
 
-export const GENERATOR_VERSION = 'b9-1';
+export const GENERATOR_VERSION = 'b9-2';
 
 export interface FatigueTruth {
   /** Minuto de la sesión desde el que empieza a cansarse */
@@ -23,6 +23,12 @@ export interface StudentTruth {
   topicOffset: Record<string, number>;
   /** Propensión por etiqueta de sesgo. 0 es sin propensión. Solo las etiquetas sembradas */
   biasPropensity: Record<string, number>;
+  /**
+   * Cómo actúa la propensión. weighted, el sesgo pesa más al elegir distractor cuando falla y
+   * también atrae cuando sabía la respuesta. lure, solo atrae cuando sabía la respuesta, con más
+   * fuerza. lure existe para validar el análisis por sesgo con un mecanismo distinto (D-051)
+   */
+  biasModel: 'weighted' | 'lure';
   /** Probabilidad de leer una pregunta negativa como si fuera afirmativa */
   negationMisread: number;
   /** Palabras por segundo al leer con cuidado */
@@ -98,6 +104,7 @@ export interface CohortMix {
   misreadShare: number;
   /** Proporción con fatiga sembrada */
   fatigueShare: number;
+  biasModel?: StudentTruth['biasModel'];
 }
 
 export const DEFAULT_MIX: CohortMix = { biasShare: 0.2, misreadShare: 0.2, fatigueShare: 0.2 };
@@ -122,6 +129,7 @@ export function sampleTruth(
     branchOffset,
     topicOffset: {},
     biasPropensity,
+    biasModel: mix.biasModel ?? 'weighted',
     negationMisread: rng.chance(mix.misreadShare) ? 0.3 + rng.next() * 0.2 : rng.next() * 0.03,
     readingWps: clamp(rng.normal(3.2, 0.6), 1.8, 5.5),
     fatigue,
@@ -163,7 +171,9 @@ function pickWeighted<T>(rng: Rng, items: readonly T[], weight: (item: T) => num
 
 /** Peso de un distractor al equivocarse. Los de su sesgo pesan más */
 const distractorWeight = (truth: StudentTruth) => (option: SimOption) =>
-  Math.exp(1.1 * (truth.biasPropensity[option.biasTag ?? ''] ?? 0));
+  truth.biasModel === 'lure'
+    ? 1
+    : Math.exp(1.1 * (truth.biasPropensity[option.biasTag ?? ''] ?? 0));
 
 /**
  * Respuesta a una pregunta con las opciones mostradas
@@ -198,7 +208,11 @@ export function respond(input: {
     );
     for (const lure of lures) {
       const strength = truth.biasPropensity[lure.biasTag ?? ''] ?? 0;
-      if (rng.chance(Math.min(0.3, 0.15 * strength))) {
+      const lureChance =
+        truth.biasModel === 'lure'
+          ? Math.min(0.45, 0.25 * strength)
+          : Math.min(0.3, 0.15 * strength);
+      if (rng.chance(lureChance)) {
         chosen = lure;
         break;
       }

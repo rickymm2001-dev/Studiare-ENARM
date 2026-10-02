@@ -50,6 +50,13 @@
 - Bloque 10. tests/recovery/recovery.test.ts e informe en docs/recovery-report.md con 3 semillas (npm run recovery-report). Rasch de 0.985 a 0.987, Elo de 0.976 a 0.980, encogimiento por tema que baja el error 53 a 56%, mala lectura con 89 a 100% de detección y 0 a 0.8% de falsos positivos. No cumplen sesgos con el método de 7.4 (marca 47 a 54% sin propensión) ni fatiga (61 a 73% de detección). Ajuste de sesgos propuesto e implementado como opción (D-051) y dos opciones para fatiga en el informe
 - Migración para trabajar desde GitHub (D-049). README.md, docs/contenido-demo.md, scripts/content (check-draft, merge-batch y review-chunks), content-drafts, .claude/workflows/enarm-demo-review.js y .github/workflows/check.yml. Se quitó .claude.zip porque .claude/launch.json ya está en el repositorio
 
+- Revisión independiente de los bloques 9 y 10. Un subagente que no escribió el código encontró 3 hallazgos medios, 1 de honestidad en el informe y 7 bajos, ninguno alto. Se corrigieron todos. Eventos en el futuro al sembrar (ahora se corta en el momento actual), excepción de Regenerar escrita en PLAN.md 2.2, siembra doble bloqueada, faltante de afirmativas en negationSignal, prueba de los patrones del alumno de la demo con los motores reales, pruebas de recuperación menos frágiles y atadas a la versión del generador, etiquetas vacías y verdad por tema en la recuperación. El informe ahora valida la variante de sesgos con semillas nuevas y con otro modelo de sesgo (D-051). La desviación de las tarjetas de la cohorte queda como pregunta
+
+### Preguntas abiertas para Ricardo (Fase B)
+1. Sesgos (D-051). ¿Adoptamos la variante por parte de los errores con corrección de Bonferroni como método por defecto? Recomiendo que sí, porque el método de 7.4 marca a la mitad de los alumnos sin sesgo
+2. Fatiga. ¿Pruebo la regresión contra el minuto de la sesión antes de cerrar la fase? Recomiendo que sí
+3. Tarjetas de la cohorte (D-052). ¿Aceptas que los 300 alumnos simulados se guarden sin historial de tarjetas? Recomiendo que sí, el generador lo simula pero guardarlo pesaría demasiado
+
 ## Fase A. Esqueleto, datos y proxy
 
 ### Respuestas de Ricardo al aprobar

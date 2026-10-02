@@ -411,6 +411,7 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Con 300 alumnos simulados en 3 semillas, el método de 7.4 detecta 100% de los sesgos sembrados, pero marca entre 47% y 54% de los alumnos sin propensión. La meta es 10% o menos
 - Causas. La atracción se mide contra todas las preguntas con la etiqueta a la vista, así que quien falla mucho parece atraído por todas. Y se prueban unas 20 etiquetas por alumno con 95% cada una
 - Propuesta. Medir qué parte de los errores con la etiqueta a la vista fue a esa etiqueta, con la línea base calculada igual, y corregir el nivel por Bonferroni según las etiquetas evaluadas. Con eso detecta 100% y marca entre 3% y 6%
+- Límite señalado por la revisión independiente. La variante se diseñó viendo las mismas semillas, y el modelo principal del generador simula el sesgo de una forma que favorece a la variante. Por eso se validó además con 3 semillas nuevas (marca 3 a 6%) y con un modelo de sesgo distinto, que solo atrae cuando el alumno sabía la respuesta (detecta 88 a 98% y marca 3 a 5%)
 - Estado. Está en src/engines/bias.ts como opción (method error_share y familywise). El valor por defecto sigue siendo el de 7.4 hasta que Ricardo decida. Detalle en docs/recovery-report.md
 
 ### D-052. Siembra de la demo en el navegador
@@ -418,7 +419,17 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - La base demo vive en IndexedDB dentro del navegador. Por eso la siembra real se hace en la app, en Perfil con Demostración activa, con los botones Generar datos de demostración y Regenerar desde cero. En la Fase D también vivirán en la pantalla de admin 24
 - La generación corre en un Web Worker (src/workers/simulate.worker.ts) que se carga bajo demanda, así no traba la interfaz ni entra al JavaScript inicial
 - Se guardan el contenido demo con IDs estables, 301 perfiles (alumno de la demo y 300 simulados), el SimTruth de todos y la bitácora completa del alumno de la demo. Las bitácoras de los 300 simulados no se guardan porque serían cerca de 900 mil eventos. La línea base de la población y las estadísticas de las preguntas se resuelven en la Fase C con la misma generación determinista
+- Las fechas dependen del último día de la siembra. Por eso el SimTruth del alumno de la demo guarda las opciones de la siembra, incluido ese día, y con ellas la generación reproduce exactamente lo sembrado
+- Nada de la bitácora simulada queda en el futuro. La app pasa el momento actual y se descartan las sesiones que terminarían después
+- Desviación de 11.2 que queda como pregunta para Ricardo. En la siembra, los 300 alumnos simulados no traen su historial de tarjetas. El generador sí simula 90 días de FSRS para cualquier alumno, pero guardarlo para todos pesaría demasiado
+- Regenerar desde cero borra la base demo completa. Es la segunda excepción a la bitácora de solo agregar y quedó escrita en PLAN.md 2.2
 - npm run demo-seed genera la siembra por defecto completa fuera del navegador, valida cada registro y reporta conteos. npm run demo-reset explica cómo regenerar desde la app, porque un script de Node no puede borrar una base del navegador
 - Mientras no existan los mazos se usa una baraja de 200 tarjetas sintéticas sin contenido médico, marcada como datos simulados (D-050)
 - Las pruebas de punta a punta aceptan PW_CHROMIUM_PATH para usar un Chromium ya instalado en entornos en la nube. En la computadora de Ricardo no se define
+
+### D-053. Mazos de Paco completos en la demo
+- Fecha 2026-10-02. Decisión de Ricardo, con autorización de Paco
+- Reemplaza a D-008 para los mazos de Paco. El mazo de Fer sigue fuera del repositorio
+- Los mazos de Medicina interna (2,122 tarjetas), Ginecología y obstetricia (1,526) y Urgencias (123) entran completos al repositorio privado, con sus 478 imágenes, como mazos precargados de la demo con etiqueta Demostración y crédito visible a Paco
+- Sustituyen a las tarjetas sintéticas en la simulación de repasos del alumno de la demo (D-050)
 

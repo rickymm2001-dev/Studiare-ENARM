@@ -19,6 +19,13 @@ export class DemoOnlyError extends Error {
   }
 }
 
+export class DemoAlreadySeededError extends Error {
+  constructor() {
+    super('La base de demostración ya tiene datos. Usa Regenerar desde cero');
+    this.name = 'DemoAlreadySeededError';
+  }
+}
+
 /** La base ya tiene al alumno de la demo */
 export async function isDemoSeeded(db: EnarmDb, demoUserId: string): Promise<boolean> {
   return (await db.users.get(demoUserId)) !== undefined;
@@ -40,6 +47,10 @@ export async function seedDemoDatabase(db: EnarmDb, seed: DemoSeedRecords): Prom
       db.events,
     ],
     async () => {
+      // Evita duplicar la bitácora si dos pestañas generan a la vez o en días distintos
+      if ((await db.users.count()) > 0 || (await db.events.count()) > 0) {
+        throw new DemoAlreadySeededError();
+      }
       await db.cases.bulkPut(seed.cases);
       await db.questions.bulkPut(seed.questions.map((entry) => entry.question));
       await db.options.bulkPut(seed.questions.flatMap((entry) => entry.options));
@@ -62,8 +73,8 @@ export async function seedDemoDatabase(db: EnarmDb, seed: DemoSeedRecords): Prom
 }
 
 /**
- * Regenera la demo desde cero. Borra la base demo completa, que es la excepción permitida a la
- * bitácora inmutable porque no tiene datos reales (PLAN.md 2.2), y vuelve a sembrar
+ * Regenera la demo desde cero. Borra la base demo completa, que es la segunda excepción a la
+ * bitácora inmutable (PLAN.md 2.2, D-052), porque no tiene datos reales, y vuelve a sembrar
  */
 export async function resetDemoDatabase(db: EnarmDb, seed: DemoSeedRecords): Promise<SeedSummary> {
   if (db.kind !== 'demo') throw new DemoOnlyError();

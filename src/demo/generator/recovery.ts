@@ -9,7 +9,7 @@ import { estimateRasch } from '@/engines/rasch';
 import { pearson } from '@/engines/stats/correlation';
 import { analyzeTopics } from '@/engines/topics';
 import type { Cohort } from './cohort';
-import { effectiveAbility, sigmoid, type SimItem } from './model';
+import { sigmoid, type SimItem } from './model';
 import type { SimResponse } from './simulate';
 
 export interface DetectionResult {
@@ -60,9 +60,9 @@ const detection = (rows: readonly { seeded: boolean; flagged: boolean }[]): Dete
 };
 
 const exposureOf = (response: SimResponse): BiasExposure => ({
-  visibleTags: response.shown
-    .filter((option) => !option.isCorrect)
-    .map((option) => option.biasTag ?? ''),
+  visibleTags: response.shown.flatMap((option) =>
+    !option.isCorrect && option.biasTag !== null ? [option.biasTag] : [],
+  ),
   chosenTag: response.chosenTag,
 });
 
@@ -156,18 +156,25 @@ export function computeRecovery(
     return { ...detection(rows), falsePositivePairRate: pairs === 0 ? 0 : pairFlags / pairs };
   });
 
-  // Temas. Error del dominio crudo y del encogido contra la exactitud verdadera del tema
+  // Temas. Error del dominio crudo y del encogido contra la exactitud verdadera del tema, que es
+  // el promedio de la probabilidad de acierto con que el modelo generó esas mismas respuestas
   let squaredRaw = 0;
   let squaredShrunk = 0;
   let cells = 0;
-  const itemsByTopic = new Map<string, SimItem[]>();
-  for (const item of items) {
-    const key = `${item.branch}/${item.topic}`;
-    itemsByTopic.set(key, [...(itemsByTopic.get(key) ?? []), item]);
-  }
   for (const student of students) {
     // Primeras 150 respuestas, cuando el encogimiento más importa
     const sample = student.history.responses.slice(0, 150);
+    const truthByTopic = new Map<string, { sum: number; n: number }>();
+    for (const response of sample) {
+      const key = `${response.branch}/${response.topic}`;
+      const entry = truthByTopic.get(key) ?? { sum: 0, n: 0 };
+      entry.sum +=
+        response.polarity === 'negative'
+          ? response.truth.probability * (1 - student.truth.negationMisread)
+          : response.truth.probability;
+      entry.n += 1;
+      truthByTopic.set(key, entry);
+    }
     const analysis = analyzeTopics({
       responses: sample.map((response) => ({
         branch: response.branch,
@@ -179,20 +186,11 @@ export function computeRecovery(
       thresholds: thresholds.topics,
     });
     for (const topic of analysis.topics) {
-      if (topic.tally.trials === 0) continue;
-      const topicItems = itemsByTopic.get(`${topic.branch}/${topic.topic}`) ?? [];
-      if (topicItems.length === 0) continue;
-      const truth =
-        topicItems.reduce(
-          (sum, item) =>
-            sum +
-            sigmoid(
-              effectiveAbility(student.truth, item, 0) - (cohort.difficulties[item.key] ?? 0),
-            ),
-          0,
-        ) / topicItems.length;
-      squaredRaw += (topic.tally.successes / topic.tally.trials - truth) ** 2;
-      squaredShrunk += (topic.estimate.mean - truth) ** 2;
+      const truth = truthByTopic.get(`${topic.branch}/${topic.topic}`);
+      if (topic.tally.trials === 0 || !truth) continue;
+      const expected = truth.sum / truth.n;
+      squaredRaw += (topic.tally.successes / topic.tally.trials - expected) ** 2;
+      squaredShrunk += (topic.estimate.mean - expected) ** 2;
       cells += 1;
     }
   }

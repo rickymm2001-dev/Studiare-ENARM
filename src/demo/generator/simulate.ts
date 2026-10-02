@@ -94,6 +94,11 @@ export interface SimulateOptions {
   examDate: string | null;
   /** Opciones mostradas por pregunta */
   optionsShown?: number;
+  /**
+   * Momento UTC después del cual no puede haber nada. Al generar la demo es ahora, para que la
+   * bitácora no tenga eventos en el futuro. Se descartan las sesiones que terminan después
+   */
+  notAfter?: string;
 }
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
@@ -345,7 +350,20 @@ export function simulateStudent(
       });
     }
   }
-  return { sessions, responses, reviews, activeDays };
+  if (options.notAfter === undefined) return { sessions, responses, reviews, activeDays };
+  // Las sesiones van en orden de tiempo, así que solo se recorta la cola y las cadenas de FSRS
+  // de lo que queda siguen completas
+  const limit = options.notAfter;
+  const kept = sessions.filter((session) => session.endedAt <= limit);
+  const keptIds = new Set(kept.map((session) => session.id));
+  const lastDay = limit.slice(0, 10);
+  const daysWithSessions = new Set(kept.map((session) => session.startedAt.slice(0, 10)));
+  return {
+    sessions: kept,
+    responses: responses.filter((response) => keptIds.has(response.session)),
+    reviews: reviews.filter((review) => keptIds.has(review.session)),
+    activeDays: activeDays.filter((day) => day < lastDay || daysWithSessions.has(day)),
+  };
 }
 
 /** Tarjetas sintéticas por tema, marcadas como tales, mientras no existan los mazos (D-050) */

@@ -43,6 +43,8 @@ export interface CohortOptions {
   simulateCards?: boolean;
   /** Tarjetas sintéticas por tema mientras no existan los mazos (D-050) */
   cardsPerTopic?: number;
+  /** Nada después de este momento UTC (ver SimulateOptions) */
+  notAfter?: string;
 }
 
 /** Preguntas del banco tal como las usa el generador */
@@ -118,6 +120,7 @@ export function generateCohort(
         cards,
         newCardsPerDay: 10,
         examDate: null,
+        ...(options.notAfter ? { notAfter: options.notAfter } : {}),
       }),
     });
   }
@@ -132,6 +135,7 @@ export interface DemoStudentOptions {
   examDate: string | null;
   difficulties: Record<string, number>;
   cards: readonly SimCard[];
+  notAfter?: string;
 }
 
 /**
@@ -149,6 +153,7 @@ export const DEMO_STUDENT_TRUTH: StudentTruth = {
   },
   topicOffset: {},
   biasPropensity: { anchoring: 1.8 },
+  biasModel: 'weighted',
   negationMisread: 0.4,
   readingWps: 3.4,
   fatigue: { onsetMinutes: 40, logitPerMinute: 0.07 },
@@ -176,6 +181,7 @@ export function generateDemoStudent(bank: DemoBank, options: DemoStudentOptions)
       cards: options.cards,
       newCardsPerDay: 10,
       examDate: options.examDate,
+      ...(options.notAfter ? { notAfter: options.notAfter } : {}),
     }),
   };
 }

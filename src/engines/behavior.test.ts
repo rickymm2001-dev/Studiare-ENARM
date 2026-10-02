@@ -219,6 +219,13 @@ describe('mala lectura de negaciones (7.5, 14.2)', () => {
     );
     expect(signal.misreads).toBeNull();
     expect(signal.negativeNeeded).toBe(10);
+    expect(signal.affirmativeNeeded).toBe(0);
+    const fewAffirmative = negationSignal(
+      [...block('negative', 40, 0.2), ...block('affirmative', 5, 0.7)],
+      20,
+    );
+    expect(fewAffirmative.misreads).toBeNull();
+    expect(fewAffirmative.affirmativeNeeded).toBe(15);
   });
 
   it('marca el patrón cuando rinde claramente peor en las negativas', () => {
