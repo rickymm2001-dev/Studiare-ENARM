@@ -48,6 +48,20 @@ export default defineConfig({
       workbox: {
         // La app completa queda en caché para abrir sin conexión después de la primera carga
         globPatterns: ['**/*.{js,css,html,svg,png,webmanifest}'],
+        // Las imágenes de los mazos demo (unos 47 MB) no se precargan. Se guardan al verlas (D-053)
+        globIgnores: ['demo-media/**'],
+        // Los mazos demo viajan en el worker de simulación, que pesa varios MB
+        maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.pathname.startsWith('/demo-media/'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'demo-media',
+              expiration: { maxEntries: 400 },
+            },
+          },
+        ],
         navigateFallback: '/index.html',
         // Las llamadas al proxy de IA nunca se sirven desde caché
         navigateFallbackDenylist: [/^\/api\//],

@@ -1,10 +1,11 @@
 // Arma todo lo que se siembra en enarm_demo (11.2, 11.3, D-052). Función pura. El caso de uso
-// src/data/usecases/seedDemo.ts lo escribe en la base. Contenido demo con sus IDs estables, baraja
-// de tarjetas sintéticas mientras no existan los mazos, alumno de la demo con su bitácora, y la
-// cohorte de alumnos simulados con sus parámetros verdaderos en SimTruth.
+// src/data/usecases/seedDemo.ts lo escribe en la base. Contenido demo con sus IDs estables, los
+// mazos precargados de Paco (D-053), alumno de la demo con su bitácora, y la cohorte de alumnos
+// simulados con sus parámetros verdaderos en SimTruth. Sin mazos, por ejemplo en pruebas, usa una
+// baraja de tarjetas sintéticas marcada como tal (D-050).
 import { SimTruthSchema, type SimTruth } from '@/data/schemas/activity';
 import type { ClinicalCase, Option, Question } from '@/data/schemas/bank';
-import type { TopicTaxonomy } from '@/data/schemas/content';
+import type { DemoDeckFile, TopicTaxonomy } from '@/data/schemas/content';
 import {
   CardSchema,
   DeckSchema,
@@ -16,11 +17,13 @@ import {
 import type { AppEvent } from '@/data/schemas/events';
 import { UserSchema, UserSettingsSchema, type User } from '@/data/schemas/people';
 import type { DemoBank } from '../content/bank';
+import { buildDeckEntities } from '../content/deckEntities';
 import { DEMO_CONTENT_TIME } from '../stableId';
 import { generateCohort, generateDemoStudent, type Cohort, type SimStudent } from './cohort';
 import { syntheticIds, toEvents } from './events';
 import { GENERATOR_VERSION } from './model';
-import { SIM_TIME_ZONE, syntheticCards } from './simulate';
+import { createRng } from '@/engines/random';
+import { SIM_TIME_ZONE, syntheticCards, type SimCard } from './simulate';
 
 export interface DemoSeedOptions {
   seed: string;
@@ -47,7 +50,7 @@ export interface DemoSeed {
   generatorVersion: string;
   cases: ClinicalCase[];
   questions: { question: Question; options: Option[] }[];
-  deck: Deck;
+  decks: Deck[];
   notes: Note[];
   cards: Card[];
   users: User[];
@@ -105,48 +108,60 @@ function truthOf(student: SimStudent, seedOptions?: DemoSeedOptions): SimTruth {
   });
 }
 
-export function buildDemoSeed(
-  bank: DemoBank,
-  taxonomy: TopicTaxonomy,
-  options: DemoSeedOptions,
-): DemoSeed {
-  const cohort = generateCohort(bank, taxonomy, {
-    seed: options.seed,
-    size: options.cohortSize,
-    days: options.cohortDays,
-    endDay: options.endDay,
-    ...(options.notAfter ? { notAfter: options.notAfter } : {}),
-    // Solo el alumno de la demo necesita sus repasos. Los de la cohorte no se guardan (D-052)
-    simulateCards: false,
-  });
-  const cardSet = syntheticCards(
+interface CardContent {
+  simCards: SimCard[];
+  decks: Deck[];
+  notes: Note[];
+  cards: Card[];
+  refs: Map<string, { cardId: string; deckId: string }>;
+}
+
+/** Tarjetas de los mazos reales, en un orden barajado para que el alumno mezcle los mazos */
+function realCards(decks: readonly DemoDeckFile[], seed: string): CardContent {
+  const entities = buildDeckEntities(decks);
+  const rng = createRng(`card-difficulty|${seed}`);
+  const simCards = createRng(`card-order|${seed}`).shuffle(
+    entities.cards.map((entry) => ({
+      key: entry.key,
+      branch: entry.note.branch ?? 'urgencias',
+      topic: entry.note.topic ?? `${entry.deckKey}-sin-tema`,
+      difficulty: rng.normal(0, 0.7),
+    })),
+  );
+  return {
+    simCards,
+    decks: entities.decks,
+    notes: entities.notes,
+    cards: entities.cards.map((entry) => entry.card),
+    refs: new Map(
+      entities.cards.map((entry) => [
+        entry.key,
+        { cardId: entry.card.id, deckId: entry.card.deckId },
+      ]),
+    ),
+  };
+}
+
+/** Baraja sintética sin contenido médico, solo si no hay mazos (D-050) */
+function syntheticContent(taxonomy: TopicTaxonomy, seed: string): CardContent {
+  const simCards = syntheticCards(
     taxonomy.branches.flatMap((branch) =>
       branch.topics.map((topic) => ({ branch: branch.key, topic: topic.key })),
     ),
     5,
-    options.seed,
+    seed,
   );
-  const demoStudent = generateDemoStudent(bank, {
-    seed: options.seed,
-    endDay: options.endDay,
-    days: options.demoDays,
-    examDate: options.examDate,
-    difficulties: cohort.difficulties,
-    cards: cardSet,
-    ...(options.notAfter ? { notAfter: options.notAfter } : {}),
-  });
-
   const topicName = new Map(
     taxonomy.branches.flatMap((branch) =>
       branch.topics.map((topic) => [topic.key, topic.name] as const),
     ),
   );
-  const deckId = syntheticIds.deck(options.seed);
+  const deckId = syntheticIds.deck(seed);
   const deck = DeckSchema.parse({
     id: deckId,
     name: 'Tarjetas sintéticas de la simulación',
     description:
-      'Datos simulados. Tarjetas sin contenido médico que usa la simulación de repasos mientras se escriben los mazos de demostración.',
+      'Datos simulados. Tarjetas sin contenido médico que usa la simulación de repasos cuando no hay mazos de demostración.',
     ownerId: null,
     origin: 'preloaded',
     visibility: 'private',
@@ -155,8 +170,10 @@ export function buildDemoSeed(
   });
   const notes: Note[] = [];
   const cards: Card[] = [];
-  for (const card of cardSet) {
-    const noteId = syntheticIds.note(options.seed, card.key);
+  const refs = new Map<string, { cardId: string; deckId: string }>();
+  for (const card of simCards) {
+    const noteId = syntheticIds.note(seed, card.key);
+    const cardId = syntheticIds.card(seed, card.key);
     notes.push(
       NoteSchema.parse({
         id: noteId,
@@ -170,21 +187,48 @@ export function buildDemoSeed(
         createdAt,
         kind: 'basic',
         front: `Tarjeta sintética de ${topicName.get(card.topic) ?? card.topic}`,
-        back: 'Sin contenido. Sirve para simular repasos mientras se escriben los mazos de demostración.',
+        back: 'Sin contenido. Sirve para simular repasos cuando no hay mazos de demostración.',
       }),
     );
-    cards.push(
-      CardSchema.parse({
-        id: syntheticIds.card(options.seed, card.key),
-        noteId,
-        deckId,
-        ordinal: 0,
-        createdAt,
-      }),
-    );
+    cards.push(CardSchema.parse({ id: cardId, noteId, deckId, ordinal: 0, createdAt }));
+    refs.set(card.key, { cardId, deckId });
   }
+  return { simCards, decks: [deck], notes, cards, refs };
+}
 
-  const events = toEvents({ student: demoStudent, bank, cards: cardSet, cardSeed: options.seed });
+export function buildDemoSeed(
+  bank: DemoBank,
+  taxonomy: TopicTaxonomy,
+  options: DemoSeedOptions,
+  decks: readonly DemoDeckFile[] = [],
+): DemoSeed {
+  const cohort = generateCohort(bank, taxonomy, {
+    seed: options.seed,
+    size: options.cohortSize,
+    days: options.cohortDays,
+    endDay: options.endDay,
+    ...(options.notAfter ? { notAfter: options.notAfter } : {}),
+    // Solo el alumno de la demo necesita sus repasos. Los de la cohorte no se guardan (D-052)
+    simulateCards: false,
+  });
+  const content =
+    decks.length > 0 ? realCards(decks, options.seed) : syntheticContent(taxonomy, options.seed);
+  const demoStudent = generateDemoStudent(bank, {
+    seed: options.seed,
+    endDay: options.endDay,
+    days: options.demoDays,
+    examDate: options.examDate,
+    difficulties: cohort.difficulties,
+    cards: content.simCards,
+    ...(options.notAfter ? { notAfter: options.notAfter } : {}),
+  });
+
+  const events = toEvents({
+    student: demoStudent,
+    bank,
+    cards: content.simCards,
+    cardRefs: content.refs,
+  });
   return {
     options,
     generatorVersion: GENERATOR_VERSION,
@@ -193,9 +237,9 @@ export function buildDemoSeed(
       question: entry.question,
       options: entry.options,
     })),
-    deck,
-    notes,
-    cards,
+    decks: content.decks,
+    notes: content.notes,
+    cards: content.cards,
     users: [
       userOf(demoStudent, options.examDate, 90),
       ...cohort.students.map((student) => userOf(student, null, null)),

@@ -52,10 +52,14 @@
 
 - Revisión independiente de los bloques 9 y 10. Un subagente que no escribió el código encontró 3 hallazgos medios, 1 de honestidad en el informe y 7 bajos, ninguno alto. Se corrigieron todos. Eventos en el futuro al sembrar (ahora se corta en el momento actual), excepción de Regenerar escrita en PLAN.md 2.2, siembra doble bloqueada, faltante de afirmativas en negationSignal, prueba de los patrones del alumno de la demo con los motores reales, pruebas de recuperación menos frágiles y atadas a la versión del generador, etiquetas vacías y verdad por tema en la recuperación. El informe ahora valida la variante de sesgos con semillas nuevas y con otro modelo de sesgo (D-051). La desviación de las tarjetas de la cohorte queda como pregunta
 
+- Mazos de Paco (D-053). scripts/content/import-paco-decks.ts convierte los .apkg con fflate y node:sqlite, sanea el HTML con DOMPurify (src/data/content/cardHtml.ts, lista corta de etiquetas, sin estilos ni recursos externos) y ubica cada nota en la taxonomía por su etiqueta. Quedan en src/demo/content/decks (Medicina interna 2,122 notas, Ginecología y obstetricia 1,526, Urgencias 123) y sus 302 imágenes en public/demo-media. Solo se quitó una imagen externa de drugs.com. 96 notas quedan sin tema (72 de Urgencias, que no es rama todavía). La siembra de la demo usa estas 3,771 tarjetas en lugar de las sintéticas, que quedan solo como respaldo en pruebas. Las imágenes no entran a la precarga del service worker y se guardan al verlas. Pruebas del saneador, del contenido de los mazos y de sus entidades, y la e2e de la demo pasa con los mazos reales
+
 ### Preguntas abiertas para Ricardo (Fase B)
 1. Sesgos (D-051). ¿Adoptamos la variante por parte de los errores con corrección de Bonferroni como método por defecto? Recomiendo que sí, porque el método de 7.4 marca a la mitad de los alumnos sin sesgo
 2. Fatiga. ¿Pruebo la regresión contra el minuto de la sesión antes de cerrar la fase? Recomiendo que sí
-3. Tarjetas de la cohorte (D-052). ¿Aceptas que los 300 alumnos simulados se guarden sin historial de tarjetas? Recomiendo que sí, el generador lo simula pero guardarlo pesaría demasiado
+3. Mazos. ¿Los mazos de Paco sustituyen a los 4 mazos de 200 tarjetas que pedía 11.1, o los escribo de todos modos al final con el banco? Faltan Pediatría y Cirugía general. Si Paco tiene esos mazos, con pasarlos se integran con el mismo script
+4. Mapeo de temas. Las subcarpetas de Ginecología y obstetricia se ubicaron en la taxonomía con juicio mío (por ejemplo SUA en endocrinología ginecológica). Está en scripts/content/import-paco-decks.ts para que lo revises
+5. Tarjetas de la cohorte (D-052). ¿Aceptas que los 300 alumnos simulados se guarden sin historial de tarjetas? Recomiendo que sí, el generador lo simula pero guardarlo pesaría demasiado
 
 ## Fase A. Esqueleto, datos y proxy
 

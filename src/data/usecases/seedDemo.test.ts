@@ -49,7 +49,7 @@ describe('siembra de la demo (11.2, 11.3)', () => {
         .between([seed.demoUserId, ''], [seed.demoUserId, '￿'])
         .count(),
     ).toBe(seed.events.length);
-    const deck = await db.decks.get(seed.deck.id);
+    const deck = await db.decks.get(seed.decks[0]?.id ?? '');
     expect(deck?.isDemo).toBe(true);
     // La caché de XP se reconstruye desde la bitácora
     const xp = await db.xpCache.get(seed.demoUserId);

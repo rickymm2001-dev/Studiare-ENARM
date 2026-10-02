@@ -4,7 +4,7 @@ import { AppEventSchema } from '@/data/schemas/events';
 import { buildDemoBank } from '../content/bank';
 import { topicTaxonomy } from '../content';
 import { DEMO_STUDENT_TRUTH, generateCohort, generateDemoStudent, simItemsFrom } from './cohort';
-import { toEvents } from './events';
+import { syntheticIds, toEvents } from './events';
 import { DEFAULT_MIX, respond, sampleTruth, type SimItem } from './model';
 import { createRng } from '@/engines/random';
 import { analyzeBias, populationBaseline, type BiasExposure } from '@/engines/bias';
@@ -197,7 +197,20 @@ describe('alumno de la demo', () => {
   });
 
   it('su bitácora valida con el esquema de eventos, en orden y sin IDs repetidos', () => {
-    const events = toEvents({ student, bank, cards, cardSeed: 'demo-test' });
+    const events = toEvents({
+      student,
+      bank,
+      cards,
+      cardRefs: new Map(
+        cards.map((card) => [
+          card.key,
+          {
+            cardId: syntheticIds.card('demo-test', card.key),
+            deckId: syntheticIds.deck('demo-test'),
+          },
+        ]),
+      ),
+    });
     for (const event of events) expect(AppEventSchema.safeParse(event).success).toBe(true);
     expect(new Set(events.map((event) => event.id)).size).toBe(events.length);
     const sorted = [...events].sort((a, b) => a.id.localeCompare(b.id));

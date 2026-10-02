@@ -1,0 +1,1253 @@
+{
+  "version": 1,
+  "key": "paco-urgencias",
+  "name": "Urgencias (Paco)",
+  "description": "Mazo de Paco, compartido con su autorización. Urgencias no es rama de la taxonomía todavía (D-013). Demostración, no validado por médicos.",
+  "author": "Paco",
+  "status": "pending_physician_review",
+  "media": [
+    "demo-media/paco-urgencias/m-0001.jpg",
+    "demo-media/paco-urgencias/m-0002.jpg",
+    "demo-media/paco-urgencias/m-0003.jpg",
+    "demo-media/paco-urgencias/m-0004.png",
+    "demo-media/paco-urgencias/m-0005.png",
+    "demo-media/paco-urgencias/m-0006.png",
+    "demo-media/paco-urgencias/m-0007.png",
+    "demo-media/paco-urgencias/m-0008.jpg",
+    "demo-media/paco-urgencias/m-0009.webp",
+    "demo-media/paco-urgencias/m-0010.jpeg",
+    "demo-media/paco-urgencias/m-0011.png"
+  ],
+  "notes": [
+    {
+      "key": "paco-urgencias-0001",
+      "sourceTag": "Urgencias::Toxíndromes::Anticolinérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Anticolinérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>mecanismo de acción</span></b> del <b>síndrome anticolinérgico</b>?",
+      "back": "<u>Bloqueo competitivo</u> de la <u>acetilcolina</u> en las sinapsis parasimpáticas"
+    },
+    {
+      "key": "paco-urgencias-0002",
+      "sourceTag": "Urgencias::Toxíndromes::Anticolinérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Anticolinérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuáles son las <b><span>causas farmacológicas</span></b> principales del <span><b>síndrome anticolinérgico</b></span>?",
+      "back": "<ul><li><u>Atropina</u> ⭐</li><li>Antihistamínicos</li><li>Antipsicóticos</li><li><u>Antidepresivos tricíclicos</u> ⭐</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0003",
+      "sourceTag": "Urgencias::Toxíndromes::Anticolinérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Anticolinérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es la <span><b>clínica característica</b></span> del <b><span>síndrome anticolinérgico</span></b>?",
+      "back": "<ul><li>Paciente <u>seco</u> ⭐️</li><li><u>Midriasis</u> y visión <u>borrosa</u></li><li>Taquicardia e hipertermia</li><li><u>Piel seca</u> y rubicundez</li><li>Retención urinaria ⭐</li></ul><u><b>Notas</b></u><br><i>*\"Rojo como betabel, seco como hueso, ciego como murciélago\"</i><br>"
+    },
+    {
+      "key": "paco-urgencias-0004",
+      "sourceTag": "Urgencias::Toxíndromes::Anticolinérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Anticolinérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>tratamiento específico</span></b> (antídoto) de la <b><span>intoxicación</span></b> por <span><b>anticolinérgicos</b></span>?",
+      "back": "Fisostigmina ⭐️<br><br><u><b>Notas</b></u><br><i>*Solo si hay síntomas graves; el manejo base es ABCDE, enfriamiento y carbón activado</i>"
+    },
+    {
+      "key": "paco-urgencias-0005",
+      "sourceTag": "Urgencias::Toxíndromes::Anticolinérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Anticolinérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuáles son las <b><span>complicaciones</span></b> potencialmente <b><span>mortales</span></b> del <span><b>síndrome anticolinérgico</b></span>?",
+      "back": "Hipertermia y disritmias"
+    },
+    {
+      "key": "paco-urgencias-0006",
+      "sourceTag": "Urgencias::Toxíndromes::Simpáticomimético",
+      "tags": ["Urgencias", "Toxíndromes", "Simpáticomimético"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>mecanismo</span></b> del <span><b>síndrome simpaticomimético</b></span>?",
+      "back": "<u>Exceso de aminas</u> en el <u>SNC</u> por aumento de liberación, disminución de recaptación o impedimento de su metabolismo"
+    },
+    {
+      "key": "paco-urgencias-0007",
+      "sourceTag": "Urgencias::Toxíndromes::Simpáticomimético",
+      "tags": ["Urgencias", "Toxíndromes", "Simpáticomimético"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuáles son las <b><span>causas farmacológicas</span></b> principales del <span><b>síndrome simpaticomimético</b></span>?",
+      "back": "<ul><li><u>Cocaína</u> (2da causa de intoxicación por drogas) ⭐️</li><li><u>Anfetaminas</u></li><li>Salbutamol y Teofilina</li><li><u>Cafeína</u></li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0008",
+      "sourceTag": "Urgencias::Toxíndromes::Simpáticomimético",
+      "tags": ["Urgencias", "Toxíndromes", "Simpáticomimético"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es la <b><span>clínica característica</span></b> del <span><b>síndrome simpaticomimético</b></span>?",
+      "back": "<ul><li><u>Taquicardia e hipertensión</u> ⭐</li><li>Agitación y agresividad</li><li>Midriasis</li><li><u>Diaforesis</u> ⭐️</li></ul><u><b>Notas</b></u><br><i>*La diaforesis es el dato clave para diferenciarlo del síndrome anticolinérgico (que es seco)</i><br>"
+    },
+    {
+      "key": "paco-urgencias-0009",
+      "sourceTag": "Urgencias::Toxíndromes::Simpáticomimético",
+      "tags": ["Urgencias", "Toxíndromes", "Simpáticomimético"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>manejo farmacológico específico</span></b> y de las <b><span>crisis hipertensivas</span></b> en el <span><b>síndrome simpaticomimético</b></span>?",
+      "back": "<ul><li><b>Específico: </b>benzodiacepinas</li><li><b>Crisis hipertensiva:</b> nicardipino</li></ul><u><b>Notas</b></u><br><i>*El manejo base incluye ABCDE, bicarbonato y enfriamiento precoz</i><br>"
+    },
+    {
+      "key": "paco-urgencias-0010",
+      "sourceTag": "Urgencias::Toxíndromes::Simpáticomimético",
+      "tags": ["Urgencias", "Toxíndromes", "Simpáticomimético"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Qué <span><b>estudios</b></span> de <span><b>apoyo diagnóstico</b></span> se <span><b>solicitan</b></span> ante la <span><b>sospecha</b></span> de <b><span>síndrome simpaticomimético</span></b>?",
+      "back": "<ul><li>Prueba de drogas en orina</li><li>Electrocardiograma (EKG)</li><li>Enzimas cardíacas</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0011",
+      "sourceTag": "Urgencias::Toxíndromes::Simpáticomimético",
+      "tags": ["Urgencias", "Toxíndromes", "Simpáticomimético"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuáles son las <b><span>complicaciones</span></b> del <b><span>síndrome simpaticomimético</span></b> que pueden causar la <span><b>muerte</b></span>?",
+      "back": "<ul><li><u>Convulsiones</u> ⭐</li><li>Paro cardíaco</li><li>Hipertermia</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0012",
+      "sourceTag": "Urgencias::Toxíndromes::Serotoninérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Serotoninérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>mecanismo de acción </span></b>del <span><b>síndrome serotoninérgico</b></span>?",
+      "back": "<u>Actividad aumentada</u> del sistema nervioso central (SNC)"
+    },
+    {
+      "key": "paco-urgencias-0013",
+      "sourceTag": "Urgencias::Toxíndromes::Serotoninérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Serotoninérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuáles son las <b><span>causas farmacológicas</span></b> principales del <span><b>síndrome serotoninérgico</b></span>?",
+      "back": "<ul><li>Sertralina y <u>Fluoxetina</u> (ISRS) ⭐️</li><li>Citalopram</li><li><u>Valproato</u></li><li>Ondansetrón</li><li><u>Hierba de San Juan</u> ⭐️</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0014",
+      "sourceTag": "Urgencias::Toxíndromes::Serotoninérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Serotoninérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es la <b><span>clínica característica</span></b> que permite <b><span>identificar</span></b> el <span><b>síndrome serotoninérgico</b></span>?",
+      "back": "<ul><li><u>Fiebre y taquicardia</u> ⭐️</li><li><u>Hipertensión</u></li><li>Diaforesis y diarrea</li><li><u>Mioclonías</u> y <u>rigidez</u> ⭐️</li><li>Midriasis</li></ul><div><img src=\"demo-media/paco-urgencias/m-0001.jpg\" alt=\"\"><br></div>"
+    },
+    {
+      "key": "paco-urgencias-0015",
+      "sourceTag": "Urgencias::Toxíndromes::Serotoninérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Serotoninérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>manejo inicial</span></b> y el <b><span>tratamiento específico</span></b> del <span><b>síndrome serotoninérgico</b></span>?",
+      "back": "<ul><li><b>Inicial:</b> Descontaminación y ABCDE</li><li><b>Específico:</b> Benzodiacepinas</li></ul><div><u><b>Notas</b></u></div><div><i>*Aunque el antídoto per se es la <b>ciproheptadina</b></i><br></div>"
+    },
+    {
+      "key": "paco-urgencias-0016",
+      "sourceTag": "Urgencias::Toxíndromes::Colinérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Colinérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>mecanismo de acción</span></b> de los <b><span>organofosforados</span></b> y <span><b>carbamatos</b></span>?",
+      "back": "<u>Inhibición de la enzima acetilcolinesterasa</u>, acumulando acetilcolina en las sinapsis"
+    },
+    {
+      "key": "paco-urgencias-0017",
+      "sourceTag": "Urgencias::Toxíndromes::Colinérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Colinérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuáles son las <b><span>causas</span></b> o <b><span>fuentes de exposición</span></b> más comunes para el <span><b>síndrome colinérgico</b></span>?",
+      "back": "<ul><li>Insecticidas (Organofosforados/Carbamatos) ⭐️</li><li>Gas sarín</li><li>Fisostigmina (iatrogenia)</li></ul><u><b>Notas</b></u><br><i>*Otros fármacos incluyen Neostigmina, Rivastigmina, Donepezilo y Pilocarpina</i><br>"
+    },
+    {
+      "key": "paco-urgencias-0018",
+      "sourceTag": "Urgencias::Toxíndromes::Colinérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Colinérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cómo se <b><span>presenta</span></b> el <b><span>síndrome agudo</span></b> por <span><b>organofosforados</b></span>?",
+      "back": "Aparece a las <u>6–8 h postexposición</u> y combina clínica <u>muscarínica</u>, <u>nicotínica</u> y puede producir <u>parálisis tipo I</u>"
+    },
+    {
+      "key": "paco-urgencias-0019",
+      "sourceTag": "Urgencias::Toxíndromes::Colinérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Colinérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cómo se <b><span>caracteriza</span></b> el <b><span>síndrome intermedio</span></b> por <span><b>organofosforados</b></span>?",
+      "back": "<div><ul><li>Aparece a los <u>1–4 días postexposición</u></li><li>Presenta <u>parálisis tipo II</u>, <u>debilidad de músculos oculares</u>, sin afectación sensorial ni síntomas muscarínicos</li></ul></div><div><u><b>Notas</b></u></div><div><i>*El síndrome tardío aparece a las <strong>2–3 semanas</strong> con polineuropatía periférica, parestesias, mialgias, marcha atáxica y cambios en memoria/conducta</i><br></div>"
+    },
+    {
+      "key": "paco-urgencias-0020",
+      "sourceTag": "Urgencias::Toxíndromes::Colinérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Colinérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>tratamiento inicial</span></b> en el <b><span>manejo</span></b> del <span><b>síndrome colinérgico</b></span>?",
+      "back": "ABCDE y descontaminación (retirar ropa, lavado de piel)<br><br><u><b>Notas</b></u><br><i>*El personal debe usar equipo de protección para evitar intoxicación secundaria</i>"
+    },
+    {
+      "key": "paco-urgencias-0021",
+      "sourceTag": "Urgencias::Toxíndromes::Colinérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Colinérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>antídoto de elección</span></b> para <b><span>revertir</span></b> los <span><b>síntomas muscarínicos</b></span> (broncorrea)?",
+      "back": "Atropina 1-2 mg cada 5 minutos ⭐️<br><br><u><b>Notas</b></u><br><i>*Se administra hasta lograr la \"atropinización\" (desaparición de estertores y secreciones pulmonares)</i>"
+    },
+    {
+      "key": "paco-urgencias-0022",
+      "sourceTag": "Urgencias::Toxíndromes::Colinérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Colinérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Qué <b><span>fármaco</span></b> se <b><span>utiliza</span></b> para <b><span>reactivar la acetilcolinesterasa</span></b> en <b><span>intoxicaciones</span></b> por <span><b>organofosforados</b></span>?",
+      "back": "Pralidoxima (Oximas) ⭐️<br><br><u><b>Notas</b></u><br><i>*Debe administrarse antes de que ocurra el \"envejecimiento\" de la unión enzima-tóxico</i>"
+    },
+    {
+      "key": "paco-urgencias-0023",
+      "sourceTag": "Urgencias::Toxíndromes::Colinérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Colinérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuáles son los <b><span>estados</span></b> con <b><span>mayor tasa</span></b> de <b><span>incidencia</span></b> de <b><span>intoxicación</span></b> por <span><b>organofosforados en México</b></span>?",
+      "back": "<ul><li><b>Nayarit:</b> mayor incidencia</li><li><b>Jalisco:</b> mayor número de casos reportados</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0024",
+      "sourceTag": "Urgencias::Toxíndromes::Colinérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Colinérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Qué <b><span>estudios de laboratorio</span></b> confirman el <b><span>diagnóstico</span></b> de <span><b>síndrome colinérgico</b></span>?",
+      "back": "<u>Medición de colinesterasa</u> plasmática o intraeritrocitaria"
+    },
+    {
+      "key": "paco-urgencias-0025",
+      "sourceTag": "Urgencias::Toxíndromes::Hipnótico-Sedante",
+      "tags": ["Urgencias", "Toxíndromes", "Hipnótico Sedante"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>mecanismo de acción</span></b> de las <b><span>benzodiacepinas</span></b> cuando producen <span><b>intoxicación</b></span>?",
+      "back": "Potenciación del <u>receptor GABA-A</u> (inhibidor), ocasionando síndrome hipnótico-sedante"
+    },
+    {
+      "key": "paco-urgencias-0026",
+      "sourceTag": "Urgencias::Toxíndromes::Hipnótico-Sedante",
+      "tags": ["Urgencias", "Toxíndromes", "Hipnótico Sedante"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuáles son las <b><span>causas farmacológicas</span></b> principales del <span><b>síndrome hipnótico-sedante</b></span>?",
+      "back": "<ul><li><u>Benzodiacepinas</u> ⭐</li><li>Barbitúricos</li><li>Alcohol (Etanol)</li><li><u>Zopeiclona / Zolpidem</u></li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0027",
+      "sourceTag": "Urgencias::Toxíndromes::Hipnótico-Sedante",
+      "tags": ["Urgencias", "Toxíndromes", "Hipnótico Sedante"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es la <b><span>clínica característica</span></b> del <span><b>síndrome hipnótico-sedante</b></span>?",
+      "back": "<ul><li>Deterioro del <u>estado de alerta</u> (sedación/coma) ⭐</li><li><u>Hiporreflexia y ataxia</u></li><li>Hipotensión y bradicardia</li><li>Miosis (variable)</li></ul><u><b>Notas</b></u><br><i>*La depresión respiratoria es la principal causa de muerte</i><br>"
+    },
+    {
+      "key": "paco-urgencias-0028",
+      "sourceTag": "Urgencias::Toxíndromes::Hipnótico-Sedante",
+      "tags": ["Urgencias", "Toxíndromes", "Hipnótico Sedante"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <span><b>antídoto específico</b></span> para la <span><b>intoxicación</b></span> por <b><span>benzodiacepinas</span></b>?",
+      "back": "Flumazenil 0.1 a 0.3 mg IV durante 30 segundos ⭐️<br><br><u><b>Notas</b></u><br><i>*Contraindicado si hay sospecha de ingesta de antidepresivos tricíclicos por riesgo de <b>convulsiones</b></i>"
+    },
+    {
+      "key": "paco-urgencias-0029",
+      "sourceTag": "Urgencias::Toxíndromes::Hipnótico-Sedante",
+      "tags": ["Urgencias", "Toxíndromes", "Hipnótico Sedante"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>manejo inicial </span></b>en el <span><b>síndrome hipnótico-sedante</b></span>?",
+      "back": "Asegurar <u>vía aérea</u> (ABCDE) con <u>suplementación con O2</u> sin inducir el vómito"
+    },
+    {
+      "key": "paco-urgencias-0030",
+      "sourceTag": "Urgencias::Toxíndromes::Hipnótico-Sedante",
+      "tags": ["Urgencias", "Toxíndromes", "Hipnótico Sedante"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cómo se realiza el <b><span>diagnóstico inicial </span></b>y <b><span>confirmatorio</span></b> en el <span><b>síndrome hipnótico-sedante</b></span>?",
+      "back": "<ul><li><b>Inicial:</b> <u>clínico</u> (historia y exploración física)</li><li><b>Confirmatorio:</b> <u>prueba</u> en orina o niveles séricos cuantitativos</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0031",
+      "sourceTag": "Urgencias::Toxíndromes::Hipnótico-Sedante",
+      "tags": ["Urgencias", "Toxíndromes", "Hipnótico Sedante"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Qué <b><span>conducta seguir</span></b> ante <b><span>síndrome sedante</span></b> con <b><span>miosis y depresión respiratoria</span></b>, aunque la prueba de orina sea <span><b>negativa</b></span>?",
+      "back": "Administrar <u>naloxona</u> (prueba terapéutica) ⭐️<br><br><u><b>Notas</b></u><br><i>*Útil para descartar o tratar una intoxicación por opioides que mimetiza al cuadro sedante</i>"
+    },
+    {
+      "key": "paco-urgencias-0032",
+      "sourceTag": "Urgencias::Toxíndromes::Opiáceo",
+      "tags": ["Urgencias", "Toxíndromes", "Opiáceo"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <span><b>mecanismo de acción</b></span> de los <b><span>opiáceos</span></b>?",
+      "back": "Activación de receptores <u>opioides mu,</u> delta, <u>kappa</u>, <u>sigma</u> y épsilon"
+    },
+    {
+      "key": "paco-urgencias-0033",
+      "sourceTag": "Urgencias::Toxíndromes::Opiáceo",
+      "tags": ["Urgencias", "Toxíndromes", "Opiáceo"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuáles son las <b><span>causas farmacológicas</span></b> principales del <span><b>síndrome opiáceo</b></span>?",
+      "back": "<ul><li>Morfina y derivados</li><li><u>Codeína</u> ⭐️</li><li>Oxicodona</li><li><u>Fentanilo y Heroína</u> ⭐ </li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0034",
+      "sourceTag": "Urgencias::Toxíndromes::Opiáceo",
+      "tags": ["Urgencias", "Toxíndromes", "Opiáceo"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es la <b><span>tríada clínica clásica</span></b> del <span><b>síndrome opiáceo</b></span>?",
+      "back": "<ul><li><u>Miosis</u> bilateral puntiforme</li><li>Alteraciones del <u>nivel de conciencia</u> (coma)</li><li><u>Depresión respiratoria</u></li></ul><div><img src=\"demo-media/paco-urgencias/m-0002.jpg\" alt=\"\"><u><br></u></div>"
+    },
+    {
+      "key": "paco-urgencias-0035",
+      "sourceTag": "Urgencias::Toxíndromes::Opiáceo",
+      "tags": ["Urgencias", "Toxíndromes", "Opiáceo"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "Además de la <span><b>triada clásica</b></span>, ¿qué otros <b><span>datos clínicos</span></b> orientan a <b><span>intoxicación por opiáceos</span></b>?",
+      "back": "<ul><li>Bradicardia e hipotermia</li><li>Edema pulmonar</li><li>Prurito y sudoración</li><li>Disminución de motilidad intestinal (estreñimiento)</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0036",
+      "sourceTag": "Urgencias::Toxíndromes::Opiáceo",
+      "tags": ["Urgencias", "Toxíndromes", "Opiáceo"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>antídoto</span></b> y <b><span>esquema inicial</span></b> en <b><span>intoxicación</span></b> por <span><b>opioides</b></span>?",
+      "back": "<u>Naloxona</u> 0.4 a 2 mg IV cada 2-3 minutos ⭐️<br><br><u><b>Notas</b></u><br><i>*Bloquea la inhibición de receptores GABA</i>"
+    },
+    {
+      "key": "paco-urgencias-0037",
+      "sourceTag": "Urgencias::Toxíndromes::Opiáceo",
+      "tags": ["Urgencias", "Toxíndromes", "Opiáceo"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <span><b>manejo inicial </b></span>ante la <span><b>sospecha</b></span> de <b><span>intoxicación por opiáceos</span></b>?",
+      "back": "Asegurar <u>vía aérea</u> (ABCDE) + oxígeno suplementario"
+    },
+    {
+      "key": "paco-urgencias-0038",
+      "sourceTag": "Urgencias::Toxíndromes::Etanol",
+      "tags": ["Urgencias", "Toxíndromes", "Etanol"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es la <b><span>principal causa</span></b> de <b><span>intoxicación por etanol</span></b> según el <span><b>grupo etario</b></span>?",
+      "back": "<ul><li><b>Pediátricos:</b> <u>ingesta</u> accidentales </li><li><b>Adultos:</b> abuso por <u>ingesta</u>, causa <u>más frecuente</u> de intoxicación por drogas ⭐</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0039",
+      "sourceTag": "Urgencias::Toxíndromes::Etanol",
+      "tags": ["Urgencias", "Toxíndromes", "Etanol"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cómo se <b><span>absorbe</span></b> y <b><span>metaboliza</span></b> el <b><span>etanol</span></b> en el <span><b>organismo</b></span>?",
+      "back": "<ul><li><b>Absorción rápida:</b> 30% estómago, 70% intestino delgado</li><li><b>Alcohol deshidrogenasa:</b> etanol → acetaldehído</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0040",
+      "sourceTag": "Urgencias::Toxíndromes::Etanol",
+      "tags": ["Urgencias", "Toxíndromes", "Etanol"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>mecanismo de acción</span></b> del <b><span>etanol</span></b> en el <span><b>SNC</b></span>?",
+      "back": "Potenciación de <u>GABA</u> con depresión del sistema nervioso central ⭐️"
+    },
+    {
+      "key": "paco-urgencias-0041",
+      "sourceTag": "Urgencias::Toxíndromes::Etanol",
+      "tags": ["Urgencias", "Toxíndromes", "Etanol"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuáles son los <b><span>datos clínicos</span></b> de <b><span>intoxicación leve y moderada</span></b> por <span><b>etanol</b></span>?",
+      "back": "<ul><li><b>Leve:</b> <u>ataxia</u>, <u>somnolencia</u>, náuseas</li><li><b>Moderada:</b> lenguaje <u>incoherente</u>, agresividad, <u>letargia</u></li></ul><div><img src=\"demo-media/paco-urgencias/m-0003.jpg\" alt=\"\"><u><br></u></div>"
+    },
+    {
+      "key": "paco-urgencias-0042",
+      "sourceTag": "Urgencias::Toxíndromes::Etanol",
+      "tags": ["Urgencias", "Toxíndromes", "Etanol"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuáles son los <b><span>datos de intoxicación grave</span></b> y<b><span> letal</span></b> por <span><b>etanol</b></span>?",
+      "back": "<ul><li><b>Grave:</b> <u>coma</u>, hipotermia, midriasis</li><li><b>Letal:</b> <u>depresión respiratoria</u>, convulsiones, choque</li></ul><div><img src=\"demo-media/paco-urgencias/m-0003.jpg\" alt=\"\"><br></div>"
+    },
+    {
+      "key": "paco-urgencias-0043",
+      "sourceTag": "Urgencias::Toxíndromes::Etanol",
+      "tags": ["Urgencias", "Toxíndromes", "Etanol"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>manejo inicial</span></b> y <b><span>tratamiento específico</span></b> de la <span><b>intoxicación por etanol</b></span>?",
+      "back": "<ul><li><b>Inicial: </b>ABCDE + líquidos IV con glucosa al 5%</li><li><b>Específico: </b>Tiamina 1–2 ámpulas IV</li></ul><u><b>Notas</b></u><br><i>*Agitación: haloperidol</i><br>"
+    },
+    {
+      "key": "paco-urgencias-0044",
+      "sourceTag": "Urgencias::Toxíndromes::Etanol",
+      "tags": ["Urgencias", "Toxíndromes", "Etanol"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿<span><b>Cuál</b></span> es el <b><span>diagnóstico inicial</span></b> y <b><span>confirmatorio</span></b> de la <b><span>intoxicación</span></b> <b><span>por etanol</span></b>?",
+      "back": "<ul><li><b>Inicial: </b>clínico</li><li><b>Confirmatorio:</b> con <u>etanol en sangre</u> y glucosa capilar</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0045",
+      "sourceTag": "Urgencias::Toxíndromes",
+      "tags": ["Urgencias", "Toxíndromes"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>antídoto</span></b> en <span><b>intoxicación por betabloqueadores</b></span>?",
+      "back": "Glucagón IV <br><br><u><b>Notas</b></u><br><i>*↑ FC y contractilidad independiente de receptores β</i>"
+    },
+    {
+      "key": "paco-urgencias-0046",
+      "sourceTag": "Urgencias::Toxíndromes",
+      "tags": ["Urgencias", "Toxíndromes"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>tratamiento específico</span></b> en <b><span>intoxicación</span></b> por <span><b>calcio antagonistas</b></span>?",
+      "back": "<u>Calcio IV</u> + <u>insulina en dosis altas</u> con glucosa ± vasopresores"
+    },
+    {
+      "key": "paco-urgencias-0047",
+      "sourceTag": "Urgencias::Toxíndromes",
+      "tags": ["Urgencias", "Toxíndromes"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>tratamiento de elección</span></b> en <b><span>intoxicación</span></b> por <span><b>monóxido de carbono</b></span>?",
+      "back": "Oxígeno al 100%"
+    },
+    {
+      "key": "paco-urgencias-0048",
+      "sourceTag": "Urgencias::Toxíndromes",
+      "tags": ["Urgencias", "Toxíndromes"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>antídoto</span></b> en <b><span>intoxicación</span></b> por <span><b>antidepresivos tricíclicos</b></span>?",
+      "back": "Bicarbonato de sodio IV <br><br><u><b>Notas</b></u><br><i>*Corrige acidosis y QRS ancho</i>"
+    },
+    {
+      "key": "paco-urgencias-0049",
+      "sourceTag": "Urgencias::Toxíndromes",
+      "tags": ["Urgencias", "Toxíndromes"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>antídoto</span></b> de la <span><b>intoxicación por heparina</b></span>?",
+      "back": "Protamina<br><br><u><b>Notas</b></u><br><i>*Neutraliza efecto anticoagulante</i>"
+    },
+    {
+      "key": "paco-urgencias-0050",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Cómo se <b><span>define</span></b> una <b><span>quemadura </span></b>según el <span><b>daño tisular</b></span>?",
+      "back": "<u>Destrucción</u> de <u>estructuras cutáneas</u> por agentes físicos, químicos o biológicos"
+    },
+    {
+      "key": "paco-urgencias-0051",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Cuáles son las <b><span>principales causas</span></b> de <b><span>muerte temprana</span></b> y <b><span>tardía</span></b> en <span><b>quemaduras graves</b></span>?",
+      "back": "<ul><li><b>Temprana:</b> choque hipovolémico</li><li><b>Tardía:</b> falla respiratoria o sobreinfección</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0052",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Cuál es la <b><span>causa más frecuente</span></b> de <b><span>quemaduras</span></b> en <span><b>niños de 5-14 años</b></span>?",
+      "back": "<u>Escaldadura</u> por líquidos calientes"
+    },
+    {
+      "key": "paco-urgencias-0053",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿<b><span>Cuáles</span></b> son los <b><span>sitios más afectados</span></b> por <b><span>quemaduras</span></b> en <span><b>niños</b></span>?",
+      "back": "<u>Extremidades superiores</u> ⭐, seguidas de extremidades inferiores y tronco"
+    },
+    {
+      "key": "paco-urgencias-0054",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>agente</span></b> causa <b><span>típicamente</span></b> una <span><b>quemadura de primer grado</b></span>?",
+      "back": "<u>Quemadura solar</u> o contacto breve"
+    },
+    {
+      "key": "paco-urgencias-0055",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>profundidad</span></b> tiene una <span><b>quemadura de primer grado</b></span>?",
+      "back": "Epidérmica <u>superficial</u>"
+    },
+    {
+      "key": "paco-urgencias-0056",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿<b><span>Cómo</span></b> se <b><span>ve</span></b> una <b><span>quemadura</span></b> de <span><b>primer grado</b></span>?",
+      "back": "<u>Húmeda y roja</u>, <u>palidece</u> a la presión y sin ampollas ⭐<br><br><img src=\"demo-media/paco-urgencias/m-0004.png\" alt=\"\">"
+    },
+    {
+      "key": "paco-urgencias-0057",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿La <b><span>quemadura</span></b> de <b><span>primer grado</span></b> se <b><span>incluye</span></b> en el <span><b>cálculo de reposición hídrica</b></span>?",
+      "back": "No"
+    },
+    {
+      "key": "paco-urgencias-0058",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>agente</span></b> causa <b><span>típicamente</span></b> una <b><span>quemadura</span></b> de <span><b>segundo grado superficial</b></span>?",
+      "back": "<u>Escaldadura</u> por salpicadura o derrame"
+    },
+    {
+      "key": "paco-urgencias-0059",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>profundidad</span></b> tiene una <span><b>quemadura de segundo grado superficial</b></span>?",
+      "back": "Espesor <u>parcial superficial</u>"
+    },
+    {
+      "key": "paco-urgencias-0060",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿<b><span>Cómo</span></b> se ve <b><span>una quemadura</span></b> de <span><b>segundo grado superficial</b></span>?",
+      "back": "<u>Rosada o rojo intenso</u>, con <u>ampollas</u> delgadas ⭐ y <u>palidece a la presión<br></u><br><img src=\"demo-media/paco-urgencias/m-0005.png\" alt=\"\">"
+    },
+    {
+      "key": "paco-urgencias-0061",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Cuál es la <b><span>sensibilidad típica</span></b> en <span><b>quemadura de segundo grado superficial</b></span>?",
+      "back": "Muy dolorosa"
+    },
+    {
+      "key": "paco-urgencias-0062",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>agente</span></b> <b><span>causa típicamente</span></b> una <span><b>quemadura de segundo grado profunda</b></span>?",
+      "back": "<u>Escaldaduras</u>, <u>fuego</u> o contacto con superficies calientes"
+    },
+    {
+      "key": "paco-urgencias-0063",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿<b><span>Cómo se ve</span></b> una <span><b>quemadura de segundo grado profunda</b></span>?",
+      "back": "<u>Rosa pálido o rojo violáceo</u>, puede tener <u>ampollas</u> y <u>sin llenado capilar<br></u><br><img src=\"demo-media/paco-urgencias/m-0006.png\" alt=\"\">"
+    },
+    {
+      "key": "paco-urgencias-0064",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>dato clínico</span></b> diferencia <span><b>quemadura de segundo grado superficial</b></span> vs <b><span>profundo</span></b>?",
+      "back": "<ul><li><b>Superficial</b> palidece a la presión</li><li><b>Profunda</b> no tiene llenado capilar</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0065",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿<b><span>Cuándo cura</span></b> una <span><b>quemadura de segundo grado profunda</b></span>?",
+      "back": "Más de <u>21 días</u> ⭐; puede requerir injerto"
+    },
+    {
+      "key": "paco-urgencias-0066",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>agente</span></b> <b><span>causa típicamente</span></b> una <span><b>quemadura de tercer grado</b></span>?",
+      "back": "<u>Inmersión</u> en <u>aceite/grasa</u>, fuego, <u>químicos</u> o <u>electricidad</u> de alto voltaje"
+    },
+    {
+      "key": "paco-urgencias-0067",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>profundidad</span></b> tiene una <span><b>quemadura de tercer grado</b></span>?",
+      "back": "Espesor total"
+    },
+    {
+      "key": "paco-urgencias-0068",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿<b><span>Cómo se ve</span></b> una <b><span>quemadura</span></b> de <span><b>tercer grado</b></span>?",
+      "back": "<u>Blanca o negra</u>, acartonada o aperlada<br><br><img src=\"demo-media/paco-urgencias/m-0007.png\" alt=\"\">"
+    },
+    {
+      "key": "paco-urgencias-0069",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <span><b>tejidos involucra</b></span> a una <b><span>quemadura</span></b> de <b><span>cuarto grado</span></b>?",
+      "back": "Involucra <u>fascia</u>, <u>músculo</u> u hueso"
+    },
+    {
+      "key": "paco-urgencias-0070",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Cuál es la <b><span>herramienta de elección</span></b> para <b><span>estimar extensión</span></b> de <span><b>quemaduras</b></span> en<b><span> adultos</span></b>?",
+      "back": "Regla de los nueves de Wallace (en mayores de 15 años)<br><br><img alt=\"Según la extensión - Información\" src=\"demo-media/paco-urgencias/m-0008.jpg\">"
+    },
+    {
+      "key": "paco-urgencias-0071",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>esquema</span></b> se <b><span>prefiere</span></b> para <b><span>estimar extensión de quemaduras</span></b> en <span><b>niños</b></span>?",
+      "back": "Lund and Browder<br><br><u><b>Notas</b></u><br><i>*Cabeza proporcionalmente mayor y extremidades inferiores menores que en adultos</i>"
+    },
+    {
+      "key": "paco-urgencias-0072",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>porcentaje</span></b> de <b><span>SCT</span></b> representa la <b><span>palma</span></b> del <b><span>paciente</span></b> con <span><b>dedos</b></span>?",
+      "back": "Aproximadamente <u>1%</u> de SCT"
+    },
+    {
+      "key": "paco-urgencias-0073",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿<b><span>Cómo</span></b> se <b><span>distribuye</span></b> la <b><span>SCT</span></b> en la <b><span>regla de los nueves</span></b> de <span><b>Wallace</b></span>?",
+      "back": "<ul><li><strong>Cabeza/cuello:</strong> 9%</li><li><strong>Tronco anterior:</strong> 18% = tórax 9% + abdomen 9%</li><li><strong>Tronco posterior:</strong> 18% = espalda superior 9% + espalda inferior 9%</li><li><strong>Cada MS:</strong> 9%</li><li><strong>Cada MI:</strong> 18%</li><li><strong>Genitales/periné:</strong> 1%<br></li></ul><div><img alt=\"Según la extensión - Información\" src=\"demo-media/paco-urgencias/m-0008.jpg\"><br></div>"
+    },
+    {
+      "key": "paco-urgencias-0074",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>primer paso</span></b> en el <b><span>manejo inicial</span></b> del <span><b>paciente quemado</b></span>?",
+      "back": "<u>Detener la quemadura</u>, no retirar ropa adherida y <u>cubrir con sábanas limpias</u>, tibias y secas para evitar hipotermia"
+    },
+    {
+      "key": "paco-urgencias-0075",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿<span><b>Cuáles</b></span> son <b><span>indicaciones</span></b> de <b><span>intubación temprana</span></b> en <b><span>quemaduras</span></b>?",
+      "back": "<ul><li><u>Obstrucción</u> de vía aérea ⭐</li><li>Quemadura <u>facial</u> profunda o quemadura <u>intraoral</u></li><li>Edema/disfagia</li><li>Compromiso respiratorio</li><li>Disminución del <u>estado de conciencia</u> ⭐</li><li>Quemadura &gt; 40% SC</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0076",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>dato</span></b> sugiere <b><span>lesión</span></b> <b><span>por inhalación</span></b> en un <span><b>paciente involucrado en incendio</b></span>?",
+      "back": "Carboxihemoglobina &gt;10%"
+    },
+    {
+      "key": "paco-urgencias-0077",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿<b><span>Cuándo</span></b> se <b><span>indica reanimación hídrica</span></b> en <span><b>quemaduras</b></span>?",
+      "back": "Quemaduras de 2º-3º grado con &gt;20% de superficie corporal quemada ⭐"
+    },
+    {
+      "key": "paco-urgencias-0078",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Cuál es la <b><span>fórmula inicial</span></b> de <b><span>reanimación hídrica</span></b> en <span><b>quemaduras con Ringer lactato</b></span>?<br><br><sup><i>(adultos vs niños)</i></sup>",
+      "back": "<ul><li><b>Adultos/adolescentes ≥14 años:</b> 2 ml × kg × %SCQ</li><li><b>Niños &lt;14 años o &lt;30 kg: </b>3 ml × kg × %SCQ</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0079",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿<b><span>Cómo</span></b> se <b><span>administra</span></b> el <b><span>volumen calculado</span></b> de <b><span>líquidos</span></b> en las <span><b>primeras 24 h postquemadura</b></span>?",
+      "back": "<u>50%</u> en las <u>primeras 8 h desde la quemadura</u> y 50% en las siguientes 16 h"
+    },
+    {
+      "key": "paco-urgencias-0080",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Cuál es la <b><span>meta de gasto urinario</span></b> durante <b><span>reanimación hídrica</span></b> en <span><b>quemaduras</b></span>?<br><br><sup><i>(adultos vs niños)</i></sup>",
+      "back": "<ul><li><b>Adultos/adolescentes ≥14 años:</b> 0.5 ml/kg/h o 30-50 ml/h ⭐</li><li><b>Niños &lt;14 años o &lt;30 kg: </b>1 ml/kg/h</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0081",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>manejo local</span></b> se recomienda en <span><b>quemaduras químicas</b></span>?",
+      "back": "<u>Irrigación</u> con agua durante <u>30 min</u>"
+    },
+    {
+      "key": "paco-urgencias-0082",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>cuidados locales</span></b> se recomiendan en <span><b>quemaduras profundas</b></span>?",
+      "back": "<u>Sulfadiazina de plata</u>, enfriar quemadura, <u>apósitos</u> e hidrogeles<br><br><u><b>Notas</b></u><br><i>*Antibióticos sistémicos tienen poca efectividad como profilaxis</i>"
+    },
+    {
+      "key": "paco-urgencias-0083",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>intervenciones</span></b> deben <b><span>valorarse</span></b> en los<b><span> primeros días</span></b> de una <span><b>quemadura profunda</b></span>?",
+      "back": "<u>Debridamiento temprano</u> y posible injerto o parches de reepitelización"
+    },
+    {
+      "key": "paco-urgencias-0084",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>profilaxis</span></b> debe <b><span>verificarse</span></b> en <span><b>todo paciente quemado</b></span>?",
+      "back": "Inmunización contra tétanos"
+    },
+    {
+      "key": "paco-urgencias-0085",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Cuáles son los <b><span>criterios de hospitalización/referencia</span></b> en <b><span>quemaduras</span></b>?",
+      "back": "<ul><li>2º-3º grado &gt;10% SCT en &lt;10 o &gt;50 años, o &gt;20% en otras edades</li><li><u>Áreas especiales</u> ⭐</li><li>3º grado</li><li><u>Químicas/eléctricas/inhalación</u></li><li>Politrauma o comorbilidad importante</li></ul><u><b>Notas</b></u><br><i>*Áreas especiales = cara, manos, pies, genitales, periné o articulaciones mayores</i><br>"
+    },
+    {
+      "key": "paco-urgencias-0086",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Cómo se <b><span>define</span></b> una <span><b>quemadura química</b></span>?",
+      "back": "<u>Lesión por exposición</u> corporal a <u>sustancias como ácidos</u>, <u>álcalis</u> o derivados del petróleo"
+    },
+    {
+      "key": "paco-urgencias-0087",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>tipo de sustancia química</span></b> causa <b><span>lesiones más profundas</span></b> y <span><b>evolutivas</b></span>?",
+      "back": "Álcalis ⭐<br><br><u><b>Notas</b></u><br><i>*Producen saponificación, penetran más y generan necrosis por licuefacción</i>"
+    },
+    {
+      "key": "paco-urgencias-0088",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>tipo de necrosis</span></b> producen los <b><span>ácidos</span></b> en <span><b>quemaduras químicas</b></span>?",
+      "back": "Necrosis por <u>coagulación</u>, usualmente limitada y de profundidad media"
+    },
+    {
+      "key": "paco-urgencias-0089",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>manifestación clínica</span></b> orienta a <b><span>quemadura</span></b> por <span><b>ácido fluorhídrico</b></span>?",
+      "back": "<u>Quemadura dolorosa</u> con <u>lesión blanca</u>, ampollas o <u>eritema circundante<br></u><br><img alt=\"Ácido fluorhídrico HF y fluoruros. ¿Cómo limitar su exposición? -  Environnement\" src=\"demo-media/paco-urgencias/m-0009.webp\">"
+    },
+    {
+      "key": "paco-urgencias-0090",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <span><b>manifestación clínica</b></span> orienta a <span><b>quemadura</b></span> por <b><span>cemento húmedo</span></b>?",
+      "back": "<u>Ardor</u>, eritema, <u>dolor</u> y <u>vesículas</u> horas después de la exposición<br><br><img alt=\"Quemadura química por cemento : r/DIYUK\" src=\"demo-media/paco-urgencias/m-0010.jpeg\">"
+    },
+    {
+      "key": "paco-urgencias-0091",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>manejo inicial</span></b> de una <span><b>quemadura química</b></span>?",
+      "back": "<ul><li>ABCDE ⭐</li><li>Retirar ropa contaminada</li><li>Cepillar polvo si existe e <u>irrigar con agua 20-30 min</u></li></ul><u><b>Notas</b></u><br><i>*Álcalis requieren lavado más prolongado</i><br>"
+    },
+    {
+      "key": "paco-urgencias-0092",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Cómo se <b><span>define</span></b> una <span><b>quemadura eléctrica</b></span>?",
+      "back": "<u>Lesión por contacto</u> con <u>fuente eléctrica</u> que transmite corriente a través del cuerpo y genera daño térmico tisular"
+    },
+    {
+      "key": "paco-urgencias-0093",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>tejidos</span></b> son más <b><span>vulnerables</span></b> en <span><b>quemadura eléctrica</b></span>?",
+      "back": "Nervios, vasos y músculo<br><br><u><b>Notas</b></u><br><i>*El hueso es más resistente y puede transmitir calor a tejidos profundos</i>"
+    },
+    {
+      "key": "paco-urgencias-0094",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>datos clínicos</span></b> sugieren <b><span>lesión profunda</span></b> en <span><b>quemadura eléctrica</b></span>?",
+      "back": "Punto de <u>entrada pequeño</u>, <u>necrosis muscular</u> profunda, <u>trombosis local</u> o daño esquelético/muscular"
+    },
+    {
+      "key": "paco-urgencias-0095",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Cuáles son las <b><span>complicaciones graves</span></b> de una <span><b>quemadura eléctrica</b></span>?",
+      "back": "<u>Arritmias</u>, <u>rabdomiólisis</u>, falla renal aguda y síndrome compartimental"
+    },
+    {
+      "key": "paco-urgencias-0096",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>manejo inicial</span></b> en <span><b>quemadura eléctrica</b></span>?",
+      "back": "<ul><li>ABCDE ⭐</li><li>Solicitar ECG</li><li><u>Vía IV en extremidad no afectada</u> y líquidos IV para meta urinaria</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0097",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿A <b><span>cuánto</span></b> se <b><span>indican</span></b> los <b><span>líquidos IV</span></b> en <span><b>quemadura eléctrica</b></span>?",
+      "back": "Ringer lactato <u>4 ml</u> × kg × %SCQ ⭐<br><br><u><b>Notas</b></u><br><i>*Meta GU: adultos 100 ml/h o 1-1.5 ml/kg/h hasta aclarar orina; después 0.5 ml/kg/h</i>"
+    },
+    {
+      "key": "paco-urgencias-0098",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Cuándo se <b><span>clasifica</span></b> a un <b><span>paciente</span></b> como <b><span>gran quemado por extensión</span></b> o <span><b>edad extrema</b></span>?",
+      "back": "<ul><li>Índice de gravedad &gt;70 o quemaduras AB/B &gt;20% SCT</li><li>También &lt;2 años o &gt;65 años con ≥10% SCT AB/B</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0099",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>mecanismos</span></b> <b><span>de lesión</span></b> <b><span>clasifican</span></b> al <b><span>paciente</span></b> como <span><b>gran quemado</b></span>?",
+      "back": "Quemadura <u>respiratoria/inhalación de humo</u> o quemadura <u>eléctrica</u> por alta tensión"
+    },
+    {
+      "key": "paco-urgencias-0100",
+      "sourceTag": "Urgencias::Quemaduras",
+      "tags": ["Urgencias", "Quemaduras"],
+      "branch": "general_surgery",
+      "topic": "burns",
+      "kind": "basic",
+      "front": "¿Qué <b><span>condiciones</span></b> asociadas <b><span>clasifican</span></b> al <b><span>paciente</span></b> como <span><b>gran quemado</b></span>?",
+      "back": "<u>Politrauma</u> o patologías graves asociadas"
+    },
+    {
+      "key": "paco-urgencias-0101",
+      "sourceTag": "Urgencias::Toxíndromes::Colinérgico",
+      "tags": ["Urgencias", "Toxíndromes", "Colinérgico"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Qué <b><span>manifestaciones muscarínicas</span></b> incluye la mnemotecnia <b><span>DUMBBBELS</span></b> en <span><b>intoxicación por organofosforados</b></span>?",
+      "back": "<ul><li><strong>D:</strong> diarrea/diaforesis</li><li><strong>U:</strong> urgencia o incontinencia urinaria</li><li><strong>M:</strong> miosis</li><li><strong>B:</strong> bradicardia, broncorrea y broncoespasmo</li><li><strong>E:</strong> emesis</li><li><strong>L:</strong> lagrimeo</li><li><strong>S:</strong> salivación excesiva</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0102",
+      "sourceTag": "Urgencias::Térmicos::Hipotermia",
+      "tags": ["Urgencias", "Térmicos", "Hipotermia"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuá es la <span><b>definición clínica</b></span> de <b><span>hipotermia</span></b>?",
+      "back": "Temperatura central <u>menor de 35 °C</u> ⭐"
+    },
+    {
+      "key": "paco-urgencias-0103",
+      "sourceTag": "Urgencias::Térmicos::Hipotermia",
+      "tags": ["Urgencias", "Térmicos", "Hipotermia"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es la <b><span>clasificación ATLS</span></b> de <b><span>hipotermia leve</span></b> y <span><b>moderada</b></span>?",
+      "back": "<ul><li><b>Leve:</b> estadio I, <u>35-32 °C</u>, consciente con escalofríos</li><li><b>Moderada:</b> estadio II, menor de <u>32-28 °C</u>, consciencia disminuida sin escalofríos</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0104",
+      "sourceTag": "Urgencias::Térmicos::Hipotermia",
+      "tags": ["Urgencias", "Térmicos", "Hipotermia"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es la <b><span>clasificación</span></b> <b><span>ATLS</span></b> de <b><span>hipotermia severa</span></b> y <span><b>profunda</b></span>?",
+      "back": "<ul><li><b>Severa:</b> estadio III, menor de <u>28-24 °C</u>, inconsciente sin escalofríos pero con signos vitales</li><li><b>Profunda:</b> estadio IV, menor de <u>24 °C</u>, sin signos vitales</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0105",
+      "sourceTag": "Urgencias::Térmicos::Hipotermia",
+      "tags": ["Urgencias", "Térmicos", "Hipotermia"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>manejo inicial universal</span></b> del paciente con <span><b>hipotermia</b></span>?",
+      "back": "<u>Retirar de la exposición</u> e iniciar <u>ABCDE</u>, oxígeno y accesos venosos permeables"
+    },
+    {
+      "key": "paco-urgencias-0106",
+      "sourceTag": "Urgencias::Térmicos::Hipotermia",
+      "tags": ["Urgencias", "Térmicos", "Hipotermia"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>tratamiento</span></b> de la <span><b>hipotermia estadio I y II</b></span>?",
+      "back": "<ul><li><b>Estadio I:</b> <u>recalentamiento pasivo</u> con ambiente tibio, ropa seca, líquidos azucarados tibios y movimiento activo</li><li><b>Estadio II:</b> <u>recalentamiento externo activo</u>, monitorización <u>cardiaca</u> y movilización mínima para evitar arritmias</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0107",
+      "sourceTag": "Urgencias::Térmicos::Hipotermia",
+      "tags": ["Urgencias", "Térmicos", "Hipotermia"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>manejo</span></b> de <b><span>hipotermia</span></b> <span><b>estadio III o inestabilidad cardiaca</b></span>?",
+      "back": "<u>Manejo de vía aérea</u>, recalentamiento <u>interno</u> y considerar <u>ECMO</u> o bypass cardiopulmonar"
+    },
+    {
+      "key": "paco-urgencias-0108",
+      "sourceTag": "Urgencias::Térmicos::Hipotermia",
+      "tags": ["Urgencias", "Térmicos", "Hipotermia"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Qué <b><span>conducta</span></b> se <b><span>recomienda ante paro cardiaco</span></b> por <span><b>hipotermia severa</b></span>?",
+      "back": "<u>Iniciar RCP,</u> desfibrilar según respuesta y <u>continuar hasta recalentamiento</u>; “nadie está muerto hasta estar caliente y muerto”"
+    },
+    {
+      "key": "paco-urgencias-0109",
+      "sourceTag": "Urgencias::Térmicos::Hipotermia",
+      "tags": ["Urgencias", "Térmicos", "Hipotermia"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cómo se <b><span>define frostbite</span></b> por <span><b>lesión por frío</b></span>?",
+      "back": "<u>Lesión por congelación</u> con formación de <u>cristales de hielo</u>, entumecimiento, <u>decoloración blanco-grisácea</u> y endurecimiento de la piel<br><br><img src=\"demo-media/paco-urgencias/m-0011.png\" alt=\"\"><br><br><u><b>Notas</b></u><br><i>*Frecuente en dedos, nariz, orejas y mejillas</i>"
+    },
+    {
+      "key": "paco-urgencias-0110",
+      "sourceTag": "Urgencias::Térmicos::Hipotermia",
+      "tags": ["Urgencias", "Térmicos", "Hipotermia"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cómo se <b><span>define</span></b> <span><b>pie de trinchera</b></span>?",
+      "back": "<u>Lesión sin congelación</u> por <u>exposición prolongada</u> a <u>frío húmedo</u>, típica de soldados o marineros<br><br><u><b>Notas</b></u><br><i>*Ocurre con temperaturas bajas ambientales, aprox. 1.6-10 °C</i>"
+    },
+    {
+      "key": "paco-urgencias-0111",
+      "sourceTag": "Urgencias::Térmicos::Calor",
+      "tags": ["Urgencias", "Térmicos", "Calor"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es la <b><span>definición clínica</span></b> de <span><b>golpe de calor</b></span>?",
+      "back": "Temperatura <u>central mayor de 40 °C</u> + <u>disfunción del SNC</u> por exposición a calor"
+    },
+    {
+      "key": "paco-urgencias-0112",
+      "sourceTag": "Urgencias::Térmicos::Calor",
+      "tags": ["Urgencias", "Térmicos", "Calor"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuáles son los <b><span>2 tipos</span></b> de <span><b>golpe de calor</b></span>?",
+      "back": "<ul><li><b>Por ejercicio:</b> atletas, soldados u obreros</li><li><b>Clásico:</b> baja actividad + factores predisponentes</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0113",
+      "sourceTag": "Urgencias::Térmicos::Calor",
+      "tags": ["Urgencias", "Térmicos", "Calor"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuáles son <b><span>factores de riesgo</span></b> para <span><b>golpe de calor clásico</b></span>?",
+      "back": "<u>Adulto mayor</u>, niño, <u>obesidad</u>, DM, HAS, <u>diuréticos</u>, alcoholismo, demencia o <u>ERC</u>"
+    },
+    {
+      "key": "paco-urgencias-0114",
+      "sourceTag": "Urgencias::Térmicos::Calor",
+      "tags": ["Urgencias", "Térmicos", "Calor"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Qué <b><span>fármacos aumentan</span></b> <b><span>riesgo</span></b> de <span><b>golpe de calor</b></span>?",
+      "back": "α-adrenérgicos, anticolinérgicos y antihistamínicos"
+    },
+    {
+      "key": "paco-urgencias-0115",
+      "sourceTag": "Urgencias::Térmicos::Calor",
+      "tags": ["Urgencias", "Térmicos", "Calor"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es la <span><b>clínica inicial</b> </span>del <span><b>golpe de calor</b></span>?",
+      "back": "<u>Calambres</u>, mialgias, <u>cefalea</u>, náusea y astenia<br><br><u><b>Notas</b></u><br><i>*Puede haber taquipnea y pulso débil</i>"
+    },
+    {
+      "key": "paco-urgencias-0116",
+      "sourceTag": "Urgencias::Térmicos::Calor",
+      "tags": ["Urgencias", "Térmicos", "Calor"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuáles son los <b><span>criterios de Bouchama</span></b> para <span><b>golpe de calor</b></span>?",
+      "back": "Exposición a <u>temperatura ambiental mayor de 32 °C</u> + temperatura <u>central</u> mayor o igual a <u>40 °C</u> + piel <u>caliente</u>/seca + <u>alteración del SNC</u>"
+    },
+    {
+      "key": "paco-urgencias-0117",
+      "sourceTag": "Urgencias::Térmicos::Calor",
+      "tags": ["Urgencias", "Térmicos", "Calor"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cómo se <b><span>clasifica</span></b> el <b><span>golpe de calor</span></b> según <span><b>AJMA</b></span>?",
+      "back": "<ul><li><b>I:</b> leve, consciente</li><li><b>II:</b> moderado, alteración del juicio o concentración</li><li><b>III:</b> grave, disfunción orgánica o SNC severo</li></ul>"
+    },
+    {
+      "key": "paco-urgencias-0118",
+      "sourceTag": "Urgencias::Térmicos::Calor",
+      "tags": ["Urgencias", "Térmicos", "Calor"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es el <b><span>manejo inicial</span></b> del <span><b>golpe de calor</b></span>?",
+      "back": "<u>ABCDE</u> + enfriamiento <u>rápido</u> + <u>cristaloides IV</u> según metas, evitando sobrecarga"
+    },
+    {
+      "key": "paco-urgencias-0119",
+      "sourceTag": "Urgencias::Térmicos::Calor",
+      "tags": ["Urgencias", "Térmicos", "Calor"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuál es la <b><span>medida</span></b> de <b><span>enfriamiento</span></b> más <b><span>rápida</span></b> en <span><b>golpe de calor</b></span>?",
+      "back": "Retirar <u>ropa excesiva</u> + <u>inmersión</u> completa en <u>agua fría o hielo</u>, excepto la cabeza"
+    },
+    {
+      "key": "paco-urgencias-0120",
+      "sourceTag": "Urgencias::Térmicos::Calor",
+      "tags": ["Urgencias", "Térmicos", "Calor"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuándo <span><b>referir</b></span> a <span><b>2º nivel/UCI</b></span> en <b><span>golpe de calor</span></b>?",
+      "back": "<u>Edad</u> extrema (&gt; 65 o &lt; 2 años), alteración <u>neurológica</u>, <u>datos cardiovasculares</u> o falla multiorgánica<br><br><u><b>Notas</b></u><br><i>*También comorbilidad, uso de ilícitos o no respuesta al tratamiento</i>"
+    },
+    {
+      "key": "paco-urgencias-0121",
+      "sourceTag": "Urgencias::Térmicos::Calor",
+      "tags": ["Urgencias", "Térmicos", "Calor"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Qué <b><span>distingue</span></b> al <b><span>agotamiento</span></b> por <span><b>calor del golpe de calor</b></span>?",
+      "back": "Función <u>mental preservada</u> y temperatura central <u>menor de 39 °C</u>"
+    },
+    {
+      "key": "paco-urgencias-0122",
+      "sourceTag": "Urgencias::Toxíndromes::Etanol",
+      "tags": ["Urgencias", "Toxíndromes", "Etanol"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Qué <b><span>nivel de etanol </span></b>define<b><span> intoxicación legal</span></b> y qué <span><b>clínica</b></span> produce?",
+      "back": "<strong>50–100 mg/dL:</strong> <u>euforia</u>, verborrea, <u>desinhibición</u> e incoordinación"
+    },
+    {
+      "key": "paco-urgencias-0123",
+      "sourceTag": "Urgencias::Toxíndromes::Opiáceo",
+      "tags": ["Urgencias", "Toxíndromes", "Opiáceo"],
+      "branch": null,
+      "topic": null,
+      "kind": "basic",
+      "front": "¿Cuáles son <b><span>efectos adversos</span></b> importantes de la <span><b>naloxona</b></span>?",
+      "back": "<u>Convulsiones</u>, edema pulmonar, <u>hipertensión</u>, <u>taquicardia</u>, náusea y cefalea"
+    }
+  ]
+}

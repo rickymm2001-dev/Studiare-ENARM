@@ -7,7 +7,7 @@ Guía para continuar la Fase B, bloque 8, desde cualquier sesión, local o en la
 - Lotes 1 a 4 escritos, 200 de 300 preguntas. Todos con estado pending_physician_review y etiqueta visible de demo
 - Revisión de IA de los lotes 1 a 4 en docs/revisiones/revision-ia-lotes-1-a-4.json. Todos sus hallazgos están atendidos (campo resolution)
 - Los 118 subtemas de la taxonomía ya tienen al menos una pregunta
-- Faltan los lotes 5 y 6, y los 4 mazos con 200 tarjetas
+- Faltan los lotes 5 y 6. Los mazos precargados son los de Paco (D-053), en src/demo/content/decks
 
 ## Reparto por lote
 

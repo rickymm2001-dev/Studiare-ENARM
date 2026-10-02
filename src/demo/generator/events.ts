@@ -70,7 +70,8 @@ export function toEvents(input: {
   student: SimStudent;
   bank: DemoBank;
   cards: readonly SimCard[];
-  cardSeed: string;
+  /** IDs de tarjeta y mazo por clave de tarjeta simulada */
+  cardRefs: ReadonlyMap<string, { cardId: string; deckId: string }>;
 }): AppEvent[] {
   const { student, bank } = input;
   const builder: Builder = { events: [], counter: 0 };
@@ -83,7 +84,6 @@ export function toEvents(input: {
   const responsesBySession = groupBy(student.history.responses, (response) => response.session);
   const reviewsBySession = groupBy(student.history.reviews, (review) => review.session);
   const cardByKey = new Map(input.cards.map((card) => [card.key, card]));
-  const deckId = syntheticIds.deck(input.cardSeed);
 
   // Racha simple para el multiplicador de XP. Días seguidos con actividad
   const activeDays = new Set(student.history.activeDays);
@@ -189,11 +189,12 @@ export function toEvents(input: {
     } else {
       for (const review of reviewsBySession.get(session.id) ?? []) {
         const card = cardByKey.get(review.cardKey);
-        if (!card) continue;
+        const ref = input.cardRefs.get(review.cardKey);
+        if (!card || !ref) continue;
         const atMs = Math.max(Date.parse(review.at), lastMs + 1);
         const reviewed = push(builder, student, 'card_reviewed', atMs, sessionId, {
-          cardId: syntheticIds.card(input.cardSeed, card.key),
-          deckId,
+          cardId: ref.cardId,
+          deckId: ref.deckId,
           source: 'card',
           rating: review.rating,
           confidence: review.confidence,

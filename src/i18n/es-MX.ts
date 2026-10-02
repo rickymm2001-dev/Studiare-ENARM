@@ -233,9 +233,9 @@ export const t = {
   demoData: {
     title: 'Datos de demostración',
     empty:
-      'La demostración está vacía. Genera al alumno de demostración con 60 días de historial y 300 alumnos simulados. Tarda unos segundos.',
+      'La demostración está vacía. Genera al alumno de demostración con 60 días de historial, 300 alumnos simulados y los mazos de Paco. Tarda unos segundos.',
     ready: (profiles: number) =>
-      `Hay ${profiles.toLocaleString('es-MX')} perfiles simulados, el alumno de demostración con 60 días de historial y los alumnos simulados con sus parámetros verdaderos.`,
+      `Hay ${profiles.toLocaleString('es-MX')} perfiles simulados, el alumno de demostración con 60 días de historial y los alumnos simulados con sus parámetros verdaderos. Los mazos precargados son de Paco, compartidos con su autorización.`,
     generate: 'Generar datos de demostración',
     regenerate: 'Regenerar desde cero',
     confirm: 'Sí, borrar y regenerar',

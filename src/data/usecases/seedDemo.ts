@@ -54,7 +54,7 @@ export async function seedDemoDatabase(db: EnarmDb, seed: DemoSeedRecords): Prom
       await db.cases.bulkPut(seed.cases);
       await db.questions.bulkPut(seed.questions.map((entry) => entry.question));
       await db.options.bulkPut(seed.questions.flatMap((entry) => entry.options));
-      await db.decks.put(seed.deck);
+      await db.decks.bulkPut(seed.decks);
       await db.notes.bulkPut(seed.notes);
       await db.cards.bulkPut(seed.cards);
       await db.users.bulkPut(seed.users);

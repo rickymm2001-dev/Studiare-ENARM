@@ -3,8 +3,8 @@ import { provisionalExamDate } from '@/demo/generator/seed';
 import { simulateApi } from './simulateApi';
 
 describe('API del worker de simulación', () => {
-  it('arma registros sin los historiales completos y con fecha del ENARM provisional', () => {
-    const records = simulateApi.buildSeed({
+  it('arma registros sin los historiales completos y con fecha del ENARM provisional', async () => {
+    const records = await simulateApi.buildSeed({
       endDay: '2026-10-01',
       cohortSize: 3,
       cohortDays: 10,
@@ -16,6 +16,13 @@ describe('API del worker de simulación', () => {
     expect('cohort' in records).toBe(false);
     expect(records.options.examDate).toBe('2027-09-15');
     expect(records.users[0]?.examDate).toBe('2027-09-15');
+    // Usa los mazos de Paco, no la baraja sintética (D-053)
+    expect(records.decks.map((deck) => deck.name)).toEqual([
+      'Ginecología y obstetricia (Paco)',
+      'Medicina interna (Paco)',
+      'Urgencias (Paco)',
+    ]);
+    expect(records.cards.length).toBeGreaterThan(3700);
   });
 
   it('la fecha provisional queda al menos a 90 días', () => {
