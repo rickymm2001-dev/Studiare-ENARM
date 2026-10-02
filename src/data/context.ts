@@ -20,6 +20,11 @@ export interface DataApi {
   rebuildDerivedState: () => Promise<void>;
   /** null en enarm_real */
   demo: DemoDataActions | null;
+  /**
+   * Borrar mis datos (4.5). Elimina la base completa de Mi cuenta. Es la excepción a la bitácora
+   * inmutable de PLAN.md 2.2. null en la demo, que se regenera con sus propias acciones
+   */
+  deleteAllData: (() => Promise<void>) | null;
 }
 
 /** El contexto solo lleva la API. La base de Dexie queda capturada dentro de recordEvent y rebuild */
@@ -36,6 +41,6 @@ export function useRepositories(): Repositories {
 }
 
 export function useDataApi(): DataApi {
-  const { repos, recordEvent, rebuildDerivedState, demo } = useDataContext();
-  return { repos, recordEvent, rebuildDerivedState, demo };
+  const { repos, recordEvent, rebuildDerivedState, demo, deleteAllData } = useDataContext();
+  return { repos, recordEvent, rebuildDerivedState, demo, deleteAllData };
 }

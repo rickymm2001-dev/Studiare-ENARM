@@ -43,6 +43,14 @@ function instanceFor(kind: DatabaseKind): DataApi {
       recordEvent: (event) => recordEvent(db, repos.events, event),
       rebuildDerivedState: () => rebuildDerivedState(db),
       demo: demoActions(db),
+      deleteAllData:
+        db.kind === 'real'
+          ? async () => {
+              db.close();
+              await db.delete();
+              await db.open();
+            }
+          : null,
     };
     instances.set(kind, instance);
   }

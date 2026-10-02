@@ -99,3 +99,47 @@ export async function updateProfile(
   }
   return next;
 }
+
+/** Estado actual de cada finalidad, con la decisión más reciente */
+export async function currentConsents(
+  api: Pick<DataApi, 'repos'>,
+  userId: string,
+): Promise<Record<ConsentPurpose, boolean>> {
+  const list = (await api.repos.consents.list())
+    .filter((consent) => consent.userId === userId)
+    .sort((a, b) => a.decidedAt.localeCompare(b.decidedAt));
+  const result: Record<ConsentPurpose, boolean> = {
+    party: false,
+    ai_analysis: false,
+    anonymized_improvement: false,
+  };
+  for (const consent of list) result[consent.purpose] = consent.status === 'granted';
+  return result;
+}
+
+/** Da o retira el consentimiento de una finalidad, con su evento (4.5) */
+export async function setConsent(
+  api: Pick<DataApi, 'repos' | 'recordEvent'>,
+  user: User,
+  purpose: ConsentPurpose,
+  granted: boolean,
+): Promise<void> {
+  const status = granted ? 'granted' : 'revoked';
+  await api.repos.consents.put(
+    ConsentSchema.parse({
+      id: newId(),
+      userId: user.id,
+      purpose,
+      noticeVersion: PRIVACY_NOTICE_VERSION,
+      status,
+      decidedAt: new Date().toISOString(),
+    }),
+  );
+  await api.recordEvent(
+    createEvent(
+      'consent_changed',
+      { purpose, status, noticeVersion: PRIVACY_NOTICE_VERSION },
+      { userId: user.id, tz: user.timeZone },
+    ),
+  );
+}

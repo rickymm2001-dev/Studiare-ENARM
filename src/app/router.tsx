@@ -1,6 +1,7 @@
 // Rutas de las 26 pantallas. Las que todavía son esqueleto usan ScreenPlaceholder.
 import type { ComponentType } from 'react';
 import { createBrowserRouter, type RouteObject } from 'react-router';
+import { SubscriptionScreen } from '@/features/billing/SubscriptionScreen';
 import { HomeScreen } from '@/features/home/HomeScreen';
 import { OnboardingScreen } from '@/features/onboarding/OnboardingScreen';
 import { ProfileScreen } from '@/features/profile/ProfileScreen';
@@ -14,6 +15,7 @@ import { SCREEN_KEYS, SCREENS, type ScreenKey } from './screens';
 const BUILT_SCREENS: Partial<Record<ScreenKey, ComponentType>> = {
   onboarding: OnboardingScreen,
   home: HomeScreen,
+  subscription: SubscriptionScreen,
   profile: ProfileScreen,
   roleSelector: RoleSelectorScreen,
 };
