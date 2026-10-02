@@ -55,6 +55,9 @@ export const routes: RouteObject[] = [
   },
 ];
 
+/** Ruta base de la app publicada sin la diagonal final. En local es / */
+export const ROUTER_BASENAME = import.meta.env.BASE_URL.replace(/\/+$/, '') || '/';
+
 export function createAppRouter() {
-  return createBrowserRouter(routes);
+  return createBrowserRouter(routes, { basename: ROUTER_BASENAME });
 }

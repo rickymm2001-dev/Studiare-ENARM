@@ -1,0 +1,51 @@
+# Publica la app en GitHub Pages en cada push a main (D-050).
+# La demo publicada corre con la IA en modo simulado. No usa secretos y la clave nunca llega aquí.
+name: pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Una sola publicación a la vez. Si llega un push nuevo, se publica ese y no se cancela el que va en curso
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - id: pages
+        uses: actions/configure-pages@v6
+      - run: npm ci
+      # base_path es /Studiare-ENARM sin dominio propio y vacío con dominio propio
+      - run: npm run build
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+      # GitHub Pages responde 404.html a cualquier ruta que no existe. Así abren bien los enlaces directos como /perfil
+      - run: cp dist/index.html dist/404.html
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
