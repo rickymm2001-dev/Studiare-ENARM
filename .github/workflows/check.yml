@@ -28,3 +28,5 @@ jobs:
       - run: npm ci
       # Incluye tests/security/no-secrets.test.ts, que construye la app y busca secretos en el build
       - run: npm run check
+      # Permisos por fila y roles del esquema de Supabase contra un Postgres local temporal (D-069)
+      - run: npm run test:sql

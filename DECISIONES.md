@@ -566,3 +566,13 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - La lista de especialidades de entrada directa sale de fuentes públicas del 50º ENARM. Está por verificar contra la convocatoria oficial, que no se pudo abrir desde el entorno de desarrollo
 - Foto de perfil con iniciales, uno de 12 avatares médicos generados por la app (bata, estetoscopio, gorro, lentes, espejo frontal), sin librerías ni imágenes de terceros, o una foto propia reducida a 256 px
 - Sigue sin contraseña porque no hay servidor. Con Supabase el correo se verifica y se agrega contraseña o acceso con Google
+
+### D-069. Esquema de Supabase con permisos por fila y roles
+- Fecha 2026-10-02. Implementación de Claude según D-060
+- supabase/migrations/20261002000001_platform.sql crea roles, perfiles, cuentas privadas, aceptación del aviso, configuración de la plataforma, suscripciones, pagos, avisos de pago, contenido con asignaciones y decisiones de revisión, reportes, mazos, bitácora de solo agregar, grupos, retos y borradores de IA
+- Permisos por fila en todas las tablas. Los roles solo cambian con la función set_user_role, que exige admin o dueño, impide cambiar el propio rol, no deja asignar ni quitar el rol de dueño y solo deja al dueño nombrar o quitar admins. Cada cambio queda en role_audit
+- El dueño se fija una sola vez desde el SQL Editor de Supabase. Un índice único impide que haya dos
+- npm run test:sql levanta un Postgres local temporal con un esqueleto de Supabase Auth y corre 12 pruebas de permisos. Se comprobó que detectan un permiso roto a propósito. El CI las corre en cada push
+- La llave anon de Supabase es pública por diseño y la protegen los permisos por fila. La llave service_role nunca va al navegador ni al repositorio
+- docs/SUPABASE.md es la guía para que Ricardo cree el proyecto, cargue el esquema, se haga dueño y pase las llaves públicas
+- La app todavía no habla con Supabase. Se conecta cuando Ricardo pase las llaves (bloque 9, sincronización)

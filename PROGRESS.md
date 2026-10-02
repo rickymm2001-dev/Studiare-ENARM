@@ -22,7 +22,7 @@
 ### Bloques
 - [x] 1. Sistema de diseño premium (D-061 a D-067)
 - [x] 2. Portada de venta, registro con correo, datos de cuenta y foto o avatar (D-068)
-- [ ] 3. Esquema de Supabase con permisos por fila y roles
+- [x] 3. Esquema de Supabase con permisos por fila y roles, probado en Postgres local (D-069)
 - [ ] 4. Panel de administración de usuarios y asignaciones a médicos
 - [ ] 5. Pagos con Stripe y Mercado Pago en modo prueba
 - [ ] 6. Plan del día, misiones, ligas, insignias, duelos y compartir
@@ -41,7 +41,9 @@
 - Seis ramas troncales con subespecialidades en Simular, Mazos y Progreso. Primera versión de Progreso. Títulos de nivel de R0 a Eminencia. Heatmap que crece mes con mes (D-066)
 - Tope de 21 días sobre Bien con botones separados y multiplicador por botón (D-067)
 - Portada de venta, cuenta con correo en tabla aparte, datos opcionales, 12 avatares médicos o foto propia (D-068). 322 pruebas pasan
-- Siguiente. Bloque 3, esquema de Supabase con permisos por fila y roles
+- Esquema de Supabase con 12 pruebas de permisos en npm run test:sql y guía en docs/SUPABASE.md (D-069)
+- Siguiente. Bloque 4, panel de administración de usuarios y asignaciones a médicos
+- Pendiente de Ricardo. Crear el proyecto de Supabase con docs/SUPABASE.md y pasar las llaves públicas
 
 ## Fase C. Pantallas del alumno (esqueleto funcionando)
 
