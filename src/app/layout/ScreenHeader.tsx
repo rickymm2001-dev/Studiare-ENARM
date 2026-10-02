@@ -16,7 +16,7 @@ export function ScreenHeader({ title, description, badges }: ScreenHeaderProps) 
       <h1 tabIndex={-1} className="text-2xl font-bold text-fg outline-none sm:text-3xl">
         {title}
       </h1>
-      {description ? <p className="text-fg-muted">{description}</p> : null}
+      {description ? <p className="max-w-reading text-fg-muted">{description}</p> : null}
     </header>
   );
 }

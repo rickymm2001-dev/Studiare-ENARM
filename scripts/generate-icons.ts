@@ -1,7 +1,7 @@
 // Genera los íconos provisionales de la PWA (D-016) a partir de un SVG.
+// El ícono de la pestaña ya es el símbolo de Studiare (public/favicon-*.png, D-053) y no sale de aquí.
 // Usa el Chromium de Playwright que vive dentro del proyecto. Se corre una vez y el resultado
 // queda en public/. Para regenerarlos: node scripts/generate-icons.ts
-import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 process.env.PLAYWRIGHT_BROWSERS_PATH ??= '0';
@@ -31,8 +31,6 @@ const rounded = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
 const maskable = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <rect width="512" height="512" fill="${PRIMARY}"/>${glyph(0.72)}
 </svg>`;
-
-writeFileSync(join(PUBLIC_DIR, 'favicon.svg'), rounded);
 
 const targets = [
   { file: 'pwa-192x192.png', svg: rounded, size: 192 },

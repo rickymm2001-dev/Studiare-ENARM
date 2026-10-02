@@ -34,7 +34,7 @@ export function AppShell() {
       </a>
 
       <header className="sticky top-0 z-10 border-b border-line bg-surface/95 backdrop-blur lg:pl-rail">
-        <div className="mx-auto flex min-h-14 max-w-reading flex-wrap items-center gap-2 px-4 py-2">
+        <div className="mx-auto flex min-h-14 max-w-app flex-wrap items-center gap-2 px-4 py-2">
           <Link to={HOME_BY_ROLE[role]} className="mr-auto rounded-sm">
             {/* Logo de Studiare. En modo oscuro se usa la versión con letras blancas */}
             <img
@@ -92,7 +92,7 @@ export function AppShell() {
         <main
           id="contenido"
           tabIndex={-1}
-          className="mx-auto flex max-w-reading flex-col gap-4 px-4 pt-4 pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1.5rem)] outline-none lg:pb-10"
+          className="mx-auto flex max-w-app flex-col gap-4 px-4 pt-4 pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1.5rem)] outline-none lg:pb-10"
         >
           <Outlet />
         </main>
