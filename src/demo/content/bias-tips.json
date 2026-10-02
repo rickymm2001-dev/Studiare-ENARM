@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "status": "pending_physician_review",
+  "tips": [
+    {
+      "biasKey": "premature_closure",
+      "tip": "Antes de elegir, lee el caso hasta el final y pregúntate qué dato descartaría tu primera idea."
+    },
+    {
+      "biasKey": "anchoring",
+      "tip": "Antes de responder, nombra el dato del caso que no encaja con tu primera impresión."
+    },
+    {
+      "biasKey": "availability_heuristic",
+      "tip": "Cuando una opción te parezca obvia por lo común que es, busca el criterio del caso que la confirma y no solo el que se parece."
+    },
+    {
+      "biasKey": "base_rate_fallacy",
+      "tip": "Revisa edad, sexo y contexto del paciente y pregúntate qué tan frecuente es cada opción en ese grupo."
+    },
+    {
+      "biasKey": "framing_effect",
+      "tip": "Reescribe mentalmente el dato al revés, como riesgo en lugar de beneficio, y verifica si tu elección sigue siendo la misma."
+    },
+    {
+      "biasKey": "sunk_cost_fallacy",
+      "tip": "Decide con los datos de hoy. Lo que ya se hizo antes no obliga a seguir el mismo camino."
+    },
+    {
+      "biasKey": "gamblers_fallacy",
+      "tip": "Cada pregunta y cada estudio son independientes. Que las anteriores salieran de una forma no cambia esta."
+    },
+    {
+      "biasKey": "clustering_illusion",
+      "tip": "Antes de unir datos en un patrón, pregúntate si podrían coincidir por azar."
+    },
+    {
+      "biasKey": "loss_aversion",
+      "tip": "Compara el beneficio neto de cada opción, no solo el riesgo inmediato que quieres evitar."
+    },
+    {
+      "biasKey": "inattentional_blindness",
+      "tip": "Haz un último barrido del caso buscando un dato inesperado, como un signo vital, un antecedente o un resultado fuera de lugar."
+    },
+    {
+      "biasKey": "serial_position_effect",
+      "tip": "Da el mismo peso a los datos de en medio del caso que al primero y al último."
+    },
+    {
+      "biasKey": "representativeness_heuristic",
+      "tip": "Contrasta el caso con los criterios diagnósticos, no con la imagen clásica del libro."
+    },
+    {
+      "biasKey": "halo_horn_effect",
+      "tip": "Separa quién es el paciente de lo que tiene. Juzga el cuadro por los datos clínicos."
+    },
+    {
+      "biasKey": "ambiguity_effect",
+      "tip": "No descartes la opción indicada solo porque su resultado parece incierto. Busca qué dice la guía para este caso."
+    },
+    {
+      "biasKey": "complexity_bias",
+      "tip": "Antes de ir por lo raro, descarta la explicación común que encaja con todos los datos."
+    },
+    {
+      "biasKey": "zeigarnik_effect",
+      "tip": "Si una pregunta te atoró, márcala y suéltala. Empieza la siguiente con la mente en blanco."
+    },
+    {
+      "biasKey": "confirmation_bias",
+      "tip": "Elige el estudio que separa tus dos hipótesis principales, no el que solo confirma la favorita."
+    },
+    {
+      "biasKey": "status_quo_bias",
+      "tip": "Si un dato nuevo cambia el panorama, permítete cambiar el manejo o tu primera respuesta."
+    },
+    {
+      "biasKey": "belief_bias",
+      "tip": "Cuando una opción te suene lógica, verifica que coincida con la regla o la guía y no solo con la costumbre."
+    },
+    {
+      "biasKey": "overconfidence_effect",
+      "tip": "Cuando te sientas muy seguro, nombra en una frase por qué. Si no puedes, revisa otra vez."
+    },
+    {
+      "biasKey": "information_bias",
+      "tip": "Antes de pedir otro estudio, pregúntate si su resultado cambiaría lo que vas a hacer."
+    },
+    {
+      "biasKey": "focusing_illusion",
+      "tip": "Haz una lista rápida de todos los problemas del caso antes de decidir cuál pesa más."
+    },
+    {
+      "biasKey": "omission_bias",
+      "tip": "No actuar también es una decisión con consecuencias. Compara el riesgo de esperar con el de intervenir."
+    },
+    {
+      "biasKey": "decision_fatigue",
+      "tip": "Si llevas muchas preguntas seguidas, toma una pausa corta. Tu precisión baja con el cansancio."
+    }
+  ]
+}

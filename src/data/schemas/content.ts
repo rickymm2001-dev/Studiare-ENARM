@@ -107,3 +107,13 @@ export const TopicTaxonomySchema = z.strictObject({
     .min(1),
 });
 export type TopicTaxonomy = z.infer<typeof TopicTaxonomySchema>;
+
+/** Textos base de consejos por sesgo (8.5). Borradores de Claude pendientes de revisión médica */
+export const BiasTipsSchema = z.strictObject({
+  version: z.int().min(1),
+  status: ReviewStatusSchema,
+  tips: z
+    .array(z.strictObject({ biasKey: TaxonomyKeySchema, tip: z.string().min(10).max(400) }))
+    .min(1),
+});
+export type BiasTips = z.infer<typeof BiasTipsSchema>;

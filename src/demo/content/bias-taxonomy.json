@@ -1,0 +1,198 @@
+{
+  "version": 1,
+  "status": "pending_physician_review",
+  "biases": [
+    {
+      "key": "premature_closure",
+      "name": "Cierre prematuro",
+      "englishName": "Premature closure",
+      "distractorDefinition": "Es correcto para la primera hipótesis razonable, pero un dato posterior del caso la descarta.",
+      "taggable": true,
+      "behaviorSignals": []
+    },
+    {
+      "key": "anchoring",
+      "name": "Sesgo de anclaje",
+      "englishName": "Anchoring bias",
+      "distractorDefinition": "Se apoya en el primer dato o en el más llamativo del caso e ignora el resto.",
+      "taggable": true,
+      "behaviorSignals": []
+    },
+    {
+      "key": "availability_heuristic",
+      "name": "Heurística de disponibilidad",
+      "englishName": "Availability heuristic",
+      "distractorDefinition": "Es una entidad frecuente, reciente o muy conocida que solo comparte rasgos superficiales con el caso.",
+      "taggable": true,
+      "behaviorSignals": []
+    },
+    {
+      "key": "base_rate_fallacy",
+      "name": "Falacia de la tasa base",
+      "englishName": "Base rate fallacy",
+      "distractorDefinition": "Encaja con el cuadro, pero es mucho menos probable por edad, sexo, epidemiología o contexto.",
+      "taggable": true,
+      "behaviorSignals": []
+    },
+    {
+      "key": "framing_effect",
+      "name": "Sesgo de encuadre",
+      "englishName": "Framing effect",
+      "distractorDefinition": "Atrae por cómo está redactado el caso o el dato, por ejemplo un riesgo presentado como pérdida o como ganancia, y no por lo que el dato significa.",
+      "taggable": true,
+      "behaviorSignals": []
+    },
+    {
+      "key": "sunk_cost_fallacy",
+      "name": "Falacia del costo hundido",
+      "englishName": "Sunk cost fallacy",
+      "distractorDefinition": "Continúa un manejo que ya se inició o en el que ya se invirtió, aunque los datos actuales indican cambiarlo.",
+      "taggable": true,
+      "behaviorSignals": ["time_sink"]
+    },
+    {
+      "key": "gamblers_fallacy",
+      "name": "Falacia del apostador",
+      "englishName": "Gambler's fallacy",
+      "distractorDefinition": "Supone que un resultado se compensa con los anteriores, por ejemplo que tras varios estudios negativos el siguiente debe salir positivo.",
+      "taggable": true,
+      "behaviorSignals": ["answer_position_pattern"]
+    },
+    {
+      "key": "clustering_illusion",
+      "name": "Ilusión de agrupamiento o apofenia",
+      "englishName": "Clustering illusion",
+      "distractorDefinition": "Atribuye una causa común o un patrón a datos que coinciden por azar.",
+      "taggable": true,
+      "behaviorSignals": ["answer_position_pattern"]
+    },
+    {
+      "key": "loss_aversion",
+      "name": "Aversión a la pérdida",
+      "englishName": "Loss aversion",
+      "distractorDefinition": "Evita un riesgo o una pérdida inmediata, como un efecto adverso, aunque la opción correcta da más beneficio neto.",
+      "taggable": true,
+      "behaviorSignals": []
+    },
+    {
+      "key": "inattentional_blindness",
+      "name": "Ceguera inatencional",
+      "englishName": "Inattentional blindness",
+      "distractorDefinition": "Ignora un dato presente en el caso que no se esperaba ver y que cambia la respuesta.",
+      "taggable": true,
+      "behaviorSignals": []
+    },
+    {
+      "key": "serial_position_effect",
+      "name": "Efecto de posición serial, primacía y recencia",
+      "englishName": "Serial position effect",
+      "distractorDefinition": "Da más peso al primer o al último dato que se presentó, en el caso o entre las opciones.",
+      "taggable": true,
+      "behaviorSignals": ["exam_position"]
+    },
+    {
+      "key": "representativeness_heuristic",
+      "name": "Heurística de representatividad",
+      "englishName": "Representativeness heuristic",
+      "distractorDefinition": "Corresponde al cuadro clásico de libro, aunque al caso le falta o le sobra un criterio clave.",
+      "taggable": true,
+      "behaviorSignals": []
+    },
+    {
+      "key": "halo_horn_effect",
+      "name": "Efecto halo o efecto cuerno enfocado en el paciente",
+      "englishName": "Halo / Horn effect",
+      "distractorDefinition": "Se deja llevar por una característica del paciente, como su aspecto, ocupación, conducta o consumo de sustancias, para juzgar el cuadro.",
+      "taggable": true,
+      "behaviorSignals": []
+    },
+    {
+      "key": "ambiguity_effect",
+      "name": "Efecto de ambigüedad",
+      "englishName": "Ambiguity effect",
+      "distractorDefinition": "Prefiere la opción de resultado conocido y evita la indicada porque su resultado parece incierto.",
+      "taggable": true,
+      "behaviorSignals": []
+    },
+    {
+      "key": "complexity_bias",
+      "name": "Sesgo de complejidad o atracción por lo atípico",
+      "englishName": "Complexity bias",
+      "distractorDefinition": "Es la explicación rara, compleja o espectacular cuando la sencilla basta.",
+      "taggable": true,
+      "behaviorSignals": []
+    },
+    {
+      "key": "zeigarnik_effect",
+      "name": "Efecto Zeigarnik",
+      "englishName": "Zeigarnik effect",
+      "distractorDefinition": "No describe un distractor. Una pregunta anterior sin resolver sigue ocupando la atención y afecta la siguiente.",
+      "taggable": false,
+      "behaviorSignals": ["time_sink", "answer_changes"]
+    },
+    {
+      "key": "confirmation_bias",
+      "name": "Sesgo de confirmación intra-pregunta",
+      "englishName": "Confirmation bias",
+      "distractorDefinition": "Propone el estudio o el dato que confirma la hipótesis favorita en lugar del que distingue entre hipótesis.",
+      "taggable": true,
+      "behaviorSignals": []
+    },
+    {
+      "key": "status_quo_bias",
+      "name": "Sesgo del statu quo o efecto de dotación sobre la primera respuesta",
+      "englishName": "Status quo bias / Endowment effect",
+      "distractorDefinition": "Mantiene el manejo actual o la decisión ya tomada cuando los datos piden cambiarla.",
+      "taggable": true,
+      "behaviorSignals": ["answer_changes"]
+    },
+    {
+      "key": "belief_bias",
+      "name": "Sesgo de creencias o reactancia a la regla",
+      "englishName": "Belief bias",
+      "distractorDefinition": "Suena lógico o coincide con lo que se suele creer, pero contradice la regla o la guía vigente.",
+      "taggable": true,
+      "behaviorSignals": []
+    },
+    {
+      "key": "overconfidence_effect",
+      "name": "Efecto de sobreconfianza o falsa fluidez",
+      "englishName": "Overconfidence effect",
+      "distractorDefinition": "No describe un distractor. Se responde con seguridad algo que se siente familiar, sin verificarlo.",
+      "taggable": false,
+      "behaviorSignals": ["confidence_calibration"]
+    },
+    {
+      "key": "information_bias",
+      "name": "Sesgo de información",
+      "englishName": "Information bias",
+      "distractorDefinition": "Pide más estudios o datos que no van a cambiar el manejo.",
+      "taggable": true,
+      "behaviorSignals": []
+    },
+    {
+      "key": "focusing_illusion",
+      "name": "Ilusión de enfoque",
+      "englishName": "Focusing illusion",
+      "distractorDefinition": "Exagera la importancia de un solo aspecto del caso y descuida los demás.",
+      "taggable": true,
+      "behaviorSignals": []
+    },
+    {
+      "key": "omission_bias",
+      "name": "Sesgo de omisión",
+      "englishName": "Omission bias",
+      "distractorDefinition": "Prefiere no actuar, observar o esperar, cuando lo indicado es intervenir.",
+      "taggable": true,
+      "behaviorSignals": []
+    },
+    {
+      "key": "decision_fatigue",
+      "name": "Fatiga de decisión",
+      "englishName": "Decision fatigue",
+      "distractorDefinition": "No describe un distractor. Después de muchas decisiones seguidas baja la calidad de las respuestas.",
+      "taggable": false,
+      "behaviorSignals": ["session_fatigue"]
+    }
+  ]
+}
