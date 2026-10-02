@@ -1,7 +1,7 @@
 // Datos de prueba para la capa de datos. Solo los usan las pruebas.
 import { monotonicFactory } from 'ulid';
 import { createEnarmDb, type EnarmDb } from '../db/database';
-import type { DatabaseKind } from '../db/tables';
+import type { DatabaseKind } from '../databases';
 import { createEvent, type Clock } from '../events/createEvent';
 import type { Question, Option } from '../schemas/bank';
 import type { EventPayload, EventType } from '../schemas/events';

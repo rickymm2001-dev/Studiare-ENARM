@@ -25,7 +25,7 @@ import type { Card, Deck, Note } from '../schemas/decks';
 import type { AppEvent, EventType } from '../schemas/events';
 import type { Consent, OfficialScore, Subscription, User } from '../schemas/people';
 import type { z } from 'zod';
-import type { DatabaseKind } from '../db/tables';
+import type { DatabaseKind } from '../databases';
 
 export interface EventFilter {
   userId: Id;

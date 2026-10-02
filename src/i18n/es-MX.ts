@@ -195,6 +195,41 @@ export const t = {
         `Faltan ${missing.toLocaleString('es-MX')} ${unit}`,
     },
   },
+  roles: {
+    names: { student: 'Alumno', physician: 'Médico', admin: 'Admin' },
+    descriptions: {
+      student: 'Repaso, simuladores, progreso, tutor y Party.',
+      physician: 'Banco de preguntas, etiquetado, acuerdo, borradores de IA y reportes.',
+      admin: 'Costos de IA, datos de demostración y configuración. También ve el panel médico.',
+    },
+    legend: 'Rol en este dispositivo',
+    notice:
+      'En el prototipo no hay inicio de sesión. El rol solo cambia lo que ves en este dispositivo.',
+    enterAs: (roleName: string) => `Entrar como ${roleName}`,
+    current: (roleName: string) => `Rol actual, ${roleName}`,
+    change: 'Cambiar de rol',
+    cardTitle: 'Rol',
+  },
+  access: {
+    physicianTitle: 'Esta sección es para médicos',
+    adminTitle: 'Esta sección es para admin',
+    description: 'Cambia de rol para verla. En el prototipo no hay inicio de sesión.',
+  },
+  database: {
+    legend: 'Cuenta activa',
+    description: 'Los datos viven solo en este dispositivo, en dos bases separadas.',
+    real: 'Mi cuenta',
+    realDescription: 'Tus datos reales. Nada sale de este dispositivo.',
+    demo: 'Demostración',
+    demoDescription:
+      'Alumno de demostración y alumnos simulados. Todo lo que ves son datos simulados.',
+    banner: 'Estás en la demostración. Todo lo que ves son datos simulados.',
+    backToReal: 'Volver a Mi cuenta',
+    storedIn: (name: string) => `Base local ${name}`,
+    users: (count: number) =>
+      count === 1 ? '1 perfil guardado' : `${count.toLocaleString('es-MX')} perfiles guardados`,
+    openError: 'No se pudo abrir la base local. Revisa que el navegador permita guardar datos.',
+  },
   ai: {
     cardTitle: 'Inteligencia artificial',
     badge: {

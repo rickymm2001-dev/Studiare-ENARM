@@ -25,7 +25,8 @@ import type {
 import type { Card, Deck, Note } from '../schemas/decks';
 import type { AppEvent } from '../schemas/events';
 import type { Consent, OfficialScore, Subscription, User } from '../schemas/people';
-import { DATABASE_NAMES, storesFor, type DatabaseKind } from './tables';
+import { DATABASE_NAMES, type DatabaseKind } from '../databases';
+import { storesFor } from './tables';
 
 /** Tabla sin llaves autogeneradas. Cada registro llega completo y con su ID */
 type StrictTable<T, K extends keyof T> = EntityTable<T, K, T>;

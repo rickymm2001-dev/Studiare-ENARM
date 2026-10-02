@@ -38,3 +38,19 @@ export async function expectNoSeriousA11yViolations(page: Page): Promise<void> {
     'violaciones serias o críticas de axe',
   ).toEqual([]);
 }
+
+/** Deja preferencias guardadas antes de que cargue la app, como si el alumno ya las hubiera elegido */
+export async function presetPreferences(
+  page: Page,
+  preferences: { theme?: string; role?: string; database?: string },
+): Promise<void> {
+  await page.addInitScript(
+    (value) => {
+      // Solo la primera carga de la prueba. Así los cambios que hace la prueba sí se recuerdan
+      if (sessionStorage.getItem('enarm.e2e.preset') === '1') return;
+      sessionStorage.setItem('enarm.e2e.preset', '1');
+      localStorage.setItem('enarm.preferences.v1', JSON.stringify(value));
+    },
+    { theme: 'system', role: 'student', database: 'real', ...preferences },
+  );
+}

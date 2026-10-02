@@ -2,6 +2,7 @@
 // La primera entrada de indexes es la llave primaria. [a+b] es índice compuesto y *x es multientrada.
 // Una prueba revisa que cada campo indexado exista en su esquema.
 import type { z } from 'zod';
+import type { DatabaseKind } from '../databases';
 import {
   AiArtifactSchema,
   AiCallLogSchema,
@@ -97,13 +98,6 @@ export const TABLES = {
 
 export type TableName = keyof typeof TABLES;
 export const TABLE_NAMES = Object.keys(TABLES) as TableName[];
-
-export type DatabaseKind = 'real' | 'demo';
-
-export const DATABASE_NAMES: Record<DatabaseKind, string> = {
-  real: 'enarm_real',
-  demo: 'enarm_demo',
-};
 
 /** Índices de Dexie para una base. enarm_real no tiene SimTruth */
 export function storesFor(kind: DatabaseKind): Record<string, string> {

@@ -1,5 +1,5 @@
 // Marco de la app. Salto al contenido, encabezado, aviso sin conexión, contenido y navegación.
-import { WifiOff } from 'lucide-react';
+import { FlaskConical, WifiOff } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { Link, Outlet, useLocation } from 'react-router';
 import { AiModeBadge } from '@/ai/AiModeBadge';
@@ -7,13 +7,16 @@ import { useAiStatus } from '@/ai/useAiStatus';
 import { t } from '@/i18n/es-MX';
 import { useOnlineStatus } from '@/ui/hooks/use-online-status';
 import { useApplyTheme } from '@/ui/theme';
-import { STUDENT_NAV } from '../navigation';
+import { HOME_BY_ROLE, NAV_BY_ROLE } from '../navigation';
 import { usePreferences } from '../preferences';
 import { BottomNav } from './BottomNav';
 import { PwaUpdatePrompt } from './PwaUpdatePrompt';
 
 export function AppShell() {
   const theme = usePreferences((state) => state.theme);
+  const role = usePreferences((state) => state.role);
+  const database = usePreferences((state) => state.database);
+  const setDatabase = usePreferences((state) => state.setDatabase);
   useApplyTheme(theme);
   const online = useOnlineStatus();
   const aiStatus = useAiStatus();
@@ -30,12 +33,34 @@ export function AppShell() {
 
       <header className="sticky top-0 z-10 border-b border-line bg-surface/95 backdrop-blur lg:pl-rail">
         <div className="mx-auto flex min-h-14 max-w-reading flex-wrap items-center gap-2 px-4 py-2">
-          <Link to="/" className="mr-auto rounded-sm font-semibold text-fg">
+          <Link to={HOME_BY_ROLE[role]} className="mr-auto rounded-sm font-semibold text-fg">
             {t.app.name}
           </Link>
           <AiModeBadge status={aiStatus} />
         </div>
       </header>
+
+      {database === 'demo' ? (
+        <div
+          role="note"
+          className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 border-b border-sim-line bg-sim px-4 py-2 text-sm text-sim-fg lg:pl-rail"
+        >
+          <span className="flex items-center gap-2 font-semibold">
+            <FlaskConical aria-hidden className="size-4" />
+            {t.labels.simulatedData}
+          </span>
+          <span>{t.database.banner}</span>
+          <button
+            type="button"
+            className="min-h-touch rounded-sm px-2 font-semibold underline underline-offset-4"
+            onClick={() => {
+              setDatabase('real');
+            }}
+          >
+            {t.database.backToReal}
+          </button>
+        </div>
+      ) : null}
 
       {online ? null : (
         <div
@@ -57,7 +82,7 @@ export function AppShell() {
         </main>
       </div>
 
-      <BottomNav items={STUDENT_NAV} />
+      <BottomNav items={NAV_BY_ROLE[role]} />
       <PwaUpdatePrompt />
     </div>
   );

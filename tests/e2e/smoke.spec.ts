@@ -2,11 +2,15 @@
 // revisa su título, la navegación y la accesibilidad básica con axe.
 import { SCREEN_KEYS, SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
-import { expect, expectNoSeriousA11yViolations, test } from './support/fixtures';
+import { expect, expectNoSeriousA11yViolations, presetPreferences, test } from './support/fixtures';
 
 for (const key of SCREEN_KEYS) {
   const screen = SCREENS[key];
   test(`pantalla ${screen.number} ${key} abre en ${screen.path}`, async ({ page }) => {
+    // Las áreas de médico y admin piden rol. Admin puede ver ambas
+    if (screen.area === 'physician' || screen.area === 'admin') {
+      await presetPreferences(page, { role: 'admin' });
+    }
     await page.goto(screen.path);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens[key].title);
     await expect(page).toHaveTitle(t.app.documentTitle(t.screens[key].title));

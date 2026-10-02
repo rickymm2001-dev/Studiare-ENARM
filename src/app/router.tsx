@@ -2,6 +2,7 @@
 import type { ComponentType } from 'react';
 import { createBrowserRouter, type RouteObject } from 'react-router';
 import { ProfileScreen } from '@/features/profile/ProfileScreen';
+import { RoleSelectorScreen } from '@/features/role/RoleSelectorScreen';
 import { AppShell } from './layout/AppShell';
 import { InitialLoadingScreen, NotFoundScreen, RouteErrorScreen } from './layout/RouteFallbacks';
 import { ScreenPlaceholder } from './layout/ScreenPlaceholder';
@@ -10,6 +11,7 @@ import { SCREEN_KEYS, SCREENS, type ScreenKey } from './screens';
 /** Pantallas que ya tienen componente propio. Las demás muestran el esqueleto */
 const BUILT_SCREENS: Partial<Record<ScreenKey, ComponentType>> = {
   profile: ProfileScreen,
+  roleSelector: RoleSelectorScreen,
 };
 
 function routeFor(key: ScreenKey): RouteObject {

@@ -2,7 +2,7 @@
 import { useMemo, type ReactNode } from 'react';
 import { DataContext, type DataContextValue } from './context';
 import { createEnarmDb } from './db/database';
-import type { DatabaseKind } from './db/tables';
+import type { DatabaseKind } from './databases';
 import { rebuildDerivedState } from './derive/derivations';
 import { createDexieRepositories } from './repos/dexie/createRepositories';
 import { recordEvent } from './usecases/recordEvent';

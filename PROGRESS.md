@@ -4,8 +4,8 @@
 
 - Fase 0 aprobada por Ricardo el 2026-10-01
 - Fase A en curso desde el 2026-10-01. Ricardo la aprobó y pidió ejecutar solo la Fase A y detenerse al terminar
-- Bloque terminado más reciente. Bloque 5 (proxy de IA)
-- Siguiente paso. Bloque 6 (selector de rol e interruptor de base)
+- Bloque terminado más reciente. Bloque 6 (rol y base demo)
+- Siguiente paso. Bloque 7 (npm run dev con app y proxy) y luego el cierre de 15.1
 
 ## Fase A. Esqueleto, datos y proxy
 
@@ -20,7 +20,7 @@
 - [x] 3. Esquemas zod, Dexie para enarm_real y enarm_demo, repositorios, bitácora de solo agregar y derivación
 - [x] 4. PWA instalable con modo sin conexión básico
 - [x] 5. Proxy Hono con /health, modo simulado y lectura de server/.env.local
-- [ ] 6. Selector de rol sin login e interruptor de base real o demo
+- [x] 6. Selector de rol sin login e interruptor de base real o demo
 - [ ] 7. npm run dev con app y proxy juntos
 
 ### Bitácora por bloque
@@ -29,6 +29,7 @@
 - Bloque 3. Esquemas zod de las 25 entidades de 6.2 y de los 30 tipos de evento de 6.3 en src/data/schemas. Registro de tablas con sus índices de Dexie y prueba de que cada índice existe en su esquema. enarm_real y enarm_demo con Dexie versión 1, SimTruth solo en demo. Repositorios con interfaz y implementación Dexie. Bitácora de solo agregar protegida en el repositorio y en la base (D-038). recordEvent agrega y actualiza cachés en una transacción y rebuildDerivedState las reconstruye. Prueba de fronteras de src/engines. 34 pruebas unitarias. JavaScript inicial de 191 KB comprimido, bajo el presupuesto de 300 KB
 - Bloque 4. vite-plugin-pwa con manifest en español, íconos provisionales y caché completa de la app (D-039). Aviso de versión nueva sin recarga automática. e2e de manifest, service worker activo, instalable según Chromium y apertura sin conexión con aviso, en teléfono y escritorio. 66 e2e en total
 - Bloque 5. Proxy Hono en server/ con /health, modo real o simulado según server/.env.local, --mock para forzar simulado, Host solo localhost y tamaño máximo (D-040). server/.env.example sin valor. Cliente en src/ai/client.ts y etiqueta del modo de IA en encabezado y Perfil. 16 pruebas nuevas del proxy y del cliente, entre ellas la que revisa que escucha solo en 127.0.0.1. e2e que confirma IA simulada y cero peticiones fuera de localhost
+- Bloque 6. Pantalla 26 con selector de rol sin login que lleva a la entrada de cada rol. Navegación propia de médico y admin. Guarda de rol en las áreas de médico (médico y admin) y admin (solo admin). Interruptor Mi cuenta o Demostración en Perfil, con franja Datos simulados en toda pantalla de la demo y botón para volver. Perfil abre la base activa y dice su nombre. 17 pruebas unitarias de app y 76 e2e
 
 ## Fase 0. Entrevista, entorno y plan
 
