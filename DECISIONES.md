@@ -373,3 +373,12 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Olvidos. Las acciones de 7.9 son más que la lista cerrada de 8.2, porque incluyen repetir pronto, bajar el ritmo y repasar el tema base. La lista de 8.2 sigue siendo la única que puede proponer el LLM
 - Olvido esperado con retrievability predicha menor a 0.8 tras 21 días o más (J). No forma patrones ni alarma
 - Acuerdo. Mientras no exista kappa (sin doble etiquetado), la interfaz dice trampas y no sesgos, que es la lectura honesta de 4.4. Se pregunta a Ricardo al cerrar la fase
+
+### D-047. Sesión, planificador, racha, XP y Party
+- Fecha 2026-10-02. Origen C
+- Sesión. Proporciones por defecto de 60% vencidas, 20% nuevas, 15% errores y 5% retos, y segundos estimados de 15, 40, 75 y 90 por tipo (J). El intercalado busca un orden válido con retroceso y, si no existe, rompe la regla lo menos posible
+- Planificador. Usa los minutos reales de Pomodoro si hay al menos 3 días, si no los declarados. Avisa de sobrecarga cuando el promedio de los próximos 7 días no cabe y da el efecto de bajar nuevas (diferencia entre proyecciones del motor fsrs) y de subir minutos (J)
+- Racha. Un congelador cuando la racha llega a un múltiplo de 7, máximo 2, y se usa solo para cubrir un día perdido si la racha es mayor a 0. Un día sin registro cuenta como perdido. Si hoy no se ha cumplido, la racha sigue viva desde ayer
+- XP. Acierto 10 + 5 por nivel de dificultad del médico, error 2, tarjeta 3, meta diaria 50, reto 100, multiplicador por racha de 1 + 0.025 por día con tope de 1.5, y tope de 1,500 XP diarios por volumen (J). El bono por racha queda como premio aparte con su motivo
+- Niveles. XP acumulado para el nivel n = 1700 · (n − 1)^1.7. Con un alumno constante simulado (100 tarjetas, 30 preguntas con 65% de aciertos y meta diaria) sube 2 niveles la primera semana y unos 0.5 por semana a los 3 meses, como pide 9.5. Títulos Pasante (1), R1 (4), R2 (7), R3 (10), R4 (13), Jefe de residentes (16), Adscrito (20) y Profesor titular (25) (J)
+- Party. Códigos de 6 caracteres sin 0, O, 1, I ni L. Empates en la tabla comparten lugar. El duelo lo gana la exactitud y desempata el tiempo
