@@ -26,7 +26,7 @@
 - [x] 4. Usuarios con roles por nivel y asignaciones a médicos, banco del médico solo con lo asignado (D-070)
 - [ ] 5. Pagos con Stripe y Mercado Pago en modo prueba
 - [ ] 6. Plan del día, misiones, ligas, insignias, duelos y compartir
-- [ ] 7. Progreso con estadísticas de técnica
+- [~] 7. Progreso con estadísticas de técnica. Conócete listo (D-074), falta carga futura y dificultad
 - [ ] 8. Subir mazos desde otras apps, CSV, Excel y Word
 - [ ] 9. Sincronización con el servidor
 
@@ -45,7 +45,9 @@
 - Usuarios en /admin/usuarios con reglas de roles idénticas a Supabase y banco del médico (D-070). 326 pruebas pasan
 - Marco compacto a todo lo ancho, nivel junto al título, Configuración en el riel y botones de guardar (D-071)
 - Elegir qué repasar por modo, mazo, troncal y subespecialidad, y cambiar sin perder avance (D-072)
-- Siguiente. Bloque 5, pagos con Stripe y Mercado Pago en modo prueba
+- Análisis docente del ENARM en docs/ANALISIS_DOCENTE_ENARM.md y protección del contenido al final (D-073)
+- Conócete en Progreso con el motor de autoconocimiento, 30 hallazgos posibles en tres áreas con acción concreta (D-074). 346 pruebas pasan
+- Siguiente. Fase B lotes 5 y 6 del banco con trampas explícitas y luego Fase D con IA en modo simulado, como pidió Ricardo. Después bloque 5 de pagos
 - Pendiente de Ricardo. Crear el proyecto de Supabase con docs/SUPABASE.md y pasar las llaves públicas
 
 ## Fase C. Pantallas del alumno (esqueleto funcionando)

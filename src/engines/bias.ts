@@ -45,7 +45,7 @@ export interface Baseline {
   /** Método con que se calculó. error_share si falta */
   method?: BiasMethod;
   /** La línea base viene de alumnos simulados mientras no haya población real (7.4) */
-  source: 'real' | 'simulated';
+  source: 'real' | 'simulated' | 'chance';
 }
 
 export type PatternStatus =
