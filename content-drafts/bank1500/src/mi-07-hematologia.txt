@@ -1,0 +1,223 @@
+@ mi|hematology|anemia_adult|2|diagnosis
+V: Mujer de 38 años con menstruaciones abundantes. Refiere fatiga y antojo de comer hielo. Hemoglobina de 8.9 g/dL, VCM de 68 fL, HCM baja, ferritina de 6 ng/mL y amplitud de distribución eritrocitaria elevada.
+P: ¿Cuál es el diagnóstico más probable?
++ Anemia por deficiencia de hierro || Anemia microcítica hipocrómica con ferritina baja y pica.
+- representativeness_heuristic | Talasemia menor || También es microcítica, pero la ferritina es normal y el ADE suele ser normal.
+- anchoring | Anemia de enfermedad crónica || Puede ser microcítica, pero la ferritina estaría normal o alta.
+- availability_heuristic | Anemia megaloblástica || Daría VCM elevado.
+- premature_closure | Anemia sideroblástica || Concluye una causa rara sin datos.
+- base_rate_fallacy | Esferocitosis hereditaria || Es poco frecuente y no es microcítica por ferropenia.
+- framing_effect | Anemia por enfermedad renal || Suena común, pero suele ser normocítica.
+- inattentional_blindness | Anemia hemolítica autoinmune || No hay datos de hemólisis.
+- focusing_illusion | Intoxicación por plomo || Se centra en la microcitosis con otra causa rara.
+- belief_bias | Anemia por estrés || Cree que el estrés causa anemia.
+E: La anemia por deficiencia de hierro es la causa más frecuente de anemia en el mundo y en México. En mujeres en edad reproductiva suele deberse a pérdidas menstruales, y en hombres y mujeres posmenopáusicas obliga a buscar sangrado digestivo. Se caracteriza por anemia microcítica e hipocrómica, ADE elevado, ferritina baja, que es el marcador más específico, saturación de transferrina baja y capacidad de fijación aumentada. Puede haber pica, coiloniquia, glositis y queilitis. El tratamiento es hierro oral, como sulfato ferroso, y corregir la causa. La respuesta se ve con aumento de reticulocitos en una semana.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la anemia por deficiencia de hierro
+
+@ mi|hematology|anemia_adult|3|initial_study
+V: Hombre de 66 años con fatiga. Hemoglobina de 10.1 g/dL, VCM de 72 fL y ferritina de 9 ng/mL. No tiene síntomas digestivos ni sangrado visible.
+P: ¿Cuál es el estudio inicial más importante para buscar la causa?
++ Endoscopia superior y colonoscopia || En un hombre mayor con ferropenia se debe descartar sangrado digestivo, incluido cáncer.
+- anchoring | Dar hierro oral y ver la respuesta sin buscar causa || Se ancla en corregir la anemia sin investigar.
+- availability_heuristic | Sangre oculta en heces como único estudio || Un resultado negativo no descarta pérdida digestiva.
+- representativeness_heuristic | Aspirado de médula ósea || Es invasivo y la causa probable es digestiva.
+- framing_effect | Medir vitamina B12 y folatos || Suena a estudio de anemia, pero la anemia es microcítica.
+- premature_closure | Electroforesis de hemoglobina || Busca talasemia pese a ferritina baja.
+- complexity_bias | Tomografía por emisión de positrones || No es el estudio inicial.
+- information_bias | Perfil tiroideo y hepático antes de estudios digestivos || Retrasa el estudio clave.
+- belief_bias | Atribuirla a mala alimentación || Cree que la dieta explica la ferropenia en un hombre adulto.
+- base_rate_fallacy | Ultrasonido abdominal || No evalúa la mucosa.
+E: En hombres adultos y mujeres posmenopáusicas, la anemia por deficiencia de hierro sin causa evidente debe considerarse secundaria a pérdida digestiva hasta demostrar lo contrario. Por eso se recomienda estudio endoscópico superior e inferior para buscar cáncer colorrectal, cáncer gástrico, úlceras o angiodisplasias. También se busca enfermedad celíaca con anticuerpos o biopsias duodenales. Una prueba de sangre oculta negativa no descarta la pérdida. El tratamiento con hierro se inicia, pero no sustituye la búsqueda de la causa. La ferropenia en un hombre mayor puede ser la primera manifestación de un cáncer de colon derecho.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la anemia por deficiencia de hierro
+
+@ mi|hematology|anemia_adult|3|diagnosis
+V: Hombre de 58 años con fatiga, parestesias en pies, alteración de la marcha y glositis. Hemoglobina de 9.0 g/dL, VCM de 118 fL, neutrófilos hipersegmentados. Toma metformina desde hace 10 años.
+P: ¿Cuál es el diagnóstico más probable?
++ Anemia megaloblástica por deficiencia de vitamina B12 || Macrocitosis, neutrófilos hipersegmentados y síntomas neurológicos.
+- representativeness_heuristic | Deficiencia de ácido fólico || También es megaloblástica, pero no da síntomas neurológicos.
+- anchoring | Anemia por deficiencia de hierro || Se ancla en la anemia, pero el VCM está elevado.
+- availability_heuristic | Anemia por alcoholismo || Puede dar macrocitosis, pero sin neutrófilos hipersegmentados ni neuropatía de este tipo.
+- premature_closure | Neuropatía diabética como causa de todo || Explica los pies, pero no la anemia macrocítica.
+- base_rate_fallacy | Mielodisplasia || Es menos probable con datos clásicos de deficiencia.
+- framing_effect | Hipotiroidismo || Suena posible por la macrocitosis leve, pero no explica los neutrófilos hipersegmentados.
+- inattentional_blindness | Anemia hemolítica || No hay datos de hemólisis.
+- focusing_illusion | Esclerosis múltiple || Se centra en los síntomas neurológicos.
+- belief_bias | Anemia por la edad || Cree que la anemia es normal en la vejez.
+E: La deficiencia de vitamina B12 causa anemia megaloblástica con macrocitosis, neutrófilos hipersegmentados y, en ocasiones, pancitopenia. A diferencia del déficit de folato, produce manifestaciones neurológicas, como neuropatía periférica, degeneración combinada subaguda de la médula con alteración de la propiocepción y la marcha, y cambios cognitivos. Las causas incluyen anemia perniciosa, gastrectomía, enfermedades del íleon, dieta vegana estricta y uso prolongado de metformina o inhibidores de la bomba de protones. Se confirma con B12 baja y ácido metilmalónico elevado. Se trata con vitamina B12 intramuscular. Dar solo folato puede empeorar el daño neurológico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la anemia por deficiencia de vitamina B12
+
+@ mi|hematology|anemia_adult|3|data_interpretation
+V: Mujer de 30 años con ictericia, fatiga y orina oscura. Hemoglobina de 7.8 g/dL, reticulocitos de 12%, DHL elevada, haptoglobina baja, bilirrubina indirecta elevada y esferocitos en el frotis. Prueba de Coombs directa positiva.
+P: ¿Cuál es la interpretación correcta de estos resultados?
++ Anemia hemolítica autoinmune || Hemólisis con Coombs directo positivo.
+- representativeness_heuristic | Esferocitosis hereditaria || También tiene esferocitos, pero el Coombs es negativo.
+- anchoring | Hepatitis viral por la ictericia || Se ancla en la ictericia, pero es por bilirrubina indirecta y hemólisis.
+- availability_heuristic | Anemia por deficiencia de hierro || No hay microcitosis ni datos de ferropenia.
+- premature_closure | Síndrome de Gilbert || Da hiperbilirrubinemia indirecta leve sin anemia.
+- base_rate_fallacy | Hemoglobinuria paroxística nocturna || Es rara y tiene Coombs negativo.
+- framing_effect | Púrpura trombocitopénica trombótica || Suena a hemólisis, pero da esquistocitos y plaquetas bajas.
+- inattentional_blindness | Deficiencia de glucosa 6 fosfato deshidrogenasa || No toma en cuenta el Coombs positivo.
+- focusing_illusion | Coledocolitiasis || Se centra en la ictericia.
+- belief_bias | Talasemia mayor || Cree que toda hemólisis en jóvenes es genética.
+E: Los datos de hemólisis son anemia con reticulocitosis, deshidrogenasa láctica elevada, haptoglobina baja y bilirrubina indirecta elevada. La prueba de Coombs directa distingue el mecanismo. Si es positiva, indica anticuerpos o complemento sobre el eritrocito, es decir, anemia hemolítica autoinmune, que puede ser primaria o secundaria a lupus, linfomas, infecciones o fármacos. En la forma por anticuerpos calientes, la más frecuente, el frotis muestra esferocitos. El tratamiento de primera línea son los corticosteroides, como prednisona, y en casos refractarios rituximab o esplenectomía. Se debe buscar la causa subyacente.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la anemia hemolítica autoinmune
+
+@ mi|hematology|anemia_adult|2|treatment_of_choice
+V: Mujer de 29 años con anemia por deficiencia de hierro por menstruación abundante, hemoglobina de 9.5 g/dL. Tolera la vía oral sin problemas digestivos.
+P: ¿Cuál es el tratamiento de elección?
++ Hierro oral, como sulfato ferroso, por al menos 3 meses tras normalizar la hemoglobina, y manejo del sangrado menstrual || Repone hemoglobina y depósitos.
+- complexity_bias | Hierro intravenoso como primera opción en todos || Se reserva para intolerancia, malabsorción o necesidad rápida.
+- availability_heuristic | Transfusión de concentrado eritrocitario || No está indicada en una paciente estable.
+- anchoring | Hierro oral solo hasta que la hemoglobina se normalice || Se ancla en la hemoglobina y no repone depósitos.
+- representativeness_heuristic | Vitamina B12 intramuscular || Es para anemia megaloblástica.
+- framing_effect | Dieta rica en hierro sin suplemento || Suena natural, pero es insuficiente.
+- premature_closure | Eritropoyetina subcutánea || Es para enfermedad renal crónica.
+- status_quo_bias | Observar sin tratamiento || Deja la anemia sin corregir.
+- belief_bias | Tomar el hierro con leche para evitar molestias || El calcio disminuye su absorción.
+- omission_bias | Evitar el hierro por el estreñimiento que causa || Sobreestima un efecto adverso manejable.
+E: El tratamiento de la anemia por deficiencia de hierro incluye corregir la causa y reponer el hierro. El hierro oral, como sulfato ferroso, es la primera opción por su eficacia, seguridad y bajo costo. Se absorbe mejor en ayuno o con vitamina C y se evita tomarlo con leche, café, té o antiácidos. Esquemas en días alternos pueden mejorar la absorción y la tolerancia. La hemoglobina sube alrededor de 1 a 2 g/dL cada dos a tres semanas, y el tratamiento se continúa tres meses después de normalizarla para llenar depósitos. El hierro intravenoso se usa con intolerancia, malabsorción o sangrado persistente.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la anemia por deficiencia de hierro
+
+@ mi|hematology|anticoagulation|3|next_step
+V: Hombre de 70 años anticoagulado con warfarina por fibrilación auricular. Acude por control y su INR es de 7.8. No tiene sangrado.
+P: ¿Cuál es la conducta a seguir?
++ Suspender temporalmente la warfarina y dar vitamina K oral a dosis baja, con control de INR en 24 horas || INR mayor de 10 o entre 5 y 10 sin sangrado se maneja así.
+- anchoring | Continuar la misma dosis porque no hay sangrado || Se ancla en la falta de síntomas y mantiene un riesgo alto.
+- availability_heuristic | Plasma fresco congelado de inmediato || Se reserva para sangrado grave.
+- framing_effect | Vitamina K intravenosa a dosis alta para corregir rápido || Corregir rápido suena bien, pero dificulta reanticoagular y tiene riesgo de reacción.
+- representativeness_heuristic | Protamina intravenosa || Revierte heparina, no warfarina.
+- premature_closure | Suspender la anticoagulación de forma definitiva || Pierde la protección contra el evento vascular cerebral.
+- complexity_bias | Concentrado de complejo protrombínico en todos los casos || Es para sangrado grave.
+- status_quo_bias | Reducir la dosis y revisar en un mes || El control es demasiado tardío.
+- belief_bias | Comer más verduras verdes para bajar el INR como única medida || Cree que la dieta basta.
+- omission_bias | Hospitalizar en terapia intensiva sin tratamiento específico || Es innecesario y no corrige el INR.
+E: El manejo de un INR supraterapéutico con warfarina depende del valor y de la presencia de sangrado. Sin sangrado y con INR por arriba del rango pero menor de 5, se reduce u omite una dosis. Con INR entre 5 y 10 sin sangrado se suspenden una o dos dosis y puede darse vitamina K oral a dosis baja si hay riesgo de sangrado. Con INR mayor de 10 sin sangrado se suspende la warfarina y se da vitamina K oral. Con sangrado grave se suspende, se da vitamina K intravenosa y concentrado de complejo protrombínico o, si no hay, plasma fresco congelado.
+R: Guía de Práctica Clínica de tratamiento con anticoagulantes orales
+
+@ mi|hematology|anticoagulation|4|complication_prognosis
+V: Mujer de 62 años operada de cadera. Recibe heparina no fraccionada desde hace 7 días. Sus plaquetas bajaron de 260,000 a 95,000 y presenta una trombosis venosa profunda nueva en la pierna derecha.
+P: ¿Cuál es la complicación que presenta?
++ Trombocitopenia inducida por heparina || Caída de más de 50% de plaquetas entre el quinto y décimo día con trombosis.
+- anchoring | Sangrado por exceso de heparina || Se ancla en la heparina, pero la paciente presenta trombosis.
+- availability_heuristic | Coagulación intravascular diseminada || Da plaquetas bajas, pero con alteración de tiempos y fibrinógeno.
+- representativeness_heuristic | Púrpura trombocitopénica inmune || Da plaquetas bajas, pero no trombosis ni relación con la heparina.
+- premature_closure | Dilución por líquidos posoperatorios || Explica plaquetas bajas, no la trombosis.
+- base_rate_fallacy | Púrpura trombocitopénica trombótica || Es rara y daría hemólisis.
+- framing_effect | Trombocitopenia por consumo en la cirugía || Suena posoperatoria, pero el momento y la trombosis orientan a la heparina.
+- inattentional_blindness | Síndrome antifosfolípido || No toma en cuenta la relación temporal con la heparina.
+- focusing_illusion | Seudotrombocitopenia por EDTA || Se centra en la cifra.
+- belief_bias | Reacción normal a la heparina sin importancia || Cree que toda caída de plaquetas es esperada.
+E: La trombocitopenia inducida por heparina tipo II es una reacción inmunológica mediada por anticuerpos contra el complejo heparina factor plaquetario 4, que activan las plaquetas. Paradójicamente produce trombosis venosas y arteriales. Se sospecha con una caída de plaquetas mayor de 50%, que aparece entre el quinto y el décimo día de exposición, con o sin trombosis, y se evalúa con la escala de 4T. Es más frecuente con heparina no fraccionada y en pacientes quirúrgicos. El tratamiento es suspender toda heparina, incluidas las lavadas de catéter, e iniciar un anticoagulante sin heparina, como argatrobán, fondaparinux o un anticoagulante oral directo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la trombocitopenia inducida por heparina
+
+@ mi|hematology|anticoagulation|3|mechanism
+V: Hombre de 55 años que inicia rivaroxabán por trombosis venosa profunda.
+P: ¿Cuál es el mecanismo de acción del rivaroxabán?
++ Inhibición directa del factor Xa || Es un anticoagulante oral directo anti Xa.
+- anchoring | Inhibición de la síntesis de factores dependientes de vitamina K || Es el mecanismo de la warfarina.
+- availability_heuristic | Inhibición directa de la trombina || Es el mecanismo del dabigatrán.
+- representativeness_heuristic | Potenciación de la antitrombina || Es el mecanismo de la heparina.
+- framing_effect | Bloqueo del receptor plaquetario P2Y12 || Suena antitrombótico, pero es el mecanismo del clopidogrel.
+- premature_closure | Inhibición de la ciclooxigenasa plaquetaria || Es el mecanismo del ácido acetilsalicílico.
+- belief_bias | Disolución directa del trombo formado || Cree que disuelve el coágulo, efecto de los fibrinolíticos.
+- complexity_bias | Bloqueo del receptor de glucoproteína IIb IIIa || Es otro antiagregante intravenoso.
+- focusing_illusion | Inhibición del factor VII activado || Se centra en otro factor.
+- status_quo_bias | Aumento de la producción de plasmina || Confunde con fibrinolíticos.
+E: Los anticoagulantes orales directos actúan sobre un solo factor de la coagulación. Rivaroxabán, apixabán y edoxabán inhiben directamente el factor Xa, mientras que dabigatrán inhibe directamente la trombina. A diferencia de la warfarina, que inhibe la síntesis de los factores II, VII, IX y X dependientes de vitamina K, no requieren control rutinario del INR, tienen inicio de acción rápido y menos interacciones con alimentos. Su eliminación depende en parte del riñón, por lo que se ajustan según la filtración glomerular. Existen antídotos específicos, como andexanet alfa para los anti Xa e idarucizumab para dabigatrán.
+R: Guía de Práctica Clínica de tratamiento con anticoagulantes orales
+
+@ mi|hematology|anticoagulation|3|treatment_of_choice
+V: Mujer de 28 años con trombosis venosa profunda y diagnóstico de síndrome antifosfolípido triple positivo. Filtración glomerular normal.
+P: ¿Cuál es el anticoagulante de elección a largo plazo?
++ Warfarina con meta de INR de 2 a 3 || En el síndrome antifosfolípido de alto riesgo los anticoagulantes orales directos tienen más eventos.
+- availability_heuristic | Rivaroxabán por su comodidad || Se asoció a más trombosis arteriales en triple positivo.
+- anchoring | Apixabán por ser joven y sin otras enfermedades || Se ancla en la comodidad y omite el síndrome.
+- representativeness_heuristic | Ácido acetilsalicílico solo || Es insuficiente tras una trombosis.
+- framing_effect | Anticoagular solo 3 meses porque la trombosis fue la primera || Suena estándar, pero el síndrome requiere tratamiento prolongado.
+- premature_closure | Filtro de vena cava como tratamiento principal || No sustituye la anticoagulación.
+- complexity_bias | Warfarina más doble antiagregación de rutina || Aumenta el sangrado sin indicación.
+- status_quo_bias | Heparina de bajo peso molecular por 2 semanas y suspender || Es insuficiente.
+- belief_bias | Corticosteroides para eliminar los anticuerpos || Cree que el esteroide trata la trombosis.
+- omission_bias | Evitar anticoagulantes por su edad || La juventud no reduce el riesgo trombótico.
+E: El síndrome antifosfolípido es una enfermedad autoinmune con trombosis venosas o arteriales o morbilidad obstétrica, y anticuerpos antifosfolípido persistentes, como anticoagulante lúpico, anticardiolipina y anti beta 2 glicoproteína I. Los pacientes triple positivos tienen el mayor riesgo de recurrencia. Tras una trombosis se indica anticoagulación prolongada, generalmente indefinida, con antagonista de vitamina K, como warfarina, con meta de INR de 2 a 3. Los anticoagulantes orales directos no se recomiendan en el síndrome antifosfolípido de alto riesgo, sobre todo triple positivo o con trombosis arterial, porque se asociaron a más eventos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome antifosfolípido
+
+@ mi|hematology|anticoagulation|4|initial_treatment
+V: Hombre de 74 años que toma apixabán por fibrilación auricular. Sufre una caída y presenta hemorragia intracraneal en la tomografía, con deterioro neurológico.
+P: ¿Cuál es el tratamiento inicial para revertir la anticoagulación?
++ Suspender apixabán y administrar andexanet alfa o, si no está disponible, concentrado de complejo protrombínico || Revierte el efecto anti Xa en sangrado grave.
+- anchoring | Vitamina K intravenosa como reversor principal || Se ancla en la warfarina y no revierte el apixabán.
+- availability_heuristic | Protamina intravenosa || Revierte heparina, no anti Xa.
+- representativeness_heuristic | Idarucizumab || Es el antídoto del dabigatrán.
+- framing_effect | Esperar a que el fármaco se elimine solo en 24 horas || Suena conservador, pero el sangrado progresa.
+- premature_closure | Transfusión de plaquetas como medida principal || No revierte un anti Xa.
+- complexity_bias | Hemodiálisis para eliminar el apixabán || El apixabán se une mucho a proteínas y se dializa poco.
+- status_quo_bias | Continuar el anticoagulante para prevenir un evento vascular || Agrava la hemorragia.
+- belief_bias | Plasma fresco congelado como primera elección || Cree que el plasma basta para revertir anti Xa.
+- omission_bias | Solo vigilancia neurológica || Pierde la oportunidad de limitar el hematoma.
+E: El sangrado grave en pacientes con anticoagulantes orales directos requiere suspender el fármaco, medidas de soporte y reversión específica cuando el sangrado pone en riesgo la vida, como la hemorragia intracraneal. Para los inhibidores del factor Xa, como apixabán y rivaroxabán, el antídoto específico es andexanet alfa, y si no está disponible se usa concentrado de complejo protrombínico de cuatro factores. Para el dabigatrán el antídoto es idarucizumab, y también puede eliminarse con hemodiálisis. La vitamina K solo es útil para la warfarina. Una vez controlado el sangrado se reevalúa cuándo reiniciar la anticoagulación.
+R: Guía de Práctica Clínica de tratamiento con anticoagulantes orales
+
+@ mi|hematology|acute_leukemia_adult|3|diagnosis
+V: Hombre de 45 años con fatiga, fiebre, equimosis y gingivorragia de 3 semanas. Hemoglobina de 7.2 g/dL, plaquetas de 18,000 y leucocitos de 48,000 con 70% de blastos. Los blastos tienen bastones de Auer.
+P: ¿Cuál es el diagnóstico más probable?
++ Leucemia mieloide aguda || Más de 20% de blastos con bastones de Auer.
+- representativeness_heuristic | Leucemia linfoblástica aguda || También tiene blastos, pero los bastones de Auer son mieloides y es más frecuente en niños.
+- anchoring | Leucemia mieloide crónica || Se ancla en la leucocitosis, pero predominan formas maduras, no blastos.
+- availability_heuristic | Mononucleosis infecciosa || Da linfocitos atípicos, no blastos.
+- premature_closure | Reacción leucemoide por infección || Concluye por la fiebre, pero no hay blastos en una reacción leucemoide.
+- base_rate_fallacy | Leucemia de células peludas || Es rara y no tiene este perfil.
+- framing_effect | Linfoma no Hodgkin leucemizado || Suena hematológico, pero los bastones de Auer orientan a mieloide.
+- inattentional_blindness | Púrpura trombocitopénica inmune || No toma en cuenta los blastos.
+- focusing_illusion | Anemia aplásica || Se centra en las citopenias, pero no hay blastos en la aplasia.
+- belief_bias | Leucemia linfocítica crónica || Cree que toda leucemia del adulto es linfocítica crónica.
+E: La leucemia mieloide aguda es la leucemia aguda más frecuente en adultos. Se debe a la proliferación clonal de precursores mieloides que desplazan la hematopoyesis normal, con anemia, trombocitopenia y neutropenia funcional, que causan fatiga, sangrados e infecciones. El diagnóstico requiere 20% o más de blastos en sangre periférica o médula ósea. Los bastones de Auer son característicos del linaje mieloide. Se confirma con aspirado de médula, inmunofenotipo, citogenética y biología molecular, que definen el pronóstico y el tratamiento. La leucemia promielocítica es una variante con coagulación intravascular diseminada que se trata con ácido transretinoico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la leucemia mieloide aguda
+
+@ mi|hematology|acute_leukemia_adult|4|next_step
+V: Mujer de 35 años con leucemia promielocítica aguda recién diagnosticada. Tiene sangrado de mucosas, fibrinógeno de 80 mg/dL, dímero D muy elevado y tiempos de coagulación prolongados.
+P: ¿Cuál es el siguiente paso?
++ Iniciar de inmediato ácido transretinoico, con soporte de plaquetas, plasma y crioprecipitados || La leucemia promielocítica con coagulopatía es una urgencia.
+- anchoring | Esperar el resultado de la citogenética para iniciar tratamiento || Se ancla en la confirmación y retrasa un tratamiento que salva la vida.
+- availability_heuristic | Heparina por la coagulopatía || Puede empeorar el sangrado.
+- framing_effect | Solo transfusiones hasta que se estabilice || Suena de soporte, pero sin ácido transretinoico la coagulopatía persiste.
+- representativeness_heuristic | Quimioterapia de inducción estándar sin ácido transretinoico || No aprovecha el tratamiento dirigido.
+- premature_closure | Trasplante de médula ósea inmediato || No es el tratamiento inicial.
+- complexity_bias | Plasmaféresis urgente || No es el tratamiento.
+- status_quo_bias | Manejo ambulatorio con vigilancia || Ignora una urgencia hemorrágica.
+- belief_bias | Vitamina K como tratamiento principal de la coagulopatía || Cree que corrige una coagulopatía de consumo.
+- omission_bias | Retrasar el tratamiento por miedo al síndrome de diferenciación || El beneficio supera el riesgo, que se vigila y trata.
+E: La leucemia promielocítica aguda es un subtipo de leucemia mieloide aguda caracterizado por la translocación entre los cromosomas 15 y 17. Se asocia con frecuencia a coagulación intravascular diseminada e hiperfibrinólisis, con alto riesgo de sangrado grave y muerte temprana. Ante la sospecha clínica y morfológica, el ácido transretinoico debe iniciarse de inmediato, sin esperar la confirmación molecular, porque induce la diferenciación de los promielocitos y corrige la coagulopatía. Se combina con trióxido de arsénico o quimioterapia y soporte transfusional intensivo. Un efecto adverso es el síndrome de diferenciación, que se trata con dexametasona.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la leucemia promielocítica aguda
+
+@ mi|hematology|acute_leukemia_adult|4|complication_prognosis
+V: Hombre de 50 años con leucemia aguda y leucocitos de 160,000. Dos días después de iniciar quimioterapia presenta oliguria, calambres y arritmia. Potasio de 6.9 mEq/L, fósforo de 9.2 mg/dL, calcio de 6.8 mg/dL, ácido úrico de 14 mg/dL y creatinina de 3.1 mg/dL.
+P: ¿Cuál es la complicación que presenta?
++ Síndrome de lisis tumoral || Hiperpotasemia, hiperfosfatemia, hipocalcemia, hiperuricemia y lesión renal tras la quimioterapia.
+- anchoring | Nefrotoxicidad directa por quimioterapia || Se ancla en el fármaco, pero no explica el patrón metabólico.
+- availability_heuristic | Sepsis por neutropenia || Es frecuente, pero no explica las alteraciones electrolíticas.
+- representativeness_heuristic | Hiperparatiroidismo || Da alteraciones del calcio y fósforo, pero no este cuadro agudo.
+- premature_closure | Deshidratación por vómito || Concluye una causa prerrenal sin explicar el patrón.
+- base_rate_fallacy | Rabdomiólisis || Puede dar potasio alto, pero no se relaciona con la quimioterapia ni explica el fósforo.
+- framing_effect | Insuficiencia renal crónica agudizada || Suena renal, pero no hay antecedente.
+- inattentional_blindness | Hiperleucocitosis con leucostasis || No toma en cuenta las alteraciones electrolíticas.
+- focusing_illusion | Hipocalcemia por hipoparatiroidismo || Se centra en el calcio.
+- belief_bias | Reacción alérgica a la quimioterapia || Cree que todo efecto agudo es alergia.
+E: El síndrome de lisis tumoral se produce por la destrucción masiva de células tumorales, espontánea o tras iniciar el tratamiento, sobre todo en tumores con alta carga y proliferación, como leucemias agudas con hiperleucocitosis y linfoma de Burkitt. La liberación del contenido celular causa hiperpotasemia, hiperfosfatemia, hipocalcemia secundaria e hiperuricemia, con lesión renal aguda por depósito de ácido úrico y fosfato de calcio, arritmias y convulsiones. Se previene con hidratación intensa y alopurinol, o rasburicasa en alto riesgo. El tratamiento incluye manejo de la hiperpotasemia, rasburicasa y hemodiálisis si es refractario.
+R: Guía de Práctica Clínica de prevención y tratamiento del síndrome de lisis tumoral
+
+@ mi|hematology|acute_leukemia_adult|3|prevention_screening
+V: Hombre de 42 años con leucemia mieloide aguda y leucocitos de 95,000, a punto de iniciar quimioterapia de inducción. Función renal normal.
+P: ¿Cuál es la medida de prevención del síndrome de lisis tumoral más adecuada?
++ Hidratación intravenosa abundante y alopurinol o rasburicasa según el riesgo, con vigilancia de electrolitos || Es la profilaxis en riesgo intermedio a alto.
+- availability_heuristic | Bicarbonato para alcalinizar la orina en todos || Ya no se recomienda de rutina.
+- anchoring | Restricción de líquidos para proteger el corazón || Se ancla en otra preocupación y favorece la lesión renal.
+- framing_effect | Retrasar la quimioterapia hasta normalizar los leucocitos || Suena prudente, pero la quimioterapia es el tratamiento.
+- representativeness_heuristic | Corticosteroides profilácticos || No previenen la lisis.
+- premature_closure | Hemodiálisis profiláctica || No está indicada de rutina.
+- complexity_bias | Plasmaféresis previa a la quimioterapia || No es la medida estándar.
+- status_quo_bias | Sin profilaxis porque la función renal es normal || Ignora el alto riesgo.
+- belief_bias | Dieta baja en purinas como única medida || Cree que la dieta basta.
+- omission_bias | Evitar el alopurinol por posibles reacciones cutáneas || Pierde una protección importante.
+E: La prevención del síndrome de lisis tumoral se basa en estratificar el riesgo según el tipo de tumor, la carga tumoral, como leucocitos elevados o DHL alta, la función renal y la sensibilidad al tratamiento. En riesgo intermedio se indica hidratación intravenosa abundante para lograr una diuresis alta y alopurinol, que reduce la formación de ácido úrico. En riesgo alto se prefiere rasburicasa, que degrada el ácido úrico ya formado, salvo deficiencia de glucosa 6 fosfato deshidrogenasa. Se vigilan electrolitos, ácido úrico y creatinina cada 6 a 12 horas en los primeros días. La alcalinización urinaria ya no se recomienda.
+R: Guía de Práctica Clínica de prevención y tratamiento del síndrome de lisis tumoral

@@ -1,0 +1,175 @@
+@ mi|infectious_diseases|dengue|2|diagnosis
+V: Hombre de 25 años de Veracruz con fiebre de 39.5 grados de 3 días, cefalea retroocular, mialgias intensas, artralgias y exantema. Torniquete positivo. Plaquetas de 110,000 y leucocitos de 3,200. Sin dolor abdominal ni vómito.
+P: ¿Cuál es el diagnóstico más probable?
++ Dengue sin signos de alarma || Fiebre con cefalea retroocular, mialgias, exantema, leucopenia y prueba de torniquete positiva en zona endémica.
+- representativeness_heuristic | Chikungunya || Comparte fiebre y exantema, pero predomina la artritis intensa y persistente.
+- anchoring | Dengue grave || Se ancla en el dengue, pero no hay choque, sangrado grave ni daño orgánico.
+- availability_heuristic | Influenza || Es frecuente, pero no explica la leucopenia, el exantema y el torniquete positivo.
+- premature_closure | Zika || Da exantema y conjuntivitis con fiebre leve.
+- base_rate_fallacy | Leptospirosis || Es posible, pero el cuadro es típico de dengue.
+- framing_effect | Dengue con signos de alarma || Suena a mayor vigilancia, pero no hay signos de alarma.
+- inattentional_blindness | Fiebre tifoidea || No toma en cuenta el exantema y la leucopenia con trombocitopenia en zona de dengue.
+- focusing_illusion | Púrpura trombocitopénica inmune || Se centra en las plaquetas.
+- belief_bias | Paludismo || Cree que toda fiebre tropical es paludismo.
+E: El dengue es una enfermedad viral transmitida por el mosquito Aedes aegypti, endémica en gran parte de México. Se sospecha en personas de zonas endémicas con fiebre de dos a siete días y dos o más de los siguientes datos, náusea o vómito, exantema, cefalea o dolor retroocular, mialgias o artralgias, leucopenia o prueba de torniquete positiva. Se clasifica en dengue sin signos de alarma, con signos de alarma y dengue grave. En los primeros cinco días se confirma con antígeno NS1 o RT PCR, y después con IgM. El tratamiento es de soporte, con hidratación y paracetamol, evitando AINE y ácido acetilsalicílico.
+R: Guía de Práctica Clínica de diagnóstico y manejo del dengue ;; Norma Oficial Mexicana para la vigilancia, prevención y control de enfermedades transmitidas por vector
+
+@ mi|infectious_diseases|dengue|3|data_interpretation
+V: Mujer de 30 años con dengue en el quinto día. La fiebre cedió ayer. Hoy presenta dolor abdominal intenso y continuo, vómito persistente, somnolencia y hepatomegalia de 3 cm. Hematocrito de 48%, previamente de 39%, y plaquetas de 40,000.
+P: ¿Cuál es la interpretación correcta de su estado?
++ Dengue con signos de alarma en fase crítica, que requiere hospitalización y líquidos intravenosos || Dolor abdominal, vómito persistente, letargo, hepatomegalia y hemoconcentración con descenso de plaquetas.
+- anchoring | Mejoría porque la fiebre desapareció || Se ancla en la fiebre, pero la defervescencia marca la fase crítica.
+- availability_heuristic | Dengue sin signos de alarma con manejo en casa || Subestima los signos presentes.
+- framing_effect | Dengue grave por las plaquetas menores de 50,000 || La cifra de plaquetas no define gravedad por sí sola.
+- representativeness_heuristic | Apendicitis aguda coincidente || El dolor abdominal es un signo de alarma del dengue.
+- premature_closure | Transfundir plaquetas como prioridad || Las plaquetas se transfunden solo con sangrado activo importante.
+- base_rate_fallacy | Hepatitis viral aguda || Es menos probable en este contexto.
+- inattentional_blindness | Deshidratación leve por vómito || No reconoce la hemoconcentración por fuga plasmática.
+- focusing_illusion | Colecistitis acalculosa como diagnóstico principal || Se centra en el dolor abdominal.
+- belief_bias | Dengue hemorrágico porque hay riesgo de sangrar || Cree que el riesgo de sangrado define el manejo.
+E: El dengue tiene tres fases, febril, crítica y de recuperación. La fase crítica inicia con la defervescencia, generalmente entre el tercer y séptimo día, y es cuando aumenta la permeabilidad capilar con riesgo de fuga plasmática y choque. Los signos de alarma son dolor abdominal intenso y continuo, vómito persistente, acumulación clínica de líquidos, sangrado de mucosas, letargo o irritabilidad, hepatomegalia mayor de 2 cm y aumento del hematocrito con descenso rápido de plaquetas. Su presencia indica hospitalización y cristaloides intravenosos con vigilancia estrecha del hematocrito y la diuresis.
+R: Guía de Práctica Clínica de diagnóstico y manejo del dengue
+
+@ mi|infectious_diseases|dengue|3|initial_treatment
+V: Hombre de 22 años con dengue en el cuarto día, sin signos de alarma, tolera la vía oral y tiene diuresis adecuada. Refiere fiebre y dolor muscular intenso.
+P: ¿Cuál es el tratamiento inicial más adecuado?
++ Manejo en casa con hidratación oral abundante, paracetamol y explicar los signos de alarma || Dengue sin signos de alarma con tolerancia oral.
+- availability_heuristic | Ibuprofeno para la fiebre y el dolor || Los AINE aumentan el riesgo de sangrado.
+- anchoring | Hospitalización con antibiótico intravenoso || Se ancla en la fiebre alta, pero es viral.
+- framing_effect | Ácido acetilsalicílico para prevenir trombosis || Suena preventivo, pero aumenta el riesgo de sangrado.
+- representativeness_heuristic | Corticosteroides para el dolor muscular || No tienen beneficio en dengue.
+- premature_closure | Transfusión profiláctica de plaquetas || No está indicada.
+- complexity_bias | Antiviral específico intravenoso || No existe un antiviral específico.
+- status_quo_bias | Reposo absoluto sin líquidos para no sobrecargar || Favorece la deshidratación.
+- belief_bias | Inyecciones intramusculares de analgésicos || Causan hematomas por la trombocitopenia.
+- omission_bias | Sin seguimiento porque se ve bien || Puede progresar a la fase crítica.
+E: El paciente con dengue sin signos de alarma que tolera líquidos y orina adecuadamente puede manejarse en casa. Se indica reposo relativo, hidratación oral abundante con suero oral, agua y jugos, y paracetamol para la fiebre y el dolor, evitando AINE, ácido acetilsalicílico, corticosteroides e inyecciones intramusculares. Es fundamental explicar los signos de alarma y acudir de inmediato si aparecen, sobre todo cuando cede la fiebre. Se recomienda revaloración diaria con biometría hemática hasta salir de la fase crítica. También se indica usar mosquitero para evitar transmitir el virus a otros mosquitos.
+R: Guía de Práctica Clínica de diagnóstico y manejo del dengue
+
+@ mi|infectious_diseases|dengue|4|next_step
+V: Mujer de 27 años con dengue en el quinto día. Está fría, con llenado capilar de 4 segundos, pulso débil, presión arterial de 90/76 mmHg y diuresis escasa. Hematocrito de 52%.
+P: ¿Cuál es el siguiente paso?
++ Bolo de cristaloide de 20 mL/kg en 15 a 30 minutos y revalorar, en área de choque || Dengue grave con choque compensado y presión de pulso estrecha.
+- anchoring | Esperar a que la presión sistólica baje de 80 para dar líquidos || Se ancla en la cifra y no reconoce la presión de pulso estrecha.
+- availability_heuristic | Transfundir plaquetas de inmediato || No corrige el choque por fuga plasmática.
+- framing_effect | Diurético para mejorar la diuresis || Suena lógico, pero empeora el choque.
+- representativeness_heuristic | Norepinefrina como primera medida sin líquidos || El choque es hipovolémico por fuga.
+- premature_closure | Corticosteroides en dosis altas || No tienen beneficio.
+- complexity_bias | Oxigenación por membrana extracorpórea || Medida extrema.
+- status_quo_bias | Continuar líquidos orales || Insuficiente en el choque.
+- belief_bias | Coloides como primera elección en todos || Cree que los coloides son mejores de inicio.
+- omission_bias | Observar una hora más antes de actuar || Retrasa la reanimación.
+E: El dengue grave incluye choque por fuga plasmática, acumulación de líquidos con dificultad respiratoria, sangrado grave o daño orgánico grave. El choque inicial suele ser compensado, con presión arterial normal o con presión de pulso estrecha de 20 mmHg o menos, extremidades frías, llenado capilar lento, taquicardia y oliguria, y la hipotensión es un signo tardío. El tratamiento es reanimación con cristaloides, bolo de 20 mL/kg en 15 a 30 minutos, revalorando clínica y hematocrito. Si mejora se reduce gradualmente el volumen. Si persiste el choque y el hematocrito baja, se sospecha sangrado y se transfunde. El exceso de líquidos causa sobrecarga.
+R: Guía de Práctica Clínica de diagnóstico y manejo del dengue
+
+@ mi|infectious_diseases|dengue|2|prevention_screening
+V: En una colonia de Tabasco se notifican varios casos de dengue en las últimas dos semanas.
+P: ¿Cuál es la medida más eficaz para la prevención de nuevos casos en la comunidad?
++ Eliminar criaderos del mosquito, como recipientes con agua estancada, con participación comunitaria || Controla al vector Aedes aegypti.
+- availability_heuristic | Vacunar a toda la población con la vacuna contra fiebre amarilla || No protege contra dengue.
+- anchoring | Tratar a toda la comunidad con antibiótico profiláctico || Se ancla en la infección, pero es viral.
+- framing_effect | Fumigar solo una vez al año || Suena a control, pero es insuficiente sin eliminar criaderos.
+- representativeness_heuristic | Aislar a los enfermos en el hospital como medida única || Ayuda poco si el vector sigue presente.
+- status_quo_bias | Esperar a que termine la temporada de lluvias || No previene casos.
+- premature_closure | Quimioprofilaxis con cloroquina || Es para paludismo.
+- complexity_bias | Liberar mosquitos modificados como única medida inmediata || Es una estrategia en estudio, no la medida básica.
+- belief_bias | Hervir el agua de beber || Previene enfermedades diarreicas, no dengue.
+- omission_bias | Ninguna medida porque el dengue es leve en la mayoría || Ignora el riesgo de dengue grave.
+E: El dengue se transmite por la picadura de mosquitos Aedes aegypti infectados, que se reproducen en recipientes con agua limpia estancada, como llantas, cubetas, floreros, tinacos destapados y botellas. La medida más eficaz es el control del vector mediante la eliminación de criaderos, con la estrategia de lavar, tapar, voltear y tirar, con participación de la comunidad. Se complementa con larvicidas, nebulización en zonas de transmisión activa, mosquiteros, repelentes y ropa que cubra la piel. La vigilancia epidemiológica y la notificación oportuna de casos permiten focalizar las acciones. Existen vacunas autorizadas en algunos países con indicaciones específicas.
+R: Norma Oficial Mexicana para la vigilancia, prevención y control de enfermedades transmitidas por vector
+
+@ mi|infectious_diseases|dengue|3|complication_prognosis
+V: Mujer de 35 años con dengue que recibió grandes volúmenes de líquidos intravenosos durante la fase crítica. En el séptimo día la fiebre ya cedió, recupera el apetito y la diuresis aumenta, pero presenta disnea, crépitos bilaterales y derrame pleural.
+P: ¿Cuál es la complicación más probable en esta fase?
++ Sobrecarga hídrica por reabsorción del líquido extravasado en la fase de recuperación || La reabsorción con líquidos excesivos causa edema pulmonar.
+- anchoring | Neumonía bacteriana nosocomial || Se ancla en la disnea, pero no hay fiebre y coincide con la recuperación.
+- availability_heuristic | Reinfección por otro serotipo || No ocurre en días.
+- representativeness_heuristic | Choque por dengue recurrente || La paciente está en recuperación con diuresis aumentada.
+- premature_closure | Tromboembolia pulmonar || Concluye sin factores ni datos.
+- base_rate_fallacy | Miocarditis viral como causa principal || Es posible, pero menos probable que la sobrecarga.
+- framing_effect | Síndrome de dificultad respiratoria por sepsis || Suena grave, pero no hay sepsis.
+- inattentional_blindness | Crisis asmática || No relaciona los líquidos administrados.
+- focusing_illusion | Insuficiencia renal aguda || Se centra en los líquidos, pero la diuresis aumenta.
+- belief_bias | Hemorragia pulmonar por plaquetas bajas || Cree que todo síntoma pulmonar en dengue es sangrado.
+E: En la fase de recuperación del dengue, el líquido que se extravasó durante la fase crítica regresa al espacio intravascular. Si se administraron líquidos en exceso o no se redujeron a tiempo, esto provoca sobrecarga de volumen con edema pulmonar, derrame pleural, ascitis e hipertensión. Los datos de recuperación son mejoría del estado general, regreso del apetito, estabilidad hemodinámica, aumento de la diuresis y descenso del hematocrito. En esta fase se deben suspender o reducir los líquidos intravenosos y, si hay sobrecarga con estabilidad hemodinámica, dar diuréticos. Ajustar los líquidos según la fase previene esta complicación.
+R: Guía de Práctica Clínica de diagnóstico y manejo del dengue
+
+@ mi|infectious_diseases|sepsis|3|initial_treatment
+V: Hombre de 67 años con pielonefritis. Llega con temperatura de 39.4 grados, frecuencia cardiaca de 118 lpm, frecuencia respiratoria de 26 rpm, presión arterial de 84/50 mmHg y confusión. Lactato de 4.2 mmol/L.
+P: ¿Cuál es el tratamiento inicial en la primera hora?
++ Hemocultivos, antibiótico de amplio espectro y 30 mL/kg de cristaloide, con vasopresor si persiste la hipotensión || Corresponde al paquete de la primera hora en sepsis con choque.
+- anchoring | Esperar el resultado del urocultivo para elegir antibiótico || Se ancla en el cultivo y retrasa el antibiótico.
+- availability_heuristic | Antipirético y vigilancia || Trata la fiebre sin la infección.
+- framing_effect | Corticosteroide en dosis altas como primera medida || Suena potente, pero se reserva para choque refractario.
+- representativeness_heuristic | Antibiótico oral y egreso || Asocia pielonefritis con manejo ambulatorio.
+- premature_closure | Iniciar dopamina como vasopresor de elección || La norepinefrina es la de elección.
+- complexity_bias | Hemofiltración como medida inicial || No es el tratamiento inicial.
+- status_quo_bias | Líquidos de mantenimiento a 100 mL por hora || Insuficiente en el choque.
+- belief_bias | Bicarbonato para el lactato elevado || Cree que corregir el lactato con bicarbonato mejora el pronóstico.
+- omission_bias | Retrasar el antibiótico hasta tener tomografía || Cada hora de retraso aumenta la mortalidad.
+E: La sepsis es una disfunción orgánica que pone en riesgo la vida, causada por una respuesta desregulada a la infección, y el choque séptico añade la necesidad de vasopresores para mantener una presión arterial media de 65 mmHg y lactato mayor de 2 mmol/L pese a líquidos. El manejo de la primera hora incluye medir lactato, tomar hemocultivos antes del antibiótico sin retrasarlo, administrar antibiótico de amplio espectro, dar 30 mL/kg de cristaloide en hipotensión o lactato de 4 o más, e iniciar norepinefrina si la presión no mejora. Se debe identificar y controlar el foco infeccioso.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la sepsis grave y choque séptico en el adulto
+
+@ mi|infectious_diseases|sepsis|3|treatment_of_choice
+V: Mujer de 58 años con choque séptico por neumonía. Recibió 30 mL/kg de cristaloide y persiste con presión arterial media de 58 mmHg.
+P: ¿Cuál es el vasopresor de elección?
++ Norepinefrina || Es el vasopresor de primera línea en el choque séptico.
+- availability_heuristic | Dopamina || Se usó mucho, pero causa más arritmias.
+- anchoring | Dobutamina || Se ancla en el apoyo cardiaco, pero es un inotrópico, no un vasopresor de primera línea.
+- representativeness_heuristic | Adrenalina como primera opción || Es una alternativa o agregado, no la primera.
+- framing_effect | Más líquidos hasta 100 mL/kg antes de cualquier vasopresor || Suena a reanimar más, pero causa sobrecarga.
+- premature_closure | Vasopresina como primera opción única || Se agrega para reducir la dosis de norepinefrina.
+- complexity_bias | Azul de metileno de inicio || Es una terapia de rescate.
+- status_quo_bias | Fenilefrina como fármaco base || Es una opción limitada.
+- belief_bias | Hidrocortisona sola sin vasopresor || Cree que el esteroide sustituye al vasopresor.
+- omission_bias | Retrasar el vasopresor hasta colocar catéter central || Se puede iniciar por vía periférica temporalmente.
+E: En el choque séptico, cuando la hipotensión persiste después de la reanimación inicial con líquidos, se inicia un vasopresor para alcanzar una presión arterial media de 65 mmHg. La norepinefrina es el vasopresor de elección porque aumenta el tono vascular con menos arritmias que la dopamina. Si se requieren dosis altas, se agrega vasopresina para reducir la dosis de norepinefrina, y la adrenalina es otra alternativa. La dobutamina se usa cuando hay disfunción cardiaca con hipoperfusión persistente. La hidrocortisona se considera en choque que requiere vasopresores de forma sostenida. Puede iniciarse por vena periférica mientras se coloca un catéter central.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la sepsis grave y choque séptico en el adulto
+
+@ mi|infectious_diseases|sepsis|2|data_interpretation
+V: Hombre de 54 años con fiebre por celulitis. Frecuencia respiratoria de 24 rpm, presión arterial sistólica de 96 mmHg y está desorientado.
+P: ¿Cuál es la interpretación correcta de la escala qSOFA en este paciente?
++ qSOFA de 3, que indica alto riesgo de mal pronóstico y obliga a buscar disfunción orgánica || Frecuencia respiratoria de 22 o más, sistólica de 100 o menos y alteración mental.
+- anchoring | qSOFA de 1, bajo riesgo || Subestima los criterios presentes.
+- inattentional_blindness | qSOFA de 2 sin contar la desorientación || Pasa por alto un criterio.
+- framing_effect | qSOFA de 3 que confirma choque séptico || Lo eleva a un diagnóstico que requiere otros datos.
+- availability_heuristic | La escala requiere lactato para calcularse || El qSOFA es clínico.
+- representativeness_heuristic | qSOFA de 4 por la fiebre || La fiebre no forma parte del qSOFA.
+- base_rate_fallacy | Bajo riesgo porque la celulitis suele ser leve || Usa la frecuencia general.
+- premature_closure | qSOFA de 3, pero puede irse a casa con antibiótico oral || Calcula bien y subestima el manejo.
+- belief_bias | El qSOFA reemplaza a la escala SOFA para diagnosticar sepsis || Cree que diagnostica, cuando solo identifica riesgo.
+- omission_bias | Se requieren hemocultivos antes de calcularlo || El cálculo no depende de estudios.
+E: La escala qSOFA es una herramienta clínica rápida que identifica pacientes con infección y mayor riesgo de mala evolución. Asigna un punto a cada criterio, frecuencia respiratoria de 22 o más, alteración del estado mental y presión sistólica de 100 mmHg o menos. Un puntaje de 2 o más indica alto riesgo y debe motivar la búsqueda de disfunción orgánica con la escala SOFA, que define sepsis con un aumento de 2 o más puntos. Ya no se recomienda usar qSOFA como única herramienta de tamizaje por su baja sensibilidad. Este paciente requiere manejo hospitalario urgente.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la sepsis grave y choque séptico en el adulto
+
+@ mi|infectious_diseases|sepsis|3|risk_factor
+V: Hombre de 60 años con choque séptico de origen abdominal. Persiste la fiebre pese a antibióticos adecuados por 72 horas. La tomografía muestra una colección de 8 cm en la corredera derecha.
+P: ¿Cuál es la causa más probable de la falta de respuesta?
++ Falta de control del foco infeccioso, que requiere drenaje de la colección || Un absceso requiere drenaje además del antibiótico.
+- anchoring | Resistencia bacteriana como única explicación || Se ancla en el antibiótico e ignora la colección.
+- availability_heuristic | Fiebre por fármacos || Es posible, pero la colección explica el cuadro.
+- representativeness_heuristic | Infección por hongos como primera causa || Debe considerarse, pero primero se controla el foco.
+- premature_closure | Dosis baja del antibiótico || Cambiar la dosis no resuelve un absceso.
+- framing_effect | Insuficiencia suprarrenal || Suena relacionada con el choque, pero no explica la fiebre persistente con absceso.
+- base_rate_fallacy | Linfoma oculto || Es poco probable.
+- inattentional_blindness | Tromboflebitis por catéter || No toma en cuenta la colección documentada.
+- focusing_illusion | Neumonía nosocomial || Se centra en otra infección.
+- belief_bias | Fiebre central por estrés || Cree que la fiebre persistente es por estrés.
+E: El control del foco infeccioso es un pilar del tratamiento de la sepsis, junto con el antibiótico y el soporte hemodinámico. Incluye drenar abscesos, desbridar tejido necrótico, retirar dispositivos infectados y corregir perforaciones o fuentes de contaminación. Se recomienda realizarlo lo antes posible, idealmente en las primeras 6 a 12 horas tras el diagnóstico, con la intervención menos invasiva eficaz, como el drenaje percutáneo guiado por imagen. Un absceso no se resuelve solo con antibióticos, porque estos penetran mal en las colecciones. Ante falta de respuesta se buscan colecciones no drenadas, resistencia o infecciones por hongos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la sepsis grave y choque séptico en el adulto
+
+@ mi|infectious_diseases|sepsis|4|treatment_of_choice
+V: Mujer de 45 años con neutropenia por quimioterapia, neutrófilos de 200, y fiebre de 38.6 grados sin foco aparente. Presión arterial normal. Sin catéter central infectado aparente.
+P: ¿Cuál es el tratamiento de elección inmediato?
++ Antibiótico betalactámico antipseudomónico, como cefepime o piperacilina con tazobactam, en la primera hora || Neutropenia febril es una urgencia que requiere cobertura empírica de Pseudomonas.
+- anchoring | Esperar hemocultivos positivos para iniciar antibiótico || Se ancla en la confirmación y retrasa el tratamiento.
+- availability_heuristic | Ceftriaxona sola || No cubre Pseudomonas.
+- representativeness_heuristic | Vancomicina sola || No cubre bacterias gramnegativas.
+- framing_effect | Antifúngico empírico de inicio en todos || Suena amplio, pero se agrega si la fiebre persiste.
+- premature_closure | Factor estimulante de colonias como único tratamiento || No sustituye al antibiótico.
+- complexity_bias | Cuatro antibióticos de amplio espectro desde el inicio || Exceso sin indicación.
+- status_quo_bias | Paracetamol y observar 24 horas || Retrasa el tratamiento de una urgencia.
+- belief_bias | Aislamiento sin antibiótico es suficiente || Cree que el aislamiento previene la sepsis.
+- omission_bias | Evitar antibióticos para no generar resistencia || Pone en riesgo la vida.
+E: La neutropenia febril se define por fiebre de 38.3 grados en una medición o de 38 grados sostenida y neutrófilos menores de 500 o que se espera bajen de esa cifra. Es una urgencia oncológica porque la infección puede progresar rápido a sepsis. Tras tomar hemocultivos, se debe iniciar en la primera hora un betalactámico con actividad antipseudomónica, como cefepime, piperacilina con tazobactam o un carbapenémico. La vancomicina se agrega si hay inestabilidad, sospecha de infección de catéter, neumonía, piel o colonización por resistentes. Los antifúngicos se agregan si la fiebre persiste de cuatro a siete días. Se estratifica el riesgo con la escala MASCC.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la neutropenia febril en el paciente adulto con cáncer
