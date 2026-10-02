@@ -4,8 +4,8 @@
 
 - Fase 0 aprobada por Ricardo el 2026-10-01
 - Fase A en curso desde el 2026-10-01. Ricardo la aprobó y pidió ejecutar solo la Fase A y detenerse al terminar
-- Bloque terminado más reciente. Bloque 6 (rol y base demo)
-- Siguiente paso. Bloque 7 (npm run dev con app y proxy) y luego el cierre de 15.1
+- Bloque terminado más reciente. Bloque 7 (npm run dev)
+- Siguiente paso. Cierre de la Fase A según 15.1 (pruebas, capturas, revisión independiente, PROGRESS.md y commit)
 
 ## Fase A. Esqueleto, datos y proxy
 
@@ -21,7 +21,7 @@
 - [x] 4. PWA instalable con modo sin conexión básico
 - [x] 5. Proxy Hono con /health, modo simulado y lectura de server/.env.local
 - [x] 6. Selector de rol sin login e interruptor de base real o demo
-- [ ] 7. npm run dev con app y proxy juntos
+- [x] 7. npm run dev con app y proxy juntos
 
 ### Bitácora por bloque
 - Bloque 1. Versiones verificadas con npm view, iguales a D-020. Dependencias nuevas en D-032. Chromium de Playwright dentro del proyecto (D-033). Tres proyectos de TypeScript (D-034). typecheck, lint, 1 prueba unitaria y 1 prueba e2e en teléfono y escritorio pasan. eval-ai, demo-seed y demo-reset existen como marcadores que fallan con un aviso de la fase en que llegan
@@ -30,6 +30,7 @@
 - Bloque 4. vite-plugin-pwa con manifest en español, íconos provisionales y caché completa de la app (D-039). Aviso de versión nueva sin recarga automática. e2e de manifest, service worker activo, instalable según Chromium y apertura sin conexión con aviso, en teléfono y escritorio. 66 e2e en total
 - Bloque 5. Proxy Hono en server/ con /health, modo real o simulado según server/.env.local, --mock para forzar simulado, Host solo localhost y tamaño máximo (D-040). server/.env.example sin valor. Cliente en src/ai/client.ts y etiqueta del modo de IA en encabezado y Perfil. 16 pruebas nuevas del proxy y del cliente, entre ellas la que revisa que escucha solo en 127.0.0.1. e2e que confirma IA simulada y cero peticiones fuera de localhost
 - Bloque 6. Pantalla 26 con selector de rol sin login que lleva a la entrada de cada rol. Navegación propia de médico y admin. Guarda de rol en las áreas de médico (médico y admin) y admin (solo admin). Interruptor Mi cuenta o Demostración en Perfil, con franja Datos simulados en toda pantalla de la demo y botón para volver. Perfil abre la base activa y dice su nombre. 17 pruebas unitarias de app y 76 e2e
+- Bloque 7. npm run dev usa concurrently para levantar la app en 127.0.0.1:5173 y el proxy en 127.0.0.1:8787. npm run check:dev lo comprueba de punta a punta (app, proxy y /api de la app hacia el proxy) y apaga todo al terminar. Pasó
 
 ## Fase 0. Entrevista, entorno y plan
 
