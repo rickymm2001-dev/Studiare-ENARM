@@ -5,8 +5,8 @@
 - Fase 0 aprobada por Ricardo el 2026-10-01
 - Fase A aprobada por Ricardo el 2026-10-02
 - Fase B en curso desde el 2026-10-02. Ricardo la aprobó junto con la Fase A
-- Bloque terminado más reciente. Bloque 4 (behavior, difficulty y rasch)
-- Siguiente paso. Bloque 5 (topics, bias, forgetting y agreement)
+- Bloque terminado más reciente. Bloque 5 (topics, bias, forgetting y agreement)
+- Siguiente paso. Bloque 6 (session, planner, streak, xp y party)
 
 ## Fase B. Motores núcleo, alumnos simulados y contenido demo
 
@@ -22,7 +22,7 @@
 - [x] 2. fsrs y mcqGrade
 - [x] 3. sampler, distractors y structure
 - [x] 4. behavior, difficulty (Elo) y rasch en Web Worker
-- [ ] 5. topics, bias, forgetting y agreement
+- [x] 5. topics, bias, forgetting y agreement
 - [ ] 6. session, planner, streak, xp y party
 - [ ] 7. Taxonomías y diccionarios en JSON
 - [ ] 8. Contenido demo, 300 preguntas en 6 lotes y 4 mazos con 200 tarjetas
@@ -34,6 +34,7 @@
 - Bloque 2. src/engines/fsrs.ts con ts-fsrs 5, modo examen, retención de 0.93 en los últimos 30 días, sanguijuelas, cola del día con límites y hermanas enterradas, y carga futura a 30 y 60 días (D-044). src/engines/mcqGrade.ts con la tabla de 7.1. src/engines/studyDay.ts con corte a las 4 a. m. de Mérida. Propiedades con fast-check. Otra vez nunca vence después que Bien, nada vence después del ENARM en modo examen, y la tabla de opción múltiple es determinista y completa contra un oráculo escrito desde 7.1. 50 pruebas de motores
 - Bloque 3. src/engines/sampler.ts con los modos canónico, diverso, dirigido y estratificado, correcta en la posición menos usada y regla de 200 exposiciones para variantes en el examen. src/engines/distractors.ts con atracción, intervalo de Wilson y no funcional bajo 5% tras 100 exposiciones. src/engines/structure.ts con polaridad, tarea, formato, doble negación, rangos de resaltado sobre el texto original y probable mala lectura. El diccionario de negaciones y tareas se adelantó del bloque 7 a src/demo/content/structure-dict.json porque el motor lo necesita, marcado pendiente de revisión médica, con su esquema en src/data/schemas/content.ts. Propiedades del muestreo con fast-check. 85 pruebas de motores
 - Bloque 4. src/engines/behavior.ts con ritmo personal, puntaje z, adivinanza rápida, percentil 25, dirección de cambios, fatiga entre sesiones largas, distracción, franjas horarias y calibración de la confianza. src/engines/difficulty.ts con Elo, estados de calibración, bandas y modo adaptativo. src/engines/rasch.ts con JML y corrección de Wright, en un Web Worker con Comlink (src/workers). Correlación de Pearson en stats. En pruebas de humo, Rasch recupera dificultades con r mayor a 0.95 con datos completos y mayor a 0.9 con 40% de cobertura, y Elo con r mayor a 0.8 (D-045). La recuperación formal de 14.2 llega en el bloque 10. 109 pruebas de motores y worker
+- Bloque 5. src/engines/topics.ts con dominio por tema encogido hacia su rama, prioridades con porqué y acción, y análisis por estructura. src/engines/bias.ts con atracción por etiqueta contra la línea base y 7 indicadores de conducta (D-042, D-046). src/engines/forgetting.ts con las 9 reglas de 7.9, causa reportada contra señales y patrones de 5 hallazgos en 14 días. src/engines/agreement.ts con muestra de 20%, kappa global y por etiqueta, y vocabulario sesgos o trampas. Pruebas de humo de detección de sesgo sembrado sin falsos positivos y de encogimiento por tema. 135 pruebas de motores, 207 en total
 
 ## Fase A. Esqueleto, datos y proxy
 

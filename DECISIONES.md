@@ -354,3 +354,22 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Elo con factor K que baja con las respuestas, K(n) = máx(0.04, 0.4 / √(1 + n/20)) (J). Se ajusta con la recuperación de parámetros si no llega a la meta
 - Escala del médico a logit, 1 → −2, 2 → −1, 3 → 0, 4 → 1 y 5 → 2. Bandas fácil, media, difícil y muy difícil cortadas en −1, 0 y 1 (J)
 - Rasch con JML como dice D-025, con exclusión iterativa de puntajes extremos, dificultades centradas en 0 y corrección de Wright. Corre en un Web Worker con Comlink. La prueba usa un canal de mensajes en el mismo hilo para probar el protocolo. El worker se usa en la interfaz desde la Fase C o D
+
+### D-046. Temas, sesgos, olvidos y acuerdo
+- Fecha 2026-10-02. Origen C
+- Temas. Prioridad = (1 − dominio) × peso del tema en el ENARM × (2 − retrievability promedio de sus tarjetas). Sin tarjetas el factor es 1. Solo entran a las prioridades los temas que ya dejaron de calibrar. Acción. Repasar tarjetas si la retrievability es menor a 0.85, simulador del tema si el dominio es menor a 0.6 y, si no, un reto (J)
+- Estructura. Mismo modelo que temas, con 20 respuestas mínimas por categoría y la regla del intervalo
+- Sesgos por distractor. Solo la etiqueta primaria cuenta (D-029). El mínimo de 40 errores con etiqueta es del alumno en total, no por etiqueta. La línea base viene de alumnos simulados mientras no haya población real, y la salida dice su fuente
+- Indicadores de conducta (D-042), pendientes de revisión médica (J)
+  - Sobreconfianza. Errores entre las respuestas con Seguro
+  - Posición serial. Errores en los que eligió la primera o la última opción
+  - Statu quo. Primera elección incorrecta, sin Seguro, que no cambió
+  - Costo hundido. Respuestas con tiempo mayor a 2 desviaciones de su ritmo
+  - Falacia del apostador. Errores cuando la correcta repite la posición de la anterior, contra su propia tasa de error
+  - Ilusión de agrupamiento. Elegir la misma posición que en la pregunta anterior
+  - Zeigarnik. Errores justo después de una pregunta que lo atoró, contra su propia tasa de error
+  - Fatiga de decisión. La señal de fatiga del motor behavior
+  - Cada indicador calibra hasta 30 casos y marca patrón probable solo si el intervalo de Wilson supera la línea base
+- Olvidos. Las acciones de 7.9 son más que la lista cerrada de 8.2, porque incluyen repetir pronto, bajar el ritmo y repasar el tema base. La lista de 8.2 sigue siendo la única que puede proponer el LLM
+- Olvido esperado con retrievability predicha menor a 0.8 tras 21 días o más (J). No forma patrones ni alarma
+- Acuerdo. Mientras no exista kappa (sin doble etiquetado), la interfaz dice trampas y no sesgos, que es la lectura honesta de 4.4. Se pregunta a Ricardo al cerrar la fase
