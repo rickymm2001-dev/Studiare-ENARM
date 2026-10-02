@@ -46,7 +46,7 @@
 - Marco compacto a todo lo ancho, nivel junto al título, Configuración en el riel y botones de guardar (D-071)
 - Elegir qué repasar por modo, mazo, troncal y subespecialidad, y cambiar sin perder avance (D-072)
 - Análisis docente del ENARM en docs/ANALISIS_DOCENTE_ENARM.md y protección del contenido al final (D-073)
-- Conócete en Progreso con el motor de autoconocimiento, 30 hallazgos posibles en tres áreas con acción concreta (D-074). 346 pruebas pasan
+- Conócete en Progreso con el motor de autoconocimiento, 19 lecturas en tres áreas más un foco por cada trampa detectada con acción concreta (D-074). 346 pruebas pasan
 - Siguiente. Fase B lotes 5 y 6 del banco con trampas explícitas y luego Fase D con IA en modo simulado, como pidió Ricardo. Después bloque 5 de pagos
 - Pendiente de Ricardo. Crear el proyecto de Supabase con docs/SUPABASE.md y pasar las llaves públicas
 
