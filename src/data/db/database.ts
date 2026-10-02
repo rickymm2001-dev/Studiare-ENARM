@@ -24,7 +24,7 @@ import type {
 } from '../schemas/caches';
 import type { Card, Deck, Note } from '../schemas/decks';
 import type { AppEvent } from '../schemas/events';
-import type { Consent, OfficialScore, Subscription, User } from '../schemas/people';
+import type { Account, Consent, OfficialScore, Subscription, User } from '../schemas/people';
 import { DATABASE_NAMES, type DatabaseKind } from '../databases';
 import { storesFor } from './tables';
 
@@ -54,6 +54,7 @@ export interface EnarmTables {
   memberships: StrictTable<Membership, 'id'>;
   challenges: StrictTable<Challenge, 'id'>;
   widgetLayouts: StrictTable<WidgetLayout, 'userId'>;
+  accounts: StrictTable<Account, 'userId'>;
   simTruth: StrictTable<SimTruth, 'userId'>;
   cardStateCache: StrictTable<CardStateCache, 'cardId'>;
   itemStatsCache: StrictTable<ItemStatsCache, 'questionVersionId'>;
@@ -72,7 +73,8 @@ export class ImmutableEventError extends Error {
 }
 
 /** Versión actual del esquema de Dexie. Cada cambio de índices sube esta versión con su migración */
-export const DB_VERSION = 1;
+// 2 agrega la tabla accounts (D-068). Dexie crea la tabla nueva sin tocar los datos
+export const DB_VERSION = 2;
 
 export function createEnarmDb(kind: DatabaseKind, options?: { name?: string }): EnarmDb {
   const db = new Dexie(options?.name ?? DATABASE_NAMES[kind]) as EnarmDb;

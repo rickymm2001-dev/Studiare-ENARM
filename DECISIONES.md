@@ -556,3 +556,13 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Cada botón (Difícil, Bien y Fácil) tiene su multiplicador de 50% a 200%. 100% es lo recomendado y es lo que calcula FSRS. La retención de 90% también queda marcada como la recomendada por los creadores de FSRS
 - Un botón en Configuración regresa todo a lo recomendado
 - Los perfiles creados antes guardaron el tope anterior. Se actualizan con ese botón
+
+### D-068. Portada de venta, cuenta con correo, datos del perfil y avatares
+- Fecha 2026-10-02. Origen R (D-060), implementación de Claude
+- Sin sesión, la raíz muestra la portada de venta. Qué es Studiare, qué lo hace distinto, para quién es, planes con precios de ejemplo, preguntas frecuentes y botón de registro. Va sin navegación
+- La bienvenida tiene dos pestañas. Crear cuenta (alias, correo, meta diaria, datos opcionales y aviso de privacidad) y Ya tengo cuenta (entrar con el correo). Los perfiles creados antes de las cuentas se pueden abrir desde ahí y agregar su correo en Perfil
+- Los datos de cuenta viven en una tabla nueva, accounts, aparte del perfil seudónimo. Así el correo y los datos personales nunca viajan a la IA ni a Party. La base local sube a la versión 2 y Dexie agrega la tabla sin tocar lo demás. Exportar mis datos ya incluye la cuenta
+- Datos opcionales. Año de nacimiento, sexo, estado, situación actual, intento en el ENARM y especialidad objetivo. Cada uno con prefiero no decir
+- La lista de especialidades de entrada directa sale de fuentes públicas del 50º ENARM. Está por verificar contra la convocatoria oficial, que no se pudo abrir desde el entorno de desarrollo
+- Foto de perfil con iniciales, uno de 12 avatares médicos generados por la app (bata, estetoscopio, gorro, lentes, espejo frontal), sin librerías ni imágenes de terceros, o una foto propia reducida a 256 px
+- Sigue sin contraseña porque no hay servidor. Con Supabase el correo se verifica y se agrega contraseña o acceso con Google

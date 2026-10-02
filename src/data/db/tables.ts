@@ -32,6 +32,7 @@ import {
 import { CardSchema, DeckSchema, NoteSchema } from '../schemas/decks';
 import { AppEventSchema } from '../schemas/events';
 import {
+  AccountSchema,
   ConsentSchema,
   OfficialScoreSchema,
   SubscriptionSchema,
@@ -49,6 +50,8 @@ interface TableDef {
 
 export const TABLES = {
   users: { schema: UserSchema, indexes: 'id', kind: 'entity' },
+  // Datos de cuenta aparte del perfil seudónimo (D-068)
+  accounts: { schema: AccountSchema, indexes: 'userId, &email', kind: 'entity' },
   consents: { schema: ConsentSchema, indexes: 'id, userId, [userId+purpose]', kind: 'entity' },
   subscriptions: { schema: SubscriptionSchema, indexes: 'userId', kind: 'entity' },
   officialScores: { schema: OfficialScoreSchema, indexes: 'userId', kind: 'entity' },

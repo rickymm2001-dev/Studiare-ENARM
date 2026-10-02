@@ -1,5 +1,6 @@
-// Bienvenida (pantalla 1). Página aparte, sin navegación. Entrar con un perfil de este dispositivo
-// o crear uno con alias, meta diaria y un solo aviso de privacidad (D-059).
+// Bienvenida (pantalla 1, D-059, D-068). Página aparte, sin navegación. Crear cuenta con alias,
+// correo, meta diaria, datos opcionales y un solo aviso de privacidad, o entrar con el correo.
+// Sin servidor todavía, así que la cuenta vive en este navegador y no hay contraseña (D-060).
 import { LogIn, UserPlus } from 'lucide-react';
 import { useState, type SyntheticEvent } from 'react';
 import { Link, useNavigate } from 'react-router';
@@ -8,20 +9,30 @@ import { usePreferences } from '@/app/preferences';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
-import { createProfile } from '@/data/usecases/profile';
+import { AccountSchema } from '@/data/schemas/people';
+import {
+  EMPTY_DETAILS,
+  findAccountByEmail,
+  registerAccount,
+  type AccountDetails,
+} from '@/data/usecases/account';
 import { t } from '@/i18n/es-MX';
+import { celebrate } from '@/ui/celebrate';
+import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
+import { AccountDetailsFields } from '../profile/AccountDetailsFields';
 
 type GoalMetric = 'cards' | 'questions' | 'focusMinutes';
 const GOAL_DEFAULTS: Record<GoalMetric, number> = { cards: 20, questions: 10, focusMinutes: 15 };
+const validEmail = (email: string) => AccountSchema.shape.email.safeParse(email.trim()).success;
 
 export function OnboardingScreen() {
   const api = useDataApi();
   const navigate = useNavigate();
   const signIn = usePreferences((state) => state.signIn);
-  const profiles = useLiveData(() => api.repos.users.list(), [api.repos]);
+  const [tab, setTab] = useState<'create' | 'login'>('create');
 
   if (api.repos.kind === 'demo') {
     return (
@@ -34,74 +45,75 @@ export function OnboardingScreen() {
     );
   }
 
+  const enter = (userId: string) => {
+    signIn(userId);
+    celebrate('small');
+    void navigate(screenPath('home'));
+  };
+
   return (
     <>
-      <ScreenHeader title={t.screens.onboarding.title} description={t.session.simulatedLogin} />
-      {profiles && profiles.length > 0 ? (
-        <Card aria-labelledby="entrar-titulo">
-          <CardHeader>
-            <CardTitle id="entrar-titulo">{t.onboarding.signInTitle}</CardTitle>
-            <CardDescription>{t.onboarding.signInDescription}</CardDescription>
-          </CardHeader>
-          <ul className="flex flex-col gap-2">
-            {profiles.map((profile) => (
-              <li key={profile.id}>
-                <Button
-                  variant="secondary"
-                  className="w-full justify-start"
-                  onClick={() => {
-                    signIn(profile.id);
-                    void navigate(screenPath('home'));
-                  }}
-                >
-                  <LogIn aria-hidden />
-                  <span>{t.onboarding.signInAs(profile.alias)}</span>
-                </Button>
-              </li>
-            ))}
-          </ul>
-        </Card>
-      ) : null}
-      <CreateProfileForm
-        onCreated={(userId) => {
-          signIn(userId);
-          void navigate(screenPath('home'));
-        }}
-        create={(input) => createProfile(api, input)}
-      />
+      <ScreenHeader title={t.screens.onboarding.title} description={t.onboarding.intro} />
+      <div
+        role="tablist"
+        aria-label={t.onboarding.tabs}
+        className="flex gap-1 rounded-full bg-muted p-1"
+      >
+        {(['create', 'login'] as const).map((value) => (
+          <button
+            key={value}
+            role="tab"
+            type="button"
+            aria-selected={tab === value}
+            onClick={() => {
+              setTab(value);
+            }}
+            className={cn(
+              'min-h-touch flex-1 rounded-full text-sm font-semibold transition-all',
+              tab === value ? 'bg-surface text-fg shadow-card' : 'text-fg-muted',
+            )}
+          >
+            {value === 'create' ? t.onboarding.createTab : t.onboarding.loginTab}
+          </button>
+        ))}
+      </div>
+      {tab === 'create' ? <CreateAccountForm onCreated={enter} /> : <LoginForm onFound={enter} />}
+      <p className="text-center text-xs text-fg-muted">{t.session.simulatedLogin}</p>
     </>
   );
 }
 
-function CreateProfileForm({
-  create,
-  onCreated,
-}: {
-  create: (input: Parameters<typeof createProfile>[1]) => Promise<{ id: string }>;
-  onCreated: (userId: string) => void;
-}) {
+function CreateAccountForm({ onCreated }: { onCreated: (userId: string) => void }) {
+  const api = useDataApi();
   const [alias, setAlias] = useState('');
+  const [email, setEmail] = useState('');
   const [goalMetric, setGoalMetric] = useState<GoalMetric>('cards');
   const [goalValue, setGoalValue] = useState(String(GOAL_DEFAULTS.cards));
+  const [details, setDetails] = useState<AccountDetails>(EMPTY_DETAILS);
   const [privacy, setPrivacy] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [taken, setTaken] = useState(false);
 
   const aliasError =
     alias.trim().length < 1 || alias.trim().length > 40 ? t.onboarding.aliasError : null;
+  const emailError = taken ? t.account.emailTaken : validEmail(email) ? null : t.account.emailError;
   const privacyError = privacy ? null : t.onboarding.privacyError;
 
   const onSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
     setSubmitted(true);
-    if (aliasError || privacyError) return;
+    if (aliasError || emailError || privacyError) return;
     setBusy(true);
     try {
-      const user = await create({
+      const result = await registerAccount(api, {
         alias: alias.trim(),
+        email,
         dailyGoal: { metric: goalMetric, value: Math.max(1, Number(goalValue) || 1) },
+        details,
       });
-      onCreated(user.id);
+      if (result.ok) onCreated(result.user.id);
+      else setTaken(true);
     } finally {
       setBusy(false);
     }
@@ -123,6 +135,20 @@ function CreateProfileForm({
           error={submitted ? aliasError : null}
           onChange={(event) => {
             setAlias(event.target.value);
+          }}
+        />
+        <TextField
+          label={t.account.email}
+          hint={t.account.emailHint}
+          type="email"
+          value={email}
+          maxLength={254}
+          autoComplete="email"
+          inputMode="email"
+          error={submitted ? emailError : null}
+          onChange={(event) => {
+            setEmail(event.target.value);
+            setTaken(false);
           }}
         />
         <div className="grid gap-3 sm:grid-cols-2">
@@ -151,6 +177,15 @@ function CreateProfileForm({
             }}
           />
         </div>
+        <details className="group rounded-lg border border-line p-3">
+          <summary className="cursor-pointer font-semibold">
+            {t.account.detailsTitle}
+            <span className="ml-2 text-sm font-normal text-fg-muted">{t.account.detailsHint}</span>
+          </summary>
+          <div className="mt-3">
+            <AccountDetailsFields value={details} onChange={setDetails} />
+          </div>
+        </details>
         <section
           aria-labelledby="aviso-titulo"
           className="flex flex-col gap-2 rounded-md bg-muted p-3"
@@ -172,13 +207,86 @@ function CreateProfileForm({
             </p>
           ) : null}
         </section>
-        <CardContent>
-          <Button type="submit" disabled={busy}>
-            <UserPlus aria-hidden />
-            {busy ? t.onboarding.creating : t.onboarding.create}
-          </Button>
-        </CardContent>
+        <Button type="submit" size="lg" disabled={busy}>
+          <UserPlus aria-hidden />
+          {busy ? t.onboarding.creating : t.onboarding.create}
+        </Button>
       </form>
+    </Card>
+  );
+}
+
+function LoginForm({ onFound }: { onFound: (userId: string) => void }) {
+  const api = useDataApi();
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  // Perfiles de este navegador creados antes de las cuentas con correo
+  const legacy = useLiveData(async () => {
+    const [users, accounts] = await Promise.all([
+      api.repos.users.list(),
+      api.repos.accounts.list(),
+    ]);
+    const withAccount = new Set(accounts.map((account) => account.userId));
+    return users.filter((user) => !withAccount.has(user.id));
+  }, [api.repos]);
+
+  const onSubmit = async (event: SyntheticEvent) => {
+    event.preventDefault();
+    if (!validEmail(email)) {
+      setMessage(t.account.emailError);
+      return;
+    }
+    const account = await findAccountByEmail(api, email);
+    if (account) onFound(account.userId);
+    else setMessage(t.onboarding.noAccount);
+  };
+
+  return (
+    <Card aria-labelledby="entrar-titulo">
+      <CardHeader>
+        <CardTitle id="entrar-titulo">{t.onboarding.signInTitle}</CardTitle>
+        <CardDescription>{t.onboarding.signInDescription}</CardDescription>
+      </CardHeader>
+      <form className="flex flex-col gap-3" noValidate onSubmit={(event) => void onSubmit(event)}>
+        <TextField
+          label={t.account.email}
+          type="email"
+          value={email}
+          autoComplete="email"
+          inputMode="email"
+          onChange={(event) => {
+            setEmail(event.target.value);
+            setMessage('');
+          }}
+        />
+        <Button type="submit">
+          <LogIn aria-hidden />
+          {t.onboarding.signIn}
+        </Button>
+        {message ? (
+          <p role="status" className="text-sm text-danger">
+            {message}
+          </p>
+        ) : null}
+      </form>
+      {legacy && legacy.length > 0 ? (
+        <div className="mt-4 flex flex-col gap-2 border-t border-line pt-4">
+          <p className="text-sm font-semibold">{t.onboarding.legacyTitle}</p>
+          {legacy.map((profile) => (
+            <Button
+              key={profile.id}
+              variant="secondary"
+              className="justify-start"
+              onClick={() => {
+                onFound(profile.id);
+              }}
+            >
+              <LogIn aria-hidden />
+              {t.onboarding.signInAs(profile.alias)}
+            </Button>
+          ))}
+        </div>
+      ) : null}
     </Card>
   );
 }

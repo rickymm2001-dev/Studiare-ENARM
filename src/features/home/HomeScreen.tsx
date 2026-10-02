@@ -13,6 +13,8 @@ import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { SelectField } from '@/ui/components/field';
 import { SimulatedDataLabel } from '@/ui/components/labels';
 import { CalibratingState, LoadingState } from '@/ui/states/states';
+import { useSession } from '@/app/session';
+import { LandingScreen } from '../landing/LandingScreen';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 import { PartyWidget } from '../party/PartyWidget';
@@ -32,9 +34,10 @@ import { DEFAULT_HEATMAP, type HeatmapSettings } from './widgets/heatmapSettings
 import { DailyGoalWidget, LevelWidget, StreakWidget, TodayWidget } from './widgets/SimpleWidgets';
 
 export function HomeScreen() {
-  return (
-    <RequireSession screen="home">{(session) => <Dashboard session={session} />}</RequireSession>
-  );
+  // Sin sesión, la raíz es la portada de venta (D-068)
+  const session = useSession();
+  if (session.status === 'signed-out') return <LandingScreen />;
+  return <RequireSession screen="home">{(ready) => <Dashboard session={ready} />}</RequireSession>;
 }
 
 function Dashboard({ session }: { session: ReadySession }) {

@@ -2,8 +2,9 @@
 import type { Repositories } from '../repos/types';
 
 export async function exportUserData(repos: Repositories, userId: string) {
-  const [user, consents, events, layout, subscription] = await Promise.all([
+  const [user, account, consents, events, layout, subscription] = await Promise.all([
     repos.users.get(userId),
+    repos.accounts.get(userId),
     repos.consents.list().then((list) => list.filter((consent) => consent.userId === userId)),
     repos.events.query({ userId }),
     repos.widgetLayouts.get(userId),
@@ -13,6 +14,7 @@ export async function exportUserData(repos: Repositories, userId: string) {
     exportedAt: new Date().toISOString(),
     format: 'enarm-prototipo-export-v1',
     user,
+    account: account ?? null,
     consents,
     subscription: subscription ?? null,
     widgetLayout: layout ?? null,

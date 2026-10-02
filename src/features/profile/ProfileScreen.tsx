@@ -14,6 +14,8 @@ import { LoadingState } from '@/ui/states/states';
 import { buildSnapshot } from '../home/snapshot';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
+import { useAccount } from '../shared/useAccount';
+import { AccountDataCard } from './AccountDataCard';
 import { AccountSection } from './AccountSettings';
 
 export function ProfileScreen() {
@@ -25,6 +27,7 @@ export function ProfileScreen() {
 function Profile({ session }: { session: ReadySession }) {
   const { user, settings } = session;
   const events = useUserEvents(user.id);
+  const account = useAccount(user.id);
   const header = (
     <ScreenHeader
       title={t.screens.profile.title}
@@ -39,7 +42,7 @@ function Profile({ session }: { session: ReadySession }) {
       }
     />
   );
-  if (events === undefined) {
+  if (events === undefined || account === undefined) {
     return (
       <>
         {header}
@@ -57,6 +60,7 @@ function Profile({ session }: { session: ReadySession }) {
           <Avatar
             name={user.alias}
             seed={user.id}
+            avatar={account?.avatar}
             className="size-20 text-2xl ring-4 ring-surface"
           />
           <div>
@@ -91,10 +95,10 @@ function Profile({ session }: { session: ReadySession }) {
               {t.profileCard.xp(totalXp)}
             </span>
           </div>
-          <p className="text-sm text-fg-muted">{t.profileCard.photoSoon}</p>
         </div>
       </Card>
       <div className="grid items-start gap-4 lg:grid-cols-2">
+        <AccountDataCard key={account ? 'cuenta' : 'nueva'} session={session} account={account} />
         <AccountSection session={session} />
       </div>
     </>
