@@ -2,6 +2,7 @@
 // le pide su correo para crearla.
 import { Save } from 'lucide-react';
 import { useState } from 'react';
+import { pushAccountIfLinked } from '@/app/cloudState';
 import { useDataApi } from '@/data/context';
 import { AccountSchema, type Account } from '@/data/schemas/people';
 import {
@@ -48,6 +49,7 @@ export function AccountDataCard({
     if (account) {
       await updateAccount(api, account, details);
       setStatus(t.account.saved);
+      void pushAccountIfLinked(api, user.id);
       return;
     }
     const clean = normalizeEmail(email);

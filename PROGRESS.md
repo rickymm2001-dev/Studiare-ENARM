@@ -28,7 +28,7 @@
 - [ ] 6. Plan del día, misiones, ligas, insignias, duelos y compartir
 - [~] 7. Progreso con estadísticas de técnica. Conócete listo (D-074), falta carga futura y dificultad
 - [ ] 8. Subir mazos desde otras apps, CSV, Excel y Word
-- [ ] 9. Sincronización con el servidor
+- [~] 9. Sincronización con el servidor. Cuenta en la nube con enlace al correo y rol del servidor listos (D-075), falta subir la bitácora y el banco
 
 ### Bitácora
 - Bienvenida simple, un solo aviso de privacidad y sin cambio de rol (D-059). Análisis en docs/ANALISIS_PLATAFORMA.md y entrevista (D-060)
@@ -46,9 +46,9 @@
 - Marco compacto a todo lo ancho, nivel junto al título, Configuración en el riel y botones de guardar (D-071)
 - Elegir qué repasar por modo, mazo, troncal y subespecialidad, y cambiar sin perder avance (D-072)
 - Análisis docente del ENARM en docs/ANALISIS_DOCENTE_ENARM.md y protección del contenido al final (D-073)
-- Conócete en Progreso con el motor de autoconocimiento, 30 hallazgos posibles en tres áreas con acción concreta (D-074). 346 pruebas pasan
-- Siguiente. Fase B lotes 5 y 6 del banco con trampas explícitas y luego Fase D con IA en modo simulado, como pidió Ricardo. Después bloque 5 de pagos
-- Pendiente de Ricardo. Crear el proyecto de Supabase con docs/SUPABASE.md y pasar las llaves públicas
+- Conócete en Progreso con el motor de autoconocimiento, 19 lecturas en tres áreas más un foco por cada trampa detectada con acción concreta (D-074). 346 pruebas pasan
+- Proyecto de Supabase creado por Ricardo. Cuenta en la nube con enlace al correo, rol desde el servidor y datos de cuenta sincronizados (D-075). 353 pruebas pasan
+- Siguiente. Ricardo prueba su cuenta y se hace dueño. Luego segunda parte de la nube con bitácora, usuarios y banco. Después Fase B del banco con trampas explícitas y luego Fase D con IA en modo simulado, como pidió Ricardo. Después bloque 5 de pagos
 
 ## Fase C. Pantallas del alumno (esqueleto funcionando)
 

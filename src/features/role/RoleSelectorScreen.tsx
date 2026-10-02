@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 import { HOME_BY_ROLE } from '@/app/navigation';
 import { usePreferences } from '@/app/preferences';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
+import { getCloud } from '@/data/cloud/client';
 import type { Role } from '@/data/schemas/common';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
@@ -30,6 +31,21 @@ export function RoleSelectorScreen() {
   const setRole = usePreferences((state) => state.setRole);
   const [selected, setSelected] = useState<Role>(currentRole);
   const navigate = useNavigate();
+
+  // Con cuenta en la nube el rol lo asigna el servidor y nadie se lo pone a sí mismo (D-075)
+  if (getCloud()) {
+    return (
+      <>
+        <ScreenHeader
+          title={t.screens.roleSelector.title}
+          description={t.screens.roleSelector.description}
+        />
+        <Card>
+          <p>{t.cloud.roleFromCloud}</p>
+        </Card>
+      </>
+    );
+  }
 
   return (
     <>

@@ -1,12 +1,15 @@
 // Bienvenida (pantalla 1, D-059, D-068). Página aparte, sin navegación. Crear cuenta con alias,
 // correo, meta diaria, datos opcionales y un solo aviso de privacidad, o entrar con el correo.
-// Sin servidor todavía, así que la cuenta vive en este navegador y no hay contraseña (D-060).
-import { LogIn, UserPlus } from 'lucide-react';
+// Con Supabase configurado la cuenta también se guarda en la nube y se entra con un enlace al
+// correo, sin contraseña (D-075). Sin Supabase la cuenta vive solo en este navegador (D-060).
+import { LogIn, MailCheck, UserPlus } from 'lucide-react';
 import { useState, type SyntheticEvent } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { usePreferences } from '@/app/preferences';
 import { screenPath } from '@/app/screens';
+import { requestEmailLink, type LinkResult } from '@/data/cloud/account';
+import { getCloud } from '@/data/cloud/client';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import { AccountSchema } from '@/data/schemas/people';
@@ -27,6 +30,18 @@ import { AccountDetailsFields } from '../profile/AccountDetailsFields';
 type GoalMetric = 'cards' | 'questions' | 'focusMinutes';
 const GOAL_DEFAULTS: Record<GoalMetric, number> = { cards: 20, questions: 10, focusMinutes: 15 };
 const validEmail = (email: string) => AccountSchema.shape.email.safeParse(email.trim()).success;
+/** A dónde regresa el enlace del correo. La raíz de la app, con o sin dominio propio */
+const redirectTo = () => new URL(import.meta.env.BASE_URL, window.location.origin).toString();
+
+async function sendLink(email: string, alias?: string): Promise<LinkResult | null> {
+  const cloud = getCloud();
+  if (!cloud) return null;
+  return requestEmailLink(cloud, {
+    email: email.trim().toLowerCase(),
+    ...(alias ? { alias } : {}),
+    redirectTo: redirectTo(),
+  });
+}
 
 export function OnboardingScreen() {
   const api = useDataApi();
@@ -78,7 +93,9 @@ export function OnboardingScreen() {
         ))}
       </div>
       {tab === 'create' ? <CreateAccountForm onCreated={enter} /> : <LoginForm onFound={enter} />}
-      <p className="text-center text-xs text-fg-muted">{t.session.simulatedLogin}</p>
+      <p className="text-center text-xs text-fg-muted">
+        {getCloud() ? t.cloud.loginNote : t.session.simulatedLogin}
+      </p>
     </>
   );
 }
@@ -94,6 +111,7 @@ function CreateAccountForm({ onCreated }: { onCreated: (userId: string) => void 
   const [submitted, setSubmitted] = useState(false);
   const [busy, setBusy] = useState(false);
   const [taken, setTaken] = useState(false);
+  const [sent, setSent] = useState<{ userId: string; result: LinkResult } | null>(null);
 
   const aliasError =
     alias.trim().length < 1 || alias.trim().length > 40 ? t.onboarding.aliasError : null;
@@ -112,12 +130,29 @@ function CreateAccountForm({ onCreated }: { onCreated: (userId: string) => void 
         dailyGoal: { metric: goalMetric, value: Math.max(1, Number(goalValue) || 1) },
         details,
       });
-      if (result.ok) onCreated(result.user.id);
-      else setTaken(true);
+      if (!result.ok) {
+        setTaken(true);
+        return;
+      }
+      const link = await sendLink(email, alias.trim());
+      if (link) setSent({ userId: result.user.id, result: link });
+      else onCreated(result.user.id);
     } finally {
       setBusy(false);
     }
   };
+
+  if (sent) {
+    return (
+      <LinkSentCard
+        email={email}
+        result={sent.result}
+        onContinue={() => {
+          onCreated(sent.userId);
+        }}
+      />
+    );
+  }
 
   return (
     <Card aria-labelledby="crear-titulo">
@@ -220,6 +255,8 @@ function LoginForm({ onFound }: { onFound: (userId: string) => void }) {
   const api = useDataApi();
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [sent, setSent] = useState<LinkResult | null>(null);
+  const cloud = getCloud();
   // Perfiles de este navegador creados antes de las cuentas con correo
   const legacy = useLiveData(async () => {
     const [users, accounts] = await Promise.all([
@@ -236,16 +273,34 @@ function LoginForm({ onFound }: { onFound: (userId: string) => void }) {
       setMessage(t.account.emailError);
       return;
     }
+    if (cloud) {
+      setSent(await sendLink(email));
+      return;
+    }
     const account = await findAccountByEmail(api, email);
     if (account) onFound(account.userId);
     else setMessage(t.onboarding.noAccount);
   };
 
+  if (sent) {
+    return (
+      <LinkSentCard
+        email={email}
+        result={sent}
+        onRetry={() => {
+          setSent(null);
+        }}
+      />
+    );
+  }
+
   return (
     <Card aria-labelledby="entrar-titulo">
       <CardHeader>
         <CardTitle id="entrar-titulo">{t.onboarding.signInTitle}</CardTitle>
-        <CardDescription>{t.onboarding.signInDescription}</CardDescription>
+        <CardDescription>
+          {cloud ? t.cloud.signInDescription : t.onboarding.signInDescription}
+        </CardDescription>
       </CardHeader>
       <form className="flex flex-col gap-3" noValidate onSubmit={(event) => void onSubmit(event)}>
         <TextField
@@ -261,7 +316,7 @@ function LoginForm({ onFound }: { onFound: (userId: string) => void }) {
         />
         <Button type="submit">
           <LogIn aria-hidden />
-          {t.onboarding.signIn}
+          {cloud ? t.cloud.sendLink : t.onboarding.signIn}
         </Button>
         {message ? (
           <p role="status" className="text-sm text-danger">
@@ -287,6 +342,47 @@ function LoginForm({ onFound }: { onFound: (userId: string) => void }) {
           ))}
         </div>
       ) : null}
+    </Card>
+  );
+}
+
+function LinkSentCard({
+  email,
+  result,
+  onContinue,
+  onRetry,
+}: {
+  email: string;
+  result: LinkResult;
+  onContinue?: () => void;
+  onRetry?: () => void;
+}) {
+  const ok = result.ok;
+  return (
+    <Card aria-labelledby="enlace-titulo">
+      <CardHeader>
+        <CardTitle id="enlace-titulo" className="flex items-center gap-2">
+          <MailCheck aria-hidden className="text-primary" />
+          {ok ? t.cloud.sentTitle : t.cloud.failedTitle}
+        </CardTitle>
+        <CardDescription role="status">
+          {ok
+            ? t.cloud.sentBody(email.trim().toLowerCase())
+            : result.reason === 'rate_limited'
+              ? t.cloud.rateLimited
+              : t.cloud.failedBody}
+        </CardDescription>
+      </CardHeader>
+      <div className="flex flex-wrap gap-2">
+        {onContinue ? (
+          <Button onClick={onContinue}>{ok ? t.cloud.continue : t.cloud.continueLocal}</Button>
+        ) : null}
+        {onRetry ? (
+          <Button variant="secondary" onClick={onRetry}>
+            {t.cloud.retry}
+          </Button>
+        ) : null}
+      </div>
     </Card>
   );
 }

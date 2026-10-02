@@ -728,5 +728,29 @@ export const featureText = {
     cancel: 'Cancelar',
     leave: 'Salir del grupo',
   },
+  cloud: {
+    loginNote:
+      'Tu cuenta se guarda en la nube. Entras con un enlace que te llega al correo, sin contraseña.',
+    signInDescription:
+      'Escribe tu correo y te enviamos un enlace para entrar. Ábrelo en este u otro dispositivo.',
+    sendLink: 'Enviarme el enlace',
+    sentTitle: 'Revisa tu correo',
+    sentBody: (email: string) =>
+      `Te enviamos un enlace a ${email}. Ábrelo para confirmar tu cuenta y entrar desde cualquier dispositivo. Si no lo ves, revisa la carpeta de spam.`,
+    failedTitle: 'No pudimos enviar el enlace',
+    failedBody: 'Intenta de nuevo en unos minutos. Tu cuenta ya quedó guardada en este navegador.',
+    rateLimited:
+      'Se enviaron demasiados enlaces en poco tiempo. Espera unos minutos e intenta de nuevo.',
+    continue: 'Empezar a estudiar',
+    continueLocal: 'Seguir en este navegador',
+    retry: 'Usar otro correo',
+    statusTitle: 'Cuenta en la nube',
+    linked: (email: string) => `Conectada como ${email}.`,
+    notLinked:
+      'Aún no confirmas tu correo. Entra con el enlace que te enviamos para guardar tu cuenta en la nube.',
+    checking: 'Revisando tu cuenta en la nube…',
+    error: 'No pudimos conectar con la nube. Tu avance sigue guardado en este navegador.',
+    roleFromCloud: 'Tu rol viene de tu cuenta en la nube y solo un administrador lo puede cambiar.',
+  },
   insights: insightText,
 } as const;
