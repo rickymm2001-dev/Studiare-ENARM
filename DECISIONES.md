@@ -619,3 +619,13 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Fatiga con el método de tercios mientras Ricardo decide D-054
 - Los textos y acciones son borrador pendiente de revisión médica y docente. Aviso visible de que son estimaciones, no diagnóstico ni predicción del puntaje
 - La sección va justo debajo del resumen de Progreso, antes del dominio por rama
+
+### D-075. Cuenta en la nube con Supabase, primera parte
+- Fecha 2026-10-02. Origen R
+- Ricardo creó el proyecto de Supabase, corrió el esquema de D-069 y guardó en GitHub la URL y la llave pública. El despliegue de Pages ya las pasa al build
+- Se entra con un enlace al correo, sin contraseña. Crear cuenta guarda el perfil en el navegador como antes y además envía el enlace. Ya tengo cuenta envía el enlace. El enlace abre en cualquier dispositivo (flujo implicit)
+- Al volver con sesión, la app busca el perfil local con ese correo o lo crea con el alias de la nube, abre la sesión, aplica el rol que da el servidor, registra la aceptación del aviso y sube alias y datos de cuenta. La foto propia todavía no se sube
+- Con la nube configurada el selector de rol de la pantalla 26 queda bloqueado. El rol solo lo cambia un administrador con set_user_role. Al cerrar sesión se cierra también en la nube y el rol vuelve a alumno
+- Sin las variables la app funciona igual que antes, completa en el navegador
+- Pendiente para la segunda parte. Subir la bitácora de estudio, administrar usuarios desde Supabase y mover el banco y las tarjetas (protección de D-073)
+- Límite conocido. El correo que trae Supabase de fábrica solo envía a los correos del equipo del proyecto y pocas veces por hora. Antes de abrir a alumnos hay que conectar un proveedor de correo propio (SMTP)

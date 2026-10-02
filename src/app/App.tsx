@@ -1,5 +1,6 @@
 import { RouterProvider } from 'react-router/dom';
 import { DataProvider } from '@/data/DataProvider';
+import { CloudBridge } from './cloud';
 import { usePreferences } from './preferences';
 import { createAppRouter } from './router';
 
@@ -11,6 +12,7 @@ export function App() {
   const database = usePreferences((state) => state.database);
   return (
     <DataProvider kind={database}>
+      <CloudBridge />
       <RouterProvider router={router} />
     </DataProvider>
   );

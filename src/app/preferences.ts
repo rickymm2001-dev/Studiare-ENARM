@@ -3,6 +3,8 @@
 // El rol es el selector sin login de la pantalla 26. En producción lo dará la cuenta real.
 import { z } from 'zod';
 import { create } from 'zustand';
+import { signOutCloud } from '@/data/cloud/account';
+import { getCloud } from '@/data/cloud/client';
 import { RoleSchema } from '@/data/schemas/common';
 import { AppearanceSchema, DEFAULT_APPEARANCE } from '@/ui/appearance';
 import { THEME_PREFERENCES } from '@/ui/theme';
@@ -89,7 +91,10 @@ export const usePreferences = create<PreferencesState>()((set, get) => {
       update({ sessionUserId: userId });
     },
     signOut: () => {
-      update({ sessionUserId: null });
+      const cloud = getCloud();
+      // Con cuenta en la nube el rol lo da el servidor, así que al salir vuelve a alumno (D-075)
+      update(cloud ? { sessionUserId: null, role: 'student' } : { sessionUserId: null });
+      void signOutCloud(cloud);
     },
   };
 });

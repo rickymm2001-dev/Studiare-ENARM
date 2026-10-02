@@ -49,7 +49,25 @@ where user_id = (select id from auth.users where email = 'tu-correo@ejemplo.com'
 1. En GitHub abre el repositorio, Settings, Secrets and variables, Actions, pestaña Variables
 2. Crea la variable VITE_SUPABASE_URL con el Project URL
 3. Crea la variable VITE_SUPABASE_ANON_KEY con la llave anon public
-4. Avísame y conecto el código para que la app use Supabase en lugar del navegador
+4. Listo desde el 2026-10-02. La app ya usa estas variables (D-075)
+
+## Paso 6. Dirección de regreso de los correos
+
+1. En Supabase abre Authentication, URL Configuration
+2. En Site URL pon https://rickymm2001-dev.github.io/Studiare-ENARM/
+3. En Redirect URLs agrega esa misma dirección y http://localhost:5173/**
+
+## Paso 7. Probar tu cuenta y hacerte dueño
+
+1. Abre la página, Crear cuenta, con el mismo correo con el que entraste a Supabase
+2. Abre el enlace que te llega al correo
+3. En Perfil debe decir Cuenta en la nube, Conectada como tu correo
+4. Corre el SQL del paso 3 con tu correo y vuelve a cargar la página. Debe aparecer Usuarios en el menú
+
+## Antes de abrir a alumnos
+
+- El correo de fábrica de Supabase solo envía a los correos del equipo del proyecto y pocas veces por hora
+- Hay que conectar un proveedor de correo propio en Authentication, Emails, SMTP Settings. Opciones comunes son Resend, Brevo o Amazon SES
 
 ## Qué protege el esquema
 

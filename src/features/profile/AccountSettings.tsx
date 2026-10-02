@@ -4,6 +4,7 @@
 import { CreditCard, Download, LogOut, Trash2 } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router';
+import { pushAccountIfLinked, useCloud } from '@/app/cloudState';
 import { usePreferences } from '@/app/preferences';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
@@ -135,6 +136,7 @@ function AccountCard({
           if (!alias.trim()) return;
           void updateProfile(api, user, { alias: alias.trim() }).then(() => {
             setStatus(t.settings.saved);
+            void pushAccountIfLinked(api, user.id);
           });
         }}
       >
@@ -159,6 +161,7 @@ function AccountCard({
           {status}
         </p>
       </form>
+      {session.isDemo ? null : <CloudStatus />}
     </Section>
   );
 }
@@ -420,5 +423,25 @@ function DeleteCard({
         </Button>
       )}
     </Section>
+  );
+}
+
+/** Estado de la cuenta en la nube. Solo aparece si Supabase está configurado (D-075) */
+function CloudStatus() {
+  const state = useCloud((store) => store.state);
+  if (state.status === 'off') return null;
+  const text =
+    state.status === 'linked'
+      ? t.cloud.linked(state.identity.email)
+      : state.status === 'checking'
+        ? t.cloud.checking
+        : state.status === 'error'
+          ? t.cloud.error
+          : t.cloud.notLinked;
+  return (
+    <div className="mt-3 rounded-md bg-muted p-3 text-sm">
+      <p className="font-semibold">{t.cloud.statusTitle}</p>
+      <p className="text-fg-muted">{text}</p>
+    </div>
   );
 }
