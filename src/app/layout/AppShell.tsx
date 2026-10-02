@@ -40,22 +40,22 @@ export function AppShell() {
       <header
         className={`sticky top-0 z-10 border-b border-line bg-surface/95 backdrop-blur ${rail}`}
       >
-        <div className="mx-auto flex min-h-14 max-w-app flex-wrap items-center gap-2 px-4 py-2">
-          <Link to={HOME_BY_ROLE[role]} className="mr-auto rounded-sm">
+        <div className="mx-auto flex min-h-14 max-w-app items-center gap-2 px-4 py-2">
+          <Link to={HOME_BY_ROLE[role]} className="mr-auto shrink-0 rounded-sm">
             {/* Logo de Studiare. En modo oscuro se usa la versión con letras blancas */}
             <img
               src={logoUrl}
               alt={t.app.logoAlt}
               width={148}
               height={32}
-              className="h-7 w-auto sm:h-8 dark:hidden"
+              className="h-6 w-auto sm:h-8 dark:hidden"
             />
             <img
               src={logoDarkUrl}
               alt={t.app.logoAlt}
               width={148}
               height={32}
-              className="hidden h-7 w-auto sm:h-8 dark:block"
+              className="hidden h-6 w-auto sm:h-8 dark:block"
             />
           </Link>
           {bare ? null : <HeaderStats />}

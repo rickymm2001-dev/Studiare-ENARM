@@ -5,6 +5,7 @@ import type { TopicTaxonomy } from '@/data/schemas/content';
 import { physicianToLogit } from '@/engines/difficulty';
 import { createRng } from '@/engines/random';
 import type { DemoBank } from '../content/bank';
+import { bankTaxonomy } from './bankTaxonomy';
 import { DEMO_CONTENT_TIME, stableUlid } from '../stableId';
 import {
   DEFAULT_MIX,
@@ -90,9 +91,10 @@ export const simUserId = (seed: string, index: number) =>
 
 export function generateCohort(
   bank: DemoBank,
-  taxonomy: TopicTaxonomy,
+  fullTaxonomy: TopicTaxonomy,
   options: CohortOptions,
 ): Cohort {
+  const taxonomy = bankTaxonomy(fullTaxonomy, bank);
   const items = simItemsFrom(bank);
   const difficulties = trueDifficulties(items, options.seed);
   const branches = taxonomy.branches.map((branch) => branch.key);

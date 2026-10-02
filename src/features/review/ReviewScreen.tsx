@@ -128,6 +128,7 @@ function ReviewSession({
     () => ({
       desiredRetention: settings.desiredRetention,
       maxIntervalDays: settings.maxIntervalDays,
+      spacing: settings.spacing,
       examDate: examDateFor(user),
       timeZone: user.timeZone,
       thresholds: {

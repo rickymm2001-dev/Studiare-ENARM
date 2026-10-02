@@ -16,7 +16,8 @@
  *     límites diarios de nuevas y de repasos
  *   - Carga futura. Simula cada tarjeta suponiendo que el alumno califica Bien en cada vencimiento
  *     y que introduce las nuevas al ritmo de su límite diario
- *   - Intervalo máximo del alumno con compresión suave, 30 días por defecto (D-064)
+ *   - Intervalo máximo del alumno sobre Bien con compresión suave, 21 días por defecto. Difícil y
+ *     Fácil guardan su proporción con Bien y cada botón tiene su multiplicador (D-064, D-067)
  * Umbrales. Retención 0.90 (0.80 a 0.97), 0.93 en los últimos 30 días, sanguijuela con 8 lapsos,
  * 20 nuevas y 200 repasos por día. Optimizar parámetros por alumno desde 1,000 repasos queda fuera
  * del prototipo. El punto de extensión es config.weights.
@@ -45,6 +46,11 @@ export interface SchedulerConfig {
    * sin tope, como FSRS puro
    */
   maxIntervalDays?: number | null;
+  /**
+   * Qué tan lejos sale la tarjeta con cada botón, como fracción de lo que calcula FSRS (D-067).
+   * 1 es lo recomendado. Ausente es 1 en los tres
+   */
+  spacing?: Readonly<Record<'hard' | 'good' | 'easy', number>>;
 }
 
 /**
@@ -189,12 +195,23 @@ export function scheduleReview(
   const card = state ? toFsrsCard(state) : createEmptyCard(now);
   const result = schedulerFor(retention, config.weights).next(card, now, GRADE[rating]);
   let next = fromFsrsCard(result.card);
-  // Tope del alumno (D-064). Solo a intervalos de días, los pasos cortos de aprendizaje no cambian
+  // Tope y separación del alumno (D-064, D-067). Solo a intervalos de días, los pasos cortos de
+  // aprendizaje no cambian. El tope se aplica a Bien con compresión suave y Difícil y Fácil se
+  // escalan en la misma proporción, así los botones no se empalman. Luego cada botón aplica su
+  // multiplicador
   const cap = config.maxIntervalDays ?? null;
+  const multiplier = rating === 'again' ? 1 : (config.spacing?.[rating] ?? 1);
   const rawDays = (new Date(next.due).getTime() - now.getTime()) / DAY_MS;
-  if (cap !== null && rawDays >= 1) {
-    const days = Math.max(1, Math.floor(softCapDays(rawDays, cap)));
-    if (days < rawDays) {
+  if (rating !== 'again' && rawDays >= 1 && (cap !== null || multiplier !== 1)) {
+    const goodDays =
+      rating === 'good'
+        ? rawDays
+        : (schedulerFor(retention, config.weights).next(card, now, Rating.Good).card.due.getTime() -
+            now.getTime()) /
+          DAY_MS;
+    const scale = cap !== null && goodDays >= 1 ? softCapDays(goodDays, cap) / goodDays : 1;
+    const days = Math.max(1, Math.round(rawDays * scale * multiplier));
+    if (days !== Math.round(rawDays)) {
       next = {
         ...next,
         due: new Date(now.getTime() + days * DAY_MS).toISOString(),

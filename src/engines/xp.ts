@@ -118,15 +118,24 @@ export interface LevelCurve {
 /** Curva por defecto (J). Se revisa con la simulación de un alumno constante */
 export const DEFAULT_LEVEL_CURVE: LevelCurve = { a: 1700, p: 1.7 };
 
+/**
+ * Títulos por tramo (D-066). Todos los alumnos ya egresaron, así que la escalera empieza en R0,
+ * el aspirante a residencia, y sigue la carrera hospitalaria con un toque de humor al final
+ */
 export const TITLES: readonly { fromLevel: number; title: string }[] = [
-  { fromLevel: 1, title: 'Pasante' },
-  { fromLevel: 4, title: 'R1' },
-  { fromLevel: 7, title: 'R2' },
-  { fromLevel: 10, title: 'R3' },
-  { fromLevel: 13, title: 'R4' },
-  { fromLevel: 16, title: 'Jefe de residentes' },
-  { fromLevel: 20, title: 'Adscrito' },
-  { fromLevel: 25, title: 'Profesor titular' },
+  { fromLevel: 1, title: 'R0' },
+  { fromLevel: 3, title: 'R1' },
+  { fromLevel: 5, title: 'R2' },
+  { fromLevel: 8, title: 'R3' },
+  { fromLevel: 11, title: 'R4' },
+  { fromLevel: 14, title: 'Jefe de residentes' },
+  { fromLevel: 17, title: 'Especialista' },
+  { fromLevel: 20, title: 'Subespecialista' },
+  { fromLevel: 24, title: 'Adscrito' },
+  { fromLevel: 28, title: 'Jefe de servicio' },
+  { fromLevel: 33, title: 'Adscritosaurio' },
+  { fromLevel: 38, title: 'Jubilado' },
+  { fromLevel: 45, title: 'Eminencia' },
 ];
 
 /** XP acumulado que hace falta para llegar al nivel n */
@@ -147,7 +156,7 @@ export function levelFor(totalXp: number, curve: LevelCurve = DEFAULT_LEVEL_CURV
   let level = Math.max(1, Math.floor((xp / curve.a) ** (1 / curve.p)) + 1);
   while (xpForLevel(level + 1, curve) <= xp) level += 1;
   while (level > 1 && xpForLevel(level, curve) > xp) level -= 1;
-  const title = [...TITLES].reverse().find((entry) => level >= entry.fromLevel)?.title ?? 'Pasante';
+  const title = [...TITLES].reverse().find((entry) => level >= entry.fromLevel)?.title ?? 'R0';
   return {
     level,
     title,

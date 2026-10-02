@@ -1,6 +1,9 @@
 // Opciones del intervalo máximo del repaso (D-064). none es sin tope
 export const MAX_INTERVAL_OPTIONS = [
+  '3',
+  '5',
   '7',
+  '10',
   '14',
   '21',
   '30',

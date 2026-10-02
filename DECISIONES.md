@@ -538,3 +538,21 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - La muestra de fuentes dice "Así se verá tu texto"
 - Se quita por completo el widget de cuenta regresiva al ENARM. La fecha del ENARM se sigue usando por dentro para el modo examen de FSRS
 - El heatmap se divide por meses con el nombre del mes en chiquito arriba
+
+### D-066. Seis ramas troncales, subespecialidades, títulos médicos y Progreso por rama
+- Fecha 2026-10-02. Origen R
+- La taxonomía pasa a 6 ramas troncales con pesos iguales. Medicina interna, Pediatría, Ginecología y obstetricia, Cirugía general, Medicina familiar y Urgencias. Medicina familiar y Urgencias todavía no tienen preguntas y se muestran como "Sin preguntas todavía"
+- Ricardo pidió la lista oficial del ENARM para las subespecialidades. La CIFRHS no publica un temario detallado. El examen se basa en las GPC, las NOM y los protocolos nacionales. Por eso la lista de subespecialidades es propia, se conservan los 40 temas que ya usa el banco y se agregan los que faltaban (por ejemplo Oncología, Dermatología, Oftalmología, Otorrinolaringología, Ortopedia y los de Medicina familiar y Urgencias). Queda pendiente de revisión médica como el resto de la taxonomía
+- La simulación de alumnos solo usa las ramas y temas con preguntas en el banco (src/demo/generator/bankTaxonomy.ts). Así los datos simulados y la prueba de recuperación no cambian
+- Configurar práctica, Mazos y Progreso dividen entre troncales y subespecialidades, en tantas columnas como quepan
+- Progreso tiene una primera versión. Resumen, dominio por troncal y por subespecialidad con el modelo beta-binomial, con estado calibrando hasta tener respuestas suficientes
+- Títulos de nivel para médicos ya egresados. R0, R1, R2, R3, R4, Jefe de residentes, Especialista, Subespecialista, Adscrito, Jefe de servicio, Adscritosaurio, Jubilado y Eminencia. Se agregaron Jefe de residentes y Jefe de servicio a la idea de Ricardo
+- El encabezado dice "Nivel 1", la barra es más ancha y abajo dice en chiquito la XP que falta para el siguiente nivel
+- El heatmap muestra por defecto desde el mes en que empezó el alumno y crece mes con mes. Se puede cambiar a 90, 180 o 365 días
+
+### D-067. Separación entre botones del repaso
+- Fecha 2026-10-02. Origen R. Con tope de 14 días los botones quedaban demasiado pegados
+- El tope por defecto sube a 21 días y se aplica a Bien con compresión suave. Difícil y Fácil se escalan en la misma proporción que Bien, así conservan la separación que da FSRS. Ajusta D-064
+- Cada botón (Difícil, Bien y Fácil) tiene su multiplicador de 50% a 200%. 100% es lo recomendado y es lo que calcula FSRS. La retención de 90% también queda marcada como la recomendada por los creadores de FSRS
+- Un botón en Configuración regresa todo a lo recomendado
+- Los perfiles creados antes guardaron el tope anterior. Se actualizan con ese botón
