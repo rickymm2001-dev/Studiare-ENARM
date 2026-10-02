@@ -1,4 +1,4 @@
-// Registro de las 26 pantallas de la sección 10, con su ruta, área y fase.
+// Registro de las 26 pantallas de la sección 10, más Configuración (D-065), con su ruta, área y fase.
 // Es solo datos. Lo usan el router, la navegación y la prueba de humo que recorre cada ruta.
 // Las rutas visibles van en español y las claves en inglés (D-035).
 
@@ -34,6 +34,7 @@ export const SCREEN_KEYS = [
   'demoData',
   'adminSettings',
   'roleSelector',
+  'settings',
 ] as const;
 
 export type ScreenKey = (typeof SCREEN_KEYS)[number];
@@ -74,6 +75,8 @@ export const SCREENS: Record<ScreenKey, ScreenDef> = {
   demoData: { number: 24, path: '/admin/demo', area: 'admin', phase: 'D' },
   adminSettings: { number: 25, path: '/admin/configuracion', area: 'admin', phase: 'D' },
   roleSelector: { number: 26, path: '/rol', area: 'shared', phase: 'A' },
+  // Configuración separada de Perfil por decisión de Ricardo (D-065)
+  settings: { number: 27, path: '/configuracion', area: 'shared', phase: 'C' },
 };
 
 export function screenPath(key: ScreenKey): string {

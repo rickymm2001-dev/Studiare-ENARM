@@ -29,7 +29,7 @@ export function AppShell() {
   const rail = bare ? '' : 'lg:pl-rail';
 
   return (
-    <div className="min-h-dvh bg-canvas text-fg">
+    <div className="min-h-dvh text-fg">
       <a
         href="#contenido"
         className="sr-only z-50 rounded-md bg-primary px-4 py-2 text-primary-fg focus:not-sr-only focus:fixed focus:top-2 focus:left-2"

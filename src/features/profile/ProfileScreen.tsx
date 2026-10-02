@@ -1,122 +1,102 @@
-// Perfil (pantalla 15). En la Fase A trae cuenta activa, rol, tema visual y modo de IA.
-// El resto de los ajustes llega en la Fase C, y exportar, borrar y puntaje oficial en la Fase E.
-import { FlaskConical, Monitor, Moon, Sun, UserRound } from 'lucide-react';
-import type { ReactNode } from 'react';
-import { AiModeBadge } from '@/ai/AiModeBadge';
-import { useAiStatus } from '@/ai/useAiStatus';
-import { usePreferences } from '@/app/preferences';
+// Perfil (pantalla 15, D-065). Quién eres en Studiare. Foto, nivel, racha, cuenta y suscripción.
+// Los ajustes viven en Configuración.
+import { Flame, Settings, Star } from 'lucide-react';
+import { Link } from 'react-router';
+import { LevelLadderDialog } from '@/app/layout/LevelLadderDialog';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
-import { useRepositories } from '@/data/context';
-import { DATABASE_NAMES } from '@/data/databases';
-import { useLiveData } from '@/data/hooks';
+import { screenPath } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
-import { SimulatedDataLabel } from '@/ui/components/labels';
-import { RadioCards } from '@/ui/components/radio-cards';
-import type { ThemePreference } from '@/ui/theme';
-import { useSession } from '@/app/session';
-import { AccountSettings } from './AccountSettings';
-import { AppearanceSettings } from './AppearanceSettings';
-import { DemoDataPanel } from './DemoDataPanel';
-
-const THEME_OPTIONS = [
-  { value: 'system', label: t.theme.system, icon: <Monitor /> },
-  { value: 'light', label: t.theme.light, icon: <Sun /> },
-  { value: 'dark', label: t.theme.dark, icon: <Moon /> },
-] as const satisfies readonly { value: ThemePreference; label: string; icon: ReactNode }[];
-
-const DATABASE_OPTIONS = [
-  {
-    value: 'real',
-    label: t.database.real,
-    description: t.database.realDescription,
-    icon: <UserRound />,
-  },
-  {
-    value: 'demo',
-    label: t.database.demo,
-    description: t.database.demoDescription,
-    icon: <FlaskConical />,
-  },
-] as const;
+import { Avatar } from '@/ui/components/avatar';
+import { Button } from '@/ui/components/button';
+import { Card } from '@/ui/components/card';
+import { ProgressBar } from '@/ui/components/progress-bar';
+import { LoadingState } from '@/ui/states/states';
+import { buildSnapshot } from '../home/snapshot';
+import { RequireSession, type ReadySession } from '../shared/RequireSession';
+import { useUserEvents } from '../shared/useUserEvents';
+import { AccountSection } from './AccountSettings';
 
 export function ProfileScreen() {
-  const theme = usePreferences((state) => state.theme);
-  const setTheme = usePreferences((state) => state.setTheme);
-  const database = usePreferences((state) => state.database);
-  const setDatabase = usePreferences((state) => state.setDatabase);
-  const aiStatus = useAiStatus();
-  const session = useSession();
-
   return (
-    <>
-      <ScreenHeader title={t.screens.profile.title} description={t.screens.profile.description} />
-
-      {/* En computadora las tarjetas van en dos columnas (D-057) */}
-      <div className="grid items-start gap-4 lg:grid-cols-2">
-        <Card>
-          <RadioCards
-            legend={t.database.legend}
-            description={t.database.description}
-            value={database}
-            options={DATABASE_OPTIONS}
-            onValueChange={setDatabase}
-          />
-          <DatabaseStatus />
-        </Card>
-
-        {database === 'demo' ? <DemoDataPanel /> : null}
-
-        {session.status === 'ready' ? <AccountSettings session={session} /> : null}
-
-        <Card>
-          <RadioCards
-            legend={t.theme.legend}
-            value={theme}
-            options={THEME_OPTIONS}
-            onValueChange={setTheme}
-          />
-        </Card>
-
-        <AppearanceSettings />
-
-        <Card aria-labelledby="ia-titulo">
-          <CardHeader>
-            <div className="flex flex-wrap items-center gap-2">
-              <CardTitle id="ia-titulo">{t.ai.cardTitle}</CardTitle>
-              <AiModeBadge status={aiStatus} />
-            </div>
-            <CardDescription>{t.ai.detail[aiStatus.kind]}</CardDescription>
-          </CardHeader>
-        </Card>
-      </div>
-    </>
+    <RequireSession screen="profile">{(session) => <Profile session={session} />}</RequireSession>
   );
 }
 
-/** Abre la base activa en el navegador y dice cuántos perfiles tiene. Prueba que IndexedDB funciona */
-function DatabaseStatus() {
-  const repos = useRepositories();
-  const result = useLiveData(
-    () =>
-      repos.users.list().then(
-        (users) => ({ ok: true as const, count: users.length }),
-        () => ({ ok: false as const, count: 0 }),
-      ),
-    [repos],
+function Profile({ session }: { session: ReadySession }) {
+  const { user, settings } = session;
+  const events = useUserEvents(user.id);
+  const header = (
+    <ScreenHeader
+      title={t.screens.profile.title}
+      description={t.screens.profile.description}
+      actions={
+        <Button asChild variant="secondary" size="sm">
+          <Link to={screenPath('settings')}>
+            <Settings aria-hidden />
+            {t.screens.settings.title}
+          </Link>
+        </Button>
+      }
+    />
   );
+  if (events === undefined) {
+    return (
+      <>
+        {header}
+        <LoadingState />
+      </>
+    );
+  }
+  const { level, streak, totalXp } = buildSnapshot({ events, user, settings, now: new Date() });
   return (
-    <div
-      className="mt-3 flex flex-wrap items-center gap-2 text-sm text-fg-muted"
-      aria-live="polite"
-    >
-      <span className="font-mono">{t.database.storedIn(DATABASE_NAMES[repos.kind])}</span>
-      {result === undefined ? null : result.ok ? (
-        <span>· {t.database.users(result.count)}</span>
-      ) : (
-        <span className="text-danger">{t.database.openError}</span>
-      )}
-      {repos.kind === 'demo' ? <SimulatedDataLabel /> : null}
-    </div>
+    <>
+      {header}
+      <Card className="overflow-hidden p-0 sm:p-0">
+        <div className="bg-hero h-20" />
+        <div className="-mt-10 flex flex-col gap-3 px-5 pb-5">
+          <Avatar
+            name={user.alias}
+            seed={user.id}
+            className="size-20 text-2xl ring-4 ring-surface"
+          />
+          <div>
+            <p className="font-display text-2xl font-extrabold">{user.alias}</p>
+            <p className="font-semibold text-accent">
+              {t.profileCard.levelLine(level.level, level.title)}
+            </p>
+          </div>
+          <LevelLadderDialog totalXp={totalXp}>
+            <button type="button" className="flex flex-col gap-1 rounded-md text-left">
+              <ProgressBar
+                tone="gold"
+                value={level.xpIntoLevel}
+                max={level.xpForNext}
+                label={t.levelLadder.toNextLevel(
+                  (level.xpForNext - level.xpIntoLevel).toLocaleString('es-MX'),
+                  level.level + 1,
+                )}
+              />
+              <span className="text-sm text-fg-muted underline underline-offset-4">
+                {t.profileCard.seeLevels}
+              </span>
+            </button>
+          </LevelLadderDialog>
+          <div className="flex flex-wrap gap-2">
+            <span className="flex items-center gap-1.5 rounded-full bg-streak-soft px-3 py-1.5 font-bold text-streak">
+              <Flame aria-hidden className="size-4" />
+              {t.profileCard.streak(streak.current, streak.best)}
+            </span>
+            <span className="flex items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1.5 font-bold text-accent">
+              <Star aria-hidden className="size-4" />
+              {t.profileCard.xp(totalXp)}
+            </span>
+          </div>
+          <p className="text-sm text-fg-muted">{t.profileCard.photoSoon}</p>
+        </div>
+      </Card>
+      <div className="grid items-start gap-4 lg:grid-cols-2">
+        <AccountSection session={session} />
+      </div>
+    </>
   );
 }

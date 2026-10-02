@@ -45,7 +45,7 @@ export const featureText = {
     branchesError: 'Elige al menos una rama.',
     goalMetric: 'Meta diaria para tu racha',
     goalValue: 'Cantidad',
-    goalMetrics: { cards: 'Tarjetas', questions: 'Preguntas', focusMinutes: 'Minutos de enfoque' },
+    goalMetrics: { cards: 'Tarjetas', questions: 'Preguntas', focusMinutes: 'Minutos de estudio' },
     privacyTitle: 'Aviso de privacidad (simulado)',
     privacyBody:
       'Un solo aviso cubre todo. Usamos tus datos para darte tu plan de estudio, tus estadísticas y el análisis de tus respuestas con IA, para mostrar tu alias, XP, nivel y racha en los grupos a los que te unas, y para mejorar la plataforma con datos sin tu identidad. A la IA solo viajan IDs seudónimos y texto del banco, nunca tu nombre ni tu correo. Puedes exportar o borrar tus datos cuando quieras. Este aviso es un ejemplo del prototipo.',
@@ -102,7 +102,7 @@ export const featureText = {
       level_xp: 'Nivel y XP',
       today: 'Para hoy',
       weak_topics: 'Temas débiles',
-      exam_countdown: 'Cuenta regresiva al ENARM',
+      exam_countdown: 'Cuenta regresiva (retirada)',
       bias_pattern: 'Patrón de sesgo',
       future_load: 'Carga futura',
       daily_goal: 'Meta diaria',
@@ -113,7 +113,7 @@ export const featureText = {
       range: 'Rango',
       days: (n: number) => `${n} días`,
       metric: 'Métrica',
-      metrics: { cards: 'Tarjetas', questions: 'Preguntas', focusMinutes: 'Minutos de enfoque' },
+      metrics: { cards: 'Tarjetas', questions: 'Preguntas', focusMinutes: 'Minutos de estudio' },
       summary: (active: number, total: number, sum: number, metric: string) =>
         `${active} de ${total} días con actividad. ${sum.toLocaleString('es-MX')} ${metric} en total.`,
       cell: (day: string, value: number, metric: string) => `${day}, ${value} ${metric}`,
@@ -142,19 +142,12 @@ export const featureText = {
       review: 'Repasar',
       simulate: 'Simular',
     },
-    countdown: {
-      days: (n: number) => plural(n, 'día', 'días'),
-      until: (date: string) => `para el ENARM del ${date}`,
-      today: 'El ENARM es hoy. Mucho éxito',
-      past: 'La fecha del ENARM ya pasó. Actualízala en Perfil',
-      noDate: 'Agrega la fecha del ENARM en Perfil para ver la cuenta regresiva.',
-    },
     goal: {
       progress: (done: number, goal: number, metric: string) => `${done} de ${goal} ${metric}`,
       metricNames: {
         cards: 'tarjetas',
         questions: 'preguntas',
-        focusMinutes: 'minutos de enfoque',
+        focusMinutes: 'minutos de estudio',
       },
       met: 'Meta cumplida',
     },
@@ -202,6 +195,11 @@ export const featureText = {
     retention: 'Retención deseada',
     retentionHint:
       'Qué tan seguido quieres recordar cada tarjeta. 90% por defecto, entre 80% y 97%.',
+    maxInterval: 'Intervalo máximo del repaso',
+    maxIntervalHint:
+      'Ninguna tarjeta se va más lejos que esto, así las vuelves a ver antes del examen. Mientras más corto, más repasos al día.',
+    maxIntervalOption: (days: number | null) =>
+      days === null ? 'Sin tope, FSRS puro' : days === 30 ? '30 días, recomendado' : `${days} días`,
     newCardsPerDay: 'Tarjetas nuevas por día',
     reviewsPerDay: 'Repasos máximos por día',
     studyTitle: 'Estudio',
@@ -392,9 +390,9 @@ export const featureText = {
   },
   appearance: {
     title: 'Apariencia',
-    description: 'Hazla tuya. Los cambios se ven al instante y se guardan en este dispositivo.',
+    description: 'Hazla tuya. Ves los cambios al momento y se quedan cuando guardas.',
     font: 'Fuente de lectura',
-    sample: 'Fiebre y rigidez de nuca',
+    sample: 'Así se verá tu texto',
     fonts: {
       jakarta: ['Moderna', 'La de Studiare, clara y amable'],
       atkinson: ['Hiperlegible', 'Diseñada para leer sin confundir letras'],
@@ -404,13 +402,67 @@ export const featureText = {
     size: 'Tamaño del texto',
     sizes: { sm: 'Chico', md: 'Normal', lg: 'Grande', xl: 'Muy grande' },
     background: 'Fondo',
-    backgrounds: { plain: 'Liso', glow: 'Resplandor', mesh: 'Colores de rama', dots: 'Puntos' },
+    backgrounds: {
+      plain: 'Liso',
+      glow: 'Resplandor',
+      mesh: 'Colores de rama',
+      dots: 'Puntos',
+      custom: 'Personalizado',
+    },
+    customColor: 'Color',
+    pickColor: (color: string) => `Usar el color ${color}`,
+    otherColor: 'Otro',
+    uploadPhoto: 'Subir foto',
+    changePhoto: 'Cambiar foto',
+    removePhoto: 'Quitar foto',
+    photoNote:
+      'La foto se reduce y se guarda solo en este dispositivo. Le ponemos un velo encima para que el texto se siga leyendo.',
+    imageError: 'No pudimos abrir esa imagen. Prueba con una foto JPG o PNG.',
+    imageTooBig: 'La foto no cupo en el almacenamiento del navegador. Prueba con otra más ligera.',
     motion: 'Movimiento y sonido',
     animations: 'Animaciones',
     animationsHint: 'Si tu sistema pide reducir movimiento, se respetará siempre.',
     confetti: 'Confeti al ganar',
     sounds: 'Sonidos al ganar y del Pomodoro',
     tryIt: 'Probar celebración',
+    save: 'Guardar apariencia',
+    discard: 'Descartar cambios',
+    unsaved: 'Tienes cambios sin guardar.',
+    saved: 'Apariencia guardada.',
+    discarded: 'Volvimos a lo que tenías guardado.',
+  },
+  profileCard: {
+    levelLine: (level: number, title: string) => `Nivel ${level} · ${title}`,
+    seeLevels: 'Ver niveles y títulos',
+    streak: (current: number, best: number) =>
+      `${plural(current, 'día', 'días')} de racha · récord ${best}`,
+    xp: (xp: number) => `${xp.toLocaleString('es-MX')} XP en total`,
+    photoSoon: 'Pronto podrás subir tu foto o elegir un avatar.',
+  },
+  studyPause: {
+    title: 'Estudio pausado',
+    body: (minutes: number) =>
+      `No vimos actividad en un rato, así que pausamos tu tiempo. Llevas ${plural(minutes, 'minuto', 'minutos')} de estudio en esta sesión.`,
+    resume: 'Reanudar',
+    finish: 'Finalizar sesión',
+  },
+  levelLadder: {
+    title: 'Niveles y títulos',
+    current: (level: number, title: string, xp: string) =>
+      `Vas en el nivel ${level}, ${title}, con ${xp} XP en total.`,
+    close: 'Cerrar',
+    toNextLevel: (left: string, level: number) => `Te faltan ${left} XP para el nivel ${level}`,
+    nextTitle: (title: string, level: number, left: string) =>
+      `Siguiente título, ${title} en el nivel ${level}. Te faltan ${left} XP.`,
+    maxTitle: 'Ya tienes el título más alto. Sigue sumando niveles.',
+    levels: 'Niveles',
+    titleColumn: 'Título',
+    xpColumn: 'XP total para llegar',
+    range: (from: number, to: number) => `${from} a ${to}`,
+    fromLevel: (from: number) => `${from} en adelante`,
+    you: 'tú',
+    howTo:
+      'Ganas XP con cada tarjeta repasada (3), cada pregunta correcta (10 a 30 según dificultad) o intentada (2), y con los retos. La racha suma hasta 50% extra.',
   },
   headerStats: {
     streak: (days: number) => `Racha de ${plural(days, 'día', 'días')}`,
@@ -418,6 +470,7 @@ export const featureText = {
       `Nivel ${level}, ${title}. ${into.toLocaleString('es-MX')} de ${next.toLocaleString('es-MX')} XP para el siguiente nivel`,
     short: (level: number) => `Nv ${level}`,
     profile: 'Tu perfil',
+    openLevels: 'Ver niveles y títulos',
   },
   party: {
     privacy:

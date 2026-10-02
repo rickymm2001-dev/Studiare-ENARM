@@ -30,6 +30,10 @@ export interface Snapshot {
   weeklyXp: number;
 }
 
+function addMinutes(map: Map<string, number>, day: string, minutes: number) {
+  map.set(day, (map.get(day) ?? 0) + minutes);
+}
+
 const emptyDay = (): DaySummary => ({ cards: 0, questions: 0, focusMinutes: 0, xp: 0 });
 
 export function buildSnapshot(input: {
@@ -45,6 +49,10 @@ export function buildSnapshot(input: {
   const latestCard = new Map<string, FsrsCardState>();
   let totalXp = 0;
   let errorsToday = 0;
+  // Minutos de estudio del día. Cuenta el tiempo activo de las sesiones y los enfoques del Pomodoro,
+  // y se queda con el mayor para no contar dos veces el mismo rato (D-063)
+  const sessions = new Map<string, number>();
+  const pomodoro = new Map<string, number>();
   for (const event of events) {
     const day = studyDayOf(new Date(event.at), event.tz);
     const entry = (activity[day] ??= emptyDay());
@@ -58,8 +66,10 @@ export function buildSnapshot(input: {
         if (!event.payload.correct && day === today) errorsToday += 1;
         break;
       case 'pomodoro_completed':
-        if (event.payload.phase === 'focus')
-          entry.focusMinutes += Math.round(event.payload.actualMinutes);
+        if (event.payload.phase === 'focus') addMinutes(pomodoro, day, event.payload.actualMinutes);
+        break;
+      case 'session_ended':
+        addMinutes(sessions, day, event.payload.durationMs / 60000);
         break;
       case 'xp_awarded':
         entry.xp += event.payload.amount;
@@ -68,6 +78,9 @@ export function buildSnapshot(input: {
       default:
         break;
     }
+  }
+  for (const [day, entry] of Object.entries(activity)) {
+    entry.focusMinutes = Math.round(Math.max(sessions.get(day) ?? 0, pomodoro.get(day) ?? 0));
   }
   const endOfToday = studyDayEnd(today, tz).getTime();
   let dueCards = 0;

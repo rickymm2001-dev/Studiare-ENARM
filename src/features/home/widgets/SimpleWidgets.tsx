@@ -1,5 +1,5 @@
 // Widgets de racha, nivel y XP, para hoy, cuenta regresiva y meta diaria (9.1, 9.4, 9.5).
-import { BookOpenCheck, Flame, Snowflake, Target, Timer, Trophy } from 'lucide-react';
+import { BookOpenCheck, Flame, Snowflake, Target, Trophy } from 'lucide-react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
@@ -93,28 +93,6 @@ export function TodayWidget({ snapshot }: { snapshot: Snapshot }) {
         </Button>
       </div>
     </div>
-  );
-}
-
-export function CountdownWidget({
-  snapshot,
-  examDate,
-}: {
-  snapshot: Snapshot;
-  examDate: string | null;
-}) {
-  if (examDate === null || snapshot.daysToExam === null) {
-    return <p className="text-sm text-fg-muted">{t.widgets.countdown.noDate}</p>;
-  }
-  if (snapshot.daysToExam < 0) return <p className="text-sm">{t.widgets.countdown.past}</p>;
-  if (snapshot.daysToExam === 0)
-    return <p className="font-semibold">{t.widgets.countdown.today}</p>;
-  return (
-    <BigNumber
-      icon={<Timer />}
-      value={t.widgets.countdown.days(snapshot.daysToExam)}
-      caption={t.widgets.countdown.until(examDate)}
-    />
   );
 }
 

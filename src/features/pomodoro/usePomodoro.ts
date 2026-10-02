@@ -23,9 +23,10 @@ const UI_KEY = 'enarm.pomodoro.ui.v1';
 
 function loadMinimized(): boolean {
   try {
-    return localStorage.getItem(UI_KEY) === 'min';
+    // Opcional (D-063). Hasta que el alumno lo abra, se ve solo el ícono
+    return localStorage.getItem(UI_KEY) !== 'max';
   } catch {
-    return false;
+    return true;
   }
 }
 
@@ -37,7 +38,7 @@ export const usePomodoroUi = create<{
   setMinimized: (value: boolean) => void;
   setMessage: (value: string) => void;
 }>()((set) => ({
-  minimized: typeof localStorage === 'undefined' ? false : loadMinimized(),
+  minimized: typeof localStorage === 'undefined' ? true : loadMinimized(),
   message: '',
   setMinimized: (minimized) => {
     set({ minimized });

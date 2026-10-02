@@ -7,6 +7,7 @@
 - Fase B en curso desde el 2026-10-02. Ricardo la aprobó junto con la Fase A
 - Bloques 9 y 10 terminados. Bloque 8 (contenido demo) pausado con 4 de 6 lotes y sin mazos (D-050)
 - Fase C en curso. Bloques 1 a 8 terminados, ver su sección
+- Fase P en curso (D-060). Bloque 1 casi listo y bloque 2 sigue, ver su sección
 - Pendiente de la Fase B. Cierre según 15.1, con el banco y los mazos pendientes para el final (D-050). Antes del cierre Ricardo decide el ajuste de sesgos (D-051) y si se prueba el cambio del método de fatiga. El lote 5 quedó a medias en content-drafts/b5, con Medicina interna (13) y Pediatría (12) validadas
 - Todo el trabajo se sube a GitHub con push frecuente y el CI corre npm run check en cada push a cualquier rama (D-050)
 - Trabajo desde GitHub listo (D-049). CI con npm run check en cada push, scripts de contenido en scripts/content y workflow de revisión en .claude/workflows
@@ -15,6 +16,29 @@
 - Logo de Studiare en el encabezado, en modo claro y oscuro (D-056)
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
+
+## Fase P. Plataforma real (D-060)
+
+### Bloques
+- [ ] 1. Sistema de diseño premium. Hecho lo principal (D-061 a D-065). Falta pulir pantallas una por una
+- [ ] 2. Portada de venta, registro, perfil con datos útiles y foto o avatar. Siguiente
+- [ ] 3. Esquema de Supabase con permisos por fila y roles
+- [ ] 4. Panel de administración de usuarios y asignaciones a médicos
+- [ ] 5. Pagos con Stripe y Mercado Pago en modo prueba
+- [ ] 6. Plan del día, misiones, ligas, insignias, duelos y compartir
+- [ ] 7. Progreso con estadísticas de técnica
+- [ ] 8. Subir mazos desde otras apps, CSV, Excel y Word
+- [ ] 9. Sincronización con el servidor
+
+### Bitácora
+- Bienvenida simple, un solo aviso de privacidad y sin cambio de rol (D-059). Análisis en docs/ANALISIS_PLATAFORMA.md y entrevista (D-060)
+- Diseño premium, fuentes propias, apariencia personalizable y celebraciones (D-061)
+- Encabezado con racha, nivel con barra y foto. Pomodoro en Repasar, opcional, con ajustes ahí mismo (D-062, D-063)
+- Tiempo de estudio activo con aviso de estudio pausado tras 2.5 minutos (D-063)
+- Tabla de niveles al tocar el nivel (D-063)
+- Intervalo máximo del repaso de 30 días con compresión suave (D-064)
+- Configuración aparte de Perfil, fondo personalizado con foto, sin cuenta regresiva y heatmap por meses (D-065). 318 pruebas pasan
+- Pendiente de Ricardo. Si cambia la escalera de títulos de nivel a Estudiante, Interno, Pasante, R1 a R4, Jefe de residentes, Adscrito y Profesor titular
 
 ## Fase C. Pantallas del alumno (esqueleto funcionando)
 

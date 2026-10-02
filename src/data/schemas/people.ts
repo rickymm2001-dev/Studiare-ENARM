@@ -14,6 +14,8 @@ import {
 export const UserSettingsSchema = z.strictObject({
   /** Retención deseada de FSRS, 0.90 por defecto, entre 0.80 y 0.97 (7.1) */
   desiredRetention: z.number().min(0.8).max(0.97).default(0.9),
+  /** Intervalo máximo del repaso en días con compresión suave. null es sin tope (D-064) */
+  maxIntervalDays: z.int().min(1).max(3650).nullable().default(30),
   newCardsPerDay: z.int().min(0).max(500).default(20),
   reviewsPerDay: z.int().min(0).max(5000).default(200),
   /** Paso de confianza antes de revelar en tarjetas. Se puede apagar para modo rápido (7.1) */

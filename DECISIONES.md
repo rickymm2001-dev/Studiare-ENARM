@@ -515,3 +515,26 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Arriba a la derecha siempre se ven la racha, el nivel con su barra de XP y nombre, y la foto de perfil que lleva a Perfil. La etiqueta IA simulada sale del encabezado y queda en Perfil y junto al contenido de IA
 - El Pomodoro sale de Inicio y vive solo en Repasar, como píldora a la altura del título. Arranca solo al empezar a repasar si estaba detenido, y se puede pausar, saltar o minimizar a un ícono que no muestra el tiempo. El minimizado se recuerda en el dispositivo
 - Al terminar una fase suena y aparece un aviso con el botón para empezar la siguiente. La siguiente fase no arranca sola para que el alumno decida
+
+### D-063. Pomodoro opcional, tiempo de estudio activo y tabla de niveles
+- Fecha 2026-10-02. Origen R
+- El Pomodoro es opcional. Empieza como ícono en Repasar y no arranca solo. Sus ajustes se abren ahí mismo con el engrane de la píldora, además de en Configuración. Ajusta D-062
+- El tiempo de estudio se cuenta aunque no se use el Pomodoro. Suma el tiempo entre interacciones mientras el hueco no pase de 2.5 minutos. Si pasa, sale "Estudio pausado" con Reanudar o Finalizar sesión, y el rato en pausa no cuenta. session_ended guarda ese tiempo activo
+- Los minutos de estudio del día son el mayor entre el tiempo activo de las sesiones y los enfoques del Pomodoro, para no contar dos veces el mismo rato. La meta y el heatmap dicen minutos de estudio
+- Al tocar el nivel del encabezado o del Perfil se abre la tabla de niveles y títulos, con el título actual marcado, el siguiente y cuánto XP falta
+
+### D-064. Intervalo máximo del repaso con compresión suave
+- Fecha 2026-10-02. Origen R. Le pareció que 47 días en Difícil y 100 en Fácil lo dejaban sin volver a ver las tarjetas antes del examen
+- Nuevo ajuste maxIntervalDays, 30 días por defecto, configurable en Configuración (7, 14, 21, 30, 45, 60, 90, 180 o sin tope)
+- Compresión suave d' = tope × (1 − e^(−d / tope)). Los intervalos cortos casi no cambian, ninguno pasa del tope y Difícil, Bien y Fácil siguen distintos. Con tope de 30, 47 días pasan a unos 23 y 100 a unos 29. Solo cambia la fecha de vencimiento, la estabilidad de FSRS queda igual
+- Más repasos por día es el costo. Con 3,700 tarjetas maduras y tope de 30 son unos 120 repasos diarios como mínimo
+
+### D-065. Configuración aparte, fondo personalizado y sin cuenta regresiva
+- Fecha 2026-10-02. Origen R
+- Perfil muestra quién eres (foto, nivel, racha, cuenta y plan). Configuración es la pantalla 27 en /configuracion, con apariencia, metas y repaso, estudio, Pomodoro, base activa, IA, exportar y borrar
+- Apariencia muestra los cambios al instante como vista previa y solo se quedan con Guardar. Descartar o salir sin guardar regresa lo guardado
+- Fondo personalizado con un color o una foto propia. La foto se reduce a 1,600 px y se comprime en el navegador, se guarda solo en este dispositivo y lleva un velo del color del tema para que el texto se lea
+- Se corrigió que el fondo elegido no se veía. El marco de la app pintaba su propio color encima
+- La muestra de fuentes dice "Así se verá tu texto"
+- Se quita por completo el widget de cuenta regresiva al ENARM. La fecha del ENARM se sigue usando por dentro para el modo examen de FSRS
+- El heatmap se divide por meses con el nombre del mes en chiquito arriba

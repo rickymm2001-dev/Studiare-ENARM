@@ -155,3 +155,34 @@ export function levelFor(totalXp: number, curve: LevelCurve = DEFAULT_LEVEL_CURV
     xpForNext: xpForLevel(level + 1, curve) - xpForLevel(level, curve),
   };
 }
+
+export interface TitleStep {
+  title: string;
+  fromLevel: number;
+  /** Último nivel con este título. null en el último título */
+  toLevel: number | null;
+  /** XP acumulado para llegar a fromLevel */
+  xpFrom: number;
+}
+
+/** Escalera de títulos con su rango de niveles y el XP para llegar a cada uno */
+export function titleLadder(curve: LevelCurve = DEFAULT_LEVEL_CURVE): TitleStep[] {
+  return TITLES.map((entry, index) => {
+    const next = TITLES[index + 1];
+    return {
+      title: entry.title,
+      fromLevel: entry.fromLevel,
+      toLevel: next ? next.fromLevel - 1 : null,
+      xpFrom: xpForLevel(entry.fromLevel, curve),
+    };
+  });
+}
+
+/** Siguiente título por alcanzar y cuánto XP falta. null si ya tiene el último */
+export function nextTitle(
+  totalXp: number,
+  curve: LevelCurve = DEFAULT_LEVEL_CURVE,
+): { step: TitleStep; xpLeft: number } | null {
+  const step = titleLadder(curve).find((entry) => entry.xpFrom > totalXp);
+  return step ? { step, xpLeft: step.xpFrom - Math.max(0, totalXp) } : null;
+}

@@ -1,8 +1,11 @@
-// Pomodoro en Repasar (9.2, D-062). Píldora compacta a la altura del título que corre mientras el
-// alumno estudia y se puede minimizar para no ver el tiempo. Al terminar una fase aparece un aviso
-// con el botón para empezar la siguiente. Los ajustes viven en Perfil.
-import { Maximize2, Minimize2, Pause, Play, SkipForward, Timer, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+// Pomodoro en Repasar (9.2, D-062, D-063). Opcional. Empieza como ícono y el alumno lo abre y lo
+// arranca si quiere. Píldora a la altura del título, minimizable para no ver el tiempo, con sus
+// ajustes ahí mismo. Al terminar una fase aparece un aviso con el botón para empezar la siguiente.
+import { Maximize2, Minimize2, Pause, Play, Settings2, SkipForward, Timer, X } from 'lucide-react';
+import { Popover } from 'radix-ui';
+import { useState } from 'react';
+import { useDataApi } from '@/data/context';
+import { updateProfile } from '@/data/usecases/profile';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
@@ -11,14 +14,8 @@ import type { ReadySession } from '../shared/RequireSession';
 import { formatClock } from './timer';
 import { usePomodoro, usePomodoroUi } from './usePomodoro';
 
-export function PomodoroPill({
-  session,
-  autoStart,
-}: {
-  session: ReadySession;
-  /** Arranca el enfoque solo al empezar a estudiar, si estaba detenido */
-  autoStart: boolean;
-}) {
+export function PomodoroPill({ session }: { session: ReadySession }) {
+  const api = useDataApi();
   const pomodoro = usePomodoro(session);
   const { state, left, start, pause, resume, stop } = pomodoro;
   const minimized = usePomodoroUi((ui) => ui.minimized);
@@ -26,12 +23,6 @@ export function PomodoroPill({
   const isBreak = state.phase !== 'focus';
   const phaseName = t.pomodoro.phases[state.phase];
   const running = state.status === 'running';
-
-  useEffect(() => {
-    if (autoStart && state.status === 'idle' && state.phase === 'focus') start();
-    // Solo al montar, cuando el alumno empieza a estudiar
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- arranca una sola vez por visita
-  }, [autoStart]);
 
   if (minimized) {
     return (
@@ -107,6 +98,28 @@ export function PomodoroPill({
       >
         <SkipForward aria-hidden />
       </Button>
+      <Popover.Root>
+        <Popover.Trigger asChild>
+          <Button variant="ghost" size="icon" aria-label={t.pomodoro.settings}>
+            <Settings2 aria-hidden />
+          </Button>
+        </Popover.Trigger>
+        <Popover.Portal>
+          <Popover.Content
+            align="end"
+            sideOffset={8}
+            className="animate-rise z-50 w-[min(22rem,calc(100vw-2rem))] rounded-xl border border-line bg-surface p-3 shadow-raised"
+          >
+            <p className="mb-2 font-semibold">{t.pomodoro.settings}</p>
+            <PomodoroSettingsForm
+              value={session.settings.pomodoro}
+              onSave={async (next) => {
+                await updateProfile(api, session.user, { settings: { pomodoro: next } });
+              }}
+            />
+          </Popover.Content>
+        </Popover.Portal>
+      </Popover.Root>
       <Button
         variant="ghost"
         size="icon"

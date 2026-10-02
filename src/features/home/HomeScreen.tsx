@@ -6,7 +6,6 @@ import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import type { WidgetLayout } from '@/data/schemas/activity';
-import { examDateFor } from '@/config/exam';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
@@ -29,13 +28,7 @@ import {
 import { buildSnapshot, type Snapshot } from './snapshot';
 import { HeatmapWidget } from './widgets/HeatmapWidget';
 import { DEFAULT_HEATMAP, type HeatmapSettings } from './widgets/heatmapSettings';
-import {
-  CountdownWidget,
-  DailyGoalWidget,
-  LevelWidget,
-  StreakWidget,
-  TodayWidget,
-} from './widgets/SimpleWidgets';
+import { DailyGoalWidget, LevelWidget, StreakWidget, TodayWidget } from './widgets/SimpleWidgets';
 
 export function HomeScreen() {
   return (
@@ -59,7 +52,9 @@ function Dashboard({ session }: { session: ReadySession }) {
   // El Pomodoro se mudó a Repasar. Un tablero guardado antes ya no lo muestra (D-062)
   const layout: WidgetLayout = {
     ...saved,
-    widgets: saved.widgets.filter((widget) => widget.type !== 'pomodoro'),
+    widgets: saved.widgets.filter(
+      (widget) => widget.type !== 'pomodoro' && widget.type !== 'exam_countdown',
+    ),
   };
   const save = (next: WidgetLayout) => {
     void api.repos.widgetLayouts.put(next);
@@ -193,8 +188,6 @@ function WidgetBody({
       return <LevelWidget snapshot={snapshot} />;
     case 'today':
       return <TodayWidget snapshot={snapshot} />;
-    case 'exam_countdown':
-      return <CountdownWidget snapshot={snapshot} examDate={examDateFor(session.user)} />;
     case 'daily_goal':
       return <DailyGoalWidget snapshot={snapshot} />;
     case 'party_challenge':

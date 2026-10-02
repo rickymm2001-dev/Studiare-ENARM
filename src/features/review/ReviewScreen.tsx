@@ -25,6 +25,8 @@ import { studyDayOf } from '@/engines/studyDay';
 import { awardXp } from '@/engines/xp';
 import { examDateFor } from '@/config/exam';
 import { t } from '@/i18n/es-MX';
+import { StudyPausedDialog } from '../shared/StudyPausedDialog';
+import { useStudyClock } from '../shared/useStudyClock';
 import { PomodoroNotice, PomodoroPill } from '../pomodoro/Pomodoro';
 import { celebrate } from '@/ui/celebrate';
 import { Badge } from '@/ui/components/badge';
@@ -125,6 +127,7 @@ function ReviewSession({
   const config: SchedulerConfig = useMemo(
     () => ({
       desiredRetention: settings.desiredRetention,
+      maxIntervalDays: settings.maxIntervalDays,
       examDate: examDateFor(user),
       timeZone: user.timeZone,
       thresholds: {
@@ -168,7 +171,6 @@ function ReviewSession({
   const sessionId = useRef<string | null>(null);
   const shownAt = useRef(0);
   const revealedAt = useRef(0);
-  const startedAt = useRef(0);
   const recorded = useRef<AppEvent[]>([]);
 
   // Momento en que se mostró la tarjeta actual, para medir el tiempo hasta revelar
@@ -179,12 +181,13 @@ function ReviewSession({
   const cardId = queue[position];
   const card = cardId ? cardById.get(cardId) : undefined;
   const note = card ? noteById.get(card.noteId) : undefined;
+  // Tiempo activo de estudio, con pausa tras 2.5 minutos sin actividad (D-063)
+  const study = useStudyClock(step !== 'done' && card !== undefined);
   const ctx = () => ({ userId: user.id, tz: user.timeZone, sessionId: sessionId.current });
 
   const ensureSession = async () => {
     if (sessionId.current) return;
     sessionId.current = newId();
-    startedAt.current = clock();
     await api.recordEvent(
       createEvent('session_started', { kind: 'review', config: { source: 'review' } }, ctx()),
     );
@@ -200,7 +203,7 @@ function ReviewSession({
             reason: position >= queue.length ? 'completed' : 'abandoned',
             items: reviewed,
             correct: null,
-            durationMs: clock() - startedAt.current,
+            durationMs: Math.round(study.activeMs()),
             xp: xpGained,
           },
           ctx(),
@@ -289,9 +292,19 @@ function ReviewSession({
         title={t.screens.review.title}
         description={t.screens.review.description}
         badges={session.isDemo ? <SimulatedDataLabel /> : undefined}
-        actions={<PomodoroPill session={session} autoStart={queue.length > 0} />}
+        actions={<PomodoroPill session={session} />}
       />
       <PomodoroNotice session={session} />
+      {study.paused ? (
+        <StudyPausedDialog
+          minutes={study.pausedActiveMs / 60000}
+          onResume={study.resume}
+          onFinish={() => {
+            study.resume();
+            void finish();
+          }}
+        />
+      ) : null}
     </>
   );
 
