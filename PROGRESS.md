@@ -9,7 +9,7 @@
 - Siguiente paso. Cierre de la Fase B según 15.1, con el banco y los mazos pendientes para el final (D-050). Antes del cierre Ricardo decide el ajuste de sesgos (D-051) y si se prueba el cambio del método de fatiga. El lote 5 quedó a medias en content-drafts/b5, con Medicina interna (13) y Pediatría (12) validadas
 - Todo el trabajo se sube a GitHub con push frecuente y el CI corre npm run check en cada push a cualquier rama (D-050)
 - Trabajo desde GitHub listo (D-049). CI con npm run check en cada push, scripts de contenido en scripts/content y workflow de revisión en .claude/workflows
-- Repo remoto privado en https://github.com/rickymm2001-dev/enarm-prototipo, rama main con seguimiento a origin (D-048)
+- Repo remoto privado en https://github.com/rickymm2001-dev/Studiare-ENARM (antes enarm-prototipo, GitHub redirige el nombre viejo). El trabajo en la nube va a la rama main-y84jz2 (D-048, D-050)
 
 ## Fase B. Motores núcleo, alumnos simulados y contenido demo
 
