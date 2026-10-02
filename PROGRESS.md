@@ -6,7 +6,7 @@
 - Fase A aprobada por Ricardo el 2026-10-02
 - Fase B en curso desde el 2026-10-02. Ricardo la aprobó junto con la Fase A
 - Bloque en curso. Bloque 8 (contenido demo). Lote 4 de 6 escrito. Revisión de IA de los lotes 1 a 4 hecha, con correcciones pendientes
-- Siguiente paso. Aplicar las correcciones de docs/revisiones/revision-ia-lotes-1-a-4.json, primero las 3 altas y las 43 medias. Las 44 de severidad media o alta que no alcanzaron verificador se verifican con el workflow enarm-demo-review en modo args.findings o se revisan a mano. Después siguen el lote 5, el lote 6 y los mazos. Guía completa en docs/contenido-demo.md
+- Siguiente paso. Los 3 hallazgos altos y los 43 medios de docs/revisiones/revision-ia-lotes-1-a-4.json ya se corrigieron. Faltan los 148 bajos (resolution pendiente), sobre todo los de contenido clínico y los de viñetas que no traen un dato que la justificación da por hecho. Después siguen el lote 5, el lote 6 y los mazos. Guía completa en docs/contenido-demo.md
 - Trabajo desde GitHub listo (D-049). CI con npm run check en cada push, scripts de contenido en scripts/content y workflow de revisión en .claude/workflows
 - Repo remoto privado en https://github.com/rickymm2001-dev/enarm-prototipo, rama main con seguimiento a origin (D-048)
 

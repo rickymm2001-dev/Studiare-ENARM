@@ -2,7 +2,7 @@
   "run": "wf_8e746d06-467",
   "date": "2026-10-02",
   "scope": "lotes 1 a 4, 200 preguntas",
-  "note": "Revisión de IA. Las verificaciones de severidad media y alta quedaron pendientes porque se alcanzó el límite de uso. Nada de esto sustituye la revisión médica.",
+  "note": "Revisión de IA. Las verificaciones de severidad media y alta quedaron pendientes porque se alcanzó el límite de uso. Nada de esto sustituye la revisión médica. Los hallazgos altos y medios ya se corrigieron (campo resolution). Los bajos quedan pendientes.",
   "findings": [
     {
       "key": "b1-q01",
@@ -14,7 +14,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-01.json"
+      "file": "chunk-01.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q03",
@@ -26,7 +27,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-01.json"
+      "file": "chunk-01.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q03",
@@ -38,7 +40,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-01.json"
+      "file": "chunk-01.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q04",
@@ -50,7 +53,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-01.json"
+      "file": "chunk-01.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q04",
@@ -62,7 +66,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-01.json"
+      "file": "chunk-01.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q06",
@@ -74,7 +79,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-01.json"
+      "file": "chunk-01.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q08",
@@ -86,7 +92,8 @@
       "lens": "item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-01.json"
+      "file": "chunk-01.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b1-q08",
@@ -98,7 +105,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-01.json"
+      "file": "chunk-01.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q10",
@@ -110,7 +118,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-01.json"
+      "file": "chunk-01.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q11",
@@ -122,7 +131,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-02.json"
+      "file": "chunk-02.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q12",
@@ -134,7 +144,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-02.json"
+      "file": "chunk-02.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q13",
@@ -146,7 +157,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-02.json"
+      "file": "chunk-02.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q13",
@@ -158,7 +170,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-02.json"
+      "file": "chunk-02.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q14",
@@ -170,7 +183,8 @@
       "lens": "clinical+item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-02.json"
+      "file": "chunk-02.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q14",
@@ -182,7 +196,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-02.json"
+      "file": "chunk-02.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q16",
@@ -194,7 +209,8 @@
       "lens": "clinical+item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-02.json"
+      "file": "chunk-02.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b1-q17",
@@ -206,7 +222,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-02.json"
+      "file": "chunk-02.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q19",
@@ -218,7 +235,8 @@
       "lens": "clinical+item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-02.json"
+      "file": "chunk-02.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b1-q19",
@@ -230,7 +248,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-02.json"
+      "file": "chunk-02.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q21",
@@ -242,7 +261,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-03.json"
+      "file": "chunk-03.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q21",
@@ -254,7 +274,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-03.json"
+      "file": "chunk-03.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q22",
@@ -266,7 +287,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-03.json"
+      "file": "chunk-03.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q22",
@@ -278,7 +300,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-03.json"
+      "file": "chunk-03.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q24",
@@ -290,7 +313,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-03.json"
+      "file": "chunk-03.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q25",
@@ -302,7 +326,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-03.json"
+      "file": "chunk-03.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q27",
@@ -314,7 +339,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-03.json"
+      "file": "chunk-03.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q27",
@@ -326,7 +352,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-03.json"
+      "file": "chunk-03.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q28",
@@ -338,7 +365,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-03.json"
+      "file": "chunk-03.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q29",
@@ -350,7 +378,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-03.json"
+      "file": "chunk-03.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q30",
@@ -362,7 +391,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-03.json"
+      "file": "chunk-03.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q30",
@@ -374,7 +404,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-03.json"
+      "file": "chunk-03.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q30",
@@ -386,7 +417,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-03.json"
+      "file": "chunk-03.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q31",
@@ -398,7 +430,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-04.json"
+      "file": "chunk-04.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q31",
@@ -410,7 +443,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-04.json"
+      "file": "chunk-04.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q32",
@@ -422,7 +456,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-04.json"
+      "file": "chunk-04.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q34",
@@ -434,7 +469,8 @@
       "lens": "clinical+item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-04.json"
+      "file": "chunk-04.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q35",
@@ -451,7 +487,8 @@
         "reasoning": "The key itself is sound. Insulin resistance (a) is clearly not a Rotterdam criterion, and every current guideline agrees. The reviewer calls this high severity (two defensible exceptions), and that overstates it. The 2003 Rotterdam consensus is literally worded as \"two of three criteria\" plus \"exclusion of other aetiologies\". So ruling out other causes belongs to the Rotterdam definition, and option g is not truly false. Most students would still pick a.\n\nThere is a smaller real problem, though.\n- Many ENARM review sources teach Rotterdam as \"2 de 3\" only, with exclusion as a separate prerequisite.\n- The item's own explanation says \"Además deben excluirse otras causas\", which treats exclusion as something outside the criteria. That argues against keeping g as a \"criterion\" distractor.\n- The causes listed in g (hiperprolactinemia, enfermedad tiroidea) are not the ones the 2003 consensus names. It names congenital adrenal hyperplasia, androgen-secreting tumours and Cushing. The others come from later guidelines (AE-PCOS, International PCOS Guideline 2023).\n\nSo g is a \"criterion\" distractor that is open to argument, in an item whose other eight distractors are clear-cut. This is a wording and option-choice flaw that does not flip the key. The 2023 International Guideline lists androgenic alopecia as clinical hyperandrogenism, so swapping g for it removes the ambiguity. The canonical set (a, b, c, d) does not include g and stays unchanged.",
         "fix": "Opción g. Texto: \"Alopecia de patrón androgénico\". Sesgo: anchoring. Rationale: \"Se ancla en el hirsutismo como única expresión clínica y olvida que la alopecia androgénica también cuenta como hiperandrogenismo clínico.\"\n\nExplicación completa: \"Los criterios de Rotterdam establecen el diagnóstico de síndrome de ovario poliquístico con dos de tres datos: oligoovulación o anovulación; hiperandrogenismo clínico (hirsutismo, acné o alopecia de patrón androgénico) o bioquímico (testosterona o índice de andrógenos libres elevados); y morfología de ovario poliquístico en el ultrasonido, por número de folículos o por volumen ovárico aumentado. La definición exige además excluir otras causas de hiperandrogenismo y de trastornos menstruales, como hiperplasia suprarrenal congénita no clásica, tumores productores de andrógenos, síndrome de Cushing, hiperprolactinemia o enfermedad tiroidea. La resistencia a la insulina, la obesidad y la acantosis son frecuentes y aumentan el riesgo metabólico, pero no forman parte de los criterios diagnósticos.\""
       },
-      "file": "chunk-04.json"
+      "file": "chunk-04.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b1-q35",
@@ -463,7 +500,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-04.json"
+      "file": "chunk-04.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q38",
@@ -475,7 +513,8 @@
       "lens": "clinical+item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-04.json"
+      "file": "chunk-04.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b1-q39",
@@ -492,7 +531,8 @@
         "reasoning": "Confirmed. The vignette says the Alvarado score is 9, but every MANTRELS criterion is present in the vignette. Migration of pain to the right iliac fossa 1, anorexia 1, nausea 1, right iliac fossa tenderness at McBurney 2, rebound 1, temperature 37.9 °C (37.3 or higher) 1, leukocytes 14,500/µL (over 10,000) 2, neutrophilia (left shift) 1. That totals 10, the maximum score. The explanation repeats 'puntuación de 9'. The key (appendectomy) does not change because the score is 7 or more either way. Still, the stated number is internally inconsistent and a student who adds up the score will see the contradiction. Medium fits, as a wrong number that does not flip the key. The simplest fix is to change 9 to 10 in both places. The explanation word count stays the same.",
         "fix": "En la viñeta cambia \"La escala de Alvarado es de 9.\" por \"La escala de Alvarado es de 10.\" En la explicación cambia \"En este paciente, con puntuación de 9, el tratamiento es la apendicectomía\" por \"En este paciente, con puntuación de 10, el tratamiento es la apendicectomía\". Otra opción, si se prefiere conservar el 9, es quitar \"y náusea\" de la viñeta (\"...migró a la fosa iliaca derecha, con anorexia.\") y en la opción g cambiar la justificación por \"Cierra en gastroenteritis por el dolor abdominal sin considerar la migración del dolor.\""
       },
-      "file": "chunk-04.json"
+      "file": "chunk-04.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b1-q40",
@@ -504,7 +544,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-04.json"
+      "file": "chunk-04.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q41",
@@ -516,7 +557,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-05.json"
+      "file": "chunk-05.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q41",
@@ -528,7 +570,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-05.json"
+      "file": "chunk-05.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q42",
@@ -540,7 +583,8 @@
       "lens": "clinical+item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-05.json"
+      "file": "chunk-05.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b1-q43",
@@ -552,7 +596,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-05.json"
+      "file": "chunk-05.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q44",
@@ -564,7 +609,8 @@
       "lens": "clinical+item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-05.json"
+      "file": "chunk-05.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b1-q44",
@@ -576,7 +622,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-05.json"
+      "file": "chunk-05.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q44",
@@ -588,7 +635,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-05.json"
+      "file": "chunk-05.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q45",
@@ -600,7 +648,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-05.json"
+      "file": "chunk-05.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q46",
@@ -612,7 +661,8 @@
       "lens": "item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-05.json"
+      "file": "chunk-05.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b1-q47",
@@ -624,7 +674,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-05.json"
+      "file": "chunk-05.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b1-q48",
@@ -636,7 +687,8 @@
       "lens": "clinical+item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-05.json"
+      "file": "chunk-05.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b1-q49",
@@ -648,7 +700,8 @@
       "lens": "clinical+item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-05.json"
+      "file": "chunk-05.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q03",
@@ -660,7 +713,8 @@
       "lens": "clinical+item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-06.json"
+      "file": "chunk-06.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b2-q03",
@@ -672,7 +726,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-06.json"
+      "file": "chunk-06.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q04",
@@ -684,7 +739,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-06.json"
+      "file": "chunk-06.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q04",
@@ -696,7 +752,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-06.json"
+      "file": "chunk-06.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q05",
@@ -708,7 +765,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-06.json"
+      "file": "chunk-06.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q06",
@@ -720,7 +778,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-06.json"
+      "file": "chunk-06.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q07",
@@ -732,7 +791,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-06.json"
+      "file": "chunk-06.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q07",
@@ -744,7 +804,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-06.json"
+      "file": "chunk-06.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q08",
@@ -756,7 +817,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-06.json"
+      "file": "chunk-06.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q09",
@@ -768,7 +830,8 @@
       "lens": "item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-06.json"
+      "file": "chunk-06.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b2-q12",
@@ -780,7 +843,8 @@
       "lens": "item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-07.json"
+      "file": "chunk-07.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b2-q12",
@@ -792,7 +856,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-07.json"
+      "file": "chunk-07.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q12",
@@ -804,7 +869,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-07.json"
+      "file": "chunk-07.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q13",
@@ -816,7 +882,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-07.json"
+      "file": "chunk-07.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q14",
@@ -828,7 +895,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-07.json"
+      "file": "chunk-07.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q15",
@@ -840,7 +908,8 @@
       "lens": "clinical",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-07.json"
+      "file": "chunk-07.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b2-q15",
@@ -852,7 +921,8 @@
       "lens": "item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-07.json"
+      "file": "chunk-07.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b2-q15",
@@ -864,7 +934,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-07.json"
+      "file": "chunk-07.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q16",
@@ -876,7 +947,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-07.json"
+      "file": "chunk-07.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q18",
@@ -888,7 +960,8 @@
       "lens": "clinical+item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-07.json"
+      "file": "chunk-07.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q18",
@@ -900,7 +973,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-07.json"
+      "file": "chunk-07.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q18",
@@ -912,7 +986,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-07.json"
+      "file": "chunk-07.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q20",
@@ -924,7 +999,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-07.json"
+      "file": "chunk-07.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q20",
@@ -936,7 +1012,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-07.json"
+      "file": "chunk-07.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q21",
@@ -948,7 +1025,8 @@
       "lens": "item+clinical",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-08.json"
+      "file": "chunk-08.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b2-q21",
@@ -960,7 +1038,8 @@
       "lens": "item+clinical",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-08.json"
+      "file": "chunk-08.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b2-q22",
@@ -972,7 +1051,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-08.json"
+      "file": "chunk-08.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q22",
@@ -984,7 +1064,8 @@
       "lens": "item+clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-08.json"
+      "file": "chunk-08.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q23",
@@ -996,7 +1077,8 @@
       "lens": "item+clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-08.json"
+      "file": "chunk-08.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q25",
@@ -1008,7 +1090,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-08.json"
+      "file": "chunk-08.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q25",
@@ -1020,7 +1103,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-08.json"
+      "file": "chunk-08.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q25",
@@ -1032,7 +1116,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-08.json"
+      "file": "chunk-08.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q28",
@@ -1044,7 +1129,8 @@
       "lens": "clinical",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-08.json"
+      "file": "chunk-08.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b2-q30",
@@ -1056,7 +1142,8 @@
       "lens": "clinical",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-08.json"
+      "file": "chunk-08.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b2-q31",
@@ -1068,7 +1155,8 @@
       "lens": "clinical+item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-09.json"
+      "file": "chunk-09.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b2-q32",
@@ -1080,7 +1168,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-09.json"
+      "file": "chunk-09.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q34",
@@ -1092,7 +1181,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-09.json"
+      "file": "chunk-09.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q35",
@@ -1104,7 +1194,8 @@
       "lens": "clinical",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-09.json"
+      "file": "chunk-09.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b2-q35",
@@ -1116,7 +1207,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-09.json"
+      "file": "chunk-09.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q39",
@@ -1128,7 +1220,8 @@
       "lens": "item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-09.json"
+      "file": "chunk-09.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b2-q40",
@@ -1140,7 +1233,8 @@
       "lens": "clinical+item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-09.json"
+      "file": "chunk-09.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b2-q44",
@@ -1152,7 +1246,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-10.json"
+      "file": "chunk-10.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q46",
@@ -1164,7 +1259,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-10.json"
+      "file": "chunk-10.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q46",
@@ -1176,7 +1272,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-10.json"
+      "file": "chunk-10.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q47",
@@ -1188,7 +1285,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-10.json"
+      "file": "chunk-10.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q48",
@@ -1200,7 +1298,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-10.json"
+      "file": "chunk-10.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q49",
@@ -1212,7 +1311,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-10.json"
+      "file": "chunk-10.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b2-q50",
@@ -1224,7 +1324,8 @@
       "lens": "clinical+item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-10.json"
+      "file": "chunk-10.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b3-q01",
@@ -1236,7 +1337,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-11.json"
+      "file": "chunk-11.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q01",
@@ -1248,7 +1350,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-11.json"
+      "file": "chunk-11.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q04",
@@ -1260,7 +1363,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-11.json"
+      "file": "chunk-11.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q04",
@@ -1272,7 +1376,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-11.json"
+      "file": "chunk-11.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q06",
@@ -1284,7 +1389,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-11.json"
+      "file": "chunk-11.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q07",
@@ -1296,7 +1402,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-11.json"
+      "file": "chunk-11.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q09",
@@ -1308,7 +1415,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-11.json"
+      "file": "chunk-11.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q10",
@@ -1320,7 +1428,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-11.json"
+      "file": "chunk-11.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q10",
@@ -1332,7 +1441,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-11.json"
+      "file": "chunk-11.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q12",
@@ -1344,7 +1454,8 @@
       "lens": "clinical",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-12.json"
+      "file": "chunk-12.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b3-q12",
@@ -1356,7 +1467,8 @@
       "lens": "item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-12.json"
+      "file": "chunk-12.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b3-q12",
@@ -1368,7 +1480,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-12.json"
+      "file": "chunk-12.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q14",
@@ -1380,7 +1493,8 @@
       "lens": "clinical",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-12.json"
+      "file": "chunk-12.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b3-q14",
@@ -1392,7 +1506,8 @@
       "lens": "item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-12.json"
+      "file": "chunk-12.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b3-q16",
@@ -1404,7 +1519,8 @@
       "lens": "clinical+item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-12.json"
+      "file": "chunk-12.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q17",
@@ -1416,7 +1532,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-12.json"
+      "file": "chunk-12.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q18",
@@ -1428,7 +1545,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-12.json"
+      "file": "chunk-12.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q19",
@@ -1440,7 +1558,8 @@
       "lens": "clinical",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-12.json"
+      "file": "chunk-12.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b3-q19",
@@ -1452,7 +1571,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-12.json"
+      "file": "chunk-12.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q20",
@@ -1464,7 +1584,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-12.json"
+      "file": "chunk-12.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q22",
@@ -1476,7 +1597,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-13.json"
+      "file": "chunk-13.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q23",
@@ -1488,7 +1610,8 @@
       "lens": "clinical+item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-13.json"
+      "file": "chunk-13.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b3-q25",
@@ -1500,7 +1623,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-13.json"
+      "file": "chunk-13.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q26",
@@ -1512,7 +1636,8 @@
       "lens": "clinical",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-13.json"
+      "file": "chunk-13.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b3-q27",
@@ -1524,7 +1649,8 @@
       "lens": "clinical",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-13.json"
+      "file": "chunk-13.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b3-q27",
@@ -1536,7 +1662,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-13.json"
+      "file": "chunk-13.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q27",
@@ -1548,7 +1675,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-13.json"
+      "file": "chunk-13.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q28",
@@ -1560,7 +1688,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-13.json"
+      "file": "chunk-13.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q30",
@@ -1572,7 +1701,8 @@
       "lens": "clinical",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-13.json"
+      "file": "chunk-13.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b3-q30",
@@ -1584,7 +1714,8 @@
       "lens": "item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-13.json"
+      "file": "chunk-13.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b3-q30",
@@ -1596,7 +1727,8 @@
       "lens": "item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-13.json"
+      "file": "chunk-13.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b3-q32",
@@ -1608,7 +1740,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-14.json"
+      "file": "chunk-14.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q32",
@@ -1620,7 +1753,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-14.json"
+      "file": "chunk-14.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q34",
@@ -1632,7 +1766,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-14.json"
+      "file": "chunk-14.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q35",
@@ -1644,7 +1779,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-14.json"
+      "file": "chunk-14.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q37",
@@ -1656,7 +1792,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-14.json"
+      "file": "chunk-14.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q38",
@@ -1668,7 +1805,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-14.json"
+      "file": "chunk-14.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q38",
@@ -1680,7 +1818,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-14.json"
+      "file": "chunk-14.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q40",
@@ -1692,7 +1831,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-14.json"
+      "file": "chunk-14.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q41",
@@ -1704,7 +1844,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-15.json"
+      "file": "chunk-15.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q42",
@@ -1716,7 +1857,8 @@
       "lens": "clinical",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-15.json"
+      "file": "chunk-15.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b3-q42",
@@ -1728,7 +1870,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-15.json"
+      "file": "chunk-15.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q43",
@@ -1740,7 +1883,8 @@
       "lens": "clinical+item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-15.json"
+      "file": "chunk-15.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b3-q43",
@@ -1752,7 +1896,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-15.json"
+      "file": "chunk-15.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q45",
@@ -1764,7 +1909,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-15.json"
+      "file": "chunk-15.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q46",
@@ -1776,7 +1922,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-15.json"
+      "file": "chunk-15.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b3-q48",
@@ -1788,7 +1935,8 @@
       "lens": "item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-15.json"
+      "file": "chunk-15.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b4-q03",
@@ -1800,7 +1948,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-16.json"
+      "file": "chunk-16.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q04",
@@ -1812,7 +1961,8 @@
       "lens": "clinical",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-16.json"
+      "file": "chunk-16.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b4-q04",
@@ -1824,7 +1974,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-16.json"
+      "file": "chunk-16.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q04",
@@ -1836,7 +1987,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-16.json"
+      "file": "chunk-16.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q05",
@@ -1848,7 +2000,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-16.json"
+      "file": "chunk-16.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q05",
@@ -1860,7 +2013,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-16.json"
+      "file": "chunk-16.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q05",
@@ -1872,7 +2026,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-16.json"
+      "file": "chunk-16.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q05",
@@ -1884,7 +2039,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-16.json"
+      "file": "chunk-16.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q07",
@@ -1896,7 +2052,8 @@
       "lens": "clinical+item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-16.json"
+      "file": "chunk-16.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q07",
@@ -1908,7 +2065,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-16.json"
+      "file": "chunk-16.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q09",
@@ -1920,7 +2078,8 @@
       "lens": "clinical",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-16.json"
+      "file": "chunk-16.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b4-q10",
@@ -1932,7 +2091,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-16.json"
+      "file": "chunk-16.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q11",
@@ -1944,7 +2104,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-17.json"
+      "file": "chunk-17.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q11",
@@ -1956,7 +2117,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-17.json"
+      "file": "chunk-17.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q12",
@@ -1968,7 +2130,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-17.json"
+      "file": "chunk-17.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q17",
@@ -1980,7 +2143,8 @@
       "lens": "item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-17.json"
+      "file": "chunk-17.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b4-q19",
@@ -1992,7 +2156,8 @@
       "lens": "clinical",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-17.json"
+      "file": "chunk-17.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b4-q19",
@@ -2004,7 +2169,8 @@
       "lens": "item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-17.json"
+      "file": "chunk-17.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b4-q20",
@@ -2016,7 +2182,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-17.json"
+      "file": "chunk-17.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q21",
@@ -2028,7 +2195,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-18.json"
+      "file": "chunk-18.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q21",
@@ -2040,7 +2208,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-18.json"
+      "file": "chunk-18.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q23",
@@ -2052,7 +2221,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-18.json"
+      "file": "chunk-18.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q23",
@@ -2064,7 +2234,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-18.json"
+      "file": "chunk-18.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q24",
@@ -2076,7 +2247,8 @@
       "lens": "clinical+item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-18.json"
+      "file": "chunk-18.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q25",
@@ -2088,7 +2260,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-18.json"
+      "file": "chunk-18.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q27",
@@ -2100,7 +2273,8 @@
       "lens": "clinical+item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-18.json"
+      "file": "chunk-18.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q27",
@@ -2112,7 +2286,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-18.json"
+      "file": "chunk-18.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q30",
@@ -2124,7 +2299,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-18.json"
+      "file": "chunk-18.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q31",
@@ -2136,7 +2312,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-19.json"
+      "file": "chunk-19.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q32",
@@ -2148,7 +2325,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-19.json"
+      "file": "chunk-19.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q32",
@@ -2160,7 +2338,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-19.json"
+      "file": "chunk-19.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q33",
@@ -2172,7 +2351,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-19.json"
+      "file": "chunk-19.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q33",
@@ -2184,7 +2364,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-19.json"
+      "file": "chunk-19.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q34",
@@ -2196,7 +2377,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-19.json"
+      "file": "chunk-19.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q35",
@@ -2208,7 +2390,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-19.json"
+      "file": "chunk-19.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q36",
@@ -2220,7 +2403,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-19.json"
+      "file": "chunk-19.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q40",
@@ -2232,7 +2416,8 @@
       "lens": "clinical",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-19.json"
+      "file": "chunk-19.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b4-q40",
@@ -2244,7 +2429,8 @@
       "lens": "item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-19.json"
+      "file": "chunk-19.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b4-q41",
@@ -2256,7 +2442,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-20.json"
+      "file": "chunk-20.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q41",
@@ -2268,7 +2455,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-20.json"
+      "file": "chunk-20.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q42",
@@ -2280,7 +2468,8 @@
       "lens": "clinical+item",
       "status": "pending_verification",
       "verdict": null,
-      "file": "chunk-20.json"
+      "file": "chunk-20.json",
+      "resolution": "corregido por el autor el 2026-10-02"
     },
     {
       "key": "b4-q42",
@@ -2292,7 +2481,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-20.json"
+      "file": "chunk-20.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q43",
@@ -2304,7 +2494,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-20.json"
+      "file": "chunk-20.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q45",
@@ -2316,7 +2507,8 @@
       "lens": "clinical",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-20.json"
+      "file": "chunk-20.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q49",
@@ -2328,7 +2520,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-20.json"
+      "file": "chunk-20.json",
+      "resolution": "pendiente"
     },
     {
       "key": "b4-q50",
@@ -2340,7 +2533,8 @@
       "lens": "item",
       "status": "low_not_verified",
       "verdict": null,
-      "file": "chunk-20.json"
+      "file": "chunk-20.json",
+      "resolution": "pendiente"
     }
   ]
 }

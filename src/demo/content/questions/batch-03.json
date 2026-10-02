@@ -4,7 +4,7 @@
   "cases": [
     {
       "key": "case-b3-prenatal",
-      "vignette": "Mujer de 24 años, primigesta, que acude a su primera consulta prenatal con embarazo de 9 semanas por fecha de última menstruación. Está sana, no toma medicamentos y no tiene antecedentes de importancia. Su grupo sanguíneo es O Rh negativo y su pareja es Rh positivo."
+      "vignette": "Mujer de 24 años, primigesta, que acude a su primera consulta prenatal con embarazo de 5 semanas por fecha de última menstruación. Está sana, no toma medicamentos y no tiene antecedentes de importancia. Su grupo sanguíneo es O Rh negativo y su pareja es Rh positivo."
     }
   ],
   "questions": [
@@ -990,7 +990,7 @@
       "branch": "internal_medicine",
       "topic": "cardiology",
       "subtopic": "hypertension",
-      "vignette": "Mujer de 60 años con diabetes tipo 2, con presión arterial de 152/94 mmHg en dos consultas y relación albúmina creatinina en orina de 250 mg/g. Su potasio y su creatinina son normales.",
+      "vignette": "Mujer de 60 años con diabetes tipo 2, con presión arterial de 144/88 mmHg en dos consultas y relación albúmina creatinina en orina de 250 mg/g. Su potasio y su creatinina son normales.",
       "prompt": "¿Cuál es el fármaco de elección?",
       "polarity": "affirmative",
       "task": "treatment_of_choice",
@@ -1067,7 +1067,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "e"],
-      "explanation": "En pacientes con diabetes e hipertensión se busca una presión menor de 130/80 mmHg cuando es segura. Si hay albuminuria, el fármaco de elección es un inhibidor de la enzima convertidora de angiotensina o, si no se tolera, un antagonista del receptor de angiotensina, porque además de bajar la presión reducen la albuminuria y la progresión de la enfermedad renal. Se vigilan potasio y creatinina después de iniciarlos. No deben combinarse entre sí por el riesgo de hiperpotasemia y lesión renal. Si no se alcanza la meta, se agrega un calcioantagonista o un diurético tiazídico. Estos fármacos están contraindicados en el embarazo.",
+      "explanation": "En pacientes con diabetes e hipertensión se busca una presión menor de 130/80 mmHg cuando es segura. Si hay albuminuria, el fármaco de elección es un inhibidor de la enzima convertidora de angiotensina o, si no se tolera, un antagonista del receptor de angiotensina, porque además de bajar la presión reducen la albuminuria y la progresión de la enfermedad renal. Se vigilan potasio y creatinina después de iniciarlos. No deben combinarse entre sí por el riesgo de hiperpotasemia y lesión renal. Si no se alcanza la meta, o desde el inicio si la presión es de 150/90 mmHg o más, se agrega un calcioantagonista o un diurético tiazídico. Estos fármacos están contraindicados en el embarazo.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el adulto"
       ]
@@ -1206,7 +1206,7 @@
           "text": "Vancomicina con meropenem",
           "correct": false,
           "bias": "complexity_bias",
-          "rationale": "Usa un espectro innecesario y no cubre Listeria de forma confiable."
+          "rationale": "Usa un espectro innecesariamente amplio que favorece la resistencia bacteriana y no es el esquema empírico recomendado."
         },
         {
           "key": "f",
@@ -1684,7 +1684,7 @@
           "text": "Pentavalente acelular, hepatitis B y Sabin oral",
           "correct": false,
           "bias": "status_quo_bias",
-          "rationale": "Era un esquema anterior que ya fue sustituido."
+          "rationale": "Mezcla vacunas de esquemas anteriores que ya fueron sustituidas por la hexavalente."
         }
       ],
       "canonical": ["a", "b", "c", "d"],
@@ -1966,7 +1966,7 @@
       "topic": "pediatric_neurology",
       "subtopic": "febrile_seizures",
       "vignette": "Niña de 18 meses que presenta una crisis convulsiva durante un cuadro febril por infección respiratoria.",
-      "prompt": "Todas las siguientes son características de una crisis febril simple, EXCEPTO:",
+      "prompt": "Todas las siguientes corresponden a la definición o al abordaje de una crisis febril simple, EXCEPTO:",
       "polarity": "negative",
       "task": "diagnosis",
       "difficulty": 2,
@@ -2028,10 +2028,10 @@
         },
         {
           "key": "i",
-          "text": "Antecedente familiar de crisis febriles",
+          "text": "Sin alteración metabólica que explique la crisis",
           "correct": false,
-          "bias": "clustering_illusion",
-          "rationale": "Ve en la historia familiar un patrón de enfermedad grave, aunque es un antecedente común."
+          "bias": "premature_closure",
+          "rationale": "Ve la fiebre como explicación suficiente y olvida que la definición exige descartar otras causas, como una alteración metabólica."
         },
         {
           "key": "j",
@@ -2042,7 +2042,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "d"],
-      "explanation": "Las crisis febriles son las crisis convulsivas más frecuentes en la infancia y ocurren entre los 6 meses y los 5 años, con fiebre y sin infección del sistema nervioso central ni otra causa. Son simples cuando son generalizadas, duran menos de 15 minutos, no se repiten en 24 horas y el niño se recupera por completo. Son complejas si son focales, duran más de 15 minutos o se repiten en 24 horas. Las simples tienen buen pronóstico, no requieren electroencefalograma, imagen ni tratamiento anticonvulsivo continuo, y el riesgo de epilepsia es apenas mayor que el de la población general. El antecedente familiar es frecuente.",
+      "explanation": "Las crisis febriles son las crisis convulsivas más frecuentes en la infancia y ocurren entre los 6 meses y los 5 años, con fiebre y sin infección del sistema nervioso central, alteración metabólica ni otra causa. Son simples cuando son generalizadas, duran menos de 15 minutos, no se repiten en 24 horas y el niño se recupera por completo. Son complejas si son focales, duran más de 15 minutos o se repiten en 24 horas. Las simples tienen buen pronóstico, no requieren electroencefalograma, imagen ni tratamiento anticonvulsivo continuo, y el riesgo de epilepsia es apenas mayor que el de la población general.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de las crisis febriles en niños"
       ]
@@ -2329,7 +2329,7 @@
       "options": [
         {
           "key": "a",
-          "text": "Biometría hemática, glucosa, examen general de orina con urocultivo y pruebas de VIH y sífilis",
+          "text": "Biometría hemática, glucosa, examen general de orina con urocultivo, pruebas de VIH y sífilis, y Coombs indirecto por ser Rh negativo",
           "correct": true,
           "rationale": "Son los estudios de tamizaje de la primera consulta prenatal."
         },
@@ -2398,7 +2398,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "e"],
-      "explanation": "En la primera consulta prenatal se realiza historia clínica completa, se calcula la edad gestacional y se solicitan estudios de tamizaje. Incluyen biometría hemática, grupo sanguíneo y factor Rh, glucosa en ayuno, examen general de orina con urocultivo para detectar bacteriuria asintomática, y pruebas de VIH y sífilis, que se ofrecen a todas las embarazadas y se repiten en el tercer trimestre. La curva de tolerancia a la glucosa se realiza entre las semanas 24 y 28, o antes si hay factores de riesgo. El ultrasonido del primer trimestre confirma la edad gestacional. Detectar y tratar a tiempo la sífilis y el VIH evita la transmisión al bebé.",
+      "explanation": "En la primera consulta prenatal se realiza historia clínica completa, se calcula la edad gestacional y se solicitan estudios de tamizaje. Incluyen biometría hemática, grupo sanguíneo y factor Rh, con Coombs indirecto en las mujeres Rh negativo, glucosa en ayuno, examen general de orina con urocultivo para detectar bacteriuria asintomática, y pruebas de VIH y sífilis, que se ofrecen a todas las embarazadas y se repiten en el tercer trimestre. La curva de tolerancia a la glucosa se realiza entre las semanas 24 y 28, o antes si hay factores de riesgo. El ultrasonido del primer trimestre confirma la edad gestacional. Detectar y tratar a tiempo la sífilis y el VIH evita la transmisión al bebé.",
       "gpcRefs": [
         "Guía de Práctica Clínica de control prenatal con atención centrada en la paciente"
       ]
@@ -2589,7 +2589,7 @@
       "topic": "contraception",
       "subtopic": "hormonal_contraception",
       "vignette": "Mujer de 28 años que desea iniciar anticonceptivos orales combinados. Se revisan sus antecedentes antes de indicarlos.",
-      "prompt": "¿Cuál de las siguientes es una contraindicación para los anticonceptivos orales combinados?",
+      "prompt": "Todas las siguientes condiciones permiten usar anticonceptivos orales combinados, EXCEPTO:",
       "polarity": "negative",
       "task": "prevention_screening",
       "difficulty": 2,
@@ -2647,7 +2647,7 @@
           "text": "Índice de masa corporal de 32",
           "correct": false,
           "bias": "loss_aversion",
-          "rationale": "Es una precaución, no una contraindicación absoluta."
+          "rationale": "La obesidad sola es categoría 2, en la que los beneficios superan los riesgos, y no impide su uso."
         },
         {
           "key": "i",
@@ -2665,7 +2665,7 @@
         }
       ],
       "canonical": ["a", "b", "d", "h"],
-      "explanation": "Los criterios médicos de elegibilidad para el uso de anticonceptivos clasifican cada condición en cuatro categorías. Los anticonceptivos orales combinados contienen estrógeno, que aumenta el riesgo de trombosis, y están contraindicados en migraña con aura, por su mayor riesgo de evento vascular cerebral, antecedente o riesgo alto de tromboembolia, tabaquismo de 15 cigarrillos o más al día después de los 35 años, hipertensión no controlada, cardiopatía isquémica, cáncer de mama actual, enfermedad hepática grave y las primeras semanas del puerperio. La obesidad es una precaución, no una contraindicación absoluta. En el acné, la dismenorrea y el síndrome de ovario poliquístico pueden ser útiles.",
+      "explanation": "Los criterios médicos de elegibilidad para el uso de anticonceptivos clasifican cada condición en cuatro categorías. Los anticonceptivos orales combinados contienen estrógeno, que aumenta el riesgo de trombosis, y están contraindicados en migraña con aura, por su mayor riesgo de evento vascular cerebral, antecedente o riesgo alto de tromboembolia, tabaquismo de 15 cigarrillos o más al día después de los 35 años, hipertensión no controlada, cardiopatía isquémica, cáncer de mama actual, enfermedad hepática grave y las primeras semanas del puerperio. La obesidad sola es categoría 2, en la que los beneficios superan los riesgos. En el acné, la dismenorrea y el síndrome de ovario poliquístico pueden ser útiles.",
       "gpcRefs": [
         "Guía de Práctica Clínica de criterios médicos de elegibilidad y selección del método anticonceptivo"
       ]
@@ -3653,9 +3653,9 @@
       "topic": "colorectal_anorectal",
       "subtopic": "anal_fissure_fistula",
       "vignette": "Hombre de 35 años con dolor intenso al evacuar y sangrado escaso de 3 meses. Tiene una fisura en la línea media posterior con bordes indurados, fibras del esfínter visibles en el fondo y un colgajo cutáneo centinela. Ya usa fibra y baños de asiento.",
-      "prompt": "¿Cuál es el tratamiento de elección?",
+      "prompt": "¿Cuál es el tratamiento inicial más apropiado?",
       "polarity": "affirmative",
-      "task": "treatment_of_choice",
+      "task": "initial_treatment",
       "difficulty": 4,
       "options": [
         {
@@ -3729,7 +3729,7 @@
         }
       ],
       "canonical": ["a", "b", "f", "j"],
-      "explanation": "La fisura anal es un desgarro del anodermo, casi siempre en la línea media posterior, que causa dolor intenso al evacuar y sangrado escaso. Es crónica cuando dura más de 6 a 8 semanas o tiene bordes indurados, fibras del esfínter visibles, colgajo centinela o papila hipertrófica. El mecanismo es la hipertonía del esfínter interno, que reduce el flujo sanguíneo. Además de fibra y baños de asiento, el tratamiento de elección es la relajación química del esfínter con diltiazem o nitroglicerina tópicos. Si no hay respuesta, se usa toxina botulínica o esfinterotomía lateral interna. Las fisuras fuera de la línea media sugieren enfermedad de Crohn, infecciones o cáncer.",
+      "explanation": "La fisura anal es un desgarro del anodermo, casi siempre en la línea media posterior, que causa dolor intenso al evacuar y sangrado escaso. Es crónica cuando dura más de 6 a 8 semanas o tiene bordes indurados, fibras del esfínter visibles, colgajo centinela o papila hipertrófica. El mecanismo es la hipertonía del esfínter interno, que reduce el flujo sanguíneo. Además de fibra y baños de asiento, el tratamiento inicial es la relajación química del esfínter con diltiazem o nitroglicerina tópicos. Si no hay respuesta, se usa toxina botulínica o esfinterotomía lateral interna, que es el tratamiento quirúrgico de elección. Las fisuras fuera de la línea media sugieren enfermedad de Crohn, infecciones o cáncer.",
       "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento de la fisura anal"]
     },
     {
@@ -3739,7 +3739,7 @@
       "branch": "general_surgery",
       "topic": "vascular_surgery",
       "subtopic": "aortic_aneurysm",
-      "vignette": "Hombre de 70 años, fumador e hipertenso, en quien un ultrasonido muestra un aneurisma de aorta abdominal infrarrenal de 5.8 cm. Está asintomático y su riesgo quirúrgico es aceptable. Hace un año medía 5.0 cm.",
+      "vignette": "Hombre de 70 años, fumador e hipertenso, en quien un ultrasonido muestra un aneurisma de aorta abdominal infrarrenal de 5.8 cm. Está asintomático y su riesgo quirúrgico es aceptable. Hace un año medía 4.7 cm.",
       "prompt": "¿Cuál es la conducta más apropiada?",
       "polarity": "affirmative",
       "task": "next_step",
@@ -4252,10 +4252,10 @@
         },
         {
           "key": "j",
-          "text": "Recomendar no consumir alcohol",
+          "text": "Revalorar la gravedad durante las primeras 48 horas",
           "correct": false,
-          "bias": "halo_horn_effect",
-          "rationale": "Se piensa que solo aplica a pacientes con alcoholismo."
+          "bias": "premature_closure",
+          "rationale": "Como es leve al ingreso parece innecesario, aunque puede evolucionar a moderada o grave en las primeras 48 horas."
         }
       ],
       "canonical": ["a", "b", "c", "d"],

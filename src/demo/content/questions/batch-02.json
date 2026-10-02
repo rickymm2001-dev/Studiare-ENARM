@@ -245,10 +245,10 @@
         },
         {
           "key": "h",
-          "text": "Losartán si no tolera el enalapril",
+          "text": "Captopril",
           "correct": false,
           "bias": "premature_closure",
-          "rationale": "Se olvida que el antagonista del receptor sustituye al inhibidor de la enzima convertidora."
+          "rationale": "Se piensa que solo el enalapril tiene evidencia, aunque la reducción de la mortalidad es un efecto de clase de los inhibidores de la enzima convertidora."
         },
         {
           "key": "i",
@@ -266,7 +266,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "d"],
-      "explanation": "En la insuficiencia cardiaca con fracción de expulsión reducida, los fármacos que reducen la mortalidad son los inhibidores de la enzima convertidora de angiotensina o, si no se toleran, los antagonistas del receptor de angiotensina, o bien sacubitrilo con valsartán, los betabloqueadores con evidencia como carvedilol, bisoprolol y metoprolol de liberación prolongada, los antagonistas de mineralocorticoides como espironolactona y eplerenona, y los inhibidores del cotransportador de sodio y glucosa tipo 2 como dapagliflozina y empagliflozina. Los diuréticos de asa, como la furosemida, alivian la congestión y los síntomas, pero no han demostrado reducir la mortalidad.",
+      "explanation": "En la insuficiencia cardiaca con fracción de expulsión reducida, los fármacos que reducen la mortalidad son los inhibidores de la enzima convertidora de angiotensina, como enalapril o captopril, o bien sacubitrilo con valsartán, los betabloqueadores con evidencia como carvedilol, bisoprolol y metoprolol de liberación prolongada, los antagonistas de mineralocorticoides como espironolactona y eplerenona, y los inhibidores del cotransportador de sodio y glucosa tipo 2 como dapagliflozina y empagliflozina. Los diuréticos de asa, como la furosemida, alivian la congestión y los síntomas, pero no han demostrado reducir la mortalidad. Si no se toleran los inhibidores de la enzima convertidora, se usa un antagonista del receptor de angiotensina, que reduce las hospitalizaciones.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la insuficiencia cardiaca crónica"
       ]
@@ -798,7 +798,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "d"],
-      "explanation": "Las guías actuales recomiendan iniciar tratamiento antirretroviral en todas las personas con infección por VIH, sin importar la cifra de linfocitos CD4, y lo antes posible después del diagnóstico, incluso el mismo día cuando hay condiciones. El tratamiento temprano reduce la progresión, las complicaciones y la mortalidad, y una carga viral indetectable evita la transmisión sexual. Se usan combinaciones de al menos tres fármacos activos, como dos inhibidores nucleósidos más un inhibidor de integrasa. Esperar a que bajen los CD4 era una recomendación anterior. La profilaxis de infecciones oportunistas depende de la cifra de CD4.",
+      "explanation": "Las guías actuales recomiendan iniciar tratamiento antirretroviral en todas las personas con infección por VIH, sin importar la cifra de linfocitos CD4, y lo antes posible después del diagnóstico, incluso el mismo día cuando hay condiciones. El tratamiento temprano reduce la progresión, las complicaciones y la mortalidad, y una carga viral indetectable evita la transmisión sexual. Se usan esquemas combinados, de preferencia dos inhibidores nucleósidos más un inhibidor de integrasa, y nunca monoterapia. Esperar a que bajen los CD4 era una recomendación anterior. La profilaxis de infecciones oportunistas depende de la cifra de CD4.",
       "gpcRefs": [
         "Guía de Práctica Clínica de tratamiento antirretroviral del paciente adulto con infección por VIH"
       ]
@@ -1058,8 +1058,8 @@
           "key": "j",
           "text": "Arritmia supraventricular",
           "correct": false,
-          "bias": "confirmation_bias",
-          "rationale": "Busca confirmar una causa cardiaca a pesar del electrocardiograma normal."
+          "bias": "focusing_illusion",
+          "rationale": "Se fija en las palpitaciones súbitas, pero la arritmia no explica el miedo intenso a morir, el temblor ni la evitación. Un electrocardiograma entre crisis no la descarta y, si hay duda, se busca con monitoreo ambulatorio."
         }
       ],
       "canonical": ["a", "b", "c", "e"],
@@ -1251,7 +1251,7 @@
       "branch": "pediatrics",
       "topic": "immunizations",
       "subtopic": "vaccine_contraindications",
-      "vignette": "Lactante de 4 meses que acude a su vacunación programada. La madre pregunta qué situaciones impedirían vacunarlo.",
+      "vignette": "En la consulta de vacunación revisas qué situaciones obligan a no aplicar o a posponer una vacuna.",
       "prompt": "Todas las siguientes situaciones impiden aplicar una vacuna en ese momento, EXCEPTO:",
       "polarity": "negative",
       "task": "prevention_screening",
@@ -1783,7 +1783,7 @@
       "branch": "pediatrics",
       "topic": "pediatric_neurology",
       "subtopic": "bacterial_meningitis_child",
-      "vignette": "Niño de 4 años con fiebre de 39.5 °C, cefalea, vómito y somnolencia de 12 horas. Tiene rigidez de nuca y signos de Kernig y Brudzinski positivos, sin datos de hipertensión endocraneana ni focalización.",
+      "vignette": "Niño de 4 años con fiebre de 39.5 °C, cefalea, vómito y somnolencia leve de 12 horas, con Glasgow de 14. Tiene rigidez de nuca y signos de Kernig y Brudzinski positivos, sin datos de hipertensión endocraneana ni focalización.",
       "prompt": "¿Cuál es la conducta más apropiada?",
       "polarity": "affirmative",
       "task": "next_step",
@@ -1791,7 +1791,7 @@
       "options": [
         {
           "key": "a",
-          "text": "Tomar hemocultivos, realizar punción lumbar e iniciar de inmediato ceftriaxona intravenosa",
+          "text": "Tomar hemocultivos, realizar punción lumbar e iniciar de inmediato ceftriaxona más vancomicina intravenosas",
           "correct": true,
           "rationale": "Ante la sospecha de meningitis bacteriana el antibiótico no debe retrasarse."
         },
@@ -1860,7 +1860,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "d"],
-      "explanation": "La meningitis bacteriana es una urgencia. Se sospecha con fiebre, cefalea, vómito, alteración del estado de alerta y signos meníngeos. Ante la sospecha se toman hemocultivos, se realiza punción lumbar si no hay contraindicación y se inicia de inmediato antibiótico empírico intravenoso, como ceftriaxona o cefotaxima, con vancomicina cuando se sospecha neumococo resistente. La dexametasona antes o junto con la primera dosis reduce las secuelas auditivas en algunos casos. La tomografía antes de la punción solo se indica con focalización, papiledema, crisis convulsivas o inmunosupresión. Si la punción se retrasa, el antibiótico no debe esperar.",
+      "explanation": "La meningitis bacteriana es una urgencia. Se sospecha con fiebre, cefalea, vómito, alteración del estado de alerta y signos meníngeos. Ante la sospecha se toman hemocultivos, se realiza punción lumbar si no hay contraindicación y se inicia de inmediato antibiótico empírico intravenoso, como ceftriaxona o cefotaxima más vancomicina por la posibilidad de neumococo resistente, y se ajusta según el cultivo. La dexametasona antes o junto con la primera dosis reduce las secuelas auditivas en algunos casos. La tomografía antes de la punción solo se indica con focalización, papiledema, crisis convulsivas, deterioro moderado o grave del estado de alerta o inmunosupresión. Si la punción se retrasa, el antibiótico no debe esperar.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la meningitis bacteriana aguda en niños"
       ]
@@ -2414,7 +2414,7 @@
       "options": [
         {
           "key": "a",
-          "text": "Esquema de corticoesteroide prenatal, tocolisis por 48 horas y sulfato de magnesio para neuroprotección fetal",
+          "text": "Esquema de corticoesteroide prenatal, tocolisis por 48 horas y sulfato de magnesio para neuroprotección fetal si el nacimiento se vuelve inminente",
           "correct": true,
           "rationale": "Reduce las complicaciones neonatales. La tocolisis solo da tiempo para completar el esquema."
         },
@@ -2483,7 +2483,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "d"],
-      "explanation": "El trabajo de parto pretérmino se define por contracciones regulares con cambios cervicales antes de las 37 semanas. Entre las 24 y 34 semanas se aplica un esquema de corticoesteroide, como betametasona en dos dosis, que reduce la dificultad respiratoria, la hemorragia intraventricular y la mortalidad neonatal. La tocolisis, con nifedipino o atosiban, solo busca retrasar el nacimiento 48 horas para completar el esquema o trasladar a la paciente, y no debe prolongarse. Antes de las 32 semanas se agrega sulfato de magnesio para neuroprotección fetal. Los antibióticos no están indicados con membranas íntegras sin infección, salvo la profilaxis contra estreptococo del grupo B cuando corresponde.",
+      "explanation": "El trabajo de parto pretérmino se define por contracciones regulares con cambios cervicales antes de las 37 semanas. Entre las 24 y 34 semanas se aplica un esquema de corticoesteroide, como betametasona en dos dosis, que reduce la dificultad respiratoria, la hemorragia intraventricular y la mortalidad neonatal. La tocolisis, con nifedipino o atosiban, solo busca retrasar el nacimiento 48 horas para completar el esquema o trasladar a la paciente, y no debe prolongarse. Antes de las 32 semanas, cuando el nacimiento se considera inminente, se indica sulfato de magnesio para neuroprotección fetal. Los antibióticos no están indicados con membranas íntegras sin infección, salvo la profilaxis contra estreptococo del grupo B cuando corresponde.",
       "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y manejo del parto pretérmino"]
     },
     {
@@ -2590,7 +2590,7 @@
       "options": [
         {
           "key": "a",
-          "text": "Medición seriada de gonadotropina coriónica hasta que se negativice, con anticoncepción hormonal eficaz durante la vigilancia",
+          "text": "Medición seriada de gonadotropina coriónica hasta su negativización y durante la vigilancia posterior, con anticoncepción hormonal eficaz",
           "correct": true,
           "rationale": "Detecta a tiempo la neoplasia trofoblástica y evita que un embarazo confunda el seguimiento."
         },
@@ -2679,7 +2679,7 @@
       "options": [
         {
           "key": "a",
-          "text": "Ceftriaxona intramuscular en dosis única más doxiciclina oral por 14 días, con o sin metronidazol",
+          "text": "Ceftriaxona intramuscular en dosis única más doxiciclina y metronidazol orales por 14 días",
           "correct": true,
           "rationale": "Cubre gonococo, clamidia y anaerobios en el manejo ambulatorio."
         },
@@ -2748,7 +2748,7 @@
         }
       ],
       "canonical": ["a", "b", "e", "f"],
-      "explanation": "La enfermedad pélvica inflamatoria es la infección del tracto genital superior, causada con frecuencia por Neisseria gonorrhoeae y Chlamydia trachomatis, además de flora vaginal. El diagnóstico es clínico ante dolor pélvico con dolor a la movilización del cérvix, uterino o anexial en una mujer sexualmente activa, y se apoya con fiebre, flujo purulento y leucocitosis. El tratamiento empírico debe iniciarse pronto para evitar infertilidad, embarazo ectópico y dolor pélvico crónico. En casos leves a moderados es ambulatorio con ceftriaxona intramuscular en dosis única más doxiciclina por 14 días, con o sin metronidazol. Se hospitaliza con absceso tuboovárico, embarazo, enfermedad grave, intolerancia a la vía oral o falta de respuesta. Las parejas sexuales deben tratarse.",
+      "explanation": "La enfermedad pélvica inflamatoria es la infección del tracto genital superior, causada con frecuencia por Neisseria gonorrhoeae y Chlamydia trachomatis, además de flora vaginal. El diagnóstico es clínico ante dolor pélvico con dolor a la movilización del cérvix, uterino o anexial en una mujer sexualmente activa, y se apoya con fiebre, flujo purulento y leucocitosis. El tratamiento empírico debe iniciarse pronto para evitar infertilidad, embarazo ectópico y dolor pélvico crónico. En casos leves a moderados es ambulatorio con ceftriaxona intramuscular en dosis única más doxiciclina y metronidazol por vía oral durante 14 días. Se hospitaliza con absceso tuboovárico, embarazo, enfermedad grave, intolerancia a la vía oral o falta de respuesta. Las parejas sexuales deben tratarse.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad pélvica inflamatoria"
       ]
@@ -3026,7 +3026,7 @@
       "topic": "reproductive_endocrinology",
       "subtopic": "menopause",
       "vignette": "Mujer de 52 años con menopausia hace un año, con bochornos intensos que le impiden dormir. Pide información sobre la terapia hormonal.",
-      "prompt": "¿Cuál de las siguientes es una contraindicación para la terapia hormonal?",
+      "prompt": "Todas las siguientes condiciones permiten indicar la terapia hormonal, EXCEPTO:",
       "polarity": "negative",
       "task": "treatment_of_choice",
       "difficulty": 3,
@@ -3458,7 +3458,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "f"],
-      "explanation": "El estudio inicial ante la sospecha de oclusión intestinal es la radiografía simple de abdomen de pie y en decúbito, que muestra asas de intestino delgado dilatadas, niveles hidroaéreos escalonados y poco gas en el colon. Es accesible y rápida, y la radiografía de tórax de pie ayuda a descartar aire libre. La tomografía de abdomen con contraste se indica cuando la radiografía no es concluyente o se sospechan estrangulación o isquemia, porque localiza el sitio y la causa de la obstrucción y muestra datos de sufrimiento intestinal. Los estudios con bario se evitan si se sospecha perforación. Los laboratorios valoran la gravedad, pero no establecen el diagnóstico.",
+      "explanation": "El estudio inicial ante la sospecha de oclusión intestinal es la radiografía simple de abdomen de pie y en decúbito, que muestra asas de intestino delgado dilatadas, niveles hidroaéreos escalonados y poco gas en el colon. Es accesible y rápida, y la radiografía de tórax de pie ayuda a descartar aire libre. La tomografía de abdomen con contraste intravenoso es el estudio de mayor rendimiento, porque localiza el sitio y la causa de la obstrucción y muestra datos de sufrimiento intestinal, y se indica sobre todo si la radiografía no es concluyente o se sospechan estrangulación o isquemia. Los estudios con bario se evitan si se sospecha perforación. Los laboratorios valoran la gravedad, pero no establecen el diagnóstico.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la oclusión intestinal por adherencias"
       ]
@@ -3529,7 +3529,7 @@
           "text": "Mantener el manejo conservador por más de una semana aunque no haya mejoría",
           "correct": false,
           "bias": "sunk_cost_fallacy",
-          "rationale": "Insiste en el manejo ya iniciado cuando la falta de respuesta en 3 a 5 días indica cirugía."
+          "rationale": "Insiste en el manejo ya iniciado cuando la falta de resolución después de 72 horas indica cirugía."
         },
         {
           "key": "i",
@@ -3547,7 +3547,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "h"],
-      "explanation": "La oclusión del intestino delgado por adherencias sin datos de estrangulación se maneja de inicio de forma conservadora con ayuno, descompresión con sonda nasogástrica, soluciones intravenosas, corrección de electrolitos, control de la uresis y exploraciones abdominales seriadas. La mayoría de los casos se resuelve en 48 a 72 horas. El medio de contraste hidrosoluble por la sonda ayuda a predecir la resolución. La cirugía se indica de inmediato ante datos de estrangulación, como fiebre, taquicardia, dolor continuo, irritación peritoneal, leucocitosis o acidosis, y también cuando no hay mejoría en 3 a 5 días. Los procinéticos y los laxantes no se usan en la obstrucción mecánica.",
+      "explanation": "La oclusión del intestino delgado por adherencias sin datos de estrangulación se maneja de inicio de forma conservadora con ayuno, descompresión con sonda nasogástrica, soluciones intravenosas, corrección de electrolitos, control de la uresis y exploraciones abdominales seriadas. La mayoría de los casos se resuelve en 48 a 72 horas. El medio de contraste hidrosoluble por la sonda ayuda a predecir la resolución. La cirugía se indica de inmediato ante datos de estrangulación, como fiebre, taquicardia, dolor continuo, irritación peritoneal, leucocitosis o acidosis, y también cuando no hay resolución después de 72 horas de manejo conservador. Los procinéticos y los laxantes no se usan en la obstrucción mecánica.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la oclusión intestinal por adherencias"
       ]
@@ -4435,7 +4435,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "d"],
-      "explanation": "La enfermedad arterial periférica es más frecuente en fumadores, diabéticos, hipertensos y personas con dislipidemia, y su síntoma clásico es la claudicación intermitente, dolor en la pantorrilla al caminar que cede con el reposo. El estudio inicial es el índice tobillo-brazo, que es sencillo, barato y no invasivo. Un valor de 0.90 o menor confirma la enfermedad, y un valor mayor de 1.40 indica arterias no compresibles, frecuentes en la diabetes. Los estudios de imagen, como el ultrasonido Doppler arterial, la angiotomografía o la angiografía, se reservan para planear una revascularización. El tratamiento inicial incluye suspender el tabaco, ejercicio supervisado, estatina y antiagregante.",
+      "explanation": "La enfermedad arterial periférica es más frecuente en fumadores, diabéticos, hipertensos y personas con dislipidemia, y su síntoma clásico es la claudicación intermitente, dolor en la pantorrilla al caminar que cede con el reposo. El estudio inicial es el índice tobillo-brazo, que es sencillo, barato y no invasivo. Un valor de 0.90 o menor confirma la enfermedad, y un valor mayor de 1.40 indica arterias no compresibles, frecuentes en la diabetes. Si el índice es mayor de 1.40 se complementa con el índice dedo-brazo o con ultrasonido Doppler arterial, y la angiotomografía o la angiografía se reservan para planear una revascularización. El tratamiento inicial incluye suspender el tabaco, ejercicio supervisado, estatina y antiagregante.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad arterial periférica"
       ]

@@ -282,7 +282,7 @@
       "branch": "internal_medicine",
       "topic": "pulmonology",
       "subtopic": "pulmonary_embolism",
-      "vignette": "Mujer de 35 años con dolor torácico pleurítico y disnea leve desde ayer. Frecuencia cardiaca de 88 por minuto y saturación de 97%. No tiene datos de trombosis venosa, cirugía reciente ni cáncer, y no usa anticonceptivos. La escala de Wells da probabilidad baja.",
+      "vignette": "Mujer de 35 años con dolor torácico pleurítico y disnea leve desde ayer. Frecuencia cardiaca de 88 por minuto y saturación de 97%. Usa anticonceptivos orales combinados y no tiene datos de trombosis venosa, cirugía reciente ni cáncer. La escala de Wells da probabilidad baja.",
       "prompt": "¿Cuál es el estudio inicial?",
       "polarity": "affirmative",
       "task": "initial_study",
@@ -359,7 +359,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "i"],
-      "explanation": "Ante la sospecha de embolia pulmonar en un paciente estable se calcula primero la probabilidad clínica con escalas como la de Wells. Con probabilidad baja o intermedia, el estudio inicial es el dímero D, que tiene alta sensibilidad, y un resultado negativo prácticamente descarta la embolia. Si es positivo, se realiza angiotomografía pulmonar, que confirma el diagnóstico. Con probabilidad alta se va directo a la angiotomografía, porque un dímero D negativo no basta. Pedir imagen sin esta estrategia expone a radiación y contraste innecesarios. La probabilidad de cada paciente depende de sus propios datos, no de los resultados de los pacientes anteriores.",
+      "explanation": "Ante la sospecha de embolia pulmonar en un paciente estable se calcula primero la probabilidad clínica con escalas como la de Wells. Con probabilidad baja o intermedia, el estudio inicial es el dímero D, que tiene alta sensibilidad, y un resultado negativo prácticamente descarta la embolia. Si es positivo, se realiza angiotomografía pulmonar, que confirma el diagnóstico. Con probabilidad alta se va directo a la angiotomografía, porque un dímero D negativo no basta. Si la probabilidad es baja y se cumplen todos los criterios PERC no se necesitan más estudios, pero aquí el uso de estrógenos impide aplicarlos. Pedir imagen sin esta estrategia expone a radiación y contraste innecesarios. La probabilidad de cada paciente depende de sus propios datos, no de los resultados de los pacientes anteriores.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de la tromboembolia pulmonar"
       ]
@@ -742,7 +742,7 @@
           "text": "Síndrome neuroléptico maligno",
           "correct": false,
           "bias": "representativeness_heuristic",
-          "rationale": "Comparte la fiebre y la disautonomía, pero cursa con rigidez y bradicinesia, evoluciona en días y requiere un antipsicótico."
+          "rationale": "Comparte la fiebre y la disautonomía, pero cursa con rigidez y bradicinesia, evoluciona en días y se asocia con antagonistas de la dopamina o con la suspensión de agonistas dopaminérgicos."
         },
         {
           "key": "c",
@@ -1512,7 +1512,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "e"],
-      "explanation": "El niño con diarrea y choque hipovolémico, con letargo, pulso débil, llenado capilar prolongado o incapacidad para beber, requiere el plan C. Consiste en reponer volumen por vía intravenosa de inmediato con solución de Hartmann o salina al 0.9%, en cargas y con revaloración frecuente del estado de hidratación y del estado de alerta. Si no hay acceso venoso, se usa la vía intraósea o la sonda nasogástrica mientras se consigue. En cuanto puede beber se agrega vida suero oral y después se continúa con los planes B y A. No se usan soluciones glucosadas solas para reponer volumen ni antidiarreicos. El ayuno no está indicado.",
+      "explanation": "El niño con diarrea y choque hipovolémico, con letargo, pulso débil, llenado capilar prolongado o incapacidad para beber, requiere el plan C. Consiste en reponer volumen por vía intravenosa de inmediato con solución de Hartmann o salina al 0.9%, en cargas y con revaloración frecuente del estado de hidratación y del estado de alerta. Si no se logra un acceso venoso en pocos minutos, se coloca una vía intraósea, porque la sonda nasogástrica no sustituye la reposición intravenosa en un niño en choque. En cuanto puede beber se agrega vida suero oral y después se continúa con los planes B y A. No se usan soluciones glucosadas solas para reponer volumen ni antidiarreicos. El ayuno no está indicado.",
       "gpcRefs": [
         "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la diarrea aguda en niños de dos meses a cinco años en el primer y segundo nivel de atención"
       ]
@@ -1690,7 +1690,7 @@
         }
       ],
       "canonical": ["a", "b", "d", "h"],
-      "explanation": "El asma en niños se clasifica según su control. Usar salbutamol más de 2 veces por semana o despertar por síntomas indica asma no controlada, que requiere tratamiento de control. En niños de 6 a 11 años, el tratamiento de elección es un corticoesteroide inhalado diario a dosis baja con salbutamol de rescate, o en algunos esquemas budesonida con formoterol. El montelukast es una alternativa menos eficaz. Los agonistas beta 2 de acción prolongada nunca se usan sin corticoesteroide. Antes de subir el tratamiento se revisan la técnica inhalatoria, la adherencia y la exposición a desencadenantes. El control se revalora cada 1 a 3 meses.",
+      "explanation": "El asma en niños se clasifica según su control. Usar salbutamol más de 2 veces por semana o despertar por síntomas indica asma no controlada, que requiere tratamiento de control. En niños de 6 a 11 años con síntomas más de 2 veces por semana, pero no diarios, el tratamiento de elección es un corticoesteroide inhalado diario a dosis baja con salbutamol de rescate. El esquema de mantenimiento y rescate con budesonida y formoterol se reserva para pasos superiores. El montelukast es una alternativa menos eficaz. Los agonistas beta 2 de acción prolongada nunca se usan sin corticoesteroide. Antes de subir el tratamiento se revisan la técnica inhalatoria, la adherencia y la exposición a desencadenantes. El control se revalora cada 1 a 3 meses.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en menores de 18 años"
       ]
@@ -3468,15 +3468,15 @@
       "branch": "general_surgery",
       "topic": "acute_abdomen",
       "subtopic": "bowel_obstruction",
-      "vignette": "Hombre de 78 años con estreñimiento crónico, que vive en una residencia, con distensión abdominal importante, dolor y ausencia de evacuaciones de 2 días. Está estable y sin datos de peritonitis. La radiografía muestra un asa colónica muy dilatada en forma de U invertida o grano de café que se dirige al cuadrante superior derecho.",
-      "prompt": "¿Cuál es el tratamiento inicial?",
+      "vignette": "Hombre de 78 años con estreñimiento crónico, que vive en una residencia, con distensión abdominal importante, dolor y ausencia de evacuaciones de 2 días. Es independiente para sus actividades, no tiene comorbilidades graves y está estable, sin datos de peritonitis. La radiografía muestra un asa colónica muy dilatada en forma de U invertida o grano de café que se dirige al cuadrante superior derecho.",
+      "prompt": "¿Cuál es el plan de tratamiento más adecuado?",
       "polarity": "affirmative",
-      "task": "initial_treatment",
+      "task": "treatment_of_choice",
       "difficulty": 3,
       "options": [
         {
           "key": "a",
-          "text": "Destorsión endoscópica con sigmoidoscopia y colocación de sonda rectal",
+          "text": "Destorsión endoscópica con sigmoidoscopia y sonda rectal, seguida de sigmoidectomía electiva en el mismo internamiento",
           "correct": true,
           "rationale": "Resuelve el vólvulo en la mayoría de los pacientes estables sin peritonitis."
         },
@@ -3646,7 +3646,7 @@
       "branch": "general_surgery",
       "topic": "trauma",
       "subtopic": "primary_survey",
-      "vignette": "Hombre de 22 años con aliento alcohólico, traído después de un accidente en motocicleta sin casco. Abre los ojos al dolor, emite sonidos incomprensibles y retira la extremidad al estímulo doloroso, con Glasgow de 7. Ronca al respirar y tiene saturación de 89%.",
+      "vignette": "Hombre de 22 años con aliento alcohólico, traído después de un accidente en motocicleta sin casco. Abre los ojos al dolor, emite sonidos incomprensibles y presenta flexión anormal de las extremidades al estímulo doloroso, con Glasgow de 7. Ronca al respirar y tiene saturación de 89%.",
       "prompt": "¿Cuál es la acción inmediata?",
       "polarity": "affirmative",
       "task": "next_step",

@@ -4,7 +4,7 @@
   "cases": [
     {
       "key": "case-b1-bph",
-      "vignette": "Hombre de 66 años con 2 años de chorro urinario débil, pujo, sensación de vaciamiento incompleto y nicturia de 3 veces por noche. El puntaje internacional de síntomas prostáticos es de 19. Al tacto rectal la próstata está aumentada de tamaño, lisa, de consistencia elástica y sin nódulos. El examen general de orina y la creatinina son normales y el antígeno prostático específico es acorde a su edad."
+      "vignette": "Hombre de 66 años con 2 años de chorro urinario débil, pujo, sensación de vaciamiento incompleto y nicturia de 3 veces por noche. El puntaje internacional de síntomas prostáticos es de 19 y refiere que los síntomas le molestan y afectan su calidad de vida. Al tacto rectal la próstata está aumentada de tamaño, lisa, de consistencia elástica y sin nódulos. El examen general de orina y la creatinina son normales y el antígeno prostático específico es acorde a su edad."
     }
   ],
   "questions": [
@@ -639,7 +639,7 @@
       "topic": "gastroenterology",
       "subtopic": "upper_gi_bleeding",
       "vignette": "Hombre de 55 años con cirrosis por alcohol, que llega con hematemesis abundante. Frecuencia cardiaca de 120 lpm y presión arterial de 88/54 mmHg. Hemoglobina de 7.4 g/dL.",
-      "prompt": "Todas las siguientes son medidas del manejo inicial, EXCEPTO:",
+      "prompt": "Todas las siguientes son medidas recomendadas en el manejo de la hemorragia por várices, EXCEPTO:",
       "polarity": "negative",
       "task": "initial_treatment",
       "difficulty": 3,
@@ -1423,7 +1423,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "f"],
-      "explanation": "La vigilancia del desarrollo compara lo que hace el niño con los hitos esperados para su edad. Alrededor de los 2 meses aparece la sonrisa social, sigue objetos con la mirada y sostiene la cabeza por momentos. Hacia los 4 meses sostiene bien la cabeza y rueda, a los 6 meses transfiere objetos y se sienta con apoyo, entre los 8 y 9 meses se sienta solo, gatea y muestra angustia ante extraños, entre los 9 y 10 meses aparece la pinza fina y cerca de los 12 meses camina, dice palabras con intención y señala. La falta de sonrisa social a los 3 meses es una señal de alerta.",
+      "explanation": "La vigilancia del desarrollo compara lo que hace el niño con los hitos esperados para su edad. Alrededor de los 2 meses aparece la sonrisa social, sigue objetos con la mirada y sostiene la cabeza por momentos. Hacia los 4 meses sostiene bien la cabeza y rueda, a los 6 meses transfiere objetos y empieza a sentarse sin apoyo, lo que se consolida hacia los 8 meses, entre los 8 y 9 meses gatea y muestra angustia ante extraños, entre los 9 y 10 meses aparece la pinza fina y cerca de los 12 meses camina, dice palabras con intención y señala. La falta de sonrisa social a los 3 meses es una señal de alerta.",
       "gpcRefs": [
         "Guía de Práctica Clínica de control y seguimiento de la nutrición, el crecimiento y el desarrollo del niño menor de cinco años"
       ]
@@ -1663,7 +1663,7 @@
           "text": "Neumonía como complicación frecuente",
           "correct": false,
           "bias": "complexity_bias",
-          "rationale": "Se piensa que las complicaciones graves son raras, pero la neumonía es la más común."
+          "rationale": "Se piensa que las complicaciones graves son raras, pero la neumonía es la complicación grave más frecuente y la principal causa de muerte."
         },
         {
           "key": "h",
@@ -1688,7 +1688,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "d"],
-      "explanation": "El sarampión tiene un periodo de incubación de 10 a 12 días, seguido de un pródromo con fiebre alta, tos, coriza y conjuntivitis. Las manchas de Koplik, pequeñas lesiones blanquecinas en la mucosa yugal, aparecen antes del exantema y son características. El exantema maculopapular inicia en la cara y detrás de las orejas, desciende al tronco y las extremidades, puede volverse confluente y aparece con fiebre alta. Al resolverse deja descamación fina. La neumonía es la complicación más frecuente. El exantema que aparece cuando cede la fiebre es típico del exantema súbito, causado por el herpesvirus humano 6.",
+      "explanation": "El sarampión tiene un periodo de incubación de 10 a 12 días, seguido de un pródromo con fiebre alta, tos, coriza y conjuntivitis. Las manchas de Koplik, pequeñas lesiones blanquecinas en la mucosa yugal, aparecen antes del exantema y son características. El exantema maculopapular inicia en la cara y detrás de las orejas, desciende al tronco y las extremidades, puede volverse confluente y aparece con fiebre alta. Al resolverse deja descamación fina. La otitis media es la complicación más común y la neumonía es la complicación grave más frecuente y la principal causa de muerte. El exantema que aparece cuando cede la fiebre es típico del exantema súbito, causado por el herpesvirus humano 6.",
       "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento del sarampión"]
     },
     {
@@ -3078,10 +3078,10 @@
         },
         {
           "key": "g",
-          "text": "Descartar hiperplasia suprarrenal, hiperprolactinemia y enfermedad tiroidea",
+          "text": "Alopecia de patrón androgénico",
           "correct": false,
-          "bias": "complexity_bias",
-          "rationale": "Parece un paso aparte, pero excluir otras causas es parte del diagnóstico."
+          "bias": "anchoring",
+          "rationale": "Se ancla en el hirsutismo como única expresión clínica y olvida que la alopecia androgénica también cuenta como hiperandrogenismo clínico."
         },
         {
           "key": "h",
@@ -3106,7 +3106,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "d"],
-      "explanation": "Los criterios de Rotterdam establecen el diagnóstico de síndrome de ovario poliquístico con dos de tres datos, que son oligoovulación o anovulación, hiperandrogenismo clínico o bioquímico, y morfología de ovario poliquístico en el ultrasonido, por número de folículos o por volumen ovárico aumentado. Además deben excluirse otras causas de hiperandrogenismo y de trastornos menstruales, como hiperplasia suprarrenal congénita no clásica, hiperprolactinemia, enfermedad tiroidea o tumores productores de andrógenos. La resistencia a la insulina, la obesidad y la acantosis son frecuentes y aumentan el riesgo metabólico, pero no forman parte de los criterios diagnósticos.",
+      "explanation": "Los criterios de Rotterdam establecen el diagnóstico de síndrome de ovario poliquístico con dos de tres datos, que son oligoovulación o anovulación, hiperandrogenismo clínico, como hirsutismo, acné o alopecia androgénica, o bioquímico, y morfología de ovario poliquístico en el ultrasonido, por número de folículos o por volumen ovárico aumentado. La definición exige además excluir otras causas de hiperandrogenismo y de trastornos menstruales, como hiperplasia suprarrenal congénita no clásica, hiperprolactinemia, enfermedad tiroidea o tumores productores de andrógenos. La resistencia a la insulina, la obesidad y la acantosis son frecuentes y aumentan el riesgo metabólico, pero no forman parte de los criterios diagnósticos.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de ovarios poliquísticos"
       ]
@@ -3369,7 +3369,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "d"],
-      "explanation": "La amenaza de aborto se define por sangrado transvaginal, con o sin dolor tipo cólico, antes de la semana 20, con orificio cervical cerrado y embrión o feto vivo. Es la forma más frecuente de las alteraciones del primer trimestre y la mayoría de estos embarazos continúa con normalidad. En el aborto inevitable el orificio está abierto o hay ruptura de membranas, en el incompleto hay expulsión parcial de restos y en el diferido el embrión no tiene actividad cardiaca y permanece en el útero. El manejo de la amenaza es expectante, con vigilancia, analgésico si hace falta e inmunoglobulina anti-D si la paciente es Rh negativo.",
+      "explanation": "La amenaza de aborto se define por sangrado transvaginal, con o sin dolor tipo cólico, antes de la semana 20, con orificio cervical cerrado y embrión o feto vivo. Es la forma más frecuente de las alteraciones del primer trimestre y la mayoría de estos embarazos continúa con normalidad. En el aborto inevitable el orificio está abierto o hay ruptura de membranas, en el incompleto hay expulsión parcial de restos y en el diferido el embrión no tiene actividad cardiaca y permanece en el útero. El manejo de la amenaza es expectante, con vigilancia y analgésico si hace falta. En la paciente Rh negativo no sensibilizada, la inmunoglobulina anti-D se indica según la edad gestacional y la intensidad del sangrado.",
       "gpcRefs": ["Guía de Práctica Clínica de diagnóstico y tratamiento del aborto espontáneo"]
     },
     {
@@ -3379,7 +3379,7 @@
       "branch": "general_surgery",
       "topic": "acute_abdomen",
       "subtopic": "appendicitis",
-      "vignette": "Hombre de 22 años con dolor abdominal de 18 horas que inició en el epigastrio y migró a la fosa iliaca derecha, con anorexia y náusea. Temperatura de 37.9 °C, dolor y rebote en el punto de McBurney. Leucocitos de 14,500/µL con neutrofilia. La escala de Alvarado es de 9.",
+      "vignette": "Hombre de 22 años con dolor abdominal de 18 horas que inició en el epigastrio y migró a la fosa iliaca derecha, con anorexia y náusea. Temperatura de 37.9 °C, dolor y rebote en el punto de McBurney. Leucocitos de 14,500/µL con neutrofilia. La escala de Alvarado es de 10.",
       "prompt": "¿Cuál es la conducta a seguir?",
       "polarity": "affirmative",
       "task": "next_step",
@@ -3456,7 +3456,7 @@
         }
       ],
       "canonical": ["a", "b", "c", "d"],
-      "explanation": "El dolor que inicia en el epigastrio y migra a la fosa iliaca derecha, con anorexia, fiebre, dolor y rebote en el punto de McBurney y leucocitosis con neutrofilia, es típico de apendicitis aguda. La escala de Alvarado ayuda a decidir. Una puntuación de 7 o más indica alta probabilidad y justifica la cirugía, mientras que las puntuaciones intermedias se benefician de imagen, como ultrasonido o tomografía. En este paciente, con puntuación de 9, el tratamiento es la apendicectomía, de preferencia laparoscópica, con antibiótico profiláctico. Retrasar la cirugía aumenta el riesgo de perforación. El manejo solo con antibióticos se reserva para casos seleccionados.",
+      "explanation": "El dolor que inicia en el epigastrio y migra a la fosa iliaca derecha, con anorexia, fiebre, dolor y rebote en el punto de McBurney y leucocitosis con neutrofilia, es típico de apendicitis aguda. La escala de Alvarado ayuda a decidir. Una puntuación de 7 o más indica alta probabilidad y justifica la cirugía, mientras que las puntuaciones intermedias se benefician de imagen, como ultrasonido o tomografía. En este paciente, con puntuación de 10, el tratamiento es la apendicectomía, de preferencia laparoscópica, con antibiótico profiláctico. Retrasar la cirugía aumenta el riesgo de perforación. El manejo solo con antibióticos se reserva para casos seleccionados.",
       "gpcRefs": ["Guía de Práctica Clínica de diagnóstico de apendicitis aguda"]
     },
     {
@@ -3712,7 +3712,7 @@
         },
         {
           "key": "j",
-          "text": "Lipasa elevada aunque la amilasa ya se normalizó",
+          "text": "Lipasa tres veces o más sobre el límite superior aunque la amilasa ya se normalizó",
           "correct": false,
           "bias": "serial_position_effect",
           "rationale": "Da peso al último resultado de amilasa y no a la lipasa, que dura más tiempo elevada."
@@ -3817,9 +3817,9 @@
       "topic": "trauma",
       "subtopic": "thoracic_trauma",
       "vignette": "Hombre de 28 años con herida por arma blanca en el hemitórax izquierdo. Presenta disnea grave, desviación de la tráquea a la derecha, ausencia de ruidos respiratorios en el lado izquierdo, ingurgitación yugular, presión arterial de 78/40 mmHg y saturación de 82%.",
-      "prompt": "¿Cuál de las siguientes acciones NO debe hacerse antes de descomprimir el tórax?",
+      "prompt": "¿Cuál de las siguientes acciones es incorrecta en el manejo inicial de este paciente?",
       "polarity": "negative",
-      "task": "next_step",
+      "task": "initial_treatment",
       "difficulty": 3,
       "options": [
         {
@@ -3851,14 +3851,14 @@
         },
         {
           "key": "e",
-          "text": "Canalizar una vena",
+          "text": "Canalizar una vena al mismo tiempo, sin retrasar la descompresión",
           "correct": false,
           "bias": "focusing_illusion",
           "rationale": "Se fija solo en el tórax, aunque el paciente está en choque."
         },
         {
           "key": "f",
-          "text": "Preparar el material para colocar después una sonda pleural",
+          "text": "Preparar el material para colocar una sonda pleural después de la descompresión",
           "correct": false,
           "bias": "premature_closure",
           "rationale": "Se piensa que la sonda debe ir primero, pero la descompresión con aguja no la espera."
@@ -3992,7 +3992,7 @@
       "branch": "general_surgery",
       "topic": "urology",
       "subtopic": "testicular_torsion",
-      "vignette": "Adolescente de 15 años con dolor testicular izquierdo intenso, de inicio súbito hace 3 horas, que lo despertó, con náusea y vómito. El testículo izquierdo está elevado, horizontalizado y muy doloroso. El reflejo cremastérico izquierdo está ausente.",
+      "vignette": "Adolescente de 15 años con dolor testicular izquierdo intenso, de inicio súbito hace 3 horas, que lo despertó, con náusea y vómito. El testículo izquierdo está aumentado de volumen, de consistencia dura, elevado, horizontalizado y muy doloroso. El reflejo cremastérico izquierdo está ausente.",
       "prompt": "¿Cuál es el siguiente paso?",
       "polarity": "affirmative",
       "task": "next_step",
