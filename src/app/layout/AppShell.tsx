@@ -2,17 +2,17 @@
 import { FlaskConical, WifiOff } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { Link, Outlet, useLocation } from 'react-router';
-import { AiModeBadge } from '@/ai/AiModeBadge';
 import logoDarkUrl from '@/assets/brand/studiare-logo-dark.png';
 import logoUrl from '@/assets/brand/studiare-logo.png';
-import { useAiStatus } from '@/ai/useAiStatus';
 import { t } from '@/i18n/es-MX';
 import { useOnlineStatus } from '@/ui/hooks/use-online-status';
+import { useApplyAppearance } from '@/ui/appearance';
 import { useApplyTheme } from '@/ui/theme';
 import { HOME_BY_ROLE, NAV_BY_ROLE } from '../navigation';
 import { screenPath } from '../screens';
 import { usePreferences } from '../preferences';
 import { BottomNav } from './BottomNav';
+import { HeaderStats } from './HeaderStats';
 import { PwaUpdatePrompt } from './PwaUpdatePrompt';
 
 export function AppShell() {
@@ -21,8 +21,8 @@ export function AppShell() {
   const database = usePreferences((state) => state.database);
   const setDatabase = usePreferences((state) => state.setDatabase);
   useApplyTheme(theme);
+  useApplyAppearance(usePreferences((state) => state.appearance));
   const online = useOnlineStatus();
-  const aiStatus = useAiStatus();
   useFocusHeadingOnNavigation();
   // La bienvenida es una página aparte, sin navegación ni riel lateral
   const bare = useLocation().pathname === screenPath('onboarding');
@@ -48,17 +48,17 @@ export function AppShell() {
               alt={t.app.logoAlt}
               width={148}
               height={32}
-              className="h-8 w-auto dark:hidden"
+              className="h-7 w-auto sm:h-8 dark:hidden"
             />
             <img
               src={logoDarkUrl}
               alt={t.app.logoAlt}
               width={148}
               height={32}
-              className="hidden h-8 w-auto dark:block"
+              className="hidden h-7 w-auto sm:h-8 dark:block"
             />
           </Link>
-          <AiModeBadge status={aiStatus} />
+          {bare ? null : <HeaderStats />}
         </div>
       </header>
 

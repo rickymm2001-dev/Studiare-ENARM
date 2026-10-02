@@ -16,7 +16,6 @@ import { CalibratingState, LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 import { PartyWidget } from '../party/PartyWidget';
-import { PomodoroWidget } from '../pomodoro/PomodoroWidget';
 import {
   addWidget,
   ALL_WIDGETS,
@@ -56,7 +55,12 @@ function Dashboard({ session }: { session: ReadySession }) {
   const [toAdd, setToAdd] = useState<WidgetType>('heatmap');
 
   if (events === undefined || stored === undefined) return <LoadingState />;
-  const layout: WidgetLayout = stored ?? layoutFromPreset(user.id, 'essential');
+  const saved: WidgetLayout = stored ?? layoutFromPreset(user.id, 'essential');
+  // El Pomodoro se mudó a Repasar. Un tablero guardado antes ya no lo muestra (D-062)
+  const layout: WidgetLayout = {
+    ...saved,
+    widgets: saved.widgets.filter((widget) => widget.type !== 'pomodoro'),
+  };
   const save = (next: WidgetLayout) => {
     void api.repos.widgetLayouts.put(next);
   };
@@ -193,8 +197,6 @@ function WidgetBody({
       return <CountdownWidget snapshot={snapshot} examDate={examDateFor(session.user)} />;
     case 'daily_goal':
       return <DailyGoalWidget snapshot={snapshot} />;
-    case 'pomodoro':
-      return <PomodoroWidget session={session} />;
     case 'party_challenge':
       return <PartyWidget session={session} snapshot={snapshot} />;
     case 'bias_pattern':

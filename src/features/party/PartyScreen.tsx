@@ -20,6 +20,7 @@ import { collectiveProgress, weeklyLeaderboard } from '@/engines/party';
 import { studyDayOf } from '@/engines/studyDay';
 import { awardXp } from '@/engines/xp';
 import { t } from '@/i18n/es-MX';
+import { celebrate } from '@/ui/celebrate';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
@@ -352,6 +353,7 @@ function ChallengeRow({
     })) {
       await api.recordEvent(createEvent('xp_awarded', award, ctx));
     }
+    celebrate('badge');
   };
   const percent = Math.round(progress.fraction * 100);
   return (

@@ -502,3 +502,16 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Precios de ejemplo por ahora. Gratis con 20 preguntas al día, mensual 249 pesos y anual 1,990 pesos
 - Mazos de Paco. Ricardo confirma que Paco autoriza que estén públicos
 - Roles. Alumno sin poderes, médico revisa solo lo asignado, administrador todo, dueño fijo que nadie puede quitar
+
+### D-061. Sistema de diseño premium y apariencia personalizable
+- Fecha 2026-10-02. Origen R, con propuesta de Claude
+- Paleta marfil y tinta azul en claro, medianoche en oscuro, azul petróleo de marca, oro para XP y logros, naranja para la racha y un color por rama (Medicina interna coral, Pediatría turquesa, Ginecología y obstetricia magenta, Cirugía esmeralda, Urgencias ámbar)
+- Títulos en Bricolage Grotesque. Cuatro fuentes de lectura a elegir (Plus Jakarta Sans, Atkinson Hyperlegible, Lexend y Source Serif 4). Todas se sirven desde la app con Fontsource, sin CDN, para funcionar sin conexión
+- El alumno elige fuente, tamaño del texto (4 pasos), fondo (liso, resplandor, colores de rama, puntos) y enciende o apaga animaciones, confeti y sonidos por separado. Se guarda en este dispositivo. prefers-reduced-motion siempre se respeta
+- Celebraciones con canvas-confetti (licencia ISC), cargado solo al usarse, y un acorde corto con Web Audio. Suenan al terminar un repaso o una práctica, al reclamar un reto y al terminar un enfoque del Pomodoro
+
+### D-062. Encabezado de juego y Pomodoro en Repasar
+- Fecha 2026-10-02. Origen R
+- Arriba a la derecha siempre se ven la racha, el nivel con su barra de XP y nombre, y la foto de perfil que lleva a Perfil. La etiqueta IA simulada sale del encabezado y queda en Perfil y junto al contenido de IA
+- El Pomodoro sale de Inicio y vive solo en Repasar, como píldora a la altura del título. Arranca solo al empezar a repasar si estaba detenido, y se puede pausar, saltar o minimizar a un ícono que no muestra el tiempo. El minimizado se recuerda en el dispositivo
+- Al terminar una fase suena y aparece un aviso con el botón para empezar la siguiente. La siguiente fase no arranca sola para que el alumno decida

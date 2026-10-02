@@ -16,6 +16,7 @@ import { RadioCards } from '@/ui/components/radio-cards';
 import type { ThemePreference } from '@/ui/theme';
 import { useSession } from '@/app/session';
 import { AccountSettings } from './AccountSettings';
+import { AppearanceSettings } from './AppearanceSettings';
 import { DemoDataPanel } from './DemoDataPanel';
 
 const THEME_OPTIONS = [
@@ -76,6 +77,8 @@ export function ProfileScreen() {
             onValueChange={setTheme}
           />
         </Card>
+
+        <AppearanceSettings />
 
         <Card aria-labelledby="ia-titulo">
           <CardHeader>

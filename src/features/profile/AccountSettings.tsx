@@ -13,7 +13,7 @@ import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
-import { PomodoroSettingsForm } from '../pomodoro/PomodoroWidget';
+import { PomodoroSettingsForm } from '../pomodoro/Pomodoro';
 import type { ReadySession } from '../shared/RequireSession';
 
 function Section({
