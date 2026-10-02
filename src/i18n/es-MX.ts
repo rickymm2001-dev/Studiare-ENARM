@@ -195,6 +195,12 @@ export const t = {
         `Faltan ${missing.toLocaleString('es-MX')} ${unit}`,
     },
   },
+  pwa: {
+    updateAvailable: 'Hay una versión nueva de la app.',
+    offlineReady: 'Lista. La app ya abre sin conexión en este dispositivo.',
+    reload: 'Actualizar',
+    dismiss: 'Cerrar aviso',
+  },
   offlineBanner: 'Sin conexión. Lo que ya está en este dispositivo sigue funcionando.',
   labels: {
     demoContent: 'Demostración, no validado por médicos',

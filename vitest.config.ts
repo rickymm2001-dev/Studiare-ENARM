@@ -7,6 +7,10 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+      // El plugin de PWA no corre en pruebas unitarias. Este sustituto no registra nada
+      'virtual:pwa-register/react': fileURLToPath(
+        new URL('./tests/setup/pwa-register-stub.ts', import.meta.url),
+      ),
     },
   },
   test: {

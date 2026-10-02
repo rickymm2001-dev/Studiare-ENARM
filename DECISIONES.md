@@ -288,3 +288,10 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Los esquemas rechazan campos desconocidos (strictObject). Así un dato personal como un correo no se cuela por accidente
 - La derivación de ejemplo de la Fase A es xpCache, que suma xp_awarded. Se actualiza en la misma transacción al agregar y se reconstruye desde cero con rebuildDerivedState
 - Las pantallas reciben repositorios y casos de uso por contexto (useRepositories y useDataApi). La base de Dexie no sale de src/data
+
+### D-039. PWA con aviso de versión nueva
+- Fecha 2026-10-01. Origen C
+- vite-plugin-pwa con registerType prompt. Una versión nueva no se aplica sola, la app avisa y el alumno elige cuándo actualizar, para no recargar a mitad de un repaso o de un examen
+- Toda la app queda en caché para abrir sin conexión. Las rutas /api del proxy de IA nunca se sirven desde caché
+- Íconos provisionales con una E sobre el azul petróleo de la paleta, generados con scripts/generate-icons.ts. Cambian junto con la marca (D-016)
+- La instalabilidad se prueba con Chromium (Page.getInstallabilityErrors sin errores). La captura manual del botón de instalar queda para que Ricardo la confirme en su teléfono o en Chrome, porque el navegador sin ventana de las pruebas no muestra ese botón

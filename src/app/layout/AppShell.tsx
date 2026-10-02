@@ -8,6 +8,7 @@ import { useApplyTheme } from '@/ui/theme';
 import { STUDENT_NAV } from '../navigation';
 import { usePreferences } from '../preferences';
 import { BottomNav } from './BottomNav';
+import { PwaUpdatePrompt } from './PwaUpdatePrompt';
 
 export function AppShell() {
   const theme = usePreferences((state) => state.theme);
@@ -53,6 +54,7 @@ export function AppShell() {
       </div>
 
       <BottomNav items={STUDENT_NAV} />
+      <PwaUpdatePrompt />
     </div>
   );
 }
