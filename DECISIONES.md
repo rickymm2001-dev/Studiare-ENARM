@@ -400,3 +400,13 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Las revisiones de IA se guardan en docs/revisiones. Son ayuda para el autor y no sustituyen la revisión médica de D-031
 - Se quitó .claude.zip. Solo traía .claude/launch.json, que ya está en el repositorio, y un archivo de bloqueo local
 
+
+### D-050. Demo publicada en GitHub Pages
+- Fecha 2026-10-02. Origen R
+- Ricardo pidió ver la página en vivo y que se actualice sola con cada cambio. Eligió GitHub Pages en lugar de Cloudflare Pages (ajusta D-017 y la Fase F del PLAN) y dejar el repositorio público. El repo ahora se llama rickymm2001-dev/Studiare-ENARM
+- Esta petición cuenta como su aprobación explícita para publicar la demo (D-017). La demo corre con la IA en modo simulado porque en Pages no hay proxy. /api/health responde 404 y la app muestra IA simulada
+- El workflow .github/workflows/pages.yml construye y publica en cada push a main, con actions/configure-pages v6, upload-pages-artifact v5 y deploy-pages v5. No usa secretos y el build sigue revisándose contra secretos
+- La ruta base sale de la variable BASE_PATH, que el workflow toma de configure-pages. Sin dominio propio es /Studiare-ENARM/ y con dominio propio queda en / sin tocar código. El manifest, el service worker y el router usan esa misma base
+- GitHub Pages no sabe de rutas de una app de una sola página. Se copia index.html a 404.html para que un enlace directo como /perfil abra la app. Esa primera carga responde con código 404, sin efecto para quien la usa
+- Ricardo todavía no tiene dominio propio. Cuando lo compre se agrega en Settings, Pages, Custom domain, y el siguiente push ya usa la base /
+- Probado en Chromium sirviendo el build bajo /Studiare-ENARM/. Abre el inicio y /perfil directo, la navegación conserva la base, el service worker queda con alcance /Studiare-ENARM/, Chromium la marca instalable y la etiqueta dice IA simulada

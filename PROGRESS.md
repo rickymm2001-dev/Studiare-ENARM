@@ -8,7 +8,8 @@
 - Bloque en curso. Bloque 8 (contenido demo). Lote 4 de 6 escrito. Revisión de IA de los lotes 1 a 4 hecha, con correcciones pendientes
 - Siguiente paso. Los 3 hallazgos altos y los 43 medios de docs/revisiones/revision-ia-lotes-1-a-4.json ya se corrigieron. Faltan los 148 bajos (resolution pendiente), sobre todo los de contenido clínico y los de viñetas que no traen un dato que la justificación da por hecho. Después siguen el lote 5, el lote 6 y los mazos. Guía completa en docs/contenido-demo.md
 - Trabajo desde GitHub listo (D-049). CI con npm run check en cada push, scripts de contenido en scripts/content y workflow de revisión en .claude/workflows
-- Repo remoto privado en https://github.com/rickymm2001-dev/enarm-prototipo, rama main con seguimiento a origin (D-048)
+- Repo remoto en https://github.com/rickymm2001-dev/Studiare-ENARM, público por decisión de Ricardo (D-048 y D-050)
+- Demo publicada en GitHub Pages en https://rickymm2001-dev.github.io/Studiare-ENARM/ y se actualiza sola con cada push a main (D-050). Falta el dominio propio, que Ricardo todavía no compra
 
 ## Fase B. Motores núcleo, alumnos simulados y contenido demo
 
