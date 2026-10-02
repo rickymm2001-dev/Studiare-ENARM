@@ -60,6 +60,17 @@ describe('esquemas y tablas', () => {
       negationHighlightExam: false,
       errorsToReview: true,
       optionsShown: 4,
+      branches: ['internal_medicine', 'pediatrics', 'obstetrics_gynecology', 'general_surgery'],
+      // Racha con 20 tarjetas (9.4) y Pomodoro de 25, 5 y 15 cada 4 ciclos (9.2)
+      dailyGoal: { metric: 'cards', value: 20 },
+      pomodoro: {
+        focusMinutes: 25,
+        shortBreakMinutes: 5,
+        longBreakMinutes: 15,
+        cyclesBeforeLong: 4,
+        sound: true,
+        notifications: false,
+      },
     });
     expect(() => UserSettingsSchema.parse({ desiredRetention: 0.99 })).toThrow();
     expect(UserSchema.parse(makeUser()).timeZone).toBe('America/Merida');

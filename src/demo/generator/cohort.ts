@@ -1,5 +1,6 @@
 // Cohorte de alumnos simulados y alumno de la demo (11.2, 11.3). Todo sale de una semilla: con la
 // misma semilla y el mismo banco, los parámetros verdaderos y los historiales son idénticos.
+import { DEMO_STUDENT_ALIAS } from '../constants';
 import type { TopicTaxonomy } from '@/data/schemas/content';
 import { physicianToLogit } from '@/engines/difficulty';
 import { createRng } from '@/engines/random';
@@ -173,7 +174,7 @@ export function generateDemoStudent(bank: DemoBank, options: DemoStudentOptions)
   const truth = DEMO_STUDENT_TRUTH;
   return {
     userId: stableUlid(`demo-student|${options.seed}`, DEMO_CONTENT_TIME),
-    alias: 'Alumno de demostración',
+    alias: DEMO_STUDENT_ALIAS,
     seed,
     truth,
     history: simulateStudent(seed, truth, {

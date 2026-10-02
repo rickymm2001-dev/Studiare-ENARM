@@ -2,6 +2,7 @@
 // El código usa claves en inglés y nunca escribe texto visible fuera de este archivo.
 import { BRAND } from '@/config/brand';
 import type { Phase, ScreenKey } from '@/app/screens';
+import { featureText } from './features';
 
 interface ScreenText {
   title: string;
@@ -129,6 +130,7 @@ const screens: Record<ScreenKey, ScreenText> = {
 };
 
 export const t = {
+  ...featureText,
   app: {
     name: BRAND.name,
     skipToContent: 'Saltar al contenido',

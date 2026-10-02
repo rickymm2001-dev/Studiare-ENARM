@@ -1,6 +1,8 @@
 // Rutas de las 26 pantallas. Las que todavía son esqueleto usan ScreenPlaceholder.
 import type { ComponentType } from 'react';
 import { createBrowserRouter, type RouteObject } from 'react-router';
+import { HomeScreen } from '@/features/home/HomeScreen';
+import { OnboardingScreen } from '@/features/onboarding/OnboardingScreen';
 import { ProfileScreen } from '@/features/profile/ProfileScreen';
 import { RoleSelectorScreen } from '@/features/role/RoleSelectorScreen';
 import { AppShell } from './layout/AppShell';
@@ -10,6 +12,8 @@ import { SCREEN_KEYS, SCREENS, type ScreenKey } from './screens';
 
 /** Pantallas que ya tienen componente propio. Las demás muestran el esqueleto */
 const BUILT_SCREENS: Partial<Record<ScreenKey, ComponentType>> = {
+  onboarding: OnboardingScreen,
+  home: HomeScreen,
   profile: ProfileScreen,
   roleSelector: RoleSelectorScreen,
 };

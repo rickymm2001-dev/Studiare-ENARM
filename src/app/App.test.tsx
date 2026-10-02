@@ -1,8 +1,10 @@
 // @vitest-environment jsdom
+import 'fake-indexeddb/auto';
 import { render, screen } from '@testing-library/react';
 import { createMemoryRouter } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 import { afterEach, describe, expect, it } from 'vitest';
+import { DataProvider } from '@/data/DataProvider';
 import { t } from '@/i18n/es-MX';
 import { DEFAULT_PREFERENCES, usePreferences } from './preferences';
 import { routes } from './router';
@@ -10,7 +12,11 @@ import { SCREEN_KEYS, SCREENS } from './screens';
 
 function renderAt(path: string) {
   const router = createMemoryRouter(routes, { initialEntries: [path] });
-  render(<RouterProvider router={router} />);
+  render(
+    <DataProvider kind="real">
+      <RouterProvider router={router} />
+    </DataProvider>,
+  );
 }
 
 afterEach(() => {
