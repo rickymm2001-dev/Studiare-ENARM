@@ -18,6 +18,7 @@ import {
   OfficialScoreSchema,
   SubscriptionSchema,
   UserSchema,
+  AccountSchema,
 } from '../../schemas/people';
 import type { Repositories } from '../types';
 import {
@@ -34,6 +35,7 @@ export function createDexieRepositories(db: EnarmDb): Repositories {
     kind: db.kind,
     events: createDexieEventRepo(db),
     users: createDexieEntityRepo(db.users, UserSchema),
+    accounts: createDexieEntityRepo(db.accounts, AccountSchema),
     consents: createDexieEntityRepo(db.consents, ConsentSchema),
     subscriptions: createDexieEntityRepo(db.subscriptions, SubscriptionSchema),
     officialScores: createDexieEntityRepo(db.officialScores, OfficialScoreSchema),

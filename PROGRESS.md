@@ -20,8 +20,8 @@
 ## Fase P. Plataforma real (D-060)
 
 ### Bloques
-- [ ] 1. Sistema de diseño premium. Hecho lo principal (D-061 a D-065). Falta pulir pantallas una por una
-- [ ] 2. Portada de venta, registro, perfil con datos útiles y foto o avatar. Siguiente
+- [x] 1. Sistema de diseño premium (D-061 a D-067)
+- [x] 2. Portada de venta, registro con correo, datos de cuenta y foto o avatar (D-068)
 - [ ] 3. Esquema de Supabase con permisos por fila y roles
 - [ ] 4. Panel de administración de usuarios y asignaciones a médicos
 - [ ] 5. Pagos con Stripe y Mercado Pago en modo prueba
@@ -39,7 +39,9 @@
 - Intervalo máximo del repaso de 30 días con compresión suave (D-064)
 - Configuración aparte de Perfil, fondo personalizado con foto, sin cuenta regresiva y heatmap por meses (D-065). 318 pruebas pasan
 - Seis ramas troncales con subespecialidades en Simular, Mazos y Progreso. Primera versión de Progreso. Títulos de nivel de R0 a Eminencia. Heatmap que crece mes con mes (D-066)
-- Tope de 21 días sobre Bien con botones separados y multiplicador por botón (D-067). 319 pruebas pasan
+- Tope de 21 días sobre Bien con botones separados y multiplicador por botón (D-067)
+- Portada de venta, cuenta con correo en tabla aparte, datos opcionales, 12 avatares médicos o foto propia (D-068). 322 pruebas pasan
+- Siguiente. Bloque 3, esquema de Supabase con permisos por fila y roles
 
 ## Fase C. Pantallas del alumno (esqueleto funcionando)
 

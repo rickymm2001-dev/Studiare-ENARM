@@ -22,11 +22,15 @@ export function saveBackgroundImage(dataUrl: string | null): boolean {
   }
 }
 
-/** Lee una imagen del alumno, la reduce a 1600 px por lado y la pasa a JPEG */
-export async function compressImage(file: File): Promise<string> {
+/** Lee una imagen del alumno, la reduce al tamaño pedido por lado y la pasa a JPEG */
+export async function compressImage(
+  file: File,
+  maxSide = MAX_SIDE,
+  quality = 0.72,
+): Promise<string> {
   if (!file.type.startsWith('image/')) throw new Error('not-image');
   const bitmap = await createImageBitmap(file);
-  const scale = Math.min(1, MAX_SIDE / Math.max(bitmap.width, bitmap.height));
+  const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
   const canvas = document.createElement('canvas');
   canvas.width = Math.round(bitmap.width * scale);
   canvas.height = Math.round(bitmap.height * scale);
@@ -34,5 +38,5 @@ export async function compressImage(file: File): Promise<string> {
   if (!context) throw new Error('no-canvas');
   context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
   bitmap.close();
-  return canvas.toDataURL('image/jpeg', 0.72);
+  return canvas.toDataURL('image/jpeg', quality);
 }

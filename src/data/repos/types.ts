@@ -23,7 +23,7 @@ import type {
 import type { EditorialStatusSchema, Id } from '../schemas/common';
 import type { Card, Deck, Note } from '../schemas/decks';
 import type { AppEvent, EventType } from '../schemas/events';
-import type { Consent, OfficialScore, Subscription, User } from '../schemas/people';
+import type { Account, Consent, OfficialScore, Subscription, User } from '../schemas/people';
 import type { z } from 'zod';
 import type { DatabaseKind } from '../databases';
 
@@ -104,6 +104,7 @@ export interface Repositories {
   readonly kind: DatabaseKind;
   events: EventRepo;
   users: EntityRepo<User>;
+  accounts: EntityRepo<Account>;
   consents: EntityRepo<Consent>;
   subscriptions: EntityRepo<Subscription>;
   officialScores: EntityRepo<OfficialScore>;

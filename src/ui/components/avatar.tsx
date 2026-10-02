@@ -1,6 +1,7 @@
-// Foto de perfil. Muestra la foto si existe y si no, las iniciales sobre un color estable por
-// alumno. Las fotos subidas y los avatares generados llegan con el bloque P2 (D-060).
+// Foto de perfil (D-068). Foto propia, avatar médico generado o iniciales sobre un color estable.
+import type { Account } from '@/data/schemas/people';
 import { cn } from '@/ui/cn';
+import { GeneratedAvatar } from './generated-avatar';
 
 const TONES = ['bg-mi', 'bg-ped', 'bg-gyo', 'bg-cir', 'bg-urg', 'bg-primary'];
 
@@ -21,14 +22,20 @@ export function Avatar({
   name,
   seed,
   src,
+  avatar,
   className,
 }: {
   name: string;
   /** Algo estable del alumno, como su ID, para que el color no cambie */
   seed: string;
   src?: string | null;
+  /** Lo que eligió el alumno. Si falta, se usan src o las iniciales */
+  avatar?: Account['avatar'] | null;
   className?: string;
 }) {
+  if (avatar?.kind === 'generated')
+    return <GeneratedAvatar seed={avatar.seed} className={className} />;
+  if (avatar?.kind === 'photo') src = avatar.dataUrl;
   if (src) {
     return (
       <img

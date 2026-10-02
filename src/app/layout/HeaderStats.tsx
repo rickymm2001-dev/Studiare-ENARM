@@ -4,6 +4,7 @@ import { Flame } from 'lucide-react';
 import { Link } from 'react-router';
 import type { User, UserSettings } from '@/data/schemas/people';
 import { buildSnapshot } from '@/features/home/snapshot';
+import { useAccount } from '@/features/shared/useAccount';
 import { useUserEvents } from '@/features/shared/useUserEvents';
 import { t } from '@/i18n/es-MX';
 import { Avatar } from '@/ui/components/avatar';
@@ -19,6 +20,7 @@ export function HeaderStats() {
 
 function Stats({ user, settings }: { user: User; settings: UserSettings }) {
   const events = useUserEvents(user.id);
+  const account = useAccount(user.id);
   if (events === undefined) return null;
   const { streak, level, totalXp } = buildSnapshot({ events, user, settings, now: new Date() });
   const percent = level.xpForNext > 0 ? Math.round((level.xpIntoLevel / level.xpForNext) * 100) : 0;
@@ -57,7 +59,7 @@ function Stats({ user, settings }: { user: User; settings: UserSettings }) {
         </button>
       </LevelLadderDialog>
       <Link to={screenPath('profile')} aria-label={t.headerStats.profile} className="rounded-full">
-        <Avatar name={user.alias} seed={user.id} />
+        <Avatar name={user.alias} seed={user.id} avatar={account?.avatar} />
       </Link>
     </div>
   );

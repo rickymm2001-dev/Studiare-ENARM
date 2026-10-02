@@ -32,10 +32,16 @@ describe('rutas', () => {
     expect(numbers).toEqual(Array.from({ length: 27 }, (_, index) => index + 1));
   });
 
-  it('muestra Inicio con la navegación de 5 secciones', async () => {
+  it('sin sesión la raíz es la portada de venta, sin navegación (D-068)', async () => {
     renderAt('/');
+    expect(await screen.findByRole('heading', { level: 1, name: t.landing.title })).toBeVisible();
+    expect(screen.queryByRole('navigation', { name: t.nav.label })).toBeNull();
+  });
+
+  it('las pantallas del alumno muestran la navegación de 5 secciones', async () => {
+    renderAt(SCREENS.review.path);
     expect(
-      await screen.findByRole('heading', { level: 1, name: t.screens.home.title }),
+      await screen.findByRole('heading', { level: 1, name: t.screens.review.title }),
     ).toBeVisible();
     const nav = screen.getByRole('navigation', { name: t.nav.label });
     expect(nav.querySelectorAll('a')).toHaveLength(5);

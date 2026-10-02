@@ -10,6 +10,7 @@ import { useApplyAppearance } from '@/ui/appearance';
 import { useApplyTheme } from '@/ui/theme';
 import { HOME_BY_ROLE, NAV_BY_ROLE } from '../navigation';
 import { screenPath } from '../screens';
+import { useSession } from '../session';
 import { usePreferences } from '../preferences';
 import { BottomNav } from './BottomNav';
 import { HeaderStats } from './HeaderStats';
@@ -25,7 +26,11 @@ export function AppShell() {
   const online = useOnlineStatus();
   useFocusHeadingOnNavigation();
   // La bienvenida es una página aparte, sin navegación ni riel lateral
-  const bare = useLocation().pathname === screenPath('onboarding');
+  const { pathname } = useLocation();
+  const session = useSession();
+  const bare =
+    pathname === screenPath('onboarding') ||
+    (pathname === screenPath('home') && session.status === 'signed-out');
   const rail = bare ? '' : 'lg:pl-rail';
 
   return (
@@ -100,7 +105,7 @@ export function AppShell() {
           tabIndex={-1}
           className={
             bare
-              ? 'mx-auto flex max-w-reading flex-col gap-4 px-4 pt-6 pb-10 outline-none'
+              ? `mx-auto flex ${pathname === screenPath('onboarding') ? 'max-w-reading' : 'max-w-5xl'} flex-col gap-4 px-4 pt-6 pb-10 outline-none`
               : 'mx-auto flex max-w-app flex-col gap-4 px-4 pt-4 pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1.5rem)] outline-none lg:pb-10'
           }
         >

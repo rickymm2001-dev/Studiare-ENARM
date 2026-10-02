@@ -83,6 +83,42 @@ export const UserSchema = z.strictObject({
 });
 export type User = z.infer<typeof UserSchema>;
 
+/**
+ * Datos de cuenta del alumno (D-068). Viven aparte de User para que nunca viajen a la IA ni a
+ * Party. Solo el correo es obligatorio. El resto es opcional y sirve para conocer el mercado y
+ * ajustar el plan
+ */
+export const AccountSchema = z.strictObject({
+  userId: IdSchema,
+  email: z.email().max(254),
+  birthYear: z.int().min(1940).max(2010).nullable(),
+  sex: z.enum(['female', 'male', 'other', 'undisclosed']).nullable(),
+  /** Clave de la entidad federativa, por ejemplo YUC */
+  state: z
+    .string()
+    .regex(/^[A-Z]{2,4}$/)
+    .nullable(),
+  situation: z.enum(['internship', 'social_service', 'graduated', 'working', 'other']).nullable(),
+  /** Intento en el ENARM. 1 es la primera vez */
+  attempt: z.int().min(1).max(10).nullable(),
+  /** Clave de la especialidad objetivo de src/config/specialties.ts */
+  targetSpecialty: z
+    .string()
+    .regex(/^[a-z_]{2,48}$/)
+    .nullable(),
+  /** Foto de perfil. initials, un avatar generado por su semilla o una foto propia comprimida */
+  avatar: z.discriminatedUnion('kind', [
+    z.strictObject({ kind: z.literal('initials') }),
+    z.strictObject({ kind: z.literal('generated'), seed: z.string().min(1).max(40) }),
+    z.strictObject({
+      kind: z.literal('photo'),
+      dataUrl: z.string().startsWith('data:image/jpeg;base64,').max(400_000),
+    }),
+  ]),
+  updatedAt: UtcDateTimeSchema,
+});
+export type Account = z.infer<typeof AccountSchema>;
+
 export const ConsentSchema = z.strictObject({
   id: IdSchema,
   userId: IdSchema,
