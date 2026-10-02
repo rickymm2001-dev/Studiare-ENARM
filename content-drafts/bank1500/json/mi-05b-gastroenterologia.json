@@ -1,0 +1,1042 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-05b-gastroenterologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "viral_hepatitis",
+      "vignette": "Hombre de 28 años con ictericia, coluria y malestar general de una semana. Transaminasas mayores de 1,500 U/L. Serología con HBsAg positivo, anti HBc IgM positivo y anti HBs negativo.",
+      "prompt": "¿Cuál es la interpretación correcta de su serología?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Falso positivo por reacción cruzada",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No acepta un patrón serológico coherente."
+        },
+        {
+          "key": "b",
+          "text": "Hepatitis autoinmune",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que toda transaminasemia alta es autoinmune."
+        },
+        {
+          "key": "c",
+          "text": "Hepatitis C aguda",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la hepatitis sin revisar los marcadores."
+        },
+        {
+          "key": "d",
+          "text": "Portador inactivo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye sin considerar la IgM ni las transaminasas."
+        },
+        {
+          "key": "e",
+          "text": "Inmunidad por vacunación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La vacuna da anti HBs positivo con HBsAg y anti HBc negativos."
+        },
+        {
+          "key": "f",
+          "text": "Hepatitis A aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es frecuente, pero la serología corresponde a hepatitis B."
+        },
+        {
+          "key": "g",
+          "text": "Infección resuelta con inmunidad natural",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a recuperación, pero aquí no hay anti HBs."
+        },
+        {
+          "key": "h",
+          "text": "Hepatitis D aislada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Requiere coinfección y no hay marcadores de D."
+        },
+        {
+          "key": "i",
+          "text": "Hepatitis B aguda",
+          "correct": true,
+          "rationale": "El anti HBc IgM positivo con HBsAg indica infección aguda."
+        },
+        {
+          "key": "j",
+          "text": "Hepatitis B crónica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el HBsAg, pero la IgM anti HBc indica infección reciente."
+        }
+      ],
+      "canonical": [
+        "e",
+        "f",
+        "i",
+        "j"
+      ],
+      "explanation": "La serología de la hepatitis B se interpreta con varios marcadores. El HBsAg indica infección actual, aguda o crónica. El anti HBc IgM indica infección aguda o reciente. El anti HBc total indica contacto con el virus. El anti HBs indica inmunidad, ya sea por vacunación, cuando es el único positivo, o por infección resuelta, junto con anti HBc. Un paciente con HBsAg y anti HBc IgM positivos tiene hepatitis B aguda. Si el HBsAg persiste más de seis meses se considera crónica. La mayoría de los adultos inmunocompetentes eliminan el virus y el tratamiento de la forma aguda es de soporte.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hepatitis B crónica"
+      ]
+    },
+    {
+      "key": "mi-05b-gastroenterologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "viral_hepatitis",
+      "vignette": "Niño de 8 años y su madre presentan fiebre, náusea e ictericia. En la escuela del niño hubo varios casos similares en las últimas semanas. Viven en una comunidad con abastecimiento irregular de agua potable.",
+      "prompt": "¿Cuál es la vía de transmisión más probable, como factor de riesgo de su hepatitis?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Herencia familiar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la hepatitis familiar es genética."
+        },
+        {
+          "key": "b",
+          "text": "Uso de drogas inyectables",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se asocia a hepatitis C."
+        },
+        {
+          "key": "c",
+          "text": "Vía sexual",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la hepatitis B sin considerar la edad y el brote."
+        },
+        {
+          "key": "d",
+          "text": "Hepatitis E por carne de cerdo cruda",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente en México."
+        },
+        {
+          "key": "e",
+          "text": "Fármacos hepatotóxicos",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No considera los casos múltiples."
+        },
+        {
+          "key": "f",
+          "text": "Fecal oral por agua o alimentos contaminados, compatible con hepatitis A",
+          "correct": true,
+          "rationale": "Brotes escolares y agua insegura sugieren hepatitis A."
+        },
+        {
+          "key": "g",
+          "text": "Picadura de mosquito",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la fiebre."
+        },
+        {
+          "key": "h",
+          "text": "Transmisión vertical al nacer",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El niño tiene 8 años y la madre enfermó al mismo tiempo."
+        },
+        {
+          "key": "i",
+          "text": "Transfusiones sanguíneas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se asocia a hepatitis B y C."
+        },
+        {
+          "key": "j",
+          "text": "Contacto con sangre en el recreo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena plausible, pero el brote sugiere fuente común."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "La hepatitis A se transmite por vía fecal oral, a través de agua o alimentos contaminados y contacto estrecho, y es frecuente en lugares con saneamiento deficiente. En niños suele ser asintomática o leve, mientras que en adultos es más sintomática, con fiebre, náusea, dolor abdominal, ictericia y coluria. No se cronifica y rara vez es fulminante. El diagnóstico es con anticuerpos IgM contra el virus de la hepatitis A. El tratamiento es de soporte. La prevención incluye agua segura, lavado de manos, saneamiento y vacunación, incluida en el esquema mexicano en niños.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hepatitis A",
+        "Norma Oficial Mexicana para la vigilancia epidemiológica"
+      ]
+    },
+    {
+      "key": "mi-05b-gastroenterologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "viral_hepatitis",
+      "vignette": "Mujer de 50 años con transaminasas discretamente elevadas por 1 año. Recibió una transfusión durante una cesárea hace 25 años. Asintomática.",
+      "prompt": "¿Cuál es el estudio inicial para buscar la causa más probable?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Anticuerpos contra el virus de la hepatitis C, y si son positivos, carga viral del ARN",
+          "correct": true,
+          "rationale": "La transfusión antigua es factor de riesgo de hepatitis C."
+        },
+        {
+          "key": "b",
+          "text": "Atribuirlo a hígado graso sin estudios",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Cierra el diagnóstico sin descartar virus."
+        },
+        {
+          "key": "c",
+          "text": "Alfa 1 antitripsina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es una causa rara."
+        },
+        {
+          "key": "d",
+          "text": "Genotipo viral como primer estudio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena específico, pero va después de confirmar la infección."
+        },
+        {
+          "key": "e",
+          "text": "Perfil completo autoinmune y metabólico antes que los virales",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Pospone el estudio más probable."
+        },
+        {
+          "key": "f",
+          "text": "Ceruloplasmina para enfermedad de Wilson",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es causa de enfermedad hepática en jóvenes."
+        },
+        {
+          "key": "g",
+          "text": "Repetir transaminasas en un año más",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que observar basta."
+        },
+        {
+          "key": "h",
+          "text": "Resonancia magnética hepática",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No identifica la causa viral."
+        },
+        {
+          "key": "i",
+          "text": "Biopsia hepática como primer paso",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el daño hepático y salta a lo invasivo."
+        },
+        {
+          "key": "j",
+          "text": "Anticuerpos contra hepatitis A IgM",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es aguda y no crónica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "i",
+        "j"
+      ],
+      "explanation": "La hepatitis C es una causa importante de enfermedad hepática crónica, cirrosis y carcinoma hepatocelular. Los factores de riesgo incluyen transfusiones antes de 1995 en México, uso de drogas inyectables, hemodiálisis, tatuajes o procedimientos sin esterilidad y exposición laboral. Muchos pacientes son asintomáticos con transaminasas normales o levemente elevadas. El estudio inicial son los anticuerpos contra el virus. Si son positivos, se confirma la infección activa con la carga viral del ARN. Actualmente los antivirales de acción directa curan más de 95% de los casos en 8 a 12 semanas. Se recomienda tamizaje a todos los adultos al menos una vez.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hepatitis C"
+      ]
+    },
+    {
+      "key": "mi-05b-gastroenterologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "viral_hepatitis",
+      "vignette": "Hombre de 45 años con hepatitis C crónica confirmada por carga viral. Fibrosis leve por elastografía, sin cirrosis. Sin tratamiento previo.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tenofovir",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es para hepatitis B."
+        },
+        {
+          "key": "b",
+          "text": "Ribavirina sola por ser más barata",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Lo barato suena práctico, pero es ineficaz sola."
+        },
+        {
+          "key": "c",
+          "text": "Interferón pegilado con ribavirina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Fue el tratamiento clásico, con menor eficacia y más efectos adversos."
+        },
+        {
+          "key": "d",
+          "text": "Evitar tratamiento por miedo a efectos adversos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Los antivirales actuales se toleran bien."
+        },
+        {
+          "key": "e",
+          "text": "Antivirales de acción directa pangenotípicos, como sofosbuvir con velpatasvir, por 12 semanas",
+          "correct": true,
+          "rationale": "Curan la gran mayoría de los casos."
+        },
+        {
+          "key": "f",
+          "text": "Solo vacunarlo contra hepatitis A y B",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Es útil, pero no trata la hepatitis C."
+        },
+        {
+          "key": "g",
+          "text": "Trasplante hepático",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No tiene cirrosis."
+        },
+        {
+          "key": "h",
+          "text": "Observación porque la fibrosis es leve",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el daño leve, pero tratar evita la progresión."
+        },
+        {
+          "key": "i",
+          "text": "Silimarina como tratamiento curativo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree en un hepatoprotector sin efecto antiviral."
+        },
+        {
+          "key": "j",
+          "text": "Combinación de tres antivirales por 48 semanas",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es más compleja sin beneficio."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "El tratamiento de la hepatitis C cambió con los antivirales de acción directa, que actúan sobre proteínas del virus. Los esquemas pangenotípicos, como sofosbuvir con velpatasvir por 12 semanas o glecaprevir con pibrentasvir por 8 semanas, logran respuesta viral sostenida, considerada curación, en más de 95% de los pacientes. Se indica tratamiento a todos los pacientes con infección activa, con o sin fibrosis avanzada, porque previene la progresión y la transmisión. Antes de iniciarlo se evalúa la fibrosis, la coinfección con hepatitis B o VIH y las interacciones farmacológicas. Los pacientes con cirrosis continúan en vigilancia de carcinoma.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hepatitis C"
+      ]
+    },
+    {
+      "key": "mi-05b-gastroenterologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "viral_hepatitis",
+      "vignette": "Mujer de 32 años con hepatitis aguda por virus A. Al quinto día presenta somnolencia, asterixis e INR de 2.6. No tiene enfermedad hepática previa.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Meningitis viral",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la somnolencia."
+        },
+        {
+          "key": "b",
+          "text": "Encefalopatía de Wernicke",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La somnolencia confunde, pero hay asterixis e INR alto."
+        },
+        {
+          "key": "c",
+          "text": "Colestasis prolongada por hepatitis A",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es una forma atípica, pero sin encefalopatía."
+        },
+        {
+          "key": "d",
+          "text": "Hígado graso agudo del embarazo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No está embarazada."
+        },
+        {
+          "key": "e",
+          "text": "Hepatitis recidivante",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es otra forma atípica sin falla hepática."
+        },
+        {
+          "key": "f",
+          "text": "Deshidratación por vómito",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta el INR elevado."
+        },
+        {
+          "key": "g",
+          "text": "Hepatitis crónica por virus A",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la hepatitis A se cronifica."
+        },
+        {
+          "key": "h",
+          "text": "Cirrosis descompensada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Comparte encefalopatía, pero no hay enfermedad hepática previa."
+        },
+        {
+          "key": "i",
+          "text": "Insuficiencia hepática aguda grave",
+          "correct": true,
+          "rationale": "Coagulopatía y encefalopatía en hepatitis aguda sin hepatopatía previa."
+        },
+        {
+          "key": "j",
+          "text": "Hepatitis A con evolución habitual",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en que suele ser benigna e ignora la encefalopatía."
+        }
+      ],
+      "canonical": [
+        "c",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "La insuficiencia hepática aguda se define por coagulopatía con INR de 1.5 o más y encefalopatía de cualquier grado en un paciente sin enfermedad hepática previa, con menos de 26 semanas de evolución. Las causas incluyen intoxicación por paracetamol, hepatitis virales A, B y E, fármacos, hepatitis autoinmune y enfermedad de Wilson. Aunque la hepatitis A suele ser benigna, en una pequeña proporción evoluciona a falla hepática, más en adultos mayores y con hepatopatía previa. El manejo es en terapia intensiva, con evaluación temprana para trasplante hepático según criterios como los del King's College, y N acetilcisteína en algunas causas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la insuficiencia hepática aguda"
+      ]
+    },
+    {
+      "key": "mi-05b-gastroenterologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "viral_hepatitis",
+      "vignette": "Enfermera de 24 años que inicia trabajo en un hospital. Nunca ha recibido la vacuna contra hepatitis B.",
+      "prompt": "¿Cuál es la medida de prevención indicada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Evitar la vacuna por posibles reacciones",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Sobreestima efectos leves."
+        },
+        {
+          "key": "b",
+          "text": "Usar guantes dobles siempre en lugar de vacunarse",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena protector, pero no sustituye la vacuna."
+        },
+        {
+          "key": "c",
+          "text": "Vacunar solo si tiene un accidente con aguja",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Espera la exposición para prevenir."
+        },
+        {
+          "key": "d",
+          "text": "Vacunar con dosis triple simultánea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Agrega dosis sin beneficio."
+        },
+        {
+          "key": "e",
+          "text": "La hepatitis B no se transmite por accidentes laborales",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Niega el riesgo ocupacional."
+        },
+        {
+          "key": "f",
+          "text": "Inmunoglobulina contra hepatitis B como única medida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se usa tras exposición en no vacunados."
+        },
+        {
+          "key": "g",
+          "text": "Profilaxis con tenofovir antes de trabajar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es tratamiento, no prevención rutinaria."
+        },
+        {
+          "key": "h",
+          "text": "Esquema de vacunación contra hepatitis B y verificar anti HBs al terminar",
+          "correct": true,
+          "rationale": "El personal de salud tiene riesgo ocupacional."
+        },
+        {
+          "key": "i",
+          "text": "Vacuna contra hepatitis A",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es útil, pero no protege contra el riesgo ocupacional por sangre."
+        },
+        {
+          "key": "j",
+          "text": "Medir anti HBc y decidir según su resultado sin vacunar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retrasa la vacunación."
+        }
+      ],
+      "canonical": [
+        "b",
+        "f",
+        "h",
+        "i"
+      ],
+      "explanation": "La vacunación contra la hepatitis B está indicada en el personal de salud y en otros grupos de riesgo, como pacientes en hemodiálisis, contactos de portadores, personas con varias parejas sexuales y usuarios de drogas inyectables. El esquema habitual es de tres dosis a los 0, 1 y 6 meses. En personal de salud se recomienda medir el anti HBs de uno a dos meses después de la última dosis para confirmar respuesta, con título de 10 mUI/mL o más. Si no responde se repite el esquema. En México la vacuna también forma parte del esquema universal desde el nacimiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de vacunación en el adulto",
+        "Norma Oficial Mexicana para la prevención y control de enfermedades transmisibles por vacunación"
+      ]
+    },
+    {
+      "key": "mi-05b-gastroenterologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "peptic_ulcer",
+      "vignette": "Hombre de 42 años con dolor epigástrico urente que mejora con los alimentos y reaparece 2 a 3 horas después, y lo despierta en la noche. No toma AINE ni fuma.",
+      "prompt": "¿Cuál es el factor de riesgo más probable de su enfermedad?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Consumo de AINE no reportado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Supone una causa que el paciente negó."
+        },
+        {
+          "key": "b",
+          "text": "Litiasis vesicular",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el dolor posprandial."
+        },
+        {
+          "key": "c",
+          "text": "Síndrome de Zollinger Ellison",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da úlceras, pero es raro y suele ser múltiple o refractario."
+        },
+        {
+          "key": "d",
+          "text": "Reflujo gastroesofágico",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El patrón de dolor es duodenal."
+        },
+        {
+          "key": "e",
+          "text": "Infección por Helicobacter pylori",
+          "correct": true,
+          "rationale": "Es la causa más frecuente de úlcera duodenal en pacientes sin AINE."
+        },
+        {
+          "key": "f",
+          "text": "Exceso de café",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a irritante, pero no causa úlcera."
+        },
+        {
+          "key": "g",
+          "text": "Enfermedad de Crohn gastroduodenal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es poco frecuente."
+        },
+        {
+          "key": "h",
+          "text": "Herencia sin causa infecciosa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la úlcera es solo genética."
+        },
+        {
+          "key": "i",
+          "text": "Consumo de alimentos picantes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la dieta, que no causa úlceras."
+        },
+        {
+          "key": "j",
+          "text": "Estrés laboral",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se cree causa de úlceras, pero no es la principal."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "Las dos causas principales de úlcera péptica son la infección por Helicobacter pylori y el consumo de antiinflamatorios no esteroideos. La úlcera duodenal típicamente produce dolor epigástrico urente que mejora con los alimentos o antiácidos y reaparece dos a tres horas después, con dolor nocturno. En México la prevalencia de Helicobacter pylori en adultos es alta. Todo paciente con úlcera debe someterse a búsqueda de la bacteria con prueba de aliento, antígeno en heces o biopsia, y recibir tratamiento de erradicación si es positiva, lo que reduce de forma importante la recurrencia. El estrés y la dieta no son causas directas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad ulcerosa péptica"
+      ]
+    },
+    {
+      "key": "mi-05b-gastroenterologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "peptic_ulcer",
+      "vignette": "Mujer de 38 años con úlcera duodenal confirmada por endoscopia. La prueba de ureasa en la biopsia es positiva para Helicobacter pylori. No tiene alergia a la penicilina y nunca ha recibido claritromicina.",
+      "prompt": "¿Cuál es el tratamiento de elección para erradicar la bacteria?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Omeprazol solo por 8 semanas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Cicatriza la úlcera, pero no erradica la bacteria."
+        },
+        {
+          "key": "b",
+          "text": "Amoxicilina sola por 10 días",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La monoterapia no erradica."
+        },
+        {
+          "key": "c",
+          "text": "Terapia cuádruple con inhibidor de bomba de protones, bismuto, tetraciclina y metronidazol, o cuádruple concomitante, por 14 días",
+          "correct": true,
+          "rationale": "En zonas de alta resistencia a claritromicina se prefieren esquemas cuádruples de 14 días."
+        },
+        {
+          "key": "d",
+          "text": "Antiácidos y dieta blanda por un mes",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena calmante, pero no elimina la bacteria."
+        },
+        {
+          "key": "e",
+          "text": "Tratar solo si la úlcera reaparece",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Deja una causa conocida de recurrencia."
+        },
+        {
+          "key": "f",
+          "text": "Terapia triple clásica por 7 días",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el esquema clásico, con baja eficacia por resistencia."
+        },
+        {
+          "key": "g",
+          "text": "Cirugía de vagotomía",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Ya no se usa para úlcera no complicada."
+        },
+        {
+          "key": "h",
+          "text": "Evitar antibióticos para no causar diarrea",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pierde la curación."
+        },
+        {
+          "key": "i",
+          "text": "Probióticos solos para erradicar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que los probióticos bastan."
+        },
+        {
+          "key": "j",
+          "text": "Seis antibióticos por 28 días",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Exceso sin beneficio."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "f"
+      ],
+      "explanation": "La erradicación de Helicobacter pylori cura la úlcera y previene sus recurrencias y complicaciones. Debido a la alta resistencia a claritromicina y metronidazol en México, se recomiendan esquemas de 14 días. Las opciones incluyen la terapia cuádruple con bismuto, que combina inhibidor de la bomba de protones, subcitrato o subsalicilato de bismuto, tetraciclina y metronidazol, y la terapia cuádruple concomitante sin bismuto, con inhibidor de bomba, amoxicilina, claritromicina y metronidazol. La terapia triple con claritromicina solo se recomienda donde la resistencia es menor de 15%. Se confirma la erradicación con prueba de aliento o antígeno fecal cuatro semanas después.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la infección por Helicobacter pylori"
+      ]
+    },
+    {
+      "key": "mi-05b-gastroenterologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "peptic_ulcer",
+      "vignette": "Hombre de 58 años con antecedente de úlcera péptica que toma ibuprofeno. Presenta dolor epigástrico súbito, intenso, que se generaliza. Abdomen en tabla, sin ruidos intestinales. La radiografía de tórax de pie muestra aire libre bajo los hemidiafragmas.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hemorragia digestiva alta",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la úlcera, pero no hay sangrado."
+        },
+        {
+          "key": "b",
+          "text": "Obstrucción pilórica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es otra complicación con vómito, no con peritonitis."
+        },
+        {
+          "key": "c",
+          "text": "Disección aórtica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la intensidad del dolor."
+        },
+        {
+          "key": "d",
+          "text": "Infarto agudo de miocardio inferior",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede dar dolor epigástrico, pero no neumoperitoneo."
+        },
+        {
+          "key": "e",
+          "text": "Apendicitis perforada",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo neumoperitoneo es apendicular."
+        },
+        {
+          "key": "f",
+          "text": "Colecistitis aguda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El dolor abdominal confunde, pero el aire libre indica perforación."
+        },
+        {
+          "key": "g",
+          "text": "Isquemia mesentérica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable en este contexto."
+        },
+        {
+          "key": "h",
+          "text": "Gastritis aguda por AINE",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta el neumoperitoneo."
+        },
+        {
+          "key": "i",
+          "text": "Perforación de úlcera péptica",
+          "correct": true,
+          "rationale": "Dolor súbito, abdomen en tabla y neumoperitoneo."
+        },
+        {
+          "key": "j",
+          "text": "Pancreatitis aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También da dolor epigástrico intenso, pero sin neumoperitoneo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "i",
+        "j"
+      ],
+      "explanation": "La perforación es una complicación grave de la úlcera péptica, asociada a AINE, tabaquismo y Helicobacter pylori. Se presenta con dolor epigástrico súbito e intenso, en puñalada, que se generaliza por peritonitis química, con abdomen en tabla, ausencia de ruidos intestinales y, en ocasiones, choque. La radiografía de tórax de pie o la tomografía muestran aire libre subdiafragmático. El tratamiento es reanimación, sonda nasogástrica, inhibidor de bomba de protones intravenoso, antibióticos y cirugía urgente, generalmente cierre con parche de epiplón, seguida de erradicación de Helicobacter pylori.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad ulcerosa péptica"
+      ]
+    },
+    {
+      "key": "mi-05b-gastroenterologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "peptic_ulcer",
+      "vignette": "Hombre de 63 años con pérdida de 8 kg en 3 meses, saciedad temprana, dispepsia de reciente inicio y anemia ferropénica.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Endoscopia superior con toma de biopsias",
+          "correct": true,
+          "rationale": "Dispepsia con datos de alarma en mayor de 60 años."
+        },
+        {
+          "key": "b",
+          "text": "Ultrasonido abdominal como único estudio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No evalúa la mucosa gástrica."
+        },
+        {
+          "key": "c",
+          "text": "Inhibidor de bomba de protones por 8 semanas y revalorar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Retrasa el diagnóstico de una posible neoplasia."
+        },
+        {
+          "key": "d",
+          "text": "Dieta y antiácidos por un mes",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Mantiene un enfoque sintomático."
+        },
+        {
+          "key": "e",
+          "text": "Hierro oral y observar la respuesta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que corregir la anemia resuelve el problema."
+        },
+        {
+          "key": "f",
+          "text": "Tomografía por emisión de positrones",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "g",
+          "text": "Colonoscopia como único estudio por la anemia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La dispepsia orienta primero al tubo digestivo alto."
+        },
+        {
+          "key": "h",
+          "text": "Esperar más síntomas antes de estudiar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasa un diagnóstico grave."
+        },
+        {
+          "key": "i",
+          "text": "Serie esofagogastroduodenal con bario",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a estudio del estómago, pero no permite biopsias."
+        },
+        {
+          "key": "j",
+          "text": "Prueba y tratamiento empírico de Helicobacter pylori",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la estrategia para jóvenes sin datos de alarma."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "En la dispepsia se buscan datos de alarma, como edad mayor de 60 años con síntomas nuevos, pérdida de peso no intencional, disfagia progresiva, vómito persistente, sangrado digestivo, anemia ferropénica, masa palpable o antecedente familiar de cáncer gástrico. Ante estos datos se indica endoscopia superior temprana con toma de biopsias para descartar cáncer gástrico o úlcera complicada. En menores de 60 años sin datos de alarma la estrategia es buscar y tratar Helicobacter pylori o dar inhibidor de bomba de protones. El cáncer gástrico suele diagnosticarse tarde en México, por lo que estos datos no deben pasarse por alto.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la dispepsia funcional",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer gástrico"
+      ]
+    },
+    {
+      "key": "mi-05b-gastroenterologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "peptic_ulcer",
+      "vignette": "Mujer de 72 años con artritis reumatoide que requiere naproxeno de forma crónica. Tuvo una úlcera gástrica hace 3 años. También toma ácido acetilsalicílico a dosis baja por cardiopatía.",
+      "prompt": "¿Cuál es la mejor medida de prevención de úlcera y sangrado?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Evitar el inhibidor de bomba por miedo a efectos a largo plazo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Sobreestima riesgos frente al beneficio."
+        },
+        {
+          "key": "b",
+          "text": "Tomar el naproxeno con leche para proteger el estómago",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena protector, pero no previene la úlcera."
+        },
+        {
+          "key": "c",
+          "text": "Antiácidos líquidos como prevención suficiente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que neutralizar basta."
+        },
+        {
+          "key": "d",
+          "text": "Dos AINE distintos a menor dosis",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Aumenta el riesgo."
+        },
+        {
+          "key": "e",
+          "text": "Mantener igual sin protección",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Ignora un riesgo alto."
+        },
+        {
+          "key": "f",
+          "text": "Sucralfato como única protección",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Tiene menor eficacia."
+        },
+        {
+          "key": "g",
+          "text": "Agregar ranitidina a dosis habitual",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es menos eficaz que el inhibidor de bomba."
+        },
+        {
+          "key": "h",
+          "text": "Agregar un inhibidor de bomba de protones y valorar cambiar a un inhibidor selectivo de COX 2 si es posible",
+          "correct": true,
+          "rationale": "Tiene varios factores de riesgo de complicación por AINE."
+        },
+        {
+          "key": "i",
+          "text": "Suspender el ácido acetilsalicílico de inmediato",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el riesgo digestivo y omite el beneficio cardiovascular."
+        },
+        {
+          "key": "j",
+          "text": "Endoscopia cada 3 meses de vigilancia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No previene la úlcera."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "Los factores de riesgo de úlcera y sangrado por AINE incluyen edad mayor de 65 años, antecedente de úlcera o sangrado, uso de dosis altas o varios AINE, y uso concomitante de ácido acetilsalicílico, anticoagulantes, corticosteroides o inhibidores de la recaptura de serotonina. En pacientes de riesgo alto se recomienda gastroprotección con inhibidor de bomba de protones y, si es posible, un inhibidor selectivo de la ciclooxigenasa 2, valorando el riesgo cardiovascular. También debe buscarse y tratarse Helicobacter pylori antes de iniciar AINE crónicos en pacientes con antecedente de úlcera. Los antagonistas H2 a dosis habituales protegen menos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad ulcerosa péptica"
+      ]
+    }
+  ]
+}

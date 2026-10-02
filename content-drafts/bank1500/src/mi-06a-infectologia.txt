@@ -1,0 +1,191 @@
+@ mi|infectious_diseases|hiv|2|confirmatory_study
+V: Hombre de 29 años con prueba rápida de cuarta generación reactiva para VIH realizada en una campaña. Asintomático.
+P: ¿Cuál es el siguiente estudio para confirmar el diagnóstico de infección por VIH?
++ Una segunda prueba distinta según el algoritmo, como inmunoensayo diferenciador o carga viral || El diagnóstico requiere confirmación con otra prueba.
+- premature_closure | Con la prueba rápida reactiva ya está confirmado || Cierra el diagnóstico con una sola prueba de tamizaje.
+- anchoring | Conteo de linfocitos CD4 como prueba confirmatoria || Se ancla en el CD4, que evalúa la inmunidad, no confirma la infección.
+- availability_heuristic | Repetir la misma prueba rápida en un año || Retrasa la confirmación.
+- representativeness_heuristic | Prueba de tuberculina || Es útil en el abordaje, no confirma VIH.
+- framing_effect | Biometría hemática con linfopenia || Suena sugestiva, pero no diagnostica.
+- information_bias | Genotipo de resistencia antes de confirmar || Va después del diagnóstico.
+- complexity_bias | Cultivo viral || Es un método de investigación.
+- belief_bias | Western blot como única opción obligatoria en todos los casos || Cree que es la única prueba confirmatoria, cuando hay algoritmos más actuales.
+- base_rate_fallacy | Descartar porque es asintomático || Usa los síntomas para negar un resultado reactivo.
+E: El diagnóstico de infección por VIH se basa en un algoritmo de pruebas. Una prueba de tamizaje reactiva, como un inmunoensayo de cuarta generación que detecta anticuerpos y antígeno p24 o una prueba rápida, debe confirmarse con una prueba diferente, como un inmunoensayo que diferencia VIH 1 y 2, o con carga viral si hay discordancia o sospecha de infección aguda. Una vez confirmado, se miden los linfocitos CD4, la carga viral y el genotipo de resistencia, y se inicia tratamiento antirretroviral lo antes posible. El diagnóstico se comunica con consejería y confidencialidad.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento antirretroviral de la infección por VIH en adultos ;; Norma Oficial Mexicana para la prevención y control de la infección por VIH
+
+@ mi|infectious_diseases|hiv|3|initial_treatment
+V: Mujer de 34 años con diagnóstico reciente de VIH. CD4 de 420 células por microlitro y carga viral de 48,000 copias por mL. Sin infecciones oportunistas ni embarazo. Función renal normal.
+P: ¿Cuál es el tratamiento inicial recomendado?
++ Iniciar de inmediato tratamiento antirretroviral, como bictegravir con tenofovir alafenamida y emtricitabina || Se recomienda tratar a todas las personas con VIH sin importar el CD4.
+- anchoring | Esperar a que el CD4 baje de 350 para iniciar || Se ancla en criterios antiguos.
+- availability_heuristic | Monoterapia con zidovudina || Genera resistencia rápidamente.
+- framing_effect | Iniciar solo profilaxis con trimetoprim con sulfametoxazol || Suena protector, pero no trata el VIH.
+- status_quo_bias | Vigilar carga viral cada 6 meses sin tratamiento || Deja progresar la infección.
+- representativeness_heuristic | Dos inhibidores de proteasa sin otros fármacos || No es un esquema recomendado.
+- premature_closure | Iniciar solo cuando tenga síntomas || Espera daño inmunológico.
+- complexity_bias | Esquema de cinco fármacos para mayor potencia || Agrega toxicidad sin beneficio.
+- belief_bias | Suplementos vitamínicos para fortalecer el sistema inmune || Cree que sustituyen el tratamiento.
+- omission_bias | Retrasar el tratamiento por miedo a efectos adversos || Los esquemas actuales se toleran bien.
+E: Actualmente se recomienda iniciar tratamiento antirretroviral en todas las personas con VIH, independientemente del conteo de CD4, lo antes posible tras el diagnóstico, incluso el mismo día cuando es factible. El tratamiento reduce la morbilidad, la mortalidad y la transmisión, ya que una carga viral indetectable sostenida no transmite el virus por vía sexual. Los esquemas preferidos combinan un inhibidor de integrasa, como bictegravir o dolutegravir, con dos análogos de nucleósidos, como tenofovir con emtricitabina o lamivudina. Antes de iniciarlo se solicitan carga viral, CD4, genotipo, serologías de hepatitis B y C y función renal.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento antirretroviral de la infección por VIH en adultos
+
+@ mi|infectious_diseases|hiv|3|prevention_screening
+V: Hombre de 36 años con VIH recién diagnosticado. CD4 de 140 células por microlitro. Prueba de tuberculosis latente negativa. IgG para toxoplasma positiva.
+P: ¿Cuál es la profilaxis de infecciones oportunistas indicada?
++ Trimetoprim con sulfametoxazol diario || Con CD4 menor de 200 previene neumonía por Pneumocystis y con menos de 100 toxoplasmosis.
+- availability_heuristic | Fluconazol profiláctico || No se recomienda de rutina.
+- anchoring | Azitromicina semanal para Mycobacterium avium || Se ancla en otra profilaxis, indicada con CD4 menor de 50 sin tratamiento eficaz.
+- framing_effect | Aciclovir diario para prevenir todo tipo de virus || Suena amplio, pero no está indicado de rutina.
+- representativeness_heuristic | Isoniazida aunque la prueba de tuberculosis sea negativa y sin contacto || No está indicada sin exposición o infección latente.
+- status_quo_bias | Ninguna profilaxis hasta iniciar antirretrovirales || Pierde la protección mientras el CD4 es bajo.
+- premature_closure | Profilaxis solo si el CD4 baja de 50 || Usa un umbral equivocado.
+- complexity_bias | Cuatro antibióticos profilácticos diferentes || Exceso sin indicación.
+- belief_bias | Vacuna BCG para prevenir tuberculosis en el adulto con VIH || Es una vacuna viva contraindicada.
+- omission_bias | Evitar la sulfa por posibles alergias sin antecedente || Pierde un beneficio importante.
+E: En personas con VIH y conteo de CD4 menor de 200 células por microlitro se indica profilaxis primaria contra neumonía por Pneumocystis jirovecii con trimetoprim con sulfametoxazol diario. Si el CD4 es menor de 100 y la serología para toxoplasma es positiva, el mismo fármaco previene la toxoplasmosis cerebral. Con CD4 menor de 50 sin tratamiento antirretroviral eficaz se consideraba la profilaxis contra Mycobacterium avium con azitromicina. Las profilaxis se suspenden cuando el CD4 se mantiene por arriba de 200 por al menos tres meses con carga viral suprimida. La infección tuberculosa latente se trata si se documenta.
+R: Guía de Práctica Clínica de prevención y tratamiento de infecciones oportunistas en personas con VIH
+
+@ mi|infectious_diseases|hiv|3|diagnosis
+V: Hombre de 31 años con VIH sin tratamiento y CD4 de 60. Refiere disnea progresiva de 3 semanas, tos seca y fiebre. Saturación de 86% al caminar. La radiografía muestra infiltrado intersticial bilateral difuso. DHL elevada.
+P: ¿Cuál es el diagnóstico más probable?
++ Neumonía por Pneumocystis jirovecii || CD4 menor de 200, curso subagudo, tos seca, hipoxemia de esfuerzo e infiltrado intersticial bilateral.
+- representativeness_heuristic | Neumonía neumocócica || Es frecuente en VIH, pero da consolidación lobar y curso agudo.
+- anchoring | Tuberculosis pulmonar || Se ancla en la tuberculosis por el VIH, pero el patrón intersticial difuso y la tos seca sugieren Pneumocystis.
+- availability_heuristic | Influenza estacional || Es aguda y no explica el curso de semanas.
+- premature_closure | Sarcoma de Kaposi pulmonar || Concluye una causa tumoral sin lesiones cutáneas.
+- base_rate_fallacy | Histoplasmosis diseminada || Es posible en México, pero menos probable que Pneumocystis.
+- framing_effect | Insuficiencia cardiaca por miocardiopatía por VIH || La disnea confunde, pero hay fiebre e infiltrado.
+- inattentional_blindness | Asma de inicio tardío || No toma en cuenta la inmunosupresión.
+- focusing_illusion | Neumonía por citomegalovirus || Se centra en el CD4 bajo y elige una causa menos frecuente.
+- belief_bias | Linfoma pulmonar primario || Cree que todo infiltrado en VIH es tumoral.
+E: La neumonía por Pneumocystis jirovecii es una de las infecciones oportunistas más frecuentes en personas con VIH con CD4 menor de 200 que no reciben profilaxis. Se presenta de forma subaguda con disnea progresiva, tos seca, fiebre e hipoxemia, sobre todo al esfuerzo. La radiografía muestra infiltrado intersticial bilateral difuso o en vidrio despulido, y la deshidrogenasa láctica suele estar elevada. Se confirma con tinciones o PCR en esputo inducido o lavado broncoalveolar. El tratamiento es trimetoprim con sulfametoxazol por 21 días, con prednisona si la PaO2 es menor de 70 mmHg, y antirretrovirales en las primeras dos semanas.
+R: Guía de Práctica Clínica de prevención y tratamiento de infecciones oportunistas en personas con VIH
+
+@ mi|infectious_diseases|hiv|4|complication_prognosis
+V: Hombre de 35 años con VIH y CD4 de 30 que inició antirretrovirales hace 3 semanas, mientras recibía tratamiento para tuberculosis pulmonar. Ahora presenta fiebre alta, crecimiento de ganglios cervicales y empeoramiento de los infiltrados pulmonares. Su carga viral disminuyó y el CD4 subió a 120.
+P: ¿Cuál es la complicación más probable?
++ Síndrome inflamatorio de reconstitución inmune || Empeoramiento inflamatorio de una infección conocida tras iniciar antirretrovirales con recuperación inmune.
+- anchoring | Fracaso del tratamiento antituberculoso por resistencia || Se ancla en la tuberculosis sin considerar la respuesta inmune.
+- availability_heuristic | Nueva infección oportunista no relacionada || Es posible, pero el cuadro coincide con la recuperación inmune.
+- representativeness_heuristic | Linfoma no Hodgkin || Da ganglios grandes, pero la relación temporal sugiere reconstitución.
+- premature_closure | Reacción alérgica a los antirretrovirales || Concluye una alergia sin exantema típico.
+- framing_effect | Fracaso del tratamiento antirretroviral || Suena a fracaso, pero la carga viral bajó y el CD4 subió.
+- base_rate_fallacy | Sarcoidosis || Es poco probable en este contexto.
+- inattentional_blindness | Infección bacteriana común sin relación || No nota la secuencia temporal.
+- focusing_illusion | Toxicidad hepática por isoniazida || Se centra en los fármacos y no explica los ganglios.
+- belief_bias | Suspender todos los tratamientos porque empeoran al paciente || Cree que el empeoramiento indica daño por los fármacos.
+E: El síndrome inflamatorio de reconstitución inmune ocurre semanas después de iniciar el tratamiento antirretroviral en pacientes con inmunosupresión grave, cuando la recuperación del sistema inmune provoca una respuesta inflamatoria exagerada contra una infección ya presente, como tuberculosis, criptococosis o micobacterias atípicas. Se manifiesta con empeoramiento paradójico de la infección, fiebre, crecimiento ganglionar o nuevos infiltrados, con disminución de la carga viral y aumento del CD4. Es más frecuente con CD4 muy bajo. El tratamiento es continuar los antirretrovirales y el tratamiento de la infección, con antiinflamatorios o corticosteroides en casos moderados a graves.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento antirretroviral de la infección por VIH en adultos
+
+@ mi|infectious_diseases|hiv|2|prevention_screening
+V: Hombre de 27 años sin VIH, con pareja estable que vive con VIH y tiene carga viral detectable. Usa condón de forma irregular. Pruebas de VIH y función renal normales.
+P: ¿Cuál es la medida de prevención farmacológica más adecuada para él?
++ Profilaxis preexposición con tenofovir y emtricitabina oral diaria || Reduce de forma importante el riesgo de adquirir VIH.
+- availability_heuristic | Profilaxis posexposición cada vez que tenga relaciones || Es para exposiciones puntuales, no continuas.
+- anchoring | Vacuna contra el VIH || Se ancla en la idea de vacuna, que aún no existe.
+- framing_effect | Antibiótico profiláctico semanal || Suena preventivo, pero no actúa sobre el virus.
+- representativeness_heuristic | Tratamiento antirretroviral completo de tres fármacos para él || Es tratamiento, no prevención en una persona sin VIH.
+- status_quo_bias | Solo recomendar condón sin otras medidas || Es útil, pero su uso es irregular.
+- premature_closure | Esperar a que la pareja tenga carga indetectable sin otra medida || La pareja aún tiene carga detectable.
+- complexity_bias | Inmunoglobulina mensual || No previene el VIH.
+- belief_bias | Lavados genitales después de las relaciones || Cree que el lavado previene la infección.
+- omission_bias | Evitar la profilaxis por miedo a efectos renales || Sobreestima el riesgo con vigilancia adecuada.
+E: La profilaxis preexposición consiste en que una persona sin VIH con riesgo sustancial de adquirirlo tome antirretrovirales de forma continua, como tenofovir con emtricitabina diario. Reduce el riesgo de infección sexual en más de 90% cuando hay buen apego. Está indicada en parejas serodiscordantes cuando la pareja con VIH no está suprimida, en hombres que tienen sexo con hombres con conductas de riesgo, trabajadoras sexuales y personas que usan drogas inyectables. Antes de iniciar se confirma prueba de VIH negativa y función renal, y se repiten pruebas cada tres meses. Se recomienda también el condón para otras infecciones de transmisión sexual.
+R: Guía de Práctica Clínica de profilaxis preexposición al VIH
+
+@ mi|infectious_diseases|tuberculosis|2|confirmatory_study
+V: Hombre de 45 años con diabetes. Refiere tos productiva de 5 semanas, fiebre vespertina, sudoración nocturna y pérdida de 6 kg. La radiografía muestra infiltrado en el lóbulo superior derecho con una cavitación.
+P: ¿Cuál es el estudio de elección para confirmar el diagnóstico?
++ Baciloscopia seriada de esputo y prueba molecular como Xpert MTB RIF, con cultivo || Confirman la tuberculosis pulmonar y detectan resistencia a rifampicina.
+- availability_heuristic | Prueba de tuberculina || Indica infección, pero no distingue enfermedad activa.
+- anchoring | La radiografía con cavitación es suficiente || Se ancla en la imagen sin confirmación bacteriológica.
+- representativeness_heuristic | Interferón gamma en sangre como prueba de enfermedad activa || Detecta infección, no enfermedad activa.
+- premature_closure | Tomografía de tórax para confirmar || Apoya, pero no confirma.
+- complexity_bias | Biopsia pulmonar abierta || Es invasiva e innecesaria como primer paso.
+- framing_effect | Biometría hemática con linfocitosis || Suena sugestiva, pero no diagnostica.
+- information_bias | Broncoscopia de inicio en todos || Se reserva si el esputo es negativo.
+- belief_bias | Cultivo de orina || Cree que la orina confirma la tuberculosis pulmonar.
+- base_rate_fallacy | Descartar tuberculosis por su diabetes controlada || Ignora que la diabetes aumenta el riesgo.
+E: La tuberculosis pulmonar se sospecha en personas con tos de más de dos semanas, sobre todo con fiebre, sudoración nocturna, pérdida de peso o hemoptisis. El diagnóstico se confirma con estudios bacteriológicos del esputo, como la baciloscopia seriada, las pruebas moleculares rápidas, como Xpert MTB RIF, que además detectan resistencia a rifampicina, y el cultivo, que es el estándar de oro y permite el antibiograma. La radiografía apoya el diagnóstico, con lesiones en lóbulos superiores y cavitaciones. La tuberculina y el interferón gamma identifican infección, pero no enfermedad activa. La diabetes es un factor de riesgo importante en México.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la tuberculosis pulmonar ;; Norma Oficial Mexicana para la prevención y control de la tuberculosis
+
+@ mi|infectious_diseases|tuberculosis|3|treatment_of_choice
+V: Mujer de 38 años con tuberculosis pulmonar confirmada, sensible a rifampicina. Sin tratamiento previo, sin VIH y con función hepática normal.
+P: ¿Cuál es el tratamiento de elección?
++ Isoniazida, rifampicina, pirazinamida y etambutol por 2 meses, seguidos de isoniazida y rifampicina por 4 meses || Es el esquema primario acortado.
+- anchoring | Isoniazida sola por 9 meses || Se ancla en el tratamiento de la tuberculosis latente.
+- availability_heuristic | Rifampicina con isoniazida por 2 meses || Es insuficiente.
+- representativeness_heuristic | Levofloxacino como monoterapia || Las fluoroquinolonas se reservan para resistencias y la monoterapia genera resistencia.
+- framing_effect | Tratamiento solo hasta que deje de toser || Suena práctico, pero lleva a recaída y resistencia.
+- premature_closure | Hospitalizar y aislar 6 meses sin fármacos hasta tener cultivo || Retrasa el tratamiento.
+- complexity_bias | Esquema de 8 fármacos por 24 meses || Corresponde a la tuberculosis multirresistente.
+- status_quo_bias | Estreptomicina sola como en el pasado || Es obsoleto y genera resistencia.
+- belief_bias | Tratamiento autoadministrado sin supervisión || Cree que no se necesita supervisión, cuando se recomienda tratamiento supervisado.
+- omission_bias | Retrasar el tratamiento por miedo a hepatotoxicidad || Sobreestima el riesgo con vigilancia.
+E: El tratamiento de la tuberculosis pulmonar sensible en adultos es el esquema primario acortado de seis meses. Consiste en una fase intensiva de dos meses con isoniazida, rifampicina, pirazinamida y etambutol, y una fase de sostén de cuatro meses con isoniazida y rifampicina. En México se administra bajo tratamiento estrictamente supervisado para asegurar el apego y evitar resistencias. Se vigilan los efectos adversos, como hepatotoxicidad por isoniazida, rifampicina y pirazinamida, neuropatía por isoniazida, que se previene con piridoxina, y neuritis óptica por etambutol. Se realiza baciloscopia de control mensual.
+R: Norma Oficial Mexicana para la prevención y control de la tuberculosis ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la tuberculosis pulmonar
+
+@ mi|infectious_diseases|tuberculosis|3|complication_prognosis
+V: Hombre de 50 años en el segundo mes de tratamiento antituberculoso. Refiere disminución de la agudeza visual y dificultad para distinguir el rojo del verde.
+P: ¿Cuál es la complicación y el fármaco responsable?
++ Neuritis óptica por etambutol || El etambutol puede causar neuritis óptica con alteración de colores.
+- anchoring | Neuropatía periférica por isoniazida || Se ancla en otro efecto conocido que no afecta la visión.
+- availability_heuristic | Hepatitis por pirazinamida || Es un efecto frecuente, pero no visual.
+- representativeness_heuristic | Coloración naranja de líquidos por rifampicina || Es benigna y no altera la visión.
+- premature_closure | Retinopatía diabética || Atribuye a otra causa sin considerar el fármaco.
+- base_rate_fallacy | Uveítis por rifabutina || No recibe rifabutina.
+- framing_effect | Ototoxicidad por estreptomicina || Suena a toxicidad sensorial, pero es auditiva.
+- inattentional_blindness | Hiperuricemia por pirazinamida || No relaciona la alteración visual.
+- focusing_illusion | Cataratas por corticosteroides || Se centra en la visión con otra causa.
+- belief_bias | Fatiga visual por el estrés de la enfermedad || Cree que el síntoma es emocional.
+E: Los efectos adversos de los antituberculosos de primera línea se deben conocer para vigilarlos. La isoniazida causa hepatotoxicidad y neuropatía periférica, prevenible con piridoxina. La rifampicina causa hepatotoxicidad, coloración naranja de orina y lágrimas, e interacciones por inducción enzimática, como la disminución del efecto de anticonceptivos. La pirazinamida causa hepatotoxicidad, hiperuricemia y artralgias. El etambutol causa neuritis óptica retrobulbar, con disminución de la agudeza visual y alteración de la discriminación entre rojo y verde, dependiente de la dosis. Ante síntomas visuales se suspende el etambutol y se envía a oftalmología.
+R: Norma Oficial Mexicana para la prevención y control de la tuberculosis
+
+@ mi|infectious_diseases|tuberculosis|3|prevention_screening
+V: Niña de 4 años que vive con su abuelo, recién diagnosticado con tuberculosis pulmonar con baciloscopia positiva. La niña está asintomática y su radiografía de tórax es normal.
+P: ¿Cuál es la medida de prevención indicada para la niña?
++ Tratamiento preventivo con isoniazida tras descartar enfermedad activa || Los contactos menores de 5 años tienen alto riesgo de enfermedad grave.
+- anchoring | Esperar a que tenga síntomas para tratar || Se ancla en la ausencia de síntomas.
+- availability_heuristic | Aplicar BCG de refuerzo || No previene la enfermedad en un contacto expuesto.
+- representativeness_heuristic | Esquema completo de cuatro fármacos || Es para enfermedad activa, que se descartó.
+- framing_effect | Separar a la niña del abuelo como única medida || Suena protector, pero la exposición ya ocurrió.
+- status_quo_bias | Repetir la radiografía en un año sin tratamiento || Deja a la niña sin protección.
+- premature_closure | Prueba de tuberculina y tratar solo si es positiva en todos los casos || En menores de 5 años se trata aunque sea negativa.
+- complexity_bias | Broncoscopia para buscar bacilos || Invasiva e innecesaria.
+- belief_bias | Vitaminas para fortalecer las defensas || Cree que sustituyen la quimioprofilaxis.
+- omission_bias | Evitar la isoniazida por miedo a efectos en niños || Los niños la toleran bien.
+E: Los contactos de pacientes con tuberculosis pulmonar bacilífera deben estudiarse. Los niños menores de cinco años y las personas con VIH tienen alto riesgo de progresar a enfermedad grave, como meningitis o tuberculosis miliar. Tras descartar enfermedad activa con evaluación clínica y radiografía, se indica tratamiento preventivo, clásicamente con isoniazida por seis meses o esquemas más cortos con rifampicina, aunque la tuberculina sea negativa. En contactos mayores, el tratamiento preventivo se indica si se demuestra infección latente. La BCG previene formas graves en niños pequeños, pero no sustituye la quimioprofilaxis.
+R: Norma Oficial Mexicana para la prevención y control de la tuberculosis
+
+@ mi|infectious_diseases|tuberculosis|4|diagnosis
+V: Hombre de 40 años con VIH y CD4 de 80. Tiene cefalea de 3 semanas, fiebre, confusión y parálisis del VI par craneal. El líquido cefalorraquídeo muestra 250 células con predominio linfocitario, proteínas de 210 mg/dL, glucosa de 25 mg/dL y adenosina desaminasa elevada.
+P: ¿Cuál es el diagnóstico más probable?
++ Meningitis tuberculosa || Curso subagudo, pares craneales afectados, LCR linfocitario con proteínas altas, glucosa baja y ADA elevada.
+- representativeness_heuristic | Meningitis por criptococo || También ocurre en VIH avanzado, pero suele tener menos celularidad y se confirma con antígeno.
+- anchoring | Meningitis viral || Se ancla en el predominio linfocitario, pero la glucosa baja no corresponde.
+- availability_heuristic | Meningitis bacteriana por neumococo || Es aguda con predominio de neutrófilos.
+- premature_closure | Toxoplasmosis cerebral || Da lesiones focales con anillo, no meningitis.
+- base_rate_fallacy | Neurosífilis meningovascular || Es posible, pero el perfil favorece tuberculosis.
+- framing_effect | Linfoma primario del sistema nervioso central || Suena a complicación del VIH, pero da masa cerebral.
+- inattentional_blindness | Encefalopatía por VIH || No toma en cuenta las alteraciones del LCR.
+- focusing_illusion | Migraña con aura || Se centra en la cefalea.
+- belief_bias | Hemorragia subaracnoidea || Cree que toda cefalea con confusión es vascular.
+E: La meningitis tuberculosa es la forma más grave de tuberculosis extrapulmonar, más frecuente en niños pequeños y personas con VIH. Su curso es subagudo, con cefalea, fiebre, alteración del estado de alerta y afección de pares craneales, sobre todo el VI, por aracnoiditis basal. El líquido cefalorraquídeo muestra pleocitosis linfocitaria, proteínas muy elevadas, glucosa baja y adenosina desaminasa elevada. La confirmación se busca con pruebas moleculares y cultivo. La tomografía puede mostrar hidrocefalia y realce meníngeo basal. El tratamiento es el esquema antituberculoso por 12 meses más dexametasona, que reduce la mortalidad.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la tuberculosis meníngea
+
+@ mi|infectious_diseases|tuberculosis|2|risk_factor
+V: Mujer de 55 años que será tratada con infliximab por artritis reumatoide. Su prueba de interferón gamma es positiva y la radiografía de tórax es normal. Asintomática.
+P: ¿Cuál es el factor de riesgo que obliga a tratar su infección tuberculosa latente antes del biológico?
++ El bloqueo del factor de necrosis tumoral aumenta mucho el riesgo de reactivar la tuberculosis || La infección latente se trata antes de iniciar anti TNF.
+- availability_heuristic | Su edad mayor de 50 años como único factor || La edad no es la razón principal.
+- anchoring | La artritis reumatoide por sí sola sin importar el fármaco || Se ancla en la enfermedad e ignora el efecto del biológico.
+- representativeness_heuristic | El sexo femenino || No es un factor determinante.
+- framing_effect | Que el interferón gamma positivo indique enfermedad activa || Suena grave, pero indica infección latente.
+- premature_closure | La radiografía normal descarta todo riesgo || Una radiografía normal no elimina la infección latente.
+- base_rate_fallacy | Que la tuberculosis sea rara en México || Subestima la prevalencia.
+- inattentional_blindness | El uso previo de paracetamol || No tiene relación.
+- focusing_illusion | El tabaquismo pasivo || Se centra en un factor menor.
+- belief_bias | Que el metotrexato sea el principal riesgo de reactivación || Cree que el metotrexato pesa más que el anti TNF.
+E: Los fármacos que bloquean el factor de necrosis tumoral alfa, como infliximab, adalimumab y etanercept, aumentan de forma importante el riesgo de reactivación de la tuberculosis, porque esta citocina es esencial para mantener los granulomas que contienen al bacilo. Antes de iniciarlos se debe buscar infección tuberculosa latente con tuberculina o interferón gamma y radiografía de tórax. Si es positiva y se descarta enfermedad activa, se da tratamiento de infección latente, como isoniazida por nueve meses o rifampicina por cuatro meses, iniciándolo al menos un mes antes del biológico. Otros factores de riesgo de reactivación son VIH, diabetes, enfermedad renal y corticosteroides.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la tuberculosis latente

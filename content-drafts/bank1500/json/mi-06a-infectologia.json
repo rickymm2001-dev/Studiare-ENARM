@@ -1,0 +1,1136 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-06a-infectologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "hiv",
+      "vignette": "Hombre de 29 años con prueba rápida de cuarta generación reactiva para VIH realizada en una campaña. Asintomático.",
+      "prompt": "¿Cuál es el siguiente estudio para confirmar el diagnóstico de infección por VIH?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cultivo viral",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es un método de investigación."
+        },
+        {
+          "key": "b",
+          "text": "Repetir la misma prueba rápida en un año",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Retrasa la confirmación."
+        },
+        {
+          "key": "c",
+          "text": "Descartar porque es asintomático",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Usa los síntomas para negar un resultado reactivo."
+        },
+        {
+          "key": "d",
+          "text": "Biometría hemática con linfopenia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena sugestiva, pero no diagnostica."
+        },
+        {
+          "key": "e",
+          "text": "Con la prueba rápida reactiva ya está confirmado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Cierra el diagnóstico con una sola prueba de tamizaje."
+        },
+        {
+          "key": "f",
+          "text": "Una segunda prueba distinta según el algoritmo, como inmunoensayo diferenciador o carga viral",
+          "correct": true,
+          "rationale": "El diagnóstico requiere confirmación con otra prueba."
+        },
+        {
+          "key": "g",
+          "text": "Conteo de linfocitos CD4 como prueba confirmatoria",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el CD4, que evalúa la inmunidad, no confirma la infección."
+        },
+        {
+          "key": "h",
+          "text": "Western blot como única opción obligatoria en todos los casos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que es la única prueba confirmatoria, cuando hay algoritmos más actuales."
+        },
+        {
+          "key": "i",
+          "text": "Prueba de tuberculina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es útil en el abordaje, no confirma VIH."
+        },
+        {
+          "key": "j",
+          "text": "Genotipo de resistencia antes de confirmar",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Va después del diagnóstico."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "El diagnóstico de infección por VIH se basa en un algoritmo de pruebas. Una prueba de tamizaje reactiva, como un inmunoensayo de cuarta generación que detecta anticuerpos y antígeno p24 o una prueba rápida, debe confirmarse con una prueba diferente, como un inmunoensayo que diferencia VIH 1 y 2, o con carga viral si hay discordancia o sospecha de infección aguda. Una vez confirmado, se miden los linfocitos CD4, la carga viral y el genotipo de resistencia, y se inicia tratamiento antirretroviral lo antes posible. El diagnóstico se comunica con consejería y confidencialidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento antirretroviral de la infección por VIH en adultos",
+        "Norma Oficial Mexicana para la prevención y control de la infección por VIH"
+      ]
+    },
+    {
+      "key": "mi-06a-infectologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "hiv",
+      "vignette": "Mujer de 34 años con diagnóstico reciente de VIH. CD4 de 420 células por microlitro y carga viral de 48,000 copias por mL. Sin infecciones oportunistas ni embarazo. Función renal normal.",
+      "prompt": "¿Cuál es el tratamiento inicial recomendado?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Iniciar solo cuando tenga síntomas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Espera daño inmunológico."
+        },
+        {
+          "key": "b",
+          "text": "Retrasar el tratamiento por miedo a efectos adversos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Los esquemas actuales se toleran bien."
+        },
+        {
+          "key": "c",
+          "text": "Iniciar de inmediato tratamiento antirretroviral, como bictegravir con tenofovir alafenamida y emtricitabina",
+          "correct": true,
+          "rationale": "Se recomienda tratar a todas las personas con VIH sin importar el CD4."
+        },
+        {
+          "key": "d",
+          "text": "Dos inhibidores de proteasa sin otros fármacos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un esquema recomendado."
+        },
+        {
+          "key": "e",
+          "text": "Vigilar carga viral cada 6 meses sin tratamiento",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Deja progresar la infección."
+        },
+        {
+          "key": "f",
+          "text": "Suplementos vitamínicos para fortalecer el sistema inmune",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que sustituyen el tratamiento."
+        },
+        {
+          "key": "g",
+          "text": "Monoterapia con zidovudina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Genera resistencia rápidamente."
+        },
+        {
+          "key": "h",
+          "text": "Esquema de cinco fármacos para mayor potencia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Agrega toxicidad sin beneficio."
+        },
+        {
+          "key": "i",
+          "text": "Iniciar solo profilaxis con trimetoprim con sulfametoxazol",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena protector, pero no trata el VIH."
+        },
+        {
+          "key": "j",
+          "text": "Esperar a que el CD4 baje de 350 para iniciar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en criterios antiguos."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "Actualmente se recomienda iniciar tratamiento antirretroviral en todas las personas con VIH, independientemente del conteo de CD4, lo antes posible tras el diagnóstico, incluso el mismo día cuando es factible. El tratamiento reduce la morbilidad, la mortalidad y la transmisión, ya que una carga viral indetectable sostenida no transmite el virus por vía sexual. Los esquemas preferidos combinan un inhibidor de integrasa, como bictegravir o dolutegravir, con dos análogos de nucleósidos, como tenofovir con emtricitabina o lamivudina. Antes de iniciarlo se solicitan carga viral, CD4, genotipo, serologías de hepatitis B y C y función renal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento antirretroviral de la infección por VIH en adultos"
+      ]
+    },
+    {
+      "key": "mi-06a-infectologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "hiv",
+      "vignette": "Hombre de 36 años con VIH recién diagnosticado. CD4 de 140 células por microlitro. Prueba de tuberculosis latente negativa. IgG para toxoplasma positiva.",
+      "prompt": "¿Cuál es la profilaxis de infecciones oportunistas indicada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fluconazol profiláctico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se recomienda de rutina."
+        },
+        {
+          "key": "b",
+          "text": "Isoniazida aunque la prueba de tuberculosis sea negativa y sin contacto",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada sin exposición o infección latente."
+        },
+        {
+          "key": "c",
+          "text": "Aciclovir diario para prevenir todo tipo de virus",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena amplio, pero no está indicado de rutina."
+        },
+        {
+          "key": "d",
+          "text": "Cuatro antibióticos profilácticos diferentes",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Exceso sin indicación."
+        },
+        {
+          "key": "e",
+          "text": "Ninguna profilaxis hasta iniciar antirretrovirales",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Pierde la protección mientras el CD4 es bajo."
+        },
+        {
+          "key": "f",
+          "text": "Trimetoprim con sulfametoxazol diario",
+          "correct": true,
+          "rationale": "Con CD4 menor de 200 previene neumonía por Pneumocystis y con menos de 100 toxoplasmosis."
+        },
+        {
+          "key": "g",
+          "text": "Vacuna BCG para prevenir tuberculosis en el adulto con VIH",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una vacuna viva contraindicada."
+        },
+        {
+          "key": "h",
+          "text": "Evitar la sulfa por posibles alergias sin antecedente",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pierde un beneficio importante."
+        },
+        {
+          "key": "i",
+          "text": "Azitromicina semanal para Mycobacterium avium",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en otra profilaxis, indicada con CD4 menor de 50 sin tratamiento eficaz."
+        },
+        {
+          "key": "j",
+          "text": "Profilaxis solo si el CD4 baja de 50",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Usa un umbral equivocado."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "En personas con VIH y conteo de CD4 menor de 200 células por microlitro se indica profilaxis primaria contra neumonía por Pneumocystis jirovecii con trimetoprim con sulfametoxazol diario. Si el CD4 es menor de 100 y la serología para toxoplasma es positiva, el mismo fármaco previene la toxoplasmosis cerebral. Con CD4 menor de 50 sin tratamiento antirretroviral eficaz se consideraba la profilaxis contra Mycobacterium avium con azitromicina. Las profilaxis se suspenden cuando el CD4 se mantiene por arriba de 200 por al menos tres meses con carga viral suprimida. La infección tuberculosa latente se trata si se documenta.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención y tratamiento de infecciones oportunistas en personas con VIH"
+      ]
+    },
+    {
+      "key": "mi-06a-infectologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "hiv",
+      "vignette": "Hombre de 31 años con VIH sin tratamiento y CD4 de 60. Refiere disnea progresiva de 3 semanas, tos seca y fiebre. Saturación de 86% al caminar. La radiografía muestra infiltrado intersticial bilateral difuso. DHL elevada.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Neumonía por Pneumocystis jirovecii",
+          "correct": true,
+          "rationale": "CD4 menor de 200, curso subagudo, tos seca, hipoxemia de esfuerzo e infiltrado intersticial bilateral."
+        },
+        {
+          "key": "b",
+          "text": "Sarcoma de Kaposi pulmonar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye una causa tumoral sin lesiones cutáneas."
+        },
+        {
+          "key": "c",
+          "text": "Influenza estacional",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es aguda y no explica el curso de semanas."
+        },
+        {
+          "key": "d",
+          "text": "Asma de inicio tardío",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta la inmunosupresión."
+        },
+        {
+          "key": "e",
+          "text": "Tuberculosis pulmonar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la tuberculosis por el VIH, pero el patrón intersticial difuso y la tos seca sugieren Pneumocystis."
+        },
+        {
+          "key": "f",
+          "text": "Histoplasmosis diseminada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es posible en México, pero menos probable que Pneumocystis."
+        },
+        {
+          "key": "g",
+          "text": "Insuficiencia cardiaca por miocardiopatía por VIH",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La disnea confunde, pero hay fiebre e infiltrado."
+        },
+        {
+          "key": "h",
+          "text": "Neumonía por citomegalovirus",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el CD4 bajo y elige una causa menos frecuente."
+        },
+        {
+          "key": "i",
+          "text": "Linfoma pulmonar primario",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo infiltrado en VIH es tumoral."
+        },
+        {
+          "key": "j",
+          "text": "Neumonía neumocócica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es frecuente en VIH, pero da consolidación lobar y curso agudo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "La neumonía por Pneumocystis jirovecii es una de las infecciones oportunistas más frecuentes en personas con VIH con CD4 menor de 200 que no reciben profilaxis. Se presenta de forma subaguda con disnea progresiva, tos seca, fiebre e hipoxemia, sobre todo al esfuerzo. La radiografía muestra infiltrado intersticial bilateral difuso o en vidrio despulido, y la deshidrogenasa láctica suele estar elevada. Se confirma con tinciones o PCR en esputo inducido o lavado broncoalveolar. El tratamiento es trimetoprim con sulfametoxazol por 21 días, con prednisona si la PaO2 es menor de 70 mmHg, y antirretrovirales en las primeras dos semanas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención y tratamiento de infecciones oportunistas en personas con VIH"
+      ]
+    },
+    {
+      "key": "mi-06a-infectologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "hiv",
+      "vignette": "Hombre de 35 años con VIH y CD4 de 30 que inició antirretrovirales hace 3 semanas, mientras recibía tratamiento para tuberculosis pulmonar. Ahora presenta fiebre alta, crecimiento de ganglios cervicales y empeoramiento de los infiltrados pulmonares. Su carga viral disminuyó y el CD4 subió a 120.",
+      "prompt": "¿Cuál es la complicación más probable?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fracaso del tratamiento antituberculoso por resistencia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la tuberculosis sin considerar la respuesta inmune."
+        },
+        {
+          "key": "b",
+          "text": "Fracaso del tratamiento antirretroviral",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a fracaso, pero la carga viral bajó y el CD4 subió."
+        },
+        {
+          "key": "c",
+          "text": "Reacción alérgica a los antirretrovirales",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye una alergia sin exantema típico."
+        },
+        {
+          "key": "d",
+          "text": "Infección bacteriana común sin relación",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No nota la secuencia temporal."
+        },
+        {
+          "key": "e",
+          "text": "Linfoma no Hodgkin",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da ganglios grandes, pero la relación temporal sugiere reconstitución."
+        },
+        {
+          "key": "f",
+          "text": "Nueva infección oportunista no relacionada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es posible, pero el cuadro coincide con la recuperación inmune."
+        },
+        {
+          "key": "g",
+          "text": "Suspender todos los tratamientos porque empeoran al paciente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el empeoramiento indica daño por los fármacos."
+        },
+        {
+          "key": "h",
+          "text": "Toxicidad hepática por isoniazida",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en los fármacos y no explica los ganglios."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome inflamatorio de reconstitución inmune",
+          "correct": true,
+          "rationale": "Empeoramiento inflamatorio de una infección conocida tras iniciar antirretrovirales con recuperación inmune."
+        },
+        {
+          "key": "j",
+          "text": "Sarcoidosis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es poco probable en este contexto."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "El síndrome inflamatorio de reconstitución inmune ocurre semanas después de iniciar el tratamiento antirretroviral en pacientes con inmunosupresión grave, cuando la recuperación del sistema inmune provoca una respuesta inflamatoria exagerada contra una infección ya presente, como tuberculosis, criptococosis o micobacterias atípicas. Se manifiesta con empeoramiento paradójico de la infección, fiebre, crecimiento ganglionar o nuevos infiltrados, con disminución de la carga viral y aumento del CD4. Es más frecuente con CD4 muy bajo. El tratamiento es continuar los antirretrovirales y el tratamiento de la infección, con antiinflamatorios o corticosteroides en casos moderados a graves.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento antirretroviral de la infección por VIH en adultos"
+      ]
+    },
+    {
+      "key": "mi-06a-infectologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "hiv",
+      "vignette": "Hombre de 27 años sin VIH, con pareja estable que vive con VIH y tiene carga viral detectable. Usa condón de forma irregular. Pruebas de VIH y función renal normales.",
+      "prompt": "¿Cuál es la medida de prevención farmacológica más adecuada para él?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Profilaxis preexposición con tenofovir y emtricitabina oral diaria",
+          "correct": true,
+          "rationale": "Reduce de forma importante el riesgo de adquirir VIH."
+        },
+        {
+          "key": "b",
+          "text": "Vacuna contra el VIH",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la idea de vacuna, que aún no existe."
+        },
+        {
+          "key": "c",
+          "text": "Tratamiento antirretroviral completo de tres fármacos para él",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es tratamiento, no prevención en una persona sin VIH."
+        },
+        {
+          "key": "d",
+          "text": "Inmunoglobulina mensual",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No previene el VIH."
+        },
+        {
+          "key": "e",
+          "text": "Evitar la profilaxis por miedo a efectos renales",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Sobreestima el riesgo con vigilancia adecuada."
+        },
+        {
+          "key": "f",
+          "text": "Solo recomendar condón sin otras medidas",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Es útil, pero su uso es irregular."
+        },
+        {
+          "key": "g",
+          "text": "Esperar a que la pareja tenga carga indetectable sin otra medida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La pareja aún tiene carga detectable."
+        },
+        {
+          "key": "h",
+          "text": "Lavados genitales después de las relaciones",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el lavado previene la infección."
+        },
+        {
+          "key": "i",
+          "text": "Antibiótico profiláctico semanal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena preventivo, pero no actúa sobre el virus."
+        },
+        {
+          "key": "j",
+          "text": "Profilaxis posexposición cada vez que tenga relaciones",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es para exposiciones puntuales, no continuas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "La profilaxis preexposición consiste en que una persona sin VIH con riesgo sustancial de adquirirlo tome antirretrovirales de forma continua, como tenofovir con emtricitabina diario. Reduce el riesgo de infección sexual en más de 90% cuando hay buen apego. Está indicada en parejas serodiscordantes cuando la pareja con VIH no está suprimida, en hombres que tienen sexo con hombres con conductas de riesgo, trabajadoras sexuales y personas que usan drogas inyectables. Antes de iniciar se confirma prueba de VIH negativa y función renal, y se repiten pruebas cada tres meses. Se recomienda también el condón para otras infecciones de transmisión sexual.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de profilaxis preexposición al VIH"
+      ]
+    },
+    {
+      "key": "mi-06a-infectologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "tuberculosis",
+      "vignette": "Hombre de 45 años con diabetes. Refiere tos productiva de 5 semanas, fiebre vespertina, sudoración nocturna y pérdida de 6 kg. La radiografía muestra infiltrado en el lóbulo superior derecho con una cavitación.",
+      "prompt": "¿Cuál es el estudio de elección para confirmar el diagnóstico?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Interferón gamma en sangre como prueba de enfermedad activa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Detecta infección, no enfermedad activa."
+        },
+        {
+          "key": "b",
+          "text": "Baciloscopia seriada de esputo y prueba molecular como Xpert MTB RIF, con cultivo",
+          "correct": true,
+          "rationale": "Confirman la tuberculosis pulmonar y detectan resistencia a rifampicina."
+        },
+        {
+          "key": "c",
+          "text": "Prueba de tuberculina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Indica infección, pero no distingue enfermedad activa."
+        },
+        {
+          "key": "d",
+          "text": "Tomografía de tórax para confirmar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Apoya, pero no confirma."
+        },
+        {
+          "key": "e",
+          "text": "Biopsia pulmonar abierta",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es invasiva e innecesaria como primer paso."
+        },
+        {
+          "key": "f",
+          "text": "Broncoscopia de inicio en todos",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Se reserva si el esputo es negativo."
+        },
+        {
+          "key": "g",
+          "text": "Descartar tuberculosis por su diabetes controlada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ignora que la diabetes aumenta el riesgo."
+        },
+        {
+          "key": "h",
+          "text": "Cultivo de orina",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la orina confirma la tuberculosis pulmonar."
+        },
+        {
+          "key": "i",
+          "text": "La radiografía con cavitación es suficiente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la imagen sin confirmación bacteriológica."
+        },
+        {
+          "key": "j",
+          "text": "Biometría hemática con linfocitosis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena sugestiva, pero no diagnostica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "i"
+      ],
+      "explanation": "La tuberculosis pulmonar se sospecha en personas con tos de más de dos semanas, sobre todo con fiebre, sudoración nocturna, pérdida de peso o hemoptisis. El diagnóstico se confirma con estudios bacteriológicos del esputo, como la baciloscopia seriada, las pruebas moleculares rápidas, como Xpert MTB RIF, que además detectan resistencia a rifampicina, y el cultivo, que es el estándar de oro y permite el antibiograma. La radiografía apoya el diagnóstico, con lesiones en lóbulos superiores y cavitaciones. La tuberculina y el interferón gamma identifican infección, pero no enfermedad activa. La diabetes es un factor de riesgo importante en México.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la tuberculosis pulmonar",
+        "Norma Oficial Mexicana para la prevención y control de la tuberculosis"
+      ]
+    },
+    {
+      "key": "mi-06a-infectologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "tuberculosis",
+      "vignette": "Mujer de 38 años con tuberculosis pulmonar confirmada, sensible a rifampicina. Sin tratamiento previo, sin VIH y con función hepática normal.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Isoniazida, rifampicina, pirazinamida y etambutol por 2 meses, seguidos de isoniazida y rifampicina por 4 meses",
+          "correct": true,
+          "rationale": "Es el esquema primario acortado."
+        },
+        {
+          "key": "b",
+          "text": "Esquema de 8 fármacos por 24 meses",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Corresponde a la tuberculosis multirresistente."
+        },
+        {
+          "key": "c",
+          "text": "Rifampicina con isoniazida por 2 meses",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es insuficiente."
+        },
+        {
+          "key": "d",
+          "text": "Retrasar el tratamiento por miedo a hepatotoxicidad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Sobreestima el riesgo con vigilancia."
+        },
+        {
+          "key": "e",
+          "text": "Tratamiento solo hasta que deje de toser",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena práctico, pero lleva a recaída y resistencia."
+        },
+        {
+          "key": "f",
+          "text": "Tratamiento autoadministrado sin supervisión",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que no se necesita supervisión, cuando se recomienda tratamiento supervisado."
+        },
+        {
+          "key": "g",
+          "text": "Levofloxacino como monoterapia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Las fluoroquinolonas se reservan para resistencias y la monoterapia genera resistencia."
+        },
+        {
+          "key": "h",
+          "text": "Hospitalizar y aislar 6 meses sin fármacos hasta tener cultivo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "i",
+          "text": "Isoniazida sola por 9 meses",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el tratamiento de la tuberculosis latente."
+        },
+        {
+          "key": "j",
+          "text": "Estreptomicina sola como en el pasado",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Es obsoleto y genera resistencia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "El tratamiento de la tuberculosis pulmonar sensible en adultos es el esquema primario acortado de seis meses. Consiste en una fase intensiva de dos meses con isoniazida, rifampicina, pirazinamida y etambutol, y una fase de sostén de cuatro meses con isoniazida y rifampicina. En México se administra bajo tratamiento estrictamente supervisado para asegurar el apego y evitar resistencias. Se vigilan los efectos adversos, como hepatotoxicidad por isoniazida, rifampicina y pirazinamida, neuropatía por isoniazida, que se previene con piridoxina, y neuritis óptica por etambutol. Se realiza baciloscopia de control mensual.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención y control de la tuberculosis",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la tuberculosis pulmonar"
+      ]
+    },
+    {
+      "key": "mi-06a-infectologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "tuberculosis",
+      "vignette": "Hombre de 50 años en el segundo mes de tratamiento antituberculoso. Refiere disminución de la agudeza visual y dificultad para distinguir el rojo del verde.",
+      "prompt": "¿Cuál es la complicación y el fármaco responsable?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Neuropatía periférica por isoniazida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en otro efecto conocido que no afecta la visión."
+        },
+        {
+          "key": "b",
+          "text": "Ototoxicidad por estreptomicina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a toxicidad sensorial, pero es auditiva."
+        },
+        {
+          "key": "c",
+          "text": "Fatiga visual por el estrés de la enfermedad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el síntoma es emocional."
+        },
+        {
+          "key": "d",
+          "text": "Uveítis por rifabutina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No recibe rifabutina."
+        },
+        {
+          "key": "e",
+          "text": "Cataratas por corticosteroides",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la visión con otra causa."
+        },
+        {
+          "key": "f",
+          "text": "Hiperuricemia por pirazinamida",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No relaciona la alteración visual."
+        },
+        {
+          "key": "g",
+          "text": "Coloración naranja de líquidos por rifampicina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es benigna y no altera la visión."
+        },
+        {
+          "key": "h",
+          "text": "Retinopatía diabética",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Atribuye a otra causa sin considerar el fármaco."
+        },
+        {
+          "key": "i",
+          "text": "Neuritis óptica por etambutol",
+          "correct": true,
+          "rationale": "El etambutol puede causar neuritis óptica con alteración de colores."
+        },
+        {
+          "key": "j",
+          "text": "Hepatitis por pirazinamida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es un efecto frecuente, pero no visual."
+        }
+      ],
+      "canonical": [
+        "a",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "Los efectos adversos de los antituberculosos de primera línea se deben conocer para vigilarlos. La isoniazida causa hepatotoxicidad y neuropatía periférica, prevenible con piridoxina. La rifampicina causa hepatotoxicidad, coloración naranja de orina y lágrimas, e interacciones por inducción enzimática, como la disminución del efecto de anticonceptivos. La pirazinamida causa hepatotoxicidad, hiperuricemia y artralgias. El etambutol causa neuritis óptica retrobulbar, con disminución de la agudeza visual y alteración de la discriminación entre rojo y verde, dependiente de la dosis. Ante síntomas visuales se suspende el etambutol y se envía a oftalmología.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención y control de la tuberculosis"
+      ]
+    },
+    {
+      "key": "mi-06a-infectologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "tuberculosis",
+      "vignette": "Niña de 4 años que vive con su abuelo, recién diagnosticado con tuberculosis pulmonar con baciloscopia positiva. La niña está asintomática y su radiografía de tórax es normal.",
+      "prompt": "¿Cuál es la medida de prevención indicada para la niña?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esquema completo de cuatro fármacos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es para enfermedad activa, que se descartó."
+        },
+        {
+          "key": "b",
+          "text": "Separar a la niña del abuelo como única medida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena protector, pero la exposición ya ocurrió."
+        },
+        {
+          "key": "c",
+          "text": "Esperar a que tenga síntomas para tratar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la ausencia de síntomas."
+        },
+        {
+          "key": "d",
+          "text": "Evitar la isoniazida por miedo a efectos en niños",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Los niños la toleran bien."
+        },
+        {
+          "key": "e",
+          "text": "Prueba de tuberculina y tratar solo si es positiva en todos los casos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "En menores de 5 años se trata aunque sea negativa."
+        },
+        {
+          "key": "f",
+          "text": "Tratamiento preventivo con isoniazida tras descartar enfermedad activa",
+          "correct": true,
+          "rationale": "Los contactos menores de 5 años tienen alto riesgo de enfermedad grave."
+        },
+        {
+          "key": "g",
+          "text": "Repetir la radiografía en un año sin tratamiento",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Deja a la niña sin protección."
+        },
+        {
+          "key": "h",
+          "text": "Aplicar BCG de refuerzo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No previene la enfermedad en un contacto expuesto."
+        },
+        {
+          "key": "i",
+          "text": "Broncoscopia para buscar bacilos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Invasiva e innecesaria."
+        },
+        {
+          "key": "j",
+          "text": "Vitaminas para fortalecer las defensas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que sustituyen la quimioprofilaxis."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "h"
+      ],
+      "explanation": "Los contactos de pacientes con tuberculosis pulmonar bacilífera deben estudiarse. Los niños menores de cinco años y las personas con VIH tienen alto riesgo de progresar a enfermedad grave, como meningitis o tuberculosis miliar. Tras descartar enfermedad activa con evaluación clínica y radiografía, se indica tratamiento preventivo, clásicamente con isoniazida por seis meses o esquemas más cortos con rifampicina, aunque la tuberculina sea negativa. En contactos mayores, el tratamiento preventivo se indica si se demuestra infección latente. La BCG previene formas graves en niños pequeños, pero no sustituye la quimioprofilaxis.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención y control de la tuberculosis"
+      ]
+    },
+    {
+      "key": "mi-06a-infectologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "tuberculosis",
+      "vignette": "Hombre de 40 años con VIH y CD4 de 80. Tiene cefalea de 3 semanas, fiebre, confusión y parálisis del VI par craneal. El líquido cefalorraquídeo muestra 250 células con predominio linfocitario, proteínas de 210 mg/dL, glucosa de 25 mg/dL y adenosina desaminasa elevada.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Toxoplasmosis cerebral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da lesiones focales con anillo, no meningitis."
+        },
+        {
+          "key": "b",
+          "text": "Meningitis viral",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el predominio linfocitario, pero la glucosa baja no corresponde."
+        },
+        {
+          "key": "c",
+          "text": "Linfoma primario del sistema nervioso central",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a complicación del VIH, pero da masa cerebral."
+        },
+        {
+          "key": "d",
+          "text": "Neurosífilis meningovascular",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es posible, pero el perfil favorece tuberculosis."
+        },
+        {
+          "key": "e",
+          "text": "Meningitis tuberculosa",
+          "correct": true,
+          "rationale": "Curso subagudo, pares craneales afectados, LCR linfocitario con proteínas altas, glucosa baja y ADA elevada."
+        },
+        {
+          "key": "f",
+          "text": "Encefalopatía por VIH",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta las alteraciones del LCR."
+        },
+        {
+          "key": "g",
+          "text": "Meningitis por criptococo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También ocurre en VIH avanzado, pero suele tener menos celularidad y se confirma con antígeno."
+        },
+        {
+          "key": "h",
+          "text": "Hemorragia subaracnoidea",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que toda cefalea con confusión es vascular."
+        },
+        {
+          "key": "i",
+          "text": "Migraña con aura",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la cefalea."
+        },
+        {
+          "key": "j",
+          "text": "Meningitis bacteriana por neumococo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es aguda con predominio de neutrófilos."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La meningitis tuberculosa es la forma más grave de tuberculosis extrapulmonar, más frecuente en niños pequeños y personas con VIH. Su curso es subagudo, con cefalea, fiebre, alteración del estado de alerta y afección de pares craneales, sobre todo el VI, por aracnoiditis basal. El líquido cefalorraquídeo muestra pleocitosis linfocitaria, proteínas muy elevadas, glucosa baja y adenosina desaminasa elevada. La confirmación se busca con pruebas moleculares y cultivo. La tomografía puede mostrar hidrocefalia y realce meníngeo basal. El tratamiento es el esquema antituberculoso por 12 meses más dexametasona, que reduce la mortalidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la tuberculosis meníngea"
+      ]
+    },
+    {
+      "key": "mi-06a-infectologia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "tuberculosis",
+      "vignette": "Mujer de 55 años que será tratada con infliximab por artritis reumatoide. Su prueba de interferón gamma es positiva y la radiografía de tórax es normal. Asintomática.",
+      "prompt": "¿Cuál es el factor de riesgo que obliga a tratar su infección tuberculosa latente antes del biológico?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Que el interferón gamma positivo indique enfermedad activa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena grave, pero indica infección latente."
+        },
+        {
+          "key": "b",
+          "text": "La artritis reumatoide por sí sola sin importar el fármaco",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la enfermedad e ignora el efecto del biológico."
+        },
+        {
+          "key": "c",
+          "text": "El sexo femenino",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un factor determinante."
+        },
+        {
+          "key": "d",
+          "text": "Que la tuberculosis sea rara en México",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Subestima la prevalencia."
+        },
+        {
+          "key": "e",
+          "text": "Su edad mayor de 50 años como único factor",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La edad no es la razón principal."
+        },
+        {
+          "key": "f",
+          "text": "El uso previo de paracetamol",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No tiene relación."
+        },
+        {
+          "key": "g",
+          "text": "La radiografía normal descarta todo riesgo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Una radiografía normal no elimina la infección latente."
+        },
+        {
+          "key": "h",
+          "text": "Que el metotrexato sea el principal riesgo de reactivación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el metotrexato pesa más que el anti TNF."
+        },
+        {
+          "key": "i",
+          "text": "El bloqueo del factor de necrosis tumoral aumenta mucho el riesgo de reactivar la tuberculosis",
+          "correct": true,
+          "rationale": "La infección latente se trata antes de iniciar anti TNF."
+        },
+        {
+          "key": "j",
+          "text": "El tabaquismo pasivo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en un factor menor."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "i"
+      ],
+      "explanation": "Los fármacos que bloquean el factor de necrosis tumoral alfa, como infliximab, adalimumab y etanercept, aumentan de forma importante el riesgo de reactivación de la tuberculosis, porque esta citocina es esencial para mantener los granulomas que contienen al bacilo. Antes de iniciarlos se debe buscar infección tuberculosa latente con tuberculina o interferón gamma y radiografía de tórax. Si es positiva y se descarta enfermedad activa, se da tratamiento de infección latente, como isoniazida por nueve meses o rifampicina por cuatro meses, iniciándolo al menos un mes antes del biológico. Otros factores de riesgo de reactivación son VIH, diabetes, enfermedad renal y corticosteroides.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la tuberculosis latente"
+      ]
+    }
+  ]
+}

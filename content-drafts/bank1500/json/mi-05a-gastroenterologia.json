@@ -1,0 +1,1039 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-05a-gastroenterologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "upper_gi_bleeding",
+      "vignette": "Hombre de 62 años que toma diclofenaco por artrosis. Presenta tres evacuaciones melénicas y un episodio de hematemesis. Frecuencia cardiaca de 112 lpm, presión arterial de 96/60 mmHg. Hemoglobina de 8.2 g/dL.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Angiografía con embolización como primer paso",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es para casos que no responden a la endoscopia."
+        },
+        {
+          "key": "b",
+          "text": "Colocar sonda de balón para detener el sangrado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Detener el sangrado suena correcto, pero es para várices."
+        },
+        {
+          "key": "c",
+          "text": "Continuar el diclofenaco a menor dosis",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Mantiene la causa del sangrado."
+        },
+        {
+          "key": "d",
+          "text": "Observación sin estudios por 48 horas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasa el diagnóstico y tratamiento."
+        },
+        {
+          "key": "e",
+          "text": "Octreótido intravenoso como tratamiento principal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se usa en sangrado variceal."
+        },
+        {
+          "key": "f",
+          "text": "Transfundir hasta hemoglobina mayor de 10 g/dL",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La transfusión restrictiva con meta de 7 a 8 es más segura."
+        },
+        {
+          "key": "g",
+          "text": "Antiácidos orales como único tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el antiácido basta para una úlcera sangrante."
+        },
+        {
+          "key": "h",
+          "text": "Cirugía de urgencia como primera opción",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se reserva para fracaso endoscópico."
+        },
+        {
+          "key": "i",
+          "text": "Endoscopia inmediata antes de estabilizar al paciente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la endoscopia, pero primero se reanima."
+        },
+        {
+          "key": "j",
+          "text": "Reanimación con dos accesos venosos y cristaloides, inhibidor de bomba de protones intravenoso y endoscopia en las primeras 24 horas",
+          "correct": true,
+          "rationale": "Hemorragia digestiva alta no variceal con repercusión hemodinámica."
+        }
+      ],
+      "canonical": [
+        "b",
+        "f",
+        "i",
+        "j"
+      ],
+      "explanation": "La hemorragia digestiva alta no variceal se debe con mayor frecuencia a úlcera péptica, asociada a AINE o a Helicobacter pylori. El manejo inicial consiste en estabilizar al paciente con dos accesos venosos de gran calibre, cristaloides y transfusión restrictiva con meta de hemoglobina de 7 a 8 g/dL, o mayor en cardiopatía isquémica. Se inicia un inhibidor de la bomba de protones intravenoso y se estratifica el riesgo con la escala de Glasgow Blatchford. La endoscopia se realiza en las primeras 24 horas tras la reanimación y permite diagnosticar y tratar con terapia combinada, como adrenalina más método térmico o mecánico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia digestiva alta no variceal"
+      ]
+    },
+    {
+      "key": "mi-05a-gastroenterologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "upper_gi_bleeding",
+      "vignette": "Hombre de 55 años con hemorragia digestiva alta. La endoscopia muestra una úlcera duodenal con un vaso visible no sangrante en su base.",
+      "prompt": "¿Cuál es la interpretación correcta del hallazgo según la clasificación de Forrest?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "La clasificación de Forrest solo aplica a úlceras gástricas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que no aplica al duodeno."
+        },
+        {
+          "key": "b",
+          "text": "Forrest III, sin riesgo de resangrado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en que no sangra activamente."
+        },
+        {
+          "key": "c",
+          "text": "Forrest IIc con mancha pigmentada plana",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No distingue el vaso visible."
+        },
+        {
+          "key": "d",
+          "text": "Forrest Ia con sangrado en chorro",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Exagera el hallazgo."
+        },
+        {
+          "key": "e",
+          "text": "Forrest IIa, pero solo requiere omeprazol oral y egreso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Clasifica bien y subestima el manejo."
+        },
+        {
+          "key": "f",
+          "text": "No requiere tratamiento endoscópico si el paciente está estable",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Evita tratar un hallazgo de alto riesgo."
+        },
+        {
+          "key": "g",
+          "text": "Forrest Ib con sangrado en capa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Confunde las categorías activas."
+        },
+        {
+          "key": "h",
+          "text": "Bajo riesgo porque la mayoría de las úlceras dejan de sangrar solas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Usa la frecuencia general."
+        },
+        {
+          "key": "i",
+          "text": "Forrest IIa, con riesgo alto de resangrado que requiere tratamiento endoscópico",
+          "correct": true,
+          "rationale": "El vaso visible no sangrante tiene alto riesgo."
+        },
+        {
+          "key": "j",
+          "text": "Forrest IIb con coágulo adherido",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es otra categoría de riesgo intermedio."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "d",
+        "i"
+      ],
+      "explanation": "La clasificación de Forrest describe el aspecto endoscópico de la úlcera péptica y predice el riesgo de resangrado. Forrest Ia es sangrado en chorro, Ib sangrado en capa, IIa vaso visible no sangrante, IIb coágulo adherido, IIc mancha pigmentada plana y III base limpia de fibrina. Las lesiones Ia, Ib y IIa tienen alto riesgo y requieren tratamiento endoscópico, de preferencia combinado, seguido de inhibidor de la bomba de protones intravenoso en dosis altas por 72 horas. El coágulo adherido puede retirarse y tratarse. Las lesiones IIc y III tienen bajo riesgo y permiten inhibidor oral y egreso temprano.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia digestiva alta no variceal"
+      ]
+    },
+    {
+      "key": "mi-05a-gastroenterologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "upper_gi_bleeding",
+      "vignette": "Hombre de 50 años con cirrosis por alcohol. Llega con hematemesis abundante, presión arterial de 88/52 mmHg y frecuencia cardiaca de 124 lpm.",
+      "prompt": "¿Cuál es el tratamiento inicial, además de la reanimación, antes de la endoscopia?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esperar la endoscopia sin fármacos",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Omite tratamiento que reduce mortalidad."
+        },
+        {
+          "key": "b",
+          "text": "Derivación portosistémica intrahepática como primer paso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se reserva para fracaso o alto riesgo tras endoscopia."
+        },
+        {
+          "key": "c",
+          "text": "Transfundir hasta hemoglobina de 12 g/dL para compensar la pérdida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Compensar suena bien, pero aumenta la presión portal y el resangrado."
+        },
+        {
+          "key": "d",
+          "text": "Trasplante hepático urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el tratamiento del sangrado agudo."
+        },
+        {
+          "key": "e",
+          "text": "Evitar antibióticos para no generar resistencia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pierde un beneficio en supervivencia."
+        },
+        {
+          "key": "f",
+          "text": "Propranolol intravenoso para bajar la presión portal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Los betabloqueadores son para profilaxis, no para el sangrado agudo con hipotensión."
+        },
+        {
+          "key": "g",
+          "text": "Solo inhibidor de bomba de protones intravenoso",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el manejo de la úlcera."
+        },
+        {
+          "key": "h",
+          "text": "Vitamina K intravenosa como tratamiento principal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No corrige el sangrado variceal."
+        },
+        {
+          "key": "i",
+          "text": "Lactulosa como tratamiento del sangrado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Previene encefalopatía, pero no detiene el sangrado."
+        },
+        {
+          "key": "j",
+          "text": "Vasoactivo como terlipresina u octreótido y profilaxis antibiótica con ceftriaxona",
+          "correct": true,
+          "rationale": "Hemorragia variceal sospechada en cirrótico."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "En el paciente con cirrosis y hemorragia digestiva alta se debe sospechar sangrado variceal. Además de la reanimación cuidadosa con transfusión restrictiva, meta de hemoglobina de 7 a 8 g/dL, se inicia lo antes posible un fármaco vasoactivo, como terlipresina, octreótido o somatostatina, que reduce la presión portal, y profilaxis antibiótica con ceftriaxona por hasta siete días, que disminuye infecciones, resangrado y mortalidad. La endoscopia se realiza en las primeras 12 horas, con ligadura de las várices esofágicas. La sonda de balón es un puente temporal si el sangrado no se controla.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia digestiva alta variceal"
+      ]
+    },
+    {
+      "key": "mi-05a-gastroenterologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "upper_gi_bleeding",
+      "vignette": "Hombre de 34 años tras varios días de consumo intenso de alcohol presentó vómitos repetidos. Después del último vómito tuvo hematemesis de sangre roja en poca cantidad. Está estable.",
+      "prompt": "¿Cuál es la causa más probable del sangrado?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Várices esofágicas por alcoholismo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el alcohol, pero no hay datos de cirrosis."
+        },
+        {
+          "key": "b",
+          "text": "Cáncer gástrico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye una causa grave sin datos."
+        },
+        {
+          "key": "c",
+          "text": "Síndrome de Mallory Weiss",
+          "correct": true,
+          "rationale": "Desgarro de la unión esofagogástrica tras vómito intenso."
+        },
+        {
+          "key": "d",
+          "text": "Gastritis erosiva por estrés",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a lesión por alcohol, pero la secuencia vómito luego sangre sugiere desgarro."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome de Boerhaave",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También ocurre tras vómito, pero es perforación con dolor y enfisema."
+        },
+        {
+          "key": "f",
+          "text": "Epistaxis deglutida",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la sangre roja."
+        },
+        {
+          "key": "g",
+          "text": "Ectasia vascular antral",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo sangrado en alcohólico es vascular."
+        },
+        {
+          "key": "h",
+          "text": "Úlcera péptica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es la causa más frecuente en general, pero el antecedente de vómito intenso orienta a desgarro."
+        },
+        {
+          "key": "i",
+          "text": "Esofagitis por reflujo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No considera la secuencia clínica."
+        },
+        {
+          "key": "j",
+          "text": "Lesión de Dieulafoy",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es poco frecuente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "El síndrome de Mallory Weiss es un desgarro longitudinal de la mucosa en la unión esofagogástrica, causado por aumentos bruscos de presión intraabdominal, como el vómito o las arcadas repetidas, frecuentemente asociados a consumo de alcohol. Se manifiesta con hematemesis después de varios episodios de vómito sin sangre. En la mayoría de los casos el sangrado es autolimitado y se resuelve con tratamiento de soporte, inhibidor de la bomba de protones y antieméticos. Si el sangrado persiste se trata por endoscopia. Se distingue del síndrome de Boerhaave, que es una perforación transmural con dolor torácico, enfisema y mediastinitis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia digestiva alta no variceal"
+      ]
+    },
+    {
+      "key": "mi-05a-gastroenterologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "cirrhosis",
+      "vignette": "Hombre de 56 años con cirrosis por alcohol y ascitis. Presenta fiebre, dolor abdominal difuso y confusión leve. La paracentesis muestra 420 polimorfonucleares por milímetro cúbico, proteínas de 0.8 g/dL y cultivo pendiente.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Peritonitis bacteriana secundaria por perforación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También eleva los neutrófilos, pero suele ser polimicrobiana con glucosa baja y proteínas altas."
+        },
+        {
+          "key": "b",
+          "text": "Encefalopatía hepática sin infección",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la confusión e ignora el líquido."
+        },
+        {
+          "key": "c",
+          "text": "Pancreatitis aguda",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el dolor abdominal."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome hepatorrenal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No relaciona la fiebre ni el conteo celular."
+        },
+        {
+          "key": "e",
+          "text": "Ascitis por insuficiencia cardiaca",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica los neutrófilos."
+        },
+        {
+          "key": "f",
+          "text": "Esperar el cultivo para confirmar la infección",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El diagnóstico se establece con los neutrófilos."
+        },
+        {
+          "key": "g",
+          "text": "Tuberculosis peritoneal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable y predomina en linfocitos."
+        },
+        {
+          "key": "h",
+          "text": "Carcinomatosis peritoneal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que toda ascitis complicada es tumoral."
+        },
+        {
+          "key": "i",
+          "text": "Ascitis quilosa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El líquido turbio confunde, pero es por neutrófilos."
+        },
+        {
+          "key": "j",
+          "text": "Peritonitis bacteriana espontánea",
+          "correct": true,
+          "rationale": "Más de 250 polimorfonucleares en el líquido de ascitis sin causa quirúrgica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "j"
+      ],
+      "explanation": "La peritonitis bacteriana espontánea es la infección del líquido de ascitis sin un foco intraabdominal tratable quirúrgicamente. Se presenta en pacientes con cirrosis y ascitis, a veces con fiebre y dolor, pero puede manifestarse solo con encefalopatía o lesión renal. El diagnóstico se establece con más de 250 polimorfonucleares por milímetro cúbico en el líquido, sin esperar el cultivo. El tratamiento es una cefalosporina de tercera generación, como cefotaxima o ceftriaxona, más albúmina intravenosa el primer y tercer día para prevenir el síndrome hepatorrenal. Después se indica profilaxis secundaria con una quinolona o trimetoprim con sulfametoxazol.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cirrosis hepática y sus complicaciones"
+      ]
+    },
+    {
+      "key": "mi-05a-gastroenterologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "cirrhosis",
+      "vignette": "Mujer de 60 años con cirrosis por hepatitis C. Su esposo nota que está desorientada, somnolienta y tiene asterixis. Tuvo estreñimiento de 5 días. Sin sangrado ni fiebre.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Flumazenil como tratamiento de rutina",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la encefalopatía siempre es por benzodiacepinas."
+        },
+        {
+          "key": "b",
+          "text": "Tomografía de cráneo urgente antes de cualquier tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La clínica es típica y no retrasa el tratamiento."
+        },
+        {
+          "key": "c",
+          "text": "Diurético para la confusión",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede precipitar encefalopatía."
+        },
+        {
+          "key": "d",
+          "text": "Observación esperando que pase sola",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Deja una encefalopatía sin tratar."
+        },
+        {
+          "key": "e",
+          "text": "Benzodiacepina para la agitación",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Empeora la encefalopatía."
+        },
+        {
+          "key": "f",
+          "text": "Evitar la lactulosa por la diarrea que causa",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La diarrea controlada es el efecto buscado."
+        },
+        {
+          "key": "g",
+          "text": "Restricción estricta de proteínas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el amonio, pero la restricción ya no se recomienda."
+        },
+        {
+          "key": "h",
+          "text": "Neomicina oral prolongada como primera opción",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena antimicrobiana útil, pero es tóxica."
+        },
+        {
+          "key": "i",
+          "text": "Lactulosa oral para lograr 2 a 3 evacuaciones blandas al día, corrigiendo el desencadenante",
+          "correct": true,
+          "rationale": "Encefalopatía hepática precipitada por estreñimiento."
+        },
+        {
+          "key": "j",
+          "text": "Trasplante hepático inmediato",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el tratamiento del episodio agudo."
+        }
+      ],
+      "canonical": [
+        "e",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "La encefalopatía hepática es un síndrome neuropsiquiátrico en la cirrosis, relacionado con el amonio y otras toxinas intestinales. Se manifiesta desde cambios sutiles de conducta hasta coma, con asterixis característica. Casi siempre hay un desencadenante, como estreñimiento, infecciones, sangrado digestivo, deshidratación, alteraciones electrolíticas, diuréticos o sedantes, que debe buscarse y corregirse. El tratamiento de elección es la lactulosa, ajustada para dos a tres evacuaciones blandas diarias. La rifaximina se agrega para prevenir recurrencias. La restricción de proteínas no se recomienda porque empeora la desnutrición.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cirrosis hepática y sus complicaciones"
+      ]
+    },
+    {
+      "key": "mi-05a-gastroenterologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "cirrhosis",
+      "vignette": "Hombre de 58 años con cirrosis. Bilirrubina de 2.5 mg/dL, albúmina de 2.9 g/dL, INR de 1.8, ascitis moderada que responde a diuréticos y encefalopatía grado 1.",
+      "prompt": "¿Cuál es la interpretación correcta de su función hepática con la escala Child Pugh?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Child Pugh A con 6 puntos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Subestima varios parámetros."
+        },
+        {
+          "key": "b",
+          "text": "Child Pugh B con 9 puntos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Casi acierta, pero suma de menos."
+        },
+        {
+          "key": "c",
+          "text": "Se requiere biopsia para clasificar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La escala es clínica y de laboratorio."
+        },
+        {
+          "key": "d",
+          "text": "La escala usa la creatinina en lugar del INR",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Confunde con la escala MELD."
+        },
+        {
+          "key": "e",
+          "text": "Función conservada porque la bilirrubina es casi normal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ignora el resto de parámetros."
+        },
+        {
+          "key": "f",
+          "text": "Child Pugh C, pero con supervivencia similar a la clase A",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Clasifica bien y malinterpreta el pronóstico."
+        },
+        {
+          "key": "g",
+          "text": "Child Pugh C con 13 puntos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Sobreestima la puntuación."
+        },
+        {
+          "key": "h",
+          "text": "Child Pugh B con 8 puntos sin contar la encefalopatía",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Pasa por alto un criterio."
+        },
+        {
+          "key": "i",
+          "text": "La escala solo aplica a cirrosis alcohólica",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que no aplica a otras causas."
+        },
+        {
+          "key": "j",
+          "text": "Child Pugh C con 10 puntos",
+          "correct": true,
+          "rationale": "Bilirrubina 2, albúmina 2, INR 2, ascitis moderada 2 y encefalopatía grado 1 2."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "h",
+        "j"
+      ],
+      "explanation": "La escala de Child Pugh evalúa la gravedad de la cirrosis con cinco parámetros, bilirrubina, albúmina, INR o tiempo de protrombina, ascitis y encefalopatía, cada uno de 1 a 3 puntos. La bilirrubina de 2 a 3 mg/dL vale 2, la albúmina de 2.8 a 3.5 vale 2, el INR de 1.7 a 2.3 vale 2, la ascitis moderada vale 2 y la encefalopatía grado 1 a 2 vale 2. El total es 10, clase C. La clase A tiene 5 a 6 puntos, la B 7 a 9 y la C 10 a 15, con menor supervivencia. Para priorizar trasplante se usa MELD.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cirrosis hepática y sus complicaciones"
+      ]
+    },
+    {
+      "key": "mi-05a-gastroenterologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "cirrhosis",
+      "vignette": "Hombre de 52 años con cirrosis por alcohol y ascitis moderada sin complicaciones. Sodio sérico de 134 mEq/L y función renal normal. Dejó de beber hace 2 meses.",
+      "prompt": "¿Cuál es el tratamiento inicial de la ascitis?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Derivación portosistémica intrahepática de entrada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es para ascitis refractaria."
+        },
+        {
+          "key": "b",
+          "text": "Restricción estricta de líquidos para secar la ascitis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena lógico, pero solo se restringe con hiponatremia grave."
+        },
+        {
+          "key": "c",
+          "text": "Albúmina intravenosa diaria como tratamiento principal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se usa en paracentesis grandes y en peritonitis."
+        },
+        {
+          "key": "d",
+          "text": "Dieta alta en sal para mantener la presión",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la sal ayuda."
+        },
+        {
+          "key": "e",
+          "text": "Restricción de sodio en la dieta y espironolactona, con furosemida si se requiere",
+          "correct": true,
+          "rationale": "Es el manejo de la ascitis no complicada."
+        },
+        {
+          "key": "f",
+          "text": "Paracentesis evacuadora semanal como primera opción",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para ascitis grande o refractaria."
+        },
+        {
+          "key": "g",
+          "text": "Furosemida sola a dosis altas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es menos eficaz sola y causa más alteraciones."
+        },
+        {
+          "key": "h",
+          "text": "Evitar diuréticos por miedo a dañar el riñón",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Sobreestima el riesgo con vigilancia adecuada."
+        },
+        {
+          "key": "i",
+          "text": "Sin tratamiento porque es moderada",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Deja progresar la ascitis."
+        },
+        {
+          "key": "j",
+          "text": "Trasplante hepático inmediato",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el manejo inicial de la ascitis."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "La ascitis es la complicación más frecuente de la cirrosis descompensada. En la ascitis moderada no complicada el tratamiento es la restricción de sodio a 2 g al día y diuréticos, con espironolactona como base, iniciada a 100 mg y aumentada hasta 400 mg, y furosemida de 40 hasta 160 mg en proporción, para lograr una pérdida de peso de 0.5 kg al día sin edema o 1 kg con edema. Se vigilan electrolitos y función renal. La abstinencia de alcohol mejora el pronóstico. La restricción de líquidos solo está indicada con sodio menor de 125 mEq/L.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cirrosis hepática y sus complicaciones"
+      ]
+    },
+    {
+      "key": "mi-05a-gastroenterologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "cirrhosis",
+      "vignette": "Mujer de 61 años con cirrosis compensada por hígado graso. Nunca ha tenido sangrado. Acude a seguimiento.",
+      "prompt": "¿Cuál es el tamizaje recomendado para carcinoma hepatocelular?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Pruebas de función hepática mensuales como tamizaje",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que las enzimas detectan el tumor."
+        },
+        {
+          "key": "b",
+          "text": "Biopsia hepática anual",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es invasiva y no es tamizaje."
+        },
+        {
+          "key": "c",
+          "text": "Alfafetoproteína anual como único estudio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es poco sensible sola."
+        },
+        {
+          "key": "d",
+          "text": "Ultrasonido cada 3 años",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a vigilancia, pero el intervalo es muy largo."
+        },
+        {
+          "key": "e",
+          "text": "Evitar estudios para no causar ansiedad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pierde la detección temprana."
+        },
+        {
+          "key": "f",
+          "text": "Resonancia solo si aparece ictericia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Espera síntomas, cuando el tumor ya es avanzado."
+        },
+        {
+          "key": "g",
+          "text": "Tomografía con contraste cada mes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Exceso de radiación y costo sin beneficio."
+        },
+        {
+          "key": "h",
+          "text": "Endoscopia cada 6 meses",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Sirve para várices, no para carcinoma."
+        },
+        {
+          "key": "i",
+          "text": "Sin vigilancia por estar compensada",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "La cirrosis compensada también tiene riesgo."
+        },
+        {
+          "key": "j",
+          "text": "Ultrasonido hepático cada 6 meses, con o sin alfafetoproteína",
+          "correct": true,
+          "rationale": "Es la vigilancia recomendada en cirrosis."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "Los pacientes con cirrosis de cualquier causa tienen riesgo elevado de carcinoma hepatocelular y deben recibir vigilancia, lo que permite detectar tumores en etapas tratables con resección, ablación o trasplante. La recomendación es ultrasonido hepático cada seis meses realizado por personal experto, con o sin alfafetoproteína. Si se detecta un nódulo mayor de 1 cm, se realiza tomografía o resonancia con contraste en fases, que puede establecer el diagnóstico sin biopsia por su patrón de realce arterial y lavado venoso. La enfermedad hepática por hígado graso es una causa creciente de cirrosis y carcinoma en México.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del carcinoma hepatocelular"
+      ]
+    },
+    {
+      "key": "mi-05a-gastroenterologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "cirrhosis",
+      "vignette": "Hombre de 54 años con cirrosis y ascitis a tensión. Sin uso de nefrotóxicos ni sangrado. Su creatinina subió de 0.9 a 2.4 mg/dL en una semana sin mejoría tras suspender diuréticos y dar albúmina por 2 días. Sodio urinario de 6 mEq/L y sedimento normal, sin proteinuria.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Uropatía obstructiva",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye sin buscar hidronefrosis."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome compartimental abdominal como única causa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la ascitis."
+        },
+        {
+          "key": "c",
+          "text": "Rabdomiólisis por alcohol",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo cirrótico alcohólico tiene rabdomiólisis."
+        },
+        {
+          "key": "d",
+          "text": "Nefropatía por IgA",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable y daría hematuria."
+        },
+        {
+          "key": "e",
+          "text": "Insuficiencia renal crónica de base",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena crónico, pero la creatinina previa era normal."
+        },
+        {
+          "key": "f",
+          "text": "Nefritis intersticial por fármacos",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay fármacos implicados."
+        },
+        {
+          "key": "g",
+          "text": "Lesión renal prerrenal por diuréticos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También tiene sodio urinario bajo, pero respondería a la albúmina."
+        },
+        {
+          "key": "h",
+          "text": "Necrosis tubular aguda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la lesión aguda, pero el sedimento es normal y el sodio urinario bajo."
+        },
+        {
+          "key": "i",
+          "text": "Glomerulonefritis por hepatitis C",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría proteinuria y hematuria."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome hepatorrenal con lesión renal aguda",
+          "correct": true,
+          "rationale": "Lesión renal funcional en cirrosis sin respuesta a la expansión con albúmina."
+        }
+      ],
+      "canonical": [
+        "g",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "El síndrome hepatorrenal es una lesión renal funcional en pacientes con cirrosis avanzada y ascitis, causada por vasodilatación esplácnica y vasoconstricción renal intensa. Se diagnostica con aumento de creatinina que cumple criterios de lesión renal aguda, sin respuesta tras 48 horas de suspender diuréticos y expandir con albúmina, en ausencia de choque, nefrotóxicos y daño estructural, es decir, sin proteinuria significativa, hematuria ni alteraciones en el ultrasonido. El sodio urinario es muy bajo. El tratamiento es terlipresina con albúmina, o norepinefrina si está en terapia intensiva. El tratamiento definitivo es el trasplante hepático.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cirrosis hepática y sus complicaciones"
+      ]
+    },
+    {
+      "key": "mi-05a-gastroenterologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "gastroenterology",
+      "subtopic": "cirrhosis",
+      "vignette": "Hombre de 50 años con ascitis de reciente aparición. Se realiza paracentesis diagnóstica. Albúmina sérica de 3.0 g/dL y albúmina en el líquido de ascitis de 1.6 g/dL.",
+      "prompt": "¿Cuál es el estudio inicial del líquido que mejor orienta la causa de la ascitis, y qué indica su resultado?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Citología del líquido como estudio inicial de rutina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es útil si se sospecha cáncer, no como estudio inicial."
+        },
+        {
+          "key": "b",
+          "text": "Adenosina desaminasa en todos los casos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se usa cuando se sospecha tuberculosis."
+        },
+        {
+          "key": "c",
+          "text": "Gradiente de albúmina suero ascitis, que aquí es de 1.4 g/dL e indica hipertensión portal",
+          "correct": true,
+          "rationale": "Un gradiente de 1.1 o más indica hipertensión portal."
+        },
+        {
+          "key": "d",
+          "text": "Glucosa del líquido como único estudio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la glucosa define la causa."
+        },
+        {
+          "key": "e",
+          "text": "Laparoscopia diagnóstica como primer paso",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es invasiva y posterior."
+        },
+        {
+          "key": "f",
+          "text": "Triglicéridos del líquido de rutina",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Se piden si el líquido es lechoso."
+        },
+        {
+          "key": "g",
+          "text": "Proteínas totales del líquido como estudio principal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en las proteínas, que orientan menos que el gradiente."
+        },
+        {
+          "key": "h",
+          "text": "Gradiente de 1.4 que indica carcinomatosis peritoneal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Calcula bien, pero interpreta al revés."
+        },
+        {
+          "key": "i",
+          "text": "Amilasa del líquido como estudio principal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es útil en sospecha de ascitis pancreática."
+        },
+        {
+          "key": "j",
+          "text": "Gradiente menor de 1.1 que indica tuberculosis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Calcula mal el gradiente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "En toda ascitis de reciente aparición se realiza paracentesis diagnóstica con conteo celular, albúmina y proteínas totales del líquido, y cultivo. El gradiente de albúmina suero ascitis se obtiene restando la albúmina del líquido a la albúmina sérica. Un gradiente de 1.1 g/dL o más indica hipertensión portal, como en la cirrosis, la insuficiencia cardiaca o el síndrome de Budd Chiari. Un gradiente menor de 1.1 orienta a causas peritoneales, como carcinomatosis, tuberculosis, pancreatitis o síndrome nefrótico. Las proteínas totales ayudan a distinguir la cirrosis, con proteínas bajas, de la ascitis cardiaca, con proteínas altas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cirrosis hepática y sus complicaciones"
+      ]
+    }
+  ]
+}
