@@ -72,33 +72,7 @@ export function StudySettings({ session }: { session: ReadySession }) {
         <GoalsForm settings={settings} onSave={saveSettings} />
       </Section>
       <Section id="estudio-titulo" title={t.settings.studyTitle}>
-        <div className="flex flex-col gap-3">
-          {(
-            [
-              'cardConfidenceStep',
-              'negationHighlightPractice',
-              'negationHighlightExam',
-              'errorsToReview',
-            ] as const
-          ).map((key) => (
-            <CheckboxField
-              key={key}
-              label={t.settings[key]}
-              checked={settings[key]}
-              onChange={(event) => {
-                void saveSettings({ [key]: event.target.checked });
-              }}
-            />
-          ))}
-          <SelectField
-            label={t.settings.optionsShown}
-            value={String(settings.optionsShown)}
-            options={[4, 5, 6].map((n) => ({ value: String(n), label: String(n) }))}
-            onChange={(event) => {
-              void saveSettings({ optionsShown: Number(event.target.value) });
-            }}
-          />
-        </div>
+        <StudyForm settings={settings} onSave={saveSettings} />
       </Section>
       <Section id="pomodoro-ajustes" title={t.settings.pomodoroTitle}>
         <PomodoroSettingsForm
@@ -186,6 +160,69 @@ function AccountCard({
         </p>
       </form>
     </Section>
+  );
+}
+
+const STUDY_KEYS = [
+  'cardConfidenceStep',
+  'negationHighlightPractice',
+  'negationHighlightExam',
+  'errorsToReview',
+] as const;
+
+/** Opciones de estudio con su botón de guardar (D-071) */
+function StudyForm({
+  settings,
+  onSave,
+}: {
+  settings: UserSettings;
+  onSave: (patch: Partial<UserSettings>) => Promise<unknown>;
+}) {
+  const [draft, setDraft] = useState(() => ({
+    cardConfidenceStep: settings.cardConfidenceStep,
+    negationHighlightPractice: settings.negationHighlightPractice,
+    negationHighlightExam: settings.negationHighlightExam,
+    errorsToReview: settings.errorsToReview,
+    optionsShown: settings.optionsShown,
+  }));
+  const [status, setStatus] = useState('');
+  return (
+    <form
+      className="flex flex-col gap-3"
+      onSubmit={(event) => {
+        event.preventDefault();
+        void onSave(draft).then(() => {
+          setStatus(t.settings.saved);
+        });
+      }}
+    >
+      {STUDY_KEYS.map((key) => (
+        <CheckboxField
+          key={key}
+          label={t.settings[key]}
+          checked={draft[key]}
+          onChange={(event) => {
+            setDraft({ ...draft, [key]: event.target.checked });
+            setStatus('');
+          }}
+        />
+      ))}
+      <SelectField
+        label={t.settings.optionsShown}
+        value={String(draft.optionsShown)}
+        options={[4, 5, 6].map((n) => ({ value: String(n), label: String(n) }))}
+        onChange={(event) => {
+          setDraft({ ...draft, optionsShown: Number(event.target.value) });
+          setStatus('');
+        }}
+      />
+      <div className="flex flex-wrap items-center gap-3">
+        <Button type="submit">{t.settings.saveChanges}</Button>
+        <p role="status" className="text-sm text-fg-muted">
+          {status}
+        </p>
+      </div>
+    </form>
   );
 }
 

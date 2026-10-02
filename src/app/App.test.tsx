@@ -38,13 +38,16 @@ describe('rutas', () => {
     expect(screen.queryByRole('navigation', { name: t.nav.label })).toBeNull();
   });
 
-  it('las pantallas del alumno muestran la navegación de 5 secciones', async () => {
+  it('las pantallas del alumno muestran 5 secciones y Configuración solo en el riel (D-071)', async () => {
     renderAt(SCREENS.review.path);
     expect(
       await screen.findByRole('heading', { level: 1, name: t.screens.review.title }),
     ).toBeVisible();
     const nav = screen.getByRole('navigation', { name: t.nav.label });
-    expect(nav.querySelectorAll('a')).toHaveLength(5);
+    const items = nav.querySelectorAll('li');
+    expect(items).toHaveLength(6);
+    expect([...items].filter((item) => !item.className.includes('hidden'))).toHaveLength(5);
+    expect(items[5]).toHaveTextContent(t.navItems.settings);
   });
 
   it('muestra la pantalla de no encontrada en una ruta desconocida', async () => {

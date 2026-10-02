@@ -68,7 +68,7 @@ export function AdminUsersScreen() {
   return (
     <>
       {header}
-      <p className="max-w-reading text-sm text-fg-muted">{t.admin.notice}</p>
+      <p className="text-sm text-fg-muted">{t.admin.notice}</p>
       {message ? (
         <p role="status" className="rounded-lg bg-muted p-3 text-sm">
           {message}

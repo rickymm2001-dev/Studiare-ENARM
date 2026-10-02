@@ -259,7 +259,7 @@ function QuestionCard({
   };
 
   return (
-    <Card aria-labelledby="pregunta-frase" className="w-full max-w-reading">
+    <Card aria-labelledby="pregunta-frase" className="w-full">
       <CardHeader>
         <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-fg-muted">
           <span

@@ -1,11 +1,13 @@
 // Selector de ramas troncales y subespecialidades (D-066). Arriba las 6 troncales, abajo todas las
 // subespecialidades agrupadas por troncal, en tantas columnas como quepan. Marcar una troncal marca
 // o desmarca todas sus subespecialidades.
+import { CheckCheck, X } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { topicTaxonomy } from '@/demo/content';
 import { t } from '@/i18n/es-MX';
 import { toneClasses } from '@/ui/branches';
 import { cn } from '@/ui/cn';
+import { Button } from '@/ui/components/button';
 import { ALL_TOPICS } from './topics';
 
 function TriCheckbox({
@@ -53,11 +55,14 @@ export function BranchTopicPicker({
   selected,
   onChange,
   counts,
+  countLabel = t.topicPicker.questions,
 }: {
   selected: ReadonlySet<string>;
   onChange: (next: Set<string>) => void;
   /** Preguntas disponibles por subespecialidad, para mostrarlas junto a cada una */
   counts?: ReadonlyMap<string, number>;
+  /** Texto del total de cada troncal. Preguntas por defecto */
+  countLabel?: (n: number) => string;
 }) {
   const setMany = (keys: readonly string[], on: boolean) => {
     const next = new Set(selected);
@@ -91,8 +96,10 @@ export function BranchTopicPicker({
                     total === undefined
                       ? undefined
                       : total === 0
-                        ? t.topicPicker.noQuestions
-                        : t.topicPicker.questions(total)
+                        ? countLabel === t.topicPicker.questions
+                          ? t.topicPicker.noQuestions
+                          : countLabel(0)
+                        : countLabel(total)
                   }
                   checked={on === keys.length}
                   indeterminate={on > 0 && on < keys.length}
@@ -104,25 +111,32 @@ export function BranchTopicPicker({
             );
           })}
         </div>
-        <div className="mt-2 flex gap-3 text-sm">
-          <button
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Button
             type="button"
-            className="font-semibold text-primary underline underline-offset-4"
+            variant="secondary"
+            size="sm"
             onClick={() => {
               onChange(new Set(ALL_TOPICS));
             }}
           >
+            <CheckCheck aria-hidden />
             {t.topicPicker.all}
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
-            className="font-semibold text-primary underline underline-offset-4"
+            variant="secondary"
+            size="sm"
             onClick={() => {
               onChange(new Set());
             }}
           >
+            <X aria-hidden />
             {t.topicPicker.none}
-          </button>
+          </Button>
+          <span className="self-center text-sm text-fg-muted">
+            {t.topicPicker.selected(selected.size, ALL_TOPICS.length)}
+          </span>
         </div>
       </fieldset>
 

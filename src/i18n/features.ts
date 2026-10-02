@@ -202,6 +202,7 @@ export const featureText = {
     save: 'Guardar',
     saved: 'Guardado',
     goalsTitle: 'Metas y repaso',
+    saveChanges: 'Guardar cambios',
     retention: 'Retención deseada',
     retentionHint:
       'Qué tanto quieres recordar cada tarjeta. 90% es lo recomendado por los creadores de FSRS. Más alto da repasos más seguidos. Entre 80% y 97%.',
@@ -627,8 +628,25 @@ export const featureText = {
     subspecialties: 'Subespecialidades',
     all: 'Seleccionar todo',
     none: 'Quitar todo',
+    selected: (n: number, of: number) => `${n} de ${of} subespecialidades`,
     questions: (n: number) => `${n.toLocaleString('es-MX')} preguntas`,
     noQuestions: 'Sin preguntas todavía',
+  },
+  reviewSetup: {
+    title: 'Qué quieres repasar',
+    hint: 'Elige el modo, tus mazos y las ramas o subespecialidades. Tu avance se guarda en cada tarjeta, así que puedes cambiar cuando quieras.',
+    mode: 'Modo',
+    modes: { today: 'Lo que toca hoy', due: 'Solo vencidas', new: 'Solo nuevas' },
+    decks: 'Mazos',
+    cards: (n: number) => `${n.toLocaleString('es-MX')} tarjetas`,
+    untagged: 'Incluir tarjetas sin subespecialidad',
+    untaggedHint: 'Algunas notas no traen su subespecialidad. Entran con su mazo si lo marcaste.',
+    start: (n: number) =>
+      n === 0 ? 'Nada por repasar' : `Empezar repaso, ${n.toLocaleString('es-MX')} tarjetas`,
+    nothing: 'Con esta selección no hay tarjetas para hoy. Prueba otro modo o más temas.',
+    change: 'Cambiar mazo o tema',
+    other: 'Repasar otros temas',
+    addDeck: 'Agregar mazo',
   },
   studyPause: {
     title: 'Estudio pausado',

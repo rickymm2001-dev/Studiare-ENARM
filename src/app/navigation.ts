@@ -11,6 +11,7 @@ import {
   House,
   Scale,
   Settings,
+  SlidersHorizontal,
   UserRound,
   Users,
   type LucideIcon,
@@ -25,12 +26,20 @@ export interface NavItem {
   icon: LucideIcon;
   /** Solo marca activa la ruta exacta, para que Inicio no quede activo en todas */
   end?: boolean;
+  /** Solo en el riel de computadora. En el teléfono se llega desde Perfil (D-071) */
+  railOnly?: boolean;
 }
 
 const profile: NavItem = {
   path: screenPath('profile'),
   label: t.navItems.profile,
   icon: UserRound,
+};
+const settingsItem: NavItem = {
+  path: screenPath('settings'),
+  label: t.navItems.settings,
+  icon: SlidersHorizontal,
+  railOnly: true,
 };
 const bank: NavItem = { path: screenPath('questionBank'), label: t.navItems.bank, icon: Database };
 
@@ -40,6 +49,7 @@ const adminNav: readonly NavItem[] = [
   { path: screenPath('adminSettings'), label: t.navItems.settings, icon: Settings },
   bank,
   profile,
+  settingsItem,
 ];
 
 export const NAV_BY_ROLE: Record<Role, readonly NavItem[]> = {
@@ -49,6 +59,7 @@ export const NAV_BY_ROLE: Record<Role, readonly NavItem[]> = {
     { path: screenPath('simulatorSetup'), label: t.navItems.simulate, icon: ClipboardList },
     { path: screenPath('progress'), label: t.navItems.progress, icon: ChartLine },
     profile,
+    settingsItem,
   ],
   physician: [
     bank,
@@ -56,6 +67,7 @@ export const NAV_BY_ROLE: Record<Role, readonly NavItem[]> = {
     { path: screenPath('aiDrafts'), label: t.navItems.drafts, icon: FileText },
     { path: screenPath('contentReports'), label: t.navItems.reports, icon: Flag },
     profile,
+    settingsItem,
   ],
   admin: adminNav,
   owner: adminNav,
