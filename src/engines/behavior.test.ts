@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import {
+  fatigueTrendSignal,
   negationSignal,
   accuracyBy,
   calibrationReport,
@@ -136,6 +137,31 @@ describe('fatiga', () => {
       minuteInSession: item.minuteInSession / 4,
     }));
     expect(fatigueSignal(short, thresholds).sessions).toBe(0);
+  });
+});
+
+describe('fatiga por tendencia (D-054)', () => {
+  it('detecta la caída con los minutos en sesiones largas', () => {
+    const signal = fatigueTrendSignal(sessions(6, true, 'tendencia-si'), thresholds);
+    expect(signal.sessions).toBe(6);
+    expect(signal.accuracyDrop).toBeLessThan(0);
+    expect(signal.timeIncrease).toBeGreaterThan(0);
+    expect(signal.fatigued).toBe(true);
+  });
+
+  it('no marca fatiga si no la hay', () => {
+    // Con datos sin fatiga marca cerca de 4% por azar (400 simulaciones). Esta semilla no cae ahí
+    expect(fatigueTrendSignal(sessions(6, false, 'fatiga-no'), thresholds).fatigued).toBe(false);
+  });
+
+  it('calibra hasta tener 3 sesiones largas y tolera no tener ninguna', () => {
+    expect(fatigueTrendSignal(sessions(2, true, 'tendencia-pocas'), thresholds)).toMatchObject({
+      sessions: 2,
+      fatigued: null,
+      sessionsNeeded: 1,
+    });
+    const none = fatigueTrendSignal([], thresholds);
+    expect(none).toMatchObject({ sessions: 0, fatigued: null, accuracyDrop: 0 });
   });
 });
 

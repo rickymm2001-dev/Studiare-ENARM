@@ -43,6 +43,8 @@ export interface CohortOptions {
   simulateCards?: boolean;
   /** Tarjetas sintéticas por tema mientras no existan los mazos (D-050) */
   cardsPerTopic?: number;
+  /** Tarjetas a simular, por ejemplo las de los mazos de Paco. Sin ellas se usan sintéticas */
+  cards?: readonly SimCard[];
   /** Nada después de este momento UTC (ver SimulateOptions) */
   notAfter?: string;
 }
@@ -99,7 +101,9 @@ export function generateCohort(
   const cards =
     options.simulateCards === false
       ? []
-      : syntheticCards(topics, options.cardsPerTopic ?? 5, options.seed);
+      : options.cards
+        ? [...options.cards]
+        : syntheticCards(topics, options.cardsPerTopic ?? 5, options.seed);
   const startDay = shiftDay(options.endDay, -(options.days - 1));
   const rng = createRng(`cohort|${options.seed}`);
   const students: SimStudent[] = [];

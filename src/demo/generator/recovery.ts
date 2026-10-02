@@ -3,7 +3,12 @@
 import { DEFAULT_THRESHOLDS, type Thresholds } from '@/config/thresholds';
 import type { TopicTaxonomy } from '@/data/schemas/content';
 import { analyzeBias, populationBaseline, type BiasExposure } from '@/engines/bias';
-import { fatigueSignal, negationSignal, type ResponseRecord } from '@/engines/behavior';
+import {
+  fatigueSignal,
+  fatigueTrendSignal,
+  negationSignal,
+  type ResponseRecord,
+} from '@/engines/behavior';
 import { physicianToLogit, updateElo, type EloEntity } from '@/engines/difficulty';
 import { estimateRasch } from '@/engines/rasch';
 import { pearson } from '@/engines/stats/correlation';
@@ -41,7 +46,31 @@ export interface RecoveryReport {
   };
   topics: { rmseRaw: number; rmseShrunk: number; reduction: number; cells: number };
   misread: DetectionResult;
+  /** Método de tercios de 7.6 */
   fatigue: DetectionResult;
+  /** Variante por tendencia contra el minuto de la sesión */
+  fatigueTrend: DetectionResult;
+  /**
+   * Detección entre los sembrados cuya fatiga sí pesa en sus respuestas. Efecto medio de al menos
+   * 0.15 logits por respuesta (J), que equivale a unos 3 a 4 puntos de acierto
+   */
+  fatigueNoticeable: { seeded: number; thirds: number; trend: number };
+}
+
+/** Pérdida media de logits por fatiga en las respuestas del alumno */
+export function fatigueEffect(
+  truth: { fatigue: { onsetMinutes: number; logitPerMinute: number } | null },
+  responses: readonly { minuteInSession: number }[],
+): number {
+  const fatigue = truth.fatigue;
+  if (!fatigue || responses.length === 0) return 0;
+  return (
+    responses.reduce(
+      (sum, response) =>
+        sum + Math.max(0, response.minuteInSession - fatigue.onsetMinutes) * fatigue.logitPerMinute,
+      0,
+    ) / responses.length
+  );
 }
 
 const detection = (rows: readonly { seeded: boolean; flagged: boolean }[]): DetectionResult => {
@@ -200,6 +229,8 @@ export function computeRecovery(
   // Mala lectura y fatiga con la probabilidad esperada de Rasch
   const misreadRows: { seeded: boolean; flagged: boolean }[] = [];
   const fatigueRows: { seeded: boolean; flagged: boolean }[] = [];
+  const fatigueTrendRows: { seeded: boolean; flagged: boolean }[] = [];
+  const noticeable = { seeded: 0, thirds: 0, trend: 0 };
   for (const student of students) {
     const responses = student.history.responses;
     const signal = negationSignal(
@@ -226,10 +257,15 @@ export function computeRecovery(
       changes: [],
       minuteInSession: response.minuteInSession,
     }));
-    fatigueRows.push({
-      seeded: student.truth.fatigue !== null,
-      flagged: fatigueSignal(records, thresholds.behavior).fatigued === true,
-    });
+    const thirdsFlag = fatigueSignal(records, thresholds.behavior).fatigued === true;
+    const trendFlag = fatigueTrendSignal(records, thresholds.behavior).fatigued === true;
+    fatigueRows.push({ seeded: student.truth.fatigue !== null, flagged: thirdsFlag });
+    fatigueTrendRows.push({ seeded: student.truth.fatigue !== null, flagged: trendFlag });
+    if (fatigueEffect(student.truth, responses) >= 0.15) {
+      noticeable.seeded += 1;
+      if (thirdsFlag) noticeable.thirds += 1;
+      if (trendFlag) noticeable.trend += 1;
+    }
   }
 
   return {
@@ -251,5 +287,7 @@ export function computeRecovery(
     topics: { rmseRaw, rmseShrunk, reduction: rmseRaw === 0 ? 0 : 1 - rmseShrunk / rmseRaw, cells },
     misread: detection(misreadRows),
     fatigue: detection(fatigueRows),
+    fatigueTrend: detection(fatigueTrendRows),
+    fatigueNoticeable: noticeable,
   };
 }

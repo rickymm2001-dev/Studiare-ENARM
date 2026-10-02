@@ -406,13 +406,13 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Todo el trabajo vive en el repositorio de GitHub. Cada bloque termina con commit y push, y el CI corre npm run check en cada push a cualquier rama, no solo en main
 - Mientras no existan los mazos, la simulación de FSRS de los alumnos simulados usa tarjetas sintéticas por tema, marcadas como tales. Se cambian por las tarjetas reales cuando se escriban los mazos
 
-### D-051. Ajuste propuesto al análisis por sesgo tras la recuperación de 14.2
-- Fecha 2026-10-02. Propuesta de Claude, pendiente de aprobación de Ricardo
+### D-051. Ajuste al análisis por sesgo tras la recuperación de 14.2
+- Fecha 2026-10-02. Propuesta de Claude, aprobada por Ricardo el mismo día
 - Con 300 alumnos simulados en 3 semillas, el método de 7.4 detecta 100% de los sesgos sembrados, pero marca entre 47% y 54% de los alumnos sin propensión. La meta es 10% o menos
 - Causas. La atracción se mide contra todas las preguntas con la etiqueta a la vista, así que quien falla mucho parece atraído por todas. Y se prueban unas 20 etiquetas por alumno con 95% cada una
 - Propuesta. Medir qué parte de los errores con la etiqueta a la vista fue a esa etiqueta, con la línea base calculada igual, y corregir el nivel por Bonferroni según las etiquetas evaluadas. Con eso detecta 100% y marca entre 3% y 6%
 - Límite señalado por la revisión independiente. La variante se diseñó viendo las mismas semillas, y el modelo principal del generador simula el sesgo de una forma que favorece a la variante. Por eso se validó además con 3 semillas nuevas (marca 3 a 6%) y con un modelo de sesgo distinto, que solo atrae cuando el alumno sabía la respuesta (detecta 88 a 98% y marca 3 a 5%)
-- Estado. Está en src/engines/bias.ts como opción (method error_share y familywise). El valor por defecto sigue siendo el de 7.4 hasta que Ricardo decida. Detalle en docs/recovery-report.md
+- Estado. Es el método por defecto de src/engines/bias.ts (method error_share con familywise). El método original de 7.4 queda como opción (method exposure). Detalle en docs/recovery-report.md
 
 ### D-052. Siembra de la demo en el navegador
 - Fecha 2026-10-02. Decisión de Claude
@@ -421,7 +421,7 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Se guardan el contenido demo con IDs estables, 301 perfiles (alumno de la demo y 300 simulados), el SimTruth de todos y la bitácora completa del alumno de la demo. Las bitácoras de los 300 simulados no se guardan porque serían cerca de 900 mil eventos. La línea base de la población y las estadísticas de las preguntas se resuelven en la Fase C con la misma generación determinista
 - Las fechas dependen del último día de la siembra. Por eso el SimTruth del alumno de la demo guarda las opciones de la siembra, incluido ese día, y con ellas la generación reproduce exactamente lo sembrado
 - Nada de la bitácora simulada queda en el futuro. La app pasa el momento actual y se descartan las sesiones que terminarían después
-- Desviación de 11.2 que queda como pregunta para Ricardo. En la siembra, los 300 alumnos simulados no traen su historial de tarjetas. El generador sí simula 90 días de FSRS para cualquier alumno, pero guardarlo para todos pesaría demasiado
+- Desviación de 11.2 aprobada por Ricardo por ahora. En la siembra, los 300 alumnos simulados no traen su historial de tarjetas, porque pesaría demasiado en el navegador. La estructura queda lista. La opción cohortCardHistory de la siembra simula y guarda sus repasos con las mismas tarjetas, y tiene prueba
 - Regenerar desde cero borra la base demo completa. Es la segunda excepción a la bitácora de solo agregar y quedó escrita en PLAN.md 2.2
 - npm run demo-seed genera la siembra por defecto completa fuera del navegador, valida cada registro y reporta conteos. npm run demo-reset explica cómo regenerar desde la app, porque un script de Node no puede borrar una base del navegador
 - Mientras no existan los mazos se usa una baraja de 200 tarjetas sintéticas sin contenido médico, marcada como datos simulados (D-050)
@@ -436,4 +436,11 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Ni las imágenes ni el worker de simulación, que trae los mazos, entran a la precarga del service worker. Se guardan al usarse
 - fflate se queda en dependencies porque el importador de .apkg de la Fase E lo usará en la app (D-023)
 - Sustituyen a las tarjetas sintéticas en la simulación de repasos del alumno de la demo (D-050)
+
+### D-054. Fatiga por tendencia dentro de la sesión
+- Fecha 2026-10-02. Prueba pedida por Ricardo. Propuesta de Claude, pendiente de aprobación
+- Se agregó fatigueTrendSignal a src/engines/behavior.ts. Ajusta una recta de la exactitud ajustada por dificultad contra el minuto de la sesión, con cada sesión centrada en su media, y pide además que el tiempo por palabra suba. El método de tercios de 7.6 sigue siendo el que usa la app
+- Con todos los alumnos con fatiga sembrada, ninguno de los dos llega a 80% (tercios 52 a 73%, tendencia 63 a 75%). La causa es que cerca de un tercio de esos alumnos casi no siente la fatiga, con un efecto medio cercano a un punto de acierto, que no es detectable con ningún método
+- Entre los alumnos cuya fatiga sí pesa (efecto medio de 0.15 logits o más por respuesta), los dos cumplen. Tercios 83 a 97% y tendencia 94 a 97%, con 2 a 3% de falsos positivos para la tendencia
+- Propuesta. Adoptar la tendencia como método por defecto, porque es más estable y marca menos, y medir la meta de 14.2 sobre los alumnos cuya fatiga pesa en sus respuestas
 

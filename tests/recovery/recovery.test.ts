@@ -49,16 +49,20 @@ describe('recuperación de parámetros (14.2)', { timeout: 120_000 }, () => {
     expect(report.misread.falsePositiveRate).toBeLessThanOrEqual(0.1);
   });
 
-  it('sesgos. Ambos métodos detectan y la variante propuesta cumple la meta de falsos positivos (D-051)', () => {
+  it('sesgos. Ambos métodos detectan y el método por defecto cumple la meta de falsos positivos (D-051)', () => {
     // El método de 7.4 se reporta sin exigir su tasa de falsos positivos (ver el informe)
     expect(report.bias.sensitivity).toBeGreaterThanOrEqual(0.8);
     expect(report.bias.errorShareCorrected.sensitivity).toBeGreaterThanOrEqual(0.8);
     expect(report.bias.errorShareCorrected.falsePositiveRate).toBeLessThanOrEqual(0.1);
   });
 
-  it('fatiga. Sin falsos positivos de más y con la sensibilidad que reporta el informe', () => {
+  it('fatiga. Ambos métodos sin falsos positivos de más, y la tendencia detecta la fatiga apreciable', () => {
     expect(report.fatigue.falsePositiveRate).toBeLessThanOrEqual(0.1);
+    expect(report.fatigueTrend.falsePositiveRate).toBeLessThanOrEqual(0.1);
     expect(report.fatigue.sensitivity).toBeGreaterThanOrEqual(0.5);
+    expect(report.fatigueNoticeable.trend).toBeGreaterThanOrEqual(
+      0.8 * report.fatigueNoticeable.seeded,
+    );
   });
 
   it.runIf(process.env.RECOVERY_REPORT !== '1')(

@@ -5,7 +5,7 @@
 // confianza que se correlaciona con el acierto. Todos los valores son juicio de diseño (J).
 import type { Rng } from '@/engines/random';
 
-export const GENERATOR_VERSION = 'b9-2';
+export const GENERATOR_VERSION = 'b9-3';
 
 export interface FatigueTruth {
   /** Minuto de la sesión desde el que empieza a cansarse */

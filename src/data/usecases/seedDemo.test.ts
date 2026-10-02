@@ -90,6 +90,19 @@ describe('siembra de la demo (11.2, 11.3)', () => {
     expect(await db.events.count()).toBe(seed.events.length);
   });
 
+  it('puede guardar también los repasos de la cohorte, apagado por defecto (D-052)', () => {
+    expect(new Set(seed.events.map((event) => event.userId))).toEqual(new Set([seed.demoUserId]));
+    const withCards = buildDemoSeed(buildDemoBank(), topicTaxonomy, {
+      ...seed.options,
+      cohortCardHistory: true,
+    });
+    const cohortEvents = withCards.events.filter((event) => event.userId !== seed.demoUserId);
+    expect(cohortEvents.length).toBeGreaterThan(0);
+    expect(cohortEvents.some((event) => event.type === 'card_reviewed')).toBe(true);
+    expect(cohortEvents.some((event) => event.type === 'question_answered')).toBe(false);
+    expect(new Set(withCards.events.map((event) => event.id)).size).toBe(withCards.events.length);
+  });
+
   it('con notAfter no deja eventos en el futuro', () => {
     const notAfter = '2026-10-01T20:00:00.000Z';
     const cut = buildDemoSeed(buildDemoBank(), topicTaxonomy, { ...seed.options, notAfter });

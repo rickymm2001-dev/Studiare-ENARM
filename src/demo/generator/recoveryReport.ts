@@ -79,7 +79,26 @@ function table(group: ReportGroup): string[] {
       reports,
     ),
     ...detectionRows('Mala lectura de negaciones', (r) => r.misread, reports),
-    ...detectionRows('Fatiga', (r) => r.fatigue, reports),
+    ...detectionRows('Fatiga por tercios (7.6)', (r) => r.fatigue, reports),
+    ...detectionRows('Fatiga por tendencia', (r) => r.fatigueTrend, reports),
+    row(
+      'Fatiga apreciable (efecto medio de 0.15 logits o más), detectados por tercios',
+      '80% o más',
+      reports.map(
+        (r) =>
+          `${pct(r.fatigueNoticeable.thirds / Math.max(r.fatigueNoticeable.seeded, 1))} (${r.fatigueNoticeable.thirds} de ${r.fatigueNoticeable.seeded})`,
+      ),
+      reports.map((r) => r.fatigueNoticeable.thirds >= 0.8 * r.fatigueNoticeable.seeded),
+    ),
+    row(
+      'Fatiga apreciable, detectados por tendencia',
+      '80% o más',
+      reports.map(
+        (r) =>
+          `${pct(r.fatigueNoticeable.trend / Math.max(r.fatigueNoticeable.seeded, 1))} (${r.fatigueNoticeable.trend} de ${r.fatigueNoticeable.seeded})`,
+      ),
+      reports.map((r) => r.fatigueNoticeable.trend >= 0.8 * r.fatigueNoticeable.seeded),
+    ),
     '',
     `Pares alumno y etiqueta sin propensión marcados. Método de 7.4 ${reports.map((r) => pct(r.bias.falsePositivePairRate)).join(', ')}. Parte de los errores sin corrección ${reports.map((r) => pct(r.bias.errorShare.falsePositivePairRate)).join(', ')}. Con corrección de Bonferroni ${reports.map((r) => pct(r.bias.errorShareCorrected.falsePositivePairRate)).join(', ')}.`,
     '',
@@ -108,8 +127,8 @@ export function renderRecoveryReport(groups: readonly ReportGroup[]): string {
     '',
     '- Rasch, Elo, temas y mala lectura cumplen sus metas en todas las semillas',
     '- Elo sale muy alto porque cada alumno simulado responde cada pregunta varias veces. Con alumnos reales y menos respuestas por pregunta se espera más bajo, y la meta se vuelve a revisar con datos reales',
-    '- Sesgos. El método de 7.4 encuentra a casi todos los alumnos sembrados, pero también marca a cerca de la mitad de los que no tienen propensión. Hay dos causas. La atracción se mide contra todas las veces que la etiqueta estuvo a la vista, así que un alumno que se equivoca mucho parece atraído por todas las etiquetas. Y se prueban unas 20 etiquetas por alumno con un intervalo de 95% cada una, así que alguna sale arriba de la línea base por azar',
-    '- Fatiga. La detección queda por debajo de la meta. El motor compara el primer y el último tercio de las sesiones de más de 30 minutos. Cuando la fatiga empieza cerca del final de sus sesiones habituales, el último tercio casi no la refleja, y con pocas sesiones largas el error estándar es grande. Los falsos positivos sí cumplen',
+    '- Sesgos. El método original de 7.4 encuentra a casi todos los alumnos sembrados, pero también marca a cerca de la mitad de los que no tienen propensión. Hay dos causas. La atracción se mide contra todas las veces que la etiqueta estuvo a la vista, así que un alumno que se equivoca mucho parece atraído por todas las etiquetas. Y se prueban unas 20 etiquetas por alumno con un intervalo de 95% cada una, así que alguna sale arriba de la línea base por azar. Por eso Ricardo aprobó el método por defecto de D-051',
+    '- Fatiga. Con todos los sembrados, ninguno de los dos métodos llega a 80%. La causa es que una parte de los alumnos con fatiga sembrada casi no la siente, porque empieza cerca del final de sus sesiones habituales o pierde poco por minuto. En ellos el efecto medio es de unos 0.04 logits por respuesta, cerca de un punto de acierto, y no es detectable con ningún método. Entre los alumnos cuya fatiga sí pesa (0.15 logits o más), los dos métodos cumplen la meta. La tendencia es más estable entre semillas y en general detecta más y marca menos que los tercios',
     '',
     '## Límites de esta validación',
     '',
@@ -117,10 +136,10 @@ export function renderRecoveryReport(groups: readonly ReportGroup[]): string {
     '- En el modelo principal del generador el sesgo pesa más al elegir distractor cuando el alumno falla, que es justo lo que mide la variante. Para no evaluarla en condiciones que la favorecen, se repite con un modelo de sesgo distinto (lure), donde el sesgo solo atrae cuando el alumno sabía la respuesta',
     '- Ninguna simulación sustituye datos reales. Con la población real se vuelven a correr estas medidas',
     '',
-    '## Ajustes propuestos, pendientes de aprobación de Ricardo',
+    '## Ajustes',
     '',
-    '1. Sesgos (D-051). Medir qué parte de los errores con la etiqueta a la vista fue a esa etiqueta, con la línea base calculada igual, y corregir el nivel del intervalo por Bonferroni según cuántas etiquetas se evalúan. Ya está en el motor como opción (method error_share y familywise), sin cambiar el comportamiento por defecto. Las tablas dicen si cumple con semillas nuevas y con el modelo lure',
-    '2. Fatiga. Opción a, mantener el método y mostrar calibrando hasta tener más sesiones largas. Opción b, cambiar la comparación por tercios por una regresión de la exactitud ajustada contra el minuto de la sesión, que aprovecha todas las respuestas. Recomiendo probar la opción b y repetir esta prueba antes de decidir',
+    '1. Sesgos (D-051, aprobado por Ricardo). El método por defecto mide qué parte de los errores con la etiqueta a la vista fue a esa etiqueta, con la línea base calculada igual, y corrige el nivel del intervalo por Bonferroni según cuántas etiquetas se evalúan. El método original de 7.4 queda como opción (method exposure)',
+    '2. Fatiga (D-054). La tendencia contra el minuto de la sesión (fatigueTrendSignal) está en el motor junto al método de tercios. Recomiendo adoptarla como método por defecto, porque es más estable entre semillas y marca menos, y redefinir la meta de 14.2 sobre los alumnos cuya fatiga sí pesa en sus respuestas',
     '',
   ];
   return `${lines.join('\n')}\n`;

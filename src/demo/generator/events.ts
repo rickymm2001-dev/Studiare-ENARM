@@ -72,6 +72,8 @@ export function toEvents(input: {
   cards: readonly SimCard[];
   /** IDs de tarjeta y mazo por clave de tarjeta simulada */
   cardRefs: ReadonlyMap<string, { cardId: string; deckId: string }>;
+  /** Tipos de sesión a convertir. Todas si falta */
+  sessionKinds?: readonly ('practice' | 'review')[];
 }): AppEvent[] {
   const { student, bank } = input;
   const builder: Builder = { events: [], counter: 0 };
@@ -122,6 +124,7 @@ export function toEvents(input: {
   };
 
   for (const session of student.history.sessions) {
+    if (input.sessionKinds && !input.sessionKinds.includes(session.kind)) continue;
     const sessionId = sessionIds.get(session.id) as string;
     const startMs = Date.parse(session.startedAt);
     push(builder, student, 'session_started', startMs, sessionId, {

@@ -36,6 +36,11 @@ export interface DemoSeedOptions {
   demoDays: number;
   /** Momento UTC después del cual no puede haber eventos. Al sembrar desde la app es ahora */
   notAfter?: string;
+  /**
+   * Guardar también los repasos de tarjetas de los alumnos simulados (11.2). Apagado por defecto
+   * porque pesa mucho en el navegador. La estructura queda lista para encenderlo (D-052)
+   */
+  cohortCardHistory?: boolean;
 }
 
 export const DEFAULT_DEMO_SEED: Omit<DemoSeedOptions, 'endDay' | 'examDate'> = {
@@ -55,7 +60,7 @@ export interface DemoSeed {
   cards: Card[];
   users: User[];
   simTruth: SimTruth[];
-  /** Bitácora del alumno de la demo */
+  /** Bitácora del alumno de la demo, y de la cohorte si se pidió su historial de tarjetas */
   events: AppEvent[];
   demoUserId: string;
   cohort: Cohort;
@@ -202,17 +207,18 @@ export function buildDemoSeed(
   options: DemoSeedOptions,
   decks: readonly DemoDeckFile[] = [],
 ): DemoSeed {
+  const content =
+    decks.length > 0 ? realCards(decks, options.seed) : syntheticContent(taxonomy, options.seed);
   const cohort = generateCohort(bank, taxonomy, {
     seed: options.seed,
     size: options.cohortSize,
     days: options.cohortDays,
     endDay: options.endDay,
     ...(options.notAfter ? { notAfter: options.notAfter } : {}),
-    // Solo el alumno de la demo necesita sus repasos. Los de la cohorte no se guardan (D-052)
-    simulateCards: false,
+    // Por defecto solo el alumno de la demo guarda sus repasos (D-052)
+    simulateCards: options.cohortCardHistory === true,
+    cards: content.simCards,
   });
-  const content =
-    decks.length > 0 ? realCards(decks, options.seed) : syntheticContent(taxonomy, options.seed);
   const demoStudent = generateDemoStudent(bank, {
     seed: options.seed,
     endDay: options.endDay,
@@ -229,6 +235,19 @@ export function buildDemoSeed(
     cards: content.simCards,
     cardRefs: content.refs,
   });
+  if (options.cohortCardHistory === true) {
+    for (const student of cohort.students) {
+      events.push(
+        ...toEvents({
+          student,
+          bank,
+          cards: content.simCards,
+          cardRefs: content.refs,
+          sessionKinds: ['review'],
+        }),
+      );
+    }
+  }
   return {
     options,
     generatorVersion: GENERATOR_VERSION,

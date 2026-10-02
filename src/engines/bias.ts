@@ -21,7 +21,7 @@
  *     elecciones entre exposiciones, mide qué parte de sus errores con S a la vista fue a S, y la
  *     línea base se calcula igual. Así un alumno que se equivoca mucho no parece atraído por todas
  *     las etiquetas. Con familywise, el nivel del intervalo se corrige por Bonferroni según cuántas
- *     etiquetas se evalúan. Por defecto el motor sigue el método de 7.4 hasta que Ricardo decida
+ *     etiquetas se evalúan. Ricardo la aprobó como método por defecto. El de 7.4 queda como opción
  * Umbrales. 40 errores con etiqueta (J). Mínimos por indicador de conducta (J).
  */
 import type { Thresholds } from '@/config/thresholds';
@@ -42,7 +42,7 @@ export type BiasMethod = 'exposure' | 'error_share';
 
 export interface Baseline {
   attraction: Readonly<Record<string, number>>;
-  /** Método con que se calculó. exposure si falta */
+  /** Método con que se calculó. error_share si falta */
   method?: BiasMethod;
   /** La línea base viene de alumnos simulados mientras no haya población real (7.4) */
   source: 'real' | 'simulated';
@@ -99,20 +99,20 @@ export function analyzeBias(input: {
   exposures: readonly BiasExposure[];
   baseline: Baseline;
   thresholds: Thresholds['bias'];
-  /** exposure por defecto (7.4). error_share es la variante propuesta (D-051) */
+  /** error_share por defecto (D-051, aprobado). exposure es el método original de 7.4 */
   method?: BiasMethod;
-  /** Corrige el nivel del intervalo por el número de etiquetas evaluadas (Bonferroni, D-051) */
+  /** Corrige el nivel del intervalo por el número de etiquetas evaluadas (Bonferroni, D-051). Activa por defecto */
   familywise?: boolean;
 }): BiasAnalysis {
-  const method = input.method ?? 'exposure';
-  if ((input.baseline.method ?? 'exposure') !== method) {
+  const method = input.method ?? 'error_share';
+  if ((input.baseline.method ?? 'error_share') !== method) {
     throw new RangeError('La línea base se calculó con otro método');
   }
   const counts = countByTag(input.exposures, method);
   const taggedErrors = input.exposures.filter((exposure) => exposure.chosenTag !== null).length;
   const missing = Math.max(0, input.thresholds.minTaggedErrors - taggedErrors);
   // Una cola de 2.5% en el método de 7.4. Con familywise se reparte entre las etiquetas
-  const level = input.familywise ? 1 - 0.05 / Math.max(counts.size, 1) : 0.95;
+  const level = (input.familywise ?? true) ? 1 - 0.05 / Math.max(counts.size, 1) : 0.95;
   const tags = [...counts.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([tag, { exposures, choices }]): TagAnalysis => {
@@ -144,7 +144,7 @@ export function analyzeBias(input: {
 export function populationBaseline(
   students: readonly (readonly BiasExposure[])[],
   source: Baseline['source'],
-  method: BiasMethod = 'exposure',
+  method: BiasMethod = 'error_share',
 ): Baseline {
   const counts = countByTag(students.flat(), method);
   const attraction: Record<string, number> = {};
