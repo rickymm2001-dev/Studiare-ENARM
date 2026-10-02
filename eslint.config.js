@@ -62,6 +62,8 @@ export default defineConfig([
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
       'no-console': ['error', { allow: ['warn', 'error'] }],
+      // Choca con no-non-null-assertion, que sí queremos. Una aserción con as queda explícita
+      '@typescript-eslint/non-nullable-type-assertion-style': 'off',
     },
   },
 
@@ -106,6 +108,8 @@ export default defineConfig([
   // Motores puros. Sin React, sin Dexie, sin reloj ni azar del sistema (5, Políticas)
   {
     files: ['src/engines/**/*.{ts,tsx}'],
+    // Las pruebas de los motores sí importan vitest. Ellas no se publican
+    ignores: ['src/engines/**/*.test.{ts,tsx}'],
     rules: {
       'no-restricted-imports': [
         'error',

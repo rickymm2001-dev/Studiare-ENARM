@@ -326,3 +326,13 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Trampas de formato (ajusta D-029 y 13.1). Se quitan Secuencia y Comisión. La taxonomía son solo los 24 sesgos de Ricardo. Tampoco entra la etiqueta Otro de 13.1, porque Ricardo pidió solo su lista. Si un distractor no encaja en ninguno, se reescribe el distractor
 - Repositorio remoto (ajusta D-003 y D-019). Por ahora el proyecto queda solo local. El respaldo fuera de la computadora queda pendiente y se vuelve a ver después. Es un riesgo anotado en PLAN.md
 - Contenido demo (ajusta D-030). 300 preguntas, 75 por rama, en 6 lotes de 50 para revisar uno a la vez. Cada lote mezcla las 4 ramas con toda la variedad (negativas, casos seriados y todas las tareas), para que desde el primer lote se pueda probar todo. Con 300 se puede armar un examen completo de 280 sin repetir preguntas (D-012)
+
+### D-043. Funciones estadísticas sin librerías externas
+- Fecha 2026-10-02. Origen C
+- Wilson, beta (acumulada y cuantiles), beta-binomial con empirical Bayes y kappa de Cohen están escritas en src/engines/stats, sin dependencias. Son pocas fórmulas y así no se suma peso al JavaScript del cliente
+- Referencias de las pruebas, sin instalar nada global. Valores publicados por Newcombe (1998) para Wilson, la biblioteca estándar de Python para la normal, identidades exactas con fracciones para la beta de parámetros enteros, la fórmula cerrada del arcoseno para Beta(0.5, 0.5) y un ejemplo de kappa calculado a mano
+- Kappa usa el error estándar asintótico de Fleiss, Cohen y Everitt (1969), que vale fuera de la hipótesis nula y sirve para el intervalo. Kappa por etiqueta trata cada etiqueta como sí o no
+- El intervalo del beta-binomial es de colas iguales. Las respuestas que faltan para dejar de calibrar se estiman con la aproximación normal del ancho, como pide 7.3 ("aproximadamente")
+- Azar con semilla propio (cyrb128 y sfc32) en src/engines/random.ts. Los motores nunca usan Math.random
+- La cobertura mínima de 90% en src/engines aplica a líneas, sentencias, funciones y ramas, y npm run check la exige
+- Los umbrales de la sección 12 y de los motores viven en src/config/thresholds.ts con su esquema zod, listos para editarse desde admin en la Fase D

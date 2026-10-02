@@ -1,0 +1,98 @@
+// Umbrales por defecto de la sección 12 y de los motores de la sección 7. Los motores los reciben
+// como parámetro, y en la Fase D se podrán editar desde admin (pantalla 25). La marca entre
+// paréntesis viene de la especificación. (V) verificado, (J) juicio de diseño ajustable.
+import { z } from 'zod';
+
+export const ThresholdsSchema = z.strictObject({
+  difficulty: z.strictObject({
+    /** Dificultad provisional por pregunta desde 30 respuestas (V, Linacre) */
+    provisionalResponses: z.int().positive().default(30),
+    /** Dificultad calibrada desde 100 respuestas (V, Linacre) */
+    calibratedResponses: z.int().positive().default(100),
+  }),
+  sampling: z.strictObject({
+    /** Una variante entra al puntaje del examen con 200 exposiciones por distractor (J) */
+    variantExposuresForExam: z.int().positive().default(200),
+    /** Distractor no funcional, elegido por menos de 5% tras 100 exposiciones (J) */
+    nonFunctionalRate: z.number().min(0).max(1).default(0.05),
+    nonFunctionalExposures: z.int().positive().default(100),
+  }),
+  bias: z.strictObject({
+    /** Patrón por sesgo desde 40 errores etiquetados (J) */
+    minTaggedErrors: z.int().positive().default(40),
+    /** Hablar de sesgos y no de trampas con kappa de 0.4 o más (J) */
+    minKappaForBiasLanguage: z.number().min(-1).max(1).default(0.4),
+    /** Doble etiquetado del 20% de las preguntas (J) */
+    doubleLabelShare: z.number().min(0).max(1).default(0.2),
+  }),
+  topics: z.strictObject({
+    /** Fuerza del prior beta-binomial, equivalente a unas 10 respuestas (J) */
+    priorStrength: z.number().positive().default(10),
+    /** Se muestra el dominio si el intervalo creíble de 95% mide menos de 0.25 (J) */
+    maxIntervalWidth: z.number().positive().max(1).default(0.25),
+    /** Cuántos temas a reforzar se muestran (7.3) */
+    topN: z.int().positive().default(5),
+  }),
+  structure: z.strictObject({
+    /** Análisis por estructura por alumno desde 20 respuestas por categoría (J) */
+    minResponsesPerCategory: z.int().positive().default(20),
+  }),
+  forgetting: z.strictObject({
+    /** Un patrón se confirma con 5 hallazgos del mismo tipo en 14 días (J) */
+    findingsForPattern: z.int().positive().default(5),
+    patternWindowDays: z.int().positive().default(14),
+    /** Las reglas de olvido se activan desde 3 lapsos (7.1) */
+    lapsesForForgettingRules: z.int().positive().default(3),
+    /** Una respuesta que enumera 4 o más elementos es tarjeta de lista (7.9) */
+    listCardItems: z.int().positive().default(4),
+  }),
+  fsrs: z.strictObject({
+    /** Retención deseada 0.90 entre 0.80 y 0.97 (J) */
+    desiredRetention: z.number().min(0.8).max(0.97).default(0.9),
+    /** Sube a 0.93 en los últimos 30 días antes del ENARM (J) */
+    examRetention: z.number().min(0.8).max(0.97).default(0.93),
+    examWindowDays: z.int().positive().default(30),
+    /** Sanguijuela con 8 lapsos, como Anki */
+    leechLapses: z.int().positive().default(8),
+    newCardsPerDay: z.int().nonnegative().default(20),
+    reviewsPerDay: z.int().nonnegative().default(200),
+    /** Optimizar parámetros por alumno desde 1,000 repasos, fuera del prototipo (J) */
+    optimizeAfterReviews: z.int().positive().default(1000),
+  }),
+  behavior: z.strictObject({
+    /** Ritmo mínimo plausible de lectura, en palabras por segundo (J) */
+    maxWordsPerSecond: z.number().positive().default(6),
+    /** Percentil personal bajo el cual el tiempo cuenta como adivinanza rápida (7.6) */
+    rapidGuessPercentile: z.number().min(0).max(1).default(0.1),
+    /** Percentil personal bajo el cual un acierto seguro y sin cambios es Fácil (7.1) */
+    easyPercentile: z.number().min(0).max(1).default(0.25),
+    /** La fatiga se busca en sesiones de más de 30 minutos (7.6) */
+    fatigueMinSessionMinutes: z.number().positive().default(30),
+    /** Pausa larga dentro de una pregunta, en segundos */
+    longPauseSeconds: z.number().positive().default(120),
+  }),
+  streak: z.strictObject({
+    /** Un congelador por cada 7 días de racha, con máximo 2 guardados (J) */
+    daysPerFreeze: z.int().positive().default(7),
+    maxFreezes: z.int().nonnegative().default(2),
+  }),
+  confidence: z.strictObject({
+    /** Nivel del intervalo de Wilson y de los demás intervalos */
+    level: z.number().min(0.5).max(0.999).default(0.95),
+  }),
+});
+
+export type Thresholds = z.infer<typeof ThresholdsSchema>;
+
+export const DEFAULT_THRESHOLDS: Thresholds = ThresholdsSchema.parse({
+  difficulty: {},
+  sampling: {},
+  bias: {},
+  topics: {},
+  structure: {},
+  forgetting: {},
+  fsrs: {},
+  behavior: {},
+  streak: {},
+  confidence: {},
+});

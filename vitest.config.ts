@@ -27,8 +27,12 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: ['src/**/*.{ts,tsx}', 'server/src/**/*.ts'],
-      exclude: ['**/*.test.{ts,tsx}', 'src/main.tsx'],
+      exclude: ['**/*.test.{ts,tsx}', 'src/main.tsx', 'src/**/testing/**', 'src/**/*.d.ts'],
       reportsDirectory: './coverage',
+      // Cobertura de 90% o más en los motores (14.1, criterio de la Fase B)
+      thresholds: {
+        'src/engines/**': { lines: 90, statements: 90, functions: 90, branches: 90 },
+      },
     },
   },
 });
