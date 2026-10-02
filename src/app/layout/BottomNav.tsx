@@ -11,7 +11,7 @@ export function BottomNav({ items, homePath }: { items: readonly NavItem[]; home
       aria-label={t.nav.label}
       className={cn(
         'fixed inset-x-0 bottom-0 z-20 border-t border-line/70 bg-surface/90 pb-[env(safe-area-inset-bottom)] shadow-nav backdrop-blur-md',
-        'lg:inset-y-0 lg:right-auto lg:left-0 lg:w-rail lg:border-t-0 lg:border-r lg:pt-3 lg:pb-0 lg:shadow-none',
+        'lg:inset-y-0 lg:right-auto lg:left-0 lg:w-rail lg:overflow-y-auto lg:border-t-0 lg:border-r lg:pt-3 lg:pb-3 lg:shadow-none',
       )}
     >
       {/* Símbolo de Studiare arriba del riel en computadora (D-071) */}
@@ -27,7 +27,13 @@ export function BottomNav({ items, homePath }: { items: readonly NavItem[]; home
         style={{ gridTemplateColumns: `repeat(${mobileCount}, minmax(0, 1fr))` }}
       >
         {items.map((item) => (
-          <li key={item.path} className={item.railOnly ? 'hidden lg:block' : undefined}>
+          <li
+            key={item.path}
+            className={cn(
+              item.railOnly && 'hidden lg:block',
+              item.groupStart && 'lg:mx-3 lg:mt-2 lg:border-t lg:border-line lg:pt-2',
+            )}
+          >
             <NavLink
               to={item.path}
               end={item.end ?? false}

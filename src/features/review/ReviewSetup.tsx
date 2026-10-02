@@ -8,7 +8,7 @@ import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
-import { CheckboxField } from '@/ui/components/field';
+import { CheckboxField, TextField } from '@/ui/components/field';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { ALL_TOPICS } from '../shared/topics';
 import { loadSelection, saveSelection, type ReviewMode, type ReviewSelection } from './selection';
@@ -18,6 +18,8 @@ export function ReviewSetup({
   deckNames,
   topicOfCard,
   countFor,
+  limits,
+  onSaveLimits,
   onStart,
 }: {
   cards: CardEntity[];
@@ -26,6 +28,9 @@ export function ReviewSetup({
   topicOfCard: Map<string, string | null>;
   /** Cuántas tarjetas tocarían hoy con esta selección */
   countFor: (selection: ReviewSelection) => number;
+  /** Límites diarios del alumno. Se cambian aquí mismo y aplican al momento */
+  limits: { newCardsPerDay: number; reviewsPerDay: number };
+  onSaveLimits: (patch: { newCardsPerDay: number; reviewsPerDay: number }) => Promise<unknown>;
   onStart: (selection: ReviewSelection) => void;
 }) {
   const deckIds = useMemo(() => [...new Set(cards.map((card) => card.deckId))], [cards]);
@@ -110,9 +115,12 @@ export function ReviewSetup({
           }}
         />
 
+        <DailyLimits limits={limits} onSave={onSaveLimits} />
+
         <div className="sticky bottom-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+0.5rem)] flex flex-wrap items-center gap-3 rounded-xl border border-line bg-surface/95 p-3 shadow-raised backdrop-blur lg:bottom-4">
           <Button
             size="lg"
+            className="w-full sm:w-auto"
             disabled={total === 0}
             onClick={() => {
               saveSelection(selection);
@@ -126,5 +134,69 @@ export function ReviewSetup({
         </div>
       </div>
     </Card>
+  );
+}
+
+/** Tarjetas nuevas y repasos por día, con guardado al momento. También están en Configuración */
+function DailyLimits({
+  limits,
+  onSave,
+}: {
+  limits: { newCardsPerDay: number; reviewsPerDay: number };
+  onSave: (patch: { newCardsPerDay: number; reviewsPerDay: number }) => Promise<unknown>;
+}) {
+  const [newCards, setNewCards] = useState(String(limits.newCardsPerDay));
+  const [reviews, setReviews] = useState(String(limits.reviewsPerDay));
+  const [saved, setSaved] = useState(false);
+  const clamp = (value: string, max: number) =>
+    Math.min(max, Math.max(0, Math.round(Number(value) || 0)));
+  const next = { newCardsPerDay: clamp(newCards, 500), reviewsPerDay: clamp(reviews, 5000) };
+  const dirty =
+    next.newCardsPerDay !== limits.newCardsPerDay || next.reviewsPerDay !== limits.reviewsPerDay;
+  return (
+    <fieldset className="rounded-lg border border-line p-3">
+      <legend className="px-1 font-semibold">{t.reviewSetup.limits}</legend>
+      <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
+        <TextField
+          label={t.settings.newCardsPerDay}
+          type="number"
+          min={0}
+          max={500}
+          inputMode="numeric"
+          value={newCards}
+          onChange={(event) => {
+            setNewCards(event.target.value);
+            setSaved(false);
+          }}
+        />
+        <TextField
+          label={t.settings.reviewsPerDay}
+          type="number"
+          min={0}
+          max={5000}
+          inputMode="numeric"
+          value={reviews}
+          onChange={(event) => {
+            setReviews(event.target.value);
+            setSaved(false);
+          }}
+        />
+        <Button
+          type="button"
+          variant="secondary"
+          disabled={!dirty}
+          onClick={() => {
+            void onSave(next).then(() => {
+              setSaved(true);
+            });
+          }}
+        >
+          {t.settings.saveChanges}
+        </Button>
+      </div>
+      <p role="status" className="mt-2 text-sm text-fg-muted">
+        {dirty ? t.settings.unsaved : saved ? t.reviewSetup.limitsSaved : t.reviewSetup.limitsHint}
+      </p>
+    </fieldset>
   );
 }

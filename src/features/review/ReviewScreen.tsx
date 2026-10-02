@@ -8,6 +8,7 @@ import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { useDataApi } from '@/data/context';
+import { updateProfile } from '@/data/usecases/profile';
 import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
 import { useLiveData } from '@/data/hooks';
@@ -119,6 +120,11 @@ function ReviewLoader({ session }: { session: ReadySession }) {
           cards={cards}
           deckNames={deckNames}
           topicOfCard={topicOfCard}
+          limits={{
+            newCardsPerDay: session.settings.newCardsPerDay,
+            reviewsPerDay: session.settings.reviewsPerDay,
+          }}
+          onSaveLimits={(patch) => updateProfile(api, session.user, { settings: patch })}
           countFor={(candidate) =>
             buildQueue({
               cards: cards.filter((card) =>

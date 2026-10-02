@@ -23,8 +23,8 @@ export const featureText = {
     goToWelcome: 'Ir a la bienvenida',
     demoEmptyTitle: 'La demostración está vacía',
     demoEmptyBody:
-      'Genera los datos de demostración desde Perfil para ver esta pantalla con datos simulados.',
-    goToProfile: 'Ir a Perfil',
+      'Genera los datos de demostración desde Configuración para ver esta pantalla con datos simulados.',
+    goToProfile: 'Ir a Configuración',
     signOut: 'Cerrar sesión',
     simulatedLogin:
       'Inicio de sesión simulado. En el prototipo no hay contraseña ni servidor. En producción entrarás con tu cuenta.',
@@ -43,7 +43,7 @@ export const featureText = {
     examOn: (date: string) => `ENARM el ${date}`,
     noExamDate: 'Sin fecha de ENARM',
     createTitle: 'Crea tu cuenta',
-    createDescription: 'Lo puedes cambiar después en Perfil.',
+    createDescription: 'Todo lo puedes cambiar después en Perfil y en Configuración.',
     alias: 'Alias',
     aliasHint: 'Así te verán en Party. No uses tu nombre completo.',
     aliasError: 'Escribe un alias de 1 a 40 caracteres.',
@@ -194,7 +194,7 @@ export const featureText = {
       'Solo si el navegador lo permite. En iPhone funciona si agregaste la página a tu pantalla de inicio.',
     notificationsDenied:
       'El navegador no dio permiso para notificaciones. El aviso dentro de la página sigue activo.',
-    save: 'Guardar ajustes',
+    save: 'Guardar cambios',
     saved: 'Ajustes guardados',
   },
   settings: {
@@ -204,6 +204,7 @@ export const featureText = {
     saved: 'Guardado',
     goalsTitle: 'Metas y repaso',
     saveChanges: 'Guardar cambios',
+    unsaved: 'Tienes cambios sin guardar.',
     retention: 'Retención deseada',
     retentionHint:
       'Qué tanto quieres recordar cada tarjeta. 90% es lo recomendado por los creadores de FSRS. Más alto da repasos más seguidos. Entre 80% y 97%.',
@@ -212,14 +213,10 @@ export const featureText = {
       'Una tarjeta que calificas Bien no se va más lejos que esto, así la vuelves a ver antes del examen. Difícil y Fácil se mueven en la misma proporción.',
     spacingTitle: 'Qué tan lejos sale cada botón',
     spacingHint:
-      'Ajusta cuánto tarda en volver una tarjeta según cómo la calificaste. 100% es lo que calcula FSRS y es lo recomendado.',
+      'Ajusta cuánto tarda en volver una tarjeta según cómo la calificaste. 100% (con estrella) es lo que calcula FSRS y es lo recomendado.',
     spacingLabels: { hard: 'Difícil', good: 'Bien', easy: 'Fácil' },
     spacingOption: (percent: number) =>
-      percent === 100
-        ? '100%, recomendado'
-        : percent < 100
-          ? `${percent}%, antes`
-          : `${percent}%, después`,
+      percent === 100 ? '100% ★' : percent < 100 ? `${percent}% antes` : `${percent}% después`,
     resetRecommended: 'Volver a lo recomendado',
     maxIntervalOption: (days: number | null) =>
       days === null ? 'Sin tope, FSRS puro' : days === 21 ? '21 días, recomendado' : `${days} días`,
@@ -267,6 +264,8 @@ export const featureText = {
     },
     included: 'Incluido',
     notIncluded: 'No incluido',
+    comingSoon: 'Próximamente',
+    savings: (percent: number) => `Ahorras ${percent}% contra pagar mes a mes`,
     choose: (plan: string) => `Elegir ${plan}`,
     currentPlan: 'Plan actual',
     checkoutTitle: 'Checkout simulado',
@@ -285,6 +284,7 @@ export const featureText = {
     noReceipts: 'Todavía no tienes recibos.',
   },
   decks: {
+    emptyBranches: (names: string) => `Todavía sin mazos en ${names}.`,
     preloadedTitle: 'Mazos precargados',
     preloadedDescription:
       'Mazos de demostración que puedes seguir o dejar. No están validados por médicos.',
@@ -313,7 +313,7 @@ export const featureText = {
     doneBody: (cards: number, xp: number) =>
       `Repasaste ${plural(cards, 'tarjeta', 'tarjetas')} y ganaste ${xp.toLocaleString('es-MX')} XP.`,
     nothingDue:
-      'No tienes tarjetas pendientes por ahora. Vuelve mañana o sube tu límite de nuevas en Perfil.',
+      'No tienes tarjetas pendientes por ahora. Vuelve mañana o sube tu límite de tarjetas nuevas al elegir qué repasar.',
     remaining: (reviews: number, fresh: number) =>
       `Quedan ${plural(reviews, 'repaso', 'repasos')} y ${plural(fresh, 'nueva', 'nuevas')}`,
     newCard: 'Nueva',
@@ -449,13 +449,21 @@ export const featureText = {
     confetti: 'Confeti al ganar',
     sounds: 'Sonidos al ganar y del Pomodoro',
     tryIt: 'Probar celebración',
-    save: 'Guardar apariencia',
+    save: 'Guardar cambios',
     discard: 'Descartar cambios',
     unsaved: 'Tienes cambios sin guardar.',
     saved: 'Apariencia guardada.',
     discarded: 'Volvimos a lo que tenías guardado.',
   },
   bank: {
+    listTitle: 'Preguntas',
+    search: 'Buscar en la pregunta o el caso',
+    all: 'Todas',
+    statusLabel: 'Estado',
+    pages: 'Páginas del banco',
+    previous: 'Anterior',
+    next: 'Siguiente',
+    pageOf: (page: number, total: number) => `Página ${page} de ${total}`,
     physicianHint: 'Las preguntas que te asignaron para revisar.',
     adminHint: 'Todo el banco, con a quién está asignada cada pregunta.',
     emptyTitle: 'Todavía no tienes preguntas asignadas',
@@ -593,13 +601,14 @@ export const featureText = {
     avatarGenerated: (n: number) => `Avatar médico ${n}`,
     avatarPhoto: 'Mi foto',
     uploadPhoto: 'Subir foto',
-    save: 'Guardar mis datos',
+    save: 'Guardar cambios',
     saved: 'Datos guardados.',
     noAccount:
       'Este perfil se creó antes de las cuentas con correo. Agrega tu correo para guardar tus datos.',
     addEmail: 'Agregar correo',
   },
   profileCard: {
+    shortcuts: 'Accesos',
     levelLine: (level: number, title: string) => `Nivel ${level} · ${title}`,
     seeLevels: 'Ver niveles y títulos',
     streak: (current: number, best: number) =>
@@ -639,11 +648,15 @@ export const featureText = {
     mode: 'Modo',
     modes: { today: 'Lo que toca hoy', due: 'Solo vencidas', new: 'Solo nuevas' },
     decks: 'Mazos',
-    cards: (n: number) => `${n.toLocaleString('es-MX')} tarjetas`,
+    cards: (n: number) => `${n.toLocaleString('es-MX')} en total`,
+    limits: 'Límites de hoy',
+    limitsHint:
+      'Las tarjetas nuevas y los repasos que entran cada día. Se guardan para los próximos días.',
+    limitsSaved: 'Guardado. El número de tarjetas de abajo ya usa tus nuevos límites.',
     untagged: 'Incluir tarjetas sin subespecialidad',
     untaggedHint: 'Algunas notas no traen su subespecialidad. Entran con su mazo si lo marcaste.',
     start: (n: number) =>
-      n === 0 ? 'Nada por repasar' : `Empezar repaso, ${n.toLocaleString('es-MX')} tarjetas`,
+      n === 0 ? 'Nada por repasar' : `Repasar ${plural(n, 'tarjeta', 'tarjetas')}`,
     nothing: 'Con esta selección no hay tarjetas para hoy. Prueba otro modo o más temas.',
     change: 'Cambiar mazo o tema',
     other: 'Repasar otros temas',

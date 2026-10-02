@@ -15,6 +15,9 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/ca
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 
+/** Funciones que todavía no existen. Se muestran como Próximamente para no prometer de más (D-076) */
+const COMING_SOON: ReadonlySet<keyof PlanAccess> = new Set(['fullExam', 'aiTutor', 'importDecks']);
+
 const ACCESS_KEYS: (keyof PlanAccess)[] = [
   'dailyQuestions',
   'fullExam',
@@ -112,6 +115,15 @@ function Billing({ session }: { session: ReadySession }) {
                     <span className="text-2xl font-bold">{t.billing.price(plan.priceMxn)}</span>{' '}
                     <span className="text-sm text-fg-muted">{t.billing.periods[key]}</span>
                   </p>
+                  {key === 'annual' ? (
+                    <p className="text-sm font-semibold text-success">
+                      {t.billing.savings(
+                        Math.round(
+                          (1 - PLANS.annual.priceMxn / (PLANS.monthly.priceMxn * 12)) * 100,
+                        ),
+                      )}
+                    </p>
+                  ) : null}
                 </CardHeader>
                 <ul className="mb-4 flex flex-col gap-2 text-sm">
                   {ACCESS_KEYS.map((access) => {
@@ -133,6 +145,11 @@ function Billing({ session }: { session: ReadySession }) {
                         )}
                         <span>
                           {label}
+                          {included && COMING_SOON.has(access) ? (
+                            <Badge variant="neutral" className="ml-2">
+                              {t.billing.comingSoon}
+                            </Badge>
+                          ) : null}
                           <span className="sr-only">
                             . {included ? t.billing.included : t.billing.notIncluded}
                           </span>

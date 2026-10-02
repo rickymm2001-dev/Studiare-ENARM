@@ -1,5 +1,6 @@
-// Pantalla de esqueleto de la Fase A. Cada pantalla real la reemplaza en su fase.
-// Con ?estado= se ve cada uno de los cinco estados reutilizables (10.4).
+// Pantalla que todavía no se construye. Muestra un aviso de Próximamente con lo que hará (D-076).
+// Con ?estado= se ven las etiquetas de desarrollo y cada uno de los cinco estados (10.4).
+import { Hammer } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
@@ -28,6 +29,26 @@ export function ScreenPlaceholder({ screenKey }: { screenKey: ScreenKey }) {
   const text = t.screens[screenKey];
   const [searchParams] = useSearchParams();
   const state = parsePreviewState(searchParams.get('estado'));
+
+  if (!searchParams.has('estado')) {
+    return (
+      <>
+        <ScreenHeader title={text.title} />
+        <Card aria-labelledby="pronto-titulo">
+          <CardHeader>
+            <CardTitle id="pronto-titulo" className="flex items-center gap-2">
+              <Hammer aria-hidden className="text-primary" />
+              {t.phase.comingSoonTitle}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-2">
+            <p>{text.description}</p>
+            <p className="text-sm text-fg-muted">{t.phase.comingSoonBody}</p>
+          </CardContent>
+        </Card>
+      </>
+    );
+  }
 
   return (
     <>

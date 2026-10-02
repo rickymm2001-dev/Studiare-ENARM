@@ -149,7 +149,7 @@ function AccountCard({
           }}
         />
         <div className="flex flex-wrap gap-2">
-          <Button type="submit">{t.settings.save}</Button>
+          <Button type="submit">{t.settings.saveChanges}</Button>
           {onSignOut ? (
             <Button type="button" variant="secondary" onClick={onSignOut}>
               <LogOut aria-hidden />
@@ -248,6 +248,15 @@ function GoalsForm({
   const [status, setStatus] = useState('');
   const clamp = (value: string, min: number, max: number) =>
     Math.min(max, Math.max(min, Number(value) || min));
+  // Aviso de cambios sin guardar para que nadie crea que ya se aplicaron
+  const dirty =
+    clamp(retention, 80, 97) / 100 !== settings.desiredRetention ||
+    fromOption(maxInterval) !== settings.maxIntervalDays ||
+    JSON.stringify(spacing) !== JSON.stringify(settings.spacing) ||
+    clamp(newCards, 0, 500) !== settings.newCardsPerDay ||
+    clamp(reviews, 0, 5000) !== settings.reviewsPerDay ||
+    metric !== settings.dailyGoal.metric ||
+    clamp(goal, 1, 1000) !== settings.dailyGoal.value;
   return (
     <form
       className="flex flex-col gap-3"
@@ -365,10 +374,13 @@ function GoalsForm({
         />
       </div>
       <Button type="submit" className="self-start">
-        {t.settings.save}
+        {t.settings.saveChanges}
       </Button>
-      <p role="status" className="text-sm text-fg-muted">
-        {status}
+      <p
+        role="status"
+        className={dirty ? 'text-sm font-semibold text-warning' : 'text-sm text-fg-muted'}
+      >
+        {dirty ? t.settings.unsaved : status}
       </p>
     </form>
   );

@@ -4,6 +4,8 @@ import { Flame, Settings, Star } from 'lucide-react';
 import { Link } from 'react-router';
 import { LevelLadderDialog } from '@/app/layout/LevelLadderDialog';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
+import { ADMIN_LINKS, NAV_BY_ROLE, type NavItem } from '@/app/navigation';
+import { usePreferences } from '@/app/preferences';
 import { screenPath } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import { Avatar } from '@/ui/components/avatar';
@@ -97,10 +99,46 @@ function Profile({ session }: { session: ReadySession }) {
           </div>
         </div>
       </Card>
+      <PhoneShortcuts />
       <div className="grid items-start gap-4 lg:grid-cols-2">
-        <AccountDataCard key={account ? 'cuenta' : 'nueva'} session={session} account={account} />
+        {/* El alumno de demostración no tiene correo y no se le pide (D-076) */}
+        {session.isDemo && !account ? null : (
+          <AccountDataCard key={account ? 'cuenta' : 'nueva'} session={session} account={account} />
+        )}
         <AccountSection session={session} />
       </div>
     </>
+  );
+}
+
+/** En el teléfono no caben Mazos, Party, Configuración ni Administración en la barra (D-076) */
+function PhoneShortcuts() {
+  const role = usePreferences((state) => state.role);
+  const railOnly = NAV_BY_ROLE[role].filter((item) => item.railOnly && !item.groupStart);
+  const admin = role === 'admin' || role === 'owner' ? ADMIN_LINKS : [];
+  const groups: [string, readonly NavItem[]][] = [
+    [t.profileCard.shortcuts, railOnly.filter((item) => !admin.includes(item))],
+    [t.navItems.admin, admin],
+  ];
+  return (
+    <div className="flex flex-col gap-3 lg:hidden">
+      {groups
+        .filter(([, items]) => items.length > 0)
+        .map(([title, items]) => (
+          <Card key={title} className="p-3">
+            <p className="mb-2 text-sm font-semibold text-fg-muted">{title}</p>
+            <div className="grid grid-cols-2 gap-2">
+              {items.map((item) => (
+                <Button key={item.path} asChild variant="secondary" className="justify-start">
+                  <Link to={item.path}>
+                    <item.icon aria-hidden />
+                    {item.label}
+                  </Link>
+                </Button>
+              ))}
+            </div>
+          </Card>
+        ))}
+    </div>
   );
 }
