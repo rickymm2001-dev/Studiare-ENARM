@@ -295,3 +295,13 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Toda la app queda en caché para abrir sin conexión. Las rutas /api del proxy de IA nunca se sirven desde caché
 - Íconos provisionales con una E sobre el azul petróleo de la paleta, generados con scripts/generate-icons.ts. Cambian junto con la marca (D-016)
 - La instalabilidad se prueba con Chromium (Page.getInstallabilityErrors sin errores). La captura manual del botón de instalar queda para que Ricardo la confirme en su teléfono o en Chrome, porque el navegador sin ventana de las pruebas no muestra ese botón
+
+### D-040. Proxy de IA de la Fase A
+- Fecha 2026-10-01. Origen C
+- Hono con @hono/node-server, corriendo con el soporte nativo de TypeScript de Node 26, sin herramientas extra
+- Escucha solo en 127.0.0.1, puerto 8787. La dirección está fija en server/src/config.ts y no se puede cambiar por argumento
+- Lee server/.env.local con util.parseEnv y toma solo ENARM_ANTHROPIC_KEY. La clave no pasa por process.env, no se imprime y /health solo dice el modo
+- Rechaza peticiones cuyo encabezado Host no sea localhost (defensa contra DNS rebinding) y peticiones de más de 64 KB
+- node server/src/main.ts --mock fuerza el modo simulado aunque exista clave. Las pruebas e2e lo usan así
+- La app consulta /api/health y muestra IA real, IA simulada o IA sin conexión en el encabezado y en Perfil. Sin proxy, como en la demo publicada, dice IA simulada
+- El SDK de Anthropic se instala en la Fase D, que es cuando se usa. Al crear el cliente se le pasará la clave de forma explícita para que nunca lea otra variable de entorno

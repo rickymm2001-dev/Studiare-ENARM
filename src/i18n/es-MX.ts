@@ -195,6 +195,24 @@ export const t = {
         `Faltan ${missing.toLocaleString('es-MX')} ${unit}`,
     },
   },
+  ai: {
+    cardTitle: 'Inteligencia artificial',
+    badge: {
+      checking: 'IA, revisando',
+      real: 'IA real',
+      mock: 'IA simulada',
+      'no-proxy': 'IA simulada',
+      offline: 'IA sin conexión',
+    },
+    detail: {
+      checking: 'Revisando el proxy local de IA.',
+      real: 'El proxy local tiene clave. Los motores de IA llaman al modelo y todo lo que generan queda en borrador.',
+      mock: 'El proxy local no tiene clave. Las respuestas de IA son fijas, de demostración.',
+      'no-proxy':
+        'No hay proxy local, como en la demo publicada. Las respuestas de IA son fijas, de demostración.',
+      offline: 'Las funciones de IA necesitan conexión. Lo demás sigue funcionando.',
+    },
+  },
   pwa: {
     updateAvailable: 'Hay una versión nueva de la app.',
     offlineReady: 'Lista. La app ya abre sin conexión en este dispositivo.',

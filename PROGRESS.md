@@ -4,8 +4,8 @@
 
 - Fase 0 aprobada por Ricardo el 2026-10-01
 - Fase A en curso desde el 2026-10-01. Ricardo la aprobó y pidió ejecutar solo la Fase A y detenerse al terminar
-- Bloque terminado más reciente. Bloque 4 (PWA)
-- Siguiente paso. Bloque 5 (proxy de IA)
+- Bloque terminado más reciente. Bloque 5 (proxy de IA)
+- Siguiente paso. Bloque 6 (selector de rol e interruptor de base)
 
 ## Fase A. Esqueleto, datos y proxy
 
@@ -19,7 +19,7 @@
 - [x] 2. Tailwind con tokens, modo claro y oscuro, componentes base, navegación inferior y 26 rutas con sus estados
 - [x] 3. Esquemas zod, Dexie para enarm_real y enarm_demo, repositorios, bitácora de solo agregar y derivación
 - [x] 4. PWA instalable con modo sin conexión básico
-- [ ] 5. Proxy Hono con /health, modo simulado y lectura de server/.env.local
+- [x] 5. Proxy Hono con /health, modo simulado y lectura de server/.env.local
 - [ ] 6. Selector de rol sin login e interruptor de base real o demo
 - [ ] 7. npm run dev con app y proxy juntos
 
@@ -28,6 +28,7 @@
 - Bloque 2. Tokens en src/ui/tokens.css (D-037), claro, oscuro y según el sistema, con selector en Perfil que se recuerda. Componentes base al estilo shadcn sobre Radix (botón, tarjeta, etiqueta, opciones y barra de progreso), etiquetas Demostración y Datos simulados. Navegación inferior de 5 secciones que en escritorio pasa a riel lateral. Registro de las 26 pantallas con rutas en español (D-035). Estados vacío, cargando, error, sin conexión y calibrando con cuánto falta, visibles en cada esqueleto con ?estado=. Áreas de médico y admin con carga diferida. Foco al título al navegar y salto al contenido. 4 pruebas unitarias y 60 e2e (26 rutas, navegación, estados, tema y ruta desconocida, cada una en teléfono y escritorio, con axe sin violaciones serias)
 - Bloque 3. Esquemas zod de las 25 entidades de 6.2 y de los 30 tipos de evento de 6.3 en src/data/schemas. Registro de tablas con sus índices de Dexie y prueba de que cada índice existe en su esquema. enarm_real y enarm_demo con Dexie versión 1, SimTruth solo en demo. Repositorios con interfaz y implementación Dexie. Bitácora de solo agregar protegida en el repositorio y en la base (D-038). recordEvent agrega y actualiza cachés en una transacción y rebuildDerivedState las reconstruye. Prueba de fronteras de src/engines. 34 pruebas unitarias. JavaScript inicial de 191 KB comprimido, bajo el presupuesto de 300 KB
 - Bloque 4. vite-plugin-pwa con manifest en español, íconos provisionales y caché completa de la app (D-039). Aviso de versión nueva sin recarga automática. e2e de manifest, service worker activo, instalable según Chromium y apertura sin conexión con aviso, en teléfono y escritorio. 66 e2e en total
+- Bloque 5. Proxy Hono en server/ con /health, modo real o simulado según server/.env.local, --mock para forzar simulado, Host solo localhost y tamaño máximo (D-040). server/.env.example sin valor. Cliente en src/ai/client.ts y etiqueta del modo de IA en encabezado y Perfil. 16 pruebas nuevas del proxy y del cliente, entre ellas la que revisa que escucha solo en 127.0.0.1. e2e que confirma IA simulada y cero peticiones fuera de localhost
 
 ## Fase 0. Entrevista, entorno y plan
 

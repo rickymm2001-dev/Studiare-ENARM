@@ -2,6 +2,8 @@
 import { WifiOff } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { Link, Outlet, useLocation } from 'react-router';
+import { AiModeBadge } from '@/ai/AiModeBadge';
+import { useAiStatus } from '@/ai/useAiStatus';
 import { t } from '@/i18n/es-MX';
 import { useOnlineStatus } from '@/ui/hooks/use-online-status';
 import { useApplyTheme } from '@/ui/theme';
@@ -14,6 +16,7 @@ export function AppShell() {
   const theme = usePreferences((state) => state.theme);
   useApplyTheme(theme);
   const online = useOnlineStatus();
+  const aiStatus = useAiStatus();
   useFocusHeadingOnNavigation();
 
   return (
@@ -30,6 +33,7 @@ export function AppShell() {
           <Link to="/" className="mr-auto rounded-sm font-semibold text-fg">
             {t.app.name}
           </Link>
+          <AiModeBadge status={aiStatus} />
         </div>
       </header>
 
