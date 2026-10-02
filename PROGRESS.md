@@ -5,8 +5,8 @@
 - Fase 0 aprobada por Ricardo el 2026-10-01
 - Fase A aprobada por Ricardo el 2026-10-02
 - Fase B en curso desde el 2026-10-02. Ricardo la aprobó junto con la Fase A
-- Bloque terminado más reciente. Bloque 7 (taxonomías y textos base)
-- Siguiente paso. Bloque 8 (contenido demo, lote 1 de 6)
+- Bloque en curso. Bloque 8 (contenido demo). Lote 1 de 6 terminado
+- Siguiente paso. Lote 2 de preguntas
 
 ## Fase B. Motores núcleo, alumnos simulados y contenido demo
 
@@ -37,6 +37,7 @@
 - Bloque 5. src/engines/topics.ts con dominio por tema encogido hacia su rama, prioridades con porqué y acción, y análisis por estructura. src/engines/bias.ts con atracción por etiqueta contra la línea base y 7 indicadores de conducta (D-042, D-046). src/engines/forgetting.ts con las 9 reglas de 7.9, causa reportada contra señales y patrones de 5 hallazgos en 14 días. src/engines/agreement.ts con muestra de 20%, kappa global y por etiqueta, y vocabulario sesgos o trampas. Pruebas de humo de detección de sesgo sembrado sin falsos positivos y de encogimiento por tema. 135 pruebas de motores, 207 en total
 - Bloque 6. src/engines/session.ts con selección por tiempo y proporciones, e intercalado sin más de 2 seguidos del mismo subtema ni confusables seguidos. src/engines/planner.ts con plan del día y la semana y aviso de sobrecarga con opciones y su efecto. src/engines/streak.ts con corte a las 4 a. m. y congeladores. src/engines/xp.ts con premios, tope diario, multiplicador y curva de niveles ajustada con un alumno constante simulado. src/engines/party.ts con tabla semanal, retos, duelos y códigos (D-047). Propiedades con fast-check para XP, racha e intercalado. 163 pruebas de motores, 235 en total
 - Bloque 7. En src/demo/content, todo marcado pendiente de revisión médica. topic-taxonomy.json con las 4 ramas de peso igual, 40 temas (10 por rama), 118 subtemas con claves únicas y 13 relaciones de tema base. bias-taxonomy.json con los 24 sesgos de Ricardo, la definición de cada distractor para el médico, 21 usables como etiqueta y 8 con señales de conducta (D-042). bias-tips.json con un consejo base por sesgo. Cargador validado en src/demo/content/index.ts y 8 pruebas de conteos y referencias cruzadas
+- Bloque 8, lote 1. src/demo/content/questions/batch-01.json con 50 preguntas (13 de Medicina interna, 12 de Pediatría, 13 de Ginecología y obstetricia y 12 de Cirugía general), 11 negativas o de excepción y un caso seriado de hiperplasia prostática con 3 preguntas. Cada pregunta con 10 opciones, una correcta, 9 distractores con sesgo de la lista de Ricardo y su justificación, set canónico de 4, explicación de 80 a 150 palabras y referencia GPC solo por título, por verificar. Esquema DemoQuestionBatchSchema y prueba que valida cada lote, incluida la polaridad contra el motor de estructura. Pendiente de revisión médica
 
 ## Fase A. Esqueleto, datos y proxy
 

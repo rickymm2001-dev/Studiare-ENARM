@@ -117,3 +117,50 @@ export const BiasTipsSchema = z.strictObject({
     .min(1),
 });
 export type BiasTips = z.infer<typeof BiasTipsSchema>;
+
+/**
+ * Lote de preguntas de demostración (11.1, D-042). Formato para escribir y revisar a mano. Al
+ * sembrar la base, cada pregunta se convierte en una versión de Question con sus Option
+ */
+export const DemoOptionSchema = z.strictObject({
+  key: z.string().regex(/^[a-j]$/),
+  text: z.string().min(1).max(400),
+  correct: z.boolean(),
+  /** Sesgo primario de la taxonomía. Solo en distractores */
+  bias: TaxonomyKeySchema.optional(),
+  secondaryBiases: z.array(TaxonomyKeySchema).max(3).optional(),
+  /** Por qué atrae este distractor, o por qué es la correcta */
+  rationale: z.string().min(1).max(400),
+});
+
+export const DemoQuestionSchema = z.strictObject({
+  key: z.string().regex(/^b\d-q\d{2}$/),
+  caseKey: z.string().nullable(),
+  caseOrder: z.int().min(1).max(3).nullable(),
+  branch: TaxonomyKeySchema,
+  topic: TaxonomyKeySchema,
+  subtopic: TaxonomyKeySchema,
+  /** Viñeta propia, o datos que se agregan al caso seriado en este paso */
+  vignette: z.string().max(2000),
+  prompt: z.string().min(5).max(400),
+  polarity: z.enum(['affirmative', 'negative']),
+  task: QuestionTaskSchema,
+  difficulty: z.int().min(1).max(5),
+  options: z.array(DemoOptionSchema).length(10),
+  /** Las 4 opciones del set canónico, la correcta y 3 distractores */
+  canonical: z.array(z.string().regex(/^[a-j]$/)).length(4),
+  explanation: z.string().min(1),
+  /** Solo el título general de la GPC, sin claves, años ni páginas. Por verificar (11.1) */
+  gpcRefs: z.array(z.string().min(5).max(200)).min(1).max(3),
+});
+export type DemoQuestion = z.infer<typeof DemoQuestionSchema>;
+
+export const DemoQuestionBatchSchema = z.strictObject({
+  batch: z.int().min(1).max(6),
+  status: ReviewStatusSchema,
+  cases: z.array(
+    z.strictObject({ key: z.string().min(1), vignette: z.string().min(20).max(3000) }),
+  ),
+  questions: z.array(DemoQuestionSchema).min(1),
+});
+export type DemoQuestionBatch = z.infer<typeof DemoQuestionBatchSchema>;
