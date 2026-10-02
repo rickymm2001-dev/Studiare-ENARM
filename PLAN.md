@@ -340,7 +340,7 @@ Valores por defecto en src/config/thresholds.ts, editables desde admin (12).
 | Riesgo | Efecto | Mitigación |
 |---|---|---|
 | Proyecto dentro de OneDrive | Archivos bloqueados y npm lento | Mover antes de la Fase A (D-002). Hecho |
-| Sin repo remoto por ahora (D-042) | Si la computadora falla se pierde el trabajo | Commits por bloque en local y volver a proponer el repo privado al cerrar cada fase |
+| Respaldo remoto (D-048) | Resuelto con repo privado en GitHub | Hacer push al cerrar cada bloque |
 | Contenido clínico demo escrito por IA | Un error médico en algo que ven aspirantes | Etiqueta visible, referencias por verificar y revisión por lotes de Ricardo y dos médicos más antes de las pruebas con 5 aspirantes (D-031) |
 | Sin banco real | Las pruebas de usabilidad usan solo contenido demo | Hasta 500 preguntas demo (D-030), plantilla del importador lista en la Fase E y examen sin repetir preguntas (D-012) |
 | Sin clave de API | No hay costo ni latencia reales para comparar con el plan maestro | Bitácora y pantalla de costos listas. Basta agregar la clave |
@@ -354,6 +354,6 @@ Valores por defecto en src/config/thresholds.ts, editables desde admin (12).
 ## 9. Lo que queda pendiente de Ricardo
 
 - Mover la carpeta antes de la Fase A
-- Repo privado remoto, pospuesto por Ricardo (D-042)
+- Repo privado remoto. Hecho (D-048)
 - Cuenta gratuita de Cloudflare antes de la Fase F
 - Opcionales sin fecha. Prompt maestro de flashcards, clave de API y banco de opción múltiple

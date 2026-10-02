@@ -382,3 +382,10 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - XP. Acierto 10 + 5 por nivel de dificultad del médico, error 2, tarjeta 3, meta diaria 50, reto 100, multiplicador por racha de 1 + 0.025 por día con tope de 1.5, y tope de 1,500 XP diarios por volumen (J). El bono por racha queda como premio aparte con su motivo
 - Niveles. XP acumulado para el nivel n = 1700 · (n − 1)^1.7. Con un alumno constante simulado (100 tarjetas, 30 preguntas con 65% de aciertos y meta diaria) sube 2 niveles la primera semana y unos 0.5 por semana a los 3 meses, como pide 9.5. Títulos Pasante (1), R1 (4), R2 (7), R3 (10), R4 (13), Jefe de residentes (16), Adscrito (20) y Profesor titular (25) (J)
 - Party. Códigos de 6 caracteres sin 0, O, 1, I ni L. Empates en la tabla comparten lugar. El duelo lo gana la exactitud y desempata el tiempo
+
+### D-048. Repositorio remoto privado
+- Fecha 2026-10-02. Origen R
+- Ricardo pidió subir el proyecto a GitHub. Se creó el repo privado rickymm2001-dev/enarm-prototipo desde la web, vacío y sin README, y se subió main con todo el historial
+- Sin GitHub CLI. El push usa el administrador de credenciales de Git
+- Antes de subir se revisó que no hubiera secretos en ningún commit. server/.env.local no está en el historial
+- A partir de aquí cada bloque termina con commit y push
