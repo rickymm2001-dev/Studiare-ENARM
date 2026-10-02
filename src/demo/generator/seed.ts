@@ -18,6 +18,7 @@ import type { AppEvent } from '@/data/schemas/events';
 import { UserSchema, UserSettingsSchema, type User } from '@/data/schemas/people';
 import type { DemoBank } from '../content/bank';
 import { buildDeckEntities } from '../content/deckEntities';
+import { bankTaxonomy } from './bankTaxonomy';
 import { DEMO_CONTENT_TIME } from '../stableId';
 import { generateCohort, generateDemoStudent, type Cohort, type SimStudent } from './cohort';
 import { syntheticIds, toEvents } from './events';
@@ -208,7 +209,9 @@ export function buildDemoSeed(
   decks: readonly DemoDeckFile[] = [],
 ): DemoSeed {
   const content =
-    decks.length > 0 ? realCards(decks, options.seed) : syntheticContent(taxonomy, options.seed);
+    decks.length > 0
+      ? realCards(decks, options.seed)
+      : syntheticContent(bankTaxonomy(taxonomy, bank), options.seed);
   const cohort = generateCohort(bank, taxonomy, {
     seed: options.seed,
     size: options.cohortSize,

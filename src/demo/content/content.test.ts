@@ -12,16 +12,18 @@ describe('taxonomía de temas (13.4)', () => {
   const topics = topicTaxonomy.branches.flatMap((branch) => branch.topics);
   const subtopics = topics.flatMap((topic) => topic.subtopics);
 
-  it('tiene las 4 ramas con pesos iguales y unos 40 temas', () => {
+  it('tiene las 6 ramas troncales con pesos iguales y subespecialidades en cada una (D-066)', () => {
     expect(topicTaxonomy.branches.map((branch) => branch.key)).toEqual([
       'internal_medicine',
       'pediatrics',
       'obstetrics_gynecology',
       'general_surgery',
+      'family_medicine',
+      'emergency_medicine',
     ]);
     expect(new Set(topicTaxonomy.branches.map((branch) => branch.weight)).size).toBe(1);
-    expect(topics).toHaveLength(40);
-    for (const branch of topicTaxonomy.branches) expect(branch.topics).toHaveLength(10);
+    for (const branch of topicTaxonomy.branches)
+      expect(branch.topics.length).toBeGreaterThanOrEqual(7);
   });
 
   it('las claves de tema y de subtema son únicas en toda la taxonomía', () => {

@@ -54,6 +54,8 @@
   --enarm-gyo-soft: #f9dfec;
   --enarm-cir: #1f8a57;
   --enarm-cir-soft: #dbf2e5;
+  --enarm-fam: #6a4bc4;
+  --enarm-fam-soft: #ece6fb;
   --enarm-urg: #c27c0e;
   --enarm-urg-soft: #fbeccf;
 
@@ -111,6 +113,10 @@
     --enarm-gyo-soft: #3a1529;
     --enarm-cir: #5fd99a;
     --enarm-cir-soft: #12301f;
+    --enarm-fam: #b39dff;
+    --enarm-fam-soft: #241c3d;
+    --enarm-fam: #b39dff;
+    --enarm-fam-soft: #241c3d;
     --enarm-urg: #f5b84a;
     --enarm-urg-soft: #38280c;
     --enarm-demo: #362a12;
@@ -228,6 +234,8 @@
   --color-gyo-soft: var(--enarm-gyo-soft);
   --color-cir: var(--enarm-cir);
   --color-cir-soft: var(--enarm-cir-soft);
+  --color-fam: var(--enarm-fam);
+  --color-fam-soft: var(--enarm-fam-soft);
   --color-urg: var(--enarm-urg);
   --color-urg-soft: var(--enarm-urg-soft);
 

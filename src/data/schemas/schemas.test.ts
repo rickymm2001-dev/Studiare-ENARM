@@ -53,7 +53,8 @@ describe('esquemas y tablas', () => {
   it('los ajustes por defecto siguen la especificación', () => {
     expect(UserSettingsSchema.parse({})).toEqual({
       desiredRetention: 0.9,
-      maxIntervalDays: 30,
+      maxIntervalDays: 21,
+      spacing: { hard: 1, good: 1, easy: 1 },
       newCardsPerDay: 20,
       reviewsPerDay: 200,
       cardConfidenceStep: true,

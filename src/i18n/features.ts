@@ -6,6 +6,8 @@ export const branchNames: Record<string, string> = {
   pediatrics: 'Pediatría',
   obstetrics_gynecology: 'Ginecología y obstetricia',
   general_surgery: 'Cirugía general',
+  family_medicine: 'Medicina familiar',
+  emergency_medicine: 'Urgencias',
 };
 
 const plural = (n: number, one: string, many: string) =>
@@ -111,6 +113,7 @@ export const featureText = {
     },
     heatmap: {
       range: 'Rango',
+      auto: 'Desde que empezaste',
       days: (n: number) => `${n} días`,
       metric: 'Métrica',
       metrics: { cards: 'Tarjetas', questions: 'Preguntas', focusMinutes: 'Minutos de estudio' },
@@ -194,12 +197,23 @@ export const featureText = {
     goalsTitle: 'Metas y repaso',
     retention: 'Retención deseada',
     retentionHint:
-      'Qué tan seguido quieres recordar cada tarjeta. 90% por defecto, entre 80% y 97%.',
-    maxInterval: 'Intervalo máximo del repaso',
+      'Qué tanto quieres recordar cada tarjeta. 90% es lo recomendado por los creadores de FSRS. Más alto da repasos más seguidos. Entre 80% y 97%.',
+    maxInterval: 'Intervalo máximo con Bien',
     maxIntervalHint:
-      'Ninguna tarjeta se va más lejos que esto, así las vuelves a ver antes del examen. Mientras más corto, más repasos al día.',
+      'Una tarjeta que calificas Bien no se va más lejos que esto, así la vuelves a ver antes del examen. Difícil y Fácil se mueven en la misma proporción.',
+    spacingTitle: 'Qué tan lejos sale cada botón',
+    spacingHint:
+      'Ajusta cuánto tarda en volver una tarjeta según cómo la calificaste. 100% es lo que calcula FSRS y es lo recomendado.',
+    spacingLabels: { hard: 'Difícil', good: 'Bien', easy: 'Fácil' },
+    spacingOption: (percent: number) =>
+      percent === 100
+        ? '100%, recomendado'
+        : percent < 100
+          ? `${percent}%, antes`
+          : `${percent}%, después`,
+    resetRecommended: 'Volver a lo recomendado',
     maxIntervalOption: (days: number | null) =>
-      days === null ? 'Sin tope, FSRS puro' : days === 30 ? '30 días, recomendado' : `${days} días`,
+      days === null ? 'Sin tope, FSRS puro' : days === 21 ? '21 días, recomendado' : `${days} días`,
     newCardsPerDay: 'Tarjetas nuevas por día',
     reviewsPerDay: 'Repasos máximos por día',
     studyTitle: 'Estudio',
@@ -275,6 +289,7 @@ export const featureText = {
     unfollow: 'Dejar de seguir',
     adding: 'Agregando…',
     loading: 'Cargando mazos…',
+    noDecksInBranch: 'Sin mazos todavía en esta rama.',
     importTitle: 'Sube tu mazo',
     importBody:
       'Pronto podrás subir tus mazos desde otras apps de tarjetas, Word, Excel o CSV. Tus mazos serán privados.',
@@ -439,6 +454,31 @@ export const featureText = {
     xp: (xp: number) => `${xp.toLocaleString('es-MX')} XP en total`,
     photoSoon: 'Pronto podrás subir tu foto o elegir un avatar.',
   },
+  progress: {
+    description:
+      'Cómo vas por rama troncal y por subespecialidad. Cada número aparece cuando hay respuestas suficientes para que sea confiable.',
+    questions: 'Preguntas respondidas',
+    accuracy: 'Exactitud',
+    cards: 'Tarjetas repasadas',
+    minutes: 'Minutos de estudio',
+    trunksHint: 'Tu dominio estimado en cada rama, a partir de tus respuestas.',
+    topicsHint:
+      'Verde desde 75%, ámbar de 60% a 74% y rojo abajo de 60%. Mientras calibra se ven tus preguntas y tarjetas.',
+    branchCounts: (questions: number, cards: number) =>
+      `${questions.toLocaleString('es-MX')} preguntas · ${cards.toLocaleString('es-MX')} tarjetas`,
+    topicCounts: (questions: number, cards: number) => `${questions} preg · ${cards} tarj`,
+    mastery: (percent: number) => `Dominio estimado de ${percent}%`,
+    calibrating: (missing: number) =>
+      `Calibrando, faltan unas ${missing.toLocaleString('es-MX')} respuestas`,
+  },
+  topicPicker: {
+    trunks: 'Ramas troncales',
+    subspecialties: 'Subespecialidades',
+    all: 'Seleccionar todo',
+    none: 'Quitar todo',
+    questions: (n: number) => `${n.toLocaleString('es-MX')} preguntas`,
+    noQuestions: 'Sin preguntas todavía',
+  },
   studyPause: {
     title: 'Estudio pausado',
     body: (minutes: number) =>
@@ -468,7 +508,8 @@ export const featureText = {
     streak: (days: number) => `Racha de ${plural(days, 'día', 'días')}`,
     level: (level: number, title: string, into: number, next: number) =>
       `Nivel ${level}, ${title}. ${into.toLocaleString('es-MX')} de ${next.toLocaleString('es-MX')} XP para el siguiente nivel`,
-    short: (level: number) => `Nv ${level}`,
+    short: (level: number) => `Nivel ${level}`,
+    left: (xp: number, next: number) => `${xp.toLocaleString('es-MX')} XP para el nivel ${next}`,
     profile: 'Tu perfil',
     openLevels: 'Ver niveles y títulos',
   },

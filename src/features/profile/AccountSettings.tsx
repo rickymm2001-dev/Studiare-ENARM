@@ -189,6 +189,8 @@ function AccountCard({
   );
 }
 
+const SPACING_OPTIONS = [50, 75, 100, 125, 150, 200];
+
 function GoalsForm({
   settings,
   onSave,
@@ -198,6 +200,7 @@ function GoalsForm({
 }) {
   const [retention, setRetention] = useState(String(Math.round(settings.desiredRetention * 100)));
   const [maxInterval, setMaxInterval] = useState(toOption(settings.maxIntervalDays));
+  const [spacing, setSpacing] = useState(settings.spacing);
   const [newCards, setNewCards] = useState(String(settings.newCardsPerDay));
   const [reviews, setReviews] = useState(String(settings.reviewsPerDay));
   const [metric, setMetric] = useState(settings.dailyGoal.metric);
@@ -213,6 +216,7 @@ function GoalsForm({
         void onSave({
           desiredRetention: clamp(retention, 80, 97) / 100,
           maxIntervalDays: fromOption(maxInterval),
+          spacing,
           newCardsPerDay: clamp(newCards, 0, 500),
           reviewsPerDay: clamp(reviews, 0, 5000),
           dailyGoal: { metric, value: clamp(goal, 1, 1000) },
@@ -244,6 +248,39 @@ function GoalsForm({
           setMaxInterval(event.target.value);
         }}
       />
+      <fieldset className="flex flex-col gap-2 rounded-lg bg-muted p-3">
+        <legend className="font-semibold">{t.settings.spacingTitle}</legend>
+        <p className="text-sm text-fg-muted">{t.settings.spacingHint}</p>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {(['hard', 'good', 'easy'] as const).map((rating) => (
+            <SelectField
+              key={rating}
+              label={t.settings.spacingLabels[rating]}
+              value={String(Math.round(spacing[rating] * 100))}
+              options={SPACING_OPTIONS.map((percent) => ({
+                value: String(percent),
+                label: t.settings.spacingOption(percent),
+              }))}
+              onChange={(event) => {
+                setSpacing({ ...spacing, [rating]: Number(event.target.value) / 100 });
+              }}
+            />
+          ))}
+        </div>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="self-start"
+          onClick={() => {
+            setSpacing({ hard: 1, good: 1, easy: 1 });
+            setMaxInterval('21');
+            setRetention('90');
+          }}
+        >
+          {t.settings.resetRecommended}
+        </Button>
+      </fieldset>
       <div className="grid gap-3 sm:grid-cols-2">
         <TextField
           label={t.settings.newCardsPerDay}

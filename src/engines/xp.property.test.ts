@@ -145,10 +145,11 @@ describe('propiedades del XP', () => {
         },
       ),
     );
-    expect(levelFor(0)).toMatchObject({ level: 1, title: 'Pasante' });
-    expect(levelFor(xpForLevel(4)).title).toBe('R1');
-    expect(levelFor(xpForLevel(16)).title).toBe('Jefe de residentes');
-    expect(levelFor(xpForLevel(30)).title).toBe('Profesor titular');
+    expect(levelFor(0)).toMatchObject({ level: 1, title: 'R0' });
+    expect(levelFor(xpForLevel(3)).title).toBe('R1');
+    expect(levelFor(xpForLevel(14)).title).toBe('Jefe de residentes');
+    expect(levelFor(xpForLevel(33)).title).toBe('Adscritosaurio');
+    expect(levelFor(xpForLevel(60)).title).toBe('Eminencia');
   });
 });
 

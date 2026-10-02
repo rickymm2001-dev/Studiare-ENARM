@@ -6,6 +6,7 @@ import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import type { WidgetLayout } from '@/data/schemas/activity';
+import { studyDayOf } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
@@ -179,6 +180,7 @@ function WidgetBody({
       return (
         <HeatmapWidget
           snapshot={snapshot}
+          since={studyDayOf(new Date(session.user.createdAt), session.user.timeZone)}
           settings={{ ...DEFAULT_HEATMAP, ...(settings as Partial<HeatmapSettings>) }}
         />
       );
@@ -291,12 +293,16 @@ function HeatmapSettingsForm({
       <SelectField
         label={t.widgets.heatmap.range}
         value={String(value.range)}
-        options={[90, 180, 365].map((n) => ({
-          value: String(n),
-          label: t.widgets.heatmap.days(n),
-        }))}
+        options={[
+          { value: 'auto', label: t.widgets.heatmap.auto },
+          ...[90, 180, 365].map((n) => ({ value: String(n), label: t.widgets.heatmap.days(n) })),
+        ]}
         onChange={(event) => {
-          onChange({ ...value, range: Number(event.target.value) as HeatmapSettings['range'] });
+          const raw = event.target.value;
+          onChange({
+            ...value,
+            range: raw === 'auto' ? 'auto' : (Number(raw) as HeatmapSettings['range']),
+          });
         }}
       />
       <SelectField

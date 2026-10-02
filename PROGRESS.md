@@ -38,7 +38,8 @@
 - Tabla de niveles al tocar el nivel (D-063)
 - Intervalo máximo del repaso de 30 días con compresión suave (D-064)
 - Configuración aparte de Perfil, fondo personalizado con foto, sin cuenta regresiva y heatmap por meses (D-065). 318 pruebas pasan
-- Pendiente de Ricardo. Si cambia la escalera de títulos de nivel a Estudiante, Interno, Pasante, R1 a R4, Jefe de residentes, Adscrito y Profesor titular
+- Seis ramas troncales con subespecialidades en Simular, Mazos y Progreso. Primera versión de Progreso. Títulos de nivel de R0 a Eminencia. Heatmap que crece mes con mes (D-066)
+- Tope de 21 días sobre Bien con botones separados y multiplicador por botón (D-067). 319 pruebas pasan
 
 ## Fase C. Pantallas del alumno (esqueleto funcionando)
 

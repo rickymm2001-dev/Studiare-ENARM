@@ -1,7 +1,7 @@
 // Heatmap de estudio (9.3). Calendario por día con intensidad por actividad y resumen en texto para
 // lectores de pantalla. Dividido por meses con el nombre del mes arriba (D-065). Rango de 90, 180
 // o 365 días y métrica configurables (9.1).
-import { addDays } from '@/engines/studyDay';
+import { addDays, daysBetween } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import type { Snapshot } from '../snapshot';
@@ -15,13 +15,20 @@ const LEVELS = ['bg-muted', 'bg-primary/25', 'bg-primary/50', 'bg-primary/75', '
 export function HeatmapWidget({
   snapshot,
   settings,
+  since,
 }: {
   snapshot: Snapshot;
   settings: HeatmapSettings;
+  /** Día de estudio en que empezó el alumno, para el rango automático */
+  since: string;
 }) {
-  const days = Array.from({ length: settings.range }, (_, index) =>
-    addDays(snapshot.today, index - settings.range + 1),
-  );
+  // Rango automático. Del primer día del mes en que empezó, o de su primera actividad si es antes,
+  // hasta hoy. Así el calendario crece mes con mes
+  const firstActivity = Object.keys(snapshot.activity).sort()[0] ?? since;
+  const start = `${(firstActivity < since ? firstActivity : since).slice(0, 7)}-01`;
+  const length =
+    settings.range === 'auto' ? daysBetween(start, snapshot.today) + 1 : settings.range;
+  const days = Array.from({ length }, (_, index) => addDays(snapshot.today, index - length + 1));
   const values = days.map((day) => snapshot.activity[day]?.[settings.metric] ?? 0);
   const max = Math.max(1, ...values);
   const metricName = t.widgets.heatmap.metrics[settings.metric].toLowerCase();
@@ -50,7 +57,7 @@ export function HeatmapWidget({
   return (
     <div className="flex flex-col gap-2">
       <p className="text-sm text-fg-muted">
-        {t.widgets.heatmap.summary(active, settings.range, total, metricName)}
+        {t.widgets.heatmap.summary(active, length, total, metricName)}
       </p>
       <div className="overflow-x-auto" aria-hidden>
         <div className="flex gap-2">

@@ -8,6 +8,7 @@ import { ReviewScreen } from '@/features/review/ReviewScreen';
 import { OnboardingScreen } from '@/features/onboarding/OnboardingScreen';
 import { PartyScreen } from '@/features/party/PartyScreen';
 import { ProfileScreen } from '@/features/profile/ProfileScreen';
+import { ProgressScreen } from '@/features/progress/ProgressScreen';
 import { SettingsScreen } from '@/features/settings/SettingsScreen';
 import { RoleSelectorScreen } from '@/features/role/RoleSelectorScreen';
 import { FeedbackScreen } from '@/features/simulator/FeedbackScreen';
@@ -32,6 +33,7 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, ComponentType>> = {
   subscription: SubscriptionScreen,
   party: PartyScreen,
   profile: ProfileScreen,
+  progress: ProgressScreen,
   settings: SettingsScreen,
   roleSelector: RoleSelectorScreen,
 };

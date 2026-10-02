@@ -35,7 +35,7 @@ function Stats({ user, settings }: { user: User; settings: UserSettings }) {
       <LevelLadderDialog totalXp={totalXp}>
         <button
           type="button"
-          className="flex w-24 flex-col gap-1 rounded-md text-left sm:w-32"
+          className="flex w-28 min-w-0 flex-col gap-1 rounded-md text-left sm:w-48"
           aria-label={`${t.headerStats.openLevels}. ${t.headerStats.level(
             level.level,
             level.title,
@@ -48,8 +48,11 @@ function Stats({ user, settings }: { user: User; settings: UserSettings }) {
             <span className="truncate text-accent">{level.title}</span>
             <span className="text-fg-muted">{t.headerStats.short(level.level)}</span>
           </span>
-          <span aria-hidden className="h-1.5 overflow-hidden rounded-full bg-muted">
+          <span aria-hidden className="h-2 overflow-hidden rounded-full bg-muted">
             <span className="block h-full rounded-full bg-gold" style={{ width: `${percent}%` }} />
+          </span>
+          <span aria-hidden className="truncate text-[0.65rem] leading-none text-fg-muted">
+            {t.headerStats.left(level.xpForNext - level.xpIntoLevel, level.level + 1)}
           </span>
         </button>
       </LevelLadderDialog>

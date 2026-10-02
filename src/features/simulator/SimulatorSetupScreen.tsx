@@ -16,14 +16,15 @@ import { createRng } from '@/engines/random';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
-import { CheckboxField, SelectField } from '@/ui/components/field';
+import { SelectField } from '@/ui/components/field';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
+import { BranchTopicPicker } from '../shared/BranchTopicPicker';
+import { ALL_TOPICS } from '../shared/topics';
 import { useUserEvents } from '../shared/useUserEvents';
 import { clock, usePractice } from './practice';
 
-const BRANCHES = ['internal_medicine', 'pediatrics', 'obstetrics_gynecology', 'general_surgery'];
 type Difficulty = 'all' | 'easy' | 'medium' | 'hard';
 type Structure = 'all' | 'negative' | 'affirmative';
 
@@ -51,7 +52,7 @@ function Setup({ session }: { session: ReadySession }) {
     [api.repos, session.user.id],
   );
   const events = useUserEvents(session.user.id);
-  const [branches, setBranches] = useState<string[]>(session.settings.branches);
+  const [topics, setTopics] = useState<Set<string>>(() => new Set(ALL_TOPICS));
   const [difficulty, setDifficulty] = useState<Difficulty>('all');
   const [structure, setStructure] = useState<Structure>('all');
   const [count, setCount] = useState('10');
@@ -79,8 +80,21 @@ function Setup({ session }: { session: ReadySession }) {
       event.type === 'question_answered' && studyDayOf(new Date(event.at), event.tz) === today,
   ).length;
   const left = limit === null ? null : Math.max(0, limit - answeredToday);
+  // Preguntas por subespecialidad con los filtros de dificultad y estructura, para el selector
+  const matchesLevel = (question: (typeof questions)[number]) => {
+    const level = question.physicianDifficulty;
+    if (difficulty === 'easy' && level > 2) return false;
+    if (difficulty === 'medium' && level !== 3) return false;
+    if (difficulty === 'hard' && level < 4) return false;
+    return structure === 'all' || question.structure.polarity === structure;
+  };
+  const countsByTopic = new Map<string, number>();
+  for (const question of questions) {
+    if (matchesLevel(question))
+      countsByTopic.set(question.topic, (countsByTopic.get(question.topic) ?? 0) + 1);
+  }
   const filtered = questions.filter((question) => {
-    if (!branches.includes(question.branch)) return false;
+    if (!topics.has(question.topic)) return false;
     const level = question.physicianDifficulty;
     if (difficulty === 'easy' && level > 2) return false;
     if (difficulty === 'medium' && level !== 3) return false;
@@ -101,7 +115,10 @@ function Setup({ session }: { session: ReadySession }) {
     await api.recordEvent(
       createEvent(
         'session_started',
-        { kind: 'practice', config: { branches, difficulty, structure, count: wanted } },
+        {
+          kind: 'practice',
+          config: { topics: [...topics], difficulty, structure, count: wanted },
+        },
         { userId: session.user.id, tz: session.user.timeZone, sessionId },
       ),
     );
@@ -129,23 +146,7 @@ function Setup({ session }: { session: ReadySession }) {
           <CardDescription>{t.simulator.bankNote(questions.length)}</CardDescription>
         </CardHeader>
         <div className="flex flex-col gap-4">
-          <fieldset className="flex flex-col gap-2">
-            <legend className="mb-1 font-medium">{t.simulator.branches}</legend>
-            {BRANCHES.map((branch) => (
-              <CheckboxField
-                key={branch}
-                label={t.branchNames[branch] ?? branch}
-                checked={branches.includes(branch)}
-                onChange={(event) => {
-                  setBranches((current) =>
-                    event.target.checked
-                      ? [...current, branch]
-                      : current.filter((b) => b !== branch),
-                  );
-                }}
-              />
-            ))}
-          </fieldset>
+          <BranchTopicPicker selected={topics} onChange={setTopics} counts={countsByTopic} />
           <div className="grid gap-3 sm:grid-cols-3">
             <SelectField
               label={t.simulator.difficulty}
