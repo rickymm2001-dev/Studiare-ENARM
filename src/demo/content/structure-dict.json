@@ -85,7 +85,15 @@
     },
     {
       "task": "prevention_screening",
-      "patterns": ["tamizaje", "cribado", "prevencion", "prevenir", "profilaxis", "vacuna", "deteccion oportuna"]
+      "patterns": [
+        "tamizaje",
+        "cribado",
+        "prevencion",
+        "prevenir",
+        "profilaxis",
+        "vacuna",
+        "deteccion oportuna"
+      ]
     },
     {
       "task": "complication_prognosis",
@@ -115,7 +123,13 @@
     },
     {
       "task": "diagnosis",
-      "patterns": ["diagnostico", "padece", "cuadro clinico", "entidad", "que (?:tiene|presenta) (?:el|la) paciente"]
+      "patterns": [
+        "diagnostico",
+        "padece",
+        "cuadro clinico",
+        "entidad",
+        "que (?:tiene|presenta) (?:el|la) paciente"
+      ]
     }
   ]
 }
