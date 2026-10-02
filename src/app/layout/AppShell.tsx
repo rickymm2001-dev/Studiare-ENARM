@@ -13,7 +13,6 @@ import { screenPath } from '../screens';
 import { useSession } from '../session';
 import { usePreferences } from '../preferences';
 import { BottomNav } from './BottomNav';
-import { HeaderStats } from './HeaderStats';
 import { PwaUpdatePrompt } from './PwaUpdatePrompt';
 
 export function AppShell() {
@@ -42,10 +41,11 @@ export function AppShell() {
         {t.app.skipToContent}
       </a>
 
+      {/* En el teléfono una barra delgada con el logo. En computadora el logo va en el riel (D-071) */}
       <header
-        className={`sticky top-0 z-10 border-b border-line bg-surface/95 backdrop-blur ${rail}`}
+        className={`sticky top-0 z-10 border-b border-line bg-surface/95 backdrop-blur ${bare ? '' : 'lg:hidden'}`}
       >
-        <div className="mx-auto flex min-h-14 max-w-app items-center gap-2 px-4 py-2">
+        <div className="flex min-h-12 items-center gap-2 px-4 py-1.5">
           <Link to={HOME_BY_ROLE[role]} className="mr-auto shrink-0 rounded-sm">
             {/* Logo de Studiare. En modo oscuro se usa la versión con letras blancas */}
             <img
@@ -63,7 +63,6 @@ export function AppShell() {
               className="hidden h-6 w-auto sm:h-8 dark:block"
             />
           </Link>
-          {bare ? null : <HeaderStats />}
         </div>
       </header>
 
@@ -106,14 +105,14 @@ export function AppShell() {
           className={
             bare
               ? `mx-auto flex ${pathname === screenPath('onboarding') ? 'max-w-reading' : 'max-w-5xl'} flex-col gap-4 px-4 pt-6 pb-10 outline-none`
-              : 'mx-auto flex max-w-app flex-col gap-4 px-4 pt-4 pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1.5rem)] outline-none lg:pb-10'
+              : 'flex w-full flex-col gap-3 px-4 pt-3 pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1rem)] outline-none lg:px-6 lg:pt-5 lg:pb-8'
           }
         >
           <Outlet />
         </main>
       </div>
 
-      {bare ? null : <BottomNav items={NAV_BY_ROLE[role]} />}
+      {bare ? null : <BottomNav items={NAV_BY_ROLE[role]} homePath={HOME_BY_ROLE[role]} />}
       <PwaUpdatePrompt />
     </div>
   );

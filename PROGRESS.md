@@ -43,6 +43,8 @@
 - Portada de venta, cuenta con correo en tabla aparte, datos opcionales, 12 avatares médicos o foto propia (D-068). 322 pruebas pasan
 - Esquema de Supabase con 12 pruebas de permisos en npm run test:sql y guía en docs/SUPABASE.md (D-069)
 - Usuarios en /admin/usuarios con reglas de roles idénticas a Supabase y banco del médico (D-070). 326 pruebas pasan
+- Marco compacto a todo lo ancho, nivel junto al título, Configuración en el riel y botones de guardar (D-071)
+- Elegir qué repasar por modo, mazo, troncal y subespecialidad, y cambiar sin perder avance (D-072)
 - Siguiente. Bloque 5, pagos con Stripe y Mercado Pago en modo prueba
 - Pendiente de Ricardo. Crear el proyecto de Supabase con docs/SUPABASE.md y pasar las llaves públicas
 

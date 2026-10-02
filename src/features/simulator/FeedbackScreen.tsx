@@ -141,8 +141,7 @@ function FeedbackBody({
   };
 
   return (
-    // Ancho de lectura para el texto clínico (D-057)
-    <div className="flex w-full max-w-reading flex-col gap-4">
+    <div className="flex w-full flex-col gap-3">
       <Card aria-labelledby="resultado">
         <CardHeader>
           <CardTitle id="resultado" className="flex items-center gap-2">

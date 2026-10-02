@@ -13,7 +13,9 @@ import { t } from '@/i18n/es-MX';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SimulatedDataLabel } from '@/ui/components/labels';
 import { RadioCards } from '@/ui/components/radio-cards';
-import type { ThemePreference } from '@/ui/theme';
+import { applyTheme, resolveTheme, useApplyTheme, type ThemePreference } from '@/ui/theme';
+import { useEffect, useState } from 'react';
+import { Button } from '@/ui/components/button';
 import { useSession } from '@/app/session';
 import { StudySettings } from '../profile/AccountSettings';
 import { AppearanceSettings } from './AppearanceSettings';
@@ -39,6 +41,56 @@ const DATABASE_OPTIONS = [
     icon: <FlaskConical />,
   },
 ] as const;
+
+/** Tema visual con vista previa y botón de guardar (D-071) */
+function ThemeCard({
+  current,
+  onSave,
+}: {
+  current: ThemePreference;
+  onSave: (theme: ThemePreference) => void;
+}) {
+  const [draft, setDraft] = useState<ThemePreference>(current);
+  const [status, setStatus] = useState('');
+  // Vista previa al momento. Al salir sin guardar vuelve el tema guardado
+  useApplyTheme(draft);
+  useEffect(
+    () => () => {
+      const dark =
+        typeof window.matchMedia === 'function' &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches;
+      applyTheme(document.documentElement, resolveTheme(usePreferences.getState().theme, dark));
+    },
+    [],
+  );
+  return (
+    <Card>
+      <RadioCards
+        legend={t.theme.legend}
+        value={draft}
+        options={THEME_OPTIONS}
+        onValueChange={(value) => {
+          setDraft(value);
+          setStatus('');
+        }}
+      />
+      <div className="mt-3 flex flex-wrap items-center gap-3">
+        <Button
+          disabled={draft === current}
+          onClick={() => {
+            onSave(draft);
+            setStatus(t.settings.saved);
+          }}
+        >
+          {t.settings.saveChanges}
+        </Button>
+        <p role="status" className="text-sm text-fg-muted">
+          {draft !== current ? t.appearance.unsaved : status}
+        </p>
+      </div>
+    </Card>
+  );
+}
 
 export function SettingsScreen() {
   const theme = usePreferences((state) => state.theme);
@@ -69,14 +121,7 @@ export function SettingsScreen() {
 
         {session.status === 'ready' ? <StudySettings session={session} /> : null}
 
-        <Card>
-          <RadioCards
-            legend={t.theme.legend}
-            value={theme}
-            options={THEME_OPTIONS}
-            onValueChange={setTheme}
-          />
-        </Card>
+        <ThemeCard current={theme} onSave={setTheme} />
 
         <AppearanceSettings />
 

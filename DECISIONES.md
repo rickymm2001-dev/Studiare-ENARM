@@ -585,3 +585,20 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Banco de preguntas, primera versión. El médico ve solo lo asignado. El admin ve todo y a quién está asignada cada pregunta. El editor con decisiones llega en la Fase E
 - La base local sube a la versión 3 con la tabla reviewAssignments
 - En el prototipo quien llama usa el rol del selector de pruebas de la pantalla 26 (sin enlaces). Con Supabase el rol sale de la cuenta y lo aplica el servidor
+
+### D-071. Marco compacto a todo lo ancho y botones de guardar
+- Fecha 2026-10-02. Origen R
+- La racha, el nivel con su barra y la foto van a la derecha del título de cada pantalla, a la misma altura. En computadora ya no hay barra superior. El símbolo de Studiare va arriba del riel lateral. En el teléfono queda una barra delgada con el logo
+- El contenido usa todo el ancho de la pantalla. Se quitan el marco de 88rem y el ancho de lectura en pregunta, retroalimentación y repaso. Ajusta D-057
+- Menos espacio perdido. Títulos un poco más chicos, menos separación entre tarjetas y relleno más compacto
+- Configuración tiene su propio botón en el riel lateral, debajo de Perfil. En el teléfono se llega desde Perfil
+- Nuevos botones de guardar en Configuración. Opciones de estudio y tema visual ya no se aplican al tocarlos. El tema muestra vista previa y regresa al guardado si sales sin guardar
+- En Simular, Seleccionar todo y Quitar todo son botones visibles con el conteo de subespecialidades elegidas
+
+### D-072. Elegir qué repasar
+- Fecha 2026-10-02. Origen R
+- Antes de repasar el alumno elige el modo (lo que toca hoy, solo vencidas o solo nuevas), sus mazos y las ramas troncales o subespecialidades, con el número de tarjetas de cada una. El botón dice cuántas tarjetas tocan con esa selección
+- Las tarjetas cuya nota no trae subespecialidad entran con su mazo si el alumno lo deja marcado
+- Durante el repaso, Cambiar mazo o tema regresa a la selección. Cada calificación ya quedó guardada, así que no se pierde avance. Al terminar se puede repasar otros temas
+- Agregar mazo lleva a Mazos. Subir mazos propios llega en el bloque P8
+- La última selección se recuerda en el dispositivo

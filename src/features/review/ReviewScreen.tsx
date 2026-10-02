@@ -1,7 +1,7 @@
 // Repaso de tarjetas (pantalla 3, 7.1). Cola del día con el motor real de FSRS, confianza previa
 // (apagable), los cuatro botones con su intervalo, causa después de fallar, tiempos y XP. Cada
 // repaso queda como evento card_reviewed con su estado FSRS antes y después.
-import { BookOpen, CheckCircle2 } from 'lucide-react';
+import { BookOpen, CheckCircle2, Plus, Shuffle } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -39,6 +39,10 @@ import { buildSnapshot } from '../home/snapshot';
 import { CardHtml } from '../shared/CardHtml';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
+import { deckIds } from '@/demo/content/deckEntities';
+import { useDeckCatalog } from '../decks/useDeckCatalog';
+import { ReviewSetup } from './ReviewSetup';
+import { cardMatches, type ReviewMode, type ReviewSelection } from './selection';
 import { latestCardStates, renderCloze, reviewedToday, volumeXpToday } from './study';
 
 type Confidence = 'dont_know' | 'unsure' | 'sure';
@@ -69,7 +73,10 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     ]);
     return { decks, cards, notes };
   }, [api.repos]);
-  if (events === undefined || content === undefined) return <LoadingState />;
+  const catalog = useDeckCatalog();
+  const [selection, setSelection] = useState<ReviewSelection | null>(null);
+  if (events === undefined || content === undefined || catalog === undefined)
+    return <LoadingState />;
   const followed = followedDeckIds(
     session,
     content.decks.map((deck) => deck.id),
@@ -91,15 +98,114 @@ function ReviewLoader({ session }: { session: ReadySession }) {
       </>
     );
   }
+  const deckNames = new Map(content.decks.map((deck) => [deck.id, deck.name]));
+  // Subespecialidad de cada tarjeta, según la nota de su mazo
+  const noteTopic = new Map<string, string | null>();
+  for (const file of catalog)
+    for (const note of file.notes) noteTopic.set(deckIds.note(note.key), note.topic);
+  const topicOfCard = new Map(cards.map((card) => [card.id, noteTopic.get(card.noteId) ?? null]));
+  const config = schedulerConfig(session);
+
+  if (selection === null) {
+    return (
+      <>
+        <ScreenHeader
+          title={t.screens.review.title}
+          description={t.screens.review.description}
+          badges={session.isDemo ? <SimulatedDataLabel /> : undefined}
+          actions={<AddDeckButton />}
+        />
+        <ReviewSetup
+          cards={cards}
+          deckNames={deckNames}
+          topicOfCard={topicOfCard}
+          countFor={(candidate) =>
+            buildQueue({
+              cards: cards.filter((card) =>
+                cardMatches(card, topicOfCard.get(card.id) ?? null, candidate),
+              ),
+              events,
+              config,
+              timeZone: session.user.timeZone,
+              mode: candidate.mode,
+            }).length
+          }
+          onStart={setSelection}
+        />
+      </>
+    );
+  }
   return (
     <ReviewSession
+      key={JSON.stringify([selection.mode, [...selection.decks], [...selection.topics]])}
       session={session}
-      cards={cards}
+      cards={cards.filter((card) => cardMatches(card, topicOfCard.get(card.id) ?? null, selection))}
+      mode={selection.mode}
       notes={content.notes}
-      deckNames={new Map(content.decks.map((deck) => [deck.id, deck.name]))}
+      deckNames={deckNames}
       initialEvents={events}
+      onChangeSelection={() => {
+        setSelection(null);
+      }}
     />
   );
+}
+
+function AddDeckButton() {
+  return (
+    <Button asChild variant="secondary" size="sm">
+      <Link to={screenPath('decks')}>
+        <Plus aria-hidden />
+        {t.reviewSetup.addDeck}
+      </Link>
+    </Button>
+  );
+}
+
+function schedulerConfig(session: ReadySession): SchedulerConfig {
+  const { user, settings } = session;
+  return {
+    desiredRetention: settings.desiredRetention,
+    maxIntervalDays: settings.maxIntervalDays,
+    spacing: settings.spacing,
+    examDate: examDateFor(user),
+    timeZone: user.timeZone,
+    thresholds: {
+      ...DEFAULT_THRESHOLDS.fsrs,
+      newCardsPerDay: settings.newCardsPerDay,
+      reviewsPerDay: settings.reviewsPerDay,
+    },
+  };
+}
+
+/** Cola del día para unas tarjetas y un modo. Repasos vencidos primero y luego las nuevas */
+function buildQueue(input: {
+  cards: CardEntity[];
+  events: AppEvent[];
+  config: SchedulerConfig;
+  timeZone: string;
+  mode: ReviewMode;
+}): string[] {
+  const now = new Date();
+  const states = latestCardStates(input.events);
+  const noteOfCard = new Map(input.cards.map((card) => [card.id, card.noteId]));
+  const daily = buildDailyQueue({
+    cards: input.cards.map((card) => ({
+      cardId: card.id,
+      noteId: card.noteId,
+      state: states.get(card.id) ?? null,
+    })),
+    now,
+    config: input.config,
+    reviewedToday: reviewedToday(input.events, studyDayOf(now, input.timeZone), noteOfCard),
+  });
+  const picked =
+    input.mode === 'due'
+      ? daily.reviews
+      : input.mode === 'new'
+        ? daily.newCards
+        : [...daily.reviews, ...daily.newCards];
+  return picked.map((card) => card.cardId);
 }
 
 function intervalLabel(state: FsrsCardState, now: Date): string {
@@ -112,53 +218,31 @@ function intervalLabel(state: FsrsCardState, now: Date): string {
 function ReviewSession({
   session,
   cards,
+  mode,
   notes,
   deckNames,
   initialEvents,
+  onChangeSelection,
 }: {
   session: ReadySession;
   cards: CardEntity[];
+  mode: ReviewMode;
   notes: Note[];
   deckNames: Map<string, string>;
   initialEvents: AppEvent[];
+  /** Volver a elegir qué repasar. Lo ya calificado queda guardado */
+  onChangeSelection: () => void;
 }) {
   const api = useDataApi();
   const { user, settings } = session;
-  const config: SchedulerConfig = useMemo(
-    () => ({
-      desiredRetention: settings.desiredRetention,
-      maxIntervalDays: settings.maxIntervalDays,
-      spacing: settings.spacing,
-      examDate: examDateFor(user),
-      timeZone: user.timeZone,
-      thresholds: {
-        ...DEFAULT_THRESHOLDS.fsrs,
-        newCardsPerDay: settings.newCardsPerDay,
-        reviewsPerDay: settings.reviewsPerDay,
-      },
-    }),
-    [settings, user],
-  );
+  const config: SchedulerConfig = useMemo(() => schedulerConfig(session), [session]);
   const noteById = useMemo(() => new Map(notes.map((note) => [note.id, note])), [notes]);
   const cardById = useMemo(() => new Map(cards.map((card) => [card.id, card])), [cards]);
 
   // La cola se arma una vez al entrar y no cambia mientras se repasa
-  const [queue, setQueue] = useState<string[]>(() => {
-    const now = new Date();
-    const states = latestCardStates(initialEvents);
-    const noteOfCard = new Map(cards.map((card) => [card.id, card.noteId]));
-    const daily = buildDailyQueue({
-      cards: cards.map((card) => ({
-        cardId: card.id,
-        noteId: card.noteId,
-        state: states.get(card.id) ?? null,
-      })),
-      now,
-      config,
-      reviewedToday: reviewedToday(initialEvents, studyDayOf(now, user.timeZone), noteOfCard),
-    });
-    return [...daily.reviews, ...daily.newCards].map((card) => card.cardId);
-  });
+  const [queue, setQueue] = useState<string[]>(() =>
+    buildQueue({ cards, events: initialEvents, config, timeZone: user.timeZone, mode }),
+  );
   const [states, setStates] = useState(() => latestCardStates(initialEvents));
   const [position, setPosition] = useState(0);
   const [step, setStep] = useState<'confidence' | 'front' | 'back' | 'cause' | 'done'>(
@@ -194,7 +278,7 @@ function ReviewSession({
     );
   };
 
-  const finish = async () => {
+  const finish = async (options: { celebrate?: boolean } = {}) => {
     if (sessionId.current) {
       await api.recordEvent(
         createEvent(
@@ -211,7 +295,7 @@ function ReviewSession({
         ),
       );
       sessionId.current = null;
-      celebrate('session');
+      if (options.celebrate !== false) celebrate('session');
     }
     setStep('done');
   };
@@ -293,7 +377,22 @@ function ReviewSession({
         title={t.screens.review.title}
         description={t.screens.review.description}
         badges={session.isDemo ? <SimulatedDataLabel /> : undefined}
-        actions={<PomodoroPill session={session} />}
+        actions={
+          <>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => {
+                // Lo calificado ya quedó en la bitácora. Solo se cierra la sesión y se vuelve a elegir
+                void finish({ celebrate: false }).then(onChangeSelection);
+              }}
+            >
+              <Shuffle aria-hidden />
+              <span className="hidden sm:inline">{t.reviewSetup.change}</span>
+            </Button>
+            <PomodoroPill session={session} />
+          </>
+        }
       />
       <PomodoroNotice session={session} />
       {study.paused ? (
@@ -323,9 +422,15 @@ function ReviewSession({
               {reviewed > 0 ? t.review.doneBody(reviewed, xpGained) : t.review.nothingDue}
             </CardDescription>
           </CardHeader>
-          <Button asChild className="self-start">
-            <Link to={screenPath('home')}>{t.onboarding.goHome}</Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button onClick={onChangeSelection}>
+              <Shuffle aria-hidden />
+              {t.reviewSetup.other}
+            </Button>
+            <Button asChild variant="secondary">
+              <Link to={screenPath('home')}>{t.onboarding.goHome}</Link>
+            </Button>
+          </div>
         </Card>
       </>
     );
@@ -354,10 +459,7 @@ function ReviewSession({
         </span>
         <span aria-live="polite">{lastXp > 0 ? t.review.xpGained(lastXp) : ''}</span>
       </div>
-      <Card
-        aria-label={t.review.deck(deckNames.get(card.deckId) ?? '')}
-        className="w-full max-w-reading"
-      >
+      <Card aria-label={t.review.deck(deckNames.get(card.deckId) ?? '')} className="w-full">
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <Badge variant={isNew ? 'info' : 'neutral'}>
             {isNew ? t.review.newCard : t.review.reviewCard}
