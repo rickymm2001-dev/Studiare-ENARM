@@ -60,6 +60,18 @@ export interface EntityRepo<T, K extends string = Id> {
   remove(key: K): Promise<void>;
 }
 
+/**
+ * Registros inmutables. Solo se agregan. Lo usan los casos clínicos, porque su viñeta es parte
+ * del contenido de preguntas ya respondidas. Editar una viñeta es agregar un caso nuevo y
+ * versiones nuevas de sus preguntas que apunten a él (6.1)
+ */
+export interface AppendOnlyRepo<T, K extends string = Id> {
+  get(key: K): Promise<T | undefined>;
+  list(): Promise<T[]>;
+  /** Valida con zod y agrega. Falla si el ID ya existe */
+  add(entity: T): Promise<T>;
+}
+
 /** Preguntas con versiones inmutables (6.1). Editar es agregar una versión nueva */
 export interface QuestionRepo {
   get(questionVersionId: Id): Promise<Question | undefined>;
@@ -96,7 +108,7 @@ export interface Repositories {
   decks: EntityRepo<Deck>;
   notes: EntityRepo<Note>;
   cards: EntityRepo<Card>;
-  cases: EntityRepo<ClinicalCase>;
+  cases: AppendOnlyRepo<ClinicalCase>;
   questions: QuestionRepo;
   options: OptionRepo;
   biasLabels: EntityRepo<BiasLabel>;

@@ -1,6 +1,5 @@
 // Contexto y hooks de acceso a datos. El proveedor vive en DataProvider.tsx.
 import { createContext, useContext } from 'react';
-import type { EnarmDb } from './db/database';
 import type { Repositories } from './repos/types';
 import type { AppEvent } from './schemas/events';
 
@@ -12,13 +11,10 @@ export interface DataApi {
   rebuildDerivedState: () => Promise<void>;
 }
 
-export interface DataContextValue extends DataApi {
-  db: EnarmDb;
-}
+/** El contexto solo lleva la API. La base de Dexie queda capturada dentro de recordEvent y rebuild */
+export const DataContext = createContext<DataApi | null>(null);
 
-export const DataContext = createContext<DataContextValue | null>(null);
-
-function useDataContext(): DataContextValue {
+function useDataContext(): DataApi {
   const value = useContext(DataContext);
   if (!value) throw new Error('Los hooks de datos necesitan estar dentro de DataProvider');
   return value;

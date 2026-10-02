@@ -134,6 +134,16 @@ describe('eventRepo, bitácora de solo agregar (4.7)', () => {
     expect(await repo.query({ userId, limit: 1 })).toEqual([first]);
   });
 
+  it('rechaza límites de tiempo en otro formato, que ordenarían mal', async () => {
+    const { repo } = setup();
+    const userId = newId();
+    await expect(repo.query({ userId, to: '2026-10-01T10:00:00Z' })).rejects.toBeInstanceOf(
+      ZodError,
+    );
+    const stream = repo.stream({ userId, from: '2026-10-01T10:00:00.5Z' });
+    await expect(stream[Symbol.asyncIterator]().next()).rejects.toBeInstanceOf(ZodError);
+  });
+
   it('stream recorre todo en orden por páginas, con eventos del mismo milisegundo', async () => {
     const { repo } = setup(3);
     const userId = newId();

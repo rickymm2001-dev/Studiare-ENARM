@@ -2,7 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { storesFor, TABLES, TABLE_NAMES } from '../db/tables';
 import { makeQuestionWithOptions, makeUser, newId } from '../testing/fixtures';
+import { AiArtifactSchema } from './activity';
 import { OptionSchema, QuestionSchema } from './bank';
+import { UtcDateTimeSchema } from './common';
+import { NoteSchema } from './decks';
 import { AppEventSchema, EVENT_TYPES } from './events';
 import { UserSchema, UserSettingsSchema } from './people';
 
@@ -85,6 +88,69 @@ describe('esquemas y tablas', () => {
     const { question } = makeQuestionWithOptions();
     expect(() => QuestionSchema.parse({ ...question, caseId: newId(), caseOrder: null })).toThrow();
     expect(QuestionSchema.parse({ ...question, caseId: newId(), caseOrder: 2 }).caseOrder).toBe(2);
+  });
+
+  it('las fechas UTC usan un solo formato, el de toISOString', () => {
+    const now = new Date('2026-10-01T10:00:00.500Z');
+    expect(UtcDateTimeSchema.parse(now.toISOString())).toBe('2026-10-01T10:00:00.500Z');
+    for (const other of [
+      '2026-10-01T10:00:00Z',
+      '2026-10-01T10:00:00.5Z',
+      '2026-10-01T10:00:00.123456Z',
+      '2026-10-01T10:00:00.000-06:00',
+    ]) {
+      expect(UtcDateTimeSchema.safeParse(other).success, other).toBe(false);
+    }
+  });
+
+  it('un artefacto de IA sale de borrador solo con decisión y validador aprobado (4.1, 4.2)', () => {
+    const draft = {
+      id: newId(),
+      userId: newId(),
+      kind: 'flashcard',
+      status: 'draft',
+      mode: 'mock',
+      model: 'fixture',
+      promptVersion: 'flashcards.v1',
+      content: {},
+      validatorResult: { passed: false, issues: ['cifra sin respaldo'] },
+      sourceIds: [newId()],
+      createdAt: '2026-10-01T10:00:00.000Z',
+      decidedAt: null,
+      decidedBy: null,
+    };
+    expect(AiArtifactSchema.parse(draft).status).toBe('draft');
+    const decided = { ...draft, decidedAt: '2026-10-01T11:00:00.000Z', decidedBy: newId() };
+    expect(() => AiArtifactSchema.parse({ ...draft, status: 'approved' })).toThrow();
+    expect(() => AiArtifactSchema.parse({ ...decided, status: 'approved' })).toThrow();
+    expect(AiArtifactSchema.parse({ ...decided, status: 'rejected' }).status).toBe('rejected');
+    const passed = { ...decided, validatorResult: { passed: true, issues: [] } };
+    expect(AiArtifactSchema.parse({ ...passed, status: 'approved' }).status).toBe('approved');
+  });
+
+  it('una tarjeta generada cita su fuente (4.1)', () => {
+    const note = {
+      id: newId(),
+      deckId: newId(),
+      kind: 'basic',
+      front: 'Frente',
+      back: 'Reverso',
+      tags: [],
+      origin: 'generated',
+      editorialStatus: 'draft',
+      sourceQuote: null,
+      sourceQuestionVersionId: null,
+      isDemo: false,
+      createdAt: '2026-10-01T10:00:00.000Z',
+    };
+    expect(() => NoteSchema.parse(note)).toThrow();
+    const anchored = {
+      ...note,
+      sourceQuote: 'Frase exacta de la explicación',
+      sourceQuestionVersionId: newId(),
+    };
+    expect(NoteSchema.parse(anchored).origin).toBe('generated');
+    expect(NoteSchema.parse({ ...note, origin: 'manual' }).origin).toBe('manual');
   });
 
   it('los esquemas rechazan campos desconocidos', () => {

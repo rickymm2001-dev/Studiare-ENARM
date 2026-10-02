@@ -305,3 +305,14 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - node server/src/main.ts --mock fuerza el modo simulado aunque exista clave. Las pruebas e2e lo usan así
 - La app consulta /api/health y muestra IA real, IA simulada o IA sin conexión en el encabezado y en Perfil. Sin proxy, como en la demo publicada, dice IA simulada
 - El SDK de Anthropic se instala en la Fase D, que es cuando se usa. Al crear el cliente se le pasará la clave de forma explícita para que nunca lea otra variable de entorno
+
+### D-041. Ajustes tras la revisión independiente de la Fase A
+- Fecha 2026-10-02. Origen C
+- Fechas UTC con un solo formato, el de toISOString con milisegundos. La bitácora ordena y filtra comparando texto, así que otro formato del mismo instante quedaría mal ordenado para siempre. Los límites from y to de las consultas se validan igual
+- IDs de eventos con ULID monotónico. Dos eventos del mismo milisegundo, como una respuesta y su XP, conservan su orden al reconstruir
+- Los esquemas hacen cumplir borrador primero y anclaje. Un artefacto de IA solo sale de borrador con quién y cuándo decidió, y solo se aprueba si pasó el validador. Una tarjeta generada siempre cita su frase y su pregunta de origen
+- Los casos clínicos son de solo agregar, como las versiones de pregunta. Editar una viñeta es crear un caso nuevo y versiones nuevas de sus preguntas
+- El contexto de datos ya no lleva la base de Dexie, solo repositorios, recordEvent y rebuildDerivedState. La regla de lint que prohíbe Dexie también cubre src/ai
+- Los motores tienen lista blanca de importaciones. zod, ts-fsrs, date-fns, @date-fns/tz, otros motores, esquemas y configuración. Una prueba sigue las importaciones de forma transitiva
+- El proxy rechaza cualquier Origin que no sea la app (5173 o 4173) y exige JSON en escrituras. Así otra página abierta en el navegador no puede gastar presupuesto cuando exista clave
+- Las e2e nunca reusan un proxy ya abierto, porque podría estar en modo real

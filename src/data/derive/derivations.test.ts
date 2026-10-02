@@ -2,6 +2,7 @@ import 'fake-indexeddb/auto';
 import { afterEach, describe, expect, it } from 'vitest';
 import type { EnarmDb } from '../db/database';
 import { createDexieRepositories } from '../repos/dexie/createRepositories';
+import { createEvent } from '../events/createEvent';
 import { fixedClock, freshDb, makeEvent, newId } from '../testing/fixtures';
 import { recordEvent } from '../usecases/recordEvent';
 import { rebuildDerivedState } from './derivations';
@@ -71,6 +72,27 @@ describe('derivación de estado desde la bitácora', () => {
     const rebuilt = await repos.caches.xp.list();
     expect(rebuilt).toEqual(incremental);
     expect(rebuilt).toHaveLength(2);
+  });
+
+  it('eventos del mismo milisegundo conservan su orden al reconstruir', async () => {
+    const { db, repos } = setup();
+    const userId = newId();
+    const clock = fixedClock();
+    // Sin newId inyectado, como en la app real. El reloj no avanza entre eventos
+    const created = [5, 7, 11, 13, 17, 19].map((amount) =>
+      createEvent(
+        'xp_awarded',
+        { amount, reason: 'mcq_correct', sourceEventId: null },
+        { userId, tz: 'America/Merida', clock },
+      ),
+    );
+    const ids = created.map((event) => event.id);
+    expect([...ids].sort()).toEqual(ids);
+    for (const event of created) await recordEvent(db, repos.events, event);
+    const incremental = await repos.caches.xp.get(userId);
+    await rebuildDerivedState(db);
+    expect(await repos.caches.xp.get(userId)).toEqual(incremental);
+    expect(incremental?.lastEventId).toBe(ids.at(-1));
   });
 
   it('una caché corrupta se repara al reconstruir', async () => {

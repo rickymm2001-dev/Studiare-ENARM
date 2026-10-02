@@ -5,8 +5,12 @@ import { z } from 'zod';
 export const IdSchema = z.ulid();
 export type Id = z.infer<typeof IdSchema>;
 
-/** Momento en UTC como ISO 8601 con Z, por ejemplo 2026-10-01T15:30:00.000Z */
-export const UtcDateTimeSchema = z.iso.datetime();
+/**
+ * Momento en UTC como ISO 8601 con milisegundos y Z, exactamente el formato de toISOString,
+ * por ejemplo 2026-10-01T15:30:00.000Z. Un solo formato hace que el orden del texto sea el orden
+ * en el tiempo, que es como la bitácora ordena y filtra
+ */
+export const UtcDateTimeSchema = z.iso.datetime({ precision: 3 });
 
 /** Fecha de calendario sin hora, por ejemplo 2027-09-14 */
 export const CalendarDateSchema = z.iso.date();

@@ -26,3 +26,7 @@ Thumbs.db
 .idea/
 *.log
 .vitest/
+
+# Estado local de Claude Code
+.claude/scheduled_tasks.lock
+.claude/settings.local.json

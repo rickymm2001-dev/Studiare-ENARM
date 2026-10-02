@@ -3,7 +3,7 @@
 import { Hono } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 import { secureHeaders } from 'hono/secure-headers';
-import { ALLOWED_HOSTNAMES, MAX_BODY_BYTES, PROXY_VERSION } from './config.ts';
+import { ALLOWED_HOSTNAMES, ALLOWED_ORIGINS, MAX_BODY_BYTES, PROXY_VERSION } from './config.ts';
 import type { AiMode } from './env.ts';
 
 export interface HealthResponse {
@@ -30,6 +30,23 @@ export function createApp(options: { mode: AiMode }) {
     const hostname = hostnameOf(c.req.header('host'));
     if (!hostname || !ALLOWED_HOSTNAMES.has(hostname)) {
       return c.json({ error: 'host_not_allowed' }, 403);
+    }
+    return next();
+  });
+
+  // Otra página abierta en el navegador podría llamar al proxy y gastar presupuesto. Se rechaza
+  // todo Origin que no sea la app. Las escrituras además piden JSON, que obliga al navegador a
+  // preguntar antes (preflight) y que la app sí manda (5.3, 8.1)
+  app.use(async (c, next) => {
+    const origin = c.req.header('origin');
+    if (origin !== undefined && !ALLOWED_ORIGINS.has(origin)) {
+      return c.json({ error: 'origin_not_allowed' }, 403);
+    }
+    if (!['GET', 'HEAD'].includes(c.req.method)) {
+      const contentType = c.req.header('content-type')?.toLowerCase() ?? '';
+      if (!contentType.startsWith('application/json')) {
+        return c.json({ error: 'unsupported_media_type' }, 415);
+      }
     }
     return next();
   });

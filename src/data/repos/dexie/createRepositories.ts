@@ -21,6 +21,7 @@ import {
 } from '../../schemas/people';
 import type { Repositories } from '../types';
 import {
+  createDexieAppendOnlyRepo,
   createDexieCacheReader,
   createDexieEntityRepo,
   createDexieOptionRepo,
@@ -39,7 +40,7 @@ export function createDexieRepositories(db: EnarmDb): Repositories {
     decks: createDexieEntityRepo(db.decks, DeckSchema),
     notes: createDexieEntityRepo(db.notes, NoteSchema),
     cards: createDexieEntityRepo(db.cards, CardSchema),
-    cases: createDexieEntityRepo(db.cases, ClinicalCaseSchema),
+    cases: createDexieAppendOnlyRepo(db.cases, ClinicalCaseSchema),
     questions: createDexieQuestionRepo(db),
     options: createDexieOptionRepo(db),
     biasLabels: createDexieEntityRepo(db.biasLabels, BiasLabelSchema),

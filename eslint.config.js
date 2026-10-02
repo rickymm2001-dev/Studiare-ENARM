@@ -6,33 +6,20 @@ import { reactRefresh } from 'eslint-plugin-react-refresh';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-// Lo que un motor puro nunca puede importar (PLAN.md 2.1)
-const ENGINE_FORBIDDEN_IMPORTS = [
-  'react',
-  'react/*',
-  'react-dom',
-  'react-dom/*',
-  'react-router',
-  'react-router/*',
-  'dexie',
-  'dexie-react-hooks',
-  'zustand',
-  'zustand/*',
-  '@/app/*',
-  '@/features/*',
-  '@/data/db/*',
-  '@/data/repos/*',
-  '@/data/usecases/*',
-  '@/ui/*',
-  '@/ai/*',
-  '@/workers/*',
-  '**/app/**',
-  '**/features/**',
-  '**/db/**',
-  '**/repos/**',
-  '**/usecases/**',
-  '**/ui/**',
+// Lo único que un motor puro puede importar (PLAN.md 2.1). Es lista blanca, así una importación
+// nueva que traiga React o Dexie de forma indirecta no se cuela. Debe coincidir con
+// tests/architecture/engine-boundaries.test.ts
+const ENGINE_ALLOWED_IMPORTS = [
+  'zod',
+  'ts-fsrs',
+  'date-fns(?:/.*)?',
+  '@date-fns/tz',
+  String.raw`\./.*`,
+  '@/engines/.*',
+  '@/data/schemas/.*',
+  '@/config/.*',
 ];
+const ENGINE_FORBIDDEN_IMPORT_REGEX = `^(?!(?:${ENGINE_ALLOWED_IMPORTS.join('|')})$).*`;
 
 export default defineConfig([
   globalIgnores([
@@ -95,7 +82,12 @@ export default defineConfig([
 
   // Las pantallas y la app no tocan Dexie directo, solo repositorios y hooks (PLAN.md 2.1)
   {
-    files: ['src/app/**/*.{ts,tsx}', 'src/features/**/*.{ts,tsx}', 'src/ui/**/*.{ts,tsx}'],
+    files: [
+      'src/app/**/*.{ts,tsx}',
+      'src/features/**/*.{ts,tsx}',
+      'src/ui/**/*.{ts,tsx}',
+      'src/ai/**/*.{ts,tsx}',
+    ],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -113,16 +105,16 @@ export default defineConfig([
 
   // Motores puros. Sin React, sin Dexie, sin reloj ni azar del sistema (5, Políticas)
   {
-    files: ['src/engines/**/*.ts'],
+    files: ['src/engines/**/*.{ts,tsx}'],
     rules: {
       'no-restricted-imports': [
         'error',
         {
           patterns: [
             {
-              group: ENGINE_FORBIDDEN_IMPORTS,
+              regex: ENGINE_FORBIDDEN_IMPORT_REGEX,
               message:
-                'Los motores son funciones puras. Reciben datos, reloj y semilla como parámetros.',
+                'Los motores son funciones puras. Solo importan zod, ts-fsrs, date-fns, otros motores, esquemas y configuración.',
             },
           ],
         },

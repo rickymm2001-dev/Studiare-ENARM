@@ -54,28 +54,48 @@ export type Pattern = z.infer<typeof PatternSchema>;
 
 export const AiModeSchema = z.enum(['real', 'mock', 'template']);
 
-export const AiArtifactSchema = z.strictObject({
-  id: IdSchema,
-  /** Alumno al que pertenece. null en artefactos para el médico, como preguntas reestructuradas */
-  userId: IdSchema.nullable(),
-  kind: AiArtifactKindSchema,
-  /** Borrador primero (4.2) */
-  status: z.enum(['draft', 'approved', 'edited', 'rejected']),
-  mode: AiModeSchema,
-  model: z.string().min(1).max(80),
-  promptVersion: z.string().min(1).max(40),
-  /** Contenido validado por el esquema de cada motor en la Fase D */
-  content: JsonRecordSchema,
-  validatorResult: z.strictObject({
-    passed: z.boolean(),
-    issues: z.array(z.string().max(500)).max(50),
-  }),
-  /** IDs del banco que anclan el texto (4.1) */
-  sourceIds: z.array(IdSchema).max(50),
-  createdAt: UtcDateTimeSchema,
-  decidedAt: UtcDateTimeSchema.nullable(),
-  decidedBy: IdSchema.nullable(),
-});
+export const AiArtifactSchema = z
+  .strictObject({
+    id: IdSchema,
+    /** Alumno al que pertenece. null en artefactos para el médico, como preguntas reestructuradas */
+    userId: IdSchema.nullable(),
+    kind: AiArtifactKindSchema,
+    /** Borrador primero (4.2) */
+    status: z.enum(['draft', 'approved', 'edited', 'rejected']),
+    mode: AiModeSchema,
+    model: z.string().min(1).max(80),
+    promptVersion: z.string().min(1).max(40),
+    /** Contenido validado por el esquema de cada motor en la Fase D */
+    content: JsonRecordSchema,
+    validatorResult: z.strictObject({
+      passed: z.boolean(),
+      issues: z.array(z.string().max(500)).max(50),
+    }),
+    /** IDs del banco que anclan el texto (4.1) */
+    sourceIds: z.array(IdSchema).max(50),
+    createdAt: UtcDateTimeSchema,
+    decidedAt: UtcDateTimeSchema.nullable(),
+    decidedBy: IdSchema.nullable(),
+  })
+  // Salir de borrador pide quién decidió y cuándo (4.2)
+  .refine(
+    (artifact) =>
+      artifact.status === 'draft' || (artifact.decidedAt !== null && artifact.decidedBy !== null),
+    {
+      message: 'Una decisión sobre un borrador guarda quién y cuándo',
+      path: ['decidedBy'],
+    },
+  )
+  // Nada que no pasó el validador de anclaje se aprueba (4.1)
+  .refine(
+    (artifact) =>
+      !(artifact.status === 'approved' || artifact.status === 'edited') ||
+      artifact.validatorResult.passed,
+    {
+      message: 'Solo se aprueba lo que pasó el validador',
+      path: ['validatorResult'],
+    },
+  );
 export type AiArtifact = z.infer<typeof AiArtifactSchema>;
 
 export const AiCallLogSchema = z.strictObject({

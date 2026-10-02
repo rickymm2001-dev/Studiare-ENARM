@@ -1,11 +1,20 @@
 // Bitácora con Dexie. Este archivo solo agrega y lee. Una prueba revisa que nunca llame a
 // métodos que editan o borran, además del bloqueo en database.ts.
 import type { EnarmDb } from '../../db/database';
+import { UtcDateTimeSchema } from '../../schemas/common';
 import { AppEventSchema, type AppEvent } from '../../schemas/events';
 import type { EventFilter, EventRepo } from '../types';
 
 const MIN_AT = '0000-01-01T00:00:00.000Z';
 const MAX_AT = '9999-12-31T23:59:59.999Z';
+
+/** Los límites de tiempo usan el mismo formato que los eventos, si no la comparación de texto miente */
+function timeBounds(filter: EventFilter): { from: string; to: string } {
+  return {
+    from: filter.from === undefined ? MIN_AT : UtcDateTimeSchema.parse(filter.from),
+    to: filter.to === undefined ? MAX_AT : UtcDateTimeSchema.parse(filter.to),
+  };
+}
 
 function matches(event: AppEvent, filter: EventFilter): boolean {
   if (filter.types && !filter.types.includes(event.type)) return false;
@@ -31,8 +40,7 @@ export function createDexieEventRepo(db: EnarmDb, options?: { pageSize?: number 
     },
 
     async query(filter) {
-      const from = filter.from ?? MIN_AT;
-      const to = filter.to ?? MAX_AT;
+      const { from, to } = timeBounds(filter);
       const singleType = filter.types?.length === 1 ? filter.types[0] : undefined;
       const candidates = singleType
         ? await db.events.where('[userId+type]').equals([filter.userId, singleType]).toArray()
@@ -46,8 +54,9 @@ export function createDexieEventRepo(db: EnarmDb, options?: { pageSize?: number 
 
     async *stream(filter) {
       // Paginación por llave [userId+at]. Los eventos del mismo milisegundo se distinguen por ID
-      let lowerAt = filter.from ?? MIN_AT;
-      const upperAt = filter.to ?? MAX_AT;
+      const bounds = timeBounds(filter);
+      let lowerAt = bounds.from;
+      const upperAt = bounds.to;
       let seenAtLower = new Set<string>();
       let emitted = 0;
       for (;;) {

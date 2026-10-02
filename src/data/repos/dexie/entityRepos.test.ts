@@ -32,6 +32,20 @@ describe('repositorios de entidades', () => {
     expect(setup('demo').repos.simTruth).not.toBeNull();
   });
 
+  it('los casos clínicos solo se agregan, nunca se editan (6.1)', async () => {
+    const { repos } = setup();
+    expect(Object.keys(repos.cases).sort()).toEqual(['add', 'get', 'list']);
+    const clinicalCase = {
+      id: newId(),
+      vignette: 'Viñeta de prueba',
+      isDemo: true,
+      createdAt: '2026-10-01T15:00:00.000Z',
+    };
+    await repos.cases.add(clinicalCase);
+    await expect(repos.cases.add({ ...clinicalCase, vignette: 'Otra viñeta' })).rejects.toThrow();
+    expect(await repos.cases.get(clinicalCase.id)).toEqual(clinicalCase);
+  });
+
   it('las preguntas se versionan sin reemplazar versiones existentes (6.1)', async () => {
     const { repos } = setup();
     const { question, options } = makeQuestionWithOptions();

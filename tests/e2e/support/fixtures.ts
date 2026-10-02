@@ -24,6 +24,9 @@ export { expect };
 
 /** Cero violaciones serias o críticas de accesibilidad (14.1) */
 export async function expectNoSeriousA11yViolations(page: Page): Promise<void> {
+  // axe falló una vez de forma intermitente en la primera prueba tras el build, con un JSON
+  // incompleto. Se analiza solo cuando la página terminó de cargar y la red está quieta
+  await page.waitForLoadState('networkidle');
   const results = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
     .analyze();

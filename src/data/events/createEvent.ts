@@ -1,6 +1,6 @@
 // Arma un evento con sus campos comunes y lo valida. El reloj y el generador de IDs se
 // inyectan para poder probar de forma determinista.
-import { ulid } from 'ulid';
+import { monotonicFactory } from 'ulid';
 import type { Id } from '../schemas/common';
 import {
   AppEventSchema,
@@ -9,6 +9,12 @@ import {
   type EventPayload,
   type EventType,
 } from '../schemas/events';
+
+/**
+ * ULID monotónico. Dos eventos del mismo milisegundo, como una respuesta y su XP, conservan el
+ * orden en que se crearon, y la bitácora los reproduce igual al reconstruir
+ */
+const nextUlid = monotonicFactory();
 
 export interface Clock {
   now(): Date;
@@ -32,7 +38,7 @@ export function createEvent<T extends EventType>(
   const clock = context.clock ?? systemClock;
   const now = clock.now();
   const candidate = {
-    id: context.newId ? context.newId() : ulid(now.getTime()),
+    id: context.newId ? context.newId() : nextUlid(now.getTime()),
     type,
     userId: context.userId,
     at: now.toISOString(),

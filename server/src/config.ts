@@ -17,4 +17,15 @@ export const MAX_BODY_BYTES = 64 * 1024;
 /** Nombres de host aceptados en el encabezado Host. Frena ataques de DNS rebinding */
 export const ALLOWED_HOSTNAMES = new Set(['127.0.0.1', 'localhost', '[::1]']);
 
+/**
+ * Páginas que pueden llamar al proxy. La app en desarrollo (5173) y en vista previa (4173).
+ * Una petición desde cualquier otro sitio se rechaza aunque llegue por localhost
+ */
+export const ALLOWED_ORIGINS = new Set([
+  'http://127.0.0.1:5173',
+  'http://localhost:5173',
+  'http://127.0.0.1:4173',
+  'http://localhost:4173',
+]);
+
 export const PROXY_VERSION = 1;

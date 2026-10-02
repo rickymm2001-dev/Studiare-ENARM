@@ -49,7 +49,15 @@ export const ClozeNoteSchema = z.strictObject({
   extra: SanitizedHtmlSchema.default(''),
 });
 
-export const NoteSchema = z.discriminatedUnion('kind', [BasicNoteSchema, ClozeNoteSchema]);
+export const NoteSchema = z
+  .discriminatedUnion('kind', [BasicNoteSchema, ClozeNoteSchema])
+  // Una tarjeta generada siempre cita la frase y la pregunta del banco que la respaldan (4.1)
+  .refine(
+    (note) =>
+      note.origin !== 'generated' ||
+      (note.sourceQuote !== null && note.sourceQuestionVersionId !== null),
+    { message: 'Una tarjeta generada cita su fuente', path: ['sourceQuote'] },
+  );
 export type Note = z.infer<typeof NoteSchema>;
 
 export const CardSchema = z.strictObject({

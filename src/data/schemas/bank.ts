@@ -3,7 +3,10 @@
 import { z } from 'zod';
 import { EditorialStatusSchema, IdSchema, TaxonomyKeySchema, UtcDateTimeSchema } from './common';
 
-/** Viñeta clínica compartida por las preguntas de un caso seriado */
+/**
+ * Viñeta clínica compartida por las preguntas de un caso seriado. Es inmutable. Editarla crea
+ * un caso nuevo y versiones nuevas de sus preguntas (6.1)
+ */
 export const ClinicalCaseSchema = z.strictObject({
   id: IdSchema,
   vignette: z.string().min(1).max(8000),

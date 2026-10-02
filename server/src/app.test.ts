@@ -40,6 +40,27 @@ describe('app del proxy', () => {
     }
   });
 
+  it('acepta la app como Origin y rechaza cualquier otro sitio', async () => {
+    const app = createApp({ mode: 'mock' });
+    for (const origin of ['http://127.0.0.1:5173', 'http://localhost:4173']) {
+      const response = await app.request('/health', { headers: { ...LOCAL, origin } });
+      expect(response.status, origin).toBe(200);
+    }
+    for (const origin of ['https://evil.example', 'null', 'http://127.0.0.1:9999']) {
+      const response = await app.request('/health', { headers: { ...LOCAL, origin } });
+      expect(response.status, origin).toBe(403);
+    }
+  });
+
+  it('las escrituras piden JSON para que el navegador no las mande sin preguntar', async () => {
+    const response = await createApp({ mode: 'mock' }).request('/health', {
+      method: 'POST',
+      headers: { ...LOCAL, 'content-type': 'text/plain' },
+      body: 'hola',
+    });
+    expect(response.status).toBe(415);
+  });
+
   it('rechaza peticiones más grandes que el máximo', async () => {
     const response = await createApp({ mode: 'mock' }).request('/health', {
       method: 'POST',

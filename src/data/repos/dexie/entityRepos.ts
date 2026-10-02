@@ -3,7 +3,7 @@ import type { Table } from 'dexie';
 import type { z } from 'zod';
 import type { EnarmDb } from '../../db/database';
 import { OptionSchema, QuestionSchema, type Option, type Question } from '../../schemas/bank';
-import type { CacheReader, EntityRepo, OptionRepo, QuestionRepo } from '../types';
+import type { AppendOnlyRepo, CacheReader, EntityRepo, OptionRepo, QuestionRepo } from '../types';
 
 export function createDexieEntityRepo<T, K extends string>(
   table: Table<T, K>,
@@ -19,6 +19,21 @@ export function createDexieEntityRepo<T, K extends string>(
     },
     async remove(key) {
       await table.delete(key);
+    },
+  };
+}
+
+export function createDexieAppendOnlyRepo<T, K extends string>(
+  table: Table<T, K>,
+  schema: z.ZodType<T>,
+): AppendOnlyRepo<T, K> {
+  return {
+    get: (key) => table.get(key),
+    list: () => table.toArray(),
+    async add(entity) {
+      const parsed = schema.parse(entity);
+      await table.add(parsed);
+      return parsed;
     },
   };
 }
