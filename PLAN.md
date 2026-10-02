@@ -208,8 +208,8 @@ Bloques
 4. behavior, difficulty (Elo) y rasch en Web Worker con Comlink
 5. topics, bias, forgetting y agreement
 6. session, planner, streak, xp y party
-7. Taxonomía de unos 40 temas con subtemas y relación de tema base, taxonomía de sesgos con los 24 de Ricardo (D-029), diccionario de estructura y textos base de consejos marcados pendiente de revisión médica, todo como JSON en src/demo/content
-8. Contenido demo. Hasta 500 preguntas (D-030, número exacto a proponer al empezar la fase) con 10 opciones cada una, al menos 20% negativas o de excepción, al menos 6 casos seriados, y 4 mazos con 200 tarjetas
+7. Taxonomía de unos 40 temas con subtemas y relación de tema base, taxonomía de sesgos con solo los 24 de Ricardo, sin trampas de formato ni Otro (D-029 y D-042), diccionario de estructura y textos base de consejos marcados pendiente de revisión médica, todo como JSON en src/demo/content
+8. Contenido demo. 300 preguntas, 75 por rama, en 6 lotes mezclados de 50 (D-042), con 10 opciones cada una, al menos 20% negativas o de excepción, al menos 6 casos seriados, y 4 mazos con 200 tarjetas
 9. Generador de 300 alumnos simulados con semilla, simulación de FSRS de 90 días, alumno de la demo con 60 días y patrones sembrados (anclaje, mala lectura de negaciones, fatiga después de 40 minutos y Pediatría débil)
 10. Prueba de recuperación de parámetros (14.2) e informe en docs/recovery-report.md
 
@@ -339,7 +339,8 @@ Valores por defecto en src/config/thresholds.ts, editables desde admin (12).
 
 | Riesgo | Efecto | Mitigación |
 |---|---|---|
-| Proyecto dentro de OneDrive | Archivos bloqueados y npm lento | Mover antes de la Fase A (D-002) |
+| Proyecto dentro de OneDrive | Archivos bloqueados y npm lento | Mover antes de la Fase A (D-002). Hecho |
+| Sin repo remoto por ahora (D-042) | Si la computadora falla se pierde el trabajo | Commits por bloque en local y volver a proponer el repo privado al cerrar cada fase |
 | Contenido clínico demo escrito por IA | Un error médico en algo que ven aspirantes | Etiqueta visible, referencias por verificar y revisión por lotes de Ricardo y dos médicos más antes de las pruebas con 5 aspirantes (D-031) |
 | Sin banco real | Las pruebas de usabilidad usan solo contenido demo | Hasta 500 preguntas demo (D-030), plantilla del importador lista en la Fase E y examen sin repetir preguntas (D-012) |
 | Sin clave de API | No hay costo ni latencia reales para comparar con el plan maestro | Bitácora y pantalla de costos listas. Basta agregar la clave |
@@ -353,6 +354,6 @@ Valores por defecto en src/config/thresholds.ts, editables desde admin (12).
 ## 9. Lo que queda pendiente de Ricardo
 
 - Mover la carpeta antes de la Fase A
-- Crear el repo privado o autorizar GitHub CLI en la Fase A
+- Repo privado remoto, pospuesto por Ricardo (D-042)
 - Cuenta gratuita de Cloudflare antes de la Fase F
 - Opcionales sin fecha. Prompt maestro de flashcards, clave de API y banco de opción múltiple

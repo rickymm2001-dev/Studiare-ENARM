@@ -316,3 +316,13 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Los motores tienen lista blanca de importaciones. zod, ts-fsrs, date-fns, @date-fns/tz, otros motores, esquemas y configuración. Una prueba sigue las importaciones de forma transitiva
 - El proxy rechaza cualquier Origin que no sea la app (5173 o 4173) y exige JSON en escrituras. Así otra página abierta en el navegador no puede gastar presupuesto cuando exista clave
 - Las e2e nunca reusan un proxy ya abierto, porque podría estar en modo real
+
+## Fase B
+
+### D-042. Respuestas de Ricardo al aprobar la Fase A
+- Fecha 2026-10-02. Origen R
+- Aprueba la Fase A y pide empezar la Fase B
+- Sesgos de conducta (ajusta D-029). Los sesgos que describen cómo responde el alumno se usan como etiqueta donde aplique y además se miden con las señales de conducta de 7.6, como tiempo, cambios de respuesta, confianza y posición en el examen. Así se detectan aunque ningún distractor los provoque
+- Trampas de formato (ajusta D-029 y 13.1). Se quitan Secuencia y Comisión. La taxonomía son solo los 24 sesgos de Ricardo. Tampoco entra la etiqueta Otro de 13.1, porque Ricardo pidió solo su lista. Si un distractor no encaja en ninguno, se reescribe el distractor
+- Repositorio remoto (ajusta D-003 y D-019). Por ahora el proyecto queda solo local. El respaldo fuera de la computadora queda pendiente y se vuelve a ver después. Es un riesgo anotado en PLAN.md
+- Contenido demo (ajusta D-030). 300 preguntas, 75 por rama, en 6 lotes de 50 para revisar uno a la vez. Cada lote mezcla las 4 ramas con toda la variedad (negativas, casos seriados y todas las tareas), para que desde el primer lote se pueda probar todo. Con 300 se puede armar un examen completo de 280 sin repetir preguntas (D-012)

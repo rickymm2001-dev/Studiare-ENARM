@@ -3,9 +3,33 @@
 ## Estado actual
 
 - Fase 0 aprobada por Ricardo el 2026-10-01
-- Fase A terminada el 2026-10-02, esperando aprobación de Ricardo
-- Siguiente paso. Ricardo revisa el resumen, contesta las preguntas abiertas de la Fase A y aprueba la Fase B
-- No empezar la Fase B sin su aprobación explícita
+- Fase A aprobada por Ricardo el 2026-10-02
+- Fase B en curso desde el 2026-10-02. Ricardo la aprobó junto con la Fase A
+- Bloque terminado más reciente. Ninguno todavía
+- Siguiente paso. Bloque 1 (funciones estadísticas)
+
+## Fase B. Motores núcleo, alumnos simulados y contenido demo
+
+### Respuestas de Ricardo al aprobar la Fase A (D-042)
+- Sesgos de conducta como etiqueta y también medidos con señales de conducta
+- Sin trampas de formato. La taxonomía son solo sus 24 sesgos
+- Repo remoto pospuesto, el proyecto queda solo local
+- 300 preguntas demo, 75 por rama, en 6 lotes mezclados de 50
+- Las preguntas abiertas 1 a 4 de la Fase A quedan contestadas, salvo la confirmación manual de la PWA, que sigue opcional
+
+### Bloques
+- [ ] 1. Funciones estadísticas (Wilson, beta-binomial con empirical Bayes y kappa de Cohen con IC)
+- [ ] 2. fsrs y mcqGrade
+- [ ] 3. sampler, distractors y structure
+- [ ] 4. behavior, difficulty (Elo) y rasch en Web Worker
+- [ ] 5. topics, bias, forgetting y agreement
+- [ ] 6. session, planner, streak, xp y party
+- [ ] 7. Taxonomías y diccionarios en JSON
+- [ ] 8. Contenido demo, 300 preguntas en 6 lotes y 4 mazos con 200 tarjetas
+- [ ] 9. Generador de 300 alumnos simulados y alumno de la demo
+- [ ] 10. Prueba de recuperación de parámetros e informe
+
+### Bitácora por bloque
 
 ## Fase A. Esqueleto, datos y proxy
 
