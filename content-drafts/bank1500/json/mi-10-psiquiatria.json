@@ -1,0 +1,1323 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-10-psiquiatria-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "psychiatry",
+      "subtopic": "depression",
+      "vignette": "Mujer de 35 años que desde hace 6 semanas se siente triste casi todos los días, perdió el interés en sus actividades, duerme mal, perdió 5 kg, se siente culpable y le cuesta concentrarse en el trabajo. Sin consumo de sustancias ni enfermedades médicas. Niega ideas suicidas.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe descartarse, pero el cuadro cumple criterios de depresión."
+        },
+        {
+          "key": "b",
+          "text": "Anorexia nerviosa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la pérdida de peso."
+        },
+        {
+          "key": "c",
+          "text": "Duelo normal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay una pérdida descrita."
+        },
+        {
+          "key": "d",
+          "text": "Trastorno bipolar tipo I",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay episodios de manía."
+        },
+        {
+          "key": "e",
+          "text": "Trastorno distímico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También da ánimo bajo, pero es más leve y de al menos 2 años."
+        },
+        {
+          "key": "f",
+          "text": "Trastorno de ansiedad generalizada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el insomnio y la falta de concentración."
+        },
+        {
+          "key": "g",
+          "text": "Simple cansancio laboral",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que es solo agotamiento."
+        },
+        {
+          "key": "h",
+          "text": "Trastorno de adaptación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena relacionado con el estrés, pero cumple criterios de depresión mayor."
+        },
+        {
+          "key": "i",
+          "text": "Esquizofrenia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay síntomas psicóticos."
+        },
+        {
+          "key": "j",
+          "text": "Trastorno depresivo mayor",
+          "correct": true,
+          "rationale": "Cinco o más síntomas por más de 2 semanas, incluidos ánimo deprimido y anhedonia, con deterioro funcional."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "El trastorno depresivo mayor se diagnostica con al menos cinco síntomas durante dos semanas o más, uno de los cuales debe ser ánimo deprimido o pérdida de interés o placer. Los otros incluyen cambios en el apetito o el peso, insomnio o hipersomnia, agitación o enlentecimiento psicomotor, fatiga, sentimientos de inutilidad o culpa, dificultad para concentrarse e ideas recurrentes de muerte o suicidio. Debe causar deterioro funcional y no deberse a sustancias o a una enfermedad médica. Siempre se debe evaluar el riesgo suicida y descartar trastorno bipolar. Las escalas como PHQ 9 ayudan al tamizaje y seguimiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto"
+      ]
+    },
+    {
+      "key": "mi-10-psiquiatria-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "psychiatry",
+      "subtopic": "depression",
+      "vignette": "Hombre de 40 años con trastorno depresivo mayor moderado. Sin ideas suicidas ni síntomas psicóticos. Sin enfermedades médicas.",
+      "prompt": "¿Cuál es el tratamiento farmacológico de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Un inhibidor selectivo de la recaptura de serotonina, como sertralina o escitalopram",
+          "correct": true,
+          "rationale": "Son de primera línea por su eficacia y tolerancia."
+        },
+        {
+          "key": "b",
+          "text": "Amitriptilina como primera opción",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en lo clásico, con más efectos adversos y riesgo en sobredosis."
+        },
+        {
+          "key": "c",
+          "text": "Terapia electroconvulsiva",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para depresión grave, psicótica o refractaria."
+        },
+        {
+          "key": "d",
+          "text": "Suplementos herbales como hipérico sin supervisión",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Tienen interacciones importantes."
+        },
+        {
+          "key": "e",
+          "text": "Solo recomendaciones de ejercicio sin tratamiento formal",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Es útil como complemento, pero insuficiente en depresión moderada."
+        },
+        {
+          "key": "f",
+          "text": "Benzodiacepinas como tratamiento principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Alivian ansiedad, pero no tratan la depresión y generan dependencia."
+        },
+        {
+          "key": "g",
+          "text": "Litio como fármaco inicial",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es estabilizador del ánimo y se usa como potenciador."
+        },
+        {
+          "key": "h",
+          "text": "Evitar antidepresivos por miedo a dependencia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Los antidepresivos no causan adicción."
+        },
+        {
+          "key": "i",
+          "text": "Inhibidor de la monoaminooxidasa de inicio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Tiene muchas interacciones."
+        },
+        {
+          "key": "j",
+          "text": "Antipsicótico atípico solo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena potente, pero se usa como potenciador."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "f"
+      ],
+      "explanation": "En el trastorno depresivo mayor moderado a grave, el tratamiento combina psicoterapia, como la terapia cognitivo conductual, y antidepresivos. Los inhibidores selectivos de la recaptura de serotonina, como sertralina, escitalopram o fluoxetina, son de primera línea por su eficacia, perfil de efectos adversos favorable y seguridad en sobredosis. Su efecto aparece en dos a cuatro semanas, y se valora la respuesta a las cuatro a seis semanas. Tras la remisión se continúa al menos seis a doce meses para prevenir recaídas. Al inicio puede aumentar la ansiedad, y en jóvenes se vigila la ideación suicida.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto"
+      ]
+    },
+    {
+      "key": "mi-10-psiquiatria-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "psychiatry",
+      "subtopic": "depression",
+      "vignette": "Mujer de 52 años con depresión. Refiere que ha pensado en quitarse la vida, tiene un plan de tomar todos sus medicamentos y ayer escribió cartas de despedida. Vive sola.",
+      "prompt": "¿Cuál es la conducta a seguir?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Evitar preguntar más para no inducir la idea",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Preguntar no induce el suicidio."
+        },
+        {
+          "key": "b",
+          "text": "Hacerle firmar un contrato de no suicidio y enviarla a casa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena protector, pero no tiene eficacia demostrada."
+        },
+        {
+          "key": "c",
+          "text": "Iniciar antidepresivo y citar en un mes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el tratamiento ambulatorio pese a riesgo alto."
+        },
+        {
+          "key": "d",
+          "text": "Esperar a que llegue un familiar para decidir",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasa una medida urgente."
+        },
+        {
+          "key": "e",
+          "text": "Dar benzodiacepina para que duerma mejor",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No reduce el riesgo inmediato."
+        },
+        {
+          "key": "f",
+          "text": "Electroconvulsivoterapia ambulatoria inmediata",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es la primera medida."
+        },
+        {
+          "key": "g",
+          "text": "Mantener su tratamiento actual sin cambios",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Ignora el riesgo."
+        },
+        {
+          "key": "h",
+          "text": "Referirla a psicología sin urgencia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Subestima el riesgo."
+        },
+        {
+          "key": "i",
+          "text": "Considerar que si habla del suicidio no lo hará",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Cree en un mito peligroso."
+        },
+        {
+          "key": "j",
+          "text": "Hospitalización psiquiátrica urgente con vigilancia continua y retirar medios letales",
+          "correct": true,
+          "rationale": "Riesgo suicida alto con plan, método y preparativos."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "La evaluación del riesgo suicida es obligatoria en todo paciente con depresión. Los factores de alto riesgo incluyen ideación con plan estructurado, acceso a medios letales, intentos previos, preparativos como cartas o despedidas, desesperanza, consumo de sustancias, aislamiento social, enfermedad crónica y edad avanzada en hombres. Preguntar directamente por ideas suicidas no las induce. Un paciente con plan, método disponible y preparativos tiene riesgo alto y requiere hospitalización psiquiátrica urgente, involuntaria si es necesario, con vigilancia continua y retiro de medios letales. Los contratos de no suicidio no son eficaces.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto",
+        "Guía de Práctica Clínica de prevención, detección y manejo de la conducta suicida"
+      ]
+    },
+    {
+      "key": "mi-10-psiquiatria-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "psychiatry",
+      "subtopic": "depression",
+      "vignette": "Hombre de 45 años que toma sertralina. Se agregó tramadol por dolor lumbar. Al día siguiente presenta agitación, diaforesis, temblor, fiebre de 39 grados, diarrea, hiperreflexia y clonus inducible en extremidades inferiores.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome serotoninérgico",
+          "correct": true,
+          "rationale": "Agitación, hipertermia, diarrea, hiperreflexia y clonus tras combinar fármacos serotoninérgicos."
+        },
+        {
+          "key": "b",
+          "text": "Hipertermia maligna",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a hipertermia por fármacos, pero ocurre con anestésicos."
+        },
+        {
+          "key": "c",
+          "text": "Reacción alérgica al tramadol",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo efecto agudo es alergia."
+        },
+        {
+          "key": "d",
+          "text": "Intoxicación anticolinérgica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da piel seca y midriasis, no diarrea ni clonus."
+        },
+        {
+          "key": "e",
+          "text": "Infección del sistema nervioso central",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la fiebre e ignora la relación farmacológica."
+        },
+        {
+          "key": "f",
+          "text": "Síndrome neuroléptico maligno",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Comparte fiebre y alteración mental, pero tiene rigidez en tubo de plomo, bradirreflexia y evolución lenta."
+        },
+        {
+          "key": "g",
+          "text": "Gastroenteritis aguda",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la diarrea."
+        },
+        {
+          "key": "h",
+          "text": "Abstinencia de alcohol",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Comparte agitación y temblor, pero no hay consumo ni clonus."
+        },
+        {
+          "key": "i",
+          "text": "Crisis de ansiedad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye un trastorno psiquiátrico sin fiebre explicada."
+        },
+        {
+          "key": "j",
+          "text": "Tormenta tiroidea",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable sin antecedente tiroideo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "h"
+      ],
+      "explanation": "El síndrome serotoninérgico se produce por exceso de serotonina, generalmente al combinar fármacos serotoninérgicos, como antidepresivos inhibidores de la recaptura, inhibidores de la monoaminooxidasa, tramadol, linezolid, triptanos o metoclopramida. Inicia en horas y se caracteriza por la tríada de alteración del estado mental, hiperactividad autonómica con taquicardia, hipertermia, diaforesis y diarrea, y anomalías neuromusculares, como hiperreflexia, mioclonías y clonus, más marcados en extremidades inferiores. Se diagnostica con los criterios de Hunter. El tratamiento es suspender los fármacos, soporte, benzodiacepinas y, en casos moderados a graves, ciproheptadina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto"
+      ]
+    },
+    {
+      "key": "mi-10-psiquiatria-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "psychiatry",
+      "subtopic": "depression",
+      "vignette": "Mujer de 30 años con episodios de depresión. Hace un año tuvo un periodo de 10 días en que durmió 3 horas por noche sin sentirse cansada, gastó todos sus ahorros, hablaba sin parar, tenía ideas de grandeza y fue hospitalizada.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Trastorno bipolar tipo II",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También alterna con depresión, pero con hipomanía sin hospitalización ni deterioro grave."
+        },
+        {
+          "key": "b",
+          "text": "Esquizofrenia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay síntomas psicóticos persistentes fuera de los episodios."
+        },
+        {
+          "key": "c",
+          "text": "Personalidad extrovertida",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la manía es un rasgo."
+        },
+        {
+          "key": "d",
+          "text": "Consumo de cocaína",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la euforia sin evidencia de consumo."
+        },
+        {
+          "key": "e",
+          "text": "Trastorno límite de la personalidad",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da inestabilidad, pero no episodios de manía de días."
+        },
+        {
+          "key": "f",
+          "text": "Trastorno por déficit de atención del adulto",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a hiperactividad, pero no da episodios definidos."
+        },
+        {
+          "key": "g",
+          "text": "Ciclotimia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye una forma leve pese a la manía grave."
+        },
+        {
+          "key": "h",
+          "text": "Trastorno depresivo mayor recurrente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la depresión y omite la manía."
+        },
+        {
+          "key": "i",
+          "text": "Hipertiroidismo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No relaciona los episodios."
+        },
+        {
+          "key": "j",
+          "text": "Trastorno bipolar tipo I",
+          "correct": true,
+          "rationale": "Un episodio de manía con hospitalización basta para el diagnóstico."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "El trastorno bipolar tipo I se define por al menos un episodio maníaco, que dura una semana o más o requiere hospitalización, con ánimo elevado o irritable y aumento de energía, más síntomas como grandiosidad, menor necesidad de dormir, verborrea, fuga de ideas, distraibilidad, aumento de la actividad y conductas de riesgo. Los episodios depresivos son frecuentes pero no necesarios para el diagnóstico. En el tipo II hay hipomanía, más breve y sin deterioro grave. Es importante identificar la bipolaridad antes de dar antidepresivos solos, porque pueden desencadenar manía. El tratamiento usa estabilizadores como litio o antipsicóticos atípicos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno bipolar"
+      ]
+    },
+    {
+      "key": "mi-10-psiquiatria-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "psychiatry",
+      "subtopic": "depression",
+      "vignette": "Mujer de 38 años con trastorno bipolar en tratamiento con litio. Inició un diurético tiazídico y un AINE. Presenta temblor grueso, vómito, diarrea, ataxia y confusión. Litemia de 2.6 mEq/L.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Gastroenteritis viral",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Explica los síntomas digestivos, pero no la ataxia ni la litemia."
+        },
+        {
+          "key": "b",
+          "text": "Evento vascular cerebral de fosa posterior",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye sin considerar la litemia."
+        },
+        {
+          "key": "c",
+          "text": "Intoxicación por litio",
+          "correct": true,
+          "rationale": "Litemia elevada con síntomas neurológicos y digestivos, favorecida por tiazida y AINE."
+        },
+        {
+          "key": "d",
+          "text": "Ansiedad por la enfermedad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que los síntomas son emocionales."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome serotoninérgico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Comparte temblor y confusión, pero no hay fármacos serotoninérgicos."
+        },
+        {
+          "key": "f",
+          "text": "Encefalopatía hepática",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la confusión."
+        },
+        {
+          "key": "g",
+          "text": "Diabetes insípida nefrogénica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es otro efecto del litio que da poliuria, no este cuadro."
+        },
+        {
+          "key": "h",
+          "text": "Recaída maníaca",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la enfermedad de base."
+        },
+        {
+          "key": "i",
+          "text": "Efecto adverso esperado y leve del litio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena benigno, pero la litemia es tóxica."
+        },
+        {
+          "key": "j",
+          "text": "Hipotiroidismo por litio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un efecto crónico, no este cuadro agudo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "El litio tiene un margen terapéutico estrecho, con niveles terapéuticos de 0.6 a 1.2 mEq/L. Su eliminación es renal, y los diuréticos tiazídicos, los AINE, los IECA, la deshidratación y la insuficiencia renal aumentan sus niveles. La intoxicación produce síntomas digestivos, como náusea, vómito y diarrea, y neurológicos, como temblor grueso, ataxia, disartria, confusión, convulsiones y coma, además de arritmias. El tratamiento incluye suspender el litio, hidratación con solución salina, corregir electrolitos y hemodiálisis en casos graves, como litemia mayor de 4 mEq/L o mayor de 2.5 con síntomas graves o insuficiencia renal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno bipolar"
+      ]
+    },
+    {
+      "key": "mi-10-psiquiatria-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "psychiatry",
+      "subtopic": "anxiety_disorders",
+      "vignette": "Mujer de 33 años que desde hace 1 año se preocupa en exceso casi todos los días por el trabajo, la salud de su familia y el dinero. Le cuesta controlar la preocupación, está inquieta, tensa, se cansa fácil, duerme mal y está irritable.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fobia social",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena ansioso, pero se limita a situaciones sociales."
+        },
+        {
+          "key": "b",
+          "text": "Trastorno depresivo mayor",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el insomnio y la fatiga sin ánimo deprimido central."
+        },
+        {
+          "key": "c",
+          "text": "Trastorno obsesivo compulsivo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da preocupaciones, pero con obsesiones y compulsiones."
+        },
+        {
+          "key": "d",
+          "text": "Trastorno de adaptación",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El cuadro dura más de 6 meses y no hay un desencadenante."
+        },
+        {
+          "key": "e",
+          "text": "Insomnio primario",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el sueño."
+        },
+        {
+          "key": "f",
+          "text": "Hipertiroidismo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe descartarse, pero el cuadro es de ansiedad generalizada."
+        },
+        {
+          "key": "g",
+          "text": "Trastorno de pánico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También es ansioso, pero con crisis súbitas recurrentes y miedo a nuevas crisis."
+        },
+        {
+          "key": "h",
+          "text": "Nerviosismo normal por su personalidad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que es un rasgo y no un trastorno."
+        },
+        {
+          "key": "i",
+          "text": "Trastorno de estrés postraumático",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay un evento traumático."
+        },
+        {
+          "key": "j",
+          "text": "Trastorno de ansiedad generalizada",
+          "correct": true,
+          "rationale": "Preocupación excesiva y difícil de controlar por más de 6 meses con síntomas físicos."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "El trastorno de ansiedad generalizada se caracteriza por ansiedad y preocupación excesivas, difíciles de controlar, sobre diversos temas, la mayoría de los días durante al menos seis meses, acompañadas de tres o más síntomas, como inquietud, fatiga, dificultad para concentrarse, irritabilidad, tensión muscular y alteraciones del sueño. Causa malestar y deterioro funcional. Se deben descartar causas médicas, como hipertiroidismo, y sustancias, como cafeína. El tratamiento de primera línea combina terapia cognitivo conductual e inhibidores selectivos de la recaptura de serotonina o de serotonina y noradrenalina. Las benzodiacepinas se usan solo a corto plazo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto"
+      ]
+    },
+    {
+      "key": "mi-10-psiquiatria-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "psychiatry",
+      "subtopic": "anxiety_disorders",
+      "vignette": "Hombre de 28 años que acude a urgencias por tercera vez en el mes por episodios súbitos de palpitaciones, dolor torácico, sensación de ahogo, temblor, mareo y miedo a morir, que llegan a su máximo en 10 minutos. Electrocardiogramas y troponinas normales. Ahora evita salir solo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Trastorno de pánico con agorafobia",
+          "correct": true,
+          "rationale": "Crisis de angustia recurrentes inesperadas con evitación."
+        },
+        {
+          "key": "b",
+          "text": "Fobia específica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a miedo, pero las crisis son inesperadas."
+        },
+        {
+          "key": "c",
+          "text": "Trastorno de ansiedad generalizada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la ansiedad, pero aquí hay crisis súbitas."
+        },
+        {
+          "key": "d",
+          "text": "Simulación para obtener atención",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el paciente finge."
+        },
+        {
+          "key": "e",
+          "text": "Asma",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la sensación de ahogo."
+        },
+        {
+          "key": "f",
+          "text": "Arritmia paroxística",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Debe descartarse, pero los estudios son normales."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome coronario agudo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da dolor torácico, pero los estudios son normales repetidamente."
+        },
+        {
+          "key": "h",
+          "text": "Hipoglucemia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No relaciona el patrón de crisis."
+        },
+        {
+          "key": "i",
+          "text": "Hipertiroidismo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye sin datos tiroideos."
+        },
+        {
+          "key": "j",
+          "text": "Feocromocitoma",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es raro."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "g"
+      ],
+      "explanation": "El trastorno de pánico se caracteriza por crisis de angustia recurrentes e inesperadas, que alcanzan su máxima intensidad en minutos, con síntomas como palpitaciones, sudoración, temblor, disnea, dolor torácico, náusea, mareo, parestesias, desrealización y miedo a perder el control o a morir, seguidas de al menos un mes de preocupación por nuevas crisis o cambios conductuales. Puede acompañarse de agorafobia. Es frecuente que los pacientes consulten repetidamente en urgencias. Tras descartar causas médicas, el tratamiento de primera línea es terapia cognitivo conductual e inhibidores selectivos de la recaptura de serotonina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto"
+      ]
+    },
+    {
+      "key": "mi-10-psiquiatria-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "psychiatry",
+      "subtopic": "anxiety_disorders",
+      "vignette": "Mujer de 36 años con trastorno de ansiedad generalizada de 2 años que interfiere con su trabajo. Sin consumo de sustancias.",
+      "prompt": "¿Cuál es el tratamiento farmacológico de elección a largo plazo?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sin tratamiento hasta que empeore",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Mantiene el deterioro funcional."
+        },
+        {
+          "key": "b",
+          "text": "Alprazolam a demanda como único tratamiento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena práctico, pero genera dependencia y rebote."
+        },
+        {
+          "key": "c",
+          "text": "Infusiones relajantes como tratamiento suficiente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que bastan."
+        },
+        {
+          "key": "d",
+          "text": "Propranolol como tratamiento principal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en los síntomas físicos, útil solo en ansiedad de desempeño."
+        },
+        {
+          "key": "e",
+          "text": "Hidroxicina como tratamiento de mantenimiento único",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es una opción de segunda línea."
+        },
+        {
+          "key": "f",
+          "text": "Evitar antidepresivos por el estigma",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pierde un tratamiento eficaz."
+        },
+        {
+          "key": "g",
+          "text": "Clonazepam diario de forma indefinida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Causa dependencia, tolerancia y deterioro cognitivo."
+        },
+        {
+          "key": "h",
+          "text": "Electroconvulsivoterapia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "i",
+          "text": "Antipsicótico típico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "j",
+          "text": "Inhibidor selectivo de la recaptura de serotonina, como escitalopram o sertralina, junto con psicoterapia",
+          "correct": true,
+          "rationale": "Son eficaces y no causan dependencia."
+        }
+      ],
+      "canonical": [
+        "d",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El tratamiento de los trastornos de ansiedad combina psicoterapia, sobre todo la terapia cognitivo conductual, y fármacos. Los inhibidores selectivos de la recaptura de serotonina y los inhibidores de la recaptura de serotonina y noradrenalina, como venlafaxina o duloxetina, son de primera línea a largo plazo. Su efecto ansiolítico tarda varias semanas, y al inicio pueden aumentar la ansiedad, por lo que se inician a dosis bajas. Las benzodiacepinas pueden usarse a corto plazo mientras actúa el antidepresivo, pero no se recomiendan a largo plazo por la dependencia, la tolerancia y el riesgo de caídas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto"
+      ]
+    },
+    {
+      "key": "mi-10-psiquiatria-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "psychiatry",
+      "subtopic": "anxiety_disorders",
+      "vignette": "Mujer de 26 años que hace 3 meses sufrió un asalto con arma. Desde entonces tiene recuerdos intrusivos, pesadillas, evita la calle donde ocurrió, está siempre alerta, se sobresalta fácilmente y se siente desconectada.",
+      "prompt": "¿Cuál es el factor de riesgo indispensable en su cuadro?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tener ideas suicidas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es un criterio."
+        },
+        {
+          "key": "b",
+          "text": "Ser hombre",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un requisito y es más frecuente en mujeres."
+        },
+        {
+          "key": "c",
+          "text": "Insomnio crónico previo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el sueño."
+        },
+        {
+          "key": "d",
+          "text": "Antecedente de depresión",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "e",
+          "text": "La exposición a un evento traumático real o amenazante, compatible con trastorno de estrés postraumático",
+          "correct": true,
+          "rationale": "El evento traumático es criterio indispensable."
+        },
+        {
+          "key": "f",
+          "text": "Debilidad de carácter",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que depende del carácter."
+        },
+        {
+          "key": "g",
+          "text": "Consumo de alcohol posterior",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede ser comorbilidad, no requisito."
+        },
+        {
+          "key": "h",
+          "text": "Que haya tenido lesiones físicas graves",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena necesario, pero no se requiere."
+        },
+        {
+          "key": "i",
+          "text": "Antecedente familiar de ansiedad",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es un factor de riesgo, no un criterio necesario."
+        },
+        {
+          "key": "j",
+          "text": "Duración menor de un mes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el estrés agudo, que dura menos de un mes."
+        }
+      ],
+      "canonical": [
+        "e",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El trastorno de estrés postraumático requiere la exposición a un evento traumático, como muerte real o amenaza, lesión grave o violencia sexual, de forma directa, presenciada o al conocer que le ocurrió a alguien cercano. Los síntomas incluyen reexperimentación con recuerdos intrusivos, pesadillas o flashbacks, evitación de estímulos asociados, alteraciones negativas del ánimo y la cognición, e hiperactivación, como hipervigilancia, sobresalto e insomnio, durante más de un mes y con deterioro funcional. Si dura menos de un mes se llama trastorno de estrés agudo. El tratamiento de primera línea es la psicoterapia centrada en el trauma y los inhibidores de la recaptura de serotonina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno de estrés postraumático"
+      ]
+    },
+    {
+      "key": "mi-10-psiquiatria-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "psychiatry",
+      "subtopic": "substance_use",
+      "vignette": "Hombre de 50 años con consumo diario de alcohol, hospitalizado por una fractura. A las 48 horas de su último trago presenta temblor, diaforesis, taquicardia, hipertensión, agitación y alucinaciones visuales. Está desorientado.",
+      "prompt": "¿Cuál es el tratamiento inicial?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Naltrexona",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es para mantener la abstinencia, no para la abstinencia aguda."
+        },
+        {
+          "key": "b",
+          "text": "Disulfiram en la fase aguda",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Causa reacción grave con alcohol y no trata la abstinencia."
+        },
+        {
+          "key": "c",
+          "text": "Solución glucosada primero para la energía antes de la tiamina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena nutritivo, pero puede precipitar encefalopatía de Wernicke."
+        },
+        {
+          "key": "d",
+          "text": "Haloperidol como tratamiento único",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la agitación, pero baja el umbral convulsivo y no trata la abstinencia."
+        },
+        {
+          "key": "e",
+          "text": "Benzodiacepinas, como diazepam o lorazepam, y tiamina intravenosa antes de la glucosa",
+          "correct": true,
+          "rationale": "Corresponde a abstinencia alcohólica grave con delirium."
+        },
+        {
+          "key": "f",
+          "text": "Evitar benzodiacepinas por riesgo de dependencia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son el tratamiento de elección en este escenario."
+        },
+        {
+          "key": "g",
+          "text": "Intubación inmediata en todos los casos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para casos refractarios."
+        },
+        {
+          "key": "h",
+          "text": "Sujeción mecánica sin fármacos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No trata el cuadro y aumenta riesgos."
+        },
+        {
+          "key": "i",
+          "text": "Dar alcohol para calmar la abstinencia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es un tratamiento médico adecuado."
+        },
+        {
+          "key": "j",
+          "text": "Observar sin tratamiento porque es esperado",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "El delirium tremens tiene alta mortalidad."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "e",
+        "i"
+      ],
+      "explanation": "El síndrome de abstinencia alcohólica aparece entre 6 y 24 horas después del último consumo, con temblor, ansiedad, diaforesis, taquicardia, hipertensión, náusea e insomnio. Puede haber crisis convulsivas entre las 12 y 48 horas y alucinosis. El delirium tremens aparece entre las 48 y 96 horas, con alteración del estado de alerta, desorientación, alucinaciones e hiperactividad autonómica grave, y tiene mortalidad importante. El tratamiento de elección son las benzodiacepinas, guiadas por escalas como CIWA Ar. Se administra tiamina intravenosa antes de la glucosa para prevenir la encefalopatía de Wernicke, además de hidratación y corrección de electrolitos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, detección y tratamiento del consumo de alcohol",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de abstinencia alcohólica"
+      ]
+    },
+    {
+      "key": "mi-10-psiquiatria-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "psychiatry",
+      "subtopic": "substance_use",
+      "vignette": "Hombre de 55 años con alcoholismo crónico y desnutrición. Presenta confusión, marcha atáxica y movimientos oculares anormales con nistagmo y parálisis del VI par bilateral.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de Korsakoff",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es la secuela crónica con amnesia y confabulación."
+        },
+        {
+          "key": "b",
+          "text": "Esclerosis múltiple",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es poco probable."
+        },
+        {
+          "key": "c",
+          "text": "Neuropatía alcohólica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la ataxia."
+        },
+        {
+          "key": "d",
+          "text": "Intoxicación alcohólica aguda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el alcohol, pero la oftalmoplejía no corresponde."
+        },
+        {
+          "key": "e",
+          "text": "Evento vascular cerebral del tallo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe considerarse, pero el contexto sugiere déficit de tiamina."
+        },
+        {
+          "key": "f",
+          "text": "Encefalopatía de Wernicke",
+          "correct": true,
+          "rationale": "Tríada de confusión, ataxia y oftalmoplejía por déficit de tiamina."
+        },
+        {
+          "key": "g",
+          "text": "Hematoma subdural crónico",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Debe descartarse, pero no explica la oftalmoplejía bilateral."
+        },
+        {
+          "key": "h",
+          "text": "Demencia por la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que es deterioro normal."
+        },
+        {
+          "key": "i",
+          "text": "Encefalopatía hepática",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da confusión, pero no oftalmoplejía."
+        },
+        {
+          "key": "j",
+          "text": "Delirium tremens",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a complicación del alcohol, pero aparece con abstinencia e hiperactividad autonómica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "f",
+        "i"
+      ],
+      "explanation": "La encefalopatía de Wernicke es una urgencia neurológica causada por deficiencia de tiamina, frecuente en alcoholismo crónico, desnutrición, hiperémesis, cirugía bariátrica y vómitos prolongados. Su tríada clásica es confusión, ataxia y oftalmoplejía con nistagmo, aunque la tríada completa se presenta en una minoría. El diagnóstico es clínico y el tratamiento no debe retrasarse, con tiamina intravenosa en dosis altas antes de administrar glucosa, porque la glucosa sin tiamina puede precipitarla o empeorarla. Sin tratamiento puede evolucionar al síndrome de Korsakoff, con amnesia anterógrada y confabulación, frecuentemente irreversible.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, detección y tratamiento del consumo de alcohol"
+      ]
+    },
+    {
+      "key": "mi-10-psiquiatria-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "psychiatry",
+      "subtopic": "substance_use",
+      "vignette": "Hombre de 24 años traído por amigos tras una fiesta. Está somnoliento, con frecuencia respiratoria de 6 por minuto, saturación de 84% y pupilas puntiformes.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Asegurar la vía aérea y ventilar con bolsa válvula mascarilla, y administrar naloxona",
+          "correct": true,
+          "rationale": "Intoxicación por opioides con depresión respiratoria."
+        },
+        {
+          "key": "b",
+          "text": "Evitar la naloxona por miedo a la abstinencia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo de muerte es mayor."
+        },
+        {
+          "key": "c",
+          "text": "Lavado gástrico inmediato",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es la prioridad y aumenta el riesgo de aspiración."
+        },
+        {
+          "key": "d",
+          "text": "Solicitar perfil toxicológico antes de actuar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retrasa el tratamiento urgente."
+        },
+        {
+          "key": "e",
+          "text": "Estimulación dolorosa como tratamiento principal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que despertarlo basta."
+        },
+        {
+          "key": "f",
+          "text": "Carbón activado por vía oral",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena antitóxico, pero el paciente no protege su vía aérea."
+        },
+        {
+          "key": "g",
+          "text": "Hemodiálisis urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "Observar hasta que despierte solo",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Riesgo de paro respiratorio."
+        },
+        {
+          "key": "i",
+          "text": "Atropina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se usa en intoxicación por organofosforados."
+        },
+        {
+          "key": "j",
+          "text": "Flumazenil intravenoso",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en las benzodiacepinas y puede causar convulsiones."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "La intoxicación por opioides se reconoce por la tríada de depresión del estado de alerta, depresión respiratoria y miosis puntiforme. La prioridad es la vía aérea y la ventilación, con bolsa válvula mascarilla y oxígeno, seguida de naloxona, un antagonista que revierte los efectos de los opioides. Puede darse por vía intravenosa, intramuscular o intranasal, en dosis tituladas para restablecer la respiración sin desencadenar abstinencia grave. Su efecto dura menos que muchos opioides, por lo que se requiere vigilancia prolongada y a veces infusión. El fentanilo ilícito es una causa creciente de sobredosis en el norte de México.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la intoxicación por opioides"
+      ]
+    },
+    {
+      "key": "mi-10-psiquiatria-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "psychiatry",
+      "subtopic": "substance_use",
+      "vignette": "Hombre de 42 años que acude a revisión. Refiere tomar 6 a 8 cervezas cada fin de semana. No se considera alcohólico.",
+      "prompt": "¿Cuál es la herramienta de tamizaje recomendada para detectar consumo de riesgo de alcohol?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Alcoholemia en la consulta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que mide el patrón de consumo."
+        },
+        {
+          "key": "b",
+          "text": "Escala de Glasgow",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Mide el estado de alerta."
+        },
+        {
+          "key": "c",
+          "text": "Considerar que el consumo de fin de semana es normal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Ignora el consumo excesivo episódico."
+        },
+        {
+          "key": "d",
+          "text": "Biopsia hepática",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es tamizaje."
+        },
+        {
+          "key": "e",
+          "text": "Evitar el tema para no incomodar al paciente",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pierde una intervención útil."
+        },
+        {
+          "key": "f",
+          "text": "Preguntar solo si se considera alcohólico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena directo, pero la negación es frecuente."
+        },
+        {
+          "key": "g",
+          "text": "No preguntar por el alcohol si no hay síntomas",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Pierde la detección temprana."
+        },
+        {
+          "key": "h",
+          "text": "Cuestionario AUDIT o su versión breve AUDIT C",
+          "correct": true,
+          "rationale": "Identifica consumo de riesgo y dependencia."
+        },
+        {
+          "key": "i",
+          "text": "Medir enzimas hepáticas como tamizaje principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Son poco sensibles para consumo de riesgo."
+        },
+        {
+          "key": "j",
+          "text": "Volumen corpuscular medio como único tamizaje",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en un marcador inespecífico."
+        }
+      ],
+      "canonical": [
+        "b",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "El tamizaje del consumo de alcohol se recomienda en adultos en el primer nivel de atención. El cuestionario AUDIT, de la Organización Mundial de la Salud, tiene diez preguntas sobre consumo, dependencia y consecuencias, y su versión breve AUDIT C tiene tres preguntas sobre frecuencia y cantidad. Permiten identificar consumo de riesgo, consumo perjudicial y probable dependencia. El consumo excesivo episódico, como cinco o más bebidas en una ocasión en hombres, es un patrón de riesgo aunque no sea diario. Ante un tamizaje positivo se ofrece una intervención breve, que reduce el consumo, y se refiere si hay dependencia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, detección y tratamiento del consumo de alcohol"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,239 @@
+@ mi|oncology|lung_cancer|2|risk_factor
+V: Hombre de 66 años con tos persistente de 2 meses, hemoptisis leve y pérdida de peso. Fumó 30 cigarros al día durante 40 años.
+P: ¿Cuál es el principal factor de riesgo de cáncer pulmonar?
++ Tabaquismo || Es responsable de la gran mayoría de los casos de cáncer pulmonar.
+- availability_heuristic | Exposición al asbesto || Es un factor reconocido, pero mucho menos frecuente que el tabaco.
+- anchoring | Contaminación del aire urbano || Se ancla en un factor general de menor peso.
+- representativeness_heuristic | Tuberculosis previa || Puede asociarse, pero no es el principal.
+- framing_effect | Exposición al radón doméstico || Suena relevante, pero es la segunda causa y menos frecuente.
+- premature_closure | Antecedente familiar de cáncer de colon || No se relaciona.
+- base_rate_fallacy | Infección por VIH || Aumenta el riesgo, pero es poco frecuente.
+- inattentional_blindness | Consumo de alcohol || No es un factor principal de cáncer pulmonar.
+- focusing_illusion | Exposición a humo de leña como causa principal en este paciente || Es relevante en mujeres rurales, pero este paciente fumó mucho.
+- belief_bias | Dieta rica en carne roja || Cree que la dieta causa cáncer pulmonar.
+E: El tabaquismo es el principal factor de riesgo de cáncer pulmonar y se asocia a la gran mayoría de los casos, con un riesgo proporcional a la intensidad y duración del consumo, medido en paquetes año. Otros factores son la exposición pasiva al humo, el radón, el asbesto, el humo de leña, la contaminación, la exposición ocupacional a arsénico y níquel y la fibrosis pulmonar. Dejar de fumar reduce el riesgo progresivamente. En personas de 50 a 80 años con 20 o más paquetes año, fumadoras actuales o que dejaron de fumar en los últimos 15 años, se recomienda tamizaje anual con tomografía de baja dosis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer pulmonar de células no pequeñas
+
+@ mi|oncology|lung_cancer|3|prevention_screening
+V: Mujer de 62 años que fumó un paquete diario durante 35 años y dejó de fumar hace 5 años. Asintomática.
+P: ¿Cuál es el tamizaje recomendado para cáncer pulmonar?
++ Tomografía de tórax de baja dosis anual || Indicado en personas de 50 a 80 años con 20 o más paquetes año.
+- availability_heuristic | Radiografía de tórax anual || No reduce la mortalidad.
+- anchoring | Citología de esputo cada 6 meses || Se ancla en un método sin beneficio.
+- representativeness_heuristic | Broncoscopia anual || Es invasiva y no es tamizaje.
+- framing_effect | Sin tamizaje porque ya dejó de fumar || Suena a menor riesgo, pero dejó hace menos de 15 años.
+- premature_closure | Tomografía de alta dosis con contraste cada mes || Exceso de radiación.
+- complexity_bias | Tomografía por emisión de positrones anual || No es el método de tamizaje.
+- status_quo_bias | Esperar a que tenga síntomas || Cuando hay síntomas suele ser avanzado.
+- belief_bias | Marcadores tumorales en sangre como tamizaje || Cree que los marcadores detectan el cáncer temprano.
+- omission_bias | Evitar el tamizaje por miedo a la radiación || La dosis baja tiene beneficio mayor al riesgo.
+E: El tamizaje con tomografía de tórax de baja dosis anual reduce la mortalidad por cáncer pulmonar en personas de alto riesgo, según estudios grandes. Se recomienda a personas de 50 a 80 años con 20 o más paquetes año de tabaquismo, que fuman actualmente o dejaron de fumar en los últimos 15 años, y que podrían recibir tratamiento curativo. La radiografía de tórax y la citología de esputo no reducen la mortalidad. El tamizaje debe acompañarse de consejería para dejar de fumar y de una discusión sobre los posibles daños, como falsos positivos y sobrediagnóstico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer pulmonar de células no pequeñas
+
+@ mi|oncology|lung_cancer|4|complication_prognosis
+V: Hombre de 60 años con cáncer pulmonar de células pequeñas. Presenta edema de cara, cuello y brazos, circulación colateral en el tórax y disnea que empeora al acostarse.
+P: ¿Cuál es la complicación que presenta?
++ Síndrome de vena cava superior || Obstrucción venosa por compresión tumoral mediastinal.
+- representativeness_heuristic | Insuficiencia cardiaca derecha || También da edema e ingurgitación, pero no edema facial y de brazos con colaterales torácicas.
+- anchoring | Reacción alérgica a la quimioterapia || Se ancla en el tratamiento, sin relación clínica.
+- availability_heuristic | Derrame pleural maligno || Da disnea, pero no edema facial.
+- premature_closure | Síndrome nefrótico paraneoplásico || Concluye otra causa de edema.
+- base_rate_fallacy | Trombosis de vena yugular aislada || No explica el edema bilateral.
+- framing_effect | Angioedema hereditario || Suena a edema facial, pero no hay colaterales.
+- inattentional_blindness | Taponamiento cardiaco || No toma en cuenta el edema de brazos y colaterales.
+- focusing_illusion | Hipotiroidismo || Se centra en el edema facial.
+- belief_bias | Obesidad || Cree que es acumulación de grasa.
+E: El síndrome de vena cava superior se produce por obstrucción del flujo venoso de cabeza, cuello y extremidades superiores, en la mayoría de los casos por compresión tumoral, sobre todo cáncer pulmonar de células pequeñas y linfomas. Se manifiesta con edema facial y de cuello, plétora, distensión de venas del cuello y del tórax, edema de brazos, disnea, tos y empeoramiento al acostarse o inclinarse. El diagnóstico se confirma con tomografía con contraste. El tratamiento incluye elevar la cabecera, diagnóstico histológico, quimioterapia o radioterapia según el tumor, y colocación de stent endovascular en casos graves.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer pulmonar de células pequeñas
+
+@ mi|oncology|lung_cancer|3|diagnosis
+V: Hombre de 63 años fumador con cáncer pulmonar. Presenta ptosis, miosis y anhidrosis del lado derecho, y dolor en hombro y brazo derechos con debilidad de la mano.
+P: ¿Cuál es el diagnóstico más probable?
++ Tumor de Pancoast con síndrome de Horner || Tumor del vértice pulmonar que invade la cadena simpática y el plexo braquial.
+- representativeness_heuristic | Evento vascular cerebral del tallo || Puede dar Horner, pero no dolor de hombro con plexopatía.
+- anchoring | Hernia de disco cervical || Se ancla en el dolor de brazo, sin explicar el Horner.
+- availability_heuristic | Síndrome del túnel del carpo || Explica la mano, no el Horner.
+- premature_closure | Metástasis cerebral || Concluye otra lesión sin explicar la plexopatía.
+- base_rate_fallacy | Disección carotídea || Da Horner, pero no plexopatía braquial.
+- framing_effect | Síndrome de vena cava superior || Suena a complicación torácica, pero da edema facial.
+- inattentional_blindness | Bursitis de hombro || No toma en cuenta los datos neurológicos.
+- focusing_illusion | Miastenia gravis || Se centra en la ptosis.
+- belief_bias | Lesión por mala postura || Cree que es mecánico.
+E: El tumor de Pancoast es un cáncer pulmonar del vértice, del surco superior, que invade estructuras vecinas. Produce dolor intenso de hombro y brazo por invasión del plexo braquial, con debilidad y atrofia de músculos de la mano, y síndrome de Horner por afección de la cadena simpática cervical, con ptosis, miosis y anhidrosis del mismo lado. Puede destruir costillas y vértebras. Con frecuencia la radiografía de tórax inicial no lo muestra por su localización, por lo que se requiere tomografía o resonancia. El tratamiento suele combinar quimiorradioterapia y cirugía en casos resecables.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer pulmonar de células no pequeñas
+
+@ mi|oncology|lung_cancer|4|data_interpretation
+V: Hombre de 58 años con cáncer pulmonar de células pequeñas. Presenta confusión y náusea. Sodio de 118 mEq/L, osmolaridad sérica baja, osmolaridad urinaria alta y euvolemia.
+P: ¿Cuál es la interpretación correcta de este hallazgo?
++ Síndrome paraneoplásico de secreción inadecuada de hormona antidiurética || El cáncer de células pequeñas produce ADH ectópica.
+- anchoring | Metástasis cerebrales como única causa de la confusión || Se ancla en las metástasis e ignora el sodio.
+- availability_heuristic | Hipercalcemia paraneoplásica || Es más típica del carcinoma epidermoide.
+- representativeness_heuristic | Síndrome de Cushing ectópico || También es paraneoplásico del de células pequeñas, pero da hipopotasemia e hiperglucemia.
+- framing_effect | Hiponatremia por deshidratación || Suena a vómito, pero la paciente está euvolémica.
+- premature_closure | Insuficiencia suprarrenal por metástasis || Debe descartarse, pero el patrón sugiere SIADH.
+- base_rate_fallacy | Polidipsia primaria || Daría orina diluida.
+- inattentional_blindness | Seudohiponatremia || La osmolaridad está baja.
+- focusing_illusion | Síndrome de Eaton Lambert || Es otro paraneoplásico, pero da debilidad.
+- belief_bias | Efecto de la quimioterapia sin relación con el tumor || Cree que todo es por el tratamiento.
+E: El cáncer pulmonar de células pequeñas es un tumor neuroendocrino que se asocia con frecuencia a síndromes paraneoplásicos. El más común es el síndrome de secreción inadecuada de hormona antidiurética, con hiponatremia hipotónica euvolémica y orina concentrada. También produce síndrome de Cushing por ACTH ectópica y síndrome miasténico de Eaton Lambert. El carcinoma epidermoide se asocia a hipercalcemia por péptido relacionado con la PTH. La hiponatremia se trata con restricción de líquidos, solución salina hipertónica si es grave y sintomática, antagonistas de vasopresina en casos seleccionados y tratamiento del tumor.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer pulmonar de células pequeñas
+
+@ mi|oncology|lung_cancer|3|initial_study
+V: Mujer de 59 años, exfumadora, con un nódulo pulmonar de 2.5 cm de bordes espiculados en el lóbulo superior izquierdo detectado en una radiografía.
+P: ¿Cuál es el estudio inicial más adecuado para continuar el abordaje?
++ Tomografía de tórax con contraste que incluya abdomen superior || Caracteriza el nódulo y estadifica.
+- anchoring | Repetir la radiografía en un año || Se ancla en la vigilancia de nódulos benignos.
+- availability_heuristic | Citología de esputo como estudio principal || Tiene baja sensibilidad.
+- representativeness_heuristic | Ultrasonido de tórax || No evalúa nódulos pulmonares.
+- framing_effect | Antibiótico por 2 semanas y repetir la imagen || Suena a descartar infección, pero el nódulo espiculado es sospechoso.
+- premature_closure | Cirugía inmediata sin estadificar || Omite la estadificación.
+- complexity_bias | Resonancia de cuerpo entero || No es el estudio inicial.
+- information_bias | Marcadores tumorales en sangre antes de la imagen || No definen la conducta.
+- belief_bias | Gammagrama óseo como primer estudio || Cree que primero se buscan metástasis óseas.
+- base_rate_fallacy | Asumir granuloma tuberculoso por estar en México || Ignora los datos de malignidad.
+E: Un nódulo pulmonar con características sospechosas de malignidad, como tamaño mayor de 8 mm, bordes espiculados, localización en lóbulos superiores, crecimiento y antecedente de tabaquismo, requiere estudio. El siguiente paso es la tomografía de tórax con contraste que incluya el abdomen superior para caracterizar el nódulo y buscar adenopatías y metástasis en hígado y suprarrenales. Según el riesgo se realiza tomografía por emisión de positrones y se obtiene diagnóstico histológico por biopsia guiada por tomografía, broncoscopia o resección. La radiografía no es suficiente para el abordaje.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer pulmonar de células no pequeñas
+
+@ mi|oncology|colorectal_cancer_internal|2|prevention_screening
+V: Hombre de 50 años sin antecedentes familiares de cáncer ni síntomas digestivos acude a revisión.
+P: ¿Cuál es el tamizaje recomendado para cáncer colorrectal?
++ Prueba inmunoquímica de sangre oculta en heces anual o colonoscopia cada 10 años || Tamizaje de riesgo promedio desde los 45 a 50 años.
+- availability_heuristic | Antígeno carcinoembrionario anual || No sirve para tamizaje.
+- anchoring | Colonoscopia anual || Se ancla en el método más completo con intervalo excesivo.
+- representativeness_heuristic | Tacto rectal como único tamizaje || Es insuficiente.
+- framing_effect | Iniciar tamizaje a los 70 años || Suena prudente, pero es tardío.
+- premature_closure | Sin tamizaje por no tener síntomas || El tamizaje es precisamente para asintomáticos.
+- complexity_bias | Tomografía de abdomen anual con contraste || Exceso de radiación sin beneficio.
+- status_quo_bias | Esperar a que aparezca sangrado || Retrasa el diagnóstico.
+- belief_bias | Dieta rica en fibra en lugar de tamizaje || Cree que la dieta sustituye el tamizaje.
+- omission_bias | Evitar el tamizaje por miedo a la colonoscopia || Hay opciones no invasivas.
+E: El cáncer colorrectal es prevenible con tamizaje, porque la mayoría se origina de pólipos adenomatosos que pueden detectarse y extirparse. En personas de riesgo promedio se recomienda iniciar entre los 45 y 50 años hasta los 75. Las opciones incluyen la prueba inmunoquímica de sangre oculta en heces cada año, con colonoscopia si es positiva, o colonoscopia cada 10 años, entre otras. En personas con antecedente familiar de primer grado con cáncer antes de los 60 años se inicia a los 40 años o 10 años antes del caso índice. El antígeno carcinoembrionario se usa para seguimiento, no para tamizaje.
+R: Guía de Práctica Clínica de detección oportuna y diagnóstico del cáncer de colon y recto
+
+@ mi|oncology|colorectal_cancer_internal|3|diagnosis
+V: Mujer de 68 años con fatiga, anemia microcítica con ferritina baja y pérdida de peso. No refiere cambios en las evacuaciones ni sangrado visible. Se palpa una masa en fosa iliaca derecha.
+P: ¿Cuál es el diagnóstico más probable?
++ Cáncer de colon derecho || El colon derecho suele manifestarse con anemia ferropénica y masa, sin obstrucción.
+- representativeness_heuristic | Cáncer de colon izquierdo || Se manifiesta más con cambios en el hábito intestinal y obstrucción.
+- anchoring | Anemia por deficiencia de hierro dietética || Se ancla en la anemia sin buscar la causa.
+- availability_heuristic | Apendicitis crónica || Es poco probable con anemia y pérdida de peso.
+- premature_closure | Enfermedad de Crohn || Concluye sin diarrea ni dolor.
+- base_rate_fallacy | Tumor carcinoide de íleon || Es menos frecuente.
+- framing_effect | Diverticulitis || Suena colónico, pero es más izquierda y aguda.
+- inattentional_blindness | Quiste de ovario || No relaciona la anemia ferropénica.
+- focusing_illusion | Absceso del psoas || Se centra en la masa.
+- belief_bias | Anemia de la vejez || Cree que la anemia es normal en ancianos.
+E: El cáncer colorrectal se manifiesta de forma distinta según su localización. Los tumores del colon derecho, de luz amplia y contenido líquido, suelen causar sangrado oculto con anemia ferropénica, fatiga, pérdida de peso y masa palpable, sin obstrucción. Los del colon izquierdo y recto causan cambios en el hábito intestinal, heces delgadas, sangrado visible, tenesmo y obstrucción. Toda anemia ferropénica en un adulto mayor sin causa evidente obliga a realizar colonoscopia. El diagnóstico se confirma con colonoscopia y biopsia, y se estadifica con tomografía de tórax, abdomen y pelvis y antígeno carcinoembrionario.
+R: Guía de Práctica Clínica de detección oportuna y diagnóstico del cáncer de colon y recto
+
+@ mi|oncology|colorectal_cancer_internal|3|risk_factor
+V: Hombre de 32 años con cáncer de colon. Su padre tuvo cáncer de colon a los 45 años, una tía cáncer de endometrio a los 48 y un abuelo cáncer de colon a los 50.
+P: ¿Cuál es el factor de riesgo hereditario más probable?
++ Síndrome de Lynch, cáncer colorrectal hereditario no polipósico || Cáncer colorrectal y de endometrio en varias generaciones a edades tempranas.
+- representativeness_heuristic | Poliposis adenomatosa familiar || También es hereditaria, pero se caracteriza por cientos de pólipos.
+- anchoring | Dieta rica en carne roja de la familia || Se ancla en el ambiente compartido.
+- availability_heuristic | Colitis ulcerosa || Aumenta el riesgo, pero no explica el patrón familiar.
+- premature_closure | Casualidad sin causa hereditaria || Ignora un patrón claro.
+- base_rate_fallacy | Síndrome de Peutz Jeghers || Es raro y tiene pigmentación mucocutánea.
+- framing_effect | Mutación de BRCA1 || Suena hereditario, pero se asocia a mama y ovario.
+- inattentional_blindness | Tabaquismo familiar || No explica la agregación de cánceres específicos.
+- focusing_illusion | Obesidad || Se centra en un factor general.
+- belief_bias | Estrés familiar || Cree que el estrés causa cáncer.
+E: El síndrome de Lynch es la forma hereditaria más frecuente de cáncer colorrectal. Se debe a mutaciones en genes de reparación de errores del ADN, como MLH1, MSH2, MSH6 y PMS2, con herencia autosómica dominante. Causa cáncer colorrectal a edades tempranas, predominantemente en el colon derecho, y otros tumores, sobre todo de endometrio, ovario, estómago y vías urinarias. Se sospecha con los criterios de Ámsterdam o Bethesda y se estudia con inestabilidad de microsatélites o inmunohistoquímica en el tumor y pruebas genéticas. Los portadores requieren colonoscopia cada uno a dos años desde los 20 a 25 años.
+R: Guía de Práctica Clínica de detección oportuna y diagnóstico del cáncer de colon y recto
+
+@ mi|oncology|colorectal_cancer_internal|3|complication_prognosis
+V: Hombre de 70 años con cáncer de colon sigmoides. Presenta distensión abdominal progresiva, ausencia de evacuaciones y canalización de gases por 4 días, vómito y dolor cólico.
+P: ¿Cuál es la complicación que presenta?
++ Obstrucción intestinal maligna del colon || El cáncer de colon izquierdo es causa frecuente de obstrucción colónica.
+- anchoring | Íleo paralítico por medicamentos || Se ancla en una causa funcional, sin explicar la lesión.
+- availability_heuristic | Vólvulo de sigmoides sin relación con el tumor || Es causa de obstrucción, pero aquí hay un tumor conocido.
+- representativeness_heuristic | Perforación con peritonitis || Puede ocurrir después, pero no hay datos de peritonitis.
+- premature_closure | Estreñimiento funcional || Subestima un cuadro grave.
+- base_rate_fallacy | Seudoobstrucción colónica aguda || Es menos probable con tumor conocido.
+- framing_effect | Gastroenteritis con vómito || Suena digestivo, pero no hay evacuaciones ni gases.
+- inattentional_blindness | Hernia inguinal estrangulada || No toma en cuenta el tumor.
+- focusing_illusion | Isquemia mesentérica || Se centra en el dolor.
+- belief_bias | Efecto de la dieta baja en fibra || Cree que la dieta explica el cuadro.
+E: La obstrucción intestinal maligna es una complicación frecuente del cáncer de colon, sobre todo de los tumores del colon izquierdo y sigmoides, por su luz más estrecha y contenido sólido. Se manifiesta con distensión abdominal, dolor cólico, ausencia de evacuaciones y gases, y vómito tardío. La tomografía confirma el sitio de obstrucción y descarta perforación. Si la válvula ileocecal es competente, se produce una obstrucción en asa cerrada con riesgo de perforación del ciego. El manejo incluye reanimación, descompresión y cirugía urgente o colocación de stent colónico como puente en casos seleccionados.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de colon
+
+@ mi|oncology|lymphomas|2|diagnosis
+V: Hombre de 24 años con adenopatías cervicales indoloras de 2 meses, fiebre nocturna, sudoración profusa y pérdida de 8 kg. Refiere que le duelen los ganglios al tomar alcohol. La biopsia muestra células de Reed Sternberg.
+P: ¿Cuál es el diagnóstico más probable?
++ Linfoma de Hodgkin || Adenopatías cervicales, síntomas B y células de Reed Sternberg.
+- representativeness_heuristic | Linfoma no Hodgkin difuso de células grandes || También da adenopatías y síntomas B, pero no tiene células de Reed Sternberg.
+- anchoring | Tuberculosis ganglionar || Se ancla en la fiebre y la sudoración, pero la biopsia es diagnóstica.
+- availability_heuristic | Mononucleosis infecciosa || Da adenopatías, pero es aguda y autolimitada.
+- premature_closure | Linfadenitis bacteriana || Concluye infección pese a la biopsia.
+- base_rate_fallacy | Enfermedad de Castleman || Es rara.
+- framing_effect | Leucemia linfocítica crónica || Suena a enfermedad linfoproliferativa, pero ocurre en adultos mayores.
+- inattentional_blindness | Toxoplasmosis ganglionar || No toma en cuenta las células de Reed Sternberg.
+- focusing_illusion | Sarcoidosis || Se centra en las adenopatías.
+- belief_bias | Reacción por consumo de alcohol || Cree que el dolor con alcohol indica intoxicación.
+E: El linfoma de Hodgkin tiene una distribución bimodal, con un pico en adultos jóvenes y otro en mayores de 55 años. Se presenta con adenopatías indoloras, sobre todo cervicales y mediastinales, que se diseminan de forma contigua. Puede haber síntomas B, que son fiebre, sudoración nocturna y pérdida de más de 10% del peso, prurito y dolor ganglionar al ingerir alcohol. El diagnóstico se establece por biopsia ganglionar con células de Reed Sternberg, que expresan CD15 y CD30. Se estadifica con tomografía por emisión de positrones. Tiene buen pronóstico con quimioterapia, como ABVD, con o sin radioterapia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del linfoma de Hodgkin en el adulto
+
+@ mi|oncology|lymphomas|3|confirmatory_study
+V: Mujer de 60 años con adenopatía axilar de 3 cm, indolora, de 2 meses de evolución, y otra inguinal. Sin infección evidente.
+P: ¿Cuál es el estudio de elección para confirmar el diagnóstico de linfoma?
++ Biopsia excisional del ganglio completo || Permite ver la arquitectura ganglionar y realizar inmunohistoquímica.
+- anchoring | Biopsia por aspiración con aguja fina como estudio definitivo || Se ancla en lo menos invasivo, sin arquitectura suficiente.
+- availability_heuristic | Biometría hemática || No confirma el linfoma.
+- representativeness_heuristic | Deshidrogenasa láctica elevada || Es pronóstica, no diagnóstica.
+- framing_effect | Antibiótico por 2 semanas como prueba diagnóstica || Suena a descartar infección, pero no confirma.
+- premature_closure | Tomografía por emisión de positrones como confirmación || Estadifica, pero no confirma la histología.
+- complexity_bias | Aspirado de médula ósea como primer estudio || Se usa para estadificar.
+- information_bias | Electroforesis de proteínas || No confirma linfoma.
+- belief_bias | Ultrasonido del ganglio como estudio definitivo || Cree que la imagen basta.
+- base_rate_fallacy | Observar 6 meses porque la mayoría de las adenopatías son reactivas || Ignora datos de sospecha.
+E: Ante una adenopatía sospechosa de linfoma, como un ganglio mayor de 2 cm, persistente más de cuatro a seis semanas, duro, indoloro o con síntomas sistémicos, el estudio de elección es la biopsia excisional del ganglio completo o, si no es posible, una biopsia con aguja gruesa adecuada. Esto permite evaluar la arquitectura ganglionar y realizar inmunohistoquímica, citometría y estudios moleculares para clasificar el linfoma según la Organización Mundial de la Salud. La aspiración con aguja fina no se recomienda para el diagnóstico inicial. Después se estadifica con tomografía por emisión de positrones.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del linfoma no Hodgkin difuso de células grandes B
+
+@ mi|oncology|lymphomas|3|risk_factor
+V: Hombre de 58 años con dispepsia de larga evolución. La endoscopia muestra un linfoma MALT gástrico de bajo grado. La biopsia también muestra gastritis crónica.
+P: ¿Cuál es el factor asociado cuyo tratamiento puede producir la remisión del linfoma?
++ Infección por Helicobacter pylori || Su erradicación puede curar el linfoma MALT gástrico de bajo grado localizado.
+- availability_heuristic | Virus de Epstein Barr || Se asocia a otros linfomas, como Burkitt y Hodgkin.
+- anchoring | Consumo de AINE || Se ancla en la dispepsia sin relación con el linfoma.
+- representativeness_heuristic | Virus de la hepatitis C || Se asocia a linfomas de la zona marginal esplénicos.
+- framing_effect | Dieta rica en sal || Suena a factor gástrico, pero se asocia a cáncer gástrico, no a MALT.
+- premature_closure | Tabaquismo || No es el factor principal.
+- base_rate_fallacy | Virus HTLV 1 || Se asocia a leucemia linfoma T del adulto.
+- inattentional_blindness | Alcohol || No explica el linfoma.
+- focusing_illusion | Enfermedad celíaca || Se asocia a linfoma intestinal de células T.
+- belief_bias | Estrés crónico || Cree que el estrés causa linfoma.
+E: El linfoma MALT gástrico es un linfoma de la zona marginal asociado a la estimulación antigénica crónica por Helicobacter pylori. En la enfermedad localizada de bajo grado, la erradicación de la bacteria con tratamiento antibiótico produce la remisión en la mayoría de los pacientes, por lo que es el tratamiento inicial. Se vigila con endoscopias seriadas. La translocación entre los cromosomas 11 y 18 predice falta de respuesta a la erradicación. En los casos que no responden o están avanzados se usa radioterapia, rituximab o quimioterapia. Otras infecciones asociadas a linfomas son Epstein Barr, VIH, hepatitis C y HTLV 1.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del linfoma no Hodgkin
+
+@ mi|oncology|lymphomas|4|treatment_of_choice
+V: Hombre de 55 años con linfoma no Hodgkin difuso de células grandes B, estadio III. Buen estado funcional y fracción de expulsión normal.
+P: ¿Cuál es el tratamiento de elección?
++ Quimioinmunoterapia con R CHOP, rituximab con ciclofosfamida, doxorrubicina, vincristina y prednisona || Es el estándar en linfoma difuso de células grandes B.
+- availability_heuristic | ABVD || Es el esquema del linfoma de Hodgkin.
+- anchoring | Solo radioterapia del área afectada || Se ancla en el tratamiento local, insuficiente en estadio III.
+- representativeness_heuristic | Erradicación de Helicobacter pylori || Es para linfoma MALT gástrico.
+- framing_effect | Vigilancia activa sin tratamiento || Suena prudente en linfomas indolentes, pero este es agresivo.
+- premature_closure | Trasplante alogénico de médula como primera línea || Se reserva para recaídas.
+- complexity_bias | Seis fármacos experimentales || No es el estándar.
+- status_quo_bias | Corticosteroide solo || Es insuficiente.
+- belief_bias | Inmunoterapia sin quimioterapia || Cree que el rituximab solo basta.
+- omission_bias | Evitar la doxorrubicina por riesgo cardiaco sin contraindicación || La fracción normal permite usarla.
+E: El linfoma difuso de células grandes B es el linfoma no Hodgkin más frecuente en adultos y es agresivo, pero potencialmente curable. El tratamiento estándar es la quimioinmunoterapia con R CHOP, que combina rituximab, un anticuerpo anti CD20, con ciclofosfamida, doxorrubicina, vincristina y prednisona, generalmente seis ciclos, con radioterapia en casos seleccionados. El pronóstico se estima con el índice pronóstico internacional. Antes de la doxorrubicina se evalúa la función cardiaca, y antes del rituximab se busca hepatitis B por riesgo de reactivación. Las recaídas se tratan con quimioterapia de rescate y trasplante autólogo o terapia con células CAR T.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del linfoma no Hodgkin difuso de células grandes B
+
+@ mi|oncology|lymphomas|3|data_interpretation
+V: Mujer de 45 años con linfoma de Hodgkin. La tomografía por emisión de positrones muestra ganglios afectados en el cuello y el mediastino, por arriba del diafragma, sin afección abdominal. Tiene fiebre y sudoración nocturna.
+P: ¿Cuál es la interpretación correcta de su estadio según la clasificación de Ann Arbor y Lugano?
++ Estadio II B || Dos o más regiones ganglionares del mismo lado del diafragma con síntomas B.
+- anchoring | Estadio I A || Subestima el número de regiones y omite los síntomas.
+- inattentional_blindness | Estadio II A sin considerar los síntomas || Pasa por alto los síntomas B.
+- framing_effect | Estadio III B || Implica afección a ambos lados del diafragma.
+- availability_heuristic | Estadio IV B || Implica afección extraganglionar diseminada.
+- representativeness_heuristic | Estadio II E || La E indica extensión extraganglionar contigua, no descrita.
+- premature_closure | Estadio III A || Sobreestima y omite síntomas.
+- base_rate_fallacy | Enfermedad localizada sin síntomas || Ignora los síntomas.
+- belief_bias | La fiebre no cuenta para el estadio || Cree que los síntomas no modifican la clasificación.
+- omission_bias | Se requiere biopsia de médula para cualquier estadio || La tomografía por emisión de positrones suele bastar en Hodgkin.
+E: La clasificación de Ann Arbor, modificada por Lugano, estadifica los linfomas. El estadio I es una sola región ganglionar, el II dos o más regiones del mismo lado del diafragma, el III regiones a ambos lados del diafragma, y el IV afección extraganglionar diseminada, como médula ósea, hígado o pulmón. Se agrega la letra A si no hay síntomas y B si hay fiebre mayor de 38 grados, sudoración nocturna o pérdida de más de 10% del peso en seis meses. La letra E indica extensión extraganglionar limitada y contigua. Los síntomas B y la enfermedad voluminosa empeoran el pronóstico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del linfoma de Hodgkin en el adulto
