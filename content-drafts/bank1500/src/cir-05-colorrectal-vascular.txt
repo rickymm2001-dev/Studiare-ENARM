@@ -1,0 +1,463 @@
+@ cir|colorectal_anorectal|hemorrhoids|2|diagnosis
+V: Hombre de 40 años con estreñimiento crónico que presenta sangrado rojo brillante indoloro al final de la evacuación, que mancha el papel y gotea en el inodoro. En la anoscopia hay paquetes vasculares internos que protruyen al pujar y se reducen solos.
+P: ¿Cuál es el diagnóstico más probable?
++ Hemorroides internas grado II || Sangrado indoloro con prolapso que se reduce de forma espontánea.
+- anchoring | Fisura anal || Da dolor intenso al evacuar.
+- availability_heuristic | Cáncer colorrectal || Debe considerarse según la edad y factores, pero el cuadro es típico de hemorroides.
+- representativeness_heuristic | Hemorroides grado III || Requieren reducción manual.
+- premature_closure | Trombosis hemorroidaria externa || Da dolor intenso con nódulo violáceo.
+- base_rate_fallacy | Enfermedad inflamatoria intestinal || Da diarrea con moco y sangre.
+- framing_effect | Pólipo rectal || No explica el prolapso al pujar.
+- inattentional_blindness | Prolapso rectal completo || Protruyen todas las capas del recto.
+- focusing_illusion | Absceso anal || Da dolor y fiebre.
+- belief_bias | Sangrado por comer picante || La causa es hemorroidal.
+E: Las hemorroides son cojinetes vasculares normales del canal anal que se vuelven sintomáticos al dilatarse y prolapsarse. Las internas se originan por arriba de la línea dentada, no duelen y se manifiestan con sangrado rojo brillante y prolapso. Se clasifican en grado I sin prolapso, grado II con prolapso que se reduce solo, grado III que requiere reducción manual y grado IV irreductible. Las externas se originan por debajo de la línea dentada y duelen al trombosarse. Los factores de riesgo son estreñimiento, esfuerzo defecatorio, embarazo y permanecer mucho tiempo sentado.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad hemorroidal
+
+@ cir|colorectal_anorectal|hemorrhoids|2|initial_treatment
+V: Mujer de 35 años con hemorroides internas grado I y II que sangran ocasionalmente. Tiene dieta baja en fibra y pasa mucho tiempo en el baño.
+P: ¿Cuál es el tratamiento inicial de elección?
++ Dieta rica en fibra, abundantes líquidos, evitar el esfuerzo y el tiempo prolongado en el baño || Las medidas higiénico dietéticas son la base del tratamiento.
+- anchoring | Hemorroidectomía quirúrgica || Se reserva para grados III y IV o falla de otras medidas.
+- availability_heuristic | Antibióticos orales || No hay infección.
+- representativeness_heuristic | Laxantes estimulantes diarios por meses || No son la primera elección.
+- premature_closure | Ligadura con bandas como primera medida en todos || Se usa si fallan las medidas conservadoras.
+- framing_effect | Corticosteroides tópicos de forma indefinida || Causan atrofia de la piel.
+- complexity_bias | Colonoscopia terapéutica || No trata las hemorroides.
+- base_rate_fallacy | Reposo absoluto || No es eficaz.
+- belief_bias | Sentarse sobre una superficie fría para desinflamar || No es eficaz.
+- omission_bias | No dar tratamiento porque son leves || Las medidas evitan la progresión.
+E: El tratamiento inicial de las hemorroides de grados I y II es conservador, con dieta rica en fibra de 25 a 35 g al día o suplementos de psyllium, líquidos abundantes, evitar el esfuerzo y la permanencia prolongada en el inodoro, y baños de asiento. Los flebotónicos y los tratamientos tópicos alivian los síntomas por periodos cortos. Si persisten los síntomas, la ligadura con bandas elásticas es el tratamiento ambulatorio de elección para los grados I a III. La hemorroidectomía se reserva para grados III y IV, hemorroides mixtas o falla de otros tratamientos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad hemorroidal
+
+@ cir|colorectal_anorectal|hemorrhoids|3|treatment_of_choice
+V: Hombre de 45 años con dolor anal intenso de 36 horas y un nódulo violáceo, duro y muy doloroso en el borde anal tras un esfuerzo defecatorio.
+P: ¿Cuál es el tratamiento de elección?
++ Escisión del trombo hemorroidario externo con anestesia local || En las primeras 72 horas alivia el dolor de forma rápida.
+- anchoring | Ligadura con bandas || Está contraindicada en hemorroides externas por el dolor.
+- availability_heuristic | Antibióticos orales || No hay infección.
+- representativeness_heuristic | Hemorroidectomía de todos los paquetes de urgencia || No es necesaria.
+- premature_closure | Incisión y drenaje como en un absceso || El trombo se escinde, no se drena como absceso.
+- framing_effect | Solo vigilancia sin analgesia || El dolor es intenso.
+- complexity_bias | Colonoscopia urgente || No es necesaria.
+- base_rate_fallacy | Escleroterapia || Es para hemorroides internas.
+- belief_bias | Reventar el nódulo en casa con una aguja || Es peligroso.
+- omission_bias | No ofrecer la escisión por miedo a sangrado || Es segura y alivia el dolor.
+E: La trombosis hemorroidaria externa se manifiesta con dolor anal agudo e intenso y un nódulo violáceo, duro y doloroso en el borde anal. Si el paciente consulta en las primeras 72 horas, la escisión del trombo con anestesia local alivia el dolor de forma rápida y reduce las recurrencias. Después de las 72 horas el dolor empieza a disminuir y se prefiere el manejo conservador con analgésicos, baños de asiento, ablandadores de heces y tratamiento tópico. La simple incisión con evacuación del coágulo tiene más recurrencia que la escisión.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad hemorroidal
+
+@ cir|colorectal_anorectal|hemorrhoids|3|next_step
+V: Hombre de 58 años con sangrado rectal rojo brillante intermitente que atribuye a hemorroides que tiene desde hace años. Refiere cambio reciente en el hábito intestinal y pérdida de 4 kg. Nunca se ha realizado colonoscopia.
+P: ¿Cuál es el siguiente paso?
++ Realizar colonoscopia completa antes de atribuir el sangrado a las hemorroides || La edad, el cambio del hábito y la pérdida de peso obligan a descartar cáncer.
+- anchoring | Tratar las hemorroides y no estudiar más || Puede pasar inadvertido un cáncer.
+- availability_heuristic | Hemorroidectomía inmediata || Primero se descarta cáncer.
+- representativeness_heuristic | Sangre oculta en heces como único estudio || Ya hay sangrado visible y datos de alarma.
+- premature_closure | Anoscopia como estudio definitivo || No evalúa el colon.
+- framing_effect | Ultrasonido abdominal || No evalúa la mucosa del colon.
+- complexity_bias | Tomografía por emisión de positrones || No es el estudio inicial.
+- base_rate_fallacy | Esperar 6 meses para ver la evolución || Retrasa el diagnóstico.
+- belief_bias | El sangrado rojo siempre es por hemorroides || Puede ser por cáncer.
+- omission_bias | No pedir colonoscopia por la incomodidad || El diagnóstico temprano es clave.
+E: Aunque las hemorroides son la causa más frecuente de sangrado rectal, no deben asumirse como causa en pacientes con datos de alarma. La edad mayor de 45 a 50 años, el cambio del hábito intestinal, la pérdida de peso, la anemia, el sangrado oscuro o mezclado con las heces, los antecedentes familiares de cáncer colorrectal y la ausencia de colonoscopia previa obligan a realizar colonoscopia completa. El cáncer colorrectal puede coexistir con hemorroides. La anoscopia confirma las hemorroides pero no descarta lesiones proximales.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad hemorroidal
+
+@ cir|colorectal_anorectal|hemorrhoids|3|complication_prognosis
+V: Mujer de 50 años con hemorroides grado IV que no se reducen, muy dolorosas, edematosas, de color violáceo oscuro con áreas negras y fiebre de 38 °C.
+P: ¿Cuál es la complicación que presenta?
++ Hemorroides prolapsadas estranguladas con necrosis || El prolapso irreductible compromete la irrigación.
+- anchoring | Hemorroides grado III no complicadas || Son reductibles manualmente.
+- availability_heuristic | Fisura anal || No explica el prolapso necrótico.
+- representativeness_heuristic | Absceso perianal simple || No explica el prolapso.
+- premature_closure | Prolapso rectal sin complicación || Los hallazgos indican necrosis.
+- base_rate_fallacy | Cáncer anal || No explica el cuadro agudo.
+- framing_effect | Condilomas anales || Son verrugosos indoloros.
+- inattentional_blindness | Trombosis de una hemorroide externa aislada || El prolapso es interno y extenso.
+- focusing_illusion | Dermatitis perianal || No explica la necrosis.
+- belief_bias | Inflamación que cede con pomada || Hay necrosis.
+E: Las hemorroides internas grado IV con prolapso irreductible pueden encarcelarse y estrangularse, con edema, trombosis, dolor intenso y necrosis. Los datos de necrosis, como coloración negra, fiebre o sepsis, indican tratamiento quirúrgico urgente con hemorroidectomía y antibióticos. Otras complicaciones de las hemorroides incluyen anemia ferropénica por sangrado crónico y trombosis. Las hemorroides en pacientes con cirrosis e hipertensión portal deben distinguirse de las várices anorrectales. El tratamiento oportuno de los grados avanzados, con ligadura o hemorroidectomía electiva, evita estas complicaciones.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad hemorroidal
+
+@ cir|colorectal_anorectal|anal_fissure_fistula|2|diagnosis
+V: Mujer de 28 años con estreñimiento que presenta dolor anal intenso desgarrante durante la evacuación y que persiste horas después, con sangrado rojo escaso en el papel. En la exploración hay una úlcera lineal en la línea media posterior del ano.
+P: ¿Cuál es el diagnóstico más probable?
++ Fisura anal aguda || Dolor intenso al evacuar con úlcera lineal en la línea media posterior.
+- anchoring | Hemorroides internas || No suelen doler.
+- availability_heuristic | Absceso perianal || Da masa fluctuante con fiebre.
+- representativeness_heuristic | Fístula anal || Da secreción por un orificio externo.
+- premature_closure | Cáncer anal || Es raro a esta edad.
+- base_rate_fallacy | Enfermedad de Crohn perianal || Las fisuras serían laterales o múltiples.
+- framing_effect | Proctalgia fugaz || No hay lesión visible.
+- inattentional_blindness | Prolapso rectal || No explica la úlcera.
+- focusing_illusion | Herpes anal || Da vesículas múltiples.
+- belief_bias | Dolor por comer chile || Hay una lesión.
+E: La fisura anal es un desgarro longitudinal del anodermo distal a la línea dentada, generalmente en la línea media posterior, por el paso de heces duras. Se manifiesta con dolor intenso durante y después de la evacuación, con sangrado rojo escaso. El espasmo del esfínter anal interno perpetúa la isquemia y la falta de cicatrización. La fisura crónica, de más de 6 semanas, presenta papila hipertrófica, hemorroide centinela y fibras del esfínter visibles. Las fisuras laterales o múltiples sugieren enfermedad de Crohn, tuberculosis, sífilis, virus de la inmunodeficiencia humana o cáncer.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la fisura anal
+
+@ cir|colorectal_anorectal|anal_fissure_fistula|3|treatment_of_choice
+V: Hombre de 35 años con fisura anal crónica de 3 meses que no mejoró con fibra, baños de asiento ni nitroglicerina tópica. Tiene papila hipertrófica y hemorroide centinela.
+P: ¿Cuál es el tratamiento de elección?
++ Esfinterotomía lateral interna || Es el tratamiento más eficaz para la fisura crónica refractaria.
+- anchoring | Dilatación anal forzada || Tiene alto riesgo de incontinencia.
+- availability_heuristic | Continuar solo con baños de asiento || Ya fallaron las medidas conservadoras.
+- representativeness_heuristic | Hemorroidectomía || No trata la fisura.
+- premature_closure | Antibióticos orales || No hay infección.
+- framing_effect | Fistulotomía || Es para fístulas.
+- complexity_bias | Colostomía || Es excesiva.
+- base_rate_fallacy | Corticosteroides tópicos de forma indefinida || No curan la fisura.
+- belief_bias | Aplicar alcohol para cicatrizar || Aumenta el dolor.
+- omission_bias | No operar por miedo a la incontinencia || El riesgo es bajo con la técnica adecuada.
+E: El tratamiento inicial de la fisura anal incluye fibra, líquidos, ablandadores de heces, baños de asiento y analgésicos tópicos. Para relajar el esfínter interno se usan nitroglicerina tópica, bloqueadores de calcio tópicos como diltiazem o nifedipino, y toxina botulínica. La fisura crónica que no responde al tratamiento médico se trata con esfinterotomía lateral interna, que tiene una tasa de curación mayor de 90%, con bajo riesgo de incontinencia leve a gases. La dilatación anal forzada no se recomienda por su riesgo de incontinencia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la fisura anal
+
+@ cir|colorectal_anorectal|anal_fissure_fistula|2|diagnosis
+V: Hombre de 40 años con dolor anal intenso, constante y pulsátil de 3 días, que aumenta al sentarse, con fiebre de 38.5 °C. En la exploración hay una masa eritematosa, caliente y fluctuante junto al ano.
+P: ¿Cuál es el diagnóstico más probable?
++ Absceso perianal || Masa fluctuante dolorosa con fiebre junto al ano.
+- anchoring | Trombosis hemorroidaria externa || Es violácea, sin fiebre ni fluctuación.
+- availability_heuristic | Fisura anal || Da dolor al evacuar sin masa.
+- representativeness_heuristic | Quiste pilonidal infectado || Se localiza en el surco interglúteo sacro.
+- premature_closure | Hidradenitis supurativa || Afecta zonas con glándulas apocrinas con lesiones múltiples crónicas.
+- base_rate_fallacy | Cáncer anal || Es una masa indurada sin fiebre aguda.
+- framing_effect | Condiloma infectado || No explica la masa fluctuante.
+- inattentional_blindness | Prolapso rectal || No explica la masa con fiebre.
+- focusing_illusion | Furúnculo simple sin relación anal || La localización perianal orienta a absceso anorrectal.
+- belief_bias | Grano que se quita con pomada || Requiere drenaje.
+E: El absceso anorrectal se origina por infección de las glándulas anales de las criptas en la línea dentada, según la teoría criptoglandular. Se clasifica en perianal, el más frecuente, isquiorrectal, interesfintérico y supraelevador. Se manifiesta con dolor anal intenso y constante, masa fluctuante, eritema y fiebre. El tratamiento es la incisión y drenaje quirúrgico oportuno, sin esperar a que fluctúe. Los antibióticos se agregan en inmunosuprimidos, diabéticos, celulitis extensa o prótesis. Hasta la mitad de los pacientes desarrolla una fístula anal después.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de abscesos y fístulas anorrectales
+
+@ cir|colorectal_anorectal|anal_fissure_fistula|3|diagnosis
+V: Hombre de 42 años que tuvo un absceso perianal drenado hace 4 meses. Desde entonces tiene secreción purulenta intermitente por un orificio en la piel perianal a 3 cm del ano, con irritación y molestias.
+P: ¿Cuál es el diagnóstico más probable?
++ Fístula anal || Trayecto entre el canal anal y la piel perianal tras un absceso.
+- anchoring | Absceso recurrente sin trayecto || La secreción crónica por un orificio indica fístula.
+- availability_heuristic | Hemorroides externas || No dan secreción purulenta.
+- representativeness_heuristic | Quiste pilonidal || Se localiza en la región sacrococcígea.
+- premature_closure | Fisura anal crónica || No da orificio externo con secreción.
+- base_rate_fallacy | Cáncer anal ulcerado || Es menos probable.
+- framing_effect | Dermatitis perianal || No explica el orificio.
+- inattentional_blindness | Hidradenitis supurativa || Suele ser múltiple con lesiones en ingles y axilas.
+- focusing_illusion | Condilomas || Son verrugosos.
+- belief_bias | Secreción normal tras la cirugía previa || Indica fístula.
+E: La fístula anal es un trayecto anormal que comunica el canal anal con la piel perianal y suele ser la secuela de un absceso anorrectal. Se manifiesta con secreción purulenta o serosanguinolenta intermitente por un orificio externo, prurito e irritación. La regla de Goodsall ayuda a predecir el trayecto. Se clasifica según su relación con los esfínteres en interesfintérica, transesfintérica, supraesfintérica y extraesfintérica. La resonancia magnética de pelvis es útil en fístulas complejas. Las fístulas múltiples o recurrentes sugieren enfermedad de Crohn. El tratamiento es quirúrgico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de abscesos y fístulas anorrectales
+
+@ cir|colorectal_anorectal|anal_fissure_fistula|3|treatment_of_choice
+V: Mujer de 38 años con fístula anal interesfintérica simple que involucra una porción mínima del esfínter. Continencia normal y sin enfermedad inflamatoria intestinal.
+P: ¿Cuál es el tratamiento de elección?
++ Fistulotomía || Es el tratamiento más eficaz para las fístulas simples con mínimo riesgo de incontinencia.
+- anchoring | Antibióticos orales prolongados || No curan la fístula.
+- availability_heuristic | Sedal de corte en todas las fístulas simples || Se reserva para fístulas complejas.
+- representativeness_heuristic | Colostomía de derivación || Es excesiva.
+- premature_closure | Observación indefinida || La fístula no cierra sola.
+- framing_effect | Esfinterotomía lateral interna || Es para fisuras.
+- complexity_bias | Colgajo de avance rectal para una fístula simple || Se reserva para fístulas complejas.
+- base_rate_fallacy | Hemorroidectomía || No trata la fístula.
+- belief_bias | Lavados con remedios caseros || No curan la fístula.
+- omission_bias | No operar por miedo a la incontinencia en una fístula simple || El riesgo es bajo.
+E: El tratamiento de la fístula anal es quirúrgico y su objetivo es eliminar el trayecto preservando la continencia. Las fístulas simples, interesfintéricas o transesfintéricas bajas que involucran menos de un tercio del esfínter, se tratan con fistulotomía, que abre el trayecto, con alta tasa de curación y bajo riesgo de incontinencia. Las fístulas complejas, que involucran más esfínter, se tratan con técnicas que preservan el esfínter, como el sedal, el colgajo de avance rectal o la ligadura del trayecto interesfintérico. En la enfermedad de Crohn se combinan sedal y tratamiento médico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de abscesos y fístulas anorrectales
+
+@ cir|colorectal_anorectal|colorectal_cancer|2|prevention_screening
+V: Hombre de 50 años sin antecedentes familiares de cáncer, asintomático, que acude a consulta preventiva.
+P: ¿Cuál es la estrategia de tamizaje de cáncer colorrectal recomendada?
++ Prueba inmunoquímica fecal anual o colonoscopia cada 10 años a partir de los 45 a 50 años || Reducen la incidencia y mortalidad por cáncer colorrectal.
+- anchoring | Ningún estudio si no tiene síntomas || El tamizaje busca detectar lesiones antes de los síntomas.
+- availability_heuristic | Antígeno carcinoembrionario anual || No sirve para tamizaje.
+- representativeness_heuristic | Tomografía abdominal anual || No es un método de tamizaje.
+- premature_closure | Tacto rectal como único tamizaje || Es insuficiente.
+- base_rate_fallacy | Colonoscopia anual en riesgo promedio || Es innecesariamente frecuente.
+- framing_effect | Iniciar el tamizaje a los 70 años || Es tarde.
+- complexity_bias | Cápsula endoscópica anual || No es el estándar.
+- belief_bias | Si no hay sangre visible no hay riesgo || El cáncer puede ser silencioso.
+- omission_bias | No ofrecer tamizaje por la incomodidad del estudio || Hay opciones no invasivas.
+E: El cáncer colorrectal es prevenible y curable si se detecta temprano. En personas de riesgo promedio se recomienda iniciar el tamizaje entre los 45 y 50 años y continuarlo hasta los 75. Las opciones incluyen prueba inmunoquímica fecal anual, sangre oculta en heces de alta sensibilidad, colonoscopia cada 10 años o sigmoidoscopia cada 5 años. La colonoscopia permite detectar y extirpar pólipos adenomatosos. Una prueba fecal positiva requiere colonoscopia. En personas con familiar de primer grado con cáncer antes de los 60 años, el tamizaje inicia a los 40 años o 10 años antes del caso más joven.
+R: Guía de Práctica Clínica de detección y diagnóstico del cáncer colorrectal
+
+@ cir|colorectal_anorectal|colorectal_cancer|3|diagnosis
+V: Hombre de 68 años con fatiga, palidez y anemia ferropénica de 8.5 g/dL sin sangrado visible. No hay cambios en el hábito intestinal. Tiene una masa palpable en la fosa iliaca derecha.
+P: ¿Cuál es el diagnóstico más probable?
++ Cáncer de colon derecho || Anemia ferropénica sin sangrado visible con masa en fosa iliaca derecha en un adulto mayor.
+- anchoring | Anemia ferropénica por dieta || En un hombre mayor siempre debe buscarse pérdida digestiva.
+- availability_heuristic | Hemorroides sangrantes || No explican la masa ni la anemia sin sangrado visible.
+- representativeness_heuristic | Cáncer de recto || Suele dar rectorragia y tenesmo.
+- premature_closure | Apendicitis crónica || No explica la anemia.
+- base_rate_fallacy | Enfermedad celiaca || Es menos probable a esta edad con masa.
+- framing_effect | Mieloma múltiple || No explica la anemia ferropénica ni la masa.
+- inattentional_blindness | Anemia por enfermedad renal || No explica la ferropenia ni la masa.
+- focusing_illusion | Absceso apendicular || No explica la anemia crónica.
+- belief_bias | Cansancio normal de la edad || Hay anemia y una masa.
+E: El cáncer de colon derecho suele manifestarse con anemia ferropénica por sangrado oculto, fatiga y masa palpable, ya que la luz es amplia y las heces son líquidas, por lo que rara vez obstruye. El cáncer de colon izquierdo causa cambios del hábito intestinal, heces delgadas y obstrucción por su luz más estrecha. El cáncer de recto da rectorragia, tenesmo y evacuaciones incompletas. Toda anemia ferropénica en hombres y en mujeres posmenopáusicas requiere estudio del tubo digestivo con colonoscopia y endoscopia superior.
+R: Guía de Práctica Clínica de detección y diagnóstico del cáncer colorrectal
+
+@ cir|colorectal_anorectal|colorectal_cancer|3|treatment_of_choice
+V: Mujer de 62 años con adenocarcinoma de colon sigmoides confirmado por biopsia, sin metástasis a distancia en la tomografía. Buen estado funcional.
+P: ¿Cuál es el tratamiento de elección?
++ Sigmoidectomía con linfadenectomía regional y márgenes adecuados, con quimioterapia adyuvante según la etapa || La resección quirúrgica es el tratamiento curativo.
+- anchoring | Quimioterapia sola como tratamiento definitivo || La cirugía es la base del tratamiento curativo.
+- availability_heuristic | Polipectomía endoscópica de un cáncer invasor avanzado || No es suficiente.
+- representativeness_heuristic | Radioterapia sola || No es el tratamiento estándar del colon.
+- premature_closure | Colostomía sin resección || No es curativa.
+- framing_effect | Observación con antígeno carcinoembrionario || No trata el cáncer.
+- complexity_bias | Colectomía total en todos los casos || Es excesiva sin indicación.
+- base_rate_fallacy | Inmunoterapia como primera línea en todos || Se reserva para casos seleccionados.
+- belief_bias | Dieta alcalina para curar el cáncer || No es eficaz.
+- omission_bias | No operar por la edad || Tiene buen estado funcional.
+E: El tratamiento curativo del cáncer de colon no metastásico es la resección quirúrgica del segmento afectado con márgenes adecuados y linfadenectomía regional, con al menos 12 ganglios para una estadificación adecuada, por vía abierta o laparoscópica. La quimioterapia adyuvante con esquemas basados en fluoropirimidinas y oxaliplatino se indica en la etapa III, con ganglios positivos, y en la etapa II de alto riesgo. En el cáncer de recto localmente avanzado se usa quimiorradioterapia neoadyuvante. El antígeno carcinoembrionario se usa en el seguimiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de colon
+
+@ cir|colorectal_anorectal|colorectal_cancer|3|risk_factor
+V: Hombre de 22 años con cientos de pólipos adenomatosos en todo el colon descubiertos en la colonoscopia por rectorragia. Su padre murió de cáncer de colon a los 40 años.
+P: ¿Cuál es el factor de riesgo hereditario más probable?
++ Poliposis adenomatosa familiar por mutación del gen APC || Cientos de adenomas en un joven con historia familiar de cáncer temprano.
+- anchoring | Síndrome de Lynch || Tiene pocos pólipos.
+- availability_heuristic | Pólipos hiperplásicos esporádicos || No explica cientos de adenomas.
+- representativeness_heuristic | Síndrome de Peutz Jeghers || Da pólipos hamartomatosos con pigmentación oral.
+- premature_closure | Enfermedad inflamatoria intestinal con pseudopólipos || No son adenomas.
+- base_rate_fallacy | Poliposis juvenil || Da pólipos hamartomatosos.
+- framing_effect | Síndrome de Cowden || Da hamartomas con otros tumores.
+- inattentional_blindness | Mutación de BRCA1 || Se asocia a mama y ovario.
+- focusing_illusion | Dieta rica en carne roja como única causa || No explica cientos de pólipos en un joven.
+- belief_bias | Mala suerte sin causa genética || Es un síndrome hereditario.
+E: La poliposis adenomatosa familiar es una enfermedad autosómica dominante por mutaciones del gen APC. Se caracteriza por cientos a miles de pólipos adenomatosos en el colon que aparecen desde la adolescencia, con riesgo de cáncer colorrectal cercano a 100% hacia los 40 años sin tratamiento. Se asocia a adenomas duodenales, tumores desmoides, osteomas e hipertrofia del epitelio pigmentario de la retina, en el síndrome de Gardner. Se recomienda colonoscopia desde los 10 a 12 años en familiares y colectomía profiláctica cuando aparecen los pólipos.
+R: Guía de Práctica Clínica de detección y diagnóstico del cáncer colorrectal
+
+@ cir|colorectal_anorectal|colorectal_cancer|3|data_interpretation
+V: Hombre de 60 años con colonoscopia de tamizaje en la que se extirpó un pólipo de 15 mm. El reporte histopatológico indica adenoma velloso con displasia de alto grado, resecado por completo.
+P: ¿Qué indica este hallazgo para su seguimiento?
++ Adenoma avanzado que requiere colonoscopia de vigilancia en 3 años || El tamaño mayor de 10 mm, la histología vellosa y la displasia de alto grado lo hacen de alto riesgo.
+- anchoring | Lesión benigna que no requiere seguimiento || Es de alto riesgo.
+- availability_heuristic | Cáncer invasor que requiere colectomía inmediata || Fue resecado por completo sin invasión.
+- representativeness_heuristic | Seguimiento a 10 años como en riesgo promedio || Requiere vigilancia más frecuente.
+- premature_closure | Quimioterapia adyuvante || No está indicada.
+- base_rate_fallacy | Pólipo hiperplásico sin riesgo || Es un adenoma.
+- framing_effect | Colonoscopia mensual || Es excesiva.
+- inattentional_blindness | Tomografía cada mes || No está indicada.
+- focusing_illusion | Indica poliposis familiar || Es un pólipo único.
+- belief_bias | Al quitarlo ya no hay riesgo nunca más || Puede formar nuevos pólipos.
+E: La mayoría de los cánceres colorrectales se originan de pólipos adenomatosos a través de la secuencia adenoma carcinoma, que tarda años. Los adenomas avanzados son los mayores de 10 mm, con componente velloso o con displasia de alto grado, y tienen mayor riesgo de cáncer. Tras su resección completa se recomienda colonoscopia de vigilancia a los 3 años. Los adenomas pequeños y escasos tienen menor riesgo y se vigilan a los 7 a 10 años. Los pólipos hiperplásicos pequeños del recto no aumentan el riesgo. Los pólipos serrados también pueden progresar.
+R: Guía de Práctica Clínica de detección y diagnóstico del cáncer colorrectal
+
+@ cir|colorectal_anorectal|colorectal_cancer|3|complication_prognosis
+V: Mujer de 65 años operada de cáncer de colon etapa III hace 2 años. En el seguimiento, el antígeno carcinoembrionario aumentó de 2 a 18 ng/mL. Está asintomática.
+P: ¿Cuál es la complicación que debe buscarse?
++ Recurrencia de la enfermedad, más frecuentemente metástasis hepáticas || El aumento del antígeno carcinoembrionario sugiere recurrencia.
+- anchoring | Resultado sin importancia en una paciente asintomática || El aumento progresivo es significativo.
+- availability_heuristic | Nuevo cáncer primario de mama || No es lo más probable.
+- representativeness_heuristic | Hepatitis viral || No explica el marcador.
+- premature_closure | Error de laboratorio sin repetir || Debe confirmarse y estudiarse.
+- base_rate_fallacy | Metástasis cerebrales como sitio más frecuente || El hígado es el sitio más frecuente.
+- framing_effect | Efecto del tabaquismo como única explicación || El aumento importante sugiere recurrencia.
+- inattentional_blindness | Insuficiencia renal || No explica el aumento.
+- focusing_illusion | Hipotiroidismo || No explica el marcador.
+- belief_bias | Si está asintomática no hay recurrencia || La recurrencia puede ser asintomática.
+E: El seguimiento del cáncer colorrectal tras el tratamiento incluye antígeno carcinoembrionario cada 3 a 6 meses, tomografía de tórax, abdomen y pelvis periódica y colonoscopia. El aumento progresivo del antígeno sugiere recurrencia y se estudia con tomografía. El hígado es el sitio más frecuente de metástasis por el drenaje portal, seguido del pulmón. Las metástasis hepáticas o pulmonares limitadas pueden resecarse con intención curativa, y la quimioterapia sistémica se usa en enfermedad no resecable. El antígeno también puede elevarse levemente en fumadores.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de colon
+
+@ cir|colorectal_anorectal|diverticular_disease|2|diagnosis
+V: Hombre de 75 años con sangrado rectal abundante, rojo oscuro, indoloro y súbito. Está estable tras líquidos. Tiene antecedente de divertículos en una colonoscopia previa. No hay dolor abdominal.
+P: ¿Cuál es el diagnóstico más probable del origen del sangrado?
++ Hemorragia diverticular || Sangrado abundante indoloro en un adulto mayor con divertículos.
+- anchoring | Diverticulitis aguda || Da dolor y fiebre, rara vez sangrado abundante.
+- availability_heuristic | Hemorroides || Dan sangrado escaso rojo brillante.
+- representativeness_heuristic | Cáncer de colon || Suele dar sangrado escaso y crónico.
+- premature_closure | Colitis isquémica || Da dolor abdominal con sangrado.
+- base_rate_fallacy | Úlcera péptica sangrante masiva || Debe considerarse si hay inestabilidad, pero el contexto orienta a divertículos.
+- framing_effect | Fisura anal || Da sangrado escaso con dolor.
+- inattentional_blindness | Enfermedad inflamatoria intestinal || Da diarrea con sangre.
+- focusing_illusion | Divertículo de Meckel || Es más común en niños.
+- belief_bias | Sangrado por comer betabel || El sangrado es real y abundante.
+E: La enfermedad diverticular es la causa más frecuente de hemorragia digestiva baja abundante en adultos mayores. El sangrado se produce por rotura de los vasos rectos en el cuello del divertículo, es súbito, indoloro y abundante, y con frecuencia se detiene solo. Es más común en el colon derecho aunque los divertículos predominan en el izquierdo. La angiodisplasia es otra causa importante. El abordaje incluye reanimación, colonoscopia en las primeras 24 horas tras preparación, angiotomografía si el sangrado es activo e intenso y embolización o cirugía si persiste.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de enfermedad diverticular
+
+@ cir|colorectal_anorectal|diverticular_disease|2|treatment_of_choice
+V: Mujer de 60 años con diverticulitis aguda no complicada confirmada por tomografía, sin absceso ni perforación. Está estable, tolera la vía oral y sin inmunosupresión.
+P: ¿Cuál es el tratamiento de elección?
++ Manejo ambulatorio con dieta líquida progresiva y analgesia, con antibióticos solo en casos seleccionados || La diverticulitis no complicada en inmunocompetentes puede manejarse sin antibióticos.
+- anchoring | Hospitalización con antibióticos intravenosos en todos los casos || No es necesaria en casos leves.
+- availability_heuristic | Sigmoidectomía urgente || No está indicada.
+- representativeness_heuristic | Colonoscopia urgente en fase aguda || Está contraindicada por riesgo de perforación.
+- premature_closure | Procedimiento de Hartmann || Es para peritonitis.
+- framing_effect | Drenaje percutáneo || No hay absceso.
+- complexity_bias | Colectomía total || Es excesiva.
+- base_rate_fallacy | Evitar semillas y nueces de por vida || No previene la diverticulitis.
+- belief_bias | Laxantes estimulantes en fase aguda || No están indicados.
+- omission_bias | No dar seguimiento ni colonoscopia posterior || Se recomienda en casos seleccionados.
+E: La diverticulitis aguda no complicada en pacientes inmunocompetentes, estables y que toleran la vía oral puede manejarse de forma ambulatoria con dieta líquida progresiva y analgesia. Los estudios recientes muestran que los antibióticos no son necesarios en todos los casos, y se reservan para pacientes con datos sistémicos, comorbilidades, inmunosupresión o falta de mejoría. La colonoscopia se realiza 6 a 8 semanas después para descartar cáncer si no se ha hecho recientemente. La dieta rica en fibra y la actividad física reducen las recurrencias, y no es necesario evitar las semillas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de enfermedad diverticular
+
+@ cir|colorectal_anorectal|diverticular_disease|3|complication_prognosis
+V: Mujer de 70 años con diverticulitis de repetición que presenta salida de aire y heces por la uretra durante la micción e infecciones urinarias recurrentes por gérmenes intestinales.
+P: ¿Cuál es la complicación que presenta?
++ Fístula colovesical || Neumaturia y fecaluria por comunicación entre el colon y la vejiga.
+- anchoring | Infección urinaria recurrente simple || No explica la neumaturia ni la fecaluria.
+- availability_heuristic | Cistitis intersticial || No explica el aire y las heces.
+- representativeness_heuristic | Cáncer de vejiga || No explica la fecaluria.
+- premature_closure | Fístula colovaginal || Daría salida de heces por la vagina.
+- base_rate_fallacy | Enfermedad de Crohn || Es menos probable en este contexto.
+- framing_effect | Vejiga neurogénica || No explica el aire.
+- inattentional_blindness | Litiasis vesical || No explica la fecaluria.
+- focusing_illusion | Absceso pélvico sin fístula || No explica la neumaturia.
+- belief_bias | Gases que se cuelan de forma normal || Indica una comunicación anormal.
+E: La fístula colovesical es la fístula más frecuente asociada a la enfermedad diverticular y es más común en hombres, porque en las mujeres el útero se interpone entre el colon y la vejiga, salvo tras histerectomía. Se manifiesta con neumaturia, fecaluria e infecciones urinarias recurrentes polimicrobianas. La tomografía con aire en la vejiga es el estudio más útil. Se debe descartar cáncer de colon o vejiga como causa. El tratamiento es la resección del sigmoides afectado con cierre de la vejiga, generalmente en una sola etapa.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de enfermedad diverticular
+
+@ cir|colorectal_anorectal|diverticular_disease|3|risk_factor
+V: Hombre de 55 años con diverticulosis del sigmoides descubierta en una colonoscopia. Pregunta qué favorece la formación de divertículos.
+P: ¿Cuál es el factor de riesgo más asociado a la enfermedad diverticular?
++ Dieta baja en fibra con aumento de la presión intraluminal del colon || Favorece la herniación de la mucosa en los sitios débiles.
+- anchoring | Consumo de semillas y palomitas || No aumenta el riesgo.
+- availability_heuristic | Ejercicio regular || Es protector.
+- representativeness_heuristic | Consumo de café || No es un factor importante.
+- premature_closure | Dieta vegetariana || Es protectora por la fibra.
+- base_rate_fallacy | Grupo sanguíneo || No es un factor.
+- framing_effect | Lactancia materna en la infancia || No es un factor.
+- inattentional_blindness | Vacunación contra hepatitis || No es un factor.
+- focusing_illusion | Uso de lentes || No es relevante.
+- belief_bias | Comer rápido como única causa || El factor principal es la dieta baja en fibra.
+E: La diverticulosis es la presencia de divertículos, herniaciones de la mucosa y submucosa a través de la capa muscular en los sitios donde penetran los vasos rectos. Es más frecuente con la edad y en el colon sigmoides en países occidentales. Los factores de riesgo incluyen dieta baja en fibra y alta en carne roja, que aumenta la presión intraluminal, obesidad, sedentarismo, tabaquismo y uso de antiinflamatorios. La mayoría de las personas con diverticulosis no presentan síntomas. La dieta rica en fibra y la actividad física reducen el riesgo de complicaciones. Consumir semillas y nueces no aumenta el riesgo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de enfermedad diverticular
+
+@ cir|vascular_surgery|peripheral_arterial_disease|2|diagnosis
+V: Hombre de 65 años, fumador y diabético, que presenta dolor en las pantorrillas al caminar 200 metros, que cede con 5 minutos de reposo de pie. Pulsos poplíteos y pedios disminuidos.
+P: ¿Cuál es el diagnóstico más probable?
++ Enfermedad arterial periférica con claudicación intermitente || Dolor muscular reproducible al caminar que cede con el reposo, con pulsos disminuidos.
+- anchoring | Estenosis del canal lumbar || La claudicación neurógena mejora al sentarse o flexionar el tronco.
+- availability_heuristic | Insuficiencia venosa crónica || Da pesadez y edema que mejoran al elevar las piernas.
+- representativeness_heuristic | Trombosis venosa profunda || Da edema unilateral agudo.
+- premature_closure | Neuropatía diabética || Da dolor ardoroso en reposo sin relación con la marcha.
+- base_rate_fallacy | Síndrome compartimental crónico || Es propio de atletas jóvenes.
+- framing_effect | Artrosis de rodilla || El dolor es articular.
+- inattentional_blindness | Calambres por deshidratación || No son reproducibles con la distancia.
+- focusing_illusion | Miositis || No explica los pulsos disminuidos.
+- belief_bias | Cansancio normal de la edad || Hay enfermedad arterial.
+E: La enfermedad arterial periférica es la aterosclerosis de las arterias de las extremidades inferiores. Sus principales factores de riesgo son el tabaquismo y la diabetes, seguidos de hipertensión, dislipidemia y edad. La claudicación intermitente es dolor muscular reproducible con el ejercicio que cede con el reposo en pocos minutos, y su localización orienta al nivel de la obstrucción. La exploración muestra pulsos disminuidos. El índice tobillo brazo menor de 0.9 confirma el diagnóstico. Estos pacientes tienen alto riesgo de infarto y evento vascular cerebral.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad arterial periférica
+
+@ cir|vascular_surgery|peripheral_arterial_disease|2|initial_study
+V: Hombre de 68 años fumador con claudicación intermitente de las pantorrillas. Se desea confirmar la enfermedad arterial periférica.
+P: ¿Cuál es el estudio inicial de elección para el diagnóstico?
++ Índice tobillo brazo || Un valor menor de 0.9 confirma la enfermedad arterial periférica.
+- anchoring | Angiografía invasiva como primer estudio || Se reserva para planear la revascularización.
+- availability_heuristic | Radiografía de las piernas || No evalúa el flujo arterial.
+- representativeness_heuristic | Electromiografía || Evalúa los nervios.
+- premature_closure | Ultrasonido venoso || Evalúa las venas.
+- base_rate_fallacy | Resonancia magnética de columna lumbar || Evalúa la estenosis del canal.
+- framing_effect | Creatina cinasa sérica || No diagnostica la enfermedad arterial.
+- complexity_bias | Tomografía por emisión de positrones || No es el estudio inicial.
+- information_bias | Perfil de lípidos como diagnóstico || Evalúa el riesgo, no confirma.
+- belief_bias | El diagnóstico solo se hace si hay úlceras || Puede diagnosticarse antes.
+E: El índice tobillo brazo es el estudio inicial de elección para diagnosticar la enfermedad arterial periférica. Se calcula dividiendo la presión sistólica más alta del tobillo entre la presión sistólica más alta de los brazos, medidas con Doppler. Un valor de 1 a 1.4 es normal, menor de 0.9 confirma la enfermedad, menor de 0.4 indica isquemia crítica y mayor de 1.4 sugiere arterias no compresibles por calcificación, frecuente en diabéticos y renales, en cuyo caso se usa el índice dedo brazo. El ultrasonido Doppler, la angiotomografía y la angiorresonancia localizan las lesiones para planear el tratamiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad arterial periférica
+
+@ cir|vascular_surgery|peripheral_arterial_disease|3|initial_treatment
+V: Hombre de 62 años con claudicación intermitente a 300 metros, índice tobillo brazo de 0.75. Fuma y tiene dislipidemia. No tiene dolor en reposo ni úlceras.
+P: ¿Cuál es el tratamiento inicial de elección?
++ Suspender el tabaco, ejercicio supervisado, antiagregante plaquetario y estatina de alta intensidad || Reducen los eventos cardiovasculares y mejoran la distancia de marcha.
+- anchoring | Revascularización quirúrgica inmediata || Se reserva para claudicación limitante refractaria o isquemia crítica.
+- availability_heuristic | Reposo en cama para no forzar las piernas || El ejercicio mejora la claudicación.
+- representativeness_heuristic | Anticoagulación con warfarina || No es el tratamiento de elección.
+- premature_closure | Amputación || No está indicada.
+- framing_effect | Vasodilatadores como pentoxifilina como única medida || Tiene beneficio limitado.
+- complexity_bias | Angioplastia en todos los pacientes con claudicación || No es el tratamiento inicial.
+- base_rate_fallacy | Betabloqueadores suspendidos por empeorar la claudicación || No empeoran la claudicación.
+- belief_bias | Masajes en las piernas como tratamiento principal || No tratan la enfermedad.
+- omission_bias | No insistir en dejar de fumar por ser difícil || Es la medida más importante.
+E: El tratamiento de la enfermedad arterial periférica busca reducir el riesgo cardiovascular y mejorar los síntomas. Incluye suspender el tabaco, que es la medida más importante, ejercicio supervisado de caminata, que aumenta la distancia de marcha, antiagregación con ácido acetilsalicílico o clopidogrel, estatina de alta intensidad, control de la presión arterial y de la glucosa. El cilostazol mejora la claudicación en pacientes sin insuficiencia cardiaca. La revascularización endovascular o quirúrgica se reserva para la claudicación que limita la vida pese al tratamiento y para la isquemia crítica.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad arterial periférica
+
+@ cir|vascular_surgery|peripheral_arterial_disease|4|next_step
+V: Mujer de 70 años con fibrilación auricular sin anticoagulación que presenta dolor súbito intenso en la pierna izquierda de 3 horas, con palidez, frialdad, ausencia de pulsos femoral distal y parestesias. Movilidad conservada.
+P: ¿Cuál es la conducta más apropiada?
++ Anticoagulación inmediata con heparina y revascularización urgente con embolectomía || Isquemia arterial aguda de origen embólico con extremidad viable amenazada.
+- anchoring | Analgésicos y ultrasonido programado en una semana || Es una urgencia vascular.
+- availability_heuristic | Elevar la pierna para disminuir el dolor || Empeora la perfusión.
+- representativeness_heuristic | Amputación primaria || La extremidad aún es viable.
+- premature_closure | Antiagregante oral solo y observación || No resuelve la oclusión aguda.
+- framing_effect | Aplicar calor local || Aumenta la demanda metabólica.
+- complexity_bias | Estudios extensos antes de anticoagular || Retrasan el tratamiento.
+- base_rate_fallacy | Medias de compresión || Están contraindicadas.
+- belief_bias | Calambre que pasará solo || Es una isquemia aguda.
+- omission_bias | Diferir la cirugía hasta controlar la fibrilación auricular || La extremidad puede perderse.
+E: La isquemia arterial aguda de una extremidad es una urgencia. Las causas más frecuentes son la embolia de origen cardiaco, sobre todo por fibrilación auricular, y la trombosis de una arteria con aterosclerosis previa. Se manifiesta con las seis P, dolor, palidez, ausencia de pulsos, parestesias, parálisis y poiquilotermia. La pérdida de la sensibilidad y la movilidad indica amenaza inmediata. El tratamiento es anticoagulación inmediata con heparina y revascularización urgente con embolectomía con catéter de Fogarty o trombólisis dirigida según la viabilidad. Tras la revascularización se vigila el síndrome compartimental.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la isquemia arterial aguda
+
+@ cir|vascular_surgery|aortic_aneurysm|2|diagnosis
+V: Hombre de 72 años, fumador e hipertenso, con hallazgo de una masa pulsátil en el mesogastrio en la exploración de rutina. Está asintomático. El ultrasonido muestra dilatación de la aorta infrarrenal de 4.5 cm.
+P: ¿Cuál es el diagnóstico más probable?
++ Aneurisma de aorta abdominal infrarrenal || Dilatación de la aorta mayor de 3 cm en un hombre mayor fumador.
+- anchoring | Aorta tortuosa normal || Un diámetro mayor de 3 cm es aneurisma.
+- availability_heuristic | Tumor de páncreas || Es una masa sólida no pulsátil.
+- representativeness_heuristic | Disección aórtica aguda || Da dolor intenso súbito.
+- premature_closure | Riñón en herradura || No es pulsátil.
+- base_rate_fallacy | Pseudoquiste pancreático || No es pulsátil ni vascular.
+- framing_effect | Adenopatías retroperitoneales || No son pulsátiles.
+- inattentional_blindness | Aneurisma roto || Está asintomático y estable.
+- focusing_illusion | Hernia umbilical || No es pulsátil.
+- belief_bias | Latido normal del corazón en el abdomen || Es una dilatación anormal.
+E: El aneurisma de aorta abdominal es una dilatación permanente de la aorta mayor de 3 cm o mayor de 50% del diámetro normal, generalmente infrarrenal. Sus factores de riesgo son tabaquismo, sexo masculino, edad mayor de 65 años, antecedente familiar, hipertensión y aterosclerosis. La mayoría son asintomáticos y se descubren de forma incidental. El ultrasonido es el estudio de elección para el diagnóstico y el seguimiento. Se recomienda tamizaje con ultrasonido único en hombres de 65 a 75 años que han fumado. El riesgo de rotura aumenta con el diámetro y el crecimiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del aneurisma de aorta abdominal
+
+@ cir|vascular_surgery|aortic_aneurysm|3|next_step
+V: Hombre de 70 años con aneurisma de aorta abdominal infrarrenal asintomático de 4.2 cm descubierto en un ultrasonido. Fuma.
+P: ¿Cuál es la conducta más apropiada?
++ Vigilancia con ultrasonido periódico, suspender el tabaco y controlar los factores de riesgo || Los aneurismas menores de 5.5 cm asintomáticos se vigilan.
+- anchoring | Reparación quirúrgica inmediata || Se indica con diámetro de 5.5 cm o más, crecimiento rápido o síntomas.
+- availability_heuristic | Ningún seguimiento porque está asintomático || Requiere vigilancia.
+- representativeness_heuristic | Anticoagulación de por vida || No está indicada.
+- premature_closure | Betabloqueadores como tratamiento que evita la rotura || No han demostrado reducir el crecimiento.
+- framing_effect | Reposo absoluto para evitar la rotura || No es necesario.
+- complexity_bias | Angiografía invasiva anual || No es necesaria.
+- base_rate_fallacy | Reparación endovascular profiláctica en todos || No está indicada en aneurismas pequeños.
+- belief_bias | Hacer abdominales para fortalecer la aorta || No tiene efecto.
+- omission_bias | No insistir en dejar de fumar || El tabaco acelera el crecimiento.
+E: El manejo del aneurisma de aorta abdominal depende del diámetro, la velocidad de crecimiento y los síntomas. Los aneurismas asintomáticos menores de 5.5 cm en hombres y de 5 cm en mujeres se vigilan con ultrasonido, cada 1 a 3 años según el tamaño. Se suspende el tabaco, que acelera el crecimiento, y se controlan la presión arterial y los lípidos con estatinas. La reparación, endovascular o abierta, se indica con diámetro de 5.5 cm o más, crecimiento mayor de 1 cm por año o síntomas como dolor abdominal o lumbar.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del aneurisma de aorta abdominal
+
+@ cir|vascular_surgery|aortic_aneurysm|4|diagnosis
+V: Hombre de 75 años con antecedente de aneurisma de aorta abdominal de 6 cm que rechazó la cirugía. Presenta dolor abdominal y lumbar súbito e intenso, síncope, presión de 70/40 mmHg y una masa pulsátil dolorosa.
+P: ¿Cuál es el diagnóstico más probable?
++ Aneurisma de aorta abdominal roto || Tríada de dolor abdominal o lumbar, hipotensión y masa pulsátil.
+- anchoring | Cólico renoureteral || No explica la hipotensión ni la masa pulsátil.
+- availability_heuristic | Pancreatitis aguda || No explica la masa pulsátil con choque.
+- representativeness_heuristic | Infarto agudo de miocardio || No explica la masa pulsátil.
+- premature_closure | Diverticulitis perforada || No explica la masa pulsátil.
+- base_rate_fallacy | Isquemia mesentérica || No explica la masa pulsátil.
+- framing_effect | Lumbalgia mecánica || No explica el choque.
+- inattentional_blindness | Úlcera perforada || No explica la masa pulsátil.
+- focusing_illusion | Síncope vasovagal || No explica la masa ni el dolor.
+- belief_bias | Dolor de espalda por la edad || Es una urgencia mortal.
+E: La rotura del aneurisma de aorta abdominal es una urgencia con mortalidad muy alta. Se presenta con la tríada de dolor abdominal o lumbar súbito, hipotensión y masa pulsátil, aunque solo una parte de los pacientes la presenta completa, y puede confundirse con cólico renal. La mayoría de las roturas son retroperitoneales, lo que permite que algunos pacientes lleguen vivos. En el paciente inestable con aneurisma conocido no se debe retrasar la cirugía por estudios. Se aplica hipotensión permisiva y se realiza reparación urgente, endovascular si la anatomía lo permite, o abierta.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del aneurisma de aorta abdominal
+
+@ cir|vascular_surgery|aortic_aneurysm|3|prevention_screening
+V: Hombre de 67 años, exfumador de 30 paquetes al año, sin síntomas, que acude a consulta preventiva.
+P: ¿Cuál es el tamizaje vascular recomendado?
++ Ultrasonido abdominal único para buscar aneurisma de aorta abdominal || Se recomienda en hombres de 65 a 75 años que han fumado.
+- anchoring | Ningún estudio porque está asintomático || El aneurisma suele ser silencioso.
+- availability_heuristic | Angiotomografía de cuerpo entero anual || Es excesiva.
+- representativeness_heuristic | Radiografía de abdomen anual || No es adecuada.
+- premature_closure | Índice tobillo brazo como tamizaje de aneurisma || Evalúa la enfermedad arterial periférica.
+- base_rate_fallacy | Ultrasonido anual de por vida en todos los hombres || Se recomienda uno único si es normal.
+- framing_effect | Tamizaje solo en mujeres || El riesgo es mayor en hombres.
+- complexity_bias | Resonancia magnética anual || No es necesaria.
+- information_bias | Perfil de lípidos como tamizaje de aneurisma || No detecta aneurismas.
+- belief_bias | Palpar el abdomen basta para descartarlo || La exploración es poco sensible.
+E: El aneurisma de aorta abdominal suele ser asintomático hasta su rotura, que tiene una mortalidad muy alta. Se recomienda un tamizaje con ultrasonido abdominal único en hombres de 65 a 75 años que han fumado alguna vez, ya que reduce la mortalidad por rotura. También puede considerarse en hombres con antecedente familiar. El ultrasonido es sencillo, no invasivo y tiene alta sensibilidad. Si es normal no se repite. La exploración física tiene baja sensibilidad, sobre todo en obesos, por lo que no sustituye al ultrasonido.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del aneurisma de aorta abdominal
+
+@ cir|vascular_surgery|aortic_aneurysm|4|diagnosis
+V: Hombre de 58 años con hipertensión mal controlada que presenta dolor torácico súbito, desgarrante, irradiado a la espalda entre las escápulas. Diferencia de presión arterial de 30 mmHg entre ambos brazos. La radiografía muestra ensanchamiento mediastinal.
+P: ¿Cuál es el diagnóstico más probable?
++ Disección aórtica aguda || Dolor desgarrante irradiado a la espalda con diferencia de presión entre brazos e hipertensión.
+- anchoring | Infarto agudo de miocardio || No explica la diferencia de presión ni el dolor desgarrante.
+- availability_heuristic | Tromboembolia pulmonar || No explica la diferencia de presión.
+- representativeness_heuristic | Pericarditis aguda || Da dolor pleurítico que mejora al inclinarse.
+- premature_closure | Espasmo esofágico || No explica la diferencia de presión.
+- base_rate_fallacy | Neumotórax espontáneo || No explica el mediastino ensanchado.
+- framing_effect | Contractura muscular dorsal || No explica la diferencia de presión.
+- inattentional_blindness | Aneurisma abdominal roto || El dolor es torácico.
+- focusing_illusion | Herpes zóster preeruptivo || No explica los hallazgos.
+- belief_bias | Dolor por estrés || Es una urgencia vital.
+E: La disección aórtica es la separación de las capas de la pared aórtica por un desgarro de la íntima. El principal factor de riesgo es la hipertensión, y otros son el síndrome de Marfan, la válvula aórtica bivalva y la cocaína. Se manifiesta con dolor torácico súbito y desgarrante irradiado a la espalda, diferencia de presión o pulsos entre extremidades, soplo de insuficiencia aórtica y déficit neurológico. La angiotomografía es el estudio de elección. La clasificación de Stanford divide en tipo A, que afecta la aorta ascendente y requiere cirugía urgente, y tipo B, que se maneja médicamente con control de presión y frecuencia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la disección aórtica
