@@ -1,0 +1,303 @@
+@ gyo|early_pregnancy|ectopic_pregnancy|2|diagnosis
+V: Mujer de 27 años con amenorrea de 7 semanas, dolor en fosa iliaca derecha y sangrado vaginal escaso. Antecedente de enfermedad pélvica inflamatoria. Prueba de embarazo positiva. Estable. El ultrasonido transvaginal no muestra saco gestacional intrauterino y hay una masa anexial derecha.
+P: ¿Cuál es el diagnóstico más probable?
++ Embarazo ectópico tubario || Prueba positiva, útero vacío, masa anexial y factor de riesgo tubario.
+- anchoring | Aborto completo || No explica la masa anexial.
+- availability_heuristic | Apendicitis aguda || No explica la prueba de embarazo positiva con útero vacío.
+- representativeness_heuristic | Quiste de cuerpo lúteo roto con embarazo intrauterino || No hay saco intrauterino.
+- premature_closure | Amenaza de aborto || Requiere embarazo intrauterino.
+- base_rate_fallacy | Embarazo heterotópico || Es muy raro sin reproducción asistida.
+- framing_effect | Torsión de ovario || No explica la prueba positiva con útero vacío.
+- inattentional_blindness | Enfermedad pélvica inflamatoria aguda || No explica la prueba positiva.
+- focusing_illusion | Mola hidatiforme || Daría imagen intrauterina característica.
+- belief_bias | Embarazo muy temprano que aún no se ve || A las 7 semanas con masa anexial debe pensarse en ectópico.
+E: El embarazo ectópico es la implantación fuera de la cavidad uterina, en más de 95% en la trompa, sobre todo en la ampolla. Es una causa importante de muerte materna en el primer trimestre. Se manifiesta con amenorrea, dolor abdominal y sangrado vaginal. Los factores de riesgo son enfermedad pélvica inflamatoria, cirugía tubaria, ectópico previo, dispositivo intrauterino, reproducción asistida y tabaquismo. El diagnóstico combina la fracción beta de gonadotropina coriónica y el ultrasonido transvaginal. Un útero vacío con hCG por arriba de la zona discriminatoria, alrededor de 1 500 a 3 500 mUI/mL, sugiere ectópico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del embarazo tubario
+
+@ gyo|early_pregnancy|ectopic_pregnancy|3|treatment_of_choice
+V: Mujer de 30 años con embarazo ectópico tubario no roto de 2.5 cm sin actividad cardiaca, hemodinámicamente estable. Fracción beta de hCG de 2 200 mUI/mL. Función hepática y renal normales. Puede acudir a seguimiento.
+P: ¿Cuál es el tratamiento de elección?
++ Metotrexato intramuscular con seguimiento de hCG || Cumple criterios para tratamiento médico.
+- anchoring | Salpingectomía de urgencia en todas || El tratamiento médico es adecuado en casos seleccionados.
+- availability_heuristic | Manejo expectante sin seguimiento || Requiere vigilancia estrecha.
+- representativeness_heuristic | Legrado uterino || No trata un embarazo tubario.
+- premature_closure | Misoprostol oral || No trata el embarazo ectópico.
+- framing_effect | Antibióticos y analgésicos || No tratan el ectópico.
+- complexity_bias | Histerectomía || Es excesiva.
+- base_rate_fallacy | Oxitocina intravenosa || No es útil.
+- belief_bias | Reposo hasta que se reabsorba solo sin vigilancia || Puede romperse.
+- omission_bias | Esperar a la ruptura para operar || Aumenta la morbilidad.
+E: El metotrexato es un antagonista del ácido fólico que detiene la proliferación del trofoblasto. Se indica en embarazos ectópicos no rotos en pacientes estables, con masa menor de 3.5 a 4 cm, sin actividad cardiaca, con hCG idealmente menor de 5 000 mUI/mL, sin contraindicaciones como hepatopatía, nefropatía, alteraciones hematológicas o lactancia, y que puedan acudir al seguimiento. Se mide la hCG los días 4 y 7 y debe disminuir al menos 15%. Si no disminuye se repite la dosis o se opera. La cirugía se indica en ruptura, inestabilidad o falla del tratamiento médico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del embarazo tubario
+
+@ gyo|early_pregnancy|ectopic_pregnancy|3|next_step
+V: Mujer de 25 años con amenorrea de 8 semanas que llega con dolor abdominal intenso, dolor en el hombro derecho, palidez, presión de 80/50 mmHg y frecuencia cardiaca de 125. Abdomen con rebote. Prueba de embarazo positiva. El ultrasonido muestra líquido libre abundante en el fondo de saco.
+P: ¿Cuál es la conducta más apropiada?
++ Reanimación con soluciones y hemoderivados y laparotomía o laparoscopia urgente || Embarazo ectópico roto con choque hemorrágico.
+- anchoring | Metotrexato intramuscular || Está contraindicado en ruptura e inestabilidad.
+- availability_heuristic | Medir hCG cada 48 horas || Retrasa el tratamiento de una urgencia.
+- representativeness_heuristic | Legrado uterino urgente || No trata el sangrado tubario.
+- premature_closure | Manejo expectante con analgesia || Es mortal.
+- framing_effect | Culdocentesis como tratamiento || Es diagnóstica, no terapéutica.
+- complexity_bias | Tomografía abdominal antes de operar || Retrasa la cirugía.
+- status_quo_bias | Observar en urgencias por 6 horas || La paciente está en choque.
+- belief_bias | El dolor de hombro es por mala postura || Indica irritación diafragmática por sangre.
+- omission_bias | Diferir la cirugía hasta estabilizarla por completo || La cirugía es parte de la reanimación.
+E: El embarazo ectópico roto produce hemoperitoneo y choque hipovolémico. Se manifiesta con dolor abdominal intenso, signos de irritación peritoneal, dolor referido al hombro por irritación del diafragma, hipotensión y taquicardia. El ultrasonido muestra líquido libre. El tratamiento es quirúrgico urgente mientras se reanima a la paciente con soluciones y hemoderivados. Se prefiere la laparoscopia si hay estabilidad suficiente y experiencia, y la laparotomía en inestabilidad grave. Generalmente se realiza salpingectomía. Se aplica inmunoglobulina anti D a mujeres Rh negativo no sensibilizadas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del embarazo tubario
+
+@ gyo|early_pregnancy|ectopic_pregnancy|3|data_interpretation
+V: Mujer de 29 años con amenorrea de 6 semanas y sangrado escaso, estable. Fracción beta de hCG de 900 mUI/mL. El ultrasonido transvaginal no muestra saco intrauterino ni masas anexiales.
+P: ¿Qué indica este resultado?
++ Embarazo de localización desconocida que requiere hCG seriada a las 48 horas y nuevo ultrasonido || La hCG está por debajo de la zona discriminatoria.
+- anchoring | Embarazo ectópico confirmado que requiere cirugía || No se puede confirmar con estos datos.
+- availability_heuristic | Aborto completo confirmado || No puede afirmarse sin seguimiento.
+- representativeness_heuristic | Embarazo intrauterino normal confirmado || No se ha visto el saco.
+- premature_closure | Prueba falsa positiva || La hCG sérica confirma embarazo.
+- base_rate_fallacy | Mola hidatiforme || La hCG sería muy alta.
+- framing_effect | Indicación de metotrexato inmediato || No hay diagnóstico de ectópico.
+- inattentional_blindness | Indicación de legrado diagnóstico en todas || No es el paso inicial si desea el embarazo.
+- focusing_illusion | Tumor productor de hCG || No hay datos.
+- belief_bias | Ya no está embarazada porque no se ve nada || La hCG positiva indica embarazo.
+E: El embarazo de localización desconocida es una prueba de embarazo positiva sin evidencia de embarazo intrauterino ni extrauterino por ultrasonido transvaginal. Puede ser un embarazo intrauterino temprano, un aborto o un ectópico. Cuando la hCG está por debajo de la zona discriminatoria se repite a las 48 horas. En un embarazo intrauterino viable la hCG aumenta al menos 35 a 53% en 48 horas, un descenso sugiere aborto y un ascenso lento o meseta sugiere ectópico. Se repite el ultrasonido cuando se supera la zona discriminatoria. Se dan signos de alarma a la paciente.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del embarazo tubario
+
+@ gyo|early_pregnancy|ectopic_pregnancy|3|risk_factor
+V: Mujer de 33 años con embarazo ectópico tubario. Tiene antecedente de salpingitis por clamidia hace 5 años, usa anticonceptivos orales de forma irregular y es fumadora.
+P: ¿Cuál es el factor de riesgo más importante para el embarazo ectópico en esta paciente?
++ Antecedente de enfermedad pélvica inflamatoria por clamidia || El daño tubario es el principal factor de riesgo.
+- anchoring | Uso de anticonceptivos orales || Reducen el riesgo de embarazo.
+- availability_heuristic | Edad de 33 años como factor principal || Es un factor menor.
+- representativeness_heuristic | Primiparidad || No es un factor relevante.
+- premature_closure | Ejercicio intenso || No es un factor.
+- base_rate_fallacy | Grupo sanguíneo materno || No es un factor.
+- framing_effect | Consumo de café || No es un factor relevante.
+- inattentional_blindness | Uso de tampones || No es un factor.
+- focusing_illusion | Relaciones sexuales frecuentes || No es un factor por sí mismo.
+- belief_bias | Cargar objetos pesados al inicio del embarazo || No causa ectópico.
+E: Los principales factores de riesgo de embarazo ectópico son los que dañan la trompa, como enfermedad pélvica inflamatoria, sobre todo por Chlamydia trachomatis, cirugía tubaria incluida la oclusión tubaria, ectópico previo y endometriosis. Otros factores son reproducción asistida, tabaquismo, edad mayor de 35 años y embarazo con dispositivo intrauterino colocado, aunque el dispositivo reduce el riesgo global de embarazo. El tabaquismo altera la motilidad tubaria. Prevenir y tratar las infecciones de transmisión sexual reduce el riesgo de ectópico e infertilidad.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del embarazo tubario
+
+@ gyo|early_pregnancy|ectopic_pregnancy|4|complication_prognosis
+V: Mujer de 28 años tratada con metotrexato por embarazo ectópico. Al día 7 la hCG aumentó respecto al día 4 y hoy presenta dolor abdominal creciente, aunque está estable.
+P: ¿Cuál es el riesgo principal en este momento?
++ Falla del tratamiento con riesgo de ruptura tubaria que requiere valorar segunda dosis o cirugía || La hCG que no disminuye indica falla.
+- anchoring | Ninguno, el dolor es normal y la hCG siempre sube al inicio || Del día 4 al 7 debe bajar al menos 15%.
+- availability_heuristic | Mola hidatiforme posterior || No es la complicación esperada.
+- representativeness_heuristic | Infertilidad inmediata segura || No es el riesgo inmediato.
+- premature_closure | Toxicidad hepática como única preocupación || La prioridad es la falla y la ruptura.
+- base_rate_fallacy | Embarazo intrauterino viable || No corresponde.
+- framing_effect | Alergia al metotrexato || No explica el cuadro.
+- inattentional_blindness | Gastritis por metotrexato || No explica la hCG ascendente.
+- focusing_illusion | Quiste de ovario funcional || No explica la hCG ascendente.
+- belief_bias | El medicamento tarda meses en hacer efecto || La respuesta se mide en una semana.
+E: Tras el metotrexato puede haber dolor abdominal en los primeros días por la resolución del ectópico, pero el dolor creciente obliga a descartar ruptura. La hCG puede aumentar del día 1 al 4, pero debe disminuir al menos 15% entre los días 4 y 7. Si no disminuye se considera falla y se administra una segunda dosis o se realiza cirugía. Ante datos de ruptura o inestabilidad se opera. Durante el tratamiento se evitan el ácido fólico, los antiinflamatorios, el alcohol y las relaciones sexuales, y se recomienda evitar el embarazo por al menos 3 meses.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del embarazo tubario
+
+@ gyo|early_pregnancy|ectopic_pregnancy|3|initial_study
+V: Mujer de 26 años con amenorrea de 6 semanas y dolor pélvico leve. Prueba de embarazo en orina positiva. Está estable.
+P: ¿Cuál es el estudio inicial de elección para localizar el embarazo?
++ Ultrasonido transvaginal junto con fracción beta de hCG cuantitativa || Permite identificar embarazo intrauterino o ectópico.
+- anchoring | Ultrasonido abdominal como único estudio || Es menos sensible al inicio del embarazo.
+- availability_heuristic | Tomografía abdominal || No es adecuada en el embarazo temprano.
+- representativeness_heuristic | Laparoscopia diagnóstica inmediata || Es invasiva y no es el primer paso en estables.
+- premature_closure | Culdocentesis || Ha sido sustituida por el ultrasonido.
+- base_rate_fallacy | Progesterona sérica como único estudio || No localiza el embarazo.
+- framing_effect | Resonancia magnética de pelvis || No es el estudio inicial.
+- complexity_bias | Histerosalpingografía || Está contraindicada en el embarazo.
+- information_bias | Biometría hemática como estudio de localización || No localiza.
+- belief_bias | Esperar a la siguiente menstruación || Retrasa el diagnóstico.
+E: Ante una prueba de embarazo positiva con dolor o sangrado en el primer trimestre, el abordaje inicial es el ultrasonido transvaginal junto con la fracción beta de hCG cuantitativa. El ultrasonido transvaginal visualiza el saco gestacional intrauterino desde las 4.5 a 5 semanas y es más sensible que el abdominal. La presencia de saco con vesícula vitelina confirma el embarazo intrauterino. Una masa anexial con anillo hiperecoico o un saco con embrión fuera del útero confirman el ectópico. La laparoscopia diagnóstica se reserva para casos dudosos o inestables.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del embarazo tubario
+
+@ gyo|early_pregnancy|miscarriage|2|diagnosis
+V: Mujer de 24 años con embarazo de 9 semanas que presenta sangrado vaginal escaso y dolor tipo cólico leve. El orificio cervical está cerrado. El ultrasonido muestra embrión con frecuencia cardiaca de 160 por minuto.
+P: ¿Cuál es el diagnóstico más probable?
++ Amenaza de aborto || Sangrado con cérvix cerrado y embrión vivo.
+- anchoring | Aborto inevitable || Tendría cérvix abierto.
+- availability_heuristic | Aborto incompleto || Habría restos con cérvix abierto.
+- representativeness_heuristic | Aborto diferido || El embrión tiene actividad cardiaca.
+- premature_closure | Embarazo ectópico || El embarazo es intrauterino.
+- base_rate_fallacy | Mola hidatiforme || La imagen sería característica.
+- framing_effect | Aborto completo || El embarazo continúa.
+- inattentional_blindness | Pólipo cervical || No explica el cólico.
+- focusing_illusion | Menstruación en el embarazo || El sangrado en el embarazo no es menstruación.
+- belief_bias | Pérdida segura del embarazo || La mayoría continúa con normalidad.
+E: El aborto espontáneo es la pérdida del embarazo antes de las 20 semanas o de los 500 g. Se clasifica en amenaza de aborto, con sangrado, cérvix cerrado y embrión vivo, aborto inevitable con cérvix abierto o ruptura de membranas, aborto incompleto con expulsión parcial y restos, aborto completo con expulsión total y cérvix cerrado, y aborto diferido con embrión sin actividad cardiaca retenido. En la amenaza de aborto con embrión vivo la mayoría de los embarazos continúan. El manejo es expectante, sin evidencia de beneficio del reposo absoluto.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del aborto espontáneo
+
+@ gyo|early_pregnancy|miscarriage|3|treatment_of_choice
+V: Mujer de 30 años con embarazo de 10 semanas por fecha de última menstruación. El ultrasonido muestra embrión con longitud cráneo caudal de 9 mm sin actividad cardiaca. Sin sangrado. Desea la opción menos invasiva y no tiene contraindicaciones.
+P: ¿Cuál es el tratamiento médico de elección?
++ Misoprostol, idealmente precedido de mifepristona, con seguimiento clínico || Es eficaz para evacuar el aborto diferido sin cirugía.
+- anchoring | Esperar indefinidamente sin seguimiento || Debe tener seguimiento.
+- availability_heuristic | Oxitocina intravenosa || Es poco eficaz en el primer trimestre.
+- representativeness_heuristic | Metotrexato || Se usa en ectópico.
+- premature_closure | Histerectomía || Es excesiva.
+- framing_effect | Progesterona para mantener el embarazo || El embrión no es viable.
+- complexity_bias | Legrado obligatorio en todas || Hay opciones médicas y aspiración.
+- base_rate_fallacy | Antibióticos solos || No evacuan el útero.
+- belief_bias | Repetir el ultrasonido cada semana por meses esperando latido || Con 9 mm sin latido el diagnóstico es seguro.
+- omission_bias | No ofrecer opciones por ser un tema difícil || La paciente tiene derecho a decidir.
+E: El aborto diferido se diagnostica con un embrión con longitud cráneo caudal de 7 mm o más sin actividad cardiaca, o un saco gestacional de 25 mm o más sin embrión. Las opciones de manejo son expectante, médico o quirúrgico, según la preferencia de la paciente y su estado clínico. El tratamiento médico más eficaz es mifepristona seguida de misoprostol, o misoprostol solo. El tratamiento quirúrgico de elección es la aspiración manual endouterina, preferida sobre el legrado instrumentado. Se aplica inmunoglobulina anti D en mujeres Rh negativo y se ofrece anticoncepción y apoyo emocional.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del aborto espontáneo
+
+@ gyo|early_pregnancy|miscarriage|3|treatment_of_choice
+V: Mujer de 26 años con embarazo de 8 semanas que presenta sangrado abundante con coágulos y salida de tejido. El orificio cervical está abierto y el ultrasonido muestra restos en cavidad. Estable y sin fiebre.
+P: ¿Cuál es el tratamiento quirúrgico de elección?
++ Aspiración manual endouterina || Es segura, eficaz y con menos complicaciones que el legrado instrumentado.
+- anchoring | Legrado uterino instrumentado como primera elección || Tiene más riesgo de perforación y sinequias.
+- availability_heuristic | Histerectomía || Es excesiva.
+- representativeness_heuristic | Cesárea || No corresponde.
+- premature_closure | Solo uterotónicos sin evacuar en sangrado abundante || Puede requerir evacuación.
+- framing_effect | Dilatación y evacuación del segundo trimestre || Es para embarazos más avanzados.
+- complexity_bias | Histeroscopia operatoria como primera opción || No es el estándar inicial.
+- base_rate_fallacy | Metotrexato || No está indicado.
+- belief_bias | Reposo absoluto hasta que expulse todo || Con sangrado abundante requiere evacuación.
+- omission_bias | No evacuar por miedo a dañar la fertilidad || La aspiración es segura.
+E: El aborto incompleto se caracteriza por sangrado, cólico, cérvix abierto y restos en la cavidad. En pacientes estables puede manejarse de forma expectante, médica con misoprostol o quirúrgica. La aspiración manual endouterina es el tratamiento quirúrgico de elección en embarazos de hasta 12 a 14 semanas, ya que tiene menor riesgo de perforación, sangrado y sinequias que el legrado instrumentado, y puede realizarse con anestesia local. Ante sangrado abundante, inestabilidad o infección se prefiere la evacuación quirúrgica. Se administra inmunoglobulina anti D si es Rh negativo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del aborto espontáneo
+
+@ gyo|early_pregnancy|miscarriage|3|risk_factor
+V: Mujer de 34 años con tres abortos espontáneos consecutivos en el primer trimestre. Se estudia la causa. Tiene antecedente de una trombosis venosa profunda y anticuerpos anticardiolipina positivos en dos ocasiones separadas por 12 semanas.
+P: ¿Cuál es la causa más probable de sus pérdidas recurrentes?
++ Síndrome antifosfolípido || Pérdidas recurrentes con trombosis y anticuerpos antifosfolípido persistentes.
+- anchoring | Alteraciones cromosómicas fetales esporádicas || No explican la trombosis ni los anticuerpos.
+- availability_heuristic | Hipotiroidismo subclínico || No explica los anticuerpos ni la trombosis.
+- representativeness_heuristic | Insuficiencia cervical || Causa pérdidas en el segundo trimestre.
+- premature_closure | Estrés laboral || No es una causa demostrada.
+- base_rate_fallacy | Útero septado || Puede causarlas, pero no explica los anticuerpos.
+- framing_effect | Diabetes descontrolada || No hay datos.
+- inattentional_blindness | Infección por toxoplasma || No causa pérdidas recurrentes.
+- focusing_illusion | Edad materna como única causa || No explica los anticuerpos.
+- belief_bias | Mala suerte sin causa médica || Hay una causa tratable.
+E: El aborto recurrente se define como dos o tres pérdidas consecutivas. Sus causas incluyen alteraciones cromosómicas parentales, síndrome antifosfolípido, malformaciones uterinas como útero septado, alteraciones endocrinas como diabetes y tiroides descontroladas, y factores de estilo de vida. El síndrome antifosfolípido se diagnostica con un criterio clínico, como trombosis o pérdidas gestacionales, y uno de laboratorio, anticoagulante lúpico, anticardiolipina o anti beta 2 glicoproteína I positivos en dos ocasiones con 12 semanas de diferencia. El tratamiento en el embarazo es ácido acetilsalicílico a dosis baja con heparina de bajo peso molecular.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del aborto recurrente
+
+@ gyo|early_pregnancy|miscarriage|3|complication_prognosis
+V: Mujer de 22 años con aborto inducido en condiciones inseguras hace 2 días que presenta fiebre de 39.5 °C, dolor abdominal, loquios fétidos, taquicardia y presión de 85/50 mmHg. Útero doloroso.
+P: ¿Cuál es la complicación que presenta?
++ Aborto séptico con choque séptico || Fiebre, dolor uterino, secreción fétida e hipotensión tras un aborto inseguro.
+- anchoring | Aborto incompleto no complicado || No explica la fiebre ni el choque.
+- availability_heuristic | Infección urinaria baja || No explica la secreción fétida ni el choque.
+- representativeness_heuristic | Apendicitis aguda || No explica el antecedente ni la secreción.
+- premature_closure | Embarazo ectópico roto || No explica la fiebre.
+- base_rate_fallacy | Mola invasora || No explica el cuadro agudo séptico.
+- framing_effect | Gastroenteritis aguda || No explica los hallazgos.
+- inattentional_blindness | Reacción al misoprostol || La fiebre por misoprostol es transitoria sin choque.
+- focusing_illusion | Endometriosis || No explica el cuadro agudo.
+- belief_bias | Fiebre normal después de un aborto || Es una urgencia.
+E: El aborto séptico es la infección del útero y sus anexos tras un aborto, sobre todo inseguro o con restos retenidos. Se manifiesta con fiebre, dolor abdominal, útero doloroso, secreción fétida y puede progresar a peritonitis, choque séptico, coagulación intravascular diseminada y muerte. Es una causa importante de mortalidad materna. El tratamiento incluye reanimación, antibióticos de amplio espectro como clindamicina con gentamicina o ampicilina, y evacuación uterina temprana tras iniciar los antibióticos. Si no mejora o hay perforación puede requerirse histerectomía. El acceso a aborto seguro reduce estas muertes.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del aborto espontáneo
+
+@ gyo|early_pregnancy|miscarriage|2|risk_factor
+V: Mujer de 38 años con aborto espontáneo de 8 semanas, el primero. Está muy angustiada y pregunta qué hizo mal para perder el embarazo.
+P: ¿Cuál es la causa más frecuente de aborto espontáneo en el primer trimestre?
++ Alteraciones cromosómicas del embrión, sobre todo trisomías || Explican alrededor de la mitad de los abortos tempranos.
+- anchoring | Ejercicio o actividad física moderada || No causa aborto.
+- availability_heuristic | Relaciones sexuales en el embarazo || No causan aborto.
+- representativeness_heuristic | Estrés emocional || No es una causa demostrada.
+- premature_closure | Infecciones urinarias leves || No son la causa principal.
+- base_rate_fallacy | Síndrome antifosfolípido || Es menos frecuente.
+- framing_effect | Malformaciones uterinas || Son menos frecuentes.
+- inattentional_blindness | Insuficiencia del cuerpo lúteo || No es la causa principal.
+- focusing_illusion | Haber cargado objetos ligeros || No causa aborto.
+- belief_bias | Haber comido alimentos fríos || Es un mito.
+E: El aborto espontáneo ocurre en 10 a 20% de los embarazos clínicamente reconocidos, sobre todo en el primer trimestre. Alrededor de la mitad se deben a alteraciones cromosómicas del embrión, como trisomías autosómicas, monosomía X y triploidías, cuyo riesgo aumenta con la edad materna. Otros factores son edad mayor de 35 años, abortos previos, diabetes y tiroides descontroladas, tabaquismo, alcohol, obesidad y malformaciones uterinas. El ejercicio, las relaciones sexuales y el estrés cotidiano no causan aborto. Es importante explicarlo para reducir la culpa y ofrecer apoyo emocional.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del aborto espontáneo
+
+@ gyo|early_pregnancy|gestational_trophoblastic|2|diagnosis
+V: Mujer de 19 años con amenorrea de 11 semanas, sangrado vaginal oscuro, náusea y vómito intensos y útero más grande de lo esperado para la edad gestacional. Fracción beta de hCG de 250 000 mUI/mL. El ultrasonido muestra imagen en tormenta de nieve sin embrión.
+P: ¿Cuál es el diagnóstico más probable?
++ Mola hidatiforme completa || hCG muy elevada, útero grande e imagen en tormenta de nieve sin embrión.
+- anchoring | Embarazo gemelar || Se verían sacos y embriones.
+- availability_heuristic | Hiperémesis gravídica con embarazo normal || No explica la imagen ecográfica.
+- representativeness_heuristic | Aborto diferido || No da imagen en tormenta de nieve ni hCG tan alta.
+- premature_closure | Mola parcial || Suele haber embrión o tejido fetal.
+- base_rate_fallacy | Coriocarcinoma || Suele aparecer después de un embarazo.
+- framing_effect | Mioma uterino con embarazo || No explica la hCG ni la imagen.
+- inattentional_blindness | Embarazo ectópico || El útero está ocupado.
+- focusing_illusion | Tumor ovárico de células germinales || No explica la imagen uterina.
+- belief_bias | Embarazo grande y sano || La imagen indica enfermedad trofoblástica.
+E: La mola hidatiforme completa resulta de la fecundación de un óvulo sin material genético por uno o dos espermatozoides, con cariotipo 46,XX de origen paterno, sin tejido embrionario. Se manifiesta con sangrado en el primer trimestre, útero grande para la edad gestacional, hiperémesis, hCG muy elevada, quistes tecaluteínicos, preeclampsia temprana e hipertiroidismo. El ultrasonido muestra imagen en tormenta de nieve. La mola parcial es triploide, con tejido fetal y menor riesgo de malignización. Los extremos de la edad reproductiva y la mola previa son factores de riesgo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad trofoblástica gestacional
+
+@ gyo|early_pregnancy|gestational_trophoblastic|3|treatment_of_choice
+V: Mujer de 22 años con mola hidatiforme completa confirmada, útero de 14 semanas, hemodinámicamente estable. Desea conservar su fertilidad.
+P: ¿Cuál es el tratamiento de elección?
++ Evacuación uterina por aspiración con oxitocina tras iniciar la dilatación, y seguimiento con hCG || Es el tratamiento estándar que preserva la fertilidad.
+- anchoring | Histerectomía en todas || Se reserva para quienes no desean fertilidad.
+- availability_heuristic | Inducción con misoprostol para expulsión espontánea || Aumenta el sangrado y la embolización trofoblástica.
+- representativeness_heuristic | Quimioterapia inmediata sin evacuar || Primero se evacua.
+- premature_closure | Manejo expectante || La mola debe evacuarse.
+- framing_effect | Legrado con cureta cortante como método principal || La aspiración es preferida.
+- complexity_bias | Radioterapia pélvica || No está indicada.
+- base_rate_fallacy | Metotrexato profiláctico a todas || No se recomienda de rutina.
+- belief_bias | Esperar a que el cuerpo la expulse sola || Aumenta las complicaciones.
+- omission_bias | No hacer seguimiento tras la evacuación || La hCG detecta la neoplasia persistente.
+E: El tratamiento de la mola hidatiforme es la evacuación uterina por aspiración, independientemente del tamaño uterino, en mujeres que desean fertilidad. La oxitocina se inicia después de comenzar la dilatación para reducir el riesgo de embolización trofoblástica. Se aplica inmunoglobulina anti D si es Rh negativo, ya que en la mola parcial hay tejido fetal. En mujeres sin deseo de fertilidad puede realizarse histerectomía con la mola in situ. Después se mide la hCG semanalmente hasta que sea negativa tres veces consecutivas y luego mensualmente, con anticoncepción hormonal confiable durante el seguimiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad trofoblástica gestacional
+
+@ gyo|early_pregnancy|gestational_trophoblastic|3|data_interpretation
+V: Mujer de 25 años con evacuación de mola completa hace 8 semanas. Las mediciones semanales de hCG han sido 12 000, 11 800, 11 900 y 12 100 mUI/mL en las últimas 4 semanas. Usa anticonceptivos orales.
+P: ¿Qué indica este patrón de hCG?
++ Neoplasia trofoblástica gestacional por meseta de la hCG en cuatro mediciones || La meseta durante 3 semanas indica enfermedad persistente.
+- anchoring | Descenso normal esperado tras la evacuación || La hCG no está descendiendo.
+- availability_heuristic | Nuevo embarazo normal || Usa anticoncepción y el patrón es una meseta.
+- representativeness_heuristic | Falso positivo por anticuerpos heterófilos sin relevancia || El contexto indica enfermedad persistente.
+- premature_closure | Resolución completa de la mola || La hCG sigue elevada.
+- base_rate_fallacy | Hipertiroidismo como causa de la hCG || La hCG proviene del trofoblasto.
+- framing_effect | Efecto de los anticonceptivos sobre la hCG || No elevan la hCG.
+- inattentional_blindness | Quiste ovárico funcional || No produce hCG.
+- focusing_illusion | Error de laboratorio repetido || Es consistente en 4 mediciones.
+- belief_bias | Esperar unos meses más sin estudios || La neoplasia requiere tratamiento.
+E: Tras la evacuación de una mola la hCG debe descender de forma progresiva. Se diagnostica neoplasia trofoblástica gestacional cuando la hCG se mantiene en meseta durante 3 semanas, con cuatro mediciones con variación menor de 10%, cuando aumenta más de 10% en tres mediciones durante 2 semanas, cuando persiste detectable más de 6 meses o cuando hay diagnóstico histológico de coriocarcinoma. Se realiza estudio de extensión con radiografía o tomografía de tórax y se estadifica con la puntuación de riesgo de la FIGO. La de bajo riesgo se trata con metotrexato o actinomicina D, con curación cercana a 100%.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad trofoblástica gestacional
+
+@ gyo|early_pregnancy|gestational_trophoblastic|3|complication_prognosis
+V: Mujer de 20 años con mola hidatiforme completa y hCG de 400 000 mUI/mL que presenta palpitaciones, temblor, intolerancia al calor y taquicardia. TSH suprimida y T4 libre elevada.
+P: ¿Cuál es la complicación que presenta?
++ Hipertiroidismo por estimulación del receptor de TSH por la hCG || La hCG comparte la subunidad alfa con la TSH.
+- anchoring | Enfermedad de Graves coincidente || El contexto orienta a hipertiroidismo por hCG.
+- availability_heuristic | Crisis de ansiedad || Hay alteración tiroidea objetiva.
+- representativeness_heuristic | Tiroiditis subaguda || No hay dolor tiroideo ni antecedente viral.
+- premature_closure | Feocromocitoma || No explica la alteración tiroidea.
+- base_rate_fallacy | Adenoma tóxico || El contexto explica el cuadro.
+- framing_effect | Efecto del sangrado con anemia sola || No explica la TSH suprimida.
+- inattentional_blindness | Preeclampsia sin otra alteración || No explica la tirotoxicosis.
+- focusing_illusion | Hipotiroidismo || La T4 está elevada.
+- belief_bias | Nervios por el diagnóstico de la mola || Hay hipertiroidismo bioquímico.
+E: La hCG y la TSH comparten la subunidad alfa y tienen subunidades beta similares, por lo que concentraciones muy altas de hCG pueden estimular el receptor de TSH y causar hipertiroidismo. Es una complicación de la mola hidatiforme, sobre todo con hCG muy elevada. Otras complicaciones médicas son hiperémesis, preeclampsia antes de las 20 semanas, anemia, quistes tecaluteínicos y embolización trofoblástica pulmonar durante la evacuación. El hipertiroidismo se controla con betabloqueadores antes de la evacuación para evitar una crisis tiroidea, y se resuelve al disminuir la hCG.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad trofoblástica gestacional
+
+@ gyo|early_pregnancy|gestational_trophoblastic|4|diagnosis
+V: Mujer de 31 años con parto vaginal normal hace 4 meses que presenta sangrado vaginal persistente, tos y hemoptisis. La radiografía de tórax muestra múltiples nódulos pulmonares. Fracción beta de hCG de 85 000 mUI/mL.
+P: ¿Cuál es el diagnóstico más probable?
++ Coriocarcinoma gestacional con metástasis pulmonares || hCG elevada con sangrado y nódulos pulmonares tras un embarazo.
+- anchoring | Tuberculosis pulmonar || No explica la hCG elevada.
+- availability_heuristic | Retención de restos placentarios || No explica las metástasis pulmonares.
+- representativeness_heuristic | Nuevo embarazo normal || No explica los nódulos ni la hemoptisis.
+- premature_closure | Cáncer de pulmón primario || No explica la hCG.
+- base_rate_fallacy | Tromboembolia pulmonar posparto || No explica la hCG elevada.
+- framing_effect | Mola hidatiforme completa || El antecedente es un embarazo de término.
+- inattentional_blindness | Endometritis crónica || No explica la hCG ni los nódulos.
+- focusing_illusion | Neumonía posparto || No explica la hCG ni los nódulos múltiples.
+- belief_bias | Sangrado normal del puerperio prolongado || A los 4 meses es anormal.
+E: El coriocarcinoma gestacional es una neoplasia maligna del trofoblasto que puede seguir a una mola, un aborto, un ectópico o un embarazo de término. Se disemina por vía hematógena, sobre todo a pulmón, vagina, cerebro e hígado. Se manifiesta con sangrado uterino persistente y síntomas de las metástasis, como hemoptisis. La hCG está muy elevada. Todo sangrado anormal persistente tras cualquier embarazo debe estudiarse con hCG. Es muy sensible a la quimioterapia, con metotrexato en bajo riesgo y esquemas combinados como EMA CO en alto riesgo, con altas tasas de curación incluso con metástasis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad trofoblástica gestacional
+
+@ gyo|early_pregnancy|gestational_trophoblastic|3|prevention_screening
+V: Mujer de 23 años que hace 2 semanas tuvo evacuación de una mola completa. Pregunta qué cuidados debe seguir para su salud reproductiva en los próximos meses.
+P: ¿Cuál es la medida de prevención indicada durante el seguimiento?
++ Anticoncepción hormonal confiable durante todo el seguimiento con hCG || Un nuevo embarazo impediría interpretar la hCG.
+- anchoring | Buscar embarazo de inmediato || Impide detectar la neoplasia persistente.
+- availability_heuristic | Dispositivo intrauterino de cobre inmediato en todas || Se evita hasta que la hCG sea negativa por riesgo de perforación.
+- representativeness_heuristic | Metotrexato profiláctico a todas || No se recomienda de rutina.
+- premature_closure | Suspender el seguimiento si se siente bien || La enfermedad persistente puede ser asintomática.
+- framing_effect | Histerectomía preventiva || No está indicada si desea fertilidad.
+- complexity_bias | Tomografía de cuerpo entero mensual || No es necesaria sin elevación de hCG.
+- base_rate_fallacy | Esterilización definitiva || No es necesaria.
+- belief_bias | Los anticonceptivos hormonales causan cáncer trofoblástico || Son seguros en el seguimiento.
+- omission_bias | No usar anticoncepción para no alterar el ciclo || El embarazo confunde el seguimiento.
+E: Tras la evacuación de una mola se mide la hCG cada semana hasta tener tres resultados negativos consecutivos, y después cada mes durante 3 a 6 meses según el tipo de mola. Durante ese tiempo se recomienda anticoncepción hormonal confiable, ya que un nuevo embarazo elevaría la hCG y dificultaría detectar una neoplasia trofoblástica persistente. Los anticonceptivos hormonales son seguros. El dispositivo intrauterino se evita hasta que la hCG sea negativa. En embarazos futuros se recomienda ultrasonido temprano por el riesgo de recurrencia y hCG 6 semanas después de su término.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad trofoblástica gestacional
