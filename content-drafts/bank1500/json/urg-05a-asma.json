@@ -1,0 +1,1050 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "urg-05a-asma-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "respiratory_emergencies",
+      "subtopic": "asthma_exacerbation",
+      "vignette": "Mujer de 25 años con asma que acude por disnea, tos y sibilancias de 6 horas tras exposición a polvo. Habla en frases, frecuencia respiratoria de 26, saturación de 93 por ciento y flujo espiratorio máximo del 55 por ciento de su mejor valor.",
+      "prompt": "¿Cuál es el tratamiento inicial más apropiado?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Intubación inmediata",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay datos de insuficiencia respiratoria."
+        },
+        {
+          "key": "b",
+          "text": "El oxígeno debe darse al 100 por ciento siempre en el asma",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se titula a una meta."
+        },
+        {
+          "key": "c",
+          "text": "Salbutamol inhalado repetido con espaciador o nebulizado, más corticosteroide sistémico y oxígeno para saturación de 93 a 95 por ciento",
+          "correct": true,
+          "rationale": "Es una exacerbación moderada."
+        },
+        {
+          "key": "d",
+          "text": "Los esteroides tardan días y no sirven en urgencias",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Reducen la necesidad de hospitalización."
+        },
+        {
+          "key": "e",
+          "text": "Antibiótico de amplio espectro de rutina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay datos de infección bacteriana."
+        },
+        {
+          "key": "f",
+          "text": "Solo salbutamol y alta inmediata sin esteroide",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El esteroide sistémico reduce recaídas."
+        },
+        {
+          "key": "g",
+          "text": "Teofilina intravenosa como primera línea",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Tiene más efectos adversos y menor eficacia."
+        },
+        {
+          "key": "h",
+          "text": "No revisar la técnica de inhalación y el plan de acción al egreso",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Previene nuevas crisis."
+        },
+        {
+          "key": "i",
+          "text": "Ventilación mecánica invasiva de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "j",
+          "text": "Sedación para disminuir la ansiedad",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede causar depresión respiratoria."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "La exacerbación del asma se clasifica por la gravedad clínica y la función pulmonar. En una exacerbación moderada, el paciente habla en frases, tiene taquipnea, saturación de 90 a 95 por ciento y flujo espiratorio de 50 a 75 por ciento del esperado o del mejor personal. El tratamiento inicial incluye un agonista beta 2 de acción corta, como salbutamol, cada 20 minutos durante la primera hora, con inhalador y espaciador o nebulizado, corticosteroide sistémico, como prednisona oral o metilprednisolona, y oxígeno titulado a una saturación de 93 a 95 por ciento en adultos. Se reevalúa a la hora.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años",
+        "Iniciativa global para el asma"
+      ]
+    },
+    {
+      "key": "urg-05a-asma-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "respiratory_emergencies",
+      "subtopic": "asthma_exacerbation",
+      "vignette": "Hombre de 30 años con exacerbación grave de asma. Habla con palabras sueltas, frecuencia respiratoria de 34, uso de músculos accesorios y saturación de 89 por ciento. Después de una hora de salbutamol e ipratropio nebulizados y esteroide intravenoso no mejora.",
+      "prompt": "¿Cuál es el siguiente paso más apropiado?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dar de alta con esteroide oral",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No ha mejorado y la crisis es grave."
+        },
+        {
+          "key": "b",
+          "text": "Sedar con benzodiacepinas para reducir la ansiedad",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede precipitar el paro respiratorio."
+        },
+        {
+          "key": "c",
+          "text": "Antibiótico como siguiente paso",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es el siguiente paso sin infección."
+        },
+        {
+          "key": "d",
+          "text": "No realizar gasometría para valorar hipercapnia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es indispensable."
+        },
+        {
+          "key": "e",
+          "text": "Broncoscopia diagnóstica urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "f",
+          "text": "Repetir solo el salbutamol sin otras medidas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No ha sido suficiente."
+        },
+        {
+          "key": "g",
+          "text": "Radiografía de tórax antes de cualquier tratamiento adicional",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No debe retrasar el tratamiento."
+        },
+        {
+          "key": "h",
+          "text": "Administrar sulfato de magnesio intravenoso y considerar ingreso a terapia intensiva",
+          "correct": true,
+          "rationale": "Está indicado en la exacerbación grave que no responde al tratamiento inicial."
+        },
+        {
+          "key": "i",
+          "text": "El magnesio no tiene evidencia en asma",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Reduce hospitalizaciones en crisis graves."
+        },
+        {
+          "key": "j",
+          "text": "La disminución de las sibilancias siempre indica mejoría",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede indicar tórax silencioso."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "En la exacerbación grave del asma el paciente habla con palabras sueltas, está agitado, usa músculos accesorios, tiene frecuencia respiratoria mayor de 30, frecuencia cardiaca mayor de 120, saturación menor de 90 por ciento y flujo espiratorio menor de 50 por ciento. Se agrega bromuro de ipratropio al salbutamol y corticosteroide sistémico. Si no hay respuesta, se administra sulfato de magnesio intravenoso, 2 gramos en 20 minutos, que reduce la hospitalización. Se considera el ingreso a terapia intensiva. Los signos de paro inminente son somnolencia, confusión, tórax silencioso, bradicardia e hipercapnia. Los sedantes están contraindicados.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años",
+        "Iniciativa global para el asma"
+      ]
+    },
+    {
+      "key": "urg-05a-asma-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "respiratory_emergencies",
+      "subtopic": "asthma_exacerbation",
+      "vignette": "Mujer de 22 años con crisis asmática grave de 8 horas. Está somnolienta, con tórax silencioso y frecuencia respiratoria de 12. Gasometría con pH de 7.25 y dióxido de carbono de 58 mmHg.",
+      "prompt": "¿Qué indica este hallazgo gasométrico en una crisis asmática?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Insuficiencia respiratoria con fatiga muscular y paro respiratorio inminente",
+          "correct": true,
+          "rationale": "Un dióxido de carbono normal o alto en una crisis asmática es un signo de alarma."
+        },
+        {
+          "key": "b",
+          "text": "Que puede darse de alta con esteroide oral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Requiere intervención urgente."
+        },
+        {
+          "key": "c",
+          "text": "Alcalosis respiratoria esperada en el asma",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Hay acidosis respiratoria."
+        },
+        {
+          "key": "d",
+          "text": "Error de laboratorio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es concordante con la clínica."
+        },
+        {
+          "key": "e",
+          "text": "Intoxicación por salbutamol",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "f",
+          "text": "La hipercapnia es frecuente en crisis leves",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Indica gravedad extrema."
+        },
+        {
+          "key": "g",
+          "text": "Hallazgo normal en asmáticos crónicos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es un signo de gravedad."
+        },
+        {
+          "key": "h",
+          "text": "Mejoría porque la frecuencia respiratoria bajó",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es por fatiga, no por mejoría."
+        },
+        {
+          "key": "i",
+          "text": "El tórax silencioso indica que el broncoespasmo cedió",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Indica obstrucción grave."
+        },
+        {
+          "key": "j",
+          "text": "Acidosis metabólica por diarrea",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es respiratoria."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "Al inicio de una crisis asmática, la hiperventilación produce hipocapnia y alcalosis respiratoria. A medida que la obstrucción empeora y aparece la fatiga muscular, el dióxido de carbono se normaliza y luego aumenta, con acidosis respiratoria, lo que indica insuficiencia respiratoria y paro inminente. Otros signos de alarma son somnolencia, confusión, tórax silencioso, bradicardia, movimiento paradójico y cianosis. Estos pacientes requieren preparación para intubación con secuencia rápida, preferentemente con ketamina por su efecto broncodilatador, y ventilación con frecuencia baja y tiempo espiratorio prolongado para evitar el atrapamiento aéreo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años",
+        "Iniciativa global para el asma"
+      ]
+    },
+    {
+      "key": "urg-05a-asma-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "respiratory_emergencies",
+      "subtopic": "asthma_exacerbation",
+      "vignette": "Hombre de 28 años con asma que tras una crisis moderada mejora con tratamiento en urgencias. Flujo espiratorio del 80 por ciento de su mejor valor, saturación de 96 por ciento al aire ambiente y sin disnea.",
+      "prompt": "¿Cuál es la conducta más apropiada al egreso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Suspender el corticosteroide inhalado porque ya mejoró",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El control a largo plazo depende de él."
+        },
+        {
+          "key": "b",
+          "text": "No identificar los desencadenantes de la crisis",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte de la prevención."
+        },
+        {
+          "key": "c",
+          "text": "Antibiótico profiláctico al egreso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "d",
+          "text": "Recomendar evitar todo ejercicio de por vida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "e",
+          "text": "Una crisis no indica mal control del asma",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Indica la necesidad de ajustar el tratamiento."
+        },
+        {
+          "key": "f",
+          "text": "Mantener hospitalizado una semana",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es necesario si cumple criterios de egreso."
+        },
+        {
+          "key": "g",
+          "text": "Alta solo con salbutamol de rescate",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta el riesgo de recaída."
+        },
+        {
+          "key": "h",
+          "text": "Iniciar biológico en urgencias",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Lo decide el especialista."
+        },
+        {
+          "key": "i",
+          "text": "Esteroide oral por 5 a 7 días, iniciar o aumentar corticosteroide inhalado, plan de acción escrito, revisión de técnica y seguimiento en 2 a 7 días",
+          "correct": true,
+          "rationale": "Reduce las recaídas tras una exacerbación."
+        },
+        {
+          "key": "j",
+          "text": "Los corticosteroides inhalados causan dependencia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No causan dependencia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "Los criterios de egreso tras una exacerbación de asma incluyen mejoría de los síntomas, flujo espiratorio mayor de 60 a 80 por ciento del mejor personal y saturación adecuada al aire ambiente. Al egreso se indica esteroide oral, como prednisona 40 a 50 mg diarios por 5 a 7 días, se inicia o aumenta el corticosteroide inhalado, se revisa la técnica de inhalación y la adherencia, se identifican y evitan desencadenantes, se entrega un plan de acción escrito y se programa seguimiento en 2 a 7 días. La guía GINA recomienda evitar el uso de salbutamol solo, sin corticosteroide inhalado, en adolescentes y adultos.",
+      "gpcRefs": [
+        "Iniciativa global para el asma",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años"
+      ]
+    },
+    {
+      "key": "urg-05a-asma-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "respiratory_emergencies",
+      "subtopic": "asthma_exacerbation",
+      "vignette": "Niño de 5 años con asma que llega con tos, sibilancias y tiraje intercostal. Frecuencia respiratoria de 40, saturación de 92 por ciento. Puede hablar en frases cortas.",
+      "prompt": "¿Cuál es el tratamiento inicial más apropiado?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Intubación inmediata",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "b",
+          "text": "Antibiótico oral como tratamiento principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay datos de infección bacteriana."
+        },
+        {
+          "key": "c",
+          "text": "Los esteroides orales afectan el crecimiento en cursos cortos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Los cursos cortos son seguros."
+        },
+        {
+          "key": "d",
+          "text": "No evaluar la técnica de los padres con el espaciador",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es fundamental."
+        },
+        {
+          "key": "e",
+          "text": "Salbutamol con inhalador presurizado y espaciador con mascarilla, cada 20 minutos en la primera hora, prednisolona oral y oxígeno",
+          "correct": true,
+          "rationale": "Es una exacerbación moderada en un niño."
+        },
+        {
+          "key": "f",
+          "text": "Nebulización con solución salina sola",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es broncodilatadora."
+        },
+        {
+          "key": "g",
+          "text": "Solo antitusivo y alta",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No trata el broncoespasmo."
+        },
+        {
+          "key": "h",
+          "text": "El inhalador con espaciador es menos eficaz que la nebulización en niños",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es igual o más eficaz."
+        },
+        {
+          "key": "i",
+          "text": "Aminofilina intravenosa como primera opción",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No se recomienda como primera línea."
+        },
+        {
+          "key": "j",
+          "text": "Adrenalina intramuscular como primera línea",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se usa en anafilaxia."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "En niños con exacerbación de asma, el agonista beta 2 de acción corta con inhalador presurizado y espaciador con mascarilla es tan eficaz como la nebulización, con menos efectos adversos y menor estancia. Se administran 2 a 6 disparos de salbutamol cada 20 minutos durante la primera hora, oxígeno para mantener una saturación de 94 a 98 por ciento y corticosteroide sistémico, como prednisolona oral de 1 a 2 mg por kilo, en exacerbaciones moderadas a graves. El bromuro de ipratropio se agrega en las graves. Se revalúa a la hora y se decide el egreso o la hospitalización.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en menores de 18 años",
+        "Iniciativa global para el asma"
+      ]
+    },
+    {
+      "key": "urg-05a-asma-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "respiratory_emergencies",
+      "subtopic": "asthma_exacerbation",
+      "vignette": "Hombre de 24 años con crisis asmática grave que presenta dolor torácico súbito, aumento brusco de la disnea, disminución del murmullo vesicular en el hemitórax derecho e hiperresonancia a la percusión.",
+      "prompt": "¿Cuál es la complicación más probable?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tromboembolia pulmonar como única explicación",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No explica la hiperresonancia."
+        },
+        {
+          "key": "b",
+          "text": "Atelectasia por tapón de moco",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Produce matidez."
+        },
+        {
+          "key": "c",
+          "text": "Derrame pleural",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Produce matidez, no hiperresonancia."
+        },
+        {
+          "key": "d",
+          "text": "Neumotórax",
+          "correct": true,
+          "rationale": "El atrapamiento aéreo y la hiperinsuflación pueden romper alvéolos."
+        },
+        {
+          "key": "e",
+          "text": "Neumonía lobar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la hiperresonancia súbita."
+        },
+        {
+          "key": "f",
+          "text": "Reacción adversa al salbutamol",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los hallazgos."
+        },
+        {
+          "key": "g",
+          "text": "Empeoramiento simple del broncoespasmo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La asimetría sugiere neumotórax."
+        },
+        {
+          "key": "h",
+          "text": "Infarto agudo de miocardio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica los hallazgos pulmonares."
+        },
+        {
+          "key": "i",
+          "text": "El neumotórax no ocurre en asmáticos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es una complicación conocida."
+        },
+        {
+          "key": "j",
+          "text": "El dolor torácico en crisis asmática siempre es muscular",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede indicar neumotórax o neumomediastino."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "e",
+        "g"
+      ],
+      "explanation": "Las complicaciones de la crisis asmática grave incluyen neumotórax, neumomediastino, atelectasias por tapones de moco, insuficiencia respiratoria, arritmias y alteraciones electrolíticas por los broncodilatadores, como la hipopotasemia. El atrapamiento aéreo y la hiperinsuflación aumentan la presión alveolar y pueden romper alvéolos, causando neumotórax, que se manifiesta con dolor torácico súbito, aumento de la disnea, disminución unilateral del murmullo e hiperresonancia. En pacientes ventilados el riesgo aumenta. Se confirma con radiografía o ultrasonido y se trata con sonda pleural si es significativo, y con descompresión inmediata si hay tensión.",
+      "gpcRefs": [
+        "Iniciativa global para el asma",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años"
+      ]
+    },
+    {
+      "key": "urg-05a-asma-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "respiratory_emergencies",
+      "subtopic": "asthma_exacerbation",
+      "vignette": "Mujer de 26 años con asma grave que requiere intubación. Después de intubarla, la presión arterial cae a 70/40 mmHg y las presiones de la vía aérea son muy altas, con ruidos respiratorios simétricos disminuidos. Se ventila a 24 respiraciones por minuto.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Desconectar brevemente el ventilador para permitir la espiración y reducir la frecuencia respiratoria con tiempo espiratorio prolongado",
+          "correct": true,
+          "rationale": "Sugiere atrapamiento aéreo con auto-PEEP que reduce el retorno venoso."
+        },
+        {
+          "key": "b",
+          "text": "Colocar sondas pleurales bilaterales de inmediato sin evaluar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Los ruidos simétricos sugieren atrapamiento, no neumotórax."
+        },
+        {
+          "key": "c",
+          "text": "No descartar neumotórax si no mejora",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe descartarse."
+        },
+        {
+          "key": "d",
+          "text": "Aumentar el volumen corriente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Empeora la hiperinsuflación."
+        },
+        {
+          "key": "e",
+          "text": "La hipotensión posintubación siempre se debe a los fármacos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "En asma, el atrapamiento es una causa importante."
+        },
+        {
+          "key": "f",
+          "text": "Oxigenación por membrana extracorpórea como primer paso",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "g",
+          "text": "Aumentar la frecuencia respiratoria para mejorar la ventilación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Empeora el atrapamiento."
+        },
+        {
+          "key": "h",
+          "text": "Extubar inmediatamente",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La paciente requiere soporte."
+        },
+        {
+          "key": "i",
+          "text": "Más ventilación siempre mejora la hipercapnia en asma",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Empeora el atrapamiento."
+        },
+        {
+          "key": "j",
+          "text": "Iniciar vasopresor sin modificar la ventilación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No corrige la causa."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "En el asma grave ventilado, la obstrucción al flujo espiratorio impide el vaciamiento completo de los pulmones, lo que causa atrapamiento aéreo e hiperinsuflación dinámica con presión positiva al final de la espiración intrínseca o auto-PEEP. Esto aumenta la presión intratorácica, reduce el retorno venoso y causa hipotensión, y aumenta el riesgo de barotrauma. Se maneja desconectando brevemente al paciente del ventilador para permitir la espiración, y con una estrategia de frecuencia baja, volumen corriente bajo, flujo inspiratorio alto y tiempo espiratorio prolongado, aceptando hipercapnia permisiva. Se descarta el neumotórax a tensión.",
+      "gpcRefs": [
+        "Iniciativa global para el asma",
+        "Guía de Práctica Clínica de manejo de la vía aérea en urgencias"
+      ]
+    },
+    {
+      "key": "urg-05a-asma-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "respiratory_emergencies",
+      "subtopic": "asthma_exacerbation",
+      "vignette": "Hombre de 35 años con crisis asmática que recibió salbutamol nebulizado de forma continua durante 2 horas. Presenta temblor, taquicardia de 125 y debilidad. Potasio de 2.9 mEq/L.",
+      "prompt": "¿Qué indica la hipopotasemia en este contexto?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Pérdidas renales por enfermedad renal crónica no diagnosticada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El tratamiento explica la hipopotasemia."
+        },
+        {
+          "key": "b",
+          "text": "La hipopotasemia no tiene riesgo cardiaco",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Favorece arritmias."
+        },
+        {
+          "key": "c",
+          "text": "Error de laboratorio sin relevancia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede causar arritmias."
+        },
+        {
+          "key": "d",
+          "text": "Diarrea oculta",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay datos."
+        },
+        {
+          "key": "e",
+          "text": "Acidosis tubular renal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El contexto lo explica."
+        },
+        {
+          "key": "f",
+          "text": "El salbutamol no altera los electrolitos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Causa hipopotasemia y en ocasiones acidosis láctica."
+        },
+        {
+          "key": "g",
+          "text": "Que debe suspenderse todo broncodilatador aunque persista la crisis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se vigila y se repone el potasio."
+        },
+        {
+          "key": "h",
+          "text": "Intoxicación por digoxina",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay antecedente."
+        },
+        {
+          "key": "i",
+          "text": "Efecto adverso del salbutamol en dosis altas, que desplaza el potasio al interior de la célula",
+          "correct": true,
+          "rationale": "Los agonistas beta 2 estimulan la bomba de sodio potasio."
+        },
+        {
+          "key": "j",
+          "text": "Hiperaldosteronismo primario",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El contexto agudo lo explica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "Los agonistas beta 2 adrenérgicos, como el salbutamol, estimulan la bomba de sodio potasio ATPasa y desplazan el potasio al interior de la célula, causando hipopotasemia transitoria, más marcada con dosis altas o nebulización continua. Otros efectos adversos son temblor, taquicardia, palpitaciones, hiperglucemia y acidosis láctica. La hipopotasemia puede favorecer arritmias, sobre todo en pacientes con cardiopatía o que reciben diuréticos o esteroides. Se recomienda vigilar el potasio en pacientes que reciben dosis altas y reponerlo si es necesario. Este mismo efecto se aprovecha en el tratamiento de la hiperpotasemia.",
+      "gpcRefs": [
+        "Iniciativa global para el asma",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años"
+      ]
+    },
+    {
+      "key": "urg-05a-asma-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "respiratory_emergencies",
+      "subtopic": "asthma_exacerbation",
+      "vignette": "Mujer de 30 años con crisis asmática. A la exploración presenta pulso paradójico de 25 mmHg, uso de músculos accesorios y frecuencia cardiaca de 128.",
+      "prompt": "¿Qué indica el pulso paradójico en esta paciente?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hallazgo normal en cualquier crisis leve",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Indica gravedad."
+        },
+        {
+          "key": "b",
+          "text": "Su ausencia descarta una crisis grave",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La fatiga puede hacerlo desaparecer."
+        },
+        {
+          "key": "c",
+          "text": "Exacerbación grave por grandes cambios de la presión intratorácica",
+          "correct": true,
+          "rationale": "Una caída de la sistólica mayor de 25 mmHg en la inspiración indica gravedad."
+        },
+        {
+          "key": "d",
+          "text": "Coartación de la aorta",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No produce pulso paradójico."
+        },
+        {
+          "key": "e",
+          "text": "Hipovolemia simple",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el hallazgo con el cuadro."
+        },
+        {
+          "key": "f",
+          "text": "Efecto adverso del salbutamol",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No lo explica."
+        },
+        {
+          "key": "g",
+          "text": "Que la paciente puede egresar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Indica gravedad."
+        },
+        {
+          "key": "h",
+          "text": "Insuficiencia aórtica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No produce pulso paradójico."
+        },
+        {
+          "key": "i",
+          "text": "Taponamiento cardiaco como única explicación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "En el asma grave también ocurre."
+        },
+        {
+          "key": "j",
+          "text": "El pulso paradójico solo ocurre en enfermedades del pericardio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "También ocurre en asma grave."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "El pulso paradójico es una disminución de la presión sistólica mayor de 10 mmHg durante la inspiración. En el asma grave, los grandes esfuerzos inspiratorios generan presiones intratorácicas muy negativas que aumentan la poscarga del ventrículo izquierdo y desplazan el septum, lo que exagera la caída inspiratoria de la presión. Un pulso paradójico mayor de 25 mmHg indica una exacerbación grave. Sin embargo, puede disminuir o desaparecer cuando el paciente se fatiga, por lo que su ausencia no descarta gravedad. También ocurre en el taponamiento cardiaco y la enfermedad pulmonar obstructiva grave.",
+      "gpcRefs": [
+        "Iniciativa global para el asma",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años"
+      ]
+    },
+    {
+      "key": "urg-05a-asma-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "respiratory_emergencies",
+      "subtopic": "asthma_exacerbation",
+      "vignette": "Hombre de 40 años con antecedente de asma que acude con disnea súbita, urticaria generalizada, edema de labios y sibilancias 15 minutos después de comer mariscos. Presión de 85/50 mmHg.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Adrenalina intramuscular inmediata, seguida de broncodilatadores, líquidos y oxígeno",
+          "correct": true,
+          "rationale": "Es una anafilaxia con broncoespasmo, no una crisis asmática aislada."
+        },
+        {
+          "key": "b",
+          "text": "La adrenalina está contraindicada en asmáticos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es el tratamiento de la anafilaxia."
+        },
+        {
+          "key": "c",
+          "text": "Esteroide intravenoso como única medida inicial",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Actúa en horas."
+        },
+        {
+          "key": "d",
+          "text": "Intubación antes de la adrenalina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La adrenalina es prioritaria."
+        },
+        {
+          "key": "e",
+          "text": "Antihistamínico oral y observación",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es suficiente."
+        },
+        {
+          "key": "f",
+          "text": "Tratar solo como crisis asmática con salbutamol",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No trata la anafilaxia."
+        },
+        {
+          "key": "g",
+          "text": "No prescribir autoinyector de adrenalina al egreso",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Previene muertes."
+        },
+        {
+          "key": "h",
+          "text": "Sulfato de magnesio como primera medida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No trata la anafilaxia."
+        },
+        {
+          "key": "i",
+          "text": "Esperar a que llegue el especialista",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La adrenalina debe darse de inmediato."
+        },
+        {
+          "key": "j",
+          "text": "El broncoespasmo en un asmático siempre es asma",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede ser anafilaxia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "f"
+      ],
+      "explanation": "La anafilaxia puede manifestarse con broncoespasmo que simula una crisis asmática, pero se distingue por el inicio rápido tras la exposición a un alérgeno, como alimentos, fármacos o picaduras, y por la afectación de otros sistemas, como urticaria, angioedema, hipotensión y síntomas gastrointestinales. Los pacientes asmáticos tienen mayor riesgo de anafilaxia grave y mortal. El tratamiento de primera línea es la adrenalina intramuscular inmediata, seguida de broncodilatadores para el broncoespasmo persistente, líquidos para la hipotensión y oxígeno. Al egreso se prescribe autoinyector de adrenalina y se refiere a alergología.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la anafilaxia",
+        "Iniciativa global para el asma"
+      ]
+    },
+    {
+      "key": "urg-05a-asma-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "respiratory_emergencies",
+      "subtopic": "asthma_exacerbation",
+      "vignette": "Mujer de 28 años con asma que refiere crisis frecuentes. En urgencias, tras tratar una exacerbación, el médico desea medir objetivamente la gravedad de la obstrucción y la respuesta al tratamiento de forma sencilla.",
+      "prompt": "¿Cuál es el estudio de elección para evaluar objetivamente la obstrucción en urgencias?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ecocardiograma",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No evalúa la obstrucción bronquial."
+        },
+        {
+          "key": "b",
+          "text": "Prueba de metacolina en plena crisis",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Está contraindicada."
+        },
+        {
+          "key": "c",
+          "text": "Radiografía de tórax en todos los casos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Solo si se sospecha complicación."
+        },
+        {
+          "key": "d",
+          "text": "Flujo espiratorio máximo o espirometría cuando sea posible",
+          "correct": true,
+          "rationale": "Miden de forma objetiva la obstrucción y la respuesta al tratamiento."
+        },
+        {
+          "key": "e",
+          "text": "Los pacientes perciben siempre con exactitud la gravedad de su crisis",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Muchos la subestiman."
+        },
+        {
+          "key": "f",
+          "text": "La saturación de oxígeno sustituye la medición del flujo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No mide la obstrucción."
+        },
+        {
+          "key": "g",
+          "text": "Gasometría arterial en todas las crisis leves",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se reserva para casos graves."
+        },
+        {
+          "key": "h",
+          "text": "Biometría hemática",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No mide la obstrucción."
+        },
+        {
+          "key": "i",
+          "text": "Solo la auscultación de sibilancias",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es subjetiva y puede engañar."
+        },
+        {
+          "key": "j",
+          "text": "Tomografía de tórax",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicada de rutina."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "i",
+        "j"
+      ],
+      "explanation": "La medición objetiva de la función pulmonar es fundamental en la evaluación de la exacerbación del asma, porque los síntomas y la exploración pueden subestimar la gravedad. El flujo espiratorio máximo o el volumen espiratorio forzado en el primer segundo por espirometría se miden al llegar y después del tratamiento, y se expresan como porcentaje del valor esperado o del mejor personal. Un valor mayor de 60 a 80 por ciento tras el tratamiento apoya el egreso. La radiografía de tórax se reserva para sospecha de complicaciones, como neumotórax o neumonía. La gasometría se usa en crisis graves.",
+      "gpcRefs": [
+        "Iniciativa global para el asma",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años"
+      ]
+    }
+  ]
+}
