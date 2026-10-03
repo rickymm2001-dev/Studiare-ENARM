@@ -1,0 +1,1240 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "urg-07b-electrolitos-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "electrolyte_disorders_emergency",
+      "vignette": "Mujer de 50 años con diarrea abundante de 4 días que presenta debilidad muscular generalizada y calambres. Potasio sérico de 2.4 mEq/L. El electrocardiograma muestra ondas U y aplanamiento de la onda T. Magnesio de 1.2 mg/dL.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hemodiálisis",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "b",
+          "text": "Salbutamol nebulizado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Disminuye el potasio."
+        },
+        {
+          "key": "c",
+          "text": "Cloruro de potasio intravenoso diluido con monitoreo electrocardiográfico y reposición de magnesio",
+          "correct": true,
+          "rationale": "La hipomagnesemia impide corregir la hipopotasemia."
+        },
+        {
+          "key": "d",
+          "text": "Insulina con glucosa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Agrava la hipopotasemia."
+        },
+        {
+          "key": "e",
+          "text": "Corregir el potasio basta aunque el magnesio esté bajo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El magnesio debe corregirse."
+        },
+        {
+          "key": "f",
+          "text": "Potasio intravenoso en bolo rápido sin diluir",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede causar paro cardiaco."
+        },
+        {
+          "key": "g",
+          "text": "Solo potasio oral sin corregir el magnesio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La hipopotasemia será refractaria."
+        },
+        {
+          "key": "h",
+          "text": "No tratar la causa de la diarrea ni reponer volumen",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte del manejo."
+        },
+        {
+          "key": "i",
+          "text": "Furosemida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumenta las pérdidas de potasio."
+        },
+        {
+          "key": "j",
+          "text": "La hipopotasemia nunca causa arritmias",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede causar arritmias graves."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "f",
+        "g"
+      ],
+      "explanation": "La hipopotasemia grave, menor de 2.5 mEq/L, o con síntomas o cambios electrocardiográficos, requiere reposición intravenosa. Se manifiesta con debilidad muscular, calambres, íleo, parálisis, arritmias y cambios en el electrocardiograma como aplanamiento de la onda T, ondas U y depresión del ST. El cloruro de potasio se administra diluido, por vía periférica a no más de 10 mEq por hora o hasta 20 mEq por hora por vía central con monitoreo; nunca en bolo. La hipomagnesemia acompañante debe corregirse, porque aumenta las pérdidas renales de potasio y hace refractaria la hipopotasemia. Se trata la causa.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos del potasio",
+        "Manual de urgencias médico quirúrgicas"
+      ]
+    },
+    {
+      "key": "urg-07b-electrolitos-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "electrolyte_disorders_emergency",
+      "vignette": "Mujer de 65 años con cáncer de mama metastásico que presenta confusión, poliuria, estreñimiento y deshidratación. Calcio sérico de 15.2 mg/dL y función renal levemente alterada.",
+      "prompt": "¿Cuál es el tratamiento inicial de elección?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Furosemida como primera medida antes de hidratar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Empeora la deshidratación."
+        },
+        {
+          "key": "b",
+          "text": "Vitamina D",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumentaría el calcio."
+        },
+        {
+          "key": "c",
+          "text": "No considerar calcitonina para un descenso rápido inicial",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Actúa en horas."
+        },
+        {
+          "key": "d",
+          "text": "Hidratación intravenosa intensa con solución salina, seguida de un bisfosfonato intravenoso como ácido zoledrónico",
+          "correct": true,
+          "rationale": "Es una hipercalcemia grave asociada a cáncer."
+        },
+        {
+          "key": "e",
+          "text": "Diuréticos tiazídicos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumentan la reabsorción de calcio."
+        },
+        {
+          "key": "f",
+          "text": "La hipercalcemia maligna es rara",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es una de las urgencias oncológicas más frecuentes."
+        },
+        {
+          "key": "g",
+          "text": "Los bisfosfonatos actúan en minutos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Su efecto inicia en 2 a 4 días."
+        },
+        {
+          "key": "h",
+          "text": "Solo observación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La hipercalcemia grave es una urgencia."
+        },
+        {
+          "key": "i",
+          "text": "Paratiroidectomía urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La causa es el cáncer."
+        },
+        {
+          "key": "j",
+          "text": "Calcio intravenoso",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Agravaría la hipercalcemia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "j"
+      ],
+      "explanation": "La hipercalcemia grave, mayor de 14 mg/dL o con síntomas, es una urgencia. La causa más frecuente en pacientes hospitalizados es el cáncer, por el péptido relacionado con la hormona paratiroidea o por metástasis óseas. Se manifiesta con confusión, letargo, poliuria, deshidratación, estreñimiento, náusea, acortamiento del QT y lesión renal. El tratamiento inicial es la hidratación intravenosa intensa con solución salina para corregir el volumen y aumentar la excreción de calcio. La calcitonina reduce el calcio en horas, y los bisfosfonatos intravenosos como el ácido zoledrónico, o el denosumab, tienen efecto más lento pero sostenido. La furosemida solo se usa si hay sobrecarga.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipercalcemia",
+        "Guía de Práctica Clínica de urgencias oncológicas"
+      ]
+    },
+    {
+      "key": "urg-07b-electrolitos-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "electrolyte_disorders_emergency",
+      "vignette": "Mujer de 40 años operada de tiroidectomía total hace 24 horas que presenta hormigueo perioral, espasmo carpopedal y signo de Chvostek positivo. Calcio sérico de 6.8 mg/dL.",
+      "prompt": "¿Cuál es el tratamiento de elección inmediato?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Gluconato de calcio intravenoso",
+          "correct": true,
+          "rationale": "Es una hipocalcemia sintomática por hipoparatiroidismo posquirúrgico."
+        },
+        {
+          "key": "b",
+          "text": "Furosemida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumenta las pérdidas de calcio."
+        },
+        {
+          "key": "c",
+          "text": "Solo vigilancia porque es transitoria",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede causar laringoespasmo y convulsiones."
+        },
+        {
+          "key": "d",
+          "text": "El calcio intravenoso puede darse en bolo rápido sin dilución",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Debe administrarse lentamente."
+        },
+        {
+          "key": "e",
+          "text": "Bicarbonato de sodio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Agrava la hipocalcemia ionizada."
+        },
+        {
+          "key": "f",
+          "text": "Calcio oral como única medida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La hipocalcemia sintomática requiere vía intravenosa."
+        },
+        {
+          "key": "g",
+          "text": "Reintervención quirúrgica inmediata",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "Levotiroxina en dosis alta",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No corrige la hipocalcemia."
+        },
+        {
+          "key": "i",
+          "text": "No medir magnesio",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La hipomagnesemia impide corregir el calcio."
+        },
+        {
+          "key": "j",
+          "text": "El hipoparatiroidismo posquirúrgico es siempre permanente",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Suele ser transitorio."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "f"
+      ],
+      "explanation": "La hipocalcemia es una complicación frecuente de la tiroidectomía total por lesión o devascularización de las glándulas paratiroides, generalmente transitoria. Se manifiesta con parestesias periorales y distales, espasmo carpopedal, signo de Chvostek, contracción facial al percutir el nervio facial, signo de Trousseau, espasmo del carpo al inflar el baumanómetro, laringoespasmo, convulsiones y QT prolongado. La hipocalcemia sintomática se trata con gluconato de calcio intravenoso diluido, administrado lentamente, seguido de infusión y calcio oral con calcitriol. Se mide y corrige el magnesio.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipocalcemia",
+        "Guía de Práctica Clínica de tratamiento quirúrgico del nódulo tiroideo"
+      ]
+    },
+    {
+      "key": "urg-07b-electrolitos-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "electrolyte_disorders_emergency",
+      "vignette": "Mujer de 85 años con demencia que vive en un asilo y es traída por somnolencia. No ha bebido agua en varios días. Sodio sérico de 165 mEq/L, peso de 50 kilos. Hemodinámicamente estable.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Restricción de líquidos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Agravaría la hipernatremia."
+        },
+        {
+          "key": "b",
+          "text": "Reposición de agua libre con solución glucosada al 5 por ciento o agua por vía enteral, corrigiendo el sodio no más de 10 a 12 mEq/L en 24 horas",
+          "correct": true,
+          "rationale": "La corrección rápida causa edema cerebral."
+        },
+        {
+          "key": "c",
+          "text": "Corregir el sodio a 140 en 6 horas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Causa edema cerebral."
+        },
+        {
+          "key": "d",
+          "text": "La hipernatremia en ancianos rara vez es por falta de acceso al agua",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es la causa más frecuente."
+        },
+        {
+          "key": "e",
+          "text": "Furosemida como único tratamiento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No repone agua."
+        },
+        {
+          "key": "f",
+          "text": "La hipernatremia crónica debe corregirse rápido como la aguda",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Debe ser lenta."
+        },
+        {
+          "key": "g",
+          "text": "Desmopresina sin estudiar diabetes insípida",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay datos de diabetes insípida."
+        },
+        {
+          "key": "h",
+          "text": "No calcular el déficit de agua libre",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Guía la reposición."
+        },
+        {
+          "key": "i",
+          "text": "Solo observación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La hipernatremia grave requiere tratamiento."
+        },
+        {
+          "key": "j",
+          "text": "Solución salina hipertónica al 3 por ciento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Agravaría la hipernatremia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "La hipernatremia se debe con más frecuencia a la pérdida de agua libre sin reposición adecuada, sobre todo en personas con acceso limitado al agua o alteración de la sed, como adultos mayores con demencia, lactantes y pacientes intubados. Se manifiesta con letargo, irritabilidad, confusión, convulsiones y coma. El tratamiento es la reposición de agua libre, con solución glucosada al 5 por ciento o agua por vía enteral, calculando el déficit de agua libre. En la hipernatremia crónica, la corrección no debe superar 10 a 12 mEq/L en 24 horas, porque el descenso rápido causa edema cerebral. Si hay inestabilidad, primero se repone el volumen con solución salina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipernatremia",
+        "Manual de urgencias médico quirúrgicas"
+      ]
+    },
+    {
+      "key": "urg-07b-electrolitos-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "electrolyte_disorders_emergency",
+      "vignette": "Hombre de 60 años con cáncer de pulmón de células pequeñas que presenta náusea y confusión leve. Sodio de 124 mEq/L, osmolaridad sérica baja, osmolaridad urinaria de 450 mOsm/kg y sodio urinario de 50 mEq/L. Euvolémico. Función tiroidea y suprarrenal normales.",
+      "prompt": "¿Cuál es el tratamiento inicial de elección?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Restricción de líquidos a menos de 800 a 1,000 mL al día",
+          "correct": true,
+          "rationale": "Es un síndrome de secreción inadecuada de hormona antidiurética sin síntomas graves."
+        },
+        {
+          "key": "b",
+          "text": "Debe corregirse el sodio a 140 en 24 horas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El límite es 8 a 10 mEq/L en 24 horas."
+        },
+        {
+          "key": "c",
+          "text": "Solución salina hipertónica en bolo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se reserva para síntomas graves."
+        },
+        {
+          "key": "d",
+          "text": "Diuréticos tiazídicos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Empeoran la hiponatremia."
+        },
+        {
+          "key": "e",
+          "text": "No tratar la causa subyacente",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El tratamiento del cáncer puede resolverlo."
+        },
+        {
+          "key": "f",
+          "text": "Solución salina al 0.9 por ciento en grandes volúmenes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede empeorar la hiponatremia en este síndrome."
+        },
+        {
+          "key": "g",
+          "text": "Hemodiálisis urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "Solución glucosada al 5 por ciento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Empeora la hiponatremia."
+        },
+        {
+          "key": "i",
+          "text": "Desmopresina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Empeora la retención de agua."
+        },
+        {
+          "key": "j",
+          "text": "El síndrome de secreción inadecuada cursa con hipovolemia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Cursa con euvolemia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "h"
+      ],
+      "explanation": "El síndrome de secreción inadecuada de hormona antidiurética se caracteriza por hiponatremia hipoosmolar euvolémica, con orina inapropiadamente concentrada, osmolaridad urinaria mayor de 100 mOsm/kg, y sodio urinario mayor de 30 mEq/L, una vez descartados hipotiroidismo, insuficiencia suprarrenal y diuréticos. Sus causas incluyen cáncer de pulmón de células pequeñas, enfermedades del sistema nervioso central y pulmonares, fármacos como antidepresivos, carbamazepina y ciclofosfamida, dolor y náusea. El tratamiento inicial en casos sin síntomas graves es la restricción de líquidos; se puede agregar urea oral o vaptanes. La solución salina isotónica puede empeorar la hiponatremia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hiponatremia",
+        "Guía europea para el diagnóstico y tratamiento de la hiponatremia"
+      ]
+    },
+    {
+      "key": "urg-07b-electrolitos-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "electrolyte_disorders_emergency",
+      "vignette": "Mujer de 45 años con alcoholismo y sodio de 108 mEq/L que recibió solución salina hipertónica. El sodio subió a 128 mEq/L en 24 horas. Tres días después presenta disartria, disfagia, cuadriparesia y alteración de la conciencia.",
+      "prompt": "¿Cuál es la complicación más probable?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hipoglucemia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "b",
+          "text": "El daño suele ser inmediato al corregir el sodio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Aparece de 2 a 6 días después."
+        },
+        {
+          "key": "c",
+          "text": "Encefalopatía de Wernicke como única explicación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El antecedente de corrección rápida y el cuadro orientan a desmielinización."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome de Guillain-Barré",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la disartria y la alteración de conciencia tras la corrección."
+        },
+        {
+          "key": "e",
+          "text": "Intoxicación alcohólica aguda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "f",
+          "text": "La velocidad de corrección del sodio no influye en el pronóstico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es determinante."
+        },
+        {
+          "key": "g",
+          "text": "Evento vascular cerebral isquémico de la arteria cerebral media",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el patrón ni el antecedente."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome de desmielinización osmótica",
+          "correct": true,
+          "rationale": "Ocurre tras una corrección demasiado rápida de una hiponatremia crónica."
+        },
+        {
+          "key": "i",
+          "text": "Esclerosis múltiple de inicio agudo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El contexto orienta a desmielinización osmótica."
+        },
+        {
+          "key": "j",
+          "text": "Edema cerebral por hiponatremia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ocurre con la hiponatremia no tratada, no con la corrección."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "h",
+        "j"
+      ],
+      "explanation": "El síndrome de desmielinización osmótica, antes llamado mielinólisis pontina central, ocurre cuando una hiponatremia crónica se corrige demasiado rápido, generalmente más de 10 a 12 mEq/L en 24 horas. Las células cerebrales adaptadas a la hipoosmolaridad sufren deshidratación y desmielinización, principalmente en la protuberancia. Aparece de 2 a 6 días después de la corrección, con disartria, disfagia, cuadriparesia, síndrome de enclaustramiento y alteración de la conciencia. Los factores de riesgo son alcoholismo, desnutrición, hipopotasemia, enfermedad hepática y sodio menor de 105. Se previene limitando la corrección a 8 mEq/L en 24 horas en pacientes de alto riesgo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hiponatremia",
+        "Guía europea para el diagnóstico y tratamiento de la hiponatremia"
+      ]
+    },
+    {
+      "key": "urg-07b-electrolitos-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "electrolyte_disorders_emergency",
+      "vignette": "Mujer de 35 años con lupus en tratamiento crónico con prednisona que la suspendió hace 1 semana. Presenta vómito, dolor abdominal, hipotensión de 70/40 mmHg refractaria a líquidos, sodio de 126 mEq/L, potasio de 5.6 mEq/L y glucosa de 60 mg/dL.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hidrocortisona 100 mg intravenosa en bolo, con líquidos y glucosa",
+          "correct": true,
+          "rationale": "Es una crisis suprarrenal."
+        },
+        {
+          "key": "b",
+          "text": "Solo vasopresores",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No corrigen la deficiencia de cortisol."
+        },
+        {
+          "key": "c",
+          "text": "Insulina para el potasio alto",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Agravaría la hipoglucemia."
+        },
+        {
+          "key": "d",
+          "text": "No educar sobre no suspender los esteroides bruscamente",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Previene nuevas crisis."
+        },
+        {
+          "key": "e",
+          "text": "Antibiótico como único tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No corrige la insuficiencia suprarrenal."
+        },
+        {
+          "key": "f",
+          "text": "Laparotomía exploradora por el dolor abdominal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El dolor es parte de la crisis."
+        },
+        {
+          "key": "g",
+          "text": "La dexametasona tiene el mismo efecto mineralocorticoide que la hidrocortisona",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No tiene efecto mineralocorticoide."
+        },
+        {
+          "key": "h",
+          "text": "Esperar la medición de cortisol antes de tratar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El retraso puede ser mortal."
+        },
+        {
+          "key": "i",
+          "text": "Fludrocortisona oral como única medida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es suficiente en la crisis."
+        },
+        {
+          "key": "j",
+          "text": "La suspensión de esteroides no causa insuficiencia suprarrenal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es la causa más frecuente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "h",
+        "i"
+      ],
+      "explanation": "La crisis suprarrenal es una urgencia que se presenta con choque refractario a líquidos y vasopresores, vómito, dolor abdominal, confusión, hiponatremia, hiperpotasemia en la insuficiencia primaria e hipoglucemia. La causa más frecuente es la suspensión brusca de glucocorticoides en pacientes con tratamiento crónico, que suprime el eje hipotálamo hipófisis suprarrenal, o una enfermedad intercurrente sin ajuste de dosis. El tratamiento es hidrocortisona 100 mg intravenosa en bolo, seguida de 200 mg al día, junto con solución salina y glucosa, sin esperar los resultados. Se educa al paciente sobre no suspender los esteroides y duplicar la dosis en enfermedades.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la insuficiencia suprarrenal",
+        "Guía de la Sociedad de Endocrinología para insuficiencia suprarrenal"
+      ]
+    },
+    {
+      "key": "urg-07b-electrolitos-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "electrolyte_disorders_emergency",
+      "vignette": "Hombre de 45 años con desnutrición grave por alcoholismo que inicia alimentación enteral abundante. A los 3 días presenta debilidad, insuficiencia respiratoria, arritmias y confusión. Fósforo de 0.9 mg/dL, potasio y magnesio bajos.",
+      "prompt": "¿Cuál es la complicación más probable?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "El fósforo bajo no tiene consecuencias clínicas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Causa insuficiencia respiratoria y cardiaca."
+        },
+        {
+          "key": "b",
+          "text": "La realimentación rápida siempre es beneficiosa en desnutridos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede ser peligrosa."
+        },
+        {
+          "key": "c",
+          "text": "Hiperglucemia aislada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "d",
+          "text": "No administrar tiamina antes de la realimentación",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Previene complicaciones."
+        },
+        {
+          "key": "e",
+          "text": "Neumonía por aspiración como única causa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica las alteraciones electrolíticas."
+        },
+        {
+          "key": "f",
+          "text": "Síndrome de realimentación",
+          "correct": true,
+          "rationale": "La reintroducción de carbohidratos desplaza fósforo, potasio y magnesio al interior de la célula."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome de Guillain-Barré",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica los electrolitos."
+        },
+        {
+          "key": "h",
+          "text": "Miastenia gravis",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No explica los electrolitos."
+        },
+        {
+          "key": "i",
+          "text": "Encefalopatía hepática",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la hipofosfatemia."
+        },
+        {
+          "key": "j",
+          "text": "Abstinencia alcohólica como única explicación",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la hipofosfatemia grave."
+        }
+      ],
+      "canonical": [
+        "e",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "El síndrome de realimentación ocurre al reintroducir la nutrición en pacientes desnutridos, como alcohólicos, pacientes con anorexia nerviosa, cáncer o ayuno prolongado. La carga de carbohidratos estimula la insulina, que desplaza el fósforo, el potasio y el magnesio al interior de la célula, causando hipofosfatemia grave, hipopotasemia e hipomagnesemia, además de retención de sodio y agua y deficiencia de tiamina. Se manifiesta con debilidad, insuficiencia respiratoria, insuficiencia cardiaca, arritmias, confusión y convulsiones. Se previene iniciando la nutrición de forma gradual, administrando tiamina antes y vigilando y reponiendo los electrolitos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención y tratamiento del síndrome de realimentación",
+        "Guía de la Sociedad Europea de Nutrición Clínica"
+      ]
+    },
+    {
+      "key": "urg-07b-electrolitos-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "electrolyte_disorders_emergency",
+      "vignette": "Hombre de 40 años asintomático con potasio de 6.5 mEq/L en un estudio de rutina. Función renal normal y no toma fármacos que eleven el potasio. La muestra se tomó con torniquete prolongado y se reporta hemolizada. Electrocardiograma normal.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hemodiálisis urgente",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "b",
+          "text": "Hospitalizar en terapia intensiva",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "c",
+          "text": "Repetir la medición de potasio con una muestra adecuada sin hemólisis",
+          "correct": true,
+          "rationale": "Probable seudohiperpotasemia por hemólisis."
+        },
+        {
+          "key": "d",
+          "text": "La técnica de extracción no influye en el potasio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Influye de forma importante."
+        },
+        {
+          "key": "e",
+          "text": "Calcio intravenoso e insulina de inmediato",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay datos de hiperpotasemia verdadera."
+        },
+        {
+          "key": "f",
+          "text": "Biopsia renal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "g",
+          "text": "Resinas de intercambio de forma crónica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No se ha confirmado."
+        },
+        {
+          "key": "h",
+          "text": "No revisar si hay leucocitosis o trombocitosis extremas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "También causan seudohiperpotasemia."
+        },
+        {
+          "key": "i",
+          "text": "Suspender todos los alimentos con potasio de por vida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se ha confirmado."
+        },
+        {
+          "key": "j",
+          "text": "Un potasio alto siempre refleja el valor real",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La hemólisis lo eleva falsamente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "g"
+      ],
+      "explanation": "La seudohiperpotasemia es una elevación falsa del potasio medido por liberación de potasio de las células durante o después de la extracción de la muestra. Sus causas incluyen hemólisis por torniquete prolongado, puño cerrado repetido, aguja fina o transporte inadecuado, y leucocitosis o trombocitosis extremas. Debe sospecharse en pacientes asintomáticos, sin causa aparente y con electrocardiograma normal. La conducta es repetir la medición con una técnica adecuada, idealmente sin torniquete prolongado, o en sangre total o plasma. Tratar una seudohiperpotasemia puede causar hipopotasemia iatrogénica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperpotasemia",
+        "Manual de urgencias médico quirúrgicas"
+      ]
+    },
+    {
+      "key": "urg-07b-electrolitos-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "electrolyte_disorders_emergency",
+      "vignette": "Mujer de 70 años con diabetes tratada con insulina que es encontrada inconsciente en su casa. Glucosa capilar de 32 mg/dL. Los paramédicos no logran acceso venoso.",
+      "prompt": "¿Cuál es el tratamiento de elección en este momento?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Glucagón intramuscular o intranasal",
+          "correct": true,
+          "rationale": "Eleva la glucosa cuando no hay acceso venoso ni puede deglutir."
+        },
+        {
+          "key": "b",
+          "text": "Naloxona",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "c",
+          "text": "Esperar al hospital para tratar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La hipoglucemia grave puede causar daño cerebral."
+        },
+        {
+          "key": "d",
+          "text": "Solución salina intravenosa sin glucosa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No corrige la hipoglucemia."
+        },
+        {
+          "key": "e",
+          "text": "Intubación antes de corregir la glucosa",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La corrección de la glucosa es prioritaria."
+        },
+        {
+          "key": "f",
+          "text": "El glucagón es ineficaz en adultos mayores",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es eficaz si hay reservas de glucógeno."
+        },
+        {
+          "key": "g",
+          "text": "La glucosa oral es igual de segura en pacientes inconscientes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No lo es."
+        },
+        {
+          "key": "h",
+          "text": "No vigilar recurrencia de la hipoglucemia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede recurrir."
+        },
+        {
+          "key": "i",
+          "text": "Insulina rápida subcutánea",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Agrava la hipoglucemia."
+        },
+        {
+          "key": "j",
+          "text": "Dar jugo por la boca a una paciente inconsciente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Riesgo de aspiración."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "La hipoglucemia grave es aquella que requiere asistencia de otra persona por alteración de la conciencia. Si el paciente no puede deglutir, el tratamiento es glucosa intravenosa al 50 por ciento, 25 gramos, o al 10 por ciento, o si no hay acceso venoso, glucagón intramuscular de 1 mg o intranasal de 3 mg. El glucagón es menos eficaz en pacientes con agotamiento de glucógeno, como alcohólicos o desnutridos. La glucosa oral está contraindicada en pacientes inconscientes por el riesgo de aspiración. Después de la recuperación se administra alimento y se vigila la recurrencia, sobre todo con sulfonilureas o insulinas de acción prolongada.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipoglucemia en el adulto",
+        "Estándares de atención en diabetes de la Asociación Americana de Diabetes"
+      ]
+    },
+    {
+      "key": "urg-07b-electrolitos-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "electrolyte_disorders_emergency",
+      "vignette": "Mujer de 75 años con hipotiroidismo que suspendió la levotiroxina hace meses. Llega en invierno con estupor, hipotermia de 33 grados, bradicardia, hipoventilación, hiponatremia y edema sin fóvea.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "La hipotermia se corrige solo con calor externo intenso",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El tratamiento hormonal es fundamental."
+        },
+        {
+          "key": "b",
+          "text": "Levotiroxina sin hidrocortisona previa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede precipitar una crisis suprarrenal."
+        },
+        {
+          "key": "c",
+          "text": "Levotiroxina oral en dosis habitual como única medida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es lenta y la absorción intestinal está alterada."
+        },
+        {
+          "key": "d",
+          "text": "No buscar infección como desencadenante",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es frecuente."
+        },
+        {
+          "key": "e",
+          "text": "Propiltiouracilo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se usa en hipertiroidismo."
+        },
+        {
+          "key": "f",
+          "text": "Solo líquidos y observación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El coma mixedematoso es mortal sin tratamiento."
+        },
+        {
+          "key": "g",
+          "text": "El coma mixedematoso es frecuente en jóvenes en verano",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es típico de adultos mayores en invierno."
+        },
+        {
+          "key": "h",
+          "text": "Hidrocortisona intravenosa seguida de levotiroxina intravenosa, con soporte ventilatorio y recalentamiento pasivo",
+          "correct": true,
+          "rationale": "Es un coma mixedematoso."
+        },
+        {
+          "key": "i",
+          "text": "Recalentamiento activo externo agresivo como prioridad",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede causar colapso por vasodilatación."
+        },
+        {
+          "key": "j",
+          "text": "Hemodiálisis",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "El coma mixedematoso es la forma más grave del hipotiroidismo descompensado, más frecuente en mujeres de edad avanzada, en invierno, desencadenado por infecciones, frío, fármacos sedantes o suspensión de la levotiroxina. Se manifiesta con alteración del estado mental, hipotermia, bradicardia, hipoventilación con hipercapnia, hiponatremia, hipoglucemia y edema. El tratamiento incluye soporte ventilatorio, recalentamiento pasivo, corrección de la hiponatremia, hidrocortisona intravenosa antes de la hormona tiroidea para evitar una crisis suprarrenal y levotiroxina intravenosa en dosis de carga. Se busca y trata el desencadenante. Su mortalidad es elevada.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo primario en el adulto",
+        "Guía de la Asociación Americana de Tiroides para hipotiroidismo"
+      ]
+    },
+    {
+      "key": "urg-07b-electrolitos-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "electrolyte_disorders_emergency",
+      "vignette": "Mujer de 35 años con enfermedad de Graves no tratada que tras una infección presenta fiebre de 40 grados, taquicardia de 160 con fibrilación auricular, agitación, vómito, diarrea e ictericia. Escala de Burch-Wartofsky de 60.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Betabloqueador como propranolol, tionamida como propiltiouracilo o metimazol, yodo una hora después de la tionamida, glucocorticoide y enfriamiento",
+          "correct": true,
+          "rationale": "Es una tormenta tiroidea."
+        },
+        {
+          "key": "b",
+          "text": "El propranolol empeora la tirotoxicosis",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Controla los síntomas adrenérgicos."
+        },
+        {
+          "key": "c",
+          "text": "Levotiroxina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Agravaría la crisis."
+        },
+        {
+          "key": "d",
+          "text": "Yodo radiactivo urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el tratamiento agudo."
+        },
+        {
+          "key": "e",
+          "text": "Yodo antes de la tionamida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede aumentar la síntesis de hormona."
+        },
+        {
+          "key": "f",
+          "text": "Tiroidectomía urgente como primera medida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Primero se estabiliza."
+        },
+        {
+          "key": "g",
+          "text": "La tormenta tiroidea es benigna",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tiene alta mortalidad."
+        },
+        {
+          "key": "h",
+          "text": "Ácido acetilsalicílico para la fiebre",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Desplaza la hormona tiroidea de sus proteínas."
+        },
+        {
+          "key": "i",
+          "text": "No tratar el desencadenante",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte del manejo."
+        },
+        {
+          "key": "j",
+          "text": "Solo antipiréticos y antibióticos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No trata la crisis tiroidea."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "La tormenta tiroidea es una complicación grave de la tirotoxicosis, desencadenada por infecciones, cirugía, parto o suspensión de los antitiroideos. Se manifiesta con fiebre alta, taquicardia o fibrilación auricular, insuficiencia cardiaca, agitación o delirio, síntomas gastrointestinales e ictericia. La escala de Burch-Wartofsky ayuda al diagnóstico; 45 o más sugiere tormenta. El tratamiento incluye betabloqueadores, preferentemente propranolol; tionamidas para bloquear la síntesis, con propiltiouracilo que además inhibe la conversión periférica; yodo inorgánico al menos una hora después de la tionamida; glucocorticoides; enfriamiento con paracetamol y medidas físicas; y tratamiento del desencadenante.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del hipertiroidismo",
+        "Guía de la Asociación Americana de Tiroides para hipertiroidismo"
+      ]
+    },
+    {
+      "key": "urg-07b-electrolitos-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "electrolyte_disorders_emergency",
+      "vignette": "Hombre de 55 años con vómito persistente por obstrucción pilórica. Gasometría con pH de 7.52, bicarbonato de 38 mEq/L, cloro de 85 mEq/L y potasio de 2.8 mEq/L. Cloro urinario bajo.",
+      "prompt": "¿Qué indica esta gasometría?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Acidosis metabólica con brecha aniónica elevada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El pH está alto."
+        },
+        {
+          "key": "b",
+          "text": "Alcalosis metabólica hipoclorémica sensible al cloro por pérdida de ácido gástrico",
+          "correct": true,
+          "rationale": "El vómito causa pérdida de ácido clorhídrico y depleción de volumen."
+        },
+        {
+          "key": "c",
+          "text": "Se corrige con bicarbonato",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se corrige con solución salina y potasio."
+        },
+        {
+          "key": "d",
+          "text": "Acidosis respiratoria compensada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El pH está alto."
+        },
+        {
+          "key": "e",
+          "text": "Intoxicación por salicilatos",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Causa otro patrón."
+        },
+        {
+          "key": "f",
+          "text": "El vómito causa acidosis metabólica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Causa alcalosis."
+        },
+        {
+          "key": "g",
+          "text": "Acidosis tubular renal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Causa acidosis."
+        },
+        {
+          "key": "h",
+          "text": "Alcalosis respiratoria",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El bicarbonato está alto por causa metabólica."
+        },
+        {
+          "key": "i",
+          "text": "Hiperaldosteronismo primario",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El cloro urinario bajo indica causa sensible al cloro."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome de Bartter",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Tiene cloro urinario alto."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "h"
+      ],
+      "explanation": "La alcalosis metabólica se caracteriza por pH alto y bicarbonato elevado. El vómito y la aspiración nasogástrica causan pérdida de ácido clorhídrico, depleción de volumen y de cloro, e hipopotasemia, lo que mantiene la alcalosis por aumento de la reabsorción renal de bicarbonato. Se clasifica según el cloro urinario: menor de 20 mEq/L indica alcalosis sensible al cloro, por vómito o diuréticos previos, que responde a solución salina; mayor de 20 indica resistente al cloro, como en el hiperaldosteronismo o el síndrome de Bartter. El tratamiento es solución salina al 0.9 por ciento y reposición de potasio, además de tratar la obstrucción.",
+      "gpcRefs": [
+        "Manual de urgencias médico quirúrgicas",
+        "Guía de Práctica Clínica de interpretación de gases arteriales"
+      ]
+    }
+  ]
+}

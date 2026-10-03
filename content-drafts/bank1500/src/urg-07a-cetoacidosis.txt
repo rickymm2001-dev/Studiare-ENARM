@@ -1,0 +1,191 @@
+@ urg|metabolic_emergencies|diabetic_ketoacidosis|2|diagnosis
+V: Mujer de 19 años con diabetes tipo 1 que suspendió la insulina hace 2 días. Presenta vómito, dolor abdominal, respiración profunda y rápida y aliento afrutado. Glucosa de 480 mg/dL, pH de 7.15, bicarbonato de 9 mEq/L, brecha aniónica de 24 y cetonas séricas positivas.
+P: ¿Cuál es el diagnóstico más probable?
++ Cetoacidosis diabética grave || Hiperglucemia, acidosis metabólica con brecha aniónica elevada y cetonemia.
+- anchoring | Estado hiperosmolar hiperglucémico || En este no hay acidosis importante ni cetosis significativa.
+- availability_heuristic | Abdomen agudo quirúrgico || El dolor abdominal es parte de la cetoacidosis.
+- representativeness_heuristic | Acidosis láctica por metformina || No toma metformina y hay cetonas.
+- premature_closure | Gastroenteritis aguda con deshidratación simple || No explica la acidosis con cetonas.
+- framing_effect | Cetoacidosis alcohólica || La glucosa está muy elevada en un diabético tipo 1.
+- complexity_bias | Intoxicación por metanol || Las cetonas y la hiperglucemia orientan a cetoacidosis.
+- base_rate_fallacy | La cetoacidosis solo ocurre en el debut de la diabetes || También por omisión de insulina o infección.
+- belief_bias | La respiración de Kussmaul indica neumonía || Es compensación respiratoria de la acidosis.
+- focusing_illusion | Hipoglucemia grave || La glucosa está alta.
+E: La cetoacidosis diabética se caracteriza por la tríada de hiperglucemia, generalmente mayor de 250 mg/dL, acidosis metabólica con pH menor de 7.3 y bicarbonato menor de 18 mEq/L con brecha aniónica elevada, y cetonemia o cetonuria. Es más frecuente en la diabetes tipo 1, desencadenada por omisión de insulina, infecciones, debut de la enfermedad, infarto o fármacos como los inhibidores del cotransportador de sodio y glucosa tipo 2. Se manifiesta con poliuria, polidipsia, vómito, dolor abdominal, deshidratación, respiración de Kussmaul y aliento afrutado. Se clasifica en leve, moderada y grave según el pH, el bicarbonato y el estado mental.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en el adulto ;; Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas
+
+@ urg|metabolic_emergencies|diabetic_ketoacidosis|2|initial_treatment
+V: Hombre de 25 años con cetoacidosis diabética. Presión de 95/60 mmHg, frecuencia cardiaca de 120 y mucosas secas. Potasio sérico de 4.8 mEq/L.
+P: ¿Cuál es el tratamiento inicial más importante en la primera hora?
++ Reposición de volumen con solución salina al 0.9 por ciento o cristaloide balanceado, 15 a 20 mL por kilo en la primera hora || La rehidratación es la medida inicial prioritaria.
+- anchoring | Insulina en bolo antes de cualquier líquido || Puede agravar la hipotensión y la hipopotasemia.
+- availability_heuristic | Bicarbonato de sodio de rutina || No está indicado con pH mayor de 6.9.
+- representativeness_heuristic | Solución glucosada al 5 por ciento desde el inicio || Se agrega cuando la glucosa baja a 200 a 250 mg/dL.
+- premature_closure | Restringir líquidos para evitar edema cerebral en adultos || La deshidratación es importante.
+- framing_effect | Insulina subcutánea de acción prolongada como única medida || No es el tratamiento inicial en cetoacidosis grave.
+- complexity_bias | Hemodiálisis urgente || No está indicada.
+- base_rate_fallacy | El déficit de líquidos en cetoacidosis es pequeño || Suele ser de 5 a 7 litros.
+- belief_bias | La insulina corrige la deshidratación por sí sola || No repone el volumen.
+- omission_bias | No buscar el factor desencadenante || Es parte del manejo.
+E: El tratamiento de la cetoacidosis diabética incluye reposición de líquidos, insulina, corrección de electrolitos, en especial potasio, y tratamiento del factor desencadenante. La rehidratación es la medida inicial más importante: se administran 15 a 20 mL por kilo de solución salina al 0.9 por ciento o cristaloide balanceado en la primera hora, y después se ajusta según el sodio corregido y el estado hemodinámico. La rehidratación por sí sola reduce la glucosa y mejora la perfusión. Antes de iniciar la insulina se verifica que el potasio sea de al menos 3.3 mEq/L. Cuando la glucosa baja a 200 a 250 mg/dL se agrega glucosa a los líquidos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en el adulto ;; Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas
+
+@ urg|metabolic_emergencies|diabetic_ketoacidosis|3|next_step
+V: Mujer de 30 años con cetoacidosis diabética que recibió 1 litro de solución salina. Glucosa de 520 mg/dL, pH de 7.10 y potasio sérico de 2.9 mEq/L.
+P: ¿Cuál es el siguiente paso más apropiado?
++ Reponer potasio intravenoso y diferir la insulina hasta que el potasio sea de al menos 3.3 mEq/L || La insulina desplaza el potasio a la célula y puede causar arritmias.
+- anchoring | Iniciar insulina en infusión de inmediato || Puede causar hipopotasemia grave con arritmias.
+- availability_heuristic | Administrar bicarbonato de sodio para corregir el pH || Agrava la hipopotasemia y no está indicado con pH de 7.10.
+- representativeness_heuristic | Suspender los líquidos intravenosos || Siguen siendo necesarios.
+- premature_closure | Esperar al siguiente control sin reponer potasio || La hipopotasemia es peligrosa.
+- framing_effect | Potasio en bolo intravenoso rápido sin dilución || Es peligroso.
+- complexity_bias | Hemodiálisis || No está indicada.
+- base_rate_fallacy | El potasio corporal total es normal en la cetoacidosis || Hay un déficit corporal total.
+- belief_bias | El potasio sérico normal descarta un déficit corporal en cetoacidosis || La acidosis desplaza el potasio fuera de la célula.
+- omission_bias | No monitorear el electrocardiograma || Es indispensable.
+E: En la cetoacidosis diabética existe un déficit corporal total de potasio por la diuresis osmótica y el vómito, aunque el potasio sérico inicial puede ser normal o alto porque la acidosis y la falta de insulina lo desplazan fuera de la célula. La insulina y la corrección de la acidosis lo devuelven al interior de la célula y pueden causar hipopotasemia grave. Si el potasio es menor de 3.3 mEq/L, se repone y se difiere la insulina hasta superarlo. Si está entre 3.3 y 5.2 mEq/L, se agrega potasio a los líquidos. Si es mayor de 5.2, se vigila sin reponer. Se monitoriza el electrocardiograma.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en el adulto ;; Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas
+
+@ urg|metabolic_emergencies|diabetic_ketoacidosis|2|treatment_of_choice
+V: Hombre de 28 años con cetoacidosis diabética grave, potasio de 4.2 mEq/L, que ya recibió reanimación inicial con líquidos.
+P: ¿Cuál es el esquema de insulina de elección?
++ Insulina regular en infusión intravenosa continua a 0.1 unidades por kilo por hora || Es el esquema estándar en cetoacidosis moderada a grave.
+- anchoring | Insulina NPH subcutánea cada 12 horas || No es adecuada en la fase aguda grave.
+- availability_heuristic | Insulina glargina como única terapia inicial || No es el tratamiento inicial de la cetoacidosis grave.
+- representativeness_heuristic | Bolos grandes de insulina intravenosa cada hora sin infusión || Causan descensos bruscos e hipopotasemia.
+- premature_closure | Hipoglucemiantes orales || No están indicados.
+- framing_effect | Suspender la insulina cuando la glucosa baja a 250 mg/dL || Se continúa agregando glucosa hasta resolver la acidosis.
+- complexity_bias | Bomba de insulina subcutánea programable en urgencias || No es el estándar en cetoacidosis grave.
+- base_rate_fallacy | La meta es normalizar la glucosa en la primera hora || Se busca un descenso gradual.
+- belief_bias | La cetoacidosis se resuelve cuando se normaliza la glucosa || Se resuelve cuando se corrige la acidosis.
+- omission_bias | No medir glucosa capilar cada hora || Es indispensable.
+E: En la cetoacidosis moderada a grave se usa insulina regular en infusión intravenosa continua, habitualmente a 0.1 unidades por kilo por hora, con o sin bolo inicial, una vez que el potasio es de al menos 3.3 mEq/L. Se busca un descenso de la glucosa de 50 a 75 mg/dL por hora. Cuando la glucosa baja a 200 a 250 mg/dL se agrega solución glucosada y se reduce la infusión, sin suspenderla, hasta resolver la cetoacidosis, que se define por pH mayor de 7.3, bicarbonato de 15 o más y brecha aniónica normal. En la cetoacidosis leve puede usarse insulina rápida subcutánea.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en el adulto ;; Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas
+
+@ urg|metabolic_emergencies|diabetic_ketoacidosis|3|next_step
+V: Mujer de 22 años con cetoacidosis diabética que ya se resolvió: pH de 7.35, bicarbonato de 19 y brecha aniónica normal. Tolera la vía oral. Recibe insulina en infusión.
+P: ¿Cuál es la conducta más apropiada para la transición de la insulina?
++ Aplicar insulina basal subcutánea 1 a 2 horas antes de suspender la infusión intravenosa || Evita el rebote de hiperglucemia y la recurrencia de la cetoacidosis.
+- anchoring | Suspender la infusión y aplicar la insulina subcutánea al día siguiente || Causa recurrencia de la cetoacidosis.
+- availability_heuristic | Suspender toda la insulina porque ya se resolvió || La paciente con diabetes tipo 1 requiere insulina siempre.
+- representativeness_heuristic | Cambiar a hipoglucemiantes orales || No son útiles en diabetes tipo 1.
+- premature_closure | Mantener la infusión intravenosa indefinidamente || No es necesario si tolera la vía oral.
+- framing_effect | Aplicar solo insulina rápida antes de comer sin basal || Falta la insulina basal.
+- complexity_bias | Iniciar bomba de insulina antes del egreso en todos los casos || No es obligatorio.
+- base_rate_fallacy | La insulina intravenosa tiene una vida media larga || Es de pocos minutos.
+- belief_bias | La cetoacidosis no recurre tras resolverse || Recurre si se suspende la insulina.
+- omission_bias | No educar sobre el manejo de días de enfermedad || Previene nuevas crisis.
+E: Una vez resuelta la cetoacidosis y cuando el paciente tolera la vía oral, se realiza la transición a insulina subcutánea. La insulina basal subcutánea debe aplicarse 1 a 2 horas antes de suspender la infusión intravenosa, porque la insulina intravenosa tiene una vida media de pocos minutos y su suspensión sin cobertura causa hiperglucemia de rebote y recurrencia de la cetoacidosis. Se usa un esquema basal bolo. Antes del egreso se educa al paciente sobre el manejo de días de enfermedad, el monitoreo de glucosa y cetonas, y no suspender la insulina aunque no coma.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en el adulto ;; Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas
+
+@ urg|metabolic_emergencies|diabetic_ketoacidosis|2|diagnosis
+V: Hombre de 72 años con diabetes tipo 2 que vive solo y es traído por confusión progresiva de 5 días. Glucosa de 980 mg/dL, osmolaridad sérica efectiva de 345 mOsm/kg, pH de 7.34, bicarbonato de 22 y cetonas negativas.
+P: ¿Cuál es el diagnóstico más probable?
++ Estado hiperosmolar hiperglucémico || Hiperglucemia extrema con hiperosmolaridad y sin acidosis significativa.
+- anchoring | Cetoacidosis diabética || No hay acidosis ni cetosis significativas.
+- availability_heuristic | Evento vascular cerebral como única causa de la confusión || La hiperosmolaridad explica la alteración mental.
+- representativeness_heuristic | Acidosis láctica || El pH es casi normal.
+- premature_closure | Demencia avanzada || El cuadro es agudo.
+- framing_effect | Hipoglucemia || La glucosa está alta.
+- complexity_bias | Encefalitis viral como primera opción || La hiperosmolaridad explica el cuadro.
+- base_rate_fallacy | El estado hiperosmolar es más leve que la cetoacidosis || Tiene mayor mortalidad.
+- belief_bias | Solo ocurre en diabetes tipo 1 || Es típico de la diabetes tipo 2.
+- focusing_illusion | Diabetes insípida || La glucosa muy alta explica el cuadro.
+E: El estado hiperosmolar hiperglucémico es típico de adultos mayores con diabetes tipo 2, frecuentemente desencadenado por infecciones, ingesta inadecuada de líquidos o fármacos. Se caracteriza por hiperglucemia extrema, habitualmente mayor de 600 mg/dL, osmolaridad sérica efectiva mayor de 320 mOsm/kg, deshidratación grave y alteración del estado mental, sin acidosis significativa, con pH mayor de 7.3 y bicarbonato mayor de 15, y sin cetosis importante, porque la insulina residual impide la cetogénesis. Su evolución es de días y tiene mayor mortalidad que la cetoacidosis. El tratamiento es rehidratación intensa, insulina a dosis bajas y corrección de electrolitos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del estado hiperosmolar hiperglucémico ;; Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas
+
+@ urg|metabolic_emergencies|diabetic_ketoacidosis|3|treatment_of_choice
+V: Hombre de 35 años con cetoacidosis diabética grave, pH de 6.85, bicarbonato de 3 mEq/L y potasio de 4.5 mEq/L, con inestabilidad hemodinámica.
+P: ¿Cuál es el tratamiento adicional indicado en este caso?
++ Bicarbonato de sodio intravenoso con reposición de potasio || Se considera solo con pH menor de 6.9.
+- anchoring | Bicarbonato en todos los pacientes con cetoacidosis || Solo con pH menor de 6.9.
+- availability_heuristic | Suspender la insulina hasta corregir el pH || La insulina es esencial para resolver la cetosis.
+- representativeness_heuristic | Hiperventilación mecánica como único tratamiento || No corrige la causa.
+- premature_closure | Solo líquidos sin insulina || La insulina es necesaria.
+- framing_effect | Ácido clorhídrico intravenoso || Agrava la acidosis.
+- complexity_bias | Trasplante de páncreas urgente || No está indicado.
+- base_rate_fallacy | El bicarbonato no tiene efectos adversos || Puede causar hipopotasemia y edema cerebral.
+- belief_bias | El pH se normaliza más rápido solo con bicarbonato || El tratamiento de la causa es la insulina.
+- omission_bias | No vigilar el potasio durante el bicarbonato || Puede bajar.
+E: El bicarbonato de sodio no se recomienda de rutina en la cetoacidosis diabética, porque la insulina y los líquidos corrigen la acidosis al detener la cetogénesis. Su uso se asocia con hipopotasemia, alcalosis de rebote y, en niños, edema cerebral. Se considera solo en acidosis muy grave, con pH menor de 6.9, por el riesgo de depresión miocárdica y arritmias, administrándolo en infusión con potasio y repitiendo hasta que el pH supere 7.0. La insulina, los líquidos y la reposición de potasio siguen siendo la base del tratamiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en el adulto ;; Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas
+
+@ urg|metabolic_emergencies|diabetic_ketoacidosis|3|complication_prognosis
+V: Niño de 9 años con cetoacidosis diabética en tratamiento con líquidos e insulina. A las 6 horas presenta cefalea, bradicardia, hipertensión y disminución del estado de conciencia.
+P: ¿Cuál es la complicación más probable?
++ Edema cerebral || Es la complicación más temida de la cetoacidosis en niños.
+- anchoring | Hipoglucemia por la insulina como única causa || La tríada de Cushing sugiere edema cerebral.
+- availability_heuristic | Meningitis bacteriana || No hay datos infecciosos.
+- representativeness_heuristic | Mejoría de la cetoacidosis || El cuadro neurológico indica complicación.
+- premature_closure | Hipopotasemia || No explica la hipertensión con bradicardia.
+- framing_effect | Crisis de ansiedad por el ambiente hospitalario || No explica el cuadro.
+- complexity_bias | Tumor cerebral no diagnosticado || El contexto orienta a edema cerebral.
+- base_rate_fallacy | El edema cerebral solo ocurre en adultos || Es más frecuente en niños.
+- belief_bias | El edema cerebral siempre aparece antes del tratamiento || Suele aparecer en las primeras horas del tratamiento.
+- focusing_illusion | Hiperglucemia persistente || No explica la tríada.
+E: El edema cerebral es la complicación más grave de la cetoacidosis diabética en niños y adolescentes, con alta mortalidad y secuelas. Suele aparecer entre 4 y 12 horas después de iniciar el tratamiento. Los factores de riesgo incluyen edad pequeña, debut de la diabetes, acidosis grave, nitrógeno ureico elevado, uso de bicarbonato y una corrección rápida de la osmolaridad. Se manifiesta con cefalea, vómito, alteración del estado mental, irritabilidad y la tríada de Cushing, con bradicardia, hipertensión y respiración irregular. Se trata de inmediato con manitol o solución salina hipertónica, reduciendo el aporte de líquidos, sin esperar la imagen.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en niños ;; Guía de la Sociedad Internacional de Diabetes Pediátrica y del Adolescente
+
+@ urg|metabolic_emergencies|diabetic_ketoacidosis|3|diagnosis
+V: Mujer de 45 años con diabetes tipo 2 en tratamiento con empagliflozina que se sometió a una cirugía hace 2 días con ayuno prolongado. Presenta náusea, taquipnea y malestar. Glucosa de 190 mg/dL, pH de 7.18, bicarbonato de 10 y cetonas séricas elevadas.
+P: ¿Cuál es el diagnóstico más probable?
++ Cetoacidosis diabética euglucémica asociada a inhibidor del cotransportador de sodio y glucosa tipo 2 || Acidosis con cetonas y glucosa menor de 250 mg/dL.
+- anchoring | Descartar cetoacidosis porque la glucosa es menor de 250 mg/dL || Estos fármacos causan cetoacidosis con glucosa casi normal.
+- availability_heuristic | Acidosis láctica por metformina || Hay cetonas elevadas.
+- representativeness_heuristic | Estado hiperosmolar || La glucosa no es muy alta y hay acidosis.
+- premature_closure | Náusea posoperatoria simple || No explica la acidosis.
+- framing_effect | Cetosis de ayuno benigna || La acidosis es grave.
+- complexity_bias | Intoxicación por salicilatos || El contexto orienta a cetoacidosis euglucémica.
+- base_rate_fallacy | La cetoacidosis no ocurre en diabetes tipo 2 || Puede ocurrir, sobre todo con estos fármacos.
+- belief_bias | Los inhibidores del cotransportador no tienen efectos metabólicos graves || Pueden causar cetoacidosis.
+- omission_bias | No suspender el fármaco antes de cirugías || Se suspende días antes.
+E: La cetoacidosis diabética euglucémica se caracteriza por acidosis metabólica con cetonemia y glucosa menor de 250 mg/dL. Se asocia con los inhibidores del cotransportador de sodio y glucosa tipo 2, como empagliflozina, dapagliflozina y canagliflozina, sobre todo en situaciones de ayuno, cirugía, enfermedad aguda, deshidratación, consumo de alcohol o reducción de la insulina. También ocurre en el embarazo. Puede pasar desapercibida por la glucosa casi normal. El tratamiento es suspender el fármaco, líquidos, insulina con glucosa desde el inicio y reposición de potasio. Se recomienda suspender estos fármacos 3 a 4 días antes de una cirugía programada.
+R: Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas ;; Estándares de atención en diabetes de la Asociación Americana de Diabetes
+
+@ urg|metabolic_emergencies|diabetic_ketoacidosis|2|data_interpretation
+V: Hombre de 30 años con cetoacidosis diabética. Sodio de 128 mEq/L, cloro de 92 mEq/L, bicarbonato de 8 mEq/L y glucosa de 600 mg/dL.
+P: ¿Qué indica el cálculo de la brecha aniónica?
++ Una brecha aniónica de 28, elevada por los cetoácidos || Se calcula como sodio menos cloro más bicarbonato.
+- anchoring | Una brecha de 12, normal || Es un cálculo erróneo.
+- availability_heuristic | Una brecha de 8 || Es un cálculo erróneo.
+- representativeness_heuristic | Que la acidosis es hiperclorémica de brecha normal || La brecha está elevada.
+- premature_closure | Que el sodio real es de 128 sin corrección || Debe corregirse por la glucosa.
+- framing_effect | Una brecha de 36 || Es un cálculo erróneo.
+- complexity_bias | Que se requiere medir lactato para calcular la brecha || No es necesario para el cálculo.
+- base_rate_fallacy | La brecha aniónica no tiene utilidad en la cetoacidosis || Ayuda a vigilar la resolución.
+- belief_bias | Una glucosa alta no afecta el sodio medido || Causa seudohiponatremia dilucional.
+- focusing_illusion | Que hay alcalosis metabólica || Hay acidosis.
+E: La brecha aniónica se calcula como sodio menos la suma de cloro y bicarbonato; su valor normal es de 8 a 12 mEq/L. En este paciente es 128 menos 100, es decir, 28 mEq/L, elevada por la acumulación de cetoácidos como el beta hidroxibutirato y el acetoacetato. La normalización de la brecha es uno de los criterios de resolución de la cetoacidosis. Además, la hiperglucemia causa hiponatremia por desplazamiento de agua al espacio extracelular, por lo que el sodio debe corregirse sumando 1.6 a 2.4 mEq/L por cada 100 mg/dL de glucosa por arriba de 100; aquí el sodio corregido sería de unos 136 a 140.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en el adulto ;; Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas
+
+@ urg|metabolic_emergencies|diabetic_ketoacidosis|2|initial_study
+V: Mujer de 20 años con diabetes tipo 1 que llega con cetoacidosis diabética. Refiere tos y fiebre de 3 días. Es su tercer episodio de cetoacidosis en un año.
+P: ¿Cuál es el estudio inicial más importante además de los de laboratorio metabólico?
++ Búsqueda del factor desencadenante con radiografía de tórax, cultivos, examen general de orina y prueba de embarazo || Las infecciones y la omisión de insulina son los desencadenantes más frecuentes.
+- anchoring | Ningún estudio adicional porque la causa siempre es la omisión de insulina || Debe buscarse el desencadenante.
+- availability_heuristic | Resonancia magnética de páncreas || No está indicada.
+- representativeness_heuristic | Prueba de tolerancia a la glucosa || No está indicada.
+- premature_closure | Biopsia pancreática || No está indicada.
+- framing_effect | Péptido C como estudio urgente prioritario || No cambia el manejo agudo.
+- complexity_bias | Tomografía de cuerpo completo de rutina || No está indicada.
+- base_rate_fallacy | Las infecciones rara vez desencadenan cetoacidosis || Son una causa frecuente.
+- belief_bias | Los episodios repetidos no requieren investigar factores psicosociales || Deben investigarse.
+- omission_bias | No evaluar la adherencia y el acceso a insulina || Son causas frecuentes de recurrencia.
+E: Los factores desencadenantes de la cetoacidosis diabética deben buscarse en todos los pacientes. Los más frecuentes son las infecciones, como neumonía e infección urinaria, y la omisión o dosis insuficiente de insulina. Otros son el debut de la diabetes, el infarto, la pancreatitis, el evento vascular cerebral, el embarazo, el consumo de alcohol o drogas y los fármacos como esteroides e inhibidores del cotransportador. En pacientes con episodios recurrentes, sobre todo jóvenes, se deben investigar problemas de adherencia, acceso a la insulina, trastornos de la conducta alimentaria, depresión y factores psicosociales.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en el adulto ;; Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas
+
+@ urg|metabolic_emergencies|diabetic_ketoacidosis|3|treatment_of_choice
+V: Hombre de 75 años con estado hiperosmolar hiperglucémico, glucosa de 900 mg/dL, sodio corregido de 158 mEq/L y deshidratación grave. Presión de 90/60 mmHg.
+P: ¿Cuál es el tratamiento de elección inicial?
++ Solución salina al 0.9 por ciento para restaurar el volumen, seguida de soluciones según el sodio corregido, con descenso gradual de la osmolaridad || La rehidratación es la base del tratamiento.
+- anchoring | Insulina en dosis altas antes de líquidos para bajar rápido la glucosa || Puede causar colapso circulatorio.
+- availability_heuristic | Solución glucosada al 5 por ciento desde el inicio || Agrava la hiperglucemia.
+- representativeness_heuristic | Bajar la glucosa a 100 mg/dL en la primera hora || El descenso rápido aumenta el riesgo de edema cerebral.
+- premature_closure | Restricción de líquidos || Agrava la deshidratación.
+- framing_effect | Bicarbonato de sodio de rutina || No hay acidosis importante.
+- complexity_bias | Hemodiálisis urgente || No está indicada.
+- base_rate_fallacy | El déficit de líquidos es menor que en la cetoacidosis || Suele ser mayor.
+- belief_bias | La osmolaridad debe normalizarse en minutos || Debe descender gradualmente.
+- omission_bias | No buscar infección como desencadenante || Es frecuente.
+E: El tratamiento del estado hiperosmolar hiperglucémico se basa en la rehidratación, porque el déficit de agua es mayor que en la cetoacidosis, de 8 a 12 litros. Se inicia con solución salina al 0.9 por ciento para restaurar el volumen circulante, y después se ajusta según el sodio corregido, con soluciones hipotónicas si el sodio es alto. La osmolaridad debe descender gradualmente, no más de 3 a 8 mOsm/kg por hora, para evitar el edema cerebral. La insulina se inicia a dosis bajas cuando el paciente ha recibido líquidos y el potasio es adecuado. Se busca y trata el desencadenante y se previene la trombosis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del estado hiperosmolar hiperglucémico ;; Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas

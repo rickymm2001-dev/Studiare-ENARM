@@ -1,0 +1,207 @@
+@ urg|metabolic_emergencies|electrolyte_disorders_emergency|2|treatment_of_choice
+V: Mujer de 50 años con diarrea abundante de 4 días que presenta debilidad muscular generalizada y calambres. Potasio sérico de 2.4 mEq/L. El electrocardiograma muestra ondas U y aplanamiento de la onda T. Magnesio de 1.2 mg/dL.
+P: ¿Cuál es el tratamiento de elección?
++ Cloruro de potasio intravenoso diluido con monitoreo electrocardiográfico y reposición de magnesio || La hipomagnesemia impide corregir la hipopotasemia.
+- anchoring | Potasio intravenoso en bolo rápido sin diluir || Puede causar paro cardiaco.
+- availability_heuristic | Solo potasio oral sin corregir el magnesio || La hipopotasemia será refractaria.
+- representativeness_heuristic | Insulina con glucosa || Agrava la hipopotasemia.
+- premature_closure | Salbutamol nebulizado || Disminuye el potasio.
+- framing_effect | Furosemida || Aumenta las pérdidas de potasio.
+- complexity_bias | Hemodiálisis || No está indicada.
+- base_rate_fallacy | La hipopotasemia nunca causa arritmias || Puede causar arritmias graves.
+- belief_bias | Corregir el potasio basta aunque el magnesio esté bajo || El magnesio debe corregirse.
+- omission_bias | No tratar la causa de la diarrea ni reponer volumen || Es parte del manejo.
+E: La hipopotasemia grave, menor de 2.5 mEq/L, o con síntomas o cambios electrocardiográficos, requiere reposición intravenosa. Se manifiesta con debilidad muscular, calambres, íleo, parálisis, arritmias y cambios en el electrocardiograma como aplanamiento de la onda T, ondas U y depresión del ST. El cloruro de potasio se administra diluido, por vía periférica a no más de 10 mEq por hora o hasta 20 mEq por hora por vía central con monitoreo; nunca en bolo. La hipomagnesemia acompañante debe corregirse, porque aumenta las pérdidas renales de potasio y hace refractaria la hipopotasemia. Se trata la causa.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos del potasio ;; Manual de urgencias médico quirúrgicas
+
+@ urg|metabolic_emergencies|electrolyte_disorders_emergency|3|initial_treatment
+V: Mujer de 65 años con cáncer de mama metastásico que presenta confusión, poliuria, estreñimiento y deshidratación. Calcio sérico de 15.2 mg/dL y función renal levemente alterada.
+P: ¿Cuál es el tratamiento inicial de elección?
++ Hidratación intravenosa intensa con solución salina, seguida de un bisfosfonato intravenoso como ácido zoledrónico || Es una hipercalcemia grave asociada a cáncer.
+- anchoring | Furosemida como primera medida antes de hidratar || Empeora la deshidratación.
+- availability_heuristic | Calcio intravenoso || Agravaría la hipercalcemia.
+- representativeness_heuristic | Diuréticos tiazídicos || Aumentan la reabsorción de calcio.
+- premature_closure | Solo observación || La hipercalcemia grave es una urgencia.
+- framing_effect | Vitamina D || Aumentaría el calcio.
+- complexity_bias | Paratiroidectomía urgente || La causa es el cáncer.
+- base_rate_fallacy | La hipercalcemia maligna es rara || Es una de las urgencias oncológicas más frecuentes.
+- belief_bias | Los bisfosfonatos actúan en minutos || Su efecto inicia en 2 a 4 días.
+- omission_bias | No considerar calcitonina para un descenso rápido inicial || Actúa en horas.
+E: La hipercalcemia grave, mayor de 14 mg/dL o con síntomas, es una urgencia. La causa más frecuente en pacientes hospitalizados es el cáncer, por el péptido relacionado con la hormona paratiroidea o por metástasis óseas. Se manifiesta con confusión, letargo, poliuria, deshidratación, estreñimiento, náusea, acortamiento del QT y lesión renal. El tratamiento inicial es la hidratación intravenosa intensa con solución salina para corregir el volumen y aumentar la excreción de calcio. La calcitonina reduce el calcio en horas, y los bisfosfonatos intravenosos como el ácido zoledrónico, o el denosumab, tienen efecto más lento pero sostenido. La furosemida solo se usa si hay sobrecarga.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipercalcemia ;; Guía de Práctica Clínica de urgencias oncológicas
+
+@ urg|metabolic_emergencies|electrolyte_disorders_emergency|2|treatment_of_choice
+V: Mujer de 40 años operada de tiroidectomía total hace 24 horas que presenta hormigueo perioral, espasmo carpopedal y signo de Chvostek positivo. Calcio sérico de 6.8 mg/dL.
+P: ¿Cuál es el tratamiento de elección inmediato?
++ Gluconato de calcio intravenoso || Es una hipocalcemia sintomática por hipoparatiroidismo posquirúrgico.
+- anchoring | Calcio oral como única medida || La hipocalcemia sintomática requiere vía intravenosa.
+- availability_heuristic | Bicarbonato de sodio || Agrava la hipocalcemia ionizada.
+- representativeness_heuristic | Furosemida || Aumenta las pérdidas de calcio.
+- premature_closure | Solo vigilancia porque es transitoria || Puede causar laringoespasmo y convulsiones.
+- framing_effect | Levotiroxina en dosis alta || No corrige la hipocalcemia.
+- complexity_bias | Reintervención quirúrgica inmediata || No está indicada.
+- base_rate_fallacy | El hipoparatiroidismo posquirúrgico es siempre permanente || Suele ser transitorio.
+- belief_bias | El calcio intravenoso puede darse en bolo rápido sin dilución || Debe administrarse lentamente.
+- omission_bias | No medir magnesio || La hipomagnesemia impide corregir el calcio.
+E: La hipocalcemia es una complicación frecuente de la tiroidectomía total por lesión o devascularización de las glándulas paratiroides, generalmente transitoria. Se manifiesta con parestesias periorales y distales, espasmo carpopedal, signo de Chvostek, contracción facial al percutir el nervio facial, signo de Trousseau, espasmo del carpo al inflar el baumanómetro, laringoespasmo, convulsiones y QT prolongado. La hipocalcemia sintomática se trata con gluconato de calcio intravenoso diluido, administrado lentamente, seguido de infusión y calcio oral con calcitriol. Se mide y corrige el magnesio.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipocalcemia ;; Guía de Práctica Clínica de tratamiento quirúrgico del nódulo tiroideo
+
+@ urg|metabolic_emergencies|electrolyte_disorders_emergency|3|treatment_of_choice
+V: Mujer de 85 años con demencia que vive en un asilo y es traída por somnolencia. No ha bebido agua en varios días. Sodio sérico de 165 mEq/L, peso de 50 kilos. Hemodinámicamente estable.
+P: ¿Cuál es el tratamiento de elección?
++ Reposición de agua libre con solución glucosada al 5 por ciento o agua por vía enteral, corrigiendo el sodio no más de 10 a 12 mEq/L en 24 horas || La corrección rápida causa edema cerebral.
+- anchoring | Corregir el sodio a 140 en 6 horas || Causa edema cerebral.
+- availability_heuristic | Solución salina hipertónica al 3 por ciento || Agravaría la hipernatremia.
+- representativeness_heuristic | Restricción de líquidos || Agravaría la hipernatremia.
+- premature_closure | Solo observación || La hipernatremia grave requiere tratamiento.
+- framing_effect | Furosemida como único tratamiento || No repone agua.
+- complexity_bias | Desmopresina sin estudiar diabetes insípida || No hay datos de diabetes insípida.
+- base_rate_fallacy | La hipernatremia en ancianos rara vez es por falta de acceso al agua || Es la causa más frecuente.
+- belief_bias | La hipernatremia crónica debe corregirse rápido como la aguda || Debe ser lenta.
+- omission_bias | No calcular el déficit de agua libre || Guía la reposición.
+E: La hipernatremia se debe con más frecuencia a la pérdida de agua libre sin reposición adecuada, sobre todo en personas con acceso limitado al agua o alteración de la sed, como adultos mayores con demencia, lactantes y pacientes intubados. Se manifiesta con letargo, irritabilidad, confusión, convulsiones y coma. El tratamiento es la reposición de agua libre, con solución glucosada al 5 por ciento o agua por vía enteral, calculando el déficit de agua libre. En la hipernatremia crónica, la corrección no debe superar 10 a 12 mEq/L en 24 horas, porque el descenso rápido causa edema cerebral. Si hay inestabilidad, primero se repone el volumen con solución salina.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipernatremia ;; Manual de urgencias médico quirúrgicas
+
+@ urg|metabolic_emergencies|electrolyte_disorders_emergency|3|initial_treatment
+V: Hombre de 60 años con cáncer de pulmón de células pequeñas que presenta náusea y confusión leve. Sodio de 124 mEq/L, osmolaridad sérica baja, osmolaridad urinaria de 450 mOsm/kg y sodio urinario de 50 mEq/L. Euvolémico. Función tiroidea y suprarrenal normales.
+P: ¿Cuál es el tratamiento inicial de elección?
++ Restricción de líquidos a menos de 800 a 1,000 mL al día || Es un síndrome de secreción inadecuada de hormona antidiurética sin síntomas graves.
+- anchoring | Solución salina al 0.9 por ciento en grandes volúmenes || Puede empeorar la hiponatremia en este síndrome.
+- availability_heuristic | Solución salina hipertónica en bolo || Se reserva para síntomas graves.
+- representativeness_heuristic | Solución glucosada al 5 por ciento || Empeora la hiponatremia.
+- premature_closure | Diuréticos tiazídicos || Empeoran la hiponatremia.
+- framing_effect | Desmopresina || Empeora la retención de agua.
+- complexity_bias | Hemodiálisis urgente || No está indicada.
+- base_rate_fallacy | El síndrome de secreción inadecuada cursa con hipovolemia || Cursa con euvolemia.
+- belief_bias | Debe corregirse el sodio a 140 en 24 horas || El límite es 8 a 10 mEq/L en 24 horas.
+- omission_bias | No tratar la causa subyacente || El tratamiento del cáncer puede resolverlo.
+E: El síndrome de secreción inadecuada de hormona antidiurética se caracteriza por hiponatremia hipoosmolar euvolémica, con orina inapropiadamente concentrada, osmolaridad urinaria mayor de 100 mOsm/kg, y sodio urinario mayor de 30 mEq/L, una vez descartados hipotiroidismo, insuficiencia suprarrenal y diuréticos. Sus causas incluyen cáncer de pulmón de células pequeñas, enfermedades del sistema nervioso central y pulmonares, fármacos como antidepresivos, carbamazepina y ciclofosfamida, dolor y náusea. El tratamiento inicial en casos sin síntomas graves es la restricción de líquidos; se puede agregar urea oral o vaptanes. La solución salina isotónica puede empeorar la hiponatremia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hiponatremia ;; Guía europea para el diagnóstico y tratamiento de la hiponatremia
+
+@ urg|metabolic_emergencies|electrolyte_disorders_emergency|3|complication_prognosis
+V: Mujer de 45 años con alcoholismo y sodio de 108 mEq/L que recibió solución salina hipertónica. El sodio subió a 128 mEq/L en 24 horas. Tres días después presenta disartria, disfagia, cuadriparesia y alteración de la conciencia.
+P: ¿Cuál es la complicación más probable?
++ Síndrome de desmielinización osmótica || Ocurre tras una corrección demasiado rápida de una hiponatremia crónica.
+- anchoring | Encefalopatía de Wernicke como única explicación || El antecedente de corrección rápida y el cuadro orientan a desmielinización.
+- availability_heuristic | Edema cerebral por hiponatremia || Ocurre con la hiponatremia no tratada, no con la corrección.
+- representativeness_heuristic | Evento vascular cerebral isquémico de la arteria cerebral media || No explica el patrón ni el antecedente.
+- premature_closure | Síndrome de Guillain-Barré || No explica la disartria y la alteración de conciencia tras la corrección.
+- framing_effect | Intoxicación alcohólica aguda || No explica el cuadro.
+- complexity_bias | Esclerosis múltiple de inicio agudo || El contexto orienta a desmielinización osmótica.
+- base_rate_fallacy | La velocidad de corrección del sodio no influye en el pronóstico || Es determinante.
+- belief_bias | El daño suele ser inmediato al corregir el sodio || Aparece de 2 a 6 días después.
+- focusing_illusion | Hipoglucemia || No explica el cuadro.
+E: El síndrome de desmielinización osmótica, antes llamado mielinólisis pontina central, ocurre cuando una hiponatremia crónica se corrige demasiado rápido, generalmente más de 10 a 12 mEq/L en 24 horas. Las células cerebrales adaptadas a la hipoosmolaridad sufren deshidratación y desmielinización, principalmente en la protuberancia. Aparece de 2 a 6 días después de la corrección, con disartria, disfagia, cuadriparesia, síndrome de enclaustramiento y alteración de la conciencia. Los factores de riesgo son alcoholismo, desnutrición, hipopotasemia, enfermedad hepática y sodio menor de 105. Se previene limitando la corrección a 8 mEq/L en 24 horas en pacientes de alto riesgo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hiponatremia ;; Guía europea para el diagnóstico y tratamiento de la hiponatremia
+
+@ urg|metabolic_emergencies|electrolyte_disorders_emergency|3|treatment_of_choice
+V: Mujer de 35 años con lupus en tratamiento crónico con prednisona que la suspendió hace 1 semana. Presenta vómito, dolor abdominal, hipotensión de 70/40 mmHg refractaria a líquidos, sodio de 126 mEq/L, potasio de 5.6 mEq/L y glucosa de 60 mg/dL.
+P: ¿Cuál es el tratamiento de elección?
++ Hidrocortisona 100 mg intravenosa en bolo, con líquidos y glucosa || Es una crisis suprarrenal.
+- anchoring | Esperar la medición de cortisol antes de tratar || El retraso puede ser mortal.
+- availability_heuristic | Solo vasopresores || No corrigen la deficiencia de cortisol.
+- representativeness_heuristic | Fludrocortisona oral como única medida || No es suficiente en la crisis.
+- premature_closure | Antibiótico como único tratamiento || No corrige la insuficiencia suprarrenal.
+- framing_effect | Insulina para el potasio alto || Agravaría la hipoglucemia.
+- complexity_bias | Laparotomía exploradora por el dolor abdominal || El dolor es parte de la crisis.
+- base_rate_fallacy | La suspensión de esteroides no causa insuficiencia suprarrenal || Es la causa más frecuente.
+- belief_bias | La dexametasona tiene el mismo efecto mineralocorticoide que la hidrocortisona || No tiene efecto mineralocorticoide.
+- omission_bias | No educar sobre no suspender los esteroides bruscamente || Previene nuevas crisis.
+E: La crisis suprarrenal es una urgencia que se presenta con choque refractario a líquidos y vasopresores, vómito, dolor abdominal, confusión, hiponatremia, hiperpotasemia en la insuficiencia primaria e hipoglucemia. La causa más frecuente es la suspensión brusca de glucocorticoides en pacientes con tratamiento crónico, que suprime el eje hipotálamo hipófisis suprarrenal, o una enfermedad intercurrente sin ajuste de dosis. El tratamiento es hidrocortisona 100 mg intravenosa en bolo, seguida de 200 mg al día, junto con solución salina y glucosa, sin esperar los resultados. Se educa al paciente sobre no suspender los esteroides y duplicar la dosis en enfermedades.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la insuficiencia suprarrenal ;; Guía de la Sociedad de Endocrinología para insuficiencia suprarrenal
+
+@ urg|metabolic_emergencies|electrolyte_disorders_emergency|3|complication_prognosis
+V: Hombre de 45 años con desnutrición grave por alcoholismo que inicia alimentación enteral abundante. A los 3 días presenta debilidad, insuficiencia respiratoria, arritmias y confusión. Fósforo de 0.9 mg/dL, potasio y magnesio bajos.
+P: ¿Cuál es la complicación más probable?
++ Síndrome de realimentación || La reintroducción de carbohidratos desplaza fósforo, potasio y magnesio al interior de la célula.
+- anchoring | Neumonía por aspiración como única causa || No explica las alteraciones electrolíticas.
+- availability_heuristic | Abstinencia alcohólica como única explicación || No explica la hipofosfatemia grave.
+- representativeness_heuristic | Síndrome de Guillain-Barré || No explica los electrolitos.
+- premature_closure | Encefalopatía hepática || No explica la hipofosfatemia.
+- framing_effect | Hiperglucemia aislada || No explica el cuadro.
+- complexity_bias | Miastenia gravis || No explica los electrolitos.
+- base_rate_fallacy | La realimentación rápida siempre es beneficiosa en desnutridos || Puede ser peligrosa.
+- belief_bias | El fósforo bajo no tiene consecuencias clínicas || Causa insuficiencia respiratoria y cardiaca.
+- omission_bias | No administrar tiamina antes de la realimentación || Previene complicaciones.
+E: El síndrome de realimentación ocurre al reintroducir la nutrición en pacientes desnutridos, como alcohólicos, pacientes con anorexia nerviosa, cáncer o ayuno prolongado. La carga de carbohidratos estimula la insulina, que desplaza el fósforo, el potasio y el magnesio al interior de la célula, causando hipofosfatemia grave, hipopotasemia e hipomagnesemia, además de retención de sodio y agua y deficiencia de tiamina. Se manifiesta con debilidad, insuficiencia respiratoria, insuficiencia cardiaca, arritmias, confusión y convulsiones. Se previene iniciando la nutrición de forma gradual, administrando tiamina antes y vigilando y reponiendo los electrolitos.
+R: Guía de Práctica Clínica de prevención y tratamiento del síndrome de realimentación ;; Guía de la Sociedad Europea de Nutrición Clínica
+
+@ urg|metabolic_emergencies|electrolyte_disorders_emergency|2|next_step
+V: Hombre de 40 años asintomático con potasio de 6.5 mEq/L en un estudio de rutina. Función renal normal y no toma fármacos que eleven el potasio. La muestra se tomó con torniquete prolongado y se reporta hemolizada. Electrocardiograma normal.
+P: ¿Cuál es la conducta más apropiada?
++ Repetir la medición de potasio con una muestra adecuada sin hemólisis || Probable seudohiperpotasemia por hemólisis.
+- anchoring | Calcio intravenoso e insulina de inmediato || No hay datos de hiperpotasemia verdadera.
+- availability_heuristic | Hemodiálisis urgente || No está indicada.
+- representativeness_heuristic | Resinas de intercambio de forma crónica || No se ha confirmado.
+- premature_closure | Hospitalizar en terapia intensiva || No está indicado.
+- framing_effect | Suspender todos los alimentos con potasio de por vida || No se ha confirmado.
+- complexity_bias | Biopsia renal || No está indicada.
+- base_rate_fallacy | Un potasio alto siempre refleja el valor real || La hemólisis lo eleva falsamente.
+- belief_bias | La técnica de extracción no influye en el potasio || Influye de forma importante.
+- omission_bias | No revisar si hay leucocitosis o trombocitosis extremas || También causan seudohiperpotasemia.
+E: La seudohiperpotasemia es una elevación falsa del potasio medido por liberación de potasio de las células durante o después de la extracción de la muestra. Sus causas incluyen hemólisis por torniquete prolongado, puño cerrado repetido, aguja fina o transporte inadecuado, y leucocitosis o trombocitosis extremas. Debe sospecharse en pacientes asintomáticos, sin causa aparente y con electrocardiograma normal. La conducta es repetir la medición con una técnica adecuada, idealmente sin torniquete prolongado, o en sangre total o plasma. Tratar una seudohiperpotasemia puede causar hipopotasemia iatrogénica.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperpotasemia ;; Manual de urgencias médico quirúrgicas
+
+@ urg|metabolic_emergencies|electrolyte_disorders_emergency|2|treatment_of_choice
+V: Mujer de 70 años con diabetes tratada con insulina que es encontrada inconsciente en su casa. Glucosa capilar de 32 mg/dL. Los paramédicos no logran acceso venoso.
+P: ¿Cuál es el tratamiento de elección en este momento?
++ Glucagón intramuscular o intranasal || Eleva la glucosa cuando no hay acceso venoso ni puede deglutir.
+- anchoring | Dar jugo por la boca a una paciente inconsciente || Riesgo de aspiración.
+- availability_heuristic | Esperar al hospital para tratar || La hipoglucemia grave puede causar daño cerebral.
+- representativeness_heuristic | Insulina rápida subcutánea || Agrava la hipoglucemia.
+- premature_closure | Naloxona || No está indicada.
+- framing_effect | Solución salina intravenosa sin glucosa || No corrige la hipoglucemia.
+- complexity_bias | Intubación antes de corregir la glucosa || La corrección de la glucosa es prioritaria.
+- base_rate_fallacy | El glucagón es ineficaz en adultos mayores || Es eficaz si hay reservas de glucógeno.
+- belief_bias | La glucosa oral es igual de segura en pacientes inconscientes || No lo es.
+- omission_bias | No vigilar recurrencia de la hipoglucemia || Puede recurrir.
+E: La hipoglucemia grave es aquella que requiere asistencia de otra persona por alteración de la conciencia. Si el paciente no puede deglutir, el tratamiento es glucosa intravenosa al 50 por ciento, 25 gramos, o al 10 por ciento, o si no hay acceso venoso, glucagón intramuscular de 1 mg o intranasal de 3 mg. El glucagón es menos eficaz en pacientes con agotamiento de glucógeno, como alcohólicos o desnutridos. La glucosa oral está contraindicada en pacientes inconscientes por el riesgo de aspiración. Después de la recuperación se administra alimento y se vigila la recurrencia, sobre todo con sulfonilureas o insulinas de acción prolongada.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipoglucemia en el adulto ;; Estándares de atención en diabetes de la Asociación Americana de Diabetes
+
+@ urg|metabolic_emergencies|electrolyte_disorders_emergency|3|treatment_of_choice
+V: Mujer de 75 años con hipotiroidismo que suspendió la levotiroxina hace meses. Llega en invierno con estupor, hipotermia de 33 grados, bradicardia, hipoventilación, hiponatremia y edema sin fóvea.
+P: ¿Cuál es el tratamiento de elección?
++ Hidrocortisona intravenosa seguida de levotiroxina intravenosa, con soporte ventilatorio y recalentamiento pasivo || Es un coma mixedematoso.
+- anchoring | Levotiroxina oral en dosis habitual como única medida || Es lenta y la absorción intestinal está alterada.
+- availability_heuristic | Recalentamiento activo externo agresivo como prioridad || Puede causar colapso por vasodilatación.
+- representativeness_heuristic | Levotiroxina sin hidrocortisona previa || Puede precipitar una crisis suprarrenal.
+- premature_closure | Solo líquidos y observación || El coma mixedematoso es mortal sin tratamiento.
+- framing_effect | Propiltiouracilo || Se usa en hipertiroidismo.
+- complexity_bias | Hemodiálisis || No está indicada.
+- base_rate_fallacy | El coma mixedematoso es frecuente en jóvenes en verano || Es típico de adultos mayores en invierno.
+- belief_bias | La hipotermia se corrige solo con calor externo intenso || El tratamiento hormonal es fundamental.
+- omission_bias | No buscar infección como desencadenante || Es frecuente.
+E: El coma mixedematoso es la forma más grave del hipotiroidismo descompensado, más frecuente en mujeres de edad avanzada, en invierno, desencadenado por infecciones, frío, fármacos sedantes o suspensión de la levotiroxina. Se manifiesta con alteración del estado mental, hipotermia, bradicardia, hipoventilación con hipercapnia, hiponatremia, hipoglucemia y edema. El tratamiento incluye soporte ventilatorio, recalentamiento pasivo, corrección de la hiponatremia, hidrocortisona intravenosa antes de la hormona tiroidea para evitar una crisis suprarrenal y levotiroxina intravenosa en dosis de carga. Se busca y trata el desencadenante. Su mortalidad es elevada.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo primario en el adulto ;; Guía de la Asociación Americana de Tiroides para hipotiroidismo
+
+@ urg|metabolic_emergencies|electrolyte_disorders_emergency|3|treatment_of_choice
+V: Mujer de 35 años con enfermedad de Graves no tratada que tras una infección presenta fiebre de 40 grados, taquicardia de 160 con fibrilación auricular, agitación, vómito, diarrea e ictericia. Escala de Burch-Wartofsky de 60.
+P: ¿Cuál es el tratamiento de elección?
++ Betabloqueador como propranolol, tionamida como propiltiouracilo o metimazol, yodo una hora después de la tionamida, glucocorticoide y enfriamiento || Es una tormenta tiroidea.
+- anchoring | Solo antipiréticos y antibióticos || No trata la crisis tiroidea.
+- availability_heuristic | Yodo antes de la tionamida || Puede aumentar la síntesis de hormona.
+- representativeness_heuristic | Ácido acetilsalicílico para la fiebre || Desplaza la hormona tiroidea de sus proteínas.
+- premature_closure | Levotiroxina || Agravaría la crisis.
+- framing_effect | Tiroidectomía urgente como primera medida || Primero se estabiliza.
+- complexity_bias | Yodo radiactivo urgente || No es el tratamiento agudo.
+- base_rate_fallacy | La tormenta tiroidea es benigna || Tiene alta mortalidad.
+- belief_bias | El propranolol empeora la tirotoxicosis || Controla los síntomas adrenérgicos.
+- omission_bias | No tratar el desencadenante || Es parte del manejo.
+E: La tormenta tiroidea es una complicación grave de la tirotoxicosis, desencadenada por infecciones, cirugía, parto o suspensión de los antitiroideos. Se manifiesta con fiebre alta, taquicardia o fibrilación auricular, insuficiencia cardiaca, agitación o delirio, síntomas gastrointestinales e ictericia. La escala de Burch-Wartofsky ayuda al diagnóstico; 45 o más sugiere tormenta. El tratamiento incluye betabloqueadores, preferentemente propranolol; tionamidas para bloquear la síntesis, con propiltiouracilo que además inhibe la conversión periférica; yodo inorgánico al menos una hora después de la tionamida; glucocorticoides; enfriamiento con paracetamol y medidas físicas; y tratamiento del desencadenante.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del hipertiroidismo ;; Guía de la Asociación Americana de Tiroides para hipertiroidismo
+
+@ urg|metabolic_emergencies|electrolyte_disorders_emergency|2|data_interpretation
+V: Hombre de 55 años con vómito persistente por obstrucción pilórica. Gasometría con pH de 7.52, bicarbonato de 38 mEq/L, cloro de 85 mEq/L y potasio de 2.8 mEq/L. Cloro urinario bajo.
+P: ¿Qué indica esta gasometría?
++ Alcalosis metabólica hipoclorémica sensible al cloro por pérdida de ácido gástrico || El vómito causa pérdida de ácido clorhídrico y depleción de volumen.
+- anchoring | Acidosis metabólica con brecha aniónica elevada || El pH está alto.
+- availability_heuristic | Alcalosis respiratoria || El bicarbonato está alto por causa metabólica.
+- representativeness_heuristic | Acidosis tubular renal || Causa acidosis.
+- premature_closure | Hiperaldosteronismo primario || El cloro urinario bajo indica causa sensible al cloro.
+- framing_effect | Acidosis respiratoria compensada || El pH está alto.
+- complexity_bias | Síndrome de Bartter || Tiene cloro urinario alto.
+- base_rate_fallacy | El vómito causa acidosis metabólica || Causa alcalosis.
+- belief_bias | Se corrige con bicarbonato || Se corrige con solución salina y potasio.
+- focusing_illusion | Intoxicación por salicilatos || Causa otro patrón.
+E: La alcalosis metabólica se caracteriza por pH alto y bicarbonato elevado. El vómito y la aspiración nasogástrica causan pérdida de ácido clorhídrico, depleción de volumen y de cloro, e hipopotasemia, lo que mantiene la alcalosis por aumento de la reabsorción renal de bicarbonato. Se clasifica según el cloro urinario: menor de 20 mEq/L indica alcalosis sensible al cloro, por vómito o diuréticos previos, que responde a solución salina; mayor de 20 indica resistente al cloro, como en el hiperaldosteronismo o el síndrome de Bartter. El tratamiento es solución salina al 0.9 por ciento y reposición de potasio, además de tratar la obstrucción.
+R: Manual de urgencias médico quirúrgicas ;; Guía de Práctica Clínica de interpretación de gases arteriales
