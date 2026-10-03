@@ -207,6 +207,20 @@ export const featureText = {
     goalsTitle: 'Metas y repaso',
     saveChanges: 'Guardar cambios',
     unsaved: 'Tienes cambios sin guardar.',
+    discard: 'Descartar',
+    discarded: 'Volvimos a lo que tenías guardado.',
+    sections: {
+      study: 'Estudio',
+      appearance: 'Apariencia',
+      pomodoro: 'Pomodoro',
+      account: 'Cuenta y datos',
+    },
+    sectionsLabel: 'Secciones de Configuración',
+    dailyTitle: 'Metas del día',
+    advanced: 'Opciones avanzadas del repaso',
+    advancedSummary: (retention: number, maxDays: number | null) =>
+      `Retención ${retention}% · ${maxDays === null ? 'sin tope' : `tope de ${maxDays} días`}`,
+    studyOptionsTitle: 'Al estudiar',
     retention: 'Retención deseada',
     retentionHint:
       'Qué tanto quieres recordar cada tarjeta. 90% es lo recomendado por los creadores de FSRS. Más alto da repasos más seguidos. Entre 80% y 97%.',
