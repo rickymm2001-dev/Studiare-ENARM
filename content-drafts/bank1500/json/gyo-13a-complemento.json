@@ -1,0 +1,946 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "gyo-13a-complemento-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_infections",
+      "subtopic": "hpv_infection",
+      "vignette": "Mujer de 26 años con úlceras genitales múltiples muy dolorosas sobre base eritematosa, precedidas de vesículas agrupadas, ardor y adenopatía inguinal dolorosa bilateral. Fiebre y malestar general. Es su primer episodio.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Granuloma inguinal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da úlceras indoloras rojas carnosas."
+        },
+        {
+          "key": "b",
+          "text": "Linfogranuloma venéreo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da úlcera pequeña transitoria con adenopatía fluctuante."
+        },
+        {
+          "key": "c",
+          "text": "Irritación por ropa interior nueva",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una infección."
+        },
+        {
+          "key": "d",
+          "text": "Primoinfección por virus del herpes simple genital",
+          "correct": true,
+          "rationale": "Vesículas agrupadas que se ulceran, dolorosas, con síntomas sistémicos en el primer episodio."
+        },
+        {
+          "key": "e",
+          "text": "Foliculitis por rasurado",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica las úlceras agrupadas con fiebre."
+        },
+        {
+          "key": "f",
+          "text": "Chancroide",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da úlceras dolorosas de bordes irregulares y purulentas sin vesículas previas."
+        },
+        {
+          "key": "g",
+          "text": "Enfermedad de Behçet",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es recurrente con úlceras orales."
+        },
+        {
+          "key": "h",
+          "text": "Condilomas acuminados",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Son verrugas indoloras."
+        },
+        {
+          "key": "i",
+          "text": "Sífilis primaria",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El chancro es único, indoloro y de base indurada."
+        },
+        {
+          "key": "j",
+          "text": "Candidiasis vulvar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da prurito y flujo sin úlceras agrupadas."
+        }
+      ],
+      "canonical": [
+        "b",
+        "d",
+        "f",
+        "i"
+      ],
+      "explanation": "El herpes genital es causado principalmente por el virus del herpes simple tipo 2, aunque el tipo 1 es cada vez más frecuente. La primoinfección produce vesículas agrupadas que se rompen y forman úlceras muy dolorosas, con disuria, adenopatía inguinal dolorosa y síntomas sistémicos como fiebre y malestar. Las recurrencias son más leves. El diagnóstico se confirma con reacción en cadena de polimerasa de la lesión. El tratamiento con aciclovir, valaciclovir o famciclovir acorta la duración, y la terapia supresiva reduce las recurrencias y la transmisión. En el embarazo la primoinfección cercana al parto es indicación de cesárea por el riesgo neonatal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del herpes genital"
+      ]
+    },
+    {
+      "key": "gyo-13a-complemento-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_infections",
+      "subtopic": "hpv_infection",
+      "vignette": "Mujer de 23 años con una úlcera única, indolora, de bordes indurados y fondo limpio en el labio mayor, aparecida hace 10 días, con adenopatía inguinal bilateral indolora. VDRL positivo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Chancroide",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da úlceras dolorosas de fondo sucio."
+        },
+        {
+          "key": "b",
+          "text": "Condiloma plano",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es una lesión de sífilis secundaria, no una úlcera."
+        },
+        {
+          "key": "c",
+          "text": "Cáncer de vulva",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es más común en mujeres mayores y no explica el VDRL."
+        },
+        {
+          "key": "d",
+          "text": "Linfogranuloma venéreo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da adenopatía fluctuante dolorosa."
+        },
+        {
+          "key": "e",
+          "text": "Granuloma inguinal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el VDRL."
+        },
+        {
+          "key": "f",
+          "text": "Úlcera de Lipschütz",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ocurre en adolescentes con cuadro viral sin VDRL positivo."
+        },
+        {
+          "key": "g",
+          "text": "Grano infectado sin importancia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una infección de transmisión sexual."
+        },
+        {
+          "key": "h",
+          "text": "Traumatismo vulvar",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la serología."
+        },
+        {
+          "key": "i",
+          "text": "Sífilis primaria",
+          "correct": true,
+          "rationale": "Chancro único, indoloro e indurado con adenopatía indolora y VDRL positivo."
+        },
+        {
+          "key": "j",
+          "text": "Herpes genital",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da múltiples úlceras dolorosas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "i",
+        "j"
+      ],
+      "explanation": "La sífilis es causada por Treponema pallidum. La sífilis primaria se manifiesta con el chancro, una úlcera única, indolora, de bordes indurados y fondo limpio, en el sitio de inoculación, con adenopatía regional indolora, que cura de forma espontánea en 3 a 6 semanas. Sin tratamiento progresa a sífilis secundaria con exantema palmoplantar y condilomas planos. El diagnóstico usa pruebas no treponémicas como VDRL o RPR y treponémicas como FTA ABS. El tratamiento de elección es penicilina benzatínica 2.4 millones de unidades intramuscular en dosis única. Se tratan las parejas y se tamiza el virus de la inmunodeficiencia humana.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la sífilis adquirida"
+      ]
+    },
+    {
+      "key": "gyo-13a-complemento-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "emergency_contraception",
+      "vignette": "Mujer de 27 años con índice de masa corporal de 34 que tuvo relaciones sin protección hace 48 horas. Solicita anticoncepción de emergencia oral.",
+      "prompt": "¿Qué indica su índice de masa corporal para la elección del método?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Contraindica toda anticoncepción de emergencia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay contraindicación."
+        },
+        {
+          "key": "b",
+          "text": "No influye en ningún método",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Influye en el levonorgestrel."
+        },
+        {
+          "key": "c",
+          "text": "Obliga a una prueba de embarazo antes de cualquier método",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es necesaria antes del método oral."
+        },
+        {
+          "key": "d",
+          "text": "Indica riesgo de trombosis con levonorgestrel",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No aumenta la trombosis."
+        },
+        {
+          "key": "e",
+          "text": "La eficacia del levonorgestrel puede disminuir con obesidad, por lo que se prefieren el dispositivo de cobre o el ulipristal",
+          "correct": true,
+          "rationale": "La obesidad reduce la eficacia del levonorgestrel."
+        },
+        {
+          "key": "f",
+          "text": "Requiere duplicar la dosis de ulipristal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se recomienda."
+        },
+        {
+          "key": "g",
+          "text": "Indica que debe usar el método de Yuzpe",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos eficaz."
+        },
+        {
+          "key": "h",
+          "text": "Las mujeres con sobrepeso no se embarazan fácilmente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es cierto."
+        },
+        {
+          "key": "i",
+          "text": "Indica esperar a la menstruación",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Pierde la ventana."
+        },
+        {
+          "key": "j",
+          "text": "Contraindica el dispositivo de cobre",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El dispositivo no se afecta por el peso."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "f"
+      ],
+      "explanation": "Algunos estudios muestran que la eficacia del levonorgestrel de emergencia disminuye en mujeres con índice de masa corporal mayor de 25 a 30. En estos casos el dispositivo intrauterino de cobre, que no se afecta por el peso, es la opción más eficaz, y el acetato de ulipristal es la mejor alternativa oral. Si solo se dispone de levonorgestrel, debe ofrecerse de todos modos porque sigue siendo mejor que nada, y algunas guías sugieren duplicar la dosis. La anticoncepción de emergencia no está contraindicada en ninguna mujer por su peso.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Anticoncepción de emergencia"
+      ]
+    },
+    {
+      "key": "gyo-13a-complemento-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "emergency_contraception",
+      "vignette": "Mujer de 24 años que solicita levonorgestrel de emergencia y pregunta si funciona interrumpiendo un embarazo.",
+      "prompt": "¿Cuál es el mecanismo de acción principal del levonorgestrel de emergencia?",
+      "polarity": "affirmative",
+      "task": "mechanism",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Inhibe o retrasa la ovulación al suprimir el pico de LH",
+          "correct": true,
+          "rationale": "Actúa antes de la fecundación."
+        },
+        {
+          "key": "b",
+          "text": "Bloquea las trompas temporalmente",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No tiene efecto mecánico."
+        },
+        {
+          "key": "c",
+          "text": "Funciona como espermicida vaginal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se toma por vía oral."
+        },
+        {
+          "key": "d",
+          "text": "Inflama el endometrio como el cobre",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ese es el mecanismo del dispositivo."
+        },
+        {
+          "key": "e",
+          "text": "Provoca la menstruación de inmediato en todas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es su mecanismo."
+        },
+        {
+          "key": "f",
+          "text": "Disminuye la producción de esperma de la pareja",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Actúa en la mujer."
+        },
+        {
+          "key": "g",
+          "text": "Destruye el embrión en las trompas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No tiene ese efecto."
+        },
+        {
+          "key": "h",
+          "text": "Es un aborto químico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No interrumpe embarazos establecidos."
+        },
+        {
+          "key": "i",
+          "text": "Produce contracciones uterinas que expulsan el óvulo fecundado",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es su mecanismo."
+        },
+        {
+          "key": "j",
+          "text": "Interrumpe un embarazo implantado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es abortivo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "El levonorgestrel de emergencia actúa principalmente inhibiendo o retrasando la ovulación al suprimir el pico de LH, por lo que es más eficaz cuanto antes se toma y no funciona si la ovulación ya ocurrió. No interrumpe un embarazo implantado ni daña al embrión si la mujer ya está embarazada. El acetato de ulipristal, modulador del receptor de progesterona, puede retrasar la ovulación incluso cuando el pico de LH ha comenzado, por eso es más eficaz. Explicar el mecanismo ayuda a reducir los mitos que limitan su uso.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Anticoncepción de emergencia"
+      ]
+    },
+    {
+      "key": "gyo-13a-complemento-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "endometrial_cancer",
+      "vignette": "Mujer de 64 años operada por cáncer de endometrio. La estadificación quirúrgica muestra invasión de más de la mitad del miometrio sin afección del cérvix ni de ganglios. Pregunta por su pronóstico.",
+      "prompt": "¿Cuál es el principal factor pronóstico en el cáncer de endometrio?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "La fe como único factor del pronóstico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No sustituye a los factores biológicos."
+        },
+        {
+          "key": "b",
+          "text": "El grupo sanguíneo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No influye."
+        },
+        {
+          "key": "c",
+          "text": "La presencia de miomas asociados",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No influye."
+        },
+        {
+          "key": "d",
+          "text": "El tamaño del útero antes de la cirugía",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es el factor principal."
+        },
+        {
+          "key": "e",
+          "text": "La edad de la menarca",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Influye en el riesgo, no en el pronóstico."
+        },
+        {
+          "key": "f",
+          "text": "El tipo de anestesia usada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No influye."
+        },
+        {
+          "key": "g",
+          "text": "El nivel de CA 125 como único factor",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es el principal."
+        },
+        {
+          "key": "h",
+          "text": "La etapa quirúrgica, junto con el grado, el tipo histológico, la profundidad de invasión miometrial y la clasificación molecular",
+          "correct": true,
+          "rationale": "Determinan el riesgo de recurrencia y el tratamiento adyuvante."
+        },
+        {
+          "key": "i",
+          "text": "El número de partos previos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es un factor pronóstico."
+        },
+        {
+          "key": "j",
+          "text": "El uso previo de anticonceptivos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un factor pronóstico."
+        }
+      ],
+      "canonical": [
+        "e",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "El pronóstico del cáncer de endometrio depende principalmente de la etapa quirúrgica de la FIGO, el grado histológico, el tipo histológico, la profundidad de invasión miometrial, la invasión del espacio linfovascular y la afección ganglionar. Los carcinomas serosos y de células claras tienen peor pronóstico que los endometrioides. La clasificación molecular, con grupos POLE mutado de excelente pronóstico, deficiencia de reparación, perfil sin alteraciones específicas y p53 anormal de mal pronóstico, se integra en la estadificación actual. Estos factores definen el riesgo y la necesidad de braquiterapia, radioterapia o quimioterapia adyuvante.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de endometrio"
+      ]
+    },
+    {
+      "key": "gyo-13a-complemento-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "endometrial_cancer",
+      "vignette": "Mujer de 50 años asintomática, posmenopáusica, sin factores de riesgo especiales. Pregunta si debe hacerse un estudio anual para detectar cáncer de endometrio.",
+      "prompt": "¿Cuál es la recomendación de tamizaje para cáncer de endometrio en mujeres de riesgo promedio?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Si no hay sangrado no hay ningún riesgo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Debe consultar si aparece."
+        },
+        {
+          "key": "b",
+          "text": "Tomografía pélvica cada 2 años",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "c",
+          "text": "Marcador CA 125 anual",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es útil."
+        },
+        {
+          "key": "d",
+          "text": "Resonancia magnética anual",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "e",
+          "text": "Biopsia endometrial anual a todas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es invasiva y sin beneficio en riesgo promedio."
+        },
+        {
+          "key": "f",
+          "text": "No informar sobre el sangrado como señal de alarma",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es la clave del diagnóstico temprano."
+        },
+        {
+          "key": "g",
+          "text": "Histeroscopia anual",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es invasiva y no indicada."
+        },
+        {
+          "key": "h",
+          "text": "Citología cervical como tamizaje de endometrio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es útil para el endometrio."
+        },
+        {
+          "key": "i",
+          "text": "No se recomienda tamizaje en mujeres asintomáticas de riesgo promedio; se les enseña a consultar ante cualquier sangrado posmenopáusico",
+          "correct": true,
+          "rationale": "El sangrado es un síntoma temprano."
+        },
+        {
+          "key": "j",
+          "text": "Ultrasonido transvaginal anual a todas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No ha mostrado beneficio en riesgo promedio."
+        }
+      ],
+      "canonical": [
+        "e",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "No se recomienda el tamizaje rutinario de cáncer de endometrio en mujeres asintomáticas de riesgo promedio, ya que no ha mostrado reducir la mortalidad. La mayoría de los cánceres se manifiestan tempranamente con sangrado posmenopáusico, por lo que se educa a las mujeres para consultar ante cualquier sangrado tras la menopausia. En mujeres con síndrome de Lynch se recomienda vigilancia con biopsia endometrial a partir de los 30 a 35 años y considerar histerectomía con salpingooforectomía al completar la paridad. En usuarias de tamoxifeno se investiga todo sangrado anormal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de endometrio"
+      ]
+    },
+    {
+      "key": "gyo-13a-complemento-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "menopause",
+      "vignette": "Mujer de 59 años con menopausia hace 9 años que presenta solo sequedad vaginal, ardor y dispareunia. No tiene bochornos. Sin antecedentes de cáncer.",
+      "prompt": "¿Cuál es el tratamiento de elección para sus síntomas?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Terapia hormonal sistémica oral combinada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es necesaria si solo tiene síntomas vaginales."
+        },
+        {
+          "key": "b",
+          "text": "Estrógenos vaginales a dosis bajas o hidratantes y lubricantes vaginales",
+          "correct": true,
+          "rationale": "Tratan el síndrome genitourinario con mínima absorción sistémica."
+        },
+        {
+          "key": "c",
+          "text": "Antibióticos vaginales",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay infección."
+        },
+        {
+          "key": "d",
+          "text": "No preguntar por la sexualidad de la paciente",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte de la atención."
+        },
+        {
+          "key": "e",
+          "text": "Testosterona oral",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es el tratamiento."
+        },
+        {
+          "key": "f",
+          "text": "Ningún tratamiento porque es normal a su edad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es tratable."
+        },
+        {
+          "key": "g",
+          "text": "Cirugía de rejuvenecimiento vaginal con láser como primera línea",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es el tratamiento de primera línea."
+        },
+        {
+          "key": "h",
+          "text": "Antimicóticos vaginales",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay infección."
+        },
+        {
+          "key": "i",
+          "text": "Duchas vaginales para mejorar la lubricación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Empeoran los síntomas."
+        },
+        {
+          "key": "j",
+          "text": "Histerectomía",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "El síndrome genitourinario de la menopausia es crónico y progresivo. Cuando los síntomas son solo vaginales o urinarios, sin síntomas vasomotores, el tratamiento de elección es local. Los hidratantes y lubricantes vaginales son la primera línea en síntomas leves. Los estrógenos vaginales a dosis bajas en crema, tabletas u óvulos son muy eficaces y tienen mínima absorción sistémica, por lo que no requieren progestágeno. Otras opciones son la prasterona vaginal y el ospemifeno. El ejercicio del piso pélvico y la actividad sexual regular también ayudan.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia"
+      ]
+    },
+    {
+      "key": "gyo-13a-complemento-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "menopause",
+      "vignette": "Mujer de 46 años con ciclos regulares que solicita medición de FSH para saber si ya está en la menopausia. Tiene bochornos ocasionales.",
+      "prompt": "¿Qué utilidad tiene la medición de FSH en esta situación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Es más útil que la historia clínica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La clínica es suficiente."
+        },
+        {
+          "key": "b",
+          "text": "Indica insuficiencia ovárica prematura",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Tiene más de 40 años."
+        },
+        {
+          "key": "c",
+          "text": "Poca utilidad, porque en la perimenopausia la FSH fluctúa y el diagnóstico es clínico en mayores de 45 años",
+          "correct": true,
+          "rationale": "Un valor aislado no predice la menopausia."
+        },
+        {
+          "key": "d",
+          "text": "Un análisis de sangre siempre es mejor que preguntar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La clínica tiene más valor aquí."
+        },
+        {
+          "key": "e",
+          "text": "Debe medirse cada mes hasta la menopausia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es útil."
+        },
+        {
+          "key": "f",
+          "text": "Permite decidir dejar la anticoncepción de inmediato",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es confiable para ello."
+        },
+        {
+          "key": "g",
+          "text": "Es el único estudio necesario para iniciar terapia hormonal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El diagnóstico es clínico."
+        },
+        {
+          "key": "h",
+          "text": "Predice con exactitud la edad de la menopausia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No lo hace."
+        },
+        {
+          "key": "i",
+          "text": "Un valor normal descarta la perimenopausia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Las fluctuaciones son normales."
+        },
+        {
+          "key": "j",
+          "text": "Un valor de FSH alto confirma la menopausia definitiva",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede variar de un mes a otro."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "i",
+        "j"
+      ],
+      "explanation": "En la transición menopáusica las concentraciones de FSH y estradiol fluctúan de forma importante entre ciclos, por lo que una medición aislada no confirma ni descarta la menopausia y no permite decidir cuándo suspender la anticoncepción. En mujeres mayores de 45 años con síntomas típicos el diagnóstico de perimenopausia y menopausia es clínico. La medición de FSH es útil en mujeres menores de 40 a 45 años con amenorrea para diagnosticar insuficiencia ovárica prematura, o cuando la evaluación clínica es difícil, como tras histerectomía con ovarios conservados.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia"
+      ]
+    },
+    {
+      "key": "gyo-13a-complemento-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "climacteric",
+      "subtopic": "osteoporosis_postmenopausal",
+      "vignette": "Mujer de 72 años con osteoporosis grave, dos fracturas vertebrales y fractura de cadera previa pese a 3 años de alendronato con buen apego. Función renal normal.",
+      "prompt": "¿Cuál es el tratamiento de elección ante este muy alto riesgo de fractura?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Reposo en cama para no caerse",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Empeora la masa ósea."
+        },
+        {
+          "key": "b",
+          "text": "Terapia hormonal a los 72 años como primera opción",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es adecuada a esta edad."
+        },
+        {
+          "key": "c",
+          "text": "No cambiar el tratamiento por su edad avanzada",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Se benefician del cambio."
+        },
+        {
+          "key": "d",
+          "text": "Calcitonina nasal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es poco eficaz."
+        },
+        {
+          "key": "e",
+          "text": "Solo calcio y vitamina D",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es insuficiente."
+        },
+        {
+          "key": "f",
+          "text": "Fármaco anabólico como teriparatida o romosozumab, seguido de un antirresortivo",
+          "correct": true,
+          "rationale": "Los anabólicos aumentan la formación ósea en pacientes de muy alto riesgo."
+        },
+        {
+          "key": "g",
+          "text": "Fluoruro de sodio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No reduce fracturas."
+        },
+        {
+          "key": "h",
+          "text": "Suspender todo tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Aumenta el riesgo de fracturas."
+        },
+        {
+          "key": "i",
+          "text": "Continuar alendronato sin cambios",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Hubo nuevas fracturas pese al tratamiento."
+        },
+        {
+          "key": "j",
+          "text": "Trasplante de médula ósea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "En pacientes con muy alto riesgo de fractura, como fracturas múltiples, fracturas durante el tratamiento antirresortivo o densidad muy baja, se recomiendan los fármacos anabólicos. La teriparatida, análogo de la hormona paratiroidea administrado de forma intermitente, estimula la formación ósea y se usa hasta 2 años. El romosozumab, anticuerpo contra la esclerostina, tiene efecto dual y se usa por 12 meses, con precaución por eventos cardiovasculares. Después de un anabólico se debe continuar con un antirresortivo como bisfosfonato o denosumab para mantener la ganancia. También se previenen las caídas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis en la mujer posmenopáusica"
+      ]
+    },
+    {
+      "key": "gyo-13a-complemento-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "climacteric",
+      "subtopic": "osteoporosis_postmenopausal",
+      "vignette": "Mujer de 68 años con osteoporosis en tratamiento que vive sola. Ha tenido dos caídas en el último año al levantarse por la noche al baño.",
+      "prompt": "¿Cuál es la medida de prevención de fracturas más importante además del tratamiento farmacológico?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Las caídas son inevitables con la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Muchas son prevenibles."
+        },
+        {
+          "key": "b",
+          "text": "Prevención de caídas con revisión de fármacos, iluminación nocturna, retiro de obstáculos y ejercicio de equilibrio",
+          "correct": true,
+          "rationale": "La mayoría de las fracturas de cadera se deben a caídas."
+        },
+        {
+          "key": "c",
+          "text": "Sedantes para dormir toda la noche sin levantarse",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumentan el riesgo de caídas."
+        },
+        {
+          "key": "d",
+          "text": "Cirugía de cadera profiláctica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "e",
+          "text": "Aumentar la dosis del bisfosfonato",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No previene las caídas."
+        },
+        {
+          "key": "f",
+          "text": "Ninguna medida adicional",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Las caídas son el principal desencadenante."
+        },
+        {
+          "key": "g",
+          "text": "Densitometría cada 3 meses",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No previene las caídas."
+        },
+        {
+          "key": "h",
+          "text": "No preguntar por caídas en la consulta",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es una evaluación clave."
+        },
+        {
+          "key": "i",
+          "text": "Suplementos de calcio en dosis muy altas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No previenen las caídas."
+        },
+        {
+          "key": "j",
+          "text": "Reposo en cama para no caerse",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Empeora la fuerza y la masa ósea."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "La mayoría de las fracturas osteoporóticas, sobre todo de cadera, ocurren tras una caída. La prevención de caídas es fundamental en adultos mayores con osteoporosis. Incluye revisar y reducir los fármacos que aumentan el riesgo como sedantes, antihipertensivos y antidepresivos, corregir la visión, adaptar el hogar con iluminación nocturna, barras de apoyo y retiro de tapetes, usar calzado adecuado, tratar la hipotensión ortostática y la nicturia, y realizar ejercicios de fuerza y equilibrio como el tai chi. Los protectores de cadera pueden ser útiles en residencias.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis en la mujer posmenopáusica",
+        "Guía de Práctica Clínica de prevención de caídas en el adulto mayor"
+      ]
+    }
+  ]
+}
