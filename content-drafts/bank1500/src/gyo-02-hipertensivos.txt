@@ -1,0 +1,303 @@
+@ gyo|hypertensive_pregnancy|preeclampsia|2|diagnosis
+V: Primigesta de 23 años con embarazo de 34 semanas, previamente normotensa. En la consulta tiene presión arterial de 148/96 mmHg en dos tomas separadas por 4 horas. Relación proteína creatinina en orina de 0.5. Sin cefalea ni otros síntomas. Plaquetas y transaminasas normales.
+P: ¿Cuál es el diagnóstico más probable?
++ Preeclampsia sin criterios de severidad || Hipertensión después de las 20 semanas con proteinuria y sin datos de severidad.
+- anchoring | Hipertensión gestacional || No tiene proteinuria significativa en esa entidad.
+- availability_heuristic | Hipertensión crónica || Era normotensa antes de las 20 semanas.
+- representativeness_heuristic | Preeclampsia con criterios de severidad || No tiene presión de 160/110 ni daño a órgano blanco.
+- premature_closure | Síndrome de HELLP || Plaquetas y transaminasas normales.
+- base_rate_fallacy | Eclampsia || No ha tenido convulsiones.
+- framing_effect | Glomerulonefritis aguda || El contexto obstétrico explica el cuadro.
+- inattentional_blindness | Hipertensión de bata blanca || Se confirmó en dos tomas con proteinuria.
+- focusing_illusion | Infección urinaria con proteinuria || No explica la hipertensión.
+- belief_bias | Presión elevada por nervios de la consulta || Hay proteinuria.
+E: La preeclampsia es hipertensión de 140/90 mmHg o más después de las 20 semanas en una mujer previamente normotensa, con proteinuria de 300 mg o más en 24 horas o relación proteína creatinina de 0.3 o más, o, en ausencia de proteinuria, con datos de daño a órgano blanco. La hipertensión gestacional no tiene proteinuria ni daño a órgano blanco. Los criterios de severidad incluyen presión de 160/110 o más, trombocitopenia, elevación de transaminasas, creatinina mayor de 1.1, edema pulmonar, cefalea persistente o alteraciones visuales. La preeclampsia sin severidad puede vigilarse estrechamente y resolverse a las 37 semanas.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel
+
+@ gyo|hypertensive_pregnancy|preeclampsia|3|data_interpretation
+V: Mujer de 30 años con embarazo de 32 semanas y preeclampsia. Hoy presenta cefalea intensa, fosfenos y dolor en epigastrio. Presión arterial de 165/112 mmHg. Plaquetas de 140 000 y transaminasas normales.
+P: ¿Qué indican estos hallazgos?
++ Preeclampsia con criterios de severidad por presión de 160/110 o más y síntomas neurológicos y epigástricos || Son datos de severidad que requieren manejo intrahospitalario.
+- anchoring | Preeclampsia sin severidad porque las plaquetas son normales || La presión y los síntomas son criterios de severidad.
+- availability_heuristic | Migraña sin relación con el embarazo || En este contexto son datos de severidad.
+- representativeness_heuristic | Gastritis por el embarazo || El dolor epigástrico es un dato de alarma.
+- premature_closure | Hipertensión gestacional leve || Ya tiene diagnóstico de preeclampsia y datos de severidad.
+- base_rate_fallacy | Eclampsia || No ha convulsionado.
+- framing_effect | Síndrome de HELLP completo || Las plaquetas y transaminasas son normales.
+- inattentional_blindness | Hipertensión crónica descompensada || Era preeclampsia.
+- focusing_illusion | Ansiedad por la hospitalización || Los síntomas tienen base orgánica.
+- belief_bias | Molestias normales del tercer trimestre || Son signos de alarma.
+E: Los criterios de severidad de la preeclampsia son presión sistólica de 160 o más o diastólica de 110 o más, plaquetas menores de 100 000, transaminasas al doble de lo normal o dolor en epigastrio o hipocondrio derecho persistente, creatinina mayor de 1.1 mg/dL o al doble, edema pulmonar, y cefalea persistente o alteraciones visuales. Los síntomas como cefalea, fosfenos, acúfenos y epigastralgia indican vasoespasmo y riesgo de eclampsia. Estas pacientes requieren hospitalización, antihipertensivos para presión grave, sulfato de magnesio para prevenir convulsiones y valoración de la resolución del embarazo.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel
+
+@ gyo|hypertensive_pregnancy|preeclampsia|3|initial_treatment
+V: Mujer de 27 años con embarazo de 35 semanas y preeclampsia con criterios de severidad. Presión arterial de 170/115 mmHg en dos tomas con 15 minutos de diferencia.
+P: ¿Cuál es el tratamiento antihipertensivo inicial?
++ Labetalol intravenoso, hidralazina intravenosa o nifedipino oral de liberación inmediata || Son los fármacos de primera línea para la hipertensión grave en el embarazo.
+- anchoring | Enalapril oral || Los inhibidores de la enzima convertidora están contraindicados en el embarazo.
+- availability_heuristic | Furosemida intravenosa como primera línea || Reduce el volumen intravascular ya disminuido.
+- representativeness_heuristic | Losartán || Está contraindicado en el embarazo.
+- premature_closure | Nitroprusiato como primera opción || Se reserva para casos refractarios por toxicidad fetal.
+- framing_effect | Metildopa oral como tratamiento de la crisis || Tiene inicio lento y no sirve para la urgencia.
+- complexity_bias | Bajar la presión a 110/70 en minutos || Una caída brusca reduce el flujo placentario.
+- base_rate_fallacy | Atenolol || No es de elección por restricción del crecimiento.
+- belief_bias | Reposo absoluto y dieta sin sal como único tratamiento || No controla la crisis.
+- omission_bias | No tratar la presión para no afectar al feto || El riesgo de evento vascular materno es alto.
+E: La hipertensión grave en el embarazo, presión de 160/110 o más sostenida por 15 minutos, es una urgencia que debe tratarse en los primeros 30 a 60 minutos para prevenir evento vascular cerebral materno. Los fármacos de primera línea son labetalol intravenoso, hidralazina intravenosa y nifedipino oral de liberación inmediata. La meta es una presión de 140 a 150 de sistólica y 90 a 100 de diastólica, evitando caídas bruscas que comprometan el flujo uteroplacentario. Los inhibidores de la enzima convertidora y los antagonistas del receptor de angiotensina están contraindicados por fetotoxicidad.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel
+
+@ gyo|hypertensive_pregnancy|preeclampsia|2|prevention_screening
+V: Mujer de 32 años con embarazo de 12 semanas e hipertensión crónica. En su embarazo previo tuvo preeclampsia grave a las 33 semanas.
+P: ¿Cuál es la medida de prevención indicada?
++ Ácido acetilsalicílico de 100 a 150 mg por la noche desde antes de las 16 semanas hasta las 36 semanas || Reduce el riesgo de preeclampsia en mujeres de alto riesgo.
+- anchoring | Iniciar aspirina a las 30 semanas || Es poco eficaz si se inicia después de las 16 semanas.
+- availability_heuristic | Vitamina C y E || No han mostrado beneficio.
+- representativeness_heuristic | Restricción estricta de sal || No previene la preeclampsia.
+- premature_closure | Diuréticos profilácticos || No previenen y reducen el volumen plasmático.
+- framing_effect | Reposo absoluto desde el primer trimestre || No previene y aumenta el riesgo de trombosis.
+- complexity_bias | Heparina de bajo peso molecular en todas || No es la medida de primera línea.
+- base_rate_fallacy | Sulfato de magnesio oral profiláctico || No previene la preeclampsia.
+- belief_bias | Dejar de trabajar como única medida || No previene la enfermedad.
+- omission_bias | Evitar la aspirina por miedo a sangrado || A dosis bajas es segura.
+E: El ácido acetilsalicílico a dosis baja reduce el riesgo de preeclampsia, sobre todo la pretérmino, en mujeres con riesgo alto. Se indica en mujeres con un factor de riesgo alto, como preeclampsia previa, hipertensión crónica, diabetes, enfermedad renal o autoinmune y embarazo múltiple, o dos o más factores moderados. Se inicia idealmente entre las 12 y 16 semanas, con dosis de 100 a 150 mg por la noche, y se mantiene hasta las 36 semanas. En mujeres con baja ingesta de calcio también se recomienda suplementarlo. Los antioxidantes, el reposo y la restricción de sal no previenen la enfermedad.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel
+
+@ gyo|hypertensive_pregnancy|preeclampsia|3|treatment_of_choice
+V: Mujer de 29 años con embarazo de 36 semanas y preeclampsia con criterios de severidad, ya con presión controlada con labetalol. No ha tenido convulsiones.
+P: ¿Cuál es el fármaco de elección para prevenir eclampsia?
++ Sulfato de magnesio intravenoso con dosis de impregnación y mantenimiento || Es el fármaco más eficaz para prevenir las convulsiones.
+- anchoring | Diazepam intravenoso de forma profiláctica || Es menos eficaz y causa depresión neonatal.
+- availability_heuristic | Fenitoína profiláctica || Es menos eficaz que el magnesio.
+- representativeness_heuristic | Levetiracetam || No es el tratamiento estándar.
+- premature_closure | Ningún fármaco si no ha convulsionado || La profilaxis está indicada en preeclampsia con severidad.
+- framing_effect | Fenobarbital oral || No es el estándar.
+- complexity_bias | Intubación profiláctica || No está indicada.
+- base_rate_fallacy | Gluconato de calcio profiláctico || Es el antídoto del magnesio, no la profilaxis.
+- belief_bias | Mantener la habitación oscura como única medida || Ayuda, pero no sustituye al magnesio.
+- omission_bias | Evitar el magnesio por miedo a la toxicidad || Con vigilancia es seguro.
+E: El sulfato de magnesio es el fármaco de elección para prevenir y tratar la eclampsia, superior al diazepam y la fenitoína. Se administra una dosis de impregnación de 4 a 6 g intravenosos en 15 a 20 minutos y un mantenimiento de 1 a 2 g por hora, durante el trabajo de parto y 24 horas después del nacimiento. Se vigilan los reflejos osteotendinosos, la frecuencia respiratoria y la diuresis, porque la toxicidad produce primero pérdida de reflejos y después depresión respiratoria y paro cardiaco. El antídoto es el gluconato de calcio. En insuficiencia renal la dosis de mantenimiento se reduce.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel
+
+@ gyo|hypertensive_pregnancy|preeclampsia|4|complication_prognosis
+V: Mujer de 31 años con preeclampsia grave que recibe sulfato de magnesio a 2 g por hora. A las 10 horas presenta somnolencia, reflejos patelares ausentes, frecuencia respiratoria de 9 por minuto y diuresis de 15 mL por hora.
+P: ¿Cuál es la complicación que presenta?
++ Intoxicación por sulfato de magnesio || Pérdida de reflejos, depresión respiratoria y oliguria que favorece su acumulación.
+- anchoring | Eclampsia en fase postictal || No ha convulsionado y los reflejos estarían presentes.
+- availability_heuristic | Evento vascular cerebral hemorrágico || Daría focalización neurológica.
+- representativeness_heuristic | Edema pulmonar por preeclampsia || No explica la pérdida de reflejos.
+- premature_closure | Hipoglucemia || No explica la arreflexia.
+- base_rate_fallacy | Síndrome de Guillain Barré || No explica el contexto agudo.
+- framing_effect | Efecto esperado del magnesio sin importancia || Es una toxicidad peligrosa.
+- inattentional_blindness | Síndrome de HELLP || No explica la arreflexia.
+- focusing_illusion | Sedación por labetalol || No causa arreflexia.
+- belief_bias | Cansancio por el trabajo de parto || Los datos indican toxicidad.
+E: La toxicidad por sulfato de magnesio depende de su concentración sérica. Con niveles de 8 a 10 mEq/L desaparecen los reflejos osteotendinosos, con más de 12 aparece depresión respiratoria y con más de 25 paro cardiaco. Como el magnesio se elimina por el riñón, la oliguria favorece su acumulación. Ante datos de toxicidad se suspende la infusión, se administra gluconato de calcio al 10% de 1 g intravenoso en 3 a 10 minutos, se da soporte ventilatorio y se miden los niveles. Por ello durante la infusión se vigilan reflejos, frecuencia respiratoria mayor de 12 y diuresis mayor de 30 mL por hora.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel
+
+@ gyo|hypertensive_pregnancy|preeclampsia|3|next_step
+V: Mujer de 26 años con embarazo de 37 semanas y preeclampsia sin criterios de severidad, con presión de 145/92 mmHg. Bienestar fetal adecuado. Cérvix con puntuación de Bishop de 7.
+P: ¿Cuál es la conducta más apropiada?
++ Resolver el embarazo mediante inducción del trabajo de parto || A partir de las 37 semanas la resolución es el tratamiento definitivo.
+- anchoring | Vigilancia expectante hasta las 41 semanas || Aumenta el riesgo materno sin beneficio.
+- availability_heuristic | Cesárea inmediata por preeclampsia || La vía se decide por criterios obstétricos.
+- representativeness_heuristic | Iniciar antihipertensivos y egresar hasta el inicio espontáneo del parto || La resolución está indicada a esta edad.
+- premature_closure | Corticosteroides para madurez pulmonar a término || No están indicados a término.
+- framing_effect | Reposo en casa y control semanal || La preeclampsia puede progresar.
+- complexity_bias | Amniocentesis para madurez pulmonar || No es necesaria.
+- status_quo_bias | Esperar a que la presión supere 160/110 para actuar || Se recomienda resolver a las 37 semanas.
+- belief_bias | La preeclampsia se cura con dieta || El tratamiento definitivo es el nacimiento.
+- omission_bias | Evitar la inducción por miedo a fallar || El cérvix es favorable.
+E: El tratamiento definitivo de la preeclampsia es la resolución del embarazo. En la preeclampsia sin criterios de severidad se recomienda vigilancia estrecha hasta las 37 semanas y entonces resolver, ya que hacerlo reduce las complicaciones maternas sin aumentar las cesáreas. En la preeclampsia con criterios de severidad se resuelve a partir de las 34 semanas, o antes si hay deterioro materno o fetal, tras estabilizar y administrar corticosteroides si es menor de 34 semanas. La vía de nacimiento se decide por criterios obstétricos y la inducción es adecuada con cérvix favorable.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel
+
+@ gyo|hypertensive_pregnancy|preeclampsia|3|mechanism
+V: Mujer de 28 años con preeclampsia pregunta por qué le subió la presión en el embarazo si nunca había sido hipertensa.
+P: ¿Cuál es el mecanismo fisiopatológico central de la preeclampsia?
++ Invasión trofoblástica deficiente de las arterias espirales con isquemia placentaria y liberación de factores antiangiogénicos que causan disfunción endotelial || Explica la hipertensión y el daño multiorgánico.
+- anchoring | Exceso de ingesta de sal en el embarazo || No es el mecanismo.
+- availability_heuristic | Activación del sistema nervioso simpático por estrés || No es el mecanismo central.
+- representativeness_heuristic | Aumento primario de la volemia || La volemia está disminuida.
+- premature_closure | Infección placentaria bacteriana || No es la causa.
+- base_rate_fallacy | Hipertiroidismo gestacional || No es el mecanismo.
+- framing_effect | Exceso de producción de prostaciclina || La prostaciclina está disminuida.
+- inattentional_blindness | Insuficiencia renal primaria || El daño renal es consecuencia.
+- focusing_illusion | Aumento de la sensibilidad a la insulina || No es el mecanismo.
+- belief_bias | Herencia de la presión alta del padre del bebé como única causa || Es multifactorial.
+E: En la preeclampsia el trofoblasto invade de forma deficiente las arterias espirales maternas, que no se transforman en vasos de baja resistencia. Esto produce hipoperfusión e isquemia placentaria, con liberación a la circulación materna de factores antiangiogénicos como la tirosina cinasa soluble similar a fms 1 y la endoglina soluble, y disminución del factor de crecimiento placentario. El resultado es disfunción endotelial sistémica, vasoconstricción, aumento de la permeabilidad y activación de la coagulación, que causan hipertensión, proteinuria y daño renal, hepático, cerebral y hematológico. La relación sFlt 1 entre PlGF ayuda a predecir la enfermedad.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel
+
+@ gyo|hypertensive_pregnancy|preeclampsia|3|diagnosis
+V: Mujer de 34 años con hipertensión arterial desde hace 3 años tratada con metildopa. Embarazo de 26 semanas. Hasta ahora sin proteinuria. Hoy presenta proteinuria nueva con relación proteína creatinina de 0.8 y aumento de la presión pese al tratamiento.
+P: ¿Cuál es el diagnóstico más probable?
++ Preeclampsia sobreagregada a hipertensión crónica || Proteinuria nueva y empeoramiento de la presión en una hipertensa crónica después de las 20 semanas.
+- anchoring | Hipertensión crónica descompensada sin preeclampsia || La proteinuria nueva indica preeclampsia.
+- availability_heuristic | Hipertensión gestacional || Ya era hipertensa antes del embarazo.
+- representativeness_heuristic | Nefropatía hipertensiva crónica || La proteinuria es nueva y de inicio en el embarazo.
+- premature_closure | Síndrome nefrótico primario || El contexto orienta a preeclampsia.
+- base_rate_fallacy | Lupus eritematoso sistémico de novo || No hay otros datos.
+- framing_effect | Efecto adverso de la metildopa || No causa proteinuria.
+- inattentional_blindness | Infección urinaria || No explica el aumento de la presión.
+- focusing_illusion | Error de laboratorio || Es un hallazgo nuevo y relevante.
+- belief_bias | Es normal tener proteínas en la orina en el embarazo || La proteinuria significativa es anormal.
+E: La preeclampsia sobreagregada ocurre en mujeres con hipertensión crónica que después de las 20 semanas presentan proteinuria de nuevo inicio, aumento súbito de la proteinuria previa, empeoramiento de la presión que requiere más fármacos o datos de daño a órgano blanco. Las hipertensas crónicas tienen un riesgo de 20 a 25% de desarrollarla. Su pronóstico es peor que el de la hipertensión crónica sola, con más restricción del crecimiento, desprendimiento de placenta y prematurez. Se maneja igual que la preeclampsia. En el embarazo se usan metildopa, labetalol o nifedipino como antihipertensivos.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel
+
+@ gyo|hypertensive_pregnancy|preeclampsia|3|complication_prognosis
+V: Mujer de 36 años con preeclampsia con criterios de severidad a las 33 semanas que presenta disnea progresiva, ortopnea, estertores bilaterales y saturación de 86%. Recibió líquidos intravenosos abundantes.
+P: ¿Cuál es la complicación que presenta?
++ Edema agudo pulmonar || La disfunción endotelial con aumento de la permeabilidad y la sobrecarga hídrica favorecen el edema pulmonar.
+- anchoring | Neumonía adquirida en la comunidad || No hay fiebre y el contexto orienta a edema pulmonar.
+- availability_heuristic | Tromboembolia pulmonar || No explica los estertores bilaterales con sobrecarga.
+- representativeness_heuristic | Crisis asmática || No da estertores bilaterales.
+- premature_closure | Embolia de líquido amniótico || Ocurre durante el parto con choque y coagulopatía.
+- base_rate_fallacy | Miocardiopatía periparto sin relación con líquidos || Puede ocurrir, pero el contexto orienta a edema por preeclampsia.
+- framing_effect | Ansiedad con hiperventilación || No explica la hipoxemia ni los estertores.
+- inattentional_blindness | Neumotórax || No explica los estertores bilaterales.
+- focusing_illusion | Anemia grave || No explica los hallazgos pulmonares.
+- belief_bias | Falta de aire normal por el útero grande || La hipoxemia y los estertores son patológicos.
+E: El edema agudo pulmonar es una complicación grave de la preeclampsia. Se debe a la disfunción endotelial con aumento de la permeabilidad capilar, la presión oncótica baja por hipoalbuminemia, la disfunción ventricular y la administración excesiva de líquidos. Es más frecuente en el posparto. Se manifiesta con disnea, ortopnea, taquipnea, estertores e hipoxemia. El tratamiento incluye oxígeno, posición semisentada, furosemida intravenosa, control de la presión y restricción de líquidos. Por ello en la preeclampsia los líquidos intravenosos se administran de forma restringida, generalmente a 80 mL por hora, salvo pérdidas.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel
+
+@ gyo|hypertensive_pregnancy|eclampsia_hellp|2|diagnosis
+V: Primigesta de 19 años con embarazo de 36 semanas, sin control prenatal, que presenta una convulsión tónico clónica generalizada en su casa. A su llegada tiene presión arterial de 170/110 mmHg y proteinuria en tira reactiva de 3 cruces. No tiene antecedente de epilepsia.
+P: ¿Cuál es el diagnóstico más probable?
++ Eclampsia || Convulsiones en una embarazada con preeclampsia, sin otra causa.
+- anchoring | Epilepsia de inicio en el embarazo || No explica la hipertensión con proteinuria.
+- availability_heuristic | Hipoglucemia || No explica la hipertensión con proteinuria.
+- representativeness_heuristic | Evento vascular cerebral sin relación con el embarazo || La preeclampsia explica el cuadro.
+- premature_closure | Crisis de ansiedad || Hubo convulsión tónico clónica.
+- base_rate_fallacy | Trombosis de senos venosos cerebrales || Es menos frecuente.
+- framing_effect | Intoxicación por drogas || No hay antecedente.
+- inattentional_blindness | Meningitis || No hay fiebre ni signos meníngeos.
+- focusing_illusion | Síncope convulsivo || No explica la hipertensión con proteinuria.
+- belief_bias | Ataque de nervios por el embarazo || Es una complicación grave.
+E: La eclampsia es la aparición de convulsiones tónico clónicas generalizadas en una mujer con preeclampsia, sin otra causa que las explique. Puede ocurrir antes, durante o hasta varias semanas después del parto, y en algunos casos sin hipertensión o proteinuria previas. Suele precederse de cefalea, alteraciones visuales y epigastralgia. Es una de las principales causas de muerte materna en México. Las complicaciones incluyen evento vascular cerebral, aspiración, desprendimiento de placenta y muerte fetal. El tratamiento es asegurar la vía aérea, sulfato de magnesio, control de la presión y resolución del embarazo tras estabilizar.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la eclampsia
+
+@ gyo|hypertensive_pregnancy|eclampsia_hellp|3|initial_treatment
+V: Mujer de 24 años con embarazo de 35 semanas que presenta una convulsión tónico clónica en urgencias. Presión arterial de 168/112 mmHg. La convulsión cede espontáneamente al minuto.
+P: ¿Cuál es el tratamiento inicial?
++ Proteger la vía aérea en decúbito lateral, oxígeno y sulfato de magnesio intravenoso con impregnación y mantenimiento || El magnesio previene nuevas convulsiones.
+- anchoring | Cesárea inmediata sin estabilizar a la madre || Primero se estabiliza a la madre.
+- availability_heuristic | Diazepam intravenoso como fármaco de elección || El magnesio es superior.
+- representativeness_heuristic | Fenitoína como primera elección || Es menos eficaz.
+- premature_closure | Solo antihipertensivos sin anticonvulsivo || El magnesio es indispensable.
+- framing_effect | Introducir un objeto en la boca para evitar mordedura || Es peligroso.
+- complexity_bias | Tomografía de cráneo antes de cualquier tratamiento || No debe retrasar el tratamiento.
+- base_rate_fallacy | Gluconato de calcio intravenoso || Es el antídoto del magnesio.
+- belief_bias | Sujetar con fuerza a la paciente durante la crisis || Puede lesionarla.
+- omission_bias | Esperar otra convulsión antes de tratar || El magnesio previene las recurrencias.
+E: Ante una crisis eclámptica la prioridad es proteger a la madre. Se coloca en decúbito lateral izquierdo, se protege de lesiones, se asegura la vía aérea, se administra oxígeno y se inicia sulfato de magnesio con dosis de impregnación de 4 a 6 g intravenosos y mantenimiento de 1 a 2 g por hora. Si convulsiona de nuevo se administra un bolo adicional de 2 g. Se trata la hipertensión grave con labetalol, hidralazina o nifedipino. Una vez estabilizada la madre se resuelve el embarazo, sin que la eclampsia sea por sí misma indicación de cesárea. La bradicardia fetal transitoria durante la crisis suele recuperarse.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la eclampsia
+
+@ gyo|hypertensive_pregnancy|eclampsia_hellp|3|diagnosis
+V: Mujer de 32 años con embarazo de 33 semanas y dolor en hipocondrio derecho, náusea y malestar general. Presión arterial de 150/95 mmHg. Plaquetas de 72 000, AST de 240 U/L, deshidrogenasa láctica de 780 U/L y esquistocitos en el frotis.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome de HELLP || Hemólisis, elevación de enzimas hepáticas y plaquetas bajas en una embarazada con hipertensión.
+- anchoring | Hígado graso agudo del embarazo || Da hipoglucemia, coagulopatía y falla hepática con menor hemólisis.
+- availability_heuristic | Colecistitis aguda || No explica la hemólisis ni la trombocitopenia.
+- representativeness_heuristic | Púrpura trombocitopénica inmune || No da hemólisis ni elevación de enzimas.
+- premature_closure | Hepatitis viral aguda || No explica la hemólisis con esquistocitos.
+- base_rate_fallacy | Púrpura trombocitopénica trombótica || Es más rara y suele tener alteraciones neurológicas y renales marcadas.
+- framing_effect | Gastritis del embarazo || No explica los hallazgos de laboratorio.
+- inattentional_blindness | Colestasis intrahepática del embarazo || Da prurito con ácidos biliares altos sin hemólisis.
+- focusing_illusion | Síndrome urémico hemolítico || Predomina la falla renal.
+- belief_bias | Molestias digestivas normales del embarazo || El laboratorio indica enfermedad grave.
+E: El síndrome de HELLP es una forma grave de preeclampsia caracterizada por hemólisis, elevación de enzimas hepáticas y plaquetas bajas. Se manifiesta con dolor en epigastrio o hipocondrio derecho, náusea, vómito y malestar, y puede presentarse con hipertensión leve o incluso sin ella. Los criterios incluyen deshidrogenasa láctica mayor de 600, esquistocitos o bilirrubina elevada, AST mayor de 70 y plaquetas menores de 100 000. Las complicaciones son coagulación intravascular diseminada, desprendimiento de placenta, lesión renal, edema pulmonar y hematoma o rotura hepática. El tratamiento es estabilizar, sulfato de magnesio y resolver el embarazo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de HELLP
+
+@ gyo|hypertensive_pregnancy|eclampsia_hellp|4|complication_prognosis
+V: Mujer de 35 años con síndrome de HELLP a las 34 semanas que presenta de forma súbita dolor intenso en hipocondrio derecho irradiado al hombro, hipotensión, taquicardia y caída de la hemoglobina. El ultrasonido muestra líquido libre abdominal y una colección subcapsular hepática.
+P: ¿Cuál es la complicación que presenta?
++ Hematoma subcapsular hepático roto || Dolor súbito en hipocondrio derecho con choque y líquido libre en HELLP.
+- anchoring | Desprendimiento de placenta || Daría sangrado vaginal y útero hipertónico.
+- availability_heuristic | Colecistitis aguda || No explica el choque con hemoperitoneo.
+- representativeness_heuristic | Rotura uterina || Ocurre en trabajo de parto con cicatriz uterina.
+- premature_closure | Pancreatitis aguda || No explica el hemoperitoneo.
+- base_rate_fallacy | Embarazo ectópico abdominal || El embarazo es intrauterino de 34 semanas.
+- framing_effect | Embolia de líquido amniótico || Ocurre en el parto con colapso cardiorrespiratorio.
+- inattentional_blindness | Infarto agudo de miocardio || No explica el hemoperitoneo.
+- focusing_illusion | Apendicitis perforada || No explica la colección hepática.
+- belief_bias | Dolor muscular por la posición || El choque indica sangrado.
+E: El hematoma subcapsular hepático es una complicación rara pero muy grave del síndrome de HELLP. Resulta de la necrosis periportal y hemorragia intrahepática que distiende la cápsula de Glisson. Se manifiesta con dolor intenso en hipocondrio derecho o epigastrio, irradiado al hombro, y si se rompe produce hemoperitoneo con choque hipovolémico. El diagnóstico se apoya en ultrasonido o tomografía. El hematoma íntegro puede manejarse de forma conservadora con vigilancia, pero la rotura es una urgencia quirúrgica que requiere laparotomía con empaquetamiento, embolización y transfusión masiva, además de la resolución del embarazo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de HELLP
+
+@ gyo|hypertensive_pregnancy|eclampsia_hellp|3|next_step
+V: Mujer de 29 años con embarazo de 30 semanas y síndrome de HELLP completo. Está estable, con presión controlada y plaquetas de 85 000. Bienestar fetal sin alteraciones.
+P: ¿Cuál es la conducta más apropiada?
++ Estabilizar, administrar sulfato de magnesio y corticosteroides para madurez pulmonar y resolver el embarazo en las siguientes 24 a 48 horas || El HELLP indica resolución, aprovechando el esquema de maduración si es posible.
+- anchoring | Manejo expectante hasta las 37 semanas || El HELLP progresa rápido.
+- availability_heuristic | Cesárea inmediata sin estabilizar ni madurez pulmonar || Si está estable se completan corticosteroides.
+- representativeness_heuristic | Transfusión de plaquetas profiláctica con 85 000 sin procedimiento || No es necesaria.
+- premature_closure | Egreso con control semanal || Requiere hospitalización y resolución.
+- framing_effect | Solo corticosteroides para mejorar las plaquetas y continuar el embarazo || No se recomienda prolongar.
+- complexity_bias | Plasmaféresis de rutina || No es el tratamiento.
+- status_quo_bias | Mantener la vigilancia sin plan de resolución || Aumenta las complicaciones.
+- belief_bias | Reposo absoluto curará el HELLP || El tratamiento es el nacimiento.
+- omission_bias | No dar magnesio porque no ha convulsionado || Está indicado.
+E: El síndrome de HELLP es una indicación de resolución del embarazo. Antes de las 34 semanas, si la madre y el feto están estables, se administran corticosteroides para madurez pulmonar fetal y se resuelve en las siguientes 24 a 48 horas. Si hay deterioro materno, coagulación intravascular diseminada, hematoma hepático, edema pulmonar, lesión renal o compromiso fetal, se resuelve de inmediato tras estabilizar. Se administra sulfato de magnesio, se controla la presión y se transfunden plaquetas si son menores de 50 000 antes de cesárea. Los parámetros pueden empeorar en las primeras 24 a 48 horas del posparto.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de HELLP
+
+@ gyo|hypertensive_pregnancy|eclampsia_hellp|4|diagnosis
+V: Mujer de 27 años con eclampsia que tras la crisis presenta cefalea, alteraciones visuales con ceguera cortical transitoria y confusión. La resonancia muestra edema vasogénico simétrico en la sustancia blanca parietooccipital.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome de encefalopatía posterior reversible || Edema vasogénico parietooccipital con alteraciones visuales en eclampsia.
+- anchoring | Evento vascular cerebral isquémico de la arteria cerebral posterior || El edema es vasogénico, simétrico y reversible.
+- availability_heuristic | Trombosis de senos venosos || Daría infarto venoso o hemorragia con distribución diferente.
+- representativeness_heuristic | Encefalitis herpética || Afecta lóbulos temporales con fiebre.
+- premature_closure | Hemorragia subaracnoidea || Daría sangre en el espacio subaracnoideo.
+- base_rate_fallacy | Esclerosis múltiple || No corresponde.
+- framing_effect | Desprendimiento de retina || No explica la confusión ni la resonancia.
+- inattentional_blindness | Apoplejía hipofisaria || Afecta la hipófisis.
+- focusing_illusion | Migraña con aura || No explica el edema en resonancia.
+- belief_bias | Ceguera por histeria posparto || Hay lesión demostrada.
+E: El síndrome de encefalopatía posterior reversible se asocia a eclampsia, preeclampsia grave e hipertensión grave. Se debe a la falla de la autorregulación cerebral y a la disfunción endotelial, que producen edema vasogénico de predominio en la sustancia blanca de los lóbulos parietales y occipitales. Se manifiesta con cefalea, alteraciones visuales incluida ceguera cortical, confusión y convulsiones. La resonancia magnética muestra el edema simétrico. Con el control de la presión, el sulfato de magnesio y la resolución del embarazo suele revertir en días a semanas, aunque puede complicarse con hemorragia o infarto.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la eclampsia
+
+@ gyo|hypertensive_pregnancy|eclampsia_hellp|3|next_step
+V: Mujer de 30 años que hace 5 días tuvo un parto vaginal sin complicaciones y embarazo normotenso. Acude con cefalea intensa que no cede con paracetamol, visión borrosa y presión arterial de 160/105 mmHg.
+P: ¿Cuál es la conducta más apropiada?
++ Hospitalizar, controlar la presión e iniciar sulfato de magnesio por preeclampsia posparto con criterios de severidad || La preeclampsia puede iniciar después del parto.
+- anchoring | Diagnosticar cefalea pospunción y dar cafeína || No hubo bloqueo y hay hipertensión grave.
+- availability_heuristic | Migraña y egreso con analgésicos || La hipertensión con síntomas es preeclampsia hasta demostrar lo contrario.
+- representativeness_heuristic | Iniciar enalapril y egresar sin vigilancia || Requiere hospitalización.
+- premature_closure | Descartar preeclampsia porque ya nació el bebé || Puede aparecer hasta 6 semanas posparto.
+- framing_effect | Ansiedad posparto y referir a psicología || Hay hipertensión grave.
+- complexity_bias | Angiografía cerebral inmediata antes de tratar || El tratamiento no debe retrasarse.
+- base_rate_fallacy | Tumor cerebral como primera sospecha || La preeclampsia posparto es más probable.
+- belief_bias | La presión sube por amamantar || No es la causa.
+- omission_bias | Esperar a que la presión baje sola || Hay riesgo de eclampsia y evento vascular.
+E: La preeclampsia y la eclampsia pueden aparecer por primera vez en el posparto, generalmente en las primeras 48 horas y hasta 6 semanas después, incluso en mujeres normotensas durante el embarazo. Se sospecha con hipertensión acompañada de cefalea, alteraciones visuales, epigastralgia, disnea o convulsiones. Se maneja igual que antes del parto, con hospitalización, antihipertensivos para presión grave y sulfato de magnesio. En el posparto pueden usarse enalapril, nifedipino o labetalol, compatibles con la lactancia. Debe hacerse diagnóstico diferencial con cefalea pospunción, trombosis venosa cerebral y encefalopatía posterior reversible.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel
+
+@ gyo|hypertensive_pregnancy|eclampsia_hellp|3|complication_prognosis
+V: Mujer de 33 años que tuvo preeclampsia grave en su primer embarazo hace 2 años. Ahora no está embarazada y pregunta si esa enfermedad tiene consecuencias para su salud futura.
+P: ¿Cuál es el pronóstico cardiovascular a largo plazo tras una preeclampsia?
++ Mayor riesgo de hipertensión crónica, enfermedad cardiovascular y renal en el futuro || La preeclampsia es un marcador de riesgo cardiovascular.
+- anchoring | Ningún riesgo porque se cura con el parto || El riesgo cardiovascular persiste.
+- availability_heuristic | Mayor riesgo solo de cáncer de mama || No es la asociación principal.
+- representativeness_heuristic | Infertilidad permanente || No es una consecuencia.
+- premature_closure | Mayor riesgo de diabetes tipo 1 || No es la asociación.
+- base_rate_fallacy | Riesgo de epilepsia crónica || No es una consecuencia habitual.
+- framing_effect | Contraindicación de embarazos futuros en todas || No contraindica embarazos.
+- inattentional_blindness | Osteoporosis temprana || No es la asociación principal.
+- focusing_illusion | Hipotiroidismo || No es la asociación.
+- belief_bias | Solo es un problema si vuelve a embarazarse || El riesgo es para toda la vida.
+E: La preeclampsia, sobre todo la de inicio temprano o grave, se asocia a un riesgo dos a cuatro veces mayor de hipertensión crónica, cardiopatía isquémica, evento vascular cerebral, insuficiencia cardiaca y enfermedad renal en las décadas siguientes. Se considera un factor de riesgo cardiovascular específico de la mujer. Por ello se recomienda vigilar la presión arterial, la glucosa, los lípidos y el peso de forma periódica tras el embarazo, y promover estilos de vida saludables. En un siguiente embarazo tiene mayor riesgo de recurrencia, por lo que se indica ácido acetilsalicílico desde el primer trimestre.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel
+
+@ gyo|hypertensive_pregnancy|eclampsia_hellp|3|data_interpretation
+V: Mujer de 28 años con embarazo de 32 semanas y sospecha de preeclampsia. Se solicitan estudios para valorar daño a órgano blanco. Creatinina de 1.4 mg/dL, ácido úrico de 7.8 mg/dL, plaquetas de 160 000 y transaminasas normales.
+P: ¿Qué indica la creatinina de 1.4 mg/dL en este contexto?
++ Insuficiencia renal que es un criterio de severidad de la preeclampsia || Una creatinina mayor de 1.1 mg/dL indica daño renal.
+- anchoring | Valor normal para una embarazada || En el embarazo la creatinina normal es más baja, menor de 0.8.
+- availability_heuristic | Deshidratación leve sin importancia || En este contexto es un criterio de severidad.
+- representativeness_heuristic | Enfermedad renal crónica previa sin relación || El contexto agudo orienta a preeclampsia.
+- premature_closure | Síndrome de HELLP || Plaquetas y transaminasas normales.
+- base_rate_fallacy | Nefrolitiasis obstructiva || No hay datos clínicos.
+- framing_effect | Error por masa muscular aumentada || No explica el valor.
+- inattentional_blindness | Indicación de diálisis inmediata || No hay criterios.
+- focusing_illusion | Efecto de la metildopa || No causa este aumento.
+- belief_bias | Indica que el bebé es varón || No tiene relación.
+E: En el embarazo la tasa de filtración glomerular aumenta alrededor de 50%, por lo que la creatinina sérica normal disminuye a valores de 0.4 a 0.8 mg/dL. Una creatinina mayor de 1.1 mg/dL o el doble de la basal en ausencia de otra enfermedad renal es un criterio de severidad de la preeclampsia. La lesión renal se debe a la endoteliosis glomerular y a la vasoconstricción. El ácido úrico elevado se asocia a la preeclampsia pero no es criterio diagnóstico. Estas pacientes requieren manejo como preeclampsia con criterios de severidad y vigilancia estrecha de la diuresis.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel

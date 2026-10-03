@@ -1,0 +1,1791 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "gyo-02-hipertensivos-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "preeclampsia",
+      "vignette": "Primigesta de 23 años con embarazo de 34 semanas, previamente normotensa. En la consulta tiene presión arterial de 148/96 mmHg en dos tomas separadas por 4 horas. Relación proteína creatinina en orina de 0.5. Sin cefalea ni otros síntomas. Plaquetas y transaminasas normales.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Preeclampsia sin criterios de severidad",
+          "correct": true,
+          "rationale": "Hipertensión después de las 20 semanas con proteinuria y sin datos de severidad."
+        },
+        {
+          "key": "b",
+          "text": "Hipertensión crónica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Era normotensa antes de las 20 semanas."
+        },
+        {
+          "key": "c",
+          "text": "Infección urinaria con proteinuria",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la hipertensión."
+        },
+        {
+          "key": "d",
+          "text": "Presión elevada por nervios de la consulta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay proteinuria."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome de HELLP",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Plaquetas y transaminasas normales."
+        },
+        {
+          "key": "f",
+          "text": "Eclampsia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No ha tenido convulsiones."
+        },
+        {
+          "key": "g",
+          "text": "Hipertensión gestacional",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No tiene proteinuria significativa en esa entidad."
+        },
+        {
+          "key": "h",
+          "text": "Preeclampsia con criterios de severidad",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No tiene presión de 160/110 ni daño a órgano blanco."
+        },
+        {
+          "key": "i",
+          "text": "Glomerulonefritis aguda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El contexto obstétrico explica el cuadro."
+        },
+        {
+          "key": "j",
+          "text": "Hipertensión de bata blanca",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Se confirmó en dos tomas con proteinuria."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "h"
+      ],
+      "explanation": "La preeclampsia es hipertensión de 140/90 mmHg o más después de las 20 semanas en una mujer previamente normotensa, con proteinuria de 300 mg o más en 24 horas o relación proteína creatinina de 0.3 o más, o, en ausencia de proteinuria, con datos de daño a órgano blanco. La hipertensión gestacional no tiene proteinuria ni daño a órgano blanco. Los criterios de severidad incluyen presión de 160/110 o más, trombocitopenia, elevación de transaminasas, creatinina mayor de 1.1, edema pulmonar, cefalea persistente o alteraciones visuales. La preeclampsia sin severidad puede vigilarse estrechamente y resolverse a las 37 semanas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel"
+      ]
+    },
+    {
+      "key": "gyo-02-hipertensivos-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "preeclampsia",
+      "vignette": "Mujer de 30 años con embarazo de 32 semanas y preeclampsia. Hoy presenta cefalea intensa, fosfenos y dolor en epigastrio. Presión arterial de 165/112 mmHg. Plaquetas de 140 000 y transaminasas normales.",
+      "prompt": "¿Qué indican estos hallazgos?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Preeclampsia sin severidad porque las plaquetas son normales",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La presión y los síntomas son criterios de severidad."
+        },
+        {
+          "key": "b",
+          "text": "Molestias normales del tercer trimestre",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Son signos de alarma."
+        },
+        {
+          "key": "c",
+          "text": "Gastritis por el embarazo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El dolor epigástrico es un dato de alarma."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome de HELLP completo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Las plaquetas y transaminasas son normales."
+        },
+        {
+          "key": "e",
+          "text": "Ansiedad por la hospitalización",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Los síntomas tienen base orgánica."
+        },
+        {
+          "key": "f",
+          "text": "Hipertensión gestacional leve",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Ya tiene diagnóstico de preeclampsia y datos de severidad."
+        },
+        {
+          "key": "g",
+          "text": "Eclampsia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No ha convulsionado."
+        },
+        {
+          "key": "h",
+          "text": "Preeclampsia con criterios de severidad por presión de 160/110 o más y síntomas neurológicos y epigástricos",
+          "correct": true,
+          "rationale": "Son datos de severidad que requieren manejo intrahospitalario."
+        },
+        {
+          "key": "i",
+          "text": "Hipertensión crónica descompensada",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Era preeclampsia."
+        },
+        {
+          "key": "j",
+          "text": "Migraña sin relación con el embarazo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "En este contexto son datos de severidad."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "Los criterios de severidad de la preeclampsia son presión sistólica de 160 o más o diastólica de 110 o más, plaquetas menores de 100 000, transaminasas al doble de lo normal o dolor en epigastrio o hipocondrio derecho persistente, creatinina mayor de 1.1 mg/dL o al doble, edema pulmonar, y cefalea persistente o alteraciones visuales. Los síntomas como cefalea, fosfenos, acúfenos y epigastralgia indican vasoespasmo y riesgo de eclampsia. Estas pacientes requieren hospitalización, antihipertensivos para presión grave, sulfato de magnesio para prevenir convulsiones y valoración de la resolución del embarazo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel"
+      ]
+    },
+    {
+      "key": "gyo-02-hipertensivos-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "preeclampsia",
+      "vignette": "Mujer de 27 años con embarazo de 35 semanas y preeclampsia con criterios de severidad. Presión arterial de 170/115 mmHg en dos tomas con 15 minutos de diferencia.",
+      "prompt": "¿Cuál es el tratamiento antihipertensivo inicial?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Nitroprusiato como primera opción",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se reserva para casos refractarios por toxicidad fetal."
+        },
+        {
+          "key": "b",
+          "text": "Furosemida intravenosa como primera línea",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Reduce el volumen intravascular ya disminuido."
+        },
+        {
+          "key": "c",
+          "text": "Losartán",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Está contraindicado en el embarazo."
+        },
+        {
+          "key": "d",
+          "text": "No tratar la presión para no afectar al feto",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo de evento vascular materno es alto."
+        },
+        {
+          "key": "e",
+          "text": "Labetalol intravenoso, hidralazina intravenosa o nifedipino oral de liberación inmediata",
+          "correct": true,
+          "rationale": "Son los fármacos de primera línea para la hipertensión grave en el embarazo."
+        },
+        {
+          "key": "f",
+          "text": "Bajar la presión a 110/70 en minutos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Una caída brusca reduce el flujo placentario."
+        },
+        {
+          "key": "g",
+          "text": "Metildopa oral como tratamiento de la crisis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Tiene inicio lento y no sirve para la urgencia."
+        },
+        {
+          "key": "h",
+          "text": "Enalapril oral",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los inhibidores de la enzima convertidora están contraindicados en el embarazo."
+        },
+        {
+          "key": "i",
+          "text": "Reposo absoluto y dieta sin sal como único tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No controla la crisis."
+        },
+        {
+          "key": "j",
+          "text": "Atenolol",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es de elección por restricción del crecimiento."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "La hipertensión grave en el embarazo, presión de 160/110 o más sostenida por 15 minutos, es una urgencia que debe tratarse en los primeros 30 a 60 minutos para prevenir evento vascular cerebral materno. Los fármacos de primera línea son labetalol intravenoso, hidralazina intravenosa y nifedipino oral de liberación inmediata. La meta es una presión de 140 a 150 de sistólica y 90 a 100 de diastólica, evitando caídas bruscas que comprometan el flujo uteroplacentario. Los inhibidores de la enzima convertidora y los antagonistas del receptor de angiotensina están contraindicados por fetotoxicidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel"
+      ]
+    },
+    {
+      "key": "gyo-02-hipertensivos-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "preeclampsia",
+      "vignette": "Mujer de 32 años con embarazo de 12 semanas e hipertensión crónica. En su embarazo previo tuvo preeclampsia grave a las 33 semanas.",
+      "prompt": "¿Cuál es la medida de prevención indicada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sulfato de magnesio oral profiláctico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No previene la preeclampsia."
+        },
+        {
+          "key": "b",
+          "text": "Dejar de trabajar como única medida",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No previene la enfermedad."
+        },
+        {
+          "key": "c",
+          "text": "Restricción estricta de sal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No previene la preeclampsia."
+        },
+        {
+          "key": "d",
+          "text": "Diuréticos profilácticos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No previenen y reducen el volumen plasmático."
+        },
+        {
+          "key": "e",
+          "text": "Reposo absoluto desde el primer trimestre",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No previene y aumenta el riesgo de trombosis."
+        },
+        {
+          "key": "f",
+          "text": "Evitar la aspirina por miedo a sangrado",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "A dosis bajas es segura."
+        },
+        {
+          "key": "g",
+          "text": "Iniciar aspirina a las 30 semanas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es poco eficaz si se inicia después de las 16 semanas."
+        },
+        {
+          "key": "h",
+          "text": "Heparina de bajo peso molecular en todas",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es la medida de primera línea."
+        },
+        {
+          "key": "i",
+          "text": "Ácido acetilsalicílico de 100 a 150 mg por la noche desde antes de las 16 semanas hasta las 36 semanas",
+          "correct": true,
+          "rationale": "Reduce el riesgo de preeclampsia en mujeres de alto riesgo."
+        },
+        {
+          "key": "j",
+          "text": "Vitamina C y E",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No han mostrado beneficio."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El ácido acetilsalicílico a dosis baja reduce el riesgo de preeclampsia, sobre todo la pretérmino, en mujeres con riesgo alto. Se indica en mujeres con un factor de riesgo alto, como preeclampsia previa, hipertensión crónica, diabetes, enfermedad renal o autoinmune y embarazo múltiple, o dos o más factores moderados. Se inicia idealmente entre las 12 y 16 semanas, con dosis de 100 a 150 mg por la noche, y se mantiene hasta las 36 semanas. En mujeres con baja ingesta de calcio también se recomienda suplementarlo. Los antioxidantes, el reposo y la restricción de sal no previenen la enfermedad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel"
+      ]
+    },
+    {
+      "key": "gyo-02-hipertensivos-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "preeclampsia",
+      "vignette": "Mujer de 29 años con embarazo de 36 semanas y preeclampsia con criterios de severidad, ya con presión controlada con labetalol. No ha tenido convulsiones.",
+      "prompt": "¿Cuál es el fármaco de elección para prevenir eclampsia?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Mantener la habitación oscura como única medida",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Ayuda, pero no sustituye al magnesio."
+        },
+        {
+          "key": "b",
+          "text": "Diazepam intravenoso de forma profiláctica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es menos eficaz y causa depresión neonatal."
+        },
+        {
+          "key": "c",
+          "text": "Sulfato de magnesio intravenoso con dosis de impregnación y mantenimiento",
+          "correct": true,
+          "rationale": "Es el fármaco más eficaz para prevenir las convulsiones."
+        },
+        {
+          "key": "d",
+          "text": "Fenobarbital oral",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es el estándar."
+        },
+        {
+          "key": "e",
+          "text": "Fenitoína profiláctica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es menos eficaz que el magnesio."
+        },
+        {
+          "key": "f",
+          "text": "Levetiracetam",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es el tratamiento estándar."
+        },
+        {
+          "key": "g",
+          "text": "Ningún fármaco si no ha convulsionado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La profilaxis está indicada en preeclampsia con severidad."
+        },
+        {
+          "key": "h",
+          "text": "Evitar el magnesio por miedo a la toxicidad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Con vigilancia es seguro."
+        },
+        {
+          "key": "i",
+          "text": "Intubación profiláctica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "j",
+          "text": "Gluconato de calcio profiláctico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es el antídoto del magnesio, no la profilaxis."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "f"
+      ],
+      "explanation": "El sulfato de magnesio es el fármaco de elección para prevenir y tratar la eclampsia, superior al diazepam y la fenitoína. Se administra una dosis de impregnación de 4 a 6 g intravenosos en 15 a 20 minutos y un mantenimiento de 1 a 2 g por hora, durante el trabajo de parto y 24 horas después del nacimiento. Se vigilan los reflejos osteotendinosos, la frecuencia respiratoria y la diuresis, porque la toxicidad produce primero pérdida de reflejos y después depresión respiratoria y paro cardiaco. El antídoto es el gluconato de calcio. En insuficiencia renal la dosis de mantenimiento se reduce.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel"
+      ]
+    },
+    {
+      "key": "gyo-02-hipertensivos-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "preeclampsia",
+      "vignette": "Mujer de 31 años con preeclampsia grave que recibe sulfato de magnesio a 2 g por hora. A las 10 horas presenta somnolencia, reflejos patelares ausentes, frecuencia respiratoria de 9 por minuto y diuresis de 15 mL por hora.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Efecto esperado del magnesio sin importancia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es una toxicidad peligrosa."
+        },
+        {
+          "key": "b",
+          "text": "Sedación por labetalol",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No causa arreflexia."
+        },
+        {
+          "key": "c",
+          "text": "Síndrome de Guillain Barré",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica el contexto agudo."
+        },
+        {
+          "key": "d",
+          "text": "Intoxicación por sulfato de magnesio",
+          "correct": true,
+          "rationale": "Pérdida de reflejos, depresión respiratoria y oliguria que favorece su acumulación."
+        },
+        {
+          "key": "e",
+          "text": "Edema pulmonar por preeclampsia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la pérdida de reflejos."
+        },
+        {
+          "key": "f",
+          "text": "Cansancio por el trabajo de parto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Los datos indican toxicidad."
+        },
+        {
+          "key": "g",
+          "text": "Eclampsia en fase postictal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No ha convulsionado y los reflejos estarían presentes."
+        },
+        {
+          "key": "h",
+          "text": "Hipoglucemia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la arreflexia."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de HELLP",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la arreflexia."
+        },
+        {
+          "key": "j",
+          "text": "Evento vascular cerebral hemorrágico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría focalización neurológica."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La toxicidad por sulfato de magnesio depende de su concentración sérica. Con niveles de 8 a 10 mEq/L desaparecen los reflejos osteotendinosos, con más de 12 aparece depresión respiratoria y con más de 25 paro cardiaco. Como el magnesio se elimina por el riñón, la oliguria favorece su acumulación. Ante datos de toxicidad se suspende la infusión, se administra gluconato de calcio al 10% de 1 g intravenoso en 3 a 10 minutos, se da soporte ventilatorio y se miden los niveles. Por ello durante la infusión se vigilan reflejos, frecuencia respiratoria mayor de 12 y diuresis mayor de 30 mL por hora.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel"
+      ]
+    },
+    {
+      "key": "gyo-02-hipertensivos-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "preeclampsia",
+      "vignette": "Mujer de 26 años con embarazo de 37 semanas y preeclampsia sin criterios de severidad, con presión de 145/92 mmHg. Bienestar fetal adecuado. Cérvix con puntuación de Bishop de 7.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Resolver el embarazo mediante inducción del trabajo de parto",
+          "correct": true,
+          "rationale": "A partir de las 37 semanas la resolución es el tratamiento definitivo."
+        },
+        {
+          "key": "b",
+          "text": "Corticosteroides para madurez pulmonar a término",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No están indicados a término."
+        },
+        {
+          "key": "c",
+          "text": "Cesárea inmediata por preeclampsia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La vía se decide por criterios obstétricos."
+        },
+        {
+          "key": "d",
+          "text": "Amniocentesis para madurez pulmonar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "e",
+          "text": "Iniciar antihipertensivos y egresar hasta el inicio espontáneo del parto",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La resolución está indicada a esta edad."
+        },
+        {
+          "key": "f",
+          "text": "Evitar la inducción por miedo a fallar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El cérvix es favorable."
+        },
+        {
+          "key": "g",
+          "text": "Vigilancia expectante hasta las 41 semanas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta el riesgo materno sin beneficio."
+        },
+        {
+          "key": "h",
+          "text": "Reposo en casa y control semanal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La preeclampsia puede progresar."
+        },
+        {
+          "key": "i",
+          "text": "La preeclampsia se cura con dieta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El tratamiento definitivo es el nacimiento."
+        },
+        {
+          "key": "j",
+          "text": "Esperar a que la presión supere 160/110 para actuar",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Se recomienda resolver a las 37 semanas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "g"
+      ],
+      "explanation": "El tratamiento definitivo de la preeclampsia es la resolución del embarazo. En la preeclampsia sin criterios de severidad se recomienda vigilancia estrecha hasta las 37 semanas y entonces resolver, ya que hacerlo reduce las complicaciones maternas sin aumentar las cesáreas. En la preeclampsia con criterios de severidad se resuelve a partir de las 34 semanas, o antes si hay deterioro materno o fetal, tras estabilizar y administrar corticosteroides si es menor de 34 semanas. La vía de nacimiento se decide por criterios obstétricos y la inducción es adecuada con cérvix favorable.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel"
+      ]
+    },
+    {
+      "key": "gyo-02-hipertensivos-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "preeclampsia",
+      "vignette": "Mujer de 28 años con preeclampsia pregunta por qué le subió la presión en el embarazo si nunca había sido hipertensa.",
+      "prompt": "¿Cuál es el mecanismo fisiopatológico central de la preeclampsia?",
+      "polarity": "affirmative",
+      "task": "mechanism",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Infección placentaria bacteriana",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es la causa."
+        },
+        {
+          "key": "b",
+          "text": "Aumento de la sensibilidad a la insulina",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es el mecanismo."
+        },
+        {
+          "key": "c",
+          "text": "Exceso de ingesta de sal en el embarazo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es el mecanismo."
+        },
+        {
+          "key": "d",
+          "text": "Exceso de producción de prostaciclina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La prostaciclina está disminuida."
+        },
+        {
+          "key": "e",
+          "text": "Aumento primario de la volemia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La volemia está disminuida."
+        },
+        {
+          "key": "f",
+          "text": "Invasión trofoblástica deficiente de las arterias espirales con isquemia placentaria y liberación de factores antiangiogénicos que causan disfunción endotelial",
+          "correct": true,
+          "rationale": "Explica la hipertensión y el daño multiorgánico."
+        },
+        {
+          "key": "g",
+          "text": "Insuficiencia renal primaria",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El daño renal es consecuencia."
+        },
+        {
+          "key": "h",
+          "text": "Herencia de la presión alta del padre del bebé como única causa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es multifactorial."
+        },
+        {
+          "key": "i",
+          "text": "Hipertiroidismo gestacional",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es el mecanismo."
+        },
+        {
+          "key": "j",
+          "text": "Activación del sistema nervioso simpático por estrés",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es el mecanismo central."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "En la preeclampsia el trofoblasto invade de forma deficiente las arterias espirales maternas, que no se transforman en vasos de baja resistencia. Esto produce hipoperfusión e isquemia placentaria, con liberación a la circulación materna de factores antiangiogénicos como la tirosina cinasa soluble similar a fms 1 y la endoglina soluble, y disminución del factor de crecimiento placentario. El resultado es disfunción endotelial sistémica, vasoconstricción, aumento de la permeabilidad y activación de la coagulación, que causan hipertensión, proteinuria y daño renal, hepático, cerebral y hematológico. La relación sFlt 1 entre PlGF ayuda a predecir la enfermedad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel"
+      ]
+    },
+    {
+      "key": "gyo-02-hipertensivos-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "preeclampsia",
+      "vignette": "Mujer de 34 años con hipertensión arterial desde hace 3 años tratada con metildopa. Embarazo de 26 semanas. Hasta ahora sin proteinuria. Hoy presenta proteinuria nueva con relación proteína creatinina de 0.8 y aumento de la presión pese al tratamiento.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Preeclampsia sobreagregada a hipertensión crónica",
+          "correct": true,
+          "rationale": "Proteinuria nueva y empeoramiento de la presión en una hipertensa crónica después de las 20 semanas."
+        },
+        {
+          "key": "b",
+          "text": "Lupus eritematoso sistémico de novo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay otros datos."
+        },
+        {
+          "key": "c",
+          "text": "Error de laboratorio",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es un hallazgo nuevo y relevante."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome nefrótico primario",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El contexto orienta a preeclampsia."
+        },
+        {
+          "key": "e",
+          "text": "Es normal tener proteínas en la orina en el embarazo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La proteinuria significativa es anormal."
+        },
+        {
+          "key": "f",
+          "text": "Hipertensión crónica descompensada sin preeclampsia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La proteinuria nueva indica preeclampsia."
+        },
+        {
+          "key": "g",
+          "text": "Hipertensión gestacional",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ya era hipertensa antes del embarazo."
+        },
+        {
+          "key": "h",
+          "text": "Nefropatía hipertensiva crónica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La proteinuria es nueva y de inicio en el embarazo."
+        },
+        {
+          "key": "i",
+          "text": "Efecto adverso de la metildopa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No causa proteinuria."
+        },
+        {
+          "key": "j",
+          "text": "Infección urinaria",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el aumento de la presión."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "La preeclampsia sobreagregada ocurre en mujeres con hipertensión crónica que después de las 20 semanas presentan proteinuria de nuevo inicio, aumento súbito de la proteinuria previa, empeoramiento de la presión que requiere más fármacos o datos de daño a órgano blanco. Las hipertensas crónicas tienen un riesgo de 20 a 25% de desarrollarla. Su pronóstico es peor que el de la hipertensión crónica sola, con más restricción del crecimiento, desprendimiento de placenta y prematurez. Se maneja igual que la preeclampsia. En el embarazo se usan metildopa, labetalol o nifedipino como antihipertensivos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel"
+      ]
+    },
+    {
+      "key": "gyo-02-hipertensivos-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "preeclampsia",
+      "vignette": "Mujer de 36 años con preeclampsia con criterios de severidad a las 33 semanas que presenta disnea progresiva, ortopnea, estertores bilaterales y saturación de 86%. Recibió líquidos intravenosos abundantes.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Edema agudo pulmonar",
+          "correct": true,
+          "rationale": "La disfunción endotelial con aumento de la permeabilidad y la sobrecarga hídrica favorecen el edema pulmonar."
+        },
+        {
+          "key": "b",
+          "text": "Anemia grave",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los hallazgos pulmonares."
+        },
+        {
+          "key": "c",
+          "text": "Ansiedad con hiperventilación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la hipoxemia ni los estertores."
+        },
+        {
+          "key": "d",
+          "text": "Neumotórax",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica los estertores bilaterales."
+        },
+        {
+          "key": "e",
+          "text": "Embolia de líquido amniótico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Ocurre durante el parto con choque y coagulopatía."
+        },
+        {
+          "key": "f",
+          "text": "Neumonía adquirida en la comunidad",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay fiebre y el contexto orienta a edema pulmonar."
+        },
+        {
+          "key": "g",
+          "text": "Tromboembolia pulmonar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica los estertores bilaterales con sobrecarga."
+        },
+        {
+          "key": "h",
+          "text": "Falta de aire normal por el útero grande",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La hipoxemia y los estertores son patológicos."
+        },
+        {
+          "key": "i",
+          "text": "Crisis asmática",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No da estertores bilaterales."
+        },
+        {
+          "key": "j",
+          "text": "Miocardiopatía periparto sin relación con líquidos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede ocurrir, pero el contexto orienta a edema por preeclampsia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "El edema agudo pulmonar es una complicación grave de la preeclampsia. Se debe a la disfunción endotelial con aumento de la permeabilidad capilar, la presión oncótica baja por hipoalbuminemia, la disfunción ventricular y la administración excesiva de líquidos. Es más frecuente en el posparto. Se manifiesta con disnea, ortopnea, taquipnea, estertores e hipoxemia. El tratamiento incluye oxígeno, posición semisentada, furosemida intravenosa, control de la presión y restricción de líquidos. Por ello en la preeclampsia los líquidos intravenosos se administran de forma restringida, generalmente a 80 mL por hora, salvo pérdidas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel"
+      ]
+    },
+    {
+      "key": "gyo-02-hipertensivos-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "eclampsia_hellp",
+      "vignette": "Primigesta de 19 años con embarazo de 36 semanas, sin control prenatal, que presenta una convulsión tónico clónica generalizada en su casa. A su llegada tiene presión arterial de 170/110 mmHg y proteinuria en tira reactiva de 3 cruces. No tiene antecedente de epilepsia.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Epilepsia de inicio en el embarazo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la hipertensión con proteinuria."
+        },
+        {
+          "key": "b",
+          "text": "Evento vascular cerebral sin relación con el embarazo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La preeclampsia explica el cuadro."
+        },
+        {
+          "key": "c",
+          "text": "Intoxicación por drogas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay antecedente."
+        },
+        {
+          "key": "d",
+          "text": "Trombosis de senos venosos cerebrales",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente."
+        },
+        {
+          "key": "e",
+          "text": "Ataque de nervios por el embarazo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una complicación grave."
+        },
+        {
+          "key": "f",
+          "text": "Meningitis",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay fiebre ni signos meníngeos."
+        },
+        {
+          "key": "g",
+          "text": "Síncope convulsivo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la hipertensión con proteinuria."
+        },
+        {
+          "key": "h",
+          "text": "Crisis de ansiedad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Hubo convulsión tónico clónica."
+        },
+        {
+          "key": "i",
+          "text": "Hipoglucemia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la hipertensión con proteinuria."
+        },
+        {
+          "key": "j",
+          "text": "Eclampsia",
+          "correct": true,
+          "rationale": "Convulsiones en una embarazada con preeclampsia, sin otra causa."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "La eclampsia es la aparición de convulsiones tónico clónicas generalizadas en una mujer con preeclampsia, sin otra causa que las explique. Puede ocurrir antes, durante o hasta varias semanas después del parto, y en algunos casos sin hipertensión o proteinuria previas. Suele precederse de cefalea, alteraciones visuales y epigastralgia. Es una de las principales causas de muerte materna en México. Las complicaciones incluyen evento vascular cerebral, aspiración, desprendimiento de placenta y muerte fetal. El tratamiento es asegurar la vía aérea, sulfato de magnesio, control de la presión y resolución del embarazo tras estabilizar.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la eclampsia"
+      ]
+    },
+    {
+      "key": "gyo-02-hipertensivos-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "eclampsia_hellp",
+      "vignette": "Mujer de 24 años con embarazo de 35 semanas que presenta una convulsión tónico clónica en urgencias. Presión arterial de 168/112 mmHg. La convulsión cede espontáneamente al minuto.",
+      "prompt": "¿Cuál es el tratamiento inicial?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tomografía de cráneo antes de cualquier tratamiento",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No debe retrasar el tratamiento."
+        },
+        {
+          "key": "b",
+          "text": "Sujetar con fuerza a la paciente durante la crisis",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede lesionarla."
+        },
+        {
+          "key": "c",
+          "text": "Proteger la vía aérea en decúbito lateral, oxígeno y sulfato de magnesio intravenoso con impregnación y mantenimiento",
+          "correct": true,
+          "rationale": "El magnesio previene nuevas convulsiones."
+        },
+        {
+          "key": "d",
+          "text": "Solo antihipertensivos sin anticonvulsivo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El magnesio es indispensable."
+        },
+        {
+          "key": "e",
+          "text": "Fenitoína como primera elección",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es menos eficaz."
+        },
+        {
+          "key": "f",
+          "text": "Esperar otra convulsión antes de tratar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El magnesio previene las recurrencias."
+        },
+        {
+          "key": "g",
+          "text": "Diazepam intravenoso como fármaco de elección",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El magnesio es superior."
+        },
+        {
+          "key": "h",
+          "text": "Gluconato de calcio intravenoso",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es el antídoto del magnesio."
+        },
+        {
+          "key": "i",
+          "text": "Cesárea inmediata sin estabilizar a la madre",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Primero se estabiliza a la madre."
+        },
+        {
+          "key": "j",
+          "text": "Introducir un objeto en la boca para evitar mordedura",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es peligroso."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "Ante una crisis eclámptica la prioridad es proteger a la madre. Se coloca en decúbito lateral izquierdo, se protege de lesiones, se asegura la vía aérea, se administra oxígeno y se inicia sulfato de magnesio con dosis de impregnación de 4 a 6 g intravenosos y mantenimiento de 1 a 2 g por hora. Si convulsiona de nuevo se administra un bolo adicional de 2 g. Se trata la hipertensión grave con labetalol, hidralazina o nifedipino. Una vez estabilizada la madre se resuelve el embarazo, sin que la eclampsia sea por sí misma indicación de cesárea. La bradicardia fetal transitoria durante la crisis suele recuperarse.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la eclampsia"
+      ]
+    },
+    {
+      "key": "gyo-02-hipertensivos-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "eclampsia_hellp",
+      "vignette": "Mujer de 32 años con embarazo de 33 semanas y dolor en hipocondrio derecho, náusea y malestar general. Presión arterial de 150/95 mmHg. Plaquetas de 72 000, AST de 240 U/L, deshidrogenasa láctica de 780 U/L y esquistocitos en el frotis.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hígado graso agudo del embarazo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da hipoglucemia, coagulopatía y falla hepática con menor hemólisis."
+        },
+        {
+          "key": "b",
+          "text": "Púrpura trombocitopénica inmune",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No da hemólisis ni elevación de enzimas."
+        },
+        {
+          "key": "c",
+          "text": "Síndrome urémico hemolítico",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Predomina la falla renal."
+        },
+        {
+          "key": "d",
+          "text": "Púrpura trombocitopénica trombótica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es más rara y suele tener alteraciones neurológicas y renales marcadas."
+        },
+        {
+          "key": "e",
+          "text": "Hepatitis viral aguda",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la hemólisis con esquistocitos."
+        },
+        {
+          "key": "f",
+          "text": "Colestasis intrahepática del embarazo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da prurito con ácidos biliares altos sin hemólisis."
+        },
+        {
+          "key": "g",
+          "text": "Colecistitis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la hemólisis ni la trombocitopenia."
+        },
+        {
+          "key": "h",
+          "text": "Gastritis del embarazo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica los hallazgos de laboratorio."
+        },
+        {
+          "key": "i",
+          "text": "Molestias digestivas normales del embarazo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El laboratorio indica enfermedad grave."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome de HELLP",
+          "correct": true,
+          "rationale": "Hemólisis, elevación de enzimas hepáticas y plaquetas bajas en una embarazada con hipertensión."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "El síndrome de HELLP es una forma grave de preeclampsia caracterizada por hemólisis, elevación de enzimas hepáticas y plaquetas bajas. Se manifiesta con dolor en epigastrio o hipocondrio derecho, náusea, vómito y malestar, y puede presentarse con hipertensión leve o incluso sin ella. Los criterios incluyen deshidrogenasa láctica mayor de 600, esquistocitos o bilirrubina elevada, AST mayor de 70 y plaquetas menores de 100 000. Las complicaciones son coagulación intravascular diseminada, desprendimiento de placenta, lesión renal, edema pulmonar y hematoma o rotura hepática. El tratamiento es estabilizar, sulfato de magnesio y resolver el embarazo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de HELLP"
+      ]
+    },
+    {
+      "key": "gyo-02-hipertensivos-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "eclampsia_hellp",
+      "vignette": "Mujer de 35 años con síndrome de HELLP a las 34 semanas que presenta de forma súbita dolor intenso en hipocondrio derecho irradiado al hombro, hipotensión, taquicardia y caída de la hemoglobina. El ultrasonido muestra líquido libre abdominal y una colección subcapsular hepática.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hematoma subcapsular hepático roto",
+          "correct": true,
+          "rationale": "Dolor súbito en hipocondrio derecho con choque y líquido libre en HELLP."
+        },
+        {
+          "key": "b",
+          "text": "Colecistitis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica el choque con hemoperitoneo."
+        },
+        {
+          "key": "c",
+          "text": "Rotura uterina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Ocurre en trabajo de parto con cicatriz uterina."
+        },
+        {
+          "key": "d",
+          "text": "Pancreatitis aguda",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el hemoperitoneo."
+        },
+        {
+          "key": "e",
+          "text": "Dolor muscular por la posición",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El choque indica sangrado."
+        },
+        {
+          "key": "f",
+          "text": "Infarto agudo de miocardio",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el hemoperitoneo."
+        },
+        {
+          "key": "g",
+          "text": "Embolia de líquido amniótico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Ocurre en el parto con colapso cardiorrespiratorio."
+        },
+        {
+          "key": "h",
+          "text": "Desprendimiento de placenta",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Daría sangrado vaginal y útero hipertónico."
+        },
+        {
+          "key": "i",
+          "text": "Apendicitis perforada",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la colección hepática."
+        },
+        {
+          "key": "j",
+          "text": "Embarazo ectópico abdominal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El embarazo es intrauterino de 34 semanas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "El hematoma subcapsular hepático es una complicación rara pero muy grave del síndrome de HELLP. Resulta de la necrosis periportal y hemorragia intrahepática que distiende la cápsula de Glisson. Se manifiesta con dolor intenso en hipocondrio derecho o epigastrio, irradiado al hombro, y si se rompe produce hemoperitoneo con choque hipovolémico. El diagnóstico se apoya en ultrasonido o tomografía. El hematoma íntegro puede manejarse de forma conservadora con vigilancia, pero la rotura es una urgencia quirúrgica que requiere laparotomía con empaquetamiento, embolización y transfusión masiva, además de la resolución del embarazo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de HELLP"
+      ]
+    },
+    {
+      "key": "gyo-02-hipertensivos-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "eclampsia_hellp",
+      "vignette": "Mujer de 29 años con embarazo de 30 semanas y síndrome de HELLP completo. Está estable, con presión controlada y plaquetas de 85 000. Bienestar fetal sin alteraciones.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Manejo expectante hasta las 37 semanas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El HELLP progresa rápido."
+        },
+        {
+          "key": "b",
+          "text": "Solo corticosteroides para mejorar las plaquetas y continuar el embarazo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se recomienda prolongar."
+        },
+        {
+          "key": "c",
+          "text": "Transfusión de plaquetas profiláctica con 85 000 sin procedimiento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "d",
+          "text": "Mantener la vigilancia sin plan de resolución",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Aumenta las complicaciones."
+        },
+        {
+          "key": "e",
+          "text": "Reposo absoluto curará el HELLP",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El tratamiento es el nacimiento."
+        },
+        {
+          "key": "f",
+          "text": "Egreso con control semanal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Requiere hospitalización y resolución."
+        },
+        {
+          "key": "g",
+          "text": "Plasmaféresis de rutina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el tratamiento."
+        },
+        {
+          "key": "h",
+          "text": "No dar magnesio porque no ha convulsionado",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Está indicado."
+        },
+        {
+          "key": "i",
+          "text": "Cesárea inmediata sin estabilizar ni madurez pulmonar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Si está estable se completan corticosteroides."
+        },
+        {
+          "key": "j",
+          "text": "Estabilizar, administrar sulfato de magnesio y corticosteroides para madurez pulmonar y resolver el embarazo en las siguientes 24 a 48 horas",
+          "correct": true,
+          "rationale": "El HELLP indica resolución, aprovechando el esquema de maduración si es posible."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "El síndrome de HELLP es una indicación de resolución del embarazo. Antes de las 34 semanas, si la madre y el feto están estables, se administran corticosteroides para madurez pulmonar fetal y se resuelve en las siguientes 24 a 48 horas. Si hay deterioro materno, coagulación intravascular diseminada, hematoma hepático, edema pulmonar, lesión renal o compromiso fetal, se resuelve de inmediato tras estabilizar. Se administra sulfato de magnesio, se controla la presión y se transfunden plaquetas si son menores de 50 000 antes de cesárea. Los parámetros pueden empeorar en las primeras 24 a 48 horas del posparto.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de HELLP"
+      ]
+    },
+    {
+      "key": "gyo-02-hipertensivos-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "eclampsia_hellp",
+      "vignette": "Mujer de 27 años con eclampsia que tras la crisis presenta cefalea, alteraciones visuales con ceguera cortical transitoria y confusión. La resonancia muestra edema vasogénico simétrico en la sustancia blanca parietooccipital.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hemorragia subaracnoidea",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Daría sangre en el espacio subaracnoideo."
+        },
+        {
+          "key": "b",
+          "text": "Ceguera por histeria posparto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay lesión demostrada."
+        },
+        {
+          "key": "c",
+          "text": "Trombosis de senos venosos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría infarto venoso o hemorragia con distribución diferente."
+        },
+        {
+          "key": "d",
+          "text": "Apoplejía hipofisaria",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Afecta la hipófisis."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome de encefalopatía posterior reversible",
+          "correct": true,
+          "rationale": "Edema vasogénico parietooccipital con alteraciones visuales en eclampsia."
+        },
+        {
+          "key": "f",
+          "text": "Migraña con aura",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el edema en resonancia."
+        },
+        {
+          "key": "g",
+          "text": "Desprendimiento de retina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la confusión ni la resonancia."
+        },
+        {
+          "key": "h",
+          "text": "Encefalitis herpética",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Afecta lóbulos temporales con fiebre."
+        },
+        {
+          "key": "i",
+          "text": "Evento vascular cerebral isquémico de la arteria cerebral posterior",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El edema es vasogénico, simétrico y reversible."
+        },
+        {
+          "key": "j",
+          "text": "Esclerosis múltiple",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No corresponde."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "h",
+        "i"
+      ],
+      "explanation": "El síndrome de encefalopatía posterior reversible se asocia a eclampsia, preeclampsia grave e hipertensión grave. Se debe a la falla de la autorregulación cerebral y a la disfunción endotelial, que producen edema vasogénico de predominio en la sustancia blanca de los lóbulos parietales y occipitales. Se manifiesta con cefalea, alteraciones visuales incluida ceguera cortical, confusión y convulsiones. La resonancia magnética muestra el edema simétrico. Con el control de la presión, el sulfato de magnesio y la resolución del embarazo suele revertir en días a semanas, aunque puede complicarse con hemorragia o infarto.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la eclampsia"
+      ]
+    },
+    {
+      "key": "gyo-02-hipertensivos-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "eclampsia_hellp",
+      "vignette": "Mujer de 30 años que hace 5 días tuvo un parto vaginal sin complicaciones y embarazo normotenso. Acude con cefalea intensa que no cede con paracetamol, visión borrosa y presión arterial de 160/105 mmHg.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Iniciar enalapril y egresar sin vigilancia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Requiere hospitalización."
+        },
+        {
+          "key": "b",
+          "text": "La presión sube por amamantar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es la causa."
+        },
+        {
+          "key": "c",
+          "text": "Ansiedad posparto y referir a psicología",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Hay hipertensión grave."
+        },
+        {
+          "key": "d",
+          "text": "Tumor cerebral como primera sospecha",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La preeclampsia posparto es más probable."
+        },
+        {
+          "key": "e",
+          "text": "Diagnosticar cefalea pospunción y dar cafeína",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hubo bloqueo y hay hipertensión grave."
+        },
+        {
+          "key": "f",
+          "text": "Descartar preeclampsia porque ya nació el bebé",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede aparecer hasta 6 semanas posparto."
+        },
+        {
+          "key": "g",
+          "text": "Angiografía cerebral inmediata antes de tratar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El tratamiento no debe retrasarse."
+        },
+        {
+          "key": "h",
+          "text": "Migraña y egreso con analgésicos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La hipertensión con síntomas es preeclampsia hasta demostrar lo contrario."
+        },
+        {
+          "key": "i",
+          "text": "Esperar a que la presión baje sola",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Hay riesgo de eclampsia y evento vascular."
+        },
+        {
+          "key": "j",
+          "text": "Hospitalizar, controlar la presión e iniciar sulfato de magnesio por preeclampsia posparto con criterios de severidad",
+          "correct": true,
+          "rationale": "La preeclampsia puede iniciar después del parto."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "La preeclampsia y la eclampsia pueden aparecer por primera vez en el posparto, generalmente en las primeras 48 horas y hasta 6 semanas después, incluso en mujeres normotensas durante el embarazo. Se sospecha con hipertensión acompañada de cefalea, alteraciones visuales, epigastralgia, disnea o convulsiones. Se maneja igual que antes del parto, con hospitalización, antihipertensivos para presión grave y sulfato de magnesio. En el posparto pueden usarse enalapril, nifedipino o labetalol, compatibles con la lactancia. Debe hacerse diagnóstico diferencial con cefalea pospunción, trombosis venosa cerebral y encefalopatía posterior reversible.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel"
+      ]
+    },
+    {
+      "key": "gyo-02-hipertensivos-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "eclampsia_hellp",
+      "vignette": "Mujer de 33 años que tuvo preeclampsia grave en su primer embarazo hace 2 años. Ahora no está embarazada y pregunta si esa enfermedad tiene consecuencias para su salud futura.",
+      "prompt": "¿Cuál es el pronóstico cardiovascular a largo plazo tras una preeclampsia?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Mayor riesgo de hipertensión crónica, enfermedad cardiovascular y renal en el futuro",
+          "correct": true,
+          "rationale": "La preeclampsia es un marcador de riesgo cardiovascular."
+        },
+        {
+          "key": "b",
+          "text": "Mayor riesgo de diabetes tipo 1",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es la asociación."
+        },
+        {
+          "key": "c",
+          "text": "Mayor riesgo solo de cáncer de mama",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es la asociación principal."
+        },
+        {
+          "key": "d",
+          "text": "Ningún riesgo porque se cura con el parto",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El riesgo cardiovascular persiste."
+        },
+        {
+          "key": "e",
+          "text": "Osteoporosis temprana",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es la asociación principal."
+        },
+        {
+          "key": "f",
+          "text": "Contraindicación de embarazos futuros en todas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No contraindica embarazos."
+        },
+        {
+          "key": "g",
+          "text": "Infertilidad permanente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es una consecuencia."
+        },
+        {
+          "key": "h",
+          "text": "Solo es un problema si vuelve a embarazarse",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El riesgo es para toda la vida."
+        },
+        {
+          "key": "i",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es la asociación."
+        },
+        {
+          "key": "j",
+          "text": "Riesgo de epilepsia crónica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es una consecuencia habitual."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "g"
+      ],
+      "explanation": "La preeclampsia, sobre todo la de inicio temprano o grave, se asocia a un riesgo dos a cuatro veces mayor de hipertensión crónica, cardiopatía isquémica, evento vascular cerebral, insuficiencia cardiaca y enfermedad renal en las décadas siguientes. Se considera un factor de riesgo cardiovascular específico de la mujer. Por ello se recomienda vigilar la presión arterial, la glucosa, los lípidos y el peso de forma periódica tras el embarazo, y promover estilos de vida saludables. En un siguiente embarazo tiene mayor riesgo de recurrencia, por lo que se indica ácido acetilsalicílico desde el primer trimestre.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel"
+      ]
+    },
+    {
+      "key": "gyo-02-hipertensivos-q19",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "hypertensive_pregnancy",
+      "subtopic": "eclampsia_hellp",
+      "vignette": "Mujer de 28 años con embarazo de 32 semanas y sospecha de preeclampsia. Se solicitan estudios para valorar daño a órgano blanco. Creatinina de 1.4 mg/dL, ácido úrico de 7.8 mg/dL, plaquetas de 160 000 y transaminasas normales.",
+      "prompt": "¿Qué indica la creatinina de 1.4 mg/dL en este contexto?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Valor normal para una embarazada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "En el embarazo la creatinina normal es más baja, menor de 0.8."
+        },
+        {
+          "key": "b",
+          "text": "Error por masa muscular aumentada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el valor."
+        },
+        {
+          "key": "c",
+          "text": "Deshidratación leve sin importancia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "En este contexto es un criterio de severidad."
+        },
+        {
+          "key": "d",
+          "text": "Nefrolitiasis obstructiva",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay datos clínicos."
+        },
+        {
+          "key": "e",
+          "text": "Efecto de la metildopa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No causa este aumento."
+        },
+        {
+          "key": "f",
+          "text": "Indica que el bebé es varón",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No tiene relación."
+        },
+        {
+          "key": "g",
+          "text": "Enfermedad renal crónica previa sin relación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El contexto agudo orienta a preeclampsia."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome de HELLP",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Plaquetas y transaminasas normales."
+        },
+        {
+          "key": "i",
+          "text": "Indicación de diálisis inmediata",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay criterios."
+        },
+        {
+          "key": "j",
+          "text": "Insuficiencia renal que es un criterio de severidad de la preeclampsia",
+          "correct": true,
+          "rationale": "Una creatinina mayor de 1.1 mg/dL indica daño renal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "En el embarazo la tasa de filtración glomerular aumenta alrededor de 50%, por lo que la creatinina sérica normal disminuye a valores de 0.4 a 0.8 mg/dL. Una creatinina mayor de 1.1 mg/dL o el doble de la basal en ausencia de otra enfermedad renal es un criterio de severidad de la preeclampsia. La lesión renal se debe a la endoteliosis glomerular y a la vasoconstricción. El ácido úrico elevado se asocia a la preeclampsia pero no es criterio diagnóstico. Estas pacientes requieren manejo como preeclampsia con criterios de severidad y vigilancia estrecha de la diuresis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel"
+      ]
+    }
+  ]
+}

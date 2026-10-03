@@ -1,0 +1,287 @@
+@ gyo|prenatal_care|prenatal_control|2|prevention_screening
+V: Mujer de 24 años que planea embarazarse en los próximos meses. Está sana, no fuma y no toma medicamentos. Pregunta qué debe tomar antes de embarazarse.
+P: ¿Cuál es la medida de prevención indicada antes de la concepción?
++ Ácido fólico 0.4 mg diarios al menos 3 meses antes de la concepción y durante el primer trimestre || Reduce los defectos del tubo neural.
+- anchoring | Ácido fólico solo a partir del diagnóstico de embarazo || El tubo neural se cierra antes de que muchas mujeres sepan que están embarazadas.
+- availability_heuristic | Hierro a dosis altas como única medida || No previene defectos del tubo neural.
+- representativeness_heuristic | Vitamina A a dosis altas || Es teratógena a dosis altas.
+- premature_closure | Ácido fólico 5 mg en todas las mujeres sin riesgo || La dosis alta se reserva para alto riesgo.
+- framing_effect | Calcio como única suplementación || No previene defectos del tubo neural.
+- complexity_bias | Estudio genético a todas las parejas || No es la medida de prevención principal.
+- base_rate_fallacy | Vitamina B12 intramuscular || No es la medida indicada.
+- belief_bias | Comer por dos desde antes del embarazo || No previene defectos.
+- omission_bias | No tomar nada para evitar efectos en el bebé || El ácido fólico es seguro y eficaz.
+E: El ácido fólico reduce el riesgo de defectos del tubo neural como espina bífida y anencefalia. Como el tubo neural se cierra entre los días 21 y 28 posteriores a la concepción, la suplementación debe iniciarse al menos 3 meses antes del embarazo y continuar durante el primer trimestre. La dosis recomendada es de 0.4 mg al día en mujeres sin riesgo. En mujeres con antecedente de hijo con defecto del tubo neural, uso de antiepilépticos, diabetes u obesidad se recomiendan 4 a 5 mg diarios. La consulta preconcepcional también incluye vacunación, control de enfermedades crónicas y revisión de medicamentos.
+R: Guía de Práctica Clínica de control prenatal con atención centrada en la paciente ;; Norma Oficial Mexicana para la atención de la mujer durante el embarazo, parto y puerperio
+
+@ gyo|prenatal_care|prenatal_control|2|data_interpretation
+V: Mujer de 28 años cuya fecha de última menstruación fue el 10 de marzo, con ciclos regulares de 28 días. Acude a su primera consulta prenatal.
+P: ¿Cuál es su fecha probable de parto según la regla de Naegele?
++ 17 de diciembre || Se suman 7 días y se restan 3 meses a la fecha de última menstruación.
+- anchoring | 10 de diciembre || Falta sumar los 7 días.
+- availability_heuristic | 17 de noviembre || Se restaron 4 meses.
+- representativeness_heuristic | 3 de diciembre || Se restaron 7 días en lugar de sumarlos.
+- premature_closure | 17 de enero || Se restaron solo 2 meses.
+- base_rate_fallacy | 24 de diciembre || Se sumaron 14 días.
+- framing_effect | 10 de enero || No corresponde a la regla.
+- inattentional_blindness | 7 de diciembre || No corresponde a la regla.
+- focusing_illusion | 20 de diciembre || No corresponde a la regla.
+- belief_bias | No puede calcularse sin ultrasonido || La regla permite estimarla con ciclos regulares.
+E: La regla de Naegele estima la fecha probable de parto sumando 7 días al primer día de la última menstruación y restando 3 meses, o sumando 9 meses y 7 días. Supone ciclos regulares de 28 días. La edad gestacional se confirma idealmente con un ultrasonido del primer trimestre, midiendo la longitud cráneo caudal entre las 7 y 13 semanas, que es el método más preciso. Si la diferencia entre la fecha de la última menstruación y el ultrasonido es mayor de 5 a 7 días en el primer trimestre, se usa la fecha del ultrasonido.
+R: Guía de Práctica Clínica de control prenatal con atención centrada en la paciente
+
+@ gyo|prenatal_care|prenatal_control|2|prevention_screening
+V: Mujer de 22 años con embarazo de 10 semanas en su primera consulta prenatal. Está asintomática.
+P: ¿Cuál es el estudio de tamizaje de infecciones de transmisión vertical que debe ofrecerse a todas las embarazadas?
++ Prueba de virus de la inmunodeficiencia humana y de sífilis en la primera consulta || Permiten tratamiento oportuno y previenen la transmisión al feto.
+- anchoring | Solo si tiene factores de riesgo || Se recomiendan a todas las embarazadas.
+- availability_heuristic | Serología para toxoplasmosis a todas como estudio prioritario || No es el tamizaje universal recomendado.
+- representativeness_heuristic | Cultivo vaginal para estreptococo del grupo B en la primera consulta || Se realiza entre las 35 y 37 semanas.
+- premature_closure | Prueba de virus del papiloma humano || No es el tamizaje de transmisión vertical prioritario.
+- framing_effect | Esperar al tercer trimestre para las pruebas || Retrasa el tratamiento.
+- complexity_bias | Panel completo de virus respiratorios || No está indicado.
+- base_rate_fallacy | Serología para citomegalovirus a todas || No se recomienda de rutina.
+- belief_bias | Solo mujeres con varias parejas || El tamizaje es universal.
+- omission_bias | No ofrecerlas para no ofender a la paciente || Son un derecho y una obligación.
+E: En el control prenatal se ofrece a todas las embarazadas la prueba de virus de la inmunodeficiencia humana y de sífilis en la primera consulta y se repiten en el tercer trimestre en poblaciones de riesgo. La sífilis no tratada causa muerte fetal, prematurez y sífilis congénita, y se previene con penicilina benzatínica. La infección por virus de la inmunodeficiencia humana se trata con antirretrovirales y reduce la transmisión a menos de 1%. También se realizan biometría hemática, grupo y Rh, glucosa, examen general de orina con urocultivo y antígeno de superficie de hepatitis B. Estos estudios forman parte de la normatividad mexicana.
+R: Norma Oficial Mexicana para la atención de la mujer durante el embarazo, parto y puerperio ;; Guía de Práctica Clínica de control prenatal con atención centrada en la paciente
+
+@ gyo|prenatal_care|prenatal_control|3|treatment_of_choice
+V: Mujer de 25 años con embarazo de 16 semanas. El urocultivo de control reporta más de 100 000 unidades formadoras de colonias de Escherichia coli. Está asintomática y sin fiebre.
+P: ¿Cuál es el tratamiento de elección?
++ Antibiótico seguro en el embarazo como nitrofurantoína, amoxicilina o cefalexina según antibiograma || La bacteriuria asintomática en el embarazo debe tratarse.
+- anchoring | No tratar porque está asintomática || En el embarazo aumenta el riesgo de pielonefritis y prematurez.
+- availability_heuristic | Ciprofloxacino || Las quinolonas se evitan en el embarazo.
+- representativeness_heuristic | Tetraciclina || Está contraindicada en el embarazo.
+- premature_closure | Repetir el urocultivo en el tercer trimestre sin tratar || Aumenta el riesgo de complicaciones.
+- framing_effect | Trimetoprim con sulfametoxazol cerca del término || Se evita por riesgo de kernícterus.
+- complexity_bias | Hospitalizar para antibiótico intravenoso || No es necesario.
+- base_rate_fallacy | Solo jugo de arándano || No trata la bacteriuria.
+- belief_bias | Tomar mucha agua como único tratamiento || No elimina la infección.
+- omission_bias | Evitar antibióticos para no dañar al bebé || Hay opciones seguras.
+E: La bacteriuria asintomática ocurre en 2 a 10% de las embarazadas. Por los cambios fisiológicos del embarazo, como la dilatación ureteral por progesterona y la compresión uterina, aumenta el riesgo de pielonefritis, parto pretérmino y bajo peso al nacer. Por ello se tamiza con urocultivo en el primer trimestre y se trata siempre. Las opciones seguras son nitrofurantoína, evitando el término, amoxicilina, cefalexina o fosfomicina, según el antibiograma, durante 5 a 7 días. Se realiza urocultivo de control tras el tratamiento. Las quinolonas y tetraciclinas están contraindicadas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de infección de vías urinarias en el embarazo
+
+@ gyo|prenatal_care|prenatal_control|3|prevention_screening
+V: Mujer de 30 años con embarazo de 28 semanas, grupo O Rh negativo, con esposo Rh positivo. Coombs indirecto negativo. Primer embarazo.
+P: ¿Cuál es la medida de prevención indicada?
++ Inmunoglobulina anti D a las 28 semanas y después del parto si el recién nacido es Rh positivo || Previene la aloinmunización materna.
+- anchoring | Solo inmunoglobulina anti D después del parto || También se recomienda a las 28 semanas.
+- availability_heuristic | No requiere nada por ser primer embarazo || La sensibilización puede ocurrir en el primero.
+- representativeness_heuristic | Transfusión intrauterina profiláctica || No está indicada.
+- premature_closure | Repetir Coombs indirecto cada semana sin profilaxis || No previene la sensibilización.
+- framing_effect | Inmunoglobulina anti D solo si el Coombs es positivo || Si ya es positivo, la profilaxis no sirve.
+- complexity_bias | Amniocentesis para tipificar al feto en todas || No es necesaria.
+- base_rate_fallacy | Cesárea programada para evitar sensibilización || No la previene.
+- belief_bias | Evitar relaciones sexuales en el embarazo || No influye.
+- omission_bias | No aplicar por miedo a reacciones || El beneficio es claro.
+E: La aloinmunización Rh ocurre cuando una madre Rh negativo se expone a eritrocitos fetales Rh positivo y produce anticuerpos anti D, que en embarazos posteriores atraviesan la placenta y causan enfermedad hemolítica del feto y recién nacido. Se previene con inmunoglobulina anti D a las 28 semanas en mujeres Rh negativo no sensibilizadas, con Coombs indirecto negativo, y en las primeras 72 horas tras el parto si el recién nacido es Rh positivo. También se aplica tras aborto, embarazo ectópico, sangrado, amniocentesis, traumatismo abdominal o versión cefálica externa. Si el Coombs indirecto es positivo la profilaxis ya no es útil.
+R: Guía de Práctica Clínica de prevención, diagnóstico y manejo de la aloinmunización materno fetal
+
+@ gyo|prenatal_care|prenatal_control|3|data_interpretation
+V: Mujer de 26 años con embarazo de 20 semanas que en la consulta tiene una altura del fondo uterino a nivel de la cicatriz umbilical. Frecuencia cardiaca fetal de 145 por minuto por Doppler.
+P: ¿Qué indica la altura del fondo uterino?
++ Que corresponde a la edad gestacional esperada de alrededor de 20 semanas || A las 20 semanas el fondo uterino llega al ombligo.
+- anchoring | Restricción del crecimiento fetal || Corresponde a lo esperado.
+- availability_heuristic | Embarazo gemelar || Sería mayor para la edad.
+- representativeness_heuristic | Polihidramnios || Sería mayor para la edad.
+- premature_closure | Embarazo de 12 semanas || A las 12 semanas el útero apenas rebasa la sínfisis.
+- base_rate_fallacy | Mola hidatiforme || Daría útero mayor para la edad.
+- framing_effect | Oligohidramnios grave || Sería menor.
+- inattentional_blindness | Embarazo de término || A término está cerca del apéndice xifoides.
+- focusing_illusion | Error de fechas obligado || Corresponde a las fechas.
+- belief_bias | El tamaño del vientre predice el sexo del bebé || No tiene relación.
+E: La altura del fondo uterino permite vigilar el crecimiento fetal. A las 12 semanas el útero rebasa la sínfisis del pubis, a las 16 está entre la sínfisis y el ombligo, a las 20 llega al ombligo y después crece aproximadamente 1 cm por semana, de modo que entre las 20 y 34 semanas la altura en centímetros se aproxima a las semanas de gestación. Una diferencia mayor de 2 a 3 cm sugiere alteraciones como restricción del crecimiento, oligohidramnios, macrosomía, embarazo múltiple, polihidramnios o error de fechas, y requiere ultrasonido.
+R: Guía de Práctica Clínica de control prenatal con atención centrada en la paciente
+
+@ gyo|prenatal_care|prenatal_control|3|prevention_screening
+V: Mujer de 33 años con embarazo de 12 semanas que pregunta qué estudios hay para saber si su bebé tiene riesgo de síndrome de Down.
+P: ¿Cuál es el estudio de tamizaje recomendado en el primer trimestre?
++ Tamizaje combinado con translucencia nucal por ultrasonido, fracción libre de gonadotropina coriónica humana beta y proteína plasmática A asociada al embarazo || Estima el riesgo de aneuploidías entre las 11 y 13.6 semanas.
+- anchoring | Amniocentesis a todas las embarazadas || Es diagnóstica e invasiva y se reserva para riesgo alto.
+- availability_heuristic | Ultrasonido estructural de las 20 semanas como único tamizaje || Llega tarde para el tamizaje de aneuploidías.
+- representativeness_heuristic | Cariotipo de los padres || No es el tamizaje de rutina.
+- premature_closure | Alfafetoproteína sola en el primer trimestre || Se usa en el segundo trimestre.
+- framing_effect | Esperar al nacimiento para estudiar al bebé || Impide decisiones informadas.
+- complexity_bias | Secuenciación del genoma fetal a todas || No es el tamizaje estándar.
+- base_rate_fallacy | Solo a mujeres mayores de 40 años || Se ofrece a todas.
+- belief_bias | La forma del vientre indica si tiene Down || No tiene relación.
+- omission_bias | No ofrecer tamizaje para no generar ansiedad || Es un derecho informado.
+E: El tamizaje de aneuploidías se ofrece a todas las embarazadas. En el primer trimestre, entre las 11 y 13.6 semanas, el tamizaje combinado integra la edad materna, la translucencia nucal por ultrasonido y los marcadores séricos fracción libre de hCG beta y PAPP A, con detección de alrededor de 90% para trisomía 21. El ADN fetal libre en sangre materna tiene mayor sensibilidad y puede ofrecerse como primera línea o en riesgo intermedio. Un resultado de alto riesgo se confirma con estudio diagnóstico invasivo, biopsia de vellosidades coriales o amniocentesis.
+R: Guía de Práctica Clínica de diagnóstico prenatal de cromosomopatías ;; Guía de Práctica Clínica de control prenatal con atención centrada en la paciente
+
+@ gyo|prenatal_care|prenatal_control|2|data_interpretation
+V: Mujer de 27 años con embarazo de 24 semanas, asintomática. Hemoglobina de 11.2 g/dL, volumen corpuscular medio normal. En el primer trimestre su hemoglobina era de 12.5 g/dL.
+P: ¿Qué indica este resultado de hemoglobina?
++ Cambio fisiológico por hemodilución del embarazo, sin anemia según el punto de corte del segundo trimestre || En el segundo trimestre la anemia se define con hemoglobina menor de 10.5 g/dL.
+- anchoring | Anemia ferropénica grave || No cumple criterios.
+- availability_heuristic | Anemia por pérdida sanguínea || No hay sangrado.
+- representativeness_heuristic | Talasemia menor || El volumen corpuscular es normal.
+- premature_closure | Anemia megaloblástica || El volumen es normal.
+- base_rate_fallacy | Anemia hemolítica || No hay datos de hemólisis.
+- framing_effect | Indicación de transfusión || No está indicada.
+- inattentional_blindness | Error del laboratorio || Es un cambio esperado.
+- focusing_illusion | Indicación de hierro intravenoso urgente || No hay anemia.
+- belief_bias | El bebé le está quitando la sangre a la madre || Es hemodilución fisiológica.
+E: Durante el embarazo el volumen plasmático aumenta alrededor de 40 a 50%, más que la masa eritrocitaria, lo que produce una disminución fisiológica de la hemoglobina por hemodilución, máxima en el segundo trimestre. Por ello los puntos de corte de anemia cambian, menor de 11 g/dL en el primer y tercer trimestre y menor de 10.5 g/dL en el segundo. Se recomienda suplementar hierro y ácido fólico a todas las embarazadas. La anemia ferropénica es la más frecuente en el embarazo y se asocia a parto pretérmino y bajo peso al nacer.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la anemia en el embarazo
+
+@ gyo|prenatal_care|prenatal_control|3|prevention_screening
+V: Mujer de 26 años con embarazo de 14 semanas que pregunta qué vacunas puede recibir durante el embarazo. Es temporada de influenza.
+P: ¿Cuál es la vacuna de prevención indicada en este momento?
++ Vacuna de influenza inactivada en cualquier trimestre durante la temporada || Protege a la madre y al recién nacido.
+- anchoring | Triple viral || Está contraindicada en el embarazo.
+- availability_heuristic | Varicela || Está contraindicada en el embarazo.
+- representativeness_heuristic | Vacuna de influenza de virus vivos atenuados intranasal || Está contraindicada.
+- premature_closure | Ninguna vacuna durante el embarazo || Influenza y Tdpa están indicadas.
+- framing_effect | Virus del papiloma humano || Se difiere al puerperio.
+- complexity_bias | BCG de refuerzo || No está indicada.
+- base_rate_fallacy | Fiebre amarilla de rutina || Solo si el riesgo es inevitable.
+- belief_bias | Las vacunas causan aborto || La vacuna de influenza inactivada es segura.
+- omission_bias | Esperar al parto para vacunarse || Pierde la protección del embarazo.
+E: Las embarazadas tienen mayor riesgo de complicaciones graves por influenza. La vacuna de influenza inactivada se recomienda en cualquier trimestre durante la temporada y transfiere anticuerpos que protegen al recién nacido en sus primeros meses. La Tdpa se aplica entre las semanas 20 y 36 de cada embarazo para proteger contra la tos ferina. Las vacunas de virus vivos atenuados, como triple viral, varicela e influenza intranasal, están contraindicadas. La vacuna contra hepatitis B puede aplicarse si hay riesgo. La vacuna del virus del papiloma humano se pospone hasta después del embarazo.
+R: Secretaría de Salud. Esquema nacional de vacunación ;; Guía de Práctica Clínica de control prenatal con atención centrada en la paciente
+
+@ gyo|prenatal_care|prenatal_control|3|risk_factor
+V: Mujer de 38 años con embarazo de 8 semanas, obesidad con índice de masa corporal de 34, hipertensión crónica y antecedente de preeclampsia en su embarazo anterior.
+P: ¿Cuál es el factor de riesgo más importante para desarrollar preeclampsia en este embarazo?
++ Antecedente de preeclampsia en un embarazo previo || Es uno de los factores de riesgo más fuertes, junto con la hipertensión crónica.
+- anchoring | Edad mayor de 35 años como factor principal || Es un factor moderado.
+- availability_heuristic | Multiparidad || El riesgo es mayor en nulíparas.
+- representativeness_heuristic | Tabaquismo || Paradójicamente se asocia a menor riesgo.
+- premature_closure | Sexo del feto || No es un factor relevante.
+- base_rate_fallacy | Grupo sanguíneo materno || No es un factor.
+- framing_effect | Consumo de café || No es un factor.
+- inattentional_blindness | Vacunación de influenza || No aumenta el riesgo.
+- focusing_illusion | Ejercicio moderado || Es protector.
+- belief_bias | Comer mucha sal en el embarazo || No es el factor principal.
+E: Los factores de riesgo alto de preeclampsia son preeclampsia previa, hipertensión crónica, diabetes pregestacional, enfermedad renal crónica, enfermedades autoinmunes como lupus o síndrome antifosfolípido y embarazo múltiple. Los factores moderados son nuliparidad, obesidad, edad mayor de 35 a 40 años, intervalo intergenésico largo, antecedente familiar y técnicas de reproducción asistida. Las mujeres con un factor de riesgo alto o dos moderados deben recibir ácido acetilsalicílico a dosis baja, de 100 a 150 mg por la noche, desde las 12 a 16 semanas hasta las 36 semanas, y suplementación de calcio si su ingesta es baja.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en segundo y tercer nivel
+
+@ gyo|prenatal_care|gestational_diabetes|2|prevention_screening
+V: Mujer de 29 años con embarazo de 25 semanas, sin diabetes previa y con glucosa en ayuno normal en el primer trimestre.
+P: ¿Cuál es la prueba de tamizaje de diabetes gestacional recomendada a esta edad gestacional?
++ Curva de tolerancia oral a la glucosa con 75 g entre las 24 y 28 semanas || Es la estrategia de un paso más utilizada.
+- anchoring | Hemoglobina glucosilada como prueba única de diabetes gestacional || No es adecuada para el diagnóstico de diabetes gestacional.
+- availability_heuristic | Glucosa capilar al azar || No es una prueba diagnóstica válida.
+- representativeness_heuristic | Glucosuria en tira reactiva || Es poco sensible.
+- premature_closure | No realizar tamizaje si la glucosa del primer trimestre fue normal || El tamizaje se repite a las 24 a 28 semanas.
+- framing_effect | Curva de tolerancia en el puerperio || Llega tarde para el embarazo.
+- complexity_bias | Péptido C y anticuerpos pancreáticos || No son de tamizaje.
+- base_rate_fallacy | Solo a mujeres con obesidad || Se recomienda tamizaje universal.
+- belief_bias | Los antojos de dulce confirman la diabetes || No es un criterio.
+- omission_bias | Evitar la prueba para no tomar el líquido azucarado || El diagnóstico previene complicaciones.
+E: La diabetes gestacional es la intolerancia a los carbohidratos diagnosticada por primera vez en el segundo o tercer trimestre. Se recomienda tamizaje universal entre las 24 y 28 semanas, cuando aumenta la resistencia a la insulina por las hormonas placentarias. En la estrategia de un paso se realiza curva de tolerancia oral con 75 g de glucosa, y el diagnóstico se establece con un valor alterado, ayuno de 92 mg/dL o más, una hora de 180 o más, o dos horas de 153 o más. En mujeres de alto riesgo se busca diabetes pregestacional desde la primera consulta.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la diabetes en el embarazo
+
+@ gyo|prenatal_care|gestational_diabetes|3|data_interpretation
+V: Mujer de 31 años con embarazo de 26 semanas. Curva de tolerancia oral a la glucosa con 75 g con glucosa en ayuno de 88 mg/dL, a la hora de 192 mg/dL y a las 2 horas de 140 mg/dL.
+P: ¿Qué indica este resultado?
++ Diabetes gestacional por un valor alterado a la hora || Basta un valor igual o mayor a los puntos de corte.
+- anchoring | Curva normal porque el ayuno es normal || La hora está alterada.
+- availability_heuristic | Diabetes tipo 2 pregestacional || Los valores no alcanzan criterios de diabetes franca.
+- representativeness_heuristic | Intolerancia leve sin importancia || Es diabetes gestacional que requiere manejo.
+- premature_closure | Requiere repetir la curva para confirmar || Un valor alterado es suficiente.
+- base_rate_fallacy | Hipoglucemia reactiva || Los valores están altos.
+- framing_effect | Diabetes tipo 1 || No hay datos de autoinmunidad ni cetosis.
+- inattentional_blindness | Error por ayuno prolongado || El ayuno fue adecuado.
+- focusing_illusion | Resultado limítrofe que solo requiere vigilancia || Requiere tratamiento.
+- belief_bias | Es normal que el embarazo suba la glucosa sin consecuencias || La hiperglucemia tiene consecuencias.
+E: Con la curva de tolerancia oral de 75 g en un paso, la diabetes gestacional se diagnostica con al menos un valor igual o mayor a 92 mg/dL en ayuno, 180 mg/dL a la hora o 153 mg/dL a las 2 horas. Si en la primera consulta la glucosa en ayuno es de 126 o más, la hemoglobina glucosilada de 6.5% o más o la glucosa al azar de 200 o más, se diagnostica diabetes pregestacional o franca. La diabetes gestacional se asocia a macrosomía, distocia de hombros, hipoglucemia neonatal, preeclampsia y cesárea, y aumenta el riesgo de diabetes tipo 2 materna a futuro.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la diabetes en el embarazo
+
+@ gyo|prenatal_care|gestational_diabetes|3|initial_treatment
+V: Mujer de 30 años con diabetes gestacional diagnosticada a las 26 semanas. Índice de masa corporal de 29. Aún no inicia ningún tratamiento.
+P: ¿Cuál es el tratamiento inicial?
++ Terapia médica nutricional, actividad física y automonitoreo de glucosa || La mayoría se controla con cambios de estilo de vida.
+- anchoring | Insulina desde el diagnóstico en todas || Se reserva si no se alcanzan las metas.
+- availability_heuristic | Glibenclamida como primera línea || La insulina es preferida si se requiere fármaco.
+- representativeness_heuristic | Dieta de ayuno prolongado || Produce cetosis.
+- premature_closure | Interrupción del embarazo inmediata || No está indicada.
+- framing_effect | Metformina a todas sin dieta previa || Primero se indican cambios de estilo de vida.
+- complexity_bias | Bomba de insulina desde el inicio || No es necesaria.
+- base_rate_fallacy | Dieta sin carbohidratos || No es adecuada en el embarazo.
+- belief_bias | Comer por dos para que el bebé crezca || Empeora la hiperglucemia.
+- omission_bias | No tratar porque desaparece tras el parto || La hiperglucemia daña al feto.
+E: El tratamiento inicial de la diabetes gestacional es la terapia médica nutricional individualizada con distribución de carbohidratos, actividad física regular como caminar 30 minutos al día y automonitoreo de glucosa capilar. Las metas son glucosa en ayuno menor de 95 mg/dL, una hora posprandial menor de 140 y dos horas menor de 120. Entre 70 y 85% de las mujeres se controla así. Si no se alcanzan las metas en una a dos semanas se inicia insulina, que es el fármaco de elección, aunque la metformina puede considerarse. Se vigila el crecimiento fetal con ultrasonido.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la diabetes en el embarazo
+
+@ gyo|prenatal_care|gestational_diabetes|3|complication_prognosis
+V: Recién nacido de 4 300 g, hijo de madre con diabetes gestacional mal controlada. A las 2 horas de vida presenta temblores, irritabilidad y succión débil.
+P: ¿Cuál es la complicación neonatal más probable?
++ Hipoglucemia neonatal por hiperinsulinismo fetal || La hiperglucemia materna estimula la producción de insulina fetal.
+- anchoring | Sepsis neonatal temprana || Debe considerarse, pero el contexto orienta a hipoglucemia.
+- availability_heuristic | Hipocalcemia sin hipoglucemia || Puede ocurrir, pero la hipoglucemia es más frecuente y temprana.
+- representativeness_heuristic | Hipotiroidismo congénito || No da síntomas tan tempranos.
+- premature_closure | Abstinencia neonatal por drogas || No hay antecedente.
+- base_rate_fallacy | Hemorragia intraventricular || Es más propia de prematuros.
+- framing_effect | Hiperglucemia neonatal || El problema es la glucosa baja.
+- inattentional_blindness | Policitemia sin hipoglucemia || Puede coexistir.
+- focusing_illusion | Fractura de clavícula por macrosomía || No explica los temblores sistémicos.
+- belief_bias | Bebé con hambre que se calmará con el seno || La hipoglucemia debe confirmarse y tratarse.
+E: La hiperglucemia materna atraviesa la placenta y estimula la hiperplasia de las células beta fetales, con hiperinsulinismo. Esto produce macrosomía y, tras el nacimiento, al suspenderse el aporte de glucosa materna, hipoglucemia en las primeras horas. Otras complicaciones del hijo de madre diabética son distocia de hombros, síndrome de dificultad respiratoria por retraso en la maduración pulmonar, hipocalcemia, hipomagnesemia, policitemia, hiperbilirrubinemia y miocardiopatía hipertrófica. La diabetes pregestacional mal controlada además aumenta el riesgo de malformaciones como síndrome de regresión caudal y cardiopatías. Se vigila la glucosa del recién nacido.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la diabetes en el embarazo
+
+@ gyo|prenatal_care|gestational_diabetes|3|treatment_of_choice
+V: Mujer de 32 años con diabetes gestacional que tras 2 semanas de dieta y ejercicio mantiene glucosas en ayuno de 105 a 110 mg/dL y posprandiales de una hora de 160 mg/dL.
+P: ¿Cuál es el tratamiento farmacológico de elección?
++ Insulina || No cruza la placenta y es eficaz para lograr las metas.
+- anchoring | Glibenclamida || Cruza la placenta y se asocia a más hipoglucemia neonatal.
+- availability_heuristic | Inhibidores de SGLT2 || No se usan en el embarazo.
+- representativeness_heuristic | Agonistas de GLP 1 || No se recomiendan en el embarazo.
+- premature_closure | Continuar solo con dieta más estricta || No alcanza las metas.
+- framing_effect | Acarbosa || No es un tratamiento recomendado.
+- complexity_bias | Inducción del parto inmediata a las 28 semanas || No está indicada.
+- base_rate_fallacy | Pioglitazona || No se recomienda en el embarazo.
+- belief_bias | Suspender las comidas para no subir la glucosa || Produce cetosis.
+- omission_bias | No iniciar insulina por miedo a las inyecciones || El descontrol aumenta las complicaciones.
+E: Cuando la diabetes gestacional no alcanza las metas con terapia nutricional y ejercicio en una a dos semanas se inicia tratamiento farmacológico. La insulina es el fármaco de elección porque no cruza la placenta y permite ajustar las dosis. Se usan insulina NPH o análogos de acción prolongada para la glucosa en ayuno y rápida o ultrarrápida para las posprandiales. La metformina es una alternativa en mujeres que no aceptan o no pueden usar insulina, aunque cruza la placenta. La glibenclamida se asocia a mayor hipoglucemia neonatal y macrosomía. Las demás familias de fármacos no se usan en el embarazo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la diabetes en el embarazo
+
+@ gyo|prenatal_care|gestational_diabetes|3|prevention_screening
+V: Mujer de 34 años que tuvo diabetes gestacional tratada con dieta. Hace 8 semanas tuvo un parto sin complicaciones y ya no toma medicamentos. Amamanta a su bebé.
+P: ¿Cuál es la medida de prevención indicada después del parto?
++ Curva de tolerancia oral a la glucosa de 75 g entre las 4 y 12 semanas posparto y después tamizaje periódico || Tiene alto riesgo de diabetes tipo 2.
+- anchoring | Ningún estudio porque la diabetes desaparece con el parto || El riesgo de diabetes tipo 2 es alto.
+- availability_heuristic | Hemoglobina glucosilada a las 2 semanas posparto || Está alterada por los cambios del embarazo y parto.
+- representativeness_heuristic | Metformina de por vida a todas || No está indicada de rutina.
+- premature_closure | Repetir la curva solo en el siguiente embarazo || Retrasa la detección.
+- framing_effect | Suspender la lactancia para medir mejor la glucosa || La lactancia protege.
+- complexity_bias | Péptido C y anticuerpos a todas || No es necesario.
+- base_rate_fallacy | Glucosa capilar ocasional sin seguimiento || No es suficiente.
+- belief_bias | Comer poca azúcar evita cualquier riesgo futuro || El seguimiento es necesario.
+- omission_bias | No hacer seguimiento para no preocuparla || El diagnóstico temprano previene complicaciones.
+E: Las mujeres con diabetes gestacional tienen un riesgo de 7 a 10 veces mayor de desarrollar diabetes tipo 2, y hasta la mitad la presentan en los 5 a 10 años siguientes. Se recomienda curva de tolerancia oral a la glucosa de 75 g entre las 4 y 12 semanas posparto para reclasificar el estado glucémico, y después tamizaje cada 1 a 3 años. La lactancia materna, la pérdida de peso, la actividad física y una dieta saludable reducen el riesgo. En embarazos futuros se recomienda tamizaje temprano. La metformina puede considerarse en mujeres con prediabetes.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la diabetes en el embarazo
+
+@ gyo|prenatal_care|gestational_diabetes|3|prevention_screening
+V: Mujer de 35 años con embarazo de 10 semanas. Tiene índice de masa corporal de 33, antecedente de un hijo de 4 400 g, síndrome de ovario poliquístico y madre con diabetes tipo 2.
+P: ¿Cuál es la conducta respecto al tamizaje de diabetes en esta paciente?
++ Buscar diabetes desde la primera consulta por sus múltiples factores de riesgo y repetir a las 24 a 28 semanas si es normal || Tiene alto riesgo de diabetes no diagnosticada.
+- anchoring | Esperar a las 24 a 28 semanas como en todas || El alto riesgo justifica búsqueda temprana.
+- availability_heuristic | Iniciar insulina profiláctica || No está indicada sin diagnóstico.
+- representativeness_heuristic | Solo vigilar el peso || No detecta diabetes.
+- premature_closure | No realizar tamizaje por ser su segundo embarazo || La paridad no elimina el riesgo.
+- base_rate_fallacy | Tamizar solo si aparece glucosuria || Es poco sensible.
+- framing_effect | Realizar solo ultrasonido para medir al bebé || No diagnostica diabetes.
+- complexity_bias | Biopsia placentaria || No está indicada.
+- belief_bias | El ovario poliquístico no se relaciona con la glucosa || Se asocia a resistencia a la insulina.
+- omission_bias | Evitar estudios para no estresarla || El diagnóstico temprano reduce complicaciones.
+E: Los factores de riesgo de diabetes gestacional incluyen obesidad, edad mayor de 25 a 35 años, antecedente de diabetes gestacional o de hijo macrosómico, antecedente familiar de diabetes en primer grado, síndrome de ovario poliquístico, origen étnico de alto riesgo, glucosuria, acantosis y prediabetes. En mujeres con alto riesgo se recomienda buscar diabetes pregestacional desde la primera consulta prenatal con glucosa en ayuno, hemoglobina glucosilada o curva, y si es normal repetir el tamizaje entre las 24 y 28 semanas. La población mexicana tiene alta prevalencia de diabetes, por lo que muchas embarazadas tienen riesgo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la diabetes en el embarazo
+
+@ gyo|prenatal_care|gestational_diabetes|4|next_step
+V: Mujer de 33 años con diabetes gestacional tratada con insulina, con buen control. Tiene 39 semanas, el ultrasonido estima un peso fetal de 3 600 g y el perfil biofísico es normal.
+P: ¿Cuál es la conducta más apropiada respecto a la resolución del embarazo?
++ Programar la resolución entre las 39 y 39.6 semanas, preferentemente por vía vaginal si no hay contraindicación obstétrica || Con buen control y peso estimado normal se busca el parto a término.
+- anchoring | Cesárea electiva en todas las diabéticas || La diabetes no es indicación de cesárea por sí sola.
+- availability_heuristic | Interrupción inmediata a las 34 semanas || No hay indicación de prematurez.
+- representativeness_heuristic | Esperar hasta las 42 semanas || Aumenta el riesgo de muerte fetal y macrosomía.
+- premature_closure | Suspender la insulina al final del embarazo en casa || Se ajusta en el trabajo de parto.
+- framing_effect | Cesárea solo por tener insulina || No es una indicación.
+- complexity_bias | Amniocentesis para madurez pulmonar a término || No es necesaria.
+- base_rate_fallacy | Inducción a las 37 semanas en todas sin criterios || El control adecuado permite esperar a las 39 semanas.
+- belief_bias | Que el bebé nazca grande siempre obliga a cesárea || Solo si el peso estimado es muy alto.
+- omission_bias | No planificar el nacimiento || La diabetes requiere planeación.
+E: En la diabetes gestacional con buen control y crecimiento fetal adecuado se recomienda la resolución entre las 39 y 40 semanas. Si requiere fármacos y está bien controlada, entre las 39 y 39.6 semanas. Con mal control o complicaciones puede adelantarse. La vía del nacimiento se decide por criterios obstétricos y la diabetes no es indicación de cesárea por sí sola. Se considera cesárea si el peso fetal estimado es mayor de 4 500 g por el riesgo de distocia de hombros. Durante el trabajo de parto se vigila la glucosa capilar y se ajusta la insulina, y tras el parto suele suspenderse.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la diabetes en el embarazo
