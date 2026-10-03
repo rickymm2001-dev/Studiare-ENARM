@@ -1,0 +1,335 @@
+@ gyo|obstetric_hemorrhage|placenta_previa|2|diagnosis
+V: Mujer de 34 años, multigesta con dos cesáreas previas, con embarazo de 32 semanas que presenta sangrado vaginal rojo brillante abundante, indoloro, de inicio súbito mientras dormía. Útero blando, no doloroso, frecuencia cardiaca fetal normal y presentación pélvica.
+P: ¿Cuál es el diagnóstico más probable?
++ Placenta previa || Sangrado rojo indoloro en el tercer trimestre con útero blando y cesáreas previas.
+- anchoring | Desprendimiento prematuro de placenta || Da dolor, útero hipertónico y sangrado oscuro.
+- availability_heuristic | Trabajo de parto pretérmino || No hay contracciones dolorosas.
+- representativeness_heuristic | Rotura uterina || Da dolor intenso y pérdida de la estática fetal.
+- premature_closure | Vasa previa || Sangra al romper membranas con sufrimiento fetal.
+- base_rate_fallacy | Pólipo cervical || Da sangrado escaso.
+- framing_effect | Cervicitis || Da sangrado leve poscoital.
+- inattentional_blindness | Cáncer cervicouterino || Es menos probable en este contexto agudo.
+- focusing_illusion | Hemorroides sangrantes || El sangrado es vaginal.
+- belief_bias | Sangrado normal del tercer trimestre || Todo sangrado en el tercer trimestre es anormal.
+E: La placenta previa es la implantación de la placenta sobre el orificio cervical interno o muy cerca de él. Se manifiesta con sangrado vaginal rojo brillante, indoloro, súbito y recurrente en el segundo o tercer trimestre, con útero blando y feto sin alteraciones. Se asocia a situaciones y presentaciones fetales anormales, como la pélvica o la transversa. Los factores de riesgo incluyen cesáreas previas, multiparidad, edad materna avanzada, legrados, tabaquismo, embarazo múltiple y reproducción asistida. El diagnóstico se confirma con ultrasonido, idealmente transvaginal. El tacto vaginal está contraindicado hasta descartar la placenta previa, porque puede provocar hemorragia grave.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la placenta previa
+
+@ gyo|obstetric_hemorrhage|placenta_previa|3|next_step
+V: Mujer de 30 años con embarazo de 30 semanas que llega a urgencias con sangrado vaginal rojo brillante e indoloro. Está estable hemodinámicamente y el feto tiene buena frecuencia cardiaca. No se conoce la localización placentaria.
+P: ¿Cuál es el siguiente paso?
++ Realizar ultrasonido para localizar la placenta antes de cualquier tacto vaginal || El tacto puede provocar hemorragia masiva en placenta previa.
+- anchoring | Tacto vaginal para valorar el cérvix || Está contraindicado hasta descartar placenta previa.
+- availability_heuristic | Amniotomía para acelerar el parto || Está contraindicada.
+- representativeness_heuristic | Inducción del trabajo de parto con oxitocina || No está indicada.
+- premature_closure | Egreso con reposo en casa || Requiere hospitalización.
+- framing_effect | Cesárea inmediata en una paciente estable a las 30 semanas || Si está estable puede manejarse de forma expectante.
+- complexity_bias | Resonancia magnética como primer estudio || El ultrasonido es el estudio inicial.
+- base_rate_fallacy | Colocar un pesario || No es el manejo.
+- belief_bias | Aplicar tapones vaginales para detener el sangrado || No es adecuado.
+- omission_bias | No hacer estudios hasta que el sangrado se detenga || Se requiere localizar la placenta.
+E: Ante un sangrado del segundo o tercer trimestre debe descartarse placenta previa con ultrasonido antes de realizar tacto vaginal, ya que la exploración digital puede desprender la placenta y causar hemorragia masiva. La especuloscopia cuidadosa sí puede hacerse para valorar el origen del sangrado. En pacientes estables con feto pretérmino se hospitaliza, se canaliza, se solicitan biometría, grupo y Rh y pruebas cruzadas, se administran corticosteroides para madurez pulmonar entre las 24 y 34 semanas y se aplica inmunoglobulina anti D si es Rh negativo. Se vigila el sangrado y el bienestar fetal.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la placenta previa
+
+@ gyo|obstetric_hemorrhage|placenta_previa|3|treatment_of_choice
+V: Mujer de 33 años con placenta previa total confirmada por ultrasonido, sin sangrado activo. Embarazo de 36 semanas y 4 días, con feto en buenas condiciones.
+P: ¿Cuál es el tratamiento de elección para la resolución del embarazo?
++ Cesárea programada entre las 36 y 37.6 semanas || La placenta previa total impide el parto vaginal.
+- anchoring | Parto vaginal con vigilancia estrecha || Está contraindicado en placenta previa total.
+- availability_heuristic | Inducción con prostaglandinas || Está contraindicada.
+- representativeness_heuristic | Esperar al inicio espontáneo del trabajo de parto a las 40 semanas || Aumenta el riesgo de hemorragia.
+- premature_closure | Cesárea de urgencia a las 28 semanas sin sangrado || No está indicada.
+- framing_effect | Cerclaje cervical || No está indicado.
+- complexity_bias | Histerectomía programada en todas || Se reserva para acretismo.
+- base_rate_fallacy | Parto vaginal tras amniotomía || Está contraindicado.
+- belief_bias | La placenta subirá sola antes del parto || A esta edad la migración es poco probable.
+- omission_bias | No programar la cirugía por miedo a la prematurez || El riesgo de hemorragia es mayor.
+E: En la placenta previa que cubre el orificio cervical interno el parto vaginal está contraindicado y la vía de nacimiento es la cesárea. En pacientes sin sangrado se programa entre las 36 y 37.6 semanas. Si el borde placentario está a más de 2 cm del orificio puede intentarse el parto vaginal. Muchas placentas bajas diagnosticadas en el segundo trimestre migran por el crecimiento del segmento uterino, por lo que se repite el ultrasonido a las 32 semanas. Ante sangrado grave, inestabilidad materna o compromiso fetal se realiza cesárea urgente a cualquier edad gestacional.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la placenta previa
+
+@ gyo|obstetric_hemorrhage|placenta_previa|4|complication_prognosis
+V: Mujer de 38 años con tres cesáreas previas y placenta previa anterior sobre la cicatriz uterina. El ultrasonido Doppler muestra pérdida de la zona hipoecoica retroplacentaria, lagunas vasculares e hipervascularidad en la interfase con la vejiga.
+P: ¿Cuál es la complicación que debe sospecharse?
++ Espectro de placenta acreta || Placenta previa sobre cicatriz con signos ecográficos de invasión miometrial.
+- anchoring | Placenta previa simple sin invasión || Los hallazgos indican invasión.
+- availability_heuristic | Desprendimiento prematuro de placenta || No hay sangrado ni dolor.
+- representativeness_heuristic | Mola hidatiforme parcial || No corresponde a un embarazo de tercer trimestre normal.
+- premature_closure | Mioma uterino retroplacentario || No explica las lagunas vasculares.
+- base_rate_fallacy | Corioangioma placentario || Es un tumor raro de la placenta.
+- framing_effect | Vasa previa || Son vasos fetales sobre el cérvix.
+- inattentional_blindness | Infección intraamniótica || No explica los hallazgos.
+- focusing_illusion | Endometriosis vesical || No explica la invasión placentaria.
+- belief_bias | Placenta grande por bebé grande || Los hallazgos indican invasión anormal.
+E: El espectro de placenta acreta incluye la placenta acreta, adherida al miometrio, increta, que lo invade, y percreta, que lo atraviesa hasta la serosa u órganos vecinos como la vejiga. Su principal factor de riesgo es la combinación de placenta previa y cesáreas previas, con riesgo creciente según el número de cesáreas. El ultrasonido muestra pérdida de la zona hipoecoica, lagunas placentarias, adelgazamiento miometrial e hipervascularidad, y la resonancia ayuda a valorar la extensión. Se planea cesárea con histerectomía entre las 34 y 35.6 semanas en un centro con equipo multidisciplinario y banco de sangre.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del acretismo placentario
+
+@ gyo|obstetric_hemorrhage|placenta_previa|3|risk_factor
+V: Mujer de 36 años con embarazo de 20 semanas cuyo ultrasonido muestra placenta previa. Tiene dos cesáreas previas, un legrado y fuma 10 cigarros al día.
+P: ¿Cuál es el factor de riesgo más importante de placenta previa en esta paciente?
++ Cesáreas previas || La cicatriz uterina es el principal factor de riesgo de placenta previa y acretismo.
+- anchoring | Edad materna mayor de 35 años como factor principal || Es un factor menor.
+- availability_heuristic | Primiparidad || El riesgo es mayor en multíparas.
+- representativeness_heuristic | Hipertensión arterial || Se asocia más a desprendimiento.
+- premature_closure | Diabetes gestacional || No es un factor de placenta previa.
+- base_rate_fallacy | Grupo sanguíneo O || No es un factor.
+- framing_effect | Feto femenino || No es relevante.
+- inattentional_blindness | Ejercicio moderado || No es un factor.
+- focusing_illusion | Anemia leve || No causa placenta previa.
+- belief_bias | Dormir boca abajo en el embarazo || No es un factor.
+E: Los factores de riesgo de placenta previa incluyen cesáreas previas, que aumentan el riesgo de forma proporcional a su número, cirugías uterinas, legrados, multiparidad, edad materna avanzada, tabaquismo, consumo de cocaína, embarazo múltiple y técnicas de reproducción asistida. La cicatriz o el daño del endometrio en el segmento superior favorece que el blastocisto se implante en el segmento inferior, cerca del orificio cervical. La placenta previa en mujeres con cesáreas previas tiene alto riesgo de acretismo, por lo que siempre debe buscarse con ultrasonido Doppler.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la placenta previa
+
+@ gyo|obstetric_hemorrhage|placenta_previa|4|diagnosis
+V: Mujer de 29 años en trabajo de parto a las 39 semanas. Al ocurrir la ruptura espontánea de membranas presenta sangrado vaginal moderado y de inmediato la frecuencia cardiaca fetal cae a 70 latidos por minuto con patrón sinusoidal. La madre está estable y sin dolor anormal. Embarazo por fertilización in vitro con placenta bilobulada.
+P: ¿Cuál es el diagnóstico más probable?
++ Vasa previa rota || Sangrado al romper membranas con compromiso fetal grave y madre estable.
+- anchoring | Placenta previa || Sangraría antes y con compromiso materno.
+- availability_heuristic | Desprendimiento de placenta || Daría dolor e hipertonía.
+- representativeness_heuristic | Rotura uterina || Daría dolor intenso y pérdida de la estática fetal.
+- premature_closure | Expulsión del tapón mucoso || Es sangrado escaso sin afección fetal.
+- base_rate_fallacy | Prolapso de cordón sin sangrado || No explica el sangrado.
+- framing_effect | Laceración cervical || No causa compromiso fetal inmediato.
+- inattentional_blindness | Hipotensión materna por posición || La madre está estable.
+- focusing_illusion | Sepsis fetal || No explica el sangrado súbito.
+- belief_bias | Sangrado normal al romper la fuente || El compromiso fetal indica sangrado fetal.
+E: La vasa previa ocurre cuando vasos fetales sin protección de la gelatina de Wharton ni de la placenta atraviesan las membranas sobre el orificio cervical interno. Se asocia a inserción velamentosa del cordón, placentas bilobuladas o con lóbulos accesorios, placenta previa en el segundo trimestre y fertilización in vitro. Al romperse las membranas se rompen los vasos y el sangrado es de origen fetal, con rápida bradicardia o patrón sinusoidal y alta mortalidad fetal, mientras la madre se mantiene estable. El tratamiento es cesárea inmediata. Si se diagnostica antes con Doppler transvaginal se programa cesárea a las 34 a 37 semanas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la placenta previa
+
+@ gyo|obstetric_hemorrhage|placenta_previa|3|initial_study
+V: Mujer de 27 años con embarazo de 34 semanas y sangrado vaginal escaso indoloro. Estable. No tiene ultrasonidos previos.
+P: ¿Cuál es el estudio inicial de elección para diagnosticar placenta previa?
++ Ultrasonido transvaginal || Es seguro y más preciso que el abdominal para localizar el borde placentario.
+- anchoring | Tacto vaginal || Está contraindicado.
+- availability_heuristic | Resonancia magnética como primer estudio || Se reserva para valorar acretismo.
+- representativeness_heuristic | Tomografía abdominal || Expone al feto a radiación.
+- premature_closure | Amnioscopia || No está indicada.
+- base_rate_fallacy | Colposcopia || No valora la placenta.
+- framing_effect | Prueba sin estrés como único estudio || Valora al feto, no la placenta.
+- complexity_bias | Angiografía uterina || No está indicada.
+- information_bias | Biometría hemática como estudio diagnóstico || No localiza la placenta.
+- belief_bias | El ultrasonido transvaginal provoca sangrado en placenta previa || Es seguro con técnica adecuada.
+E: El ultrasonido transvaginal es el estudio de elección para diagnosticar placenta previa. Es seguro, porque el transductor no entra en el canal cervical, y es más preciso que el ultrasonido abdominal para medir la distancia del borde placentario al orificio cervical interno. Se clasifica como placenta previa cuando cubre el orificio y como placenta de inserción baja cuando el borde está a menos de 2 cm. El ultrasonido abdominal puede ser el primer acercamiento, pero tiene más falsos positivos por la vejiga llena o la presentación fetal. La resonancia se reserva para sospecha de acretismo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la placenta previa
+
+@ gyo|obstetric_hemorrhage|placental_abruption|2|diagnosis
+V: Mujer de 32 años con preeclampsia y embarazo de 35 semanas que presenta dolor abdominal súbito e intenso, sangrado vaginal oscuro escaso y útero duro y doloroso con contracciones frecuentes. La frecuencia cardiaca fetal muestra desaceleraciones tardías.
+P: ¿Cuál es el diagnóstico más probable?
++ Desprendimiento prematuro de placenta normoinserta || Dolor súbito, útero hipertónico, sangrado oscuro y compromiso fetal en una paciente con preeclampsia.
+- anchoring | Placenta previa || Da sangrado rojo indoloro con útero blando.
+- availability_heuristic | Trabajo de parto normal || No explica el útero hipertónico doloroso ni el compromiso fetal.
+- representativeness_heuristic | Rotura uterina || Ocurre con cicatriz previa y pérdida de la estática fetal.
+- premature_closure | Apendicitis aguda en el embarazo || No explica el sangrado ni la hipertonía.
+- base_rate_fallacy | Degeneración roja de mioma || Da dolor localizado sin compromiso fetal.
+- framing_effect | Pielonefritis || Da fiebre y dolor lumbar.
+- inattentional_blindness | Vasa previa || Ocurre al romper membranas con madre estable.
+- focusing_illusion | Síndrome de HELLP aislado || No explica el útero hipertónico y el sangrado.
+- belief_bias | Contracciones de práctica fuertes || El cuadro es grave.
+E: El desprendimiento prematuro de placenta normoinserta es la separación total o parcial de la placenta antes del nacimiento. Se manifiesta con dolor abdominal súbito, sangrado vaginal oscuro que puede ser escaso o ausente porque la sangre queda retenida, útero hipertónico y doloroso, contracciones frecuentes y compromiso fetal. El sangrado visible puede no reflejar la pérdida real. Los factores de riesgo son hipertensión y preeclampsia, traumatismo abdominal, cocaína, tabaquismo, ruptura prematura de membranas, descompresión uterina brusca y desprendimiento previo. El diagnóstico es clínico, ya que el ultrasonido tiene baja sensibilidad.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del desprendimiento prematuro de placenta normoinserta
+
+@ gyo|obstetric_hemorrhage|placental_abruption|3|next_step
+V: Mujer de 28 años con embarazo de 37 semanas y desprendimiento de placenta. Presenta taquicardia de 120, presión de 90/60 mmHg, útero hipertónico y frecuencia cardiaca fetal con bradicardia sostenida de 80. Cérvix con 2 cm de dilatación.
+P: ¿Cuál es la conducta más apropiada?
++ Reanimación materna con soluciones y hemoderivados y cesárea urgente || Feto vivo con compromiso y madre inestable sin parto inminente.
+- anchoring | Esperar el parto vaginal con oxitocina || El feto tiene compromiso grave y el parto no es inminente.
+- availability_heuristic | Uteroinhibidores para detener las contracciones || Están contraindicados.
+- representativeness_heuristic | Manejo expectante con reposo || Hay compromiso materno y fetal.
+- premature_closure | Corticosteroides y esperar 48 horas || Es un embarazo de término con compromiso.
+- framing_effect | Tacto vaginal repetido para valorar progreso || Retrasa el nacimiento.
+- complexity_bias | Ultrasonido para confirmar antes de actuar || El diagnóstico es clínico y no debe retrasar.
+- status_quo_bias | Vigilar la frecuencia fetal 1 hora más || La bradicardia sostenida requiere nacimiento inmediato.
+- belief_bias | Masaje uterino para despegar la placenta || Es inadecuado.
+- omission_bias | Evitar la cesárea por la hipotensión materna || La reanimación y cesárea se hacen en paralelo.
+E: El manejo del desprendimiento de placenta depende del estado materno y fetal y de la edad gestacional. Ante compromiso fetal con feto viable o inestabilidad materna sin parto inminente se realiza cesárea urgente mientras se reanima a la madre con soluciones, concentrados eritrocitarios y corrección de la coagulopatía. Si el feto ha muerto y la madre está estable se prefiere el parto vaginal. En desprendimientos leves con feto pretérmino y madre estable puede considerarse manejo expectante vigilado. Las complicaciones incluyen choque hemorrágico, coagulación intravascular diseminada, útero de Couvelaire, lesión renal y muerte fetal.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del desprendimiento prematuro de placenta normoinserta
+
+@ gyo|obstetric_hemorrhage|placental_abruption|4|complication_prognosis
+V: Mujer de 35 años con desprendimiento de placenta masivo y óbito fetal que presenta sangrado por sitios de venopunción y encías. Plaquetas de 50 000, fibrinógeno de 90 mg/dL, tiempos de coagulación prolongados y dímero D muy elevado.
+P: ¿Cuál es la complicación que presenta?
++ Coagulación intravascular diseminada || Consumo de factores y plaquetas con fibrinógeno bajo tras desprendimiento con óbito.
+- anchoring | Púrpura trombocitopénica inmune || No explica el fibrinógeno bajo ni los tiempos prolongados.
+- availability_heuristic | Síndrome de HELLP || No explica la hipofibrinogenemia marcada.
+- representativeness_heuristic | Hemofilia adquirida || No explica la trombocitopenia ni el fibrinógeno bajo.
+- premature_closure | Efecto de anticoagulantes || No hay antecedente.
+- base_rate_fallacy | Enfermedad de von Willebrand || Es hereditaria y no explica el consumo.
+- framing_effect | Deficiencia de vitamina K || No explica la trombocitopenia ni el fibrinógeno bajo.
+- inattentional_blindness | Hígado graso agudo del embarazo || No corresponde al contexto.
+- focusing_illusion | Anemia dilucional sin coagulopatía || Hay sangrado por coagulopatía.
+- belief_bias | Sangrado normal tras perder al bebé || Es una coagulopatía grave.
+E: El desprendimiento de placenta es la causa obstétrica más frecuente de coagulación intravascular diseminada. La liberación de tromboplastina tisular placentaria a la circulación activa la coagulación de forma masiva, con consumo de plaquetas y factores, hipofibrinogenemia y fibrinólisis secundaria. Es más probable con desprendimientos extensos y óbito fetal. Se manifiesta con sangrado por sitios de punción, mucosas y herida. El fibrinógeno menor de 200 mg/dL predice hemorragia grave. El tratamiento es resolver la causa con la evacuación uterina y reponer con concentrados eritrocitarios, plasma fresco, crioprecipitados o fibrinógeno y plaquetas, además de ácido tranexámico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del desprendimiento prematuro de placenta normoinserta
+
+@ gyo|obstetric_hemorrhage|placental_abruption|3|risk_factor
+V: Mujer de 26 años con embarazo de 30 semanas que ingresa con dolor abdominal intenso, útero hipertónico y sangrado oscuro. Refiere consumo de cocaína hace 2 horas. Presión arterial de 160/100 mmHg.
+P: ¿Cuál es el factor de riesgo más probable del desprendimiento en este caso?
++ Consumo de cocaína con vasoconstricción e hipertensión aguda || La cocaína es un factor de riesgo importante de desprendimiento.
+- anchoring | Primiparidad || No es un factor relevante.
+- availability_heuristic | Edad menor de 30 años || No es un factor.
+- representativeness_heuristic | Diabetes gestacional || No es un factor principal.
+- premature_closure | Placenta previa || Es otra entidad.
+- base_rate_fallacy | Embarazo de feto femenino || No es relevante.
+- framing_effect | Actividad sexual en el embarazo || No es un factor establecido.
+- inattentional_blindness | Anemia leve || No causa desprendimiento.
+- focusing_illusion | Infección de vías urinarias tratada || No es un factor principal.
+- belief_bias | Estrés emocional como causa única || La cocaína explica el cuadro.
+E: Los factores de riesgo de desprendimiento de placenta incluyen enfermedad hipertensiva del embarazo, desprendimiento previo, consumo de cocaína y tabaco, traumatismo abdominal como accidentes y violencia, ruptura prematura de membranas prolongada, corioamnionitis, descompresión uterina súbita tras ruptura de membranas en polihidramnios o nacimiento del primer gemelo, edad materna avanzada, multiparidad y trombofilias. La cocaína produce vasoconstricción intensa y crisis hipertensivas que favorecen la separación de la placenta. En toda embarazada con desprendimiento debe interrogarse de forma privada sobre violencia y consumo de sustancias.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del desprendimiento prematuro de placenta normoinserta
+
+@ gyo|obstetric_hemorrhage|placental_abruption|3|next_step
+V: Mujer de 25 años con embarazo de 28 semanas que sufrió un choque automovilístico como conductora. Está estable, sin sangrado vaginal, con dolor abdominal leve y contracciones ocasionales. Frecuencia cardiaca fetal normal.
+P: ¿Cuál es la conducta más apropiada?
++ Monitorización fetal y de contracciones continua por al menos 4 a 6 horas || El desprendimiento puede manifestarse horas después del traumatismo.
+- anchoring | Egresar porque no hay sangrado || El desprendimiento puede ser oculto.
+- availability_heuristic | Cesárea inmediata || No hay indicación.
+- representativeness_heuristic | Ultrasonido como único estudio para descartar desprendimiento || Tiene baja sensibilidad.
+- premature_closure | Tocolíticos de rutina y egreso || No es adecuado.
+- framing_effect | Evitar cualquier radiografía aunque esté indicada || Los estudios necesarios no deben omitirse.
+- complexity_bias | Amniocentesis diagnóstica || No está indicada.
+- base_rate_fallacy | Inmunoglobulina anti D sin conocer el Rh || Solo si es Rh negativo.
+- belief_bias | El útero protege siempre al bebé de los golpes || Puede haber desprendimiento.
+- omission_bias | No vigilar porque el accidente fue leve || Aun los traumatismos menores pueden causarlo.
+E: El traumatismo abdominal en el embarazo, incluso leve, puede causar desprendimiento de placenta por la fuerza de cizallamiento entre el útero elástico y la placenta inelástica. Después de las 20 semanas se recomienda monitorización cardiotocográfica continua de al menos 4 a 6 horas. Si hay contracciones frecuentes, sangrado, dolor uterino, alteraciones de la frecuencia fetal o hipotensión materna, la vigilancia se prolonga a 24 horas. El ultrasonido no descarta el desprendimiento. Se aplica inmunoglobulina anti D a mujeres Rh negativo y se considera la prueba de Kleihauer Betke. La prioridad es la reanimación materna.
+R: Guía de Práctica Clínica de atención de la embarazada con traumatismo
+
+@ gyo|obstetric_hemorrhage|placental_abruption|3|data_interpretation
+V: Mujer de 33 años sometida a cesárea por desprendimiento de placenta. Durante la cirugía el útero se ve violáceo, con equimosis en toda la pared y sangre infiltrada en el miometrio, pero se contrae con uterotónicos.
+P: ¿Cuál es el hallazgo descrito?
++ Útero de Couvelaire por infiltración hemorrágica del miometrio || Es una complicación del desprendimiento que no obliga a histerectomía si el útero se contrae.
+- anchoring | Rotura uterina || No hay solución de continuidad.
+- availability_heuristic | Acretismo placentario || La placenta no está adherida.
+- representativeness_heuristic | Endometritis || Es una infección posterior.
+- premature_closure | Mioma uterino degenerado || No explica la infiltración difusa.
+- base_rate_fallacy | Coriocarcinoma || No corresponde.
+- framing_effect | Atonía uterina irreversible || El útero se contrae.
+- inattentional_blindness | Hematoma de ligamento ancho || La infiltración es miometrial.
+- focusing_illusion | Torsión uterina || No corresponde.
+- belief_bias | Útero muerto que siempre debe retirarse || La histerectomía no siempre es necesaria.
+E: El útero de Couvelaire o apoplejía uteroplacentaria es la extravasación de sangre al miometrio y a veces a la serosa en desprendimientos de placenta extensos. El útero se ve violáceo y equimótico. Puede asociarse a atonía uterina, pero la mayoría responde a uterotónicos, por lo que no es indicación de histerectomía por sí mismo. La histerectomía se reserva para hemorragia que no responde a medidas médicas y quirúrgicas conservadoras. Es importante vigilar la coagulación por el riesgo de coagulación intravascular diseminada y la hemorragia posparto.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del desprendimiento prematuro de placenta normoinserta
+
+@ gyo|obstetric_hemorrhage|postpartum_hemorrhage|2|diagnosis
+V: Mujer de 30 años con parto vaginal de un recién nacido de 4 200 g tras trabajo de parto prolongado con oxitocina. A los 20 minutos de la expulsión de la placenta completa presenta sangrado abundante. El útero está blando, por arriba del ombligo y no se contrae.
+P: ¿Cuál es el diagnóstico etiológico más probable de la hemorragia posparto?
++ Atonía uterina || Útero blando y no contraído tras macrosomía y trabajo de parto prolongado.
+- anchoring | Retención de restos placentarios || La placenta salió completa.
+- availability_heuristic | Desgarro del canal de parto || El útero estaría contraído.
+- representativeness_heuristic | Coagulopatía hereditaria || No hay antecedentes.
+- premature_closure | Inversión uterina || El útero se palpa en el abdomen.
+- base_rate_fallacy | Rotura uterina || Es rara sin cicatriz previa.
+- framing_effect | Acretismo placentario || La placenta se desprendió completa.
+- inattentional_blindness | Hematoma vulvar || Da dolor perineal y masa.
+- focusing_illusion | Sangrado normal del puerperio || Es abundante con útero atónico.
+- belief_bias | Sangrado que limpia el útero y es saludable || Es una hemorragia grave.
+E: La hemorragia posparto es la principal causa de muerte materna en el mundo. Se define como pérdida de 500 mL o más tras parto vaginal o de 1 000 mL o más tras cesárea, o cualquier pérdida con inestabilidad. Sus causas se recuerdan con las cuatro T, tono, que es la atonía uterina y causa la mayoría de los casos, trauma, tejido por restos placentarios y trombina por coagulopatía. Los factores de riesgo de atonía son sobredistensión uterina por macrosomía, gemelos o polihidramnios, trabajo de parto prolongado o precipitado, uso prolongado de oxitocina, corioamnionitis y multiparidad.
+R: Guía de Práctica Clínica de prevención y manejo de la hemorragia obstétrica
+
+@ gyo|obstetric_hemorrhage|postpartum_hemorrhage|2|prevention_screening
+V: Mujer de 27 años en el periodo expulsivo de un parto vaginal normal. El médico se prepara para la salida del recién nacido.
+P: ¿Cuál es la medida de prevención más eficaz de la hemorragia posparto?
++ Manejo activo del tercer periodo del trabajo de parto con oxitocina tras la salida del hombro anterior o del recién nacido || Reduce la hemorragia posparto por atonía.
+- anchoring | Esperar la expulsión espontánea de la placenta sin uterotónicos || Aumenta el riesgo de hemorragia.
+- availability_heuristic | Ergonovina a todas las mujeres de rutina || Está contraindicada en hipertensas y la oxitocina es preferida.
+- representativeness_heuristic | Tracción enérgica del cordón antes de que se contraiga el útero || Puede causar inversión uterina.
+- premature_closure | Masaje uterino como única medida antes de la placenta || La oxitocina es la medida principal.
+- framing_effect | Ácido tranexámico de rutina sin oxitocina || No sustituye a la oxitocina.
+- complexity_bias | Balón intrauterino profiláctico || No está indicado.
+- base_rate_fallacy | Revisión manual de cavidad a todas || No se recomienda de rutina.
+- belief_bias | Pujar fuerte después del parto expulsa mejor la placenta || No previene la hemorragia.
+- omission_bias | Evitar la oxitocina para no causar dolor || El beneficio es claro.
+E: El manejo activo del tercer periodo del trabajo de parto es la medida más eficaz para prevenir la hemorragia posparto. Su componente principal es la administración de un uterotónico, de preferencia oxitocina 10 UI intramuscular o intravenosa, tras la salida del hombro anterior o del recién nacido. Se complementa con tracción controlada del cordón por personal capacitado y vigilancia del tono uterino con masaje tras la expulsión de la placenta. Si no hay oxitocina pueden usarse carbetocina, ergonovina o misoprostol. Se recomienda pinzamiento tardío del cordón en recién nacidos que no requieren reanimación.
+R: Guía de Práctica Clínica de prevención y manejo de la hemorragia obstétrica
+
+@ gyo|obstetric_hemorrhage|postpartum_hemorrhage|3|initial_treatment
+V: Mujer de 31 años con hemorragia posparto por atonía uterina tras parto vaginal. Ha perdido 900 mL, frecuencia cardiaca de 110 y presión de 100/65 mmHg. Ya se canalizó con dos vías.
+P: ¿Cuál es el tratamiento inicial?
++ Masaje uterino bimanual, oxitocina intravenosa en infusión y ácido tranexámico en las primeras 3 horas, con reanimación con soluciones || Son las medidas iniciales para la atonía.
+- anchoring | Histerectomía inmediata || Se reserva para falla de medidas conservadoras.
+- availability_heuristic | Esperar que el útero se contraiga solo || Aumenta la pérdida.
+- representativeness_heuristic | Ergonovina en paciente con preeclampsia || Está contraindicada en hipertensas.
+- premature_closure | Solo transfusión sin uterotónicos || No trata la causa.
+- framing_effect | Antibióticos como primera medida || No tratan la atonía.
+- complexity_bias | Embolización arterial como primer paso || Se usa si fallan las medidas iniciales.
+- base_rate_fallacy | Desmopresina || No trata la atonía.
+- belief_bias | Colocar hielo en el abdomen como único tratamiento || No es eficaz.
+- omission_bias | Retrasar el ácido tranexámico más allá de 3 horas || Pierde eficacia.
+E: El manejo de la hemorragia posparto por atonía incluye pedir ayuda, activar el código rojo obstétrico, canalizar dos vías, reponer volumen, vaciar la vejiga, masaje uterino y compresión bimanual. Los uterotónicos de primera línea son oxitocina en infusión, seguida de ergonovina si no hay hipertensión, carbetocina o misoprostol. El ácido tranexámico 1 g intravenoso, administrado en las primeras 3 horas, reduce la mortalidad por sangrado. Si no responde se usa balón de taponamiento intrauterino, y después medidas quirúrgicas como suturas compresivas de B Lynch, ligadura de arterias uterinas o hipogástricas y, como último recurso, histerectomía.
+R: Guía de Práctica Clínica de prevención y manejo de la hemorragia obstétrica
+
+@ gyo|obstetric_hemorrhage|postpartum_hemorrhage|3|diagnosis
+V: Mujer de 25 años con parto vaginal hace 30 minutos y sangrado rojo brillante continuo. El útero está firme y bien contraído por debajo del ombligo. La placenta salió completa. Se aplicó episiotomía.
+P: ¿Cuál es el diagnóstico etiológico más probable de la hemorragia?
++ Desgarro del canal de parto o de la episiotomía || Sangrado continuo con útero bien contraído.
+- anchoring | Atonía uterina || El útero está firme.
+- availability_heuristic | Retención de restos placentarios || La placenta salió completa y el útero está contraído.
+- representativeness_heuristic | Coagulopatía || Es menos probable sin otros sitios de sangrado.
+- premature_closure | Inversión uterina || El útero se palpa normal.
+- base_rate_fallacy | Rotura uterina || Es rara sin cicatriz.
+- framing_effect | Acretismo placentario || La placenta salió completa.
+- inattentional_blindness | Sangrado por hemorroides || No explica un sangrado abundante.
+- focusing_illusion | Loquios normales || El sangrado continuo es anormal.
+- belief_bias | Sangrado esperado tras la episiotomía || El sangrado continuo requiere revisión.
+E: Cuando hay hemorragia posparto con el útero bien contraído debe sospecharse trauma del canal de parto, como desgarros cervicales, vaginales o perineales, extensión de la episiotomía o hematomas. Se realiza revisión sistemática del canal con buena iluminación y analgesia, y se reparan las lesiones. Los factores de riesgo incluyen parto instrumentado, macrosomía, expulsivo precipitado y episiotomía. Los hematomas vulvares o vaginales producen dolor intenso y masa. Siempre debe revisarse también la integridad de la placenta y descartarse una alteración de la coagulación.
+R: Guía de Práctica Clínica de prevención y manejo de la hemorragia obstétrica
+
+@ gyo|obstetric_hemorrhage|postpartum_hemorrhage|4|diagnosis
+V: Mujer de 28 años primigesta, con tracción del cordón antes de que se desprendiera la placenta. Presenta dolor intenso, sangrado abundante y choque desproporcionado a la pérdida visible. No se palpa el fondo uterino en el abdomen y en la vagina se observa una masa rojiza.
+P: ¿Cuál es el diagnóstico más probable?
++ Inversión uterina || Masa vaginal, ausencia de fondo uterino palpable y choque tras tracción del cordón.
+- anchoring | Atonía uterina || El útero se palparía blando en el abdomen.
+- availability_heuristic | Prolapso uterino || No ocurre de forma aguda en el alumbramiento.
+- representativeness_heuristic | Mioma pediculado parido || No explica la ausencia del fondo uterino.
+- premature_closure | Desgarro vaginal || No explica la masa ni la ausencia del fondo.
+- base_rate_fallacy | Retención placentaria simple || El fondo uterino se palparía.
+- framing_effect | Hematoma vaginal || No explica la ausencia del fondo.
+- inattentional_blindness | Rotura uterina || No explica la masa vaginal.
+- focusing_illusion | Embolia de líquido amniótico || No explica la masa vaginal.
+- belief_bias | Salida normal de la placenta || La ausencia del fondo indica inversión.
+E: La inversión uterina es una urgencia rara en la que el fondo uterino se invagina hacia la cavidad y puede salir por la vagina. Se asocia a tracción excesiva del cordón antes del desprendimiento placentario, presión fúndica, placenta fúndica o acreta y relajación uterina. Se manifiesta con hemorragia, dolor intenso, choque desproporcionado por estímulo vagal, ausencia del fondo uterino al palpar el abdomen y masa en la vagina. El tratamiento es la reposición manual inmediata con la maniobra de Johnson, sin retirar la placenta, con relajantes uterinos si es necesario, y después uterotónicos. Si falla se recurre a cirugía.
+R: Guía de Práctica Clínica de prevención y manejo de la hemorragia obstétrica
+
+@ gyo|obstetric_hemorrhage|postpartum_hemorrhage|3|data_interpretation
+V: Mujer de 29 años con hemorragia posparto. Frecuencia cardiaca de 120 por minuto y presión arterial sistólica de 90 mmHg.
+P: ¿Qué indica el índice de choque de esta paciente?
++ Índice de choque de 1.3, que indica pérdida importante y probable necesidad de transfusión || Un índice mayor de 0.9 a 1 sugiere hemorragia grave.
+- anchoring | Índice normal porque la presión es mayor de 80 || El índice integra frecuencia y presión.
+- availability_heuristic | Índice de 0.75 sin relevancia || El cálculo es incorrecto.
+- representativeness_heuristic | Indica solo ansiedad materna || La taquicardia refleja pérdida de volumen.
+- premature_closure | Indica sepsis || El contexto es hemorrágico.
+- base_rate_fallacy | Indica hipertensión || La presión está baja.
+- framing_effect | Índice de 2 que indica paro inminente || El cálculo es 120 entre 90.
+- inattentional_blindness | Indica efecto de la oxitocina || No explica el índice.
+- focusing_illusion | Indica dolor por la episiotomía || No explica el índice alto.
+- belief_bias | Las mujeres jóvenes compensan y no hay que preocuparse || La compensación oculta pérdidas graves.
+E: El índice de choque es la frecuencia cardiaca dividida entre la presión arterial sistólica. En obstetricia un valor normal es de 0.7 a 0.9. Un índice mayor de 0.9 a 1 se asocia a pérdidas importantes, necesidad de transfusión y de ingreso a terapia intensiva. Es útil porque las mujeres jóvenes compensan bien y la presión puede mantenerse hasta pérdidas de 30 a 40% del volumen. La estimación visual de la pérdida suele subestimarla. Junto con la clínica, el índice ayuda a activar el código rojo y la transfusión masiva de forma temprana.
+R: Guía de Práctica Clínica de prevención y manejo de la hemorragia obstétrica
+
+@ gyo|obstetric_hemorrhage|postpartum_hemorrhage|3|diagnosis
+V: Mujer de 32 años con parto vaginal hace 10 días que presenta sangrado vaginal abundante súbito. Útero subinvolucionado, blando y con orificio cervical abierto. El ultrasonido muestra material ecogénico en la cavidad.
+P: ¿Cuál es el diagnóstico etiológico más probable del sangrado?
++ Retención de restos placentarios || Hemorragia posparto tardía con útero subinvolucionado y material intracavitario.
+- anchoring | Atonía uterina primaria inmediata || Ocurre en las primeras 24 horas.
+- availability_heuristic | Desgarro del canal de parto || Sangraría desde el inicio.
+- representativeness_heuristic | Menstruación normal || No ocurre a los 10 días con lactancia.
+- premature_closure | Cáncer cervicouterino || No explica el cuadro.
+- base_rate_fallacy | Enfermedad trofoblástica gestacional posparto como primera causa || Es menos frecuente.
+- framing_effect | Endometritis sin restos || El ultrasonido muestra material en cavidad.
+- inattentional_blindness | Coagulopatía hereditaria || Es menos probable.
+- focusing_illusion | Pólipo endometrial || No explica el cuadro posparto.
+- belief_bias | Limpieza normal del útero que no requiere atención || Es una hemorragia.
+E: La hemorragia posparto secundaria o tardía ocurre entre las 24 horas y las 12 semanas posparto. Sus causas más comunes son la retención de restos placentarios, la endometritis y la subinvolución del lecho placentario. Se manifiesta con sangrado abundante, útero blando y subinvolucionado y cérvix abierto, a veces con fiebre. El ultrasonido apoya la retención. El tratamiento incluye uterotónicos, antibióticos si hay infección y evacuación uterina por aspiración o legrado cuidadoso. Debe descartarse enfermedad trofoblástica gestacional con gonadotropina coriónica si el sangrado persiste.
+R: Guía de Práctica Clínica de prevención y manejo de la hemorragia obstétrica
+
+@ gyo|obstetric_hemorrhage|postpartum_hemorrhage|4|next_step
+V: Mujer de 34 años con hemorragia posparto por atonía que no responde a masaje, oxitocina, ergonovina, misoprostol y ácido tranexámico. Sigue sangrando y tiene presión de 85/50 mmHg pese a transfusión. Desea más hijos.
+P: ¿Cuál es el siguiente paso?
++ Colocar balón de taponamiento intrauterino como puente mientras se prepara la cirugía conservadora || Es la siguiente medida tras la falla de los uterotónicos.
+- anchoring | Repetir la misma dosis de oxitocina y esperar || Ya falló el tratamiento médico.
+- availability_heuristic | Histerectomía como primera medida quirúrgica sin otras opciones || Se intentan medidas conservadoras si es posible.
+- representativeness_heuristic | Más misoprostol en dosis repetidas || Ya falló.
+- premature_closure | Solo transfusión sin control del sangrado || No resuelve la causa.
+- framing_effect | Antibióticos de amplio espectro como medida principal || No detienen el sangrado.
+- complexity_bias | Tomografía abdominal antes de actuar || Retrasa el tratamiento.
+- status_quo_bias | Mantener el manejo médico otra hora || Aumenta la mortalidad.
+- belief_bias | Elevar las piernas como tratamiento definitivo || No controla la hemorragia.
+- omission_bias | Evitar procedimientos invasivos por su deseo de fertilidad || Puede intentarse conservar el útero.
+E: Cuando la hemorragia posparto por atonía no responde a los uterotónicos se escalan las medidas de forma escalonada y rápida. El balón de taponamiento intrauterino, como el de Bakri o uno improvisado con condón, es eficaz y puede servir como puente. Si falla se procede a laparotomía con suturas compresivas como B Lynch, ligadura de arterias uterinas u ováricas e hipogástricas, o embolización arterial si hay disponibilidad y la paciente lo permite. La histerectomía se realiza si estas medidas fallan o la paciente está en riesgo vital. El traje antichoque no neumático ayuda durante el traslado.
+R: Guía de Práctica Clínica de prevención y manejo de la hemorragia obstétrica
