@@ -54,7 +54,7 @@
   - [x] 1. Modo enfoque en pregunta, tarjeta y retroalimentación. Encabezado delgado y barra fija de acciones en el teléfono, dos columnas en computadora
   - [x] 2. Repasar y Simular con el botón de empezar arriba, ramas en acordeón y mazos, temas y límites plegados con resumen. En el teléfono Repasar pasó de 4613 a 844 px de alto y Simular de 4256 a 934
   - [x] 3. Progreso en una sola página. Cifras en una fila, tus 3 focos de la semana con atajo para practicar (el simulador abre con el tema o las negativas ya elegidos), lecturas de Conócete como filas que se abren y ramas que se abren a sus subespecialidades, con las que no tienen datos ocultas. En el teléfono pasó de 8362 a 2482 px de alto
-  - [ ] 4. Marco de pantallas
+  - [x] 4. Marco de pantallas. La explicación de cada pantalla pasa a un ícono de información, el aviso de demo queda en una línea delgada y es la única etiqueta de Datos simulados en los encabezados, Inicio y Perfil ya no repiten racha y nivel, Perfil sin el botón de Configuración duplicado y Agregar mazo dentro de la tarjeta de Repasar
   - [ ] 5. Configuración por secciones
   - [ ] 6. Inicio y Mazos
 - Siguiente. Ricardo prueba su cuenta y se hace dueño. Luego segunda parte de la nube con bitácora, usuarios y banco. Después Fase B del banco con trampas explícitas y luego Fase D con IA en modo simulado, como pidió Ricardo. Después bloque 5 de pagos

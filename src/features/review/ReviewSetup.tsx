@@ -2,7 +2,7 @@
 // tocan. Mazos, ramas y límites quedan plegados con un resumen, porque se cambian poco. La última
 // selección se recuerda en este dispositivo.
 import { Play } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import type { Card as CardEntity } from '@/data/schemas/decks';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
@@ -15,6 +15,7 @@ import { ALL_TOPICS } from '../shared/topics';
 import { loadSelection, saveSelection, type ReviewMode, type ReviewSelection } from './selection';
 
 export function ReviewSetup({
+  addDeck,
   cards,
   deckNames,
   topicOfCard,
@@ -23,6 +24,8 @@ export function ReviewSetup({
   onSaveLimits,
   onStart,
 }: {
+  /** Atajo para agregar un mazo, junto al título */
+  addDeck?: ReactNode;
   cards: CardEntity[];
   deckNames: Map<string, string>;
   /** Subespecialidad de cada tarjeta. null si su nota no la trae */
@@ -51,8 +54,11 @@ export function ReviewSetup({
 
   return (
     <Card aria-labelledby="que-repasar">
-      <CardHeader className="mb-3">
-        <CardTitle id="que-repasar">{text.title}</CardTitle>
+      <CardHeader className="mb-3 flex-row flex-wrap items-center justify-between gap-2">
+        <CardTitle id="que-repasar" className="text-base sm:text-lg">
+          {text.title}
+        </CardTitle>
+        {addDeck}
       </CardHeader>
       <div className="flex flex-col gap-3">
         <fieldset>

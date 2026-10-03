@@ -35,7 +35,6 @@ import { ActionDock } from '@/ui/components/action-dock';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
-import { SimulatedDataLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { followedDeckIds } from '../decks/followed';
 import { buildSnapshot } from '../home/snapshot';
@@ -112,13 +111,9 @@ function ReviewLoader({ session }: { session: ReadySession }) {
   if (selection === null) {
     return (
       <>
-        <ScreenHeader
-          title={t.screens.review.title}
-          description={t.screens.review.description}
-          badges={session.isDemo ? <SimulatedDataLabel /> : undefined}
-          actions={<AddDeckButton />}
-        />
+        <ScreenHeader title={t.screens.review.title} description={t.screens.review.description} />
         <ReviewSetup
+          addDeck={<AddDeckButton />}
           cards={cards}
           deckNames={deckNames}
           topicOfCard={topicOfCard}
@@ -161,7 +156,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
 
 function AddDeckButton() {
   return (
-    <Button asChild variant="secondary" size="sm">
+    <Button asChild variant="ghost" size="sm">
       <Link to={screenPath('decks')}>
         <Plus aria-hidden />
         {t.reviewSetup.addDeck}
@@ -415,7 +410,6 @@ function ReviewSession({
       <ScreenHeader
         title={t.screens.review.title}
         description={t.screens.review.description}
-        badges={session.isDemo ? <SimulatedDataLabel /> : undefined}
         actions={sessionActions}
       />
       {extras}
@@ -479,7 +473,6 @@ function ReviewSession({
             </span>
           </>
         }
-        badges={session.isDemo ? <SimulatedDataLabel /> : undefined}
         actions={
           <>
             {sessionActions}

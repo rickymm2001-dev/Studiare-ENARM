@@ -19,7 +19,6 @@ import { toneClasses } from '@/ui/branches';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
-import { SimulatedDataLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { deckBranch } from '../decks/deckBranch';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
@@ -72,11 +71,7 @@ function Progress({ session }: { session: ReadySession }) {
   const questions = bank?.questions;
 
   const header = (
-    <ScreenHeader
-      title={t.screens.progress.title}
-      description={t.progress.description}
-      badges={session.isDemo ? <SimulatedDataLabel /> : undefined}
-    />
+    <ScreenHeader title={t.screens.progress.title} description={t.progress.description} />
   );
   if (
     events === undefined ||
