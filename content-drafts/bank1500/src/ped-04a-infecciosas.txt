@@ -1,0 +1,255 @@
+@ ped|pediatric_infectious|acute_diarrhea_dehydration|2|data_interpretation
+V: Niño de 18 meses con diarrea líquida de 2 días. Está inquieto e irritable, tiene ojos hundidos, bebe con avidez y el signo del pliegue se recupera lentamente. Pulso radial presente y llenado capilar de 2 segundos.
+P: ¿Qué indica la valoración del estado de hidratación?
++ Deshidratación leve a moderada, plan B de hidratación || Inquietud, ojos hundidos, sed intensa y pliegue lento son dos o más signos de algún grado de deshidratación.
+- anchoring | Deshidratación grave, plan C || Requiere letargo, incapacidad para beber o pliegue muy lento.
+- availability_heuristic | Sin deshidratación, plan A || Tiene varios signos de deshidratación.
+- representativeness_heuristic | Choque hipovolémico || El pulso y el llenado capilar son adecuados.
+- premature_closure | Desnutrición grave || No hay datos antropométricos que lo indiquen.
+- framing_effect | Sepsis || No hay datos de infección sistémica.
+- complexity_bias | Requiere electrolitos séricos antes de clasificar || La clasificación es clínica.
+- base_rate_fallacy | Hipernatremia grave || No se puede afirmar sin estudios y no cambia la clasificación clínica.
+- belief_bias | Los ojos hundidos son por desvelo || Son un signo de deshidratación.
+- omission_bias | No clasificar hasta tener laboratorio || Retrasa el tratamiento.
+E: La Organización Mundial de la Salud clasifica la deshidratación por diarrea con signos clínicos. Sin deshidratación se trata con plan A en casa, con más líquidos, vida suero oral después de cada evacuación y alimentación continua. Con dos o más signos como inquietud o irritabilidad, ojos hundidos, sed con avidez y pliegue que se recupera lentamente, hay algún grado de deshidratación y se usa plan B, con solución de rehidratación oral a 50 a 100 mL/kg en 4 horas en la unidad. La deshidratación grave, con letargo, incapacidad para beber o pliegue muy lento, requiere plan C con soluciones intravenosas.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la diarrea aguda en niños ;; Organización Mundial de la Salud. Tratamiento de la diarrea
+
+@ ped|pediatric_infectious|acute_diarrhea_dehydration|3|initial_treatment
+V: Niña de 2 años y 12 kg con diarrea y vómito. Está letárgica, no puede beber, tiene ojos muy hundidos, pliegue que tarda más de 2 segundos en recuperarse, pulso débil y llenado capilar de 4 segundos.
+P: ¿Cuál es el tratamiento inicial?
++ Plan C con solución intravenosa, Hartmann o salina, a 100 mL/kg repartidos en las primeras horas según la edad || Deshidratación grave con datos de choque.
+- anchoring | Plan B con vida suero oral en 4 horas || No puede beber y está letárgica.
+- availability_heuristic | Antidiarreico como loperamida || Está contraindicado en niños.
+- representativeness_heuristic | Antibiótico intravenoso como primera medida || La prioridad es la rehidratación.
+- premature_closure | Solución glucosada al 5% sola || No repone sodio ni corrige el choque.
+- framing_effect | Esperar a que tolere la vía oral || Retrasa el tratamiento.
+- complexity_bias | Tomar coprocultivo antes de hidratar || Retrasa la rehidratación.
+- base_rate_fallacy | Transfusión de concentrado eritrocitario || No hay sangrado.
+- belief_bias | Dar refresco o jugo para hidratar || Son hiperosmolares y empeoran la diarrea.
+- omission_bias | Suspender toda la alimentación por días || La alimentación debe reiniciarse pronto.
+E: La deshidratación grave es una urgencia y se trata con plan C. Se administran 100 mL/kg de solución de Hartmann o salina al 0.9% por vía intravenosa, en menores de un año 30 mL/kg en la primera hora y 70 mL/kg en las siguientes 5 horas, y en mayores 30 mL/kg en 30 minutos y 70 mL/kg en 2 horas y media. Se reevalúa con frecuencia y en cuanto el niño pueda beber se agrega solución oral. Si no hay acceso venoso se usa la vía intraósea o sonda nasogástrica. Los antidiarreicos no se recomiendan en niños y los antibióticos solo se indican en disentería o cólera.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la diarrea aguda en niños ;; Organización Mundial de la Salud. Tratamiento de la diarrea
+
+@ ped|pediatric_infectious|acute_diarrhea_dehydration|2|treatment_of_choice
+V: Niño de 3 años con diarrea líquida de 2 días sin sangre, sin deshidratación, que come y bebe bien. Vive en una zona donde la deficiencia de zinc es común.
+P: ¿Cuál es el tratamiento de elección además de los líquidos?
++ Continuar la alimentación habitual y dar zinc oral por 10 a 14 días || El zinc reduce la duración y gravedad de la diarrea.
+- anchoring | Antibiótico empírico || La mayoría de las diarreas son virales.
+- availability_heuristic | Loperamida || Contraindicada en niños.
+- representativeness_heuristic | Dieta de líquidos claros por 3 días || El ayuno empeora la nutrición.
+- premature_closure | Suspender los lácteos de forma permanente || No es necesario en la mayoría.
+- framing_effect | Antieméticos de rutina || No se recomiendan de rutina.
+- complexity_bias | Coprocultivo y coproparasitoscópico seriado de rutina || No se requieren en diarrea acuosa sin complicaciones.
+- base_rate_fallacy | Metronidazol empírico || No hay datos de giardiasis o amebiasis.
+- belief_bias | Dar té de manzanilla con azúcar en lugar de suero || No repone electrolitos.
+- omission_bias | No dar alimentos sólidos hasta que cese la diarrea || La alimentación continua acorta la recuperación.
+E: La mayoría de las diarreas agudas en niños son virales, sobre todo por rotavirus y norovirus, y se autolimitan. El tratamiento se basa en prevenir o corregir la deshidratación con solución de rehidratación oral de baja osmolaridad, mantener la alimentación habitual y dar zinc, 10 mg al día en menores de 6 meses y 20 mg en mayores, durante 10 a 14 días. El zinc disminuye la duración y la gravedad del episodio y reduce los episodios en los meses siguientes. No se recomiendan antidiarreicos, y los antibióticos se reservan para disentería, cólera o infecciones específicas.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la diarrea aguda en niños ;; Organización Mundial de la Salud. Tratamiento de la diarrea
+
+@ ped|pediatric_infectious|acute_diarrhea_dehydration|3|treatment_of_choice
+V: Niño de 4 años con fiebre de 39 °C, dolor abdominal tipo cólico, pujo, tenesmo y evacuaciones frecuentes de poco volumen con moco y sangre desde hace un día. Hidratado y sin datos de complicación.
+P: ¿Cuál es el tratamiento antibiótico de elección?
++ Azitromicina oral o una cefalosporina de tercera generación según la resistencia local || Disentería en niños, probablemente por Shigella.
+- anchoring | Metronidazol como primera elección || Se usa en amebiasis, menos frecuente en niños pequeños.
+- availability_heuristic | Trimetoprim con sulfametoxazol de rutina || La resistencia es alta.
+- representativeness_heuristic | Loperamida para disminuir las evacuaciones || Está contraindicada en disentería.
+- premature_closure | Solo solución oral sin antibiótico || La disentería requiere antibiótico.
+- framing_effect | Amoxicilina || No cubre Shigella de forma adecuada.
+- complexity_bias | Colonoscopia diagnóstica || No está indicada.
+- base_rate_fallacy | Vancomicina oral || Se usa en Clostridioides difficile.
+- belief_bias | Ayuno total por 3 días || Empeora el estado nutricional.
+- omission_bias | Esperar el coprocultivo para decidir || El tratamiento empírico se inicia de inmediato.
+E: La diarrea con sangre o disentería en niños se debe con mayor frecuencia a Shigella, aunque también a Campylobacter, Salmonella y Escherichia coli enteroinvasiva. Se caracteriza por fiebre, cólico, pujo, tenesmo y evacuaciones pequeñas con moco y sangre. El tratamiento empírico con antibiótico acorta la enfermedad y reduce complicaciones. Se recomiendan azitromicina o ceftriaxona, o ciprofloxacino según la resistencia local. El trimetoprim con sulfametoxazol y la ampicilina tienen resistencia elevada. Los antidiarreicos están contraindicados. Se vigilan complicaciones como síndrome urémico hemolítico, crisis convulsivas y megacolon tóxico.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la diarrea aguda en niños ;; Organización Mundial de la Salud. Tratamiento de la diarrea
+
+@ ped|pediatric_infectious|acute_diarrhea_dehydration|4|complication_prognosis
+V: Niño de 3 años que hace 7 días tuvo diarrea con sangre después de comer hamburguesa poco cocida. Ahora presenta palidez, petequias y disminución de la orina. Hemoglobina de 7 g/dL con esquistocitos en el frotis, plaquetas de 45 000 y creatinina de 2.4 mg/dL.
+P: ¿Cuál es la complicación que presenta?
++ Síndrome urémico hemolítico || Anemia hemolítica microangiopática, trombocitopenia y lesión renal tras diarrea por Escherichia coli productora de toxina Shiga.
+- anchoring | Deshidratación grave con insuficiencia prerrenal || No explica la hemólisis ni la trombocitopenia.
+- availability_heuristic | Púrpura trombocitopénica inmune || No da hemólisis ni lesión renal.
+- representativeness_heuristic | Leucemia aguda || No explica los esquistocitos tras la diarrea.
+- premature_closure | Sepsis con coagulación intravascular diseminada || Los tiempos de coagulación suelen ser normales en el síndrome urémico.
+- base_rate_fallacy | Púrpura trombocitopénica trombótica || Es más rara en niños y se asocia a deficiencia de ADAMTS13.
+- framing_effect | Glomerulonefritis postestreptocócica || No da hemólisis ni trombocitopenia.
+- inattentional_blindness | Anemia ferropénica || No explica los esquistocitos.
+- focusing_illusion | Intoxicación alimentaria por estafilococo || Da vómito temprano sin estas complicaciones.
+- belief_bias | Anemia por la diarrea con sangre solamente || El sangrado no explica la plaquetopenia ni la falla renal.
+E: El síndrome urémico hemolítico es la causa más frecuente de lesión renal aguda en niños pequeños. La forma típica sigue a una diarrea con sangre por Escherichia coli productora de toxina Shiga, como O157:H7, adquirida por carne mal cocida, lácteos no pasteurizados o agua contaminada. La toxina daña el endotelio y produce la tríada de anemia hemolítica microangiopática con esquistocitos, trombocitopenia y lesión renal aguda. El tratamiento es de soporte, con manejo de líquidos y electrolitos, transfusión si es necesario y diálisis en casos graves. Los antibióticos y antidiarreicos pueden aumentar el riesgo, por lo que se evitan en la diarrea por esta bacteria.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome urémico hemolítico
+
+@ ped|pediatric_infectious|acute_diarrhea_dehydration|3|prevention_screening
+V: Madre de un lactante de 2 meses en una comunidad con brotes de diarrea grave en menores de 2 años. Pregunta qué medidas lo protegerán.
+P: ¿Cuál es la medida de prevención más eficaz contra la diarrea grave por rotavirus?
++ Vacunación contra rotavirus junto con lactancia materna y lavado de manos || La vacuna reduce de forma importante la diarrea grave y las hospitalizaciones.
+- anchoring | Antibióticos profilácticos mensuales || No previenen diarreas virales y generan resistencia.
+- availability_heuristic | Hervir solo los biberones una vez por semana || La higiene debe ser constante.
+- representativeness_heuristic | Suspender la lactancia para evitar contagios || La lactancia protege.
+- premature_closure | Dar zinc de forma continua a todos los lactantes || No sustituye a la vacuna.
+- framing_effect | Usar probióticos como única medida || Su efecto preventivo es limitado.
+- complexity_bias | Realizar coprocultivos periódicos al lactante sano || No previene la enfermedad.
+- base_rate_fallacy | Vacunar solo a los niños desnutridos || Todos los lactantes deben vacunarse.
+- belief_bias | Dar té de hierbas para fortalecer el estómago || No protege.
+- omission_bias | No vacunar por miedo a invaginación || El beneficio supera ampliamente el riesgo.
+E: El rotavirus es la principal causa de diarrea grave con deshidratación en menores de 5 años. La vacuna oral contra rotavirus, aplicada a partir de los 2 meses, reduce de forma importante la diarrea grave, las hospitalizaciones y las muertes. Otras medidas preventivas son la lactancia materna exclusiva los primeros 6 meses, el lavado de manos con agua y jabón, el consumo de agua segura, el manejo higiénico de alimentos, la disposición adecuada de excretas y la suplementación con vitamina A en zonas de deficiencia. El riesgo de invaginación con la vacuna es muy bajo comparado con su beneficio.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la diarrea aguda en niños ;; Secretaría de Salud. Esquema nacional de vacunación
+
+@ ped|pediatric_infectious|acute_diarrhea_dehydration|4|complication_prognosis
+V: Lactante de 8 meses con diarrea de 3 días que fue hidratado en casa con fórmula preparada muy concentrada. Está irritable, con llanto agudo, piel pastosa y signos de deshidratación menos marcados de lo esperado. Sodio sérico de 162 mEq/L.
+P: ¿Cuál es el riesgo principal si se corrige este trastorno demasiado rápido?
++ Edema cerebral con crisis convulsivas || El descenso rápido del sodio introduce agua a las neuronas adaptadas a la hiperosmolaridad.
+- anchoring | Mielinólisis pontina central || Se asocia a la corrección rápida de la hiponatremia.
+- availability_heuristic | Hipoglucemia grave || No es el riesgo principal de la corrección.
+- representativeness_heuristic | Insuficiencia cardiaca por sobrecarga de sodio || No es la complicación característica.
+- premature_closure | Hipercalemia || No se relaciona con la corrección del sodio.
+- base_rate_fallacy | Trombosis de senos venosos como única complicación || Puede ocurrir por la hipernatremia, pero no por corregirla rápido.
+- framing_effect | Alcalosis metabólica || No es la complicación de la corrección.
+- inattentional_blindness | Íleo paralítico || No es el riesgo principal.
+- focusing_illusion | Hipocalcemia || No es el riesgo principal.
+- belief_bias | Ningún riesgo, entre más rápido mejor || La corrección rápida es peligrosa.
+E: La deshidratación hipernatrémica ocurre con sodio mayor de 150 mEq/L, a menudo por fórmulas o sueros mal preparados. Como el líquido se desplaza del espacio intracelular al extracelular, los signos de deshidratación pueden subestimarse, y la piel se siente pastosa. Hay irritabilidad, llanto agudo, hipertonía y crisis. Las neuronas se adaptan generando osmoles idiogénicos, por lo que un descenso rápido del sodio introduce agua a las células y produce edema cerebral y convulsiones. Se recomienda disminuir el sodio no más de 10 a 12 mEq/L en 24 horas, idealmente con rehidratación oral o intravenosa lenta en 48 horas.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la diarrea aguda en niños
+
+@ ped|pediatric_infectious|acute_diarrhea_dehydration|3|next_step
+V: Niño de 2 años con diarrea leve que recibió plan B con vida suero oral durante 4 horas en la unidad. Al reevaluarlo ya no tiene signos de deshidratación, bebe normal y orina.
+P: ¿Cuál es el siguiente paso?
++ Pasar a plan A en casa con alimentación continua, más líquidos, zinc y enseñar signos de alarma || Ya está hidratado.
+- anchoring | Repetir plan B otras 4 horas || Ya no tiene deshidratación.
+- availability_heuristic | Iniciar plan C intravenoso || No hay deshidratación grave.
+- representativeness_heuristic | Hospitalizar para vigilancia 48 horas || No es necesario.
+- premature_closure | Indicar ayuno hasta que cese la diarrea || La alimentación debe continuar.
+- framing_effect | Iniciar antibiótico al egreso || No hay indicación.
+- complexity_bias | Solicitar electrolitos antes del egreso || No son necesarios.
+- status_quo_bias | Mantenerlo en la unidad hasta que la diarrea desaparezca || Puede manejarse en casa.
+- belief_bias | Dar refresco sin gas para recuperar energía || No es adecuado para hidratar.
+- omission_bias | No explicar signos de alarma para no preocupar a la madre || La madre debe saber cuándo regresar.
+E: Después del plan B se reevalúa al niño. Si ya no tiene signos de deshidratación se pasa a plan A, que se aplica en casa. El plan A se basa en tres reglas, dar más líquidos de lo habitual, incluida solución de rehidratación oral después de cada evacuación, continuar la alimentación y la lactancia, y regresar si aparecen signos de alarma. Estos son sed intensa, evacuaciones muy frecuentes, vómito persistente, sangre en heces, fiebre alta, no come ni bebe o se ve más enfermo. Se agrega zinc por 10 a 14 días. Si persiste deshidratado se repite el plan B, y si empeora se pasa a plan C.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la diarrea aguda en niños ;; Organización Mundial de la Salud. Tratamiento de la diarrea
+
+@ ped|pediatric_infectious|exanthematous_diseases|3|diagnosis
+V: Niño de 3 años sin vacunas con fiebre de 39.5 °C, tos, rinorrea y conjuntivitis desde hace 4 días. En la mucosa oral frente a los molares tiene pequeñas manchas blanquecinas sobre fondo eritematoso. Hoy aparece un exantema maculopapular que inició detrás de las orejas y en la cara y desciende al tronco.
+P: ¿Cuál es el diagnóstico más probable?
++ Sarampión || Pródromo de tos, coriza y conjuntivitis, manchas de Koplik y exantema descendente.
+- anchoring | Rubéola || Es más leve, con adenopatías retroauriculares y sin manchas de Koplik.
+- availability_heuristic | Exantema súbito || El exantema aparece cuando cede la fiebre.
+- representativeness_heuristic | Escarlatina || Da exantema áspero y lengua en fresa.
+- premature_closure | Enfermedad de Kawasaki || No explica las manchas de Koplik.
+- base_rate_fallacy | Dengue || El cuadro respiratorio y las manchas orientan a sarampión.
+- framing_effect | Reacción alérgica a medicamento || No explica el pródromo ni las manchas orales.
+- inattentional_blindness | Eritema infeccioso || Da mejillas abofeteadas sin pródromo intenso.
+- focusing_illusion | Varicela || Da vesículas en diferentes etapas.
+- belief_bias | Sarpullido por calor || No explica la fiebre alta ni el pródromo.
+E: El sarampión es una enfermedad viral muy contagiosa prevenible por vacunación. Tiene un periodo prodrómico de 3 a 5 días con fiebre alta, tos, coriza y conjuntivitis, y las manchas de Koplik en la mucosa yugal, que son patognomónicas. Después aparece un exantema maculopapular que inicia detrás de las orejas y en la cara y desciende al tronco y las extremidades, y desaparece en el mismo orden dejando descamación fina. Las complicaciones incluyen neumonía, otitis, diarrea, encefalitis y panencefalitis esclerosante subaguda. Es de notificación inmediata. El tratamiento es de soporte con vitamina A.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del sarampión ;; Manual de procedimientos de vigilancia epidemiológica de enfermedad febril exantemática
+
+@ ped|pediatric_infectious|exanthematous_diseases|2|diagnosis
+V: Lactante de 10 meses con fiebre de 39.8 °C durante 3 días, sin otros síntomas, que se mantenía activo. Al ceder la fiebre aparece un exantema maculopapular rosado en el tronco que se extiende al cuello y no causa comezón.
+P: ¿Cuál es el diagnóstico más probable?
++ Exantema súbito por herpesvirus humano 6 || Fiebre alta de 3 días seguida de exantema al desaparecer la fiebre.
+- anchoring | Sarampión || El exantema aparece con fiebre alta y pródromo respiratorio.
+- availability_heuristic | Reacción alérgica al paracetamol || No explica la secuencia típica.
+- representativeness_heuristic | Rubéola || El exantema inicia en la cara con adenopatías.
+- premature_closure | Escarlatina || Da exantema áspero con faringitis.
+- base_rate_fallacy | Enfermedad de Kawasaki || Requiere fiebre de 5 días y otros criterios.
+- framing_effect | Sepsis meningocócica || El exantema es petequial y el niño se ve grave.
+- inattentional_blindness | Eritema infeccioso || Da mejillas abofeteadas.
+- focusing_illusion | Varicela || Da vesículas.
+- belief_bias | Exantema por dentición || La dentición no da fiebre alta ni exantema.
+E: El exantema súbito o roséola es causado por el herpesvirus humano 6 y con menor frecuencia el 7. Afecta sobre todo a lactantes de 6 a 24 meses. Se caracteriza por fiebre alta de 3 a 5 días con buen estado general, seguida de un exantema maculopapular rosado en el tronco que aparece cuando la fiebre desaparece y dura uno a dos días. Puede acompañarse de crisis febriles por el ascenso rápido de la temperatura. El diagnóstico es clínico y el tratamiento sintomático. La secuencia de fiebre primero y exantema después de que cede es la clave para distinguirlo de otros exantemas.
+R: Guía de Práctica Clínica de enfermedades exantemáticas en la infancia
+
+@ ped|pediatric_infectious|exanthematous_diseases|3|diagnosis
+V: Niño de 6 años con fiebre, faringitis y vómito. Al día siguiente aparece un exantema eritematoso fino y áspero como lija que inicia en el cuello y se extiende al tronco, más intenso en pliegues con líneas petequiales. Tiene palidez alrededor de la boca y lengua roja con papilas prominentes.
+P: ¿Cuál es el diagnóstico más probable?
++ Escarlatina || Exantema áspero con líneas de Pastia, palidez peribucal y lengua en fresa tras faringitis estreptocócica.
+- anchoring | Sarampión || Tiene pródromo catarral y manchas de Koplik.
+- availability_heuristic | Enfermedad de Kawasaki || Puede dar lengua en fresa, pero requiere fiebre de 5 días y conjuntivitis.
+- representativeness_heuristic | Síndrome de choque tóxico || El niño no tiene hipotensión ni falla orgánica.
+- premature_closure | Rubéola || Es leve con adenopatías retroauriculares.
+- base_rate_fallacy | Mononucleosis infecciosa con exantema por amoxicilina || No recibió amoxicilina.
+- framing_effect | Dermatitis de contacto || No explica la faringitis y la fiebre.
+- inattentional_blindness | Exantema súbito || Aparece al ceder la fiebre.
+- focusing_illusion | Eritema infeccioso || Da mejillas abofeteadas.
+- belief_bias | Reacción a la comida || No explica el cuadro completo.
+E: La escarlatina es causada por Streptococcus pyogenes productor de toxinas eritrogénicas, generalmente tras una faringoamigdalitis en niños de 5 a 15 años. El exantema aparece en 12 a 48 horas, es eritematoso, fino, áspero al tacto como lija, inicia en cuello y tronco y es más intenso en pliegues, donde forma las líneas de Pastia. Hay palidez peribucal, signo de Filatov, y lengua en fresa. Después se descama, sobre todo en manos y pies. El tratamiento es penicilina o amoxicilina durante 10 días para prevenir fiebre reumática. Se confirma con prueba rápida de antígeno o cultivo faríngeo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de faringoamigdalitis aguda ;; Guía de Práctica Clínica de enfermedades exantemáticas en la infancia
+
+@ ped|pediatric_infectious|exanthematous_diseases|2|diagnosis
+V: Niña de 5 años con febrícula y lesiones que iniciaron en el tronco y se extendieron a cara y extremidades. Hay máculas, pápulas, vesículas en gota de rocío y costras al mismo tiempo, con mucha comezón. Su hermano tuvo un cuadro similar hace 2 semanas.
+P: ¿Cuál es el diagnóstico más probable?
++ Varicela || Exantema pruriginoso polimorfo con lesiones en diferentes etapas de evolución.
+- anchoring | Viruela || Las lesiones están en la misma etapa y predominan en extremidades.
+- availability_heuristic | Impétigo || Da costras melicéricas sin lesiones en diferentes etapas.
+- representativeness_heuristic | Enfermedad mano pie boca || Las lesiones son en manos, pies y boca.
+- premature_closure | Picaduras de insecto || No explican la febrícula ni el contagio.
+- base_rate_fallacy | Herpes zóster || Sigue un dermatoma.
+- framing_effect | Escabiasis || Da prurito nocturno con surcos.
+- inattentional_blindness | Sarampión || Da exantema maculopapular sin vesículas.
+- focusing_illusion | Molusco contagioso || Da pápulas umbilicadas sin fiebre.
+- belief_bias | Alergia al jabón || No explica la evolución.
+E: La varicela es causada por el virus varicela zóster y es muy contagiosa. Tras una incubación de 10 a 21 días aparece febrícula y un exantema pruriginoso que inicia en el tronco y cabeza y se extiende de forma centrífuga. Su característica es el polimorfismo, con máculas, pápulas, vesículas en gota de rocío y costras al mismo tiempo, como un cielo estrellado. El tratamiento es sintomático con antihistamínicos y paracetamol, y se evita la aspirina por riesgo de síndrome de Reye. El aciclovir se indica en adolescentes, adultos, inmunosuprimidos y casos complicados. La complicación más frecuente es la sobreinfección bacteriana de la piel.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de varicela en edad pediátrica
+
+@ ped|pediatric_infectious|exanthematous_diseases|3|complication_prognosis
+V: Niño de 7 años con varicela de 4 días, que recibió ácido acetilsalicílico para la fiebre. Ahora presenta vómito persistente, confusión y somnolencia. Transaminasas elevadas, amonio alto y glucosa baja, sin ictericia.
+P: ¿Cuál es la complicación que presenta?
++ Síndrome de Reye || Encefalopatía aguda con disfunción hepática tras infección viral y uso de aspirina.
+- anchoring | Encefalitis por varicela sin otra causa || No explica la hiperamonemia con disfunción hepática.
+- availability_heuristic | Meningitis bacteriana || No explica la hepatopatía y la hipoglucemia.
+- representativeness_heuristic | Hepatitis viral fulminante || Daría ictericia intensa.
+- premature_closure | Intoxicación por paracetamol || El medicamento usado fue aspirina.
+- base_rate_fallacy | Cetoacidosis diabética || La glucosa está baja.
+- framing_effect | Gastroenteritis con deshidratación || No explica la encefalopatía con amonio alto.
+- inattentional_blindness | Sobreinfección bacteriana de piel || No da encefalopatía.
+- focusing_illusion | Ataxia cerebelosa postvaricela || Da ataxia sin hepatopatía.
+- belief_bias | Somnolencia normal por la fiebre || La encefalopatía es grave.
+E: El síndrome de Reye es una encefalopatía aguda con degeneración grasa del hígado que aparece en niños tras infecciones virales como varicela o influenza, asociada al uso de ácido acetilsalicílico. Se manifiesta con vómito persistente seguido de alteraciones del estado de alerta que pueden progresar a coma. Los estudios muestran transaminasas y amonio elevados, tiempos de coagulación prolongados e hipoglucemia, sin ictericia importante. El tratamiento es de soporte en terapia intensiva, con manejo de la hipertensión intracraneal. Su prevención consiste en evitar la aspirina en niños y adolescentes con infecciones virales, salvo indicaciones específicas como Kawasaki.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de varicela en edad pediátrica
+
+@ ped|pediatric_infectious|exanthematous_diseases|2|diagnosis
+V: Niña de 6 años con rubor intenso en ambas mejillas como si la hubieran abofeteado, con palidez alrededor de la boca. Dos días después aparece un exantema reticulado en encaje en brazos y muslos que se acentúa con el calor. Está afebril y de buen ánimo.
+P: ¿Cuál es el diagnóstico más probable?
++ Eritema infeccioso por parvovirus B19 || Mejillas abofeteadas seguidas de exantema reticulado en encaje.
+- anchoring | Lupus eritematoso sistémico || El eritema malar no es reticulado ni aparece así en niños sanos.
+- availability_heuristic | Escarlatina || Da exantema áspero con faringitis.
+- representativeness_heuristic | Dermatitis por sol || No explica el exantema reticulado.
+- premature_closure | Rubéola || Da exantema maculopapular con adenopatías.
+- base_rate_fallacy | Dermatomiositis juvenil || Da debilidad y lesiones en párpados.
+- framing_effect | Reacción alérgica || No explica la secuencia.
+- inattentional_blindness | Exantema súbito || Inicia en el tronco tras fiebre alta.
+- focusing_illusion | Enfermedad de Kawasaki || Requiere fiebre prolongada.
+- belief_bias | Rubor por vergüenza o calor || El patrón es característico de infección.
+E: El eritema infeccioso o quinta enfermedad es causado por el parvovirus B19. Es frecuente en escolares y tiene tres fases, el eritema intenso de las mejillas en bofetada, después un exantema reticulado en encaje en extremidades y tronco, y finalmente recurrencias del exantema con calor, ejercicio o sol durante semanas. Cuando aparece el exantema el niño ya no contagia. Es benigno en niños sanos, pero puede causar crisis aplásica en pacientes con anemias hemolíticas como drepanocitosis o esferocitosis, anemia crónica en inmunosuprimidos, artritis en adultos e hidrops fetal en mujeres embarazadas.
+R: Guía de Práctica Clínica de enfermedades exantemáticas en la infancia
+
+@ ped|pediatric_infectious|exanthematous_diseases|3|complication_prognosis
+V: Mujer de 28 años con embarazo de 16 semanas cuya hija de 5 años cursa con mejillas abofeteadas y exantema reticulado. La madre se siente bien. Pregunta qué riesgo hay para su embarazo.
+P: ¿Cuál es la complicación fetal más importante de esta infección?
++ Anemia fetal grave con hidrops fetal || El parvovirus B19 infecta precursores eritroides del feto.
+- anchoring | Malformaciones cardiacas como en la rubéola congénita || La rubéola es la que causa cardiopatía congénita.
+- availability_heuristic | Microcefalia || Se asocia a Zika o citomegalovirus.
+- representativeness_heuristic | Coriorretinitis y calcificaciones || Son propias de toxoplasmosis.
+- premature_closure | Ninguna, porque es benigno en niños || En el feto puede ser grave.
+- base_rate_fallacy | Hidrocefalia obstructiva || No es característica.
+- framing_effect | Sordera congénita || Se asocia a rubéola y citomegalovirus.
+- inattentional_blindness | Hipoplasia de extremidades || Se asocia a varicela congénita.
+- focusing_illusion | Labio y paladar hendido || No es característico.
+- belief_bias | Siempre causa la muerte del feto || La mayoría de los fetos no se afectan.
+E: La infección por parvovirus B19 durante el embarazo se transmite al feto en un tercio de los casos. El virus infecta los precursores eritroides y puede causar anemia fetal grave, insuficiencia cardiaca, hidrops fetal no inmune y muerte, sobre todo si la infección ocurre antes de las 20 semanas. No es teratógeno, por lo que no causa malformaciones. Ante exposición se miden anticuerpos IgM e IgG. Si hay infección reciente se vigila con ultrasonido y Doppler de la arteria cerebral media cada una a dos semanas para detectar anemia, que puede tratarse con transfusión intrauterina.
+R: Guía de Práctica Clínica de infecciones perinatales
+
+@ ped|pediatric_infectious|exanthematous_diseases|3|diagnosis
+V: Niño de 3 años que acude a guardería con fiebre baja, rechazo al alimento y úlceras dolorosas en la lengua y la mucosa oral. Tiene vesículas pequeñas de base eritematosa en palmas, plantas y glúteos. Varios niños de la guardería tienen síntomas similares.
+P: ¿Cuál es el diagnóstico más probable?
++ Enfermedad de mano, pie y boca por enterovirus || Úlceras orales con vesículas en palmas y plantas en brotes de guardería.
+- anchoring | Varicela || Las vesículas son generalizadas y en diferentes etapas.
+- availability_heuristic | Gingivoestomatitis herpética || Afecta encías sin lesiones en palmas y plantas.
+- representativeness_heuristic | Sarampión || Da exantema maculopapular con pródromo catarral.
+- premature_closure | Escarlatina || No da vesículas.
+- base_rate_fallacy | Síndrome de Stevens Johnson || Hay afección grave de mucosas y piel por fármacos.
+- framing_effect | Impétigo ampolloso || No da úlceras orales.
+- inattentional_blindness | Herpangina sola || Afecta paladar posterior sin lesiones en palmas.
+- focusing_illusion | Escabiasis || Da prurito con surcos.
+- belief_bias | Lesiones por chupar juguetes sucios || Es una infección viral contagiosa.
+E: La enfermedad de mano, pie y boca es causada sobre todo por coxsackievirus A16 y enterovirus 71. Es frecuente en menores de 5 años y en brotes en guarderías. Se manifiesta con fiebre baja, odinofagia, úlceras orales dolorosas y un exantema vesicular en palmas, plantas y a veces glúteos. Puede causar deshidratación por rechazo a la vía oral, y meses después puede haber caída de uñas. Es autolimitada en 7 a 10 días y el tratamiento es sintomático con analgésicos e hidratación. El enterovirus 71 puede causar complicaciones neurológicas como encefalitis. El lavado de manos reduce los contagios.
+R: Guía de Práctica Clínica de enfermedades exantemáticas en la infancia

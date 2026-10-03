@@ -1,0 +1,223 @@
+@ ped|neonatology|neonatal_jaundice|2|diagnosis
+V: Recién nacido de término de 3 días, alimentado al seno materno, con ictericia que inició a las 60 horas en cara y tórax. Activo, succiona bien y con evacuaciones amarillas. Bilirrubina total de 11 mg/dL de predominio indirecto. Madre y bebé grupo O Rh positivo.
+P: ¿Cuál es el diagnóstico más probable?
++ Ictericia fisiológica || Aparece después de las 24 horas, con bilirrubina indirecta moderada en un recién nacido sano.
+- representativeness_heuristic | Enfermedad hemolítica por incompatibilidad ABO || Da ictericia indirecta, pero suele aparecer antes de las 24 horas y requiere madre O con hijo A o B.
+- anchoring | Atresia de vías biliares || Se ancla en la ictericia, pero esta da bilirrubina directa y acolia.
+- availability_heuristic | Sepsis neonatal || Es frecuente, pero el bebé está activo y succiona bien.
+- premature_closure | Ictericia por leche materna tardía || Aparece después de la primera semana.
+- base_rate_fallacy | Síndrome de Crigler Najjar || Es raro y da bilirrubina muy alta persistente.
+- framing_effect | Hipotiroidismo congénito || Puede prolongar la ictericia, pero no explica este cuadro típico.
+- inattentional_blindness | Esferocitosis hereditaria || No hay datos de hemólisis ni antecedente familiar.
+- focusing_illusion | Hepatitis neonatal || Se centra en el hígado, pero daría bilirrubina directa.
+- belief_bias | Ictericia por falta de sol || Cree que la exposición solar es la causa.
+E: La ictericia fisiológica es la más frecuente en recién nacidos. Aparece después de las primeras 24 horas, alcanza su pico entre el tercer y quinto día en el recién nacido de término y se resuelve en una a dos semanas. Se debe a mayor producción de bilirrubina por la vida corta del eritrocito fetal, inmadurez de la conjugación hepática y aumento de la circulación enterohepática. Es de predominio indirecto, sin hemólisis ni otros datos de enfermedad. Toda ictericia en las primeras 24 horas, con bilirrubina directa elevada, de progresión rápida o persistente después de dos semanas se considera patológica.
+R: Guía de Práctica Clínica de detección oportuna, diagnóstico y tratamiento de la hiperbilirrubinemia en recién nacidos
+
+@ ped|neonatology|neonatal_jaundice|3|next_step
+V: Recién nacido de 18 horas de vida con ictericia hasta el abdomen. Madre grupo O positivo y bebé grupo A positivo. Coombs directo positivo. Bilirrubina total de 12 mg/dL.
+P: ¿Cuál es la conducta a seguir?
++ Iniciar fototerapia intensiva y vigilar la bilirrubina según los nomogramas por horas de vida y riesgo || Ictericia en las primeras 24 horas por enfermedad hemolítica.
+- anchoring | Esperar a que la ictericia baje sola por ser fisiológica || Se ancla en la ictericia fisiológica, pero apareció antes de las 24 horas.
+- availability_heuristic | Suspender la lactancia materna || No está indicado.
+- framing_effect | Exponer al bebé a la luz solar directa en casa || Suena natural, pero es ineficaz y peligroso.
+- representativeness_heuristic | Exanguinotransfusión inmediata en todos los casos || Se reserva para valores de riesgo o falla de fototerapia.
+- premature_closure | Dar fenobarbital como tratamiento principal || No es el tratamiento.
+- complexity_bias | Biopsia hepática || Es una ictericia indirecta hemolítica.
+- status_quo_bias | Egresar con revisión en una semana || La bilirrubina puede subir rápido.
+- belief_bias | Dar agua o té para eliminar la bilirrubina || No sirve y desplaza la leche.
+- omission_bias | Evitar la fototerapia por miedo a deshidratación || El beneficio supera el riesgo con hidratación adecuada.
+E: La ictericia que aparece en las primeras 24 horas siempre es patológica y obliga a buscar hemólisis. La incompatibilidad ABO ocurre en madres grupo O con hijos A o B, y el Coombs directo puede ser positivo. El tratamiento se decide con nomogramas de bilirrubina según las horas de vida, la edad gestacional y los factores de riesgo, como hemólisis. La fototerapia convierte la bilirrubina en isómeros hidrosolubles que se eliminan sin conjugación. Si la bilirrubina se acerca al umbral de exanguinotransfusión o no responde, se realiza exanguinotransfusión, y en la hemólisis inmune puede darse inmunoglobulina intravenosa.
+R: Guía de Práctica Clínica de detección oportuna, diagnóstico y tratamiento de la hiperbilirrubinemia en recién nacidos
+
+@ ped|neonatology|neonatal_jaundice|4|diagnosis
+V: Lactante de 5 semanas con ictericia persistente desde la segunda semana, evacuaciones blancas como masilla y orina oscura. Hepatomegalia firme. Bilirrubina total de 9 mg/dL con directa de 6.5 mg/dL.
+P: ¿Cuál es el diagnóstico más probable?
++ Atresia de vías biliares || Colestasis con acolia y hepatomegalia en las primeras semanas.
+- representativeness_heuristic | Ictericia por leche materna || También es prolongada, pero indirecta y con evacuaciones normales.
+- anchoring | Ictericia fisiológica prolongada || Se ancla en la ictericia común, pero es directa.
+- availability_heuristic | Hipotiroidismo congénito || Prolonga la ictericia indirecta.
+- premature_closure | Hepatitis viral neonatal || Debe considerarse, pero la acolia persistente sugiere atresia.
+- base_rate_fallacy | Quiste de colédoco || Es menos frecuente.
+- framing_effect | Estenosis hipertrófica de píloro || Suena a cirugía neonatal, pero da vómito.
+- inattentional_blindness | Incompatibilidad Rh || No explica la bilirrubina directa tardía.
+- focusing_illusion | Galactosemia || Se centra en el hígado, pero cursa con vómito y sepsis.
+- belief_bias | Cambio de fórmula como causa || Cree que la fórmula explica la acolia.
+E: La atresia de vías biliares es una obliteración progresiva de los conductos biliares extrahepáticos y es la causa más frecuente de colestasis neonatal quirúrgica. Se presenta con ictericia que persiste o reaparece después de las dos semanas, con hiperbilirrubinemia directa, acolia, coluria y hepatomegalia. Todo lactante con ictericia después de las dos semanas debe tener medición de bilirrubina directa. El diagnóstico se apoya en el ultrasonido y la gammagrafía y se confirma con colangiografía intraoperatoria. El tratamiento es la portoenterostomía de Kasai, idealmente antes de los 60 días de vida, porque su éxito disminuye con la edad.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la atresia de vías biliares
+
+@ ped|neonatology|neonatal_jaundice|4|complication_prognosis
+V: Recién nacido de 5 días con bilirrubina indirecta de 28 mg/dL sin tratamiento previo. Presenta letargo, hipotonía, succión débil, llanto agudo y opistótonos.
+P: ¿Cuál es la complicación que presenta?
++ Encefalopatía bilirrubínica aguda || La bilirrubina indirecta muy elevada atraviesa la barrera hematoencefálica.
+- anchoring | Sepsis neonatal tardía || Se ancla en el letargo, sin explicar la bilirrubina extrema.
+- availability_heuristic | Hipoglucemia neonatal || Da letargo, pero no explica la bilirrubina ni el opistótonos.
+- representativeness_heuristic | Meningitis bacteriana || Comparte signos neurológicos, pero la causa evidente es la bilirrubina.
+- premature_closure | Hemorragia intraventricular || Es más frecuente en prematuros.
+- base_rate_fallacy | Error innato del metabolismo || Es menos probable con bilirrubina tan alta.
+- framing_effect | Ictericia fisiológica intensa sin riesgo || Suena benigno, pero hay signos neurológicos.
+- inattentional_blindness | Deshidratación hipernatrémica || Puede coexistir, pero no explica el cuadro.
+- focusing_illusion | Asfixia perinatal || Se centra en la hipotonía.
+- belief_bias | Cólico del lactante || Cree que el llanto es por cólico.
+E: La bilirrubina indirecta no conjugada en concentraciones elevadas puede atravesar la barrera hematoencefálica y depositarse en los ganglios basales, el hipocampo y los núcleos del tallo, causando encefalopatía bilirrubínica. La fase aguda se manifiesta con letargo, hipotonía y succión débil, seguidas de hipertonía, opistótonos, llanto agudo, fiebre y convulsiones. Es una urgencia que requiere exanguinotransfusión inmediata. La secuela crónica es el kernícterus, con parálisis cerebral coreoatetósica, sordera neurosensorial, alteración de la mirada vertical y displasia dental. Se previene con tamizaje, seguimiento posterior al egreso y tratamiento oportuno de la hiperbilirrubinemia.
+R: Guía de Práctica Clínica de detección oportuna, diagnóstico y tratamiento de la hiperbilirrubinemia en recién nacidos
+
+@ ped|neonatology|neonatal_resuscitation|3|next_step
+V: Recién nacido de término, líquido amniótico claro, que al nacer no respira y está hipotónico. Se colocó bajo calor radiante, se secó, se posicionó la vía aérea y se estimuló, pero sigue sin respirar. Frecuencia cardiaca de 80 lpm.
+P: ¿Cuál es el siguiente paso?
++ Iniciar ventilación con presión positiva con bolsa y mascarilla en el primer minuto || Apnea o frecuencia menor de 100 tras pasos iniciales.
+- anchoring | Compresiones torácicas de inmediato || Se ancla en la frecuencia baja, pero las compresiones se inician con frecuencia menor de 60 tras ventilar.
+- availability_heuristic | Adrenalina intravenosa || Se usa si la frecuencia sigue menor de 60 tras ventilación y compresiones.
+- framing_effect | Seguir estimulando con palmadas en la espalda por varios minutos || Suena útil, pero retrasa la ventilación.
+- representativeness_heuristic | Aspiración traqueal de rutina || No está indicada con líquido claro.
+- premature_closure | Intubación inmediata en todos los casos || Se considera si la ventilación con mascarilla no es eficaz.
+- complexity_bias | Bicarbonato intravenoso || No se recomienda de rutina.
+- status_quo_bias | Esperar a la valoración de Apgar al minuto 5 || El Apgar no guía la reanimación.
+- belief_bias | Oxígeno al 100% de inicio en el recién nacido de término || Se inicia con aire ambiente al 21%.
+- omission_bias | Observar si respira solo en 2 minutos || Retrasa la ventilación, que es la medida más importante.
+E: La reanimación neonatal sigue el algoritmo del programa de reanimación neonatal. Tras los pasos iniciales de calentar, secar, posicionar, despejar la vía aérea si es necesario y estimular, se evalúa la respiración y la frecuencia cardiaca. Si hay apnea, respiración en boqueadas o frecuencia menor de 100 lpm, se inicia ventilación con presión positiva en el primer minuto de vida, el llamado minuto de oro, con aire ambiente en el recién nacido de término y oxígeno ajustado a la saturación preductal. La ventilación eficaz es la medida más importante. Si la frecuencia es menor de 60 tras 30 segundos de ventilación eficaz se inician compresiones.
+R: Guía de Práctica Clínica de reanimación neonatal
+
+@ ped|neonatology|neonatal_resuscitation|3|next_step
+V: Recién nacido que recibe ventilación con presión positiva eficaz, con movimiento del tórax, durante 30 segundos. Su frecuencia cardiaca es de 50 lpm.
+P: ¿Cuál es el siguiente paso?
++ Iniciar compresiones torácicas coordinadas con la ventilación en relación 3 a 1 y aumentar el oxígeno al 100% || Frecuencia menor de 60 tras ventilación eficaz.
+- anchoring | Continuar solo ventilación otros 2 minutos || Se ancla en la ventilación sin escalar.
+- availability_heuristic | Adrenalina antes de las compresiones || Se usa después de 60 segundos de compresiones sin respuesta.
+- framing_effect | Compresiones en relación 15 a 2 como en niños mayores || Suena a reanimación pediátrica, pero en neonatos es 3 a 1.
+- representativeness_heuristic | Desfibrilación || El paro neonatal casi nunca es por fibrilación.
+- premature_closure | Suspender la reanimación || Es prematuro.
+- complexity_bias | Toracotomía de urgencia || Medida inexistente.
+- status_quo_bias | Mantener el oxígeno al 21% sin cambios || Se aumenta al iniciar compresiones.
+- belief_bias | Expansores de volumen en todos los casos || Se usan si hay sospecha de pérdida de sangre.
+- omission_bias | Esperar a confirmar la frecuencia con electrocardiograma por varios minutos || Retrasa las compresiones.
+E: Si la frecuencia cardiaca del recién nacido es menor de 60 lpm después de 30 segundos de ventilación con presión positiva eficaz, idealmente con vía aérea avanzada, se inician compresiones torácicas en el tercio inferior del esternón con la técnica de los dos pulgares, coordinadas con la ventilación en una relación de tres compresiones por una ventilación, 90 compresiones y 30 ventilaciones por minuto. Se aumenta la concentración de oxígeno al 100%. Si después de 60 segundos de compresiones y ventilación coordinadas la frecuencia sigue menor de 60, se administra adrenalina, de preferencia por vía umbilical.
+R: Guía de Práctica Clínica de reanimación neonatal
+
+@ ped|neonatology|neonatal_resuscitation|2|data_interpretation
+V: Recién nacido al minuto de vida con frecuencia cardiaca de 110 lpm, llanto débil, flexión leve de extremidades, muecas al estímulo y cuerpo rosado con extremidades azuladas.
+P: ¿Cuál es su puntuación de Apgar al minuto?
++ 6 || Frecuencia mayor de 100 es 2, llanto débil 1, flexión leve 1, mueca 1 y acrocianosis 1.
+- anchoring | 9 || Sobreestima varios componentes.
+- inattentional_blindness | 4 sin contar la frecuencia cardiaca || Pasa por alto un componente de 2 puntos.
+- framing_effect | 8 || Asigna 2 al llanto débil y al tono leve.
+- availability_heuristic | 10 porque la frecuencia es normal || Ignora el resto de parámetros.
+- representativeness_heuristic | 5 || Asigna 1 a la frecuencia mayor de 100.
+- premature_closure | 7 || Calcula de más un componente.
+- base_rate_fallacy | Normal porque la mayoría de los recién nacidos tienen Apgar alto || Usa la frecuencia general.
+- belief_bias | El Apgar al minuto define si requiere reanimación || Cree que el Apgar guía la reanimación.
+- omission_bias | Se requiere gasometría para calcularlo || El Apgar es clínico.
+E: La escala de Apgar evalúa al recién nacido al minuto y a los cinco minutos con cinco parámetros, cada uno de 0 a 2 puntos. Frecuencia cardiaca, 0 si está ausente, 1 si es menor de 100 y 2 si es mayor de 100. Esfuerzo respiratorio, 0 ausente, 1 llanto débil o irregular y 2 llanto vigoroso. Tono muscular, 0 flácido, 1 flexión leve y 2 movimiento activo. Irritabilidad refleja, 0 sin respuesta, 1 mueca y 2 llanto o tos. Color, 0 pálido o cianótico, 1 acrocianosis y 2 completamente rosado. El Apgar no se usa para decidir el inicio de la reanimación.
+R: Guía de Práctica Clínica de reanimación neonatal
+
+@ ped|neonatology|neonatal_respiratory_distress|3|diagnosis
+V: Recién nacido de 30 semanas de gestación, hijo de madre que no recibió esteroides prenatales. A los minutos de nacer presenta quejido, aleteo nasal, retracciones y cianosis que empeoran en las primeras horas. La radiografía muestra infiltrado reticulogranular en vidrio esmerilado con broncograma aéreo.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome de dificultad respiratoria por deficiencia de surfactante || Prematuro con dificultad progresiva y patrón reticulogranular.
+- representativeness_heuristic | Taquipnea transitoria del recién nacido || También da dificultad respiratoria, pero en término o cesárea, con mejoría rápida y cisuras marcadas.
+- anchoring | Neumonía neonatal || Se ancla en la dificultad respiratoria y debe considerarse, pero el patrón es típico de deficiencia de surfactante.
+- availability_heuristic | Síndrome de aspiración de meconio || Ocurre en término o postérmino con líquido meconial.
+- premature_closure | Cardiopatía congénita cianógena || Concluye sin datos cardiacos.
+- base_rate_fallacy | Hernia diafragmática congénita || Daría abdomen excavado y asas en tórax.
+- framing_effect | Displasia broncopulmonar || Suena a enfermedad del prematuro, pero es crónica.
+- inattentional_blindness | Neumotórax || No toma en cuenta el patrón bilateral.
+- focusing_illusion | Hipertensión pulmonar persistente || Se centra en la cianosis.
+- belief_bias | Llanto excesivo || Cree que la dificultad es por llanto.
+E: El síndrome de dificultad respiratoria neonatal, antes llamado enfermedad de membrana hialina, se debe a deficiencia de surfactante pulmonar, que provoca colapso alveolar. Es más frecuente cuanto menor es la edad gestacional, en hijos de madre diabética y sin esteroides prenatales. Se presenta desde el nacimiento con taquipnea, quejido, aleteo nasal, retracciones y cianosis que empeoran en las primeras 48 a 72 horas. La radiografía muestra infiltrado reticulogranular difuso en vidrio esmerilado con broncograma aéreo y volúmenes pulmonares disminuidos. El tratamiento incluye presión positiva continua y surfactante exógeno.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de dificultad respiratoria en el recién nacido
+
+@ ped|neonatology|neonatal_respiratory_distress|3|prevention_screening
+V: Mujer de 29 semanas de embarazo con trabajo de parto pretérmino que no se detiene. Se prevé el nacimiento en las próximas horas.
+P: ¿Cuál es la medida de prevención más eficaz para reducir el síndrome de dificultad respiratoria del recién nacido?
++ Corticosteroides prenatales, como betametasona o dexametasona, a la madre || Aceleran la maduración pulmonar fetal.
+- availability_heuristic | Surfactante profiláctico a la madre || El surfactante se da al recién nacido, no a la madre.
+- anchoring | Antibióticos a la madre como medida principal || Se ancla en la infección, que no previene el síndrome.
+- framing_effect | Retrasar el parto con reposo absoluto sin otras medidas || Suena preventivo, pero no madura el pulmón.
+- representativeness_heuristic | Sulfato de magnesio para madurar el pulmón || El magnesio es neuroprotector, no madura el pulmón.
+- premature_closure | Cesárea inmediata sin otras medidas || No previene el síndrome.
+- complexity_bias | Ventilación mecánica profiláctica al recién nacido || Es invasiva.
+- status_quo_bias | Ninguna medida porque nacerá pronto || Incluso unas horas de esteroide dan beneficio.
+- belief_bias | Hidratación materna intensa || Cree que la hidratación madura el pulmón.
+- omission_bias | Evitar esteroides por miedo a efectos en el feto || El beneficio es muy superior.
+E: Los corticosteroides prenatales administrados a la madre con riesgo de parto pretérmino entre las 24 y 34 semanas aceleran la maduración pulmonar fetal y aumentan la producción de surfactante. Reducen el síndrome de dificultad respiratoria, la hemorragia intraventricular, la enterocolitis necrosante y la mortalidad neonatal. El esquema es betametasona 12 mg intramuscular dos dosis con 24 horas de diferencia, o dexametasona 6 mg cada 12 horas por cuatro dosis. El beneficio máximo ocurre entre 24 horas y siete días después, pero incluso dosis incompletas ayudan. En menores de 32 semanas se agrega sulfato de magnesio como neuroprotector.
+R: Guía de Práctica Clínica de diagnóstico y manejo del parto pretérmino ;; Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de dificultad respiratoria en el recién nacido
+
+@ ped|neonatology|neonatal_respiratory_distress|2|diagnosis
+V: Recién nacido de 38 semanas nacido por cesárea electiva sin trabajo de parto. A las 2 horas presenta taquipnea de 80 rpm con retracciones leves. Saturación de 93%. La radiografía muestra líquido en las cisuras y trama vascular aumentada. Mejora en las siguientes 24 horas.
+P: ¿Cuál es el diagnóstico más probable?
++ Taquipnea transitoria del recién nacido || Retención de líquido pulmonar fetal tras cesárea sin trabajo de parto.
+- representativeness_heuristic | Síndrome de dificultad respiratoria por deficiencia de surfactante || Ocurre en prematuros y empeora en las primeras horas.
+- anchoring | Neumonía neonatal || Se ancla en la taquipnea, pero mejora rápido sin datos infecciosos.
+- availability_heuristic | Síndrome de aspiración de meconio || Requiere líquido meconial.
+- premature_closure | Cardiopatía congénita || Concluye sin datos cardiacos.
+- base_rate_fallacy | Hipertensión pulmonar persistente || Es menos frecuente y más grave.
+- framing_effect | Hernia diafragmática || Suena a dificultad respiratoria neonatal, pero da asas en tórax.
+- inattentional_blindness | Neumotórax espontáneo || No toma en cuenta el líquido en cisuras.
+- focusing_illusion | Sepsis temprana || Se centra en la taquipnea.
+- belief_bias | Respiración normal del recién nacido || Cree que 80 rpm es normal.
+E: La taquipnea transitoria del recién nacido se debe a la reabsorción lenta del líquido pulmonar fetal. Es más frecuente en recién nacidos de término o pretérmino tardío nacidos por cesárea, sobre todo sin trabajo de parto, hijos de madre diabética o asmática y macrosómicos. Se presenta en las primeras horas con taquipnea, retracciones leves y requerimiento bajo de oxígeno. La radiografía muestra líquido en las cisuras, trama vascular prominente e hiperinsuflación. Es autolimitada y mejora en 24 a 72 horas. El tratamiento es de soporte con oxígeno si es necesario y alimentación cuidadosa mientras persiste la taquipnea.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la taquipnea transitoria del recién nacido
+
+@ ped|neonatology|neonatal_respiratory_distress|3|diagnosis
+V: Recién nacido de 42 semanas con líquido amniótico meconial espeso. Al nacer presenta dificultad respiratoria grave, tórax en tonel y cianosis. La radiografía muestra infiltrados gruesos en parches con zonas de hiperinsuflación.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome de aspiración de meconio || Postérmino con líquido meconial, dificultad grave e infiltrados en parches con atrapamiento de aire.
+- representativeness_heuristic | Taquipnea transitoria del recién nacido || Es leve y no tiene este patrón radiográfico.
+- anchoring | Deficiencia de surfactante || Se ancla en la dificultad respiratoria, pero ocurre en prematuros.
+- availability_heuristic | Neumonía por estreptococo del grupo B || Puede dar infiltrados, pero el meconio espeso orienta a aspiración.
+- premature_closure | Cardiopatía congénita cianógena || Concluye sin explicar el antecedente de meconio.
+- base_rate_fallacy | Hernia diafragmática || No hay asas en el tórax.
+- framing_effect | Displasia broncopulmonar || Suena a enfermedad pulmonar neonatal, pero es crónica.
+- inattentional_blindness | Hipoglucemia neonatal || No toma en cuenta los hallazgos respiratorios.
+- focusing_illusion | Atresia de esófago || Se centra en la dificultad, sin datos de atresia.
+- belief_bias | Reacción normal al parto prolongado || Cree que es esperado.
+E: El síndrome de aspiración de meconio ocurre en recién nacidos de término o postérmino, sobre todo con sufrimiento fetal, que aspiran líquido amniótico teñido de meconio antes o durante el nacimiento. El meconio obstruye la vía aérea, causando atrapamiento de aire, inactiva el surfactante y produce neumonitis química. Se manifiesta con dificultad respiratoria grave, tórax hiperinsuflado y cianosis. La radiografía muestra infiltrados gruesos en parches con zonas de hiperinsuflación y puede haber neumotórax. Se complica con hipertensión pulmonar persistente. El tratamiento es de soporte, con oxígeno, ventilación, surfactante y, en casos graves, óxido nítrico inhalado.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de aspiración de meconio
+
+@ ped|neonatology|neonatal_sepsis|3|risk_factor
+V: Recién nacido de término de 12 horas con hipotermia, letargo, rechazo al alimento y dificultad respiratoria. La madre tuvo ruptura de membranas 26 horas antes del parto, fiebre intraparto y cultivo vaginal positivo para estreptococo del grupo B sin profilaxis.
+P: ¿Cuál es el factor de riesgo más importante de su cuadro?
++ Colonización materna por estreptococo del grupo B sin profilaxis intraparto, con ruptura prolongada de membranas y fiebre materna || Son factores de sepsis neonatal temprana.
+- availability_heuristic | Nacimiento por parto vaginal en sí || No es el factor principal.
+- anchoring | Lactancia materna exclusiva || Se ancla en la alimentación, que protege.
+- representativeness_heuristic | Sexo masculino como único factor || Aumenta levemente el riesgo, pero no es el principal.
+- framing_effect | Baño temprano del recién nacido || Suena a exposición, sin relación.
+- premature_closure | Visitas familiares || La sepsis temprana es de origen materno.
+- base_rate_fallacy | Infección por Listeria como causa más probable || Es menos frecuente que el estreptococo del grupo B.
+- inattentional_blindness | Peso adecuado al nacer || No es factor.
+- focusing_illusion | Ictericia fisiológica || Se centra en otro hallazgo.
+- belief_bias | El frío del quirófano || Cree que la hipotermia es la causa y no un signo.
+E: La sepsis neonatal temprana aparece en las primeras 72 horas de vida y se adquiere por transmisión vertical. Sus principales agentes son el estreptococo del grupo B y Escherichia coli. Los factores de riesgo incluyen colonización materna por estreptococo del grupo B sin profilaxis adecuada, ruptura prolongada de membranas de 18 horas o más, fiebre materna o corioamnionitis, prematurez y bajo peso. Las manifestaciones son inespecíficas, como inestabilidad térmica, letargo, rechazo al alimento, dificultad respiratoria, apnea e hipotensión. Se toman hemocultivos y se inicia ampicilina con gentamicina de forma empírica.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la sepsis neonatal
+
+@ ped|neonatology|neonatal_sepsis|3|treatment_of_choice
+V: Recién nacido de 2 días con sospecha de sepsis neonatal temprana. Se tomaron hemocultivos. Función renal normal. Sin datos de meningitis.
+P: ¿Cuál es el tratamiento antibiótico empírico de elección?
++ Ampicilina con gentamicina intravenosas || Cubren estreptococo del grupo B, Listeria y bacilos gramnegativos.
+- availability_heuristic | Ceftriaxona sola || Desplaza la bilirrubina y no cubre Listeria.
+- anchoring | Vancomicina con meropenem de inicio || Se ancla en la gravedad con espectro excesivo.
+- representativeness_heuristic | Amoxicilina oral || La vía oral no es adecuada en sepsis.
+- framing_effect | Esperar el hemocultivo antes de iniciar antibióticos || Suena preciso, pero retrasa el tratamiento.
+- premature_closure | Fluconazol empírico || Los hongos son causa de sepsis tardía en prematuros.
+- complexity_bias | Tres antibióticos de amplio espectro en todos || Sin indicación.
+- status_quo_bias | Observación en cunero sin antibióticos || Riesgo de muerte.
+- belief_bias | Penicilina benzatínica intramuscular || Cree que trata la sepsis neonatal.
+- omission_bias | Evitar la gentamicina por miedo a ototoxicidad || Con dosis ajustadas el beneficio supera el riesgo.
+E: El tratamiento empírico de la sepsis neonatal temprana es la combinación de ampicilina y un aminoglucósido, generalmente gentamicina, que cubre estreptococo del grupo B, Listeria monocytogenes y bacilos gramnegativos como Escherichia coli. Si se sospecha meningitis se agrega o sustituye por cefotaxima, evitando la ceftriaxona en recién nacidos por el riesgo de desplazar la bilirrubina y precipitar con calcio. El tratamiento se ajusta según los cultivos y se suspende a las 36 a 48 horas si los cultivos son negativos y el bebé está bien. En la sepsis tardía hospitalaria se cubren estafilococos y gramnegativos resistentes.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la sepsis neonatal
+
+@ ped|neonatology|neonatal_sepsis|2|prevention_screening
+V: Mujer de 36 semanas de embarazo con cultivo rectovaginal positivo para estreptococo del grupo B. No tiene alergia a la penicilina.
+P: ¿Cuál es la medida de prevención indicada para evitar sepsis neonatal temprana?
++ Penicilina o ampicilina intravenosa intraparto, iniciada al menos 4 horas antes del nacimiento || La profilaxis intraparto reduce la sepsis temprana por estreptococo del grupo B.
+- availability_heuristic | Antibiótico oral durante el tercer trimestre || No erradica la colonización al momento del parto.
+- anchoring | Cesárea electiva para evitar el contacto || Se ancla en evitar el canal vaginal, sin beneficio demostrado.
+- framing_effect | Antibiótico al recién nacido en todos los casos sin profilaxis materna || Suena preventivo, pero la profilaxis materna es la medida eficaz.
+- representativeness_heuristic | Vacuna contra estreptococo del grupo B || No está disponible de rutina.
+- premature_closure | Lavados vaginales con antiséptico || No han demostrado beneficio.
+- complexity_bias | Inmunoglobulina al recién nacido || No es la medida estándar.
+- status_quo_bias | Ninguna medida porque la madre está sana || La colonización es asintomática.
+- belief_bias | Evitar la lactancia materna || No tiene relación.
+- omission_bias | Evitar antibiótico intraparto por miedo a resistencias || Pierde un beneficio claro.
+E: La profilaxis antibiótica intraparto es la principal medida para prevenir la sepsis neonatal temprana por estreptococo del grupo B. Se indica en mujeres con cultivo rectovaginal positivo entre las 36 y 37 semanas, bacteriuria por estreptococo del grupo B en el embarazo actual, hijo previo con enfermedad invasiva, o estado desconocido con factores de riesgo como parto pretérmino, ruptura de membranas de 18 horas o más o fiebre intraparto. El fármaco de elección es penicilina G o ampicilina intravenosa, iniciada al menos cuatro horas antes del nacimiento. En alergia sin riesgo de anafilaxia se usa cefazolina.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la sepsis neonatal

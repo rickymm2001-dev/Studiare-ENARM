@@ -1,0 +1,1512 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "ped-12-genetica-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "genetics",
+      "subtopic": "chromosomal_syndromes",
+      "vignette": "Recién nacido con hipotonía, fisuras palpebrales oblicuas hacia arriba, epicanto, perfil facial plano, pliegue palmar único, separación amplia entre el primer y segundo dedo del pie y soplo cardiaco. Madre de 41 años.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de Down por trisomía 21",
+          "correct": true,
+          "rationale": "Hipotonía, rasgos faciales típicos, pliegue palmar único y cardiopatía con edad materna avanzada."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de Patau",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da labio y paladar hendido, polidactilia y holoprosencefalia."
+        },
+        {
+          "key": "c",
+          "text": "Síndrome de Edwards",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da puños cerrados con dedos superpuestos y pies en mecedora."
+        },
+        {
+          "key": "d",
+          "text": "Hipotonía por sepsis neonatal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los rasgos dismórficos."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome de Zellweger",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es peroxisomal y raro."
+        },
+        {
+          "key": "f",
+          "text": "Rasgos familiares sin importancia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El conjunto es característico de un síndrome."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome de Williams",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da facies de duende y estenosis aórtica supravalvular."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome de Prader Willi",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da hipotonía sin estos rasgos."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de Turner",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Afecta mujeres con linfedema y cuello alado."
+        },
+        {
+          "key": "j",
+          "text": "Hipotiroidismo congénito",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da hipotonía, pero no los rasgos dismórficos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "El síndrome de Down es la cromosomopatía más frecuente compatible con la vida. En 95% se debe a trisomía 21 libre por no disyunción meiótica materna, cuyo riesgo aumenta con la edad materna, y el resto a translocación robertsoniana o mosaicismo. Las características incluyen hipotonía, fisuras palpebrales oblicuas, epicanto, perfil facial plano, manchas de Brushfield, pliegue palmar único y discapacidad intelectual. Se asocia a cardiopatía congénita, sobre todo canal auriculoventricular, atresia duodenal, enfermedad de Hirschsprung, hipotiroidismo, leucemia, inestabilidad atlantoaxial y enfermedad de Alzheimer temprana. El cariotipo confirma el diagnóstico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención integral de la persona con síndrome de Down"
+      ]
+    },
+    {
+      "key": "ped-12-genetica-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "genetics",
+      "subtopic": "chromosomal_syndromes",
+      "vignette": "Recién nacido con rasgos clínicos de síndrome de Down. Los padres preguntan si sus próximos hijos tendrán el mismo riesgo.",
+      "prompt": "¿Cuál es el estudio de elección para confirmar el diagnóstico y orientar el consejo genético?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ecocardiograma",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Busca cardiopatía, pero no confirma el síndrome."
+        },
+        {
+          "key": "b",
+          "text": "Tamiz neonatal metabólico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No detecta cromosomopatías."
+        },
+        {
+          "key": "c",
+          "text": "Diagnóstico solo clínico sin estudios",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No permite el consejo genético."
+        },
+        {
+          "key": "d",
+          "text": "Radiografía de columna cervical",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Busca inestabilidad atlantoaxial más adelante."
+        },
+        {
+          "key": "e",
+          "text": "Cariotipo en sangre periférica",
+          "correct": true,
+          "rationale": "Confirma la trisomía y distingue la forma libre de la translocación, que cambia el riesgo de recurrencia."
+        },
+        {
+          "key": "f",
+          "text": "Perfil tiroideo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Busca hipotiroidismo asociado."
+        },
+        {
+          "key": "g",
+          "text": "Secuenciación del exoma completo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estudio de elección."
+        },
+        {
+          "key": "h",
+          "text": "Medir la inteligencia al año de edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No confirma el diagnóstico."
+        },
+        {
+          "key": "i",
+          "text": "Ultrasonido transfontanelar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No confirma el síndrome."
+        },
+        {
+          "key": "j",
+          "text": "Biometría hemática",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No confirma el síndrome."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "f"
+      ],
+      "explanation": "El cariotipo en sangre periférica es el estudio de elección para confirmar el síndrome de Down. Distingue la trisomía 21 libre, la translocación robertsoniana y el mosaicismo. Esta distinción es importante para el consejo genético, ya que en la trisomía libre el riesgo de recurrencia es bajo y depende de la edad materna, mientras que si uno de los padres es portador de una translocación balanceada el riesgo es mucho mayor. En caso de translocación se debe realizar cariotipo a los padres. La hibridación in situ fluorescente permite un resultado rápido. También se buscan las condiciones asociadas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención integral de la persona con síndrome de Down"
+      ]
+    },
+    {
+      "key": "ped-12-genetica-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "genetics",
+      "subtopic": "chromosomal_syndromes",
+      "vignette": "Niña de 6 años con síndrome de Down que acude a su revisión anual. Está asintomática. Su madre pregunta qué estudios necesita de rutina.",
+      "prompt": "¿Cuál es el estudio de tamizaje anual más importante en esta niña?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aspirado de médula ósea anual",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se recomienda de rutina."
+        },
+        {
+          "key": "b",
+          "text": "Solo vigilar el peso",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay condiciones que requieren estudios."
+        },
+        {
+          "key": "c",
+          "text": "Ningún estudio porque está asintomática",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Requiere vigilancia de condiciones asociadas."
+        },
+        {
+          "key": "d",
+          "text": "Electroencefalograma anual",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicado sin crisis."
+        },
+        {
+          "key": "e",
+          "text": "Perfil tiroideo con TSH",
+          "correct": true,
+          "rationale": "El hipotiroidismo es muy frecuente y puede pasar inadvertido."
+        },
+        {
+          "key": "f",
+          "text": "Colonoscopia anual",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "g",
+          "text": "Cariotipo repetido cada año",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "El diagnóstico ya está confirmado."
+        },
+        {
+          "key": "h",
+          "text": "Resonancia magnética de cuerpo entero",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "i",
+          "text": "Cateterismo cardiaco anual",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "j",
+          "text": "Tomografía de cráneo anual",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No está indicada."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "j"
+      ],
+      "explanation": "Las personas con síndrome de Down requieren vigilancia de condiciones asociadas. Se recomienda perfil tiroideo al nacer, a los 6 y 12 meses y después cada año, por la alta frecuencia de hipotiroidismo. También se realiza ecocardiograma al nacer, evaluación auditiva y oftalmológica periódica, biometría hemática anual por el riesgo de leucemia y anemia, tamizaje de enfermedad celiaca según síntomas, vigilancia del crecimiento con tablas específicas, del sueño por apnea obstructiva y búsqueda de síntomas de inestabilidad atlantoaxial. La estimulación temprana mejora el desarrollo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención integral de la persona con síndrome de Down"
+      ]
+    },
+    {
+      "key": "ped-12-genetica-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "genetics",
+      "subtopic": "chromosomal_syndromes",
+      "vignette": "Adolescente de 15 años con talla baja, sin desarrollo mamario y con amenorrea primaria. Tiene cuello alado, implantación baja del cabello, tórax ancho con mamilas separadas y cuarto metacarpiano corto. Antecedente de linfedema de manos y pies al nacer.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de Noonan",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede tener fenotipo parecido, pero con cariotipo normal y estenosis pulmonar."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de Kallmann",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da anosmia sin rasgos dismórficos."
+        },
+        {
+          "key": "c",
+          "text": "Retraso constitucional del crecimiento y la pubertad",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica los rasgos dismórficos."
+        },
+        {
+          "key": "d",
+          "text": "Deficiencia aislada de hormona de crecimiento",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la falla ovárica ni los rasgos."
+        },
+        {
+          "key": "e",
+          "text": "Desarrollo tardío familiar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Los rasgos dismórficos indican síndrome."
+        },
+        {
+          "key": "f",
+          "text": "Anorexia nerviosa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica los rasgos dismórficos."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome de Down",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Tiene otros rasgos faciales y discapacidad intelectual."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome de Turner",
+          "correct": true,
+          "rationale": "Talla baja, falla ovárica, cuello alado y linfedema neonatal en una mujer."
+        },
+        {
+          "key": "i",
+          "text": "Hipotiroidismo adquirido",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el cuello alado."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome de Klinefelter",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Afecta a varones con talla alta."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "El síndrome de Turner se debe a la ausencia total o parcial de un cromosoma X, con cariotipo 45,X o mosaicos. Afecta a mujeres y se caracteriza por talla baja, disgenesia gonadal con falla ovárica, amenorrea primaria e infertilidad. Los rasgos incluyen linfedema de manos y pies al nacer, cuello alado, implantación baja del cabello, tórax en escudo, cúbito valgo y cuarto metacarpiano corto. Se asocia a coartación de aorta, válvula aórtica bivalva, riñón en herradura e hipotiroidismo. El tratamiento incluye hormona de crecimiento y estrógenos para inducir la pubertad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de Turner"
+      ]
+    },
+    {
+      "key": "ped-12-genetica-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "genetics",
+      "subtopic": "chromosomal_syndromes",
+      "vignette": "Adolescente masculino de 16 años con talla alta, extremidades largas, ginecomastia, testículos pequeños y firmes, escaso vello facial y problemas de aprendizaje. FSH y LH elevadas con testosterona baja.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de Klinefelter",
+          "correct": true,
+          "rationale": "Talla alta, testículos pequeños, ginecomastia e hipogonadismo hipergonadotrópico en un varón."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de Marfan",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da talla alta con alteraciones cardiovasculares y oculares sin hipogonadismo."
+        },
+        {
+          "key": "c",
+          "text": "Síndrome X frágil",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da macroorquidismo."
+        },
+        {
+          "key": "d",
+          "text": "Tumor testicular productor de estrógenos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Daría masa testicular."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome de Turner",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Afecta a mujeres."
+        },
+        {
+          "key": "f",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome de Kallmann",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es hipogonadotrópico con anosmia."
+        },
+        {
+          "key": "h",
+          "text": "Desarrollo tardío normal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Las gonadotropinas altas indican falla testicular."
+        },
+        {
+          "key": "i",
+          "text": "Obesidad con pseudoginecomastia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el hipogonadismo."
+        },
+        {
+          "key": "j",
+          "text": "Ginecomastia puberal fisiológica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica los testículos pequeños ni las gonadotropinas altas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "El síndrome de Klinefelter es la causa genética más frecuente de hipogonadismo masculino y se debe a un cromosoma X extra, con cariotipo 47,XXY. Se manifiesta en la adolescencia con talla alta y extremidades largas, testículos pequeños y firmes, ginecomastia, vello escaso, infertilidad por azoospermia y, con frecuencia, dificultades de aprendizaje y lenguaje. Los estudios muestran hipogonadismo hipergonadotrópico con FSH y LH altas y testosterona baja. Se confirma con cariotipo. El tratamiento es reemplazo de testosterona, y existen técnicas de reproducción asistida. Tiene mayor riesgo de cáncer de mama y osteoporosis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico del hipogonadismo masculino"
+      ]
+    },
+    {
+      "key": "ped-12-genetica-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "genetics",
+      "subtopic": "chromosomal_syndromes",
+      "vignette": "Recién nacido con bajo peso, puños cerrados con el índice sobre el tercer dedo y el quinto sobre el cuarto, occipucio prominente, micrognatia, esternón corto, pies en mecedora y comunicación interventricular.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Bebé pequeño que se desarrollará normal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Las malformaciones indican síndrome grave."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de Edwards por trisomía 18",
+          "correct": true,
+          "rationale": "Puños cerrados con dedos superpuestos, pies en mecedora y occipucio prominente."
+        },
+        {
+          "key": "c",
+          "text": "Síndrome de Down",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene hipotonía y otros rasgos faciales."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome de DiGeorge",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da cardiopatía conotruncal e hipocalcemia."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome alcohólico fetal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da filtrum liso y labio superior delgado."
+        },
+        {
+          "key": "f",
+          "text": "Síndrome de Pierre Robin aislado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Solo da micrognatia, glosoptosis y paladar hendido."
+        },
+        {
+          "key": "g",
+          "text": "Artrogriposis aislada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica los demás rasgos."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome de Patau",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da labio y paladar hendido, polidactilia y defectos de línea media."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de Turner",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da linfedema y cuello alado."
+        },
+        {
+          "key": "j",
+          "text": "Parálisis cerebral",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica las malformaciones."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "El síndrome de Edwards o trisomía 18 es la segunda trisomía autosómica más frecuente al nacer. Se asocia a edad materna avanzada. Se caracteriza por restricción del crecimiento, occipucio prominente, micrognatia, orejas bajas, puños cerrados con el índice sobre el tercero y el quinto sobre el cuarto, esternón corto, pies en mecedora, cardiopatías y malformaciones renales y digestivas. La mayoría fallece en el primer año. El síndrome de Patau o trisomía 13 se caracteriza por defectos de línea media, como holoprosencefalia, labio y paladar hendido, microftalmia, polidactilia y cutis aplasia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico de cromosomopatías en el recién nacido"
+      ]
+    },
+    {
+      "key": "ped-12-genetica-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "genetics",
+      "subtopic": "chromosomal_syndromes",
+      "vignette": "Lactante de 3 meses con cardiopatía conotruncal tipo tronco arterioso, crisis convulsivas por hipocalcemia, infecciones frecuentes, timo ausente en la radiografía y rasgos faciales con orejas pequeñas y bajas.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de deleción 22q11.2 o de DiGeorge",
+          "correct": true,
+          "rationale": "Cardiopatía conotruncal, hipocalcemia por hipoparatiroidismo e inmunodeficiencia por aplasia tímica."
+        },
+        {
+          "key": "b",
+          "text": "Raquitismo por deficiencia de vitamina D",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica la cardiopatía."
+        },
+        {
+          "key": "c",
+          "text": "Inmunodeficiencia combinada grave aislada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la cardiopatía ni la hipocalcemia."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome de Turner",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Afecta a mujeres con coartación."
+        },
+        {
+          "key": "e",
+          "text": "Epilepsia idiopática",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Las crisis se deben a hipocalcemia."
+        },
+        {
+          "key": "f",
+          "text": "Infecciones por guardería sin importancia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay inmunodeficiencia."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome de Noonan",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da estenosis pulmonar."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome de Williams",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da estenosis aórtica supravalvular e hipercalcemia."
+        },
+        {
+          "key": "i",
+          "text": "Hipocalcemia neonatal tardía por fórmula",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la cardiopatía ni la inmunodeficiencia."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome de Down",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da canal auriculoventricular y otros rasgos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "El síndrome de deleción 22q11.2 resulta de una falla en el desarrollo de la tercera y cuarta bolsas faríngeas. Sus manifestaciones se recuerdan con CATCH 22, cardiopatía conotruncal como tronco arterioso, tetralogía de Fallot o arco aórtico interrumpido, alteraciones faciales, aplasia o hipoplasia del timo con inmunodeficiencia de células T, paladar hendido e hipocalcemia por hipoparatiroidismo. También se asocia a trastornos del aprendizaje y psiquiátricos. Se confirma con hibridación in situ fluorescente o microarreglos. Los pacientes deben recibir productos sanguíneos irradiados y evitar vacunas vivas si la inmunodeficiencia es grave.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico de inmunodeficiencias primarias"
+      ]
+    },
+    {
+      "key": "ped-12-genetica-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "genetics",
+      "subtopic": "chromosomal_syndromes",
+      "vignette": "Niño de 6 años con discapacidad intelectual, hiperactividad, poco contacto visual, cara alargada, orejas grandes y prominentes y articulaciones hiperlaxas. Su tío materno tiene un cuadro similar.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Trastorno del espectro autista aislado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede coexistir, pero los rasgos y la herencia orientan a X frágil."
+        },
+        {
+          "key": "b",
+          "text": "Trastorno por déficit de atención aislado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la discapacidad ni los rasgos."
+        },
+        {
+          "key": "c",
+          "text": "Síndrome de Sotos",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da sobrecrecimiento."
+        },
+        {
+          "key": "d",
+          "text": "Mala crianza como causa de la conducta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una causa genética."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome de Down",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tiene rasgos faciales diferentes."
+        },
+        {
+          "key": "f",
+          "text": "Síndrome de X frágil",
+          "correct": true,
+          "rationale": "Discapacidad intelectual con cara alargada, orejas grandes y herencia ligada al X."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome de Rett",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Afecta a niñas con regresión."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome de Marfan",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No da discapacidad intelectual."
+        },
+        {
+          "key": "i",
+          "text": "Hipotiroidismo congénito no tratado",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la herencia ni los rasgos."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome de Klinefelter",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da hipogonadismo en la adolescencia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "f"
+      ],
+      "explanation": "El síndrome de X frágil es la causa hereditaria más frecuente de discapacidad intelectual. Se debe a una expansión de repeticiones CGG en el gen FMR1 del cromosoma X, con más de 200 repeticiones en la mutación completa. Afecta más y con mayor gravedad a varones. Se manifiesta con discapacidad intelectual, conducta autista, hiperactividad, cara alargada, orejas grandes, mandíbula prominente, hiperlaxitud articular y macroorquidismo después de la pubertad. Las portadoras de premutación tienen riesgo de insuficiencia ovárica prematura y los varones portadores de síndrome de temblor y ataxia. El diagnóstico se confirma con estudio molecular.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico de discapacidad intelectual de origen genético"
+      ]
+    },
+    {
+      "key": "ped-12-genetica-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "genetics",
+      "subtopic": "chromosomal_syndromes",
+      "vignette": "Mujer de 39 años con embarazo de 11 semanas, sana, que pregunta por el riesgo de que su bebé tenga una alteración cromosómica.",
+      "prompt": "¿Cuál es el factor de riesgo más importante de trisomía 21 fetal en este caso?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "La edad materna avanzada",
+          "correct": true,
+          "rationale": "El riesgo de no disyunción meiótica aumenta con la edad materna."
+        },
+        {
+          "key": "b",
+          "text": "El grupo sanguíneo materno",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "c",
+          "text": "El hipotiroidismo materno tratado",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No causa trisomías."
+        },
+        {
+          "key": "d",
+          "text": "Los antojos durante el embarazo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "e",
+          "text": "El consumo de café en el embarazo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "f",
+          "text": "El antecedente de cesárea previa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "g",
+          "text": "El número de controles prenatales",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No modifica el riesgo."
+        },
+        {
+          "key": "h",
+          "text": "La exposición a teléfonos celulares",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay evidencia."
+        },
+        {
+          "key": "i",
+          "text": "La diabetes gestacional",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No causa trisomías."
+        },
+        {
+          "key": "j",
+          "text": "La edad paterna como factor principal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Influye mucho menos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "La edad materna es el principal factor de riesgo de trisomías por no disyunción en la meiosis materna. El riesgo de trisomía 21 al nacer es de alrededor de 1 en 1 500 a los 20 años, 1 en 350 a los 35 años y 1 en 100 a los 40 años. Otros factores son un hijo previo con trisomía y que uno de los padres sea portador de una translocación balanceada. A todas las embarazadas se les debe ofrecer tamizaje prenatal con marcadores bioquímicos y translucencia nucal en el primer trimestre o ADN fetal libre en sangre materna, y diagnóstico con biopsia de vellosidades o amniocentesis si el resultado es de alto riesgo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de control prenatal",
+        "Guía de Práctica Clínica de diagnóstico prenatal de cromosomopatías"
+      ]
+    },
+    {
+      "key": "ped-12-genetica-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "genetics",
+      "subtopic": "inborn_errors",
+      "vignette": "Lactante de 8 meses sin tamiz neonatal con retraso del desarrollo, crisis convulsivas, eczema, piel y cabello más claros que sus hermanos y olor a ratón en la orina y el sudor.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fenilcetonuria",
+          "correct": true,
+          "rationale": "Retraso del desarrollo, hipopigmentación, eczema y olor a ratón por acumulación de fenilalanina."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de West idiopático",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los otros hallazgos."
+        },
+        {
+          "key": "c",
+          "text": "Dermatitis atópica aislada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el retraso ni las crisis."
+        },
+        {
+          "key": "d",
+          "text": "Galactosemia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da ictericia, vómito y cataratas en el recién nacido."
+        },
+        {
+          "key": "e",
+          "text": "Albinismo oculocutáneo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No da retraso del desarrollo ni olor a ratón."
+        },
+        {
+          "key": "f",
+          "text": "Olor por falta de higiene",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un signo metabólico."
+        },
+        {
+          "key": "g",
+          "text": "Enfermedad de orina con olor a jarabe de arce",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El olor es dulce a jarabe."
+        },
+        {
+          "key": "h",
+          "text": "Parálisis cerebral",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la hipopigmentación ni el olor."
+        },
+        {
+          "key": "i",
+          "text": "Hipotiroidismo congénito",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No da hipopigmentación ni olor a ratón."
+        },
+        {
+          "key": "j",
+          "text": "Homocistinuria",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da talla alta y luxación del cristalino."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "La fenilcetonuria es un error innato del metabolismo de herencia autosómica recesiva por deficiencia de la fenilalanina hidroxilasa, que convierte fenilalanina en tirosina. La fenilalanina se acumula y es tóxica para el cerebro, y la falta de tirosina reduce la melanina. Sin tratamiento causa discapacidad intelectual grave, crisis, conducta autista, eczema, hipopigmentación y olor a ratón por el ácido fenilacético. Se detecta con el tamiz neonatal. El tratamiento es una dieta baja en fenilalanina con fórmulas especiales de por vida, iniciada en las primeras semanas. Las mujeres con fenilcetonuria deben controlar su dieta antes y durante el embarazo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de fenilcetonuria",
+        "Lineamiento técnico de tamiz neonatal"
+      ]
+    },
+    {
+      "key": "ped-12-genetica-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "genetics",
+      "subtopic": "inborn_errors",
+      "vignette": "Recién nacido de 5 días alimentado al seno materno que presenta vómito, rechazo al alimento, ictericia, hepatomegalia y letargo. Tiene cataratas en el examen oftalmológico. Sustancias reductoras en orina positivas con glucosuria negativa. Hemocultivo con Escherichia coli.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hipotiroidismo congénito",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No da cataratas ni sustancias reductoras."
+        },
+        {
+          "key": "b",
+          "text": "Leche materna de mala calidad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay un error metabólico."
+        },
+        {
+          "key": "c",
+          "text": "Fenilcetonuria",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No da síntomas agudos en el recién nacido."
+        },
+        {
+          "key": "d",
+          "text": "Tirosinemia tipo 1",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente."
+        },
+        {
+          "key": "e",
+          "text": "Intolerancia a la lactosa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No da afección hepática ni cataratas."
+        },
+        {
+          "key": "f",
+          "text": "Ictericia fisiológica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica las cataratas ni la hepatomegalia."
+        },
+        {
+          "key": "g",
+          "text": "Atresia biliar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica las cataratas ni el inicio con la leche."
+        },
+        {
+          "key": "h",
+          "text": "Rubéola congénita",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Daría cataratas, pero con cardiopatía y sordera."
+        },
+        {
+          "key": "i",
+          "text": "Sepsis neonatal sin enfermedad de base",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La sepsis por Escherichia coli es una complicación típica de la galactosemia."
+        },
+        {
+          "key": "j",
+          "text": "Galactosemia clásica",
+          "correct": true,
+          "rationale": "Vómito, ictericia, hepatomegalia, cataratas y sepsis por Escherichia coli al iniciar la leche."
+        }
+      ],
+      "canonical": [
+        "f",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "La galactosemia clásica es un error innato autosómico recesivo por deficiencia de galactosa 1 fosfato uridiltransferasa. Al iniciar la leche materna o la fórmula, que contienen lactosa, se acumulan galactosa 1 fosfato y galactitol, lo que produce vómito, rechazo al alimento, ictericia, hepatomegalia con falla hepática, tubulopatía renal, cataratas y letargo. Es característica la sepsis por Escherichia coli. Las sustancias reductoras en orina son positivas sin glucosuria. El tratamiento es suspender de inmediato la lactosa y la galactosa con fórmula de soya. Es una de las pocas contraindicaciones absolutas de la lactancia materna.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de galactosemia",
+        "Lineamiento técnico de tamiz neonatal"
+      ]
+    },
+    {
+      "key": "ped-12-genetica-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "genetics",
+      "subtopic": "inborn_errors",
+      "vignette": "Recién nacido de 10 días con tamiz neonatal positivo para fenilcetonuria confirmado con fenilalanina sérica muy elevada. Está asintomático y alimentado al seno materno.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Vigilancia sin tratamiento hasta que aparezcan síntomas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El daño ocurre antes."
+        },
+        {
+          "key": "b",
+          "text": "Trasplante hepático de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el tratamiento estándar."
+        },
+        {
+          "key": "c",
+          "text": "Dieta normal porque se ve sano",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La enfermedad dañará el cerebro."
+        },
+        {
+          "key": "d",
+          "text": "Aspartame como endulzante",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Contiene fenilalanina y está contraindicado."
+        },
+        {
+          "key": "e",
+          "text": "Fórmula de soya habitual",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Contiene fenilalanina."
+        },
+        {
+          "key": "f",
+          "text": "Suspender toda alimentación por días",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es peligroso."
+        },
+        {
+          "key": "g",
+          "text": "Dieta sin lactosa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El problema no es la lactosa."
+        },
+        {
+          "key": "h",
+          "text": "Suspender la dieta en la adolescencia sin vigilancia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Se recomienda de por vida."
+        },
+        {
+          "key": "i",
+          "text": "Dieta restringida en fenilalanina con fórmula especial sin fenilalanina, permitiendo cantidades controladas de leche materna según niveles",
+          "correct": true,
+          "rationale": "Evita la acumulación tóxica."
+        },
+        {
+          "key": "j",
+          "text": "Levotiroxina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No trata la fenilcetonuria."
+        }
+      ],
+      "canonical": [
+        "e",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "El tratamiento de la fenilcetonuria debe iniciarse lo antes posible, idealmente en las primeras 2 semanas de vida. Consiste en una dieta restringida en fenilalanina, con fórmulas especiales libres de fenilalanina enriquecidas con tirosina, y cantidades controladas de proteína natural, incluida la leche materna, según los niveles en sangre. Los niveles se vigilan de forma frecuente para mantenerlos en rango terapéutico. Se recomienda mantener la dieta de por vida. Los alimentos con aspartame están contraindicados porque contienen fenilalanina. La sapropterina puede ser útil en pacientes con respuesta a tetrahidrobiopterina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de fenilcetonuria"
+      ]
+    },
+    {
+      "key": "ped-12-genetica-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "genetics",
+      "subtopic": "inborn_errors",
+      "vignette": "Recién nacido de término de 3 días, previamente sano, que inicia con rechazo al alimento, vómito, letargo progresivo, hipotonía y taquipnea. Gasometría con alcalosis respiratoria. Amonio de 750 µmol/L con glucosa normal y sin acidosis metabólica.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sepsis neonatal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede simularla, pero no explica la hiperamonemia tan elevada."
+        },
+        {
+          "key": "b",
+          "text": "Fenilcetonuria",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No da síntomas agudos neonatales."
+        },
+        {
+          "key": "c",
+          "text": "Cardiopatía congénita",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la hiperamonemia."
+        },
+        {
+          "key": "d",
+          "text": "Recién nacido que duerme mucho por cansancio del parto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El letargo progresivo es una urgencia."
+        },
+        {
+          "key": "e",
+          "text": "Acidemia orgánica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da hiperamonemia con acidosis metabólica y anión gap elevado."
+        },
+        {
+          "key": "f",
+          "text": "Encefalopatía hipóxico isquémica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hubo asfixia y el inicio fue tardío."
+        },
+        {
+          "key": "g",
+          "text": "Hipoglucemia neonatal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La glucosa es normal."
+        },
+        {
+          "key": "h",
+          "text": "Hemorragia intraventricular",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es más común en prematuros."
+        },
+        {
+          "key": "i",
+          "text": "Hiperbilirrubinemia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "j",
+          "text": "Trastorno del ciclo de la urea",
+          "correct": true,
+          "rationale": "Hiperamonemia grave con alcalosis respiratoria y sin acidosis en un recién nacido."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "Los trastornos del ciclo de la urea son errores innatos que impiden convertir el amonio en urea. La forma más común es la deficiencia de ornitina transcarbamilasa, ligada al X. En la forma neonatal el recién nacido es sano al nacer y tras iniciar la alimentación con proteínas presenta rechazo al alimento, vómito, letargo, hipotonía, crisis y coma. El amonio elevado estimula el centro respiratorio y produce alcalosis respiratoria, sin acidosis metabólica ni hipoglucemia, lo que lo distingue de las acidemias orgánicas. Es una urgencia que requiere suspender las proteínas, aportar glucosa, usar quelantes de amonio y hemodiálisis si el amonio es muy alto.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de abordaje del recién nacido con sospecha de error innato del metabolismo"
+      ]
+    },
+    {
+      "key": "ped-12-genetica-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "genetics",
+      "subtopic": "inborn_errors",
+      "vignette": "Niño de 3 años con infecciones respiratorias de repetición, tos crónica productiva, evacuaciones grasosas y fétidas, falla de medro y pólipos nasales. Antecedente de íleo meconial al nacer.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Deficiencia de alfa 1 antitripsina",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da enfisema y hepatopatía."
+        },
+        {
+          "key": "b",
+          "text": "Niño enfermizo por guardería",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una enfermedad genética."
+        },
+        {
+          "key": "c",
+          "text": "Fibrosis quística",
+          "correct": true,
+          "rationale": "Infecciones respiratorias recurrentes, insuficiencia pancreática y antecedente de íleo meconial."
+        },
+        {
+          "key": "d",
+          "text": "Inmunodeficiencia humoral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la esteatorrea ni el íleo meconial."
+        },
+        {
+          "key": "e",
+          "text": "Giardiasis crónica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la afección respiratoria."
+        },
+        {
+          "key": "f",
+          "text": "Asma con infecciones agregadas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la esteatorrea ni el íleo meconial."
+        },
+        {
+          "key": "g",
+          "text": "Reflujo con aspiración",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la insuficiencia pancreática."
+        },
+        {
+          "key": "h",
+          "text": "Discinesia ciliar primaria",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da afección respiratoria sin insuficiencia pancreática."
+        },
+        {
+          "key": "i",
+          "text": "Enfermedad celiaca",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la afección respiratoria."
+        },
+        {
+          "key": "j",
+          "text": "Tuberculosis pulmonar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica el cuadro digestivo."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "h",
+        "i"
+      ],
+      "explanation": "La fibrosis quística es una enfermedad autosómica recesiva por mutaciones del gen CFTR, siendo la más frecuente F508del. La proteína CFTR es un canal de cloro, y su disfunción produce secreciones espesas en vías respiratorias, páncreas, intestino y conductos deferentes. Se manifiesta con íleo meconial, infecciones respiratorias recurrentes por Staphylococcus aureus y Pseudomonas, bronquiectasias, insuficiencia pancreática con esteatorrea y falla de medro, pólipos nasales, sinusitis y azoospermia. Se detecta con el tamiz neonatal de tripsinógeno inmunorreactivo y se confirma con prueba de sudor con cloro mayor de 60 mmol/L.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de fibrosis quística"
+      ]
+    },
+    {
+      "key": "ped-12-genetica-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "genetics",
+      "subtopic": "inborn_errors",
+      "vignette": "Lactante de 6 meses con tamiz neonatal con tripsinógeno inmunorreactivo elevado, neumonías recurrentes y evacuaciones grasosas. Se sospecha fibrosis quística.",
+      "prompt": "¿Cuál es el estudio de elección para confirmar el diagnóstico?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Prueba de aliento con hidrógeno",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Valora intolerancia a la lactosa."
+        },
+        {
+          "key": "b",
+          "text": "Inmunoglobulinas séricas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Valoran inmunodeficiencia."
+        },
+        {
+          "key": "c",
+          "text": "Biopsia rectal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es para Hirschsprung."
+        },
+        {
+          "key": "d",
+          "text": "Biopsia pulmonar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "e",
+          "text": "Tomografía de tórax",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Muestra daño, no confirma."
+        },
+        {
+          "key": "f",
+          "text": "Cultivo de esputo con Pseudomonas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Apoya pero no confirma."
+        },
+        {
+          "key": "g",
+          "text": "Probar la piel salada al besarlo como único dato",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere medición objetiva."
+        },
+        {
+          "key": "h",
+          "text": "Elastasa fecal como única prueba",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Valora la función pancreática pero no confirma."
+        },
+        {
+          "key": "i",
+          "text": "Repetir el tamiz neonatal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No confirma el diagnóstico."
+        },
+        {
+          "key": "j",
+          "text": "Prueba de cloro en sudor",
+          "correct": true,
+          "rationale": "Un cloro mayor de 60 mmol/L confirma el diagnóstico."
+        }
+      ],
+      "canonical": [
+        "e",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "El diagnóstico de fibrosis quística se confirma con la prueba de cloro en sudor por iontoforesis con pilocarpina. Un valor de 60 mmol/L o más es diagnóstico, de 30 a 59 es intermedio y requiere estudio genético, y menor de 30 hace poco probable el diagnóstico. El estudio molecular del gen CFTR identifica las mutaciones y orienta el uso de moduladores. El manejo incluye fisioterapia respiratoria, mucolíticos, antibióticos, enzimas pancreáticas, vitaminas liposolubles, nutrición hipercalórica y moduladores del CFTR como elexacaftor, tezacaftor e ivacaftor en pacientes con mutaciones elegibles.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de fibrosis quística"
+      ]
+    },
+    {
+      "key": "ped-12-genetica-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "genetics",
+      "subtopic": "inborn_errors",
+      "vignette": "Pareja sana con un primer hijo con fibrosis quística. Planean otro embarazo y preguntan cuál es el riesgo de que su siguiente hijo tenga la misma enfermedad.",
+      "prompt": "¿Cuál es el riesgo de recurrencia en cada embarazo?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "75% de hijos afectados",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "75% es la probabilidad de no estar afectado."
+        },
+        {
+          "key": "b",
+          "text": "Riesgo igual al de la población general",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Ambos son portadores."
+        },
+        {
+          "key": "c",
+          "text": "100% porque ya tuvieron un hijo afectado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Cada embarazo es independiente."
+        },
+        {
+          "key": "d",
+          "text": "0% porque ya les tocó un hijo enfermo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Cada embarazo es independiente."
+        },
+        {
+          "key": "e",
+          "text": "Solo los varones pueden afectarse",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es autosómica."
+        },
+        {
+          "key": "f",
+          "text": "Depende de la edad materna",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No influye en herencia recesiva."
+        },
+        {
+          "key": "g",
+          "text": "Solo si el embarazo es en invierno",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No tiene relación."
+        },
+        {
+          "key": "h",
+          "text": "Depende de la dieta en el embarazo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No modifica el riesgo genético."
+        },
+        {
+          "key": "i",
+          "text": "25% de probabilidad de un hijo afectado en cada embarazo",
+          "correct": true,
+          "rationale": "Ambos padres son portadores de una enfermedad autosómica recesiva."
+        },
+        {
+          "key": "j",
+          "text": "50% en cada embarazo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es el riesgo de herencia autosómica dominante."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "La fibrosis quística, la fenilcetonuria, la galactosemia y la mayoría de los errores innatos del metabolismo tienen herencia autosómica recesiva. Cuando ambos padres son portadores sanos, en cada embarazo hay 25% de probabilidad de un hijo afectado, 50% de un hijo portador sano y 25% de un hijo no portador. Entre los hijos sanos, dos de cada tres son portadores. El riesgo es independiente en cada embarazo y no depende del sexo. Se ofrece consejo genético y, cuando se conoce la mutación familiar, diagnóstico prenatal o preimplantacional y estudio de portadores en familiares.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de fibrosis quística"
+      ]
+    }
+  ]
+}

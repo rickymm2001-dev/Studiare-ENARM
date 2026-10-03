@@ -1,0 +1,1791 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "gyo-05-primer-trimestre-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "ectopic_pregnancy",
+      "vignette": "Mujer de 27 años con amenorrea de 7 semanas, dolor en fosa iliaca derecha y sangrado vaginal escaso. Antecedente de enfermedad pélvica inflamatoria. Prueba de embarazo positiva. Estable. El ultrasonido transvaginal no muestra saco gestacional intrauterino y hay una masa anexial derecha.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Enfermedad pélvica inflamatoria aguda",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la prueba positiva."
+        },
+        {
+          "key": "b",
+          "text": "Amenaza de aborto",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Requiere embarazo intrauterino."
+        },
+        {
+          "key": "c",
+          "text": "Quiste de cuerpo lúteo roto con embarazo intrauterino",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay saco intrauterino."
+        },
+        {
+          "key": "d",
+          "text": "Embarazo heterotópico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es muy raro sin reproducción asistida."
+        },
+        {
+          "key": "e",
+          "text": "Embarazo ectópico tubario",
+          "correct": true,
+          "rationale": "Prueba positiva, útero vacío, masa anexial y factor de riesgo tubario."
+        },
+        {
+          "key": "f",
+          "text": "Apendicitis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la prueba de embarazo positiva con útero vacío."
+        },
+        {
+          "key": "g",
+          "text": "Embarazo muy temprano que aún no se ve",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "A las 7 semanas con masa anexial debe pensarse en ectópico."
+        },
+        {
+          "key": "h",
+          "text": "Torsión de ovario",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la prueba positiva con útero vacío."
+        },
+        {
+          "key": "i",
+          "text": "Aborto completo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la masa anexial."
+        },
+        {
+          "key": "j",
+          "text": "Mola hidatiforme",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Daría imagen intrauterina característica."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "El embarazo ectópico es la implantación fuera de la cavidad uterina, en más de 95% en la trompa, sobre todo en la ampolla. Es una causa importante de muerte materna en el primer trimestre. Se manifiesta con amenorrea, dolor abdominal y sangrado vaginal. Los factores de riesgo son enfermedad pélvica inflamatoria, cirugía tubaria, ectópico previo, dispositivo intrauterino, reproducción asistida y tabaquismo. El diagnóstico combina la fracción beta de gonadotropina coriónica y el ultrasonido transvaginal. Un útero vacío con hCG por arriba de la zona discriminatoria, alrededor de 1 500 a 3 500 mUI/mL, sugiere ectópico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del embarazo tubario"
+      ]
+    },
+    {
+      "key": "gyo-05-primer-trimestre-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "ectopic_pregnancy",
+      "vignette": "Mujer de 30 años con embarazo ectópico tubario no roto de 2.5 cm sin actividad cardiaca, hemodinámicamente estable. Fracción beta de hCG de 2 200 mUI/mL. Función hepática y renal normales. Puede acudir a seguimiento.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Reposo hasta que se reabsorba solo sin vigilancia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede romperse."
+        },
+        {
+          "key": "b",
+          "text": "Manejo expectante sin seguimiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Requiere vigilancia estrecha."
+        },
+        {
+          "key": "c",
+          "text": "Esperar a la ruptura para operar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Aumenta la morbilidad."
+        },
+        {
+          "key": "d",
+          "text": "Misoprostol oral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No trata el embarazo ectópico."
+        },
+        {
+          "key": "e",
+          "text": "Histerectomía",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "f",
+          "text": "Oxitocina intravenosa",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es útil."
+        },
+        {
+          "key": "g",
+          "text": "Salpingectomía de urgencia en todas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El tratamiento médico es adecuado en casos seleccionados."
+        },
+        {
+          "key": "h",
+          "text": "Antibióticos y analgésicos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No tratan el ectópico."
+        },
+        {
+          "key": "i",
+          "text": "Metotrexato intramuscular con seguimiento de hCG",
+          "correct": true,
+          "rationale": "Cumple criterios para tratamiento médico."
+        },
+        {
+          "key": "j",
+          "text": "Legrado uterino",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No trata un embarazo tubario."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El metotrexato es un antagonista del ácido fólico que detiene la proliferación del trofoblasto. Se indica en embarazos ectópicos no rotos en pacientes estables, con masa menor de 3.5 a 4 cm, sin actividad cardiaca, con hCG idealmente menor de 5 000 mUI/mL, sin contraindicaciones como hepatopatía, nefropatía, alteraciones hematológicas o lactancia, y que puedan acudir al seguimiento. Se mide la hCG los días 4 y 7 y debe disminuir al menos 15%. Si no disminuye se repite la dosis o se opera. La cirugía se indica en ruptura, inestabilidad o falla del tratamiento médico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del embarazo tubario"
+      ]
+    },
+    {
+      "key": "gyo-05-primer-trimestre-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "ectopic_pregnancy",
+      "vignette": "Mujer de 25 años con amenorrea de 8 semanas que llega con dolor abdominal intenso, dolor en el hombro derecho, palidez, presión de 80/50 mmHg y frecuencia cardiaca de 125. Abdomen con rebote. Prueba de embarazo positiva. El ultrasonido muestra líquido libre abundante en el fondo de saco.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Culdocentesis como tratamiento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es diagnóstica, no terapéutica."
+        },
+        {
+          "key": "b",
+          "text": "Diferir la cirugía hasta estabilizarla por completo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La cirugía es parte de la reanimación."
+        },
+        {
+          "key": "c",
+          "text": "Observar en urgencias por 6 horas",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "La paciente está en choque."
+        },
+        {
+          "key": "d",
+          "text": "Reanimación con soluciones y hemoderivados y laparotomía o laparoscopia urgente",
+          "correct": true,
+          "rationale": "Embarazo ectópico roto con choque hemorrágico."
+        },
+        {
+          "key": "e",
+          "text": "Tomografía abdominal antes de operar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa la cirugía."
+        },
+        {
+          "key": "f",
+          "text": "Medir hCG cada 48 horas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Retrasa el tratamiento de una urgencia."
+        },
+        {
+          "key": "g",
+          "text": "Metotrexato intramuscular",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Está contraindicado en ruptura e inestabilidad."
+        },
+        {
+          "key": "h",
+          "text": "Manejo expectante con analgesia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es mortal."
+        },
+        {
+          "key": "i",
+          "text": "Legrado uterino urgente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No trata el sangrado tubario."
+        },
+        {
+          "key": "j",
+          "text": "El dolor de hombro es por mala postura",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Indica irritación diafragmática por sangre."
+        }
+      ],
+      "canonical": [
+        "d",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "El embarazo ectópico roto produce hemoperitoneo y choque hipovolémico. Se manifiesta con dolor abdominal intenso, signos de irritación peritoneal, dolor referido al hombro por irritación del diafragma, hipotensión y taquicardia. El ultrasonido muestra líquido libre. El tratamiento es quirúrgico urgente mientras se reanima a la paciente con soluciones y hemoderivados. Se prefiere la laparoscopia si hay estabilidad suficiente y experiencia, y la laparotomía en inestabilidad grave. Generalmente se realiza salpingectomía. Se aplica inmunoglobulina anti D a mujeres Rh negativo no sensibilizadas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del embarazo tubario"
+      ]
+    },
+    {
+      "key": "gyo-05-primer-trimestre-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "ectopic_pregnancy",
+      "vignette": "Mujer de 29 años con amenorrea de 6 semanas y sangrado escaso, estable. Fracción beta de hCG de 900 mUI/mL. El ultrasonido transvaginal no muestra saco intrauterino ni masas anexiales.",
+      "prompt": "¿Qué indica este resultado?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Embarazo de localización desconocida que requiere hCG seriada a las 48 horas y nuevo ultrasonido",
+          "correct": true,
+          "rationale": "La hCG está por debajo de la zona discriminatoria."
+        },
+        {
+          "key": "b",
+          "text": "Prueba falsa positiva",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La hCG sérica confirma embarazo."
+        },
+        {
+          "key": "c",
+          "text": "Indicación de metotrexato inmediato",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay diagnóstico de ectópico."
+        },
+        {
+          "key": "d",
+          "text": "Indicación de legrado diagnóstico en todas",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es el paso inicial si desea el embarazo."
+        },
+        {
+          "key": "e",
+          "text": "Tumor productor de hCG",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay datos."
+        },
+        {
+          "key": "f",
+          "text": "Mola hidatiforme",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La hCG sería muy alta."
+        },
+        {
+          "key": "g",
+          "text": "Embarazo ectópico confirmado que requiere cirugía",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No se puede confirmar con estos datos."
+        },
+        {
+          "key": "h",
+          "text": "Ya no está embarazada porque no se ve nada",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La hCG positiva indica embarazo."
+        },
+        {
+          "key": "i",
+          "text": "Aborto completo confirmado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No puede afirmarse sin seguimiento."
+        },
+        {
+          "key": "j",
+          "text": "Embarazo intrauterino normal confirmado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No se ha visto el saco."
+        }
+      ],
+      "canonical": [
+        "a",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El embarazo de localización desconocida es una prueba de embarazo positiva sin evidencia de embarazo intrauterino ni extrauterino por ultrasonido transvaginal. Puede ser un embarazo intrauterino temprano, un aborto o un ectópico. Cuando la hCG está por debajo de la zona discriminatoria se repite a las 48 horas. En un embarazo intrauterino viable la hCG aumenta al menos 35 a 53% en 48 horas, un descenso sugiere aborto y un ascenso lento o meseta sugiere ectópico. Se repite el ultrasonido cuando se supera la zona discriminatoria. Se dan signos de alarma a la paciente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del embarazo tubario"
+      ]
+    },
+    {
+      "key": "gyo-05-primer-trimestre-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "ectopic_pregnancy",
+      "vignette": "Mujer de 33 años con embarazo ectópico tubario. Tiene antecedente de salpingitis por clamidia hace 5 años, usa anticonceptivos orales de forma irregular y es fumadora.",
+      "prompt": "¿Cuál es el factor de riesgo más importante para el embarazo ectópico en esta paciente?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cargar objetos pesados al inicio del embarazo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No causa ectópico."
+        },
+        {
+          "key": "b",
+          "text": "Primiparidad",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un factor relevante."
+        },
+        {
+          "key": "c",
+          "text": "Antecedente de enfermedad pélvica inflamatoria por clamidia",
+          "correct": true,
+          "rationale": "El daño tubario es el principal factor de riesgo."
+        },
+        {
+          "key": "d",
+          "text": "Consumo de café",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un factor relevante."
+        },
+        {
+          "key": "e",
+          "text": "Uso de tampones",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "f",
+          "text": "Ejercicio intenso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "g",
+          "text": "Grupo sanguíneo materno",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "h",
+          "text": "Edad de 33 años como factor principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es un factor menor."
+        },
+        {
+          "key": "i",
+          "text": "Uso de anticonceptivos orales",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Reducen el riesgo de embarazo."
+        },
+        {
+          "key": "j",
+          "text": "Relaciones sexuales frecuentes",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es un factor por sí mismo."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "Los principales factores de riesgo de embarazo ectópico son los que dañan la trompa, como enfermedad pélvica inflamatoria, sobre todo por Chlamydia trachomatis, cirugía tubaria incluida la oclusión tubaria, ectópico previo y endometriosis. Otros factores son reproducción asistida, tabaquismo, edad mayor de 35 años y embarazo con dispositivo intrauterino colocado, aunque el dispositivo reduce el riesgo global de embarazo. El tabaquismo altera la motilidad tubaria. Prevenir y tratar las infecciones de transmisión sexual reduce el riesgo de ectópico e infertilidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del embarazo tubario"
+      ]
+    },
+    {
+      "key": "gyo-05-primer-trimestre-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "ectopic_pregnancy",
+      "vignette": "Mujer de 28 años tratada con metotrexato por embarazo ectópico. Al día 7 la hCG aumentó respecto al día 4 y hoy presenta dolor abdominal creciente, aunque está estable.",
+      "prompt": "¿Cuál es el riesgo principal en este momento?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Mola hidatiforme posterior",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es la complicación esperada."
+        },
+        {
+          "key": "b",
+          "text": "Toxicidad hepática como única preocupación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La prioridad es la falla y la ruptura."
+        },
+        {
+          "key": "c",
+          "text": "Quiste de ovario funcional",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la hCG ascendente."
+        },
+        {
+          "key": "d",
+          "text": "Alergia al metotrexato",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "e",
+          "text": "El medicamento tarda meses en hacer efecto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La respuesta se mide en una semana."
+        },
+        {
+          "key": "f",
+          "text": "Gastritis por metotrexato",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la hCG ascendente."
+        },
+        {
+          "key": "g",
+          "text": "Embarazo intrauterino viable",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "h",
+          "text": "Ninguno, el dolor es normal y la hCG siempre sube al inicio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Del día 4 al 7 debe bajar al menos 15%."
+        },
+        {
+          "key": "i",
+          "text": "Falla del tratamiento con riesgo de ruptura tubaria que requiere valorar segunda dosis o cirugía",
+          "correct": true,
+          "rationale": "La hCG que no disminuye indica falla."
+        },
+        {
+          "key": "j",
+          "text": "Infertilidad inmediata segura",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es el riesgo inmediato."
+        }
+      ],
+      "canonical": [
+        "a",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "Tras el metotrexato puede haber dolor abdominal en los primeros días por la resolución del ectópico, pero el dolor creciente obliga a descartar ruptura. La hCG puede aumentar del día 1 al 4, pero debe disminuir al menos 15% entre los días 4 y 7. Si no disminuye se considera falla y se administra una segunda dosis o se realiza cirugía. Ante datos de ruptura o inestabilidad se opera. Durante el tratamiento se evitan el ácido fólico, los antiinflamatorios, el alcohol y las relaciones sexuales, y se recomienda evitar el embarazo por al menos 3 meses.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del embarazo tubario"
+      ]
+    },
+    {
+      "key": "gyo-05-primer-trimestre-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "ectopic_pregnancy",
+      "vignette": "Mujer de 26 años con amenorrea de 6 semanas y dolor pélvico leve. Prueba de embarazo en orina positiva. Está estable.",
+      "prompt": "¿Cuál es el estudio inicial de elección para localizar el embarazo?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ultrasonido abdominal como único estudio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es menos sensible al inicio del embarazo."
+        },
+        {
+          "key": "b",
+          "text": "Tomografía abdominal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es adecuada en el embarazo temprano."
+        },
+        {
+          "key": "c",
+          "text": "Resonancia magnética de pelvis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "d",
+          "text": "Histerosalpingografía",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Está contraindicada en el embarazo."
+        },
+        {
+          "key": "e",
+          "text": "Laparoscopia diagnóstica inmediata",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es invasiva y no es el primer paso en estables."
+        },
+        {
+          "key": "f",
+          "text": "Culdocentesis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Ha sido sustituida por el ultrasonido."
+        },
+        {
+          "key": "g",
+          "text": "Progesterona sérica como único estudio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No localiza el embarazo."
+        },
+        {
+          "key": "h",
+          "text": "Ultrasonido transvaginal junto con fracción beta de hCG cuantitativa",
+          "correct": true,
+          "rationale": "Permite identificar embarazo intrauterino o ectópico."
+        },
+        {
+          "key": "i",
+          "text": "Esperar a la siguiente menstruación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Retrasa el diagnóstico."
+        },
+        {
+          "key": "j",
+          "text": "Biometría hemática como estudio de localización",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No localiza."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "h"
+      ],
+      "explanation": "Ante una prueba de embarazo positiva con dolor o sangrado en el primer trimestre, el abordaje inicial es el ultrasonido transvaginal junto con la fracción beta de hCG cuantitativa. El ultrasonido transvaginal visualiza el saco gestacional intrauterino desde las 4.5 a 5 semanas y es más sensible que el abdominal. La presencia de saco con vesícula vitelina confirma el embarazo intrauterino. Una masa anexial con anillo hiperecoico o un saco con embrión fuera del útero confirman el ectópico. La laparoscopia diagnóstica se reserva para casos dudosos o inestables.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del embarazo tubario"
+      ]
+    },
+    {
+      "key": "gyo-05-primer-trimestre-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "miscarriage",
+      "vignette": "Mujer de 24 años con embarazo de 9 semanas que presenta sangrado vaginal escaso y dolor tipo cólico leve. El orificio cervical está cerrado. El ultrasonido muestra embrión con frecuencia cardiaca de 160 por minuto.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Amenaza de aborto",
+          "correct": true,
+          "rationale": "Sangrado con cérvix cerrado y embrión vivo."
+        },
+        {
+          "key": "b",
+          "text": "Aborto completo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El embarazo continúa."
+        },
+        {
+          "key": "c",
+          "text": "Menstruación en el embarazo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El sangrado en el embarazo no es menstruación."
+        },
+        {
+          "key": "d",
+          "text": "Pérdida segura del embarazo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La mayoría continúa con normalidad."
+        },
+        {
+          "key": "e",
+          "text": "Embarazo ectópico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El embarazo es intrauterino."
+        },
+        {
+          "key": "f",
+          "text": "Aborto inevitable",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tendría cérvix abierto."
+        },
+        {
+          "key": "g",
+          "text": "Mola hidatiforme",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La imagen sería característica."
+        },
+        {
+          "key": "h",
+          "text": "Pólipo cervical",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el cólico."
+        },
+        {
+          "key": "i",
+          "text": "Aborto incompleto",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Habría restos con cérvix abierto."
+        },
+        {
+          "key": "j",
+          "text": "Aborto diferido",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El embrión tiene actividad cardiaca."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "i",
+        "j"
+      ],
+      "explanation": "El aborto espontáneo es la pérdida del embarazo antes de las 20 semanas o de los 500 g. Se clasifica en amenaza de aborto, con sangrado, cérvix cerrado y embrión vivo, aborto inevitable con cérvix abierto o ruptura de membranas, aborto incompleto con expulsión parcial y restos, aborto completo con expulsión total y cérvix cerrado, y aborto diferido con embrión sin actividad cardiaca retenido. En la amenaza de aborto con embrión vivo la mayoría de los embarazos continúan. El manejo es expectante, sin evidencia de beneficio del reposo absoluto.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del aborto espontáneo"
+      ]
+    },
+    {
+      "key": "gyo-05-primer-trimestre-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "miscarriage",
+      "vignette": "Mujer de 30 años con embarazo de 10 semanas por fecha de última menstruación. El ultrasonido muestra embrión con longitud cráneo caudal de 9 mm sin actividad cardiaca. Sin sangrado. Desea la opción menos invasiva y no tiene contraindicaciones.",
+      "prompt": "¿Cuál es el tratamiento médico de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "No ofrecer opciones por ser un tema difícil",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La paciente tiene derecho a decidir."
+        },
+        {
+          "key": "b",
+          "text": "Misoprostol, idealmente precedido de mifepristona, con seguimiento clínico",
+          "correct": true,
+          "rationale": "Es eficaz para evacuar el aborto diferido sin cirugía."
+        },
+        {
+          "key": "c",
+          "text": "Metotrexato",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se usa en ectópico."
+        },
+        {
+          "key": "d",
+          "text": "Antibióticos solos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No evacuan el útero."
+        },
+        {
+          "key": "e",
+          "text": "Progesterona para mantener el embarazo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El embrión no es viable."
+        },
+        {
+          "key": "f",
+          "text": "Histerectomía",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "g",
+          "text": "Oxitocina intravenosa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es poco eficaz en el primer trimestre."
+        },
+        {
+          "key": "h",
+          "text": "Legrado obligatorio en todas",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Hay opciones médicas y aspiración."
+        },
+        {
+          "key": "i",
+          "text": "Esperar indefinidamente sin seguimiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Debe tener seguimiento."
+        },
+        {
+          "key": "j",
+          "text": "Repetir el ultrasonido cada semana por meses esperando latido",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Con 9 mm sin latido el diagnóstico es seguro."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "El aborto diferido se diagnostica con un embrión con longitud cráneo caudal de 7 mm o más sin actividad cardiaca, o un saco gestacional de 25 mm o más sin embrión. Las opciones de manejo son expectante, médico o quirúrgico, según la preferencia de la paciente y su estado clínico. El tratamiento médico más eficaz es mifepristona seguida de misoprostol, o misoprostol solo. El tratamiento quirúrgico de elección es la aspiración manual endouterina, preferida sobre el legrado instrumentado. Se aplica inmunoglobulina anti D en mujeres Rh negativo y se ofrece anticoncepción y apoyo emocional.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del aborto espontáneo"
+      ]
+    },
+    {
+      "key": "gyo-05-primer-trimestre-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "miscarriage",
+      "vignette": "Mujer de 26 años con embarazo de 8 semanas que presenta sangrado abundante con coágulos y salida de tejido. El orificio cervical está abierto y el ultrasonido muestra restos en cavidad. Estable y sin fiebre.",
+      "prompt": "¿Cuál es el tratamiento quirúrgico de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Histerectomía",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "b",
+          "text": "Cesárea",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "c",
+          "text": "Legrado uterino instrumentado como primera elección",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene más riesgo de perforación y sinequias."
+        },
+        {
+          "key": "d",
+          "text": "Metotrexato",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "e",
+          "text": "Dilatación y evacuación del segundo trimestre",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es para embarazos más avanzados."
+        },
+        {
+          "key": "f",
+          "text": "Histeroscopia operatoria como primera opción",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estándar inicial."
+        },
+        {
+          "key": "g",
+          "text": "No evacuar por miedo a dañar la fertilidad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La aspiración es segura."
+        },
+        {
+          "key": "h",
+          "text": "Solo uterotónicos sin evacuar en sangrado abundante",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede requerir evacuación."
+        },
+        {
+          "key": "i",
+          "text": "Reposo absoluto hasta que expulse todo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Con sangrado abundante requiere evacuación."
+        },
+        {
+          "key": "j",
+          "text": "Aspiración manual endouterina",
+          "correct": true,
+          "rationale": "Es segura, eficaz y con menos complicaciones que el legrado instrumentado."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "El aborto incompleto se caracteriza por sangrado, cólico, cérvix abierto y restos en la cavidad. En pacientes estables puede manejarse de forma expectante, médica con misoprostol o quirúrgica. La aspiración manual endouterina es el tratamiento quirúrgico de elección en embarazos de hasta 12 a 14 semanas, ya que tiene menor riesgo de perforación, sangrado y sinequias que el legrado instrumentado, y puede realizarse con anestesia local. Ante sangrado abundante, inestabilidad o infección se prefiere la evacuación quirúrgica. Se administra inmunoglobulina anti D si es Rh negativo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del aborto espontáneo"
+      ]
+    },
+    {
+      "key": "gyo-05-primer-trimestre-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "miscarriage",
+      "vignette": "Mujer de 34 años con tres abortos espontáneos consecutivos en el primer trimestre. Se estudia la causa. Tiene antecedente de una trombosis venosa profunda y anticuerpos anticardiolipina positivos en dos ocasiones separadas por 12 semanas.",
+      "prompt": "¿Cuál es la causa más probable de sus pérdidas recurrentes?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Diabetes descontrolada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay datos."
+        },
+        {
+          "key": "b",
+          "text": "Hipotiroidismo subclínico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica los anticuerpos ni la trombosis."
+        },
+        {
+          "key": "c",
+          "text": "Infección por toxoplasma",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No causa pérdidas recurrentes."
+        },
+        {
+          "key": "d",
+          "text": "Alteraciones cromosómicas fetales esporádicas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explican la trombosis ni los anticuerpos."
+        },
+        {
+          "key": "e",
+          "text": "Estrés laboral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es una causa demostrada."
+        },
+        {
+          "key": "f",
+          "text": "Insuficiencia cervical",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Causa pérdidas en el segundo trimestre."
+        },
+        {
+          "key": "g",
+          "text": "Edad materna como única causa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los anticuerpos."
+        },
+        {
+          "key": "h",
+          "text": "Mala suerte sin causa médica",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una causa tratable."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome antifosfolípido",
+          "correct": true,
+          "rationale": "Pérdidas recurrentes con trombosis y anticuerpos antifosfolípido persistentes."
+        },
+        {
+          "key": "j",
+          "text": "Útero septado",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede causarlas, pero no explica los anticuerpos."
+        }
+      ],
+      "canonical": [
+        "b",
+        "d",
+        "f",
+        "i"
+      ],
+      "explanation": "El aborto recurrente se define como dos o tres pérdidas consecutivas. Sus causas incluyen alteraciones cromosómicas parentales, síndrome antifosfolípido, malformaciones uterinas como útero septado, alteraciones endocrinas como diabetes y tiroides descontroladas, y factores de estilo de vida. El síndrome antifosfolípido se diagnostica con un criterio clínico, como trombosis o pérdidas gestacionales, y uno de laboratorio, anticoagulante lúpico, anticardiolipina o anti beta 2 glicoproteína I positivos en dos ocasiones con 12 semanas de diferencia. El tratamiento en el embarazo es ácido acetilsalicílico a dosis baja con heparina de bajo peso molecular.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del aborto recurrente"
+      ]
+    },
+    {
+      "key": "gyo-05-primer-trimestre-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "miscarriage",
+      "vignette": "Mujer de 22 años con aborto inducido en condiciones inseguras hace 2 días que presenta fiebre de 39.5 °C, dolor abdominal, loquios fétidos, taquicardia y presión de 85/50 mmHg. Útero doloroso.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aborto incompleto no complicado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la fiebre ni el choque."
+        },
+        {
+          "key": "b",
+          "text": "Mola invasora",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica el cuadro agudo séptico."
+        },
+        {
+          "key": "c",
+          "text": "Reacción al misoprostol",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "La fiebre por misoprostol es transitoria sin choque."
+        },
+        {
+          "key": "d",
+          "text": "Infección urinaria baja",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la secreción fétida ni el choque."
+        },
+        {
+          "key": "e",
+          "text": "Fiebre normal después de un aborto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia."
+        },
+        {
+          "key": "f",
+          "text": "Aborto séptico con choque séptico",
+          "correct": true,
+          "rationale": "Fiebre, dolor uterino, secreción fétida e hipotensión tras un aborto inseguro."
+        },
+        {
+          "key": "g",
+          "text": "Apendicitis aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el antecedente ni la secreción."
+        },
+        {
+          "key": "h",
+          "text": "Endometriosis",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el cuadro agudo."
+        },
+        {
+          "key": "i",
+          "text": "Gastroenteritis aguda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica los hallazgos."
+        },
+        {
+          "key": "j",
+          "text": "Embarazo ectópico roto",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la fiebre."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "f",
+        "g"
+      ],
+      "explanation": "El aborto séptico es la infección del útero y sus anexos tras un aborto, sobre todo inseguro o con restos retenidos. Se manifiesta con fiebre, dolor abdominal, útero doloroso, secreción fétida y puede progresar a peritonitis, choque séptico, coagulación intravascular diseminada y muerte. Es una causa importante de mortalidad materna. El tratamiento incluye reanimación, antibióticos de amplio espectro como clindamicina con gentamicina o ampicilina, y evacuación uterina temprana tras iniciar los antibióticos. Si no mejora o hay perforación puede requerirse histerectomía. El acceso a aborto seguro reduce estas muertes.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del aborto espontáneo"
+      ]
+    },
+    {
+      "key": "gyo-05-primer-trimestre-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "miscarriage",
+      "vignette": "Mujer de 38 años con aborto espontáneo de 8 semanas, el primero. Está muy angustiada y pregunta qué hizo mal para perder el embarazo.",
+      "prompt": "¿Cuál es la causa más frecuente de aborto espontáneo en el primer trimestre?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Alteraciones cromosómicas del embrión, sobre todo trisomías",
+          "correct": true,
+          "rationale": "Explican alrededor de la mitad de los abortos tempranos."
+        },
+        {
+          "key": "b",
+          "text": "Ejercicio o actividad física moderada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No causa aborto."
+        },
+        {
+          "key": "c",
+          "text": "Relaciones sexuales en el embarazo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No causan aborto."
+        },
+        {
+          "key": "d",
+          "text": "Infecciones urinarias leves",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No son la causa principal."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome antifosfolípido",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente."
+        },
+        {
+          "key": "f",
+          "text": "Malformaciones uterinas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Son menos frecuentes."
+        },
+        {
+          "key": "g",
+          "text": "Estrés emocional",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es una causa demostrada."
+        },
+        {
+          "key": "h",
+          "text": "Haber cargado objetos ligeros",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No causa aborto."
+        },
+        {
+          "key": "i",
+          "text": "Insuficiencia del cuerpo lúteo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es la causa principal."
+        },
+        {
+          "key": "j",
+          "text": "Haber comido alimentos fríos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un mito."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "g"
+      ],
+      "explanation": "El aborto espontáneo ocurre en 10 a 20% de los embarazos clínicamente reconocidos, sobre todo en el primer trimestre. Alrededor de la mitad se deben a alteraciones cromosómicas del embrión, como trisomías autosómicas, monosomía X y triploidías, cuyo riesgo aumenta con la edad materna. Otros factores son edad mayor de 35 años, abortos previos, diabetes y tiroides descontroladas, tabaquismo, alcohol, obesidad y malformaciones uterinas. El ejercicio, las relaciones sexuales y el estrés cotidiano no causan aborto. Es importante explicarlo para reducir la culpa y ofrecer apoyo emocional.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del aborto espontáneo"
+      ]
+    },
+    {
+      "key": "gyo-05-primer-trimestre-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "gestational_trophoblastic",
+      "vignette": "Mujer de 19 años con amenorrea de 11 semanas, sangrado vaginal oscuro, náusea y vómito intensos y útero más grande de lo esperado para la edad gestacional. Fracción beta de hCG de 250 000 mUI/mL. El ultrasonido muestra imagen en tormenta de nieve sin embrión.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Embarazo gemelar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se verían sacos y embriones."
+        },
+        {
+          "key": "b",
+          "text": "Aborto diferido",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No da imagen en tormenta de nieve ni hCG tan alta."
+        },
+        {
+          "key": "c",
+          "text": "Mioma uterino con embarazo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la hCG ni la imagen."
+        },
+        {
+          "key": "d",
+          "text": "Embarazo ectópico",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El útero está ocupado."
+        },
+        {
+          "key": "e",
+          "text": "Coriocarcinoma",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Suele aparecer después de un embarazo."
+        },
+        {
+          "key": "f",
+          "text": "Hiperémesis gravídica con embarazo normal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la imagen ecográfica."
+        },
+        {
+          "key": "g",
+          "text": "Mola parcial",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Suele haber embrión o tejido fetal."
+        },
+        {
+          "key": "h",
+          "text": "Embarazo grande y sano",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La imagen indica enfermedad trofoblástica."
+        },
+        {
+          "key": "i",
+          "text": "Tumor ovárico de células germinales",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la imagen uterina."
+        },
+        {
+          "key": "j",
+          "text": "Mola hidatiforme completa",
+          "correct": true,
+          "rationale": "hCG muy elevada, útero grande e imagen en tormenta de nieve sin embrión."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "j"
+      ],
+      "explanation": "La mola hidatiforme completa resulta de la fecundación de un óvulo sin material genético por uno o dos espermatozoides, con cariotipo 46,XX de origen paterno, sin tejido embrionario. Se manifiesta con sangrado en el primer trimestre, útero grande para la edad gestacional, hiperémesis, hCG muy elevada, quistes tecaluteínicos, preeclampsia temprana e hipertiroidismo. El ultrasonido muestra imagen en tormenta de nieve. La mola parcial es triploide, con tejido fetal y menor riesgo de malignización. Los extremos de la edad reproductiva y la mola previa son factores de riesgo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad trofoblástica gestacional"
+      ]
+    },
+    {
+      "key": "gyo-05-primer-trimestre-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "gestational_trophoblastic",
+      "vignette": "Mujer de 22 años con mola hidatiforme completa confirmada, útero de 14 semanas, hemodinámicamente estable. Desea conservar su fertilidad.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Inducción con misoprostol para expulsión espontánea",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aumenta el sangrado y la embolización trofoblástica."
+        },
+        {
+          "key": "b",
+          "text": "Quimioterapia inmediata sin evacuar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Primero se evacua."
+        },
+        {
+          "key": "c",
+          "text": "Evacuación uterina por aspiración con oxitocina tras iniciar la dilatación, y seguimiento con hCG",
+          "correct": true,
+          "rationale": "Es el tratamiento estándar que preserva la fertilidad."
+        },
+        {
+          "key": "d",
+          "text": "Radioterapia pélvica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "e",
+          "text": "Metotrexato profiláctico a todas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No se recomienda de rutina."
+        },
+        {
+          "key": "f",
+          "text": "Esperar a que el cuerpo la expulse sola",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Aumenta las complicaciones."
+        },
+        {
+          "key": "g",
+          "text": "Manejo expectante",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La mola debe evacuarse."
+        },
+        {
+          "key": "h",
+          "text": "Histerectomía en todas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para quienes no desean fertilidad."
+        },
+        {
+          "key": "i",
+          "text": "No hacer seguimiento tras la evacuación",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La hCG detecta la neoplasia persistente."
+        },
+        {
+          "key": "j",
+          "text": "Legrado con cureta cortante como método principal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La aspiración es preferida."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "El tratamiento de la mola hidatiforme es la evacuación uterina por aspiración, independientemente del tamaño uterino, en mujeres que desean fertilidad. La oxitocina se inicia después de comenzar la dilatación para reducir el riesgo de embolización trofoblástica. Se aplica inmunoglobulina anti D si es Rh negativo, ya que en la mola parcial hay tejido fetal. En mujeres sin deseo de fertilidad puede realizarse histerectomía con la mola in situ. Después se mide la hCG semanalmente hasta que sea negativa tres veces consecutivas y luego mensualmente, con anticoncepción hormonal confiable durante el seguimiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad trofoblástica gestacional"
+      ]
+    },
+    {
+      "key": "gyo-05-primer-trimestre-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "gestational_trophoblastic",
+      "vignette": "Mujer de 25 años con evacuación de mola completa hace 8 semanas. Las mediciones semanales de hCG han sido 12 000, 11 800, 11 900 y 12 100 mUI/mL en las últimas 4 semanas. Usa anticonceptivos orales.",
+      "prompt": "¿Qué indica este patrón de hCG?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Resolución completa de la mola",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La hCG sigue elevada."
+        },
+        {
+          "key": "b",
+          "text": "Falso positivo por anticuerpos heterófilos sin relevancia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El contexto indica enfermedad persistente."
+        },
+        {
+          "key": "c",
+          "text": "Error de laboratorio repetido",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es consistente en 4 mediciones."
+        },
+        {
+          "key": "d",
+          "text": "Hipertiroidismo como causa de la hCG",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La hCG proviene del trofoblasto."
+        },
+        {
+          "key": "e",
+          "text": "Descenso normal esperado tras la evacuación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La hCG no está descendiendo."
+        },
+        {
+          "key": "f",
+          "text": "Quiste ovárico funcional",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No produce hCG."
+        },
+        {
+          "key": "g",
+          "text": "Esperar unos meses más sin estudios",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La neoplasia requiere tratamiento."
+        },
+        {
+          "key": "h",
+          "text": "Nuevo embarazo normal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Usa anticoncepción y el patrón es una meseta."
+        },
+        {
+          "key": "i",
+          "text": "Efecto de los anticonceptivos sobre la hCG",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No elevan la hCG."
+        },
+        {
+          "key": "j",
+          "text": "Neoplasia trofoblástica gestacional por meseta de la hCG en cuatro mediciones",
+          "correct": true,
+          "rationale": "La meseta durante 3 semanas indica enfermedad persistente."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "Tras la evacuación de una mola la hCG debe descender de forma progresiva. Se diagnostica neoplasia trofoblástica gestacional cuando la hCG se mantiene en meseta durante 3 semanas, con cuatro mediciones con variación menor de 10%, cuando aumenta más de 10% en tres mediciones durante 2 semanas, cuando persiste detectable más de 6 meses o cuando hay diagnóstico histológico de coriocarcinoma. Se realiza estudio de extensión con radiografía o tomografía de tórax y se estadifica con la puntuación de riesgo de la FIGO. La de bajo riesgo se trata con metotrexato o actinomicina D, con curación cercana a 100%.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad trofoblástica gestacional"
+      ]
+    },
+    {
+      "key": "gyo-05-primer-trimestre-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "gestational_trophoblastic",
+      "vignette": "Mujer de 20 años con mola hidatiforme completa y hCG de 400 000 mUI/mL que presenta palpitaciones, temblor, intolerancia al calor y taquicardia. TSH suprimida y T4 libre elevada.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Feocromocitoma",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la alteración tiroidea."
+        },
+        {
+          "key": "b",
+          "text": "Crisis de ansiedad",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Hay alteración tiroidea objetiva."
+        },
+        {
+          "key": "c",
+          "text": "Enfermedad de Graves coincidente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El contexto orienta a hipertiroidismo por hCG."
+        },
+        {
+          "key": "d",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La T4 está elevada."
+        },
+        {
+          "key": "e",
+          "text": "Efecto del sangrado con anemia sola",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la TSH suprimida."
+        },
+        {
+          "key": "f",
+          "text": "Nervios por el diagnóstico de la mola",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay hipertiroidismo bioquímico."
+        },
+        {
+          "key": "g",
+          "text": "Hipertiroidismo por estimulación del receptor de TSH por la hCG",
+          "correct": true,
+          "rationale": "La hCG comparte la subunidad alfa con la TSH."
+        },
+        {
+          "key": "h",
+          "text": "Tiroiditis subaguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay dolor tiroideo ni antecedente viral."
+        },
+        {
+          "key": "i",
+          "text": "Preeclampsia sin otra alteración",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la tirotoxicosis."
+        },
+        {
+          "key": "j",
+          "text": "Adenoma tóxico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El contexto explica el cuadro."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "La hCG y la TSH comparten la subunidad alfa y tienen subunidades beta similares, por lo que concentraciones muy altas de hCG pueden estimular el receptor de TSH y causar hipertiroidismo. Es una complicación de la mola hidatiforme, sobre todo con hCG muy elevada. Otras complicaciones médicas son hiperémesis, preeclampsia antes de las 20 semanas, anemia, quistes tecaluteínicos y embolización trofoblástica pulmonar durante la evacuación. El hipertiroidismo se controla con betabloqueadores antes de la evacuación para evitar una crisis tiroidea, y se resuelve al disminuir la hCG.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad trofoblástica gestacional"
+      ]
+    },
+    {
+      "key": "gyo-05-primer-trimestre-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "gestational_trophoblastic",
+      "vignette": "Mujer de 31 años con parto vaginal normal hace 4 meses que presenta sangrado vaginal persistente, tos y hemoptisis. La radiografía de tórax muestra múltiples nódulos pulmonares. Fracción beta de hCG de 85 000 mUI/mL.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Retención de restos placentarios",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica las metástasis pulmonares."
+        },
+        {
+          "key": "b",
+          "text": "Nuevo embarazo normal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica los nódulos ni la hemoptisis."
+        },
+        {
+          "key": "c",
+          "text": "Mola hidatiforme completa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El antecedente es un embarazo de término."
+        },
+        {
+          "key": "d",
+          "text": "Sangrado normal del puerperio prolongado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "A los 4 meses es anormal."
+        },
+        {
+          "key": "e",
+          "text": "Tromboembolia pulmonar posparto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica la hCG elevada."
+        },
+        {
+          "key": "f",
+          "text": "Endometritis crónica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la hCG ni los nódulos."
+        },
+        {
+          "key": "g",
+          "text": "Tuberculosis pulmonar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la hCG elevada."
+        },
+        {
+          "key": "h",
+          "text": "Neumonía posparto",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la hCG ni los nódulos múltiples."
+        },
+        {
+          "key": "i",
+          "text": "Cáncer de pulmón primario",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la hCG."
+        },
+        {
+          "key": "j",
+          "text": "Coriocarcinoma gestacional con metástasis pulmonares",
+          "correct": true,
+          "rationale": "hCG elevada con sangrado y nódulos pulmonares tras un embarazo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "El coriocarcinoma gestacional es una neoplasia maligna del trofoblasto que puede seguir a una mola, un aborto, un ectópico o un embarazo de término. Se disemina por vía hematógena, sobre todo a pulmón, vagina, cerebro e hígado. Se manifiesta con sangrado uterino persistente y síntomas de las metástasis, como hemoptisis. La hCG está muy elevada. Todo sangrado anormal persistente tras cualquier embarazo debe estudiarse con hCG. Es muy sensible a la quimioterapia, con metotrexato en bajo riesgo y esquemas combinados como EMA CO en alto riesgo, con altas tasas de curación incluso con metástasis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad trofoblástica gestacional"
+      ]
+    },
+    {
+      "key": "gyo-05-primer-trimestre-q19",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "gestational_trophoblastic",
+      "vignette": "Mujer de 23 años que hace 2 semanas tuvo evacuación de una mola completa. Pregunta qué cuidados debe seguir para su salud reproductiva en los próximos meses.",
+      "prompt": "¿Cuál es la medida de prevención indicada durante el seguimiento?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Anticoncepción hormonal confiable durante todo el seguimiento con hCG",
+          "correct": true,
+          "rationale": "Un nuevo embarazo impediría interpretar la hCG."
+        },
+        {
+          "key": "b",
+          "text": "Dispositivo intrauterino de cobre inmediato en todas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se evita hasta que la hCG sea negativa por riesgo de perforación."
+        },
+        {
+          "key": "c",
+          "text": "Suspender el seguimiento si se siente bien",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La enfermedad persistente puede ser asintomática."
+        },
+        {
+          "key": "d",
+          "text": "Esterilización definitiva",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "e",
+          "text": "Metotrexato profiláctico a todas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No se recomienda de rutina."
+        },
+        {
+          "key": "f",
+          "text": "Tomografía de cuerpo entero mensual",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria sin elevación de hCG."
+        },
+        {
+          "key": "g",
+          "text": "Buscar embarazo de inmediato",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Impide detectar la neoplasia persistente."
+        },
+        {
+          "key": "h",
+          "text": "Los anticonceptivos hormonales causan cáncer trofoblástico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Son seguros en el seguimiento."
+        },
+        {
+          "key": "i",
+          "text": "No usar anticoncepción para no alterar el ciclo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El embarazo confunde el seguimiento."
+        },
+        {
+          "key": "j",
+          "text": "Histerectomía preventiva",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicada si desea fertilidad."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "g"
+      ],
+      "explanation": "Tras la evacuación de una mola se mide la hCG cada semana hasta tener tres resultados negativos consecutivos, y después cada mes durante 3 a 6 meses según el tipo de mola. Durante ese tiempo se recomienda anticoncepción hormonal confiable, ya que un nuevo embarazo elevaría la hCG y dificultaría detectar una neoplasia trofoblástica persistente. Los anticonceptivos hormonales son seguros. El dispositivo intrauterino se evita hasta que la hCG sea negativa. En embarazos futuros se recomienda ultrasonido temprano por el riesgo de recurrencia y hCG 6 semanas después de su término.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad trofoblástica gestacional"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,223 @@
+@ ped|pediatric_gastroenterology|pediatric_diarrhea|3|diagnosis
+V: Niño de 4 años con diarrea con moco y sangre, dolor abdominal y pujo de 5 días. No tiene fiebre alta. En el coproparasitoscópico se observan trofozoítos con eritrocitos fagocitados. Vive en una zona con agua de mala calidad.
+P: ¿Cuál es el diagnóstico más probable?
++ Amebiasis intestinal por Entamoeba histolytica || Disentería con trofozoítos hematófagos.
+- anchoring | Giardiasis || No causa disentería ni trofozoítos hematófagos.
+- availability_heuristic | Shigelosis || Da fiebre alta y no muestra trofozoítos.
+- representativeness_heuristic | Enfermedad inflamatoria intestinal || Es menos probable con este hallazgo parasitológico.
+- premature_closure | Diarrea viral || No da sangre ni trofozoítos.
+- base_rate_fallacy | Balantidiasis || Es rara.
+- framing_effect | Fisura anal || No explica la disentería.
+- inattentional_blindness | Invaginación intestinal || Da dolor cólico intenso en lactantes.
+- focusing_illusion | Entamoeba dispar no patógena || No fagocita eritrocitos.
+- belief_bias | Sangre por comer chile || No explica los trofozoítos.
+E: La amebiasis intestinal por Entamoeba histolytica se transmite por agua o alimentos contaminados con quistes. La forma invasiva produce colitis con diarrea con moco y sangre, dolor abdominal y pujo, generalmente con fiebre baja. El hallazgo de trofozoítos con eritrocitos fagocitados es característico. La complicación extraintestinal más común es el absceso hepático amebiano. El tratamiento de la colitis es metronidazol, seguido de un amebicida luminal como paromomicina o yodoquinol para eliminar los quistes. La prevención incluye agua potable, lavado de manos y manejo higiénico de alimentos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de parasitosis intestinal en niños
+
+@ ped|pediatric_gastroenterology|pediatric_diarrhea|3|diagnosis
+V: Niña de 5 años con prurito anal nocturno intenso que la despierta, irritabilidad y sueño interrumpido. Su hermano tiene síntomas similares. La madre vio pequeños gusanos blancos como hilos alrededor del ano en la noche.
+P: ¿Cuál es el diagnóstico más probable?
++ Oxiuriasis por Enterobius vermicularis || Prurito anal nocturno con gusanos blancos en niños convivientes.
+- anchoring | Ascariasis || Los gusanos son grandes y dan dolor o obstrucción.
+- availability_heuristic | Giardiasis || Da diarrea sin prurito anal.
+- representativeness_heuristic | Dermatitis del pañal || No se acompaña de gusanos.
+- premature_closure | Infección urinaria || No explica los gusanos.
+- base_rate_fallacy | Teniasis || Da proglótidos sin prurito nocturno característico.
+- framing_effect | Candidiasis perianal || No explica los gusanos.
+- inattentional_blindness | Abuso sexual como causa obligada || El cuadro es típico de oxiuriasis.
+- focusing_illusion | Hemorroides || Son raras en niños.
+- belief_bias | Prurito por comer azúcar || No es la causa.
+E: La oxiuriasis es la parasitosis más común en escolares. Enterobius vermicularis se transmite por la ingestión de huevos por contacto mano boca, ropa de cama y autoinfección. Las hembras migran por la noche a la región perianal para poner huevos, lo que provoca prurito anal nocturno, irritabilidad, insomnio y en niñas vulvovaginitis. El diagnóstico se realiza con la prueba de la cinta adhesiva de Graham por la mañana antes del baño. El tratamiento es albendazol o mebendazol en dosis única repetida a las 2 semanas, para todos los convivientes, junto con medidas de higiene como uñas cortas, lavado de manos y de ropa de cama.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de parasitosis intestinal en niños
+
+@ ped|pediatric_endocrinology|congenital_hypothyroidism|3|diagnosis
+V: Niña de 7 años con talla que cae de la percentil 50 a la 5 en los últimos 2 años, aumento de peso, estreñimiento, piel seca, intolerancia al frío y bajo rendimiento escolar. Tiene bocio difuso indoloro. Su madre tiene enfermedad tiroidea.
+P: ¿Cuál es el diagnóstico más probable?
++ Hipotiroidismo adquirido por tiroiditis de Hashimoto || Desaceleración del crecimiento con aumento de peso, bocio y antecedente familiar.
+- anchoring | Talla baja familiar || No explica la desaceleración ni los síntomas.
+- availability_heuristic | Obesidad exógena || En la obesidad la talla suele ser normal o alta.
+- representativeness_heuristic | Deficiencia de hormona de crecimiento || No explica el bocio ni el estreñimiento.
+- premature_closure | Retraso constitucional del crecimiento || La velocidad de crecimiento suele ser normal.
+- base_rate_fallacy | Síndrome de Cushing por tumor suprarrenal || Es raro.
+- framing_effect | Enfermedad celiaca || Da pérdida de peso.
+- inattentional_blindness | Hipotiroidismo congénito no detectado || Habría dado síntomas desde la lactancia.
+- focusing_illusion | Depresión infantil || No explica el bocio ni la desaceleración del crecimiento.
+- belief_bias | Niña floja que come mucho || Los datos sugieren enfermedad tiroidea.
+E: La tiroiditis de Hashimoto es la causa más frecuente de hipotiroidismo adquirido en niños y adolescentes, más común en niñas y con antecedente familiar de enfermedad tiroidea. Se asocia a diabetes tipo 1, enfermedad celiaca, síndrome de Down y síndrome de Turner. Se manifiesta con bocio difuso indoloro, desaceleración del crecimiento con ganancia de peso, estreñimiento, piel seca, intolerancia al frío, fatiga y bajo rendimiento escolar. Se confirma con TSH elevada, T4 libre baja y anticuerpos antiperoxidasa positivos. El tratamiento es levotiroxina, con la que se recupera parte del crecimiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo en niños
+
+@ ped|pediatric_endocrinology|congenital_hypothyroidism|3|data_interpretation
+V: Recién nacido de 10 días con tamiz neonatal sospechoso. Los estudios séricos muestran TSH de 85 mUI/L y T4 libre de 0.4 ng/dL. El ultrasonido no encuentra tejido tiroideo en la región cervical.
+P: ¿Qué indican estos resultados?
++ Hipotiroidismo congénito primario por disgenesia tiroidea, probable ectopia o agenesia || TSH alta con T4 libre baja y ausencia de tiroides en el cuello.
+- anchoring | Hipotiroidismo central || Tendría TSH baja o normal con T4 libre baja.
+- availability_heuristic | Hipertirotropinemia transitoria sin importancia || La T4 libre baja indica hipotiroidismo real.
+- representativeness_heuristic | Hipotiroidismo por anticuerpos maternos transitorio || El ultrasonido muestra ausencia de tiroides.
+- premature_closure | Resultados normales para un recién nacido || Están claramente alterados.
+- base_rate_fallacy | Resistencia a hormonas tiroideas || La T4 libre estaría alta.
+- framing_effect | Hipertiroidismo neonatal || La T4 libre está baja.
+- inattentional_blindness | Síndrome del eutiroideo enfermo || El bebé está sano y la TSH es muy alta.
+- focusing_illusion | Error del tamiz sin relevancia || Los estudios séricos lo confirman.
+- belief_bias | Tiroides pequeña que crecerá sola || Requiere tratamiento inmediato.
+E: El hipotiroidismo congénito primario se confirma con TSH sérica elevada y T4 libre baja. Su causa más frecuente es la disgenesia tiroidea, que incluye la ectopia, sobre todo tiroides sublingual, la agenesia y la hipoplasia. Le siguen las dishormonogénesis, que suelen cursar con bocio y herencia autosómica recesiva. El ultrasonido y el gammagrama ayudan a definir la causa, pero nunca deben retrasar el tratamiento con levotiroxina. El hipotiroidismo central, con TSH baja o normal y T4 libre baja, puede no detectarse con un tamiz basado solo en TSH y se asocia a otras deficiencias hipofisarias.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo congénito
+
+@ ped|pediatric_endocrinology|congenital_hypothyroidism|2|treatment_of_choice
+V: Recién nacido de 12 días con hipotiroidismo congénito primario confirmado. Peso de 3.4 kg.
+P: ¿Cuál es el tratamiento de elección?
++ Levotiroxina oral a 10 a 15 mcg/kg/día iniciada de inmediato || Normaliza rápidamente la función tiroidea y protege el desarrollo.
+- anchoring | Levotiroxina a dosis bajas de 2 mcg/kg/día || Es insuficiente para un recién nacido.
+- availability_heuristic | Liotironina sola || No es el tratamiento estándar.
+- representativeness_heuristic | Yodo en gotas || No trata la disgenesia tiroidea.
+- premature_closure | Esperar a los 3 meses para iniciar || El retraso causa daño neurológico.
+- framing_effect | Extracto tiroideo de origen animal || No se recomienda.
+- complexity_bias | Trasplante de tejido tiroideo || No existe como tratamiento.
+- base_rate_fallacy | Metimazol || Se usa en hipertiroidismo.
+- belief_bias | Dar la levotiroxina mezclada con fórmula de soya || La soya reduce su absorción.
+- omission_bias | Suspender el tratamiento al normalizar los estudios || Se requiere de forma continua.
+E: El tratamiento del hipotiroidismo congénito es levotiroxina oral a 10 a 15 mcg/kg/día, iniciada lo antes posible y siempre en las primeras 2 semanas de vida. La tableta se tritura y se administra en poca agua o leche materna, evitando mezclarla con soya, hierro o calcio, que reducen su absorción. Se mide TSH y T4 libre a las 2 y 4 semanas de iniciar, cada 1 a 2 meses durante el primer año y después con menor frecuencia. El objetivo es mantener la T4 libre en la mitad superior del rango y la TSH normal. A los 3 años puede reevaluarse si el hipotiroidismo era transitorio.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo congénito
+
+@ ped|pediatric_endocrinology|pediatric_diabetes|3|prevention_screening
+V: Adolescente de 14 años con diabetes tipo 1 desde hace 6 años, con buen control. Acude a su revisión anual y pregunta qué estudios le corresponden para prevenir complicaciones.
+P: ¿Cuál es el tamizaje anual indicado para detectar nefropatía diabética?
++ Relación albúmina creatinina en orina || Detecta albuminuria temprana, primer signo de nefropatía.
+- anchoring | Biopsia renal anual || No está indicada.
+- availability_heuristic | Creatinina sérica como único estudio || Se eleva tarde.
+- representativeness_heuristic | Ultrasonido renal anual || No detecta nefropatía temprana.
+- premature_closure | Ningún estudio hasta la edad adulta || El tamizaje inicia en la adolescencia.
+- base_rate_fallacy | Urocultivo anual || No detecta nefropatía.
+- framing_effect | Gammagrama renal || No es el tamizaje.
+- complexity_bias | Tomografía abdominal || No está indicada.
+- information_bias | Glucosa en orina con tira reactiva || No detecta nefropatía.
+- belief_bias | Si la glucosa está controlada no hay riesgo || El tamizaje se recomienda igual.
+E: El tamizaje de complicaciones crónicas en niños y adolescentes con diabetes tipo 1 inicia en la pubertad o a partir de los 10 a 11 años con 2 a 5 años de evolución. Incluye relación albúmina creatinina en orina cada año para nefropatía, examen de fondo de ojo o retinografía para retinopatía, exploración de pies para neuropatía, presión arterial en cada consulta, perfil de lípidos y tamizaje de enfermedad tiroidea y celiaca. La albuminuria persistente se trata con inhibidores de la enzima convertidora de angiotensina. El buen control glucémico, con hemoglobina glucosilada menor de 7%, reduce el riesgo de complicaciones.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de diabetes tipo 1 en niños y adolescentes
+
+@ ped|pediatric_endocrinology|pediatric_diabetes|3|treatment_of_choice
+V: Niño de 10 años con diabetes tipo 1 recién diagnosticada, estable, sin cetoacidosis. Peso de 32 kg. Su familia está dispuesta a aprender a medir la glucosa y contar carbohidratos.
+P: ¿Cuál es el tratamiento de elección?
++ Esquema de insulina basal bolo con insulina de acción prolongada y rápida antes de las comidas, con educación en diabetes || Imita la secreción fisiológica de insulina.
+- anchoring | Metformina oral || Se usa en diabetes tipo 2.
+- availability_heuristic | Una sola dosis diaria de insulina intermedia || No logra buen control.
+- representativeness_heuristic | Solo dieta sin azúcar || La diabetes tipo 1 requiere insulina.
+- premature_closure | Glibenclamida || No es útil sin células beta funcionales.
+- framing_effect | Insulina solo cuando la glucosa supere 300 || Produce mal control.
+- complexity_bias | Trasplante de páncreas de inicio || No es el tratamiento inicial.
+- base_rate_fallacy | Inhibidores de SGLT2 como monoterapia || No sustituyen a la insulina.
+- belief_bias | Remedios herbolarios para curar la diabetes || No son eficaces y retrasan el tratamiento.
+- omission_bias | Retrasar la insulina por miedo a las inyecciones || La insulina es indispensable.
+E: El tratamiento de la diabetes tipo 1 es la insulina desde el diagnóstico. El esquema de elección es el basal bolo, con una insulina de acción prolongada como glargina o degludec y una rápida como lispro o aspart antes de cada comida, ajustada al conteo de carbohidratos y a la glucosa, o con bomba de insulina. La dosis total inicial suele ser de 0.5 a 1 U/kg/día. Se complementa con monitoreo frecuente de glucosa, idealmente continuo, educación en diabetes, alimentación saludable, actividad física y apoyo psicosocial. La meta de hemoglobina glucosilada es menor de 7%.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de diabetes tipo 1 en niños y adolescentes
+
+@ ped|pediatric_cardiology|congenital_heart_disease|3|diagnosis
+V: Niña de 6 años asintomática con desdoblamiento fijo del segundo ruido y soplo sistólico expulsivo suave en el foco pulmonar. El electrocardiograma muestra bloqueo incompleto de rama derecha y la radiografía aumento del flujo pulmonar con crecimiento de cavidades derechas.
+P: ¿Cuál es el diagnóstico más probable?
++ Comunicación interauricular tipo ostium secundum || Desdoblamiento fijo del segundo ruido con sobrecarga de cavidades derechas.
+- anchoring | Soplo inocente || No explica el desdoblamiento fijo ni el crecimiento de cavidades.
+- availability_heuristic | Comunicación interventricular || Da soplo holosistólico paraesternal bajo.
+- representativeness_heuristic | Estenosis pulmonar aislada || No explica el aumento del flujo pulmonar.
+- premature_closure | Persistencia del conducto arterioso || Da soplo continuo.
+- base_rate_fallacy | Anomalía de Ebstein || Da cianosis y arritmias.
+- framing_effect | Tetralogía de Fallot || Da cianosis y flujo pulmonar disminuido.
+- inattentional_blindness | Coartación de aorta || Da pulsos femorales disminuidos.
+- focusing_illusion | Hipertensión pulmonar primaria || No explica el desdoblamiento fijo.
+- belief_bias | Corazón normal en una niña delgada || Los hallazgos son patológicos.
+E: La comunicación interauricular tipo ostium secundum es una de las cardiopatías congénitas más frecuentes. Produce cortocircuito de izquierda a derecha a nivel auricular con sobrecarga de volumen del ventrículo derecho. Suele ser asintomática en la infancia y se descubre por un soplo sistólico expulsivo en foco pulmonar por hiperflujo y desdoblamiento amplio y fijo del segundo ruido, característico. El electrocardiograma muestra eje derecho y bloqueo incompleto de rama derecha. El ecocardiograma confirma el diagnóstico. Los defectos significativos se cierran por cateterismo con dispositivo o por cirugía entre los 2 y 5 años para evitar arritmias e hipertensión pulmonar.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la comunicación interauricular
+
+@ ped|pediatric_cardiology|congenital_heart_disease|3|prevention_screening
+V: Recién nacido sano de término de 30 horas, antes de su egreso. Se le realiza oximetría de pulso en mano derecha y pie, con saturación de 93% en mano y 89% en pie.
+P: ¿Cuál es la utilidad de esta medición de tamizaje?
++ Detectar cardiopatías congénitas críticas, por lo que este resultado es positivo y requiere ecocardiograma || Saturación menor de 90% o diferencia mayor de 3% entre mano y pie.
+- anchoring | Es un resultado normal en todo recién nacido || Saturación menor de 90% es positiva.
+- availability_heuristic | Detectar sepsis neonatal || No es el propósito.
+- representativeness_heuristic | Detectar anemia neonatal || No es su propósito.
+- premature_closure | Repetir en un mes en la consulta de niño sano || Debe estudiarse antes del egreso.
+- framing_effect | Solo es útil en prematuros || Se recomienda en todos los recién nacidos.
+- complexity_bias | Realizar cateterismo cardiaco de inmediato || El primer paso es el ecocardiograma.
+- base_rate_fallacy | Detectar hipoglucemia || No mide glucosa.
+- belief_bias | Los pies fríos siempre bajan la saturación y no importa || La diferencia es significativa.
+- omission_bias | Egresar porque el bebé se ve rosado || Las cardiopatías críticas pueden no dar cianosis visible.
+E: El tamizaje con oximetría de pulso detecta cardiopatías congénitas críticas que dependen del conducto arterioso antes de que se cierre y causen choque o muerte. Se realiza después de las 24 horas de vida, midiendo la saturación en la mano derecha, preductal, y en un pie, posductal. Es negativo si la saturación es de 95% o más en cualquier extremidad con diferencia de 3% o menos. Es positivo si es menor de 90% en cualquier extremidad. Los valores intermedios se repiten. Un tamiz positivo requiere ecocardiograma antes del egreso. En México forma parte del tamiz neonatal.
+R: Lineamiento técnico de tamiz neonatal de cardiopatías congénitas críticas
+
+@ ped|pediatric_respiratory|pediatric_asthma|3|treatment_of_choice
+V: Niña de 4 años con episodios de sibilancias con cada resfriado, 4 en los últimos 6 meses, y tos nocturna entre episodios. Requiere salbutamol frecuente. Índice predictivo de asma positivo.
+P: ¿Cuál es el tratamiento controlador de elección?
++ Corticosteroide inhalado a dosis baja diaria con espaciador y mascarilla || Es el controlador preferido en menores de 5 años con síntomas frecuentes.
+- anchoring | Salbutamol oral diario || No controla la inflamación y tiene más efectos adversos.
+- availability_heuristic | Antibióticos con cada resfriado || No previenen las sibilancias virales.
+- representativeness_heuristic | Agonista beta de acción prolongada solo || No se recomienda sin corticosteroide.
+- premature_closure | Corticosteroide oral diario || Tiene efectos adversos importantes.
+- framing_effect | Inhalador de dosis medida sin espaciador || La técnica es ineficaz a esta edad.
+- complexity_bias | Biológicos anti IgE || No están indicados a esta edad.
+- base_rate_fallacy | Antitusivos || No tratan el asma.
+- belief_bias | Jarabes de cebolla para abrir los bronquios || No son eficaces.
+- omission_bias | No usar controlador porque es pequeña || Las sibilancias frecuentes requieren control.
+E: En niños menores de 5 años con sibilancias recurrentes frecuentes o síntomas entre episodios, el tratamiento controlador preferido es un corticosteroide inhalado a dosis baja diaria, administrado con inhalador de dosis medida, espaciador y mascarilla. Se evalúa la respuesta en 2 a 3 meses. El montelukast es una alternativa. Si no hay respuesta se revisa la técnica, la adherencia y el diagnóstico antes de aumentar la dosis. Los niños con sibilancias solo durante infecciones virales y poco frecuentes pueden manejarse con salbutamol de rescate. Se recomienda un plan de acción escrito para la familia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del asma en menores de 18 años ;; Iniciativa Global para el Asma
+
+@ ped|growth_development|developmental_milestones|3|diagnosis
+V: Niño de 9 años con dificultad para mantener la atención en clase, olvida tareas, pierde sus cosas, se levanta constantemente de su lugar, interrumpe a los demás y no espera su turno. Los síntomas ocurren en casa y en la escuela desde los 5 años y afectan su rendimiento.
+P: ¿Cuál es el diagnóstico más probable?
++ Trastorno por déficit de atención con hiperactividad de presentación combinada || Inatención, hiperactividad e impulsividad en dos ambientes desde antes de los 12 años.
+- anchoring | Mala conducta por falta de disciplina || Los síntomas son persistentes y en varios ambientes.
+- availability_heuristic | Trastorno del espectro autista || No hay alteración de la comunicación social ni intereses restringidos.
+- representativeness_heuristic | Epilepsia de ausencia || Daría episodios breves de desconexión.
+- premature_closure | Trastorno de ansiedad || No explica la hiperactividad desde los 5 años.
+- base_rate_fallacy | Hipertiroidismo || Daría otros síntomas sistémicos.
+- framing_effect | Discapacidad intelectual || No hay datos de retraso global.
+- inattentional_blindness | Hipoacusia || Puede simular inatención, pero no explica la hiperactividad.
+- focusing_illusion | Trastorno bipolar || No hay episodios afectivos.
+- belief_bias | Exceso de azúcar en la dieta || No causa el trastorno.
+E: El trastorno por déficit de atención con hiperactividad es el trastorno del neurodesarrollo más frecuente en edad escolar. Se caracteriza por un patrón persistente de inatención, hiperactividad e impulsividad que inicia antes de los 12 años, se presenta en dos o más ambientes y afecta el funcionamiento. Se clasifica en presentación predominantemente inatenta, hiperactiva impulsiva o combinada. El diagnóstico es clínico con escalas de padres y maestros, y debe descartarse hipoacusia, alteraciones visuales, trastornos del aprendizaje y ansiedad. El tratamiento combina intervención conductual, apoyo escolar y estimulantes como metilfenidato en escolares.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno por déficit de atención con hiperactividad
+
+@ ped|pediatric_gastroenterology|pediatric_gerd|3|diagnosis
+V: Niño de 10 años con atopia y asma que presenta disfagia a sólidos y episodios de impactación de carne. No mejoró con 8 semanas de inhibidor de bomba de protones. La endoscopia muestra anillos esofágicos y surcos longitudinales, y la biopsia más de 15 eosinófilos por campo.
+P: ¿Cuál es el diagnóstico más probable?
++ Esofagitis eosinofílica || Disfagia e impactación en un niño atópico con eosinofilia esofágica y falta de respuesta al inhibidor.
+- anchoring | Enfermedad por reflujo gastroesofágico || No respondió al tratamiento y la biopsia muestra eosinofilia importante.
+- availability_heuristic | Acalasia || Da disfagia a sólidos y líquidos sin eosinofilia.
+- representativeness_heuristic | Esofagitis por cándida || Da placas blancas.
+- premature_closure | Estenosis péptica || No explica la eosinofilia ni los surcos.
+- base_rate_fallacy | Enfermedad de Crohn esofágica || Es rara.
+- framing_effect | Cuerpo extraño impactado aislado || No explica los hallazgos crónicos.
+- inattentional_blindness | Anillo vascular || Es congénito y da síntomas desde lactante.
+- focusing_illusion | Esofagitis por medicamentos || No hay antecedente.
+- belief_bias | Disfagia por masticar poco || Hay una enfermedad inflamatoria.
+E: La esofagitis eosinofílica es una enfermedad inflamatoria crónica mediada por mecanismos inmunes y alergia, frecuente en niños con atopia como asma, rinitis o dermatitis. En niños pequeños da vómito, rechazo al alimento y falla de medro, y en escolares y adolescentes disfagia e impactación de alimentos. La endoscopia puede mostrar anillos, surcos longitudinales, exudados y estenosis, y el diagnóstico requiere 15 o más eosinófilos por campo de gran aumento tras descartar otras causas. El tratamiento incluye inhibidores de bomba de protones, corticosteroides deglutidos, dietas de eliminación y dilatación en estenosis. El dupilumab es una opción en casos refractarios.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de esofagitis eosinofílica
+
+@ ped|pediatric_surgery|pyloric_stenosis|3|diagnosis
+V: Recién nacido de madre de 17 años con defecto de la pared abdominal a la derecha del cordón umbilical, de 3 cm, por el que salen asas intestinales engrosadas y edematosas sin saco que las cubra. El cordón está íntegro. No hay otras malformaciones.
+P: ¿Cuál es el diagnóstico más probable?
++ Gastrosquisis || Defecto paraumbilical derecho con intestino expuesto sin saco en hijo de madre joven.
+- anchoring | Onfalocele || Tiene saco membranoso y el cordón se inserta en él.
+- availability_heuristic | Hernia umbilical || Está cubierta por piel.
+- representativeness_heuristic | Extrofia vesical || Expone la vejiga en el hipogastrio.
+- premature_closure | Persistencia del uraco || Da salida de orina por el ombligo.
+- base_rate_fallacy | Síndrome de Prune Belly || Tiene ausencia de músculos abdominales con piel íntegra.
+- framing_effect | Pentalogía de Cantrell || Incluye defectos cardiacos y esternales.
+- inattentional_blindness | Diástasis de rectos || Está cubierta por piel.
+- focusing_illusion | Onfalocele roto || Tendría restos de saco y suele asociarse a otras malformaciones.
+- belief_bias | Ombligo mal cortado || Es una malformación congénita.
+E: La gastrosquisis es un defecto de la pared abdominal a la derecha del cordón umbilical por el que se exponen asas intestinales sin saco que las cubra. El contacto con el líquido amniótico las engrosa y edematiza. Se asocia a madres jóvenes, tabaquismo y drogas, y rara vez a otras malformaciones, aunque puede acompañarse de atresia intestinal. El onfalocele, en cambio, es un defecto central cubierto por un saco con el cordón inserto en él y se asocia a cromosomopatías, cardiopatías y síndrome de Beckwith Wiedemann. En la gastrosquisis se cubre el intestino con material estéril, se evita la pérdida de calor y líquidos y se corrige quirúrgicamente.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de defectos de la pared abdominal en el recién nacido
+
+@ ped|pediatric_respiratory|pediatric_pneumonia|4|diagnosis
+V: Niño de 3 años con fiebre vespertina, pérdida de peso y tos de 6 semanas. Su abuelo con quien vive tiene tos crónica y baciloscopia positiva. La radiografía muestra adenopatía hiliar derecha con infiltrado. Prueba de tuberculina de 15 mm.
+P: ¿Cuál es el diagnóstico más probable?
++ Tuberculosis pulmonar primaria || Contacto con adulto bacilífero, síntomas crónicos, adenopatía hiliar y tuberculina positiva.
+- anchoring | Neumonía bacteriana típica || Tiene evolución aguda y no explica la adenopatía hiliar con el contacto.
+- availability_heuristic | Asma con infección agregada || No explica la pérdida de peso ni la adenopatía.
+- representativeness_heuristic | Linfoma mediastinal || No explica el contacto y la tuberculina positiva.
+- premature_closure | Neumonía por Mycoplasma || Es de evolución más corta.
+- base_rate_fallacy | Histoplasmosis || Es menos probable con el contacto conocido.
+- framing_effect | Cuerpo extraño aspirado || No explica la fiebre vespertina y el contacto.
+- inattentional_blindness | Reacción por vacuna BCG || No explica una tuberculina de 15 mm con síntomas.
+- focusing_illusion | Fibrosis quística || No explica el cuadro.
+- belief_bias | Tos por contagio de gripa del abuelo || El contacto tiene tuberculosis.
+E: La tuberculosis en niños suele adquirirse de un adulto bacilífero en el hogar, por lo que el estudio de contactos es fundamental. La forma primaria se caracteriza por adenopatías hiliares o mediastinales con o sin infiltrado parenquimatoso, el complejo de Ghon. Los niños tienen síntomas inespecíficos como fiebre, tos persistente de más de 2 semanas, pérdida de peso y falla de medro. Las baciloscopias suelen ser negativas por ser paucibacilares, por lo que se usan aspirados gástricos y pruebas moleculares. El diagnóstico combina contacto, clínica, radiografía y tuberculina o IGRA. Se trata con isoniazida, rifampicina, pirazinamida y etambutol.
+R: Norma Oficial Mexicana para la prevención y control de la tuberculosis ;; Guía de Práctica Clínica de diagnóstico y tratamiento de tuberculosis en niños

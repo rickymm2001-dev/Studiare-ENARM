@@ -1,0 +1,1040 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-06b-infectologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "dengue",
+      "vignette": "Hombre de 25 años de Veracruz con fiebre de 39.5 grados de 3 días, cefalea retroocular, mialgias intensas, artralgias y exantema. Torniquete positivo. Plaquetas de 110,000 y leucocitos de 3,200. Sin dolor abdominal ni vómito.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dengue sin signos de alarma",
+          "correct": true,
+          "rationale": "Fiebre con cefalea retroocular, mialgias, exantema, leucopenia y prueba de torniquete positiva en zona endémica."
+        },
+        {
+          "key": "b",
+          "text": "Leptospirosis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es posible, pero el cuadro es típico de dengue."
+        },
+        {
+          "key": "c",
+          "text": "Zika",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da exantema y conjuntivitis con fiebre leve."
+        },
+        {
+          "key": "d",
+          "text": "Paludismo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que toda fiebre tropical es paludismo."
+        },
+        {
+          "key": "e",
+          "text": "Dengue grave",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el dengue, pero no hay choque, sangrado grave ni daño orgánico."
+        },
+        {
+          "key": "f",
+          "text": "Dengue con signos de alarma",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a mayor vigilancia, pero no hay signos de alarma."
+        },
+        {
+          "key": "g",
+          "text": "Púrpura trombocitopénica inmune",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en las plaquetas."
+        },
+        {
+          "key": "h",
+          "text": "Chikungunya",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Comparte fiebre y exantema, pero predomina la artritis intensa y persistente."
+        },
+        {
+          "key": "i",
+          "text": "Influenza",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es frecuente, pero no explica la leucopenia, el exantema y el torniquete positivo."
+        },
+        {
+          "key": "j",
+          "text": "Fiebre tifoidea",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta el exantema y la leucopenia con trombocitopenia en zona de dengue."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "h",
+        "i"
+      ],
+      "explanation": "El dengue es una enfermedad viral transmitida por el mosquito Aedes aegypti, endémica en gran parte de México. Se sospecha en personas de zonas endémicas con fiebre de dos a siete días y dos o más de los siguientes datos, náusea o vómito, exantema, cefalea o dolor retroocular, mialgias o artralgias, leucopenia o prueba de torniquete positiva. Se clasifica en dengue sin signos de alarma, con signos de alarma y dengue grave. En los primeros cinco días se confirma con antígeno NS1 o RT PCR, y después con IgM. El tratamiento es de soporte, con hidratación y paracetamol, evitando AINE y ácido acetilsalicílico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y manejo del dengue",
+        "Norma Oficial Mexicana para la vigilancia, prevención y control de enfermedades transmitidas por vector"
+      ]
+    },
+    {
+      "key": "mi-06b-infectologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "dengue",
+      "vignette": "Mujer de 30 años con dengue en el quinto día. La fiebre cedió ayer. Hoy presenta dolor abdominal intenso y continuo, vómito persistente, somnolencia y hepatomegalia de 3 cm. Hematocrito de 48%, previamente de 39%, y plaquetas de 40,000.",
+      "prompt": "¿Cuál es la interpretación correcta de su estado?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Mejoría porque la fiebre desapareció",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la fiebre, pero la defervescencia marca la fase crítica."
+        },
+        {
+          "key": "b",
+          "text": "Hepatitis viral aguda",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable en este contexto."
+        },
+        {
+          "key": "c",
+          "text": "Transfundir plaquetas como prioridad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Las plaquetas se transfunden solo con sangrado activo importante."
+        },
+        {
+          "key": "d",
+          "text": "Colecistitis acalculosa como diagnóstico principal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el dolor abdominal."
+        },
+        {
+          "key": "e",
+          "text": "Deshidratación leve por vómito",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No reconoce la hemoconcentración por fuga plasmática."
+        },
+        {
+          "key": "f",
+          "text": "Dengue con signos de alarma en fase crítica, que requiere hospitalización y líquidos intravenosos",
+          "correct": true,
+          "rationale": "Dolor abdominal, vómito persistente, letargo, hepatomegalia y hemoconcentración con descenso de plaquetas."
+        },
+        {
+          "key": "g",
+          "text": "Dengue grave por las plaquetas menores de 50,000",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La cifra de plaquetas no define gravedad por sí sola."
+        },
+        {
+          "key": "h",
+          "text": "Dengue hemorrágico porque hay riesgo de sangrar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el riesgo de sangrado define el manejo."
+        },
+        {
+          "key": "i",
+          "text": "Apendicitis aguda coincidente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El dolor abdominal es un signo de alarma del dengue."
+        },
+        {
+          "key": "j",
+          "text": "Dengue sin signos de alarma con manejo en casa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Subestima los signos presentes."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "El dengue tiene tres fases, febril, crítica y de recuperación. La fase crítica inicia con la defervescencia, generalmente entre el tercer y séptimo día, y es cuando aumenta la permeabilidad capilar con riesgo de fuga plasmática y choque. Los signos de alarma son dolor abdominal intenso y continuo, vómito persistente, acumulación clínica de líquidos, sangrado de mucosas, letargo o irritabilidad, hepatomegalia mayor de 2 cm y aumento del hematocrito con descenso rápido de plaquetas. Su presencia indica hospitalización y cristaloides intravenosos con vigilancia estrecha del hematocrito y la diuresis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y manejo del dengue"
+      ]
+    },
+    {
+      "key": "mi-06b-infectologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "dengue",
+      "vignette": "Hombre de 22 años con dengue en el cuarto día, sin signos de alarma, tolera la vía oral y tiene diuresis adecuada. Refiere fiebre y dolor muscular intenso.",
+      "prompt": "¿Cuál es el tratamiento inicial más adecuado?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hospitalización con antibiótico intravenoso",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la fiebre alta, pero es viral."
+        },
+        {
+          "key": "b",
+          "text": "Corticosteroides para el dolor muscular",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No tienen beneficio en dengue."
+        },
+        {
+          "key": "c",
+          "text": "Manejo en casa con hidratación oral abundante, paracetamol y explicar los signos de alarma",
+          "correct": true,
+          "rationale": "Dengue sin signos de alarma con tolerancia oral."
+        },
+        {
+          "key": "d",
+          "text": "Transfusión profiláctica de plaquetas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "e",
+          "text": "Inyecciones intramusculares de analgésicos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Causan hematomas por la trombocitopenia."
+        },
+        {
+          "key": "f",
+          "text": "Antiviral específico intravenoso",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No existe un antiviral específico."
+        },
+        {
+          "key": "g",
+          "text": "Sin seguimiento porque se ve bien",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede progresar a la fase crítica."
+        },
+        {
+          "key": "h",
+          "text": "Ácido acetilsalicílico para prevenir trombosis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena preventivo, pero aumenta el riesgo de sangrado."
+        },
+        {
+          "key": "i",
+          "text": "Ibuprofeno para la fiebre y el dolor",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Los AINE aumentan el riesgo de sangrado."
+        },
+        {
+          "key": "j",
+          "text": "Reposo absoluto sin líquidos para no sobrecargar",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Favorece la deshidratación."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "El paciente con dengue sin signos de alarma que tolera líquidos y orina adecuadamente puede manejarse en casa. Se indica reposo relativo, hidratación oral abundante con suero oral, agua y jugos, y paracetamol para la fiebre y el dolor, evitando AINE, ácido acetilsalicílico, corticosteroides e inyecciones intramusculares. Es fundamental explicar los signos de alarma y acudir de inmediato si aparecen, sobre todo cuando cede la fiebre. Se recomienda revaloración diaria con biometría hemática hasta salir de la fase crítica. También se indica usar mosquitero para evitar transmitir el virus a otros mosquitos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y manejo del dengue"
+      ]
+    },
+    {
+      "key": "mi-06b-infectologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "dengue",
+      "vignette": "Mujer de 27 años con dengue en el quinto día. Está fría, con llenado capilar de 4 segundos, pulso débil, presión arterial de 90/76 mmHg y diuresis escasa. Hematocrito de 52%.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Continuar líquidos orales",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Insuficiente en el choque."
+        },
+        {
+          "key": "b",
+          "text": "Coloides como primera elección en todos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que los coloides son mejores de inicio."
+        },
+        {
+          "key": "c",
+          "text": "Diurético para mejorar la diuresis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena lógico, pero empeora el choque."
+        },
+        {
+          "key": "d",
+          "text": "Corticosteroides en dosis altas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No tienen beneficio."
+        },
+        {
+          "key": "e",
+          "text": "Esperar a que la presión sistólica baje de 80 para dar líquidos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la cifra y no reconoce la presión de pulso estrecha."
+        },
+        {
+          "key": "f",
+          "text": "Bolo de cristaloide de 20 mL/kg en 15 a 30 minutos y revalorar, en área de choque",
+          "correct": true,
+          "rationale": "Dengue grave con choque compensado y presión de pulso estrecha."
+        },
+        {
+          "key": "g",
+          "text": "Oxigenación por membrana extracorpórea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Medida extrema."
+        },
+        {
+          "key": "h",
+          "text": "Norepinefrina como primera medida sin líquidos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El choque es hipovolémico por fuga."
+        },
+        {
+          "key": "i",
+          "text": "Observar una hora más antes de actuar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasa la reanimación."
+        },
+        {
+          "key": "j",
+          "text": "Transfundir plaquetas de inmediato",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No corrige el choque por fuga plasmática."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "El dengue grave incluye choque por fuga plasmática, acumulación de líquidos con dificultad respiratoria, sangrado grave o daño orgánico grave. El choque inicial suele ser compensado, con presión arterial normal o con presión de pulso estrecha de 20 mmHg o menos, extremidades frías, llenado capilar lento, taquicardia y oliguria, y la hipotensión es un signo tardío. El tratamiento es reanimación con cristaloides, bolo de 20 mL/kg en 15 a 30 minutos, revalorando clínica y hematocrito. Si mejora se reduce gradualmente el volumen. Si persiste el choque y el hematocrito baja, se sospecha sangrado y se transfunde. El exceso de líquidos causa sobrecarga.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y manejo del dengue"
+      ]
+    },
+    {
+      "key": "mi-06b-infectologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "dengue",
+      "vignette": "En una colonia de Tabasco se notifican varios casos de dengue en las últimas dos semanas.",
+      "prompt": "¿Cuál es la medida más eficaz para la prevención de nuevos casos en la comunidad?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aislar a los enfermos en el hospital como medida única",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Ayuda poco si el vector sigue presente."
+        },
+        {
+          "key": "b",
+          "text": "Tratar a toda la comunidad con antibiótico profiláctico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la infección, pero es viral."
+        },
+        {
+          "key": "c",
+          "text": "Ninguna medida porque el dengue es leve en la mayoría",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Ignora el riesgo de dengue grave."
+        },
+        {
+          "key": "d",
+          "text": "Vacunar a toda la población con la vacuna contra fiebre amarilla",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No protege contra dengue."
+        },
+        {
+          "key": "e",
+          "text": "Eliminar criaderos del mosquito, como recipientes con agua estancada, con participación comunitaria",
+          "correct": true,
+          "rationale": "Controla al vector Aedes aegypti."
+        },
+        {
+          "key": "f",
+          "text": "Hervir el agua de beber",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Previene enfermedades diarreicas, no dengue."
+        },
+        {
+          "key": "g",
+          "text": "Quimioprofilaxis con cloroquina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es para paludismo."
+        },
+        {
+          "key": "h",
+          "text": "Esperar a que termine la temporada de lluvias",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "No previene casos."
+        },
+        {
+          "key": "i",
+          "text": "Fumigar solo una vez al año",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a control, pero es insuficiente sin eliminar criaderos."
+        },
+        {
+          "key": "j",
+          "text": "Liberar mosquitos modificados como única medida inmediata",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es una estrategia en estudio, no la medida básica."
+        }
+      ],
+      "canonical": [
+        "b",
+        "d",
+        "e",
+        "i"
+      ],
+      "explanation": "El dengue se transmite por la picadura de mosquitos Aedes aegypti infectados, que se reproducen en recipientes con agua limpia estancada, como llantas, cubetas, floreros, tinacos destapados y botellas. La medida más eficaz es el control del vector mediante la eliminación de criaderos, con la estrategia de lavar, tapar, voltear y tirar, con participación de la comunidad. Se complementa con larvicidas, nebulización en zonas de transmisión activa, mosquiteros, repelentes y ropa que cubra la piel. La vigilancia epidemiológica y la notificación oportuna de casos permiten focalizar las acciones. Existen vacunas autorizadas en algunos países con indicaciones específicas.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la vigilancia, prevención y control de enfermedades transmitidas por vector"
+      ]
+    },
+    {
+      "key": "mi-06b-infectologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "dengue",
+      "vignette": "Mujer de 35 años con dengue que recibió grandes volúmenes de líquidos intravenosos durante la fase crítica. En el séptimo día la fiebre ya cedió, recupera el apetito y la diuresis aumenta, pero presenta disnea, crépitos bilaterales y derrame pleural.",
+      "prompt": "¿Cuál es la complicación más probable en esta fase?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Choque por dengue recurrente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La paciente está en recuperación con diuresis aumentada."
+        },
+        {
+          "key": "b",
+          "text": "Miocarditis viral como causa principal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es posible, pero menos probable que la sobrecarga."
+        },
+        {
+          "key": "c",
+          "text": "Neumonía bacteriana nosocomial",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la disnea, pero no hay fiebre y coincide con la recuperación."
+        },
+        {
+          "key": "d",
+          "text": "Hemorragia pulmonar por plaquetas bajas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo síntoma pulmonar en dengue es sangrado."
+        },
+        {
+          "key": "e",
+          "text": "Sobrecarga hídrica por reabsorción del líquido extravasado en la fase de recuperación",
+          "correct": true,
+          "rationale": "La reabsorción con líquidos excesivos causa edema pulmonar."
+        },
+        {
+          "key": "f",
+          "text": "Insuficiencia renal aguda",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en los líquidos, pero la diuresis aumenta."
+        },
+        {
+          "key": "g",
+          "text": "Crisis asmática",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No relaciona los líquidos administrados."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome de dificultad respiratoria por sepsis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena grave, pero no hay sepsis."
+        },
+        {
+          "key": "i",
+          "text": "Tromboembolia pulmonar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye sin factores ni datos."
+        },
+        {
+          "key": "j",
+          "text": "Reinfección por otro serotipo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No ocurre en días."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "En la fase de recuperación del dengue, el líquido que se extravasó durante la fase crítica regresa al espacio intravascular. Si se administraron líquidos en exceso o no se redujeron a tiempo, esto provoca sobrecarga de volumen con edema pulmonar, derrame pleural, ascitis e hipertensión. Los datos de recuperación son mejoría del estado general, regreso del apetito, estabilidad hemodinámica, aumento de la diuresis y descenso del hematocrito. En esta fase se deben suspender o reducir los líquidos intravenosos y, si hay sobrecarga con estabilidad hemodinámica, dar diuréticos. Ajustar los líquidos según la fase previene esta complicación.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y manejo del dengue"
+      ]
+    },
+    {
+      "key": "mi-06b-infectologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "sepsis",
+      "vignette": "Hombre de 67 años con pielonefritis. Llega con temperatura de 39.4 grados, frecuencia cardiaca de 118 lpm, frecuencia respiratoria de 26 rpm, presión arterial de 84/50 mmHg y confusión. Lactato de 4.2 mmol/L.",
+      "prompt": "¿Cuál es el tratamiento inicial en la primera hora?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hemocultivos, antibiótico de amplio espectro y 30 mL/kg de cristaloide, con vasopresor si persiste la hipotensión",
+          "correct": true,
+          "rationale": "Corresponde al paquete de la primera hora en sepsis con choque."
+        },
+        {
+          "key": "b",
+          "text": "Bicarbonato para el lactato elevado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que corregir el lactato con bicarbonato mejora el pronóstico."
+        },
+        {
+          "key": "c",
+          "text": "Antipirético y vigilancia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Trata la fiebre sin la infección."
+        },
+        {
+          "key": "d",
+          "text": "Corticosteroide en dosis altas como primera medida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena potente, pero se reserva para choque refractario."
+        },
+        {
+          "key": "e",
+          "text": "Antibiótico oral y egreso",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Asocia pielonefritis con manejo ambulatorio."
+        },
+        {
+          "key": "f",
+          "text": "Esperar el resultado del urocultivo para elegir antibiótico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el cultivo y retrasa el antibiótico."
+        },
+        {
+          "key": "g",
+          "text": "Hemofiltración como medida inicial",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el tratamiento inicial."
+        },
+        {
+          "key": "h",
+          "text": "Retrasar el antibiótico hasta tener tomografía",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Cada hora de retraso aumenta la mortalidad."
+        },
+        {
+          "key": "i",
+          "text": "Iniciar dopamina como vasopresor de elección",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La norepinefrina es la de elección."
+        },
+        {
+          "key": "j",
+          "text": "Líquidos de mantenimiento a 100 mL por hora",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Insuficiente en el choque."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "f"
+      ],
+      "explanation": "La sepsis es una disfunción orgánica que pone en riesgo la vida, causada por una respuesta desregulada a la infección, y el choque séptico añade la necesidad de vasopresores para mantener una presión arterial media de 65 mmHg y lactato mayor de 2 mmol/L pese a líquidos. El manejo de la primera hora incluye medir lactato, tomar hemocultivos antes del antibiótico sin retrasarlo, administrar antibiótico de amplio espectro, dar 30 mL/kg de cristaloide en hipotensión o lactato de 4 o más, e iniciar norepinefrina si la presión no mejora. Se debe identificar y controlar el foco infeccioso.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la sepsis grave y choque séptico en el adulto"
+      ]
+    },
+    {
+      "key": "mi-06b-infectologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "sepsis",
+      "vignette": "Mujer de 58 años con choque séptico por neumonía. Recibió 30 mL/kg de cristaloide y persiste con presión arterial media de 58 mmHg.",
+      "prompt": "¿Cuál es el vasopresor de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dopamina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se usó mucho, pero causa más arritmias."
+        },
+        {
+          "key": "b",
+          "text": "Adrenalina como primera opción",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es una alternativa o agregado, no la primera."
+        },
+        {
+          "key": "c",
+          "text": "Azul de metileno de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es una terapia de rescate."
+        },
+        {
+          "key": "d",
+          "text": "Fenilefrina como fármaco base",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Es una opción limitada."
+        },
+        {
+          "key": "e",
+          "text": "Vasopresina como primera opción única",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se agrega para reducir la dosis de norepinefrina."
+        },
+        {
+          "key": "f",
+          "text": "Más líquidos hasta 100 mL/kg antes de cualquier vasopresor",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a reanimar más, pero causa sobrecarga."
+        },
+        {
+          "key": "g",
+          "text": "Hidrocortisona sola sin vasopresor",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el esteroide sustituye al vasopresor."
+        },
+        {
+          "key": "h",
+          "text": "Norepinefrina",
+          "correct": true,
+          "rationale": "Es el vasopresor de primera línea en el choque séptico."
+        },
+        {
+          "key": "i",
+          "text": "Retrasar el vasopresor hasta colocar catéter central",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Se puede iniciar por vía periférica temporalmente."
+        },
+        {
+          "key": "j",
+          "text": "Dobutamina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el apoyo cardiaco, pero es un inotrópico, no un vasopresor de primera línea."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "h",
+        "j"
+      ],
+      "explanation": "En el choque séptico, cuando la hipotensión persiste después de la reanimación inicial con líquidos, se inicia un vasopresor para alcanzar una presión arterial media de 65 mmHg. La norepinefrina es el vasopresor de elección porque aumenta el tono vascular con menos arritmias que la dopamina. Si se requieren dosis altas, se agrega vasopresina para reducir la dosis de norepinefrina, y la adrenalina es otra alternativa. La dobutamina se usa cuando hay disfunción cardiaca con hipoperfusión persistente. La hidrocortisona se considera en choque que requiere vasopresores de forma sostenida. Puede iniciarse por vena periférica mientras se coloca un catéter central.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la sepsis grave y choque séptico en el adulto"
+      ]
+    },
+    {
+      "key": "mi-06b-infectologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "sepsis",
+      "vignette": "Hombre de 54 años con fiebre por celulitis. Frecuencia respiratoria de 24 rpm, presión arterial sistólica de 96 mmHg y está desorientado.",
+      "prompt": "¿Cuál es la interpretación correcta de la escala qSOFA en este paciente?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "qSOFA de 3, que indica alto riesgo de mal pronóstico y obliga a buscar disfunción orgánica",
+          "correct": true,
+          "rationale": "Frecuencia respiratoria de 22 o más, sistólica de 100 o menos y alteración mental."
+        },
+        {
+          "key": "b",
+          "text": "La escala requiere lactato para calcularse",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El qSOFA es clínico."
+        },
+        {
+          "key": "c",
+          "text": "Bajo riesgo porque la celulitis suele ser leve",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Usa la frecuencia general."
+        },
+        {
+          "key": "d",
+          "text": "qSOFA de 4 por la fiebre",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La fiebre no forma parte del qSOFA."
+        },
+        {
+          "key": "e",
+          "text": "El qSOFA reemplaza a la escala SOFA para diagnosticar sepsis",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que diagnostica, cuando solo identifica riesgo."
+        },
+        {
+          "key": "f",
+          "text": "Se requieren hemocultivos antes de calcularlo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El cálculo no depende de estudios."
+        },
+        {
+          "key": "g",
+          "text": "qSOFA de 2 sin contar la desorientación",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Pasa por alto un criterio."
+        },
+        {
+          "key": "h",
+          "text": "qSOFA de 1, bajo riesgo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Subestima los criterios presentes."
+        },
+        {
+          "key": "i",
+          "text": "qSOFA de 3 que confirma choque séptico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Lo eleva a un diagnóstico que requiere otros datos."
+        },
+        {
+          "key": "j",
+          "text": "qSOFA de 3, pero puede irse a casa con antibiótico oral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Calcula bien y subestima el manejo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "La escala qSOFA es una herramienta clínica rápida que identifica pacientes con infección y mayor riesgo de mala evolución. Asigna un punto a cada criterio, frecuencia respiratoria de 22 o más, alteración del estado mental y presión sistólica de 100 mmHg o menos. Un puntaje de 2 o más indica alto riesgo y debe motivar la búsqueda de disfunción orgánica con la escala SOFA, que define sepsis con un aumento de 2 o más puntos. Ya no se recomienda usar qSOFA como única herramienta de tamizaje por su baja sensibilidad. Este paciente requiere manejo hospitalario urgente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la sepsis grave y choque séptico en el adulto"
+      ]
+    },
+    {
+      "key": "mi-06b-infectologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "sepsis",
+      "vignette": "Hombre de 60 años con choque séptico de origen abdominal. Persiste la fiebre pese a antibióticos adecuados por 72 horas. La tomografía muestra una colección de 8 cm en la corredera derecha.",
+      "prompt": "¿Cuál es la causa más probable de la falta de respuesta?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fiebre por fármacos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es posible, pero la colección explica el cuadro."
+        },
+        {
+          "key": "b",
+          "text": "Resistencia bacteriana como única explicación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el antibiótico e ignora la colección."
+        },
+        {
+          "key": "c",
+          "text": "Falta de control del foco infeccioso, que requiere drenaje de la colección",
+          "correct": true,
+          "rationale": "Un absceso requiere drenaje además del antibiótico."
+        },
+        {
+          "key": "d",
+          "text": "Linfoma oculto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es poco probable."
+        },
+        {
+          "key": "e",
+          "text": "Tromboflebitis por catéter",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta la colección documentada."
+        },
+        {
+          "key": "f",
+          "text": "Neumonía nosocomial",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en otra infección."
+        },
+        {
+          "key": "g",
+          "text": "Dosis baja del antibiótico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Cambiar la dosis no resuelve un absceso."
+        },
+        {
+          "key": "h",
+          "text": "Infección por hongos como primera causa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Debe considerarse, pero primero se controla el foco."
+        },
+        {
+          "key": "i",
+          "text": "Fiebre central por estrés",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la fiebre persistente es por estrés."
+        },
+        {
+          "key": "j",
+          "text": "Insuficiencia suprarrenal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena relacionada con el choque, pero no explica la fiebre persistente con absceso."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "El control del foco infeccioso es un pilar del tratamiento de la sepsis, junto con el antibiótico y el soporte hemodinámico. Incluye drenar abscesos, desbridar tejido necrótico, retirar dispositivos infectados y corregir perforaciones o fuentes de contaminación. Se recomienda realizarlo lo antes posible, idealmente en las primeras 6 a 12 horas tras el diagnóstico, con la intervención menos invasiva eficaz, como el drenaje percutáneo guiado por imagen. Un absceso no se resuelve solo con antibióticos, porque estos penetran mal en las colecciones. Ante falta de respuesta se buscan colecciones no drenadas, resistencia o infecciones por hongos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la sepsis grave y choque séptico en el adulto"
+      ]
+    },
+    {
+      "key": "mi-06b-infectologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "sepsis",
+      "vignette": "Mujer de 45 años con neutropenia por quimioterapia, neutrófilos de 200, y fiebre de 38.6 grados sin foco aparente. Presión arterial normal. Sin catéter central infectado aparente.",
+      "prompt": "¿Cuál es el tratamiento de elección inmediato?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esperar hemocultivos positivos para iniciar antibiótico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la confirmación y retrasa el tratamiento."
+        },
+        {
+          "key": "b",
+          "text": "Evitar antibióticos para no generar resistencia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pone en riesgo la vida."
+        },
+        {
+          "key": "c",
+          "text": "Antibiótico betalactámico antipseudomónico, como cefepime o piperacilina con tazobactam, en la primera hora",
+          "correct": true,
+          "rationale": "Neutropenia febril es una urgencia que requiere cobertura empírica de Pseudomonas."
+        },
+        {
+          "key": "d",
+          "text": "Factor estimulante de colonias como único tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No sustituye al antibiótico."
+        },
+        {
+          "key": "e",
+          "text": "Vancomicina sola",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No cubre bacterias gramnegativas."
+        },
+        {
+          "key": "f",
+          "text": "Paracetamol y observar 24 horas",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Retrasa el tratamiento de una urgencia."
+        },
+        {
+          "key": "g",
+          "text": "Aislamiento sin antibiótico es suficiente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el aislamiento previene la sepsis."
+        },
+        {
+          "key": "h",
+          "text": "Ceftriaxona sola",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No cubre Pseudomonas."
+        },
+        {
+          "key": "i",
+          "text": "Antifúngico empírico de inicio en todos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena amplio, pero se agrega si la fiebre persiste."
+        },
+        {
+          "key": "j",
+          "text": "Cuatro antibióticos de amplio espectro desde el inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Exceso sin indicación."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "La neutropenia febril se define por fiebre de 38.3 grados en una medición o de 38 grados sostenida y neutrófilos menores de 500 o que se espera bajen de esa cifra. Es una urgencia oncológica porque la infección puede progresar rápido a sepsis. Tras tomar hemocultivos, se debe iniciar en la primera hora un betalactámico con actividad antipseudomónica, como cefepime, piperacilina con tazobactam o un carbapenémico. La vancomicina se agrega si hay inestabilidad, sospecha de infección de catéter, neumonía, piel o colonización por resistentes. Los antifúngicos se agregan si la fiebre persiste de cuatro a siete días. Se estratifica el riesgo con la escala MASCC.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la neutropenia febril en el paciente adulto con cáncer"
+      ]
+    }
+  ]
+}

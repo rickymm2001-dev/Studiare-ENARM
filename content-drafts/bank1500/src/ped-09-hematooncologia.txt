@@ -1,0 +1,223 @@
+@ ped|pediatric_hematology_oncology|iron_deficiency_child|2|diagnosis
+V: Niño de 15 meses alimentado con leche de vaca entera, más de un litro al día, y poca carne. Está pálido e irritable y come tierra. Hemoglobina de 8.5 g/dL, volumen corpuscular medio de 62 fL, ancho de distribución eritrocitaria elevado y ferritina de 5 ng/mL.
+P: ¿Cuál es el diagnóstico más probable?
++ Anemia por deficiencia de hierro || Anemia microcítica con ferritina baja en un niño con consumo excesivo de leche de vaca.
+- anchoring | Talasemia menor || Da microcitosis con ferritina normal y ancho de distribución normal.
+- availability_heuristic | Anemia de la enfermedad crónica || La ferritina sería normal o alta.
+- representativeness_heuristic | Intoxicación por plomo como única causa || Puede coexistir, pero la ferritina baja indica deficiencia de hierro.
+- premature_closure | Anemia megaloblástica || Es macrocítica.
+- base_rate_fallacy | Anemia sideroblástica congénita || Es rara.
+- framing_effect | Leucemia aguda || No explica la microcitosis con ferritina baja.
+- inattentional_blindness | Esferocitosis hereditaria || Da hemólisis con volumen normal.
+- focusing_illusion | Anemia fisiológica del lactante || Ocurre entre los 2 y 3 meses.
+- belief_bias | Palidez por falta de sol || No explica la anemia microcítica.
+E: La anemia por deficiencia de hierro es la causa más frecuente de anemia en niños. Los periodos de mayor riesgo son entre los 6 y 24 meses y la adolescencia. El consumo excesivo de leche de vaca, más de 500 a 700 mL al día, desplaza alimentos ricos en hierro, tiene poco hierro de baja absorción y puede causar microsangrado intestinal. Se presenta con palidez, irritabilidad, fatiga, pica y alteraciones del neurodesarrollo. Los estudios muestran anemia microcítica e hipocrómica, ancho de distribución eritrocitaria elevado, ferritina baja, hierro sérico bajo y transferrina elevada.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la anemia por deficiencia de hierro en niños
+
+@ ped|pediatric_hematology_oncology|iron_deficiency_child|2|treatment_of_choice
+V: Niña de 2 años con anemia ferropénica, hemoglobina de 9 g/dL, sin sangrado activo. Tolera la vía oral.
+P: ¿Cuál es el tratamiento de elección?
++ Sulfato ferroso oral a 3 a 6 mg/kg/día de hierro elemental y corregir la dieta, continuando 2 a 3 meses tras normalizar la hemoglobina || Repone las reservas de hierro.
+- anchoring | Transfusión de concentrado eritrocitario || No está indicada en anemia crónica estable.
+- availability_heuristic | Hierro intravenoso como primera elección || Se reserva para intolerancia o malabsorción.
+- representativeness_heuristic | Vitamina B12 intramuscular || No trata la deficiencia de hierro.
+- premature_closure | Suspender el hierro al normalizar la hemoglobina || Debe continuarse para llenar reservas.
+- framing_effect | Dar el hierro con leche para evitar molestias || La leche reduce su absorción.
+- complexity_bias | Aspirado de médula ósea antes de tratar || No es necesario.
+- base_rate_fallacy | Ácido fólico como único tratamiento || No corrige la deficiencia de hierro.
+- belief_bias | Dar más leche para fortalecer la sangre || El exceso de leche empeora la anemia.
+- omission_bias | No tratar porque mejorará al crecer || La deficiencia afecta el desarrollo.
+E: El tratamiento de la anemia por deficiencia de hierro es hierro oral, como sulfato ferroso, a 3 a 6 mg/kg/día de hierro elemental en una o dos tomas, de preferencia lejos de las comidas y con jugo de frutas con vitamina C, y no con leche, té o antiácidos. Se espera aumento de reticulocitos en 5 a 10 días y de hemoglobina de al menos 1 g/dL en 4 semanas. Si no responde se revisa la adherencia, pérdidas o malabsorción. Se continúa 2 a 3 meses tras normalizar la hemoglobina. Se corrige la dieta limitando la leche a menos de 500 mL al día.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la anemia por deficiencia de hierro en niños
+
+@ ped|pediatric_hematology_oncology|iron_deficiency_child|3|prevention_screening
+V: Recién nacido prematuro de 33 semanas, alimentado con leche materna, que será dado de alta. La madre pregunta qué cuidados necesita para evitar la anemia.
+P: ¿Cuál es la medida de prevención indicada?
++ Suplementar hierro oral de 2 mg/kg/día desde el primer mes hasta el año || Los prematuros tienen reservas de hierro bajas.
+- anchoring | Suplementar hierro solo a partir del año || Las reservas se agotan antes.
+- availability_heuristic | Transfusión profiláctica antes del egreso || No está indicada.
+- representativeness_heuristic | Suspender la leche materna por tener poco hierro || La leche materna debe mantenerse.
+- premature_closure | No requiere ninguna medida si la hemoglobina es normal al egreso || Las reservas son bajas.
+- framing_effect | Dar leche de vaca desde los 3 meses || No se recomienda antes del año.
+- complexity_bias | Eritropoyetina de rutina en casa || No es una medida habitual.
+- base_rate_fallacy | Vitamina B12 intramuscular mensual || No previene la ferropenia.
+- belief_bias | Dar caldos de frijol en lugar de leche materna || No sustituyen la leche.
+- omission_bias | No suplementar para evitar estreñimiento || El beneficio supera el riesgo.
+E: Los prematuros y los recién nacidos de bajo peso tienen menores reservas de hierro porque la mayor parte se transfiere en el tercer trimestre, además de crecer rápido y haber tenido extracciones de sangre. Se recomienda suplementar hierro de 2 a 4 mg/kg/día a partir del primer mes y hasta los 12 meses. En recién nacidos de término alimentados con seno materno se suplementa hierro a partir de los 4 a 6 meses según las recomendaciones locales. El pinzamiento tardío del cordón, de 1 a 3 minutos, aumenta las reservas de hierro. A partir de los 6 meses se introducen alimentos ricos en hierro.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la anemia por deficiencia de hierro en niños
+
+@ ped|pediatric_hematology_oncology|iron_deficiency_child|3|data_interpretation
+V: Niño de 3 años con anemia ferropénica en tratamiento con sulfato ferroso desde hace 7 días. Los padres preguntan cómo saber si el hierro está funcionando.
+P: ¿Qué indica una respuesta adecuada al tratamiento en la primera semana?
++ Aumento de los reticulocitos entre los días 5 y 10 || Es el primer marcador de respuesta medular.
+- anchoring | Normalización completa de la hemoglobina || Tarda semanas.
+- availability_heuristic | Normalización de la ferritina en una semana || Las reservas tardan meses en llenarse.
+- representativeness_heuristic | Aumento del volumen corpuscular medio a lo normal en 3 días || Tarda más.
+- premature_closure | Heces de color negro || Es un efecto del hierro, no un marcador de respuesta.
+- base_rate_fallacy | Disminución de las plaquetas || No indica respuesta.
+- framing_effect | Aumento de la bilirrubina indirecta || No es un marcador de respuesta.
+- inattentional_blindness | Disminución de los leucocitos || No indica respuesta.
+- focusing_illusion | Aumento del hierro sérico sin cambios clínicos || No es el mejor indicador.
+- belief_bias | Que el niño engorde rápido || No indica respuesta hematológica.
+E: La respuesta al hierro oral sigue una secuencia. En 12 a 24 horas mejora la irritabilidad y el apetito. Entre los días 5 y 10 aumentan los reticulocitos, que es el primer marcador de laboratorio de respuesta. En 4 semanas la hemoglobina debe aumentar al menos 1 a 2 g/dL. La ferritina tarda meses en normalizarse, por lo que el tratamiento se continúa 2 a 3 meses tras corregir la hemoglobina. Si no hay respuesta se revisa la adherencia, la dosis, el diagnóstico, la presencia de pérdidas sanguíneas, malabsorción como enfermedad celiaca o infección por Helicobacter pylori.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la anemia por deficiencia de hierro en niños
+
+@ ped|pediatric_hematology_oncology|iron_deficiency_child|3|diagnosis
+V: Niño de 4 años con anemia microcítica leve, hemoglobina de 10.5 g/dL, volumen corpuscular medio de 64 fL, eritrocitos de 5.8 millones y ancho de distribución normal. Ferritina normal. Su padre tiene una anemia similar de por vida sin síntomas.
+P: ¿Cuál es el diagnóstico más probable?
++ Rasgo talasémico beta || Microcitosis con eritrocitos elevados, ancho normal, ferritina normal y antecedente familiar.
+- anchoring | Anemia ferropénica || La ferritina y el ancho de distribución son normales.
+- availability_heuristic | Anemia de la enfermedad crónica || No hay enfermedad crónica.
+- representativeness_heuristic | Intoxicación por plomo || No hay exposición.
+- premature_closure | Esferocitosis hereditaria || No da microcitosis marcada.
+- base_rate_fallacy | Talasemia mayor || Daría anemia grave desde el primer año.
+- framing_effect | Anemia sideroblástica || Es rara.
+- inattentional_blindness | Anemia por pérdidas crónicas || La ferritina estaría baja.
+- focusing_illusion | Deficiencia de vitamina B12 || Es macrocítica.
+- belief_bias | Anemia por mala alimentación que se corrige con hierro || Dar hierro sin deficiencia es inútil y dañino.
+E: El rasgo talasémico beta, o talasemia menor, se debe a una mutación heterocigota en el gen de la cadena beta de la hemoglobina. Produce anemia microcítica leve o ausente, con número de eritrocitos normal o elevado, ancho de distribución normal y ferritina normal. El índice de Mentzer, volumen corpuscular medio entre eritrocitos, menor de 13 sugiere talasemia, y mayor de 13 deficiencia de hierro. La electroforesis de hemoglobina muestra aumento de hemoglobina A2. No requiere tratamiento, y se debe evitar el hierro si no hay deficiencia. Se ofrece consejo genético.
+R: Guía de Práctica Clínica de diagnóstico de talasemias
+
+@ ped|pediatric_hematology_oncology|iron_deficiency_child|3|complication_prognosis
+V: Lactante de 18 meses con anemia ferropénica moderada no tratada durante su primer año. Los padres preguntan si hay consecuencias a largo plazo.
+P: ¿Cuál es la consecuencia más importante de la deficiencia de hierro en los primeros 2 años?
++ Alteraciones del neurodesarrollo cognitivo y motor que pueden ser persistentes || El hierro es esencial para el desarrollo cerebral.
+- anchoring | Insuficiencia cardiaca en todos los casos || Solo en anemias muy graves.
+- availability_heuristic | Leucemia aguda || No se relaciona.
+- representativeness_heuristic | Talla alta || No se relaciona.
+- premature_closure | Ninguna si se corrige después || Las alteraciones pueden persistir.
+- base_rate_fallacy | Diabetes tipo 1 || No se relaciona.
+- framing_effect | Obesidad infantil || No es la consecuencia principal.
+- inattentional_blindness | Hipotiroidismo congénito || No se relaciona.
+- focusing_illusion | Sordera neurosensorial || No es característica.
+- belief_bias | Solo cansancio transitorio || El efecto en el desarrollo es importante.
+E: La deficiencia de hierro en los primeros 2 años, incluso antes de que aparezca la anemia, afecta la mielinización, la síntesis de neurotransmisores y el metabolismo energético cerebral. Se asocia a retraso en el desarrollo motor y cognitivo, menor atención y alteraciones de conducta que pueden persistir aunque se corrija la anemia. Otras consecuencias son mayor susceptibilidad a infecciones, absorción aumentada de plomo, pica y espasmos del sollozo. Por ello la prevención con lactancia, alimentación complementaria rica en hierro, suplementos en grupos de riesgo y evitar el exceso de leche de vaca es prioritaria.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la anemia por deficiencia de hierro en niños
+
+@ ped|pediatric_hematology_oncology|acute_lymphoblastic_leukemia|2|diagnosis
+V: Niño de 4 años con palidez, fatiga, fiebre intermitente y dolor óseo en piernas de 3 semanas. Tiene petequias, adenopatías generalizadas y hepatoesplenomegalia. Hemoglobina de 7 g/dL, plaquetas de 25 000 y leucocitos de 45 000 con blastos en sangre periférica.
+P: ¿Cuál es el diagnóstico más probable?
++ Leucemia linfoblástica aguda || Pancitopenia funcional con blastos, dolor óseo, adenopatías y visceromegalias en un preescolar.
+- anchoring | Mononucleosis infecciosa || Da linfocitos atípicos, no blastos ni anemia grave.
+- availability_heuristic | Púrpura trombocitopénica inmune || Solo afecta plaquetas sin anemia ni visceromegalias.
+- representativeness_heuristic | Artritis idiopática juvenil || No explica los blastos.
+- premature_closure | Anemia aplásica || No da visceromegalias ni blastos.
+- base_rate_fallacy | Leucemia mieloide crónica || Es rara en niños.
+- framing_effect | Dolores de crecimiento || No explican las citopenias.
+- inattentional_blindness | Neuroblastoma || Puede infiltrar médula, pero los blastos y adenopatías orientan a leucemia.
+- focusing_illusion | Infección viral con reacción leucemoide || No explica los blastos con citopenias.
+- belief_bias | Anemia por mala alimentación || No explica los blastos.
+E: La leucemia linfoblástica aguda es el cáncer más frecuente en la infancia, con pico entre los 2 y 5 años. Se debe a la proliferación de precursores linfoides que desplazan a la médula normal. Se manifiesta con anemia, fiebre o infecciones por neutropenia, sangrados por trombocitopenia, dolor óseo, adenopatías y hepatoesplenomegalia. Los leucocitos pueden estar altos, normales o bajos. El diagnóstico se confirma con aspirado de médula ósea con más de 20 a 25% de blastos, inmunofenotipo y estudios genéticos. Los factores de buen pronóstico incluyen edad de 1 a 10 años y leucocitos menores de 50 000.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de leucemia linfoblástica aguda en niños
+
+@ ped|pediatric_hematology_oncology|acute_lymphoblastic_leukemia|3|confirmatory_study
+V: Niña de 5 años con palidez, petequias y blastos en el frotis de sangre periférica. Se sospecha leucemia aguda.
+P: ¿Cuál es el estudio de elección para confirmar el diagnóstico?
++ Aspirado de médula ósea con morfología, inmunofenotipo por citometría de flujo y estudios genéticos || Confirma la leucemia y define el tipo y el riesgo.
+- anchoring | Biometría hemática repetida || No confirma ni clasifica.
+- availability_heuristic | Frotis de sangre periférica como único estudio || No es suficiente para el diagnóstico definitivo.
+- representativeness_heuristic | Tomografía de tórax y abdomen || Valora masas, no confirma leucemia.
+- premature_closure | Biopsia de ganglio linfático || No es el estudio de elección.
+- base_rate_fallacy | Deshidrogenasa láctica elevada || Es inespecífica.
+- framing_effect | Punción lumbar como estudio diagnóstico principal || Valora infiltración, no confirma.
+- complexity_bias | Tomografía por emisión de positrones || No es el estudio inicial.
+- information_bias | Serología para virus de Epstein Barr || No confirma leucemia.
+- belief_bias | Diagnóstico solo por la clínica || Requiere confirmación medular.
+E: El diagnóstico de leucemia aguda se confirma con aspirado de médula ósea. La morfología muestra más de 20 a 25% de blastos. La citometría de flujo define el linaje, B o T, y los estudios citogenéticos y moleculares identifican alteraciones con valor pronóstico, como la hiperdiploidía y la translocación ETV6 RUNX1 de buen pronóstico, o el cromosoma Filadelfia y los rearreglos de KMT2A de mal pronóstico. También se realiza punción lumbar para buscar infiltración del sistema nervioso central y radiografía de tórax para descartar masa mediastinal. Esta información guía el tratamiento por grupos de riesgo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de leucemia linfoblástica aguda en niños
+
+@ ped|pediatric_hematology_oncology|acute_lymphoblastic_leukemia|4|complication_prognosis
+V: Niño de 6 años con leucemia linfoblástica aguda y leucocitos de 150 000 que a las 24 horas de iniciar quimioterapia presenta oliguria. Potasio de 6.8 mEq/L, fósforo de 9 mg/dL, calcio de 6.5 mg/dL, ácido úrico de 14 mg/dL y creatinina elevada.
+P: ¿Cuál es la complicación que presenta?
++ Síndrome de lisis tumoral || Hiperpotasemia, hiperfosfatemia, hipocalcemia e hiperuricemia con lesión renal tras quimioterapia.
+- anchoring | Deshidratación por vómito || No explica el patrón de electrolitos.
+- availability_heuristic | Sepsis con falla renal || No explica la hiperfosfatemia e hiperuricemia.
+- representativeness_heuristic | Nefrotoxicidad por aminoglucósidos || No explica el patrón metabólico.
+- premature_closure | Hipoparatiroidismo || No explica la hiperpotasemia ni la hiperuricemia.
+- base_rate_fallacy | Síndrome urémico hemolítico || No se relaciona con la quimioterapia.
+- framing_effect | Infiltración renal leucémica sola || No explica el patrón tras quimioterapia.
+- inattentional_blindness | Rabdomiólisis por ejercicio || No hay antecedente.
+- focusing_illusion | Cetoacidosis diabética || No hay hiperglucemia.
+- belief_bias | Efecto esperado sin importancia || Es una urgencia metabólica.
+E: El síndrome de lisis tumoral ocurre por la destrucción masiva de células tumorales, espontánea o tras iniciar quimioterapia, en tumores con alta carga y rápida proliferación, como leucemias con hiperleucocitosis y linfoma de Burkitt. La liberación del contenido celular produce hiperpotasemia, hiperfosfatemia, hipocalcemia secundaria e hiperuricemia, con lesión renal aguda por precipitación de ácido úrico y fosfato de calcio, arritmias y crisis. Se previene con hiperhidratación, alopurinol o rasburicasa y vigilancia estrecha de electrolitos. El tratamiento incluye corregir la hiperpotasemia, rasburicasa y diálisis si es necesario.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de leucemia linfoblástica aguda en niños
+
+@ ped|pediatric_hematology_oncology|acute_lymphoblastic_leukemia|3|initial_treatment
+V: Niña de 7 años con leucemia linfoblástica aguda en quimioterapia que presenta fiebre de 38.6 °C. Neutrófilos absolutos de 200 por mm3. Está estable hemodinámicamente.
+P: ¿Cuál es el tratamiento inicial?
++ Tomar cultivos e iniciar de inmediato antibiótico intravenoso de amplio espectro con cobertura antipseudomonas || Fiebre con neutropenia grave es una urgencia.
+- anchoring | Paracetamol y observación en casa || La neutropenia febril puede progresar a sepsis rápidamente.
+- availability_heuristic | Esperar el resultado de cultivos para iniciar antibióticos || El retraso aumenta la mortalidad.
+- representativeness_heuristic | Amoxicilina oral ambulatoria || No cubre gramnegativos resistentes de forma adecuada en alto riesgo.
+- premature_closure | Iniciar antifúngicos como primera medida || Se agregan si la fiebre persiste.
+- framing_effect | Transfusión de granulocitos de rutina || No está indicada.
+- complexity_bias | Tomografía de cuerpo entero antes de tratar || Retrasa el antibiótico.
+- base_rate_fallacy | Factor estimulante de colonias como único tratamiento || No sustituye al antibiótico.
+- belief_bias | Tacto rectal para buscar foco || Está contraindicado en neutropenia.
+- omission_bias | Suspender la quimioterapia sin dar antibióticos || La infección requiere antibióticos.
+E: La neutropenia febril se define por fiebre en un paciente con neutrófilos menores de 500 o que se espera que bajen de ese valor. Es una urgencia oncológica porque la infección puede progresar a choque séptico en horas. Se toman hemocultivos de catéter y periféricos y se inicia en la primera hora un antibiótico intravenoso de amplio espectro con cobertura antipseudomonas, como cefepima o piperacilina con tazobactam. Se agrega vancomicina si hay inestabilidad, infección de catéter o de piel, y antifúngicos si la fiebre persiste de 4 a 7 días. Se evitan el tacto rectal y la temperatura rectal.
+R: Guía de Práctica Clínica de manejo de neutropenia febril en niños con cáncer
+
+@ ped|pediatric_hematology_oncology|acute_lymphoblastic_leukemia|3|diagnosis
+V: Niño de 3 años con aumento del perímetro abdominal notado por su madre al bañarlo. Tiene una masa en flanco derecho, lisa, que no cruza la línea media, y presión arterial elevada. Está en buen estado general. Orina con hematuria microscópica.
+P: ¿Cuál es el diagnóstico más probable?
++ Tumor de Wilms || Masa abdominal lisa en flanco que no cruza la línea media en un niño en buen estado.
+- anchoring | Neuroblastoma || Suele cruzar la línea media, ser irregular y el niño se ve enfermo.
+- availability_heuristic | Hidronefrosis congénita || No da masa sólida con hipertensión.
+- representativeness_heuristic | Hepatoblastoma || Se origina en el hígado.
+- premature_closure | Linfoma de Burkitt abdominal || Crece muy rápido con síntomas.
+- base_rate_fallacy | Quiste de colédoco || Da ictericia y dolor.
+- framing_effect | Impactación fecal || No explica la hipertensión ni la hematuria.
+- inattentional_blindness | Riñón poliquístico || Suele ser bilateral.
+- focusing_illusion | Teratoma sacrococcígeo || Se localiza en la región sacra.
+- belief_bias | Barriga por comer mucho || Hay una masa palpable.
+E: El tumor de Wilms o nefroblastoma es el tumor renal más frecuente en niños, con pico entre los 2 y 5 años. Se presenta como masa abdominal asintomática, lisa, firme, que no suele cruzar la línea media, descubierta por los padres. Puede haber hipertensión, hematuria y dolor. Se asocia a síndromes como WAGR, Denys Drash y Beckwith Wiedemann, así como a aniridia y hemihipertrofia. El ultrasonido y la tomografía confirman la masa renal y valoran la vena cava y metástasis pulmonares. No debe palparse en exceso por riesgo de ruptura. El tratamiento combina cirugía y quimioterapia, con supervivencia alta.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del tumor de Wilms
+
+@ ped|pediatric_hematology_oncology|acute_lymphoblastic_leukemia|4|diagnosis
+V: Lactante de 18 meses con irritabilidad, pérdida de peso, equimosis periorbitarias en anteojos y una masa abdominal irregular que cruza la línea media. La tomografía muestra masa suprarrenal con calcificaciones. Catecolaminas urinarias elevadas.
+P: ¿Cuál es el diagnóstico más probable?
++ Neuroblastoma || Masa suprarrenal calcificada que cruza la línea media, metástasis orbitarias y catecolaminas elevadas.
+- anchoring | Tumor de Wilms || No suele cruzar la línea media ni elevar catecolaminas.
+- availability_heuristic | Maltrato infantil por las equimosis || Las equimosis periorbitarias son metástasis.
+- representativeness_heuristic | Feocromocitoma || Es raro en lactantes y no da equimosis orbitarias.
+- premature_closure | Linfoma abdominal || No eleva catecolaminas.
+- base_rate_fallacy | Hepatoblastoma || Se origina en el hígado.
+- framing_effect | Leucemia aguda || No explica la masa suprarrenal calcificada.
+- inattentional_blindness | Hemorragia suprarrenal neonatal || Ocurre en recién nacidos.
+- focusing_illusion | Rabdomiosarcoma orbitario || No explica la masa suprarrenal.
+- belief_bias | Ojeras por desvelo || Son metástasis orbitarias.
+E: El neuroblastoma es el tumor sólido extracraneal más frecuente en lactantes. Se origina en la cresta neural, sobre todo en la médula suprarrenal. Se presenta como masa abdominal irregular que cruza la línea media, con calcificaciones en la imagen. Las metástasis a órbitas producen equimosis periorbitarias en anteojos y proptosis, y a médula ósea dolor y citopenias. Puede causar síndrome de opsoclono mioclono y diarrea secretora. Las catecolaminas urinarias, ácido vanililmandélico y homovanílico, están elevadas. La amplificación de MYCN indica mal pronóstico, mientras que los menores de 18 meses suelen tener mejor evolución.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del neuroblastoma
+
+@ ped|pediatric_hematology_oncology|acute_lymphoblastic_leukemia|3|risk_factor
+V: Niña de 3 años con síndrome de Down que presenta palidez, petequias y fiebre. Se confirma leucemia aguda. Los padres preguntan si su condición genética influye.
+P: ¿Cuál es el factor de riesgo de leucemia en esta paciente?
++ La trisomía 21 aumenta varias veces el riesgo de leucemia aguda || El síndrome de Down es un factor genético establecido.
+- anchoring | Haber recibido todas las vacunas || No aumenta el riesgo.
+- availability_heuristic | Haber tenido infecciones respiratorias frecuentes || No es una causa establecida.
+- representativeness_heuristic | La dieta rica en azúcar || No es un factor de riesgo.
+- premature_closure | El uso de teléfonos celulares en casa || No hay evidencia.
+- base_rate_fallacy | La lactancia materna || Es protectora.
+- framing_effect | Vivir en zona urbana como causa directa || No es un factor establecido.
+- inattentional_blindness | El sexo femenino || No es un factor relevante.
+- focusing_illusion | La cardiopatía congénita del síndrome || No causa la leucemia.
+- belief_bias | Un susto o enojo durante el embarazo || No causa leucemia.
+E: Los factores de riesgo establecidos de leucemia aguda en niños incluyen síndromes genéticos como síndrome de Down, neurofibromatosis tipo 1, anemia de Fanconi, síndrome de Bloom y ataxia telangiectasia, exposición a radiación ionizante, quimioterapia previa y algunas inmunodeficiencias. Los niños con síndrome de Down tienen un riesgo de 10 a 20 veces mayor de leucemia linfoblástica y mieloide, y en recién nacidos pueden presentar un trastorno mieloproliferativo transitorio. La mayoría de los casos no tienen un factor identificable. Las vacunas, la dieta y los factores emocionales no son causas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de leucemia linfoblástica aguda en niños
+
+@ ped|pediatric_hematology_oncology|acute_lymphoblastic_leukemia|3|diagnosis
+V: Niño de 7 años con cefalea matutina de 2 meses que mejora tras vomitar, marcha inestable con base amplia y caídas frecuentes. Tiene papiledema bilateral y nistagmo. Sin fiebre.
+P: ¿Cuál es el diagnóstico más probable?
++ Tumor de fosa posterior con hidrocefalia, como meduloblastoma || Cefalea matutina con vómito, ataxia y papiledema en un escolar.
+- anchoring | Migraña infantil || No da papiledema ni ataxia.
+- availability_heuristic | Sinusitis crónica || No explica la ataxia ni el papiledema.
+- representativeness_heuristic | Gastroenteritis recurrente || No explica los datos neurológicos.
+- premature_closure | Problema de visión que requiere lentes || No explica el papiledema.
+- base_rate_fallacy | Esclerosis múltiple || Es rara en niños.
+- framing_effect | Ataxia cerebelosa aguda postinfecciosa || Es aguda y sin hipertensión intracraneal.
+- inattentional_blindness | Cefalea tensional por estrés escolar || No explica el papiledema.
+- focusing_illusion | Intoxicación por medicamentos || No explica la evolución de 2 meses con papiledema.
+- belief_bias | Niño torpe que se cae por jugar mucho || Los datos neurológicos son graves.
+E: Los tumores del sistema nervioso central son los tumores sólidos más frecuentes en niños y la mayoría se localizan en la fosa posterior. El meduloblastoma es el tumor maligno más común, y otros son astrocitoma pilocítico y ependimoma. Obstruyen el flujo del líquido cefalorraquídeo y causan hidrocefalia con cefalea matutina, vómito que alivia la cefalea y papiledema, además de ataxia, nistagmo y alteraciones de pares craneales. La resonancia magnética es el estudio de elección. Las cefaleas con banderas rojas, como despertar nocturno, vómito, cambios de conducta o datos neurológicos, requieren neuroimagen.
+R: Guía de Práctica Clínica de diagnóstico de tumores del sistema nervioso central en niños

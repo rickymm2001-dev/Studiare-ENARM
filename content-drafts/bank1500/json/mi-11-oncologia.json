@@ -1,0 +1,1415 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-11-oncologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "oncology",
+      "subtopic": "lung_cancer",
+      "vignette": "Hombre de 66 años con tos persistente de 2 meses, hemoptisis leve y pérdida de peso. Fumó 30 cigarros al día durante 40 años.",
+      "prompt": "¿Cuál es el principal factor de riesgo de cáncer pulmonar?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Exposición al asbesto",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es un factor reconocido, pero mucho menos frecuente que el tabaco."
+        },
+        {
+          "key": "b",
+          "text": "Antecedente familiar de cáncer de colon",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No se relaciona."
+        },
+        {
+          "key": "c",
+          "text": "Infección por VIH",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Aumenta el riesgo, pero es poco frecuente."
+        },
+        {
+          "key": "d",
+          "text": "Tabaquismo",
+          "correct": true,
+          "rationale": "Es responsable de la gran mayoría de los casos de cáncer pulmonar."
+        },
+        {
+          "key": "e",
+          "text": "Exposición a humo de leña como causa principal en este paciente",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es relevante en mujeres rurales, pero este paciente fumó mucho."
+        },
+        {
+          "key": "f",
+          "text": "Consumo de alcohol",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es un factor principal de cáncer pulmonar."
+        },
+        {
+          "key": "g",
+          "text": "Tuberculosis previa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede asociarse, pero no es el principal."
+        },
+        {
+          "key": "h",
+          "text": "Exposición al radón doméstico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena relevante, pero es la segunda causa y menos frecuente."
+        },
+        {
+          "key": "i",
+          "text": "Dieta rica en carne roja",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la dieta causa cáncer pulmonar."
+        },
+        {
+          "key": "j",
+          "text": "Contaminación del aire urbano",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en un factor general de menor peso."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "g",
+        "j"
+      ],
+      "explanation": "El tabaquismo es el principal factor de riesgo de cáncer pulmonar y se asocia a la gran mayoría de los casos, con un riesgo proporcional a la intensidad y duración del consumo, medido en paquetes año. Otros factores son la exposición pasiva al humo, el radón, el asbesto, el humo de leña, la contaminación, la exposición ocupacional a arsénico y níquel y la fibrosis pulmonar. Dejar de fumar reduce el riesgo progresivamente. En personas de 50 a 80 años con 20 o más paquetes año, fumadoras actuales o que dejaron de fumar en los últimos 15 años, se recomienda tamizaje anual con tomografía de baja dosis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer pulmonar de células no pequeñas"
+      ]
+    },
+    {
+      "key": "mi-11-oncologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "oncology",
+      "subtopic": "lung_cancer",
+      "vignette": "Mujer de 62 años que fumó un paquete diario durante 35 años y dejó de fumar hace 5 años. Asintomática.",
+      "prompt": "¿Cuál es el tamizaje recomendado para cáncer pulmonar?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sin tamizaje porque ya dejó de fumar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a menor riesgo, pero dejó hace menos de 15 años."
+        },
+        {
+          "key": "b",
+          "text": "Citología de esputo cada 6 meses",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en un método sin beneficio."
+        },
+        {
+          "key": "c",
+          "text": "Marcadores tumorales en sangre como tamizaje",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que los marcadores detectan el cáncer temprano."
+        },
+        {
+          "key": "d",
+          "text": "Tomografía por emisión de positrones anual",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el método de tamizaje."
+        },
+        {
+          "key": "e",
+          "text": "Tomografía de tórax de baja dosis anual",
+          "correct": true,
+          "rationale": "Indicado en personas de 50 a 80 años con 20 o más paquetes año."
+        },
+        {
+          "key": "f",
+          "text": "Tomografía de alta dosis con contraste cada mes",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Exceso de radiación."
+        },
+        {
+          "key": "g",
+          "text": "Broncoscopia anual",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es invasiva y no es tamizaje."
+        },
+        {
+          "key": "h",
+          "text": "Evitar el tamizaje por miedo a la radiación",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La dosis baja tiene beneficio mayor al riesgo."
+        },
+        {
+          "key": "i",
+          "text": "Radiografía de tórax anual",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No reduce la mortalidad."
+        },
+        {
+          "key": "j",
+          "text": "Esperar a que tenga síntomas",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Cuando hay síntomas suele ser avanzado."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "El tamizaje con tomografía de tórax de baja dosis anual reduce la mortalidad por cáncer pulmonar en personas de alto riesgo, según estudios grandes. Se recomienda a personas de 50 a 80 años con 20 o más paquetes año de tabaquismo, que fuman actualmente o dejaron de fumar en los últimos 15 años, y que podrían recibir tratamiento curativo. La radiografía de tórax y la citología de esputo no reducen la mortalidad. El tamizaje debe acompañarse de consejería para dejar de fumar y de una discusión sobre los posibles daños, como falsos positivos y sobrediagnóstico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer pulmonar de células no pequeñas"
+      ]
+    },
+    {
+      "key": "mi-11-oncologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "oncology",
+      "subtopic": "lung_cancer",
+      "vignette": "Hombre de 60 años con cáncer pulmonar de células pequeñas. Presenta edema de cara, cuello y brazos, circulación colateral en el tórax y disnea que empeora al acostarse.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Taponamiento cardiaco",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta el edema de brazos y colaterales."
+        },
+        {
+          "key": "b",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el edema facial."
+        },
+        {
+          "key": "c",
+          "text": "Trombosis de vena yugular aislada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica el edema bilateral."
+        },
+        {
+          "key": "d",
+          "text": "Obesidad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que es acumulación de grasa."
+        },
+        {
+          "key": "e",
+          "text": "Insuficiencia cardiaca derecha",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También da edema e ingurgitación, pero no edema facial y de brazos con colaterales torácicas."
+        },
+        {
+          "key": "f",
+          "text": "Síndrome nefrótico paraneoplásico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye otra causa de edema."
+        },
+        {
+          "key": "g",
+          "text": "Derrame pleural maligno",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da disnea, pero no edema facial."
+        },
+        {
+          "key": "h",
+          "text": "Angioedema hereditario",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a edema facial, pero no hay colaterales."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de vena cava superior",
+          "correct": true,
+          "rationale": "Obstrucción venosa por compresión tumoral mediastinal."
+        },
+        {
+          "key": "j",
+          "text": "Reacción alérgica a la quimioterapia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el tratamiento, sin relación clínica."
+        }
+      ],
+      "canonical": [
+        "e",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El síndrome de vena cava superior se produce por obstrucción del flujo venoso de cabeza, cuello y extremidades superiores, en la mayoría de los casos por compresión tumoral, sobre todo cáncer pulmonar de células pequeñas y linfomas. Se manifiesta con edema facial y de cuello, plétora, distensión de venas del cuello y del tórax, edema de brazos, disnea, tos y empeoramiento al acostarse o inclinarse. El diagnóstico se confirma con tomografía con contraste. El tratamiento incluye elevar la cabecera, diagnóstico histológico, quimioterapia o radioterapia según el tumor, y colocación de stent endovascular en casos graves.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer pulmonar de células pequeñas"
+      ]
+    },
+    {
+      "key": "mi-11-oncologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "oncology",
+      "subtopic": "lung_cancer",
+      "vignette": "Hombre de 63 años fumador con cáncer pulmonar. Presenta ptosis, miosis y anhidrosis del lado derecho, y dolor en hombro y brazo derechos con debilidad de la mano.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de vena cava superior",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a complicación torácica, pero da edema facial."
+        },
+        {
+          "key": "b",
+          "text": "Metástasis cerebral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye otra lesión sin explicar la plexopatía."
+        },
+        {
+          "key": "c",
+          "text": "Hernia de disco cervical",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el dolor de brazo, sin explicar el Horner."
+        },
+        {
+          "key": "d",
+          "text": "Disección carotídea",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da Horner, pero no plexopatía braquial."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome del túnel del carpo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Explica la mano, no el Horner."
+        },
+        {
+          "key": "f",
+          "text": "Lesión por mala postura",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que es mecánico."
+        },
+        {
+          "key": "g",
+          "text": "Tumor de Pancoast con síndrome de Horner",
+          "correct": true,
+          "rationale": "Tumor del vértice pulmonar que invade la cadena simpática y el plexo braquial."
+        },
+        {
+          "key": "h",
+          "text": "Evento vascular cerebral del tallo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede dar Horner, pero no dolor de hombro con plexopatía."
+        },
+        {
+          "key": "i",
+          "text": "Miastenia gravis",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la ptosis."
+        },
+        {
+          "key": "j",
+          "text": "Bursitis de hombro",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta los datos neurológicos."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "El tumor de Pancoast es un cáncer pulmonar del vértice, del surco superior, que invade estructuras vecinas. Produce dolor intenso de hombro y brazo por invasión del plexo braquial, con debilidad y atrofia de músculos de la mano, y síndrome de Horner por afección de la cadena simpática cervical, con ptosis, miosis y anhidrosis del mismo lado. Puede destruir costillas y vértebras. Con frecuencia la radiografía de tórax inicial no lo muestra por su localización, por lo que se requiere tomografía o resonancia. El tratamiento suele combinar quimiorradioterapia y cirugía en casos resecables.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer pulmonar de células no pequeñas"
+      ]
+    },
+    {
+      "key": "mi-11-oncologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "oncology",
+      "subtopic": "lung_cancer",
+      "vignette": "Hombre de 58 años con cáncer pulmonar de células pequeñas. Presenta confusión y náusea. Sodio de 118 mEq/L, osmolaridad sérica baja, osmolaridad urinaria alta y euvolemia.",
+      "prompt": "¿Cuál es la interpretación correcta de este hallazgo?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de Eaton Lambert",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es otro paraneoplásico, pero da debilidad."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de Cushing ectópico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También es paraneoplásico del de células pequeñas, pero da hipopotasemia e hiperglucemia."
+        },
+        {
+          "key": "c",
+          "text": "Metástasis cerebrales como única causa de la confusión",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en las metástasis e ignora el sodio."
+        },
+        {
+          "key": "d",
+          "text": "Insuficiencia suprarrenal por metástasis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe descartarse, pero el patrón sugiere SIADH."
+        },
+        {
+          "key": "e",
+          "text": "Hiponatremia por deshidratación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a vómito, pero la paciente está euvolémica."
+        },
+        {
+          "key": "f",
+          "text": "Polidipsia primaria",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Daría orina diluida."
+        },
+        {
+          "key": "g",
+          "text": "Seudohiponatremia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "La osmolaridad está baja."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome paraneoplásico de secreción inadecuada de hormona antidiurética",
+          "correct": true,
+          "rationale": "El cáncer de células pequeñas produce ADH ectópica."
+        },
+        {
+          "key": "i",
+          "text": "Efecto de la quimioterapia sin relación con el tumor",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo es por el tratamiento."
+        },
+        {
+          "key": "j",
+          "text": "Hipercalcemia paraneoplásica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es más típica del carcinoma epidermoide."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "El cáncer pulmonar de células pequeñas es un tumor neuroendocrino que se asocia con frecuencia a síndromes paraneoplásicos. El más común es el síndrome de secreción inadecuada de hormona antidiurética, con hiponatremia hipotónica euvolémica y orina concentrada. También produce síndrome de Cushing por ACTH ectópica y síndrome miasténico de Eaton Lambert. El carcinoma epidermoide se asocia a hipercalcemia por péptido relacionado con la PTH. La hiponatremia se trata con restricción de líquidos, solución salina hipertónica si es grave y sintomática, antagonistas de vasopresina en casos seleccionados y tratamiento del tumor.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer pulmonar de células pequeñas"
+      ]
+    },
+    {
+      "key": "mi-11-oncologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "oncology",
+      "subtopic": "lung_cancer",
+      "vignette": "Mujer de 59 años, exfumadora, con un nódulo pulmonar de 2.5 cm de bordes espiculados en el lóbulo superior izquierdo detectado en una radiografía.",
+      "prompt": "¿Cuál es el estudio inicial más adecuado para continuar el abordaje?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Antibiótico por 2 semanas y repetir la imagen",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a descartar infección, pero el nódulo espiculado es sospechoso."
+        },
+        {
+          "key": "b",
+          "text": "Cirugía inmediata sin estadificar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Omite la estadificación."
+        },
+        {
+          "key": "c",
+          "text": "Tomografía de tórax con contraste que incluya abdomen superior",
+          "correct": true,
+          "rationale": "Caracteriza el nódulo y estadifica."
+        },
+        {
+          "key": "d",
+          "text": "Resonancia de cuerpo entero",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "e",
+          "text": "Citología de esputo como estudio principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tiene baja sensibilidad."
+        },
+        {
+          "key": "f",
+          "text": "Gammagrama óseo como primer estudio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que primero se buscan metástasis óseas."
+        },
+        {
+          "key": "g",
+          "text": "Asumir granuloma tuberculoso por estar en México",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ignora los datos de malignidad."
+        },
+        {
+          "key": "h",
+          "text": "Ultrasonido de tórax",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No evalúa nódulos pulmonares."
+        },
+        {
+          "key": "i",
+          "text": "Repetir la radiografía en un año",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la vigilancia de nódulos benignos."
+        },
+        {
+          "key": "j",
+          "text": "Marcadores tumorales en sangre antes de la imagen",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No definen la conducta."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "h",
+        "i"
+      ],
+      "explanation": "Un nódulo pulmonar con características sospechosas de malignidad, como tamaño mayor de 8 mm, bordes espiculados, localización en lóbulos superiores, crecimiento y antecedente de tabaquismo, requiere estudio. El siguiente paso es la tomografía de tórax con contraste que incluya el abdomen superior para caracterizar el nódulo y buscar adenopatías y metástasis en hígado y suprarrenales. Según el riesgo se realiza tomografía por emisión de positrones y se obtiene diagnóstico histológico por biopsia guiada por tomografía, broncoscopia o resección. La radiografía no es suficiente para el abordaje.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer pulmonar de células no pequeñas"
+      ]
+    },
+    {
+      "key": "mi-11-oncologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "oncology",
+      "subtopic": "colorectal_cancer_internal",
+      "vignette": "Hombre de 50 años sin antecedentes familiares de cáncer ni síntomas digestivos acude a revisión.",
+      "prompt": "¿Cuál es el tamizaje recomendado para cáncer colorrectal?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Antígeno carcinoembrionario anual",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No sirve para tamizaje."
+        },
+        {
+          "key": "b",
+          "text": "Tomografía de abdomen anual con contraste",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Exceso de radiación sin beneficio."
+        },
+        {
+          "key": "c",
+          "text": "Sin tamizaje por no tener síntomas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El tamizaje es precisamente para asintomáticos."
+        },
+        {
+          "key": "d",
+          "text": "Esperar a que aparezca sangrado",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Retrasa el diagnóstico."
+        },
+        {
+          "key": "e",
+          "text": "Tacto rectal como único tamizaje",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es insuficiente."
+        },
+        {
+          "key": "f",
+          "text": "Iniciar tamizaje a los 70 años",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena prudente, pero es tardío."
+        },
+        {
+          "key": "g",
+          "text": "Dieta rica en fibra en lugar de tamizaje",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la dieta sustituye el tamizaje."
+        },
+        {
+          "key": "h",
+          "text": "Evitar el tamizaje por miedo a la colonoscopia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Hay opciones no invasivas."
+        },
+        {
+          "key": "i",
+          "text": "Prueba inmunoquímica de sangre oculta en heces anual o colonoscopia cada 10 años",
+          "correct": true,
+          "rationale": "Tamizaje de riesgo promedio desde los 45 a 50 años."
+        },
+        {
+          "key": "j",
+          "text": "Colonoscopia anual",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el método más completo con intervalo excesivo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "El cáncer colorrectal es prevenible con tamizaje, porque la mayoría se origina de pólipos adenomatosos que pueden detectarse y extirparse. En personas de riesgo promedio se recomienda iniciar entre los 45 y 50 años hasta los 75. Las opciones incluyen la prueba inmunoquímica de sangre oculta en heces cada año, con colonoscopia si es positiva, o colonoscopia cada 10 años, entre otras. En personas con antecedente familiar de primer grado con cáncer antes de los 60 años se inicia a los 40 años o 10 años antes del caso índice. El antígeno carcinoembrionario se usa para seguimiento, no para tamizaje.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección oportuna y diagnóstico del cáncer de colon y recto"
+      ]
+    },
+    {
+      "key": "mi-11-oncologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "oncology",
+      "subtopic": "colorectal_cancer_internal",
+      "vignette": "Mujer de 68 años con fatiga, anemia microcítica con ferritina baja y pérdida de peso. No refiere cambios en las evacuaciones ni sangrado visible. Se palpa una masa en fosa iliaca derecha.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Enfermedad de Crohn",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye sin diarrea ni dolor."
+        },
+        {
+          "key": "b",
+          "text": "Anemia de la vejez",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la anemia es normal en ancianos."
+        },
+        {
+          "key": "c",
+          "text": "Cáncer de colon derecho",
+          "correct": true,
+          "rationale": "El colon derecho suele manifestarse con anemia ferropénica y masa, sin obstrucción."
+        },
+        {
+          "key": "d",
+          "text": "Cáncer de colon izquierdo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se manifiesta más con cambios en el hábito intestinal y obstrucción."
+        },
+        {
+          "key": "e",
+          "text": "Diverticulitis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena colónico, pero es más izquierda y aguda."
+        },
+        {
+          "key": "f",
+          "text": "Absceso del psoas",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la masa."
+        },
+        {
+          "key": "g",
+          "text": "Anemia por deficiencia de hierro dietética",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la anemia sin buscar la causa."
+        },
+        {
+          "key": "h",
+          "text": "Tumor carcinoide de íleon",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente."
+        },
+        {
+          "key": "i",
+          "text": "Apendicitis crónica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es poco probable con anemia y pérdida de peso."
+        },
+        {
+          "key": "j",
+          "text": "Quiste de ovario",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No relaciona la anemia ferropénica."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "g",
+        "i"
+      ],
+      "explanation": "El cáncer colorrectal se manifiesta de forma distinta según su localización. Los tumores del colon derecho, de luz amplia y contenido líquido, suelen causar sangrado oculto con anemia ferropénica, fatiga, pérdida de peso y masa palpable, sin obstrucción. Los del colon izquierdo y recto causan cambios en el hábito intestinal, heces delgadas, sangrado visible, tenesmo y obstrucción. Toda anemia ferropénica en un adulto mayor sin causa evidente obliga a realizar colonoscopia. El diagnóstico se confirma con colonoscopia y biopsia, y se estadifica con tomografía de tórax, abdomen y pelvis y antígeno carcinoembrionario.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección oportuna y diagnóstico del cáncer de colon y recto"
+      ]
+    },
+    {
+      "key": "mi-11-oncologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "oncology",
+      "subtopic": "colorectal_cancer_internal",
+      "vignette": "Hombre de 32 años con cáncer de colon. Su padre tuvo cáncer de colon a los 45 años, una tía cáncer de endometrio a los 48 y un abuelo cáncer de colon a los 50.",
+      "prompt": "¿Cuál es el factor de riesgo hereditario más probable?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Poliposis adenomatosa familiar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También es hereditaria, pero se caracteriza por cientos de pólipos."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de Peutz Jeghers",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es raro y tiene pigmentación mucocutánea."
+        },
+        {
+          "key": "c",
+          "text": "Tabaquismo familiar",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la agregación de cánceres específicos."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome de Lynch, cáncer colorrectal hereditario no polipósico",
+          "correct": true,
+          "rationale": "Cáncer colorrectal y de endometrio en varias generaciones a edades tempranas."
+        },
+        {
+          "key": "e",
+          "text": "Colitis ulcerosa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aumenta el riesgo, pero no explica el patrón familiar."
+        },
+        {
+          "key": "f",
+          "text": "Mutación de BRCA1",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena hereditario, pero se asocia a mama y ovario."
+        },
+        {
+          "key": "g",
+          "text": "Obesidad",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en un factor general."
+        },
+        {
+          "key": "h",
+          "text": "Casualidad sin causa hereditaria",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Ignora un patrón claro."
+        },
+        {
+          "key": "i",
+          "text": "Estrés familiar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el estrés causa cáncer."
+        },
+        {
+          "key": "j",
+          "text": "Dieta rica en carne roja de la familia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el ambiente compartido."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "j"
+      ],
+      "explanation": "El síndrome de Lynch es la forma hereditaria más frecuente de cáncer colorrectal. Se debe a mutaciones en genes de reparación de errores del ADN, como MLH1, MSH2, MSH6 y PMS2, con herencia autosómica dominante. Causa cáncer colorrectal a edades tempranas, predominantemente en el colon derecho, y otros tumores, sobre todo de endometrio, ovario, estómago y vías urinarias. Se sospecha con los criterios de Ámsterdam o Bethesda y se estudia con inestabilidad de microsatélites o inmunohistoquímica en el tumor y pruebas genéticas. Los portadores requieren colonoscopia cada uno a dos años desde los 20 a 25 años.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección oportuna y diagnóstico del cáncer de colon y recto"
+      ]
+    },
+    {
+      "key": "mi-11-oncologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "oncology",
+      "subtopic": "colorectal_cancer_internal",
+      "vignette": "Hombre de 70 años con cáncer de colon sigmoides. Presenta distensión abdominal progresiva, ausencia de evacuaciones y canalización de gases por 4 días, vómito y dolor cólico.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Efecto de la dieta baja en fibra",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la dieta explica el cuadro."
+        },
+        {
+          "key": "b",
+          "text": "Obstrucción intestinal maligna del colon",
+          "correct": true,
+          "rationale": "El cáncer de colon izquierdo es causa frecuente de obstrucción colónica."
+        },
+        {
+          "key": "c",
+          "text": "Perforación con peritonitis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede ocurrir después, pero no hay datos de peritonitis."
+        },
+        {
+          "key": "d",
+          "text": "Isquemia mesentérica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el dolor."
+        },
+        {
+          "key": "e",
+          "text": "Íleo paralítico por medicamentos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en una causa funcional, sin explicar la lesión."
+        },
+        {
+          "key": "f",
+          "text": "Gastroenteritis con vómito",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena digestivo, pero no hay evacuaciones ni gases."
+        },
+        {
+          "key": "g",
+          "text": "Hernia inguinal estrangulada",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta el tumor."
+        },
+        {
+          "key": "h",
+          "text": "Vólvulo de sigmoides sin relación con el tumor",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es causa de obstrucción, pero aquí hay un tumor conocido."
+        },
+        {
+          "key": "i",
+          "text": "Seudoobstrucción colónica aguda",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable con tumor conocido."
+        },
+        {
+          "key": "j",
+          "text": "Estreñimiento funcional",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Subestima un cuadro grave."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "La obstrucción intestinal maligna es una complicación frecuente del cáncer de colon, sobre todo de los tumores del colon izquierdo y sigmoides, por su luz más estrecha y contenido sólido. Se manifiesta con distensión abdominal, dolor cólico, ausencia de evacuaciones y gases, y vómito tardío. La tomografía confirma el sitio de obstrucción y descarta perforación. Si la válvula ileocecal es competente, se produce una obstrucción en asa cerrada con riesgo de perforación del ciego. El manejo incluye reanimación, descompresión y cirugía urgente o colocación de stent colónico como puente en casos seleccionados.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de colon"
+      ]
+    },
+    {
+      "key": "mi-11-oncologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "oncology",
+      "subtopic": "lymphomas",
+      "vignette": "Hombre de 24 años con adenopatías cervicales indoloras de 2 meses, fiebre nocturna, sudoración profusa y pérdida de 8 kg. Refiere que le duelen los ganglios al tomar alcohol. La biopsia muestra células de Reed Sternberg.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Linfoma de Hodgkin",
+          "correct": true,
+          "rationale": "Adenopatías cervicales, síntomas B y células de Reed Sternberg."
+        },
+        {
+          "key": "b",
+          "text": "Linfadenitis bacteriana",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye infección pese a la biopsia."
+        },
+        {
+          "key": "c",
+          "text": "Sarcoidosis",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en las adenopatías."
+        },
+        {
+          "key": "d",
+          "text": "Toxoplasmosis ganglionar",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta las células de Reed Sternberg."
+        },
+        {
+          "key": "e",
+          "text": "Linfoma no Hodgkin difuso de células grandes",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También da adenopatías y síntomas B, pero no tiene células de Reed Sternberg."
+        },
+        {
+          "key": "f",
+          "text": "Enfermedad de Castleman",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara."
+        },
+        {
+          "key": "g",
+          "text": "Tuberculosis ganglionar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la fiebre y la sudoración, pero la biopsia es diagnóstica."
+        },
+        {
+          "key": "h",
+          "text": "Mononucleosis infecciosa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da adenopatías, pero es aguda y autolimitada."
+        },
+        {
+          "key": "i",
+          "text": "Leucemia linfocítica crónica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a enfermedad linfoproliferativa, pero ocurre en adultos mayores."
+        },
+        {
+          "key": "j",
+          "text": "Reacción por consumo de alcohol",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el dolor con alcohol indica intoxicación."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "El linfoma de Hodgkin tiene una distribución bimodal, con un pico en adultos jóvenes y otro en mayores de 55 años. Se presenta con adenopatías indoloras, sobre todo cervicales y mediastinales, que se diseminan de forma contigua. Puede haber síntomas B, que son fiebre, sudoración nocturna y pérdida de más de 10% del peso, prurito y dolor ganglionar al ingerir alcohol. El diagnóstico se establece por biopsia ganglionar con células de Reed Sternberg, que expresan CD15 y CD30. Se estadifica con tomografía por emisión de positrones. Tiene buen pronóstico con quimioterapia, como ABVD, con o sin radioterapia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del linfoma de Hodgkin en el adulto"
+      ]
+    },
+    {
+      "key": "mi-11-oncologia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "oncology",
+      "subtopic": "lymphomas",
+      "vignette": "Mujer de 60 años con adenopatía axilar de 3 cm, indolora, de 2 meses de evolución, y otra inguinal. Sin infección evidente.",
+      "prompt": "¿Cuál es el estudio de elección para confirmar el diagnóstico de linfoma?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tomografía por emisión de positrones como confirmación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Estadifica, pero no confirma la histología."
+        },
+        {
+          "key": "b",
+          "text": "Deshidrogenasa láctica elevada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es pronóstica, no diagnóstica."
+        },
+        {
+          "key": "c",
+          "text": "Biopsia por aspiración con aguja fina como estudio definitivo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en lo menos invasivo, sin arquitectura suficiente."
+        },
+        {
+          "key": "d",
+          "text": "Ultrasonido del ganglio como estudio definitivo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la imagen basta."
+        },
+        {
+          "key": "e",
+          "text": "Biometría hemática",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No confirma el linfoma."
+        },
+        {
+          "key": "f",
+          "text": "Observar 6 meses porque la mayoría de las adenopatías son reactivas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ignora datos de sospecha."
+        },
+        {
+          "key": "g",
+          "text": "Aspirado de médula ósea como primer estudio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se usa para estadificar."
+        },
+        {
+          "key": "h",
+          "text": "Biopsia excisional del ganglio completo",
+          "correct": true,
+          "rationale": "Permite ver la arquitectura ganglionar y realizar inmunohistoquímica."
+        },
+        {
+          "key": "i",
+          "text": "Electroforesis de proteínas",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No confirma linfoma."
+        },
+        {
+          "key": "j",
+          "text": "Antibiótico por 2 semanas como prueba diagnóstica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a descartar infección, pero no confirma."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "Ante una adenopatía sospechosa de linfoma, como un ganglio mayor de 2 cm, persistente más de cuatro a seis semanas, duro, indoloro o con síntomas sistémicos, el estudio de elección es la biopsia excisional del ganglio completo o, si no es posible, una biopsia con aguja gruesa adecuada. Esto permite evaluar la arquitectura ganglionar y realizar inmunohistoquímica, citometría y estudios moleculares para clasificar el linfoma según la Organización Mundial de la Salud. La aspiración con aguja fina no se recomienda para el diagnóstico inicial. Después se estadifica con tomografía por emisión de positrones.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del linfoma no Hodgkin difuso de células grandes B"
+      ]
+    },
+    {
+      "key": "mi-11-oncologia-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "oncology",
+      "subtopic": "lymphomas",
+      "vignette": "Hombre de 58 años con dispepsia de larga evolución. La endoscopia muestra un linfoma MALT gástrico de bajo grado. La biopsia también muestra gastritis crónica.",
+      "prompt": "¿Cuál es el factor asociado cuyo tratamiento puede producir la remisión del linfoma?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Infección por Helicobacter pylori",
+          "correct": true,
+          "rationale": "Su erradicación puede curar el linfoma MALT gástrico de bajo grado localizado."
+        },
+        {
+          "key": "b",
+          "text": "Virus de la hepatitis C",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se asocia a linfomas de la zona marginal esplénicos."
+        },
+        {
+          "key": "c",
+          "text": "Enfermedad celíaca",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se asocia a linfoma intestinal de células T."
+        },
+        {
+          "key": "d",
+          "text": "Tabaquismo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es el factor principal."
+        },
+        {
+          "key": "e",
+          "text": "Consumo de AINE",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la dispepsia sin relación con el linfoma."
+        },
+        {
+          "key": "f",
+          "text": "Alcohol",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el linfoma."
+        },
+        {
+          "key": "g",
+          "text": "Virus HTLV 1",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se asocia a leucemia linfoma T del adulto."
+        },
+        {
+          "key": "h",
+          "text": "Virus de Epstein Barr",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se asocia a otros linfomas, como Burkitt y Hodgkin."
+        },
+        {
+          "key": "i",
+          "text": "Dieta rica en sal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a factor gástrico, pero se asocia a cáncer gástrico, no a MALT."
+        },
+        {
+          "key": "j",
+          "text": "Estrés crónico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el estrés causa linfoma."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "h"
+      ],
+      "explanation": "El linfoma MALT gástrico es un linfoma de la zona marginal asociado a la estimulación antigénica crónica por Helicobacter pylori. En la enfermedad localizada de bajo grado, la erradicación de la bacteria con tratamiento antibiótico produce la remisión en la mayoría de los pacientes, por lo que es el tratamiento inicial. Se vigila con endoscopias seriadas. La translocación entre los cromosomas 11 y 18 predice falta de respuesta a la erradicación. En los casos que no responden o están avanzados se usa radioterapia, rituximab o quimioterapia. Otras infecciones asociadas a linfomas son Epstein Barr, VIH, hepatitis C y HTLV 1.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del linfoma no Hodgkin"
+      ]
+    },
+    {
+      "key": "mi-11-oncologia-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "oncology",
+      "subtopic": "lymphomas",
+      "vignette": "Hombre de 55 años con linfoma no Hodgkin difuso de células grandes B, estadio III. Buen estado funcional y fracción de expulsión normal.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "ABVD",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es el esquema del linfoma de Hodgkin."
+        },
+        {
+          "key": "b",
+          "text": "Erradicación de Helicobacter pylori",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es para linfoma MALT gástrico."
+        },
+        {
+          "key": "c",
+          "text": "Evitar la doxorrubicina por riesgo cardiaco sin contraindicación",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La fracción normal permite usarla."
+        },
+        {
+          "key": "d",
+          "text": "Trasplante alogénico de médula como primera línea",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se reserva para recaídas."
+        },
+        {
+          "key": "e",
+          "text": "Vigilancia activa sin tratamiento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena prudente en linfomas indolentes, pero este es agresivo."
+        },
+        {
+          "key": "f",
+          "text": "Corticosteroide solo",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Es insuficiente."
+        },
+        {
+          "key": "g",
+          "text": "Solo radioterapia del área afectada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el tratamiento local, insuficiente en estadio III."
+        },
+        {
+          "key": "h",
+          "text": "Seis fármacos experimentales",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estándar."
+        },
+        {
+          "key": "i",
+          "text": "Quimioinmunoterapia con R CHOP, rituximab con ciclofosfamida, doxorrubicina, vincristina y prednisona",
+          "correct": true,
+          "rationale": "Es el estándar en linfoma difuso de células grandes B."
+        },
+        {
+          "key": "j",
+          "text": "Inmunoterapia sin quimioterapia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el rituximab solo basta."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "i"
+      ],
+      "explanation": "El linfoma difuso de células grandes B es el linfoma no Hodgkin más frecuente en adultos y es agresivo, pero potencialmente curable. El tratamiento estándar es la quimioinmunoterapia con R CHOP, que combina rituximab, un anticuerpo anti CD20, con ciclofosfamida, doxorrubicina, vincristina y prednisona, generalmente seis ciclos, con radioterapia en casos seleccionados. El pronóstico se estima con el índice pronóstico internacional. Antes de la doxorrubicina se evalúa la función cardiaca, y antes del rituximab se busca hepatitis B por riesgo de reactivación. Las recaídas se tratan con quimioterapia de rescate y trasplante autólogo o terapia con células CAR T.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del linfoma no Hodgkin difuso de células grandes B"
+      ]
+    },
+    {
+      "key": "mi-11-oncologia-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "oncology",
+      "subtopic": "lymphomas",
+      "vignette": "Mujer de 45 años con linfoma de Hodgkin. La tomografía por emisión de positrones muestra ganglios afectados en el cuello y el mediastino, por arriba del diafragma, sin afección abdominal. Tiene fiebre y sudoración nocturna.",
+      "prompt": "¿Cuál es la interpretación correcta de su estadio según la clasificación de Ann Arbor y Lugano?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Estadio II B",
+          "correct": true,
+          "rationale": "Dos o más regiones ganglionares del mismo lado del diafragma con síntomas B."
+        },
+        {
+          "key": "b",
+          "text": "Estadio II A sin considerar los síntomas",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Pasa por alto los síntomas B."
+        },
+        {
+          "key": "c",
+          "text": "Estadio I A",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Subestima el número de regiones y omite los síntomas."
+        },
+        {
+          "key": "d",
+          "text": "Se requiere biopsia de médula para cualquier estadio",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La tomografía por emisión de positrones suele bastar en Hodgkin."
+        },
+        {
+          "key": "e",
+          "text": "Estadio IV B",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Implica afección extraganglionar diseminada."
+        },
+        {
+          "key": "f",
+          "text": "La fiebre no cuenta para el estadio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que los síntomas no modifican la clasificación."
+        },
+        {
+          "key": "g",
+          "text": "Estadio II E",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La E indica extensión extraganglionar contigua, no descrita."
+        },
+        {
+          "key": "h",
+          "text": "Enfermedad localizada sin síntomas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ignora los síntomas."
+        },
+        {
+          "key": "i",
+          "text": "Estadio III A",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Sobreestima y omite síntomas."
+        },
+        {
+          "key": "j",
+          "text": "Estadio III B",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Implica afección a ambos lados del diafragma."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "La clasificación de Ann Arbor, modificada por Lugano, estadifica los linfomas. El estadio I es una sola región ganglionar, el II dos o más regiones del mismo lado del diafragma, el III regiones a ambos lados del diafragma, y el IV afección extraganglionar diseminada, como médula ósea, hígado o pulmón. Se agrega la letra A si no hay síntomas y B si hay fiebre mayor de 38 grados, sudoración nocturna o pérdida de más de 10% del peso en seis meses. La letra E indica extensión extraganglionar limitada y contigua. Los síntomas B y la enfermedad voluminosa empeoran el pronóstico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del linfoma de Hodgkin en el adulto"
+      ]
+    }
+  ]
+}

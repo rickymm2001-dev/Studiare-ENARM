@@ -1,0 +1,223 @@
+@ ped|pediatric_nephrology|pediatric_uti|2|diagnosis
+V: Lactante femenina de 8 meses con fiebre de 39.5 °C de 2 días sin foco aparente, irritabilidad y rechazo parcial al alimento. Exploración sin datos de infección respiratoria ni otitis. El examen general de orina por sondeo muestra esterasa leucocitaria y nitritos positivos con 50 leucocitos por campo.
+P: ¿Cuál es el diagnóstico más probable?
++ Infección de vías urinarias febril, probable pielonefritis || Fiebre sin foco en una lactante con examen de orina alterado.
+- anchoring | Infección viral inespecífica || El examen de orina indica infección urinaria.
+- availability_heuristic | Bacteriuria asintomática || La lactante tiene fiebre.
+- representativeness_heuristic | Vulvovaginitis inespecífica || No explica la fiebre ni el examen por sondeo.
+- premature_closure | Meningitis bacteriana || No hay signos neurológicos ni meníngeos.
+- base_rate_fallacy | Apendicitis aguda || Es rara a esta edad y no explica el examen de orina.
+- framing_effect | Gastroenteritis aguda || No hay diarrea.
+- inattentional_blindness | Exantema súbito en fase febril || No explica el examen de orina.
+- focusing_illusion | Dentición || No da fiebre alta ni alteraciones urinarias.
+- belief_bias | Orina concentrada por calor || No explica nitritos y leucocitos.
+E: La infección de vías urinarias es la causa bacteriana más frecuente de fiebre sin foco en lactantes. Los síntomas son inespecíficos, como fiebre, irritabilidad, vómito y rechazo al alimento. En menores de 2 años sin control de esfínteres la muestra debe obtenerse por sondeo vesical o punción suprapúbica, porque la bolsa recolectora tiene muchos falsos positivos. La esterasa leucocitaria y los nitritos orientan el diagnóstico, que se confirma con urocultivo. Escherichia coli es el agente más común. La infección febril en lactantes se considera pielonefritis y puede dejar cicatrices renales.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la infección de vías urinarias en niños
+
+@ ped|pediatric_nephrology|pediatric_uti|3|confirmatory_study
+V: Lactante de 10 meses con fiebre sin foco y examen de orina obtenido con bolsa recolectora que muestra leucocitos y bacterias. Los padres preguntan si eso confirma la infección.
+P: ¿Cuál es el estudio de elección para confirmar el diagnóstico?
++ Urocultivo de muestra obtenida por sondeo vesical o punción suprapúbica || Las muestras con bolsa tienen alta contaminación.
+- anchoring | Urocultivo de la misma muestra con bolsa recolectora || Un cultivo positivo con bolsa no es confiable.
+- availability_heuristic | Repetir el examen general de orina con bolsa || Sigue teniendo contaminación.
+- representativeness_heuristic | Ultrasonido renal || No confirma la infección.
+- premature_closure | Biometría hemática y proteína C reactiva || No confirman el diagnóstico.
+- base_rate_fallacy | Hemocultivo como único estudio || Puede ser negativo.
+- framing_effect | Gammagrama renal agudo de rutina || No es necesario para el diagnóstico.
+- complexity_bias | Cistouretrografía miccional antes del cultivo || No confirma la infección aguda.
+- information_bias | Tira reactiva en orina de pañal || No es confiable.
+- belief_bias | El olor fuerte de la orina confirma la infección || No es un criterio diagnóstico.
+E: El urocultivo confirma la infección urinaria. En niños sin control de esfínteres se obtiene por sondeo vesical, en el que se considera positivo un crecimiento mayor de 10 000 a 50 000 unidades formadoras de colonias de un solo patógeno, o por punción suprapúbica, donde cualquier crecimiento es significativo. La bolsa recolectora solo es útil si el resultado es negativo, porque sus falsos positivos son muy frecuentes. En niños con control de esfínteres se usa chorro medio con aseo previo, con un umbral de 100 000. El cultivo debe tomarse antes de iniciar antibióticos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la infección de vías urinarias en niños
+
+@ ped|pediatric_nephrology|pediatric_uti|3|treatment_of_choice
+V: Niña de 2 años con pielonefritis, fiebre de 39 °C, buen estado general, tolera la vía oral y está bien hidratada. El urocultivo está en proceso. La resistencia local de Escherichia coli a cefalosporinas de tercera generación es baja.
+P: ¿Cuál es el tratamiento de elección?
++ Cefalosporina oral, como cefixima, de forma ambulatoria por 7 a 14 días ajustada al cultivo || La vía oral es tan eficaz como la intravenosa en niños estables.
+- anchoring | Ceftriaxona intravenosa con hospitalización obligatoria || No es necesaria si tolera la vía oral y está estable.
+- availability_heuristic | Nitrofurantoína oral || No alcanza niveles adecuados en el tejido renal.
+- representativeness_heuristic | Amoxicilina sola || La resistencia de Escherichia coli es alta.
+- premature_closure | Ciprofloxacino como primera elección || Se reserva para casos especiales.
+- framing_effect | Fosfomicina en dosis única || Es para cistitis no complicada en mujeres adultas.
+- complexity_bias | Meropenem intravenoso || Es excesivo sin factores de riesgo de resistencia.
+- base_rate_fallacy | Esperar el urocultivo para iniciar || El retraso aumenta el riesgo de cicatrices.
+- belief_bias | Jugo de arándano como tratamiento || No trata la pielonefritis.
+- omission_bias | No dar antibiótico porque la fiebre puede ser viral || El examen y la clínica indican infección.
+E: El tratamiento de la infección urinaria febril en niños debe iniciarse de forma empírica tras tomar el urocultivo. En niños mayores de 2 a 3 meses con buen estado, que toleran la vía oral, el tratamiento oral con cefalosporinas como cefixima o cefuroxima o con amoxicilina con clavulánico, según la resistencia local, es tan eficaz como la vía intravenosa. La hospitalización se reserva para menores de 2 a 3 meses, aspecto tóxico, intolerancia oral, deshidratación o falla del tratamiento. La duración es de 7 a 14 días. Se ajusta al antibiograma. La nitrofurantoína no se usa en pielonefritis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la infección de vías urinarias en niños
+
+@ ped|pediatric_nephrology|pediatric_uti|3|initial_study
+V: Lactante masculino de 6 meses con su primer episodio de pielonefritis por Escherichia coli que respondió bien al tratamiento en 48 horas.
+P: ¿Cuál es el estudio de imagen inicial indicado?
++ Ultrasonido renal y de vías urinarias || Busca malformaciones, dilatación y complicaciones en el primer episodio febril.
+- anchoring | Cistouretrografía miccional en todos los casos tras el primer episodio || Se reserva para ultrasonido anormal o recurrencias.
+- availability_heuristic | Tomografía abdominal || Expone a radiación sin necesidad.
+- representativeness_heuristic | Urografía excretora || Ya no se recomienda.
+- premature_closure | Ningún estudio de imagen || El ultrasonido está indicado en lactantes.
+- base_rate_fallacy | Resonancia magnética de rutina || No es necesaria.
+- framing_effect | Gammagrama con DMSA agudo de rutina || No se recomienda de rutina en el primer episodio.
+- complexity_bias | Cistoscopia || No está indicada.
+- information_bias | Radiografía simple de abdomen || No aporta información útil.
+- belief_bias | Repetir el urocultivo cada semana como estudio de imagen || No es un estudio de imagen.
+E: Tras una primera infección urinaria febril en lactantes se recomienda ultrasonido renal y vesical para detectar malformaciones, hidronefrosis, cicatrices groseras o abscesos. La cistouretrografía miccional, que diagnostica reflujo vesicoureteral, no se indica de rutina tras el primer episodio, sino cuando el ultrasonido es anormal, hay infecciones recurrentes, agentes distintos de Escherichia coli o mala respuesta. El gammagrama con DMSA detecta cicatrices renales y se realiza de 4 a 6 meses después en casos seleccionados. Esta estrategia reduce la exposición a radiación y procedimientos invasivos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la infección de vías urinarias en niños
+
+@ ped|pediatric_nephrology|pediatric_uti|4|complication_prognosis
+V: Niña de 5 años con pielonefritis recurrente desde el primer año de vida. La cistouretrografía miccional mostró reflujo vesicoureteral grado IV bilateral. Ahora tiene presión arterial elevada y proteinuria.
+P: ¿Cuál es la complicación a largo plazo que presenta?
++ Nefropatía por reflujo con cicatrices renales, hipertensión y riesgo de enfermedad renal crónica || Las pielonefritis repetidas con reflujo de alto grado dañan el parénquima.
+- anchoring | Cistitis intersticial || No explica la hipertensión ni la proteinuria.
+- availability_heuristic | Glomerulonefritis postestreptocócica || No se relaciona con el reflujo.
+- representativeness_heuristic | Síndrome nefrótico de cambios mínimos || No explica la hipertensión con reflujo.
+- premature_closure | Litiasis renal || No es la complicación característica.
+- base_rate_fallacy | Tumor de Wilms || No se relaciona con el reflujo.
+- framing_effect | Vejiga neurogénica primaria || No hay antecedente neurológico.
+- inattentional_blindness | Hipertensión esencial || Hay una causa renal clara.
+- focusing_illusion | Riñón poliquístico || Es genético y sin relación con las infecciones.
+- belief_bias | Ninguna, las infecciones no dejan secuelas || Las cicatrices renales son permanentes.
+E: El reflujo vesicoureteral es el paso retrógrado de orina de la vejiga al uréter y riñón. Se clasifica en grados I a V. Los grados bajos suelen resolverse con el crecimiento, mientras que los altos, IV y V, se asocian a pielonefritis recurrentes y cicatrices renales. La nefropatía por reflujo puede causar hipertensión, proteinuria y enfermedad renal crónica. El manejo incluye tratamiento oportuno de cada infección, corrección de la disfunción vesical e intestinal, profilaxis antibiótica en casos seleccionados y corrección endoscópica o quirúrgica en reflujos de alto grado con infecciones recurrentes.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del reflujo vesicoureteral en niños
+
+@ ped|pediatric_nephrology|pediatric_uti|3|risk_factor
+V: Niña de 6 años con infecciones urinarias de repetición. Retiene la orina por mucho tiempo en la escuela, tiene urgencia y escapes de orina durante el día y estreñimiento crónico con evacuaciones duras cada 4 días.
+P: ¿Cuál es el factor de riesgo modificable más importante de sus infecciones?
++ Disfunción vesical e intestinal con retención urinaria y estreñimiento || Favorecen el vaciamiento incompleto y la colonización.
+- anchoring | Uso de ropa interior de algodón || Es recomendable.
+- availability_heuristic | Ingesta abundante de agua || Es protectora.
+- representativeness_heuristic | Sexo femenino || No es modificable.
+- premature_closure | Baño diario || No aumenta el riesgo.
+- base_rate_fallacy | Vacunación completa || No se relaciona.
+- framing_effect | Consumo de lácteos || No es un factor de riesgo.
+- inattentional_blindness | Circuncisión del padre || No tiene relación.
+- focusing_illusion | Asistencia a natación || No es el factor principal.
+- belief_bias | Sentarse en superficies frías || No causa infecciones.
+E: La disfunción vesical e intestinal incluye alteraciones del vaciamiento vesical, como retención voluntaria, micción infrecuente, urgencia e incontinencia diurna, junto con estreñimiento. Es un factor de riesgo importante de infecciones urinarias recurrentes y empeora el reflujo vesicoureteral. El recto lleno comprime la vejiga y dificulta su vaciamiento. El tratamiento incluye micción programada cada 2 a 3 horas, postura adecuada, hidratación, dieta rica en fibra y tratamiento del estreñimiento con laxantes osmóticos. Corregir esta disfunción reduce de forma importante las recurrencias.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la infección de vías urinarias en niños
+
+@ ped|pediatric_nephrology|pediatric_uti|3|diagnosis
+V: Recién nacido masculino con ultrasonido prenatal que mostró hidronefrosis bilateral y vejiga distendida. Al nacer tiene chorro urinario débil y gotea constantemente. La cistouretrografía muestra dilatación de la uretra posterior.
+P: ¿Cuál es el diagnóstico más probable?
++ Válvulas de uretra posterior || Obstrucción uretral en un varón con hidronefrosis bilateral y vejiga distendida.
+- anchoring | Reflujo vesicoureteral primario || No explica la dilatación de la uretra posterior.
+- availability_heuristic | Estenosis ureteropiélica unilateral || La afección es bilateral con vejiga distendida.
+- representativeness_heuristic | Hipospadias || Es una alteración del meato sin obstrucción.
+- premature_closure | Fimosis fisiológica || No causa obstrucción grave.
+- base_rate_fallacy | Síndrome de Prune Belly || Tiene ausencia de músculos abdominales.
+- framing_effect | Vejiga neurogénica por mielomeningocele || No hay defecto del tubo neural.
+- inattentional_blindness | Riñones poliquísticos || No explica la vejiga distendida.
+- focusing_illusion | Ureterocele || Suele ser unilateral en niñas.
+- belief_bias | Hidronefrosis fisiológica que desaparece sola || La causa es obstructiva.
+E: Las válvulas de uretra posterior son la causa más frecuente de obstrucción urinaria baja en varones. Son pliegues membranosos en la uretra prostática que obstruyen el flujo. Se sospechan desde el ultrasonido prenatal por hidronefrosis bilateral, vejiga engrosada y distendida y oligohidramnios, que puede causar hipoplasia pulmonar. Al nacer hay chorro débil, goteo, vejiga palpable e infecciones. La cistouretrografía miccional confirma la dilatación de la uretra posterior. El tratamiento inicial es derivación urinaria con sonda y después ablación endoscópica de las válvulas. Muchos pacientes desarrollan enfermedad renal crónica, por lo que requieren seguimiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de válvulas de uretra posterior
+
+@ ped|pediatric_nephrology|nephrotic_syndrome_child|2|diagnosis
+V: Niño de 4 años con edema palpebral matutino que progresó a edema de piernas y escroto en una semana. Presión arterial normal. Examen de orina con proteínas de 3 cruces sin hematuria. Albúmina sérica de 1.8 g/dL y colesterol de 380 mg/dL.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome nefrótico idiopático, probable enfermedad de cambios mínimos || Edema, proteinuria masiva, hipoalbuminemia e hiperlipidemia sin hematuria ni hipertensión en un preescolar.
+- anchoring | Glomerulonefritis postestreptocócica || Da hematuria, hipertensión y C3 bajo.
+- availability_heuristic | Insuficiencia cardiaca || No explica la proteinuria masiva.
+- representativeness_heuristic | Desnutrición tipo kwashiorkor || No explica la proteinuria.
+- premature_closure | Alergia con angioedema || No explica la proteinuria y la hiperlipidemia.
+- base_rate_fallacy | Nefropatía lúpica || Es más frecuente en adolescentes con datos sistémicos.
+- framing_effect | Cirrosis hepática || No explica la proteinuria.
+- inattentional_blindness | Hipotiroidismo || No da proteinuria masiva.
+- focusing_illusion | Enteropatía perdedora de proteínas || No explica la proteinuria.
+- belief_bias | Hinchazón por comer mucha sal || No explica la proteinuria.
+E: El síndrome nefrótico se define por proteinuria masiva, mayor de 40 mg/m2/hora o relación proteína creatinina mayor de 2 mg/mg, hipoalbuminemia menor de 2.5 g/dL, edema e hiperlipidemia. En niños de 1 a 10 años la causa más frecuente es la enfermedad de cambios mínimos, que se presenta sin hematuria macroscópica, con presión arterial y función renal normales y complemento normal, y responde a corticosteroides. La biopsia no es necesaria al inicio en estos casos típicos. Se indica en menores de un año, mayores de 12, con hematuria, hipertensión, complemento bajo o resistencia a esteroides.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome nefrótico en niños
+
+@ ped|pediatric_nephrology|nephrotic_syndrome_child|3|treatment_of_choice
+V: Niña de 5 años con primer episodio de síndrome nefrótico típico, sin hematuria, con función renal y complemento normales.
+P: ¿Cuál es el tratamiento de elección?
++ Prednisona oral a 60 mg/m2/día por 4 a 6 semanas seguida de días alternos con reducción gradual || La mayoría responde a corticosteroides.
+- anchoring | Biopsia renal antes de iniciar cualquier tratamiento || No es necesaria en el cuadro típico.
+- availability_heuristic | Ciclofosfamida como primera línea || Se reserva para casos con recaídas frecuentes.
+- representativeness_heuristic | Solo diuréticos y restricción de sal || No inducen remisión.
+- premature_closure | Albúmina intravenosa diaria como único tratamiento || No induce remisión.
+- framing_effect | Antibióticos de amplio espectro || No hay infección.
+- complexity_bias | Rituximab de inicio || Se reserva para casos dependientes de esteroides.
+- base_rate_fallacy | Diálisis peritoneal || La función renal es normal.
+- belief_bias | Dieta sin proteínas para disminuir la proteinuria || Empeora la nutrición.
+- omission_bias | No usar corticosteroides por miedo a efectos adversos || Son el tratamiento eficaz.
+E: El tratamiento inicial del síndrome nefrótico idiopático en niños es prednisona oral a 60 mg/m2/día o 2 mg/kg/día, máximo 60 mg, durante 4 a 6 semanas, seguida de 40 mg/m2 en días alternos durante otras 4 a 6 semanas con reducción gradual. La mayoría logra remisión en las primeras 4 semanas. Se considera corticorresistente si no hay remisión tras 4 a 6 semanas. El manejo de soporte incluye restricción de sal, diuréticos con precaución y albúmina en edema grave sintomático. Muchos niños presentan recaídas, que se tratan con nuevos ciclos de esteroides.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome nefrótico en niños
+
+@ ped|pediatric_nephrology|nephrotic_syndrome_child|4|complication_prognosis
+V: Niño de 6 años con síndrome nefrótico en recaída, con ascitis importante. Presenta fiebre de 39 °C, dolor abdominal difuso intenso, rebote positivo y vómito. No ha tenido diarrea.
+P: ¿Cuál es la complicación más probable?
++ Peritonitis bacteriana espontánea, frecuentemente por neumococo || La hipogammaglobulinemia y la ascitis predisponen a esta infección.
+- anchoring | Apendicitis aguda || Es posible, pero la ascitis con síndrome nefrótico orienta a peritonitis espontánea.
+- availability_heuristic | Gastroenteritis viral || No explica el rebote con fiebre alta.
+- representativeness_heuristic | Trombosis de vena renal || Da hematuria y dolor en flanco sin rebote difuso.
+- premature_closure | Efecto adverso de los esteroides sin infección || La fiebre y el rebote indican infección.
+- base_rate_fallacy | Pancreatitis por esteroides || Es rara.
+- framing_effect | Intususcepción || Es más frecuente en lactantes.
+- inattentional_blindness | Infección urinaria baja || No explica la peritonitis.
+- focusing_illusion | Insuficiencia renal aguda sin infección || No explica la fiebre y el rebote.
+- belief_bias | Dolor por la hinchazón del abdomen || La fiebre y el rebote indican infección.
+E: Los niños con síndrome nefrótico tienen mayor riesgo de infecciones por pérdida urinaria de inmunoglobulinas y factores del complemento, edema y tratamiento inmunosupresor. La peritonitis bacteriana espontánea es una complicación grave, causada con mayor frecuencia por Streptococcus pneumoniae y bacilos gramnegativos. Se manifiesta con fiebre, dolor abdominal y datos de irritación peritoneal. Se confirma con paracentesis y se trata con cefalosporina de tercera generación. Otras complicaciones son celulitis, trombosis venosa por hipercoagulabilidad, hipovolemia y lesión renal aguda. Se recomienda vacunar contra neumococo e influenza.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome nefrótico en niños
+
+@ ped|pediatric_nephrology|nephrotic_syndrome_child|3|mechanism
+V: Niño de 4 años con síndrome nefrótico por enfermedad de cambios mínimos. La madre pregunta por qué se hincha si no tiene problemas del corazón.
+P: ¿Cuál es el mecanismo principal del edema en esta enfermedad?
++ La pérdida urinaria de albúmina reduce la presión oncótica del plasma y favorece el paso de líquido al intersticio, junto con retención renal de sodio || Explica el edema por hipoalbuminemia.
+- anchoring | Aumento de la presión hidrostática por insuficiencia cardiaca || El corazón es normal.
+- availability_heuristic | Obstrucción linfática || No es el mecanismo.
+- representativeness_heuristic | Aumento de la permeabilidad capilar por alergia || No es el mecanismo principal.
+- premature_closure | Exceso de ingesta de agua || No es la causa.
+- base_rate_fallacy | Hipotiroidismo con mixedema || No corresponde.
+- framing_effect | Hipertensión portal || No hay hepatopatía.
+- inattentional_blindness | Desnutrición calórica || No es el mecanismo.
+- focusing_illusion | Inflamación de los vasos sanguíneos || No hay vasculitis.
+- belief_bias | Se debe a dormir boca abajo || No tiene relación.
+E: En el síndrome nefrótico la alteración de la barrera de filtración glomerular, en la enfermedad de cambios mínimos por fusión de los podocitos, permite la pérdida masiva de albúmina en la orina. La hipoalbuminemia reduce la presión oncótica del plasma, lo que favorece la salida de líquido al intersticio según la teoría de subllenado. Además, el riñón retiene sodio de forma primaria por activación de canales en el túbulo colector, según la teoría de sobrellenado. El edema predomina en tejidos laxos, como párpados por la mañana y escroto, y puede progresar a ascitis y derrames.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome nefrótico en niños
+
+@ ped|pediatric_nephrology|nephrotic_syndrome_child|4|next_step
+V: Niña de 7 años con síndrome nefrótico que tras 6 semanas de prednisona a dosis plenas persiste con proteinuria masiva e hipoalbuminemia. Presión arterial normal.
+P: ¿Cuál es el siguiente paso?
++ Realizar biopsia renal y estudio genético por síndrome nefrótico corticorresistente || La falta de respuesta orienta a glomeruloesclerosis focal y segmentaria u otras causas.
+- anchoring | Continuar la prednisona a dosis plenas por 6 meses más || Aumenta los efectos adversos sin beneficio.
+- availability_heuristic | Suspender todo tratamiento y observar || La proteinuria persistente daña el riñón.
+- representativeness_heuristic | Iniciar diálisis || La función renal aún es normal.
+- premature_closure | Dar albúmina semanal como único tratamiento || No induce remisión.
+- framing_effect | Antibióticos profilácticos como tratamiento principal || No trata la enfermedad.
+- complexity_bias | Trasplante renal inmediato || No está indicado.
+- status_quo_bias | Mantener igual porque algunos responden tarde || La definición de resistencia ya se cumple.
+- belief_bias | Cambiar a remedios herbolarios || No son eficaces y pueden dañar el riñón.
+- omission_bias | No biopsiar para evitar riesgos || La biopsia orienta el tratamiento.
+E: El síndrome nefrótico corticorresistente se define por la falta de remisión tras 4 a 6 semanas de prednisona a dosis plenas. Afecta a una minoría de niños y su causa más frecuente es la glomeruloesclerosis focal y segmentaria, que puede ser genética. Se indican biopsia renal y estudio genético. El tratamiento incluye inhibidores de calcineurina como tacrolimus o ciclosporina, junto con inhibidores de la enzima convertidora de angiotensina o antagonistas del receptor de angiotensina para reducir la proteinuria. Las formas genéticas no suelen responder a inmunosupresión. Tiene mayor riesgo de progresar a enfermedad renal crónica.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome nefrótico en niños
+
+@ ped|pediatric_nephrology|nephrotic_syndrome_child|3|complication_prognosis
+V: Niño de 5 años con síndrome nefrótico activo que presenta de forma súbita dolor en el flanco izquierdo, hematuria macroscópica y aumento del tamaño del riñón izquierdo en el ultrasonido.
+P: ¿Cuál es la complicación más probable?
++ Trombosis de la vena renal || El síndrome nefrótico produce estado de hipercoagulabilidad.
+- anchoring | Litiasis renal || No explica el aumento del tamaño renal con hipercoagulabilidad.
+- availability_heuristic | Pielonefritis aguda || Daría fiebre y examen de orina con leucocitos.
+- representativeness_heuristic | Tumor de Wilms || No aparece de forma súbita.
+- premature_closure | Glomerulonefritis rápidamente progresiva || No explica el dolor en flanco súbito.
+- base_rate_fallacy | Traumatismo renal || No hay antecedente.
+- framing_effect | Hidronefrosis congénita || No explica la aparición súbita.
+- inattentional_blindness | Cistitis hemorrágica || No explica el aumento del riñón.
+- focusing_illusion | Efecto adverso del diurético || No da trombosis.
+- belief_bias | Dolor muscular por esfuerzo || No explica la hematuria.
+E: El síndrome nefrótico produce un estado de hipercoagulabilidad por pérdida urinaria de antitrombina III y proteínas S y C, aumento de fibrinógeno y factores hepáticos, hemoconcentración por diuréticos e inmovilidad. Las trombosis pueden afectar la vena renal, las venas profundas, los senos venosos cerebrales y la arteria pulmonar. La trombosis de vena renal se manifiesta con dolor en flanco, hematuria y aumento del tamaño renal, y se confirma con Doppler. El tratamiento es anticoagulación. Se previene evitando la hipovolemia, los catéteres innecesarios y el reposo prolongado.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome nefrótico en niños
+
+@ ped|pediatric_nephrology|nephrotic_syndrome_child|3|diagnosis
+V: Niño de 8 años con dolor abdominal tipo cólico, artralgias en rodillas y tobillos y lesiones purpúricas palpables en glúteos y piernas. El examen de orina muestra hematuria y proteinuria leve. Plaquetas normales.
+P: ¿Cuál es el diagnóstico más probable?
++ Vasculitis por IgA, púrpura de Henoch Schönlein, con afección renal || Púrpura palpable con plaquetas normales, dolor abdominal, artralgias y nefritis.
+- anchoring | Púrpura trombocitopénica inmune || Las plaquetas son normales.
+- availability_heuristic | Meningococcemia || Daría fiebre alta y choque.
+- representativeness_heuristic | Síndrome urémico hemolítico || Da anemia y trombocitopenia.
+- premature_closure | Leucemia aguda || Las plaquetas son normales.
+- base_rate_fallacy | Lupus eritematoso sistémico || Es más frecuente en adolescentes con otros datos.
+- framing_effect | Maltrato infantil || La distribución y los demás datos orientan a vasculitis.
+- inattentional_blindness | Fiebre reumática || No da púrpura.
+- focusing_illusion | Apendicitis aguda || No explica la púrpura ni la nefritis.
+- belief_bias | Picaduras de insectos || No explica el cuadro sistémico.
+E: La vasculitis por IgA o púrpura de Henoch Schönlein es la vasculitis más frecuente en niños. Suele seguir a una infección respiratoria. Se caracteriza por púrpura palpable con plaquetas normales en glúteos y extremidades inferiores, artritis o artralgias, dolor abdominal que puede complicarse con invaginación y afección renal con hematuria y proteinuria. El tratamiento es de soporte con analgésicos, y los corticosteroides se usan en dolor abdominal intenso. El pronóstico depende de la afección renal, por lo que se vigilan la presión arterial y el examen de orina durante al menos 6 meses.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la púrpura de Henoch Schönlein

@@ -1,0 +1,223 @@
+@ mi|neurology|stroke|3|initial_study
+V: Hombre de 68 años con hipertensión que presenta de forma súbita, hace 50 minutos, debilidad de brazo y pierna derechos y dificultad para hablar. Glucosa capilar de 110 mg/dL. Presión arterial de 172/96 mmHg.
+P: ¿Cuál es el estudio inicial más urgente?
++ Tomografía de cráneo simple || Distingue isquemia de hemorragia antes de decidir trombólisis.
+- availability_heuristic | Resonancia magnética con difusión como primer estudio en todos || Es más sensible, pero suele retrasar la decisión si no está disponible de inmediato.
+- anchoring | Electroencefalograma || Se ancla en la alteración neurológica, pero no orienta la reperfusión.
+- complexity_bias | Angiografía cerebral convencional de inicio || Es invasiva y no es el estudio inicial.
+- representativeness_heuristic | Punción lumbar || Se usa en sospecha de hemorragia subaracnoidea con tomografía normal.
+- framing_effect | Ecocardiograma para buscar la fuente embólica || Suena a buscar la causa, pero no es urgente.
+- premature_closure | Iniciar trombólisis sin imagen || Descartar hemorragia es indispensable.
+- information_bias | Perfil de lípidos y hemoglobina glucosilada || No cambia la conducta urgente.
+- belief_bias | Ultrasonido Doppler carotídeo antes de la tomografía || Cree que la causa carotídea es lo urgente.
+- base_rate_fallacy | Radiografía de cráneo || No aporta información útil.
+E: En el paciente con déficit neurológico focal súbito, el tiempo es cerebro. Tras estabilizarlo y medir la glucosa capilar para descartar hipoglucemia, el estudio inicial es la tomografía de cráneo simple, que identifica hemorragia y define si el paciente es candidato a trombólisis intravenosa con alteplasa o tenecteplasa dentro de las primeras 4.5 horas. La angiotomografía permite detectar oclusión de grandes vasos para trombectomía mecánica. La resonancia es más sensible para isquemia temprana, pero no debe retrasar el tratamiento. La meta es que la imagen se realice en los primeros 20 minutos de la llegada.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica
+
+@ mi|neurology|stroke|4|treatment_of_choice
+V: Mujer de 64 años con hemiparesia izquierda y negligencia de inicio hace 2 horas. NIHSS de 12. Tomografía sin hemorragia. Presión arterial de 168/94 mmHg. Glucosa normal. Sin cirugía, sangrado ni anticoagulantes.
+P: ¿Cuál es el tratamiento de elección?
++ Trombólisis intravenosa con alteplasa o tenecteplasa y valorar trombectomía si hay oclusión de gran vaso || Evento isquémico dentro de las 4.5 horas sin contraindicaciones.
+- anchoring | Ácido acetilsalicílico como único tratamiento || Se ancla en la antiagregación y pierde la reperfusión.
+- availability_heuristic | Heparina intravenosa en dosis plena || No mejora el pronóstico y aumenta el sangrado.
+- framing_effect | Bajar la presión a menos de 120/80 antes de cualquier tratamiento || Suena protector, pero reduce la perfusión de la penumbra.
+- representativeness_heuristic | Manitol para el edema cerebral || No es el tratamiento inicial.
+- premature_closure | Esperar 24 horas para ver si mejora sola || Pierde la ventana de reperfusión.
+- complexity_bias | Craniectomía descompresiva de inicio || Se reserva para infarto maligno.
+- status_quo_bias | Solo rehabilitación temprana || Omite la reperfusión.
+- belief_bias | Corticosteroides en dosis altas || No tienen beneficio en isquemia.
+- omission_bias | Evitar la trombólisis por la edad de 64 años || La edad no la contraindica.
+E: La trombólisis intravenosa está indicada en el evento vascular cerebral isquémico dentro de las primeras 4.5 horas del inicio de los síntomas o desde la última vez que se vio al paciente sin síntomas, en ausencia de contraindicaciones como hemorragia en la tomografía, cirugía mayor o sangrado reciente, anticoagulación eficaz o plaquetas bajas. Antes y después se mantiene la presión arterial por debajo de 185/110 y 180/105 mmHg, respectivamente. En pacientes con oclusión de grandes vasos de la circulación anterior se indica además trombectomía mecánica, que puede realizarse hasta 24 horas en casos seleccionados.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica
+
+@ mi|neurology|stroke|3|diagnosis
+V: Mujer de 46 años que presenta de forma súbita la peor cefalea de su vida durante un esfuerzo, con vómito y rigidez de nuca. Glasgow de 14. Tomografía con sangre en las cisternas basales.
+P: ¿Cuál es el diagnóstico más probable?
++ Hemorragia subaracnoidea por probable ruptura de aneurisma || Cefalea en trueno con sangre en cisternas basales.
+- representativeness_heuristic | Meningitis bacteriana || Da rigidez de nuca, pero de forma no súbita y con fiebre.
+- anchoring | Migraña con aura || Se ancla en la cefalea y no reconoce la gravedad.
+- availability_heuristic | Hemorragia intraparenquimatosa hipertensiva || Es frecuente, pero da sangre en el parénquima.
+- premature_closure | Cefalea tensional || Subestima un cuadro grave.
+- base_rate_fallacy | Trombosis de senos venosos || Es menos frecuente y no da sangre en cisternas típicamente.
+- framing_effect | Hematoma subdural agudo || Suena a sangrado, pero se asocia a trauma y tiene forma de semiluna.
+- inattentional_blindness | Crisis hipertensiva || No toma en cuenta la sangre en la tomografía.
+- focusing_illusion | Síndrome de vasoconstricción cerebral reversible || Se centra en la cefalea en trueno.
+- belief_bias | Tumor cerebral || Cree que toda cefalea intensa es tumoral.
+E: La hemorragia subaracnoidea no traumática se debe en la mayoría de los casos a ruptura de un aneurisma intracraneal. Se presenta con cefalea súbita e intensa, en trueno, descrita como la peor de la vida, con náusea, vómito, rigidez de nuca, fotofobia, alteración del estado de alerta o déficit focal. La tomografía simple es muy sensible en las primeras horas. Si es normal y la sospecha persiste, se realiza punción lumbar buscando xantocromía. Después se localiza el aneurisma con angiotomografía o angiografía. El tratamiento incluye asegurar el aneurisma con embolización o cirugía, nimodipino y prevenir el vasoespasmo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia subaracnoidea secundaria a aneurisma
+
+@ mi|neurology|stroke|3|prevention_screening
+V: Hombre de 66 años que tuvo un ataque isquémico transitorio hace 1 semana. El ultrasonido Doppler muestra estenosis de 80% de la carótida interna izquierda, del mismo lado de los síntomas.
+P: ¿Cuál es la mejor medida de prevención secundaria de un nuevo evento?
++ Endarterectomía carotídea en las primeras 2 semanas, además de antiagregante y estatina || Estenosis sintomática de 70 a 99%.
+- anchoring | Solo ácido acetilsalicílico y vigilancia anual || Se ancla en el tratamiento médico y omite la cirugía indicada.
+- availability_heuristic | Anticoagulación con warfarina || No es superior a la antiagregación en enfermedad carotídea.
+- framing_effect | Esperar 6 meses para operar cuando esté estable || Suena prudente, pero el riesgo de recurrencia es alto en las primeras semanas.
+- representativeness_heuristic | Cirugía de la carótida derecha || Elige el lado equivocado.
+- premature_closure | Stent carotídeo en todos los casos sin evaluar riesgo quirúrgico || Es alternativa, no primera opción en todos.
+- complexity_bias | Derivación extra intracraneal || No tiene beneficio demostrado.
+- status_quo_bias | Mantener sin cambios porque los síntomas desaparecieron || Ignora el alto riesgo.
+- belief_bias | Dieta y ejercicio como única medida || Cree que el estilo de vida basta.
+- omission_bias | Evitar la cirugía por miedo a complicaciones || El beneficio supera el riesgo.
+E: El ataque isquémico transitorio es una alarma de alto riesgo de evento vascular cerebral, sobre todo en los primeros días. Se debe estudiar de forma urgente con imagen cerebral, de vasos del cuello, electrocardiograma y monitoreo cardiaco. En pacientes con estenosis carotídea sintomática de 70 a 99%, la endarterectomía carotídea reduce de forma importante el riesgo de recurrencia y debe realizarse en las primeras dos semanas. En estenosis de 50 a 69% se individualiza. Todos reciben antiagregación, estatina de alta intensidad, control de la presión y la glucosa, y suspensión del tabaco.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del ataque isquémico transitorio
+
+@ mi|neurology|stroke|4|initial_treatment
+V: Hombre de 70 años con hemorragia intraparenquimatosa en los ganglios basales de 25 mL. Glasgow de 13. Presión arterial de 205/110 mmHg. No toma anticoagulantes.
+P: ¿Cuál es el tratamiento inicial respecto a la presión arterial?
++ Reducir la sistólica de forma controlada hacia 140 mmHg con fármaco intravenoso titulable || En la hemorragia intracerebral reduce el crecimiento del hematoma.
+- anchoring | Mantener la presión alta para asegurar la perfusión || Se ancla en el manejo de la isquemia.
+- availability_heuristic | Nifedipino sublingual || Causa descensos bruscos.
+- framing_effect | Bajar a menos de 100 mmHg de sistólica para evitar sangrado || Suena seguro, pero causa isquemia.
+- representativeness_heuristic | Trombólisis por el déficit neurológico || Está contraindicada en hemorragia.
+- premature_closure | Cirugía de evacuación inmediata en todos los casos || Se reserva para casos seleccionados.
+- complexity_bias | Coma barbitúrico para controlar la presión || Medida extrema.
+- status_quo_bias | Reiniciar sus antihipertensivos orales y esperar || Insuficiente en la fase aguda.
+- belief_bias | Ácido acetilsalicílico para prevenir trombosis || Empeora el sangrado.
+- omission_bias | No tratar la presión por miedo a la isquemia || Pierde el beneficio sobre el hematoma.
+E: En la hemorragia intracerebral espontánea, la presión arterial muy elevada se asocia a crecimiento del hematoma y peor pronóstico. En pacientes con presión sistólica entre 150 y 220 mmHg se recomienda reducirla de forma controlada hacia 140 mmHg, evitando descensos bruscos o por debajo de 110 a 130 mmHg, con fármacos intravenosos titulables como labetalol o nicardipino. Además se revierte cualquier anticoagulación, se maneja la hipertensión intracraneal, se controla la glucosa y la temperatura, y se valora cirugía en hematomas cerebelosos grandes o con deterioro. La hipertensión es la causa más frecuente, sobre todo en ganglios basales.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia intracerebral espontánea
+
+@ mi|neurology|epilepsy|3|treatment_of_choice
+V: Mujer de 24 años con epilepsia generalizada idiopática con crisis tónico clónicas. Planea embarazarse en el próximo año.
+P: ¿Cuál es el fármaco antiepiléptico de elección en esta paciente?
++ Lamotrigina o levetiracetam || Son eficaces en epilepsia generalizada y más seguros en el embarazo.
+- availability_heuristic | Ácido valproico || Es muy eficaz, pero teratogénico y afecta el neurodesarrollo.
+- anchoring | Fenitoína por ser clásica || Se ancla en lo clásico, con efectos adversos y teratogenia.
+- representativeness_heuristic | Carbamazepina || Es para crisis focales y puede empeorar algunas generalizadas.
+- framing_effect | Ningún fármaco hasta después del embarazo || Suena protector, pero las crisis son riesgosas.
+- premature_closure | Fenobarbital || Tiene efectos sedantes y cognitivos.
+- complexity_bias | Politerapia con tres fármacos desde el inicio || Aumenta efectos adversos sin beneficio.
+- status_quo_bias | Benzodiacepina diaria como tratamiento base || No es tratamiento de mantenimiento.
+- belief_bias | Suplementos naturales sin fármacos || Cree que sustituyen el tratamiento.
+- omission_bias | Evitar tratamiento por miedo a malformaciones || Las crisis no tratadas también dañan.
+E: En mujeres en edad reproductiva con epilepsia, la elección del antiepiléptico debe considerar la eficacia y el riesgo teratogénico. El ácido valproico es muy eficaz en epilepsias generalizadas, pero se asocia a malformaciones mayores y alteraciones del neurodesarrollo, por lo que debe evitarse si existen otras opciones. La lamotrigina y el levetiracetam tienen el menor riesgo y son eficaces en crisis generalizadas. Se recomienda ácido fólico preconcepcional, planear el embarazo, usar la menor dosis eficaz en monoterapia y vigilar niveles de lamotrigina, que disminuyen durante el embarazo. Las crisis tónico clónicas no controladas también son peligrosas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la epilepsia en el adulto
+
+@ mi|neurology|epilepsy|4|initial_treatment
+V: Hombre de 35 años con epilepsia que presenta crisis tónico clónica generalizada que dura 7 minutos sin recuperar la conciencia. Vía aérea permeable, glucosa capilar normal y acceso venoso disponible.
+P: ¿Cuál es el tratamiento inicial?
++ Benzodiacepina intravenosa, como lorazepam o diazepam || Es estado epiléptico y la benzodiacepina es la primera línea.
+- anchoring | Esperar 30 minutos a que ceda sola || Se ancla en la definición antigua.
+- availability_heuristic | Fenitoína intravenosa como primer fármaco || Es de segunda línea.
+- framing_effect | Sujetar al paciente con fuerza para detener la crisis || Suena protector, pero causa lesiones.
+- representativeness_heuristic | Haloperidol intravenoso || Puede bajar el umbral convulsivo.
+- premature_closure | Intubación y anestesia general como primera medida || Se reserva para estado refractario.
+- complexity_bias | Electroencefalograma antes de cualquier tratamiento || Retrasa el tratamiento.
+- status_quo_bias | Darle su dosis oral habitual || No es posible ni eficaz durante la crisis.
+- belief_bias | Introducir un objeto en la boca para evitar que se muerda la lengua || Cree en una práctica peligrosa.
+- omission_bias | Solo oxígeno y observación || Retrasa el control de la crisis.
+E: El estado epiléptico se define operativamente como una crisis tónico clónica de más de cinco minutos o crisis repetidas sin recuperación entre ellas. Es una urgencia neurológica. Se aseguran la vía aérea, la oxigenación y la glucosa, y se administra una benzodiacepina como primera línea, lorazepam o diazepam intravenosos, o midazolam intramuscular si no hay acceso venoso. Si la crisis persiste tras dos dosis, se usa un fármaco de segunda línea, como levetiracetam, ácido valproico o fenitoína. Si continúa, se considera estado refractario y se requiere anestesia general con intubación en terapia intensiva.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del estado epiléptico en adultos
+
+@ mi|neurology|epilepsy|2|diagnosis
+V: Niña de 8 años a quien la maestra observa episodios de mirada fija de 10 segundos varias veces al día, con parpadeo, sin caerse, y que retoma su actividad de inmediato sin confusión. El electroencefalograma muestra punta onda generalizada de 3 Hz que se desencadena con hiperventilación.
+P: ¿Cuál es el diagnóstico más probable?
++ Epilepsia de ausencias infantil || Ausencias breves frecuentes con punta onda de 3 Hz.
+- representativeness_heuristic | Crisis focales con alteración de la conciencia || También dan desconexión, pero duran más y tienen confusión posterior.
+- anchoring | Trastorno por déficit de atención || Se ancla en la distracción escolar.
+- availability_heuristic | Crisis febriles || Ocurren con fiebre en menores de 5 años.
+- premature_closure | Síncope vasovagal || Concluye sin considerar el electroencefalograma.
+- base_rate_fallacy | Síndrome de Lennox Gastaut || Es menos frecuente y tiene otro patrón.
+- framing_effect | Ensoñación diurna normal || Suena benigno, pero el electroencefalograma es anormal.
+- inattentional_blindness | Crisis psicógenas no epilépticas || No toma en cuenta el electroencefalograma.
+- focusing_illusion | Epilepsia mioclónica juvenil || Se centra en la generalización, pero da sacudidas al despertar.
+- belief_bias | Hipoglucemia recurrente || Cree que todo episodio breve es metabólico.
+E: La epilepsia de ausencias infantil inicia generalmente entre los cuatro y diez años. Se caracteriza por crisis de ausencia típicas, que son episodios breves de desconexión de 5 a 15 segundos, con mirada fija, a veces parpadeo o automatismos, de inicio y fin abruptos, sin confusión posterior, que pueden repetirse decenas de veces al día y afectar el rendimiento escolar. La hiperventilación las desencadena. El electroencefalograma muestra descargas de punta onda generalizadas a 3 Hz. El tratamiento de elección es etosuximida, o ácido valproico o lamotrigina. Suelen remitir en la adolescencia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la epilepsia en la infancia
+
+@ mi|neurology|epilepsy|3|initial_study
+V: Hombre de 42 años sin antecedentes que presenta su primera crisis convulsiva tónico clónica generalizada. Ya se recuperó. Glucosa, sodio y calcio normales. Examen neurológico normal.
+P: ¿Cuál es el estudio inicial de imagen más adecuado tras su primera crisis?
++ Resonancia magnética de cráneo, o tomografía si no está disponible de inmediato || Una primera crisis en un adulto obliga a buscar una lesión estructural.
+- availability_heuristic | Radiografía de cráneo || No aporta información útil.
+- anchoring | Ningún estudio porque ya se recuperó || Se ancla en la recuperación y omite causas estructurales.
+- representativeness_heuristic | Punción lumbar en todos los casos || Se indica si hay fiebre o sospecha de infección.
+- framing_effect | Angiografía cerebral para buscar aneurismas || Suena exhaustivo, pero no es el estudio inicial.
+- premature_closure | Iniciar antiepiléptico de por vida sin estudios || Trata sin estudiar.
+- complexity_bias | Tomografía por emisión de positrones || No es el estudio inicial.
+- information_bias | Estudio genético antes de la imagen || No es prioritario.
+- belief_bias | Ultrasonido Doppler transcraneal || Cree que evalúa estructura cerebral.
+- base_rate_fallacy | Asumir epilepsia idiopática sin estudiar || A esta edad las causas estructurales son más frecuentes.
+E: Ante una primera crisis convulsiva en un adulto se debe buscar una causa. Se realizan estudios de laboratorio para descartar alteraciones metabólicas, como glucosa, sodio, calcio y magnesio, y tóxicos, además de un electroencefalograma y una neuroimagen. La resonancia magnética es el estudio de elección porque detecta tumores, malformaciones vasculares, esclerosis mesial o secuelas, y la tomografía se usa en urgencias si no hay resonancia o se sospecha hemorragia. En adultos de nueva aparición, las causas estructurales, como tumores o lesiones vasculares, son más frecuentes que en niños. La decisión de tratar depende del riesgo de recurrencia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la epilepsia en el adulto
+
+@ mi|neurology|epilepsy|3|risk_factor
+V: Mujer de 30 años originaria de una zona rural de Guerrero, con crisis focales de reciente inicio. La tomografía muestra varias lesiones quísticas pequeñas con un punto central y calcificaciones.
+P: ¿Cuál es la causa más probable de sus crisis?
++ Neurocisticercosis || Quistes con escólex y calcificaciones en zona endémica.
+- availability_heuristic | Tumor cerebral primario || Es posible, pero las imágenes múltiples con escólex sugieren cisticercosis.
+- anchoring | Toxoplasmosis cerebral || Se ancla en lesiones múltiples, pero ocurre en inmunosupresión y tiene anillo.
+- representativeness_heuristic | Absceso cerebral bacteriano || Da lesión con anillo, no quistes con punto central.
+- premature_closure | Esclerosis múltiple || Concluye una causa desmielinizante sin datos.
+- base_rate_fallacy | Metástasis cerebrales || Son menos probables en una mujer joven sin cáncer.
+- framing_effect | Tuberculoma || Suena a infección granulomatosa, pero no tiene escólex.
+- inattentional_blindness | Epilepsia idiopática || No toma en cuenta las lesiones.
+- focusing_illusion | Malformación arteriovenosa || Se centra en las calcificaciones.
+- belief_bias | Infección viral cerebral || Cree que las lesiones son virales.
+E: La neurocisticercosis es la infección parasitaria más frecuente del sistema nervioso central y una causa importante de epilepsia adquirida en México y Latinoamérica. Se produce por la ingestión de huevos de Taenia solium a través de alimentos contaminados con heces humanas. Se manifiesta con crisis convulsivas, cefalea e hipertensión intracraneal. La neuroimagen muestra quistes con escólex, que es el punto central, quistes en degeneración con realce en anillo y calcificaciones. El tratamiento incluye antiepilépticos, albendazol o praziquantel en quistes viables con corticosteroides, y cirugía en formas ventriculares.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la neurocisticercosis
+
+@ mi|neurology|headache|2|diagnosis
+V: Mujer de 27 años con cefaleas recurrentes desde la adolescencia, hemicraneales, pulsátiles, de 8 a 24 horas, con náusea, fotofobia y fonofobia, que empeoran con la actividad. Antes de algunas crisis ve luces en zigzag por 20 minutos. Exploración normal.
+P: ¿Cuál es el diagnóstico más probable?
++ Migraña con aura || Cefalea unilateral pulsátil con síntomas asociados y aura visual reversible.
+- representativeness_heuristic | Cefalea en racimos || Es unilateral, pero orbitaria, breve, con síntomas autonómicos y más en hombres.
+- anchoring | Cefalea tensional || Se ancla en la frecuencia, pero la tensional es opresiva y bilateral.
+- availability_heuristic | Sinusitis crónica || Es un diagnóstico frecuente erróneo de la migraña.
+- premature_closure | Tumor cerebral || Concluye una causa grave sin datos de alarma.
+- base_rate_fallacy | Hemorragia subaracnoidea || La evolución es crónica y recurrente.
+- framing_effect | Migraña sin aura || Suena similar, pero esta paciente tiene aura.
+- inattentional_blindness | Neuralgia del trigémino || No toma en cuenta las características de la cefalea.
+- focusing_illusion | Glaucoma de ángulo cerrado || Se centra en los síntomas visuales.
+- belief_bias | Cefalea por uso excesivo de pantallas || Cree que la causa es la vista cansada.
+E: La migraña es una cefalea primaria frecuente, más común en mujeres. Sus crisis duran de 4 a 72 horas y tienen al menos dos características, unilateral, pulsátil, intensidad moderada a grave o empeoramiento con la actividad, más náusea o vómito, o fotofobia y fonofobia. En un tercio de los pacientes hay aura, síntomas neurológicos reversibles que duran de 5 a 60 minutos, sobre todo visuales. El diagnóstico es clínico y no requiere imagen si no hay datos de alarma. El tratamiento agudo usa AINE o triptanos, y la prevención se indica con crisis frecuentes.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la migraña en el adulto
+
+@ mi|neurology|headache|3|next_step
+V: Hombre de 62 años sin cefaleas previas que inicia con cefalea progresiva de 6 semanas, que empeora al toser y en la mañana, con vómito. A la exploración tiene papiledema bilateral.
+P: ¿Cuál es el siguiente paso?
++ Neuroimagen urgente, de preferencia resonancia magnética, o tomografía si no está disponible || Cefalea nueva en mayor de 50 años con datos de hipertensión intracraneal.
+- anchoring | Diagnosticar migraña y dar triptán || Se ancla en una cefalea primaria pese a datos de alarma.
+- availability_heuristic | Analgésicos y revalorar en un mes || Retrasa el estudio de una causa grave.
+- framing_effect | Punción lumbar inmediata antes de la imagen || Suena diagnóstica, pero con papiledema puede causar herniación.
+- representativeness_heuristic | Medir velocidad de sedimentación solo || Es útil en arteritis, pero el papiledema exige imagen.
+- premature_closure | Atribuirlo a hipertensión arterial || Concluye sin estudiar.
+- complexity_bias | Biopsia cerebral || Es invasiva y prematura.
+- status_quo_bias | Observar si empeora || Pone en riesgo al paciente.
+- belief_bias | Cambiar de lentes || Cree que la cefalea es visual.
+- omission_bias | Evitar estudios para no preocupar al paciente || Retrasa un diagnóstico grave.
+E: Ante una cefalea se buscan datos de alarma que sugieren una causa secundaria, como inicio después de los 50 años, cefalea súbita en trueno, patrón progresivo, empeoramiento con maniobras de Valsalva o al despertar, fiebre, signos neurológicos focales, papiledema, alteración del estado de alerta, inmunosupresión o cáncer. Estos datos obligan a realizar neuroimagen urgente. El papiledema indica hipertensión intracraneal, por lo que la punción lumbar está contraindicada hasta descartar una lesión con efecto de masa. Las causas probables a esta edad incluyen tumores primarios o metastásicos, hematoma subdural crónico y otras lesiones.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la cefalea en el primer nivel de atención
+
+@ mi|neurology|headache|3|treatment_of_choice
+V: Hombre de 34 años con crisis de dolor intenso periorbitario derecho de 45 minutos, una o dos veces al día durante 3 semanas, con lagrimeo, rinorrea y ptosis ipsilateral. Está inquieto durante el dolor. Le pasa cada año en primavera.
+P: ¿Cuál es el tratamiento de elección para la crisis aguda?
++ Oxígeno al 100% con mascarilla a flujo alto o sumatriptán subcutáneo || Es una cefalea en racimos.
+- availability_heuristic | Paracetamol oral || Su inicio es lento e ineficaz en la crisis.
+- anchoring | Propranolol || Se ancla en la prevención de la migraña, sin utilidad aguda en racimos.
+- representativeness_heuristic | Carbamazepina || Es para neuralgia del trigémino.
+- framing_effect | Opioides orales para el dolor intenso || Suena potente, pero no es eficaz y genera dependencia.
+- premature_closure | Cirugía de descompresión || No es el tratamiento.
+- complexity_bias | Bloqueo anestésico del ganglio esfenopalatino como primera opción || Es una opción en casos refractarios.
+- status_quo_bias | AINE orales como para cualquier cefalea || Su efecto es lento.
+- belief_bias | Reposo en un cuarto oscuro sin fármacos || Cree que ayuda como en la migraña.
+- omission_bias | Esperar a que termine el periodo de crisis || Deja un dolor muy intenso sin tratar.
+E: La cefalea en racimos es una cefalea trigémino autonómica más frecuente en hombres. Se caracteriza por crisis de dolor unilateral muy intenso, orbitario o temporal, de 15 a 180 minutos, con síntomas autonómicos del mismo lado, como lagrimeo, inyección conjuntival, rinorrea, ptosis y miosis, e inquietud. Las crisis ocurren en periodos de semanas, a menudo estacionales. El tratamiento agudo de elección es el oxígeno al 100% con mascarilla sin reinhalación a 12 a 15 litros por minuto, o sumatriptán subcutáneo o nasal. El tratamiento preventivo de elección es el verapamilo, con corticosteroides como puente.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la cefalea en el primer nivel de atención
+
+@ mi|neurology|headache|3|confirmatory_study
+V: Mujer de 72 años con cefalea temporal derecha nueva, dolor al masticar, sensibilidad del cuero cabelludo y un episodio de pérdida visual transitoria. Velocidad de sedimentación de 88 mm/h.
+P: ¿Cuál es el estudio de elección para confirmar el diagnóstico?
++ Biopsia de arteria temporal, sin retrasar el inicio de corticosteroides || Confirma arteritis de células gigantes.
+- anchoring | Esperar la biopsia antes de iniciar esteroides || Se ancla en la confirmación y arriesga la ceguera.
+- availability_heuristic | Tomografía de cráneo como estudio confirmatorio || No confirma la arteritis.
+- representativeness_heuristic | Punción lumbar || No es útil para este diagnóstico.
+- framing_effect | Electroencefalograma || Suena neurológico, pero no aporta.
+- premature_closure | Diagnóstico de migraña tardía || Subestima un cuadro grave.
+- complexity_bias | Angiografía cerebral convencional || Invasiva e innecesaria.
+- information_bias | Perfil completo de anticuerpos antes de tratar || Retrasa el tratamiento.
+- belief_bias | Ultrasonido carotídeo como estudio definitivo || Cree que evalúa la arteria temporal.
+- base_rate_fallacy | Descartar por su edad avanzada || La edad mayor de 50 años es precisamente un criterio.
+E: La arteritis de células gigantes es una vasculitis de grandes vasos en mayores de 50 años, que afecta ramas de la carótida externa, en especial la arteria temporal. Se presenta con cefalea temporal nueva, claudicación mandibular, sensibilidad del cuero cabelludo, síntomas visuales y velocidad de sedimentación y proteína C reactiva elevadas, y se asocia a polimialgia reumática. La complicación más grave es la ceguera por neuropatía óptica isquémica. Ante la sospecha se inician de inmediato corticosteroides a dosis altas y se realiza biopsia de la arteria temporal, que confirma el diagnóstico y sigue siendo útil días después.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la arteritis de células gigantes

@@ -1,0 +1,271 @@
+@ fam|preventive_medicine|adult_immunizations|2|prevention_screening
+V: Mujer de 27 años con embarazo de 26 semanas, control prenatal normal. Su último refuerzo de tétanos fue hace 6 años. Es temporada invernal.
+P: ¿Cuál es el esquema de vacunación más apropiado durante este embarazo?
++ Vacuna Tdpa e influenza inactivada || Ambas se recomiendan en cada embarazo y protegen al recién nacido.
+- anchoring | Ninguna vacuna porque recibió tétanos hace menos de 10 años || La Tdpa se aplica en cada embarazo independientemente del refuerzo previo.
+- availability_heuristic | Vacuna triple viral para proteger contra rubéola || Es de virus vivos y está contraindicada en el embarazo.
+- representativeness_heuristic | Posponer todas las vacunas hasta después del parto || Se pierde la protección pasiva del recién nacido.
+- premature_closure | Solo toxoide tetánico y diftérico || No protege contra tos ferina.
+- framing_effect | Vacuna contra varicela || Es de virus vivos.
+- complexity_bias | Inmunoglobulina antitetánica de rutina || No está indicada sin herida de riesgo.
+- base_rate_fallacy | Influenza intranasal de virus vivos atenuados || No se usa en embarazadas.
+- belief_bias | Vacuna contra herpes zóster || No está indicada en el embarazo.
+- omission_bias | Evitar la influenza por miedo a efectos en el feto || Es segura y reduce complicaciones maternas.
+E: En el embarazo se recomienda la vacuna Tdpa, con toxoide tetánico, diftérico y componente acelular de tos ferina, a partir de la semana 20, idealmente entre la 27 y la 36, en cada embarazo, para transferir anticuerpos al feto y proteger al lactante en sus primeros meses, cuando la tos ferina es más grave. La vacuna inactivada contra influenza se aplica en cualquier trimestre durante la temporada, porque las embarazadas tienen mayor riesgo de complicaciones. Las vacunas de virus vivos atenuados, como triple viral, varicela e influenza intranasal, están contraindicadas durante el embarazo.
+R: Lineamientos de vacunación del Programa de Vacunación Universal ;; Guía de Práctica Clínica de control prenatal con enfoque de riesgo
+
+@ fam|preventive_medicine|adult_immunizations|2|prevention_screening
+V: Hombre de 66 años, con diabetes tipo 2 controlada. Nunca ha recibido vacuna antineumocócica. Recibió influenza el año pasado.
+P: ¿Cuál es la recomendación de vacunación antineumocócica más adecuada?
++ Aplicar vacuna antineumocócica según el esquema vigente para mayores de 65 años || La edad y la diabetes aumentan el riesgo de enfermedad neumocócica invasiva.
+- anchoring | No vacunar porque la diabetes está controlada || El riesgo persiste por edad.
+- availability_heuristic | Repetir la vacuna de influenza en lugar de la antineumocócica || Previenen enfermedades distintas.
+- representativeness_heuristic | Vacunar solo si tiene neumonía activa || La vacuna es preventiva.
+- premature_closure | Aplicar antineumocócica cada año || No es anual.
+- framing_effect | Vacuna contra Haemophilus influenzae tipo b || No es la indicada en este adulto.
+- complexity_bias | Antibiótico profiláctico permanente || No está indicado.
+- base_rate_fallacy | La vacuna solo es para niños menores de 2 años || También está indicada en adultos mayores.
+- belief_bias | Esperar a que cumpla 75 años || La recomendación inicia a los 65.
+- omission_bias | No vacunar por temor a reacción local || Las reacciones locales son leves.
+E: Streptococcus pneumoniae es la principal causa de neumonía adquirida en la comunidad y de enfermedad invasiva en el adulto mayor. En México se recomienda vacunar contra neumococo a los adultos de 65 años o más y a menores de esa edad con enfermedades crónicas, como diabetes, cardiopatía, neumopatía, nefropatía, asplenia o inmunosupresión. Existen vacunas conjugadas y la polisacárida de 23 serotipos; el esquema específico depende de la disponibilidad y de las vacunas recibidas antes. La vacuna antineumocócica no se aplica cada año, a diferencia de la de influenza. Ambas pueden aplicarse en la misma visita.
+R: Lineamientos de vacunación del Programa de Vacunación Universal ;; Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la neumonía adquirida en la comunidad
+
+@ fam|preventive_medicine|adult_immunizations|2|prevention_screening
+V: Mujer de 22 años, estudiante de enfermería, que iniciará prácticas hospitalarias. No tiene registro de vacuna contra hepatitis B.
+P: ¿Cuál es el esquema de vacunación contra hepatitis B recomendado?
++ Tres dosis a los 0, 1 y 6 meses con verificación de anticuerpos al terminar || Es personal de salud con riesgo ocupacional.
+- anchoring | Una sola dosis es suficiente || El esquema estándar es de tres dosis.
+- availability_heuristic | Inmunoglobulina contra hepatitis B como única medida || Da protección temporal.
+- representativeness_heuristic | No vacunar porque es joven y sana || El riesgo es ocupacional.
+- premature_closure | Esperar a tener un pinchazo para vacunarse || La vacunación debe ser previa.
+- framing_effect | Vacuna contra hepatitis A || Previene otro virus.
+- complexity_bias | Tratamiento antiviral profiláctico continuo || No está indicado.
+- base_rate_fallacy | Vacunar solo a médicos cirujanos || Todo el personal expuesto requiere vacuna.
+- belief_bias | Medir carga viral antes de vacunar || No es necesario.
+- omission_bias | Iniciar prácticas sin protección || Aumenta el riesgo de infección.
+E: La hepatitis B es una de las principales infecciones ocupacionales del personal de salud. La vacuna recombinante se aplica en tres dosis intramusculares en deltoides a los 0, 1 y 6 meses. En el personal de salud se recomienda medir los anticuerpos contra el antígeno de superficie de uno a dos meses después de la última dosis; un título de 10 mUI/mL o mayor indica protección. Si no responde, se repite un segundo esquema. La inmunoglobulina se usa como profilaxis posterior a la exposición en personas no inmunes, junto con la vacuna.
+R: Lineamientos de vacunación del Programa de Vacunación Universal ;; Guía de Práctica Clínica de prevención de infecciones por exposición ocupacional en personal de salud
+
+@ fam|preventive_medicine|adult_immunizations|3|next_step
+V: Hombre de 35 años que se hizo una herida profunda en la mano con un clavo oxidado en una obra hace 3 horas. Recibió su esquema infantil completo y no recuerda refuerzos desde la secundaria, hace 20 años.
+P: ¿Cuál es la conducta más apropiada para la prevención de tétanos?
++ Aplicar toxoide tetánico y diftérico junto con inmunoglobulina antitetánica || Es una herida de alto riesgo y su último refuerzo fue hace más de 10 años.
+- anchoring | No aplicar nada porque tuvo esquema infantil completo || La protección disminuye con el tiempo.
+- availability_heuristic | Solo inmunoglobulina antitetánica || Debe acompañarse de toxoide para inmunidad activa.
+- representativeness_heuristic | Solo antibiótico oral || No previene el tétanos por sí solo.
+- premature_closure | Solo lavado de la herida || Requiere inmunización.
+- framing_effect | Aplicar triple viral || No protege contra tétanos.
+- complexity_bias | Metronidazol intravenoso y hospitalización || No están indicados sin datos de tétanos.
+- base_rate_fallacy | Esperar a que aparezca trismo para tratar || Sería tardío.
+- belief_bias | Aplicar toxoide solo si la herida se infecta || El tétanos no depende de infección visible.
+- omission_bias | No desbridar la herida || El desbridamiento es parte del manejo.
+E: La profilaxis antitetánica depende del tipo de herida y del estado de vacunación. Las heridas contaminadas con tierra, heces o saliva, las punzantes y las producidas por objetos oxidados se consideran de alto riesgo. Si el paciente tiene esquema completo y el último refuerzo fue hace más de 5 años, se aplica toxoide tetánico y diftérico; si el esquema es incompleto o desconocido, o el último refuerzo fue hace más de 10 años, se agrega inmunoglobulina antitetánica humana en un sitio diferente. Siempre se lava y desbrida la herida. Los adultos deben recibir un refuerzo cada 10 años.
+R: Lineamientos de vacunación del Programa de Vacunación Universal ;; Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del tétanos
+
+@ fam|preventive_medicine|adult_immunizations|3|prevention_screening
+V: Hombre de 45 años con infección por VIH diagnosticada hace 2 meses, conteo de linfocitos CD4 de 150 células/mm3, sin tratamiento antirretroviral aún. Pregunta qué vacunas debe recibir.
+P: ¿Cuál vacuna está contraindicada en este momento?
++ Vacuna contra fiebre amarilla || Es de virus vivos y está contraindicada con CD4 menores de 200.
+- anchoring | Vacuna inactivada contra influenza || Está indicada en personas con VIH.
+- availability_heuristic | Vacuna contra hepatitis B || Está indicada si no es inmune.
+- representativeness_heuristic | Toxoide tetánico y diftérico || Es seguro.
+- premature_closure | Vacuna antineumocócica || Está indicada.
+- framing_effect | Vacuna contra hepatitis A || Es inactivada.
+- complexity_bias | Vacuna contra virus del papiloma humano || Es recombinante y no viva.
+- base_rate_fallacy | Vacuna contra COVID-19 de ARN mensajero || No es de virus vivos.
+- belief_bias | Vacuna recombinante contra herpes zóster || No contiene virus vivos.
+- information_bias | Vacuna meningocócica conjugada || Es inactivada.
+E: Las vacunas de microorganismos vivos atenuados pueden causar enfermedad diseminada en personas con inmunosupresión grave. En personas con VIH y conteo de CD4 menor de 200 células/mm3 están contraindicadas vacunas como fiebre amarilla, triple viral, varicela y herpes zóster de virus vivos. Las vacunas inactivadas, recombinantes, de subunidades y de ARN mensajero son seguras, aunque la respuesta puede ser menor; por eso se recomienda vacunar idealmente cuando la carga viral está suprimida y el CD4 se recupera. Las personas con VIH deben recibir influenza anual, neumococo, hepatitis B y otras inactivadas según su edad.
+R: Guía de manejo antirretroviral de las personas con VIH ;; Lineamientos de vacunación del Programa de Vacunación Universal
+
+@ fam|preventive_medicine|adult_immunizations|2|prevention_screening
+V: Mujer de 25 años que planea embarazarse en los próximos meses. No tiene registro de vacunación contra sarampión y rubéola. Prueba de embarazo negativa.
+P: ¿Cuál es la recomendación de vacunación más adecuada?
++ Aplicar vacuna contra sarampión y rubéola y evitar el embarazo durante un mes || La rubéola congénita es prevenible y la vacuna es de virus vivos.
+- anchoring | Vacunar ya embarazada para mayor protección fetal || Está contraindicada en el embarazo.
+- availability_heuristic | No vacunar porque ya es adulta || La protección preconcepcional es prioritaria.
+- representativeness_heuristic | Esperar al puerperio para cualquier vacuna || Se perdería la oportunidad de proteger el embarazo.
+- premature_closure | Solo inmunoglobulina contra rubéola || No genera inmunidad duradera.
+- framing_effect | Vacuna contra influenza como sustituto || No protege contra rubéola.
+- complexity_bias | Medir anticuerpos y esperar un año para vacunar || Retrasa la protección.
+- base_rate_fallacy | La rubéola ya no existe en México por lo que no es necesaria || La vacunación mantiene la eliminación.
+- belief_bias | Recomendar embarazo inmediato tras la vacuna || Se recomienda esperar un mes.
+- omission_bias | No preguntar por su estado vacunal en la consulta preconcepcional || Es parte de la valoración.
+E: La consulta preconcepcional es la oportunidad para revisar el estado de vacunación. La vacuna contra sarampión y rubéola es de virus vivos atenuados y se aplica a mujeres en edad fértil sin antecedente documentado de vacunación o inmunidad. Se recomienda evitar el embarazo durante las cuatro semanas siguientes. La vacunación inadvertida durante el embarazo no justifica su interrupción, porque no se han documentado casos de síndrome de rubéola congénita por la vacuna. La rubéola en el primer trimestre puede causar sordera, cataratas, cardiopatía y retraso del desarrollo en el feto.
+R: Lineamientos de vacunación del Programa de Vacunación Universal ;; Guía de Práctica Clínica de atención preconcepcional en el primer nivel
+
+@ fam|preventive_medicine|adult_immunizations|2|prevention_screening
+V: Mujer de 62 años, sana, que acude en noviembre a consulta. Refiere alergia al huevo que le causa urticaria leve. No se ha vacunado contra influenza porque le dijeron que no podía.
+P: ¿Cuál es la recomendación más adecuada respecto a la vacuna de influenza?
++ Aplicar la vacuna inactivada de influenza con observación habitual || La alergia al huevo no contraindica la vacuna actual.
+- anchoring | Contraindicar la vacuna de por vida || La cantidad de proteína de huevo es mínima.
+- availability_heuristic | Realizar pruebas cutáneas con la vacuna antes de aplicarla || Ya no se recomiendan.
+- representativeness_heuristic | Administrar oseltamivir profiláctico toda la temporada || No sustituye la vacunación.
+- premature_closure | Aplicarla solo en un hospital de tercer nivel || Una urticaria leve no lo requiere.
+- framing_effect | Dividir la dosis en varias aplicaciones || No es necesario.
+- complexity_bias | Premedicar con esteroides intravenosos || No está indicado.
+- base_rate_fallacy | Vacunar solo si es mayor de 65 años || Es mayor de 60 y se recomienda.
+- belief_bias | La vacuna causa influenza por lo que debe evitarse || La vacuna inactivada no causa la enfermedad.
+- omission_bias | No vacunar por precaución || El riesgo de influenza grave es mayor.
+E: Las vacunas inactivadas contra influenza contienen cantidades mínimas de ovoalbúmina y los estudios muestran que pueden aplicarse con seguridad a personas con alergia al huevo, incluso con antecedente de reacciones graves, sin pruebas cutáneas previas ni fraccionamiento de dosis. Se aplican con la observación habitual de 15 minutos. La única contraindicación absoluta es la anafilaxia a una dosis previa de la vacuna. En México se recomienda la vacunación anual en adultos de 60 años o más, embarazadas, personal de salud y personas con enfermedades crónicas. La vacuna inactivada no puede causar influenza.
+R: Lineamientos de vacunación del Programa de Vacunación Universal ;; Lineamientos para la prevención y control de influenza estacional
+
+@ fam|preventive_medicine|adult_immunizations|3|prevention_screening
+V: Hombre de 28 años con esplenectomía programada en 3 semanas por un trauma esplénico manejado de forma conservadora con resangrado. No tiene vacunas recientes.
+P: ¿Cuál es el esquema de vacunación recomendado antes de la cirugía?
++ Vacunas contra neumococo, meningococo y Haemophilus influenzae tipo b al menos 2 semanas antes || Protegen contra bacterias encapsuladas que causan sepsis fulminante tras la esplenectomía.
+- anchoring | Solo vacuna contra influenza || No protege contra bacterias encapsuladas.
+- availability_heuristic | Vacunar hasta 6 meses después de la cirugía || La respuesta es mejor antes de la esplenectomía.
+- representativeness_heuristic | Vacuna contra hepatitis B como única indicación || No es la prioridad.
+- premature_closure | Penicilina profiláctica en lugar de vacunas || Es complementaria, no sustituta.
+- framing_effect | Vacuna triple viral || No está indicada por la esplenectomía.
+- complexity_bias | Inmunoglobulina intravenosa mensual || No está indicada.
+- base_rate_fallacy | No vacunar porque es joven || La sepsis posesplenectomía puede ocurrir a cualquier edad.
+- belief_bias | Vacuna contra fiebre tifoidea || No es una indicación por asplenia.
+- omission_bias | No informar sobre los signos de alarma de infección || Es parte de la educación del paciente.
+E: El bazo es fundamental para eliminar bacterias encapsuladas como Streptococcus pneumoniae, Neisseria meningitidis y Haemophilus influenzae tipo b. Las personas con asplenia tienen riesgo de infección fulminante posesplenectomía, con mortalidad elevada. En cirugía electiva se recomienda vacunar al menos dos semanas antes del procedimiento; en una esplenectomía urgente, se vacuna a partir de las dos semanas posteriores. Además se recomienda la vacuna de influenza anual, educación sobre fiebre como urgencia y, en algunos casos, antibiótico profiláctico o de reserva. Se deben aplicar los refuerzos según el esquema.
+R: Guía de Práctica Clínica de prevención de infecciones en pacientes con asplenia ;; Lineamientos de vacunación del Programa de Vacunación Universal
+
+@ fam|preventive_medicine|adult_immunizations|3|prevention_screening
+V: Mujer de 58 años, sana, que pregunta por una vacuna que vio anunciada para "la culebrilla". Tuvo varicela en la infancia. Su vecina tuvo neuralgia posherpética muy dolorosa.
+P: ¿Cuál es la recomendación más adecuada respecto a la vacuna contra herpes zóster?
++ Vacuna recombinante adyuvada en dos dosis separadas de 2 a 6 meses || Está indicada en adultos de 50 años o más y reduce el zóster y la neuralgia posherpética.
+- anchoring | No vacunar porque ya tuvo varicela || Precisamente por eso tiene riesgo de reactivación.
+- availability_heuristic | Vacuna contra varicela pediátrica || No es la indicada para prevenir zóster en adultos.
+- representativeness_heuristic | Aciclovir profiláctico continuo || No está indicado en inmunocompetentes.
+- premature_closure | Vacunar solo después de un episodio de zóster || Puede vacunarse sin episodio previo.
+- framing_effect | Una sola dosis de por vida de la vacuna recombinante || Requiere dos dosis.
+- complexity_bias | Medir anticuerpos contra varicela antes de vacunar || No es necesario.
+- base_rate_fallacy | Esperar a los 80 años || El riesgo aumenta desde los 50.
+- belief_bias | Inmunoglobulina contra varicela zóster || Se usa en exposición de inmunodeprimidos.
+- omission_bias | No ofrecer la vacuna por ser costosa || Debe informarse la recomendación.
+E: El herpes zóster resulta de la reactivación del virus varicela zóster latente en los ganglios sensitivos, por lo que cualquier persona que tuvo varicela tiene riesgo, y este aumenta con la edad y la inmunosupresión. La neuralgia posherpética es su complicación más frecuente y discapacitante. La vacuna recombinante adyuvada contra zóster se recomienda en adultos de 50 años o más en dos dosis con intervalo de 2 a 6 meses, con eficacia superior al 90 por ciento. Al no contener virus vivos puede aplicarse en inmunodeprimidos. No se requiere medir anticuerpos antes.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del herpes zóster ;; Recomendaciones de vacunación en el adulto del Consejo Nacional de Vacunación
+
+@ fam|preventive_medicine|adult_immunizations|3|next_step
+V: Hombre de 30 años mordido en la pierna por un perro callejero que huyó hace 4 horas. La herida es profunda y sangrante. Nunca ha recibido vacuna antirrábica.
+P: ¿Cuál es la conducta más apropiada para prevenir la rabia?
++ Lavado de la herida con agua y jabón, vacuna antirrábica e inmunoglobulina antirrábica humana || Es una exposición grave en una persona no vacunada.
+- anchoring | Solo antibiótico oral || No previene la rabia.
+- availability_heuristic | Observar al perro durante 10 días antes de decidir || El perro no está disponible.
+- representativeness_heuristic | Solo vacuna antirrábica sin inmunoglobulina || En exposición grave se requiere ambas.
+- premature_closure | Suturar la herida de inmediato y cerrar el caso || El cierre primario se difiere y se requiere profilaxis.
+- framing_effect | Esperar a que aparezcan síntomas neurológicos || La rabia sintomática es casi siempre mortal.
+- complexity_bias | Antivirales contra rabia || No existen tratamientos eficaces.
+- base_rate_fallacy | No hay rabia canina en México por lo que no es necesario || El riesgo existe con animales silvestres y no observables.
+- belief_bias | Toxoide tetánico como única medida || También se requiere profilaxis antirrábica.
+- omission_bias | No notificar el caso a la autoridad sanitaria || Es de notificación.
+E: Ante una agresión por animal potencialmente transmisor de rabia, el primer paso es lavar la herida con agua y jabón durante 10 a 15 minutos. Una exposición grave, como mordedura profunda, múltiple o en cabeza, cuello y manos, o una agresión por animal no observable, requiere en personas no vacunadas inmunoglobulina antirrábica humana infiltrada alrededor de la herida y vacuna antirrábica en el esquema vigente. Si el animal es doméstico y puede observarse diez días sin enfermar, la profilaxis puede suspenderse. También se valora el estado antitetánico. Aunque México eliminó la rabia transmitida por perro, persisten casos por animales silvestres.
+R: Norma Oficial Mexicana para la prevención y control de la rabia humana ;; Guía para la atención médica y antirrábica de la persona expuesta al virus de la rabia
+
+@ fam|preventive_medicine|adult_immunizations|2|prevention_screening
+V: En un centro de salud se descubre que el refrigerador de vacunas registró 15 grados Celsius durante toda la noche por una falla eléctrica. Se cuestiona qué hacer con los biológicos.
+P: ¿Cuál es el rango de temperatura que debe mantenerse para prevenir la pérdida de potencia de las vacunas?
++ Entre 2 y 8 grados Celsius || Es el rango de la cadena de frío para la mayoría de las vacunas en el primer nivel.
+- anchoring | Entre 0 y menos 20 grados en todas las vacunas || Congelar daña vacunas adsorbidas como hepatitis B y toxoides.
+- availability_heuristic | Temperatura ambiente controlada de 20 a 25 grados || Pierden potencia.
+- representativeness_heuristic | Cualquier temperatura si están protegidas de la luz || La temperatura es crítica.
+- premature_closure | Entre 10 y 15 grados || Está fuera del rango recomendado.
+- framing_effect | Aplicar las vacunas expuestas sin reportar el evento || Debe notificarse y evaluarse.
+- complexity_bias | Calentar las vacunas antes de usarlas para activarlas || No es una práctica válida.
+- base_rate_fallacy | Solo las vacunas de virus vivos requieren refrigeración || Todas requieren cadena de frío.
+- belief_bias | Congelar todos los toxoides para conservarlos mejor || Se dañan al congelarse.
+- omission_bias | No registrar las temperaturas diarias || El registro es obligatorio.
+E: La cadena de frío es el sistema de conservación, manejo y distribución que mantiene las vacunas dentro del rango de temperatura adecuado desde su fabricación hasta su aplicación. En el primer nivel la mayoría de los biológicos se conservan entre 2 y 8 grados Celsius. La congelación inactiva las vacunas que contienen adyuvantes de aluminio, como hepatitis B, toxoides y pentavalente acelular. Ante una ruptura de la cadena de frío se deben aislar los biológicos, registrar el tiempo y la temperatura y notificar a la jurisdicción para decidir si se usan o se desechan. La temperatura se registra al menos dos veces al día.
+R: Manual de vacunación de la Secretaría de Salud ;; Lineamientos de cadena de frío del Programa de Vacunación Universal
+
+@ fam|preventive_medicine|adult_immunizations|3|prevention_screening
+V: Enfermera de 30 años, vacunada contra hepatitis B con 3 dosis y anticuerpos antiHBs de 120 mUI/mL documentados. Sufre un pinchazo con aguja hueca de un paciente con antígeno de superficie positivo.
+P: ¿Cuál es la medida de prevención de hepatitis B indicada tras esta exposición?
++ No requiere inmunoglobulina ni vacuna adicional || Tiene respuesta protectora documentada.
+- anchoring | Inmunoglobulina y repetir el esquema completo || No es necesario en respondedores documentados.
+- availability_heuristic | Tenofovir profiláctico por un mes || No se usa como profilaxis de hepatitis B.
+- representativeness_heuristic | Una dosis de refuerzo obligatoria || No es necesaria con respuesta previa documentada.
+- premature_closure | No lavar el sitio porque ya está vacunada || El lavado siempre se realiza.
+- framing_effect | Profilaxis contra VIH sin evaluar el caso fuente || Debe evaluarse el riesgo de VIH por separado.
+- complexity_bias | Biopsia hepática basal || No está indicada.
+- base_rate_fallacy | Suspenderla del trabajo seis meses || No está indicado.
+- belief_bias | Medir anticuerpos cada mes de por vida || No es necesario.
+- omission_bias | No evaluar la exposición a VIH y hepatitis C || Deben valorarse todos los riesgos.
+E: Tras una exposición percutánea a sangre de una fuente positiva para hepatitis B, la conducta depende del estado de vacunación y de la respuesta del trabajador. Una persona vacunada con anticuerpos antiHBs de 10 mUI/mL o más documentados en algún momento se considera protegida de por vida y no requiere tratamiento adicional. Si no está vacunada, recibe inmunoglobulina y se inicia la vacuna. Si es no respondedora, recibe inmunoglobulina y se revacuna. En todos los casos se lava el sitio con agua y jabón y se evalúa por separado el riesgo de VIH y hepatitis C para decidir profilaxis.
+R: Guía de Práctica Clínica de prevención de infecciones por exposición ocupacional en personal de salud ;; Lineamientos de vacunación del Programa de Vacunación Universal
+
+@ fam|preventive_medicine|adult_immunizations|2|prevention_screening
+V: Hombre de 40 años con enfermedad renal crónica en hemodiálisis desde hace 3 meses. No está vacunado contra hepatitis B y su antígeno de superficie es negativo.
+P: ¿Cuál es la recomendación de vacunación contra hepatitis B más adecuada?
++ Esquema con dosis altas o formulación para diálisis con medición posterior de anticuerpos || Los pacientes en hemodiálisis responden menos a la vacuna.
+- anchoring | Esquema estándar sin seguimiento || La respuesta en diálisis suele ser insuficiente.
+- availability_heuristic | Contraindicar la vacuna por la insuficiencia renal || La vacuna es segura y prioritaria.
+- representativeness_heuristic | Solo inmunoglobulina cada mes || No genera inmunidad duradera.
+- premature_closure | Vacunar solo si se contagia otro paciente de la unidad || La prevención debe ser previa.
+- framing_effect | Vacuna contra hepatitis A en lugar de B || El riesgo principal es hepatitis B.
+- complexity_bias | Antiviral profiláctico permanente || No está indicado.
+- base_rate_fallacy | La diálisis no implica riesgo de hepatitis B || Es un factor de riesgo reconocido.
+- belief_bias | Esperar a que reciba trasplante para vacunar || Se debe vacunar cuanto antes.
+- omission_bias | No medir anticuerpos tras el esquema || Es necesario para documentar respuesta.
+E: Los pacientes en hemodiálisis tienen riesgo de adquirir hepatitis B por la exposición repetida a sangre y procedimientos, y su respuesta inmunitaria a la vacuna es menor por la uremia. Se recomienda un esquema con dosis más altas o con formulaciones específicas para diálisis, idealmente desde etapas tempranas de la enfermedad renal, antes de iniciar el reemplazo. Al terminar se miden anticuerpos antiHBs y se revisan anualmente; si bajan de 10 mUI/mL se aplica refuerzo. Los no respondedores se revacunan. La vacuna es segura en la insuficiencia renal.
+R: Guía de Práctica Clínica de tratamiento sustitutivo de la función renal ;; Lineamientos de vacunación del Programa de Vacunación Universal
+
+@ fam|preventive_medicine|adult_immunizations|3|prevention_screening
+V: Mujer de 35 años que recibió una vacuna hace 2 años y presentó, en los primeros minutos, dificultad respiratoria, urticaria generalizada e hipotensión que requirió adrenalina. Hoy le corresponde la segunda dosis de esa vacuna.
+P: ¿Cuál es la recomendación de vacunación más adecuada respecto a la nueva dosis?
++ No aplicar la dosis porque la anafilaxia previa a esa vacuna es contraindicación || La anafilaxia a una dosis previa contraindica las siguientes dosis.
+- anchoring | Aplicarla con premedicación con antihistamínico || No elimina el riesgo de anafilaxia.
+- availability_heuristic | Aplicar media dosis || No está validado y mantiene el riesgo.
+- representativeness_heuristic | Aplicarla porque fue hace más de un año || El riesgo persiste.
+- premature_closure | Aplicarla en otro brazo || No cambia el riesgo.
+- framing_effect | Aplicarla y observar 5 minutos || La observación no es suficiente ante contraindicación.
+- complexity_bias | Esteroide intravenoso y aplicar la dosis completa || No previene la anafilaxia.
+- base_rate_fallacy | Toda reacción a vacunas es leve || Su antecedente fue grave.
+- belief_bias | La fiebre leve tras una vacuna es igual a anafilaxia || Son eventos diferentes.
+- omission_bias | No registrar el evento adverso || Debe notificarse.
+E: La anafilaxia a una dosis previa de una vacuna, o a uno de sus componentes, es una contraindicación verdadera para dosis posteriores de esa vacuna. Se recomienda referir a alergología para evaluar el componente responsable y valorar alternativas. Las reacciones locales, la fiebre leve, las enfermedades agudas leves, el uso de antibióticos o la lactancia no son contraindicaciones, y considerarlas así genera oportunidades perdidas de vacunación. Los eventos supuestamente atribuibles a la vacunación o inmunización deben notificarse al sistema de vigilancia correspondiente.
+R: Manual de eventos supuestamente atribuibles a la vacunación o inmunización ;; Lineamientos de vacunación del Programa de Vacunación Universal
+
+@ fam|preventive_medicine|adult_immunizations|2|prevention_screening
+V: Hombre de 50 años que acude a consulta con resfriado común, temperatura de 37.6 grados, rinorrea y malestar leve. Le corresponde su refuerzo de toxoide tetánico y diftérico.
+P: ¿Cuál es la recomendación más adecuada respecto a la vacunación hoy?
++ Aplicar el refuerzo porque una enfermedad leve no es contraindicación || Diferirla genera una oportunidad perdida de vacunación.
+- anchoring | Posponer cualquier vacuna hasta que no tenga síntomas durante un mes || Es innecesario.
+- availability_heuristic | Iniciar antibiótico antes de vacunar || El resfriado es viral.
+- representativeness_heuristic | Contraindicar la vacuna por la febrícula || Solo la enfermedad moderada o grave obliga a diferir.
+- premature_closure | Aplicar solo la mitad de la dosis || No está indicado.
+- framing_effect | Esperar a que tenga una herida para aplicar el refuerzo || El refuerzo programado es preventivo.
+- complexity_bias | Solicitar biometría hemática antes de vacunar || No es necesario.
+- base_rate_fallacy | Las vacunas empeoran los resfriados || No hay evidencia.
+- belief_bias | Aplicar solo si no ha tomado paracetamol || No es una contraindicación.
+- omission_bias | Enviarlo a casa sin vacunar ni reagendar || Es una oportunidad perdida.
+E: Las oportunidades perdidas de vacunación son un problema frecuente y ocurren cuando una persona acude a un servicio de salud y no recibe las vacunas que le corresponden por falsas contraindicaciones. Las enfermedades leves, como un resfriado con febrícula, una diarrea leve o una infección respiratoria superior, no contraindican la vacunación. Solo la enfermedad aguda moderada o grave justifica diferir la vacuna hasta la mejoría. Tampoco son contraindicaciones el uso de antibióticos, la convalecencia, la lactancia ni la alergia a medicamentos no relacionados. El refuerzo de toxoide tetánico y diftérico en adultos se aplica cada 10 años.
+R: Manual de vacunación de la Secretaría de Salud ;; Lineamientos de vacunación del Programa de Vacunación Universal
+
+@ fam|preventive_medicine|adult_immunizations|3|prevention_screening
+V: Hombre de 52 años en tratamiento con prednisona 40 mg diarios desde hace 2 meses por una enfermedad autoinmune. Quiere vacunarse contra sarampión porque hay un brote en su comunidad.
+P: ¿Cuál es la recomendación más adecuada?
++ Diferir la vacuna de virus vivos hasta al menos un mes después de suspender el esteroide en dosis altas || Las dosis de 20 mg o más por más de 2 semanas causan inmunosupresión significativa.
+- anchoring | Aplicar la vacuna de inmediato por el brote || Es de virus vivos y está contraindicada.
+- availability_heuristic | Duplicar la dosis de vacuna para compensar la inmunosupresión || No está indicado y aumenta el riesgo.
+- representativeness_heuristic | Los esteroides no afectan la respuesta a las vacunas || Las dosis altas sí la afectan.
+- premature_closure | Suspender abruptamente la prednisona para vacunar hoy || Puede causar insuficiencia suprarrenal.
+- framing_effect | Contraindicar todas las vacunas inactivadas también || Las inactivadas pueden aplicarse.
+- complexity_bias | Aplicar vacuna y gammaglobulina en el mismo día || La gammaglobulina interfiere con la vacuna.
+- base_rate_fallacy | Vacunar porque solo las dosis mayores de 100 mg inmunosuprimen || El umbral es menor.
+- belief_bias | El sarampión no afecta a adultos || Puede ser grave en inmunodeprimidos.
+- omission_bias | No valorar profilaxis posterior a una exposición || Puede requerir inmunoglobulina si se expone.
+E: Los glucocorticoides en dosis de 20 mg o más de prednisona al día, o su equivalente, durante 14 días o más, producen inmunosupresión suficiente para contraindicar las vacunas de virus vivos, como triple viral, varicela y fiebre amarilla, por el riesgo de enfermedad por el virus vacunal. Se recomienda esperar al menos un mes tras suspender la dosis alta. Las vacunas inactivadas sí pueden aplicarse, aunque la respuesta puede ser menor. Si una persona inmunodeprimida no inmune se expone al sarampión, puede recibir inmunoglobulina como profilaxis. Los esteroides no deben suspenderse de forma abrupta.
+R: Lineamientos de vacunación del Programa de Vacunación Universal ;; Recomendaciones de vacunación en pacientes con inmunosupresión
+
+@ fam|preventive_medicine|adult_immunizations|2|prevention_screening
+V: Mujer de 70 años con enfermedad pulmonar obstructiva crónica que acude en octubre a su control. Recibió vacuna contra influenza en noviembre del año pasado.
+P: ¿Cuál es la recomendación más adecuada respecto a la vacuna de influenza?
++ Aplicar la vacuna de la temporada actual || La vacuna se aplica cada año porque cambian las cepas circulantes y disminuye la inmunidad.
+- anchoring | No vacunar porque se vacunó el año pasado || La protección no dura más de una temporada.
+- availability_heuristic | Esperar a que inicie un brote para vacunar || La protección tarda unas dos semanas en desarrollarse.
+- representativeness_heuristic | Contraindicar la vacuna por la enfermedad pulmonar || Es un grupo prioritario.
+- premature_closure | Aplicar la vacuna cada cinco años || La vacunación es anual.
+- framing_effect | Oseltamivir mensual como prevención || No sustituye la vacuna.
+- complexity_bias | Vacuna intranasal de virus vivos || No se recomienda en mayores de 50 ni en enfermedad pulmonar.
+- base_rate_fallacy | La influenza es leve en adultos mayores || Tienen más hospitalizaciones y muertes.
+- belief_bias | La vacuna causa exacerbaciones de la enfermedad pulmonar || Reduce las exacerbaciones.
+- omission_bias | No revisar también su vacuna antineumocócica || Debe actualizarse.
+E: Los virus de influenza cambian por mutaciones en la hemaglutinina y la neuraminidasa, y la inmunidad generada por la vacuna disminuye en meses, por lo que la vacunación se recomienda cada temporada, en México de octubre a marzo. Los adultos de 60 años o más, las personas con enfermedad pulmonar crónica, cardiopatía, diabetes, obesidad, embarazadas y personal de salud son grupos prioritarios por su mayor riesgo de complicaciones. En pacientes con enfermedad pulmonar obstructiva crónica la vacuna reduce las exacerbaciones y las hospitalizaciones. También debe revisarse la vacunación antineumocócica en la misma visita.
+R: Lineamientos para la prevención y control de influenza estacional ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad pulmonar obstructiva crónica

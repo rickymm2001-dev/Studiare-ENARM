@@ -1,0 +1,1418 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "gyo-06-puerperio-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "puerperium",
+      "subtopic": "puerperal_infection",
+      "vignette": "Mujer de 28 años con cesárea por trabajo de parto prolongado y ruptura de membranas de 20 horas. Al tercer día presenta fiebre de 38.9 °C, dolor abdominal bajo, útero blando, subinvolucionado y doloroso, y loquios fétidos.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Endometritis puerperal",
+          "correct": true,
+          "rationale": "Fiebre, útero doloroso y loquios fétidos tras cesárea con trabajo de parto prolongado."
+        },
+        {
+          "key": "b",
+          "text": "Fiebre por ingurgitación mamaria",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es febrícula transitoria."
+        },
+        {
+          "key": "c",
+          "text": "Infección urinaria",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica el útero doloroso ni los loquios fétidos."
+        },
+        {
+          "key": "d",
+          "text": "Neumonía por aspiración",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay datos respiratorios."
+        },
+        {
+          "key": "e",
+          "text": "Retención de restos sin infección",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Hay fiebre y loquios fétidos."
+        },
+        {
+          "key": "f",
+          "text": "Infección de herida quirúrgica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La herida no se describe afectada y el útero está doloroso."
+        },
+        {
+          "key": "g",
+          "text": "Tromboflebitis pélvica séptica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se sospecha con fiebre persistente pese a antibióticos."
+        },
+        {
+          "key": "h",
+          "text": "Apendicitis puerperal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los loquios fétidos."
+        },
+        {
+          "key": "i",
+          "text": "Fiebre normal tras la cesárea",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La fiebre al tercer día es anormal."
+        },
+        {
+          "key": "j",
+          "text": "Mastitis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay hallazgos mamarios."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "La endometritis puerperal es la infección más frecuente del puerperio y es mucho más común tras cesárea, sobre todo con trabajo de parto prolongado, ruptura de membranas prolongada, tactos vaginales múltiples, corioamnionitis y extracción manual de placenta. Es polimicrobiana, con bacterias aerobias y anaerobias de la flora vaginal. Se manifiesta con fiebre, dolor uterino, subinvolución y loquios fétidos o purulentos, generalmente entre el segundo y quinto día. El tratamiento de elección es clindamicina con gentamicina intravenosas hasta 24 a 48 horas sin fiebre. La profilaxis antibiótica en la cesárea reduce su frecuencia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la infección puerperal"
+      ]
+    },
+    {
+      "key": "gyo-06-puerperio-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "puerperium",
+      "subtopic": "puerperal_infection",
+      "vignette": "Mujer de 25 años con endometritis puerperal tras cesárea. Fiebre de 39 °C, útero doloroso y loquios fétidos. No es alérgica.",
+      "prompt": "¿Cuál es el tratamiento antibiótico de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Nitrofurantoína",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No tiene cobertura adecuada."
+        },
+        {
+          "key": "b",
+          "text": "Fluconazol",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es una infección por hongos."
+        },
+        {
+          "key": "c",
+          "text": "Vancomicina con meropenem de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es excesivo."
+        },
+        {
+          "key": "d",
+          "text": "Metronidazol solo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No cubre aerobios gramnegativos."
+        },
+        {
+          "key": "e",
+          "text": "Ciprofloxacino solo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No cubre anaerobios de forma adecuada."
+        },
+        {
+          "key": "f",
+          "text": "Solo antipiréticos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La infección requiere antibióticos."
+        },
+        {
+          "key": "g",
+          "text": "Amoxicilina oral ambulatoria",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es insuficiente para endometritis tras cesárea."
+        },
+        {
+          "key": "h",
+          "text": "Suspender la lactancia por los antibióticos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son compatibles con la lactancia."
+        },
+        {
+          "key": "i",
+          "text": "Clindamicina más gentamicina intravenosas",
+          "correct": true,
+          "rationale": "Cubren la flora polimicrobiana incluidos anaerobios."
+        },
+        {
+          "key": "j",
+          "text": "Lavados vaginales como tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No tratan la infección uterina."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "El tratamiento de la endometritis puerperal debe cubrir bacterias aerobias y anaerobias, incluidos Bacteroides, estreptococos, enterococos y gramnegativos. El esquema de elección es clindamicina más gentamicina intravenosas. Si no hay respuesta en 48 a 72 horas se agrega ampicilina para enterococo y se buscan complicaciones como absceso pélvico, hematoma infectado, infección de herida o tromboflebitis pélvica séptica. El tratamiento intravenoso se mantiene hasta 24 a 48 horas sin fiebre y no se requiere continuar por vía oral. Los antibióticos son compatibles con la lactancia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la infección puerperal"
+      ]
+    },
+    {
+      "key": "gyo-06-puerperio-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "puerperium",
+      "subtopic": "puerperal_infection",
+      "vignette": "Mujer de 29 años con endometritis tras cesárea que recibe clindamicina, gentamicina y ampicilina desde hace 5 días. Persiste con fiebre en picos, aunque se siente bien entre ellos. Exploración pélvica sin abscesos y ultrasonido sin colecciones ni restos.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tromboflebitis pélvica séptica",
+          "correct": true,
+          "rationale": "Fiebre persistente pese a antibióticos adecuados sin absceso ni otra causa."
+        },
+        {
+          "key": "b",
+          "text": "Fiebre por el cansancio del puerperio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es persistente y anormal."
+        },
+        {
+          "key": "c",
+          "text": "Mastitis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay hallazgos mamarios."
+        },
+        {
+          "key": "d",
+          "text": "Tuberculosis pélvica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "e",
+          "text": "Absceso pélvico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El ultrasonido no muestra colecciones."
+        },
+        {
+          "key": "f",
+          "text": "Pielonefritis no tratada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Estaría cubierta y daría otros datos."
+        },
+        {
+          "key": "g",
+          "text": "Hematoma de pared infectado",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Se vería en la imagen."
+        },
+        {
+          "key": "h",
+          "text": "Retención de restos placentarios",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El ultrasonido no los muestra."
+        },
+        {
+          "key": "i",
+          "text": "Resistencia bacteriana sin otra complicación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ya recibe cobertura amplia."
+        },
+        {
+          "key": "j",
+          "text": "Fiebre por medicamentos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es menos probable."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "La tromboflebitis pélvica séptica es la trombosis infectada de las venas ováricas o pélvicas tras el parto, sobre todo después de cesárea. Se sospecha cuando la fiebre persiste pese a antibióticos adecuados sin otra causa identificable, con la paciente en buen estado entre los picos febriles. La trombosis de la vena ovárica puede causar dolor en flanco y masa palpable. La tomografía o resonancia pueden mostrar el trombo, aunque un estudio normal no la descarta. El tratamiento es anticoagulación con heparina junto con los antibióticos, y la respuesta en 48 a 72 horas apoya el diagnóstico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la infección puerperal"
+      ]
+    },
+    {
+      "key": "gyo-06-puerperio-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "puerperium",
+      "subtopic": "puerperal_infection",
+      "vignette": "Mujer de 30 años que será sometida a cesárea programada por presentación pélvica. No es alérgica a medicamentos.",
+      "prompt": "¿Cuál es la medida de prevención indicada para reducir la infección posoperatoria?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ninguna profilaxis en cesárea programada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Está indicada en todas las cesáreas."
+        },
+        {
+          "key": "b",
+          "text": "Cefazolina intravenosa en los 60 minutos previos a la incisión de la piel",
+          "correct": true,
+          "rationale": "La profilaxis antibiótica reduce la endometritis y la infección de herida."
+        },
+        {
+          "key": "c",
+          "text": "Antibiótico después de pinzar el cordón como práctica preferida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es más eficaz antes de la incisión."
+        },
+        {
+          "key": "d",
+          "text": "Rasurado del vello con navaja la noche anterior",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumenta las infecciones."
+        },
+        {
+          "key": "e",
+          "text": "Ducha vaginal con antiséptico como única medida",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No sustituye la profilaxis."
+        },
+        {
+          "key": "f",
+          "text": "Lavar la herida con alcohol diario",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No se recomienda."
+        },
+        {
+          "key": "g",
+          "text": "Vancomicina en todas las pacientes",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se reserva para colonización por estafilococo resistente."
+        },
+        {
+          "key": "h",
+          "text": "Antibióticos de amplio espectro por 5 días",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No aumentan el beneficio."
+        },
+        {
+          "key": "i",
+          "text": "Omitir la profilaxis para no exponer al bebé",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La cefazolina es segura."
+        },
+        {
+          "key": "j",
+          "text": "Antibióticos orales por 7 días después de la cirugía",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No sustituyen la profilaxis."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "La cesárea es el principal factor de riesgo de infección puerperal. La profilaxis antibiótica con una cefalosporina de primera generación, como cefazolina 2 g intravenosa, administrada en los 60 minutos previos a la incisión, reduce de forma importante la endometritis y la infección de herida. Es más eficaz que administrarla tras pinzar el cordón y no aumenta los efectos neonatales. En pacientes obesas se aumenta la dosis y en cesáreas en trabajo de parto puede agregarse azitromicina. Otras medidas son la preparación de la piel con clorhexidina alcohólica, el corte del vello con máquina y no con navaja y la preparación vaginal en cesáreas con trabajo de parto.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la infección puerperal"
+      ]
+    },
+    {
+      "key": "gyo-06-puerperio-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "puerperium",
+      "subtopic": "puerperal_infection",
+      "vignette": "Mujer de 26 años con parto vaginal hace 36 horas. Presenta temperatura de 37.8 °C, mamas tensas, duras y dolorosas en forma bilateral, sin eritema localizado. Útero bien involucionado, no doloroso, y loquios normales.",
+      "prompt": "¿Qué indica esta febrícula?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Infección urinaria",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay síntomas urinarios."
+        },
+        {
+          "key": "b",
+          "text": "Mastitis bilateral",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría eritema localizado y fiebre alta."
+        },
+        {
+          "key": "c",
+          "text": "Endometritis puerperal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El útero no está doloroso y los loquios son normales."
+        },
+        {
+          "key": "d",
+          "text": "Tromboembolia pulmonar",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay disnea."
+        },
+        {
+          "key": "e",
+          "text": "Sepsis puerperal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay datos de afección sistémica."
+        },
+        {
+          "key": "f",
+          "text": "Tromboflebitis pélvica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No corresponde al cuadro."
+        },
+        {
+          "key": "g",
+          "text": "Congestión mamaria fisiológica con febrícula transitoria",
+          "correct": true,
+          "rationale": "Ingurgitación bilateral sin datos de infección en los primeros días."
+        },
+        {
+          "key": "h",
+          "text": "Leche mala que debe desecharse",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La leche es adecuada."
+        },
+        {
+          "key": "i",
+          "text": "Absceso mamario",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Habría masa fluctuante."
+        },
+        {
+          "key": "j",
+          "text": "Fiebre por anestesia tardía",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la congestión mamaria."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "La congestión mamaria aparece entre el segundo y quinto día posparto con la llegada de la leche. Las mamas se ponen tensas, duras, calientes y dolorosas en forma bilateral, y puede haber febrícula transitoria menor de 38 a 38.4 °C que dura menos de 24 horas. Se trata con amamantamiento frecuente, extracción de leche, compresas tibias antes y frías después de las tomas y analgésicos. Se debe distinguir de la mastitis, unilateral con área eritematosa y fiebre alta, y de las infecciones puerperales. La congestión no requiere antibióticos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de lactancia materna",
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la infección puerperal"
+      ]
+    },
+    {
+      "key": "gyo-06-puerperio-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "puerperium",
+      "subtopic": "puerperal_infection",
+      "vignette": "Mujer de 32 años con cesárea hace 6 días que presenta fiebre de 38.5 °C, dolor, eritema e induración en la herida con salida de material purulento por un extremo. Útero involucionado y no doloroso.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Alergia a la sutura",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la fiebre y el pus."
+        },
+        {
+          "key": "b",
+          "text": "Dehiscencia de la fascia con evisceración",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay salida de asas."
+        },
+        {
+          "key": "c",
+          "text": "Fascitis necrosante",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Daría dolor desproporcionado, necrosis y toxicidad."
+        },
+        {
+          "key": "d",
+          "text": "Cicatrización normal con algo de pus",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El pus indica infección."
+        },
+        {
+          "key": "e",
+          "text": "Endometritis puerperal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El útero no está doloroso."
+        },
+        {
+          "key": "f",
+          "text": "Seroma no infectado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la fiebre ni el pus."
+        },
+        {
+          "key": "g",
+          "text": "Hernia incisional",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es una complicación tardía sin infección."
+        },
+        {
+          "key": "h",
+          "text": "Hematoma de pared no infectado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el pus."
+        },
+        {
+          "key": "i",
+          "text": "Infección del sitio quirúrgico incisional",
+          "correct": true,
+          "rationale": "Eritema, induración y secreción purulenta en la herida de cesárea."
+        },
+        {
+          "key": "j",
+          "text": "Mastitis",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay datos mamarios."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "La infección del sitio quirúrgico tras cesárea suele aparecer entre el cuarto y séptimo día. Se manifiesta con eritema, induración, dolor, calor y secreción purulenta, con o sin fiebre. Los agentes más frecuentes son Staphylococcus aureus y la flora vaginal. Los factores de riesgo incluyen obesidad, diabetes, corioamnionitis, trabajo de parto prolongado y cesárea de urgencia. El tratamiento consiste en abrir y drenar la herida, lavar y curar, y dar antibióticos si hay celulitis o datos sistémicos. Debe descartarse la fascitis necrosante, que requiere desbridamiento quirúrgico urgente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la infección puerperal"
+      ]
+    },
+    {
+      "key": "gyo-06-puerperio-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "puerperium",
+      "subtopic": "puerperal_infection",
+      "vignette": "Mujer de 29 años con parto vaginal hace 3 semanas que presenta tristeza persistente, llanto fácil, desinterés por su bebé, insomnio aun cuando el bebé duerme, culpa excesiva y pensamientos de que sería mejor no estar. Los síntomas iniciaron hace 2 semanas.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Psicosis posparto",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría alucinaciones o delirios."
+        },
+        {
+          "key": "b",
+          "text": "Hipotiroidismo posparto como única causa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Debe descartarse, pero el cuadro es depresivo mayor."
+        },
+        {
+          "key": "c",
+          "text": "Anemia posparto",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica las ideas de muerte."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome de Sheehan",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Daría falta de lactancia e hipotensión."
+        },
+        {
+          "key": "e",
+          "text": "Depresión posparto",
+          "correct": true,
+          "rationale": "Síntomas depresivos de más de 2 semanas con ideas de muerte en el puerperio."
+        },
+        {
+          "key": "f",
+          "text": "Falta de amor de madre",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una enfermedad tratable."
+        },
+        {
+          "key": "g",
+          "text": "Cansancio normal por cuidar al bebé",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Hay síntomas depresivos graves."
+        },
+        {
+          "key": "h",
+          "text": "Trastorno bipolar con manía",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay síntomas maníacos."
+        },
+        {
+          "key": "i",
+          "text": "Tristeza posparto o baby blues",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es leve y se resuelve en las primeras 2 semanas."
+        },
+        {
+          "key": "j",
+          "text": "Trastorno de ansiedad generalizada aislado",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Predominan los síntomas depresivos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "i"
+      ],
+      "explanation": "La depresión posparto afecta a 10 a 15% de las mujeres. Se presenta en las primeras semanas o meses tras el parto con ánimo deprimido, anhedonia, alteraciones del sueño y apetito, culpa, dificultad para vincularse con el bebé e ideas de muerte o suicidio, durante más de 2 semanas. La tristeza posparto es leve, transitoria y cede en 2 semanas. Se recomienda tamizar con la escala de Edimburgo. Siempre se pregunta por ideas suicidas o de dañar al bebé. El tratamiento incluye psicoterapia y antidepresivos como sertralina, compatible con la lactancia. La psicosis posparto es una urgencia psiquiátrica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la depresión posparto"
+      ]
+    },
+    {
+      "key": "gyo-06-puerperio-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "puerperium",
+      "subtopic": "puerperal_infection",
+      "vignette": "Mujer de 34 años que tuvo hemorragia posparto masiva con choque hace 3 meses. Desde entonces no ha podido amamantar porque no produjo leche, no ha regresado la menstruación y refiere fatiga, intolerancia al frío y caída del vello axilar y púbico.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Depresión posparto",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la agalactia ni la pérdida de vello."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de Asherman",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da amenorrea sin hipopituitarismo."
+        },
+        {
+          "key": "c",
+          "text": "Prolactinoma",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Daría galactorrea."
+        },
+        {
+          "key": "d",
+          "text": "Amenorrea por lactancia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está amamantando."
+        },
+        {
+          "key": "e",
+          "text": "Insuficiencia ovárica prematura",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la agalactia ni el hipotiroidismo."
+        },
+        {
+          "key": "f",
+          "text": "Anemia posparto prolongada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la agalactia."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome de Sheehan por necrosis hipofisaria posparto",
+          "correct": true,
+          "rationale": "Agalactia, amenorrea e hipopituitarismo tras hemorragia obstétrica grave."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome de Cushing",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Daría obesidad central."
+        },
+        {
+          "key": "i",
+          "text": "Cansancio normal de madre primeriza",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay datos de hipopituitarismo."
+        },
+        {
+          "key": "j",
+          "text": "Hipotiroidismo primario",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la agalactia ni la amenorrea con pérdida de vello."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "El síndrome de Sheehan es el hipopituitarismo por necrosis isquémica de la hipófisis tras una hemorragia posparto grave con choque. La hipófisis aumenta de tamaño en el embarazo por hiperplasia de lactotropos y es vulnerable a la hipoperfusión. La primera manifestación suele ser la falta de lactancia por deficiencia de prolactina, seguida de amenorrea, pérdida del vello axilar y púbico, hipotiroidismo e insuficiencia suprarrenal. El diagnóstico se confirma con niveles bajos de hormonas hipofisarias y sus hormonas periféricas. El tratamiento es el reemplazo hormonal, primero con glucocorticoides y después con levotiroxina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del hipopituitarismo"
+      ]
+    },
+    {
+      "key": "gyo-06-puerperio-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "puerperium",
+      "subtopic": "mastitis",
+      "vignette": "Mujer de 27 años con 4 semanas de puerperio que amamanta y presenta mastitis en la mama izquierda con fiebre de 38.7 °C que no mejoró tras 24 horas de vaciamiento frecuente y antiinflamatorios. No es alérgica.",
+      "prompt": "¿Cuál es el tratamiento antibiótico de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Vancomicina intravenosa en todas",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para casos graves o resistentes."
+        },
+        {
+          "key": "b",
+          "text": "Suspender la lactancia del lado afectado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El vaciamiento es parte del tratamiento."
+        },
+        {
+          "key": "c",
+          "text": "Solo compresas frías sin antibiótico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Ya falló el manejo conservador."
+        },
+        {
+          "key": "d",
+          "text": "Fluconazol oral",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es una infección por hongos."
+        },
+        {
+          "key": "e",
+          "text": "Metronidazol",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No cubre estafilococo."
+        },
+        {
+          "key": "f",
+          "text": "Suspender la lactancia por los antibióticos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son compatibles."
+        },
+        {
+          "key": "g",
+          "text": "Dicloxacilina o cefalexina oral por 10 a 14 días manteniendo la lactancia",
+          "correct": true,
+          "rationale": "Cubren Staphylococcus aureus, el agente más frecuente."
+        },
+        {
+          "key": "h",
+          "text": "Cataplasmas de hierbas sobre la mama",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No tratan la infección."
+        },
+        {
+          "key": "i",
+          "text": "Ciprofloxacino",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es de elección en la lactancia."
+        },
+        {
+          "key": "j",
+          "text": "Tetraciclina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es adecuada en la lactancia."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "El tratamiento de la mastitis incluye el vaciamiento efectivo de la mama, preferentemente amamantando, analgésicos antiinflamatorios como ibuprofeno, reposo e hidratación. Si los síntomas no mejoran en 12 a 24 horas o la paciente se ve enferma se indican antibióticos que cubran Staphylococcus aureus, como dicloxacilina o cefalexina por 10 a 14 días. En alergia a penicilina se usa clindamicina. En estafilococo resistente a meticilina se usa trimetoprim con sulfametoxazol o clindamicina. La lactancia debe continuar, ya que la leche no daña al bebé y suspenderla aumenta el riesgo de absceso.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de mastitis",
+        "Guía de Práctica Clínica de lactancia materna"
+      ]
+    },
+    {
+      "key": "gyo-06-puerperio-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "puerperium",
+      "subtopic": "mastitis",
+      "vignette": "Mujer de 30 años con mastitis tratada con dicloxacilina desde hace 5 días que persiste con fiebre y dolor. En la mama derecha se palpa una masa fluctuante de 3 cm con eritema. El ultrasonido muestra una colección hipoecoica.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Galactocele",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No da fiebre ni inflamación."
+        },
+        {
+          "key": "b",
+          "text": "Carcinoma inflamatorio de mama",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Debe considerarse si no responde, pero la colección orienta a absceso."
+        },
+        {
+          "key": "c",
+          "text": "Absceso mamario",
+          "correct": true,
+          "rationale": "Masa fluctuante con colección en el ultrasonido tras mastitis que no responde."
+        },
+        {
+          "key": "d",
+          "text": "Fibroadenoma",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es sólido e indoloro."
+        },
+        {
+          "key": "e",
+          "text": "Ingurgitación mamaria",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es bilateral sin colección."
+        },
+        {
+          "key": "f",
+          "text": "Leche acumulada que se va sola",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La colección infectada requiere drenaje."
+        },
+        {
+          "key": "g",
+          "text": "Necrosis grasa",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No da fiebre con colección fluctuante."
+        },
+        {
+          "key": "h",
+          "text": "Mastitis granulomatosa idiopática",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es menos frecuente en el puerperio."
+        },
+        {
+          "key": "i",
+          "text": "Quiste mamario simple",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No da fiebre."
+        },
+        {
+          "key": "j",
+          "text": "Mastitis sin complicaciones",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la masa fluctuante."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "El absceso mamario es una complicación de la mastitis, especialmente con tratamiento tardío o vaciamiento inadecuado. Se manifiesta como una masa dolorosa y fluctuante, con fiebre persistente pese a antibióticos. El ultrasonido confirma la colección. El tratamiento es el drenaje, preferentemente por aspiración con aguja guiada por ultrasonido, que puede repetirse, o incisión y drenaje en abscesos grandes o multiloculados, junto con antibióticos. Se envía cultivo del material. La lactancia puede continuar en la mama afectada si el sitio de drenaje no interfiere, y siempre en la contralateral.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de mastitis"
+      ]
+    },
+    {
+      "key": "gyo-06-puerperio-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "puerperium",
+      "subtopic": "mastitis",
+      "vignette": "Mujer de 26 años con mastitis en la segunda semana posparto. Tiene grietas en ambos pezones, espacia las tomas a cada 5 horas por recomendación familiar y usa sostén muy ajustado.",
+      "prompt": "¿Cuál es el factor de riesgo más importante en este caso?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Lactancia materna exclusiva",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es un factor de riesgo."
+        },
+        {
+          "key": "b",
+          "text": "Exponerse al aire frío",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No causa mastitis."
+        },
+        {
+          "key": "c",
+          "text": "Consumo de lácteos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "d",
+          "text": "Vaciamiento mamario inadecuado por tomas espaciadas con grietas en el pezón",
+          "correct": true,
+          "rationale": "La estasis de leche y la entrada de bacterias por grietas favorecen la mastitis."
+        },
+        {
+          "key": "e",
+          "text": "Edad menor de 30 años",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es un factor relevante."
+        },
+        {
+          "key": "f",
+          "text": "Primer hijo varón",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es relevante."
+        },
+        {
+          "key": "g",
+          "text": "Cesárea previa",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un factor principal."
+        },
+        {
+          "key": "h",
+          "text": "Tomar mucha agua",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "i",
+          "text": "Vacunación en el puerperio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No aumenta el riesgo."
+        },
+        {
+          "key": "j",
+          "text": "Bañarse a diario",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No aumenta el riesgo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "e"
+      ],
+      "explanation": "Los factores de riesgo de mastitis incluyen estasis de leche por tomas espaciadas o saltadas, mal agarre, vaciamiento incompleto, destete brusco, grietas y lesiones del pezón que permiten la entrada de bacterias, presión sobre la mama por ropa ajustada, sobreproducción de leche, fatiga y antecedente de mastitis. La prevención se basa en la lactancia a libre demanda, el agarre adecuado, el vaciamiento frecuente, el cuidado de los pezones y evitar la ropa compresiva. Ante los primeros síntomas se recomienda aumentar la frecuencia de las tomas y vaciar bien la mama afectada.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de mastitis",
+        "Guía de Práctica Clínica de lactancia materna"
+      ]
+    },
+    {
+      "key": "gyo-06-puerperio-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "puerperium",
+      "subtopic": "mastitis",
+      "vignette": "Mujer de 36 años sin lactancia actual que presenta enrojecimiento difuso, engrosamiento de la piel en piel de naranja, aumento de volumen y calor de la mama derecha de 6 semanas de evolución, sin fiebre. Recibió dos ciclos de antibióticos sin mejoría. Adenopatía axilar palpable.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Diagnosticar absceso crónico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay colección."
+        },
+        {
+          "key": "b",
+          "text": "Drenaje quirúrgico sin estudios",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay absceso y debe descartarse cáncer."
+        },
+        {
+          "key": "c",
+          "text": "Tomografía por emisión de positrones como primer estudio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Primero se requiere diagnóstico histológico."
+        },
+        {
+          "key": "d",
+          "text": "Compresas tibias y vigilancia por 3 meses",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Retrasa el diagnóstico."
+        },
+        {
+          "key": "e",
+          "text": "Realizar mastografía y ultrasonido con biopsia de la mama y de la piel para descartar carcinoma inflamatorio",
+          "correct": true,
+          "rationale": "Mastitis que no responde a antibióticos en una mujer que no amamanta es sospechosa de cáncer."
+        },
+        {
+          "key": "f",
+          "text": "Evitar la biopsia para no alarmar a la paciente",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El diagnóstico temprano cambia el pronóstico."
+        },
+        {
+          "key": "g",
+          "text": "Corticosteroides tópicos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No tratan la causa."
+        },
+        {
+          "key": "h",
+          "text": "Inflamación por el sostén",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El cuadro es sospechoso de cáncer."
+        },
+        {
+          "key": "i",
+          "text": "Antimicóticos orales",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es una infección por hongos."
+        },
+        {
+          "key": "j",
+          "text": "Un tercer ciclo de antibióticos más largo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Retrasa el diagnóstico de cáncer."
+        }
+      ],
+      "canonical": [
+        "b",
+        "d",
+        "e",
+        "j"
+      ],
+      "explanation": "El carcinoma inflamatorio de mama es una forma agresiva de cáncer que se manifiesta con eritema, edema, calor y piel de naranja en un tercio o más de la mama, de evolución rápida, por invasión de los linfáticos dérmicos por células tumorales. Puede confundirse con mastitis, pero no responde a antibióticos y suele presentarse en mujeres que no amamantan. Toda mastitis que no responde a 1 a 2 semanas de tratamiento o que ocurre fuera de la lactancia debe estudiarse con imagen y biopsia, incluida la piel. El tratamiento es quimioterapia neoadyuvante, mastectomía radical y radioterapia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de mama"
+      ]
+    },
+    {
+      "key": "gyo-06-puerperio-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "puerperium",
+      "subtopic": "mastitis",
+      "vignette": "Mujer de 24 años con 3 días de puerperio que amamanta. Pregunta cómo evitar las infecciones de mama que tuvo su hermana.",
+      "prompt": "¿Cuál es la medida de prevención más eficaz?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Espaciar las tomas para que la mama descanse",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Favorece la estasis."
+        },
+        {
+          "key": "b",
+          "text": "Lactancia a libre demanda con buen agarre y vaciamiento frecuente de ambas mamas",
+          "correct": true,
+          "rationale": "Evita la estasis de leche y las grietas."
+        },
+        {
+          "key": "c",
+          "text": "Suspender la lactancia a las 2 semanas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "d",
+          "text": "Lavar los pezones con jabón antes de cada toma",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Reseca la piel y favorece grietas."
+        },
+        {
+          "key": "e",
+          "text": "Antibióticos profilácticos durante la lactancia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No se recomiendan."
+        },
+        {
+          "key": "f",
+          "text": "Usar sostén muy ajustado para sostener la mama",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La compresión favorece la mastitis."
+        },
+        {
+          "key": "g",
+          "text": "Dar fórmula por las noches para descansar la mama",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Favorece la estasis nocturna."
+        },
+        {
+          "key": "h",
+          "text": "Aplicar alcohol en los pezones para desinfectar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Reseca y daña la piel."
+        },
+        {
+          "key": "i",
+          "text": "No enseñar la técnica porque es instintivo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La técnica adecuada previene complicaciones."
+        },
+        {
+          "key": "j",
+          "text": "Ultrasonido mamario semanal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No previene."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "e"
+      ],
+      "explanation": "La mejor prevención de la mastitis es una lactancia eficaz. Incluye amamantar a libre demanda, de 8 a 12 veces al día, asegurar un buen agarre con la boca bien abierta y gran parte de la areola, alternar las mamas y vaciarlas bien, evitar la ropa compresiva, cuidar los pezones aplicando leche materna y dejándolos secar al aire, y descansar. Ante congestión o un conducto obstruido se recomienda aumentar las tomas, masaje suave y extracción. La educación y el apoyo a la lactancia desde el nacimiento son fundamentales.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de lactancia materna"
+      ]
+    },
+    {
+      "key": "gyo-06-puerperio-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "puerperium",
+      "subtopic": "mastitis",
+      "vignette": "Mujer de 28 años con 6 semanas de puerperio que amamanta y refiere dolor punzante intenso en ambos pezones que se irradia hacia la mama durante y después de las tomas. Los pezones están brillantes y rosados. Su bebé tiene placas blancas en la boca que no se desprenden.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Candidiasis del pezón y candidiasis oral en el lactante",
+          "correct": true,
+          "rationale": "Dolor punzante con pezones brillantes y algodoncillo en el bebé."
+        },
+        {
+          "key": "b",
+          "text": "Congestión mamaria",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Ocurre en los primeros días."
+        },
+        {
+          "key": "c",
+          "text": "Dermatitis de contacto por crema",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el algodoncillo."
+        },
+        {
+          "key": "d",
+          "text": "Herpes del pezón",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Daría vesículas."
+        },
+        {
+          "key": "e",
+          "text": "Absceso mamario",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay masa."
+        },
+        {
+          "key": "f",
+          "text": "Fenómeno de Raynaud del pezón",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da palidez del pezón con el frío."
+        },
+        {
+          "key": "g",
+          "text": "Mal agarre sin infección",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica el algodoncillo del bebé."
+        },
+        {
+          "key": "h",
+          "text": "Leche ácida que lastima el pezón",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una infección por hongos."
+        },
+        {
+          "key": "i",
+          "text": "Enfermedad de Paget del pezón",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara en el puerperio y unilateral."
+        },
+        {
+          "key": "j",
+          "text": "Mastitis bacteriana bilateral",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay fiebre ni áreas eritematosas induradas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "La candidiasis del pezón se asocia a candidiasis oral del lactante, uso reciente de antibióticos, grietas y humedad persistente. Se manifiesta con dolor punzante o quemante intenso durante y después de las tomas que puede irradiarse a la mama, con pezones brillantes, rosados o descamados. El bebé puede tener placas blancas adherentes en la boca o dermatitis del pañal por Candida. Se trata a ambos al mismo tiempo, con antifúngico tópico como miconazol o nistatina en el pezón tras las tomas y nistatina oral o miconazol en gel para el bebé. La lactancia continúa.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de lactancia materna"
+      ]
+    },
+    {
+      "key": "gyo-06-puerperio-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "puerperium",
+      "subtopic": "mastitis",
+      "vignette": "Mujer de 32 años con 2 semanas de puerperio que decidió no amamantar por motivos personales. Presenta congestión mamaria dolorosa. Pregunta qué puede hacer para suprimir la lactancia.",
+      "prompt": "¿Cuál es el tratamiento de elección para suprimir la lactancia de forma segura?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Bromocriptina como primera opción",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se asocia a efectos adversos cardiovasculares graves."
+        },
+        {
+          "key": "b",
+          "text": "Extraer la leche frecuentemente para aliviar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Estimula más la producción."
+        },
+        {
+          "key": "c",
+          "text": "Presionarla para que amamante",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La decisión es de la mujer."
+        },
+        {
+          "key": "d",
+          "text": "Restricción de líquidos estricta",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es eficaz y deshidrata."
+        },
+        {
+          "key": "e",
+          "text": "Vendar el pecho muy apretado por días",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede causar dolor y mastitis."
+        },
+        {
+          "key": "f",
+          "text": "Antibióticos profilácticos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No suprimen la lactancia."
+        },
+        {
+          "key": "g",
+          "text": "Estrógenos a dosis altas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aumentan el riesgo de trombosis."
+        },
+        {
+          "key": "h",
+          "text": "Medidas físicas con sostén firme, compresas frías, analgésicos y evitar la estimulación del pezón, con cabergolina si se requiere fármaco",
+          "correct": true,
+          "rationale": "Son eficaces y seguras."
+        },
+        {
+          "key": "i",
+          "text": "Diuréticos para secar la leche",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No son eficaces."
+        },
+        {
+          "key": "j",
+          "text": "Cirugía de conductos galactóforos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "h"
+      ],
+      "explanation": "La supresión de la lactancia puede lograrse con medidas no farmacológicas, como usar un sostén firme y cómodo, evitar la estimulación del pezón y la extracción, aplicar compresas frías y usar analgésicos. La congestión suele ceder en una semana. Si se requiere un fármaco, la cabergolina, agonista dopaminérgico, en dosis única de 1 mg dentro de las primeras 24 horas posparto o 0.25 mg cada 12 horas por 2 días si ya inició la lactancia, es eficaz y mejor tolerada que la bromocriptina, que se asocia a hipertensión, infarto y evento vascular cerebral. Los estrógenos no se recomiendan.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de lactancia materna"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,303 @@
+@ ped|growth_development|developmental_milestones|2|data_interpretation
+V: Lactante de 6 meses en consulta de niño sano. Se sienta con apoyo de sus manos al frente, transfiere objetos de una mano a otra, balbucea con sílabas como ba y ma y voltea al escuchar su nombre. Aún no gatea.
+P: ¿Qué indica el desarrollo de este lactante?
++ Desarrollo normal para su edad || Sedestación con apoyo, transferencia de objetos y balbuceo son hitos de los 6 meses.
+- anchoring | Retraso motor grueso porque no gatea || El gateo suele aparecer entre los 8 y 10 meses.
+- availability_heuristic | Trastorno del espectro autista || Responde a su nombre y balbucea.
+- representativeness_heuristic | Hipoacusia || Voltea al escuchar su nombre.
+- premature_closure | Retraso global del desarrollo || Cumple los hitos esperados.
+- base_rate_fallacy | Parálisis cerebral leve || No hay alteraciones del tono ni asimetrías.
+- framing_effect | Desarrollo adelantado que requiere estimulación especial || Es el esperado.
+- inattentional_blindness | Retraso del lenguaje || El balbuceo silábico es normal a esta edad.
+- focusing_illusion | Hipotonía central || La sedestación con apoyo es adecuada.
+- belief_bias | Todos los bebés deben caminar a los 6 meses || La marcha aparece alrededor de los 12 meses.
+E: La vigilancia del desarrollo compara los logros del niño con los hitos esperados por edad en las áreas motora gruesa, motora fina, lenguaje y social. A los 6 meses se espera que se siente con apoyo, que ruede, que transfiera objetos entre manos, que balbucee sílabas y que responda a su nombre. El gateo aparece hacia los 8 a 10 meses, la sedestación sin apoyo hacia los 8, la marcha independiente entre los 12 y 15 meses y las primeras palabras con significado hacia el año. En México se usa la prueba de Evaluación del Desarrollo Infantil para detectar riesgo de retraso.
+R: Norma Oficial Mexicana para la atención a la salud del niño ;; Manual de la prueba de Evaluación del Desarrollo Infantil
+
+@ ped|growth_development|developmental_milestones|3|next_step
+V: Niño de 18 meses que no dice ninguna palabra con significado, no señala objetos para pedir ni para mostrar, mantiene poco contacto visual y no responde a su nombre. Juega alineando carritos. Su audición no ha sido evaluada.
+P: ¿Cuál es la conducta a seguir?
++ Aplicar una prueba de tamizaje de autismo, evaluar la audición y referir a evaluación especializada del desarrollo || Hay banderas rojas de lenguaje y comunicación social.
+- anchoring | Tranquilizar a la familia porque los varones hablan más tarde || Las banderas rojas no deben atribuirse al sexo.
+- availability_heuristic | Iniciar terapia de lenguaje sin más estudios || Primero debe descartarse hipoacusia y valorarse el desarrollo completo.
+- representativeness_heuristic | Solicitar electroencefalograma de rutina || No está indicado sin crisis.
+- premature_closure | Diagnosticar autismo en la consulta y cerrar el caso || El diagnóstico requiere evaluación especializada.
+- framing_effect | Reducir el tiempo de pantalla y revalorar en un año || Retrasa la intervención temprana.
+- complexity_bias | Solicitar resonancia magnética de cráneo de rutina || No es el primer paso.
+- status_quo_bias | Esperar a los 3 años para valorar el lenguaje || La intervención temprana mejora el pronóstico.
+- belief_bias | Atribuirlo a que es hijo único || No explica las banderas rojas.
+- omission_bias | No referir para evitar etiquetar al niño || La referencia oportuna beneficia al niño.
+E: La ausencia de palabras a los 16 meses, de frases de dos palabras a los 24 meses, de señalamiento a los 12 meses y cualquier pérdida de habilidades son banderas rojas que requieren evaluación. El poco contacto visual, la falta de respuesta al nombre y el juego repetitivo sugieren trastorno del espectro autista. Se recomienda aplicar una herramienta de tamizaje como el M CHAT R entre los 18 y 24 meses, evaluar siempre la audición y referir a evaluación especializada. La intervención temprana intensiva mejora la comunicación y la conducta, por lo que no debe esperarse a que el niño crezca.
+R: Guía de Práctica Clínica de diagnóstico y manejo de los trastornos del espectro autista ;; Manual de la prueba de Evaluación del Desarrollo Infantil
+
+@ ped|growth_development|developmental_milestones|3|data_interpretation
+V: Niño de 12 meses que en la exploración se pone de pie sosteniéndose de los muebles y da pasos laterales. Dice mamá y papá con significado, hace pinza fina con índice y pulgar y busca un objeto escondido bajo un pañal. Juega a decir adiós con la mano.
+P: ¿Qué indica el desarrollo de este niño?
++ Desarrollo normal para los 12 meses || Bipedestación con apoyo, pinza fina, dos palabras y permanencia del objeto son hitos esperados.
+- anchoring | Retraso motor porque aún no camina solo || La marcha independiente puede aparecer hasta los 15 meses.
+- availability_heuristic | Retraso del lenguaje || Dos palabras con significado son esperadas al año.
+- representativeness_heuristic | Trastorno del espectro autista || Tiene interacción social adecuada.
+- premature_closure | Hipotonía congénita || Logra la bipedestación.
+- base_rate_fallacy | Distrofia muscular de Duchenne || No hay datos de debilidad.
+- framing_effect | Retraso motor fino || La pinza fina está presente.
+- inattentional_blindness | Displasia de cadera || No hay datos de asimetría ni marcha anormal.
+- focusing_illusion | Desarrollo superior que sugiere superdotación || Corresponde a lo esperado.
+- belief_bias | Debe usar andadera para aprender a caminar || La andadera no ayuda y causa accidentes.
+E: Al año de edad se espera que el niño se ponga de pie con apoyo y camine sostenido de los muebles, que haga pinza fina, que diga una a tres palabras con significado, que imite gestos como decir adiós y que tenga permanencia del objeto. La marcha independiente aparece entre los 12 y 15 meses, y se considera bandera roja si no camina a los 18 meses. Las andaderas no aceleran la marcha y se asocian a caídas y lesiones, por lo que no se recomiendan. La vigilancia del desarrollo debe realizarse en cada consulta del niño sano.
+R: Norma Oficial Mexicana para la atención a la salud del niño ;; Manual de la prueba de Evaluación del Desarrollo Infantil
+
+@ ped|growth_development|developmental_milestones|2|data_interpretation
+V: Lactante de 4 meses. Al colocarlo boca abajo levanta la cabeza y el tórax apoyándose en los antebrazos. Sostiene la cabeza al jalarlo para sentarlo, se ríe a carcajadas y lleva las manos a la línea media. El reflejo de Moro ya es incompleto.
+P: ¿Qué indica la exploración neurológica de este lactante?
++ Desarrollo normal con desaparición esperada de los reflejos primitivos || El Moro desaparece entre los 4 y 6 meses.
+- anchoring | Lesión neurológica porque el Moro está incompleto || Su atenuación es esperada a esta edad.
+- availability_heuristic | Parálisis cerebral || El control cefálico es adecuado.
+- representativeness_heuristic | Hipotonía central || Levanta cabeza y tórax.
+- premature_closure | Retraso motor || Cumple los hitos de los 4 meses.
+- base_rate_fallacy | Atrofia muscular espinal || No hay debilidad ni arreflexia.
+- framing_effect | Hipertonía por manos en línea media || Llevar las manos a la línea media es normal.
+- inattentional_blindness | Lesión del plexo braquial || No hay asimetría.
+- focusing_illusion | Hipoacusia || No se describe falta de respuesta al sonido.
+- belief_bias | Los reflejos primitivos deben persistir todo el primer año || Su persistencia es anormal.
+E: Los reflejos primitivos están presentes al nacer y desaparecen conforme madura la corteza. El Moro desaparece entre los 4 y 6 meses, la prensión palmar hacia los 3 a 4 meses, la prensión plantar entre los 9 y 12 meses y el reflejo tónico asimétrico del cuello hacia los 4 a 6 meses. Su persistencia o asimetría sugiere lesión neurológica. A los 4 meses se espera control cefálico completo, apoyo en antebrazos en decúbito prono, risa a carcajadas, seguimiento visual de 180 grados y manos en la línea media. Un Moro asimétrico en el recién nacido orienta a fractura de clavícula o lesión del plexo braquial.
+R: Norma Oficial Mexicana para la atención a la salud del niño
+
+@ ped|growth_development|developmental_milestones|4|next_step
+V: Niña de 2 años que hasta los 18 meses decía varias palabras y caminaba bien. En los últimos 4 meses dejó de hablar, perdió el uso intencional de las manos y realiza movimientos de lavado de manos constantes. El perímetro cefálico ha dejado de crecer.
+P: ¿Cuál es la conducta a seguir?
++ Referir a neurología pediátrica para estudio genético dirigido por sospecha de síndrome de Rett || Regresión del desarrollo con estereotipias de manos y desaceleración del perímetro cefálico en una niña.
+- anchoring | Considerarlo autismo y referir solo a terapia conductual || La pérdida de uso de manos y la microcefalia adquirida sugieren otra causa.
+- availability_heuristic | Tranquilizar porque es una etapa normal || La regresión nunca es normal.
+- representativeness_heuristic | Solicitar solo estudio de audición || No explica la pérdida motora.
+- premature_closure | Diagnosticar parálisis cerebral || La parálisis cerebral no es regresiva.
+- framing_effect | Atribuirlo a celos por un hermano nuevo || No explica la microcefalia.
+- complexity_bias | Biopsia muscular como primer estudio || No es el abordaje inicial.
+- status_quo_bias | Revalorar en un año || Retrasa el diagnóstico.
+- belief_bias | Atribuirlo a vacunas || No hay relación causal.
+- omission_bias | No estudiar porque no tiene tratamiento curativo || El diagnóstico orienta el manejo y el consejo genético.
+E: La regresión del desarrollo, es decir la pérdida de habilidades ya adquiridas, siempre es una bandera roja y requiere evaluación neurológica. El síndrome de Rett afecta casi exclusivamente a niñas y se debe a mutaciones del gen MECP2 en el cromosoma X. Tras un desarrollo inicial aparentemente normal, entre los 6 y 18 meses aparecen pérdida del lenguaje y del uso intencional de las manos, estereotipias como lavado o retorcimiento de manos, alteraciones de la marcha, desaceleración del crecimiento del perímetro cefálico y crisis epilépticas. El diagnóstico es clínico y se confirma con estudio genético. El manejo es multidisciplinario.
+R: Guía de Práctica Clínica de detección oportuna de alteraciones del desarrollo en niños
+
+@ ped|growth_development|developmental_milestones|3|next_step
+V: Lactante de 9 meses sin control cefálico completo y que no se sienta. Tiene hipertonía de extremidades inferiores con reflejos aumentados y cruza las piernas en tijera al suspenderlo. Antecedente de prematurez de 30 semanas con hemorragia intraventricular.
+P: ¿Cuál es la conducta más apropiada?
++ Referir a rehabilitación e intervención temprana y a neurología pediátrica por sospecha de parálisis cerebral espástica || Retraso motor con espasticidad en un prematuro con lesión cerebral.
+- anchoring | Esperar porque los prematuros se atrasan por edad corregida || A los 9 meses, con 7 corregidos, ya debería tener control cefálico.
+- availability_heuristic | Iniciar solo suplementos vitamínicos || No tratan la lesión neurológica.
+- representativeness_heuristic | Solicitar estudio metabólico como único paso || Hay una causa probable conocida.
+- premature_closure | Atribuirlo a desnutrición || No explica la espasticidad.
+- framing_effect | Colocar andadera para fortalecer las piernas || No ayuda y puede empeorar el patrón.
+- complexity_bias | Cirugía ortopédica inmediata || No es el primer paso.
+- status_quo_bias | Revalorar a los 2 años || La intervención temprana es clave.
+- belief_bias | Masajes caseros como único tratamiento || No sustituyen la rehabilitación.
+- omission_bias | No referir hasta tener diagnóstico definitivo || La rehabilitación debe iniciarse con la sospecha.
+E: La parálisis cerebral es un trastorno permanente y no progresivo del movimiento y la postura por lesión del cerebro en desarrollo. La prematurez, la hemorragia intraventricular, la leucomalacia periventricular y la asfixia son factores de riesgo. En prematuros la edad corregida se usa hasta los 2 años, pero la falta de control cefálico a los 7 meses corregidos es anormal. La forma espástica es la más frecuente y la diplejía espástica es típica del prematuro. Las señales tempranas incluyen hipertonía, reflejos aumentados, postura en tijera y persistencia de reflejos primitivos. La intervención temprana y la rehabilitación deben iniciarse ante la sospecha.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la parálisis cerebral infantil
+
+@ ped|growth_development|developmental_milestones|2|data_interpretation
+V: Niño de 3 años que corre, sube escaleras alternando los pies y pedalea un triciclo. Dice frases de tres palabras, sabe su nombre, copia un círculo y juega con otros niños compartiendo juguetes. Sus padres preguntan si se desarrolla bien.
+P: ¿Qué indica el desarrollo de este niño?
++ Desarrollo normal para los 3 años || Triciclo, escaleras alternadas, frases de tres palabras y copia de círculo son hitos de esta edad.
+- anchoring | Retraso del lenguaje por no usar oraciones largas || Las frases de tres palabras son esperadas a los 3 años.
+- availability_heuristic | Trastorno por déficit de atención || Correr y jugar son normales a esta edad.
+- representativeness_heuristic | Retraso motor fino porque no copia un cuadrado || El cuadrado se copia hacia los 4 años.
+- premature_closure | Trastorno del espectro autista || Juega con otros y comparte.
+- base_rate_fallacy | Discapacidad intelectual leve || Cumple los hitos.
+- framing_effect | Desarrollo adelantado || Es el esperado.
+- inattentional_blindness | Hipoacusia leve || Su lenguaje es adecuado.
+- focusing_illusion | Torpeza motora || Pedalea y sube escaleras.
+- belief_bias | A los 3 años debe leer y escribir || Esos logros aparecen en edad escolar.
+E: A los 3 años se espera que el niño corra con estabilidad, suba escaleras alternando los pies, pedalee un triciclo, copie un círculo, diga frases de tres palabras, sepa su nombre y edad, y empiece a jugar de forma cooperativa. El lenguaje debe ser entendido por extraños en al menos 75%. A los 4 años copia una cruz o un cuadrado, salta en un pie y cuenta historias, y a los 5 copia un triángulo. Conocer estos hitos permite tranquilizar a la familia cuando el desarrollo es normal y detectar a tiempo las desviaciones.
+R: Norma Oficial Mexicana para la atención a la salud del niño
+
+@ ped|growth_development|child_malnutrition|3|diagnosis
+V: Niño de 2 años con edema bilateral con fosita en piernas y pies, abdomen prominente, cabello delgado, despigmentado y que se desprende con facilidad, y lesiones de piel descamativas en zonas de presión. Su dieta es principalmente atole y tortilla. Albúmina de 2.1 g/dL.
+P: ¿Cuál es el diagnóstico más probable?
++ Desnutrición grave tipo kwashiorkor || Edema, alteraciones de cabello y piel e hipoalbuminemia por dieta pobre en proteínas.
+- anchoring | Marasmo || Se ancla en la desnutrición, pero el marasmo no tiene edema.
+- availability_heuristic | Síndrome nefrótico || Da edema e hipoalbuminemia, pero no lesiones de piel ni de cabello por carencia.
+- representativeness_heuristic | Insuficiencia cardiaca || No explica las alteraciones de piel y cabello.
+- premature_closure | Hipotiroidismo || No explica el edema con hipoalbuminemia grave por dieta.
+- base_rate_fallacy | Enfermedad celiaca || Puede causar desnutrición, pero la dieta explica el cuadro.
+- framing_effect | Obesidad por dieta rica en carbohidratos || El abdomen prominente es por edema y hepatomegalia.
+- inattentional_blindness | Pelagra aislada || La dermatitis no explica el edema.
+- focusing_illusion | Cirrosis hepática || No hay antecedentes de hepatopatía.
+- belief_bias | Niño sano y robusto por su abdomen grande || El abdomen grande refleja desnutrición.
+E: La desnutrición grave se clasifica en marasmo, kwashiorkor y mixta. El kwashiorkor se debe a una dieta deficiente sobre todo en proteínas con aporte relativo de carbohidratos. Se caracteriza por edema bilateral con fosita, hipoalbuminemia, hígado graso con hepatomegalia, cabello delgado, despigmentado y quebradizo, dermatosis en placas descamativas, apatía e irritabilidad. El peso puede parecer conservado por el edema. El marasmo, en cambio, muestra emaciación grave sin edema, con pérdida de grasa y músculo. El tratamiento sigue fases de estabilización, con manejo de hipoglucemia, hipotermia, deshidratación e infección, y después de rehabilitación nutricional.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la desnutrición en menores de 5 años ;; Organización Mundial de la Salud. Manejo de la desnutrición grave
+
+@ ped|growth_development|child_malnutrition|3|initial_treatment
+V: Niña de 18 meses con desnutrición grave tipo marasmo que ingresa al hospital. Está hipotérmica, con glucosa capilar de 50 mg/dL y signos de infección respiratoria. No tiene edema.
+P: ¿Cuál es el tratamiento inicial prioritario?
++ Corregir la hipoglucemia y la hipotermia, iniciar antibióticos y alimentación cautelosa con fórmula de inicio || La fase de estabilización atiende primero lo que amenaza la vida.
+- premature_closure | Iniciar dieta hipercalórica rica en proteínas desde el primer día || Puede provocar síndrome de realimentación.
+- anchoring | Administrar hierro desde el ingreso || Se retrasa hasta la fase de rehabilitación.
+- availability_heuristic | Dar soluciones intravenosas en bolo rápido de rutina || Puede causar insuficiencia cardiaca.
+- representativeness_heuristic | Transfundir albúmina || No está indicada de rutina.
+- framing_effect | Diuréticos para eliminar líquido || No tiene edema y están contraindicados.
+- complexity_bias | Nutrición parenteral total como primera opción || Se prefiere la vía oral o por sonda.
+- status_quo_bias | Esperar el resultado de cultivos antes de antibióticos || La infección suele estar presente aunque no se manifieste.
+- belief_bias | Dar solo agua de arroz y té || No aporta los nutrientes necesarios.
+- omission_bias | No alimentar hasta corregir la infección || La alimentación cautelosa debe iniciar pronto.
+E: El manejo de la desnutrición grave sigue los diez pasos de la Organización Mundial de la Salud en dos fases. En la estabilización, de los días 1 a 7, se tratan o previenen hipoglucemia e hipotermia, se corrige la deshidratación con solución de rehidratación para desnutridos y con cautela, se corrigen electrolitos, se tratan infecciones con antibióticos de forma empírica, se corrigen micronutrientes sin hierro y se inicia alimentación cautelosa con fórmula F 75. En la rehabilitación se aumenta el aporte con F 100 para lograr crecimiento compensatorio y se agrega hierro. La realimentación rápida puede causar hipofosfatemia, insuficiencia cardiaca y muerte.
+R: Organización Mundial de la Salud. Manejo de la desnutrición grave ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la desnutrición en menores de 5 años
+
+@ ped|growth_development|child_malnutrition|4|complication_prognosis
+V: Niño de 3 años con desnutrición grave que al tercer día de rehabilitación nutricional con aumento rápido del aporte calórico presenta debilidad, dificultad respiratoria, edema y arritmia. Fósforo sérico de 1.2 mg/dL y potasio de 2.9 mEq/L.
+P: ¿Cuál es la complicación que presenta?
++ Síndrome de realimentación || Hipofosfatemia e hipopotasemia con falla cardiaca al aumentar rápido el aporte.
+- anchoring | Sepsis nosocomial || Puede coexistir, pero la hipofosfatemia orienta a realimentación.
+- availability_heuristic | Neumonía por aspiración || No explica los electrolitos.
+- representativeness_heuristic | Kwashiorkor tardío || No explica la arritmia con hipofosfatemia.
+- premature_closure | Insuficiencia renal aguda || No se describe elevación de azoados.
+- base_rate_fallacy | Miocarditis viral || Es menos probable en este contexto.
+- framing_effect | Alergia a la fórmula || No da hipofosfatemia.
+- inattentional_blindness | Hipoglucemia || No explica la hipofosfatemia.
+- focusing_illusion | Deshidratación || Hay edema.
+- belief_bias | Mejoría esperada por el aumento de peso || El edema no es ganancia real.
+E: El síndrome de realimentación ocurre al reintroducir de forma rápida la nutrición en pacientes con desnutrición grave. La insulina liberada por los carbohidratos introduce fósforo, potasio y magnesio a la célula, lo que produce hipofosfatemia, hipopotasemia e hipomagnesemia, además de retención de sodio y agua y deficiencia de tiamina. Las consecuencias incluyen debilidad, insuficiencia respiratoria, insuficiencia cardiaca, arritmias, edema y muerte. Se previene iniciando con aporte bajo, aumentándolo de forma gradual, vigilando electrolitos los primeros días y suplementando fósforo, potasio, magnesio y tiamina. Ante el síndrome se reduce el aporte y se corrigen los electrolitos.
+R: Organización Mundial de la Salud. Manejo de la desnutrición grave
+
+@ ped|growth_development|child_malnutrition|2|data_interpretation
+V: Niño de 4 años con peso para la talla en menos 1 desviación estándar y talla para la edad en menos 2.5 desviaciones estándar según las tablas de la Organización Mundial de la Salud. Vive en una comunidad rural con poca variedad de alimentos y ha tenido diarreas frecuentes.
+P: ¿Qué indica este resultado antropométrico?
++ Desnutrición crónica con talla baja y peso adecuado para su estatura || Talla para la edad menor de menos 2 desviaciones refleja desnutrición crónica.
+- anchoring | Desnutrición aguda grave || El peso para la talla está cerca de lo normal.
+- availability_heuristic | Estado nutricional normal || La talla baja indica desnutrición crónica.
+- representativeness_heuristic | Talla baja familiar sin relación nutricional || El contexto apoya la causa nutricional.
+- premature_closure | Obesidad || El peso para la talla no lo indica.
+- base_rate_fallacy | Deficiencia de hormona de crecimiento || Es rara y el contexto explica la talla.
+- framing_effect | Desnutrición aguda moderada || El peso para la talla no lo indica.
+- inattentional_blindness | Hipotiroidismo congénito || Se detecta por tamiz y daría otros datos.
+- focusing_illusion | Sobrepeso || No corresponde.
+- belief_bias | Será alto de adulto porque ya comerá mejor || La talla perdida difícilmente se recupera.
+E: Los indicadores antropométricos de la Organización Mundial de la Salud permiten clasificar la desnutrición. El peso para la talla bajo, o emaciación, indica desnutrición aguda. La talla para la edad baja, o desmedro, indica desnutrición crónica, por deficiencias prolongadas e infecciones repetidas. El peso para la edad es un indicador global que no distingue entre ambas. Se considera alteración un valor menor de menos 2 desviaciones estándar y grave menor de menos 3. La desnutrición crónica en los primeros mil días afecta el crecimiento y el desarrollo cognitivo, y es difícil de revertir, por lo que la prevención temprana es prioritaria.
+R: Organización Mundial de la Salud. Patrones de crecimiento infantil ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la desnutrición en menores de 5 años
+
+@ ped|growth_development|child_malnutrition|3|data_interpretation
+V: Niña de 2 años en una brigada de salud comunitaria. Su circunferencia media del brazo es de 11 cm y no tiene edema. Está alerta y come con apetito.
+P: ¿Qué indica esta medición del brazo?
++ Desnutrición aguda grave || Una circunferencia media del brazo menor de 11.5 cm en niños de 6 a 59 meses indica desnutrición aguda grave.
+- anchoring | Desnutrición aguda moderada || El punto de corte de moderada es de 11.5 a 12.5 cm.
+- availability_heuristic | Estado nutricional normal porque come con apetito || El apetito no descarta desnutrición grave.
+- representativeness_heuristic | Desnutrición crónica || La medición del brazo refleja desnutrición aguda.
+- premature_closure | Kwashiorkor || No tiene edema.
+- base_rate_fallacy | Medición poco confiable que debe ignorarse || Es un indicador validado.
+- framing_effect | Sobrepeso || Indica lo contrario.
+- inattentional_blindness | Riesgo de desnutrición solamente || Ya cumple criterio de grave.
+- focusing_illusion | Hipotrofia muscular por falta de ejercicio || Refleja la reserva de músculo y grasa.
+- belief_bias | Brazos delgados por constitución familiar || El punto de corte es independiente de la familia.
+E: La circunferencia media del brazo es una medición simple y útil en la comunidad para detectar desnutrición aguda en niños de 6 a 59 meses. Un valor menor de 11.5 cm indica desnutrición aguda grave, de 11.5 a 12.5 cm desnutrición aguda moderada y mayor de 12.5 cm normal. La desnutrición aguda grave también se define por peso para la talla menor de menos 3 desviaciones estándar o por edema bilateral. Los niños sin complicaciones y con apetito conservado pueden tratarse de forma ambulatoria con alimento terapéutico listo para consumir, mientras que los que tienen complicaciones o no comen requieren hospitalización.
+R: Organización Mundial de la Salud. Manejo de la desnutrición grave
+
+@ ped|growth_development|child_malnutrition|3|prevention_screening
+V: Lactante de 6 meses alimentado exclusivamente al seno materno, con crecimiento adecuado. La madre pregunta cómo iniciar la alimentación complementaria para prevenir la anemia y la desnutrición.
+P: ¿Cuál es la recomendación de prevención más adecuada a esta edad?
++ Iniciar alimentos complementarios ricos en hierro, como carnes, junto con la lactancia materna continua || A los 6 meses las reservas de hierro disminuyen y la leche no cubre todas las necesidades.
+- anchoring | Sustituir la leche materna por fórmula || La lactancia debe continuar hasta los 2 años o más.
+- availability_heuristic | Iniciar con jugos y caldos como primeros alimentos || Aportan pocos nutrientes.
+- representativeness_heuristic | Esperar hasta el año para dar carne || La carne aporta hierro y zinc desde los 6 meses.
+- premature_closure | Dar leche de vaca entera como bebida principal || No se recomienda antes del año.
+- framing_effect | Agregar azúcar y sal para mejorar el sabor || No se recomiendan.
+- complexity_bias | Suplementos multivitamínicos sin alimentos complementarios || No sustituyen una dieta adecuada.
+- status_quo_bias | Continuar solo con seno materno hasta el año || Aumenta el riesgo de deficiencias.
+- belief_bias | Evitar el huevo hasta los 2 años por alergia || Retrasarlo no previene la alergia.
+- omission_bias | No ofrecer alimentos nuevos para evitar alergias || Retrasar la introducción no la previene.
+E: La alimentación complementaria debe iniciar a los 6 meses, manteniendo la lactancia materna hasta los 2 años o más. A esta edad las reservas de hierro se agotan, por lo que deben ofrecerse alimentos ricos en hierro y zinc, como carnes, hígado, leguminosas y cereales fortificados. Se introducen alimentos en consistencia de puré, avanzando a picados y trozos, con variedad de frutas, verduras y proteínas. No se recomienda agregar sal ni azúcar, ni dar leche de vaca entera antes del año. Retrasar alimentos potencialmente alergénicos como huevo o cacahuate no previene la alergia. En México se recomienda suplementar hierro en grupos de riesgo.
+R: Norma Oficial Mexicana promoción y educación para la salud en materia alimentaria ;; Guía de Práctica Clínica de alimentación complementaria
+
+@ ped|growth_development|child_malnutrition|4|complication_prognosis
+V: Niño de 3 años con antecedente de desnutrición crónica desde el primer año de vida y diarrea persistente. En la evaluación muestra talla baja y retraso en el lenguaje y en las habilidades cognitivas respecto a sus pares.
+P: ¿Cuál es la secuela más importante de la desnutrición en los primeros mil días?
++ Daño irreversible en el crecimiento lineal y en el desarrollo cognitivo || El cerebro y el crecimiento son más vulnerables desde la concepción hasta los 2 años.
+- anchoring | Obesidad inmediata en la infancia || Puede aparecer después, pero no es la secuela principal.
+- availability_heuristic | Caries dental || No es la secuela más importante.
+- representativeness_heuristic | Talla baja que siempre se recupera por completo || La recuperación suele ser parcial.
+- premature_closure | Solo bajo peso transitorio || Las secuelas son duraderas.
+- base_rate_fallacy | Diabetes tipo 1 || No se relaciona.
+- framing_effect | Miopía || No es la secuela característica.
+- inattentional_blindness | Hipertensión arterial inmediata || Es un riesgo a largo plazo, no la secuela principal.
+- focusing_illusion | Asma || No se relaciona.
+- belief_bias | Ninguna secuela si el niño come bien después || Las secuelas pueden ser permanentes.
+E: Los primeros mil días, desde la concepción hasta los 2 años, son una ventana crítica para el crecimiento y el desarrollo cerebral. La desnutrición en este periodo produce talla baja difícil de recuperar, menor desarrollo cognitivo, peor rendimiento escolar, menor productividad en la vida adulta y mayor riesgo de enfermedades crónicas como obesidad, diabetes e hipertensión si después hay exceso de calorías. Las infecciones repetidas, sobre todo diarreicas, empeoran la absorción y el crecimiento. Por ello, la prevención incluye nutrición materna adecuada, lactancia materna, alimentación complementaria correcta, agua segura, higiene, vacunación y vigilancia del crecimiento.
+R: Organización Mundial de la Salud. Patrones de crecimiento infantil ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la desnutrición en menores de 5 años
+
+@ ped|growth_development|breastfeeding|2|prevention_screening
+V: Mujer puérpera de 24 horas con su primer hijo sano de término. Pregunta durante cuánto tiempo debe dar solo seno materno.
+P: ¿Cuál es la recomendación de prevención en salud infantil sobre la lactancia?
++ Lactancia materna exclusiva durante los primeros 6 meses y continuarla con alimentos complementarios hasta los 2 años o más || Es la recomendación de la Organización Mundial de la Salud.
+- anchoring | Lactancia exclusiva solo el primer mes || Es insuficiente.
+- availability_heuristic | Complementar con agua y té desde el nacimiento || Desplaza la leche y aumenta el riesgo de infección.
+- representativeness_heuristic | Lactancia exclusiva hasta el año || A los 6 meses deben iniciarse alimentos.
+- premature_closure | Cambiar a fórmula a los 3 meses || No hay beneficio.
+- framing_effect | Suspender la lactancia al iniciar alimentos || Debe continuar.
+- complexity_bias | Fórmula especial para todos los recién nacidos || La leche materna es el alimento ideal.
+- status_quo_bias | Seguir la costumbre familiar de dar atole || No se recomienda.
+- belief_bias | La leche de la madre primeriza es insuficiente || La mayoría produce leche suficiente.
+- omission_bias | No dar el calostro por ser amarillo || El calostro es muy valioso.
+E: La Organización Mundial de la Salud recomienda iniciar la lactancia en la primera hora de vida, mantenerla exclusiva durante 6 meses, sin agua, tés ni otros líquidos, y continuarla con alimentación complementaria hasta los 2 años o más. La leche materna reduce el riesgo de diarrea, infecciones respiratorias, otitis, muerte súbita, obesidad y diabetes, y en la madre disminuye el riesgo de cáncer de mama y ovario. El calostro es rico en inmunoglobulina A y factores protectores. La lactancia a libre demanda, el alojamiento conjunto y el apoyo a la técnica son claves para lograrla.
+R: Organización Mundial de la Salud. Lactancia materna ;; Guía de Práctica Clínica de lactancia materna
+
+@ ped|growth_development|breastfeeding|3|next_step
+V: Mujer de 26 años con 10 días de puerperio que tiene grietas y dolor intenso en ambos pezones al amamantar. El bebé gana peso adecuadamente. Al observar la toma, el bebé toma solo el pezón y tiene los labios hacia dentro.
+P: ¿Cuál es la conducta a seguir?
++ Corregir la posición y el agarre para que el bebé tome gran parte de la areola con los labios evertidos || El mal agarre es la causa más común de grietas.
+- anchoring | Suspender la lactancia y dar fórmula || No es necesario.
+- availability_heuristic | Iniciar antibiótico oral || No hay datos de infección.
+- representativeness_heuristic | Usar pezoneras de forma permanente || No corrigen la causa.
+- premature_closure | Aplicar alcohol en los pezones || Reseca y empeora las grietas.
+- framing_effect | Espaciar las tomas a cada 4 horas || Favorece congestión.
+- complexity_bias | Solicitar ultrasonido mamario || No está indicado.
+- status_quo_bias | Continuar igual porque el dolor es normal || El dolor persistente indica un problema corregible.
+- belief_bias | Lavar los pezones con jabón antes de cada toma || Reseca la piel.
+- omission_bias | No intervenir porque el bebé gana peso || El dolor puede llevar a abandonar la lactancia.
+E: El dolor y las grietas del pezón suelen deberse a un mal agarre. Un buen agarre se reconoce por boca bien abierta, labios evertidos, mentón tocando el pecho, más areola visible arriba que abajo y succión lenta y profunda. Corregir la posición resuelve la mayoría de los casos. Se recomienda aplicar unas gotas de leche en el pezón después de la toma, dejarlo secar al aire y no usar jabón ni alcohol. También deben revisarse anquiloglosia y candidiasis. Suspender la lactancia no es necesario y aumenta el riesgo de congestión y mastitis.
+R: Guía de Práctica Clínica de lactancia materna
+
+@ ped|growth_development|breastfeeding|3|data_interpretation
+V: Mujer de 30 años que amamanta y toma un medicamento. Pregunta si debe dejar de dar seno. Su madre le dice que la lactancia está contraindicada en cualquier enfermedad materna.
+P: ¿Cuál de las siguientes es una contraindicación real de la lactancia materna en México?
++ Infección materna por virus de la inmunodeficiencia humana cuando hay acceso a sucedáneos seguros || Es una contraindicación cuando la alimentación de reemplazo es aceptable, factible y segura.
+- anchoring | Mastitis materna || No contraindica la lactancia y vaciar el pecho ayuda.
+- availability_heuristic | Resfriado común de la madre || La leche aporta anticuerpos.
+- representativeness_heuristic | Hepatitis B materna con vacuna e inmunoglobulina al bebé || Puede amamantar.
+- premature_closure | Ictericia neonatal || No contraindica la lactancia.
+- framing_effect | Madre con diabetes tipo 2 en tratamiento con metformina || Es compatible.
+- complexity_bias | Uso de paracetamol materno || Es compatible.
+- base_rate_fallacy | Madre con hipotiroidismo tratado con levotiroxina || Es compatible.
+- belief_bias | Cualquier enfermedad de la madre || La mayoría son compatibles con la lactancia.
+- omission_bias | Toma de vacunas maternas || Son compatibles.
+E: Las contraindicaciones reales de la lactancia son pocas. Incluyen galactosemia clásica en el bebé, infección materna por virus de la inmunodeficiencia humana cuando hay alternativa segura, virus linfotrópico de células T humanas, tuberculosis activa no tratada hasta que la madre deje de ser contagiosa, lesiones de herpes en el pecho del lado afectado, uso de drogas ilícitas y algunos fármacos como quimioterapia o radiofármacos. La mastitis, los resfriados, la hepatitis B con profilaxis al bebé y la mayoría de los medicamentos son compatibles. Ante dudas sobre fármacos se recomienda consultar fuentes especializadas en lugar de suspender la lactancia.
+R: Guía de Práctica Clínica de lactancia materna ;; Organización Mundial de la Salud. Lactancia materna
+
+@ ped|growth_development|breastfeeding|2|mechanism
+V: Mujer puérpera que nota que al amamantar a su bebé siente contracciones uterinas y la leche sale con fuerza, incluso del pecho contrario. Pregunta qué hormona produce ese efecto.
+P: ¿Cuál es el mecanismo del reflejo de eyección de la leche?
++ La succión estimula la liberación de oxitocina por la neurohipófisis, que contrae las células mioepiteliales de los alveolos || La oxitocina causa eyección y contracciones uterinas.
+- anchoring | La prolactina contrae los conductos galactóforos || La prolactina estimula la producción, no la eyección.
+- availability_heuristic | Los estrógenos liberan la leche || Sus niveles bajan tras el parto.
+- representativeness_heuristic | La progesterona estimula la salida de leche || Su descenso permite iniciar la lactancia.
+- premature_closure | El cortisol produce las contracciones || No es su función.
+- base_rate_fallacy | La hormona de crecimiento contrae el útero || No participa.
+- framing_effect | La adrenalina favorece la eyección || El estrés la inhibe.
+- inattentional_blindness | La dopamina causa la eyección || La dopamina inhibe la prolactina.
+- focusing_illusion | La insulina libera la leche || No participa.
+- belief_bias | Se debe a que la madre toma mucha agua || La hidratación no causa el reflejo.
+E: La lactancia depende de dos hormonas. La prolactina, secretada por la adenohipófisis, estimula la síntesis de leche en los alveolos, y su liberación aumenta con la succión frecuente. La oxitocina, secretada por la neurohipófisis en respuesta a la succión, al llanto o a pensar en el bebé, contrae las células mioepiteliales y produce la eyección de la leche. La oxitocina también contrae el útero y favorece su involución. El estrés, el dolor y la ansiedad pueden inhibir el reflejo de eyección. La caída de la progesterona tras la expulsión de la placenta permite que la prolactina inicie la producción abundante de leche.
+R: Guía de Práctica Clínica de lactancia materna
+
+@ ped|growth_development|breastfeeding|3|diagnosis
+V: Lactante de 3 semanas con escasa ganancia de peso, tomas largas y frecuentes y la madre refiere dolor y grietas en el pezón. A la exploración el bebé no puede sacar la lengua más allá de la encía, la punta de la lengua tiene forma de corazón y el frenillo es corto y grueso.
+P: ¿Cuál es el diagnóstico más probable de la dificultad para amamantar?
++ Anquiloglosia || El frenillo corto limita el movimiento de la lengua y dificulta el agarre.
+- anchoring | Hipogalactia materna || Se ancla en la poca ganancia, pero el problema está en la lengua del bebé.
+- availability_heuristic | Candidiasis oral || Da placas blancas, no frenillo corto.
+- representativeness_heuristic | Paladar hendido || No se describe defecto del paladar.
+- premature_closure | Reflujo gastroesofágico || No explica las alteraciones de la lengua.
+- base_rate_fallacy | Macroglosia por hipotiroidismo || La lengua no es grande sino restringida.
+- framing_effect | Cólico del lactante || No explica el problema mecánico.
+- inattentional_blindness | Estenosis hipertrófica de píloro || Daría vómito en proyectil.
+- focusing_illusion | Mastitis materna || El problema primario es del bebé.
+- belief_bias | Bebé flojo que no quiere comer || Hay una causa anatómica.
+E: La anquiloglosia es un frenillo lingual corto o engrosado que limita la movilidad de la lengua. Puede dificultar el agarre y la succión, lo que causa dolor y grietas en la madre, tomas prolongadas, ingesta insuficiente y poca ganancia de peso. En la exploración la lengua no se eleva ni sale más allá de la encía y puede tener forma de corazón al intentar sacarla. No todos los frenillos cortos causan problemas, por lo que la decisión de tratar se basa en la dificultad funcional. La frenotomía es un procedimiento sencillo y eficaz cuando la lactancia está comprometida, acompañado de apoyo en la técnica.
+R: Guía de Práctica Clínica de lactancia materna

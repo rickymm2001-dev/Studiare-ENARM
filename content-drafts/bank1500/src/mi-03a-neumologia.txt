@@ -1,0 +1,159 @@
+@ mi|pulmonology|asthma_adult|2|confirmatory_study
+V: Mujer de 26 años con episodios de sibilancias, tos nocturna y disnea que empeoran con el polvo y el ejercicio desde hace un año. Exploración normal en este momento.
+P: ¿Cuál es el estudio de elección para confirmar el diagnóstico de asma?
++ Espirometría con prueba broncodilatadora || Demuestra obstrucción reversible con aumento del FEV1 de 12% y 200 mL o más.
+- availability_heuristic | Radiografía de tórax || Suele ser normal y no confirma asma.
+- anchoring | Biometría hemática con eosinófilos || Se ancla en la alergia, pero no confirma el diagnóstico.
+- complexity_bias | Tomografía de alta resolución de tórax || No es necesaria para diagnosticar asma.
+- representativeness_heuristic | Pruebas cutáneas de alergia || Identifican sensibilización, no asma.
+- framing_effect | Oximetría de pulso en reposo || Medir oxígeno suena útil, pero suele ser normal.
+- premature_closure | Prueba terapéutica con antibiótico || Trata una infección inexistente.
+- information_bias | Gasometría arterial || No aporta al diagnóstico en una paciente estable.
+- belief_bias | Medición de IgE total como prueba definitiva || Cree que la IgE confirma asma.
+- base_rate_fallacy | Ecocardiograma para descartar insuficiencia cardiaca || No considera la baja probabilidad en una mujer joven.
+E: El diagnóstico de asma se basa en síntomas respiratorios variables, como sibilancias, disnea, opresión torácica y tos, más la demostración de limitación variable del flujo aéreo. La espirometría con prueba broncodilatadora es el estudio de elección. Un aumento del FEV1 de al menos 12% y 200 mL tras el broncodilatador confirma la reversibilidad. Si la espirometría es normal, se puede documentar variabilidad con flujometría seriada o una prueba de reto bronquial con metacolina. La radiografía de tórax suele ser normal y se usa para descartar otras causas. Las pruebas de alergia orientan desencadenantes pero no confirman asma.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años
+
+@ mi|pulmonology|asthma_adult|3|treatment_of_choice
+V: Hombre de 30 años con asma que usa salbutamol a demanda. Tiene síntomas diurnos tres veces por semana y despierta por tos una vez a la semana. Espirometría con FEV1 de 82%.
+P: ¿Cuál es el tratamiento de elección para controlar su asma?
++ Corticosteroide inhalado a dosis baja con formoterol, como tratamiento de mantenimiento o a demanda || El asma no controlada requiere corticosteroide inhalado.
+- anchoring | Continuar solo salbutamol a demanda || Se ancla en el rescate, que no controla la inflamación.
+- availability_heuristic | Montelukast como monoterapia de elección || Es menos eficaz que el corticosteroide inhalado.
+- complexity_bias | Corticosteroide oral diario || Tiene efectos adversos y no es el control habitual.
+- representativeness_heuristic | Teofilina oral || Es poco eficaz y tóxica.
+- framing_effect | Salmeterol solo para un control prolongado || Suena a control, pero el broncodilatador de acción larga sin corticosteroide aumenta riesgo de muerte.
+- status_quo_bias | Mismo tratamiento y revalorar en un año || Mantiene un asma no controlada.
+- premature_closure | Omalizumab de inicio || Es para asma grave no controlada.
+- belief_bias | Antibiótico profiláctico mensual || Cree que el asma es infecciosa.
+- omission_bias | Evitar esteroides inhalados por miedo a efectos adversos || Sobreestima efectos que a dosis baja son mínimos.
+E: El asma es una enfermedad inflamatoria crónica, y los corticosteroides inhalados son la base de su control porque reducen síntomas, exacerbaciones y mortalidad. Las recomendaciones actuales desaconsejan tratar con salbutamol solo. En adultos y adolescentes se prefiere el esquema con dosis baja de budesonida con formoterol, que puede usarse a demanda en asma leve o como mantenimiento y rescate en escalones superiores. Un broncodilatador de acción larga nunca debe usarse sin corticosteroide inhalado. Antes de escalar el tratamiento se revisa la técnica inhalatoria, el apego, la exposición a desencadenantes y las comorbilidades, como rinitis y reflujo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años
+
+@ mi|pulmonology|asthma_adult|4|next_step
+V: Mujer de 24 años con asma que llega con disnea intensa. Habla solo palabras sueltas, está somnolienta, frecuencia respiratoria de 34 rpm y saturación de 86%. A la auscultación el tórax está silencioso.
+P: ¿Cuál es la conducta a seguir?
++ Oxígeno, salbutamol con ipratropio nebulizados continuos, corticosteroide sistémico y preparar intubación por riesgo de paro respiratorio || Es una crisis asmática que amenaza la vida.
+- anchoring | Dar salbutamol inhalado y egresar si mejora || Se ancla en el tratamiento de la crisis leve.
+- framing_effect | Tranquilizarla con una benzodiacepina || Calmar la ansiedad suena humano, pero deprime la respiración.
+- availability_heuristic | Antibiótico intravenoso de amplio espectro como primer paso || No hay datos de infección y retrasa el tratamiento.
+- premature_closure | Esperar gasometría antes de cualquier tratamiento || Retrasa medidas urgentes.
+- representativeness_heuristic | Adrenalina intramuscular como en anafilaxia || Se reserva para anafilaxia, aunque puede usarse en casos excepcionales.
+- status_quo_bias | Aumentar la dosis de su corticosteroide inhalado y citar mañana || Mantiene el manejo ambulatorio ante una crisis grave.
+- complexity_bias | Broncoscopia urgente || Es invasiva e innecesaria.
+- belief_bias | Mucolítico nebulizado para aflojar flemas || Cree que el problema es la flema.
+- inattentional_blindness | Interpretar el tórax silencioso como mejoría || No reconoce un signo de gravedad extrema.
+E: Una crisis asmática con riesgo vital se reconoce por somnolencia o confusión, tórax silencioso, cianosis, bradicardia, agotamiento, saturación menor de 90% o hipercapnia. El tórax silencioso indica que casi no entra aire y no es mejoría. El tratamiento debe ser inmediato e incluye oxígeno para saturación de 93 a 95%, salbutamol nebulizado repetido o continuo con bromuro de ipratropio, corticosteroide sistémico temprano, y sulfato de magnesio intravenoso en casos graves. Se debe preparar el manejo avanzado de la vía aérea y valorar ingreso a terapia intensiva. Los sedantes están contraindicados.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años
+
+@ mi|pulmonology|asthma_adult|3|risk_factor
+V: Hombre de 45 años con asma de inicio en la edad adulta, pólipos nasales y anosmia. Cada vez que toma ibuprofeno presenta broncoespasmo grave.
+P: ¿Cuál es el factor desencadenante característico de su cuadro?
++ Antiinflamatorios no esteroideos inhibidores de la ciclooxigenasa 1 || Corresponde a enfermedad respiratoria exacerbada por AINE.
+- availability_heuristic | Ácaros del polvo || Son desencadenantes comunes, pero no explican la relación con el ibuprofeno.
+- anchoring | Reflujo gastroesofágico || Se ancla en una comorbilidad frecuente sin relación con los AINE.
+- representativeness_heuristic | Infección por Aspergillus || Se asocia a asma, pero no a la tríada con pólipos y AINE.
+- premature_closure | Alergia a la penicilina || Concluye otra alergia farmacológica sin relación.
+- base_rate_fallacy | Fibrosis quística || Es rara en esta edad sin otros datos.
+- framing_effect | Paracetamol a dosis bajas || Suena a analgésico similar, pero suele tolerarse.
+- inattentional_blindness | Ejercicio intenso || No considera la relación con el fármaco.
+- focusing_illusion | Contaminación ambiental || Se centra en un factor general.
+- belief_bias | Lácteos en la dieta || Cree que los lácteos producen moco y asma.
+E: La enfermedad respiratoria exacerbada por antiinflamatorios no esteroideos, antes llamada tríada de Samter, se caracteriza por asma de inicio en la edad adulta, rinosinusitis crónica con pólipos nasales y reacciones respiratorias tras tomar ácido acetilsalicílico u otros AINE que inhiben la ciclooxigenasa 1. La inhibición de esta enzima desvía el metabolismo del ácido araquidónico hacia la producción de leucotrienos, que provocan broncoespasmo. El manejo incluye evitar estos fármacos, usar paracetamol a dosis moderadas o inhibidores selectivos de la ciclooxigenasa 2 con precaución, antileucotrienos, corticosteroides inhalados y tratamiento de los pólipos. La desensibilización con aspirina es una opción especializada.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años
+
+@ mi|pulmonology|asthma_adult|3|initial_treatment
+V: Mujer de 32 años con asma que acude a urgencias con una crisis moderada. Habla en frases, frecuencia respiratoria de 24 rpm, saturación de 93% y sibilancias espiratorias difusas.
+P: Todas las siguientes son medidas del tratamiento inicial de la crisis asmática moderada, EXCEPTO:
++ Aminofilina intravenosa como tratamiento de primera línea || Tiene poco beneficio y muchos efectos adversos.
+- inattentional_blindness | Salbutamol inhalado con espaciador o nebulizado repetido || Es verdadero. Es la base del tratamiento.
+- framing_effect | Corticosteroide sistémico oral temprano || Es verdadero. Reduce recaídas y hospitalizaciones.
+- anchoring | Oxígeno para mantener saturación de 93 a 95% || Es verdadero. Se indica si hay hipoxemia.
+- availability_heuristic | Bromuro de ipratropio asociado al salbutamol || Es verdadero. Útil en crisis moderadas a graves.
+- representativeness_heuristic | Revalorar respuesta clínica y flujo espiratorio en una hora || Es verdadero. Guía la decisión de egreso o ingreso.
+- belief_bias | Revisar técnica inhalatoria antes del egreso || Es verdadero. Forma parte del plan de alta.
+- confirmation_bias | Iniciar o aumentar corticosteroide inhalado al egreso || Es verdadero. Previene nuevas crisis.
+- status_quo_bias | Dar un plan de acción escrito al alta || Es verdadero. Mejora el automanejo.
+- focusing_illusion | Programar seguimiento en una semana || Es verdadero. Reduce recaídas.
+E: En la crisis asmática moderada el tratamiento inicial consiste en salbutamol inhalado con espaciador o nebulizado, repetido cada 20 minutos durante la primera hora, oxígeno para mantener saturación de 93 a 95%, corticosteroide sistémico oral en la primera hora y bromuro de ipratropio en crisis moderadas a graves. Se revalora la respuesta clínica y el flujo espiratorio. Al egreso se inicia o intensifica el corticosteroide inhalado, se revisa la técnica, se entrega un plan de acción escrito y se programa seguimiento. Las metilxantinas como la aminofilina no se recomiendan de rutina por su escaso beneficio y su toxicidad.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años
+
+@ mi|pulmonology|copd|2|confirmatory_study
+V: Hombre de 62 años con tabaquismo de 40 paquetes año. Refiere tos productiva matutina de varios años y disnea progresiva de esfuerzo.
+P: ¿Cuál es el estudio que confirma el diagnóstico de EPOC?
++ Espirometría con relación FEV1 sobre FVC menor de 0.70 después del broncodilatador || Demuestra obstrucción persistente al flujo aéreo.
+- availability_heuristic | Radiografía de tórax con hiperinsuflación || Sugiere, pero no confirma.
+- anchoring | Gasometría arterial con hipercapnia || Se ancla en la gravedad, no en el diagnóstico.
+- complexity_bias | Tomografía de tórax de alta resolución || Muestra enfisema, pero no es el estándar diagnóstico.
+- representativeness_heuristic | Prueba de difusión de monóxido de carbono como único estudio || Complementa, no confirma la obstrucción.
+- framing_effect | Oximetría de pulso menor de 90% || Medir oxígeno suena útil, pero no diagnostica.
+- premature_closure | Diagnóstico clínico por tabaquismo y tos || Cierra el diagnóstico sin demostrar obstrucción.
+- information_bias | Cultivo de esputo || No diagnostica EPOC.
+- belief_bias | Espirometría con mejoría completa tras el broncodilatador || La reversibilidad completa sugiere asma.
+- base_rate_fallacy | Medir alfa 1 antitripsina en todos como prueba confirmatoria || Se mide en casos seleccionados.
+E: La enfermedad pulmonar obstructiva crónica se sospecha en mayores de 40 años con exposición a tabaco, humo de leña u otros factores, y síntomas como disnea, tos crónica o expectoración. El diagnóstico se confirma con espirometría que muestra una relación FEV1 sobre FVC menor de 0.70 después del broncodilatador, lo que indica limitación persistente al flujo aéreo. El FEV1 posbroncodilatador clasifica la gravedad de la obstrucción. La radiografía y la tomografía apoyan y descartan otros diagnósticos. En México la exposición a humo de leña es una causa importante, sobre todo en mujeres de zonas rurales.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad pulmonar obstructiva crónica
+
+@ mi|pulmonology|copd|3|treatment_of_choice
+V: Hombre de 68 años con EPOC, disnea de grado 2 en la escala mMRC y una exacerbación en el último año sin hospitalización. FEV1 de 58%.
+P: ¿Cuál es el tratamiento de mantenimiento de elección inicial?
++ Broncodilatador de acción prolongada, de preferencia combinación de LAMA con LABA || La doble broncodilatación mejora síntomas y reduce exacerbaciones.
+- anchoring | Corticosteroide inhalado como monoterapia || Se ancla en el esquema del asma, pero en EPOC no se usa solo.
+- availability_heuristic | Salbutamol a demanda como único tratamiento || Es solo de rescate.
+- complexity_bias | Triple terapia desde el inicio en todos || Se reserva para exacerbaciones frecuentes con eosinófilos altos.
+- representativeness_heuristic | Teofilina como primera línea || Es poco eficaz y tóxica.
+- framing_effect | Corticosteroide oral crónico para controlar la inflamación || Suena antiinflamatorio, pero tiene efectos adversos graves.
+- status_quo_bias | Sin tratamiento de mantenimiento por ser moderado || Deja síntomas sin control.
+- premature_closure | Oxígeno domiciliario sin evaluar hipoxemia || Indica oxígeno sin criterios.
+- belief_bias | Antibiótico profiláctico continuo para todos || Cree que todo paciente lo necesita.
+- omission_bias | Evitar inhaladores por miedo a la taquicardia || Teme efectos poco frecuentes.
+E: El tratamiento farmacológico de la EPOC estable se basa en broncodilatadores de acción prolongada. Los antagonistas muscarínicos de acción prolongada, como tiotropio, y los agonistas beta 2 de acción prolongada, como formoterol o indacaterol, mejoran la función pulmonar, los síntomas y reducen exacerbaciones. En pacientes sintomáticos se prefiere iniciar con la combinación de ambos. Los corticosteroides inhalados se agregan solo en pacientes con exacerbaciones frecuentes y eosinófilos de 300 o más por microlitro, porque aumentan el riesgo de neumonía. Además se indica dejar de fumar, vacunación, rehabilitación pulmonar y revisar la técnica inhalatoria.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad pulmonar obstructiva crónica
+
+@ mi|pulmonology|copd|3|treatment_of_choice
+V: Mujer de 70 años con EPOC por humo de leña. En reposo y estable, la gasometría al aire ambiente muestra PaO2 de 52 mmHg. Hematocrito normal.
+P: ¿Cuál es la intervención que ha demostrado aumentar la supervivencia en esta paciente?
++ Oxígeno domiciliario continuo por al menos 15 horas al día || Con PaO2 menor o igual a 55 mmHg reduce la mortalidad.
+- availability_heuristic | Broncodilatadores de acción prolongada || Mejoran síntomas, pero no han demostrado aumentar la supervivencia de la misma forma.
+- anchoring | Corticosteroide inhalado a dosis alta || Se ancla en la inflamación sin beneficio en supervivencia.
+- representativeness_heuristic | Oxígeno solo durante la noche || Menos horas no logran el beneficio.
+- framing_effect | Oxígeno a demanda cuando sienta falta de aire || Suena práctico, pero no reduce mortalidad.
+- complexity_bias | Cirugía de reducción de volumen pulmonar en todos || Es para casos muy seleccionados.
+- premature_closure | Mucolíticos diarios || No aumentan la supervivencia.
+- belief_bias | Ventilación mecánica invasiva programada || Cree que más soporte es mejor.
+- status_quo_bias | Continuar solo con inhaladores || Omite la medida que salva vidas.
+- omission_bias | Evitar oxígeno por miedo a retener CO2 || El temor no justifica negar un tratamiento indicado.
+E: En la EPOC con hipoxemia crónica grave en reposo, el oxígeno domiciliario continuo es una de las pocas intervenciones, junto con dejar de fumar, que aumentan la supervivencia. Está indicado con PaO2 menor o igual a 55 mmHg o saturación menor o igual a 88%, o con PaO2 de 56 a 59 mmHg si hay cor pulmonale, edema o policitemia. Debe usarse al menos 15 horas al día, incluyendo la noche, con flujo para lograr saturación de 88 a 92%. Se debe confirmar la hipoxemia en fase estable y revalorar la indicación. Los fumadores activos tienen riesgo de quemaduras.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad pulmonar obstructiva crónica
+
+@ mi|pulmonology|copd|3|initial_treatment
+V: Hombre de 66 años con EPOC que llega con aumento de la disnea, del volumen y de la purulencia del esputo desde hace 3 días. Saturación de 87%, frecuencia respiratoria de 26 rpm, pH de 7.37 y PaCO2 de 48 mmHg.
+P: ¿Cuál es el tratamiento inicial más adecuado?
++ Oxígeno controlado con meta de 88 a 92%, broncodilatadores de acción corta, corticosteroide sistémico por 5 días y antibiótico || Es una exacerbación con esputo purulento.
+- anchoring | Oxígeno a flujo alto para llevar la saturación a 100% || Se ancla en la hipoxemia y puede causar hipercapnia.
+- availability_heuristic | Solo antibiótico oral y egreso || Omite broncodilatadores y esteroide.
+- framing_effect | Corticosteroide por 4 semanas para evitar recaídas || Suena preventivo, pero los ciclos largos no son mejores.
+- premature_closure | Intubación orotraqueal inmediata || No hay acidosis respiratoria ni deterioro neurológico.
+- complexity_bias | Broncoscopia con lavado bronquial || No está indicada.
+- representativeness_heuristic | Diurético de asa por la disnea || Asocia disnea con insuficiencia cardiaca.
+- belief_bias | Mucolíticos y fisioterapia como tratamiento principal || Cree que retirar moco basta.
+- status_quo_bias | Continuar igual su tratamiento de casa || Insuficiente en una exacerbación.
+- omission_bias | Retrasar el antibiótico hasta tener cultivo || El cultivo no debe retrasar el tratamiento.
+E: La exacerbación de la EPOC es un empeoramiento agudo de los síntomas que requiere modificar el tratamiento. El manejo incluye oxígeno controlado con meta de saturación de 88 a 92% para evitar hipercapnia, broncodilatadores de acción corta como salbutamol con o sin ipratropio, y corticosteroide sistémico, como prednisona 40 mg por 5 días. Se indica antibiótico cuando aumenta la purulencia del esputo junto con más disnea o volumen de esputo, o si requiere ventilación. La ventilación no invasiva está indicada con acidosis respiratoria, pH menor o igual a 7.35 y PaCO2 mayor de 45 mmHg. Este paciente aún no la requiere, pero se vigila con gasometrías.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad pulmonar obstructiva crónica
+
+@ mi|pulmonology|copd|4|next_step
+V: Hombre de 71 años con EPOC en exacerbación. Pese a broncodilatadores, esteroide y oxígeno controlado, a las 2 horas tiene frecuencia respiratoria de 30 rpm, uso de músculos accesorios, pH de 7.28 y PaCO2 de 64 mmHg. Está alerta y coopera.
+P: ¿Cuál es el siguiente paso?
++ Ventilación mecánica no invasiva con presión positiva de dos niveles || Acidosis respiratoria en paciente alerta que coopera.
+- anchoring | Intubación orotraqueal inmediata || Se ancla en la gravedad, pero el paciente puede beneficiarse de ventilación no invasiva.
+- framing_effect | Aumentar el oxígeno para corregir la hipoxemia || Suena correcto, pero empeora la hipercapnia.
+- availability_heuristic | Bicarbonato intravenoso para la acidosis || La acidosis es respiratoria y se corrige con ventilación.
+- premature_closure | Sedación para disminuir el trabajo respiratorio || Deprime la respiración.
+- status_quo_bias | Continuar el mismo tratamiento y gasometría en 6 horas || Retrasa una medida necesaria.
+- complexity_bias | Oxigenación por membrana extracorpórea || Medida extrema.
+- representativeness_heuristic | Cánula nasal de alto flujo como primera opción en hipercapnia || Puede ser alternativa, pero la ventilación no invasiva tiene más evidencia.
+- belief_bias | Fisioterapia respiratoria intensiva como solución || Cree que la fisioterapia corrige la acidosis.
+- omission_bias | Retirar el oxígeno por la hipercapnia || Dejarlo sin oxígeno causa hipoxemia grave.
+E: La ventilación mecánica no invasiva es el tratamiento de elección en la exacerbación de la EPOC con acidosis respiratoria, definida por pH menor o igual a 7.35 y PaCO2 mayor de 45 mmHg, o con disnea grave y fatiga muscular, siempre que el paciente esté alerta, coopere, maneje secreciones y esté hemodinámicamente estable. Reduce la necesidad de intubación, las complicaciones y la mortalidad. Se revalora con gasometría a la hora. Se indica intubación si fracasa la ventilación no invasiva, hay paro respiratorio, alteración grave del estado de alerta, inestabilidad hemodinámica o incapacidad para proteger la vía aérea.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad pulmonar obstructiva crónica

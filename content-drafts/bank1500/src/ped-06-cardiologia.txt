@@ -1,0 +1,223 @@
+@ ped|pediatric_cardiology|congenital_heart_disease|3|diagnosis
+V: Lactante de 3 meses con sudoración al comer, tomas lentas, taquipnea y poca ganancia de peso. Soplo holosistólico grado III/VI en el borde esternal izquierdo bajo, con frémito. La radiografía muestra cardiomegalia y aumento del flujo pulmonar.
+P: ¿Cuál es el diagnóstico más probable?
++ Comunicación interventricular || Soplo holosistólico paraesternal izquierdo bajo con insuficiencia cardiaca por flujo pulmonar aumentado.
+- anchoring | Persistencia del conducto arterioso || Da soplo continuo en maquinaria infraclavicular.
+- availability_heuristic | Comunicación interauricular || Da desdoblamiento fijo del segundo ruido y rara vez síntomas tempranos.
+- representativeness_heuristic | Tetralogía de Fallot || Da cianosis con flujo pulmonar disminuido.
+- premature_closure | Soplo inocente || Los inocentes no dan insuficiencia cardiaca ni frémito.
+- base_rate_fallacy | Estenosis aórtica || El soplo es expulsivo en foco aórtico.
+- framing_effect | Coartación de aorta || Da pulsos femorales disminuidos.
+- inattentional_blindness | Neumonía recurrente sin cardiopatía || No explica el soplo con frémito.
+- focusing_illusion | Transposición de grandes arterias || Da cianosis intensa desde el nacimiento.
+- belief_bias | Bebé flojo para comer || La sudoración y taquipnea indican insuficiencia cardiaca.
+E: La comunicación interventricular es la cardiopatía congénita más frecuente. Produce un cortocircuito de izquierda a derecha que aumenta el flujo pulmonar. Los defectos pequeños son asintomáticos, con soplo intenso, y muchos cierran de forma espontánea. Los grandes causan insuficiencia cardiaca entre las 4 y 8 semanas, cuando baja la resistencia pulmonar, con taquipnea, sudoración al comer, falla de medro e infecciones respiratorias. El soplo es holosistólico en el borde esternal izquierdo bajo. Si no se corrige puede desarrollarse hipertensión pulmonar irreversible con inversión del cortocircuito, el síndrome de Eisenmenger. El ecocardiograma confirma el diagnóstico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la comunicación interventricular
+
+@ ped|pediatric_cardiology|congenital_heart_disease|3|diagnosis
+V: Niño de 2 años con cianosis que empeora al llorar. Durante los episodios se pone en cuclillas espontáneamente y mejora. Soplo sistólico expulsivo en el borde esternal izquierdo alto. La radiografía muestra corazón en forma de bota con flujo pulmonar disminuido.
+P: ¿Cuál es el diagnóstico más probable?
++ Tetralogía de Fallot || Cianosis con crisis, posición en cuclillas, corazón en bota y flujo pulmonar disminuido.
+- anchoring | Transposición de grandes arterias || Da cianosis intensa desde el nacimiento con corazón en huevo.
+- availability_heuristic | Comunicación interventricular aislada || No da cianosis.
+- representativeness_heuristic | Persistencia del conducto arterioso || No da cianosis.
+- premature_closure | Asma || No explica la cianosis con soplo.
+- base_rate_fallacy | Atresia tricuspídea || Es menos frecuente.
+- framing_effect | Crisis de espasmo del sollozo || Es benigno sin soplo ni alteraciones radiológicas.
+- inattentional_blindness | Retorno venoso pulmonar anómalo total || Da flujo pulmonar aumentado.
+- focusing_illusion | Coartación de aorta || No da cianosis central.
+- belief_bias | Se pone morado por berrinche || Hay cardiopatía estructural.
+E: La tetralogía de Fallot es la cardiopatía congénita cianótica más frecuente después del periodo neonatal. Tiene cuatro componentes, comunicación interventricular, obstrucción del tracto de salida del ventrículo derecho, cabalgamiento de la aorta e hipertrofia ventricular derecha. La cianosis depende del grado de obstrucción pulmonar. Las crisis hipoxémicas ocurren con el llanto o el esfuerzo, y la posición en cuclillas aumenta la resistencia sistémica y reduce el cortocircuito. La radiografía muestra corazón en forma de bota con flujo pulmonar disminuido. El soplo se debe a la estenosis pulmonar. El tratamiento definitivo es la corrección quirúrgica en el primer año.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la tetralogía de Fallot
+
+@ ped|pediatric_cardiology|congenital_heart_disease|4|initial_treatment
+V: Niño de 18 meses con tetralogía de Fallot que mientras llora presenta cianosis intensa, taquipnea, irritabilidad y luego somnolencia. El soplo previamente audible casi desaparece. Saturación de 60%.
+P: ¿Cuál es el tratamiento inicial de esta crisis?
++ Colocarlo en posición rodillas al pecho, oxígeno, morfina y líquidos intravenosos || Aumentan la resistencia sistémica y reducen el espasmo infundibular.
+- anchoring | Digoxina intravenosa || Aumenta la contractilidad y puede empeorar la obstrucción.
+- availability_heuristic | Furosemida intravenosa || Reduce la precarga y empeora la crisis.
+- representativeness_heuristic | Salbutamol nebulizado || La taquicardia empeora la obstrucción.
+- premature_closure | Dopamina en infusión || Aumenta la contractilidad y la frecuencia.
+- framing_effect | Adrenalina intravenosa || Empeora el espasmo infundibular.
+- complexity_bias | Cirugía de urgencia sin estabilizar || Primero se trata la crisis.
+- base_rate_fallacy | Antibióticos intravenosos || No hay infección.
+- belief_bias | Soplarle en la cara para que respire || No trata la crisis.
+- omission_bias | Esperar a que se calme solo || La crisis puede ser fatal.
+E: La crisis hipoxémica de la tetralogía de Fallot se debe a un aumento del espasmo infundibular o a una caída de la resistencia sistémica, lo que incrementa el cortocircuito de derecha a izquierda. El soplo disminuye porque pasa menos sangre por el tracto pulmonar. El tratamiento consiste en calmar al niño, colocarlo en posición rodillas al pecho para aumentar la resistencia sistémica, dar oxígeno, morfina para sedación y reducir el espasmo, y líquidos intravenosos. Si no responde se usan propranolol o esmolol y fenilefrina para elevar la resistencia sistémica. Las crisis indican necesidad de cirugía pronta.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la tetralogía de Fallot
+
+@ ped|pediatric_cardiology|congenital_heart_disease|4|initial_treatment
+V: Recién nacido de término de 24 horas con cianosis intensa que no mejora con oxígeno al 100%, sin dificultad respiratoria importante. Saturación de 65%. La radiografía muestra corazón en forma de huevo con pedículo estrecho. El ecocardiograma confirma transposición de grandes arterias con septum íntegro.
+P: ¿Cuál es el tratamiento inicial?
++ Prostaglandina E1 en infusión para mantener abierto el conducto arterioso y atrioseptostomía con balón si es necesario || Favorecen la mezcla de sangre entre circulaciones.
+- anchoring | Indometacina para cerrar el conducto arterioso || Empeoraría la mezcla y la hipoxemia.
+- availability_heuristic | Oxígeno al 100% como único tratamiento || No corrige la circulación en paralelo.
+- representativeness_heuristic | Surfactante endotraqueal || No hay enfermedad pulmonar.
+- premature_closure | Antibióticos como primera medida || No hay infección.
+- framing_effect | Furosemida intravenosa || No resuelve la hipoxemia.
+- complexity_bias | Trasplante cardiaco urgente || No es el tratamiento.
+- base_rate_fallacy | Propranolol oral || Se usa en las crisis de Fallot.
+- belief_bias | Esperar a que el corazón madure solo || Es incompatible con la vida sin tratamiento.
+- omission_bias | Diferir el tratamiento hasta la cirugía programada || La hipoxemia grave requiere manejo inmediato.
+E: En la transposición de grandes arterias la aorta sale del ventrículo derecho y la pulmonar del izquierdo, formando dos circulaciones en paralelo. La supervivencia depende de la mezcla de sangre a través del conducto arterioso, el foramen oval o una comunicación interventricular. Se presenta con cianosis intensa en las primeras horas que no mejora con oxígeno, y la radiografía muestra corazón en huevo con pedículo estrecho. El tratamiento inicial es prostaglandina E1 para mantener el conducto abierto y, si la mezcla es insuficiente, atrioseptostomía con balón de Rashkind. La corrección definitiva es la cirugía de switch arterial en las primeras semanas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de cardiopatías congénitas cianógenas en el recién nacido
+
+@ ped|pediatric_cardiology|congenital_heart_disease|3|diagnosis
+V: Recién nacido prematuro de 30 semanas, de 8 días, con taquicardia, pulsos saltones, presión diferencial amplia y soplo continuo en región infraclavicular izquierda. Requiere más oxígeno que días previos. Madre con rubéola no confirmada en el embarazo.
+P: ¿Cuál es el diagnóstico más probable?
++ Persistencia del conducto arterioso || Soplo continuo infraclavicular con pulsos saltones en un prematuro.
+- anchoring | Comunicación interventricular || Da soplo holosistólico paraesternal bajo.
+- availability_heuristic | Comunicación interauricular || Da desdoblamiento fijo del segundo ruido.
+- representativeness_heuristic | Coartación de aorta || Da pulsos femorales disminuidos.
+- premature_closure | Sepsis neonatal || No explica el soplo continuo.
+- base_rate_fallacy | Fístula arteriovenosa cerebral || Es rara y el soplo es craneal.
+- framing_effect | Tetralogía de Fallot || Da cianosis.
+- inattentional_blindness | Síndrome de dificultad respiratoria sin cardiopatía || No explica el soplo ni los pulsos.
+- focusing_illusion | Estenosis pulmonar || Da soplo sistólico expulsivo.
+- belief_bias | Soplo normal del recién nacido || El soplo continuo con repercusión no es inocente.
+E: La persistencia del conducto arterioso es muy frecuente en prematuros por inmadurez de la respuesta al oxígeno y a las prostaglandinas. También se asocia a rubéola congénita. Produce cortocircuito de la aorta a la pulmonar, con soplo continuo en maquinaria infraclavicular izquierda, pulsos saltones y presión diferencial amplia. En prematuros puede causar insuficiencia cardiaca, mayor requerimiento de oxígeno, hemorragia pulmonar y enterocolitis. El ecocardiograma confirma el diagnóstico. El cierre farmacológico se realiza con ibuprofeno, indometacina o paracetamol, y si fracasa se cierra por cateterismo o cirugía.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la persistencia del conducto arterioso
+
+@ ped|pediatric_cardiology|congenital_heart_disease|3|diagnosis
+V: Niño de 8 años con cefalea frecuente y hipertensión en brazos de 145/90 mmHg. Los pulsos femorales son débiles y retrasados respecto al radial. La presión en piernas es menor que en brazos. Tiene soplo sistólico interescapular.
+P: ¿Cuál es el diagnóstico más probable?
++ Coartación de aorta || Hipertensión en brazos con pulsos femorales débiles y retrasados.
+- anchoring | Hipertensión arterial esencial || No explica la diferencia de pulsos y presiones.
+- availability_heuristic | Feocromocitoma || Da crisis paroxísticas sin diferencia de pulsos.
+- representativeness_heuristic | Estenosis de arteria renal || No explica la diferencia entre brazos y piernas.
+- premature_closure | Migraña || No explica la hipertensión.
+- base_rate_fallacy | Arteritis de Takayasu || Es más frecuente en mujeres jóvenes con pulsos ausentes en brazos.
+- framing_effect | Glomerulonefritis aguda || No explica la diferencia de pulsos.
+- inattentional_blindness | Persistencia del conducto arterioso || Da pulsos saltones.
+- focusing_illusion | Hipertiroidismo || No explica los pulsos femorales débiles.
+- belief_bias | Error de medición de la presión || La diferencia de pulsos es objetiva.
+E: La coartación de aorta es un estrechamiento, generalmente distal a la arteria subclavia izquierda, cerca del conducto arterioso. En la forma grave neonatal se presenta con choque al cerrarse el conducto. En niños mayores suele detectarse por hipertensión en brazos, pulsos femorales débiles y retrasados, presión menor en piernas, cefalea y claudicación. Puede haber soplo interescapular. En la radiografía de niños mayores aparecen muescas costales por circulación colateral y el signo del tres. Se asocia a válvula aórtica bivalva y síndrome de Turner. Se trata con angioplastia o cirugía. Siempre deben palparse los pulsos femorales en la exploración.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la coartación de aorta
+
+@ ped|pediatric_cardiology|congenital_heart_disease|2|data_interpretation
+V: Niña de 4 años sana, con buen crecimiento, a quien se le ausculta en consulta de rutina un soplo sistólico grado II/VI, vibratorio y musical, en el borde esternal izquierdo medio, que disminuye al ponerse de pie. Ruidos cardiacos normales y pulsos simétricos.
+P: ¿Qué indica este hallazgo?
++ Soplo inocente de Still || Soplo sistólico suave, musical, que cambia con la posición, en una niña asintomática.
+- anchoring | Comunicación interventricular que requiere cirugía || Daría soplo holosistólico rudo.
+- availability_heuristic | Estenosis aórtica || El soplo es rudo en foco aórtico.
+- representativeness_heuristic | Miocardiopatía hipertrófica || El soplo aumenta al ponerse de pie.
+- premature_closure | Fiebre reumática || No hay datos clínicos.
+- base_rate_fallacy | Endocarditis || No hay fiebre ni otros datos.
+- framing_effect | Insuficiencia cardiaca || Está asintomática y crece bien.
+- inattentional_blindness | Coartación de aorta || Los pulsos son simétricos.
+- focusing_illusion | Comunicación interauricular grande || Daría desdoblamiento fijo del segundo ruido.
+- belief_bias | Todo soplo es enfermedad del corazón || La mayoría de los soplos en niños son inocentes.
+E: Los soplos inocentes son muy frecuentes en la infancia. El soplo de Still es el más común, se escucha entre los 2 y 7 años en el borde esternal izquierdo medio, es sistólico, suave, de tono musical o vibratorio y disminuye al sentarse o ponerse de pie. Los soplos inocentes son sistólicos o continuos como el zumbido venoso, de intensidad menor a III/VI, sin frémito, con ruidos cardiacos normales, y no se acompañan de síntomas. Son señales de soplo patológico los diastólicos, los holosistólicos, intensidad III o mayor, frémito, clic, síntomas o alteraciones de los pulsos, que requieren ecocardiograma.
+R: Guía de Práctica Clínica de evaluación del soplo cardiaco en niños
+
+@ ped|pediatric_cardiology|kawasaki_disease|3|diagnosis
+V: Niño de 3 años con fiebre de 39.5 °C de 6 días que no responde a antipiréticos. Tiene conjuntivitis bilateral sin secreción, labios rojos y agrietados, lengua en fresa, exantema polimorfo en tronco, edema y eritema de manos y pies, y una adenopatía cervical de 2 cm.
+P: ¿Cuál es el diagnóstico más probable?
++ Enfermedad de Kawasaki || Fiebre de 5 días o más con conjuntivitis, mucositis, exantema, cambios en extremidades y adenopatía.
+- anchoring | Escarlatina || Da exantema áspero sin conjuntivitis ni cambios en extremidades.
+- availability_heuristic | Sarampión || Da conjuntivitis con secreción, tos y manchas de Koplik.
+- representativeness_heuristic | Síndrome de Stevens Johnson || Da ampollas y desprendimiento de mucosas por fármacos.
+- premature_closure | Mononucleosis infecciosa || No explica los cambios en extremidades.
+- base_rate_fallacy | Artritis idiopática juvenil sistémica || Da fiebre en picos con exantema evanescente.
+- framing_effect | Reacción alérgica a medicamento || No explica la fiebre persistente con todos los criterios.
+- inattentional_blindness | Adenitis cervical bacteriana || No explica los demás datos.
+- focusing_illusion | Síndrome de choque tóxico || Da hipotensión y falla orgánica.
+- belief_bias | Infección viral común que se quitará sola || El retraso del tratamiento aumenta el daño coronario.
+E: La enfermedad de Kawasaki es una vasculitis aguda de vasos medianos que afecta sobre todo a menores de 5 años y es la principal causa de cardiopatía adquirida en niños de países desarrollados. El diagnóstico clínico requiere fiebre de 5 días o más y al menos cuatro de cinco criterios, conjuntivitis bilateral no exudativa, cambios en labios y mucosa oral, exantema polimorfo, cambios en extremidades con edema, eritema y después descamación periungueal, y adenopatía cervical mayor de 1.5 cm generalmente unilateral. Pueden elevarse los reactantes y después las plaquetas. La complicación más importante son los aneurismas coronarios.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad de Kawasaki
+
+@ ped|pediatric_cardiology|kawasaki_disease|3|treatment_of_choice
+V: Niña de 2 años con diagnóstico de enfermedad de Kawasaki en el séptimo día de fiebre. El ecocardiograma inicial no muestra aneurismas.
+P: ¿Cuál es el tratamiento de elección?
++ Inmunoglobulina intravenosa a 2 g/kg en dosis única con ácido acetilsalicílico || Reduce el riesgo de aneurismas coronarios si se da en los primeros 10 días.
+- anchoring | Solo ácido acetilsalicílico a dosis altas || Sin inmunoglobulina el riesgo coronario es mayor.
+- availability_heuristic | Antibiótico intravenoso || No es una infección bacteriana.
+- representativeness_heuristic | Corticosteroide oral como única terapia || No es el tratamiento de primera elección.
+- premature_closure | Paracetamol hasta que ceda la fiebre || No previene aneurismas.
+- framing_effect | Ibuprofeno junto con la aspirina || Interfiere con el efecto antiplaquetario.
+- complexity_bias | Cateterismo cardiaco diagnóstico inmediato || No es necesario.
+- base_rate_fallacy | Anticoagulación con warfarina de rutina || Se reserva para aneurismas gigantes.
+- belief_bias | Esperar a que aparezca la descamación para confirmar || Retrasa el tratamiento.
+- omission_bias | No tratar porque el ecocardiograma es normal || El tratamiento previene la aparición de aneurismas.
+E: El tratamiento de la enfermedad de Kawasaki es inmunoglobulina intravenosa a 2 g/kg en infusión única, idealmente en los primeros 10 días de fiebre, junto con ácido acetilsalicílico a dosis moderadas o altas hasta que ceda la fiebre y después a dosis bajas antiplaquetarias durante 6 a 8 semanas o más si hay aneurismas. Este tratamiento reduce el riesgo de aneurismas coronarios de alrededor de 25% a menos de 5%. Se realiza ecocardiograma al diagnóstico, a las 2 semanas y a las 6 semanas. En pacientes de alto riesgo o resistentes se agregan corticosteroides o infliximab.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad de Kawasaki
+
+@ ped|pediatric_cardiology|kawasaki_disease|3|complication_prognosis
+V: Niño de 4 años que hace 3 semanas tuvo enfermedad de Kawasaki diagnosticada tarde y sin tratamiento. Ahora presenta descamación de las puntas de los dedos. Plaquetas de 850 000.
+P: ¿Cuál es la complicación más importante que debe buscarse?
++ Aneurismas de arterias coronarias || Son la principal causa de morbimortalidad en Kawasaki no tratado.
+- anchoring | Insuficiencia renal crónica || No es la complicación característica.
+- availability_heuristic | Artritis crónica deformante || La artritis es transitoria.
+- representativeness_heuristic | Leucemia por la trombocitosis || La trombocitosis es reactiva.
+- premature_closure | Hepatitis fulminante || No es característica.
+- base_rate_fallacy | Valvulopatía reumática || Se asocia a fiebre reumática.
+- framing_effect | Encefalitis || No es característica.
+- inattentional_blindness | Descamación permanente de la piel || Es transitoria.
+- focusing_illusion | Hipotiroidismo || No es una complicación.
+- belief_bias | Ninguna, la descamación indica curación || El riesgo coronario persiste.
+E: La complicación más grave de la enfermedad de Kawasaki son los aneurismas de arterias coronarias, que aparecen en alrededor de 25% de los pacientes no tratados. Suelen formarse entre la segunda y cuarta semana, en la fase subaguda, cuando también aparecen descamación periungueal y trombocitosis. Los aneurismas grandes o gigantes pueden causar trombosis, infarto, arritmias y muerte súbita. Otras complicaciones incluyen miocarditis, pericarditis e insuficiencia valvular. El seguimiento con ecocardiograma es indispensable. Los pacientes con aneurismas requieren antiagregación prolongada y, si son gigantes, anticoagulación.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad de Kawasaki
+
+@ ped|pediatric_cardiology|kawasaki_disease|4|diagnosis
+V: Lactante de 7 meses con fiebre de 8 días sin foco. Solo tiene conjuntivitis bilateral sin secreción y labios rojos. Proteína C reactiva de 12 mg/dL, albúmina baja, plaquetas de 600 000 y piuria estéril. El ecocardiograma muestra dilatación de la coronaria derecha.
+P: ¿Cuál es el diagnóstico más probable?
++ Enfermedad de Kawasaki incompleta || Fiebre prolongada con pocos criterios, laboratorio compatible y alteración coronaria.
+- anchoring | Infección viral inespecífica || No explica la alteración coronaria.
+- availability_heuristic | Infección de vías urinarias || La piuria es estéril.
+- representativeness_heuristic | Sepsis bacteriana oculta || No explica la dilatación coronaria.
+- premature_closure | Conjuntivitis viral || No explica la fiebre prolongada ni el laboratorio.
+- base_rate_fallacy | Poliarteritis nodosa infantil || Es muy rara.
+- framing_effect | Fiebre por dentición || No da fiebre prolongada ni alteraciones de laboratorio.
+- inattentional_blindness | Miocarditis viral || No explica el patrón clínico.
+- focusing_illusion | Leucemia aguda || La trombocitosis no apoya leucemia.
+- belief_bias | Descartar Kawasaki porque no cumple todos los criterios || La forma incompleta es frecuente en lactantes.
+E: La enfermedad de Kawasaki incompleta se presenta con fiebre de 5 días o más y solo dos o tres criterios clínicos. Es más frecuente en lactantes menores de un año, que tienen mayor riesgo de aneurismas. El diagnóstico se apoya en laboratorio, como proteína C reactiva o velocidad de sedimentación elevadas, albúmina baja, anemia, transaminasas elevadas, trombocitosis después del séptimo día, leucocitosis y piuria estéril, y en el ecocardiograma. Los lactantes con fiebre de 7 días o más sin explicación deben evaluarse para Kawasaki. Si se confirma se trata igual que la forma completa con inmunoglobulina y aspirina.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad de Kawasaki
+
+@ ped|pediatric_cardiology|kawasaki_disease|3|data_interpretation
+V: Niño de 3 años con enfermedad de Kawasaki en su segunda semana. Los estudios muestran plaquetas de 780 000, velocidad de sedimentación de 90 mm/h y descamación periungueal. La fiebre cedió tras la inmunoglobulina.
+P: ¿Qué indica la trombocitosis en esta fase?
++ Es una respuesta reactiva de la fase subaguda que aumenta el riesgo de trombosis y justifica la aspirina antiplaquetaria || Las plaquetas suben después de la primera semana.
+- anchoring | Indica leucemia y requiere aspirado de médula || Es reactiva al proceso inflamatorio.
+- availability_heuristic | Es efecto adverso de la inmunoglobulina que obliga a suspenderla || No es un efecto adverso.
+- representativeness_heuristic | Indica trombocitemia esencial || Es reactiva y transitoria.
+- premature_closure | No tiene importancia clínica || Aumenta el riesgo trombótico.
+- base_rate_fallacy | Indica deficiencia de hierro como causa principal || El contexto es inflamatorio.
+- framing_effect | Indica sepsis y requiere antibióticos || No hay infección.
+- inattentional_blindness | Indica falla al tratamiento y requiere segunda dosis || La fiebre cedió y la trombocitosis es esperada.
+- focusing_illusion | Indica esplenectomía previa || No hay antecedente.
+- belief_bias | Debe tratarse con transfusión || No es necesario.
+E: La enfermedad de Kawasaki tiene tres fases. La aguda dura de 1 a 2 semanas con fiebre y los criterios clínicos. La subaguda, de la segunda a la cuarta semana, se caracteriza por desaparición de la fiebre, descamación periungueal, trombocitosis que puede superar el millón y mayor riesgo de aneurismas y trombosis. La de convalecencia termina cuando se normalizan los reactantes, alrededor de las 6 a 8 semanas. La trombocitosis es reactiva y justifica la aspirina a dosis antiplaquetarias. Si la fiebre persiste 36 horas después de la inmunoglobulina se considera resistencia y se da una segunda dosis u otras terapias.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad de Kawasaki
+
+@ ped|pediatric_cardiology|kawasaki_disease|4|next_step
+V: Niño de 2 años con enfermedad de Kawasaki tratado con inmunoglobulina intravenosa y aspirina. A las 48 horas de terminar la infusión persiste con fiebre de 39 °C y conjuntivitis. Sin aneurismas en el ecocardiograma inicial.
+P: ¿Cuál es el siguiente paso?
++ Administrar una segunda dosis de inmunoglobulina intravenosa o agregar corticosteroides por resistencia al tratamiento || La fiebre persistente más de 36 horas indica resistencia.
+- anchoring | Suspender la aspirina y observar || No trata la inflamación persistente.
+- availability_heuristic | Iniciar antibióticos de amplio espectro || No es una infección.
+- representativeness_heuristic | Esperar una semana para ver si cede || Aumenta el riesgo de aneurismas.
+- premature_closure | Egresar con paracetamol || La resistencia requiere tratamiento.
+- framing_effect | Dar ibuprofeno a dosis altas || Interfiere con la aspirina.
+- complexity_bias | Cateterismo coronario urgente || No está indicado.
+- status_quo_bias | Mantener igual porque ya recibió el tratamiento estándar || La resistencia requiere escalar el manejo.
+- belief_bias | La fiebre es efecto adverso de la inmunoglobulina || La persistencia indica resistencia.
+- omission_bias | No repetir el tratamiento por su costo || El riesgo coronario justifica el tratamiento.
+E: Entre 10 y 20% de los pacientes con enfermedad de Kawasaki no responden a la primera dosis de inmunoglobulina, lo que se define por fiebre persistente o recurrente al menos 36 horas después de terminar la infusión. Estos pacientes tienen mayor riesgo de aneurismas coronarios. Las opciones son una segunda dosis de inmunoglobulina a 2 g/kg, corticosteroides como metilprednisolona en pulsos o prednisolona en esquema descendente, e infliximab. La ciclosporina o el anakinra se reservan para casos refractarios. Se continúa la aspirina y el seguimiento ecocardiográfico estrecho.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad de Kawasaki
+
+@ ped|pediatric_cardiology|kawasaki_disease|3|prevention_screening
+V: Niña de 4 años con enfermedad de Kawasaki tratada hace un mes con inmunoglobulina. Toma aspirina a dosis baja por un aneurisma pequeño. Inicia la temporada de influenza y le corresponde la triple viral de refuerzo.
+P: ¿Cuál es la recomendación de prevención más adecuada?
++ Aplicar la vacuna de influenza inactivada y diferir la triple viral 11 meses tras la inmunoglobulina || La aspirina aumenta el riesgo de Reye con influenza y la inmunoglobulina interfiere con vacunas vivas.
+- anchoring | Aplicar la triple viral de inmediato || La inmunoglobulina reduce su eficacia.
+- availability_heuristic | Suspender la aspirina durante la temporada de influenza sin vacunar || Deja sin protección antiplaquetaria.
+- representativeness_heuristic | Evitar todas las vacunas por un año || La influenza inactivada se recomienda.
+- premature_closure | Aplicar vacuna de influenza de virus vivos atenuados || Está contraindicada con aspirina.
+- framing_effect | Cambiar la aspirina por ibuprofeno || Interfiere con el efecto antiplaquetario.
+- complexity_bias | Medir anticuerpos contra sarampión antes de decidir || No es necesario.
+- base_rate_fallacy | Dar oseltamivir profiláctico toda la temporada en lugar de vacunar || No sustituye a la vacuna.
+- belief_bias | La enfermedad de Kawasaki contraindica las vacunas de por vida || No las contraindica.
+- omission_bias | No vacunar contra influenza por miedo a eventos adversos || El riesgo de Reye es mayor sin vacuna.
+E: Los niños que toman aspirina de forma prolongada tienen riesgo de síndrome de Reye si se infectan con influenza o varicela, por lo que deben recibir la vacuna de influenza inactivada cada temporada. La vacuna de virus vivos atenuados está contraindicada con aspirina. La inmunoglobulina intravenosa a dosis altas contiene anticuerpos que pueden neutralizar las vacunas de virus vivos, como triple viral y varicela, por lo que se recomienda diferirlas 11 meses tras la infusión. Si el riesgo de exposición al sarampión es alto puede vacunarse antes y repetir la dosis después. Las vacunas inactivadas pueden aplicarse sin restricción.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad de Kawasaki ;; Manual de vacunación de la Secretaría de Salud

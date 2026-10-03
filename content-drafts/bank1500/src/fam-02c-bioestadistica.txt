@@ -1,0 +1,223 @@
+@ fam|public_health|biostatistics|3|data_interpretation
+V: En un ensayo clínico, la mortalidad a un año fue de 20 por ciento en el grupo con placebo y de 15 por ciento en el grupo con un nuevo fármaco para insuficiencia cardiaca.
+P: ¿Cuál es el número necesario a tratar para evitar una muerte?
++ 20 pacientes || Es el inverso de la reducción absoluta del riesgo de 5 por ciento.
+- anchoring | 5 pacientes || Confunde la reducción absoluta con el número necesario.
+- availability_heuristic | 25 pacientes || Corresponde a la reducción relativa expresada como porcentaje.
+- representativeness_heuristic | 4 pacientes || Es un cálculo erróneo.
+- premature_closure | 15 pacientes || Usa la mortalidad del grupo tratado.
+- framing_effect | 100 pacientes || No corresponde.
+- complexity_bias | 1.33 pacientes || Es el cociente de riesgos invertido.
+- base_rate_fallacy | 75 pacientes || Es un cálculo erróneo.
+- belief_bias | No se puede calcular sin la razón de momios || Se calcula con riesgos absolutos.
+- focusing_illusion | 50 pacientes || Es un cálculo erróneo.
+E: La reducción absoluta del riesgo es la diferencia entre el riesgo en el grupo control y el grupo tratado: 20 menos 15 por ciento, es decir, 5 por ciento o 0.05. El número necesario a tratar es el inverso de la reducción absoluta, 1 entre 0.05, es decir, 20; significa que hay que tratar a 20 pacientes durante un año para evitar una muerte. La reducción relativa del riesgo es la reducción absoluta dividida entre el riesgo del control, 0.05 entre 0.20, es decir, 25 por ciento. El riesgo relativo es 0.15 entre 0.20, es decir, 0.75. Las cifras absolutas son más útiles para decidir en la práctica clínica.
+R: Manual de epidemiología clínica para el primer nivel de atención ;; Guía para la lectura crítica de ensayos clínicos
+
+@ fam|public_health|biostatistics|3|data_interpretation
+V: Una prueba rápida para estreptococo tiene sensibilidad de 90 por ciento y especificidad de 90 por ciento. Se aplica en una población de 1,000 niños con faringitis en la que la prevalencia de estreptococo es de 10 por ciento.
+P: ¿Cuál es el valor predictivo positivo de la prueba en esta población?
++ 50 por ciento || Hay 90 verdaderos positivos y 90 falsos positivos.
+- anchoring | 90 por ciento || Confunde el valor predictivo con la sensibilidad.
+- availability_heuristic | 99 por ciento || Corresponde aproximadamente al valor predictivo negativo.
+- representativeness_heuristic | 10 por ciento || Es la prevalencia.
+- premature_closure | 81 por ciento || Es el producto de sensibilidad y especificidad.
+- framing_effect | 18 por ciento || Es la proporción de positivos totales.
+- complexity_bias | No depende de la prevalencia || El valor predictivo sí depende de ella.
+- base_rate_fallacy | 95 por ciento || Ignora la baja prevalencia.
+- belief_bias | 9 por ciento || Es un cálculo erróneo.
+- focusing_illusion | 75 por ciento || Es un cálculo erróneo.
+E: Con prevalencia de 10 por ciento hay 100 enfermos y 900 sanos. Con sensibilidad de 90 por ciento, 90 enfermos resultan positivos; con especificidad de 90 por ciento, 810 sanos resultan negativos y 90 son falsos positivos. El valor predictivo positivo es verdaderos positivos entre todos los positivos: 90 entre 180, es decir, 50 por ciento. El valor predictivo negativo es 810 entre 820, cerca de 99 por ciento. Los valores predictivos dependen de la prevalencia: cuando la prevalencia baja, disminuye el valor predictivo positivo y aumenta el negativo. La sensibilidad y la especificidad son propias de la prueba.
+R: Manual de epidemiología clínica para el primer nivel de atención ;; Guía de Práctica Clínica de diagnóstico y tratamiento de faringoamigdalitis aguda
+
+@ fam|public_health|biostatistics|3|data_interpretation
+V: Un estudio de casos y controles sobre el uso de anticonceptivos orales y trombosis venosa reporta una razón de momios de 3.2 con intervalo de confianza de 95 por ciento de 1.8 a 5.6.
+P: ¿Qué indica este resultado?
++ Una asociación positiva estadísticamente significativa entre anticonceptivos y trombosis || El intervalo no incluye el 1.
+- anchoring | Que no hay asociación porque el intervalo es amplio || Lo relevante es que no incluye el 1.
+- availability_heuristic | Que los anticonceptivos protegen contra la trombosis || Un valor mayor de 1 indica mayor riesgo.
+- representativeness_heuristic | Que el 32 por ciento de las usuarias tendrá trombosis || La razón de momios no es una incidencia.
+- premature_closure | Que se demostró causalidad definitiva || Un estudio observacional no la demuestra por sí solo.
+- framing_effect | Que el resultado no es significativo por ser menor de 5 || La significancia depende del intervalo.
+- complexity_bias | Que el número necesario a dañar es 3.2 || No se calcula así.
+- base_rate_fallacy | Que la trombosis es frecuente en todas las mujeres || La enfermedad sigue siendo rara.
+- belief_bias | Que el resultado es un error tipo II || El resultado es significativo.
+- focusing_illusion | Que la sensibilidad del estudio es de 95 por ciento || El 95 corresponde al nivel de confianza.
+E: La razón de momios compara las probabilidades de exposición entre casos y controles. Un valor de 1 indica ausencia de asociación, mayor de 1 asociación positiva y menor de 1 asociación negativa o protectora. El intervalo de confianza de 95 por ciento indica el rango de valores compatibles con los datos; si no incluye el valor nulo de 1, la asociación es estadísticamente significativa con p menor de 0.05. Un intervalo amplio refleja menor precisión, habitualmente por muestras pequeñas. En enfermedades raras la razón de momios se aproxima al riesgo relativo. La significancia estadística no demuestra causalidad.
+R: Manual de epidemiología clínica para el primer nivel de atención ;; Manual de metodología de la investigación en salud
+
+@ fam|public_health|biostatistics|3|data_interpretation
+V: Un ensayo clínico pequeño con 40 pacientes no encuentra diferencia significativa entre un nuevo fármaco y placebo para reducir el dolor, con p de 0.30. Los autores concluyen que el fármaco no es eficaz. El cálculo de poder estadístico no fue reportado.
+P: ¿Qué error puede explicar la ausencia de diferencia significativa?
++ Error tipo II por bajo poder estadístico || Una muestra pequeña puede no detectar una diferencia real.
+- anchoring | Error tipo I || Consiste en encontrar una diferencia que no existe.
+- availability_heuristic | Sesgo de memoria || No aplica a un ensayo clínico de este tipo.
+- representativeness_heuristic | Falacia ecológica || Los datos son individuales.
+- premature_closure | Que el fármaco definitivamente no funciona || La ausencia de evidencia no es evidencia de ausencia.
+- framing_effect | Efecto Hawthorne || No explica el resultado.
+- complexity_bias | Sesgo de Berkson || Es de estudios hospitalarios observacionales.
+- base_rate_fallacy | Sesgo de adelanto || Se relaciona con tamizaje.
+- belief_bias | Que el valor de p demuestra equivalencia || No la demuestra.
+- focusing_illusion | Sesgo de publicación || Afecta a la literatura, no explica este resultado.
+E: El error tipo I, o alfa, consiste en rechazar la hipótesis nula cuando es verdadera, es decir, encontrar una diferencia que no existe; se fija habitualmente en 5 por ciento. El error tipo II, o beta, consiste en no rechazar la hipótesis nula cuando es falsa, es decir, no detectar una diferencia real. El poder estadístico es uno menos beta, idealmente 80 por ciento o más, y aumenta con el tamaño de muestra, la magnitud del efecto y la menor variabilidad. Un estudio pequeño sin cálculo de poder puede no detectar un efecto real, por lo que un resultado no significativo no demuestra ausencia de efecto.
+R: Manual de metodología de la investigación en salud ;; Guía para la lectura crítica de ensayos clínicos
+
+@ fam|public_health|biostatistics|2|data_interpretation
+V: En una encuesta de ingresos mensuales de una comunidad, la mayoría de las familias gana entre 5,000 y 10,000 pesos, pero tres familias ganan más de 500,000 pesos. El investigador quiere reportar el valor típico.
+P: ¿Cuál es la medida de tendencia central más adecuada para describir estos datos?
++ Mediana || No se afecta por valores extremos en distribuciones sesgadas.
+- anchoring | Media aritmética || Se desplaza hacia los valores extremos.
+- availability_heuristic | Desviación estándar || Es una medida de dispersión.
+- representativeness_heuristic | Rango || Es una medida de dispersión muy sensible a extremos.
+- premature_closure | Varianza || Es una medida de dispersión.
+- framing_effect | Media geométrica de todos los valores sin análisis || No es la opción estándar.
+- complexity_bias | Coeficiente de correlación || Mide asociación entre variables.
+- base_rate_fallacy | Moda como única medida obligatoria || Es útil en datos categóricos.
+- belief_bias | Error estándar de la media || Mide precisión de la media.
+- focusing_illusion | Valor máximo || No representa a la mayoría.
+E: Las medidas de tendencia central son la media, la mediana y la moda. La media es el promedio aritmético y es adecuada en distribuciones simétricas, como la normal, pero se afecta mucho por valores extremos. La mediana es el valor que divide la distribución ordenada en dos mitades iguales y es robusta ante valores extremos, por lo que se prefiere en distribuciones sesgadas, como los ingresos o la estancia hospitalaria. La moda es el valor más frecuente y es útil en variables categóricas. En una distribución sesgada a la derecha, la media es mayor que la mediana.
+R: Manual de bioestadística para ciencias de la salud ;; Manual de metodología de la investigación en salud
+
+@ fam|public_health|biostatistics|2|data_interpretation
+V: En una población de adultos sanos, la glucosa en ayuno tiene distribución normal con media de 90 mg/dL y desviación estándar de 5 mg/dL.
+P: ¿Qué intervalo incluye aproximadamente al 95 por ciento de la población?
++ De 80 a 100 mg/dL || Es la media más o menos dos desviaciones estándar.
+- anchoring | De 85 a 95 mg/dL || Corresponde a una desviación estándar, cerca del 68 por ciento.
+- availability_heuristic | De 75 a 105 mg/dL || Corresponde a tres desviaciones, cerca del 99.7 por ciento.
+- representativeness_heuristic | De 90 a 100 mg/dL || Solo incluye la mitad superior.
+- premature_closure | De 70 a 110 mg/dL || Es demasiado amplio.
+- framing_effect | De 88 a 92 mg/dL || Es demasiado estrecho.
+- complexity_bias | No puede calcularse sin la mediana || En la normal media y mediana coinciden.
+- base_rate_fallacy | De 95 a 105 mg/dL || No está centrado en la media.
+- belief_bias | De 80 a 90 mg/dL || Solo incluye la mitad inferior.
+- focusing_illusion | De 0 a 90 mg/dL || No tiene sentido biológico.
+E: En una distribución normal, aproximadamente el 68 por ciento de los valores se ubica dentro de una desviación estándar de la media, el 95 por ciento dentro de dos desviaciones estándar, más precisamente 1.96, y el 99.7 por ciento dentro de tres. Con media de 90 y desviación de 5, el 95 por ciento se encuentra entre 80 y 100 mg/dL. Este principio se usa para definir los intervalos de referencia de laboratorio, por lo que el 5 por ciento de las personas sanas tiene valores fuera del rango normal. En la distribución normal la media, la mediana y la moda coinciden.
+R: Manual de bioestadística para ciencias de la salud ;; Manual de metodología de la investigación en salud
+
+@ fam|public_health|biostatistics|3|data_interpretation
+V: Un investigador quiere comparar la proporción de pacientes curados con dos antibióticos diferentes: curación sí o no, en dos grupos independientes de 150 pacientes cada uno.
+P: ¿Cuál es la prueba estadística más adecuada para este análisis?
++ Prueba de chi cuadrada || Compara proporciones de variables categóricas entre grupos independientes.
+- anchoring | Prueba t de Student para muestras independientes || Compara medias de variables cuantitativas.
+- availability_heuristic | Análisis de varianza || Compara medias de tres o más grupos.
+- representativeness_heuristic | Coeficiente de correlación de Pearson || Evalúa relación lineal entre variables cuantitativas.
+- premature_closure | Prueba t pareada || Se usa en mediciones repetidas del mismo sujeto.
+- framing_effect | Regresión lineal simple || Predice una variable cuantitativa.
+- complexity_bias | Análisis de supervivencia de Kaplan Meier || Se usa para tiempo hasta un evento.
+- base_rate_fallacy | Prueba de Wilcoxon para datos pareados || Es no paramétrica pareada.
+- belief_bias | Prueba de McNemar || Se usa en proporciones pareadas.
+- focusing_illusion | Coeficiente kappa || Mide concordancia entre observadores.
+E: La elección de la prueba estadística depende del tipo de variable y del diseño. Para comparar proporciones de variables categóricas entre grupos independientes se usa chi cuadrada, o la prueba exacta de Fisher si las frecuencias esperadas son pequeñas. Para comparar medias de una variable cuantitativa con distribución normal entre dos grupos independientes se usa la t de Student, y entre tres o más grupos el análisis de varianza. Si los datos no son normales se usan pruebas no paramétricas como U de Mann Whitney o Kruskal Wallis. Para datos pareados se usan la t pareada o McNemar.
+R: Manual de bioestadística para ciencias de la salud ;; Manual de metodología de la investigación en salud
+
+@ fam|public_health|biostatistics|3|data_interpretation
+V: Una prueba para trombosis venosa profunda tiene sensibilidad de 95 por ciento y especificidad de 50 por ciento.
+P: ¿Qué indica una prueba con estas características cuando el resultado es negativo?
++ Que es muy útil para descartar la enfermedad || Una prueba muy sensible con resultado negativo descarta.
+- anchoring | Que confirma la enfermedad || La baja especificidad impide confirmar con un positivo.
+- availability_heuristic | Que no aporta información || El negativo es muy informativo.
+- representativeness_heuristic | Que tiene muchos falsos negativos || La alta sensibilidad implica pocos falsos negativos.
+- premature_closure | Que debe repetirse siempre || No es necesario si la probabilidad previa es baja.
+- framing_effect | Que el valor predictivo positivo es alto || La baja especificidad genera falsos positivos.
+- complexity_bias | Que debe sustituirse por biopsia || No aplica.
+- base_rate_fallacy | Que su utilidad no depende de la probabilidad previa || Sí depende.
+- belief_bias | Que sirve para confirmar con un positivo || Ese papel corresponde a pruebas específicas.
+- focusing_illusion | Que tiene una razón de verosimilitud negativa alta || Es baja, cerca de 0.1.
+E: Una prueba muy sensible tiene pocos falsos negativos, por lo que un resultado negativo descarta la enfermedad con confianza, lo que se resume en la regla SnNout. Una prueba muy específica tiene pocos falsos positivos, por lo que un resultado positivo confirma la enfermedad, regla SpPin. El dímero D en la trombosis venosa profunda es un ejemplo clásico de prueba sensible pero poco específica: un resultado negativo en un paciente con baja probabilidad clínica descarta la trombosis, mientras que un positivo requiere ultrasonido. La razón de verosimilitud negativa aquí es 0.05 entre 0.5, es decir, 0.1.
+R: Manual de epidemiología clínica para el primer nivel de atención ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa
+
+@ fam|public_health|biostatistics|3|data_interpretation
+V: Un estudio reporta un coeficiente de correlación de Pearson de menos 0.85 entre las horas semanales de actividad física y el índice de masa corporal en adultos.
+P: ¿Qué indica este coeficiente de correlación?
++ Una correlación negativa fuerte, a más actividad física menor índice de masa corporal || El signo indica la dirección y el valor cercano a 1 la fuerza.
+- anchoring | Una correlación débil por ser negativa || El signo no indica fuerza.
+- availability_heuristic | Que la actividad física causa pérdida de peso con certeza || La correlación no demuestra causalidad.
+- representativeness_heuristic | Que el 85 por ciento de las personas activas es delgado || No es una proporción.
+- premature_closure | Que no hay relación entre las variables || Hay una relación fuerte.
+- framing_effect | Una correlación positiva fuerte || El signo es negativo.
+- complexity_bias | Que la relación es exponencial || Pearson mide relación lineal.
+- base_rate_fallacy | Que el resultado es significativo sin importar el tamaño de muestra || La significancia depende de la muestra.
+- belief_bias | Que el coeficiente de determinación es 0.85 || Sería 0.72, el cuadrado del coeficiente.
+- focusing_illusion | Una razón de momios de 0.85 || Es otra medida.
+E: El coeficiente de correlación de Pearson mide la fuerza y dirección de la relación lineal entre dos variables cuantitativas. Su valor va de menos 1 a 1: el signo indica la dirección, positiva si ambas aumentan juntas y negativa si una aumenta cuando la otra disminuye, y el valor absoluto indica la fuerza, de modo que valores mayores de 0.7 se consideran fuertes. El coeficiente de determinación, r al cuadrado, indica la proporción de variabilidad explicada, aquí cerca de 72 por ciento. La correlación no implica causalidad. Para datos no normales se usa el coeficiente de Spearman.
+R: Manual de bioestadística para ciencias de la salud ;; Manual de metodología de la investigación en salud
+
+@ fam|public_health|biostatistics|4|data_interpretation
+V: Una nueva prueba para insuficiencia cardiaca tiene una razón de verosimilitud positiva de 10. Un paciente tiene una probabilidad previa estimada de 50 por ciento, es decir, momios previos de 1, y su resultado es positivo.
+P: ¿Cuál es la probabilidad posterior aproximada de insuficiencia cardiaca?
++ Alrededor de 91 por ciento || Los momios posteriores son 10, que equivalen a 10 entre 11.
+- anchoring | 50 por ciento || Ignora el resultado de la prueba.
+- availability_heuristic | 100 por ciento || Ninguna prueba da certeza absoluta.
+- representativeness_heuristic | 10 por ciento || Confunde la razón con una probabilidad.
+- premature_closure | 60 por ciento || Suma en lugar de multiplicar.
+- framing_effect | 500 por ciento || No es posible.
+- complexity_bias | No puede calcularse sin la sensibilidad exacta || La razón de verosimilitud basta.
+- base_rate_fallacy | 75 por ciento || Es un cálculo erróneo.
+- belief_bias | 9 por ciento || Es un cálculo erróneo.
+- focusing_illusion | 99 por ciento || Sobrestima el resultado.
+E: La razón de verosimilitud positiva es la sensibilidad dividida entre uno menos la especificidad, e indica cuánto aumentan los momios de enfermedad con un resultado positivo. Los momios posteriores se calculan multiplicando los momios previos por la razón de verosimilitud. Con una probabilidad previa de 50 por ciento, los momios previos son 1; multiplicados por 10, los momios posteriores son 10. La probabilidad se obtiene como momios entre uno más momios, 10 entre 11, cerca de 91 por ciento. Razones mayores de 10 o menores de 0.1 producen cambios grandes y concluyentes en la probabilidad.
+R: Manual de epidemiología clínica para el primer nivel de atención ;; Manual de bioestadística para ciencias de la salud
+
+@ fam|public_health|biostatistics|3|data_interpretation
+V: Dos radiólogos interpretan de forma independiente las mismas 200 radiografías de tórax para neumonía. Coinciden en 85 por ciento de los casos, pero se espera que coincidan en 50 por ciento solo por azar.
+P: ¿Qué indica el coeficiente kappa calculado en este caso?
++ Un kappa de 0.70 que indica concordancia buena más allá del azar || Se calcula como 0.85 menos 0.50 entre 1 menos 0.50.
+- anchoring | Un kappa de 0.85 || No resta la concordancia esperada por azar.
+- availability_heuristic | La sensibilidad de la radiografía || No hay estándar de referencia.
+- representativeness_heuristic | Concordancia nula || Es mayor que la esperada por azar.
+- premature_closure | Un kappa de 0.35 || Es un cálculo erróneo.
+- framing_effect | La correlación de Pearson entre radiólogos || Kappa es para variables categóricas.
+- complexity_bias | El valor predictivo positivo del radiólogo || Requiere estándar de referencia.
+- base_rate_fallacy | Un kappa de 0.50 || Corresponde a la concordancia por azar.
+- belief_bias | Que ambos radiólogos tienen razón en 85 por ciento || Concordar no significa acertar.
+- focusing_illusion | La exactitud diagnóstica de la prueba || Kappa mide reproducibilidad.
+E: El coeficiente kappa de Cohen mide la concordancia entre dos observadores para variables categóricas, corrigiendo la concordancia esperada por azar. Se calcula como la concordancia observada menos la esperada, dividida entre uno menos la esperada: 0.85 menos 0.50, entre 0.50, es decir, 0.70. Valores de 0.61 a 0.80 indican concordancia buena o sustancial, y mayores de 0.80 casi perfecta. Kappa evalúa reproducibilidad o confiabilidad, no validez: dos observadores pueden coincidir y estar equivocados. Para variables cuantitativas se usa el coeficiente de correlación intraclase.
+R: Manual de epidemiología clínica para el primer nivel de atención ;; Manual de bioestadística para ciencias de la salud
+
+@ fam|public_health|biostatistics|3|data_interpretation
+V: Para una prueba de péptido natriurético se construye una gráfica que muestra la sensibilidad contra uno menos la especificidad en distintos puntos de corte. El área bajo la curva es de 0.92.
+P: ¿Qué indica el área bajo la curva de 0.92?
++ Excelente capacidad discriminativa de la prueba || Un área cercana a 1 indica que distingue bien entre enfermos y sanos.
+- anchoring | Que la prueba es inútil || Un área de 0.5 indicaría discriminación nula.
+- availability_heuristic | Que la sensibilidad es de 92 por ciento en todos los puntos de corte || El área resume todos los puntos.
+- representativeness_heuristic | Que la prevalencia es de 92 por ciento || No mide prevalencia.
+- premature_closure | Que el valor predictivo positivo es de 92 por ciento || Depende de la prevalencia.
+- framing_effect | Que la especificidad es de 8 por ciento || No se deduce así.
+- complexity_bias | Que el kappa es 0.92 || Es otra medida.
+- base_rate_fallacy | Que la prueba no requiere punto de corte || La curva ayuda a elegirlo.
+- belief_bias | Que el 92 por ciento de los pacientes se cura || No mide desenlaces terapéuticos.
+- focusing_illusion | Que la correlación entre pruebas es 0.92 || No es una correlación.
+E: La curva ROC, característica operativa del receptor, grafica la sensibilidad contra uno menos la especificidad para distintos puntos de corte de una prueba cuantitativa. Permite elegir el punto de corte óptimo, habitualmente el más cercano a la esquina superior izquierda, y comparar pruebas. El área bajo la curva resume la capacidad discriminativa: 0.5 equivale al azar, de 0.7 a 0.8 es aceptable, de 0.8 a 0.9 buena y mayor de 0.9 excelente. Representa la probabilidad de que la prueba clasifique correctamente a un par elegido al azar de enfermo y sano.
+R: Manual de epidemiología clínica para el primer nivel de atención ;; Manual de bioestadística para ciencias de la salud
+
+@ fam|public_health|biostatistics|3|data_interpretation
+V: Un ensayo clínico reporta que un fármaco reduce el riesgo de fractura de cadera en 50 por ciento. Al revisar los datos, la incidencia pasó de 2 por ciento con placebo a 1 por ciento con el fármaco en 3 años.
+P: ¿Qué indica la reducción absoluta del riesgo en este estudio?
++ 1 por ciento, con un número necesario a tratar de 100 pacientes por 3 años || La diferencia absoluta entre 2 y 1 por ciento es pequeña.
+- anchoring | 50 por ciento, que equivale a la reducción absoluta || Esa es la reducción relativa.
+- availability_heuristic | 2 por ciento || Es el riesgo del control.
+- representativeness_heuristic | Número necesario a tratar de 2 pacientes || Se calcula con el riesgo absoluto.
+- premature_closure | Que todos los pacientes deben recibir el fármaco por su gran efecto || El beneficio absoluto es pequeño.
+- framing_effect | 0.5 por ciento || Es un cálculo erróneo.
+- complexity_bias | No puede calcularse sin la razón de momios || Se calcula con los riesgos.
+- base_rate_fallacy | 25 por ciento || Es un cálculo erróneo.
+- belief_bias | Número necesario a tratar de 50 pacientes || Es un cálculo erróneo.
+- focusing_illusion | Que la reducción relativa es de 1 por ciento || Se invierten los conceptos.
+E: La reducción relativa del riesgo expresa la disminución proporcional del riesgo respecto al control y suele parecer impresionante: aquí de 2 a 1 por ciento es una reducción de 50 por ciento. La reducción absoluta del riesgo es la diferencia simple, 1 por ciento, y el número necesario a tratar es su inverso, 100 pacientes durante 3 años para evitar una fractura. Presentar solo la reducción relativa es un ejemplo de efecto de encuadre que puede sobrestimar el beneficio. Para decidir un tratamiento se deben considerar los valores absolutos, los efectos adversos y el costo.
+R: Guía para la lectura crítica de ensayos clínicos ;; Manual de epidemiología clínica para el primer nivel de atención
+
+@ fam|public_health|biostatistics|3|data_interpretation
+V: Un estudio comparativo de dos fármacos para bajar la presión arterial reporta una diferencia de 1 mmHg en la presión sistólica a favor del fármaco nuevo, con p de 0.001, en una muestra de 20,000 pacientes.
+P: ¿Qué indica este resultado?
++ Una diferencia estadísticamente significativa pero de poca relevancia clínica || Las muestras muy grandes detectan diferencias mínimas.
+- anchoring | Que el fármaco nuevo es clínicamente muy superior || Una diferencia de 1 mmHg es mínima.
+- availability_heuristic | Que hay 0.1 por ciento de probabilidad de que el fármaco funcione || El valor de p no significa eso.
+- representativeness_heuristic | Que el resultado es un error tipo II || La diferencia fue significativa.
+- premature_closure | Que todos deben cambiar al fármaco nuevo || La relevancia clínica es baja.
+- framing_effect | Que el resultado no es significativo || p menor de 0.05 es significativo.
+- complexity_bias | Que el estudio carece de poder || Tiene poder muy alto.
+- base_rate_fallacy | Que la diferencia es de 1 por ciento de mortalidad || Es presión arterial.
+- belief_bias | Que p de 0.001 garantiza que no hay sesgo || El valor de p no evalúa sesgos.
+- focusing_illusion | Que el fármaco cura la hipertensión || No se deduce.
+E: El valor de p es la probabilidad de obtener un resultado igual o más extremo que el observado si la hipótesis nula fuera cierta. Un valor menor de 0.05 se considera estadísticamente significativo, pero no indica la magnitud ni la importancia clínica del efecto. En muestras muy grandes, diferencias mínimas pueden ser significativas. La relevancia clínica se juzga por la magnitud del efecto y su intervalo de confianza en relación con lo que importa al paciente. Una diferencia de 1 mmHg en la presión sistólica tiene poco impacto clínico individual, aunque puede considerarse junto con costo y efectos adversos.
+R: Guía para la lectura crítica de ensayos clínicos ;; Manual de bioestadística para ciencias de la salud

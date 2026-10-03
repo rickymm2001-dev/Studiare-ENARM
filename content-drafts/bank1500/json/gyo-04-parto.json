@@ -1,0 +1,2076 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "gyo-04-parto-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "normal_labor",
+      "vignette": "Primigesta de 25 años con embarazo de 39 semanas que ingresa con contracciones regulares cada 3 minutos de 45 segundos de duración. Cérvix con 6 cm de dilatación y 80% de borramiento. Membranas íntegras y frecuencia cardiaca fetal normal.",
+      "prompt": "¿Qué indica esta exploración sobre la fase del trabajo de parto?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fase latente del primer periodo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La fase latente es antes de los 5 a 6 cm."
+        },
+        {
+          "key": "b",
+          "text": "Trabajo de parto pretérmino",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El embarazo es de término."
+        },
+        {
+          "key": "c",
+          "text": "Prodromos de trabajo de parto",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Ya hay dilatación avanzada."
+        },
+        {
+          "key": "d",
+          "text": "Segundo periodo del trabajo de parto",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Inicia con la dilatación completa."
+        },
+        {
+          "key": "e",
+          "text": "Tercer periodo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Corresponde al alumbramiento."
+        },
+        {
+          "key": "f",
+          "text": "Fase activa del primer periodo del trabajo de parto",
+          "correct": true,
+          "rationale": "La fase activa inicia alrededor de los 5 a 6 cm con contracciones regulares."
+        },
+        {
+          "key": "g",
+          "text": "Periodo expulsivo prolongado",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No ha llegado a dilatación completa."
+        },
+        {
+          "key": "h",
+          "text": "El trabajo de parto inicia solo cuando se rompe la fuente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede iniciar con membranas íntegras."
+        },
+        {
+          "key": "i",
+          "text": "Falso trabajo de parto",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Hay cambios cervicales progresivos."
+        },
+        {
+          "key": "j",
+          "text": "Fase de desaceleración patológica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay datos de detención."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "f",
+        "i"
+      ],
+      "explanation": "El trabajo de parto se divide en tres periodos. El primero, de dilatación, tiene una fase latente con contracciones irregulares y cambios cervicales lentos hasta los 5 a 6 cm, y una fase activa con contracciones regulares y dilatación más rápida hasta los 10 cm. El segundo periodo, expulsivo, va de la dilatación completa al nacimiento. El tercero, el alumbramiento, va del nacimiento a la expulsión de la placenta. Según las recomendaciones actuales, la fase activa inicia alrededor de los 5 a 6 cm, lo que evita intervenciones innecesarias en la fase latente prolongada.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de vigilancia y manejo del trabajo de parto",
+        "Organización Mundial de la Salud. Recomendaciones para los cuidados durante el parto"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "normal_labor",
+      "vignette": "Mujer de 28 años en trabajo de parto activo. El registro cardiotocográfico muestra frecuencia basal de 140 latidos por minuto, variabilidad de 5 a 25 latidos, aceleraciones presentes y desaceleraciones que inician con la contracción, son simétricas y regresan a la basal al terminar la contracción.",
+      "prompt": "¿Qué indica este registro?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Registro normal con desaceleraciones tempranas por compresión cefálica",
+          "correct": true,
+          "rationale": "Las desaceleraciones tempranas son benignas."
+        },
+        {
+          "key": "b",
+          "text": "Indicación de cesárea urgente",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El registro es tranquilizador."
+        },
+        {
+          "key": "c",
+          "text": "Hipoxia fetal grave",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay datos."
+        },
+        {
+          "key": "d",
+          "text": "Toda desaceleración indica peligro",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Las tempranas son fisiológicas."
+        },
+        {
+          "key": "e",
+          "text": "Bradicardia fetal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La basal es normal."
+        },
+        {
+          "key": "f",
+          "text": "Variabilidad ausente",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La variabilidad es normal."
+        },
+        {
+          "key": "g",
+          "text": "Patrón sinusoidal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es ondulante sin variabilidad normal."
+        },
+        {
+          "key": "h",
+          "text": "Taquicardia fetal por fiebre materna",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La basal es normal."
+        },
+        {
+          "key": "i",
+          "text": "Desaceleraciones variables por compresión del cordón",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Son abruptas y de forma variable."
+        },
+        {
+          "key": "j",
+          "text": "Sufrimiento fetal con desaceleraciones tardías",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Las tardías inician después del pico de la contracción."
+        }
+      ],
+      "canonical": [
+        "a",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El registro cardiotocográfico evalúa la frecuencia basal, normal de 110 a 160, la variabilidad, normal de 5 a 25 latidos, las aceleraciones y las desaceleraciones. Las desaceleraciones tempranas coinciden con la contracción, son simétricas y se deben a compresión de la cabeza fetal con respuesta vagal, por lo que son benignas. Las tardías inician después del pico de la contracción y regresan después de que termina, y sugieren insuficiencia uteroplacentaria. Las variables son abruptas y de forma y duración variables por compresión del cordón. Un registro con basal normal, buena variabilidad y aceleraciones es tranquilizador.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de vigilancia y manejo del trabajo de parto"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "normal_labor",
+      "vignette": "Mujer de 30 años en trabajo de parto a las 40 semanas con 7 cm de dilatación. El registro muestra desaceleraciones tardías recurrentes con variabilidad mínima. Recibe oxitocina y tiene contracciones cada minuto y medio.",
+      "prompt": "¿Cuál es la conducta inicial más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Pedir a la madre que puje para acelerar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No está en expulsivo."
+        },
+        {
+          "key": "b",
+          "text": "No intervenir para no alarmar a la madre",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El feto puede estar en hipoxia."
+        },
+        {
+          "key": "c",
+          "text": "Continuar igual porque son desaceleraciones esperadas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Las tardías recurrentes son anormales."
+        },
+        {
+          "key": "d",
+          "text": "Mantener la vigilancia sin cambios",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "El registro es anormal."
+        },
+        {
+          "key": "e",
+          "text": "Colocar a la madre en decúbito supino",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Comprime la vena cava."
+        },
+        {
+          "key": "f",
+          "text": "Suspender la oxitocina, colocar a la madre en decúbito lateral, administrar líquidos y valorar el nacimiento si no mejora",
+          "correct": true,
+          "rationale": "Son medidas de reanimación intrauterina ante un registro anormal con taquisistolia."
+        },
+        {
+          "key": "g",
+          "text": "Amniotomía como única medida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No corrige la taquisistolia."
+        },
+        {
+          "key": "h",
+          "text": "Dar oxígeno a la madre como única medida y esperar 2 horas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No resuelve la causa."
+        },
+        {
+          "key": "i",
+          "text": "Aumentar la oxitocina para acelerar el parto",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Empeora la hipoxia."
+        },
+        {
+          "key": "j",
+          "text": "Ultrasonido Doppler completo antes de actuar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa las medidas."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "Las desaceleraciones tardías recurrentes con variabilidad mínima indican posible hipoxia fetal por insuficiencia uteroplacentaria. Se aplican medidas de reanimación intrauterina, como suspender la oxitocina, corregir la taquisistolia, que son más de 5 contracciones en 10 minutos, colocar a la madre en decúbito lateral, administrar líquidos intravenosos y corregir la hipotensión. Puede usarse un tocolítico de acción rápida. Si el patrón persiste se valora la resolución rápida del embarazo, por la vía más rápida y segura según la dilatación y la estación fetal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de vigilancia y manejo del trabajo de parto"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "normal_labor",
+      "vignette": "Mujer de 26 años con embarazo de 41 semanas. Se valora la posibilidad de inducción. Cérvix con 3 cm de dilatación, 70% de borramiento, consistencia blanda, posición central y la presentación en plano 0.",
+      "prompt": "¿Qué indica la puntuación de Bishop de esta paciente?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Indica desproporción cefalopélvica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No evalúa la pelvis."
+        },
+        {
+          "key": "b",
+          "text": "Contraindicación para la inducción",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay contraindicación."
+        },
+        {
+          "key": "c",
+          "text": "La inducción siempre termina en cesárea",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Con cérvix favorable el éxito es alto."
+        },
+        {
+          "key": "d",
+          "text": "Riesgo alto de falla de la inducción",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El cérvix es favorable."
+        },
+        {
+          "key": "e",
+          "text": "Puntuación de 6 dudosa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La suma es mayor."
+        },
+        {
+          "key": "f",
+          "text": "Trabajo de parto activo establecido",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se valora para inducción."
+        },
+        {
+          "key": "g",
+          "text": "Puntuación de 10, cérvix favorable para la inducción con oxitocina",
+          "correct": true,
+          "rationale": "Una puntuación de 8 o más predice éxito de la inducción."
+        },
+        {
+          "key": "h",
+          "text": "Indicación de cesárea electiva",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "i",
+          "text": "Requiere maduración con prostaglandinas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El cérvix ya es favorable."
+        },
+        {
+          "key": "j",
+          "text": "Puntuación de 4, cérvix desfavorable que requiere maduración",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La suma real es mayor."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "h",
+        "j"
+      ],
+      "explanation": "La puntuación de Bishop valora la dilatación, el borramiento, la consistencia, la posición del cérvix y la estación de la presentación, cada una de 0 a 3 puntos, salvo consistencia y posición de 0 a 2. En este caso son 2 por 3 cm, 2 por 70%, 2 por consistencia blanda, 2 por posición central y 2 por plano 0, total 10. Una puntuación de 8 o más indica cérvix favorable y alta probabilidad de parto vaginal con inducción con oxitocina. Con puntuación de 6 o menos se recomienda maduración cervical con prostaglandinas o métodos mecánicos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de inducción del trabajo de parto"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "normal_labor",
+      "vignette": "Mujer de 27 años con embarazo de 41 semanas y 3 días, sin complicaciones, con feto en buenas condiciones. No ha iniciado trabajo de parto. Cérvix con puntuación de Bishop de 4.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Caminar mucho y comer piña para provocar el parto como única medida",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es una estrategia eficaz."
+        },
+        {
+          "key": "b",
+          "text": "No inducir por miedo a la cesárea",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La inducción no aumenta las cesáreas."
+        },
+        {
+          "key": "c",
+          "text": "Egresar sin vigilancia hasta que inicie el parto",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Requiere vigilancia e inducción."
+        },
+        {
+          "key": "d",
+          "text": "Amniotomía con cérvix cerrado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es posible ni adecuada."
+        },
+        {
+          "key": "e",
+          "text": "Esperar hasta las 43 semanas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta el riesgo de muerte fetal."
+        },
+        {
+          "key": "f",
+          "text": "Esperar al inicio espontáneo sin importar las semanas",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "El riesgo aumenta con el tiempo."
+        },
+        {
+          "key": "g",
+          "text": "Ofrecer inducción del trabajo de parto con maduración cervical previa",
+          "correct": true,
+          "rationale": "A partir de las 41 semanas la inducción reduce la mortalidad perinatal."
+        },
+        {
+          "key": "h",
+          "text": "Cesárea electiva por embarazo prolongado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicada por sí misma."
+        },
+        {
+          "key": "i",
+          "text": "Inducción con oxitocina sin maduración cervical",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Con cérvix desfavorable se madura primero."
+        },
+        {
+          "key": "j",
+          "text": "Amniocentesis para madurez pulmonar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria a término."
+        }
+      ],
+      "canonical": [
+        "e",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "El embarazo prolongado o de postérmino se asocia a mayor riesgo de muerte fetal, macrosomía, aspiración de meconio y oligohidramnios. Se recomienda ofrecer inducción del trabajo de parto a partir de las 41 semanas, ya que reduce la mortalidad perinatal sin aumentar las cesáreas. Con cérvix desfavorable, Bishop de 6 o menos, se realiza maduración cervical con misoprostol, dinoprostona o sonda de Foley, y después oxitocina. Entre las 40 y 41 semanas se vigila el bienestar fetal. El despegamiento de membranas también puede favorecer el inicio del trabajo de parto.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de inducción del trabajo de parto"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "normal_labor",
+      "vignette": "Estudiante de medicina que observa un parto en presentación cefálica occipitoanterior y debe describir el orden de los movimientos que realiza el feto al atravesar la pelvis.",
+      "prompt": "¿Cuál es la secuencia del mecanismo del trabajo de parto?",
+      "polarity": "affirmative",
+      "task": "mechanism",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Encajamiento al final del proceso",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es el primer movimiento."
+        },
+        {
+          "key": "b",
+          "text": "Restitución antes del encajamiento",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La restitución ocurre al final."
+        },
+        {
+          "key": "c",
+          "text": "Expulsión antes de la extensión de la cabeza",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La cabeza se extiende al salir."
+        },
+        {
+          "key": "d",
+          "text": "Solo descenso y expulsión",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Omite los movimientos clave."
+        },
+        {
+          "key": "e",
+          "text": "Rotación interna después del nacimiento de los hombros",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Ocurre antes de la extensión."
+        },
+        {
+          "key": "f",
+          "text": "Flexión después de la extensión",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La flexión ocurre durante el descenso."
+        },
+        {
+          "key": "g",
+          "text": "Encajamiento, descenso, flexión, rotación interna, extensión, rotación externa y expulsión",
+          "correct": true,
+          "rationale": "Son los movimientos cardinales del parto."
+        },
+        {
+          "key": "h",
+          "text": "El bebé no realiza movimientos, solo es empujado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay movimientos cardinales."
+        },
+        {
+          "key": "i",
+          "text": "Rotación externa antes de la rotación interna",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La rotación interna ocurre antes de la extensión."
+        },
+        {
+          "key": "j",
+          "text": "Extensión, flexión, descenso y rotación interna",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El orden es incorrecto."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "Los movimientos cardinales del trabajo de parto en presentación de vértice son encajamiento, cuando el diámetro biparietal pasa el estrecho superior, descenso, flexión de la cabeza para presentar el diámetro suboccipitobregmático más pequeño, rotación interna para llevar el occipucio hacia el pubis, extensión al salir por la vulva, restitución y rotación externa para alinear la cabeza con los hombros, y expulsión de hombros y cuerpo. Conocer el mecanismo permite reconocer alteraciones como las variedades posteriores persistentes o la distocia de hombros.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de vigilancia y manejo del trabajo de parto"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "normal_labor",
+      "vignette": "Mujer de 32 años con diabetes gestacional y feto estimado en 4 300 g. Tras la salida de la cabeza, esta se retrae contra el periné y los hombros no salen con la tracción suave habitual.",
+      "prompt": "¿Cuál es la maniobra inicial más apropiada?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Pedir a la madre que puje más fuerte como única medida",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No resuelve el impacto."
+        },
+        {
+          "key": "b",
+          "text": "Esperar la siguiente contracción sin maniobras",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Aumenta la hipoxia."
+        },
+        {
+          "key": "c",
+          "text": "Cesárea de inmediato con la cabeza fuera",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es la última opción tras otras maniobras."
+        },
+        {
+          "key": "d",
+          "text": "No hacer nada para evitar lesiones legales",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El retraso aumenta el daño."
+        },
+        {
+          "key": "e",
+          "text": "Episiotomía como única medida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No libera el hombro por sí sola."
+        },
+        {
+          "key": "f",
+          "text": "Presión fúndica intensa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Empeora el impacto del hombro."
+        },
+        {
+          "key": "g",
+          "text": "Rotar la cabeza 180 grados con fuerza",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede lesionar al feto."
+        },
+        {
+          "key": "h",
+          "text": "Pedir ayuda, flexionar los muslos de la madre sobre el abdomen con la maniobra de McRoberts y presión suprapúbica",
+          "correct": true,
+          "rationale": "Resuelven la mayoría de las distocias de hombros."
+        },
+        {
+          "key": "i",
+          "text": "Tracción fuerte de la cabeza fetal hacia abajo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Causa lesión del plexo braquial."
+        },
+        {
+          "key": "j",
+          "text": "Fractura intencional de la clavícula como primera maniobra",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es de último recurso."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "h",
+        "i"
+      ],
+      "explanation": "La distocia de hombros ocurre cuando el hombro anterior queda atrapado detrás de la sínfisis del pubis tras la salida de la cabeza, que se retrae contra el periné en el signo de la tortuga. Sus factores de riesgo son macrosomía, diabetes, obesidad y parto instrumentado, aunque muchas son impredecibles. El manejo inicial es pedir ayuda, evitar la tracción excesiva y la presión fúndica, realizar la maniobra de McRoberts y presión suprapúbica. Si no resuelve se realizan maniobras internas de rotación, como Rubin y Woods, y la extracción del brazo posterior. Las complicaciones incluyen lesión del plexo braquial, fractura de clavícula e hipoxia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de vigilancia y manejo del trabajo de parto"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "normal_labor",
+      "vignette": "Primigesta de 24 años con embarazo de 39 semanas en trabajo de parto activo con 5 cm de dilatación. Solicita alivio del dolor. No tiene contraindicaciones.",
+      "prompt": "¿Cuál es el método de analgesia de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Bloqueo de nervios periféricos múltiples",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el método estándar."
+        },
+        {
+          "key": "b",
+          "text": "No ofrecer analgesia para no aumentar cesáreas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "No aumenta las cesáreas."
+        },
+        {
+          "key": "c",
+          "text": "El dolor del parto debe soportarse sin ayuda",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La analgesia es un derecho."
+        },
+        {
+          "key": "d",
+          "text": "Anestesia general",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada para analgesia del parto."
+        },
+        {
+          "key": "e",
+          "text": "Morfina intramuscular repetida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es menos eficaz y causa depresión neonatal."
+        },
+        {
+          "key": "f",
+          "text": "Diazepam intravenoso",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un analgésico y causa depresión neonatal."
+        },
+        {
+          "key": "g",
+          "text": "Negar la analgesia porque prolonga mucho el parto",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Su efecto en la duración es pequeño."
+        },
+        {
+          "key": "h",
+          "text": "Ketorolaco intravenoso como método principal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es suficiente."
+        },
+        {
+          "key": "i",
+          "text": "Analgesia epidural",
+          "correct": true,
+          "rationale": "Es el método más eficaz para el dolor del trabajo de parto."
+        },
+        {
+          "key": "j",
+          "text": "Esperar a la dilatación completa para dar analgesia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede darse en cualquier momento a solicitud de la mujer."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "La analgesia epidural es el método más eficaz para el alivio del dolor durante el trabajo de parto. Puede iniciarse a solicitud de la mujer en cualquier fase, sin necesidad de esperar una dilatación específica. No aumenta el riesgo de cesárea, aunque puede prolongar ligeramente el segundo periodo y aumentar el parto instrumentado. Sus efectos adversos incluyen hipotensión, fiebre, prurito y cefalea pospunción. Las contraindicaciones son coagulopatía, infección en el sitio de punción, hipovolemia no corregida y rechazo de la paciente. Las medidas no farmacológicas, como el acompañamiento y la libertad de movimiento, también ayudan.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de vigilancia y manejo del trabajo de parto",
+        "Organización Mundial de la Salud. Recomendaciones para los cuidados durante el parto"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "preterm_labor",
+      "vignette": "Mujer de 26 años con embarazo de 31 semanas que presenta contracciones dolorosas regulares cada 5 minutos durante 2 horas. En el tacto el cérvix tiene 3 cm de dilatación y 60% de borramiento. Membranas íntegras.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Amenaza de parto pretérmino sin cambios cervicales",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ya hay dilatación y borramiento."
+        },
+        {
+          "key": "b",
+          "text": "Ruptura prematura de membranas",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Las membranas están íntegras."
+        },
+        {
+          "key": "c",
+          "text": "Trabajo de parto pretérmino",
+          "correct": true,
+          "rationale": "Contracciones regulares con cambios cervicales entre las 20 y 36.6 semanas."
+        },
+        {
+          "key": "d",
+          "text": "Infección urinaria con dolor",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica los cambios cervicales."
+        },
+        {
+          "key": "e",
+          "text": "Apendicitis aguda",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los cambios cervicales."
+        },
+        {
+          "key": "f",
+          "text": "Contracciones de Braxton Hicks",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No producen cambios cervicales."
+        },
+        {
+          "key": "g",
+          "text": "Desprendimiento de placenta",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay sangrado ni hipertonía."
+        },
+        {
+          "key": "h",
+          "text": "Contracciones normales que pasarán solas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay cambios cervicales."
+        },
+        {
+          "key": "i",
+          "text": "Insuficiencia cervical",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es una dilatación indolora sin contracciones."
+        },
+        {
+          "key": "j",
+          "text": "Trabajo de parto de término",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El embarazo es de 31 semanas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "El trabajo de parto pretérmino es la presencia de contracciones uterinas regulares con cambios cervicales progresivos, dilatación de 2 cm o más o borramiento importante, entre las 20 y 36.6 semanas. Es la principal causa de morbimortalidad neonatal. Los factores de riesgo incluyen parto pretérmino previo, cérvix corto, infecciones urinarias y vaginales, embarazo múltiple, polihidramnios, tabaquismo, periodo intergenésico corto y malformaciones uterinas. La medición de la longitud cervical por ultrasonido transvaginal y la fibronectina fetal ayudan a predecir el riesgo en casos dudosos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "preterm_labor",
+      "vignette": "Mujer de 28 años en trabajo de parto pretérmino a las 30 semanas, con 3 cm de dilatación y membranas íntegras. Sin datos de infección ni sufrimiento fetal.",
+      "prompt": "¿Cuál es el tratamiento de elección para mejorar el pronóstico neonatal?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "No dar corticosteroides por miedo a efectos en el bebé",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Su beneficio está comprobado."
+        },
+        {
+          "key": "b",
+          "text": "Hidratación intravenosa abundante como tocolítico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "c",
+          "text": "Cerclaje de urgencia con 3 cm y contracciones",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Está contraindicado con trabajo de parto activo."
+        },
+        {
+          "key": "d",
+          "text": "Progesterona en el trabajo de parto activo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se usa para prevención, no en el trabajo de parto."
+        },
+        {
+          "key": "e",
+          "text": "Cesárea inmediata",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada sin indicación obstétrica."
+        },
+        {
+          "key": "f",
+          "text": "Corticosteroides prenatales con betametasona o dexametasona y sulfato de magnesio para neuroprotección, con tocolisis breve para permitir su efecto",
+          "correct": true,
+          "rationale": "Reducen la morbimortalidad neonatal."
+        },
+        {
+          "key": "g",
+          "text": "Antibióticos de rutina con membranas íntegras",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se recomiendan sin infección."
+        },
+        {
+          "key": "h",
+          "text": "Solo reposo absoluto en cama",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "i",
+          "text": "Tocolisis prolongada por semanas como medida principal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No mejora el pronóstico y tiene efectos adversos."
+        },
+        {
+          "key": "j",
+          "text": "Que el bebé nazca rápido para que se desarrolle afuera",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La prematurez tiene riesgos."
+        }
+      ],
+      "canonical": [
+        "e",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "El manejo del trabajo de parto pretérmino busca mejorar el pronóstico neonatal. Entre las 24 y 34 semanas se administran corticosteroides prenatales, betametasona 12 mg intramuscular cada 24 horas por dos dosis o dexametasona 6 mg cada 12 horas por cuatro dosis, que reducen el síndrome de dificultad respiratoria, la hemorragia intraventricular y la mortalidad. Antes de las 32 semanas se administra sulfato de magnesio para neuroprotección, que reduce la parálisis cerebral. La tocolisis con nifedipino o atosiban se usa por 48 horas para permitir el efecto de los esteroides o el traslado. La profilaxis para estreptococo del grupo B se indica si el estado es desconocido.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "preterm_labor",
+      "vignette": "Mujer de 29 años con embarazo único de 22 semanas, sin síntomas. El ultrasonido transvaginal de rutina muestra longitud cervical de 15 mm. Sin antecedente de parto pretérmino.",
+      "prompt": "¿Cuál es la medida de prevención indicada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Progesterona vaginal diaria hasta las 36 semanas",
+          "correct": true,
+          "rationale": "Reduce el parto pretérmino en mujeres con cérvix corto."
+        },
+        {
+          "key": "b",
+          "text": "Ninguna medida porque está asintomática",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El cérvix corto aumenta el riesgo."
+        },
+        {
+          "key": "c",
+          "text": "Cesárea programada a las 34 semanas",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "d",
+          "text": "Evitar subir escaleras durante el resto del embarazo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No previene el parto pretérmino."
+        },
+        {
+          "key": "e",
+          "text": "Esperar a que aparezcan contracciones para actuar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La prevención es más eficaz antes."
+        },
+        {
+          "key": "f",
+          "text": "Reposo absoluto en cama",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "g",
+          "text": "Tocolíticos orales profilácticos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No previenen el parto pretérmino."
+        },
+        {
+          "key": "h",
+          "text": "Corticosteroides a las 22 semanas de inmediato",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se administran ante riesgo inminente de nacimiento."
+        },
+        {
+          "key": "i",
+          "text": "Suspender toda actividad laboral como única medida",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es eficaz por sí sola."
+        },
+        {
+          "key": "j",
+          "text": "Antibióticos profilácticos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No están indicados."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "La longitud cervical por ultrasonido transvaginal entre las 18 y 24 semanas predice el riesgo de parto pretérmino. En embarazos únicos con cérvix de 25 mm o menos, la progesterona vaginal diaria hasta las 36 semanas reduce el parto pretérmino y la morbilidad neonatal. En mujeres con antecedente de parto pretérmino y cérvix corto se considera cerclaje cervical. El pesario es una opción en algunos casos. El reposo en cama, los tocolíticos profilácticos y los antibióticos sin infección no previenen el parto pretérmino. Se recomienda tratar la bacteriuria asintomática y suspender el tabaquismo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "preterm_labor",
+      "vignette": "Mujer de 27 años en trabajo de parto pretérmino a las 29 semanas. Se decide tocolisis para completar el esquema de corticosteroides. Tiene asma controlada y frecuencia cardiaca de 88.",
+      "prompt": "¿Cuál es el tocolítico de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Terbutalina intravenosa como primera opción",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene efectos cardiovasculares importantes."
+        },
+        {
+          "key": "b",
+          "text": "Nifedipino oral o atosiban intravenoso",
+          "correct": true,
+          "rationale": "Son eficaces y con menos efectos adversos que los betamiméticos."
+        },
+        {
+          "key": "c",
+          "text": "Sulfato de magnesio como tocolítico de primera línea",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Su eficacia como tocolítico es limitada."
+        },
+        {
+          "key": "d",
+          "text": "Hidratación intravenosa y sedación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No son tocolíticos eficaces."
+        },
+        {
+          "key": "e",
+          "text": "Oxitocina a dosis bajas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Estimula las contracciones."
+        },
+        {
+          "key": "f",
+          "text": "Progesterona intramuscular como tocolítico agudo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No detiene el trabajo de parto activo."
+        },
+        {
+          "key": "g",
+          "text": "No usar tocolisis aunque falten esteroides",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La tocolisis breve permite completar el esquema."
+        },
+        {
+          "key": "h",
+          "text": "Combinar tres tocolíticos de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Aumenta los efectos adversos."
+        },
+        {
+          "key": "i",
+          "text": "Reposo absoluto como tocolítico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "j",
+          "text": "Indometacina después de las 32 semanas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede cerrar el conducto arterioso."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "La tocolisis busca retrasar el nacimiento 48 horas para completar los corticosteroides o trasladar a la paciente. Los tocolíticos de primera línea son nifedipino, bloqueador de canales de calcio por vía oral, y atosiban, antagonista de receptores de oxitocina con menos efectos adversos. La indometacina puede usarse antes de las 32 semanas por periodos cortos, ya que después puede causar cierre prematuro del conducto arterioso y oligohidramnios. Los betamiméticos causan taquicardia, hiperglucemia, hipopotasemia y edema pulmonar. La tocolisis está contraindicada en corioamnionitis, desprendimiento de placenta, preeclampsia grave, muerte fetal y compromiso fetal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "preterm_labor",
+      "vignette": "Mujer de 25 años con embarazo de 30 semanas en trabajo de parto pretérmino que presenta fiebre de 38.6 °C, taquicardia materna, útero doloroso y líquido amniótico fétido al tacto. Frecuencia cardiaca fetal de 175 por minuto.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esperar a completar 48 horas de corticosteroides antes de resolver",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No se retrasa el nacimiento por la infección."
+        },
+        {
+          "key": "b",
+          "text": "Amniocentesis antes de cualquier tratamiento",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El diagnóstico clínico es claro."
+        },
+        {
+          "key": "c",
+          "text": "La fiebre se debe al esfuerzo del trabajo de parto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay infección."
+        },
+        {
+          "key": "d",
+          "text": "Cesárea obligatoria por la infección",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La vía se decide por criterios obstétricos."
+        },
+        {
+          "key": "e",
+          "text": "Solo antipiréticos y vigilancia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La infección requiere antibióticos y nacimiento."
+        },
+        {
+          "key": "f",
+          "text": "Tocolisis con nifedipino para prolongar el embarazo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Está contraindicada en infección intraamniótica."
+        },
+        {
+          "key": "g",
+          "text": "Cerclaje de urgencia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Está contraindicado."
+        },
+        {
+          "key": "h",
+          "text": "No dar antibióticos para no afectar al bebé",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La infección no tratada es más dañina."
+        },
+        {
+          "key": "i",
+          "text": "Iniciar antibióticos de amplio espectro y resolver el embarazo sin tocolisis",
+          "correct": true,
+          "rationale": "La infección intraamniótica contraindica la tocolisis."
+        },
+        {
+          "key": "j",
+          "text": "Mantener el manejo expectante",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Aumenta la sepsis materna y neonatal."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "La infección intraamniótica o corioamnionitis se sospecha con fiebre materna más taquicardia fetal, leucocitosis materna, líquido purulento o fétido o dolor uterino. Es causa y consecuencia del parto pretérmino y de la ruptura de membranas. El tratamiento es antibiótico intravenoso de amplio espectro, como ampicilina con gentamicina, agregando clindamicina o metronidazol si hay cesárea, y la resolución del embarazo. La tocolisis está contraindicada. La infección intraamniótica no es indicación de cesárea por sí misma. Las complicaciones incluyen sepsis materna, hemorragia posparto por atonía y sepsis neonatal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "preterm_labor",
+      "vignette": "Mujer de 32 años con embarazo de 18 semanas. Tuvo un parto pretérmino espontáneo a las 32 semanas hace 2 años. Ahora está asintomática.",
+      "prompt": "¿Cuál es el factor de riesgo más importante de parto pretérmino en esta paciente?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Edad mayor de 30 años",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es un factor importante."
+        },
+        {
+          "key": "b",
+          "text": "Embarazo de feto masculino",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Su efecto es mínimo."
+        },
+        {
+          "key": "c",
+          "text": "Primiparidad",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Ya tiene un parto previo."
+        },
+        {
+          "key": "d",
+          "text": "Consumo moderado de café",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es un factor relevante."
+        },
+        {
+          "key": "e",
+          "text": "Grupo sanguíneo Rh negativo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "f",
+          "text": "Vacunación contra influenza",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No aumenta el riesgo."
+        },
+        {
+          "key": "g",
+          "text": "Cargar objetos ligeros en casa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es un factor relevante."
+        },
+        {
+          "key": "h",
+          "text": "Antecedente de parto pretérmino espontáneo",
+          "correct": true,
+          "rationale": "Es el factor de riesgo más fuerte de recurrencia."
+        },
+        {
+          "key": "i",
+          "text": "Ejercicio moderado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un factor de riesgo."
+        },
+        {
+          "key": "j",
+          "text": "Relaciones sexuales en el embarazo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es un factor establecido."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "El antecedente de parto pretérmino espontáneo es el factor de riesgo más importante de un nuevo parto pretérmino, con riesgo de recurrencia de 15 a 30% o mayor según el número y la edad gestacional de los previos. Otros factores son cérvix corto, embarazo múltiple, infecciones genitourinarias, sangrado en el embarazo, polihidramnios, malformaciones uterinas, cirugía cervical previa, tabaquismo, bajo índice de masa corporal y periodo intergenésico corto. En mujeres con parto pretérmino previo se mide el cérvix de forma seriada y se considera progesterona o cerclaje.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "preterm_labor",
+      "vignette": "Mujer de 30 años con embarazo de 20 semanas y antecedente de dos pérdidas en el segundo trimestre con dilatación cervical indolora sin contracciones. Ahora el cérvix mide 18 mm por ultrasonido. Sin contracciones ni infección.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Reposo absoluto como único tratamiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "b",
+          "text": "Corticosteroides a las 20 semanas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No son útiles antes de la viabilidad."
+        },
+        {
+          "key": "c",
+          "text": "Esperar a que aparezcan contracciones",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La insuficiencia cervical es indolora."
+        },
+        {
+          "key": "d",
+          "text": "Evitar caminar el resto del embarazo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "e",
+          "text": "Cerclaje cervical",
+          "correct": true,
+          "rationale": "Antecedente de pérdidas indoloras en el segundo trimestre con cérvix corto sugiere insuficiencia cervical."
+        },
+        {
+          "key": "f",
+          "text": "No intervenir para no causar contracciones",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El cerclaje reduce la pérdida."
+        },
+        {
+          "key": "g",
+          "text": "Histerectomía",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "Tocolíticos orales continuos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No tratan la insuficiencia cervical."
+        },
+        {
+          "key": "i",
+          "text": "Ácido fólico a dosis altas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No trata la insuficiencia cervical."
+        },
+        {
+          "key": "j",
+          "text": "Antibióticos profilácticos continuos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No tratan la causa."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "La insuficiencia cervical es la incapacidad del cérvix para mantener el embarazo en ausencia de contracciones, con dilatación indolora en el segundo trimestre. Se asocia a conización, dilataciones cervicales repetidas, malformaciones y alteraciones del tejido conectivo. El cerclaje cervical se indica por antecedente de una o más pérdidas en el segundo trimestre atribuibles a insuficiencia cervical, por cérvix corto menor de 25 mm antes de las 24 semanas con antecedente de parto pretérmino, o de rescate ante dilatación indolora sin contracciones. Se retira a las 36 a 37 semanas o si inicia el trabajo de parto.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "premature_rupture_membranes",
+      "vignette": "Mujer de 27 años con embarazo de 38 semanas que refiere salida abundante de líquido claro por vagina hace 2 horas. En la especuloscopia se observa salida de líquido por el orificio cervical que aumenta con la maniobra de Valsalva. Prueba de nitrazina positiva y cristalografía en helecho.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Vaginosis bacteriana",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da flujo grisáceo maloliente."
+        },
+        {
+          "key": "b",
+          "text": "Fístula vesicovaginal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara en este contexto."
+        },
+        {
+          "key": "c",
+          "text": "Incontinencia urinaria del embarazo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La orina no da patrón en helecho."
+        },
+        {
+          "key": "d",
+          "text": "Candidiasis vaginal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da flujo blanco espeso."
+        },
+        {
+          "key": "e",
+          "text": "Expulsión del tapón mucoso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es moco escaso sanguinolento."
+        },
+        {
+          "key": "f",
+          "text": "Ruptura de membranas a término",
+          "correct": true,
+          "rationale": "Salida de líquido por el cérvix con nitrazina positiva y patrón en helecho."
+        },
+        {
+          "key": "g",
+          "text": "Trabajo de parto activo con membranas íntegras",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Hay salida de líquido amniótico."
+        },
+        {
+          "key": "h",
+          "text": "Leucorrea fisiológica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No sale por el orificio cervical en cantidad."
+        },
+        {
+          "key": "i",
+          "text": "Sudoración vaginal normal del embarazo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se confirmó líquido amniótico."
+        },
+        {
+          "key": "j",
+          "text": "Semen tras relaciones sexuales",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el volumen ni el patrón."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "h"
+      ],
+      "explanation": "La ruptura de membranas es la pérdida de la integridad del saco amniótico antes del inicio del trabajo de parto. Se diagnostica por la salida de líquido por el orificio cervical en la especuloscopia, a veces con Valsalva, y se confirma con pruebas como nitrazina, que vira por el pH alcalino del líquido, cristalografía en helecho o marcadores como la proteína placentaria alfa microglobulina 1. Se evita el tacto vaginal hasta decidir el manejo para no aumentar el riesgo de infección. El ultrasonido muestra oligohidramnios en muchos casos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la ruptura prematura de membranas"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "premature_rupture_membranes",
+      "vignette": "Mujer de 26 años con embarazo de 39 semanas y ruptura de membranas confirmada hace 3 horas. No tiene contracciones. Afebril, feto en buenas condiciones, presentación cefálica. Cultivo de estreptococo del grupo B negativo.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tactos vaginales cada hora para vigilar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Aumentan el riesgo de infección."
+        },
+        {
+          "key": "b",
+          "text": "Amniocentesis para descartar infección",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "c",
+          "text": "Manejo expectante por 72 horas en casa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta el riesgo de infección."
+        },
+        {
+          "key": "d",
+          "text": "Antibióticos profilácticos sin inducir",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La inducción es el manejo recomendado."
+        },
+        {
+          "key": "e",
+          "text": "Corticosteroides para madurez pulmonar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No están indicados a término."
+        },
+        {
+          "key": "f",
+          "text": "Esperar el inicio espontáneo sin límite de tiempo",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Aumenta la infección."
+        },
+        {
+          "key": "g",
+          "text": "Cesárea inmediata",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "No inducir para evitar intervenciones",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo de infección aumenta con el tiempo."
+        },
+        {
+          "key": "i",
+          "text": "Inducción del trabajo de parto con oxitocina",
+          "correct": true,
+          "rationale": "A término la inducción temprana reduce la infección materna y neonatal."
+        },
+        {
+          "key": "j",
+          "text": "Tocolisis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada a término."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "En la ruptura de membranas a término, la mayoría de las mujeres inicia trabajo de parto en las siguientes 24 horas. La inducción temprana con oxitocina reduce la corioamnionitis, la endometritis y la infección neonatal en comparación con el manejo expectante prolongado. Se minimizan los tactos vaginales. Si el estreptococo del grupo B es positivo o desconocido con factores de riesgo, se administra profilaxis intraparto. Las indicaciones de cesárea son las obstétricas habituales. Puede ofrecerse un periodo breve de espera de algunas horas si la mujer lo prefiere y no hay complicaciones.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la ruptura prematura de membranas"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "premature_rupture_membranes",
+      "vignette": "Mujer de 28 años con embarazo de 30 semanas y ruptura prematura de membranas confirmada hace 6 horas. Sin contracciones, afebril, feto en buenas condiciones y sin datos de infección.",
+      "prompt": "¿Cuál es el manejo de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Inducción inmediata del trabajo de parto",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta las complicaciones de la prematurez sin beneficio."
+        },
+        {
+          "key": "b",
+          "text": "No administrar corticosteroides por la ruptura",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Están indicados."
+        },
+        {
+          "key": "c",
+          "text": "Antibióticos solo si aparece fiebre",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Los antibióticos de latencia prolongan el embarazo."
+        },
+        {
+          "key": "d",
+          "text": "Manejo expectante hospitalario con corticosteroides, antibióticos de latencia y sulfato de magnesio para neuroprotección, hasta las 34 semanas o hasta que haya indicación de nacimiento",
+          "correct": true,
+          "rationale": "Mejora el pronóstico neonatal."
+        },
+        {
+          "key": "e",
+          "text": "Tactos vaginales diarios para vigilar el cérvix",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumentan la infección."
+        },
+        {
+          "key": "f",
+          "text": "Egreso con reposo en casa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Requiere hospitalización."
+        },
+        {
+          "key": "g",
+          "text": "Tocolisis prolongada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No mejora el pronóstico en la ruptura de membranas."
+        },
+        {
+          "key": "h",
+          "text": "Cesárea de urgencia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay indicación."
+        },
+        {
+          "key": "i",
+          "text": "Amnioinfusión de rutina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "j",
+          "text": "El líquido se repone solo y no requiere manejo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay riesgo de infección y prematurez."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "f",
+        "g"
+      ],
+      "explanation": "En la ruptura prematura de membranas pretérmino entre las 24 y 34 semanas, sin infección ni otras indicaciones de nacimiento, se recomienda manejo expectante hospitalario. Incluye corticosteroides para madurez pulmonar, antibióticos de latencia como ampicilina y eritromicina o azitromicina, que prolongan el embarazo y reducen la infección, sulfato de magnesio para neuroprotección antes de las 32 semanas, vigilancia de datos de infección y bienestar fetal y evitar los tactos vaginales. Se resuelve a las 34 semanas o antes si hay corioamnionitis, desprendimiento, compromiso fetal o trabajo de parto.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la ruptura prematura de membranas"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q19",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "premature_rupture_membranes",
+      "vignette": "Mujer de 26 años con embarazo de 36 semanas en consulta prenatal. Pregunta por el cultivo que le van a hacer en vagina y recto.",
+      "prompt": "¿Cuál es el propósito de este tamizaje?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Detectar colonización por estreptococo del grupo B para dar profilaxis intraparto y prevenir sepsis neonatal temprana",
+          "correct": true,
+          "rationale": "El tamizaje universal se hace entre las 36 y 37.6 semanas."
+        },
+        {
+          "key": "b",
+          "text": "Diagnosticar ruptura de membranas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es su propósito."
+        },
+        {
+          "key": "c",
+          "text": "Decidir la vía de nacimiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La colonización no indica cesárea."
+        },
+        {
+          "key": "d",
+          "text": "Detectar vaginosis bacteriana para tratarla en todas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es su propósito."
+        },
+        {
+          "key": "e",
+          "text": "Detectar virus del papiloma humano",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es su propósito."
+        },
+        {
+          "key": "f",
+          "text": "Comprobar la higiene de la paciente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La colonización es frecuente y no indica mala higiene."
+        },
+        {
+          "key": "g",
+          "text": "Omitir el cultivo para evitar molestias",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Previene infecciones graves en el recién nacido."
+        },
+        {
+          "key": "h",
+          "text": "Detectar candidiasis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es su propósito."
+        },
+        {
+          "key": "i",
+          "text": "Medir la flora completa para probióticos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es su propósito."
+        },
+        {
+          "key": "j",
+          "text": "Tratar con antibióticos orales a la madre colonizada antes del parto",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No erradica la colonización y no se recomienda."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "j"
+      ],
+      "explanation": "Streptococcus agalactiae o estreptococo del grupo B coloniza el tracto genital y gastrointestinal de 10 a 30% de las embarazadas y es una causa principal de sepsis neonatal temprana. Se recomienda cultivo vaginal y rectal entre las 36 y 37.6 semanas. Las mujeres colonizadas reciben profilaxis intraparto con penicilina o ampicilina intravenosa iniciada al menos 4 horas antes del nacimiento. También reciben profilaxis las mujeres con bacteriuria por este agente en el embarazo o un hijo previo con enfermedad invasiva. La colonización no indica cesárea y los antibióticos orales antes del parto no son útiles.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la ruptura prematura de membranas",
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de sepsis y choque séptico del recién nacido"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q20",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "premature_rupture_membranes",
+      "vignette": "Mujer de 30 años con ruptura prematura de membranas a las 21 semanas, con anhidramnios persistente. Pregunta por el riesgo para el bebé si continúa el embarazo.",
+      "prompt": "¿Cuál es la complicación fetal más grave asociada?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Polihidramnios secundario",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Hay anhidramnios."
+        },
+        {
+          "key": "b",
+          "text": "Cardiopatía congénita",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No se produce por la ruptura."
+        },
+        {
+          "key": "c",
+          "text": "Hipoplasia pulmonar",
+          "correct": true,
+          "rationale": "La falta de líquido amniótico en etapas tempranas impide el desarrollo pulmonar."
+        },
+        {
+          "key": "d",
+          "text": "Labio y paladar hendido",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se relaciona."
+        },
+        {
+          "key": "e",
+          "text": "Restricción del crecimiento como única consecuencia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La hipoplasia pulmonar es la más grave."
+        },
+        {
+          "key": "f",
+          "text": "Anemia fetal grave",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es la complicación característica."
+        },
+        {
+          "key": "g",
+          "text": "Gastrosquisis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es una malformación de la pared abdominal."
+        },
+        {
+          "key": "h",
+          "text": "Macrosomía fetal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No se relaciona."
+        },
+        {
+          "key": "i",
+          "text": "Hidrocefalia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es la complicación característica."
+        },
+        {
+          "key": "j",
+          "text": "Ninguna, el bebé crece igual sin líquido",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El líquido es esencial para el desarrollo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "La ruptura de membranas antes de la viabilidad, generalmente antes de las 23 a 24 semanas, tiene mal pronóstico. El oligohidramnios grave o anhidramnios durante el periodo canalicular del desarrollo pulmonar causa hipoplasia pulmonar, principal causa de muerte neonatal en estos casos. También produce deformidades por compresión, como pie equino, contracturas y facies de Potter, además de infección intraamniótica y desprendimiento de placenta. Se ofrece asesoría sobre las opciones de manejo expectante o interrupción del embarazo, considerando los deseos de la paciente y el pronóstico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la ruptura prematura de membranas"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q21",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "premature_rupture_membranes",
+      "vignette": "Mujer de 24 años con embarazo de 32 semanas y ruptura prematura de membranas. Fuma, tuvo una ruptura prematura en su embarazo anterior y presenta vaginosis bacteriana sin tratar.",
+      "prompt": "¿Cuál es el factor de riesgo más importante para su ruptura prematura de membranas?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Edad menor de 25 años",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es un factor importante."
+        },
+        {
+          "key": "b",
+          "text": "Uso de ropa ajustada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "c",
+          "text": "Nuliparidad",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es nulípara."
+        },
+        {
+          "key": "d",
+          "text": "Ejercicio moderado",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es un factor de riesgo."
+        },
+        {
+          "key": "e",
+          "text": "Vacuna de influenza en el embarazo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No aumenta el riesgo."
+        },
+        {
+          "key": "f",
+          "text": "Un susto fuerte rompe la fuente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es una causa."
+        },
+        {
+          "key": "g",
+          "text": "Grupo sanguíneo materno",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "h",
+          "text": "Antecedente de ruptura prematura de membranas en un embarazo previo",
+          "correct": true,
+          "rationale": "Es el factor de riesgo más fuerte de recurrencia."
+        },
+        {
+          "key": "i",
+          "text": "Haber tenido relaciones sexuales la semana previa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un factor establecido."
+        },
+        {
+          "key": "j",
+          "text": "Consumo de ácido fólico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es un factor de riesgo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "Los factores de riesgo de ruptura prematura de membranas incluyen ruptura prematura o parto pretérmino previo, infecciones del tracto genital como vaginosis bacteriana, tricomoniasis y gonorrea, infección intraamniótica, tabaquismo, sangrado en el embarazo, sobredistensión uterina por polihidramnios o embarazo múltiple, cérvix corto, procedimientos invasivos como amniocentesis o cerclaje y deficiencias nutricionales. La infección y la inflamación debilitan las membranas por la acción de proteasas. El antecedente de ruptura prematura es el predictor más fuerte de recurrencia, por lo que estas mujeres requieren vigilancia estrecha en embarazos futuros.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la ruptura prematura de membranas"
+      ]
+    },
+    {
+      "key": "gyo-04-parto-q22",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "premature_rupture_membranes",
+      "vignette": "Mujer de 29 años con embarazo de 35 semanas y ruptura prematura de membranas hace 2 horas. Sin contracciones, afebril, feto en buenas condiciones. Estado de estreptococo del grupo B desconocido.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Iniciar profilaxis para estreptococo del grupo B y proceder a la inducción del trabajo de parto",
+          "correct": true,
+          "rationale": "A partir de las 34 semanas se recomienda la resolución."
+        },
+        {
+          "key": "b",
+          "text": "Tocolisis para prolongar el embarazo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "c",
+          "text": "Esperar a que aparezca fiebre para tratar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La infección neonatal puede ser grave."
+        },
+        {
+          "key": "d",
+          "text": "Observar sin profilaxis porque el cultivo no se hizo",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "El estado desconocido indica profilaxis."
+        },
+        {
+          "key": "e",
+          "text": "Corticosteroides y esperar 48 horas en todas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "A esta edad no se recomiendan de rutina."
+        },
+        {
+          "key": "f",
+          "text": "Amniocentesis para madurez pulmonar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "g",
+          "text": "Manejo expectante hasta las 37 semanas con antibióticos de latencia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "A partir de las 34 semanas se recomienda resolver."
+        },
+        {
+          "key": "h",
+          "text": "Cesárea inmediata",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay indicación."
+        },
+        {
+          "key": "i",
+          "text": "Egresar y esperar el trabajo de parto en casa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumenta el riesgo de infección."
+        },
+        {
+          "key": "j",
+          "text": "No inducir por ser pretérmino tardío",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El balance favorece la resolución."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "En la ruptura prematura de membranas a partir de las 34 semanas se recomienda la resolución del embarazo, generalmente mediante inducción, porque el riesgo de infección supera el de la prematurez tardía. Si el estado del estreptococo del grupo B es desconocido en un embarazo pretérmino se administra profilaxis intraparto con penicilina o ampicilina. Los corticosteroides entre las 34 y 36.6 semanas pueden considerarse en casos seleccionados según la guía local. Entre las 24 y 33.6 semanas se prefiere el manejo expectante con corticosteroides y antibióticos de latencia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la ruptura prematura de membranas"
+      ]
+    }
+  ]
+}

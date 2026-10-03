@@ -1,0 +1,1133 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "gyo-13b-complemento-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "gestational_trophoblastic",
+      "vignette": "Mujer de 33 años con embarazo de 10 semanas, sangrado vaginal y útero acorde a la edad gestacional. El ultrasonido muestra un feto con restricción del crecimiento y una placenta engrosada con espacios quísticos focales. Fracción beta de hCG moderadamente elevada. Cariotipo fetal triploide 69,XXY.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aborto diferido simple",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la placenta quística ni la triploidía."
+        },
+        {
+          "key": "b",
+          "text": "Mola hidatiforme completa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No tiene feto y es diploide de origen paterno."
+        },
+        {
+          "key": "c",
+          "text": "Corioangioma placentario",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es un tumor vascular benigno."
+        },
+        {
+          "key": "d",
+          "text": "Placenta previa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica los cambios quísticos."
+        },
+        {
+          "key": "e",
+          "text": "Trisomía 21 aislada",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El cariotipo es triploide."
+        },
+        {
+          "key": "f",
+          "text": "Tumor trofoblástico del sitio placentario",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es raro y tardío."
+        },
+        {
+          "key": "g",
+          "text": "Embarazo gemelar con un gemelo evanescente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el cariotipo triploide."
+        },
+        {
+          "key": "h",
+          "text": "Placenta grande por buena alimentación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una alteración genética."
+        },
+        {
+          "key": "i",
+          "text": "Mola hidatiforme parcial",
+          "correct": true,
+          "rationale": "Feto presente con placenta con cambios quísticos y cariotipo triploide."
+        },
+        {
+          "key": "j",
+          "text": "Coriocarcinoma",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No suele presentarse con feto en el primer trimestre."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "La mola hidatiforme parcial resulta de la fecundación de un óvulo normal por dos espermatozoides, con un cariotipo triploide, generalmente 69,XXY. Hay tejido fetal o embrionario, a menudo con malformaciones y restricción del crecimiento, y vellosidades con edema focal. El útero suele ser acorde o pequeño para la edad gestacional y la hCG está menos elevada que en la completa. Se trata con aspiración uterina y seguimiento de la hCG. Su riesgo de neoplasia trofoblástica persistente es de 1 a 5%, menor que el de la mola completa, que es de 15 a 20%. Las mujeres Rh negativo reciben inmunoglobulina anti D.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad trofoblástica gestacional"
+      ]
+    },
+    {
+      "key": "gyo-13b-complemento-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "miscarriage",
+      "vignette": "Mujer de 25 años con embarazo de 7 semanas que presenta sangrado vaginal abundante, dolor tipo cólico intenso y el orificio cervical abierto con membranas íntegras visibles. Estable hemodinámicamente.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Laparoscopia diagnóstica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "b",
+          "text": "Esperar a que el cérvix se cierre",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No se cerrará."
+        },
+        {
+          "key": "c",
+          "text": "Histerectomía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "d",
+          "text": "Tocolíticos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No se usan en el primer trimestre."
+        },
+        {
+          "key": "e",
+          "text": "No ofrecer apoyo emocional",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte de la atención."
+        },
+        {
+          "key": "f",
+          "text": "Cerclaje de urgencia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Está contraindicado en el primer trimestre con sangrado."
+        },
+        {
+          "key": "g",
+          "text": "Que la paciente cause el aborto por moverse",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es la causa."
+        },
+        {
+          "key": "h",
+          "text": "Ofrecer evacuación uterina por aspiración o tratamiento con misoprostol por aborto inevitable",
+          "correct": true,
+          "rationale": "El cérvix abierto indica que el embarazo no continuará."
+        },
+        {
+          "key": "i",
+          "text": "Reposo absoluto y progesterona para salvar el embarazo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El aborto es inevitable."
+        },
+        {
+          "key": "j",
+          "text": "Metotrexato",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es para ectópico."
+        }
+      ],
+      "canonical": [
+        "b",
+        "f",
+        "h",
+        "i"
+      ],
+      "explanation": "El aborto inevitable se caracteriza por sangrado y dolor con dilatación cervical o ruptura de membranas, sin expulsión del producto, de modo que el embarazo no puede continuar. El manejo puede ser expectante si la paciente está estable, médico con misoprostol o quirúrgico con aspiración manual endouterina, según su preferencia y el sangrado. Ante sangrado abundante o inestabilidad se prefiere la evacuación quirúrgica. Se aplica inmunoglobulina anti D si es Rh negativo, se ofrece anticoncepción y se brinda apoyo emocional. La progesterona y el reposo no evitan el aborto inevitable.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del aborto espontáneo"
+      ]
+    },
+    {
+      "key": "gyo-13b-complemento-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "early_pregnancy",
+      "subtopic": "miscarriage",
+      "vignette": "Mujer de 31 años con embarazo de 8 semanas por fecha de última menstruación. El ultrasonido transvaginal muestra un saco gestacional de 28 mm sin embrión. Está asintomática.",
+      "prompt": "¿Qué indica este hallazgo ecográfico?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hiperémesis gravídica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es un diagnóstico ecográfico."
+        },
+        {
+          "key": "b",
+          "text": "Mola hidatiforme completa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Daría imagen en tormenta de nieve."
+        },
+        {
+          "key": "c",
+          "text": "Embarazo anembrionado no viable, por saco de 25 mm o más sin embrión",
+          "correct": true,
+          "rationale": "Cumple criterio diagnóstico de pérdida temprana."
+        },
+        {
+          "key": "d",
+          "text": "Pseudosaco de ectópico con certeza",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Se valora el contexto y la morfología."
+        },
+        {
+          "key": "e",
+          "text": "Quiste ovárico confundido con saco",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El saco está en el útero."
+        },
+        {
+          "key": "f",
+          "text": "Embarazo gemelar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No se observan embriones."
+        },
+        {
+          "key": "g",
+          "text": "Embarazo normal con error de fechas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El tamaño del saco ya define la falta de embrión."
+        },
+        {
+          "key": "h",
+          "text": "Embarazo muy temprano que debe esperarse semanas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Con saco de 25 mm ya debería verse embrión."
+        },
+        {
+          "key": "i",
+          "text": "Embarazo ectópico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El saco está en el útero."
+        },
+        {
+          "key": "j",
+          "text": "El embrión aparecerá si se alimenta mejor",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es viable."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "Los criterios ecográficos de pérdida temprana del embarazo son un embrión con longitud cráneo caudal de 7 mm o más sin actividad cardiaca, o un saco gestacional con diámetro medio de 25 mm o más sin embrión. Otros hallazgos sugestivos requieren repetir el ultrasonido en 7 a 14 días. El embarazo anembrionado, antes llamado huevo huero, es una forma de aborto diferido. Las opciones de manejo son expectante, médico con mifepristona y misoprostol o quirúrgico con aspiración. Aplicar estos criterios estrictos evita interrumpir un embarazo viable por error.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del aborto espontáneo"
+      ]
+    },
+    {
+      "key": "gyo-13b-complemento-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "placental_abruption",
+      "vignette": "Mujer de 31 años con embarazo de 38 semanas y cesárea previa, en trabajo de parto con oxitocina. De forma súbita presenta dolor abdominal intenso, cese de las contracciones, sangrado vaginal, pérdida de la estación de la presentación fetal y bradicardia fetal.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Embolia de líquido amniótico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da colapso cardiorrespiratorio y coagulopatía."
+        },
+        {
+          "key": "b",
+          "text": "Vasa previa",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ocurre al romper membranas con madre estable."
+        },
+        {
+          "key": "c",
+          "text": "Cansancio que detiene el trabajo de parto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El cuadro es una urgencia."
+        },
+        {
+          "key": "d",
+          "text": "Placenta previa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica el dolor súbito en trabajo de parto."
+        },
+        {
+          "key": "e",
+          "text": "Desprendimiento prematuro de placenta",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el cese de contracciones ni la pérdida de la estación."
+        },
+        {
+          "key": "f",
+          "text": "Inversión uterina",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Ocurre en el alumbramiento."
+        },
+        {
+          "key": "g",
+          "text": "Rotura uterina",
+          "correct": true,
+          "rationale": "Dolor súbito con cese de contracciones, pérdida de la estación y bradicardia en una mujer con cesárea previa."
+        },
+        {
+          "key": "h",
+          "text": "Distocia de hombros",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Ocurre tras la salida de la cabeza."
+        },
+        {
+          "key": "i",
+          "text": "Trabajo de parto normal con dolor intenso",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la bradicardia ni la pérdida de la estación."
+        },
+        {
+          "key": "j",
+          "text": "Hipertonía por oxitocina sin rotura",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la pérdida de la estación."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "La rotura uterina es una complicación grave del trabajo de parto, más frecuente en mujeres con cicatriz uterina previa, sobre todo durante el trabajo de parto después de cesárea, y con el uso de oxitocina o prostaglandinas. El signo más temprano y frecuente es la alteración de la frecuencia cardiaca fetal, con bradicardia prolongada. Otros datos son dolor abdominal súbito, cese de las contracciones, pérdida de la estación de la presentación, sangrado vaginal, partes fetales palpables e inestabilidad materna. El tratamiento es laparotomía urgente con extracción fetal y reparación uterina o histerectomía.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención del parto después de cesárea"
+      ]
+    },
+    {
+      "key": "gyo-13b-complemento-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "placental_abruption",
+      "vignette": "Mujer de 35 años en trabajo de parto a las 40 semanas que tras la ruptura de membranas presenta disnea súbita, hipoxemia, hipotensión grave y convulsiones, seguidas de sangrado difuso por sitios de venopunción.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Desprendimiento de placenta aislado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el colapso respiratorio súbito."
+        },
+        {
+          "key": "b",
+          "text": "Eclampsia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el colapso cardiorrespiratorio con coagulopatía inmediata."
+        },
+        {
+          "key": "c",
+          "text": "Tromboembolia pulmonar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No suele dar coagulopatía inmediata."
+        },
+        {
+          "key": "d",
+          "text": "Infarto agudo de miocardio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica la coagulopatía."
+        },
+        {
+          "key": "e",
+          "text": "Reacción anafiláctica a la oxitocina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la coagulopatía."
+        },
+        {
+          "key": "f",
+          "text": "Agotamiento por el trabajo de parto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia vital."
+        },
+        {
+          "key": "g",
+          "text": "Crisis de ansiedad",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Hay colapso grave."
+        },
+        {
+          "key": "h",
+          "text": "Toxicidad por anestésico local",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la coagulopatía."
+        },
+        {
+          "key": "i",
+          "text": "Embolia de líquido amniótico",
+          "correct": true,
+          "rationale": "Colapso cardiorrespiratorio súbito con coagulopatía durante el trabajo de parto."
+        },
+        {
+          "key": "j",
+          "text": "Choque séptico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el inicio súbito."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "La embolia de líquido amniótico es una urgencia obstétrica rara pero con alta mortalidad. Ocurre durante el trabajo de parto, la cesárea o inmediatamente después, cuando componentes del líquido amniótico entran a la circulación materna y desencadenan una reacción inflamatoria. Se manifiesta de forma súbita con hipoxia, hipotensión o paro cardiaco y coagulación intravascular diseminada, a veces con convulsiones. El diagnóstico es clínico y de exclusión. El tratamiento es de soporte, con reanimación cardiopulmonar, oxígeno, vasopresores, corrección de la coagulopatía con hemoderivados y nacimiento inmediato si el feto no ha nacido.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención y manejo de la hemorragia obstétrica"
+      ]
+    },
+    {
+      "key": "gyo-13b-complemento-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "breast",
+      "subtopic": "breast_cancer_obstetrics",
+      "vignette": "Mujer de 34 años con 4 meses de lactancia que presenta una masa dura de 3 cm en la mama izquierda que no disminuye después de amamantar ni con el vaciamiento. No hay fiebre ni eritema. Persiste desde hace 6 semanas.",
+      "prompt": "¿Cuál es el diagnóstico que debe descartarse?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Absceso mamario",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay datos de infección."
+        },
+        {
+          "key": "b",
+          "text": "Galactocele",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Suele ser blando y quístico, y debe confirmarse por imagen."
+        },
+        {
+          "key": "c",
+          "text": "La lactancia protege totalmente del cáncer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Reduce el riesgo, pero no lo elimina."
+        },
+        {
+          "key": "d",
+          "text": "Cáncer de mama asociado a la lactancia",
+          "correct": true,
+          "rationale": "Una masa persistente durante la lactancia requiere estudio."
+        },
+        {
+          "key": "e",
+          "text": "Fibroadenoma de la lactancia sin estudio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Debe confirmarse con biopsia."
+        },
+        {
+          "key": "f",
+          "text": "Mastitis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay fiebre ni eritema."
+        },
+        {
+          "key": "g",
+          "text": "Necrosis grasa sin antecedente",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay traumatismo."
+        },
+        {
+          "key": "h",
+          "text": "Congestión mamaria fisiológica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No persiste como masa dura localizada."
+        },
+        {
+          "key": "i",
+          "text": "Conducto obstruido que se resolverá solo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Persiste más de 6 semanas sin cambios."
+        },
+        {
+          "key": "j",
+          "text": "Lipoma",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es blando."
+        }
+      ],
+      "canonical": [
+        "b",
+        "d",
+        "f",
+        "i"
+      ],
+      "explanation": "Durante la lactancia la mayoría de las masas mamarias son benignas, como conductos obstruidos, galactoceles, abscesos o adenomas de la lactancia. Sin embargo, toda masa que persiste más de 2 a 4 semanas o que no se resuelve con el vaciamiento debe estudiarse con ultrasonido y biopsia si es sólida o sospechosa, para no retrasar el diagnóstico de cáncer de mama asociado al embarazo. La biopsia con aguja de corte es segura y no obliga a suspender la lactancia, aunque puede haber fístula láctea. La mastografía puede realizarse tras amamantar para reducir la densidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de mama"
+      ]
+    },
+    {
+      "key": "gyo-13b-complemento-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "polycystic_ovary",
+      "vignette": "Mujer de 24 años con síndrome de ovario poliquístico, índice de masa corporal de 34, acantosis nigricans y glucosa en ayuno de 108 mg/dL. Pregunta por qué tiene más riesgo de diabetes.",
+      "prompt": "¿Cuál es el mecanismo de riesgo metabólico en esta paciente?",
+      "polarity": "affirmative",
+      "task": "mechanism",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Consumo de anticonceptivos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es el mecanismo."
+        },
+        {
+          "key": "b",
+          "text": "Hipotiroidismo oculto",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es el mecanismo principal."
+        },
+        {
+          "key": "c",
+          "text": "Comer dulces como único mecanismo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La resistencia a la insulina es central."
+        },
+        {
+          "key": "d",
+          "text": "Exceso de estrógenos como causa principal de la diabetes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es el mecanismo principal."
+        },
+        {
+          "key": "e",
+          "text": "Insuficiencia pancreática exocrina",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es el mecanismo."
+        },
+        {
+          "key": "f",
+          "text": "Deficiencia de hormona de crecimiento",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es el mecanismo."
+        },
+        {
+          "key": "g",
+          "text": "Resistencia a la insulina con hiperinsulinemia, agravada por la obesidad",
+          "correct": true,
+          "rationale": "La hiperinsulinemia también aumenta la producción ovárica de andrógenos."
+        },
+        {
+          "key": "h",
+          "text": "Exceso de prolactina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es el mecanismo."
+        },
+        {
+          "key": "i",
+          "text": "Destrucción autoinmune de las células beta",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Corresponde a diabetes tipo 1."
+        },
+        {
+          "key": "j",
+          "text": "Deficiencia de progesterona como causa de diabetes",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es el mecanismo."
+        }
+      ],
+      "canonical": [
+        "d",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "La resistencia a la insulina está presente en la mayoría de las mujeres con síndrome de ovario poliquístico, incluidas muchas delgadas, y se agrava con la obesidad. La hiperinsulinemia compensatoria estimula la producción de andrógenos por las células de la teca ovárica y reduce la globulina transportadora de hormonas sexuales, lo que aumenta los andrógenos libres. Con el tiempo, la falla de las células beta lleva a prediabetes y diabetes tipo 2. La acantosis nigricans es un signo clínico de resistencia a la insulina. La pérdida de peso y la metformina mejoran la sensibilidad a la insulina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de ovarios poliquísticos"
+      ]
+    },
+    {
+      "key": "gyo-13b-complemento-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "maternal_fetal",
+      "subtopic": "preterm_labor_obstetrics",
+      "vignette": "Recién nacido de 27 semanas con 900 g. Los padres preguntan por las complicaciones más importantes que puede tener por su prematurez.",
+      "prompt": "¿Cuál es una complicación característica de la prematurez extrema?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Macrosomía",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "b",
+          "text": "Aspiración de meconio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es más frecuente en postérmino."
+        },
+        {
+          "key": "c",
+          "text": "Diabetes tipo 1 neonatal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es característica."
+        },
+        {
+          "key": "d",
+          "text": "Cefalohematoma por parto prolongado",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es característico de la prematurez."
+        },
+        {
+          "key": "e",
+          "text": "Hipertensión arterial esencial infantil",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es característica."
+        },
+        {
+          "key": "f",
+          "text": "Retinopatía del prematuro, entre otras como hemorragia intraventricular y displasia broncopulmonar",
+          "correct": true,
+          "rationale": "La inmadurez vascular de la retina expone al daño."
+        },
+        {
+          "key": "g",
+          "text": "Los bebés prematuros no tienen secuelas si sobreviven",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Pueden tener secuelas."
+        },
+        {
+          "key": "h",
+          "text": "Distocia de hombros",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "i",
+          "text": "Postmadurez con descamación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Ocurre en postérmino."
+        },
+        {
+          "key": "j",
+          "text": "Fractura de clavícula",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es característica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "h",
+        "i"
+      ],
+      "explanation": "Los recién nacidos prematuros, sobre todo los extremos menores de 28 semanas, tienen alto riesgo de complicaciones por inmadurez de sus órganos. Las principales son síndrome de dificultad respiratoria, displasia broncopulmonar, hemorragia intraventricular, leucomalacia periventricular, enterocolitis necrosante, persistencia del conducto arterioso, sepsis, retinopatía del prematuro y alteraciones del neurodesarrollo. La retinopatía se debe a la proliferación vascular anormal de la retina inmadura, favorecida por el oxígeno, y se tamiza en menores de 32 semanas o 1 500 g. Las intervenciones prenatales reducen estas complicaciones.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino"
+      ]
+    },
+    {
+      "key": "gyo-13b-complemento-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "normal_labor",
+      "vignette": "Mujer de 30 años con una cesárea previa por presentación pélvica, con incisión transversal baja, que tiene embarazo de 39 semanas en presentación cefálica y desea parto vaginal. No tiene otras complicaciones.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Inducción con misoprostol",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Está contraindicado con cicatriz uterina."
+        },
+        {
+          "key": "b",
+          "text": "Cesárea obligatoria por tener una cesárea previa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Una cesárea transversal baja permite intentar parto vaginal."
+        },
+        {
+          "key": "c",
+          "text": "Ofrecer prueba de trabajo de parto después de cesárea en un hospital con capacidad de cesárea urgente",
+          "correct": true,
+          "rationale": "Es una opción segura en candidatas adecuadas."
+        },
+        {
+          "key": "d",
+          "text": "Una vez cesárea siempre cesárea",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un mito."
+        },
+        {
+          "key": "e",
+          "text": "Cesárea a las 36 semanas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "f",
+          "text": "Resonancia magnética de la cicatriz obligatoria",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "g",
+          "text": "Contraindicar el parto vaginal por cualquier cicatriz",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Depende del tipo de incisión."
+        },
+        {
+          "key": "h",
+          "text": "No informar de las opciones por temor legal",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La decisión es compartida."
+        },
+        {
+          "key": "i",
+          "text": "Esperar hasta las 42 semanas sin vigilancia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Aumenta los riesgos."
+        },
+        {
+          "key": "j",
+          "text": "Parto vaginal en casa sin vigilancia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Requiere hospital con capacidad quirúrgica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "La prueba de trabajo de parto después de una cesárea con incisión transversal baja tiene éxito en 60 a 80% de las mujeres y evita los riesgos de cesáreas repetidas, como placenta previa y acretismo. El principal riesgo es la rotura uterina, de alrededor de 0.5 a 1%. Se realiza en hospitales con capacidad de cesárea urgente, con monitorización continua. Las contraindicaciones incluyen cicatriz clásica o en T, rotura uterina previa y contraindicaciones para el parto vaginal. El misoprostol está contraindicado para inducir en mujeres con cesárea previa.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención del parto después de cesárea"
+      ]
+    },
+    {
+      "key": "gyo-13b-complemento-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "labor_delivery",
+      "subtopic": "normal_labor",
+      "vignette": "Mujer de 26 años en segundo periodo del trabajo de parto con dilatación completa, presentación cefálica occipitoanterior en plano más 3, que lleva 3 horas pujando con analgesia epidural y presenta agotamiento materno. La frecuencia cardiaca fetal muestra desaceleraciones prolongadas.",
+      "prompt": "¿Cuál es el tratamiento de elección para terminar el parto?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Parto vaginal instrumentado con fórceps o ventosa por personal capacitado",
+          "correct": true,
+          "rationale": "La cabeza está baja y hay indicación materna y fetal."
+        },
+        {
+          "key": "b",
+          "text": "Presión fúndica intensa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se recomienda."
+        },
+        {
+          "key": "c",
+          "text": "Aumentar la oxitocina como única medida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No resuelve el compromiso."
+        },
+        {
+          "key": "d",
+          "text": "Cesárea urgente obligatoria",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Con la cabeza en plano más 3 el parto instrumentado es más rápido."
+        },
+        {
+          "key": "e",
+          "text": "Esperar otras 2 horas sin intervenir",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Hay compromiso fetal."
+        },
+        {
+          "key": "f",
+          "text": "Pujar más fuerte resolverá el problema",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La madre está agotada."
+        },
+        {
+          "key": "g",
+          "text": "Evitar el parto instrumentado por miedo a lesiones",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Bien indicado es seguro."
+        },
+        {
+          "key": "h",
+          "text": "Retirar la analgesia epidural y esperar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No resuelve el compromiso."
+        },
+        {
+          "key": "i",
+          "text": "Sinfisiotomía",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el procedimiento indicado."
+        },
+        {
+          "key": "j",
+          "text": "Episiotomía como único procedimiento",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No resuelve el expulsivo prolongado."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "e"
+      ],
+      "explanation": "El parto vaginal instrumentado con fórceps o ventosa está indicado en el segundo periodo prolongado, el agotamiento materno, las condiciones maternas que contraindican pujar y la sospecha de compromiso fetal, siempre que haya dilatación completa, membranas rotas, cabeza encajada en plano más 2 o más bajo, posición conocida, analgesia adecuada, vejiga vacía y personal capacitado. Es más rápido que la cesárea cuando la cabeza está baja. Sus complicaciones incluyen desgarros perineales, hemorragia y lesiones fetales como cefalohematoma. La presión fúndica no se recomienda.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de vigilancia y manejo del trabajo de parto"
+      ]
+    },
+    {
+      "key": "gyo-13b-complemento-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "climacteric",
+      "subtopic": "menopause_obstetrics",
+      "vignette": "Mujer de 60 años con sensación de bulto en la vagina que empeora al estar de pie y al final del día, con dificultad para orinar. Tiene 5 partos vaginales. En la exploración el cérvix desciende hasta el introito con Valsalva.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Algo normal tras tener muchos hijos que no se trata",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Tiene tratamiento."
+        },
+        {
+          "key": "b",
+          "text": "Pólipo cervical grande",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el descenso con Valsalva."
+        },
+        {
+          "key": "c",
+          "text": "Mioma pediculado parido",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No desciende con Valsalva desde su posición."
+        },
+        {
+          "key": "d",
+          "text": "Prolapso de órganos pélvicos con prolapso uterino",
+          "correct": true,
+          "rationale": "Descenso del útero por debilidad del piso pélvico en una multípara posmenopáusica."
+        },
+        {
+          "key": "e",
+          "text": "Quiste de Bartholin",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es una masa lateral del introito."
+        },
+        {
+          "key": "f",
+          "text": "Hernia inguinal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es una masa inguinal."
+        },
+        {
+          "key": "g",
+          "text": "Vaginitis atrófica aislada",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el bulto."
+        },
+        {
+          "key": "h",
+          "text": "Cistitis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el bulto."
+        },
+        {
+          "key": "i",
+          "text": "Divertículo uretral",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es una masa anterior suburetral."
+        },
+        {
+          "key": "j",
+          "text": "Cáncer de cérvix",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El cérvix está sano y desciende."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "e",
+        "j"
+      ],
+      "explanation": "El prolapso de órganos pélvicos es el descenso de la vejiga, el útero o el recto hacia la vagina por debilidad del piso pélvico. Sus factores de riesgo son partos vaginales múltiples, macrosomía, edad, menopausia, obesidad, estreñimiento y tos crónica. Se manifiesta con sensación de bulto, peso vaginal, síntomas urinarios o defecatorios. Se clasifica con el sistema POP Q. El tratamiento depende de los síntomas y puede incluir observación, ejercicios del piso pélvico, pesario vaginal o cirugía reconstructiva u obliterativa. Los estrógenos vaginales mejoran la calidad del tejido.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del prolapso de órganos pélvicos"
+      ]
+    },
+    {
+      "key": "gyo-13b-complemento-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "climacteric",
+      "subtopic": "menopause_obstetrics",
+      "vignette": "Mujer de 78 años con prolapso uterino sintomático, enfermedad cardiaca grave y alto riesgo quirúrgico. Desea mejorar sus síntomas sin cirugía.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Pesario vaginal con estrógenos vaginales y vigilancia periódica",
+          "correct": true,
+          "rationale": "Es eficaz y evita la cirugía en pacientes de alto riesgo."
+        },
+        {
+          "key": "b",
+          "text": "Cirugía robótica compleja",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Tiene alto riesgo."
+        },
+        {
+          "key": "c",
+          "text": "Fajar el abdomen muy apretado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Aumenta la presión abdominal."
+        },
+        {
+          "key": "d",
+          "text": "Antibióticos vaginales",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No tratan el prolapso."
+        },
+        {
+          "key": "e",
+          "text": "Ninguna opción porque es mayor",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El pesario es eficaz."
+        },
+        {
+          "key": "f",
+          "text": "Malla abdominal por laparotomía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Tiene alto riesgo."
+        },
+        {
+          "key": "g",
+          "text": "Histerectomía vaginal con reconstrucción urgente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene alto riesgo quirúrgico."
+        },
+        {
+          "key": "h",
+          "text": "No ofrecer tratamiento por su edad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El pesario mejora la calidad de vida."
+        },
+        {
+          "key": "i",
+          "text": "Reposo absoluto en cama",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No trata el prolapso."
+        },
+        {
+          "key": "j",
+          "text": "Diuréticos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No tratan el prolapso."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "g"
+      ],
+      "explanation": "El pesario vaginal es un dispositivo de silicona que sostiene los órganos pélvicos. Es una opción eficaz de primera línea para el prolapso sintomático, sobre todo en mujeres que no desean cirugía, con alto riesgo quirúrgico o que desean más hijos. Requiere colocación y ajuste por personal capacitado, retiro y limpieza periódicos y vigilancia por posibles erosiones vaginales, que se previenen con estrógenos vaginales. La cirugía, reconstructiva o la colpocleisis obliterativa en mujeres sin vida sexual, se reserva para quienes la prefieren o fallan al pesario.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del prolapso de órganos pélvicos"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1430 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "fam-02b-disenos-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "study_design",
+      "vignette": "Un grupo de investigadores identifica a 200 pacientes con un tumor raro de hígado y a 400 personas sin el tumor, de la misma edad y sexo. Les preguntan sobre su exposición previa a un herbicida durante los últimos 20 años.",
+      "prompt": "¿Qué diseño de estudio describe esta investigación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ensayo cruzado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es experimental."
+        },
+        {
+          "key": "b",
+          "text": "Estudio de casos y controles",
+          "correct": true,
+          "rationale": "Parte de la enfermedad y busca hacia atrás la exposición."
+        },
+        {
+          "key": "c",
+          "text": "Estudio de cohorte prospectivo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Parte de la exposición y sigue hacia la enfermedad."
+        },
+        {
+          "key": "d",
+          "text": "Ensayo clínico aleatorizado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El investigador no asigna la exposición."
+        },
+        {
+          "key": "e",
+          "text": "Estudio transversal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Mide exposición y enfermedad al mismo tiempo."
+        },
+        {
+          "key": "f",
+          "text": "Estudio de prueba diagnóstica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No evalúa una prueba."
+        },
+        {
+          "key": "g",
+          "text": "Estudio de cohorte histórica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Parte de la exposición documentada."
+        },
+        {
+          "key": "h",
+          "text": "Metaanálisis",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Combina resultados de varios estudios."
+        },
+        {
+          "key": "i",
+          "text": "Serie de casos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No tiene grupo de comparación."
+        },
+        {
+          "key": "j",
+          "text": "Estudio ecológico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Usa datos de poblaciones, no de individuos."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "d",
+        "e"
+      ],
+      "explanation": "El estudio de casos y controles es un diseño observacional analítico que selecciona a los participantes según la presencia de la enfermedad, casos, o su ausencia, controles, y compara la frecuencia de exposición previa entre ambos grupos. Es ideal para enfermedades raras o con periodos de latencia largos, porque es rápido y económico. Su medida de asociación es la razón de momios, ya que no permite calcular incidencias. Sus principales limitaciones son el sesgo de memoria, porque los casos recuerdan más sus exposiciones, y el sesgo de selección de los controles. El pareamiento por edad y sexo controla esas variables.",
+      "gpcRefs": [
+        "Manual de epidemiología clínica para el primer nivel de atención",
+        "Manual de metodología de la investigación en salud"
+      ]
+    },
+    {
+      "key": "fam-02b-disenos-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "study_design",
+      "vignette": "Se recluta a 5,000 enfermeras sanas, se registra si fuman o no y se les sigue durante 20 años para comparar la aparición de enfermedad coronaria en ambos grupos.",
+      "prompt": "¿Qué diseño de estudio corresponde a esta investigación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ensayo clínico controlado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se asigna el tabaquismo."
+        },
+        {
+          "key": "b",
+          "text": "Ensayo comunitario",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No hay intervención."
+        },
+        {
+          "key": "c",
+          "text": "Estudio de cohorte prospectivo",
+          "correct": true,
+          "rationale": "Parte de la exposición y sigue a los participantes en el tiempo hasta el desenlace."
+        },
+        {
+          "key": "d",
+          "text": "Estudio de casos y controles",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Parte de la enfermedad."
+        },
+        {
+          "key": "e",
+          "text": "Estudio de casos y controles anidado",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Requiere seleccionar casos dentro de la cohorte."
+        },
+        {
+          "key": "f",
+          "text": "Revisión sistemática",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No combina estudios."
+        },
+        {
+          "key": "g",
+          "text": "Estudio transversal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay seguimiento."
+        },
+        {
+          "key": "h",
+          "text": "Serie de casos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Tiene grupo de comparación."
+        },
+        {
+          "key": "i",
+          "text": "Estudio ecológico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Usa datos individuales."
+        },
+        {
+          "key": "j",
+          "text": "Estudio cualitativo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Mide desenlaces cuantitativos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "g"
+      ],
+      "explanation": "El estudio de cohorte es un diseño observacional analítico que selecciona a personas sin el desenlace, las clasifica según su exposición y las sigue en el tiempo para medir la incidencia en cada grupo. Permite calcular la incidencia, el riesgo relativo y el riesgo atribuible, establece la secuencia temporal entre exposición y desenlace y permite estudiar varios desenlaces de una misma exposición. Sus desventajas son el costo, el tiempo y las pérdidas de seguimiento, y no es eficiente para enfermedades raras. La cohorte histórica o retrospectiva usa registros previos de exposición.",
+      "gpcRefs": [
+        "Manual de epidemiología clínica para el primer nivel de atención",
+        "Manual de metodología de la investigación en salud"
+      ]
+    },
+    {
+      "key": "fam-02b-disenos-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "study_design",
+      "vignette": "Un centro de salud aplica una encuesta en un solo día a 1,000 adultos de la comunidad para medir cuántos tienen hipertensión arterial y cuántos tienen obesidad.",
+      "prompt": "¿Qué diseño de estudio corresponde y qué medida permite obtener?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Estudio de cohorte que estima incidencia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay seguimiento."
+        },
+        {
+          "key": "b",
+          "text": "Casos y controles que estima razón de momios como medida principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se seleccionan por enfermedad."
+        },
+        {
+          "key": "c",
+          "text": "Metaanálisis que estima efecto combinado",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es un estudio primario."
+        },
+        {
+          "key": "d",
+          "text": "Estudio de cohorte que establece causalidad",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay temporalidad."
+        },
+        {
+          "key": "e",
+          "text": "Serie de casos que estima letalidad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Incluye sanos y enfermos."
+        },
+        {
+          "key": "f",
+          "text": "Estudio transversal que estima la prevalencia",
+          "correct": true,
+          "rationale": "Mide exposición y enfermedad en un solo momento."
+        },
+        {
+          "key": "g",
+          "text": "Ensayo clínico que estima eficacia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay intervención."
+        },
+        {
+          "key": "h",
+          "text": "Estudio cuasiexperimental",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay intervención."
+        },
+        {
+          "key": "i",
+          "text": "Transversal que estima incidencia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No mide casos nuevos."
+        },
+        {
+          "key": "j",
+          "text": "Estudio ecológico que estima correlación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Usa datos individuales."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "g"
+      ],
+      "explanation": "El estudio transversal mide simultáneamente la exposición y el desenlace en una población en un momento determinado, como una fotografía. Su medida principal es la prevalencia, y permite comparar prevalencias entre grupos mediante la razón de prevalencias. Es útil para planear servicios, conocer la carga de enfermedad y generar hipótesis. Su principal limitación es que no establece la secuencia temporal entre exposición y efecto, por lo que no permite inferir causalidad. Las encuestas nacionales de salud y nutrición son ejemplos de estudios transversales.",
+      "gpcRefs": [
+        "Manual de metodología de la investigación en salud",
+        "Manual de epidemiología para la vigilancia en salud pública"
+      ]
+    },
+    {
+      "key": "fam-02b-disenos-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "study_design",
+      "vignette": "Un estudio compara el consumo promedio de sal per cápita de 30 países con su tasa de mortalidad por enfermedad cerebrovascular y encuentra una correlación positiva fuerte. Un autor concluye que cada persona que consume más sal tendrá un evento vascular.",
+      "prompt": "¿Qué error de interpretación comete el autor?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sesgo de adelanto en el diagnóstico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se relaciona con tamizaje."
+        },
+        {
+          "key": "b",
+          "text": "Sesgo de memoria",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No se interrogó a individuos."
+        },
+        {
+          "key": "c",
+          "text": "Falacia ecológica",
+          "correct": true,
+          "rationale": "Atribuye a los individuos una asociación observada a nivel de grupos."
+        },
+        {
+          "key": "d",
+          "text": "Efecto Hawthorne",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Ocurre cuando los participantes saben que son observados."
+        },
+        {
+          "key": "e",
+          "text": "Sesgo de pérdida de seguimiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay seguimiento."
+        },
+        {
+          "key": "f",
+          "text": "Sesgo del entrevistador",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No hubo entrevistas."
+        },
+        {
+          "key": "g",
+          "text": "Sesgo de duración",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se relaciona con tamizaje."
+        },
+        {
+          "key": "h",
+          "text": "Error tipo I",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es un error aleatorio de rechazar la hipótesis nula."
+        },
+        {
+          "key": "i",
+          "text": "Sesgo de Berkson",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Ocurre en estudios hospitalarios."
+        },
+        {
+          "key": "j",
+          "text": "Regresión a la media",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se refiere a mediciones extremas repetidas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "El estudio ecológico usa como unidad de análisis a grupos o poblaciones, como países o municipios, en lugar de individuos. Es económico y útil para generar hipótesis con datos disponibles. Su principal limitación es la falacia ecológica, que consiste en inferir que una asociación observada entre grupos se cumple en los individuos. En el ejemplo, no se sabe si las personas que murieron de enfermedad cerebrovascular fueron las que consumieron más sal. Además, estos estudios no controlan bien los factores de confusión. Para confirmar la hipótesis se requieren estudios con datos individuales.",
+      "gpcRefs": [
+        "Manual de metodología de la investigación en salud",
+        "Manual de epidemiología clínica para el primer nivel de atención"
+      ]
+    },
+    {
+      "key": "fam-02b-disenos-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "study_design",
+      "vignette": "En un ensayo clínico sobre un nuevo antihipertensivo, los pacientes se asignan a fármaco o placebo mediante una secuencia generada por computadora y oculta para los investigadores.",
+      "prompt": "¿Cuál es el mecanismo por el que la aleatorización fortalece la validez del estudio?",
+      "polarity": "affirmative",
+      "task": "mechanism",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Elimina el efecto placebo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Para eso sirve el cegamiento y el grupo placebo."
+        },
+        {
+          "key": "b",
+          "text": "Sustituye el consentimiento informado",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El consentimiento es obligatorio."
+        },
+        {
+          "key": "c",
+          "text": "Reduce los costos del estudio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es su objetivo."
+        },
+        {
+          "key": "d",
+          "text": "Asegura que el fármaco sea eficaz",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No predetermina el resultado."
+        },
+        {
+          "key": "e",
+          "text": "Permite escoger a los pacientes más graves para el fármaco",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Eso introduciría sesgo."
+        },
+        {
+          "key": "f",
+          "text": "Distribuye por igual los factores de confusión conocidos y desconocidos entre los grupos",
+          "correct": true,
+          "rationale": "Así las diferencias se atribuyen a la intervención."
+        },
+        {
+          "key": "g",
+          "text": "Garantiza que los resultados se apliquen a toda la población",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Eso es validez externa."
+        },
+        {
+          "key": "h",
+          "text": "Aumenta el tamaño de la muestra",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No cambia la muestra."
+        },
+        {
+          "key": "i",
+          "text": "Elimina el sesgo de medición del desenlace",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Para eso sirve el cegamiento."
+        },
+        {
+          "key": "j",
+          "text": "Evita las pérdidas de seguimiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No las previene."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "La aleatorización asigna a los participantes a los grupos por azar, de modo que cada uno tiene la misma probabilidad de recibir la intervención o el control. Su principal ventaja es que distribuye de forma equilibrada los factores pronósticos y de confusión, conocidos y desconocidos, entre los grupos, lo que permite atribuir las diferencias en el desenlace a la intervención. La ocultación de la secuencia evita que los investigadores influyan en la asignación. El cegamiento, por su parte, previene sesgos de desempeño y de medición. Por eso el ensayo clínico aleatorizado es el diseño de mayor validez para evaluar intervenciones.",
+      "gpcRefs": [
+        "Manual de metodología de la investigación en salud",
+        "Manual de epidemiología clínica para el primer nivel de atención"
+      ]
+    },
+    {
+      "key": "fam-02b-disenos-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "study_design",
+      "vignette": "En un ensayo clínico, 15 por ciento de los pacientes asignados al nuevo fármaco lo abandonan por efectos adversos. Los investigadores analizan los resultados incluyendo a todos los pacientes en el grupo al que fueron asignados originalmente.",
+      "prompt": "¿Qué tipo de análisis realizan los investigadores?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Análisis de costo efectividad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Evalúa costos."
+        },
+        {
+          "key": "b",
+          "text": "Análisis por tratamiento recibido",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Clasifica según lo que realmente recibieron."
+        },
+        {
+          "key": "c",
+          "text": "Análisis de subgrupos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Evalúa grupos específicos."
+        },
+        {
+          "key": "d",
+          "text": "Análisis de casos completos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Excluye a quienes abandonaron."
+        },
+        {
+          "key": "e",
+          "text": "Metaanálisis en red",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Combina estudios múltiples."
+        },
+        {
+          "key": "f",
+          "text": "Análisis interino",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se realiza antes de terminar el estudio."
+        },
+        {
+          "key": "g",
+          "text": "Análisis por intención de tratar",
+          "correct": true,
+          "rationale": "Analiza a todos según su asignación original para preservar la aleatorización."
+        },
+        {
+          "key": "h",
+          "text": "Análisis por protocolo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Solo incluiría a quienes completaron el tratamiento."
+        },
+        {
+          "key": "i",
+          "text": "Análisis de sensibilidad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Prueba la robustez ante supuestos."
+        },
+        {
+          "key": "j",
+          "text": "Análisis de supervivencia exclusivo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es una técnica, no un enfoque de población."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "El análisis por intención de tratar incluye a todos los participantes en el grupo al que fueron asignados al azar, independientemente de si recibieron, completaron o abandonaron el tratamiento. Preserva los beneficios de la aleatorización, evita sesgos por abandono diferencial y refleja mejor la efectividad en condiciones reales, aunque tiende a subestimar el efecto. El análisis por protocolo solo incluye a quienes cumplieron el tratamiento y puede sobrestimar el efecto. En los estudios de no inferioridad suelen presentarse ambos análisis.",
+      "gpcRefs": [
+        "Manual de metodología de la investigación en salud",
+        "Guía para la lectura crítica de ensayos clínicos"
+      ]
+    },
+    {
+      "key": "fam-02b-disenos-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "study_design",
+      "vignette": "En un estudio de casos y controles sobre malformaciones congénitas, las madres de niños con malformaciones recuerdan con mayor detalle los medicamentos que tomaron durante el embarazo que las madres de niños sanos.",
+      "prompt": "¿Qué sesgo indica esta situación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sesgo de confusión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Implica una tercera variable."
+        },
+        {
+          "key": "b",
+          "text": "Sesgo de Berkson",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se relaciona con pacientes hospitalizados."
+        },
+        {
+          "key": "c",
+          "text": "Sesgo del voluntario sano",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Ocurre en la selección."
+        },
+        {
+          "key": "d",
+          "text": "Efecto Hawthorne",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Ocurre por saberse observado."
+        },
+        {
+          "key": "e",
+          "text": "Sesgo de selección",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se relaciona con cómo se eligen los participantes."
+        },
+        {
+          "key": "f",
+          "text": "Sesgo de adelanto en el diagnóstico",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se relaciona con tamizaje."
+        },
+        {
+          "key": "g",
+          "text": "Error tipo II",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un error aleatorio."
+        },
+        {
+          "key": "h",
+          "text": "Sesgo de memoria o recuerdo",
+          "correct": true,
+          "rationale": "Los casos recuerdan sus exposiciones de manera diferente a los controles."
+        },
+        {
+          "key": "i",
+          "text": "Sesgo de publicación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Afecta a la literatura publicada."
+        },
+        {
+          "key": "j",
+          "text": "Sesgo de pérdida de seguimiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Ocurre en cohortes."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "h",
+        "i"
+      ],
+      "explanation": "El sesgo de memoria o recuerdo es un sesgo de información frecuente en estudios de casos y controles. Las personas con la enfermedad o sus familiares tienden a buscar explicaciones y recuerdan sus exposiciones con más detalle que los controles, lo que puede generar asociaciones falsas o exagerar las reales. Se reduce usando registros objetivos de la exposición, como expedientes clínicos o recetas, cuestionarios estandarizados y entrevistadores cegados al estado del participante. También ayuda elegir controles con otra enfermedad, que tengan motivación similar para recordar.",
+      "gpcRefs": [
+        "Manual de metodología de la investigación en salud",
+        "Manual de epidemiología clínica para el primer nivel de atención"
+      ]
+    },
+    {
+      "key": "fam-02b-disenos-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "study_design",
+      "vignette": "Un estudio encuentra que las personas que toman café tienen más cáncer de pulmón. Al analizar los datos se observa que los bebedores de café fuman con más frecuencia, y al ajustar por tabaquismo la asociación desaparece.",
+      "prompt": "¿Qué indica este hallazgo sobre la asociación inicial?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sesgo de publicación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No aplica a un estudio individual."
+        },
+        {
+          "key": "b",
+          "text": "Sesgo de memoria",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se menciona un recuerdo diferencial."
+        },
+        {
+          "key": "c",
+          "text": "Error tipo I por azar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La explicación es sistemática."
+        },
+        {
+          "key": "d",
+          "text": "Interacción o modificación del efecto",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "En ese caso el efecto variaría según los estratos."
+        },
+        {
+          "key": "e",
+          "text": "El café causa cáncer de pulmón",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La asociación desaparece al ajustar."
+        },
+        {
+          "key": "f",
+          "text": "Sesgo de selección de los controles",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay datos sobre la selección."
+        },
+        {
+          "key": "g",
+          "text": "El tabaquismo actuaba como factor de confusión",
+          "correct": true,
+          "rationale": "Se asocia con la exposición y con el desenlace sin estar en la vía causal."
+        },
+        {
+          "key": "h",
+          "text": "El tabaquismo es una variable intermedia en la vía causal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El café no causa tabaquismo."
+        },
+        {
+          "key": "i",
+          "text": "Falacia ecológica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Los datos son individuales."
+        },
+        {
+          "key": "j",
+          "text": "Efecto placebo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay intervención."
+        }
+      ],
+      "canonical": [
+        "b",
+        "d",
+        "e",
+        "g"
+      ],
+      "explanation": "Un factor de confusión es una variable que se asocia tanto con la exposición como con el desenlace, y que no es un paso intermedio en la vía causal. Puede crear una asociación falsa, ocultar una real o cambiar su magnitud. En el ejemplo, el tabaquismo se asocia con el consumo de café y causa cáncer de pulmón, por lo que explica la asociación aparente. La confusión se controla en el diseño con aleatorización, restricción o pareamiento, y en el análisis con estratificación o modelos multivariados. La modificación del efecto ocurre cuando la asociación cambia según los niveles de una tercera variable.",
+      "gpcRefs": [
+        "Manual de metodología de la investigación en salud",
+        "Manual de epidemiología clínica para el primer nivel de atención"
+      ]
+    },
+    {
+      "key": "fam-02b-disenos-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "study_design",
+      "vignette": "Una compañía farmacéutica tiene un nuevo fármaco que ya demostró seguridad en voluntarios sanos y eficacia preliminar en 200 pacientes. Ahora planea un estudio multicéntrico con 3,000 pacientes comparándolo con el tratamiento estándar antes de solicitar su registro.",
+      "prompt": "¿Qué fase de investigación clínica corresponde al estudio planeado?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fase IV",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se realiza después de la comercialización."
+        },
+        {
+          "key": "b",
+          "text": "Estudio de cohorte observacional",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un ensayo clínico."
+        },
+        {
+          "key": "c",
+          "text": "Fase I",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Evalúa seguridad y farmacocinética en pocos voluntarios."
+        },
+        {
+          "key": "d",
+          "text": "Estudio ecológico de ventas",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No evalúa eficacia."
+        },
+        {
+          "key": "e",
+          "text": "Fase II porque aún no está registrado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La fase II es de menor tamaño."
+        },
+        {
+          "key": "f",
+          "text": "Fase II",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Evalúa eficacia preliminar y dosis."
+        },
+        {
+          "key": "g",
+          "text": "Fase III",
+          "correct": true,
+          "rationale": "Confirma eficacia y seguridad en muestras grandes frente al tratamiento estándar."
+        },
+        {
+          "key": "h",
+          "text": "Farmacovigilancia exclusiva",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Corresponde a fase IV."
+        },
+        {
+          "key": "i",
+          "text": "Fase 0 de microdosis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es exploratoria."
+        },
+        {
+          "key": "j",
+          "text": "Fase preclínica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se realiza en laboratorio y animales."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "g"
+      ],
+      "explanation": "Los ensayos clínicos de nuevos fármacos se dividen en fases. La fase I evalúa seguridad, tolerabilidad y farmacocinética en un número pequeño de voluntarios, habitualmente sanos. La fase II explora eficacia preliminar y dosis en cientos de pacientes con la enfermedad. La fase III confirma eficacia y seguridad en miles de pacientes, comparando con placebo o con el tratamiento estándar, y es la base para solicitar el registro sanitario. La fase IV, posterior a la comercialización, detecta efectos adversos raros o a largo plazo mediante farmacovigilancia. En México el registro lo otorga la Comisión Federal para la Protección contra Riesgos Sanitarios.",
+      "gpcRefs": [
+        "Manual de metodología de la investigación en salud",
+        "Reglamento de la Ley General de Salud en materia de investigación para la salud"
+      ]
+    },
+    {
+      "key": "fam-02b-disenos-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "study_design",
+      "vignette": "Un estudio de casos y controles se realiza solo con pacientes hospitalizados. Encuentra una asociación entre dos enfermedades que no se observa en la población general, porque tener ambas aumenta la probabilidad de ser hospitalizado.",
+      "prompt": "¿Qué sesgo indica esta situación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sesgo de memoria",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No depende del recuerdo."
+        },
+        {
+          "key": "b",
+          "text": "Sesgo de duración",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se relaciona con tamizaje."
+        },
+        {
+          "key": "c",
+          "text": "Efecto Hawthorne",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se relaciona con la observación."
+        },
+        {
+          "key": "d",
+          "text": "Falacia ecológica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Usa datos individuales."
+        },
+        {
+          "key": "e",
+          "text": "Sesgo de no respuesta",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Ocurre cuando no contestan."
+        },
+        {
+          "key": "f",
+          "text": "Error tipo II",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es aleatorio."
+        },
+        {
+          "key": "g",
+          "text": "Sesgo de confusión por edad",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se menciona la edad."
+        },
+        {
+          "key": "h",
+          "text": "Sesgo de publicación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Afecta a la literatura."
+        },
+        {
+          "key": "i",
+          "text": "Sesgo del entrevistador",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay entrevistas diferenciales."
+        },
+        {
+          "key": "j",
+          "text": "Sesgo de Berkson",
+          "correct": true,
+          "rationale": "Es un sesgo de selección por usar pacientes hospitalizados."
+        }
+      ],
+      "canonical": [
+        "a",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El sesgo de Berkson es un sesgo de selección que ocurre en estudios realizados con pacientes hospitalizados. Las personas con dos o más enfermedades tienen mayor probabilidad de ser hospitalizadas, lo que puede generar asociaciones que no existen en la población general. Es un ejemplo de cómo la forma de seleccionar a los participantes afecta la validez interna. Para reducirlo se recomienda usar controles poblacionales o de varias fuentes. Otros sesgos de selección incluyen el del voluntario sano, el de no respuesta y el de pérdidas de seguimiento en cohortes.",
+      "gpcRefs": [
+        "Manual de metodología de la investigación en salud",
+        "Manual de epidemiología clínica para el primer nivel de atención"
+      ]
+    },
+    {
+      "key": "fam-02b-disenos-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "study_design",
+      "vignette": "Un médico revisa la literatura para decidir el mejor tratamiento para la diabetes en adultos mayores. Encuentra un estudio que combina estadísticamente los resultados de 15 ensayos clínicos aleatorizados de buena calidad.",
+      "prompt": "¿Qué tipo de estudio describe esta publicación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Estudio transversal analítico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es primario."
+        },
+        {
+          "key": "b",
+          "text": "Estudio de cohorte",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es primario y observacional."
+        },
+        {
+          "key": "c",
+          "text": "Revisión sistemática con metaanálisis",
+          "correct": true,
+          "rationale": "Combina estadísticamente los resultados de varios estudios primarios."
+        },
+        {
+          "key": "d",
+          "text": "Opinión de expertos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es el menor nivel de evidencia."
+        },
+        {
+          "key": "e",
+          "text": "Revisión narrativa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No usa métodos sistemáticos ni combina datos."
+        },
+        {
+          "key": "f",
+          "text": "Ensayo clínico multicéntrico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es un solo estudio primario."
+        },
+        {
+          "key": "g",
+          "text": "Estudio ecológico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Usa datos de poblaciones."
+        },
+        {
+          "key": "h",
+          "text": "Casos y controles anidado",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es primario."
+        },
+        {
+          "key": "i",
+          "text": "Guía de práctica clínica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Hace recomendaciones, no combina datos primarios."
+        },
+        {
+          "key": "j",
+          "text": "Serie de casos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es descriptiva."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "f"
+      ],
+      "explanation": "La revisión sistemática es un estudio secundario que busca, selecciona y evalúa críticamente todos los estudios relevantes sobre una pregunta con métodos explícitos y reproducibles. Cuando los resultados se combinan estadísticamente para obtener una estimación conjunta del efecto, se llama metaanálisis, y suele representarse con un gráfico de bosque. Una revisión sistemática con metaanálisis de ensayos clínicos aleatorizados de buena calidad se considera el nivel más alto de evidencia. Sus limitaciones incluyen la heterogeneidad entre estudios y el sesgo de publicación, que se evalúa con el gráfico de embudo.",
+      "gpcRefs": [
+        "Manual de metodología de la investigación en salud",
+        "Metodología para la elaboración de guías de práctica clínica del Centro Nacional de Excelencia Tecnológica en Salud"
+      ]
+    },
+    {
+      "key": "fam-02b-disenos-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "study_design",
+      "vignette": "En un ensayo clínico de un analgésico para migraña, cada paciente recibe el fármaco durante 4 semanas, luego un periodo sin tratamiento de 2 semanas y después placebo durante 4 semanas, en orden aleatorio.",
+      "prompt": "¿Qué diseño de estudio corresponde a esta investigación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Serie de casos con placebo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un diseño reconocido."
+        },
+        {
+          "key": "b",
+          "text": "Ensayo factorial",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Evalúa dos o más intervenciones combinadas."
+        },
+        {
+          "key": "c",
+          "text": "Estudio ecológico",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Usa poblaciones."
+        },
+        {
+          "key": "d",
+          "text": "Estudio de cohorte",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay asignación del investigador."
+        },
+        {
+          "key": "e",
+          "text": "Ensayo de no inferioridad abierto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No describe la estructura."
+        },
+        {
+          "key": "f",
+          "text": "Estudio antes y después sin control",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Aquí hay placebo y aleatorización."
+        },
+        {
+          "key": "g",
+          "text": "Ensayo por conglomerados",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aleatoriza grupos, no individuos."
+        },
+        {
+          "key": "h",
+          "text": "Estudio de casos y controles",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es observacional."
+        },
+        {
+          "key": "i",
+          "text": "Ensayo clínico de grupos paralelos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Cada grupo recibe un solo tratamiento."
+        },
+        {
+          "key": "j",
+          "text": "Ensayo clínico cruzado",
+          "correct": true,
+          "rationale": "Cada paciente actúa como su propio control con un periodo de lavado entre tratamientos."
+        }
+      ],
+      "canonical": [
+        "b",
+        "d",
+        "i",
+        "j"
+      ],
+      "explanation": "En el ensayo clínico cruzado cada participante recibe todas las intervenciones en secuencia aleatoria, separadas por un periodo de lavado para eliminar el efecto residual del tratamiento previo. Cada paciente es su propio control, lo que reduce la variabilidad y el tamaño de muestra necesario. Es adecuado para enfermedades crónicas y estables, con tratamientos de efecto rápido y reversible, como la migraña o la hipertensión. No sirve para enfermedades agudas que se curan ni para desenlaces irreversibles. Su principal riesgo es el efecto de arrastre cuando el lavado es insuficiente.",
+      "gpcRefs": [
+        "Manual de metodología de la investigación en salud",
+        "Guía para la lectura crítica de ensayos clínicos"
+      ]
+    },
+    {
+      "key": "fam-02b-disenos-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "study_design",
+      "vignette": "Un médico familiar publica la descripción detallada de 8 pacientes atendidos en su clínica con una reacción cutánea inusual después de usar un nuevo antiinflamatorio. No incluye grupo de comparación.",
+      "prompt": "¿Qué diseño de estudio corresponde a esta publicación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Serie de casos",
+          "correct": true,
+          "rationale": "Describe un grupo de pacientes con una característica común sin grupo control."
+        },
+        {
+          "key": "b",
+          "text": "Estudio de prueba diagnóstica",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No evalúa una prueba."
+        },
+        {
+          "key": "c",
+          "text": "Estudio transversal analítico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No se mide en una población definida."
+        },
+        {
+          "key": "d",
+          "text": "Ensayo clínico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay asignación."
+        },
+        {
+          "key": "e",
+          "text": "Estudio de cohorte",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Requiere comparar expuestos y no expuestos."
+        },
+        {
+          "key": "f",
+          "text": "Estudio ecológico",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Los datos son individuales."
+        },
+        {
+          "key": "g",
+          "text": "Revisión sistemática",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es secundario."
+        },
+        {
+          "key": "h",
+          "text": "Ensayo cruzado",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es experimental."
+        },
+        {
+          "key": "i",
+          "text": "Casos y controles",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Requiere controles."
+        },
+        {
+          "key": "j",
+          "text": "Metaanálisis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No combina estudios."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "i"
+      ],
+      "explanation": "La serie de casos es un estudio descriptivo que presenta las características de un grupo de pacientes con una enfermedad, exposición o evento en común, sin grupo de comparación. Es útil para describir enfermedades nuevas, efectos adversos inesperados o presentaciones inusuales, y para generar hipótesis. El reporte de caso describe a un solo paciente. Al no tener grupo control no permite establecer asociaciones ni causalidad. Muchas alertas de farmacovigilancia y el reconocimiento inicial de enfermedades como el sida surgieron de series de casos.",
+      "gpcRefs": [
+        "Manual de metodología de la investigación en salud",
+        "Manual de farmacovigilancia de la Comisión Federal para la Protección contra Riesgos Sanitarios"
+      ]
+    },
+    {
+      "key": "fam-02b-disenos-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "study_design",
+      "vignette": "En un estudio sobre lavado de manos, el personal de un hospital mejora notablemente su apego cuando sabe que está siendo observado por los investigadores, y vuelve a su conducta habitual al terminar la observación.",
+      "prompt": "¿Qué fenómeno indica esta situación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sesgo de Berkson",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se relaciona con hospitalizados y enfermedades."
+        },
+        {
+          "key": "b",
+          "text": "Error tipo I",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es aleatorio."
+        },
+        {
+          "key": "c",
+          "text": "Efecto placebo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se refiere a una respuesta a una intervención inerte."
+        },
+        {
+          "key": "d",
+          "text": "Sesgo de publicación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No aplica."
+        },
+        {
+          "key": "e",
+          "text": "Efecto nocebo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se refiere a efectos adversos por expectativa negativa."
+        },
+        {
+          "key": "f",
+          "text": "Confusión por turno laboral",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No se menciona."
+        },
+        {
+          "key": "g",
+          "text": "Regresión a la media",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se refiere a mediciones extremas."
+        },
+        {
+          "key": "h",
+          "text": "Sesgo de adelanto",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se relaciona con tamizaje."
+        },
+        {
+          "key": "i",
+          "text": "Sesgo de memoria",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No depende del recuerdo."
+        },
+        {
+          "key": "j",
+          "text": "Efecto Hawthorne",
+          "correct": true,
+          "rationale": "Las personas modifican su conducta cuando saben que son observadas."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El efecto Hawthorne es la modificación de la conducta de los participantes de un estudio por el hecho de saberse observados, y puede sobrestimar el efecto de una intervención. Recibe su nombre de estudios realizados en una fábrica en Estados Unidos. Es especialmente relevante en estudios de apego a prácticas, como el lavado de manos. Se reduce con observación encubierta cuando es ética, periodos prolongados de observación o grupos control que también sean observados. Es distinto del efecto placebo, que es una respuesta a una intervención inerte por la expectativa de beneficio.",
+      "gpcRefs": [
+        "Manual de metodología de la investigación en salud",
+        "Programa de higiene de manos de la Secretaría de Salud"
+      ]
+    },
+    {
+      "key": "fam-02b-disenos-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "study_design",
+      "vignette": "Un ensayo clínico compara un antibiótico oral de 5 días contra el estándar de 10 días para neumonía. El objetivo es demostrar que el esquema corto no es peor que el estándar por más de un margen de 10 por ciento en curación clínica.",
+      "prompt": "¿Qué tipo de ensayo clínico describe esta investigación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Estudio de bioequivalencia farmacocinética",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Compara concentraciones sanguíneas."
+        },
+        {
+          "key": "b",
+          "text": "Ensayo controlado con placebo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se compara con un tratamiento activo."
+        },
+        {
+          "key": "c",
+          "text": "Ensayo factorial",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Combina intervenciones."
+        },
+        {
+          "key": "d",
+          "text": "Ensayo cruzado",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La neumonía es aguda."
+        },
+        {
+          "key": "e",
+          "text": "Estudio de cohorte",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es experimental."
+        },
+        {
+          "key": "f",
+          "text": "Ensayo de búsqueda de dosis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Corresponde a fase II."
+        },
+        {
+          "key": "g",
+          "text": "Ensayo de equivalencia estricta",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Busca demostrar que no es ni mejor ni peor dentro de un margen."
+        },
+        {
+          "key": "h",
+          "text": "Ensayo de superioridad",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Busca demostrar que una intervención es mejor."
+        },
+        {
+          "key": "i",
+          "text": "Ensayo de no inferioridad",
+          "correct": true,
+          "rationale": "Busca demostrar que la nueva intervención no es peor que la estándar por más de un margen predefinido."
+        },
+        {
+          "key": "j",
+          "text": "Ensayo de fase I",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Evalúa seguridad inicial."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "Los ensayos de no inferioridad buscan demostrar que una nueva intervención no es inaceptablemente peor que la estándar, dentro de un margen definido de antemano. Se justifican cuando la nueva opción tiene ventajas, como menor duración, menor costo, mejor tolerancia o administración más sencilla. El margen de no inferioridad debe basarse en criterios clínicos y estadísticos. Se recomienda presentar tanto el análisis por intención de tratar como el análisis por protocolo. Los esquemas cortos de antibiótico reducen efectos adversos y resistencia bacteriana.",
+      "gpcRefs": [
+        "Guía para la lectura crítica de ensayos clínicos",
+        "Manual de metodología de la investigación en salud"
+      ]
+    }
+  ]
+}

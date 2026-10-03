@@ -1,0 +1,1715 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "fam-01a-tamizaje-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "screening",
+      "vignette": "Mujer de 38 años, sin antecedentes patológicos, que acude a consulta de medicina familiar para revisión general. Su última citología cervical fue hace 4 años con resultado normal. Inició vida sexual a los 19 años y tiene una pareja estable.",
+      "prompt": "¿Cuál es la prueba de tamizaje para cáncer cervicouterino más apropiada en este momento?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Repetir citología cervical anual de por vida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ya no se recomienda el tamizaje anual indefinido."
+        },
+        {
+          "key": "b",
+          "text": "No requiere tamizaje por tener pareja estable",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La pareja estable no elimina el riesgo de infección previa."
+        },
+        {
+          "key": "c",
+          "text": "Prueba de detección de virus del papiloma humano de alto riesgo",
+          "correct": true,
+          "rationale": "A partir de los 35 años la prueba de VPH es la estrategia de tamizaje preferida en México."
+        },
+        {
+          "key": "d",
+          "text": "Ultrasonido pélvico transvaginal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No detecta lesiones precursoras cervicales."
+        },
+        {
+          "key": "e",
+          "text": "Suspender el tamizaje porque la última citología fue normal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Una citología normal no suspende el programa."
+        },
+        {
+          "key": "f",
+          "text": "Esperar a que presente sangrado poscoital para estudiarla",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "El tamizaje busca lesiones asintomáticas."
+        },
+        {
+          "key": "g",
+          "text": "Resonancia magnética pélvica anual",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No tiene papel en el tamizaje."
+        },
+        {
+          "key": "h",
+          "text": "Marcador tumoral CA-125",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No sirve para cáncer cervicouterino."
+        },
+        {
+          "key": "i",
+          "text": "Colposcopia de rutina a toda mujer sexualmente activa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La colposcopia se reserva para resultados anormales."
+        },
+        {
+          "key": "j",
+          "text": "Biopsia de cérvix dirigida sin lesión visible",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es una prueba de tamizaje."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "i"
+      ],
+      "explanation": "El programa mexicano de detección de cáncer cervicouterino usa la citología cervical en mujeres de 25 a 34 años y la prueba de detección de virus del papiloma humano de alto riesgo de los 35 a los 64 años. La prueba de VPH tiene mayor sensibilidad que la citología para detectar lesiones intraepiteliales de alto grado y permite espaciar el intervalo a cada cinco años cuando es negativa. Si el resultado es positivo, se realiza citología de triaje o colposcopia según el algoritmo. La colposcopia y la biopsia no son pruebas de tamizaje, sino de diagnóstico. Tener una pareja estable no elimina la indicación, porque la infección pudo adquirirse antes.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención, detección, diagnóstico, tratamiento, control y vigilancia epidemiológica del cáncer cervicouterino",
+        "Guía de Práctica Clínica de prevención y detección oportuna del cáncer cervicouterino en el primer nivel de atención"
+      ]
+    },
+    {
+      "key": "fam-01a-tamizaje-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "screening",
+      "vignette": "Mujer de 46 años, sin antecedentes familiares de cáncer, que acude a su centro de salud. Se realiza autoexploración mamaria mensual y nunca ha tenido mastografía. La exploración clínica de mamas es normal.",
+      "prompt": "¿Cuál es la recomendación de tamizaje para cáncer de mama más adecuada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Mastografía de tamizaje cada dos años",
+          "correct": true,
+          "rationale": "En México se indica mastografía bienal de los 40 a los 69 años."
+        },
+        {
+          "key": "b",
+          "text": "Resonancia magnética mamaria anual",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se reserva para mujeres de muy alto riesgo."
+        },
+        {
+          "key": "c",
+          "text": "Ultrasonido mamario anual como prueba única",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El ultrasonido es complementario, no de tamizaje poblacional."
+        },
+        {
+          "key": "d",
+          "text": "Iniciar mastografía hasta los 50 años sin excepción",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La norma mexicana inicia a los 40."
+        },
+        {
+          "key": "e",
+          "text": "Prueba genética de BRCA1 y BRCA2",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada sin factores de riesgo."
+        },
+        {
+          "key": "f",
+          "text": "Biopsia por aspiración de ambas mamas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es una prueba de tamizaje."
+        },
+        {
+          "key": "g",
+          "text": "No requiere tamizaje por no tener antecedentes familiares",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La mayoría de los cánceres de mama ocurre sin antecedentes familiares."
+        },
+        {
+          "key": "h",
+          "text": "Marcador tumoral CA 15-3 anual",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No sirve para tamizaje."
+        },
+        {
+          "key": "i",
+          "text": "Continuar solo con autoexploración porque la exploración clínica es normal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La autoexploración no sustituye la mastografía."
+        },
+        {
+          "key": "j",
+          "text": "Diferir cualquier estudio hasta que palpe un nódulo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El tamizaje busca enfermedad no palpable."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "La norma mexicana para el cáncer de mama recomienda autoexploración mensual a partir de los 20 años, exploración clínica anual a partir de los 25 años y mastografía de tamizaje cada dos años en mujeres de 40 a 69 años. La mastografía es la única prueba de tamizaje que ha demostrado reducir la mortalidad. El ultrasonido es complementario en mamas densas o para caracterizar hallazgos, y la resonancia se reserva para mujeres con riesgo muy alto, como portadoras de mutaciones BRCA o radioterapia torácica previa. La ausencia de antecedentes familiares no exime del tamizaje, porque la mayoría de los casos son esporádicos.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención, diagnóstico, tratamiento, control y vigilancia epidemiológica del cáncer de mama",
+        "Guía de Práctica Clínica de tamizaje y diagnóstico de cáncer de mama en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-01a-tamizaje-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "screening",
+      "vignette": "Hombre de 52 años, asintomático, sin antecedentes familiares de cáncer colorrectal ni pólipos. Nunca se ha realizado estudios de tamizaje. Su hemoglobina es normal.",
+      "prompt": "¿Cuál es la prueba de tamizaje inicial más apropiada para cáncer colorrectal en el primer nivel de atención?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "No requiere tamizaje porque su hemoglobina es normal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La anemia es tardía y no excluye cáncer."
+        },
+        {
+          "key": "b",
+          "text": "Ultrasonido abdominal y marcadores tumorales completos",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No aportan al tamizaje."
+        },
+        {
+          "key": "c",
+          "text": "Antígeno carcinoembrionario sérico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se usa para tamizaje."
+        },
+        {
+          "key": "d",
+          "text": "Colon por enema con doble contraste como primera opción",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Fue sustituido por pruebas más sensibles."
+        },
+        {
+          "key": "e",
+          "text": "Cápsula endoscópica anual",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el tamizaje recomendado."
+        },
+        {
+          "key": "f",
+          "text": "Esperar a que presente cambios en el hábito intestinal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El tamizaje es en asintomáticos."
+        },
+        {
+          "key": "g",
+          "text": "Iniciar tamizaje solo si tiene antecedente familiar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El riesgo promedio también requiere tamizaje."
+        },
+        {
+          "key": "h",
+          "text": "Tacto rectal como prueba única de tamizaje",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Tiene muy baja sensibilidad."
+        },
+        {
+          "key": "i",
+          "text": "Prueba inmunoquímica de sangre oculta en heces",
+          "correct": true,
+          "rationale": "Es la prueba de tamizaje poblacional recomendada en adultos de riesgo promedio desde los 50 años."
+        },
+        {
+          "key": "j",
+          "text": "Tomografía de abdomen contrastada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es una prueba de tamizaje."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "El tamizaje de cáncer colorrectal en adultos de riesgo promedio inicia entre los 45 y los 50 años y continúa hasta los 75. En el primer nivel de atención mexicano la prueba más utilizada es la prueba inmunoquímica de sangre oculta en heces anual, que no requiere dieta especial y tiene mejor sensibilidad que la prueba de guayaco. Un resultado positivo obliga a realizar colonoscopia. La colonoscopia directa cada diez años es otra estrategia válida cuando hay disponibilidad. El antígeno carcinoembrionario sirve para seguimiento, no para tamizaje, y el tacto rectal aislado tiene muy baja sensibilidad. La anemia es una manifestación tardía.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección oportuna y diagnóstico de cáncer de colon y recto no hereditario en adultos",
+        "Lineamientos del programa de detección de cáncer colorrectal"
+      ]
+    },
+    {
+      "key": "fam-01a-tamizaje-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "screening",
+      "vignette": "Hombre de 58 años, fumador activo de 1 cajetilla diaria desde los 20 años. Asintomático respiratorio. Acude preocupado porque un amigo fue diagnosticado con cáncer pulmonar.",
+      "prompt": "¿Cuál es la estrategia de tamizaje de cáncer pulmonar más apropiada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tomografía de tórax de baja dosis anual junto con consejería para dejar de fumar",
+          "correct": true,
+          "rationale": "Está indicada en adultos de 50 a 80 años con al menos 20 paquetes-año."
+        },
+        {
+          "key": "b",
+          "text": "Biopsia pulmonar por punción guiada",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Requiere una lesión."
+        },
+        {
+          "key": "c",
+          "text": "Radiografía de tórax anual",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No reduce la mortalidad por cáncer pulmonar."
+        },
+        {
+          "key": "d",
+          "text": "Marcadores tumorales séricos anuales",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No tienen utilidad en tamizaje."
+        },
+        {
+          "key": "e",
+          "text": "Broncoscopia diagnóstica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es invasiva y no es de tamizaje."
+        },
+        {
+          "key": "f",
+          "text": "Tomografía por emisión de positrones anual",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es la prueba de tamizaje."
+        },
+        {
+          "key": "g",
+          "text": "Citología de esputo seriada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es útil como tamizaje."
+        },
+        {
+          "key": "h",
+          "text": "Espirometría como tamizaje de cáncer",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Evalúa función, no cáncer."
+        },
+        {
+          "key": "i",
+          "text": "No requiere tamizaje porque no tiene síntomas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El tamizaje busca enfermedad asintomática."
+        },
+        {
+          "key": "j",
+          "text": "Ofrecer tamizaje sin consejería antitabaco",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Dejar de fumar es la intervención más eficaz."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "El tamizaje de cáncer pulmonar con tomografía de tórax de baja dosis anual reduce la mortalidad específica en adultos de 50 a 80 años con un consumo acumulado de al menos 20 paquetes-año que fuman o dejaron de fumar en los últimos 15 años. Este paciente tiene 38 paquetes-año y cumple criterios. La radiografía de tórax y la citología de esputo no demostraron beneficio en mortalidad. El tamizaje debe ofrecerse con una decisión compartida que explique los falsos positivos y el sobrediagnóstico, y siempre acompañado de consejería para dejar de fumar, que es la intervención preventiva con mayor impacto.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del consumo de tabaco",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer pulmonar de células no pequeñas"
+      ]
+    },
+    {
+      "key": "fam-01a-tamizaje-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "screening",
+      "vignette": "Hombre de 68 años, exfumador de 30 paquetes-año, hipertenso controlado. Acude a revisión anual. Exploración abdominal sin masas palpables.",
+      "prompt": "¿Cuál es el estudio de tamizaje indicado para aneurisma de aorta abdominal en este paciente?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Radiografía simple de abdomen",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es adecuada para tamizaje."
+        },
+        {
+          "key": "b",
+          "text": "Ultrasonido abdominal cada año de por vida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Si el primero es normal no se repite."
+        },
+        {
+          "key": "c",
+          "text": "Ninguno porque la exploración abdominal es normal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La palpación tiene baja sensibilidad."
+        },
+        {
+          "key": "d",
+          "text": "Tamizar solo a mujeres hipertensas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El beneficio se demostró en hombres fumadores."
+        },
+        {
+          "key": "e",
+          "text": "Ultrasonido abdominal en una sola ocasión",
+          "correct": true,
+          "rationale": "Se recomienda en hombres de 65 a 75 años que hayan fumado."
+        },
+        {
+          "key": "f",
+          "text": "Ecocardiograma transtorácico",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No evalúa la aorta abdominal."
+        },
+        {
+          "key": "g",
+          "text": "Índice tobillo brazo como tamizaje de aneurisma",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Evalúa enfermedad arterial periférica."
+        },
+        {
+          "key": "h",
+          "text": "Resonancia magnética de aorta completa",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es la prueba de tamizaje."
+        },
+        {
+          "key": "i",
+          "text": "Angiotomografía de aorta anual",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Expone a radiación y contraste sin necesidad."
+        },
+        {
+          "key": "j",
+          "text": "Angiografía por catéter",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es invasiva."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "i"
+      ],
+      "explanation": "El aneurisma de aorta abdominal suele ser asintomático hasta que se rompe, con mortalidad muy alta. En hombres de 65 a 75 años que han fumado alguna vez, un ultrasonido abdominal único reduce la mortalidad relacionada con el aneurisma. Es un estudio barato, sin radiación y con alta sensibilidad y especificidad. Si el diámetro es menor de 3 centímetros no requiere seguimiento; si hay dilatación se establece vigilancia periódica según el tamaño, y se refiere a cirugía vascular a partir de 5.5 centímetros o con crecimiento rápido. La palpación abdominal tiene baja sensibilidad, sobre todo en pacientes con obesidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del aneurisma de aorta abdominal",
+        "Recomendaciones de tamizaje del grupo de servicios preventivos de Estados Unidos"
+      ]
+    },
+    {
+      "key": "fam-01a-tamizaje-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "screening",
+      "vignette": "Mujer de 66 años, posmenopáusica desde los 50, sin fracturas previas, índice de masa corporal de 21. No toma medicamentos. Acude a revisión preventiva.",
+      "prompt": "¿Cuál es el estudio de tamizaje para osteoporosis indicado en esta paciente?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Densitometría ósea de cadera y columna lumbar por absorciometría dual de rayos X",
+          "correct": true,
+          "rationale": "Se recomienda a toda mujer de 65 años o más."
+        },
+        {
+          "key": "b",
+          "text": "Calcio y fósforo séricos como tamizaje",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Suelen ser normales en osteoporosis."
+        },
+        {
+          "key": "c",
+          "text": "No requiere estudio por no tener fracturas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El objetivo es detectar antes de la fractura."
+        },
+        {
+          "key": "d",
+          "text": "Iniciar bifosfonato sin estudio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El tratamiento se basa en riesgo evaluado."
+        },
+        {
+          "key": "e",
+          "text": "Gammagrama óseo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Detecta metástasis o fracturas, no densidad."
+        },
+        {
+          "key": "f",
+          "text": "Marcadores de recambio óseo como tamizaje",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No sustituyen la densitometría."
+        },
+        {
+          "key": "g",
+          "text": "Tomografía cuantitativa de cuerpo completo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estándar."
+        },
+        {
+          "key": "h",
+          "text": "Ultrasonido de calcáneo como diagnóstico definitivo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es solo orientador."
+        },
+        {
+          "key": "i",
+          "text": "Radiografía simple de columna lumbar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es sensible para medir densidad ósea."
+        },
+        {
+          "key": "j",
+          "text": "Esperar a que tenga una fractura de cadera",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Sería tardío."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "i"
+      ],
+      "explanation": "La osteoporosis se define por una densidad mineral ósea con puntuación T menor o igual a menos 2.5 en la densitometría por absorciometría dual de rayos X de cadera o columna lumbar. Se recomienda tamizaje en todas las mujeres de 65 años o más y en mujeres posmenopáusicas más jóvenes con factores de riesgo, como bajo peso, tabaquismo, uso de glucocorticoides o antecedente familiar de fractura de cadera. La herramienta FRAX ayuda a estimar el riesgo de fractura a diez años. Las radiografías simples detectan pérdida ósea solo cuando es avanzada, y los estudios de laboratorio suelen ser normales.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de osteoporosis en mujeres posmenopáusicas",
+        "Guía de Práctica Clínica de prevención de fracturas por fragilidad en el adulto mayor"
+      ]
+    },
+    {
+      "key": "fam-01a-tamizaje-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "screening",
+      "vignette": "Hombre de 30 años, con índice de masa corporal de 31, madre con diabetes tipo 2. Sedentario. Acude a consulta para certificado médico laboral. Presión arterial 124/80 mmHg.",
+      "prompt": "¿Cuál es la prueba de tamizaje para diabetes más adecuada en este paciente?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Examen general de orina con búsqueda de glucosuria",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es poco sensible."
+        },
+        {
+          "key": "b",
+          "text": "Insulina sérica en ayuno",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se usa para diagnóstico ni tamizaje."
+        },
+        {
+          "key": "c",
+          "text": "Glucosa capilar posprandial aislada como diagnóstico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No establece el diagnóstico."
+        },
+        {
+          "key": "d",
+          "text": "Glucosa plasmática en ayuno",
+          "correct": true,
+          "rationale": "Tiene obesidad y antecedente familiar de primer grado, lo que justifica el tamizaje."
+        },
+        {
+          "key": "e",
+          "text": "No requiere tamizaje hasta los 45 años",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los factores de riesgo adelantan el tamizaje."
+        },
+        {
+          "key": "f",
+          "text": "Tamizar solo si tiene poliuria y polidipsia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El tamizaje es para asintomáticos."
+        },
+        {
+          "key": "g",
+          "text": "Péptido C y anticuerpos antiGAD",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se usan en diabetes autoinmune."
+        },
+        {
+          "key": "h",
+          "text": "Perfil de lípidos como tamizaje de diabetes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No detecta hiperglucemia."
+        },
+        {
+          "key": "i",
+          "text": "Diferir el estudio hasta que tenga hipertensión",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Ya tiene factores suficientes."
+        },
+        {
+          "key": "j",
+          "text": "Iniciar metformina sin estudios",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Primero debe confirmarse la alteración."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "d",
+        "e"
+      ],
+      "explanation": "La norma mexicana para diabetes recomienda la detección a partir de los 20 años en personas con factores de riesgo, y la Asociación Americana de Diabetes recomienda tamizaje a cualquier edad en adultos con sobrepeso u obesidad y al menos un factor adicional, como un familiar de primer grado con diabetes o sedentarismo. Las pruebas válidas son la glucosa plasmática en ayuno, la hemoglobina glucosilada y la curva de tolerancia oral con 75 gramos. Una glucosa en ayuno de 100 a 125 mg/dL indica prediabetes y de 126 o más, repetida, confirma diabetes. La glucosuria es poco sensible.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de la diabetes mellitus",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento farmacológico de la diabetes mellitus tipo 2 en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-01a-tamizaje-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "screening",
+      "vignette": "Mujer de 24 años, sana, que acude a consulta para orientación sobre métodos anticonceptivos. Nunca se ha realizado pruebas de infecciones de transmisión sexual. No refiere síntomas.",
+      "prompt": "¿Cuál es la recomendación de tamizaje más adecuada respecto al virus de la inmunodeficiencia humana?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Carga viral como prueba de tamizaje",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es una prueba de seguimiento."
+        },
+        {
+          "key": "b",
+          "text": "Conteo de linfocitos CD4",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es una prueba de tamizaje."
+        },
+        {
+          "key": "c",
+          "text": "Genotipo viral de resistencia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No aplica a tamizaje."
+        },
+        {
+          "key": "d",
+          "text": "Realizar prueba solo a hombres que tienen sexo con hombres",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El tamizaje universal es la recomendación."
+        },
+        {
+          "key": "e",
+          "text": "No ofrecer prueba porque no refiere conductas de riesgo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La percepción de riesgo es poco confiable."
+        },
+        {
+          "key": "f",
+          "text": "Diferir la prueba hasta que se embarace",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe ofrecerse ahora."
+        },
+        {
+          "key": "g",
+          "text": "Ofrecer prueba de VIH al menos una vez, con consentimiento informado",
+          "correct": true,
+          "rationale": "Se recomienda en todas las personas de 15 a 65 años independientemente del riesgo percibido."
+        },
+        {
+          "key": "h",
+          "text": "Realizar la prueba sin informarle",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Requiere consentimiento y consejería."
+        },
+        {
+          "key": "i",
+          "text": "Western blot como primera prueba",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Ya no se usa como inicial."
+        },
+        {
+          "key": "j",
+          "text": "Solo realizar prueba si presenta síntomas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El tamizaje es para asintomáticos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "Se recomienda ofrecer la prueba de detección de VIH al menos una vez a todas las personas de 15 a 65 años, y con mayor frecuencia a quienes tienen factores de riesgo. Las pruebas rápidas de cuarta generación detectan anticuerpos y antígeno p24, lo que reduce el periodo de ventana. La prueba es voluntaria y confidencial, y se acompaña de consejería antes y después del resultado, como establece la norma mexicana. Un resultado reactivo requiere una prueba confirmatoria. La carga viral y el conteo de CD4 se usan para seguimiento del paciente diagnosticado, no para tamizaje.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención y el control de la infección por virus de la inmunodeficiencia humana",
+        "Guía de manejo antirretroviral de las personas con VIH"
+      ]
+    },
+    {
+      "key": "fam-01a-tamizaje-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "screening",
+      "vignette": "Hombre de 55 años, asintomático urinario, sin antecedentes familiares de cáncer de próstata. Solicita \"un estudio de próstata\" porque lo vio en un anuncio. Tacto rectal no realizado aún.",
+      "prompt": "¿Cuál es la recomendación más apropiada respecto al tamizaje de cáncer de próstata?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Resonancia magnética multiparamétrica de rutina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es la prueba inicial."
+        },
+        {
+          "key": "b",
+          "text": "Negar cualquier estudio por ser asintomático",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede optar por el tamizaje informado."
+        },
+        {
+          "key": "c",
+          "text": "Gammagrama óseo de tamizaje",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se usa en estadificación."
+        },
+        {
+          "key": "d",
+          "text": "Ultrasonido prostático suprapúbico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No detecta cáncer de forma confiable."
+        },
+        {
+          "key": "e",
+          "text": "Medir antígeno prostático específico sin explicación alguna",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Omite la decisión informada."
+        },
+        {
+          "key": "f",
+          "text": "Iniciar tamizaje solo a partir de los 75 años",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El beneficio es menor a esa edad."
+        },
+        {
+          "key": "g",
+          "text": "Diferir la conversación hasta que tenga síntomas urinarios",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Los síntomas suelen deberse a hiperplasia."
+        },
+        {
+          "key": "h",
+          "text": "Examen general de orina como tamizaje",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No detecta cáncer de próstata."
+        },
+        {
+          "key": "i",
+          "text": "Biopsia prostática transrectal de tamizaje",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es invasiva y no es de tamizaje."
+        },
+        {
+          "key": "j",
+          "text": "Explicar beneficios y riesgos y decidir en conjunto si se mide antígeno prostático específico",
+          "correct": true,
+          "rationale": "El tamizaje en hombres de 55 a 69 años es una decisión compartida."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "El tamizaje de cáncer de próstata con antígeno prostático específico en hombres de 55 a 69 años ofrece una reducción pequeña de la mortalidad, pero conlleva falsos positivos, biopsias innecesarias y sobrediagnóstico de tumores indolentes, con riesgo de incontinencia y disfunción eréctil por el tratamiento. Por ello se recomienda una decisión compartida e informada. En hombres afrodescendientes o con antecedente familiar de primer grado la conversación puede iniciar antes, alrededor de los 45 años. Después de los 70 años no se recomienda el tamizaje rutinario. El tacto rectal puede complementar, pero tiene baja sensibilidad como prueba aislada.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección y diagnóstico oportuno del cáncer de próstata en el primer nivel",
+        "Recomendaciones de tamizaje del grupo de servicios preventivos de Estados Unidos"
+      ]
+    },
+    {
+      "key": "fam-01a-tamizaje-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "screening",
+      "vignette": "Mujer de 45 años, sin factores de riesgo conocidos, que acude a revisión general. Nunca ha recibido transfusiones ni se ha tatuado. Pregunta si debe realizarse alguna prueba para hepatitis.",
+      "prompt": "¿Cuál es la recomendación de tamizaje para hepatitis C más adecuada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "No realizarla por no tener factores de riesgo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El tamizaje es universal en adultos."
+        },
+        {
+          "key": "b",
+          "text": "Medir solo transaminasas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Pueden ser normales en la infección crónica."
+        },
+        {
+          "key": "c",
+          "text": "Esperar a que presente ictericia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La infección crónica suele ser silenciosa."
+        },
+        {
+          "key": "d",
+          "text": "Tamizar solo a usuarios de drogas inyectables",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se pierde a muchos infectados."
+        },
+        {
+          "key": "e",
+          "text": "Carga viral de hepatitis C como prueba inicial",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se usa para confirmar un anticuerpo positivo."
+        },
+        {
+          "key": "f",
+          "text": "Biopsia hepática",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es una prueba de tamizaje."
+        },
+        {
+          "key": "g",
+          "text": "Ultrasonido hepático anual",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No detecta la infección."
+        },
+        {
+          "key": "h",
+          "text": "Antígeno de superficie de hepatitis B como tamizaje de hepatitis C",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Detecta otro virus."
+        },
+        {
+          "key": "i",
+          "text": "Realizar una prueba de anticuerpos contra virus de hepatitis C al menos una vez",
+          "correct": true,
+          "rationale": "Se recomienda tamizaje universal en adultos de 18 a 79 años."
+        },
+        {
+          "key": "j",
+          "text": "Genotipo viral como primer estudio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Solo se solicita si se confirma la infección."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "i"
+      ],
+      "explanation": "La infección por virus de hepatitis C suele ser asintomática durante décadas y puede evolucionar a cirrosis y carcinoma hepatocelular. Como existen antivirales de acción directa con tasas de curación superiores al 95 por ciento, se recomienda tamizaje universal al menos una vez en adultos de 18 a 79 años, y periódico en personas con riesgo continuo, como usuarios de drogas inyectables. La prueba inicial es la detección de anticuerpos; si es positiva, se confirma la infección activa con carga viral. Las transaminasas pueden ser normales, por lo que no sirven para descartar la infección.",
+      "gpcRefs": [
+        "Programa de acción específico para la eliminación de la hepatitis C",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de hepatitis C en el adulto"
+      ]
+    },
+    {
+      "key": "fam-01a-tamizaje-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "screening",
+      "vignette": "Se evalúa una nueva prueba de tamizaje para cáncer de colon en una población. Al compararla con colonoscopia, la prueba detecta 90 de 100 personas con cáncer y es negativa en 800 de 900 personas sin cáncer.",
+      "prompt": "¿Qué indica el valor de 90 por ciento en esta prueba?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "La sensibilidad, es decir, la proporción de enfermos con prueba positiva",
+          "correct": true,
+          "rationale": "90 de 100 enfermos fueron detectados."
+        },
+        {
+          "key": "b",
+          "text": "La prevalencia de la enfermedad",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La prevalencia es 100 de 1000, es decir, 10 por ciento."
+        },
+        {
+          "key": "c",
+          "text": "El valor predictivo positivo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Requiere dividir entre todos los positivos."
+        },
+        {
+          "key": "d",
+          "text": "El valor predictivo negativo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se calcula entre todos los negativos."
+        },
+        {
+          "key": "e",
+          "text": "La tasa de falsos positivos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Corresponde a uno menos la especificidad."
+        },
+        {
+          "key": "f",
+          "text": "La probabilidad de tener cáncer si la prueba es positiva",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Eso es el valor predictivo positivo."
+        },
+        {
+          "key": "g",
+          "text": "La exactitud global",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Incluye verdaderos positivos y negativos sobre el total."
+        },
+        {
+          "key": "h",
+          "text": "La incidencia anual de cáncer",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No se puede calcular con estos datos."
+        },
+        {
+          "key": "i",
+          "text": "La razón de verosimilitud positiva",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se calcula como sensibilidad entre uno menos especificidad."
+        },
+        {
+          "key": "j",
+          "text": "La especificidad de la prueba",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La especificidad es 800 de 900, es decir, 89 por ciento."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "La sensibilidad es la proporción de personas enfermas que obtienen un resultado positivo, calculada como verdaderos positivos entre el total de enfermos. En este ejemplo es 90 entre 100, es decir, 90 por ciento. La especificidad es la proporción de sanos con resultado negativo, 800 entre 900, aproximadamente 89 por ciento. Una prueba de tamizaje debe tener alta sensibilidad para no dejar pasar enfermos, mientras que las pruebas confirmatorias requieren alta especificidad. El valor predictivo positivo, la probabilidad de estar enfermo con una prueba positiva, depende de la prevalencia y aquí sería 90 entre 190, cerca de 47 por ciento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección oportuna de cáncer colorrectal",
+        "Manual de epidemiología clínica para el primer nivel de atención"
+      ]
+    },
+    {
+      "key": "fam-01a-tamizaje-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "screening",
+      "vignette": "En una reunión de la jurisdicción sanitaria se discute si se debe implementar un programa poblacional de tamizaje para una enfermedad. Se cuenta con una prueba barata, pero la enfermedad no tiene un tratamiento eficaz en etapas tempranas.",
+      "prompt": "¿Cuál criterio de Wilson y Jungner para programas de tamizaje no se cumple en esta situación?",
+      "polarity": "negative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "La enfermedad debe causar síntomas inmediatos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe tener una fase preclínica detectable."
+        },
+        {
+          "key": "b",
+          "text": "Debe existir un tratamiento aceptado y eficaz para quienes se detectan en fase temprana",
+          "correct": true,
+          "rationale": "Sin tratamiento eficaz, detectar antes no mejora el pronóstico."
+        },
+        {
+          "key": "c",
+          "text": "La prueba debe ser invasiva para ser confiable",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Debe ser aceptable para la población."
+        },
+        {
+          "key": "d",
+          "text": "Debe haber estudios de imagen para todos los participantes",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No es un criterio."
+        },
+        {
+          "key": "e",
+          "text": "La prueba debe ser barata",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ese criterio sí se cumple."
+        },
+        {
+          "key": "f",
+          "text": "El programa debe ser rentable solo en hospitales privados",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El costo debe ser equilibrado frente al gasto total."
+        },
+        {
+          "key": "g",
+          "text": "El tamizaje debe realizarse una sola vez en la vida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suele ser un proceso continuo."
+        },
+        {
+          "key": "h",
+          "text": "La enfermedad debe ser rara",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Debe ser un problema de salud importante."
+        },
+        {
+          "key": "i",
+          "text": "La prevalencia debe ser menor al 1 por ciento",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un requisito."
+        },
+        {
+          "key": "j",
+          "text": "Debe existir una prueba genética para la enfermedad",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es un criterio clásico."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "Los criterios de Wilson y Jungner, publicados para la Organización Mundial de la Salud, establecen que un programa de tamizaje se justifica cuando la enfermedad es un problema de salud importante, su historia natural es conocida, existe una fase latente o sintomática temprana reconocible, hay una prueba adecuada y aceptable para la población, existe un tratamiento aceptado y eficaz para los casos detectados, hay instalaciones para diagnóstico y tratamiento, existe una política acordada sobre a quién tratar, el costo es equilibrado y el proceso es continuo. Sin un tratamiento eficaz en etapa temprana, detectar antes solo adelanta el diagnóstico sin mejorar la supervivencia.",
+      "gpcRefs": [
+        "Principios y práctica del tamizaje de enfermedades de la Organización Mundial de la Salud",
+        "Manual de medicina preventiva para el primer nivel de atención"
+      ]
+    },
+    {
+      "key": "fam-01a-tamizaje-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "screening",
+      "vignette": "Un estudio observacional reporta que los pacientes con cáncer detectado por tamizaje sobreviven en promedio 3 años más desde el diagnóstico que los detectados por síntomas. Sin embargo, la edad de muerte es igual en ambos grupos.",
+      "prompt": "¿Qué indica más probablemente este hallazgo?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sesgo de memoria",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ocurre en estudios que dependen del recuerdo."
+        },
+        {
+          "key": "b",
+          "text": "Sesgo del observador por falta de cegamiento",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la diferencia en supervivencia."
+        },
+        {
+          "key": "c",
+          "text": "Que el tratamiento temprano es más eficaz",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay diferencia en la muerte."
+        },
+        {
+          "key": "d",
+          "text": "Error tipo II por muestra pequeña",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un error aleatorio."
+        },
+        {
+          "key": "e",
+          "text": "Sesgo de adelanto en el diagnóstico",
+          "correct": true,
+          "rationale": "El tamizaje adelanta la fecha del diagnóstico sin retrasar la muerte."
+        },
+        {
+          "key": "f",
+          "text": "Sesgo de confusión por tabaquismo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No explica el patrón descrito."
+        },
+        {
+          "key": "g",
+          "text": "Sesgo de duración de la enfermedad",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se refiere a detectar más tumores lentos."
+        },
+        {
+          "key": "h",
+          "text": "Sesgo de selección por voluntarios sanos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Afectaría la mortalidad también."
+        },
+        {
+          "key": "i",
+          "text": "Sobrediagnóstico demostrado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere detectar casos que nunca darían síntomas."
+        },
+        {
+          "key": "j",
+          "text": "Que el tamizaje reduce la mortalidad",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La edad de muerte no cambió."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "El sesgo de adelanto en el diagnóstico, o lead-time bias, ocurre cuando el tamizaje detecta la enfermedad antes que los síntomas y la supervivencia medida desde el diagnóstico parece mayor, aunque el momento de la muerte no cambia. Por eso la eficacia de un programa de tamizaje debe evaluarse con la mortalidad específica en ensayos aleatorizados, no con la supervivencia desde el diagnóstico. El sesgo de duración, o length-time bias, se refiere a que el tamizaje detecta con más facilidad tumores de crecimiento lento con mejor pronóstico. El sobrediagnóstico es la detección de enfermedad que nunca habría causado síntomas ni muerte.",
+      "gpcRefs": [
+        "Manual de epidemiología clínica para el primer nivel de atención",
+        "Principios y práctica del tamizaje de enfermedades de la Organización Mundial de la Salud"
+      ]
+    },
+    {
+      "key": "fam-01a-tamizaje-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "screening",
+      "vignette": "Hombre de 42 años, sin antecedentes, que acude a revisión preventiva. Presión arterial de 128/82 mmHg en dos tomas adecuadas. Índice de masa corporal de 26.",
+      "prompt": "¿Con qué periodicidad se recomienda el tamizaje de hipertensión arterial en este paciente?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cada cinco años porque no es hipertenso",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Su presión normal alta y edad justifican la medición anual."
+        },
+        {
+          "key": "b",
+          "text": "No dar recomendaciones de estilo de vida",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Tiene sobrepeso y presión normal alta."
+        },
+        {
+          "key": "c",
+          "text": "No requiere tamizaje hasta los 60 años",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La hipertensión es frecuente desde antes."
+        },
+        {
+          "key": "d",
+          "text": "Medir la presión solo si presenta cefalea",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La hipertensión suele ser asintomática."
+        },
+        {
+          "key": "e",
+          "text": "Medir una sola vez en la vida adulta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Debe ser periódica."
+        },
+        {
+          "key": "f",
+          "text": "Monitoreo ambulatorio de 24 horas anual",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se reserva para casos específicos."
+        },
+        {
+          "key": "g",
+          "text": "Ecocardiograma de tamizaje",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "h",
+          "text": "Iniciar un antihipertensivo de inmediato",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No cumple criterios de hipertensión."
+        },
+        {
+          "key": "i",
+          "text": "Medición anual de la presión arterial",
+          "correct": true,
+          "rationale": "Es mayor de 40 años y tiene presión normal alta."
+        },
+        {
+          "key": "j",
+          "text": "Medir catecolaminas urinarias",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Solo ante sospecha de feocromocitoma."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "El tamizaje de hipertensión arterial se recomienda en todos los adultos a partir de los 18 años. En adultos de 40 años o más y en quienes tienen factores de riesgo, como sobrepeso o presión normal alta, la medición debe ser anual. En menores de 40 años con presión óptima y sin factores de riesgo puede hacerse cada tres a cinco años. La medición se realiza con técnica adecuada, en reposo, con brazalete apropiado y al menos dos tomas. Antes de diagnosticar hipertensión se confirma con mediciones fuera del consultorio. Además, se recomiendan cambios en el estilo de vida.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención, detección, diagnóstico, tratamiento y control de la hipertensión arterial sistémica",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-01a-tamizaje-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "screening",
+      "vignette": "Hombre de 72 años que acude con su hija a revisión. Ella refiere que su padre sube el volumen del televisor y pide que le repitan las cosas. Vive solo y ha tenido una caída en el último año.",
+      "prompt": "¿Cuál es la intervención preventiva prioritaria en la valoración geriátrica de este paciente?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Evaluar el riesgo de caídas con pruebas de marcha y equilibrio, además de tamizaje auditivo",
+          "correct": true,
+          "rationale": "Una caída previa es el principal predictor de nuevas caídas."
+        },
+        {
+          "key": "b",
+          "text": "Densitometría como única intervención",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No evalúa el riesgo de caer."
+        },
+        {
+          "key": "c",
+          "text": "Atribuir la hipoacusia y la caída a la edad sin evaluarlas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Son condiciones modificables."
+        },
+        {
+          "key": "d",
+          "text": "Resonancia de columna completa",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es parte del tamizaje."
+        },
+        {
+          "key": "e",
+          "text": "Tomografía de cráneo de rutina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada sin datos neurológicos."
+        },
+        {
+          "key": "f",
+          "text": "Indicar benzodiacepinas para el sueño",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Aumentan el riesgo de caídas."
+        },
+        {
+          "key": "g",
+          "text": "Esperar a una segunda caída para intervenir",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La primera ya indica riesgo."
+        },
+        {
+          "key": "h",
+          "text": "Prescribir reposo para evitar caídas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Empeora la sarcopenia."
+        },
+        {
+          "key": "i",
+          "text": "No revisar sus medicamentos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La polifarmacia es un factor modificable."
+        },
+        {
+          "key": "j",
+          "text": "Solo referir a otorrinolaringología",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Omite la evaluación de caídas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "En el adulto mayor, la valoración geriátrica integral incluye la búsqueda de caídas, deterioro cognitivo, depresión, alteraciones visuales y auditivas, polifarmacia y estado nutricional. Un antecedente de caída en el último año es el predictor más importante de una nueva caída. Se recomienda evaluar marcha y equilibrio con pruebas como Levántate y anda cronometrada, revisar medicamentos que aumentan el riesgo, como benzodiacepinas y antihipertensivos, y ofrecer ejercicio de fuerza y equilibrio. La hipoacusia se asocia con aislamiento social y deterioro cognitivo, por lo que se tamiza y se refiere para auxiliares auditivos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención de caídas en el adulto mayor en el primer nivel",
+        "Guía de Práctica Clínica de valoración geronto-geriátrica integral"
+      ]
+    },
+    {
+      "key": "fam-01a-tamizaje-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "screening",
+      "vignette": "Hombre de 40 años, sin antecedentes, que acude a revisión. No fuma, presión arterial normal, índice de masa corporal de 25. Nunca se ha medido lípidos. Su padre tuvo un infarto a los 50 años.",
+      "prompt": "¿Cuál es la conducta de tamizaje más adecuada respecto a dislipidemia?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Iniciar estatina sin medir lípidos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Primero debe estimarse el riesgo."
+        },
+        {
+          "key": "b",
+          "text": "Solicitar perfil de lípidos en ayuno o sin ayuno",
+          "correct": true,
+          "rationale": "Está indicado por edad y antecedente familiar de enfermedad coronaria prematura."
+        },
+        {
+          "key": "c",
+          "text": "Medir lípidos solo si tiene xantomas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Son tardíos y raros."
+        },
+        {
+          "key": "d",
+          "text": "Angiotomografía coronaria de rutina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es tamizaje de dislipidemia."
+        },
+        {
+          "key": "e",
+          "text": "Prueba de esfuerzo de tamizaje",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada en asintomático."
+        },
+        {
+          "key": "f",
+          "text": "Solo medir colesterol HDL",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se requiere el perfil completo."
+        },
+        {
+          "key": "g",
+          "text": "No solicitarlo por tener peso normal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Las dislipidemias genéticas ocurren con peso normal."
+        },
+        {
+          "key": "h",
+          "text": "No calcular su riesgo cardiovascular",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La decisión terapéutica depende del riesgo global."
+        },
+        {
+          "key": "i",
+          "text": "Esperar a los 60 años para medir lípidos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Su padre tuvo enfermedad prematura."
+        },
+        {
+          "key": "j",
+          "text": "Medir apolipoproteínas y lipoproteína a como prueba única",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No sustituyen al perfil de lípidos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "g"
+      ],
+      "explanation": "La detección de dislipidemias se recomienda en adultos a partir de los 20 años, cada cinco años si los valores son normales, y con mayor frecuencia en presencia de factores de riesgo como antecedente familiar de enfermedad coronaria prematura, que se define en varones antes de los 55 años y en mujeres antes de los 65 en familiares de primer grado. El perfil de lípidos incluye colesterol total, triglicéridos, colesterol HDL y LDL. Actualmente se acepta la medición sin ayuno para el tamizaje. Con los resultados se estima el riesgo cardiovascular global para decidir el tratamiento.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de las dislipidemias",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en el adulto"
+      ]
+    },
+    {
+      "key": "fam-01a-tamizaje-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "screening",
+      "vignette": "Mujer de 34 años con diagnóstico reciente de tuberculosis pulmonar con baciloscopia positiva. Vive con su esposo y dos hijos de 4 y 9 años, todos asintomáticos.",
+      "prompt": "¿Cuál es la medida de prevención más apropiada para el hijo de 4 años?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Estudio de contacto con descarte de enfermedad activa y quimioprofilaxis con isoniazida",
+          "correct": true,
+          "rationale": "Los contactos menores de 5 años requieren tratamiento preventivo una vez descartada la enfermedad."
+        },
+        {
+          "key": "b",
+          "text": "Aplicar una segunda dosis de BCG",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No protege tras la exposición."
+        },
+        {
+          "key": "c",
+          "text": "Broncoscopia diagnóstica de rutina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es invasiva."
+        },
+        {
+          "key": "d",
+          "text": "Solo vigilar si presenta tos por más de dos semanas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es tardío en menores de 5 años."
+        },
+        {
+          "key": "e",
+          "text": "Iniciar tratamiento antituberculoso completo de cuatro fármacos sin estudio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Debe descartarse antes la enfermedad activa."
+        },
+        {
+          "key": "f",
+          "text": "Aislar al niño en un albergue",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es una medida recomendada."
+        },
+        {
+          "key": "g",
+          "text": "Esperar el resultado de la madre al terminar su tratamiento",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La exposición ya ocurrió."
+        },
+        {
+          "key": "h",
+          "text": "Estudiar solo al esposo por ser adulto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Los niños son los contactos de mayor riesgo."
+        },
+        {
+          "key": "i",
+          "text": "Dar amoxicilina profiláctica",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No actúa contra Mycobacterium tuberculosis."
+        },
+        {
+          "key": "j",
+          "text": "Ninguna porque está asintomático",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los niños pequeños progresan rápido a formas graves."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "j"
+      ],
+      "explanation": "El estudio de contactos de un caso de tuberculosis pulmonar bacilífera es una prioridad del programa nacional. A todos los contactos se les investiga con interrogatorio, exploración y, según el caso, radiografía de tórax y prueba de tuberculina o liberación de interferón gamma. Los niños menores de 5 años y las personas con VIH tienen alto riesgo de progresar a formas graves como meníngea o miliar, por lo que, una vez descartada la enfermedad activa, reciben quimioprofilaxis con isoniazida, habitualmente durante seis meses. La BCG no protege después de la exposición.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención y control de la tuberculosis",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de tuberculosis pulmonar en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-01a-tamizaje-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "screening",
+      "vignette": "Mujer de 50 años que acude a revisión anual. Refiere consumir tres copas de vino casi todas las noches para relajarse. No ha tenido problemas laborales ni legales.",
+      "prompt": "¿Cuál es la herramienta de tamizaje más apropiada para evaluar su consumo de alcohol?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Referir a hospitalización para desintoxicación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay datos de dependencia grave."
+        },
+        {
+          "key": "b",
+          "text": "Prueba de alcohol en aliento en la consulta",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No evalúa el patrón de consumo."
+        },
+        {
+          "key": "c",
+          "text": "Medir gamma glutamil transferasa como única prueba",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es poco sensible."
+        },
+        {
+          "key": "d",
+          "text": "Medir alcohol en orina de rutina",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Solo detecta consumo reciente."
+        },
+        {
+          "key": "e",
+          "text": "No es necesario evaluarla porque no ha tenido problemas legales",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El consumo de riesgo precede a las consecuencias."
+        },
+        {
+          "key": "f",
+          "text": "Asumir que el vino no cuenta como alcohol de riesgo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Cualquier bebida cuenta."
+        },
+        {
+          "key": "g",
+          "text": "No ofrecer intervención breve",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La intervención breve reduce el consumo."
+        },
+        {
+          "key": "h",
+          "text": "Cuestionario AUDIT o su versión breve AUDIT-C",
+          "correct": true,
+          "rationale": "Es el instrumento validado para detectar consumo de riesgo en atención primaria."
+        },
+        {
+          "key": "i",
+          "text": "Tomografía de cráneo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es tamizaje."
+        },
+        {
+          "key": "j",
+          "text": "Biopsia hepática",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es invasiva."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "El cuestionario AUDIT de la Organización Mundial de la Salud consta de 10 preguntas y su versión breve AUDIT-C de 3 preguntas sobre frecuencia, cantidad y consumo excesivo ocasional. Detecta consumo de riesgo, consumo perjudicial y probable dependencia. En una mujer, más de siete bebidas estándar por semana o más de tres en una ocasión se considera consumo de riesgo. Un tamizaje positivo se sigue de una intervención breve de consejería en la misma consulta, que ha demostrado reducir el consumo. Los marcadores biológicos como la gamma glutamil transferasa tienen baja sensibilidad para el tamizaje.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, detección e intervención de las adicciones en atención primaria",
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones"
+      ]
+    }
+  ]
+}

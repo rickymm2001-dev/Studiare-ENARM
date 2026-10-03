@@ -1,0 +1,1415 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "ped-10-cirugia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "intussusception",
+      "vignette": "Lactante de 9 meses con episodios súbitos de llanto intenso, flexión de piernas y palidez cada 15 a 20 minutos, con periodos de calma entre ellos. Ha vomitado y hace una hora tuvo una evacuación con moco y sangre como jalea de grosella. Se palpa una masa en forma de salchicha en hipocondrio derecho.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Divertículo de Meckel sangrante",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da sangrado indoloro."
+        },
+        {
+          "key": "b",
+          "text": "Vólvulo de intestino medio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da vómito biliar en recién nacidos."
+        },
+        {
+          "key": "c",
+          "text": "Invaginación intestinal",
+          "correct": true,
+          "rationale": "Dolor cólico intermitente, masa en salchicha y evacuaciones en jalea de grosella en un lactante."
+        },
+        {
+          "key": "d",
+          "text": "Infección urinaria",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la masa ni la sangre en heces."
+        },
+        {
+          "key": "e",
+          "text": "Cólico del lactante",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ocurre en menores de 4 meses sin sangre ni masa."
+        },
+        {
+          "key": "f",
+          "text": "Gastroenteritis aguda con disentería",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la masa ni los episodios de dolor con calma."
+        },
+        {
+          "key": "g",
+          "text": "Apendicitis aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es rara a esta edad y no da jalea de grosella."
+        },
+        {
+          "key": "h",
+          "text": "Berrinches por dentición",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica la sangre ni la masa."
+        },
+        {
+          "key": "i",
+          "text": "Púrpura de Henoch Schönlein",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Tiene púrpura y es más común en escolares."
+        },
+        {
+          "key": "j",
+          "text": "Estreñimiento con fisura anal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la masa ni el dolor cólico intenso."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "La invaginación intestinal es la causa más frecuente de obstrucción intestinal entre los 6 y 36 meses. La forma más común es ileocólica, generalmente idiopática por hiperplasia linfoide tras infecciones virales. Se manifiesta con dolor abdominal cólico súbito e intermitente con llanto y flexión de piernas, vómito, letargo entre episodios, masa en salchicha y evacuaciones en jalea de grosella como dato tardío. La tríada clásica solo aparece en una minoría. El ultrasonido es el estudio de elección y muestra la imagen en diana o en pseudorriñón. En niños mayores debe buscarse un punto guía, como divertículo de Meckel o linfoma.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de invaginación intestinal en niños"
+      ]
+    },
+    {
+      "key": "ped-10-cirugia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "intussusception",
+      "vignette": "Lactante de 11 meses con invaginación ileocólica confirmada por ultrasonido de 12 horas de evolución. Está hemodinámicamente estable, sin datos de peritonitis ni perforación.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Laparotomía de urgencia en todos los casos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para falla de la reducción o peritonitis."
+        },
+        {
+          "key": "b",
+          "text": "Masaje abdominal para deshacerla",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es ineficaz y peligroso."
+        },
+        {
+          "key": "c",
+          "text": "Esperar 48 horas para ver si se resuelve",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Aumenta el riesgo de necrosis."
+        },
+        {
+          "key": "d",
+          "text": "Resección intestinal laparoscópica inmediata",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria si se reduce."
+        },
+        {
+          "key": "e",
+          "text": "Laxantes orales",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Están contraindicados."
+        },
+        {
+          "key": "f",
+          "text": "Analgésicos y egreso",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La invaginación puede necrosarse."
+        },
+        {
+          "key": "g",
+          "text": "Reducción con enema hidrostático o neumático guiado por imagen",
+          "correct": true,
+          "rationale": "Es eficaz en la mayoría de los casos sin peritonitis."
+        },
+        {
+          "key": "h",
+          "text": "Sonda nasogástrica como único tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No reduce la invaginación."
+        },
+        {
+          "key": "i",
+          "text": "Enema de bario a ciegas en casa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Debe hacerse guiado por imagen y por personal capacitado."
+        },
+        {
+          "key": "j",
+          "text": "Observación y antibióticos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La invaginación no se resuelve sola de forma confiable."
+        }
+      ],
+      "canonical": [
+        "a",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El tratamiento de elección de la invaginación sin datos de peritonitis, perforación ni choque es la reducción no quirúrgica con enema hidrostático con solución o neumático con aire, guiado por ultrasonido o fluoroscopia. Tiene éxito en 80 a 90% de los casos. Se realiza con presencia del cirujano por el riesgo de perforación. La cirugía se indica si hay peritonitis, perforación, inestabilidad, falla de la reducción o un punto guía. La recurrencia ocurre en alrededor de 10%, generalmente en las primeras 24 a 72 horas, y puede volver a tratarse con enema.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de invaginación intestinal en niños"
+      ]
+    },
+    {
+      "key": "ped-10-cirugia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "intussusception",
+      "vignette": "Niño de 14 meses con dolor abdominal intermitente intenso, vómito y letargo. No tiene evacuaciones con sangre. Se sospecha invaginación intestinal.",
+      "prompt": "¿Cuál es el estudio inicial de elección?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tomografía abdominal de rutina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Emite radiación y no es necesaria."
+        },
+        {
+          "key": "b",
+          "text": "Coprocultivo",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No confirma invaginación."
+        },
+        {
+          "key": "c",
+          "text": "Ultrasonido abdominal",
+          "correct": true,
+          "rationale": "Tiene alta sensibilidad y especificidad y no emite radiación."
+        },
+        {
+          "key": "d",
+          "text": "Esperar a que aparezca sangre para estudiar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La sangre es un dato tardío."
+        },
+        {
+          "key": "e",
+          "text": "Serie esofagogastroduodenal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Valora el tracto superior."
+        },
+        {
+          "key": "f",
+          "text": "Radiografía simple de abdomen como estudio definitivo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene baja sensibilidad."
+        },
+        {
+          "key": "g",
+          "text": "Colonoscopia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "Gammagrama con tecnecio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es para divertículo de Meckel."
+        },
+        {
+          "key": "i",
+          "text": "Biometría hemática",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No confirma el diagnóstico."
+        },
+        {
+          "key": "j",
+          "text": "Resonancia magnética abdominal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Requiere sedación y no es necesaria."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "g"
+      ],
+      "explanation": "El ultrasonido abdominal es el estudio de elección para diagnosticar la invaginación intestinal, con sensibilidad y especificidad cercanas a 100% en manos expertas. En el corte transversal muestra la imagen en diana o en dona, y en el longitudinal la imagen en pseudorriñón. También permite valorar líquido libre, flujo de la pared y puntos guía. La radiografía simple puede mostrar ausencia de gas en el cuadrante inferior derecho, signo de la diana o datos de obstrucción y perforación, pero no descarta el diagnóstico. No debe esperarse a las evacuaciones en jalea de grosella, que indican isquemia de la mucosa.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de invaginación intestinal en niños"
+      ]
+    },
+    {
+      "key": "ped-10-cirugia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "pyloric_stenosis",
+      "vignette": "Lactante masculino primogénito de 4 semanas con vómito no biliar en proyectil después de cada toma desde hace una semana. Queda con hambre después de vomitar. Ha perdido peso. Se observan ondas peristálticas de izquierda a derecha y se palpa una masa en forma de oliva en epigastrio.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Malrotación intestinal con vólvulo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da vómito biliar."
+        },
+        {
+          "key": "b",
+          "text": "Atresia duodenal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Inicia en las primeras horas con vómito biliar."
+        },
+        {
+          "key": "c",
+          "text": "Reflujo gastroesofágico fisiológico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es en proyectil ni causa pérdida de peso."
+        },
+        {
+          "key": "d",
+          "text": "Meningitis",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la oliva pilórica."
+        },
+        {
+          "key": "e",
+          "text": "Infección urinaria",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los hallazgos abdominales."
+        },
+        {
+          "key": "f",
+          "text": "Gastroenteritis viral",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la oliva ni las ondas peristálticas."
+        },
+        {
+          "key": "g",
+          "text": "Estenosis hipertrófica del píloro",
+          "correct": true,
+          "rationale": "Vómito no biliar en proyectil con hambre, oliva pilórica y ondas peristálticas en un varón de 2 a 8 semanas."
+        },
+        {
+          "key": "h",
+          "text": "Bebé que come demasiado rápido",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una obstrucción anatómica."
+        },
+        {
+          "key": "i",
+          "text": "Hiperplasia suprarrenal congénita perdedora de sal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da hiperpotasemia y acidosis."
+        },
+        {
+          "key": "j",
+          "text": "Alergia a la proteína de la leche de vaca",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la oliva pilórica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "La estenosis hipertrófica del píloro es la causa quirúrgica más frecuente de vómito en lactantes. Es más común en varones primogénitos entre las 2 y 8 semanas, y se asocia a eritromicina en las primeras semanas. La hipertrofia del músculo pilórico obstruye el vaciamiento gástrico y produce vómito no biliar en proyectil después de las tomas, con hambre persistente, deshidratación y pérdida de peso. A la exploración pueden verse ondas peristálticas y palparse la oliva pilórica. El ultrasonido confirma el diagnóstico con grosor del músculo mayor de 3 a 4 mm y longitud del canal mayor de 15 a 17 mm.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de estenosis hipertrófica del píloro"
+      ]
+    },
+    {
+      "key": "ped-10-cirugia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "pyloric_stenosis",
+      "vignette": "Lactante de 5 semanas con estenosis hipertrófica del píloro y vómito de 10 días. Gasometría con pH de 7.52 y bicarbonato de 34 mEq/L. Sodio de 132, cloro de 85 y potasio de 2.9 mEq/L.",
+      "prompt": "¿Qué indica este trastorno ácido base?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Error de laboratorio",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Los valores son congruentes con el cuadro."
+        },
+        {
+          "key": "b",
+          "text": "Acidosis tubular renal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da acidosis."
+        },
+        {
+          "key": "c",
+          "text": "Alcalosis respiratoria por llanto",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El bicarbonato elevado indica causa metabólica."
+        },
+        {
+          "key": "d",
+          "text": "Exceso de sal en la fórmula",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica el trastorno."
+        },
+        {
+          "key": "e",
+          "text": "Valores normales para la edad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Están claramente alterados."
+        },
+        {
+          "key": "f",
+          "text": "Acidosis metabólica por deshidratación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Las pérdidas gástricas producen alcalosis."
+        },
+        {
+          "key": "g",
+          "text": "Alcalosis metabólica hipoclorémica e hipopotasémica por pérdida de ácido gástrico",
+          "correct": true,
+          "rationale": "Es el trastorno característico de la estenosis pilórica."
+        },
+        {
+          "key": "h",
+          "text": "Acidosis respiratoria",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El pH es alcalino."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de Bartter como causa primaria",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El contexto explica la alcalosis."
+        },
+        {
+          "key": "j",
+          "text": "Hiperplasia suprarrenal congénita",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da hiperpotasemia y acidosis."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "El vómito persistente en la estenosis pilórica produce pérdida de ácido clorhídrico, lo que causa alcalosis metabólica hipoclorémica. La deshidratación activa la aldosterona, que retiene sodio a cambio de potasio e hidrogeniones en el riñón, lo que produce hipopotasemia y aciduria paradójica. Antes de la cirugía se debe corregir la deshidratación y los electrolitos con solución salina y potasio, ya que la alcalosis aumenta el riesgo de apnea posoperatoria por la anestesia. La cirugía no es una urgencia inmediata, sino que se realiza cuando el paciente está estabilizado.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de estenosis hipertrófica del píloro"
+      ]
+    },
+    {
+      "key": "ped-10-cirugia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "pyloric_stenosis",
+      "vignette": "Lactante de 6 semanas con estenosis hipertrófica del píloro confirmada por ultrasonido. Ya se corrigieron la deshidratación y la alcalosis metabólica.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esperar a que el píloro crezca normalmente",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La obstrucción persiste."
+        },
+        {
+          "key": "b",
+          "text": "Cambiar de fórmula hasta encontrar una que tolere",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No resuelve la causa."
+        },
+        {
+          "key": "c",
+          "text": "Nutrición parenteral prolongada sin cirugía",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No resuelve la obstrucción."
+        },
+        {
+          "key": "d",
+          "text": "Gastroyeyunostomía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "e",
+          "text": "Fórmula espesada y posición semisentada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No corrige la obstrucción."
+        },
+        {
+          "key": "f",
+          "text": "Procinéticos como domperidona",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No tratan la obstrucción."
+        },
+        {
+          "key": "g",
+          "text": "Dilatación endoscópica con balón como primera opción",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es el estándar."
+        },
+        {
+          "key": "h",
+          "text": "Piloromiotomía extramucosa de Ramstedt, abierta o laparoscópica",
+          "correct": true,
+          "rationale": "Corrige de forma definitiva la obstrucción."
+        },
+        {
+          "key": "i",
+          "text": "Gastrectomía parcial",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "j",
+          "text": "Inhibidor de bomba de protones",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No trata la hipertrofia."
+        }
+      ],
+      "canonical": [
+        "e",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "El tratamiento definitivo de la estenosis hipertrófica del píloro es la piloromiotomía extramucosa de Ramstedt, que consiste en cortar longitudinalmente el músculo hipertrófico hasta la submucosa sin abrir la mucosa. Puede realizarse por vía abierta o laparoscópica con resultados similares. La alimentación se reinicia en pocas horas. Las complicaciones más frecuentes son vómito posoperatorio transitorio, perforación de la mucosa e infección de la herida. El pronóstico es excelente. La atropina es una alternativa médica en lugares sin acceso a cirugía, pero es menos eficaz.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de estenosis hipertrófica del píloro"
+      ]
+    },
+    {
+      "key": "ped-10-cirugia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "pyloric_stenosis",
+      "vignette": "Recién nacido de 3 días con vómito verde desde ayer, distensión abdominal leve e irritabilidad. Previamente toleraba la vía oral y evacuó meconio. La radiografía muestra poco gas distal y la serie gastroduodenal muestra el duodeno sin cruzar la línea media con imagen en sacacorchos.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Atresia duodenal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da doble burbuja desde las primeras horas."
+        },
+        {
+          "key": "b",
+          "text": "Reflujo gastroesofágico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es biliar."
+        },
+        {
+          "key": "c",
+          "text": "Atresia esofágica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da salivación y no permite el paso de la sonda."
+        },
+        {
+          "key": "d",
+          "text": "Vómito por tragar líquido amniótico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El vómito biliar siempre es alarmante."
+        },
+        {
+          "key": "e",
+          "text": "Enterocolitis necrosante",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es más común en prematuros con neumatosis."
+        },
+        {
+          "key": "f",
+          "text": "Enfermedad de Hirschsprung",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da retraso del meconio y distensión."
+        },
+        {
+          "key": "g",
+          "text": "Malrotación intestinal con vólvulo de intestino medio",
+          "correct": true,
+          "rationale": "Vómito biliar en un recién nacido con duodeno en sacacorchos."
+        },
+        {
+          "key": "h",
+          "text": "Estenosis hipertrófica del píloro",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da vómito no biliar a las 2 a 8 semanas."
+        },
+        {
+          "key": "i",
+          "text": "Íleo meconial",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se asocia a fibrosis quística sin evacuación de meconio."
+        },
+        {
+          "key": "j",
+          "text": "Sepsis con íleo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la imagen en sacacorchos."
+        }
+      ],
+      "canonical": [
+        "b",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "El vómito biliar en un recién nacido es una urgencia quirúrgica hasta descartar malrotación con vólvulo. En la malrotación el intestino no completa su rotación y fijación, con un mesenterio de base estrecha que puede torcerse sobre la arteria mesentérica superior. El vólvulo causa obstrucción e isquemia del intestino medio, que puede necrosarse en horas. La serie esofagogastroduodenal es el estudio de elección y muestra la unión duodenoyeyunal a la derecha y la imagen en sacacorchos. El tratamiento es cirugía urgente con el procedimiento de Ladd, que destuerce el intestino, corta las bandas y amplía la base del mesenterio.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de malrotación intestinal"
+      ]
+    },
+    {
+      "key": "ped-10-cirugia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "pyloric_stenosis",
+      "vignette": "Recién nacido de término de 4 días que no ha evacuado meconio en las primeras 48 horas, con distensión abdominal progresiva y vómito. Al tacto rectal sale una evacuación explosiva de gases y heces. El colon por enema muestra una zona de transición con recto estrecho y colon proximal dilatado.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sepsis neonatal con íleo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la zona de transición."
+        },
+        {
+          "key": "b",
+          "text": "Estenosis hipertrófica del píloro",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da vómito sin alteraciones en la evacuación."
+        },
+        {
+          "key": "c",
+          "text": "Malformación anorrectal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se ve en la exploración perineal."
+        },
+        {
+          "key": "d",
+          "text": "Malrotación con vólvulo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da vómito biliar con imagen en sacacorchos."
+        },
+        {
+          "key": "e",
+          "text": "Bebé que todavía no ha comido suficiente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El meconio debe salir en 48 horas."
+        },
+        {
+          "key": "f",
+          "text": "Enfermedad de Hirschsprung",
+          "correct": true,
+          "rationale": "Retraso en la evacuación de meconio, salida explosiva al tacto y zona de transición."
+        },
+        {
+          "key": "g",
+          "text": "Hipotiroidismo congénito",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da estreñimiento, pero no zona de transición."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome del tapón de meconio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se resuelve con el enema sin zona de transición persistente."
+        },
+        {
+          "key": "i",
+          "text": "Estreñimiento funcional",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la ausencia de meconio ni la zona de transición."
+        },
+        {
+          "key": "j",
+          "text": "Íleo meconial",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se asocia a fibrosis quística con microcolon."
+        }
+      ],
+      "canonical": [
+        "b",
+        "f",
+        "i",
+        "j"
+      ],
+      "explanation": "La enfermedad de Hirschsprung se debe a la ausencia de células ganglionares en los plexos del colon distal por falla en la migración de las células de la cresta neural. El segmento aganglionar no se relaja y produce obstrucción funcional. Se sospecha en recién nacidos que no evacuan meconio en las primeras 48 horas, con distensión, vómito y salida explosiva de heces al tacto rectal. Es más frecuente en varones y en síndrome de Down. El colon por enema muestra la zona de transición, y el diagnóstico se confirma con biopsia rectal que demuestra ausencia de células ganglionares. La complicación más grave es la enterocolitis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad de Hirschsprung"
+      ]
+    },
+    {
+      "key": "ped-10-cirugia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "cryptorchidism",
+      "vignette": "Lactante de 6 meses a quien en su consulta de niño sano no se le palpa el testículo derecho en la bolsa escrotal. Se palpa una masa móvil en el conducto inguinal derecho que no desciende al escroto con maniobras. El testículo izquierdo es normal.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Quiste de cordón espermático",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No corresponde al testículo."
+        },
+        {
+          "key": "b",
+          "text": "Testículo ectópico perineal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se encuentra en el periné."
+        },
+        {
+          "key": "c",
+          "text": "Criptorquidia derecha con testículo inguinal",
+          "correct": true,
+          "rationale": "Testículo palpable en el conducto que no puede bajarse al escroto."
+        },
+        {
+          "key": "d",
+          "text": "Trastorno del desarrollo sexual en todos los casos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se considera si es bilateral o con hipospadias."
+        },
+        {
+          "key": "e",
+          "text": "Testículo retráctil",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se baja al escroto con maniobras y permanece ahí."
+        },
+        {
+          "key": "f",
+          "text": "Anorquia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El testículo está presente en el conducto."
+        },
+        {
+          "key": "g",
+          "text": "Hidrocele",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Transilumina y el testículo está en el escroto."
+        },
+        {
+          "key": "h",
+          "text": "El testículo bajará solo en la adolescencia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Después de los 6 meses es poco probable."
+        },
+        {
+          "key": "i",
+          "text": "Hernia inguinal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es reductible al abdomen, no corresponde a la gónada."
+        },
+        {
+          "key": "j",
+          "text": "Torsión testicular",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da dolor agudo."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "La criptorquidia es la ausencia del testículo en la bolsa escrotal por falla en su descenso. Es más frecuente en prematuros. Muchos testículos descienden espontáneamente en los primeros 6 meses, pero después es poco probable. Se clasifica en palpable, como inguinal, y no palpable, que puede ser abdominal o ausente. Debe distinguirse del testículo retráctil, que se baja al escroto con maniobras y permanece ahí, y no requiere cirugía. La criptorquidia bilateral no palpable o asociada a hipospadias obliga a descartar trastornos del desarrollo sexual, como hiperplasia suprarrenal congénita.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de criptorquidia"
+      ]
+    },
+    {
+      "key": "ped-10-cirugia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "cryptorchidism",
+      "vignette": "Niño de 9 meses con criptorquidia izquierda palpable en el conducto inguinal, confirmada en varias revisiones desde el nacimiento.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Resonancia magnética antes de decidir en un testículo palpable",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "b",
+          "text": "No operar para evitar riesgos de anestesia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo de no operar es mayor."
+        },
+        {
+          "key": "c",
+          "text": "Gonadotropina coriónica humana como tratamiento de elección",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tiene baja eficacia y no se recomienda de rutina."
+        },
+        {
+          "key": "d",
+          "text": "Cirugía después de los 5 años para que crezca más",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Aumenta el daño."
+        },
+        {
+          "key": "e",
+          "text": "Solo vigilancia anual hasta los 10 años",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retrasa la cirugía."
+        },
+        {
+          "key": "f",
+          "text": "Masajes para bajar el testículo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No son eficaces."
+        },
+        {
+          "key": "g",
+          "text": "Orquidopexia entre los 6 y 18 meses de edad",
+          "correct": true,
+          "rationale": "La cirugía temprana preserva la fertilidad y facilita la vigilancia de cáncer."
+        },
+        {
+          "key": "h",
+          "text": "Esperar a la pubertad para que descienda solo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta el daño testicular."
+        },
+        {
+          "key": "i",
+          "text": "Testosterona tópica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "j",
+          "text": "Orquiectomía en todos los casos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se reserva para testículos atróficos o en pospúberes."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "h",
+        "j"
+      ],
+      "explanation": "El tratamiento de la criptorquidia es quirúrgico con orquidopexia, idealmente entre los 6 y 18 meses de edad. La cirugía temprana reduce el daño del epitelio germinal por la temperatura, mejora el potencial de fertilidad, corrige hernias asociadas, previene la torsión y permite la autoexploración para detectar cáncer. El tratamiento hormonal tiene baja eficacia y no se recomienda de rutina. En testículos no palpables se realiza laparoscopia diagnóstica y terapéutica, ya que la ecografía no es confiable para localizarlos. En adolescentes con testículo intraabdominal se considera orquiectomía por el riesgo de cáncer.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de criptorquidia"
+      ]
+    },
+    {
+      "key": "ped-10-cirugia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "cryptorchidism",
+      "vignette": "Hombre de 28 años con antecedente de criptorquidia derecha operada a los 8 años. Consulta por infertilidad y por un aumento de volumen indoloro del testículo derecho.",
+      "prompt": "¿Cuál es la complicación a largo plazo que debe sospecharse?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Varicocele",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Suele ser izquierdo y doloroso."
+        },
+        {
+          "key": "b",
+          "text": "Hidrocele simple sin importancia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Debe descartarse tumor."
+        },
+        {
+          "key": "c",
+          "text": "Orquitis por parotiditis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es dolorosa y aguda."
+        },
+        {
+          "key": "d",
+          "text": "Hernia inguinal recurrente",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la masa testicular."
+        },
+        {
+          "key": "e",
+          "text": "La cirugía elimina por completo el riesgo de cáncer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El riesgo disminuye pero persiste."
+        },
+        {
+          "key": "f",
+          "text": "Epididimitis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da dolor y fiebre."
+        },
+        {
+          "key": "g",
+          "text": "Espermatocele",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es una lesión quística del epidídimo."
+        },
+        {
+          "key": "h",
+          "text": "Cáncer testicular de células germinales, con mayor riesgo en el testículo criptorquídico",
+          "correct": true,
+          "rationale": "La criptorquidia aumenta el riesgo de cáncer y de infertilidad."
+        },
+        {
+          "key": "i",
+          "text": "Torsión testicular",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da dolor agudo intenso."
+        },
+        {
+          "key": "j",
+          "text": "Atrofia testicular por la cirugía",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el aumento de volumen."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "h"
+      ],
+      "explanation": "La criptorquidia se asocia a infertilidad y a mayor riesgo de cáncer testicular, sobre todo seminoma, en el testículo afectado y en menor medida en el contralateral. La orquidopexia antes de la pubertad reduce el riesgo de cáncer, pero no lo elimina, y facilita la exploración. La infertilidad es más frecuente en la criptorquidia bilateral y cuando la cirugía se retrasa. Por ello se recomienda la autoexploración testicular periódica en la adolescencia y la edad adulta. Toda masa testicular indolora en un adulto joven debe estudiarse con ultrasonido y marcadores tumorales.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de criptorquidia"
+      ]
+    },
+    {
+      "key": "ped-10-cirugia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "cryptorchidism",
+      "vignette": "Lactante masculino de 3 meses con aumento de volumen inguinoescrotal derecho que aparece al llorar y desaparece al dormir. Se reduce fácilmente con presión suave y no transilumina. Ambos testículos están en el escroto.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Criptorquidia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Los testículos están en el escroto."
+        },
+        {
+          "key": "b",
+          "text": "Hidrocele comunicante",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Transilumina y cambia de tamaño a lo largo del día."
+        },
+        {
+          "key": "c",
+          "text": "Hernia inguinal indirecta",
+          "correct": true,
+          "rationale": "Masa reductible que aumenta con el llanto por persistencia del conducto peritoneovaginal."
+        },
+        {
+          "key": "d",
+          "text": "Hernia inguinal directa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es rara en niños."
+        },
+        {
+          "key": "e",
+          "text": "Linfadenopatía inguinal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No aumenta con el llanto ni se reduce."
+        },
+        {
+          "key": "f",
+          "text": "Varicocele",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es raro a esta edad y se describe como bolsa de gusanos."
+        },
+        {
+          "key": "g",
+          "text": "Se cierra sola con fajero",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No se cierra y el fajero no es útil."
+        },
+        {
+          "key": "h",
+          "text": "Quiste de cordón",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No se reduce al abdomen."
+        },
+        {
+          "key": "i",
+          "text": "Torsión testicular",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da dolor agudo y no se reduce."
+        },
+        {
+          "key": "j",
+          "text": "Hernia femoral",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es rara en lactantes y está debajo del ligamento inguinal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "i"
+      ],
+      "explanation": "La hernia inguinal en niños es casi siempre indirecta, por persistencia del conducto peritoneovaginal. Es más frecuente en varones, en el lado derecho y en prematuros. Se presenta como masa inguinal o inguinoescrotal que aumenta con el llanto o el esfuerzo y se reduce. A diferencia del hidrocele, no transilumina en general. A diferencia de los hidroceles no comunicantes, la hernia no se resuelve sola y tiene riesgo de incarceración, sobre todo en el primer año. Por ello se recomienda herniorrafia electiva temprana. Una hernia incarcerada que no se reduce requiere cirugía urgente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de hernia inguinal en niños"
+      ]
+    },
+    {
+      "key": "ped-10-cirugia-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "cryptorchidism",
+      "vignette": "Recién nacido con genitales ambiguos, falo de 2 cm con hipospadias perineal y gónadas no palpables. Al tercer día presenta vómito, deshidratación, sodio de 126 mEq/L y potasio de 7 mEq/L.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Programar orquidopexia bilateral",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No se trata de una criptorquidia simple."
+        },
+        {
+          "key": "b",
+          "text": "Diagnosticar estenosis pilórica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica los genitales ni los electrolitos."
+        },
+        {
+          "key": "c",
+          "text": "Tratar la crisis suprarrenal con solución salina, hidrocortisona y corrección de la hiperpotasemia y estudiar hiperplasia suprarrenal congénita",
+          "correct": true,
+          "rationale": "Gónadas no palpables con genitales ambiguos y crisis perdedora de sal."
+        },
+        {
+          "key": "d",
+          "text": "Iniciar testosterona",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No trata la crisis."
+        },
+        {
+          "key": "e",
+          "text": "No tratar hasta tener el cariotipo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La crisis puede ser mortal."
+        },
+        {
+          "key": "f",
+          "text": "Furosemida para la hiperpotasemia como única medida",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No corrige la deficiencia hormonal."
+        },
+        {
+          "key": "g",
+          "text": "Dar solo líquidos orales y egresar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es una urgencia vital."
+        },
+        {
+          "key": "h",
+          "text": "Asignar sexo masculino de inmediato por el falo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La asignación requiere estudio."
+        },
+        {
+          "key": "i",
+          "text": "Laparoscopia exploradora urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es la prioridad."
+        },
+        {
+          "key": "j",
+          "text": "Esperar a la pubertad para definir el sexo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una urgencia médica inmediata."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "Un recién nacido con genitales ambiguos y gónadas no palpables debe considerarse una niña con hiperplasia suprarrenal congénita virilizada hasta demostrar lo contrario. La forma más común es la deficiencia de 21 hidroxilasa, que produce exceso de andrógenos y, en la forma perdedora de sal, deficiencia de cortisol y aldosterona con hiponatremia, hiperpotasemia, deshidratación y choque entre la primera y tercera semana. Se trata con solución salina, hidrocortisona y corrección de la hiperpotasemia. Se mide 17 hidroxiprogesterona y se realiza cariotipo. El tamiz neonatal permite detectarla antes de la crisis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de hiperplasia suprarrenal congénita"
+      ]
+    },
+    {
+      "key": "ped-10-cirugia-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "intussusception",
+      "vignette": "Niño de 2 años con evacuaciones con sangre rojo oscuro abundante e indolora en las últimas horas. Está pálido, con taquicardia y hemoglobina de 8 g/dL. No tiene dolor abdominal ni vómito.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Divertículo de Meckel sangrante",
+          "correct": true,
+          "rationale": "Sangrado rectal abundante e indoloro en un niño de 2 años."
+        },
+        {
+          "key": "b",
+          "text": "Gastroenteritis bacteriana",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da diarrea, fiebre y cólico."
+        },
+        {
+          "key": "c",
+          "text": "Sangre por comer betabel",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La anemia y la taquicardia confirman el sangrado."
+        },
+        {
+          "key": "d",
+          "text": "Invaginación intestinal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se acompaña de dolor cólico intenso."
+        },
+        {
+          "key": "e",
+          "text": "Fisura anal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da sangrado escaso rojo brillante con dolor al evacuar."
+        },
+        {
+          "key": "f",
+          "text": "Hemorroides",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Son raras en niños."
+        },
+        {
+          "key": "g",
+          "text": "Pólipo juvenil",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da sangrado escaso y recurrente."
+        },
+        {
+          "key": "h",
+          "text": "Úlcera péptica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Daría melena con dolor epigástrico."
+        },
+        {
+          "key": "i",
+          "text": "Enfermedad inflamatoria intestinal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara a esta edad."
+        },
+        {
+          "key": "j",
+          "text": "Púrpura de Henoch Schönlein",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da púrpura y dolor."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "g"
+      ],
+      "explanation": "El divertículo de Meckel es la anomalía congénita más frecuente del tubo digestivo y es un remanente del conducto onfalomesentérico en el íleon. Se resume con la regla de los dos, 2% de la población, a 2 pies de la válvula ileocecal, 2 pulgadas de largo, con síntomas antes de los 2 años y dos tipos de mucosa ectópica, gástrica y pancreática. La mucosa gástrica secreta ácido y ulcera el íleon adyacente, lo que causa sangrado rectal abundante e indoloro. El gammagrama con tecnecio 99m pertecnetato detecta la mucosa gástrica ectópica. El tratamiento es la resección quirúrgica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del divertículo de Meckel"
+      ]
+    },
+    {
+      "key": "ped-10-cirugia-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "intussusception",
+      "vignette": "Recién nacido prematuro de 29 semanas, alimentado con fórmula, que a los 10 días presenta distensión abdominal, residuo gástrico biliar, evacuaciones con sangre e inestabilidad térmica. La radiografía muestra gas en la pared intestinal y gas en la vena porta.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sepsis neonatal sin afección intestinal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la neumatosis."
+        },
+        {
+          "key": "b",
+          "text": "Fisura anal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la distensión ni la neumatosis."
+        },
+        {
+          "key": "c",
+          "text": "Íleo por hipopotasemia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la sangre ni la neumatosis."
+        },
+        {
+          "key": "d",
+          "text": "Invaginación intestinal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara en prematuros."
+        },
+        {
+          "key": "e",
+          "text": "Intolerancia transitoria a la fórmula",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La neumatosis indica enfermedad grave."
+        },
+        {
+          "key": "f",
+          "text": "Enterocolitis necrosante",
+          "correct": true,
+          "rationale": "Prematuro con distensión, sangre en heces, neumatosis intestinal y gas portal."
+        },
+        {
+          "key": "g",
+          "text": "Enfermedad de Hirschsprung",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No da neumatosis intestinal."
+        },
+        {
+          "key": "h",
+          "text": "Gastroenteritis viral",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No da neumatosis."
+        },
+        {
+          "key": "i",
+          "text": "Malrotación con vólvulo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da vómito biliar sin neumatosis."
+        },
+        {
+          "key": "j",
+          "text": "Alergia a la proteína de la leche de vaca",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No da neumatosis ni gas portal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "La enterocolitis necrosante es la urgencia gastrointestinal más frecuente en recién nacidos, sobre todo prematuros. Se relaciona con inmadurez intestinal, alimentación con fórmula, disbiosis e isquemia. Se manifiesta con intolerancia alimentaria, distensión abdominal, residuo biliar, sangre en heces, apneas, inestabilidad térmica y choque. La neumatosis intestinal en la radiografía es característica, y el gas portal o neumoperitoneo indican mayor gravedad. El tratamiento incluye ayuno, descompresión gástrica, antibióticos de amplio espectro y soporte. La perforación o el deterioro requieren cirugía. La leche materna es la principal medida preventiva.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de enterocolitis necrosante"
+      ]
+    }
+  ]
+}

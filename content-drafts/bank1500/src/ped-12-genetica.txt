@@ -1,0 +1,255 @@
+@ ped|genetics|chromosomal_syndromes|2|diagnosis
+V: Recién nacido con hipotonía, fisuras palpebrales oblicuas hacia arriba, epicanto, perfil facial plano, pliegue palmar único, separación amplia entre el primer y segundo dedo del pie y soplo cardiaco. Madre de 41 años.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome de Down por trisomía 21 || Hipotonía, rasgos faciales típicos, pliegue palmar único y cardiopatía con edad materna avanzada.
+- anchoring | Hipotiroidismo congénito || Da hipotonía, pero no los rasgos dismórficos.
+- availability_heuristic | Síndrome de Edwards || Da puños cerrados con dedos superpuestos y pies en mecedora.
+- representativeness_heuristic | Síndrome de Patau || Da labio y paladar hendido, polidactilia y holoprosencefalia.
+- premature_closure | Síndrome de Turner || Afecta mujeres con linfedema y cuello alado.
+- base_rate_fallacy | Síndrome de Prader Willi || Da hipotonía sin estos rasgos.
+- framing_effect | Síndrome de Williams || Da facies de duende y estenosis aórtica supravalvular.
+- inattentional_blindness | Síndrome de Zellweger || Es peroxisomal y raro.
+- focusing_illusion | Hipotonía por sepsis neonatal || No explica los rasgos dismórficos.
+- belief_bias | Rasgos familiares sin importancia || El conjunto es característico de un síndrome.
+E: El síndrome de Down es la cromosomopatía más frecuente compatible con la vida. En 95% se debe a trisomía 21 libre por no disyunción meiótica materna, cuyo riesgo aumenta con la edad materna, y el resto a translocación robertsoniana o mosaicismo. Las características incluyen hipotonía, fisuras palpebrales oblicuas, epicanto, perfil facial plano, manchas de Brushfield, pliegue palmar único y discapacidad intelectual. Se asocia a cardiopatía congénita, sobre todo canal auriculoventricular, atresia duodenal, enfermedad de Hirschsprung, hipotiroidismo, leucemia, inestabilidad atlantoaxial y enfermedad de Alzheimer temprana. El cariotipo confirma el diagnóstico.
+R: Guía de Práctica Clínica de atención integral de la persona con síndrome de Down
+
+@ ped|genetics|chromosomal_syndromes|3|confirmatory_study
+V: Recién nacido con rasgos clínicos de síndrome de Down. Los padres preguntan si sus próximos hijos tendrán el mismo riesgo.
+P: ¿Cuál es el estudio de elección para confirmar el diagnóstico y orientar el consejo genético?
++ Cariotipo en sangre periférica || Confirma la trisomía y distingue la forma libre de la translocación, que cambia el riesgo de recurrencia.
+- anchoring | Ecocardiograma || Busca cardiopatía, pero no confirma el síndrome.
+- availability_heuristic | Perfil tiroideo || Busca hipotiroidismo asociado.
+- representativeness_heuristic | Tamiz neonatal metabólico || No detecta cromosomopatías.
+- premature_closure | Diagnóstico solo clínico sin estudios || No permite el consejo genético.
+- base_rate_fallacy | Ultrasonido transfontanelar || No confirma el síndrome.
+- framing_effect | Biometría hemática || No confirma el síndrome.
+- complexity_bias | Secuenciación del exoma completo || No es el estudio de elección.
+- information_bias | Radiografía de columna cervical || Busca inestabilidad atlantoaxial más adelante.
+- belief_bias | Medir la inteligencia al año de edad || No confirma el diagnóstico.
+E: El cariotipo en sangre periférica es el estudio de elección para confirmar el síndrome de Down. Distingue la trisomía 21 libre, la translocación robertsoniana y el mosaicismo. Esta distinción es importante para el consejo genético, ya que en la trisomía libre el riesgo de recurrencia es bajo y depende de la edad materna, mientras que si uno de los padres es portador de una translocación balanceada el riesgo es mucho mayor. En caso de translocación se debe realizar cariotipo a los padres. La hibridación in situ fluorescente permite un resultado rápido. También se buscan las condiciones asociadas.
+R: Guía de Práctica Clínica de atención integral de la persona con síndrome de Down
+
+@ ped|genetics|chromosomal_syndromes|3|prevention_screening
+V: Niña de 6 años con síndrome de Down que acude a su revisión anual. Está asintomática. Su madre pregunta qué estudios necesita de rutina.
+P: ¿Cuál es el estudio de tamizaje anual más importante en esta niña?
++ Perfil tiroideo con TSH || El hipotiroidismo es muy frecuente y puede pasar inadvertido.
+- anchoring | Tomografía de cráneo anual || No está indicada.
+- availability_heuristic | Aspirado de médula ósea anual || No se recomienda de rutina.
+- representativeness_heuristic | Electroencefalograma anual || No está indicado sin crisis.
+- premature_closure | Ningún estudio porque está asintomática || Requiere vigilancia de condiciones asociadas.
+- base_rate_fallacy | Colonoscopia anual || No está indicada.
+- framing_effect | Cateterismo cardiaco anual || No está indicado.
+- complexity_bias | Resonancia magnética de cuerpo entero || No está indicada.
+- information_bias | Cariotipo repetido cada año || El diagnóstico ya está confirmado.
+- belief_bias | Solo vigilar el peso || Hay condiciones que requieren estudios.
+E: Las personas con síndrome de Down requieren vigilancia de condiciones asociadas. Se recomienda perfil tiroideo al nacer, a los 6 y 12 meses y después cada año, por la alta frecuencia de hipotiroidismo. También se realiza ecocardiograma al nacer, evaluación auditiva y oftalmológica periódica, biometría hemática anual por el riesgo de leucemia y anemia, tamizaje de enfermedad celiaca según síntomas, vigilancia del crecimiento con tablas específicas, del sueño por apnea obstructiva y búsqueda de síntomas de inestabilidad atlantoaxial. La estimulación temprana mejora el desarrollo.
+R: Guía de Práctica Clínica de atención integral de la persona con síndrome de Down
+
+@ ped|genetics|chromosomal_syndromes|3|diagnosis
+V: Adolescente de 15 años con talla baja, sin desarrollo mamario y con amenorrea primaria. Tiene cuello alado, implantación baja del cabello, tórax ancho con mamilas separadas y cuarto metacarpiano corto. Antecedente de linfedema de manos y pies al nacer.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome de Turner || Talla baja, falla ovárica, cuello alado y linfedema neonatal en una mujer.
+- anchoring | Retraso constitucional del crecimiento y la pubertad || No explica los rasgos dismórficos.
+- availability_heuristic | Síndrome de Noonan || Puede tener fenotipo parecido, pero con cariotipo normal y estenosis pulmonar.
+- representativeness_heuristic | Hipotiroidismo adquirido || No explica el cuello alado.
+- premature_closure | Anorexia nerviosa || No explica los rasgos dismórficos.
+- base_rate_fallacy | Síndrome de Kallmann || Da anosmia sin rasgos dismórficos.
+- framing_effect | Síndrome de Klinefelter || Afecta a varones con talla alta.
+- inattentional_blindness | Deficiencia aislada de hormona de crecimiento || No explica la falla ovárica ni los rasgos.
+- focusing_illusion | Síndrome de Down || Tiene otros rasgos faciales y discapacidad intelectual.
+- belief_bias | Desarrollo tardío familiar || Los rasgos dismórficos indican síndrome.
+E: El síndrome de Turner se debe a la ausencia total o parcial de un cromosoma X, con cariotipo 45,X o mosaicos. Afecta a mujeres y se caracteriza por talla baja, disgenesia gonadal con falla ovárica, amenorrea primaria e infertilidad. Los rasgos incluyen linfedema de manos y pies al nacer, cuello alado, implantación baja del cabello, tórax en escudo, cúbito valgo y cuarto metacarpiano corto. Se asocia a coartación de aorta, válvula aórtica bivalva, riñón en herradura e hipotiroidismo. El tratamiento incluye hormona de crecimiento y estrógenos para inducir la pubertad.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de Turner
+
+@ ped|genetics|chromosomal_syndromes|3|diagnosis
+V: Adolescente masculino de 16 años con talla alta, extremidades largas, ginecomastia, testículos pequeños y firmes, escaso vello facial y problemas de aprendizaje. FSH y LH elevadas con testosterona baja.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome de Klinefelter || Talla alta, testículos pequeños, ginecomastia e hipogonadismo hipergonadotrópico en un varón.
+- anchoring | Ginecomastia puberal fisiológica || No explica los testículos pequeños ni las gonadotropinas altas.
+- availability_heuristic | Síndrome de Marfan || Da talla alta con alteraciones cardiovasculares y oculares sin hipogonadismo.
+- representativeness_heuristic | Síndrome de Kallmann || Es hipogonadotrópico con anosmia.
+- premature_closure | Obesidad con pseudoginecomastia || No explica el hipogonadismo.
+- base_rate_fallacy | Tumor testicular productor de estrógenos || Daría masa testicular.
+- framing_effect | Síndrome de Turner || Afecta a mujeres.
+- inattentional_blindness | Hipotiroidismo || No explica el cuadro.
+- focusing_illusion | Síndrome X frágil || Da macroorquidismo.
+- belief_bias | Desarrollo tardío normal || Las gonadotropinas altas indican falla testicular.
+E: El síndrome de Klinefelter es la causa genética más frecuente de hipogonadismo masculino y se debe a un cromosoma X extra, con cariotipo 47,XXY. Se manifiesta en la adolescencia con talla alta y extremidades largas, testículos pequeños y firmes, ginecomastia, vello escaso, infertilidad por azoospermia y, con frecuencia, dificultades de aprendizaje y lenguaje. Los estudios muestran hipogonadismo hipergonadotrópico con FSH y LH altas y testosterona baja. Se confirma con cariotipo. El tratamiento es reemplazo de testosterona, y existen técnicas de reproducción asistida. Tiene mayor riesgo de cáncer de mama y osteoporosis.
+R: Guía de Práctica Clínica de diagnóstico del hipogonadismo masculino
+
+@ ped|genetics|chromosomal_syndromes|4|diagnosis
+V: Recién nacido con bajo peso, puños cerrados con el índice sobre el tercer dedo y el quinto sobre el cuarto, occipucio prominente, micrognatia, esternón corto, pies en mecedora y comunicación interventricular.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome de Edwards por trisomía 18 || Puños cerrados con dedos superpuestos, pies en mecedora y occipucio prominente.
+- anchoring | Síndrome de Down || Tiene hipotonía y otros rasgos faciales.
+- availability_heuristic | Síndrome de Patau || Da labio y paladar hendido, polidactilia y defectos de línea media.
+- representativeness_heuristic | Artrogriposis aislada || No explica los demás rasgos.
+- premature_closure | Síndrome de Pierre Robin aislado || Solo da micrognatia, glosoptosis y paladar hendido.
+- base_rate_fallacy | Síndrome de Turner || Da linfedema y cuello alado.
+- framing_effect | Parálisis cerebral || No explica las malformaciones.
+- inattentional_blindness | Síndrome alcohólico fetal || Da filtrum liso y labio superior delgado.
+- focusing_illusion | Síndrome de DiGeorge || Da cardiopatía conotruncal e hipocalcemia.
+- belief_bias | Bebé pequeño que se desarrollará normal || Las malformaciones indican síndrome grave.
+E: El síndrome de Edwards o trisomía 18 es la segunda trisomía autosómica más frecuente al nacer. Se asocia a edad materna avanzada. Se caracteriza por restricción del crecimiento, occipucio prominente, micrognatia, orejas bajas, puños cerrados con el índice sobre el tercero y el quinto sobre el cuarto, esternón corto, pies en mecedora, cardiopatías y malformaciones renales y digestivas. La mayoría fallece en el primer año. El síndrome de Patau o trisomía 13 se caracteriza por defectos de línea media, como holoprosencefalia, labio y paladar hendido, microftalmia, polidactilia y cutis aplasia.
+R: Guía de Práctica Clínica de diagnóstico de cromosomopatías en el recién nacido
+
+@ ped|genetics|chromosomal_syndromes|3|diagnosis
+V: Lactante de 3 meses con cardiopatía conotruncal tipo tronco arterioso, crisis convulsivas por hipocalcemia, infecciones frecuentes, timo ausente en la radiografía y rasgos faciales con orejas pequeñas y bajas.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome de deleción 22q11.2 o de DiGeorge || Cardiopatía conotruncal, hipocalcemia por hipoparatiroidismo e inmunodeficiencia por aplasia tímica.
+- anchoring | Síndrome de Down || Da canal auriculoventricular y otros rasgos.
+- availability_heuristic | Hipocalcemia neonatal tardía por fórmula || No explica la cardiopatía ni la inmunodeficiencia.
+- representativeness_heuristic | Síndrome de Williams || Da estenosis aórtica supravalvular e hipercalcemia.
+- premature_closure | Inmunodeficiencia combinada grave aislada || No explica la cardiopatía ni la hipocalcemia.
+- base_rate_fallacy | Raquitismo por deficiencia de vitamina D || No explica la cardiopatía.
+- framing_effect | Síndrome de Turner || Afecta a mujeres con coartación.
+- inattentional_blindness | Síndrome de Noonan || Da estenosis pulmonar.
+- focusing_illusion | Epilepsia idiopática || Las crisis se deben a hipocalcemia.
+- belief_bias | Infecciones por guardería sin importancia || Hay inmunodeficiencia.
+E: El síndrome de deleción 22q11.2 resulta de una falla en el desarrollo de la tercera y cuarta bolsas faríngeas. Sus manifestaciones se recuerdan con CATCH 22, cardiopatía conotruncal como tronco arterioso, tetralogía de Fallot o arco aórtico interrumpido, alteraciones faciales, aplasia o hipoplasia del timo con inmunodeficiencia de células T, paladar hendido e hipocalcemia por hipoparatiroidismo. También se asocia a trastornos del aprendizaje y psiquiátricos. Se confirma con hibridación in situ fluorescente o microarreglos. Los pacientes deben recibir productos sanguíneos irradiados y evitar vacunas vivas si la inmunodeficiencia es grave.
+R: Guía de Práctica Clínica de diagnóstico de inmunodeficiencias primarias
+
+@ ped|genetics|chromosomal_syndromes|3|diagnosis
+V: Niño de 6 años con discapacidad intelectual, hiperactividad, poco contacto visual, cara alargada, orejas grandes y prominentes y articulaciones hiperlaxas. Su tío materno tiene un cuadro similar.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome de X frágil || Discapacidad intelectual con cara alargada, orejas grandes y herencia ligada al X.
+- anchoring | Trastorno del espectro autista aislado || Puede coexistir, pero los rasgos y la herencia orientan a X frágil.
+- availability_heuristic | Síndrome de Down || Tiene rasgos faciales diferentes.
+- representativeness_heuristic | Trastorno por déficit de atención aislado || No explica la discapacidad ni los rasgos.
+- premature_closure | Síndrome de Marfan || No da discapacidad intelectual.
+- base_rate_fallacy | Síndrome de Rett || Afecta a niñas con regresión.
+- framing_effect | Síndrome de Klinefelter || Da hipogonadismo en la adolescencia.
+- inattentional_blindness | Hipotiroidismo congénito no tratado || No explica la herencia ni los rasgos.
+- focusing_illusion | Síndrome de Sotos || Da sobrecrecimiento.
+- belief_bias | Mala crianza como causa de la conducta || Hay una causa genética.
+E: El síndrome de X frágil es la causa hereditaria más frecuente de discapacidad intelectual. Se debe a una expansión de repeticiones CGG en el gen FMR1 del cromosoma X, con más de 200 repeticiones en la mutación completa. Afecta más y con mayor gravedad a varones. Se manifiesta con discapacidad intelectual, conducta autista, hiperactividad, cara alargada, orejas grandes, mandíbula prominente, hiperlaxitud articular y macroorquidismo después de la pubertad. Las portadoras de premutación tienen riesgo de insuficiencia ovárica prematura y los varones portadores de síndrome de temblor y ataxia. El diagnóstico se confirma con estudio molecular.
+R: Guía de Práctica Clínica de diagnóstico de discapacidad intelectual de origen genético
+
+@ ped|genetics|chromosomal_syndromes|3|risk_factor
+V: Mujer de 39 años con embarazo de 11 semanas, sana, que pregunta por el riesgo de que su bebé tenga una alteración cromosómica.
+P: ¿Cuál es el factor de riesgo más importante de trisomía 21 fetal en este caso?
++ La edad materna avanzada || El riesgo de no disyunción meiótica aumenta con la edad materna.
+- anchoring | La edad paterna como factor principal || Influye mucho menos.
+- availability_heuristic | El consumo de café en el embarazo || No es un factor.
+- representativeness_heuristic | El antecedente de cesárea previa || No es un factor.
+- premature_closure | La diabetes gestacional || No causa trisomías.
+- base_rate_fallacy | La exposición a teléfonos celulares || No hay evidencia.
+- framing_effect | El grupo sanguíneo materno || No es un factor.
+- inattentional_blindness | El número de controles prenatales || No modifica el riesgo.
+- focusing_illusion | El hipotiroidismo materno tratado || No causa trisomías.
+- belief_bias | Los antojos durante el embarazo || No es un factor.
+E: La edad materna es el principal factor de riesgo de trisomías por no disyunción en la meiosis materna. El riesgo de trisomía 21 al nacer es de alrededor de 1 en 1 500 a los 20 años, 1 en 350 a los 35 años y 1 en 100 a los 40 años. Otros factores son un hijo previo con trisomía y que uno de los padres sea portador de una translocación balanceada. A todas las embarazadas se les debe ofrecer tamizaje prenatal con marcadores bioquímicos y translucencia nucal en el primer trimestre o ADN fetal libre en sangre materna, y diagnóstico con biopsia de vellosidades o amniocentesis si el resultado es de alto riesgo.
+R: Guía de Práctica Clínica de control prenatal ;; Guía de Práctica Clínica de diagnóstico prenatal de cromosomopatías
+
+@ ped|genetics|inborn_errors|3|diagnosis
+V: Lactante de 8 meses sin tamiz neonatal con retraso del desarrollo, crisis convulsivas, eczema, piel y cabello más claros que sus hermanos y olor a ratón en la orina y el sudor.
+P: ¿Cuál es el diagnóstico más probable?
++ Fenilcetonuria || Retraso del desarrollo, hipopigmentación, eczema y olor a ratón por acumulación de fenilalanina.
+- anchoring | Albinismo oculocutáneo || No da retraso del desarrollo ni olor a ratón.
+- availability_heuristic | Hipotiroidismo congénito || No da hipopigmentación ni olor a ratón.
+- representativeness_heuristic | Enfermedad de orina con olor a jarabe de arce || El olor es dulce a jarabe.
+- premature_closure | Dermatitis atópica aislada || No explica el retraso ni las crisis.
+- base_rate_fallacy | Homocistinuria || Da talla alta y luxación del cristalino.
+- framing_effect | Galactosemia || Da ictericia, vómito y cataratas en el recién nacido.
+- inattentional_blindness | Parálisis cerebral || No explica la hipopigmentación ni el olor.
+- focusing_illusion | Síndrome de West idiopático || No explica los otros hallazgos.
+- belief_bias | Olor por falta de higiene || Es un signo metabólico.
+E: La fenilcetonuria es un error innato del metabolismo de herencia autosómica recesiva por deficiencia de la fenilalanina hidroxilasa, que convierte fenilalanina en tirosina. La fenilalanina se acumula y es tóxica para el cerebro, y la falta de tirosina reduce la melanina. Sin tratamiento causa discapacidad intelectual grave, crisis, conducta autista, eczema, hipopigmentación y olor a ratón por el ácido fenilacético. Se detecta con el tamiz neonatal. El tratamiento es una dieta baja en fenilalanina con fórmulas especiales de por vida, iniciada en las primeras semanas. Las mujeres con fenilcetonuria deben controlar su dieta antes y durante el embarazo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de fenilcetonuria ;; Lineamiento técnico de tamiz neonatal
+
+@ ped|genetics|inborn_errors|3|diagnosis
+V: Recién nacido de 5 días alimentado al seno materno que presenta vómito, rechazo al alimento, ictericia, hepatomegalia y letargo. Tiene cataratas en el examen oftalmológico. Sustancias reductoras en orina positivas con glucosuria negativa. Hemocultivo con Escherichia coli.
+P: ¿Cuál es el diagnóstico más probable?
++ Galactosemia clásica || Vómito, ictericia, hepatomegalia, cataratas y sepsis por Escherichia coli al iniciar la leche.
+- anchoring | Sepsis neonatal sin enfermedad de base || La sepsis por Escherichia coli es una complicación típica de la galactosemia.
+- availability_heuristic | Ictericia fisiológica || No explica las cataratas ni la hepatomegalia.
+- representativeness_heuristic | Atresia biliar || No explica las cataratas ni el inicio con la leche.
+- premature_closure | Fenilcetonuria || No da síntomas agudos en el recién nacido.
+- base_rate_fallacy | Tirosinemia tipo 1 || Es menos frecuente.
+- framing_effect | Rubéola congénita || Daría cataratas, pero con cardiopatía y sordera.
+- inattentional_blindness | Hipotiroidismo congénito || No da cataratas ni sustancias reductoras.
+- focusing_illusion | Intolerancia a la lactosa || No da afección hepática ni cataratas.
+- belief_bias | Leche materna de mala calidad || Hay un error metabólico.
+E: La galactosemia clásica es un error innato autosómico recesivo por deficiencia de galactosa 1 fosfato uridiltransferasa. Al iniciar la leche materna o la fórmula, que contienen lactosa, se acumulan galactosa 1 fosfato y galactitol, lo que produce vómito, rechazo al alimento, ictericia, hepatomegalia con falla hepática, tubulopatía renal, cataratas y letargo. Es característica la sepsis por Escherichia coli. Las sustancias reductoras en orina son positivas sin glucosuria. El tratamiento es suspender de inmediato la lactosa y la galactosa con fórmula de soya. Es una de las pocas contraindicaciones absolutas de la lactancia materna.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de galactosemia ;; Lineamiento técnico de tamiz neonatal
+
+@ ped|genetics|inborn_errors|3|treatment_of_choice
+V: Recién nacido de 10 días con tamiz neonatal positivo para fenilcetonuria confirmado con fenilalanina sérica muy elevada. Está asintomático y alimentado al seno materno.
+P: ¿Cuál es el tratamiento de elección?
++ Dieta restringida en fenilalanina con fórmula especial sin fenilalanina, permitiendo cantidades controladas de leche materna según niveles || Evita la acumulación tóxica.
+- anchoring | Suspender toda alimentación por días || Es peligroso.
+- availability_heuristic | Fórmula de soya habitual || Contiene fenilalanina.
+- representativeness_heuristic | Dieta sin lactosa || El problema no es la lactosa.
+- premature_closure | Vigilancia sin tratamiento hasta que aparezcan síntomas || El daño ocurre antes.
+- framing_effect | Levotiroxina || No trata la fenilcetonuria.
+- complexity_bias | Trasplante hepático de inicio || No es el tratamiento estándar.
+- base_rate_fallacy | Aspartame como endulzante || Contiene fenilalanina y está contraindicado.
+- belief_bias | Dieta normal porque se ve sano || La enfermedad dañará el cerebro.
+- omission_bias | Suspender la dieta en la adolescencia sin vigilancia || Se recomienda de por vida.
+E: El tratamiento de la fenilcetonuria debe iniciarse lo antes posible, idealmente en las primeras 2 semanas de vida. Consiste en una dieta restringida en fenilalanina, con fórmulas especiales libres de fenilalanina enriquecidas con tirosina, y cantidades controladas de proteína natural, incluida la leche materna, según los niveles en sangre. Los niveles se vigilan de forma frecuente para mantenerlos en rango terapéutico. Se recomienda mantener la dieta de por vida. Los alimentos con aspartame están contraindicados porque contienen fenilalanina. La sapropterina puede ser útil en pacientes con respuesta a tetrahidrobiopterina.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de fenilcetonuria
+
+@ ped|genetics|inborn_errors|4|diagnosis
+V: Recién nacido de término de 3 días, previamente sano, que inicia con rechazo al alimento, vómito, letargo progresivo, hipotonía y taquipnea. Gasometría con alcalosis respiratoria. Amonio de 750 µmol/L con glucosa normal y sin acidosis metabólica.
+P: ¿Cuál es el diagnóstico más probable?
++ Trastorno del ciclo de la urea || Hiperamonemia grave con alcalosis respiratoria y sin acidosis en un recién nacido.
+- anchoring | Sepsis neonatal || Puede simularla, pero no explica la hiperamonemia tan elevada.
+- availability_heuristic | Acidemia orgánica || Da hiperamonemia con acidosis metabólica y anión gap elevado.
+- representativeness_heuristic | Hipoglucemia neonatal || La glucosa es normal.
+- premature_closure | Hemorragia intraventricular || Es más común en prematuros.
+- base_rate_fallacy | Fenilcetonuria || No da síntomas agudos neonatales.
+- framing_effect | Cardiopatía congénita || No explica la hiperamonemia.
+- inattentional_blindness | Encefalopatía hipóxico isquémica || No hubo asfixia y el inicio fue tardío.
+- focusing_illusion | Hiperbilirrubinemia || No explica el cuadro.
+- belief_bias | Recién nacido que duerme mucho por cansancio del parto || El letargo progresivo es una urgencia.
+E: Los trastornos del ciclo de la urea son errores innatos que impiden convertir el amonio en urea. La forma más común es la deficiencia de ornitina transcarbamilasa, ligada al X. En la forma neonatal el recién nacido es sano al nacer y tras iniciar la alimentación con proteínas presenta rechazo al alimento, vómito, letargo, hipotonía, crisis y coma. El amonio elevado estimula el centro respiratorio y produce alcalosis respiratoria, sin acidosis metabólica ni hipoglucemia, lo que lo distingue de las acidemias orgánicas. Es una urgencia que requiere suspender las proteínas, aportar glucosa, usar quelantes de amonio y hemodiálisis si el amonio es muy alto.
+R: Guía de Práctica Clínica de abordaje del recién nacido con sospecha de error innato del metabolismo
+
+@ ped|genetics|inborn_errors|3|diagnosis
+V: Niño de 3 años con infecciones respiratorias de repetición, tos crónica productiva, evacuaciones grasosas y fétidas, falla de medro y pólipos nasales. Antecedente de íleo meconial al nacer.
+P: ¿Cuál es el diagnóstico más probable?
++ Fibrosis quística || Infecciones respiratorias recurrentes, insuficiencia pancreática y antecedente de íleo meconial.
+- anchoring | Asma con infecciones agregadas || No explica la esteatorrea ni el íleo meconial.
+- availability_heuristic | Enfermedad celiaca || No explica la afección respiratoria.
+- representativeness_heuristic | Discinesia ciliar primaria || Da afección respiratoria sin insuficiencia pancreática.
+- premature_closure | Inmunodeficiencia humoral || No explica la esteatorrea ni el íleo meconial.
+- base_rate_fallacy | Tuberculosis pulmonar || No explica el cuadro digestivo.
+- framing_effect | Giardiasis crónica || No explica la afección respiratoria.
+- inattentional_blindness | Reflujo con aspiración || No explica la insuficiencia pancreática.
+- focusing_illusion | Deficiencia de alfa 1 antitripsina || Da enfisema y hepatopatía.
+- belief_bias | Niño enfermizo por guardería || Hay una enfermedad genética.
+E: La fibrosis quística es una enfermedad autosómica recesiva por mutaciones del gen CFTR, siendo la más frecuente F508del. La proteína CFTR es un canal de cloro, y su disfunción produce secreciones espesas en vías respiratorias, páncreas, intestino y conductos deferentes. Se manifiesta con íleo meconial, infecciones respiratorias recurrentes por Staphylococcus aureus y Pseudomonas, bronquiectasias, insuficiencia pancreática con esteatorrea y falla de medro, pólipos nasales, sinusitis y azoospermia. Se detecta con el tamiz neonatal de tripsinógeno inmunorreactivo y se confirma con prueba de sudor con cloro mayor de 60 mmol/L.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de fibrosis quística
+
+@ ped|genetics|inborn_errors|3|confirmatory_study
+V: Lactante de 6 meses con tamiz neonatal con tripsinógeno inmunorreactivo elevado, neumonías recurrentes y evacuaciones grasosas. Se sospecha fibrosis quística.
+P: ¿Cuál es el estudio de elección para confirmar el diagnóstico?
++ Prueba de cloro en sudor || Un cloro mayor de 60 mmol/L confirma el diagnóstico.
+- anchoring | Repetir el tamiz neonatal || No confirma el diagnóstico.
+- availability_heuristic | Elastasa fecal como única prueba || Valora la función pancreática pero no confirma.
+- representativeness_heuristic | Tomografía de tórax || Muestra daño, no confirma.
+- premature_closure | Cultivo de esputo con Pseudomonas || Apoya pero no confirma.
+- base_rate_fallacy | Biopsia rectal || Es para Hirschsprung.
+- framing_effect | Inmunoglobulinas séricas || Valoran inmunodeficiencia.
+- complexity_bias | Biopsia pulmonar || No está indicada.
+- information_bias | Prueba de aliento con hidrógeno || Valora intolerancia a la lactosa.
+- belief_bias | Probar la piel salada al besarlo como único dato || Requiere medición objetiva.
+E: El diagnóstico de fibrosis quística se confirma con la prueba de cloro en sudor por iontoforesis con pilocarpina. Un valor de 60 mmol/L o más es diagnóstico, de 30 a 59 es intermedio y requiere estudio genético, y menor de 30 hace poco probable el diagnóstico. El estudio molecular del gen CFTR identifica las mutaciones y orienta el uso de moduladores. El manejo incluye fisioterapia respiratoria, mucolíticos, antibióticos, enzimas pancreáticas, vitaminas liposolubles, nutrición hipercalórica y moduladores del CFTR como elexacaftor, tezacaftor e ivacaftor en pacientes con mutaciones elegibles.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de fibrosis quística
+
+@ ped|genetics|inborn_errors|3|risk_factor
+V: Pareja sana con un primer hijo con fibrosis quística. Planean otro embarazo y preguntan cuál es el riesgo de que su siguiente hijo tenga la misma enfermedad.
+P: ¿Cuál es el riesgo de recurrencia en cada embarazo?
++ 25% de probabilidad de un hijo afectado en cada embarazo || Ambos padres son portadores de una enfermedad autosómica recesiva.
+- anchoring | 50% en cada embarazo || Es el riesgo de herencia autosómica dominante.
+- availability_heuristic | 100% porque ya tuvieron un hijo afectado || Cada embarazo es independiente.
+- representativeness_heuristic | Riesgo igual al de la población general || Ambos son portadores.
+- premature_closure | Solo los varones pueden afectarse || Es autosómica.
+- base_rate_fallacy | 0% porque ya les tocó un hijo enfermo || Cada embarazo es independiente.
+- framing_effect | 75% de hijos afectados || 75% es la probabilidad de no estar afectado.
+- inattentional_blindness | Depende de la edad materna || No influye en herencia recesiva.
+- focusing_illusion | Solo si el embarazo es en invierno || No tiene relación.
+- belief_bias | Depende de la dieta en el embarazo || No modifica el riesgo genético.
+E: La fibrosis quística, la fenilcetonuria, la galactosemia y la mayoría de los errores innatos del metabolismo tienen herencia autosómica recesiva. Cuando ambos padres son portadores sanos, en cada embarazo hay 25% de probabilidad de un hijo afectado, 50% de un hijo portador sano y 25% de un hijo no portador. Entre los hijos sanos, dos de cada tres son portadores. El riesgo es independiente en cada embarazo y no depende del sexo. Se ofrece consejo genético y, cuando se conoce la mutación familiar, diagnóstico prenatal o preimplantacional y estudio de portadores en familiares.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de fibrosis quística

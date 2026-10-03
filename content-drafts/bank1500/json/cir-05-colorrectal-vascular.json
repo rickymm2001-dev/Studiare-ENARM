@@ -1,0 +1,2731 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "cir-05-colorrectal-vascular-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "hemorrhoids",
+      "vignette": "Hombre de 40 años con estreñimiento crónico que presenta sangrado rojo brillante indoloro al final de la evacuación, que mancha el papel y gotea en el inodoro. En la anoscopia hay paquetes vasculares internos que protruyen al pujar y se reducen solos.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fisura anal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da dolor intenso al evacuar."
+        },
+        {
+          "key": "b",
+          "text": "Cáncer colorrectal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Debe considerarse según la edad y factores, pero el cuadro es típico de hemorroides."
+        },
+        {
+          "key": "c",
+          "text": "Absceso anal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da dolor y fiebre."
+        },
+        {
+          "key": "d",
+          "text": "Enfermedad inflamatoria intestinal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da diarrea con moco y sangre."
+        },
+        {
+          "key": "e",
+          "text": "Hemorroides grado III",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Requieren reducción manual."
+        },
+        {
+          "key": "f",
+          "text": "Prolapso rectal completo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Protruyen todas las capas del recto."
+        },
+        {
+          "key": "g",
+          "text": "Sangrado por comer picante",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La causa es hemorroidal."
+        },
+        {
+          "key": "h",
+          "text": "Hemorroides internas grado II",
+          "correct": true,
+          "rationale": "Sangrado indoloro con prolapso que se reduce de forma espontánea."
+        },
+        {
+          "key": "i",
+          "text": "Pólipo rectal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el prolapso al pujar."
+        },
+        {
+          "key": "j",
+          "text": "Trombosis hemorroidaria externa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da dolor intenso con nódulo violáceo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "h"
+      ],
+      "explanation": "Las hemorroides son cojinetes vasculares normales del canal anal que se vuelven sintomáticos al dilatarse y prolapsarse. Las internas se originan por arriba de la línea dentada, no duelen y se manifiestan con sangrado rojo brillante y prolapso. Se clasifican en grado I sin prolapso, grado II con prolapso que se reduce solo, grado III que requiere reducción manual y grado IV irreductible. Las externas se originan por debajo de la línea dentada y duelen al trombosarse. Los factores de riesgo son estreñimiento, esfuerzo defecatorio, embarazo y permanecer mucho tiempo sentado.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad hemorroidal"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "hemorrhoids",
+      "vignette": "Mujer de 35 años con hemorroides internas grado I y II que sangran ocasionalmente. Tiene dieta baja en fibra y pasa mucho tiempo en el baño.",
+      "prompt": "¿Cuál es el tratamiento inicial de elección?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Colonoscopia terapéutica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No trata las hemorroides."
+        },
+        {
+          "key": "b",
+          "text": "Ligadura con bandas como primera medida en todos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se usa si fallan las medidas conservadoras."
+        },
+        {
+          "key": "c",
+          "text": "Hemorroidectomía quirúrgica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para grados III y IV o falla de otras medidas."
+        },
+        {
+          "key": "d",
+          "text": "Sentarse sobre una superficie fría para desinflamar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "e",
+          "text": "Antibióticos orales",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay infección."
+        },
+        {
+          "key": "f",
+          "text": "Reposo absoluto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "g",
+          "text": "Dieta rica en fibra, abundantes líquidos, evitar el esfuerzo y el tiempo prolongado en el baño",
+          "correct": true,
+          "rationale": "Las medidas higiénico dietéticas son la base del tratamiento."
+        },
+        {
+          "key": "h",
+          "text": "Laxantes estimulantes diarios por meses",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No son la primera elección."
+        },
+        {
+          "key": "i",
+          "text": "Corticosteroides tópicos de forma indefinida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Causan atrofia de la piel."
+        },
+        {
+          "key": "j",
+          "text": "No dar tratamiento porque son leves",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Las medidas evitan la progresión."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "El tratamiento inicial de las hemorroides de grados I y II es conservador, con dieta rica en fibra de 25 a 35 g al día o suplementos de psyllium, líquidos abundantes, evitar el esfuerzo y la permanencia prolongada en el inodoro, y baños de asiento. Los flebotónicos y los tratamientos tópicos alivian los síntomas por periodos cortos. Si persisten los síntomas, la ligadura con bandas elásticas es el tratamiento ambulatorio de elección para los grados I a III. La hemorroidectomía se reserva para grados III y IV, hemorroides mixtas o falla de otros tratamientos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad hemorroidal"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "hemorrhoids",
+      "vignette": "Hombre de 45 años con dolor anal intenso de 36 horas y un nódulo violáceo, duro y muy doloroso en el borde anal tras un esfuerzo defecatorio.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ligadura con bandas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Está contraindicada en hemorroides externas por el dolor."
+        },
+        {
+          "key": "b",
+          "text": "Hemorroidectomía de todos los paquetes de urgencia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "c",
+          "text": "Solo vigilancia sin analgesia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El dolor es intenso."
+        },
+        {
+          "key": "d",
+          "text": "Reventar el nódulo en casa con una aguja",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es peligroso."
+        },
+        {
+          "key": "e",
+          "text": "Escleroterapia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es para hemorroides internas."
+        },
+        {
+          "key": "f",
+          "text": "Colonoscopia urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "g",
+          "text": "Escisión del trombo hemorroidario externo con anestesia local",
+          "correct": true,
+          "rationale": "En las primeras 72 horas alivia el dolor de forma rápida."
+        },
+        {
+          "key": "h",
+          "text": "Antibióticos orales",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay infección."
+        },
+        {
+          "key": "i",
+          "text": "No ofrecer la escisión por miedo a sangrado",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es segura y alivia el dolor."
+        },
+        {
+          "key": "j",
+          "text": "Incisión y drenaje como en un absceso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El trombo se escinde, no se drena como absceso."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "h"
+      ],
+      "explanation": "La trombosis hemorroidaria externa se manifiesta con dolor anal agudo e intenso y un nódulo violáceo, duro y doloroso en el borde anal. Si el paciente consulta en las primeras 72 horas, la escisión del trombo con anestesia local alivia el dolor de forma rápida y reduce las recurrencias. Después de las 72 horas el dolor empieza a disminuir y se prefiere el manejo conservador con analgésicos, baños de asiento, ablandadores de heces y tratamiento tópico. La simple incisión con evacuación del coágulo tiene más recurrencia que la escisión.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad hemorroidal"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "hemorrhoids",
+      "vignette": "Hombre de 58 años con sangrado rectal rojo brillante intermitente que atribuye a hemorroides que tiene desde hace años. Refiere cambio reciente en el hábito intestinal y pérdida de 4 kg. Nunca se ha realizado colonoscopia.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tomografía por emisión de positrones",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "b",
+          "text": "Hemorroidectomía inmediata",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Primero se descarta cáncer."
+        },
+        {
+          "key": "c",
+          "text": "No pedir colonoscopia por la incomodidad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El diagnóstico temprano es clave."
+        },
+        {
+          "key": "d",
+          "text": "Anoscopia como estudio definitivo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No evalúa el colon."
+        },
+        {
+          "key": "e",
+          "text": "El sangrado rojo siempre es por hemorroides",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede ser por cáncer."
+        },
+        {
+          "key": "f",
+          "text": "Tratar las hemorroides y no estudiar más",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede pasar inadvertido un cáncer."
+        },
+        {
+          "key": "g",
+          "text": "Realizar colonoscopia completa antes de atribuir el sangrado a las hemorroides",
+          "correct": true,
+          "rationale": "La edad, el cambio del hábito y la pérdida de peso obligan a descartar cáncer."
+        },
+        {
+          "key": "h",
+          "text": "Ultrasonido abdominal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No evalúa la mucosa del colon."
+        },
+        {
+          "key": "i",
+          "text": "Esperar 6 meses para ver la evolución",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Retrasa el diagnóstico."
+        },
+        {
+          "key": "j",
+          "text": "Sangre oculta en heces como único estudio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Ya hay sangrado visible y datos de alarma."
+        }
+      ],
+      "canonical": [
+        "b",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "Aunque las hemorroides son la causa más frecuente de sangrado rectal, no deben asumirse como causa en pacientes con datos de alarma. La edad mayor de 45 a 50 años, el cambio del hábito intestinal, la pérdida de peso, la anemia, el sangrado oscuro o mezclado con las heces, los antecedentes familiares de cáncer colorrectal y la ausencia de colonoscopia previa obligan a realizar colonoscopia completa. El cáncer colorrectal puede coexistir con hemorroides. La anoscopia confirma las hemorroides pero no descarta lesiones proximales.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad hemorroidal"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "hemorrhoids",
+      "vignette": "Mujer de 50 años con hemorroides grado IV que no se reducen, muy dolorosas, edematosas, de color violáceo oscuro con áreas negras y fiebre de 38 °C.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fisura anal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica el prolapso necrótico."
+        },
+        {
+          "key": "b",
+          "text": "Absceso perianal simple",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el prolapso."
+        },
+        {
+          "key": "c",
+          "text": "Cáncer anal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica el cuadro agudo."
+        },
+        {
+          "key": "d",
+          "text": "Dermatitis perianal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la necrosis."
+        },
+        {
+          "key": "e",
+          "text": "Hemorroides grado III no complicadas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Son reductibles manualmente."
+        },
+        {
+          "key": "f",
+          "text": "Trombosis de una hemorroide externa aislada",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El prolapso es interno y extenso."
+        },
+        {
+          "key": "g",
+          "text": "Hemorroides prolapsadas estranguladas con necrosis",
+          "correct": true,
+          "rationale": "El prolapso irreductible compromete la irrigación."
+        },
+        {
+          "key": "h",
+          "text": "Inflamación que cede con pomada",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay necrosis."
+        },
+        {
+          "key": "i",
+          "text": "Condilomas anales",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Son verrugosos indoloros."
+        },
+        {
+          "key": "j",
+          "text": "Prolapso rectal sin complicación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Los hallazgos indican necrosis."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "g"
+      ],
+      "explanation": "Las hemorroides internas grado IV con prolapso irreductible pueden encarcelarse y estrangularse, con edema, trombosis, dolor intenso y necrosis. Los datos de necrosis, como coloración negra, fiebre o sepsis, indican tratamiento quirúrgico urgente con hemorroidectomía y antibióticos. Otras complicaciones de las hemorroides incluyen anemia ferropénica por sangrado crónico y trombosis. Las hemorroides en pacientes con cirrosis e hipertensión portal deben distinguirse de las várices anorrectales. El tratamiento oportuno de los grados avanzados, con ligadura o hemorroidectomía electiva, evita estas complicaciones.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad hemorroidal"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "anal_fissure_fistula",
+      "vignette": "Mujer de 28 años con estreñimiento que presenta dolor anal intenso desgarrante durante la evacuación y que persiste horas después, con sangrado rojo escaso en el papel. En la exploración hay una úlcera lineal en la línea media posterior del ano.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cáncer anal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es raro a esta edad."
+        },
+        {
+          "key": "b",
+          "text": "Herpes anal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da vesículas múltiples."
+        },
+        {
+          "key": "c",
+          "text": "Absceso perianal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da masa fluctuante con fiebre."
+        },
+        {
+          "key": "d",
+          "text": "Proctalgia fugaz",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay lesión visible."
+        },
+        {
+          "key": "e",
+          "text": "Fisura anal aguda",
+          "correct": true,
+          "rationale": "Dolor intenso al evacuar con úlcera lineal en la línea media posterior."
+        },
+        {
+          "key": "f",
+          "text": "Hemorroides internas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No suelen doler."
+        },
+        {
+          "key": "g",
+          "text": "Dolor por comer chile",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una lesión."
+        },
+        {
+          "key": "h",
+          "text": "Prolapso rectal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la úlcera."
+        },
+        {
+          "key": "i",
+          "text": "Enfermedad de Crohn perianal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Las fisuras serían laterales o múltiples."
+        },
+        {
+          "key": "j",
+          "text": "Fístula anal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da secreción por un orificio externo."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "La fisura anal es un desgarro longitudinal del anodermo distal a la línea dentada, generalmente en la línea media posterior, por el paso de heces duras. Se manifiesta con dolor intenso durante y después de la evacuación, con sangrado rojo escaso. El espasmo del esfínter anal interno perpetúa la isquemia y la falta de cicatrización. La fisura crónica, de más de 6 semanas, presenta papila hipertrófica, hemorroide centinela y fibras del esfínter visibles. Las fisuras laterales o múltiples sugieren enfermedad de Crohn, tuberculosis, sífilis, virus de la inmunodeficiencia humana o cáncer.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la fisura anal"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "anal_fissure_fistula",
+      "vignette": "Hombre de 35 años con fisura anal crónica de 3 meses que no mejoró con fibra, baños de asiento ni nitroglicerina tópica. Tiene papila hipertrófica y hemorroide centinela.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dilatación anal forzada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene alto riesgo de incontinencia."
+        },
+        {
+          "key": "b",
+          "text": "Fistulotomía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es para fístulas."
+        },
+        {
+          "key": "c",
+          "text": "Corticosteroides tópicos de forma indefinida",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No curan la fisura."
+        },
+        {
+          "key": "d",
+          "text": "Continuar solo con baños de asiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ya fallaron las medidas conservadoras."
+        },
+        {
+          "key": "e",
+          "text": "Esfinterotomía lateral interna",
+          "correct": true,
+          "rationale": "Es el tratamiento más eficaz para la fisura crónica refractaria."
+        },
+        {
+          "key": "f",
+          "text": "No operar por miedo a la incontinencia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo es bajo con la técnica adecuada."
+        },
+        {
+          "key": "g",
+          "text": "Hemorroidectomía",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No trata la fisura."
+        },
+        {
+          "key": "h",
+          "text": "Colostomía",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "i",
+          "text": "Antibióticos orales",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay infección."
+        },
+        {
+          "key": "j",
+          "text": "Aplicar alcohol para cicatrizar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Aumenta el dolor."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "g"
+      ],
+      "explanation": "El tratamiento inicial de la fisura anal incluye fibra, líquidos, ablandadores de heces, baños de asiento y analgésicos tópicos. Para relajar el esfínter interno se usan nitroglicerina tópica, bloqueadores de calcio tópicos como diltiazem o nifedipino, y toxina botulínica. La fisura crónica que no responde al tratamiento médico se trata con esfinterotomía lateral interna, que tiene una tasa de curación mayor de 90%, con bajo riesgo de incontinencia leve a gases. La dilatación anal forzada no se recomienda por su riesgo de incontinencia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la fisura anal"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "anal_fissure_fistula",
+      "vignette": "Hombre de 40 años con dolor anal intenso, constante y pulsátil de 3 días, que aumenta al sentarse, con fiebre de 38.5 °C. En la exploración hay una masa eritematosa, caliente y fluctuante junto al ano.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hidradenitis supurativa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Afecta zonas con glándulas apocrinas con lesiones múltiples crónicas."
+        },
+        {
+          "key": "b",
+          "text": "Furúnculo simple sin relación anal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La localización perianal orienta a absceso anorrectal."
+        },
+        {
+          "key": "c",
+          "text": "Absceso perianal",
+          "correct": true,
+          "rationale": "Masa fluctuante dolorosa con fiebre junto al ano."
+        },
+        {
+          "key": "d",
+          "text": "Condiloma infectado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la masa fluctuante."
+        },
+        {
+          "key": "e",
+          "text": "Fisura anal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da dolor al evacuar sin masa."
+        },
+        {
+          "key": "f",
+          "text": "Cáncer anal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es una masa indurada sin fiebre aguda."
+        },
+        {
+          "key": "g",
+          "text": "Prolapso rectal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la masa con fiebre."
+        },
+        {
+          "key": "h",
+          "text": "Trombosis hemorroidaria externa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es violácea, sin fiebre ni fluctuación."
+        },
+        {
+          "key": "i",
+          "text": "Quiste pilonidal infectado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se localiza en el surco interglúteo sacro."
+        },
+        {
+          "key": "j",
+          "text": "Grano que se quita con pomada",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere drenaje."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "h",
+        "i"
+      ],
+      "explanation": "El absceso anorrectal se origina por infección de las glándulas anales de las criptas en la línea dentada, según la teoría criptoglandular. Se clasifica en perianal, el más frecuente, isquiorrectal, interesfintérico y supraelevador. Se manifiesta con dolor anal intenso y constante, masa fluctuante, eritema y fiebre. El tratamiento es la incisión y drenaje quirúrgico oportuno, sin esperar a que fluctúe. Los antibióticos se agregan en inmunosuprimidos, diabéticos, celulitis extensa o prótesis. Hasta la mitad de los pacientes desarrolla una fístula anal después.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de abscesos y fístulas anorrectales"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "anal_fissure_fistula",
+      "vignette": "Hombre de 42 años que tuvo un absceso perianal drenado hace 4 meses. Desde entonces tiene secreción purulenta intermitente por un orificio en la piel perianal a 3 cm del ano, con irritación y molestias.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Absceso recurrente sin trayecto",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La secreción crónica por un orificio indica fístula."
+        },
+        {
+          "key": "b",
+          "text": "Dermatitis perianal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el orificio."
+        },
+        {
+          "key": "c",
+          "text": "Secreción normal tras la cirugía previa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Indica fístula."
+        },
+        {
+          "key": "d",
+          "text": "Hidradenitis supurativa",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Suele ser múltiple con lesiones en ingles y axilas."
+        },
+        {
+          "key": "e",
+          "text": "Quiste pilonidal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se localiza en la región sacrococcígea."
+        },
+        {
+          "key": "f",
+          "text": "Condilomas",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Son verrugosos."
+        },
+        {
+          "key": "g",
+          "text": "Cáncer anal ulcerado",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable."
+        },
+        {
+          "key": "h",
+          "text": "Fístula anal",
+          "correct": true,
+          "rationale": "Trayecto entre el canal anal y la piel perianal tras un absceso."
+        },
+        {
+          "key": "i",
+          "text": "Hemorroides externas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No dan secreción purulenta."
+        },
+        {
+          "key": "j",
+          "text": "Fisura anal crónica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No da orificio externo con secreción."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "h",
+        "i"
+      ],
+      "explanation": "La fístula anal es un trayecto anormal que comunica el canal anal con la piel perianal y suele ser la secuela de un absceso anorrectal. Se manifiesta con secreción purulenta o serosanguinolenta intermitente por un orificio externo, prurito e irritación. La regla de Goodsall ayuda a predecir el trayecto. Se clasifica según su relación con los esfínteres en interesfintérica, transesfintérica, supraesfintérica y extraesfintérica. La resonancia magnética de pelvis es útil en fístulas complejas. Las fístulas múltiples o recurrentes sugieren enfermedad de Crohn. El tratamiento es quirúrgico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de abscesos y fístulas anorrectales"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "anal_fissure_fistula",
+      "vignette": "Mujer de 38 años con fístula anal interesfintérica simple que involucra una porción mínima del esfínter. Continencia normal y sin enfermedad inflamatoria intestinal.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Antibióticos orales prolongados",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No curan la fístula."
+        },
+        {
+          "key": "b",
+          "text": "Esfinterotomía lateral interna",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es para fisuras."
+        },
+        {
+          "key": "c",
+          "text": "Observación indefinida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La fístula no cierra sola."
+        },
+        {
+          "key": "d",
+          "text": "Sedal de corte en todas las fístulas simples",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se reserva para fístulas complejas."
+        },
+        {
+          "key": "e",
+          "text": "Hemorroidectomía",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No trata la fístula."
+        },
+        {
+          "key": "f",
+          "text": "Lavados con remedios caseros",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No curan la fístula."
+        },
+        {
+          "key": "g",
+          "text": "Colostomía de derivación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "h",
+          "text": "Colgajo de avance rectal para una fístula simple",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para fístulas complejas."
+        },
+        {
+          "key": "i",
+          "text": "No operar por miedo a la incontinencia en una fístula simple",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo es bajo."
+        },
+        {
+          "key": "j",
+          "text": "Fistulotomía",
+          "correct": true,
+          "rationale": "Es el tratamiento más eficaz para las fístulas simples con mínimo riesgo de incontinencia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "g",
+        "j"
+      ],
+      "explanation": "El tratamiento de la fístula anal es quirúrgico y su objetivo es eliminar el trayecto preservando la continencia. Las fístulas simples, interesfintéricas o transesfintéricas bajas que involucran menos de un tercio del esfínter, se tratan con fistulotomía, que abre el trayecto, con alta tasa de curación y bajo riesgo de incontinencia. Las fístulas complejas, que involucran más esfínter, se tratan con técnicas que preservan el esfínter, como el sedal, el colgajo de avance rectal o la ligadura del trayecto interesfintérico. En la enfermedad de Crohn se combinan sedal y tratamiento médico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de abscesos y fístulas anorrectales"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "colorectal_cancer",
+      "vignette": "Hombre de 50 años sin antecedentes familiares de cáncer, asintomático, que acude a consulta preventiva.",
+      "prompt": "¿Cuál es la estrategia de tamizaje de cáncer colorrectal recomendada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Prueba inmunoquímica fecal anual o colonoscopia cada 10 años a partir de los 45 a 50 años",
+          "correct": true,
+          "rationale": "Reducen la incidencia y mortalidad por cáncer colorrectal."
+        },
+        {
+          "key": "b",
+          "text": "No ofrecer tamizaje por la incomodidad del estudio",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Hay opciones no invasivas."
+        },
+        {
+          "key": "c",
+          "text": "Tacto rectal como único tamizaje",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es insuficiente."
+        },
+        {
+          "key": "d",
+          "text": "Iniciar el tamizaje a los 70 años",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es tarde."
+        },
+        {
+          "key": "e",
+          "text": "Antígeno carcinoembrionario anual",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No sirve para tamizaje."
+        },
+        {
+          "key": "f",
+          "text": "Si no hay sangre visible no hay riesgo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El cáncer puede ser silencioso."
+        },
+        {
+          "key": "g",
+          "text": "Tomografía abdominal anual",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un método de tamizaje."
+        },
+        {
+          "key": "h",
+          "text": "Cápsula endoscópica anual",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estándar."
+        },
+        {
+          "key": "i",
+          "text": "Ningún estudio si no tiene síntomas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El tamizaje busca detectar lesiones antes de los síntomas."
+        },
+        {
+          "key": "j",
+          "text": "Colonoscopia anual en riesgo promedio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es innecesariamente frecuente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "El cáncer colorrectal es prevenible y curable si se detecta temprano. En personas de riesgo promedio se recomienda iniciar el tamizaje entre los 45 y 50 años y continuarlo hasta los 75. Las opciones incluyen prueba inmunoquímica fecal anual, sangre oculta en heces de alta sensibilidad, colonoscopia cada 10 años o sigmoidoscopia cada 5 años. La colonoscopia permite detectar y extirpar pólipos adenomatosos. Una prueba fecal positiva requiere colonoscopia. En personas con familiar de primer grado con cáncer antes de los 60 años, el tamizaje inicia a los 40 años o 10 años antes del caso más joven.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección y diagnóstico del cáncer colorrectal"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "colorectal_cancer",
+      "vignette": "Hombre de 68 años con fatiga, palidez y anemia ferropénica de 8.5 g/dL sin sangrado visible. No hay cambios en el hábito intestinal. Tiene una masa palpable en la fosa iliaca derecha.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Absceso apendicular",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la anemia crónica."
+        },
+        {
+          "key": "b",
+          "text": "Mieloma múltiple",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la anemia ferropénica ni la masa."
+        },
+        {
+          "key": "c",
+          "text": "Anemia ferropénica por dieta",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "En un hombre mayor siempre debe buscarse pérdida digestiva."
+        },
+        {
+          "key": "d",
+          "text": "Enfermedad celiaca",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable a esta edad con masa."
+        },
+        {
+          "key": "e",
+          "text": "Anemia por enfermedad renal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la ferropenia ni la masa."
+        },
+        {
+          "key": "f",
+          "text": "Cansancio normal de la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay anemia y una masa."
+        },
+        {
+          "key": "g",
+          "text": "Cáncer de recto",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Suele dar rectorragia y tenesmo."
+        },
+        {
+          "key": "h",
+          "text": "Apendicitis crónica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la anemia."
+        },
+        {
+          "key": "i",
+          "text": "Hemorroides sangrantes",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explican la masa ni la anemia sin sangrado visible."
+        },
+        {
+          "key": "j",
+          "text": "Cáncer de colon derecho",
+          "correct": true,
+          "rationale": "Anemia ferropénica sin sangrado visible con masa en fosa iliaca derecha en un adulto mayor."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El cáncer de colon derecho suele manifestarse con anemia ferropénica por sangrado oculto, fatiga y masa palpable, ya que la luz es amplia y las heces son líquidas, por lo que rara vez obstruye. El cáncer de colon izquierdo causa cambios del hábito intestinal, heces delgadas y obstrucción por su luz más estrecha. El cáncer de recto da rectorragia, tenesmo y evacuaciones incompletas. Toda anemia ferropénica en hombres y en mujeres posmenopáusicas requiere estudio del tubo digestivo con colonoscopia y endoscopia superior.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección y diagnóstico del cáncer colorrectal"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "colorectal_cancer",
+      "vignette": "Mujer de 62 años con adenocarcinoma de colon sigmoides confirmado por biopsia, sin metástasis a distancia en la tomografía. Buen estado funcional.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sigmoidectomía con linfadenectomía regional y márgenes adecuados, con quimioterapia adyuvante según la etapa",
+          "correct": true,
+          "rationale": "La resección quirúrgica es el tratamiento curativo."
+        },
+        {
+          "key": "b",
+          "text": "Polipectomía endoscópica de un cáncer invasor avanzado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es suficiente."
+        },
+        {
+          "key": "c",
+          "text": "Colostomía sin resección",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es curativa."
+        },
+        {
+          "key": "d",
+          "text": "Quimioterapia sola como tratamiento definitivo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La cirugía es la base del tratamiento curativo."
+        },
+        {
+          "key": "e",
+          "text": "Inmunoterapia como primera línea en todos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se reserva para casos seleccionados."
+        },
+        {
+          "key": "f",
+          "text": "Colectomía total en todos los casos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es excesiva sin indicación."
+        },
+        {
+          "key": "g",
+          "text": "Radioterapia sola",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es el tratamiento estándar del colon."
+        },
+        {
+          "key": "h",
+          "text": "No operar por la edad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Tiene buen estado funcional."
+        },
+        {
+          "key": "i",
+          "text": "Dieta alcalina para curar el cáncer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "j",
+          "text": "Observación con antígeno carcinoembrionario",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No trata el cáncer."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "g"
+      ],
+      "explanation": "El tratamiento curativo del cáncer de colon no metastásico es la resección quirúrgica del segmento afectado con márgenes adecuados y linfadenectomía regional, con al menos 12 ganglios para una estadificación adecuada, por vía abierta o laparoscópica. La quimioterapia adyuvante con esquemas basados en fluoropirimidinas y oxaliplatino se indica en la etapa III, con ganglios positivos, y en la etapa II de alto riesgo. En el cáncer de recto localmente avanzado se usa quimiorradioterapia neoadyuvante. El antígeno carcinoembrionario se usa en el seguimiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de colon"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "colorectal_cancer",
+      "vignette": "Hombre de 22 años con cientos de pólipos adenomatosos en todo el colon descubiertos en la colonoscopia por rectorragia. Su padre murió de cáncer de colon a los 40 años.",
+      "prompt": "¿Cuál es el factor de riesgo hereditario más probable?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de Lynch",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene pocos pólipos."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de Peutz Jeghers",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da pólipos hamartomatosos con pigmentación oral."
+        },
+        {
+          "key": "c",
+          "text": "Enfermedad inflamatoria intestinal con pseudopólipos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No son adenomas."
+        },
+        {
+          "key": "d",
+          "text": "Mutación de BRCA1",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Se asocia a mama y ovario."
+        },
+        {
+          "key": "e",
+          "text": "Poliposis juvenil",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da pólipos hamartomatosos."
+        },
+        {
+          "key": "f",
+          "text": "Síndrome de Cowden",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da hamartomas con otros tumores."
+        },
+        {
+          "key": "g",
+          "text": "Dieta rica en carne roja como única causa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica cientos de pólipos en un joven."
+        },
+        {
+          "key": "h",
+          "text": "Pólipos hiperplásicos esporádicos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica cientos de adenomas."
+        },
+        {
+          "key": "i",
+          "text": "Mala suerte sin causa genética",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un síndrome hereditario."
+        },
+        {
+          "key": "j",
+          "text": "Poliposis adenomatosa familiar por mutación del gen APC",
+          "correct": true,
+          "rationale": "Cientos de adenomas en un joven con historia familiar de cáncer temprano."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "h",
+        "j"
+      ],
+      "explanation": "La poliposis adenomatosa familiar es una enfermedad autosómica dominante por mutaciones del gen APC. Se caracteriza por cientos a miles de pólipos adenomatosos en el colon que aparecen desde la adolescencia, con riesgo de cáncer colorrectal cercano a 100% hacia los 40 años sin tratamiento. Se asocia a adenomas duodenales, tumores desmoides, osteomas e hipertrofia del epitelio pigmentario de la retina, en el síndrome de Gardner. Se recomienda colonoscopia desde los 10 a 12 años en familiares y colectomía profiláctica cuando aparecen los pólipos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección y diagnóstico del cáncer colorrectal"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "colorectal_cancer",
+      "vignette": "Hombre de 60 años con colonoscopia de tamizaje en la que se extirpó un pólipo de 15 mm. El reporte histopatológico indica adenoma velloso con displasia de alto grado, resecado por completo.",
+      "prompt": "¿Qué indica este hallazgo para su seguimiento?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Quimioterapia adyuvante",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "b",
+          "text": "Cáncer invasor que requiere colectomía inmediata",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Fue resecado por completo sin invasión."
+        },
+        {
+          "key": "c",
+          "text": "Indica poliposis familiar",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es un pólipo único."
+        },
+        {
+          "key": "d",
+          "text": "Al quitarlo ya no hay riesgo nunca más",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede formar nuevos pólipos."
+        },
+        {
+          "key": "e",
+          "text": "Colonoscopia mensual",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "f",
+          "text": "Tomografía cada mes",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "g",
+          "text": "Adenoma avanzado que requiere colonoscopia de vigilancia en 3 años",
+          "correct": true,
+          "rationale": "El tamaño mayor de 10 mm, la histología vellosa y la displasia de alto grado lo hacen de alto riesgo."
+        },
+        {
+          "key": "h",
+          "text": "Seguimiento a 10 años como en riesgo promedio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Requiere vigilancia más frecuente."
+        },
+        {
+          "key": "i",
+          "text": "Lesión benigna que no requiere seguimiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es de alto riesgo."
+        },
+        {
+          "key": "j",
+          "text": "Pólipo hiperplásico sin riesgo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un adenoma."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "La mayoría de los cánceres colorrectales se originan de pólipos adenomatosos a través de la secuencia adenoma carcinoma, que tarda años. Los adenomas avanzados son los mayores de 10 mm, con componente velloso o con displasia de alto grado, y tienen mayor riesgo de cáncer. Tras su resección completa se recomienda colonoscopia de vigilancia a los 3 años. Los adenomas pequeños y escasos tienen menor riesgo y se vigilan a los 7 a 10 años. Los pólipos hiperplásicos pequeños del recto no aumentan el riesgo. Los pólipos serrados también pueden progresar.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección y diagnóstico del cáncer colorrectal"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "colorectal_cancer",
+      "vignette": "Mujer de 65 años operada de cáncer de colon etapa III hace 2 años. En el seguimiento, el antígeno carcinoembrionario aumentó de 2 a 18 ng/mL. Está asintomática.",
+      "prompt": "¿Cuál es la complicación que debe buscarse?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Error de laboratorio sin repetir",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe confirmarse y estudiarse."
+        },
+        {
+          "key": "b",
+          "text": "Metástasis cerebrales como sitio más frecuente",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El hígado es el sitio más frecuente."
+        },
+        {
+          "key": "c",
+          "text": "Hepatitis viral",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el marcador."
+        },
+        {
+          "key": "d",
+          "text": "Si está asintomática no hay recurrencia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La recurrencia puede ser asintomática."
+        },
+        {
+          "key": "e",
+          "text": "Resultado sin importancia en una paciente asintomática",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El aumento progresivo es significativo."
+        },
+        {
+          "key": "f",
+          "text": "Nuevo cáncer primario de mama",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es lo más probable."
+        },
+        {
+          "key": "g",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el marcador."
+        },
+        {
+          "key": "h",
+          "text": "Recurrencia de la enfermedad, más frecuentemente metástasis hepáticas",
+          "correct": true,
+          "rationale": "El aumento del antígeno carcinoembrionario sugiere recurrencia."
+        },
+        {
+          "key": "i",
+          "text": "Insuficiencia renal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el aumento."
+        },
+        {
+          "key": "j",
+          "text": "Efecto del tabaquismo como única explicación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El aumento importante sugiere recurrencia."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "h"
+      ],
+      "explanation": "El seguimiento del cáncer colorrectal tras el tratamiento incluye antígeno carcinoembrionario cada 3 a 6 meses, tomografía de tórax, abdomen y pelvis periódica y colonoscopia. El aumento progresivo del antígeno sugiere recurrencia y se estudia con tomografía. El hígado es el sitio más frecuente de metástasis por el drenaje portal, seguido del pulmón. Las metástasis hepáticas o pulmonares limitadas pueden resecarse con intención curativa, y la quimioterapia sistémica se usa en enfermedad no resecable. El antígeno también puede elevarse levemente en fumadores.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de colon"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "diverticular_disease",
+      "vignette": "Hombre de 75 años con sangrado rectal abundante, rojo oscuro, indoloro y súbito. Está estable tras líquidos. Tiene antecedente de divertículos en una colonoscopia previa. No hay dolor abdominal.",
+      "prompt": "¿Cuál es el diagnóstico más probable del origen del sangrado?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hemorroides",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Dan sangrado escaso rojo brillante."
+        },
+        {
+          "key": "b",
+          "text": "Úlcera péptica sangrante masiva",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Debe considerarse si hay inestabilidad, pero el contexto orienta a divertículos."
+        },
+        {
+          "key": "c",
+          "text": "Fisura anal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da sangrado escaso con dolor."
+        },
+        {
+          "key": "d",
+          "text": "Colitis isquémica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da dolor abdominal con sangrado."
+        },
+        {
+          "key": "e",
+          "text": "Enfermedad inflamatoria intestinal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da diarrea con sangre."
+        },
+        {
+          "key": "f",
+          "text": "Cáncer de colon",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Suele dar sangrado escaso y crónico."
+        },
+        {
+          "key": "g",
+          "text": "Hemorragia diverticular",
+          "correct": true,
+          "rationale": "Sangrado abundante indoloro en un adulto mayor con divertículos."
+        },
+        {
+          "key": "h",
+          "text": "Sangrado por comer betabel",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El sangrado es real y abundante."
+        },
+        {
+          "key": "i",
+          "text": "Divertículo de Meckel",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es más común en niños."
+        },
+        {
+          "key": "j",
+          "text": "Diverticulitis aguda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da dolor y fiebre, rara vez sangrado abundante."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "La enfermedad diverticular es la causa más frecuente de hemorragia digestiva baja abundante en adultos mayores. El sangrado se produce por rotura de los vasos rectos en el cuello del divertículo, es súbito, indoloro y abundante, y con frecuencia se detiene solo. Es más común en el colon derecho aunque los divertículos predominan en el izquierdo. La angiodisplasia es otra causa importante. El abordaje incluye reanimación, colonoscopia en las primeras 24 horas tras preparación, angiotomografía si el sangrado es activo e intenso y embolización o cirugía si persiste.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de enfermedad diverticular"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "diverticular_disease",
+      "vignette": "Mujer de 60 años con diverticulitis aguda no complicada confirmada por tomografía, sin absceso ni perforación. Está estable, tolera la vía oral y sin inmunosupresión.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hospitalización con antibióticos intravenosos en todos los casos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es necesaria en casos leves."
+        },
+        {
+          "key": "b",
+          "text": "No dar seguimiento ni colonoscopia posterior",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Se recomienda en casos seleccionados."
+        },
+        {
+          "key": "c",
+          "text": "Colonoscopia urgente en fase aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Está contraindicada por riesgo de perforación."
+        },
+        {
+          "key": "d",
+          "text": "Drenaje percutáneo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay absceso."
+        },
+        {
+          "key": "e",
+          "text": "Laxantes estimulantes en fase aguda",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No están indicados."
+        },
+        {
+          "key": "f",
+          "text": "Evitar semillas y nueces de por vida",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No previene la diverticulitis."
+        },
+        {
+          "key": "g",
+          "text": "Sigmoidectomía urgente",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "Colectomía total",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "i",
+          "text": "Procedimiento de Hartmann",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es para peritonitis."
+        },
+        {
+          "key": "j",
+          "text": "Manejo ambulatorio con dieta líquida progresiva y analgesia, con antibióticos solo en casos seleccionados",
+          "correct": true,
+          "rationale": "La diverticulitis no complicada en inmunocompetentes puede manejarse sin antibióticos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "La diverticulitis aguda no complicada en pacientes inmunocompetentes, estables y que toleran la vía oral puede manejarse de forma ambulatoria con dieta líquida progresiva y analgesia. Los estudios recientes muestran que los antibióticos no son necesarios en todos los casos, y se reservan para pacientes con datos sistémicos, comorbilidades, inmunosupresión o falta de mejoría. La colonoscopia se realiza 6 a 8 semanas después para descartar cáncer si no se ha hecho recientemente. La dieta rica en fibra y la actividad física reducen las recurrencias, y no es necesario evitar las semillas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de enfermedad diverticular"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q19",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "diverticular_disease",
+      "vignette": "Mujer de 70 años con diverticulitis de repetición que presenta salida de aire y heces por la uretra durante la micción e infecciones urinarias recurrentes por gérmenes intestinales.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fístula colovesical",
+          "correct": true,
+          "rationale": "Neumaturia y fecaluria por comunicación entre el colon y la vejiga."
+        },
+        {
+          "key": "b",
+          "text": "Absceso pélvico sin fístula",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la neumaturia."
+        },
+        {
+          "key": "c",
+          "text": "Vejiga neurogénica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el aire."
+        },
+        {
+          "key": "d",
+          "text": "Fístula colovaginal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Daría salida de heces por la vagina."
+        },
+        {
+          "key": "e",
+          "text": "Cáncer de vejiga",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la fecaluria."
+        },
+        {
+          "key": "f",
+          "text": "Gases que se cuelan de forma normal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Indica una comunicación anormal."
+        },
+        {
+          "key": "g",
+          "text": "Cistitis intersticial",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica el aire y las heces."
+        },
+        {
+          "key": "h",
+          "text": "Litiasis vesical",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la fecaluria."
+        },
+        {
+          "key": "i",
+          "text": "Infección urinaria recurrente simple",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la neumaturia ni la fecaluria."
+        },
+        {
+          "key": "j",
+          "text": "Enfermedad de Crohn",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable en este contexto."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "La fístula colovesical es la fístula más frecuente asociada a la enfermedad diverticular y es más común en hombres, porque en las mujeres el útero se interpone entre el colon y la vejiga, salvo tras histerectomía. Se manifiesta con neumaturia, fecaluria e infecciones urinarias recurrentes polimicrobianas. La tomografía con aire en la vejiga es el estudio más útil. Se debe descartar cáncer de colon o vejiga como causa. El tratamiento es la resección del sigmoides afectado con cierre de la vejiga, generalmente en una sola etapa.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de enfermedad diverticular"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q20",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "diverticular_disease",
+      "vignette": "Hombre de 55 años con diverticulosis del sigmoides descubierta en una colonoscopia. Pregunta qué favorece la formación de divertículos.",
+      "prompt": "¿Cuál es el factor de riesgo más asociado a la enfermedad diverticular?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dieta baja en fibra con aumento de la presión intraluminal del colon",
+          "correct": true,
+          "rationale": "Favorece la herniación de la mucosa en los sitios débiles."
+        },
+        {
+          "key": "b",
+          "text": "Consumo de semillas y palomitas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No aumenta el riesgo."
+        },
+        {
+          "key": "c",
+          "text": "Lactancia materna en la infancia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "d",
+          "text": "Uso de lentes",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es relevante."
+        },
+        {
+          "key": "e",
+          "text": "Consumo de café",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un factor importante."
+        },
+        {
+          "key": "f",
+          "text": "Comer rápido como única causa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El factor principal es la dieta baja en fibra."
+        },
+        {
+          "key": "g",
+          "text": "Ejercicio regular",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es protector."
+        },
+        {
+          "key": "h",
+          "text": "Vacunación contra hepatitis",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "i",
+          "text": "Dieta vegetariana",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es protectora por la fibra."
+        },
+        {
+          "key": "j",
+          "text": "Grupo sanguíneo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un factor."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "g"
+      ],
+      "explanation": "La diverticulosis es la presencia de divertículos, herniaciones de la mucosa y submucosa a través de la capa muscular en los sitios donde penetran los vasos rectos. Es más frecuente con la edad y en el colon sigmoides en países occidentales. Los factores de riesgo incluyen dieta baja en fibra y alta en carne roja, que aumenta la presión intraluminal, obesidad, sedentarismo, tabaquismo y uso de antiinflamatorios. La mayoría de las personas con diverticulosis no presentan síntomas. La dieta rica en fibra y la actividad física reducen el riesgo de complicaciones. Consumir semillas y nueces no aumenta el riesgo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de enfermedad diverticular"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q21",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "vascular_surgery",
+      "subtopic": "peripheral_arterial_disease",
+      "vignette": "Hombre de 65 años, fumador y diabético, que presenta dolor en las pantorrillas al caminar 200 metros, que cede con 5 minutos de reposo de pie. Pulsos poplíteos y pedios disminuidos.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Estenosis del canal lumbar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La claudicación neurógena mejora al sentarse o flexionar el tronco."
+        },
+        {
+          "key": "b",
+          "text": "Cansancio normal de la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay enfermedad arterial."
+        },
+        {
+          "key": "c",
+          "text": "Neuropatía diabética",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da dolor ardoroso en reposo sin relación con la marcha."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome compartimental crónico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es propio de atletas jóvenes."
+        },
+        {
+          "key": "e",
+          "text": "Miositis",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los pulsos disminuidos."
+        },
+        {
+          "key": "f",
+          "text": "Calambres por deshidratación",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No son reproducibles con la distancia."
+        },
+        {
+          "key": "g",
+          "text": "Insuficiencia venosa crónica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da pesadez y edema que mejoran al elevar las piernas."
+        },
+        {
+          "key": "h",
+          "text": "Artrosis de rodilla",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El dolor es articular."
+        },
+        {
+          "key": "i",
+          "text": "Trombosis venosa profunda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da edema unilateral agudo."
+        },
+        {
+          "key": "j",
+          "text": "Enfermedad arterial periférica con claudicación intermitente",
+          "correct": true,
+          "rationale": "Dolor muscular reproducible al caminar que cede con el reposo, con pulsos disminuidos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "La enfermedad arterial periférica es la aterosclerosis de las arterias de las extremidades inferiores. Sus principales factores de riesgo son el tabaquismo y la diabetes, seguidos de hipertensión, dislipidemia y edad. La claudicación intermitente es dolor muscular reproducible con el ejercicio que cede con el reposo en pocos minutos, y su localización orienta al nivel de la obstrucción. La exploración muestra pulsos disminuidos. El índice tobillo brazo menor de 0.9 confirma el diagnóstico. Estos pacientes tienen alto riesgo de infarto y evento vascular cerebral.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad arterial periférica"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q22",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "vascular_surgery",
+      "subtopic": "peripheral_arterial_disease",
+      "vignette": "Hombre de 68 años fumador con claudicación intermitente de las pantorrillas. Se desea confirmar la enfermedad arterial periférica.",
+      "prompt": "¿Cuál es el estudio inicial de elección para el diagnóstico?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Índice tobillo brazo",
+          "correct": true,
+          "rationale": "Un valor menor de 0.9 confirma la enfermedad arterial periférica."
+        },
+        {
+          "key": "b",
+          "text": "Electromiografía",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Evalúa los nervios."
+        },
+        {
+          "key": "c",
+          "text": "Creatina cinasa sérica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No diagnostica la enfermedad arterial."
+        },
+        {
+          "key": "d",
+          "text": "Angiografía invasiva como primer estudio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para planear la revascularización."
+        },
+        {
+          "key": "e",
+          "text": "Ultrasonido venoso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Evalúa las venas."
+        },
+        {
+          "key": "f",
+          "text": "Tomografía por emisión de positrones",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "g",
+          "text": "Perfil de lípidos como diagnóstico",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Evalúa el riesgo, no confirma."
+        },
+        {
+          "key": "h",
+          "text": "El diagnóstico solo se hace si hay úlceras",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede diagnosticarse antes."
+        },
+        {
+          "key": "i",
+          "text": "Radiografía de las piernas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No evalúa el flujo arterial."
+        },
+        {
+          "key": "j",
+          "text": "Resonancia magnética de columna lumbar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Evalúa la estenosis del canal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "i"
+      ],
+      "explanation": "El índice tobillo brazo es el estudio inicial de elección para diagnosticar la enfermedad arterial periférica. Se calcula dividiendo la presión sistólica más alta del tobillo entre la presión sistólica más alta de los brazos, medidas con Doppler. Un valor de 1 a 1.4 es normal, menor de 0.9 confirma la enfermedad, menor de 0.4 indica isquemia crítica y mayor de 1.4 sugiere arterias no compresibles por calcificación, frecuente en diabéticos y renales, en cuyo caso se usa el índice dedo brazo. El ultrasonido Doppler, la angiotomografía y la angiorresonancia localizan las lesiones para planear el tratamiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad arterial periférica"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q23",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "vascular_surgery",
+      "subtopic": "peripheral_arterial_disease",
+      "vignette": "Hombre de 62 años con claudicación intermitente a 300 metros, índice tobillo brazo de 0.75. Fuma y tiene dislipidemia. No tiene dolor en reposo ni úlceras.",
+      "prompt": "¿Cuál es el tratamiento inicial de elección?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Vasodilatadores como pentoxifilina como única medida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Tiene beneficio limitado."
+        },
+        {
+          "key": "b",
+          "text": "Anticoagulación con warfarina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es el tratamiento de elección."
+        },
+        {
+          "key": "c",
+          "text": "Masajes en las piernas como tratamiento principal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No tratan la enfermedad."
+        },
+        {
+          "key": "d",
+          "text": "No insistir en dejar de fumar por ser difícil",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es la medida más importante."
+        },
+        {
+          "key": "e",
+          "text": "Betabloqueadores suspendidos por empeorar la claudicación",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No empeoran la claudicación."
+        },
+        {
+          "key": "f",
+          "text": "Angioplastia en todos los pacientes con claudicación",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el tratamiento inicial."
+        },
+        {
+          "key": "g",
+          "text": "Reposo en cama para no forzar las piernas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El ejercicio mejora la claudicación."
+        },
+        {
+          "key": "h",
+          "text": "Amputación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "i",
+          "text": "Revascularización quirúrgica inmediata",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para claudicación limitante refractaria o isquemia crítica."
+        },
+        {
+          "key": "j",
+          "text": "Suspender el tabaco, ejercicio supervisado, antiagregante plaquetario y estatina de alta intensidad",
+          "correct": true,
+          "rationale": "Reducen los eventos cardiovasculares y mejoran la distancia de marcha."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El tratamiento de la enfermedad arterial periférica busca reducir el riesgo cardiovascular y mejorar los síntomas. Incluye suspender el tabaco, que es la medida más importante, ejercicio supervisado de caminata, que aumenta la distancia de marcha, antiagregación con ácido acetilsalicílico o clopidogrel, estatina de alta intensidad, control de la presión arterial y de la glucosa. El cilostazol mejora la claudicación en pacientes sin insuficiencia cardiaca. La revascularización endovascular o quirúrgica se reserva para la claudicación que limita la vida pese al tratamiento y para la isquemia crítica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad arterial periférica"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q24",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "vascular_surgery",
+      "subtopic": "peripheral_arterial_disease",
+      "vignette": "Mujer de 70 años con fibrilación auricular sin anticoagulación que presenta dolor súbito intenso en la pierna izquierda de 3 horas, con palidez, frialdad, ausencia de pulsos femoral distal y parestesias. Movilidad conservada.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Calambre que pasará solo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una isquemia aguda."
+        },
+        {
+          "key": "b",
+          "text": "Elevar la pierna para disminuir el dolor",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Empeora la perfusión."
+        },
+        {
+          "key": "c",
+          "text": "Analgésicos y ultrasonido programado en una semana",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es una urgencia vascular."
+        },
+        {
+          "key": "d",
+          "text": "Medias de compresión",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Están contraindicadas."
+        },
+        {
+          "key": "e",
+          "text": "Anticoagulación inmediata con heparina y revascularización urgente con embolectomía",
+          "correct": true,
+          "rationale": "Isquemia arterial aguda de origen embólico con extremidad viable amenazada."
+        },
+        {
+          "key": "f",
+          "text": "Diferir la cirugía hasta controlar la fibrilación auricular",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La extremidad puede perderse."
+        },
+        {
+          "key": "g",
+          "text": "Estudios extensos antes de anticoagular",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasan el tratamiento."
+        },
+        {
+          "key": "h",
+          "text": "Amputación primaria",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La extremidad aún es viable."
+        },
+        {
+          "key": "i",
+          "text": "Antiagregante oral solo y observación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No resuelve la oclusión aguda."
+        },
+        {
+          "key": "j",
+          "text": "Aplicar calor local",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumenta la demanda metabólica."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "La isquemia arterial aguda de una extremidad es una urgencia. Las causas más frecuentes son la embolia de origen cardiaco, sobre todo por fibrilación auricular, y la trombosis de una arteria con aterosclerosis previa. Se manifiesta con las seis P, dolor, palidez, ausencia de pulsos, parestesias, parálisis y poiquilotermia. La pérdida de la sensibilidad y la movilidad indica amenaza inmediata. El tratamiento es anticoagulación inmediata con heparina y revascularización urgente con embolectomía con catéter de Fogarty o trombólisis dirigida según la viabilidad. Tras la revascularización se vigila el síndrome compartimental.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la isquemia arterial aguda"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q25",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "vascular_surgery",
+      "subtopic": "aortic_aneurysm",
+      "vignette": "Hombre de 72 años, fumador e hipertenso, con hallazgo de una masa pulsátil en el mesogastrio en la exploración de rutina. Está asintomático. El ultrasonido muestra dilatación de la aorta infrarrenal de 4.5 cm.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hernia umbilical",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es pulsátil."
+        },
+        {
+          "key": "b",
+          "text": "Pseudoquiste pancreático",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es pulsátil ni vascular."
+        },
+        {
+          "key": "c",
+          "text": "Aorta tortuosa normal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Un diámetro mayor de 3 cm es aneurisma."
+        },
+        {
+          "key": "d",
+          "text": "Aneurisma roto",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Está asintomático y estable."
+        },
+        {
+          "key": "e",
+          "text": "Latido normal del corazón en el abdomen",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una dilatación anormal."
+        },
+        {
+          "key": "f",
+          "text": "Riñón en herradura",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es pulsátil."
+        },
+        {
+          "key": "g",
+          "text": "Adenopatías retroperitoneales",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No son pulsátiles."
+        },
+        {
+          "key": "h",
+          "text": "Tumor de páncreas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es una masa sólida no pulsátil."
+        },
+        {
+          "key": "i",
+          "text": "Disección aórtica aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da dolor intenso súbito."
+        },
+        {
+          "key": "j",
+          "text": "Aneurisma de aorta abdominal infrarrenal",
+          "correct": true,
+          "rationale": "Dilatación de la aorta mayor de 3 cm en un hombre mayor fumador."
+        }
+      ],
+      "canonical": [
+        "c",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "El aneurisma de aorta abdominal es una dilatación permanente de la aorta mayor de 3 cm o mayor de 50% del diámetro normal, generalmente infrarrenal. Sus factores de riesgo son tabaquismo, sexo masculino, edad mayor de 65 años, antecedente familiar, hipertensión y aterosclerosis. La mayoría son asintomáticos y se descubren de forma incidental. El ultrasonido es el estudio de elección para el diagnóstico y el seguimiento. Se recomienda tamizaje con ultrasonido único en hombres de 65 a 75 años que han fumado. El riesgo de rotura aumenta con el diámetro y el crecimiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del aneurisma de aorta abdominal"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q26",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "vascular_surgery",
+      "subtopic": "aortic_aneurysm",
+      "vignette": "Hombre de 70 años con aneurisma de aorta abdominal infrarrenal asintomático de 4.2 cm descubierto en un ultrasonido. Fuma.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hacer abdominales para fortalecer la aorta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No tiene efecto."
+        },
+        {
+          "key": "b",
+          "text": "Anticoagulación de por vida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "c",
+          "text": "Vigilancia con ultrasonido periódico, suspender el tabaco y controlar los factores de riesgo",
+          "correct": true,
+          "rationale": "Los aneurismas menores de 5.5 cm asintomáticos se vigilan."
+        },
+        {
+          "key": "d",
+          "text": "Betabloqueadores como tratamiento que evita la rotura",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No han demostrado reducir el crecimiento."
+        },
+        {
+          "key": "e",
+          "text": "No insistir en dejar de fumar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El tabaco acelera el crecimiento."
+        },
+        {
+          "key": "f",
+          "text": "Reparación endovascular profiláctica en todos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No está indicada en aneurismas pequeños."
+        },
+        {
+          "key": "g",
+          "text": "Angiografía invasiva anual",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "h",
+          "text": "Reparación quirúrgica inmediata",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se indica con diámetro de 5.5 cm o más, crecimiento rápido o síntomas."
+        },
+        {
+          "key": "i",
+          "text": "Ningún seguimiento porque está asintomático",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Requiere vigilancia."
+        },
+        {
+          "key": "j",
+          "text": "Reposo absoluto para evitar la rotura",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesario."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "El manejo del aneurisma de aorta abdominal depende del diámetro, la velocidad de crecimiento y los síntomas. Los aneurismas asintomáticos menores de 5.5 cm en hombres y de 5 cm en mujeres se vigilan con ultrasonido, cada 1 a 3 años según el tamaño. Se suspende el tabaco, que acelera el crecimiento, y se controlan la presión arterial y los lípidos con estatinas. La reparación, endovascular o abierta, se indica con diámetro de 5.5 cm o más, crecimiento mayor de 1 cm por año o síntomas como dolor abdominal o lumbar.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del aneurisma de aorta abdominal"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q27",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "vascular_surgery",
+      "subtopic": "aortic_aneurysm",
+      "vignette": "Hombre de 75 años con antecedente de aneurisma de aorta abdominal de 6 cm que rechazó la cirugía. Presenta dolor abdominal y lumbar súbito e intenso, síncope, presión de 70/40 mmHg y una masa pulsátil dolorosa.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Isquemia mesentérica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica la masa pulsátil."
+        },
+        {
+          "key": "b",
+          "text": "Pancreatitis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la masa pulsátil con choque."
+        },
+        {
+          "key": "c",
+          "text": "Infarto agudo de miocardio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la masa pulsátil."
+        },
+        {
+          "key": "d",
+          "text": "Úlcera perforada",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la masa pulsátil."
+        },
+        {
+          "key": "e",
+          "text": "Síncope vasovagal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la masa ni el dolor."
+        },
+        {
+          "key": "f",
+          "text": "Diverticulitis perforada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la masa pulsátil."
+        },
+        {
+          "key": "g",
+          "text": "Lumbalgia mecánica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el choque."
+        },
+        {
+          "key": "h",
+          "text": "Dolor de espalda por la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia mortal."
+        },
+        {
+          "key": "i",
+          "text": "Cólico renoureteral",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la hipotensión ni la masa pulsátil."
+        },
+        {
+          "key": "j",
+          "text": "Aneurisma de aorta abdominal roto",
+          "correct": true,
+          "rationale": "Tríada de dolor abdominal o lumbar, hipotensión y masa pulsátil."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "La rotura del aneurisma de aorta abdominal es una urgencia con mortalidad muy alta. Se presenta con la tríada de dolor abdominal o lumbar súbito, hipotensión y masa pulsátil, aunque solo una parte de los pacientes la presenta completa, y puede confundirse con cólico renal. La mayoría de las roturas son retroperitoneales, lo que permite que algunos pacientes lleguen vivos. En el paciente inestable con aneurisma conocido no se debe retrasar la cirugía por estudios. Se aplica hipotensión permisiva y se realiza reparación urgente, endovascular si la anatomía lo permite, o abierta.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del aneurisma de aorta abdominal"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q28",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "vascular_surgery",
+      "subtopic": "aortic_aneurysm",
+      "vignette": "Hombre de 67 años, exfumador de 30 paquetes al año, sin síntomas, que acude a consulta preventiva.",
+      "prompt": "¿Cuál es el tamizaje vascular recomendado?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Índice tobillo brazo como tamizaje de aneurisma",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Evalúa la enfermedad arterial periférica."
+        },
+        {
+          "key": "b",
+          "text": "Palpar el abdomen basta para descartarlo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La exploración es poco sensible."
+        },
+        {
+          "key": "c",
+          "text": "Perfil de lípidos como tamizaje de aneurisma",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No detecta aneurismas."
+        },
+        {
+          "key": "d",
+          "text": "Radiografía de abdomen anual",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es adecuada."
+        },
+        {
+          "key": "e",
+          "text": "Angiotomografía de cuerpo entero anual",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "f",
+          "text": "Ningún estudio porque está asintomático",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El aneurisma suele ser silencioso."
+        },
+        {
+          "key": "g",
+          "text": "Tamizaje solo en mujeres",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El riesgo es mayor en hombres."
+        },
+        {
+          "key": "h",
+          "text": "Resonancia magnética anual",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "i",
+          "text": "Ultrasonido abdominal único para buscar aneurisma de aorta abdominal",
+          "correct": true,
+          "rationale": "Se recomienda en hombres de 65 a 75 años que han fumado."
+        },
+        {
+          "key": "j",
+          "text": "Ultrasonido anual de por vida en todos los hombres",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se recomienda uno único si es normal."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "El aneurisma de aorta abdominal suele ser asintomático hasta su rotura, que tiene una mortalidad muy alta. Se recomienda un tamizaje con ultrasonido abdominal único en hombres de 65 a 75 años que han fumado alguna vez, ya que reduce la mortalidad por rotura. También puede considerarse en hombres con antecedente familiar. El ultrasonido es sencillo, no invasivo y tiene alta sensibilidad. Si es normal no se repite. La exploración física tiene baja sensibilidad, sobre todo en obesos, por lo que no sustituye al ultrasonido.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del aneurisma de aorta abdominal"
+      ]
+    },
+    {
+      "key": "cir-05-colorrectal-vascular-q29",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "vascular_surgery",
+      "subtopic": "aortic_aneurysm",
+      "vignette": "Hombre de 58 años con hipertensión mal controlada que presenta dolor torácico súbito, desgarrante, irradiado a la espalda entre las escápulas. Diferencia de presión arterial de 30 mmHg entre ambos brazos. La radiografía muestra ensanchamiento mediastinal.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Infarto agudo de miocardio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la diferencia de presión ni el dolor desgarrante."
+        },
+        {
+          "key": "b",
+          "text": "Dolor por estrés",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia vital."
+        },
+        {
+          "key": "c",
+          "text": "Aneurisma abdominal roto",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El dolor es torácico."
+        },
+        {
+          "key": "d",
+          "text": "Neumotórax espontáneo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica el mediastino ensanchado."
+        },
+        {
+          "key": "e",
+          "text": "Tromboembolia pulmonar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la diferencia de presión."
+        },
+        {
+          "key": "f",
+          "text": "Espasmo esofágico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la diferencia de presión."
+        },
+        {
+          "key": "g",
+          "text": "Herpes zóster preeruptivo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los hallazgos."
+        },
+        {
+          "key": "h",
+          "text": "Contractura muscular dorsal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la diferencia de presión."
+        },
+        {
+          "key": "i",
+          "text": "Pericarditis aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da dolor pleurítico que mejora al inclinarse."
+        },
+        {
+          "key": "j",
+          "text": "Disección aórtica aguda",
+          "correct": true,
+          "rationale": "Dolor desgarrante irradiado a la espalda con diferencia de presión entre brazos e hipertensión."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "La disección aórtica es la separación de las capas de la pared aórtica por un desgarro de la íntima. El principal factor de riesgo es la hipertensión, y otros son el síndrome de Marfan, la válvula aórtica bivalva y la cocaína. Se manifiesta con dolor torácico súbito y desgarrante irradiado a la espalda, diferencia de presión o pulsos entre extremidades, soplo de insuficiencia aórtica y déficit neurológico. La angiotomografía es el estudio de elección. La clasificación de Stanford divide en tipo A, que afecta la aorta ascendente y requiere cirugía urgente, y tipo B, que se maneja médicamente con control de presión y frecuencia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la disección aórtica"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,447 @@
+@ cir|orthopedics|fractures|2|diagnosis
+V: Mujer de 78 años con osteoporosis que cae de su propia altura y no puede levantarse. Tiene dolor en la ingle derecha y la extremidad inferior derecha está acortada y en rotación externa.
+P: ¿Cuál es el diagnóstico más probable?
++ Fractura de cadera, de cuello femoral o intertrocantérica || Caída de baja energía en una anciana con extremidad acortada y en rotación externa.
+- anchoring | Luxación posterior de cadera || Da extremidad en rotación interna y aducción, generalmente con alta energía.
+- availability_heuristic | Contusión de cadera sin fractura || No explica el acortamiento ni la rotación.
+- representativeness_heuristic | Fractura de pelvis aislada || No explica la rotación externa con acortamiento.
+- premature_closure | Hernia de disco lumbar || No explica la deformidad.
+- base_rate_fallacy | Bursitis trocantérica || No explica la incapacidad para levantarse ni la deformidad.
+- framing_effect | Artrosis de cadera agudizada || No explica el acortamiento agudo.
+- inattentional_blindness | Fractura de tibia || El dolor y la deformidad son en la cadera.
+- focusing_illusion | Esguince de tobillo || No explica los hallazgos.
+- belief_bias | Golpe que mejorará con reposo en casa || Es una fractura que requiere cirugía.
+E: La fractura de cadera es muy frecuente en adultos mayores con osteoporosis tras caídas de baja energía. Se clasifica en intracapsular, del cuello femoral, y extracapsular, intertrocantérica y subtrocantérica. Se manifiesta con dolor en la ingle, incapacidad para caminar y extremidad acortada y en rotación externa. La radiografía anteroposterior de pelvis y lateral de cadera confirma el diagnóstico. El tratamiento es quirúrgico en las primeras 24 a 48 horas, con fijación o artroplastia según el tipo, lo que reduce la mortalidad y las complicaciones. La mortalidad al año es de 20 a 30%.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la fractura de cadera en el adulto mayor
+
+@ cir|orthopedics|fractures|3|treatment_of_choice
+V: Mujer de 80 años, independiente, con fractura desplazada del cuello femoral derecho tras una caída. Buen estado cognitivo y sin contraindicaciones quirúrgicas.
+P: ¿Cuál es el tratamiento de elección?
++ Artroplastia de cadera, hemiartroplastia o total, en las primeras 48 horas || En fracturas desplazadas del cuello femoral en ancianos la fijación tiene alta tasa de falla.
+- anchoring | Reposo en cama y tracción por 8 semanas || Aumenta las complicaciones y la mortalidad.
+- availability_heuristic | Fijación con tornillos canulados en todas las desplazadas en ancianos || Tiene alto riesgo de necrosis avascular y falta de unión.
+- representativeness_heuristic | Yeso pelvipédico || No es adecuado en adultos.
+- premature_closure | Diferir la cirugía varias semanas para estabilizar || El retraso aumenta la mortalidad.
+- framing_effect | Analgésicos y movilización sin cirugía en todos || Se reserva para pacientes no operables.
+- complexity_bias | Amputación || Es absurda.
+- base_rate_fallacy | Clavo intramedular como en intertrocantéricas || Es para fracturas extracapsulares.
+- belief_bias | A su edad no vale la pena operarla || La cirugía mejora la supervivencia y la función.
+- omission_bias | No operar por miedo a la anestesia || El riesgo de no operar es mayor.
+E: El tratamiento de la fractura de cadera depende de su localización y desplazamiento. Las fracturas del cuello femoral no desplazadas pueden fijarse con tornillos. Las desplazadas en adultos mayores se tratan con artroplastia, hemiartroplastia en pacientes con baja demanda o artroplastia total en pacientes activos con buena cognición, porque la irrigación de la cabeza femoral se compromete y la fijación tiene alto riesgo de necrosis avascular y falta de unión. Las fracturas intertrocantéricas se fijan con clavo cefalomedular o placa con tornillo deslizante. La cirugía temprana permite la movilización rápida.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la fractura de cadera en el adulto mayor
+
+@ cir|orthopedics|fractures|3|complication_prognosis
+V: Hombre de 25 años con fractura cerrada de la diáfisis de la tibia por accidente de motocicleta, inmovilizado con férula. A las 8 horas presenta dolor intenso que no cede con analgésicos y aumenta con la extensión pasiva de los dedos, con pierna tensa y parestesias.
+P: ¿Cuál es la complicación que presenta?
++ Síndrome compartimental agudo || Dolor desproporcionado que aumenta con el estiramiento pasivo y compartimento tenso.
+- anchoring | Dolor esperado por la fractura || El dolor es desproporcionado y progresivo.
+- availability_heuristic | Trombosis venosa profunda || No explica el dolor con el estiramiento pasivo.
+- representativeness_heuristic | Lesión arterial con isquemia completa || Los pulsos suelen conservarse en el síndrome compartimental.
+- premature_closure | Embolia grasa || Da síntomas respiratorios y neurológicos.
+- base_rate_fallacy | Infección del sitio de fractura || Es temprana y la fractura es cerrada.
+- framing_effect | Lesión del nervio peroneo aislada || No explica la tensión del compartimento.
+- inattentional_blindness | Celulitis || No hay fiebre ni eritema.
+- focusing_illusion | Ansiedad por la lesión || Hay datos objetivos.
+- belief_bias | Es solo la férula apretada y se resuelve sin más acciones || Puede requerir fasciotomía.
+E: El síndrome compartimental agudo es el aumento de la presión dentro de un compartimento muscular que compromete la perfusión de los tejidos. Es más frecuente en las fracturas de tibia y antebrazo, lesiones por aplastamiento y reperfusión. El signo más temprano y sensible es el dolor desproporcionado que aumenta con el estiramiento pasivo de los músculos afectados. Después aparecen parestesias, tensión del compartimento, paresia y, tardíamente, ausencia de pulsos. Ante la sospecha se retiran vendajes y férulas, y si persiste se realiza fasciotomía urgente. La medición de la presión compartimental apoya el diagnóstico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome compartimental
+
+@ cir|orthopedics|fractures|3|initial_treatment
+V: Hombre de 30 años con fractura expuesta de la tibia con herida de 3 cm, contaminación moderada y sin lesión vascular, tras un accidente en la calle. Está estable.
+P: ¿Cuál es el tratamiento inicial?
++ Antibióticos intravenosos tempranos, profilaxis antitetánica, cubrir la herida con apósito estéril y lavado con desbridamiento quirúrgico con estabilización || Reducen el riesgo de infección.
+- anchoring | Cerrar la herida en urgencias y enviar a casa || Aumenta el riesgo de infección.
+- availability_heuristic | Esperar el cultivo para iniciar antibióticos || El retraso aumenta la infección.
+- representativeness_heuristic | Amputación primaria || No está indicada.
+- premature_closure | Yeso cerrado sobre la herida || Impide vigilar la herida.
+- framing_effect | Solo analgésicos y férula || Falta el tratamiento de la infección.
+- complexity_bias | Injerto óseo inmediato || No es la medida inicial.
+- base_rate_fallacy | Antibióticos orales ambulatorios || Se requieren intravenosos.
+- belief_bias | Lavar la herida con remedios caseros || Aumenta la contaminación.
+- omission_bias | Omitir la profilaxis antitetánica || Está indicada.
+E: Las fracturas expuestas tienen comunicación entre el hueso fracturado y el exterior, con alto riesgo de infección. Se clasifican con la escala de Gustilo y Anderson según el tamaño de la herida, la contaminación y el daño de partes blandas. El manejo incluye antibióticos intravenosos lo antes posible, idealmente en la primera hora, con cefalosporina de primera generación y cobertura de gramnegativos en lesiones extensas, profilaxis antitetánica, cubrir la herida con apósito estéril, inmovilizar y realizar lavado y desbridamiento quirúrgico con estabilización ósea con fijación externa o interna.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de fracturas expuestas
+
+@ cir|orthopedics|fractures|3|diagnosis
+V: Mujer de 65 años que cayó apoyando la mano extendida. Presenta dolor y deformidad de la muñeca en dorso de tenedor. La radiografía muestra fractura del radio distal con desplazamiento dorsal del fragmento distal.
+P: ¿Cuál es el diagnóstico más probable?
++ Fractura de Colles || Fractura del radio distal con desplazamiento dorsal por caída sobre la mano extendida.
+- anchoring | Fractura de Smith || Tiene desplazamiento volar por caída sobre la muñeca flexionada.
+- availability_heuristic | Fractura de escafoides || Da dolor en la tabaquera anatómica sin deformidad en tenedor.
+- representativeness_heuristic | Luxación del semilunar || Es una lesión carpiana.
+- premature_closure | Fractura de Barton || Es intraarticular con luxación del carpo.
+- base_rate_fallacy | Esguince de muñeca || No explica la deformidad ni la fractura.
+- framing_effect | Fractura de Monteggia || Afecta el cúbito con luxación de la cabeza radial.
+- inattentional_blindness | Fractura de Galeazzi || Afecta el radio con luxación radiocubital distal.
+- focusing_illusion | Fractura de olécranon || Afecta el codo.
+- belief_bias | Torcedura que sanará con pomada || Hay una fractura.
+E: La fractura de Colles es la fractura del radio distal con desplazamiento dorsal del fragmento distal, que produce la deformidad en dorso de tenedor. Es la fractura más frecuente en adultos mayores, sobre todo mujeres con osteoporosis, tras una caída sobre la mano extendida. La fractura de Smith tiene desplazamiento volar, en pala de jardinero. El tratamiento de las fracturas estables es la reducción cerrada e inmovilización con yeso, y las inestables o intraarticulares se fijan quirúrgicamente. Es una fractura centinela de osteoporosis, por lo que se debe evaluar la densidad ósea.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la fractura de radio distal
+
+@ cir|orthopedics|fractures|3|next_step
+V: Hombre de 22 años que cayó sobre la mano extendida. Tiene dolor en la tabaquera anatómica de la muñeca. La radiografía inicial de muñeca no muestra fracturas.
+P: ¿Cuál es el siguiente paso?
++ Inmovilizar con férula que incluya el pulgar y repetir la radiografía en 10 a 14 días o realizar resonancia magnética || La fractura de escafoides puede no verse al inicio.
+- anchoring | Egresar sin inmovilización porque la radiografía es normal || La fractura puede pasar inadvertida.
+- availability_heuristic | Cirugía inmediata en todos || No hay fractura confirmada.
+- representativeness_heuristic | Solo analgésicos y regresar al deporte || Puede complicarse con necrosis avascular.
+- premature_closure | Diagnosticar esguince y no dar seguimiento || La fractura de escafoides es frecuente con este cuadro.
+- framing_effect | Inyección de corticosteroide en la muñeca || No está indicada.
+- complexity_bias | Artroscopia diagnóstica inmediata || No es el primer paso.
+- base_rate_fallacy | Gammagrama óseo inmediato en todos || No es el estudio de elección.
+- belief_bias | Si no se ve en la radiografía no hay fractura || La fractura puede ser oculta.
+- omission_bias | No dar seguimiento para no molestar al paciente || El retraso diagnóstico causa complicaciones.
+E: El escafoides es el hueso del carpo que se fractura con mayor frecuencia, generalmente en jóvenes tras caída sobre la mano extendida. El dato clínico clave es el dolor en la tabaquera anatómica. Las radiografías iniciales pueden ser normales. Ante sospecha clínica con radiografía normal se inmoviliza con férula que incluya el pulgar y se repite la radiografía en 10 a 14 días, o se realiza resonancia magnética o tomografía. Por su irrigación retrógrada, las fracturas del polo proximal tienen alto riesgo de necrosis avascular y falta de consolidación.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la fractura de escafoides
+
+@ cir|orthopedics|fractures|4|complication_prognosis
+V: Hombre de 24 años con fractura de la diáfisis del fémur por accidente automovilístico, en espera de cirugía. A las 36 horas presenta disnea, hipoxemia, confusión y petequias en el tórax, axilas y conjuntivas.
+P: ¿Cuál es la complicación que presenta?
++ Síndrome de embolia grasa || Tríada de insuficiencia respiratoria, alteración neurológica y petequias tras fractura de huesos largos.
+- anchoring | Tromboembolia pulmonar || No explica las petequias.
+- availability_heuristic | Neumonía nosocomial || No explica las petequias ni el inicio.
+- representativeness_heuristic | Coagulación intravascular diseminada primaria || No explica la tríada típica.
+- premature_closure | Delirium por opioides || No explica la hipoxemia ni las petequias.
+- base_rate_fallacy | Contusión cerebral tardía || No explica las petequias.
+- framing_effect | Reacción transfusional || No hubo transfusión.
+- inattentional_blindness | Síndrome compartimental || No explica los hallazgos sistémicos.
+- focusing_illusion | Sepsis por fractura cerrada || No hay foco infeccioso.
+- belief_bias | Ansiedad por la espera de cirugía || Hay hipoxemia y petequias.
+E: El síndrome de embolia grasa ocurre de 24 a 72 horas después de fracturas de huesos largos o de pelvis, sobre todo del fémur, por paso de glóbulos de grasa de la médula ósea a la circulación. Se manifiesta con la tríada de insuficiencia respiratoria con hipoxemia, alteraciones neurológicas como confusión y petequias en tórax, axilas y conjuntivas. El diagnóstico es clínico con los criterios de Gurd. El tratamiento es de soporte con oxígeno y ventilación si es necesaria. La fijación temprana de las fracturas de huesos largos reduce el riesgo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las fracturas de fémur
+
+@ cir|orthopedics|fractures|3|complication_prognosis
+V: Niño de 6 años que cayó sobre el codo extendido. Tiene dolor, edema y deformidad del codo. La radiografía muestra fractura supracondílea del húmero con desplazamiento posterior. El pulso radial está ausente y la mano está pálida.
+P: ¿Cuál es la complicación asociada que debe atenderse con urgencia?
++ Lesión de la arteria braquial con compromiso vascular || La fractura supracondílea desplazada puede lesionar la arteria braquial.
+- anchoring | Lesión del nervio cubital aislada || No explica la ausencia de pulso.
+- availability_heuristic | Fractura del olécranon || No es la complicación descrita.
+- representativeness_heuristic | Contractura isquémica de Volkmann ya establecida || Es una secuela tardía.
+- premature_closure | Luxación de codo simple || La radiografía muestra fractura.
+- base_rate_fallacy | Pronación dolorosa || Es una subluxación de la cabeza radial sin fractura.
+- framing_effect | Edema sin importancia || La ausencia de pulso es una urgencia.
+- inattentional_blindness | Fractura de clavícula || No corresponde.
+- focusing_illusion | Esguince de muñeca || No explica la ausencia de pulso.
+- belief_bias | El pulso regresará solo con el tiempo || Requiere reducción urgente.
+E: La fractura supracondílea del húmero es la fractura del codo más frecuente en niños, generalmente por caída con el codo en extensión. Las fracturas desplazadas pueden lesionar la arteria braquial y los nervios mediano, radial y cubital, siendo el nervio interóseo anterior el más afectado. La mano pálida y sin pulso es una urgencia que requiere reducción cerrada y fijación percutánea inmediatas. Si no se trata, la isquemia puede causar síndrome compartimental y contractura isquémica de Volkmann. Siempre se explora el estado neurovascular antes y después de la reducción.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la fractura supracondílea en niños
+
+@ cir|orthopedics|pediatric_orthopedics|2|diagnosis
+V: Recién nacida de término, primogénita, nacida en presentación pélvica. En la exploración de la cadera izquierda, al abducirla con el muslo flexionado se percibe un chasquido de reducción. Hay asimetría de pliegues.
+P: ¿Cuál es el diagnóstico más probable?
++ Displasia del desarrollo de la cadera || Maniobra de Ortolani positiva en una recién nacida con factores de riesgo.
+- anchoring | Cadera normal con chasquido ligamentario || El chasquido de reducción indica inestabilidad.
+- availability_heuristic | Artritis séptica de cadera || Daría fiebre e irritabilidad.
+- representativeness_heuristic | Enfermedad de Legg Calvé Perthes || Ocurre en niños de 4 a 8 años.
+- premature_closure | Fractura de fémur por el parto || No explica la maniobra positiva.
+- base_rate_fallacy | Epifisiólisis femoral || Ocurre en adolescentes.
+- framing_effect | Parálisis braquial obstétrica || Afecta el brazo.
+- inattentional_blindness | Pie equino varo || Afecta el pie.
+- focusing_illusion | Sinovitis transitoria || Ocurre en preescolares tras infección viral.
+- belief_bias | Los bebés tienen las caderas flojas de forma normal || La inestabilidad requiere tratamiento.
+E: La displasia del desarrollo de la cadera es un espectro que va de la inestabilidad a la luxación de la cadera. Los factores de riesgo son sexo femenino, primogénito, presentación pélvica, antecedente familiar y oligohidramnios. El tamizaje en el recién nacido incluye las maniobras de Ortolani, que reduce una cadera luxada, y de Barlow, que luxa una cadera inestable. Después de los 3 meses los signos son limitación de la abducción, asimetría de pliegues y acortamiento. El ultrasonido es el estudio de elección antes de los 4 a 6 meses. El tratamiento temprano es el arnés de Pavlik.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la displasia del desarrollo de la cadera
+
+@ cir|orthopedics|pediatric_orthopedics|3|diagnosis
+V: Niño de 6 años con cojera indolora de 2 meses y dolor leve intermitente en la rodilla derecha. Limitación de la abducción y la rotación interna de la cadera derecha. Sin fiebre. La radiografía muestra aplanamiento y fragmentación de la cabeza femoral.
+P: ¿Cuál es el diagnóstico más probable?
++ Enfermedad de Legg Calvé Perthes || Necrosis avascular idiopática de la cabeza femoral en un niño de 4 a 8 años.
+- anchoring | Sinovitis transitoria de cadera || Dura pocos días sin cambios radiológicos.
+- availability_heuristic | Artritis séptica || Da fiebre y dolor intenso agudo.
+- representativeness_heuristic | Epifisiólisis femoral proximal || Ocurre en adolescentes obesos.
+- premature_closure | Lesión de rodilla || El dolor de rodilla es referido de la cadera.
+- base_rate_fallacy | Leucemia con infiltración ósea || No explica la fragmentación de la cabeza femoral.
+- framing_effect | Displasia del desarrollo de la cadera tardía || La imagen muestra necrosis de la cabeza.
+- inattentional_blindness | Artritis idiopática juvenil || Afecta varias articulaciones con rigidez matutina.
+- focusing_illusion | Osteomielitis || Daría fiebre.
+- belief_bias | Dolores de crecimiento || Hay alteración radiológica.
+E: La enfermedad de Legg Calvé Perthes es la necrosis avascular idiopática de la cabeza femoral en niños, más frecuente en varones de 4 a 8 años. Se manifiesta con cojera indolora o con dolor leve que puede referirse a la rodilla, y limitación de la abducción y la rotación interna. La radiografía muestra esclerosis, fragmentación y aplanamiento de la cabeza femoral. El pronóstico es mejor en niños pequeños. El tratamiento busca mantener la cabeza femoral contenida en el acetábulo con fisioterapia, limitación de actividades y, en casos seleccionados, osteotomía.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad de Legg Calvé Perthes
+
+@ cir|orthopedics|pediatric_orthopedics|3|diagnosis
+V: Adolescente de 13 años con obesidad que presenta dolor en la rodilla izquierda y cojera de 3 semanas sin traumatismo. Al flexionar la cadera, esta rota hacia afuera. La radiografía de cadera muestra desplazamiento posterior e inferior de la epífisis femoral.
+P: ¿Cuál es el diagnóstico más probable?
++ Epifisiólisis femoral proximal || Adolescente obeso con dolor referido a la rodilla y rotación externa obligada al flexionar la cadera.
+- anchoring | Lesión de menisco || El dolor de rodilla es referido de la cadera.
+- availability_heuristic | Enfermedad de Osgood Schlatter || Da dolor en la tuberosidad tibial.
+- representativeness_heuristic | Enfermedad de Legg Calvé Perthes || Ocurre en niños más pequeños.
+- premature_closure | Sinovitis transitoria || No explica el desplazamiento epifisario.
+- base_rate_fallacy | Tumor óseo || No explica el desplazamiento de la epífisis.
+- framing_effect | Artritis séptica || Daría fiebre.
+- inattentional_blindness | Condromalacia rotuliana || No explica los hallazgos de cadera.
+- focusing_illusion | Fractura de fémur por estrés || No explica el desplazamiento epifisario.
+- belief_bias | Dolor por crecimiento rápido || Hay una lesión estructural.
+E: La epifisiólisis femoral proximal es el desplazamiento de la cabeza femoral sobre el cuello a través de la fisis. Es más frecuente en adolescentes varones con obesidad durante el estirón puberal. Se manifiesta con dolor en la cadera, el muslo o la rodilla y cojera. Un signo característico es el de Drehmann, la rotación externa obligada al flexionar la cadera. Puede ser bilateral. La radiografía anteroposterior y en posición de rana confirma el diagnóstico. Es una urgencia ortopédica que se trata con fijación in situ con tornillo para evitar mayor desplazamiento y necrosis avascular.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la epifisiólisis femoral proximal
+
+@ cir|orthopedics|pediatric_orthopedics|3|diagnosis
+V: Niña de 5 años con dolor intenso en la cadera derecha, fiebre de 39.2 °C, rechazo a caminar y cadera en flexión, abducción y rotación externa. Leucocitos de 17 000 y velocidad de sedimentación de 60 mm/h. El ultrasonido muestra derrame articular.
+P: ¿Cuál es el diagnóstico más probable?
++ Artritis séptica de cadera || Fiebre, rechazo a la carga, leucocitosis y velocidad de sedimentación elevada con derrame.
+- anchoring | Sinovitis transitoria || Suele ser afebril o con febrícula y reactantes normales.
+- availability_heuristic | Enfermedad de Legg Calvé Perthes || No da fiebre ni reactantes elevados.
+- representativeness_heuristic | Artritis idiopática juvenil || Es crónica.
+- premature_closure | Fractura oculta || No explica la fiebre.
+- base_rate_fallacy | Leucemia aguda || Debe considerarse, pero el cuadro sugiere infección articular.
+- framing_effect | Celulitis del muslo || No explica el derrame articular.
+- inattentional_blindness | Púrpura de Henoch Schönlein || Daría púrpura y dolor abdominal.
+- focusing_illusion | Epifisiólisis femoral || Ocurre en adolescentes.
+- belief_bias | Dolor por una caída que no recuerda || Hay datos de infección.
+E: La artritis séptica de cadera es una urgencia en niños por el riesgo de destrucción articular y necrosis avascular. Staphylococcus aureus es el agente más frecuente, y Kingella kingae en menores de 4 años. Los criterios de Kocher, fiebre mayor de 38.5 °C, incapacidad para la carga, velocidad de sedimentación mayor de 40 mm/h y leucocitos mayores de 12 000, junto con la proteína C reactiva, ayudan a distinguirla de la sinovitis transitoria. Se confirma con artrocentesis y cultivo. El tratamiento es el drenaje quirúrgico urgente con lavado articular y antibióticos intravenosos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la artritis séptica en niños
+
+@ cir|orthopedics|pediatric_orthopedics|2|diagnosis
+V: Niña de 3 años que llora y no mueve el brazo derecho después de que su madre la jaló de la mano para evitar que cayera. Mantiene el codo ligeramente flexionado y el antebrazo en pronación. No hay deformidad ni edema.
+P: ¿Cuál es el diagnóstico más probable?
++ Pronación dolorosa o subluxación de la cabeza radial || Tracción del brazo en un preescolar con antebrazo en pronación sin deformidad.
+- anchoring | Fractura supracondílea || Daría edema y deformidad.
+- availability_heuristic | Luxación de hombro || Es rara a esta edad.
+- representativeness_heuristic | Fractura de clavícula || Daría deformidad y dolor en la clavícula.
+- premature_closure | Lesión del plexo braquial || No hay antecedente obstétrico ni de este mecanismo.
+- base_rate_fallacy | Artritis séptica del codo || Daría fiebre e inflamación.
+- framing_effect | Maltrato infantil con fractura oculta || El mecanismo y la clínica son típicos de pronación dolorosa.
+- inattentional_blindness | Fractura de muñeca || No explica el mecanismo.
+- focusing_illusion | Esguince de hombro || No explica la posición del antebrazo.
+- belief_bias | Berrinche para que la carguen || Hay una lesión real.
+E: La pronación dolorosa es la subluxación de la cabeza del radio por deslizamiento del ligamento anular, frecuente en niños de 1 a 5 años tras una tracción longitudinal del brazo con el codo extendido. El niño deja de usar el brazo, que mantiene en pronación y ligera flexión, sin deformidad ni edema. El diagnóstico es clínico y no requiere radiografía si el mecanismo es típico. El tratamiento es la reducción con maniobra de hiperpronación o de supinación con flexión, que suele producir un chasquido y alivio inmediato. Se orienta a los padres para evitar jalar a los niños de las manos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de lesiones de codo en niños
+
+@ cir|orthopedics|pediatric_orthopedics|2|treatment_of_choice
+V: Recién nacido con el pie derecho en equino, varo del retropié, aducción y cavo, que no se corrige de forma pasiva. El resto de la exploración es normal.
+P: ¿Cuál es el tratamiento de elección?
++ Método de Ponseti con manipulaciones y yesos seriados, generalmente con tenotomía del tendón de Aquiles || Corrige la mayoría de los pies equinovaros sin cirugía mayor.
+- anchoring | Cirugía de liberación extensa al nacer || El método de Ponseti es la primera línea.
+- availability_heuristic | Esperar a que camine para tratar || Se pierde la plasticidad del recién nacido.
+- representativeness_heuristic | Zapatos ortopédicos como único tratamiento || No corrigen el pie equinovaro.
+- premature_closure | Fisioterapia sin yesos || No es suficiente.
+- framing_effect | Amputación || Es absurda.
+- complexity_bias | Osteotomías múltiples al nacer || No son necesarias.
+- base_rate_fallacy | Vendaje con cinta adhesiva en casa || No es el tratamiento estándar.
+- belief_bias | El pie se endereza solo con el tiempo || El pie equinovaro estructural no se corrige solo.
+- omission_bias | No usar la férula de abducción después de corregir || Aumenta la recidiva.
+E: El pie equinovaro aducto congénito es una deformidad estructural con equino del tobillo, varo del retropié, aducción del antepié y cavo, que no se corrige de forma pasiva, a diferencia de las deformidades posturales. El tratamiento de elección es el método de Ponseti, que inicia en las primeras semanas con manipulaciones y yesos seriados semanales, seguido en la mayoría de una tenotomía percutánea del tendón de Aquiles y del uso de una férula de abducción hasta los 4 años para prevenir recidivas. Tiene éxito en más de 90%. Se asocia a displasia de cadera.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del pie equinovaro congénito
+
+@ cir|orthopedics|pediatric_orthopedics|3|diagnosis
+V: Niña de 12 años en revisión escolar. Al inclinarse hacia adelante con los brazos colgando se observa una giba costal derecha. Los hombros están desnivelados. Sin dolor ni alteraciones neurológicas.
+P: ¿Cuál es el diagnóstico más probable?
++ Escoliosis idiopática del adolescente || Giba costal en la prueba de Adams en una niña prepúber sin otras alteraciones.
+- anchoring | Escoliosis postural por mala postura || La giba en la flexión indica rotación vertebral estructural.
+- availability_heuristic | Cifosis de Scheuermann || Da cifosis torácica rígida.
+- representativeness_heuristic | Tumor medular || Daría dolor y alteraciones neurológicas.
+- premature_closure | Espondilolistesis || Da dolor lumbar.
+- base_rate_fallacy | Escoliosis congénita por malformación vertebral || Suele detectarse antes.
+- framing_effect | Diferencia de longitud de piernas || No explica la giba en flexión.
+- inattentional_blindness | Escoliosis neuromuscular || No hay enfermedad neuromuscular.
+- focusing_illusion | Contractura muscular por mochila pesada || No causa giba estructural.
+- belief_bias | Por cargar la mochila de un solo lado || No es la causa.
+E: La escoliosis idiopática del adolescente es una curvatura lateral de la columna con rotación vertebral, más frecuente y progresiva en niñas durante el estirón puberal. La prueba de Adams, inclinarse hacia adelante, revela la giba costal por la rotación vertebral. El diagnóstico se confirma con radiografía de columna completa y medición del ángulo de Cobb, que debe ser mayor de 10 grados. El tratamiento depende del ángulo y la madurez esquelética, con vigilancia en curvas menores de 20 a 25 grados, corsé en curvas de 25 a 40 grados en pacientes en crecimiento y cirugía en curvas mayores de 45 a 50 grados.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la escoliosis idiopática del adolescente
+
+@ cir|otolaryngology|otitis|2|diagnosis
+V: Hombre de 25 años, nadador, con otalgia intensa izquierda de 2 días que aumenta al traccionar el pabellón auricular y al presionar el trago. El conducto auditivo está edematoso, eritematoso y con secreción. La membrana timpánica, cuando se logra ver, es normal.
+P: ¿Cuál es el diagnóstico más probable?
++ Otitis externa aguda || Otalgia que aumenta al mover el pabellón y el trago con conducto inflamado en un nadador.
+- anchoring | Otitis media aguda || La membrana timpánica es normal.
+- availability_heuristic | Mastoiditis || Daría inflamación retroauricular.
+- representativeness_heuristic | Tapón de cerumen || No da inflamación ni secreción.
+- premature_closure | Otitis externa maligna || Ocurre en diabéticos ancianos con afección ósea.
+- base_rate_fallacy | Colesteatoma || Da otorrea crónica fétida.
+- framing_effect | Herpes zóster ótico || Da vesículas con parálisis facial.
+- inattentional_blindness | Disfunción de la articulación temporomandibular || No explica el conducto inflamado.
+- focusing_illusion | Cuerpo extraño || No se describe.
+- belief_bias | Agua atrapada que saldrá sola || Hay una infección.
+E: La otitis externa aguda es la infección del conducto auditivo externo, frecuente en nadadores y con el uso de hisopos que dañan la piel del conducto. Los agentes más comunes son Pseudomonas aeruginosa y Staphylococcus aureus. Se manifiesta con otalgia intensa que aumenta al traccionar el pabellón o presionar el trago, prurito, otorrea y edema del conducto. El tratamiento es con gotas óticas de antibiótico, como ciprofloxacino con o sin corticosteroide, limpieza del conducto y analgesia. Se colocan mechas si el conducto está muy edematoso. Los antibióticos sistémicos se reservan para extensión fuera del conducto.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la otitis externa
+
+@ cir|otolaryngology|otitis|3|diagnosis
+V: Hombre de 72 años con diabetes descontrolada que presenta otalgia intensa izquierda de 4 semanas, otorrea purulenta persistente pese a gotas, tejido de granulación en el piso del conducto y parálisis facial izquierda reciente.
+P: ¿Cuál es el diagnóstico más probable?
++ Otitis externa maligna o necrosante || Diabético anciano con otalgia persistente, granulación y afección de pares craneales.
+- anchoring | Otitis externa simple || No explica la parálisis facial ni la duración.
+- availability_heuristic | Parálisis de Bell aislada || No explica la otorrea ni la granulación.
+- representativeness_heuristic | Colesteatoma || Es menos probable con este contexto.
+- premature_closure | Otitis media crónica sin complicación || No explica la granulación en el conducto con parálisis.
+- base_rate_fallacy | Cáncer de conducto auditivo || Debe descartarse, pero el cuadro es típico de otitis maligna.
+- framing_effect | Herpes zóster ótico || Daría vesículas.
+- inattentional_blindness | Mastoiditis aguda simple || No explica la granulación del conducto en el diabético.
+- focusing_illusion | Absceso dental || No explica los hallazgos.
+- belief_bias | Infección leve que solo necesita más gotas || Es una infección grave.
+E: La otitis externa maligna es una osteomielitis de la base del cráneo que inicia en el conducto auditivo externo, generalmente por Pseudomonas aeruginosa. Ocurre en adultos mayores con diabetes o inmunosupresión. Se manifiesta con otalgia intensa persistente, otorrea, tejido de granulación en el piso del conducto en la unión osteocartilaginosa y, en casos avanzados, parálisis de pares craneales, sobre todo del facial. La tomografía y la resonancia muestran la afección ósea, y la velocidad de sedimentación ayuda en el seguimiento. El tratamiento es antibiótico antipseudomonas prolongado de 6 a 8 semanas y control de la glucosa.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la otitis externa
+
+@ cir|otolaryngology|otitis|3|diagnosis
+V: Hombre de 40 años con otorrea fétida crónica izquierda de varios años e hipoacusia progresiva. En la otoscopia se observa una perforación en la porción superior de la membrana timpánica con material blanquecino nacarado.
+P: ¿Cuál es el diagnóstico más probable?
++ Colesteatoma || Otorrea fétida crónica con perforación atical y material escamoso blanquecino.
+- anchoring | Otitis externa crónica || No explica la perforación atical con material nacarado.
+- availability_heuristic | Otitis media aguda || La evolución es crónica.
+- representativeness_heuristic | Otitis media serosa || No da otorrea fétida.
+- premature_closure | Tapón de cerumen || No explica la perforación.
+- base_rate_fallacy | Cáncer de oído medio || Es raro.
+- framing_effect | Otitis externa micótica || Da prurito con hifas en el conducto.
+- inattentional_blindness | Timpanoesclerosis || Son placas blancas en un tímpano íntegro.
+- focusing_illusion | Cuerpo extraño antiguo || No explica la perforación atical.
+- belief_bias | Oído sucio por falta de limpieza || Hay una lesión destructiva.
+E: El colesteatoma es la acumulación de epitelio escamoso queratinizado en el oído medio, con crecimiento progresivo y destrucción de estructuras por enzimas osteolíticas. Puede ser congénito o adquirido, generalmente por retracción o perforación de la porción flácida o atical de la membrana timpánica. Se manifiesta con otorrea fétida crónica e hipoacusia de conducción. Las complicaciones incluyen erosión de los huesecillos, parálisis facial, fístula laberíntica con vértigo, mastoiditis y complicaciones intracraneales como meningitis y absceso. La tomografía evalúa la extensión. El tratamiento es quirúrgico con mastoidectomía.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del colesteatoma
+
+@ cir|otolaryngology|otitis|3|data_interpretation
+V: Mujer de 35 años con hipoacusia izquierda de 3 meses. Prueba de Weber lateralizada al oído izquierdo y prueba de Rinne negativa en el oído izquierdo, con conducción ósea mayor que la aérea.
+P: ¿Qué indican las pruebas con diapasón?
++ Hipoacusia conductiva del oído izquierdo || Weber lateraliza al oído enfermo y Rinne es negativo en él.
+- anchoring | Hipoacusia neurosensorial izquierda || El Weber lateralizaría al oído sano.
+- availability_heuristic | Audición normal || Las pruebas son anormales.
+- representativeness_heuristic | Hipoacusia neurosensorial derecha || No corresponde a los hallazgos.
+- premature_closure | Hipoacusia mixta bilateral confirmada || Los hallazgos indican conducción izquierda.
+- base_rate_fallacy | Neurinoma del acústico confirmado || Daría hipoacusia neurosensorial.
+- framing_effect | Presbiacusia || Es neurosensorial bilateral.
+- inattentional_blindness | Enfermedad de Ménière || Da hipoacusia neurosensorial fluctuante.
+- focusing_illusion | Simulación || Las pruebas son consistentes.
+- belief_bias | Las pruebas con diapasón no son útiles || Distinguen el tipo de hipoacusia.
+E: Las pruebas con diapasón de 512 Hz distinguen la hipoacusia conductiva de la neurosensorial. En la prueba de Weber se coloca el diapasón en la línea media del cráneo, y el sonido se lateraliza al oído con hipoacusia conductiva o al oído sano en la neurosensorial. En la prueba de Rinne se compara la conducción aérea con la ósea, y normalmente la aérea es mayor, lo que se llama Rinne positivo. En la hipoacusia conductiva la ósea es mayor, Rinne negativo. Las causas conductivas incluyen cerumen, otitis media, perforación y otosclerosis. La audiometría confirma el diagnóstico.
+R: Guía de Práctica Clínica de diagnóstico de la hipoacusia en el adulto
+
+@ cir|otolaryngology|otitis|3|diagnosis
+V: Mujer de 30 años con hipoacusia progresiva bilateral de conducción que empeoró en su embarazo. Su madre tuvo el mismo problema. La membrana timpánica es normal y la audiometría muestra la muesca de Carhart.
+P: ¿Cuál es el diagnóstico más probable?
++ Otosclerosis || Hipoacusia conductiva progresiva con tímpano normal, antecedente familiar y empeoramiento en el embarazo.
+- anchoring | Otitis media serosa || El tímpano se vería con líquido.
+- availability_heuristic | Presbiacusia || Es neurosensorial en ancianos.
+- representativeness_heuristic | Colesteatoma || Daría otorrea y perforación.
+- premature_closure | Tapón de cerumen bilateral || Se vería en la otoscopia.
+- base_rate_fallacy | Neurinoma del acústico bilateral || Es neurosensorial.
+- framing_effect | Enfermedad de Ménière || Da vértigo y tinnitus con hipoacusia neurosensorial.
+- inattentional_blindness | Perforación timpánica || El tímpano es normal.
+- focusing_illusion | Hipoacusia por ruido || Es neurosensorial.
+- belief_bias | Pérdida auditiva normal tras el embarazo que se recupera sola || Es progresiva.
+E: La otosclerosis es una enfermedad del hueso de la cápsula ótica que fija el estribo en la ventana oval, causando hipoacusia de conducción progresiva, generalmente bilateral, con membrana timpánica normal. Es más frecuente en mujeres jóvenes, tiene herencia autosómica dominante y empeora con el embarazo. La audiometría muestra hipoacusia conductiva con la muesca de Carhart a 2 000 Hz, y la timpanometría es normal o con baja complianza. El tratamiento es la estapedectomía o estapedotomía, o el uso de auxiliares auditivos.
+R: Guía de Práctica Clínica de diagnóstico de la hipoacusia en el adulto
+
+@ cir|otolaryngology|sinusitis|2|diagnosis
+V: Mujer de 32 años con resfriado de 5 días que mejoró y luego empeoró, con congestión nasal, rinorrea purulenta, dolor facial maxilar que aumenta al inclinarse y fiebre de 38.5 °C. Lleva 11 días con síntomas.
+P: ¿Cuál es el diagnóstico más probable?
++ Rinosinusitis aguda bacteriana || Doble empeoramiento con síntomas de más de 10 días, rinorrea purulenta, dolor facial y fiebre.
+- anchoring | Resfriado común viral || No explica el doble empeoramiento ni la duración.
+- availability_heuristic | Rinitis alérgica || No da fiebre ni rinorrea purulenta.
+- representativeness_heuristic | Rinosinusitis crónica || Requiere más de 12 semanas.
+- premature_closure | Migraña || No explica la rinorrea purulenta.
+- base_rate_fallacy | Mucormicosis rinocerebral || Ocurre en diabéticos descompensados con necrosis.
+- framing_effect | Absceso dental maxilar aislado || No explica la rinorrea purulenta.
+- inattentional_blindness | Cuerpo extraño nasal || Es más común en niños.
+- focusing_illusion | Neuralgia del trigémino || No explica la fiebre.
+- belief_bias | Resfriado que se complicó por el frío || La causa es bacteriana.
+E: La rinosinusitis aguda suele ser viral y se resuelve en 7 a 10 días. Se sospecha origen bacteriano cuando los síntomas persisten más de 10 días sin mejoría, cuando son graves desde el inicio con fiebre mayor de 39 °C y rinorrea purulenta por 3 a 4 días, o cuando hay un doble empeoramiento tras mejoría inicial. Los agentes son Streptococcus pneumoniae, Haemophilus influenzae y Moraxella catarrhalis. El diagnóstico es clínico y no requiere imagen salvo complicaciones. El tratamiento incluye lavados nasales con solución salina, corticosteroides nasales y analgésicos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la rinosinusitis aguda
+
+@ cir|otolaryngology|sinusitis|2|treatment_of_choice
+V: Hombre de 40 años con rinosinusitis aguda bacteriana de 12 días con rinorrea purulenta, dolor facial y fiebre. No es alérgico a penicilina.
+P: ¿Cuál es el antibiótico de elección?
++ Amoxicilina, con o sin ácido clavulánico, por 5 a 7 días || Es la primera línea para la rinosinusitis bacteriana.
+- anchoring | Azitromicina como primera elección || Tiene alta resistencia de neumococo.
+- availability_heuristic | Trimetoprim con sulfametoxazol || Tiene alta resistencia.
+- representativeness_heuristic | Ciprofloxacino || No cubre bien al neumococo.
+- premature_closure | Antihistamínicos como tratamiento principal || No tratan la infección bacteriana.
+- framing_effect | Cirugía endoscópica de senos inmediata || No es el tratamiento inicial.
+- complexity_bias | Antibiótico intravenoso hospitalario || No es necesario sin complicaciones.
+- base_rate_fallacy | Antifúngicos || No es una infección por hongos.
+- belief_bias | Vaporizaciones con eucalipto como tratamiento definitivo || No curan la infección bacteriana.
+- omission_bias | No dar analgesia || Ayuda a los síntomas.
+E: Cuando se decide tratar con antibiótico la rinosinusitis aguda bacteriana, la primera línea es amoxicilina, o amoxicilina con ácido clavulánico en pacientes con factores de riesgo de resistencia, como uso reciente de antibióticos, edad mayor de 65 años, inmunosupresión o enfermedad moderada a grave. La duración en adultos es de 5 a 7 días. En alergia a penicilina se usan doxiciclina o quinolonas respiratorias como levofloxacino. Los macrólidos y el trimetoprim con sulfametoxazol no se recomiendan por la resistencia. Se agregan lavados salinos y corticosteroides nasales.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la rinosinusitis aguda
+
+@ cir|otolaryngology|sinusitis|4|complication_prognosis
+V: Niño de 8 años con rinosinusitis aguda que presenta edema palpebral importante, proptosis, dolor con los movimientos oculares, oftalmoplejía y disminución de la agudeza visual del ojo derecho. Fiebre de 39 °C.
+P: ¿Cuál es la complicación que presenta?
++ Celulitis orbitaria postseptal, posiblemente con absceso subperióstico || Proptosis, oftalmoplejía y disminución visual indican afección postseptal.
+- anchoring | Celulitis preseptal || No da proptosis, oftalmoplejía ni pérdida visual.
+- availability_heuristic | Conjuntivitis bacteriana || No explica la proptosis.
+- representativeness_heuristic | Orzuelo || Es una lesión localizada del párpado.
+- premature_closure | Dacriocistitis || Da inflamación en el canto interno.
+- base_rate_fallacy | Trombosis del seno cavernoso ya establecida || Puede ser una complicación posterior, con afección bilateral.
+- framing_effect | Reacción alérgica || No explica la fiebre ni la oftalmoplejía.
+- inattentional_blindness | Tumor orbitario || No explica el cuadro agudo febril.
+- focusing_illusion | Picadura de insecto || No explica la oftalmoplejía.
+- belief_bias | Ojo hinchado por llorar || Es una urgencia.
+E: Las complicaciones orbitarias de la rinosinusitis, sobre todo etmoidal, son más frecuentes en niños. La clasificación de Chandler incluye celulitis preseptal, celulitis orbitaria, absceso subperióstico, absceso orbitario y trombosis del seno cavernoso. La celulitis preseptal afecta solo el párpado, mientras que la postseptal produce proptosis, dolor con los movimientos oculares, oftalmoplejía y disminución de la agudeza visual. Se realiza tomografía con contraste de órbitas y senos. El tratamiento es hospitalización con antibióticos intravenosos, y drenaje quirúrgico si hay absceso o afección visual.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la rinosinusitis aguda
+
+@ cir|otolaryngology|sinusitis|3|diagnosis
+V: Hombre de 55 años con diabetes y cetoacidosis que presenta dolor facial, congestión nasal, fiebre y una costra negra en el cornete medio y el paladar. Hay edema periorbitario y alteración del estado de alerta.
+P: ¿Cuál es el diagnóstico más probable?
++ Mucormicosis rinocerebral || Diabético en cetoacidosis con necrosis negra nasal y extensión orbitaria y cerebral.
+- anchoring | Rinosinusitis bacteriana aguda || No explica la escara negra necrótica.
+- availability_heuristic | Celulitis facial simple || No explica la necrosis nasal.
+- representativeness_heuristic | Aspergilosis alérgica || No da necrosis aguda.
+- premature_closure | Cáncer nasosinusal || No explica el cuadro agudo en cetoacidosis.
+- base_rate_fallacy | Granulomatosis con poliangeítis || Es crónica.
+- framing_effect | Herpes zóster facial || Da vesículas en dermatoma.
+- inattentional_blindness | Epistaxis con coágulo || La costra es necrótica.
+- focusing_illusion | Absceso dental || No explica la necrosis nasal.
+- belief_bias | Costra por resequedad nasal || Es necrosis por hongos.
+E: La mucormicosis rinocerebral es una infección fúngica invasiva por hongos del orden Mucorales, como Rhizopus. Ocurre en diabéticos con cetoacidosis, inmunosuprimidos, neutropénicos y pacientes con sobrecarga de hierro. Los hongos invaden los vasos y producen trombosis y necrosis. Se manifiesta con dolor facial, congestión, fiebre, escara negra en la nariz o el paladar y extensión a la órbita y el cerebro. El tratamiento es urgente con anfotericina B liposomal, desbridamiento quirúrgico extenso y corrección de la cetoacidosis. La mortalidad es alta.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de infecciones fúngicas invasivas
+
+@ cir|otolaryngology|sinusitis|3|initial_treatment
+V: Mujer de 38 años con congestión nasal, rinorrea y disminución del olfato de 6 meses. La endoscopia nasal muestra pólipos bilaterales. Tiene asma.
+P: ¿Cuál es el tratamiento inicial de elección?
++ Corticosteroides nasales tópicos con lavados salinos || Son la primera línea en la rinosinusitis crónica con pólipos.
+- anchoring | Cirugía endoscópica de senos inmediata en todos || Se reserva para falla del tratamiento médico.
+- availability_heuristic | Antibióticos prolongados como único tratamiento || No son la primera línea.
+- representativeness_heuristic | Descongestionantes nasales tópicos de uso continuo || Causan rinitis medicamentosa.
+- premature_closure | Antihistamínicos como único tratamiento || No reducen los pólipos.
+- framing_effect | Ácido acetilsalicílico para tratar los pólipos sin evaluación || Puede desencadenar crisis en enfermedad respiratoria exacerbada por aspirina.
+- complexity_bias | Biológicos como primera línea en todos || Se reservan para casos graves refractarios.
+- base_rate_fallacy | Radioterapia || No está indicada.
+- belief_bias | Inhalar vapor caliente cura los pólipos || No es eficaz.
+- omission_bias | No tratar porque los pólipos son benignos || Afectan la calidad de vida.
+E: La rinosinusitis crónica se define por síntomas de más de 12 semanas, como congestión, rinorrea, dolor facial y disminución del olfato, con evidencia endoscópica o por tomografía. Puede ser con o sin pólipos nasales. Se asocia a asma y, en algunos casos, a la enfermedad respiratoria exacerbada por aspirina, con la tríada de asma, pólipos e intolerancia a antiinflamatorios. El tratamiento inicial son los corticosteroides nasales y los lavados con solución salina. Los corticosteroides orales se usan en ciclos cortos. La cirugía endoscópica y los biológicos se reservan para casos refractarios.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la rinosinusitis crónica
+
+@ cir|otolaryngology|epistaxis|2|initial_treatment
+V: Niño de 8 años con sangrado nasal por la fosa derecha de 10 minutos tras hurgarse la nariz. Está estable. La rinoscopia anterior muestra el sitio de sangrado en la parte anterior del tabique.
+P: ¿Cuál es el tratamiento inicial?
++ Compresión digital de las alas nasales durante 10 a 15 minutos con la cabeza ligeramente hacia adelante || La mayoría de las epistaxis anteriores se controlan con presión.
+- anchoring | Inclinar la cabeza hacia atrás || Favorece la deglución de sangre y la aspiración.
+- availability_heuristic | Taponamiento posterior inmediato || No es necesario en epistaxis anterior.
+- representativeness_heuristic | Cirugía de ligadura arterial || Es excesiva.
+- premature_closure | Transfusión || No está indicada.
+- framing_effect | Colocar hielo en la nuca como único tratamiento || No es eficaz.
+- complexity_bias | Angiografía con embolización || Se reserva para casos refractarios graves.
+- base_rate_fallacy | Ácido acetilsalicílico para el dolor || Aumenta el sangrado.
+- belief_bias | Sonarse fuerte para sacar los coágulos y que pare || Puede aumentar el sangrado.
+- omission_bias | No hacer nada porque se detendrá solo || La compresión acelera el control.
+E: La epistaxis anterior es la más frecuente, sobre todo en niños, y se origina en el plexo de Kiesselbach en el área de Little, en la parte anterior del tabique. Las causas más comunes son el traumatismo digital, la resequedad de la mucosa y las infecciones. El tratamiento inicial es la compresión digital continua de las alas nasales durante 10 a 15 minutos con la cabeza ligeramente inclinada hacia adelante. Si no cede se usa un vasoconstrictor tópico, cauterización química con nitrato de plata o eléctrica y, si persiste, taponamiento anterior.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la epistaxis
+
+@ cir|otolaryngology|epistaxis|3|diagnosis
+V: Hombre de 68 años con hipertensión y anticoagulación por fibrilación auricular que presenta sangrado nasal abundante bilateral con sangre que escurre hacia la faringe, que no cede con compresión anterior ni con taponamiento anterior.
+P: ¿Cuál es el diagnóstico más probable?
++ Epistaxis posterior por sangrado de ramas de la arteria esfenopalatina || Sangrado abundante hacia la faringe que no cede con medidas anteriores en un adulto mayor.
+- anchoring | Epistaxis anterior simple || Cedería con compresión o taponamiento anterior.
+- availability_heuristic | Hemoptisis || La sangre proviene de la nariz.
+- representativeness_heuristic | Hematemesis por várices || El origen es nasal.
+- premature_closure | Angiofibroma juvenil || Ocurre en adolescentes varones.
+- base_rate_fallacy | Telangiectasia hemorrágica hereditaria como causa más probable || Es menos frecuente.
+- framing_effect | Cáncer nasofaríngeo como causa más probable || Debe considerarse, pero el contexto orienta a epistaxis posterior.
+- inattentional_blindness | Rinitis alérgica || No explica el sangrado abundante.
+- focusing_illusion | Cuerpo extraño nasal || Es más común en niños.
+- belief_bias | Sangrado por la presión alta que no requiere manejo nasal || Requiere control local.
+E: La epistaxis posterior se origina en las ramas de la arteria esfenopalatina en la parte posterior de las fosas nasales. Es más frecuente en adultos mayores con hipertensión, aterosclerosis, anticoagulación y coagulopatías. Se manifiesta con sangrado abundante, a menudo bilateral, que escurre hacia la faringe y no cede con las medidas anteriores. Puede causar inestabilidad hemodinámica. El tratamiento incluye estabilización, corrección de la anticoagulación según el riesgo, taponamiento posterior con sonda con balón o taponamiento anteroposterior, y si persiste, ligadura endoscópica de la arteria esfenopalatina o embolización.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la epistaxis
+
+@ cir|otolaryngology|epistaxis|3|diagnosis
+V: Adolescente de 15 años con obstrucción nasal unilateral progresiva y episodios recurrentes de epistaxis abundante unilateral. La endoscopia muestra una masa rojiza, vascularizada en la nasofaringe.
+P: ¿Cuál es el diagnóstico más probable?
++ Angiofibroma nasofaríngeo juvenil || Masa vascular nasofaríngea con epistaxis y obstrucción en un adolescente varón.
+- anchoring | Pólipo nasal benigno || Es pálido y no sangra de forma abundante.
+- availability_heuristic | Epistaxis anterior simple || No explica la masa.
+- representativeness_heuristic | Cáncer nasofaríngeo || Es raro a esta edad.
+- premature_closure | Hipertrofia adenoidea || No explica la masa muy vascular con epistaxis abundante.
+- base_rate_fallacy | Rinitis alérgica || No explica la masa.
+- framing_effect | Cuerpo extraño nasal || No explica la masa vascular.
+- inattentional_blindness | Desviación septal || No explica la epistaxis abundante con masa.
+- focusing_illusion | Linfoma nasal || Es menos frecuente.
+- belief_bias | Sangrado por la adolescencia sin importancia || Hay una masa.
+E: El angiofibroma nasofaríngeo juvenil es un tumor benigno pero localmente agresivo y muy vascularizado que afecta casi exclusivamente a adolescentes varones. Se origina cerca del agujero esfenopalatino. Se manifiesta con obstrucción nasal unilateral progresiva, epistaxis recurrente abundante y, en casos avanzados, deformidad facial o proptosis. El diagnóstico se basa en la endoscopia y la imagen con tomografía y resonancia. No debe biopsiarse en el consultorio por el riesgo de sangrado masivo. El tratamiento es la resección quirúrgica, con embolización preoperatoria.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la epistaxis

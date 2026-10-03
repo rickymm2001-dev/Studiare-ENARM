@@ -1,0 +1,1323 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "ped-13b-complemento-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_gastroenterology",
+      "subtopic": "pediatric_diarrhea",
+      "vignette": "Niño de 4 años con diarrea con moco y sangre, dolor abdominal y pujo de 5 días. No tiene fiebre alta. En el coproparasitoscópico se observan trofozoítos con eritrocitos fagocitados. Vive en una zona con agua de mala calidad.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fisura anal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la disentería."
+        },
+        {
+          "key": "b",
+          "text": "Giardiasis",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No causa disentería ni trofozoítos hematófagos."
+        },
+        {
+          "key": "c",
+          "text": "Diarrea viral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No da sangre ni trofozoítos."
+        },
+        {
+          "key": "d",
+          "text": "Sangre por comer chile",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica los trofozoítos."
+        },
+        {
+          "key": "e",
+          "text": "Amebiasis intestinal por Entamoeba histolytica",
+          "correct": true,
+          "rationale": "Disentería con trofozoítos hematófagos."
+        },
+        {
+          "key": "f",
+          "text": "Balantidiasis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara."
+        },
+        {
+          "key": "g",
+          "text": "Shigelosis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da fiebre alta y no muestra trofozoítos."
+        },
+        {
+          "key": "h",
+          "text": "Entamoeba dispar no patógena",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No fagocita eritrocitos."
+        },
+        {
+          "key": "i",
+          "text": "Enfermedad inflamatoria intestinal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es menos probable con este hallazgo parasitológico."
+        },
+        {
+          "key": "j",
+          "text": "Invaginación intestinal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da dolor cólico intenso en lactantes."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "La amebiasis intestinal por Entamoeba histolytica se transmite por agua o alimentos contaminados con quistes. La forma invasiva produce colitis con diarrea con moco y sangre, dolor abdominal y pujo, generalmente con fiebre baja. El hallazgo de trofozoítos con eritrocitos fagocitados es característico. La complicación extraintestinal más común es el absceso hepático amebiano. El tratamiento de la colitis es metronidazol, seguido de un amebicida luminal como paromomicina o yodoquinol para eliminar los quistes. La prevención incluye agua potable, lavado de manos y manejo higiénico de alimentos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de parasitosis intestinal en niños"
+      ]
+    },
+    {
+      "key": "ped-13b-complemento-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_gastroenterology",
+      "subtopic": "pediatric_diarrhea",
+      "vignette": "Niña de 5 años con prurito anal nocturno intenso que la despierta, irritabilidad y sueño interrumpido. Su hermano tiene síntomas similares. La madre vio pequeños gusanos blancos como hilos alrededor del ano en la noche.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hemorroides",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Son raras en niños."
+        },
+        {
+          "key": "b",
+          "text": "Dermatitis del pañal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No se acompaña de gusanos."
+        },
+        {
+          "key": "c",
+          "text": "Teniasis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da proglótidos sin prurito nocturno característico."
+        },
+        {
+          "key": "d",
+          "text": "Abuso sexual como causa obligada",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El cuadro es típico de oxiuriasis."
+        },
+        {
+          "key": "e",
+          "text": "Ascariasis",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los gusanos son grandes y dan dolor o obstrucción."
+        },
+        {
+          "key": "f",
+          "text": "Candidiasis perianal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica los gusanos."
+        },
+        {
+          "key": "g",
+          "text": "Prurito por comer azúcar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es la causa."
+        },
+        {
+          "key": "h",
+          "text": "Oxiuriasis por Enterobius vermicularis",
+          "correct": true,
+          "rationale": "Prurito anal nocturno con gusanos blancos en niños convivientes."
+        },
+        {
+          "key": "i",
+          "text": "Infección urinaria",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica los gusanos."
+        },
+        {
+          "key": "j",
+          "text": "Giardiasis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da diarrea sin prurito anal."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "La oxiuriasis es la parasitosis más común en escolares. Enterobius vermicularis se transmite por la ingestión de huevos por contacto mano boca, ropa de cama y autoinfección. Las hembras migran por la noche a la región perianal para poner huevos, lo que provoca prurito anal nocturno, irritabilidad, insomnio y en niñas vulvovaginitis. El diagnóstico se realiza con la prueba de la cinta adhesiva de Graham por la mañana antes del baño. El tratamiento es albendazol o mebendazol en dosis única repetida a las 2 semanas, para todos los convivientes, junto con medidas de higiene como uñas cortas, lavado de manos y de ropa de cama.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de parasitosis intestinal en niños"
+      ]
+    },
+    {
+      "key": "ped-13b-complemento-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_endocrinology",
+      "subtopic": "congenital_hypothyroidism",
+      "vignette": "Niña de 7 años con talla que cae de la percentil 50 a la 5 en los últimos 2 años, aumento de peso, estreñimiento, piel seca, intolerancia al frío y bajo rendimiento escolar. Tiene bocio difuso indoloro. Su madre tiene enfermedad tiroidea.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hipotiroidismo adquirido por tiroiditis de Hashimoto",
+          "correct": true,
+          "rationale": "Desaceleración del crecimiento con aumento de peso, bocio y antecedente familiar."
+        },
+        {
+          "key": "b",
+          "text": "Deficiencia de hormona de crecimiento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el bocio ni el estreñimiento."
+        },
+        {
+          "key": "c",
+          "text": "Enfermedad celiaca",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da pérdida de peso."
+        },
+        {
+          "key": "d",
+          "text": "Retraso constitucional del crecimiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La velocidad de crecimiento suele ser normal."
+        },
+        {
+          "key": "e",
+          "text": "Niña floja que come mucho",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Los datos sugieren enfermedad tiroidea."
+        },
+        {
+          "key": "f",
+          "text": "Depresión infantil",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el bocio ni la desaceleración del crecimiento."
+        },
+        {
+          "key": "g",
+          "text": "Obesidad exógena",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "En la obesidad la talla suele ser normal o alta."
+        },
+        {
+          "key": "h",
+          "text": "Talla baja familiar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la desaceleración ni los síntomas."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de Cushing por tumor suprarrenal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es raro."
+        },
+        {
+          "key": "j",
+          "text": "Hipotiroidismo congénito no detectado",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Habría dado síntomas desde la lactancia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "h"
+      ],
+      "explanation": "La tiroiditis de Hashimoto es la causa más frecuente de hipotiroidismo adquirido en niños y adolescentes, más común en niñas y con antecedente familiar de enfermedad tiroidea. Se asocia a diabetes tipo 1, enfermedad celiaca, síndrome de Down y síndrome de Turner. Se manifiesta con bocio difuso indoloro, desaceleración del crecimiento con ganancia de peso, estreñimiento, piel seca, intolerancia al frío, fatiga y bajo rendimiento escolar. Se confirma con TSH elevada, T4 libre baja y anticuerpos antiperoxidasa positivos. El tratamiento es levotiroxina, con la que se recupera parte del crecimiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo en niños"
+      ]
+    },
+    {
+      "key": "ped-13b-complemento-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_endocrinology",
+      "subtopic": "congenital_hypothyroidism",
+      "vignette": "Recién nacido de 10 días con tamiz neonatal sospechoso. Los estudios séricos muestran TSH de 85 mUI/L y T4 libre de 0.4 ng/dL. El ultrasonido no encuentra tejido tiroideo en la región cervical.",
+      "prompt": "¿Qué indican estos resultados?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Resultados normales para un recién nacido",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Están claramente alterados."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome del eutiroideo enfermo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El bebé está sano y la TSH es muy alta."
+        },
+        {
+          "key": "c",
+          "text": "Hipotiroidismo central",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tendría TSH baja o normal con T4 libre baja."
+        },
+        {
+          "key": "d",
+          "text": "Tiroides pequeña que crecerá sola",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere tratamiento inmediato."
+        },
+        {
+          "key": "e",
+          "text": "Hipotiroidismo por anticuerpos maternos transitorio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El ultrasonido muestra ausencia de tiroides."
+        },
+        {
+          "key": "f",
+          "text": "Hipotiroidismo congénito primario por disgenesia tiroidea, probable ectopia o agenesia",
+          "correct": true,
+          "rationale": "TSH alta con T4 libre baja y ausencia de tiroides en el cuello."
+        },
+        {
+          "key": "g",
+          "text": "Resistencia a hormonas tiroideas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La T4 libre estaría alta."
+        },
+        {
+          "key": "h",
+          "text": "Error del tamiz sin relevancia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Los estudios séricos lo confirman."
+        },
+        {
+          "key": "i",
+          "text": "Hipertiroidismo neonatal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La T4 libre está baja."
+        },
+        {
+          "key": "j",
+          "text": "Hipertirotropinemia transitoria sin importancia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La T4 libre baja indica hipotiroidismo real."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "El hipotiroidismo congénito primario se confirma con TSH sérica elevada y T4 libre baja. Su causa más frecuente es la disgenesia tiroidea, que incluye la ectopia, sobre todo tiroides sublingual, la agenesia y la hipoplasia. Le siguen las dishormonogénesis, que suelen cursar con bocio y herencia autosómica recesiva. El ultrasonido y el gammagrama ayudan a definir la causa, pero nunca deben retrasar el tratamiento con levotiroxina. El hipotiroidismo central, con TSH baja o normal y T4 libre baja, puede no detectarse con un tamiz basado solo en TSH y se asocia a otras deficiencias hipofisarias.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo congénito"
+      ]
+    },
+    {
+      "key": "ped-13b-complemento-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_endocrinology",
+      "subtopic": "congenital_hypothyroidism",
+      "vignette": "Recién nacido de 12 días con hipotiroidismo congénito primario confirmado. Peso de 3.4 kg.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Levotiroxina oral a 10 a 15 mcg/kg/día iniciada de inmediato",
+          "correct": true,
+          "rationale": "Normaliza rápidamente la función tiroidea y protege el desarrollo."
+        },
+        {
+          "key": "b",
+          "text": "Levotiroxina a dosis bajas de 2 mcg/kg/día",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es insuficiente para un recién nacido."
+        },
+        {
+          "key": "c",
+          "text": "Liotironina sola",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es el tratamiento estándar."
+        },
+        {
+          "key": "d",
+          "text": "Esperar a los 3 meses para iniciar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El retraso causa daño neurológico."
+        },
+        {
+          "key": "e",
+          "text": "Trasplante de tejido tiroideo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No existe como tratamiento."
+        },
+        {
+          "key": "f",
+          "text": "Yodo en gotas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No trata la disgenesia tiroidea."
+        },
+        {
+          "key": "g",
+          "text": "Extracto tiroideo de origen animal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se recomienda."
+        },
+        {
+          "key": "h",
+          "text": "Dar la levotiroxina mezclada con fórmula de soya",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La soya reduce su absorción."
+        },
+        {
+          "key": "i",
+          "text": "Suspender el tratamiento al normalizar los estudios",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Se requiere de forma continua."
+        },
+        {
+          "key": "j",
+          "text": "Metimazol",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se usa en hipertiroidismo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "f"
+      ],
+      "explanation": "El tratamiento del hipotiroidismo congénito es levotiroxina oral a 10 a 15 mcg/kg/día, iniciada lo antes posible y siempre en las primeras 2 semanas de vida. La tableta se tritura y se administra en poca agua o leche materna, evitando mezclarla con soya, hierro o calcio, que reducen su absorción. Se mide TSH y T4 libre a las 2 y 4 semanas de iniciar, cada 1 a 2 meses durante el primer año y después con menor frecuencia. El objetivo es mantener la T4 libre en la mitad superior del rango y la TSH normal. A los 3 años puede reevaluarse si el hipotiroidismo era transitorio.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo congénito"
+      ]
+    },
+    {
+      "key": "ped-13b-complemento-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_endocrinology",
+      "subtopic": "pediatric_diabetes",
+      "vignette": "Adolescente de 14 años con diabetes tipo 1 desde hace 6 años, con buen control. Acude a su revisión anual y pregunta qué estudios le corresponden para prevenir complicaciones.",
+      "prompt": "¿Cuál es el tamizaje anual indicado para detectar nefropatía diabética?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Urocultivo anual",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No detecta nefropatía."
+        },
+        {
+          "key": "b",
+          "text": "Ultrasonido renal anual",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No detecta nefropatía temprana."
+        },
+        {
+          "key": "c",
+          "text": "Biopsia renal anual",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "d",
+          "text": "Relación albúmina creatinina en orina",
+          "correct": true,
+          "rationale": "Detecta albuminuria temprana, primer signo de nefropatía."
+        },
+        {
+          "key": "e",
+          "text": "Tomografía abdominal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "f",
+          "text": "Gammagrama renal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es el tamizaje."
+        },
+        {
+          "key": "g",
+          "text": "Si la glucosa está controlada no hay riesgo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El tamizaje se recomienda igual."
+        },
+        {
+          "key": "h",
+          "text": "Glucosa en orina con tira reactiva",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No detecta nefropatía."
+        },
+        {
+          "key": "i",
+          "text": "Ningún estudio hasta la edad adulta",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El tamizaje inicia en la adolescencia."
+        },
+        {
+          "key": "j",
+          "text": "Creatinina sérica como único estudio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se eleva tarde."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "d",
+        "j"
+      ],
+      "explanation": "El tamizaje de complicaciones crónicas en niños y adolescentes con diabetes tipo 1 inicia en la pubertad o a partir de los 10 a 11 años con 2 a 5 años de evolución. Incluye relación albúmina creatinina en orina cada año para nefropatía, examen de fondo de ojo o retinografía para retinopatía, exploración de pies para neuropatía, presión arterial en cada consulta, perfil de lípidos y tamizaje de enfermedad tiroidea y celiaca. La albuminuria persistente se trata con inhibidores de la enzima convertidora de angiotensina. El buen control glucémico, con hemoglobina glucosilada menor de 7%, reduce el riesgo de complicaciones.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de diabetes tipo 1 en niños y adolescentes"
+      ]
+    },
+    {
+      "key": "ped-13b-complemento-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_endocrinology",
+      "subtopic": "pediatric_diabetes",
+      "vignette": "Niño de 10 años con diabetes tipo 1 recién diagnosticada, estable, sin cetoacidosis. Peso de 32 kg. Su familia está dispuesta a aprender a medir la glucosa y contar carbohidratos.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esquema de insulina basal bolo con insulina de acción prolongada y rápida antes de las comidas, con educación en diabetes",
+          "correct": true,
+          "rationale": "Imita la secreción fisiológica de insulina."
+        },
+        {
+          "key": "b",
+          "text": "Una sola dosis diaria de insulina intermedia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No logra buen control."
+        },
+        {
+          "key": "c",
+          "text": "Trasplante de páncreas de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el tratamiento inicial."
+        },
+        {
+          "key": "d",
+          "text": "Metformina oral",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se usa en diabetes tipo 2."
+        },
+        {
+          "key": "e",
+          "text": "Glibenclamida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es útil sin células beta funcionales."
+        },
+        {
+          "key": "f",
+          "text": "Solo dieta sin azúcar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La diabetes tipo 1 requiere insulina."
+        },
+        {
+          "key": "g",
+          "text": "Retrasar la insulina por miedo a las inyecciones",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La insulina es indispensable."
+        },
+        {
+          "key": "h",
+          "text": "Remedios herbolarios para curar la diabetes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No son eficaces y retrasan el tratamiento."
+        },
+        {
+          "key": "i",
+          "text": "Insulina solo cuando la glucosa supere 300",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Produce mal control."
+        },
+        {
+          "key": "j",
+          "text": "Inhibidores de SGLT2 como monoterapia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No sustituyen a la insulina."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "f"
+      ],
+      "explanation": "El tratamiento de la diabetes tipo 1 es la insulina desde el diagnóstico. El esquema de elección es el basal bolo, con una insulina de acción prolongada como glargina o degludec y una rápida como lispro o aspart antes de cada comida, ajustada al conteo de carbohidratos y a la glucosa, o con bomba de insulina. La dosis total inicial suele ser de 0.5 a 1 U/kg/día. Se complementa con monitoreo frecuente de glucosa, idealmente continuo, educación en diabetes, alimentación saludable, actividad física y apoyo psicosocial. La meta de hemoglobina glucosilada es menor de 7%.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de diabetes tipo 1 en niños y adolescentes"
+      ]
+    },
+    {
+      "key": "ped-13b-complemento-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_cardiology",
+      "subtopic": "congenital_heart_disease",
+      "vignette": "Niña de 6 años asintomática con desdoblamiento fijo del segundo ruido y soplo sistólico expulsivo suave en el foco pulmonar. El electrocardiograma muestra bloqueo incompleto de rama derecha y la radiografía aumento del flujo pulmonar con crecimiento de cavidades derechas.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Soplo inocente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el desdoblamiento fijo ni el crecimiento de cavidades."
+        },
+        {
+          "key": "b",
+          "text": "Tetralogía de Fallot",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da cianosis y flujo pulmonar disminuido."
+        },
+        {
+          "key": "c",
+          "text": "Comunicación interauricular tipo ostium secundum",
+          "correct": true,
+          "rationale": "Desdoblamiento fijo del segundo ruido con sobrecarga de cavidades derechas."
+        },
+        {
+          "key": "d",
+          "text": "Coartación de aorta",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da pulsos femorales disminuidos."
+        },
+        {
+          "key": "e",
+          "text": "Anomalía de Ebstein",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da cianosis y arritmias."
+        },
+        {
+          "key": "f",
+          "text": "Persistencia del conducto arterioso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da soplo continuo."
+        },
+        {
+          "key": "g",
+          "text": "Estenosis pulmonar aislada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el aumento del flujo pulmonar."
+        },
+        {
+          "key": "h",
+          "text": "Hipertensión pulmonar primaria",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el desdoblamiento fijo."
+        },
+        {
+          "key": "i",
+          "text": "Corazón normal en una niña delgada",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Los hallazgos son patológicos."
+        },
+        {
+          "key": "j",
+          "text": "Comunicación interventricular",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da soplo holosistólico paraesternal bajo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "La comunicación interauricular tipo ostium secundum es una de las cardiopatías congénitas más frecuentes. Produce cortocircuito de izquierda a derecha a nivel auricular con sobrecarga de volumen del ventrículo derecho. Suele ser asintomática en la infancia y se descubre por un soplo sistólico expulsivo en foco pulmonar por hiperflujo y desdoblamiento amplio y fijo del segundo ruido, característico. El electrocardiograma muestra eje derecho y bloqueo incompleto de rama derecha. El ecocardiograma confirma el diagnóstico. Los defectos significativos se cierran por cateterismo con dispositivo o por cirugía entre los 2 y 5 años para evitar arritmias e hipertensión pulmonar.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la comunicación interauricular"
+      ]
+    },
+    {
+      "key": "ped-13b-complemento-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_cardiology",
+      "subtopic": "congenital_heart_disease",
+      "vignette": "Recién nacido sano de término de 30 horas, antes de su egreso. Se le realiza oximetría de pulso en mano derecha y pie, con saturación de 93% en mano y 89% en pie.",
+      "prompt": "¿Cuál es la utilidad de esta medición de tamizaje?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Detectar sepsis neonatal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es el propósito."
+        },
+        {
+          "key": "b",
+          "text": "Solo es útil en prematuros",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se recomienda en todos los recién nacidos."
+        },
+        {
+          "key": "c",
+          "text": "Detectar cardiopatías congénitas críticas, por lo que este resultado es positivo y requiere ecocardiograma",
+          "correct": true,
+          "rationale": "Saturación menor de 90% o diferencia mayor de 3% entre mano y pie."
+        },
+        {
+          "key": "d",
+          "text": "Realizar cateterismo cardiaco de inmediato",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El primer paso es el ecocardiograma."
+        },
+        {
+          "key": "e",
+          "text": "Repetir en un mes en la consulta de niño sano",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe estudiarse antes del egreso."
+        },
+        {
+          "key": "f",
+          "text": "Es un resultado normal en todo recién nacido",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Saturación menor de 90% es positiva."
+        },
+        {
+          "key": "g",
+          "text": "Egresar porque el bebé se ve rosado",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Las cardiopatías críticas pueden no dar cianosis visible."
+        },
+        {
+          "key": "h",
+          "text": "Los pies fríos siempre bajan la saturación y no importa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La diferencia es significativa."
+        },
+        {
+          "key": "i",
+          "text": "Detectar anemia neonatal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es su propósito."
+        },
+        {
+          "key": "j",
+          "text": "Detectar hipoglucemia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No mide glucosa."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "El tamizaje con oximetría de pulso detecta cardiopatías congénitas críticas que dependen del conducto arterioso antes de que se cierre y causen choque o muerte. Se realiza después de las 24 horas de vida, midiendo la saturación en la mano derecha, preductal, y en un pie, posductal. Es negativo si la saturación es de 95% o más en cualquier extremidad con diferencia de 3% o menos. Es positivo si es menor de 90% en cualquier extremidad. Los valores intermedios se repiten. Un tamiz positivo requiere ecocardiograma antes del egreso. En México forma parte del tamiz neonatal.",
+      "gpcRefs": [
+        "Lineamiento técnico de tamiz neonatal de cardiopatías congénitas críticas"
+      ]
+    },
+    {
+      "key": "ped-13b-complemento-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_respiratory",
+      "subtopic": "pediatric_asthma",
+      "vignette": "Niña de 4 años con episodios de sibilancias con cada resfriado, 4 en los últimos 6 meses, y tos nocturna entre episodios. Requiere salbutamol frecuente. Índice predictivo de asma positivo.",
+      "prompt": "¿Cuál es el tratamiento controlador de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Corticosteroide oral diario",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Tiene efectos adversos importantes."
+        },
+        {
+          "key": "b",
+          "text": "Antibióticos con cada resfriado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No previenen las sibilancias virales."
+        },
+        {
+          "key": "c",
+          "text": "Biológicos anti IgE",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No están indicados a esta edad."
+        },
+        {
+          "key": "d",
+          "text": "Salbutamol oral diario",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No controla la inflamación y tiene más efectos adversos."
+        },
+        {
+          "key": "e",
+          "text": "Jarabes de cebolla para abrir los bronquios",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No son eficaces."
+        },
+        {
+          "key": "f",
+          "text": "Antitusivos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No tratan el asma."
+        },
+        {
+          "key": "g",
+          "text": "Agonista beta de acción prolongada solo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No se recomienda sin corticosteroide."
+        },
+        {
+          "key": "h",
+          "text": "No usar controlador porque es pequeña",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Las sibilancias frecuentes requieren control."
+        },
+        {
+          "key": "i",
+          "text": "Corticosteroide inhalado a dosis baja diaria con espaciador y mascarilla",
+          "correct": true,
+          "rationale": "Es el controlador preferido en menores de 5 años con síntomas frecuentes."
+        },
+        {
+          "key": "j",
+          "text": "Inhalador de dosis medida sin espaciador",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La técnica es ineficaz a esta edad."
+        }
+      ],
+      "canonical": [
+        "b",
+        "d",
+        "g",
+        "i"
+      ],
+      "explanation": "En niños menores de 5 años con sibilancias recurrentes frecuentes o síntomas entre episodios, el tratamiento controlador preferido es un corticosteroide inhalado a dosis baja diaria, administrado con inhalador de dosis medida, espaciador y mascarilla. Se evalúa la respuesta en 2 a 3 meses. El montelukast es una alternativa. Si no hay respuesta se revisa la técnica, la adherencia y el diagnóstico antes de aumentar la dosis. Los niños con sibilancias solo durante infecciones virales y poco frecuentes pueden manejarse con salbutamol de rescate. Se recomienda un plan de acción escrito para la familia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en menores de 18 años",
+        "Iniciativa Global para el Asma"
+      ]
+    },
+    {
+      "key": "ped-13b-complemento-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "developmental_milestones",
+      "vignette": "Niño de 9 años con dificultad para mantener la atención en clase, olvida tareas, pierde sus cosas, se levanta constantemente de su lugar, interrumpe a los demás y no espera su turno. Los síntomas ocurren en casa y en la escuela desde los 5 años y afectan su rendimiento.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hipertiroidismo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Daría otros síntomas sistémicos."
+        },
+        {
+          "key": "b",
+          "text": "Exceso de azúcar en la dieta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No causa el trastorno."
+        },
+        {
+          "key": "c",
+          "text": "Hipoacusia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Puede simular inatención, pero no explica la hiperactividad."
+        },
+        {
+          "key": "d",
+          "text": "Trastorno por déficit de atención con hiperactividad de presentación combinada",
+          "correct": true,
+          "rationale": "Inatención, hiperactividad e impulsividad en dos ambientes desde antes de los 12 años."
+        },
+        {
+          "key": "e",
+          "text": "Mala conducta por falta de disciplina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los síntomas son persistentes y en varios ambientes."
+        },
+        {
+          "key": "f",
+          "text": "Trastorno del espectro autista",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay alteración de la comunicación social ni intereses restringidos."
+        },
+        {
+          "key": "g",
+          "text": "Epilepsia de ausencia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Daría episodios breves de desconexión."
+        },
+        {
+          "key": "h",
+          "text": "Trastorno de ansiedad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la hiperactividad desde los 5 años."
+        },
+        {
+          "key": "i",
+          "text": "Trastorno bipolar",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay episodios afectivos."
+        },
+        {
+          "key": "j",
+          "text": "Discapacidad intelectual",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay datos de retraso global."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "El trastorno por déficit de atención con hiperactividad es el trastorno del neurodesarrollo más frecuente en edad escolar. Se caracteriza por un patrón persistente de inatención, hiperactividad e impulsividad que inicia antes de los 12 años, se presenta en dos o más ambientes y afecta el funcionamiento. Se clasifica en presentación predominantemente inatenta, hiperactiva impulsiva o combinada. El diagnóstico es clínico con escalas de padres y maestros, y debe descartarse hipoacusia, alteraciones visuales, trastornos del aprendizaje y ansiedad. El tratamiento combina intervención conductual, apoyo escolar y estimulantes como metilfenidato en escolares.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno por déficit de atención con hiperactividad"
+      ]
+    },
+    {
+      "key": "ped-13b-complemento-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_gastroenterology",
+      "subtopic": "pediatric_gerd",
+      "vignette": "Niño de 10 años con atopia y asma que presenta disfagia a sólidos y episodios de impactación de carne. No mejoró con 8 semanas de inhibidor de bomba de protones. La endoscopia muestra anillos esofágicos y surcos longitudinales, y la biopsia más de 15 eosinófilos por campo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esofagitis eosinofílica",
+          "correct": true,
+          "rationale": "Disfagia e impactación en un niño atópico con eosinofilia esofágica y falta de respuesta al inhibidor."
+        },
+        {
+          "key": "b",
+          "text": "Enfermedad por reflujo gastroesofágico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No respondió al tratamiento y la biopsia muestra eosinofilia importante."
+        },
+        {
+          "key": "c",
+          "text": "Acalasia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da disfagia a sólidos y líquidos sin eosinofilia."
+        },
+        {
+          "key": "d",
+          "text": "Esofagitis por cándida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da placas blancas."
+        },
+        {
+          "key": "e",
+          "text": "Estenosis péptica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la eosinofilia ni los surcos."
+        },
+        {
+          "key": "f",
+          "text": "Disfagia por masticar poco",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una enfermedad inflamatoria."
+        },
+        {
+          "key": "g",
+          "text": "Cuerpo extraño impactado aislado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica los hallazgos crónicos."
+        },
+        {
+          "key": "h",
+          "text": "Esofagitis por medicamentos",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay antecedente."
+        },
+        {
+          "key": "i",
+          "text": "Anillo vascular",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es congénito y da síntomas desde lactante."
+        },
+        {
+          "key": "j",
+          "text": "Enfermedad de Crohn esofágica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "explanation": "La esofagitis eosinofílica es una enfermedad inflamatoria crónica mediada por mecanismos inmunes y alergia, frecuente en niños con atopia como asma, rinitis o dermatitis. En niños pequeños da vómito, rechazo al alimento y falla de medro, y en escolares y adolescentes disfagia e impactación de alimentos. La endoscopia puede mostrar anillos, surcos longitudinales, exudados y estenosis, y el diagnóstico requiere 15 o más eosinófilos por campo de gran aumento tras descartar otras causas. El tratamiento incluye inhibidores de bomba de protones, corticosteroides deglutidos, dietas de eliminación y dilatación en estenosis. El dupilumab es una opción en casos refractarios.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de esofagitis eosinofílica"
+      ]
+    },
+    {
+      "key": "ped-13b-complemento-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "pyloric_stenosis",
+      "vignette": "Recién nacido de madre de 17 años con defecto de la pared abdominal a la derecha del cordón umbilical, de 3 cm, por el que salen asas intestinales engrosadas y edematosas sin saco que las cubra. El cordón está íntegro. No hay otras malformaciones.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Extrofia vesical",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Expone la vejiga en el hipogastrio."
+        },
+        {
+          "key": "b",
+          "text": "Persistencia del uraco",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da salida de orina por el ombligo."
+        },
+        {
+          "key": "c",
+          "text": "Onfalocele roto",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Tendría restos de saco y suele asociarse a otras malformaciones."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome de Prune Belly",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tiene ausencia de músculos abdominales con piel íntegra."
+        },
+        {
+          "key": "e",
+          "text": "Ombligo mal cortado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una malformación congénita."
+        },
+        {
+          "key": "f",
+          "text": "Hernia umbilical",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Está cubierta por piel."
+        },
+        {
+          "key": "g",
+          "text": "Diástasis de rectos",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Está cubierta por piel."
+        },
+        {
+          "key": "h",
+          "text": "Pentalogía de Cantrell",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Incluye defectos cardiacos y esternales."
+        },
+        {
+          "key": "i",
+          "text": "Onfalocele",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene saco membranoso y el cordón se inserta en él."
+        },
+        {
+          "key": "j",
+          "text": "Gastrosquisis",
+          "correct": true,
+          "rationale": "Defecto paraumbilical derecho con intestino expuesto sin saco en hijo de madre joven."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "i",
+        "j"
+      ],
+      "explanation": "La gastrosquisis es un defecto de la pared abdominal a la derecha del cordón umbilical por el que se exponen asas intestinales sin saco que las cubra. El contacto con el líquido amniótico las engrosa y edematiza. Se asocia a madres jóvenes, tabaquismo y drogas, y rara vez a otras malformaciones, aunque puede acompañarse de atresia intestinal. El onfalocele, en cambio, es un defecto central cubierto por un saco con el cordón inserto en él y se asocia a cromosomopatías, cardiopatías y síndrome de Beckwith Wiedemann. En la gastrosquisis se cubre el intestino con material estéril, se evita la pérdida de calor y líquidos y se corrige quirúrgicamente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de defectos de la pared abdominal en el recién nacido"
+      ]
+    },
+    {
+      "key": "ped-13b-complemento-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_respiratory",
+      "subtopic": "pediatric_pneumonia",
+      "vignette": "Niño de 3 años con fiebre vespertina, pérdida de peso y tos de 6 semanas. Su abuelo con quien vive tiene tos crónica y baciloscopia positiva. La radiografía muestra adenopatía hiliar derecha con infiltrado. Prueba de tuberculina de 15 mm.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Neumonía por Mycoplasma",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es de evolución más corta."
+        },
+        {
+          "key": "b",
+          "text": "Linfoma mediastinal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el contacto y la tuberculina positiva."
+        },
+        {
+          "key": "c",
+          "text": "Cuerpo extraño aspirado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la fiebre vespertina y el contacto."
+        },
+        {
+          "key": "d",
+          "text": "Histoplasmosis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable con el contacto conocido."
+        },
+        {
+          "key": "e",
+          "text": "Asma con infección agregada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la pérdida de peso ni la adenopatía."
+        },
+        {
+          "key": "f",
+          "text": "Reacción por vacuna BCG",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica una tuberculina de 15 mm con síntomas."
+        },
+        {
+          "key": "g",
+          "text": "Fibrosis quística",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "h",
+          "text": "Tos por contagio de gripa del abuelo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El contacto tiene tuberculosis."
+        },
+        {
+          "key": "i",
+          "text": "Tuberculosis pulmonar primaria",
+          "correct": true,
+          "rationale": "Contacto con adulto bacilífero, síntomas crónicos, adenopatía hiliar y tuberculina positiva."
+        },
+        {
+          "key": "j",
+          "text": "Neumonía bacteriana típica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene evolución aguda y no explica la adenopatía hiliar con el contacto."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "La tuberculosis en niños suele adquirirse de un adulto bacilífero en el hogar, por lo que el estudio de contactos es fundamental. La forma primaria se caracteriza por adenopatías hiliares o mediastinales con o sin infiltrado parenquimatoso, el complejo de Ghon. Los niños tienen síntomas inespecíficos como fiebre, tos persistente de más de 2 semanas, pérdida de peso y falla de medro. Las baciloscopias suelen ser negativas por ser paucibacilares, por lo que se usan aspirados gástricos y pruebas moleculares. El diagnóstico combina contacto, clínica, radiografía y tuberculina o IGRA. Se trata con isoniazida, rifampicina, pirazinamida y etambutol.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención y control de la tuberculosis",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de tuberculosis en niños"
+      ]
+    }
+  ]
+}

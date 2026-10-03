@@ -1,0 +1,1040 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-03b-neumologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "community_pneumonia",
+      "vignette": "Hombre de 58 años con fiebre de 39 grados, tos con expectoración herrumbrosa y dolor pleurítico derecho de 3 días. Frecuencia respiratoria de 24 rpm. Estertores crepitantes y soplo tubario en base derecha. La radiografía muestra consolidación lobar con broncograma aéreo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cáncer pulmonar obstructivo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la consolidación sin considerar el cuadro agudo febril."
+        },
+        {
+          "key": "b",
+          "text": "Absceso pulmonar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que toda neumonía con fiebre alta es absceso, que daría cavitación."
+        },
+        {
+          "key": "c",
+          "text": "Tromboembolia pulmonar con infarto pulmonar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También da dolor pleurítico, pero no consolidación lobar con broncograma y fiebre alta."
+        },
+        {
+          "key": "d",
+          "text": "Bronquitis aguda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la tos, pero hay consolidación."
+        },
+        {
+          "key": "e",
+          "text": "Neumonía por Pneumocystis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ocurre en inmunosuprimidos y da infiltrado intersticial."
+        },
+        {
+          "key": "f",
+          "text": "Neumonía adquirida en la comunidad, probablemente neumocócica",
+          "correct": true,
+          "rationale": "Fiebre, tos productiva, consolidación lobar y esputo herrumbroso."
+        },
+        {
+          "key": "g",
+          "text": "Tuberculosis pulmonar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es frecuente en México, pero el cuadro agudo lobar sugiere neumococo."
+        },
+        {
+          "key": "h",
+          "text": "Exacerbación de EPOC",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena respiratorio, pero no hay antecedente."
+        },
+        {
+          "key": "i",
+          "text": "Insuficiencia cardiaca con congestión",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No nota la fiebre y la consolidación unilateral."
+        },
+        {
+          "key": "j",
+          "text": "Derrame pleural paraneumónico como diagnóstico principal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede coexistir, pero la imagen describe consolidación."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "f",
+        "g"
+      ],
+      "explanation": "La neumonía adquirida en la comunidad se diagnostica con síntomas respiratorios agudos, como tos, expectoración, disnea o dolor pleurítico, más fiebre y un infiltrado nuevo en la radiografía de tórax. El Streptococcus pneumoniae es la causa bacteriana más frecuente y suele producir consolidación lobar con broncograma aéreo, inicio brusco, fiebre alta, escalofríos y esputo herrumbroso. Una vez establecido el diagnóstico, se estima la gravedad con escalas como CURB-65 o el índice de gravedad de neumonía para decidir tratamiento ambulatorio, hospitalización o terapia intensiva. La tuberculosis se sospecha con evolución subaguda, pérdida de peso y lesiones apicales.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la neumonía adquirida en la comunidad en adultos"
+      ]
+    },
+    {
+      "key": "mi-03b-neumologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "community_pneumonia",
+      "vignette": "Mujer de 79 años con neumonía adquirida en la comunidad. Está confusa, urea de 52 mg/dL (BUN de 24 mg/dL), frecuencia respiratoria de 32 rpm y presión arterial de 96/58 mmHg.",
+      "prompt": "¿Cuál es la interpretación correcta de su gravedad con la escala CURB-65?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Puntaje de 3 sin contar la confusión ni la edad",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Pasa por alto criterios."
+        },
+        {
+          "key": "b",
+          "text": "Riesgo bajo porque la mayoría de las neumonías son leves",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Usa la frecuencia general en vez de los datos de la paciente."
+        },
+        {
+          "key": "c",
+          "text": "La escala solo aplica a menores de 65 años",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Confunde un criterio con una restricción."
+        },
+        {
+          "key": "d",
+          "text": "La confusión es por la edad y no se toma en cuenta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la confusión del anciano es basal."
+        },
+        {
+          "key": "e",
+          "text": "Puntaje de 5, neumonía grave que requiere hospitalización y valorar terapia intensiva",
+          "correct": true,
+          "rationale": "Confusión, urea elevada, frecuencia mayor de 30, presión baja y edad de 65 o más."
+        },
+        {
+          "key": "f",
+          "text": "Puntaje de 5, pero basta observación en urgencias 6 horas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Calcula bien y subestima el manejo."
+        },
+        {
+          "key": "g",
+          "text": "Puntaje de 4, tratamiento ambulatorio con antibiótico oral",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Calcula casi bien, pero propone un manejo inseguro."
+        },
+        {
+          "key": "h",
+          "text": "La presión de 96/58 no cuenta porque la sistólica es mayor de 90",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La diastólica de 60 o menos sí cuenta."
+        },
+        {
+          "key": "i",
+          "text": "Puntaje de 2, puede tratarse en casa con vigilancia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Subestima varios criterios presentes."
+        },
+        {
+          "key": "j",
+          "text": "Se requiere procalcitonina antes de decidir el sitio de tratamiento",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasa una decisión clara."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "La escala CURB-65 asigna un punto a cada criterio, que son confusión, urea mayor de 42 mg/dL o BUN mayor de 19 mg/dL, frecuencia respiratoria de 30 o más, presión sistólica menor de 90 o diastólica de 60 o menos, y edad de 65 años o más. Un puntaje de 0 a 1 permite tratamiento ambulatorio, 2 sugiere hospitalización breve o ambulatorio vigilado, y 3 o más indica neumonía grave con hospitalización y valoración de terapia intensiva cuando el puntaje es 4 o 5. La escala apoya, pero no sustituye, el juicio clínico, que considera saturación, comorbilidades y situación social.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la neumonía adquirida en la comunidad en adultos"
+      ]
+    },
+    {
+      "key": "mi-03b-neumologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "community_pneumonia",
+      "vignette": "Hombre de 40 años previamente sano, sin uso reciente de antibióticos. Tiene neumonía adquirida en la comunidad con CURB-65 de 0 y saturación de 96%.",
+      "prompt": "¿Cuál es el tratamiento de elección ambulatorio?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Meropenem oral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es un carbapenémico de uso hospitalario."
+        },
+        {
+          "key": "b",
+          "text": "Antibiótico solo si el cultivo de esputo es positivo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Esperar confirmación suena riguroso, pero retrasa el tratamiento."
+        },
+        {
+          "key": "c",
+          "text": "Tratamiento sintomático sin antibiótico",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Deja una infección bacteriana sin tratar."
+        },
+        {
+          "key": "d",
+          "text": "Trimetoprim con sulfametoxazol como fármaco de elección",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que es útil para neumococo, con alta resistencia."
+        },
+        {
+          "key": "e",
+          "text": "Ceftriaxona intravenosa con azitromicina en hospitalización",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es el esquema del paciente hospitalizado."
+        },
+        {
+          "key": "f",
+          "text": "Levofloxacino como primera opción en todos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se reserva para comorbilidades o alergia, por resistencia y efectos adversos."
+        },
+        {
+          "key": "g",
+          "text": "Vancomicina por miedo a resistencia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la resistencia sin factores de riesgo."
+        },
+        {
+          "key": "h",
+          "text": "Esperar 48 horas para ver si se resuelve sola",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "i",
+          "text": "Amoxicilina oral a dosis altas, o un macrólido si la resistencia local lo permite",
+          "correct": true,
+          "rationale": "Neumonía leve en adulto sano sin comorbilidades."
+        },
+        {
+          "key": "j",
+          "text": "Oseltamivir como único tratamiento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Asocia neumonía con influenza sin datos que la sugieran."
+        }
+      ],
+      "canonical": [
+        "e",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "En el adulto sano con neumonía adquirida en la comunidad leve, sin comorbilidades ni uso reciente de antibióticos, el tratamiento ambulatorio de elección es amoxicilina oral a dosis altas, o doxiciclina, o un macrólido como azitromicina o claritromicina si la resistencia local del neumococo a macrólidos es menor de 25%. En pacientes con comorbilidades se usa amoxicilina con clavulanato o una cefalosporina más un macrólido, o una fluoroquinolona respiratoria en monoterapia. La duración habitual es de 5 a 7 días si hay estabilidad clínica. Se revalora a las 48 a 72 horas para confirmar la mejoría.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la neumonía adquirida en la comunidad en adultos"
+      ]
+    },
+    {
+      "key": "mi-03b-neumologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "community_pneumonia",
+      "vignette": "Hombre de 55 años con neumonía en tratamiento con ceftriaxona y claritromicina. Al quinto día persiste la fiebre y el dolor pleurítico. La radiografía muestra derrame pleural. La toracocentesis obtiene líquido turbio con pH de 6.9, glucosa de 30 mg/dL y tinción de Gram con cocos grampositivos.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Falla del antibiótico por resistencia como única explicación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el antibiótico e ignora la colección."
+        },
+        {
+          "key": "b",
+          "text": "Derrame por insuficiencia cardiaca",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Atribuye el líquido a otra causa pese a las características del exudado."
+        },
+        {
+          "key": "c",
+          "text": "Pleuritis tuberculosa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a infección pleural, pero el Gram muestra cocos."
+        },
+        {
+          "key": "d",
+          "text": "Fiebre por fármaco",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta el líquido pleural infectado."
+        },
+        {
+          "key": "e",
+          "text": "Derrame paraneumónico simple",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También es un derrame asociado a neumonía, pero el pH y la glucosa son normales."
+        },
+        {
+          "key": "f",
+          "text": "Mesotelioma pleural",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es raro y no explica el cuadro agudo infeccioso."
+        },
+        {
+          "key": "g",
+          "text": "Empiema pleural",
+          "correct": true,
+          "rationale": "Líquido turbio con pH menor de 7.2, glucosa baja y gérmenes en el Gram."
+        },
+        {
+          "key": "h",
+          "text": "Absceso pulmonar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es otra complicación, pero da cavitación con nivel hidroaéreo."
+        },
+        {
+          "key": "i",
+          "text": "Tromboembolia pulmonar intrahospitalaria",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el dolor pleurítico."
+        },
+        {
+          "key": "j",
+          "text": "Quilotórax",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo líquido turbio es quilo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "El derrame pleural paraneumónico se presenta en una proporción importante de las neumonías bacterianas. Se clasifica como simple, complicado o empiema. El empiema es la presencia de pus franco en la cavidad pleural o de gérmenes en la tinción o el cultivo. El derrame complicado se sospecha con pH menor de 7.2, glucosa menor de 60 mg/dL o deshidrogenasa láctica muy elevada. La persistencia de fiebre pese a antibiótico adecuado obliga a buscar estas complicaciones. El tratamiento del empiema y del derrame complicado es el drenaje con sonda pleural, con fibrinolíticos intrapleurales o cirugía si hay loculaciones.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del derrame pleural"
+      ]
+    },
+    {
+      "key": "mi-03b-neumologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "community_pneumonia",
+      "vignette": "Mujer de 67 años con diabetes y EPOC acude a su revisión anual. Nunca ha recibido vacunas en la edad adulta.",
+      "prompt": "¿Cuál es la medida de prevención más importante contra la neumonía en esta paciente?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Antibiótico profiláctico en invierno",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Promueve resistencias sin beneficio demostrado."
+        },
+        {
+          "key": "b",
+          "text": "Inmunoglobulina intravenosa mensual",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es para inmunodeficiencias."
+        },
+        {
+          "key": "c",
+          "text": "Vitamina C diaria para fortalecer defensas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena preventivo, sin evidencia."
+        },
+        {
+          "key": "d",
+          "text": "Evitar vacunas por posibles reacciones",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Sobreestima efectos leves."
+        },
+        {
+          "key": "e",
+          "text": "Sin vacunas por su edad avanzada",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Es precisamente el grupo que más se beneficia."
+        },
+        {
+          "key": "f",
+          "text": "Vacunar solo si tiene una neumonía previa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Espera al evento para prevenir."
+        },
+        {
+          "key": "g",
+          "text": "Vacunación contra neumococo y vacuna anual contra influenza",
+          "correct": true,
+          "rationale": "Reducen la neumonía y sus complicaciones en adultos mayores con comorbilidades."
+        },
+        {
+          "key": "h",
+          "text": "Solo vacuna contra influenza",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en una vacuna y omite el neumococo."
+        },
+        {
+          "key": "i",
+          "text": "Evitar salir de casa en invierno como medida principal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el aislamiento sustituye la vacuna."
+        },
+        {
+          "key": "j",
+          "text": "Vacuna BCG de refuerzo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La asocia con enfermedades respiratorias, pero no previene neumonía."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "La vacunación es la principal medida preventiva contra la neumonía en adultos mayores y en personas con enfermedades crónicas como diabetes, EPOC, cardiopatía, enfermedad renal o hepática. Se recomienda la vacuna antineumocócica en todos los adultos de 65 años o más y en menores con factores de riesgo, con esquemas que combinan vacuna conjugada y polisacárida según disponibilidad. La vacuna contra influenza se aplica cada año en temporada invernal, porque la influenza predispone a neumonía bacteriana secundaria. Otras medidas son dejar de fumar, buen control de comorbilidades y vacunación contra COVID-19 según las recomendaciones vigentes.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de vacunación en el adulto",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la neumonía adquirida en la comunidad en adultos"
+      ]
+    },
+    {
+      "key": "mi-03b-neumologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "community_pneumonia",
+      "vignette": "Hombre de 52 años con alcoholismo crónico. Lo encontraron en la calle tras una intoxicación. Una semana después presenta fiebre, tos con expectoración fétida y una cavidad con nivel hidroaéreo en el segmento posterior del lóbulo superior derecho.",
+      "prompt": "¿Cuál es el factor de riesgo principal de su cuadro?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Contaminación ambiental de la ciudad",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en un factor general."
+        },
+        {
+          "key": "b",
+          "text": "Exposición a tuberculosis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La cavidad la sugiere, pero el esputo fétido y la aspiración apuntan a anaerobios."
+        },
+        {
+          "key": "c",
+          "text": "Neumonía viral previa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye otra causa sin datos."
+        },
+        {
+          "key": "d",
+          "text": "Diabetes no diagnosticada",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No considera el antecedente de intoxicación."
+        },
+        {
+          "key": "e",
+          "text": "Tabaquismo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en un factor común sin relación directa."
+        },
+        {
+          "key": "f",
+          "text": "Fibrosis quística no diagnosticada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es improbable en un adulto de esta edad."
+        },
+        {
+          "key": "g",
+          "text": "Broncoaspiración de flora orofaríngea por alteración del estado de conciencia",
+          "correct": true,
+          "rationale": "La aspiración en un paciente alcohólico causa absceso pulmonar anaerobio."
+        },
+        {
+          "key": "h",
+          "text": "Inmunosupresión por VIH",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede predisponer, pero el antecedente de intoxicación y la localización sugieren aspiración."
+        },
+        {
+          "key": "i",
+          "text": "Exposición a palomas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a infección respiratoria, pero es otra entidad."
+        },
+        {
+          "key": "j",
+          "text": "Desnutrición como causa única",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la desnutrición explica el absceso por sí sola."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "El absceso pulmonar es una cavidad necrótica con pus en el parénquima, causada con mayor frecuencia por aspiración de flora orofaríngea anaerobia y estreptococos. Los factores de riesgo son la alteración del estado de conciencia por alcohol, fármacos, crisis convulsivas o anestesia, los trastornos de la deglución y la mala higiene dental. Se localiza en segmentos dependientes, como el posterior del lóbulo superior y el superior del lóbulo inferior, sobre todo del lado derecho. Se presenta con fiebre, tos con esputo fétido y cavidad con nivel hidroaéreo. Se trata con clindamicina o ampicilina con sulbactam por varias semanas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la neumonía adquirida en la comunidad en adultos"
+      ]
+    },
+    {
+      "key": "mi-03b-neumologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "pulmonary_embolism",
+      "vignette": "Mujer de 34 años que toma anticonceptivos orales y regresó de un vuelo de 14 horas. Presenta disnea súbita, dolor pleurítico y taquicardia de 118 lpm. Saturación de 90%. Pantorrilla izquierda con edema y dolor.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Neumonía adquirida en la comunidad",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es frecuente, pero no hay fiebre ni tos productiva."
+        },
+        {
+          "key": "b",
+          "text": "Reacción alérgica a los anticonceptivos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que los anticonceptivos causan alergia, cuando su riesgo es trombótico."
+        },
+        {
+          "key": "c",
+          "text": "Deshidratación por el vuelo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el viaje."
+        },
+        {
+          "key": "d",
+          "text": "Pericarditis aguda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El dolor pleurítico confunde, pero no explica la hipoxemia ni la pierna."
+        },
+        {
+          "key": "e",
+          "text": "Neumotórax espontáneo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da disnea súbita y dolor, pero no edema de pantorrilla."
+        },
+        {
+          "key": "f",
+          "text": "Crisis de ansiedad por el viaje",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el estrés del viaje y pasa por alto la hipoxemia."
+        },
+        {
+          "key": "g",
+          "text": "Celulitis de la pierna",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No relaciona la pierna con la disnea."
+        },
+        {
+          "key": "h",
+          "text": "Tromboembolia pulmonar",
+          "correct": true,
+          "rationale": "Disnea súbita, taquicardia, hipoxemia y datos de trombosis venosa profunda con factores de riesgo."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome coronario agudo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable en una mujer joven sin factores coronarios."
+        },
+        {
+          "key": "j",
+          "text": "Crisis asmática",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye una causa respiratoria sin sibilancias."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "h"
+      ],
+      "explanation": "La tromboembolia pulmonar se produce casi siempre por un trombo originado en las venas profundas de las piernas. Los factores de riesgo incluyen inmovilización prolongada, viajes largos, cirugía reciente, cáncer, embarazo y puerperio, anticonceptivos con estrógenos, trombofilias y antecedente de trombosis. Se manifiesta con disnea súbita, dolor pleurítico, taquicardia, hipoxemia, tos o hemoptisis y, en los casos graves, síncope o choque. La probabilidad clínica se estima con escalas como Wells o Ginebra. Con probabilidad alta se solicita angiotomografía pulmonar, y con probabilidad baja o intermedia primero el dímero D.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa"
+      ]
+    },
+    {
+      "key": "mi-03b-neumologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "pulmonary_embolism",
+      "vignette": "Hombre de 56 años operado de rodilla hace 10 días. Presenta disnea súbita y taquicardia. Su probabilidad clínica por escala de Wells es alta. Presión arterial normal y función renal normal.",
+      "prompt": "¿Cuál es el estudio de elección para confirmar el diagnóstico de tromboembolia pulmonar?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Angiografía pulmonar convencional de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es invasiva y fue sustituida por la tomografía."
+        },
+        {
+          "key": "b",
+          "text": "Ecocardiograma como prueba confirmatoria en el paciente estable",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Muestra sobrecarga derecha, pero no confirma en el estable."
+        },
+        {
+          "key": "c",
+          "text": "Gasometría arterial con hipoxemia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La hipoxemia apoya, pero no confirma."
+        },
+        {
+          "key": "d",
+          "text": "Troponina como prueba diagnóstica",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la troponina confirma la embolia."
+        },
+        {
+          "key": "e",
+          "text": "Angiotomografía pulmonar",
+          "correct": true,
+          "rationale": "Con probabilidad clínica alta se realiza directamente."
+        },
+        {
+          "key": "f",
+          "text": "Dímero D y decidir según el resultado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el dímero D, útil solo para descartar con probabilidad baja o intermedia."
+        },
+        {
+          "key": "g",
+          "text": "Radiografía de tórax",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Suele ser normal o inespecífica."
+        },
+        {
+          "key": "h",
+          "text": "Ultrasonido de ambas piernas antes que cualquier estudio de tórax",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Puede apoyar, pero no es el estudio de elección."
+        },
+        {
+          "key": "i",
+          "text": "Gammagrama ventilación perfusión como primera opción en todos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se reserva para contraindicación al contraste o embarazo."
+        },
+        {
+          "key": "j",
+          "text": "Electrocardiograma con patrón S1Q3T3",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es poco sensible y no confirma."
+        }
+      ],
+      "canonical": [
+        "e",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "En la sospecha de tromboembolia pulmonar en un paciente estable, la decisión se basa en la probabilidad clínica. Si es baja o intermedia, se mide el dímero D, y un valor normal descarta el diagnóstico. Si es alta o el dímero D es positivo, se realiza angiotomografía pulmonar, que es el estudio de elección porque es rápida, disponible y muestra los defectos de llenado. El gammagrama de ventilación y perfusión se usa con alergia al contraste, insuficiencia renal grave o embarazo. En el paciente inestable que no puede trasladarse, el ecocardiograma con disfunción del ventrículo derecho justifica el tratamiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa"
+      ]
+    },
+    {
+      "key": "mi-03b-neumologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "pulmonary_embolism",
+      "vignette": "Mujer de 45 años con tromboembolia pulmonar confirmada por angiotomografía. Está estable, presión arterial de 124/78 mmHg, sin disfunción del ventrículo derecho y con troponina normal. Función renal normal, sin cáncer ni embarazo.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Filtro de vena cava como tratamiento inicial",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Solo si la anticoagulación está contraindicada."
+        },
+        {
+          "key": "b",
+          "text": "Heparina no fraccionada indefinida por ser más segura",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena segura, pero no es el tratamiento crónico de elección."
+        },
+        {
+          "key": "c",
+          "text": "Trombólisis sistémica con alteplasa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la embolia, pero se reserva para el paciente inestable."
+        },
+        {
+          "key": "d",
+          "text": "Anticoagular solo 2 semanas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El mínimo habitual es de tres meses."
+        },
+        {
+          "key": "e",
+          "text": "Anticoagulación con un anticoagulante oral directo, como rivaroxabán o apixabán",
+          "correct": true,
+          "rationale": "Embolia de riesgo bajo sin contraindicaciones."
+        },
+        {
+          "key": "f",
+          "text": "Ácido acetilsalicílico como tratamiento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es suficiente para tratar trombosis venosa."
+        },
+        {
+          "key": "g",
+          "text": "Evitar anticoagulantes por miedo a sangrado",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Sobreestima el riesgo en una paciente sin factores de sangrado."
+        },
+        {
+          "key": "h",
+          "text": "Observación sin tratamiento si no hay síntomas",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Deja expuesta a la paciente a recurrencia."
+        },
+        {
+          "key": "i",
+          "text": "Embolectomía quirúrgica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para inestabilidad con contraindicación a trombólisis."
+        },
+        {
+          "key": "j",
+          "text": "Medias de compresión como único tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la compresión trata la embolia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "i"
+      ],
+      "explanation": "El tratamiento de la tromboembolia pulmonar se basa en la estratificación del riesgo. En pacientes hemodinámicamente estables sin disfunción del ventrículo derecho ni elevación de troponina, el tratamiento es la anticoagulación, y se prefieren los anticoagulantes orales directos, como rivaroxabán o apixabán, sobre la heparina seguida de antagonista de vitamina K, salvo en cáncer activo con ciertas condiciones, embarazo, síndrome antifosfolípido o insuficiencia renal grave. La duración mínima es de tres meses y se prolonga si el factor de riesgo persiste o no hay causa identificada. La trombólisis sistémica se reserva para el paciente con choque o hipotensión.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa"
+      ]
+    },
+    {
+      "key": "mi-03b-neumologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "pulmonary_embolism",
+      "vignette": "Hombre de 60 años con tromboembolia pulmonar confirmada. Presión arterial de 76/50 mmHg pese a líquidos, frecuencia cardiaca de 132 lpm y ventrículo derecho dilatado en el ecocardiograma. Sin contraindicaciones para trombólisis.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo anticoagulación con heparina de bajo peso molecular",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el tratamiento estándar del estable."
+        },
+        {
+          "key": "b",
+          "text": "Nitroglicerina para mejorar el gasto",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Empeora la hipotensión."
+        },
+        {
+          "key": "c",
+          "text": "Anticoagulante oral directo para iniciar rápido",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Lo rápido suena bien, pero no reperfunde en el choque."
+        },
+        {
+          "key": "d",
+          "text": "Dobutamina como tratamiento definitivo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el apoyo inotrópico resuelve la obstrucción."
+        },
+        {
+          "key": "e",
+          "text": "Esperar a ver si responde a vasopresores sin reperfusión",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Retrasa el tratamiento que salva la vida."
+        },
+        {
+          "key": "f",
+          "text": "Evitar trombólisis por riesgo de sangrado",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Sobreestima el riesgo frente a la mortalidad del choque."
+        },
+        {
+          "key": "g",
+          "text": "Grandes cargas de líquidos hasta normalizar la presión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El exceso de volumen empeora el ventrículo derecho."
+        },
+        {
+          "key": "h",
+          "text": "Filtro de vena cava inferior como medida principal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No resuelve el émbolo actual."
+        },
+        {
+          "key": "i",
+          "text": "Trasplante pulmonar de urgencia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Medida inexistente en este escenario."
+        },
+        {
+          "key": "j",
+          "text": "Trombólisis sistémica con alteplasa más anticoagulación",
+          "correct": true,
+          "rationale": "Embolia de alto riesgo con choque."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "La tromboembolia pulmonar de alto riesgo se define por inestabilidad hemodinámica, como paro cardiaco, choque obstructivo con presión sistólica menor de 90 mmHg o necesidad de vasopresores, o hipotensión persistente. Su mortalidad es muy alta. El tratamiento es la reperfusión con trombólisis sistémica, de preferencia alteplasa, junto con anticoagulación con heparina no fraccionada. Si la trombólisis está contraindicada o fracasa, se realiza embolectomía quirúrgica o tratamiento dirigido por catéter. La reposición de líquidos debe ser cautelosa porque la sobrecarga del ventrículo derecho empeora el gasto. La norepinefrina es el vasopresor de elección.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa"
+      ]
+    },
+    {
+      "key": "mi-03b-neumologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "pulmonary_embolism",
+      "vignette": "Hombre de 70 años hospitalizado por neumonía, con movilidad reducida. Sin sangrado activo, plaquetas normales y función renal normal.",
+      "prompt": "¿Cuál es la medida de prevención de tromboembolia venosa indicada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solicitar ultrasonido de piernas antes de decidir",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El ultrasonido no sustituye la profilaxis."
+        },
+        {
+          "key": "b",
+          "text": "Hidratación abundante como medida suficiente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el líquido previene trombos."
+        },
+        {
+          "key": "c",
+          "text": "Heparina de bajo peso molecular a dosis profiláctica, como enoxaparina 40 mg al día",
+          "correct": true,
+          "rationale": "Paciente médico hospitalizado con riesgo alto y sin contraindicaciones."
+        },
+        {
+          "key": "d",
+          "text": "Medias de compresión como única medida en todos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reservan para contraindicación de anticoagulantes."
+        },
+        {
+          "key": "e",
+          "text": "Sin profilaxis porque la estancia será corta",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Subestima el riesgo."
+        },
+        {
+          "key": "f",
+          "text": "Dosis terapéutica de enoxaparina para mayor protección",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena más seguro, pero aumenta el sangrado."
+        },
+        {
+          "key": "g",
+          "text": "Ácido acetilsalicílico diario",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es la profilaxis recomendada en pacientes médicos."
+        },
+        {
+          "key": "h",
+          "text": "Evitar anticoagular por su edad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La edad avanzada aumenta el riesgo trombótico."
+        },
+        {
+          "key": "i",
+          "text": "Filtro de vena cava profiláctico",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "j",
+          "text": "Warfarina con meta de INR de 2 a 3",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es tratamiento, no profilaxis hospitalaria."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "f",
+        "g"
+      ],
+      "explanation": "Los pacientes médicos hospitalizados con movilidad reducida y factores de riesgo, como edad avanzada, infección aguda, insuficiencia cardiaca o respiratoria, cáncer o antecedente de trombosis, tienen riesgo alto de enfermedad tromboembólica venosa. La escala de Padua ayuda a identificarlos. Si no hay contraindicación, se indica profilaxis farmacológica con heparina de bajo peso molecular, como enoxaparina 40 mg subcutánea al día, heparina no fraccionada o fondaparinux. Si hay sangrado activo o riesgo hemorrágico alto, se usan métodos mecánicos, como la compresión neumática intermitente. La profilaxis se mantiene mientras persista el riesgo durante la hospitalización.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención de la enfermedad tromboembólica venosa en el paciente hospitalizado"
+      ]
+    }
+  ]
+}

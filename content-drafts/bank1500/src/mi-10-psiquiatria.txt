@@ -1,0 +1,223 @@
+@ mi|psychiatry|depression|2|diagnosis
+V: Mujer de 35 años que desde hace 6 semanas se siente triste casi todos los días, perdió el interés en sus actividades, duerme mal, perdió 5 kg, se siente culpable y le cuesta concentrarse en el trabajo. Sin consumo de sustancias ni enfermedades médicas. Niega ideas suicidas.
+P: ¿Cuál es el diagnóstico más probable?
++ Trastorno depresivo mayor || Cinco o más síntomas por más de 2 semanas, incluidos ánimo deprimido y anhedonia, con deterioro funcional.
+- representativeness_heuristic | Trastorno distímico || También da ánimo bajo, pero es más leve y de al menos 2 años.
+- anchoring | Trastorno de ansiedad generalizada || Se ancla en el insomnio y la falta de concentración.
+- availability_heuristic | Duelo normal || No hay una pérdida descrita.
+- premature_closure | Hipotiroidismo || Debe descartarse, pero el cuadro cumple criterios de depresión.
+- base_rate_fallacy | Trastorno bipolar tipo I || No hay episodios de manía.
+- framing_effect | Trastorno de adaptación || Suena relacionado con el estrés, pero cumple criterios de depresión mayor.
+- inattentional_blindness | Esquizofrenia || No hay síntomas psicóticos.
+- focusing_illusion | Anorexia nerviosa || Se centra en la pérdida de peso.
+- belief_bias | Simple cansancio laboral || Cree que es solo agotamiento.
+E: El trastorno depresivo mayor se diagnostica con al menos cinco síntomas durante dos semanas o más, uno de los cuales debe ser ánimo deprimido o pérdida de interés o placer. Los otros incluyen cambios en el apetito o el peso, insomnio o hipersomnia, agitación o enlentecimiento psicomotor, fatiga, sentimientos de inutilidad o culpa, dificultad para concentrarse e ideas recurrentes de muerte o suicidio. Debe causar deterioro funcional y no deberse a sustancias o a una enfermedad médica. Siempre se debe evaluar el riesgo suicida y descartar trastorno bipolar. Las escalas como PHQ 9 ayudan al tamizaje y seguimiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto
+
+@ mi|psychiatry|depression|2|treatment_of_choice
+V: Hombre de 40 años con trastorno depresivo mayor moderado. Sin ideas suicidas ni síntomas psicóticos. Sin enfermedades médicas.
+P: ¿Cuál es el tratamiento farmacológico de elección?
++ Un inhibidor selectivo de la recaptura de serotonina, como sertralina o escitalopram || Son de primera línea por su eficacia y tolerancia.
+- availability_heuristic | Benzodiacepinas como tratamiento principal || Alivian ansiedad, pero no tratan la depresión y generan dependencia.
+- anchoring | Amitriptilina como primera opción || Se ancla en lo clásico, con más efectos adversos y riesgo en sobredosis.
+- complexity_bias | Terapia electroconvulsiva || Se reserva para depresión grave, psicótica o refractaria.
+- representativeness_heuristic | Litio como fármaco inicial || Es estabilizador del ánimo y se usa como potenciador.
+- framing_effect | Antipsicótico atípico solo || Suena potente, pero se usa como potenciador.
+- premature_closure | Inhibidor de la monoaminooxidasa de inicio || Tiene muchas interacciones.
+- status_quo_bias | Solo recomendaciones de ejercicio sin tratamiento formal || Es útil como complemento, pero insuficiente en depresión moderada.
+- belief_bias | Suplementos herbales como hipérico sin supervisión || Tienen interacciones importantes.
+- omission_bias | Evitar antidepresivos por miedo a dependencia || Los antidepresivos no causan adicción.
+E: En el trastorno depresivo mayor moderado a grave, el tratamiento combina psicoterapia, como la terapia cognitivo conductual, y antidepresivos. Los inhibidores selectivos de la recaptura de serotonina, como sertralina, escitalopram o fluoxetina, son de primera línea por su eficacia, perfil de efectos adversos favorable y seguridad en sobredosis. Su efecto aparece en dos a cuatro semanas, y se valora la respuesta a las cuatro a seis semanas. Tras la remisión se continúa al menos seis a doce meses para prevenir recaídas. Al inicio puede aumentar la ansiedad, y en jóvenes se vigila la ideación suicida.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto
+
+@ mi|psychiatry|depression|3|next_step
+V: Mujer de 52 años con depresión. Refiere que ha pensado en quitarse la vida, tiene un plan de tomar todos sus medicamentos y ayer escribió cartas de despedida. Vive sola.
+P: ¿Cuál es la conducta a seguir?
++ Hospitalización psiquiátrica urgente con vigilancia continua y retirar medios letales || Riesgo suicida alto con plan, método y preparativos.
+- anchoring | Iniciar antidepresivo y citar en un mes || Se ancla en el tratamiento ambulatorio pese a riesgo alto.
+- availability_heuristic | Dar benzodiacepina para que duerma mejor || No reduce el riesgo inmediato.
+- framing_effect | Hacerle firmar un contrato de no suicidio y enviarla a casa || Suena protector, pero no tiene eficacia demostrada.
+- representativeness_heuristic | Referirla a psicología sin urgencia || Subestima el riesgo.
+- premature_closure | Considerar que si habla del suicidio no lo hará || Cree en un mito peligroso.
+- complexity_bias | Electroconvulsivoterapia ambulatoria inmediata || No es la primera medida.
+- status_quo_bias | Mantener su tratamiento actual sin cambios || Ignora el riesgo.
+- belief_bias | Evitar preguntar más para no inducir la idea || Preguntar no induce el suicidio.
+- omission_bias | Esperar a que llegue un familiar para decidir || Retrasa una medida urgente.
+E: La evaluación del riesgo suicida es obligatoria en todo paciente con depresión. Los factores de alto riesgo incluyen ideación con plan estructurado, acceso a medios letales, intentos previos, preparativos como cartas o despedidas, desesperanza, consumo de sustancias, aislamiento social, enfermedad crónica y edad avanzada en hombres. Preguntar directamente por ideas suicidas no las induce. Un paciente con plan, método disponible y preparativos tiene riesgo alto y requiere hospitalización psiquiátrica urgente, involuntaria si es necesario, con vigilancia continua y retiro de medios letales. Los contratos de no suicidio no son eficaces.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto ;; Guía de Práctica Clínica de prevención, detección y manejo de la conducta suicida
+
+@ mi|psychiatry|depression|4|complication_prognosis
+V: Hombre de 45 años que toma sertralina. Se agregó tramadol por dolor lumbar. Al día siguiente presenta agitación, diaforesis, temblor, fiebre de 39 grados, diarrea, hiperreflexia y clonus inducible en extremidades inferiores.
+P: ¿Cuál es la complicación que presenta?
++ Síndrome serotoninérgico || Agitación, hipertermia, diarrea, hiperreflexia y clonus tras combinar fármacos serotoninérgicos.
+- representativeness_heuristic | Síndrome neuroléptico maligno || Comparte fiebre y alteración mental, pero tiene rigidez en tubo de plomo, bradirreflexia y evolución lenta.
+- anchoring | Infección del sistema nervioso central || Se ancla en la fiebre e ignora la relación farmacológica.
+- availability_heuristic | Abstinencia de alcohol || Comparte agitación y temblor, pero no hay consumo ni clonus.
+- premature_closure | Crisis de ansiedad || Concluye un trastorno psiquiátrico sin fiebre explicada.
+- base_rate_fallacy | Tormenta tiroidea || Es menos probable sin antecedente tiroideo.
+- framing_effect | Hipertermia maligna || Suena a hipertermia por fármacos, pero ocurre con anestésicos.
+- inattentional_blindness | Intoxicación anticolinérgica || Da piel seca y midriasis, no diarrea ni clonus.
+- focusing_illusion | Gastroenteritis aguda || Se centra en la diarrea.
+- belief_bias | Reacción alérgica al tramadol || Cree que todo efecto agudo es alergia.
+E: El síndrome serotoninérgico se produce por exceso de serotonina, generalmente al combinar fármacos serotoninérgicos, como antidepresivos inhibidores de la recaptura, inhibidores de la monoaminooxidasa, tramadol, linezolid, triptanos o metoclopramida. Inicia en horas y se caracteriza por la tríada de alteración del estado mental, hiperactividad autonómica con taquicardia, hipertermia, diaforesis y diarrea, y anomalías neuromusculares, como hiperreflexia, mioclonías y clonus, más marcados en extremidades inferiores. Se diagnostica con los criterios de Hunter. El tratamiento es suspender los fármacos, soporte, benzodiacepinas y, en casos moderados a graves, ciproheptadina.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto
+
+@ mi|psychiatry|depression|3|diagnosis
+V: Mujer de 30 años con episodios de depresión. Hace un año tuvo un periodo de 10 días en que durmió 3 horas por noche sin sentirse cansada, gastó todos sus ahorros, hablaba sin parar, tenía ideas de grandeza y fue hospitalizada.
+P: ¿Cuál es el diagnóstico más probable?
++ Trastorno bipolar tipo I || Un episodio de manía con hospitalización basta para el diagnóstico.
+- representativeness_heuristic | Trastorno bipolar tipo II || También alterna con depresión, pero con hipomanía sin hospitalización ni deterioro grave.
+- anchoring | Trastorno depresivo mayor recurrente || Se ancla en la depresión y omite la manía.
+- availability_heuristic | Trastorno límite de la personalidad || Da inestabilidad, pero no episodios de manía de días.
+- premature_closure | Ciclotimia || Concluye una forma leve pese a la manía grave.
+- base_rate_fallacy | Esquizofrenia || No hay síntomas psicóticos persistentes fuera de los episodios.
+- framing_effect | Trastorno por déficit de atención del adulto || Suena a hiperactividad, pero no da episodios definidos.
+- inattentional_blindness | Hipertiroidismo || No relaciona los episodios.
+- focusing_illusion | Consumo de cocaína || Se centra en la euforia sin evidencia de consumo.
+- belief_bias | Personalidad extrovertida || Cree que la manía es un rasgo.
+E: El trastorno bipolar tipo I se define por al menos un episodio maníaco, que dura una semana o más o requiere hospitalización, con ánimo elevado o irritable y aumento de energía, más síntomas como grandiosidad, menor necesidad de dormir, verborrea, fuga de ideas, distraibilidad, aumento de la actividad y conductas de riesgo. Los episodios depresivos son frecuentes pero no necesarios para el diagnóstico. En el tipo II hay hipomanía, más breve y sin deterioro grave. Es importante identificar la bipolaridad antes de dar antidepresivos solos, porque pueden desencadenar manía. El tratamiento usa estabilizadores como litio o antipsicóticos atípicos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno bipolar
+
+@ mi|psychiatry|depression|3|complication_prognosis
+V: Mujer de 38 años con trastorno bipolar en tratamiento con litio. Inició un diurético tiazídico y un AINE. Presenta temblor grueso, vómito, diarrea, ataxia y confusión. Litemia de 2.6 mEq/L.
+P: ¿Cuál es la complicación que presenta?
++ Intoxicación por litio || Litemia elevada con síntomas neurológicos y digestivos, favorecida por tiazida y AINE.
+- anchoring | Recaída maníaca || Se ancla en la enfermedad de base.
+- availability_heuristic | Gastroenteritis viral || Explica los síntomas digestivos, pero no la ataxia ni la litemia.
+- representativeness_heuristic | Síndrome serotoninérgico || Comparte temblor y confusión, pero no hay fármacos serotoninérgicos.
+- premature_closure | Evento vascular cerebral de fosa posterior || Concluye sin considerar la litemia.
+- base_rate_fallacy | Hipotiroidismo por litio || Es un efecto crónico, no este cuadro agudo.
+- framing_effect | Efecto adverso esperado y leve del litio || Suena benigno, pero la litemia es tóxica.
+- inattentional_blindness | Diabetes insípida nefrogénica || Es otro efecto del litio que da poliuria, no este cuadro.
+- focusing_illusion | Encefalopatía hepática || Se centra en la confusión.
+- belief_bias | Ansiedad por la enfermedad || Cree que los síntomas son emocionales.
+E: El litio tiene un margen terapéutico estrecho, con niveles terapéuticos de 0.6 a 1.2 mEq/L. Su eliminación es renal, y los diuréticos tiazídicos, los AINE, los IECA, la deshidratación y la insuficiencia renal aumentan sus niveles. La intoxicación produce síntomas digestivos, como náusea, vómito y diarrea, y neurológicos, como temblor grueso, ataxia, disartria, confusión, convulsiones y coma, además de arritmias. El tratamiento incluye suspender el litio, hidratación con solución salina, corregir electrolitos y hemodiálisis en casos graves, como litemia mayor de 4 mEq/L o mayor de 2.5 con síntomas graves o insuficiencia renal.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno bipolar
+
+@ mi|psychiatry|anxiety_disorders|2|diagnosis
+V: Mujer de 33 años que desde hace 1 año se preocupa en exceso casi todos los días por el trabajo, la salud de su familia y el dinero. Le cuesta controlar la preocupación, está inquieta, tensa, se cansa fácil, duerme mal y está irritable.
+P: ¿Cuál es el diagnóstico más probable?
++ Trastorno de ansiedad generalizada || Preocupación excesiva y difícil de controlar por más de 6 meses con síntomas físicos.
+- representativeness_heuristic | Trastorno de pánico || También es ansioso, pero con crisis súbitas recurrentes y miedo a nuevas crisis.
+- anchoring | Trastorno depresivo mayor || Se ancla en el insomnio y la fatiga sin ánimo deprimido central.
+- availability_heuristic | Trastorno obsesivo compulsivo || Da preocupaciones, pero con obsesiones y compulsiones.
+- premature_closure | Hipertiroidismo || Debe descartarse, pero el cuadro es de ansiedad generalizada.
+- base_rate_fallacy | Trastorno de estrés postraumático || No hay un evento traumático.
+- framing_effect | Fobia social || Suena ansioso, pero se limita a situaciones sociales.
+- inattentional_blindness | Trastorno de adaptación || El cuadro dura más de 6 meses y no hay un desencadenante.
+- focusing_illusion | Insomnio primario || Se centra en el sueño.
+- belief_bias | Nerviosismo normal por su personalidad || Cree que es un rasgo y no un trastorno.
+E: El trastorno de ansiedad generalizada se caracteriza por ansiedad y preocupación excesivas, difíciles de controlar, sobre diversos temas, la mayoría de los días durante al menos seis meses, acompañadas de tres o más síntomas, como inquietud, fatiga, dificultad para concentrarse, irritabilidad, tensión muscular y alteraciones del sueño. Causa malestar y deterioro funcional. Se deben descartar causas médicas, como hipertiroidismo, y sustancias, como cafeína. El tratamiento de primera línea combina terapia cognitivo conductual e inhibidores selectivos de la recaptura de serotonina o de serotonina y noradrenalina. Las benzodiacepinas se usan solo a corto plazo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto
+
+@ mi|psychiatry|anxiety_disorders|3|diagnosis
+V: Hombre de 28 años que acude a urgencias por tercera vez en el mes por episodios súbitos de palpitaciones, dolor torácico, sensación de ahogo, temblor, mareo y miedo a morir, que llegan a su máximo en 10 minutos. Electrocardiogramas y troponinas normales. Ahora evita salir solo.
+P: ¿Cuál es el diagnóstico más probable?
++ Trastorno de pánico con agorafobia || Crisis de angustia recurrentes inesperadas con evitación.
+- representativeness_heuristic | Síndrome coronario agudo || Da dolor torácico, pero los estudios son normales repetidamente.
+- anchoring | Trastorno de ansiedad generalizada || Se ancla en la ansiedad, pero aquí hay crisis súbitas.
+- availability_heuristic | Arritmia paroxística || Debe descartarse, pero los estudios son normales.
+- premature_closure | Hipertiroidismo || Concluye sin datos tiroideos.
+- base_rate_fallacy | Feocromocitoma || Es raro.
+- framing_effect | Fobia específica || Suena a miedo, pero las crisis son inesperadas.
+- inattentional_blindness | Hipoglucemia || No relaciona el patrón de crisis.
+- focusing_illusion | Asma || Se centra en la sensación de ahogo.
+- belief_bias | Simulación para obtener atención || Cree que el paciente finge.
+E: El trastorno de pánico se caracteriza por crisis de angustia recurrentes e inesperadas, que alcanzan su máxima intensidad en minutos, con síntomas como palpitaciones, sudoración, temblor, disnea, dolor torácico, náusea, mareo, parestesias, desrealización y miedo a perder el control o a morir, seguidas de al menos un mes de preocupación por nuevas crisis o cambios conductuales. Puede acompañarse de agorafobia. Es frecuente que los pacientes consulten repetidamente en urgencias. Tras descartar causas médicas, el tratamiento de primera línea es terapia cognitivo conductual e inhibidores selectivos de la recaptura de serotonina.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto
+
+@ mi|psychiatry|anxiety_disorders|3|treatment_of_choice
+V: Mujer de 36 años con trastorno de ansiedad generalizada de 2 años que interfiere con su trabajo. Sin consumo de sustancias.
+P: ¿Cuál es el tratamiento farmacológico de elección a largo plazo?
++ Inhibidor selectivo de la recaptura de serotonina, como escitalopram o sertralina, junto con psicoterapia || Son eficaces y no causan dependencia.
+- availability_heuristic | Clonazepam diario de forma indefinida || Causa dependencia, tolerancia y deterioro cognitivo.
+- anchoring | Propranolol como tratamiento principal || Se ancla en los síntomas físicos, útil solo en ansiedad de desempeño.
+- representativeness_heuristic | Antipsicótico típico || No está indicado.
+- framing_effect | Alprazolam a demanda como único tratamiento || Suena práctico, pero genera dependencia y rebote.
+- premature_closure | Hidroxicina como tratamiento de mantenimiento único || Es una opción de segunda línea.
+- complexity_bias | Electroconvulsivoterapia || No está indicada.
+- status_quo_bias | Sin tratamiento hasta que empeore || Mantiene el deterioro funcional.
+- belief_bias | Infusiones relajantes como tratamiento suficiente || Cree que bastan.
+- omission_bias | Evitar antidepresivos por el estigma || Pierde un tratamiento eficaz.
+E: El tratamiento de los trastornos de ansiedad combina psicoterapia, sobre todo la terapia cognitivo conductual, y fármacos. Los inhibidores selectivos de la recaptura de serotonina y los inhibidores de la recaptura de serotonina y noradrenalina, como venlafaxina o duloxetina, son de primera línea a largo plazo. Su efecto ansiolítico tarda varias semanas, y al inicio pueden aumentar la ansiedad, por lo que se inician a dosis bajas. Las benzodiacepinas pueden usarse a corto plazo mientras actúa el antidepresivo, pero no se recomiendan a largo plazo por la dependencia, la tolerancia y el riesgo de caídas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto
+
+@ mi|psychiatry|anxiety_disorders|3|risk_factor
+V: Mujer de 26 años que hace 3 meses sufrió un asalto con arma. Desde entonces tiene recuerdos intrusivos, pesadillas, evita la calle donde ocurrió, está siempre alerta, se sobresalta fácilmente y se siente desconectada.
+P: ¿Cuál es el factor de riesgo indispensable en su cuadro?
++ La exposición a un evento traumático real o amenazante, compatible con trastorno de estrés postraumático || El evento traumático es criterio indispensable.
+- availability_heuristic | Antecedente familiar de ansiedad || Es un factor de riesgo, no un criterio necesario.
+- anchoring | Duración menor de un mes || Se ancla en el estrés agudo, que dura menos de un mes.
+- representativeness_heuristic | Consumo de alcohol posterior || Puede ser comorbilidad, no requisito.
+- framing_effect | Que haya tenido lesiones físicas graves || Suena necesario, pero no se requiere.
+- premature_closure | Tener ideas suicidas || No es un criterio.
+- base_rate_fallacy | Ser hombre || No es un requisito y es más frecuente en mujeres.
+- inattentional_blindness | Antecedente de depresión || No es necesario.
+- focusing_illusion | Insomnio crónico previo || Se centra en el sueño.
+- belief_bias | Debilidad de carácter || Cree que depende del carácter.
+E: El trastorno de estrés postraumático requiere la exposición a un evento traumático, como muerte real o amenaza, lesión grave o violencia sexual, de forma directa, presenciada o al conocer que le ocurrió a alguien cercano. Los síntomas incluyen reexperimentación con recuerdos intrusivos, pesadillas o flashbacks, evitación de estímulos asociados, alteraciones negativas del ánimo y la cognición, e hiperactivación, como hipervigilancia, sobresalto e insomnio, durante más de un mes y con deterioro funcional. Si dura menos de un mes se llama trastorno de estrés agudo. El tratamiento de primera línea es la psicoterapia centrada en el trauma y los inhibidores de la recaptura de serotonina.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno de estrés postraumático
+
+@ mi|psychiatry|substance_use|3|initial_treatment
+V: Hombre de 50 años con consumo diario de alcohol, hospitalizado por una fractura. A las 48 horas de su último trago presenta temblor, diaforesis, taquicardia, hipertensión, agitación y alucinaciones visuales. Está desorientado.
+P: ¿Cuál es el tratamiento inicial?
++ Benzodiacepinas, como diazepam o lorazepam, y tiamina intravenosa antes de la glucosa || Corresponde a abstinencia alcohólica grave con delirium.
+- anchoring | Haloperidol como tratamiento único || Se ancla en la agitación, pero baja el umbral convulsivo y no trata la abstinencia.
+- availability_heuristic | Dar alcohol para calmar la abstinencia || No es un tratamiento médico adecuado.
+- framing_effect | Solución glucosada primero para la energía antes de la tiamina || Suena nutritivo, pero puede precipitar encefalopatía de Wernicke.
+- representativeness_heuristic | Naltrexona || Es para mantener la abstinencia, no para la abstinencia aguda.
+- premature_closure | Sujeción mecánica sin fármacos || No trata el cuadro y aumenta riesgos.
+- complexity_bias | Intubación inmediata en todos los casos || Se reserva para casos refractarios.
+- status_quo_bias | Observar sin tratamiento porque es esperado || El delirium tremens tiene alta mortalidad.
+- belief_bias | Disulfiram en la fase aguda || Causa reacción grave con alcohol y no trata la abstinencia.
+- omission_bias | Evitar benzodiacepinas por riesgo de dependencia || Son el tratamiento de elección en este escenario.
+E: El síndrome de abstinencia alcohólica aparece entre 6 y 24 horas después del último consumo, con temblor, ansiedad, diaforesis, taquicardia, hipertensión, náusea e insomnio. Puede haber crisis convulsivas entre las 12 y 48 horas y alucinosis. El delirium tremens aparece entre las 48 y 96 horas, con alteración del estado de alerta, desorientación, alucinaciones e hiperactividad autonómica grave, y tiene mortalidad importante. El tratamiento de elección son las benzodiacepinas, guiadas por escalas como CIWA Ar. Se administra tiamina intravenosa antes de la glucosa para prevenir la encefalopatía de Wernicke, además de hidratación y corrección de electrolitos.
+R: Guía de Práctica Clínica de prevención, detección y tratamiento del consumo de alcohol ;; Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de abstinencia alcohólica
+
+@ mi|psychiatry|substance_use|3|diagnosis
+V: Hombre de 55 años con alcoholismo crónico y desnutrición. Presenta confusión, marcha atáxica y movimientos oculares anormales con nistagmo y parálisis del VI par bilateral.
+P: ¿Cuál es el diagnóstico más probable?
++ Encefalopatía de Wernicke || Tríada de confusión, ataxia y oftalmoplejía por déficit de tiamina.
+- representativeness_heuristic | Síndrome de Korsakoff || Es la secuela crónica con amnesia y confabulación.
+- anchoring | Intoxicación alcohólica aguda || Se ancla en el alcohol, pero la oftalmoplejía no corresponde.
+- availability_heuristic | Encefalopatía hepática || Da confusión, pero no oftalmoplejía.
+- premature_closure | Evento vascular cerebral del tallo || Debe considerarse, pero el contexto sugiere déficit de tiamina.
+- base_rate_fallacy | Esclerosis múltiple || Es poco probable.
+- framing_effect | Delirium tremens || Suena a complicación del alcohol, pero aparece con abstinencia e hiperactividad autonómica.
+- inattentional_blindness | Hematoma subdural crónico || Debe descartarse, pero no explica la oftalmoplejía bilateral.
+- focusing_illusion | Neuropatía alcohólica || Se centra en la ataxia.
+- belief_bias | Demencia por la edad || Cree que es deterioro normal.
+E: La encefalopatía de Wernicke es una urgencia neurológica causada por deficiencia de tiamina, frecuente en alcoholismo crónico, desnutrición, hiperémesis, cirugía bariátrica y vómitos prolongados. Su tríada clásica es confusión, ataxia y oftalmoplejía con nistagmo, aunque la tríada completa se presenta en una minoría. El diagnóstico es clínico y el tratamiento no debe retrasarse, con tiamina intravenosa en dosis altas antes de administrar glucosa, porque la glucosa sin tiamina puede precipitarla o empeorarla. Sin tratamiento puede evolucionar al síndrome de Korsakoff, con amnesia anterógrada y confabulación, frecuentemente irreversible.
+R: Guía de Práctica Clínica de prevención, detección y tratamiento del consumo de alcohol
+
+@ mi|psychiatry|substance_use|3|next_step
+V: Hombre de 24 años traído por amigos tras una fiesta. Está somnoliento, con frecuencia respiratoria de 6 por minuto, saturación de 84% y pupilas puntiformes.
+P: ¿Cuál es el siguiente paso?
++ Asegurar la vía aérea y ventilar con bolsa válvula mascarilla, y administrar naloxona || Intoxicación por opioides con depresión respiratoria.
+- anchoring | Flumazenil intravenoso || Se ancla en las benzodiacepinas y puede causar convulsiones.
+- availability_heuristic | Lavado gástrico inmediato || No es la prioridad y aumenta el riesgo de aspiración.
+- framing_effect | Carbón activado por vía oral || Suena antitóxico, pero el paciente no protege su vía aérea.
+- representativeness_heuristic | Atropina || Se usa en intoxicación por organofosforados.
+- premature_closure | Solicitar perfil toxicológico antes de actuar || Retrasa el tratamiento urgente.
+- complexity_bias | Hemodiálisis urgente || No está indicada.
+- status_quo_bias | Observar hasta que despierte solo || Riesgo de paro respiratorio.
+- belief_bias | Estimulación dolorosa como tratamiento principal || Cree que despertarlo basta.
+- omission_bias | Evitar la naloxona por miedo a la abstinencia || El riesgo de muerte es mayor.
+E: La intoxicación por opioides se reconoce por la tríada de depresión del estado de alerta, depresión respiratoria y miosis puntiforme. La prioridad es la vía aérea y la ventilación, con bolsa válvula mascarilla y oxígeno, seguida de naloxona, un antagonista que revierte los efectos de los opioides. Puede darse por vía intravenosa, intramuscular o intranasal, en dosis tituladas para restablecer la respiración sin desencadenar abstinencia grave. Su efecto dura menos que muchos opioides, por lo que se requiere vigilancia prolongada y a veces infusión. El fentanilo ilícito es una causa creciente de sobredosis en el norte de México.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la intoxicación por opioides
+
+@ mi|psychiatry|substance_use|2|prevention_screening
+V: Hombre de 42 años que acude a revisión. Refiere tomar 6 a 8 cervezas cada fin de semana. No se considera alcohólico.
+P: ¿Cuál es la herramienta de tamizaje recomendada para detectar consumo de riesgo de alcohol?
++ Cuestionario AUDIT o su versión breve AUDIT C || Identifica consumo de riesgo y dependencia.
+- availability_heuristic | Medir enzimas hepáticas como tamizaje principal || Son poco sensibles para consumo de riesgo.
+- anchoring | Volumen corpuscular medio como único tamizaje || Se ancla en un marcador inespecífico.
+- representativeness_heuristic | Escala de Glasgow || Mide el estado de alerta.
+- framing_effect | Preguntar solo si se considera alcohólico || Suena directo, pero la negación es frecuente.
+- premature_closure | Considerar que el consumo de fin de semana es normal || Ignora el consumo excesivo episódico.
+- complexity_bias | Biopsia hepática || No es tamizaje.
+- status_quo_bias | No preguntar por el alcohol si no hay síntomas || Pierde la detección temprana.
+- belief_bias | Alcoholemia en la consulta || Cree que mide el patrón de consumo.
+- omission_bias | Evitar el tema para no incomodar al paciente || Pierde una intervención útil.
+E: El tamizaje del consumo de alcohol se recomienda en adultos en el primer nivel de atención. El cuestionario AUDIT, de la Organización Mundial de la Salud, tiene diez preguntas sobre consumo, dependencia y consecuencias, y su versión breve AUDIT C tiene tres preguntas sobre frecuencia y cantidad. Permiten identificar consumo de riesgo, consumo perjudicial y probable dependencia. El consumo excesivo episódico, como cinco o más bebidas en una ocasión en hombres, es un patrón de riesgo aunque no sea diario. Ante un tamizaje positivo se ofrece una intervención breve, que reduce el consumo, y se refiere si hay dependencia.
+R: Guía de Práctica Clínica de prevención, detección y tratamiento del consumo de alcohol

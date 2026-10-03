@@ -1,0 +1,3295 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "cir-06-perioperatorio-urologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "perioperative",
+      "subtopic": "preoperative_assessment",
+      "vignette": "Hombre de 45 años sano, sin síntomas, que será sometido a colecistectomía laparoscópica electiva. Su capacidad funcional es buena, sube dos pisos sin disnea. Exploración normal.",
+      "prompt": "¿Qué estudios preoperatorios están indicados en este paciente?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Prueba de esfuerzo obligatoria en todos los mayores de 40 años",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Depende del riesgo y la capacidad funcional."
+        },
+        {
+          "key": "b",
+          "text": "No se requieren estudios de rutina más allá de los indicados por su historia clínica",
+          "correct": true,
+          "rationale": "En pacientes sanos de bajo riesgo los estudios rutinarios no cambian el manejo."
+        },
+        {
+          "key": "c",
+          "text": "Coronariografía preoperatoria",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "d",
+          "text": "Gasometría arterial de rutina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "e",
+          "text": "Electrocardiograma, radiografía de tórax, ecocardiograma y prueba de esfuerzo en todos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No están indicados en pacientes sanos jóvenes."
+        },
+        {
+          "key": "f",
+          "text": "Tomografía de tórax de rutina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "g",
+          "text": "No hacer historia clínica porque es sano",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La historia y exploración son la base de la valoración."
+        },
+        {
+          "key": "h",
+          "text": "Pruebas de función pulmonar completas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No están indicadas."
+        },
+        {
+          "key": "i",
+          "text": "Holter de 24 horas",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "j",
+          "text": "Entre más estudios, más segura la cirugía",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Los estudios innecesarios generan retrasos y falsos positivos."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "La valoración preoperatoria se basa en la historia clínica, la exploración física, la capacidad funcional y el riesgo de la cirugía. En pacientes sanos, ASA I, con buena capacidad funcional, mayor de 4 METs, que se someterán a cirugía de bajo o intermedio riesgo, no se recomiendan estudios de rutina, ya que no mejoran los resultados y generan costos y retrasos. Los estudios se solicitan de forma selectiva según las comorbilidades, los fármacos y el tipo de cirugía, como biometría en cirugías con sangrado esperado o electrocardiograma en cardiópatas o mayores con factores de riesgo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de valoración perioperatoria en cirugía no cardiaca en el adulto"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "perioperative",
+      "subtopic": "preoperative_assessment",
+      "vignette": "Hombre de 68 años con fibrilación auricular que toma warfarina, programado para colectomía electiva por cáncer de colon en 10 días. Escala CHA2DS2 VASc de 3 sin antecedente de evento vascular cerebral reciente ni válvula mecánica.",
+      "prompt": "¿Cuál es la conducta más apropiada respecto a la anticoagulación?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Suspender la warfarina 5 días antes de la cirugía sin terapia puente y reiniciarla tras asegurar la hemostasia",
+          "correct": true,
+          "rationale": "En pacientes de riesgo trombótico bajo a moderado no se requiere puente con heparina."
+        },
+        {
+          "key": "b",
+          "text": "Suspender la warfarina el día de la cirugía",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No da tiempo a normalizar el INR."
+        },
+        {
+          "key": "c",
+          "text": "No reiniciar la anticoagulación tras la cirugía",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Aumenta el riesgo de trombosis."
+        },
+        {
+          "key": "d",
+          "text": "Cancelar la cirugía oncológica de forma indefinida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "e",
+          "text": "Administrar vitamina K intravenosa de rutina días antes",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Solo si se requiere revertir de urgencia."
+        },
+        {
+          "key": "f",
+          "text": "Suspender la warfarina un mes antes",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es innecesariamente prolongado."
+        },
+        {
+          "key": "g",
+          "text": "La warfarina no afecta el sangrado quirúrgico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Lo aumenta."
+        },
+        {
+          "key": "h",
+          "text": "Continuar la warfarina sin cambios durante la cirugía",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta el riesgo de sangrado."
+        },
+        {
+          "key": "i",
+          "text": "Colocar un filtro de vena cava",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "j",
+          "text": "Terapia puente con heparina en todos los pacientes con fibrilación auricular",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumenta el sangrado sin reducir las trombosis en riesgo moderado."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "h",
+        "j"
+      ],
+      "explanation": "El manejo perioperatorio de los anticoagulantes depende del riesgo de sangrado de la cirugía y del riesgo trombótico del paciente. La warfarina se suspende 5 días antes para que el INR sea menor de 1.5. La terapia puente con heparina de bajo peso molecular solo se recomienda en pacientes de alto riesgo trombótico, como válvulas mecánicas, evento vascular cerebral reciente o trombosis venosa reciente. Los anticoagulantes orales directos se suspenden de 24 a 72 horas antes según la función renal y el riesgo de sangrado, sin puente. Se reinicia la anticoagulación al asegurar la hemostasia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de valoración perioperatoria en cirugía no cardiaca en el adulto"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "perioperative",
+      "subtopic": "preoperative_assessment",
+      "vignette": "Mujer de 72 años con diabetes en tratamiento con insulina, cardiopatía isquémica con infarto previo y creatinina de 2.3 mg/dL, programada para cirugía de aneurisma de aorta abdominal abierta.",
+      "prompt": "¿Qué indica su perfil según el índice de riesgo cardiaco revisado de Lee?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Indica revascularización coronaria profiláctica en todos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No se recomienda de rutina."
+        },
+        {
+          "key": "b",
+          "text": "Riesgo determinado solo por la edad",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La edad no es un predictor del índice."
+        },
+        {
+          "key": "c",
+          "text": "Riesgo bajo sin necesidad de ninguna valoración",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene múltiples predictores."
+        },
+        {
+          "key": "d",
+          "text": "Indica cirugía urgente sin valoración",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "La cirugía es electiva."
+        },
+        {
+          "key": "e",
+          "text": "Contraindicación absoluta para cualquier cirugía",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se puede optimizar."
+        },
+        {
+          "key": "f",
+          "text": "Riesgo bajo porque la cirugía es abdominal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La cirugía vascular suprainguinal es de alto riesgo."
+        },
+        {
+          "key": "g",
+          "text": "Indica que solo importa la diabetes",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se suman todos los predictores."
+        },
+        {
+          "key": "h",
+          "text": "El riesgo cardiaco no influye en la cirugía no cardiaca",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es la principal causa de complicaciones."
+        },
+        {
+          "key": "i",
+          "text": "Riesgo cardiaco elevado por cuatro predictores, que obliga a optimizar y valorar estudios cardiológicos según la capacidad funcional",
+          "correct": true,
+          "rationale": "Cirugía de alto riesgo, cardiopatía isquémica, diabetes con insulina y creatinina mayor de 2."
+        },
+        {
+          "key": "j",
+          "text": "Indica suspender todos sus medicamentos cardiacos",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Deben continuarse."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "i"
+      ],
+      "explanation": "El índice de riesgo cardiaco revisado de Lee estima el riesgo de complicaciones cardiacas mayores en cirugía no cardiaca. Incluye seis predictores, cirugía de alto riesgo intraperitoneal, intratorácica o vascular suprainguinal, cardiopatía isquémica, insuficiencia cardiaca, enfermedad cerebrovascular, diabetes en tratamiento con insulina y creatinina mayor de 2 mg/dL. Con 0 predictores el riesgo es bajo y aumenta con cada uno. En pacientes de alto riesgo con mala capacidad funcional se considera una prueba de estrés si cambiaría el manejo. La revascularización profiláctica no se recomienda de rutina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de valoración perioperatoria en cirugía no cardiaca en el adulto"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "perioperative",
+      "subtopic": "preoperative_assessment",
+      "vignette": "Hombre de 55 años con hipertensión controlada con metoprolol y enalapril, programado para hernioplastia inguinal. Pregunta qué medicamentos debe tomar el día de la cirugía.",
+      "prompt": "¿Cuál es la indicación más apropiada sobre sus fármacos?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Continuar el betabloqueador el día de la cirugía y considerar omitir el inhibidor de la enzima convertidora esa mañana",
+          "correct": true,
+          "rationale": "Suspender el betabloqueador causa taquicardia de rebote, y los inhibidores pueden causar hipotensión con la anestesia."
+        },
+        {
+          "key": "b",
+          "text": "Iniciar un betabloqueador a dosis altas el día de la cirugía",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aumenta el riesgo de evento vascular y muerte."
+        },
+        {
+          "key": "c",
+          "text": "Suspender todos los antihipertensivos una semana antes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Causa descontrol de la presión y rebote."
+        },
+        {
+          "key": "d",
+          "text": "Suspender el metoprolol 3 días antes",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Causa rebote adrenérgico."
+        },
+        {
+          "key": "e",
+          "text": "No revisar los fármacos antes de la cirugía",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte de la valoración."
+        },
+        {
+          "key": "f",
+          "text": "Hospitalizar 3 días antes para ajustar fármacos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario con buen control."
+        },
+        {
+          "key": "g",
+          "text": "Cambiar a diuréticos el día de la cirugía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es adecuado."
+        },
+        {
+          "key": "h",
+          "text": "Cancelar la cirugía por la hipertensión controlada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "i",
+          "text": "Los medicamentos siempre deben suspenderse antes de operarse",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Muchos deben continuarse."
+        },
+        {
+          "key": "j",
+          "text": "Duplicar la dosis de todos los fármacos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es peligroso."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "Los betabloqueadores que el paciente ya toma deben continuarse en el perioperatorio, porque su suspensión causa taquicardia, hipertensión e isquemia por rebote. No se recomienda iniciarlos de forma aguda a dosis altas antes de la cirugía. Los inhibidores de la enzima convertidora y los antagonistas del receptor de angiotensina pueden causar hipotensión durante la anestesia, por lo que con frecuencia se omiten la mañana de la cirugía. Las estatinas se continúan. Los antiagregantes, anticoagulantes, hipoglucemiantes e insulina requieren ajustes específicos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de valoración perioperatoria en cirugía no cardiaca en el adulto"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "perioperative",
+      "subtopic": "preoperative_assessment",
+      "vignette": "Hombre de 65 años con obesidad que será sometido a colectomía por cáncer, con estancia prevista de 5 días. No tiene contraindicaciones para la anticoagulación.",
+      "prompt": "¿Cuál es la medida de prevención de enfermedad tromboembólica indicada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo deambulación temprana sin fármacos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El riesgo es alto en cirugía oncológica."
+        },
+        {
+          "key": "b",
+          "text": "Anticoagulación a dosis terapéutica en todos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumenta el sangrado."
+        },
+        {
+          "key": "c",
+          "text": "Heparina de bajo peso molecular profiláctica más medidas mecánicas y movilización temprana, extendida hasta 4 semanas por cirugía oncológica abdominal",
+          "correct": true,
+          "rationale": "El riesgo de trombosis es alto."
+        },
+        {
+          "key": "d",
+          "text": "Medias de compresión como único método en alto riesgo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Son insuficientes solas."
+        },
+        {
+          "key": "e",
+          "text": "Filtro de vena cava profiláctico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "f",
+          "text": "Profilaxis solo durante la hospitalización en todos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "En cirugía oncológica se extiende."
+        },
+        {
+          "key": "g",
+          "text": "Evitar la heparina por miedo a sangrado",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El beneficio supera el riesgo."
+        },
+        {
+          "key": "h",
+          "text": "Ultrasonido Doppler diario de vigilancia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es la medida preventiva."
+        },
+        {
+          "key": "i",
+          "text": "Ácido acetilsalicílico como único método",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es la profilaxis de elección en cirugía general."
+        },
+        {
+          "key": "j",
+          "text": "La trombosis solo ocurre en ortopedia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es frecuente en cirugía oncológica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "i"
+      ],
+      "explanation": "La enfermedad tromboembólica venosa es una causa importante de morbilidad y mortalidad posoperatoria. El riesgo se estima con la escala de Caprini, que considera la edad, el tipo de cirugía, el cáncer, la obesidad, la inmovilidad y los antecedentes de trombosis. En pacientes de riesgo moderado o alto se usa heparina de bajo peso molecular o heparina no fraccionada, combinada con métodos mecánicos como compresión neumática intermitente y movilización temprana. En la cirugía oncológica abdominal y pélvica se recomienda extender la profilaxis hasta 4 semanas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención de enfermedad tromboembólica venosa en pacientes quirúrgicos"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "perioperative",
+      "subtopic": "surgical_site_infection",
+      "vignette": "Hombre de 50 años con hemicolectomía hace 5 días que presenta fiebre de 38.4 °C, eritema, induración, calor y secreción purulenta en la herida quirúrgica. La aponeurosis está íntegra.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Reacción alérgica a la sutura",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el pus."
+        },
+        {
+          "key": "b",
+          "text": "Cicatrización normal con algo de pus",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El pus indica infección."
+        },
+        {
+          "key": "c",
+          "text": "Infección del sitio quirúrgico incisional superficial",
+          "correct": true,
+          "rationale": "Afecta piel y tejido subcutáneo con secreción purulenta."
+        },
+        {
+          "key": "d",
+          "text": "Absceso intraabdominal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La infección es superficial."
+        },
+        {
+          "key": "e",
+          "text": "Atelectasia como causa de la fiebre",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Hay datos locales de infección de herida."
+        },
+        {
+          "key": "f",
+          "text": "Trombosis venosa profunda",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica los hallazgos de la herida."
+        },
+        {
+          "key": "g",
+          "text": "Dehiscencia aponeurótica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La aponeurosis está íntegra."
+        },
+        {
+          "key": "h",
+          "text": "Fascitis necrosante",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Daría necrosis y toxicidad sistémica grave."
+        },
+        {
+          "key": "i",
+          "text": "Seroma no infectado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la fiebre ni el pus."
+        },
+        {
+          "key": "j",
+          "text": "Fuga de anastomosis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Daría peritonitis o salida de contenido intestinal."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "La infección del sitio quirúrgico se clasifica en incisional superficial, que afecta piel y tejido subcutáneo, incisional profunda, que afecta fascia y músculo, y de órgano o espacio, como abscesos intraabdominales. Suele aparecer entre el quinto y el décimo día. Se manifiesta con eritema, induración, dolor, calor y secreción purulenta. El tratamiento de la infección superficial es abrir y drenar la herida, con curaciones, y antibióticos solo si hay celulitis extensa o datos sistémicos. La fiebre en las primeras 48 horas rara vez se debe a infección de herida.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de infección de sitio quirúrgico"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "perioperative",
+      "subtopic": "surgical_site_infection",
+      "vignette": "Mujer de 55 años que será sometida a colecistectomía laparoscópica electiva. No es alérgica.",
+      "prompt": "¿Cuál es la medida de prevención antibiótica correcta?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Antibiótico durante 7 días después de la cirugía",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La profilaxis prolongada no aporta beneficio y aumenta la resistencia."
+        },
+        {
+          "key": "b",
+          "text": "Vancomicina en todos los pacientes",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se reserva para colonización por estafilococo resistente."
+        },
+        {
+          "key": "c",
+          "text": "Antibiótico de amplio espectro como carbapenémico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es innecesario."
+        },
+        {
+          "key": "d",
+          "text": "Ningún antibiótico en ninguna cirugía limpia contaminada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Está indicado en limpias contaminadas."
+        },
+        {
+          "key": "e",
+          "text": "Omitir la profilaxis por ser laparoscopia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Está indicada en cirugía biliar."
+        },
+        {
+          "key": "f",
+          "text": "Antibióticos y antifúngicos combinados",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es excesivo."
+        },
+        {
+          "key": "g",
+          "text": "Antibiótico oral el día anterior en casa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es la vía ni el momento adecuado."
+        },
+        {
+          "key": "h",
+          "text": "Antibiótico después de cerrar la herida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es tarde para prevenir."
+        },
+        {
+          "key": "i",
+          "text": "Cefazolina intravenosa en los 60 minutos previos a la incisión, en dosis única",
+          "correct": true,
+          "rationale": "La profilaxis es más eficaz administrada antes de la incisión."
+        },
+        {
+          "key": "j",
+          "text": "Entre más días de antibiótico, menos infecciones",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es así."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "i"
+      ],
+      "explanation": "La profilaxis antibiótica quirúrgica busca alcanzar concentraciones adecuadas en los tejidos al momento de la incisión. Se administra por vía intravenosa en los 60 minutos previos a la incisión, o 120 minutos para vancomicina y quinolonas. La cefazolina es el fármaco de elección en la mayoría de las cirugías limpias y limpias contaminadas. Se repite la dosis si la cirugía dura más de dos vidas medias del fármaco o hay sangrado importante. No debe prolongarse más de 24 horas tras la cirugía. En la cirugía colorrectal se agrega cobertura contra anaerobios.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de infección de sitio quirúrgico"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "perioperative",
+      "subtopic": "surgical_site_infection",
+      "vignette": "Hombre de 60 años con diabetes descontrolada, obesidad y tabaquismo activo, operado de urgencia por apendicitis perforada con peritonitis. La cirugía duró 3 horas.",
+      "prompt": "¿Cuál es el factor más importante que aumenta su riesgo de infección del sitio quirúrgico?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "La clase de herida sucia por perforación con peritonitis, sumada a sus factores del huésped",
+          "correct": true,
+          "rationale": "La contaminación de la herida es el principal determinante."
+        },
+        {
+          "key": "b",
+          "text": "La temperatura del quirófano normal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es un factor de riesgo."
+        },
+        {
+          "key": "c",
+          "text": "La edad de 60 años como único factor",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es un factor menor."
+        },
+        {
+          "key": "d",
+          "text": "El grupo sanguíneo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "e",
+          "text": "La vacunación previa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "f",
+          "text": "El uso de antibióticos profilácticos",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Reduce el riesgo."
+        },
+        {
+          "key": "g",
+          "text": "El uso de suturas absorbibles",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es el factor principal."
+        },
+        {
+          "key": "h",
+          "text": "El cierre de la piel con grapas",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es el factor principal."
+        },
+        {
+          "key": "i",
+          "text": "La mala suerte como causa principal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay factores identificables."
+        },
+        {
+          "key": "j",
+          "text": "El tipo de anestesia general",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un factor principal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "Las heridas quirúrgicas se clasifican según su contaminación en limpias, limpias contaminadas, contaminadas y sucias, con riesgo de infección creciente. La herida sucia, como una víscera perforada con peritonitis, tiene el mayor riesgo. Los factores del paciente incluyen diabetes descontrolada, obesidad, tabaquismo, desnutrición, inmunosupresión y edad avanzada. Los factores del procedimiento incluyen duración prolongada, cirugía de urgencia, hipotermia, transfusión y técnica. En heridas sucias puede dejarse la piel abierta para cierre diferido. El control de la glucosa y el cese del tabaco reducen el riesgo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de infección de sitio quirúrgico"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "perioperative",
+      "subtopic": "surgical_site_infection",
+      "vignette": "Hombre de 58 años con diabetes operado de hernioplastia que al tercer día presenta dolor intenso desproporcionado en la herida, edema que se extiende, piel violácea con ampollas, crepitación y fiebre con hipotensión.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Celulitis simple",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la crepitación ni la toxicidad."
+        },
+        {
+          "key": "b",
+          "text": "Reacción alérgica a la malla",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la crepitación."
+        },
+        {
+          "key": "c",
+          "text": "Seroma infectado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica las ampollas ni la crepitación."
+        },
+        {
+          "key": "d",
+          "text": "Hematoma de pared",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la fiebre y la toxicidad."
+        },
+        {
+          "key": "e",
+          "text": "Trombosis venosa",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica los hallazgos."
+        },
+        {
+          "key": "f",
+          "text": "Fascitis necrosante",
+          "correct": true,
+          "rationale": "Dolor desproporcionado, ampollas, crepitación y toxicidad sistémica."
+        },
+        {
+          "key": "g",
+          "text": "Erisipela",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es superficial con bordes bien definidos."
+        },
+        {
+          "key": "h",
+          "text": "Dolor normal tras la cirugía",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es desproporcionado y grave."
+        },
+        {
+          "key": "i",
+          "text": "Infección superficial de la herida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la gravedad."
+        },
+        {
+          "key": "j",
+          "text": "Absceso simple",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la extensión rápida."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "La fascitis necrosante es una infección grave y rápidamente progresiva de la fascia y el tejido subcutáneo, polimicrobiana o por Streptococcus pyogenes o Clostridium. Los factores de riesgo incluyen diabetes, inmunosupresión, obesidad y cirugía. Se manifiesta con dolor desproporcionado a los hallazgos iniciales, edema que rebasa el eritema, piel violácea, ampollas, crepitación, anestesia cutánea y toxicidad sistémica. La escala LRINEC ayuda en el diagnóstico. El tratamiento es desbridamiento quirúrgico urgente y amplio, antibióticos de amplio espectro con clindamicina y soporte. El retraso aumenta la mortalidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de infección de sitio quirúrgico"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "perioperative",
+      "subtopic": "surgical_site_infection",
+      "vignette": "Hombre de 62 años con laparotomía hace 7 días que tras un acceso de tos presenta salida abundante de líquido serosanguinolento por la herida. Al explorar se observan asas intestinales en el fondo de la herida bajo la piel separada.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Reacción a las suturas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "b",
+          "text": "Fístula enterocutánea",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Daría salida de contenido intestinal."
+        },
+        {
+          "key": "c",
+          "text": "Infección superficial de la herida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la visualización de asas."
+        },
+        {
+          "key": "d",
+          "text": "Hernia incisional tardía",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es una complicación de meses o años."
+        },
+        {
+          "key": "e",
+          "text": "Absceso de pared",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica las asas visibles."
+        },
+        {
+          "key": "f",
+          "text": "Seroma simple",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la separación de la aponeurosis."
+        },
+        {
+          "key": "g",
+          "text": "Fuga de anastomosis",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la herida abierta con asas."
+        },
+        {
+          "key": "h",
+          "text": "Herida que solo necesita una gasa más gruesa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia quirúrgica."
+        },
+        {
+          "key": "i",
+          "text": "Hematoma de pared",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica la visualización de asas."
+        },
+        {
+          "key": "j",
+          "text": "Dehiscencia de la aponeurosis con evisceración contenida",
+          "correct": true,
+          "rationale": "Salida de líquido serosanguinolento tras un esfuerzo con asas visibles."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "La dehiscencia aponeurótica es la separación de los bordes de la aponeurosis, generalmente entre el quinto y el décimo día posoperatorio. El signo de alarma típico es la salida de líquido serosanguinolento abundante por la herida, y puede progresar a evisceración. Los factores de riesgo incluyen edad avanzada, desnutrición, obesidad, infección de la herida, tos, distensión, corticosteroides, cirugía de urgencia y técnica de cierre. Se cubren las asas con gasas húmedas estériles, se coloca una faja y se reinterviene para cerrar la pared, a veces con malla o cierre temporal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de infección de sitio quirúrgico"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "perioperative",
+      "subtopic": "surgical_site_infection",
+      "vignette": "Mujer de 45 años con colecistectomía abierta. Tiene fiebre de 38 °C en las primeras 24 horas del posoperatorio, sin otros síntomas. Herida limpia y sin dolor abdominal anormal.",
+      "prompt": "¿Qué indica esta fiebre en el primer día posoperatorio?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sepsis que requiere carbapenémicos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay datos de sepsis."
+        },
+        {
+          "key": "b",
+          "text": "Fuga biliar que requiere reintervención inmediata",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay datos."
+        },
+        {
+          "key": "c",
+          "text": "Trombosis venosa profunda como causa más probable",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Suele aparecer más tarde."
+        },
+        {
+          "key": "d",
+          "text": "Absceso intraabdominal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Aparece días después."
+        },
+        {
+          "key": "e",
+          "text": "Probablemente respuesta inflamatoria al trauma quirúrgico o atelectasia, sin infección de herida",
+          "correct": true,
+          "rationale": "La fiebre de las primeras 48 horas rara vez es infecciosa."
+        },
+        {
+          "key": "f",
+          "text": "Toda fiebre después de operar es infección",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La mayoría de la fiebre temprana no lo es."
+        },
+        {
+          "key": "g",
+          "text": "Hipertermia maligna",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Ocurre en el quirófano con rigidez y gran elevación de temperatura."
+        },
+        {
+          "key": "h",
+          "text": "Infección de la herida quirúrgica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Suele aparecer después del quinto día."
+        },
+        {
+          "key": "i",
+          "text": "Endocarditis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay datos."
+        },
+        {
+          "key": "j",
+          "text": "Infección urinaria por sonda como causa más probable el primer día",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Suele aparecer después de 3 días."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "La causa de la fiebre posoperatoria se orienta por el tiempo de aparición. En las primeras 48 horas suele deberse a la respuesta inflamatoria al trauma quirúrgico, y la atelectasia es un hallazgo frecuente, aunque su relación causal con la fiebre es discutida. Entre los días 3 y 5 se consideran infección urinaria, neumonía y flebitis por catéter. Entre los días 5 y 7, infección de la herida, trombosis venosa y fuga de anastomosis. Después de una semana, abscesos intraabdominales. La fiebre muy alta en el quirófano sugiere hipertermia maligna o reacción transfusional.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de infección de sitio quirúrgico"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "perioperative",
+      "subtopic": "postoperative_fluids",
+      "vignette": "Hombre de 70 kg en ayuno posoperatorio tras cirugía abdominal, sin pérdidas anormales, con función renal normal.",
+      "prompt": "¿Cuál es el aporte de mantenimiento de líquidos y electrolitos más adecuado?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Nutrición parenteral total desde el primer día en todos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria en ayunos cortos."
+        },
+        {
+          "key": "b",
+          "text": "No incluir potasio en el mantenimiento",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Se requiere para las necesidades basales."
+        },
+        {
+          "key": "c",
+          "text": "Entre más líquidos, mejor recuperación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El exceso causa complicaciones."
+        },
+        {
+          "key": "d",
+          "text": "Agua destilada intravenosa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Causa hemólisis."
+        },
+        {
+          "key": "e",
+          "text": "Solo albúmina intravenosa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No cubre las necesidades."
+        },
+        {
+          "key": "f",
+          "text": "Potasio en bolo rápido intravenoso",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es peligroso."
+        },
+        {
+          "key": "g",
+          "text": "Solución glucosada al 5% sola a 4 litros por día",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Causa hiponatremia."
+        },
+        {
+          "key": "h",
+          "text": "Solución salina al 0.9% a 6 litros por día",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Causa sobrecarga y acidosis hiperclorémica."
+        },
+        {
+          "key": "i",
+          "text": "Ningún líquido intravenoso si está en ayuno",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Requiere aporte de mantenimiento."
+        },
+        {
+          "key": "j",
+          "text": "Alrededor de 25 a 30 mL/kg/día de agua con 1 mmol/kg/día de sodio y potasio y glucosa para evitar la cetosis",
+          "correct": true,
+          "rationale": "Cubre las necesidades basales."
+        }
+      ],
+      "canonical": [
+        "g",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "Las necesidades de mantenimiento en adultos son de 25 a 30 mL/kg/día de agua, 1 mmol/kg/día de sodio, potasio y cloro, y 50 a 100 g de glucosa al día para limitar la cetosis. El aporte se ajusta a las pérdidas anormales, como sonda nasogástrica, drenajes o fístulas, y a las condiciones del paciente, como insuficiencia cardiaca o renal. La sobrecarga de líquidos y sodio se asocia a íleo, edema, complicaciones pulmonares y fugas anastomóticas. La glucosada sola favorece la hiponatremia. Se prefiere reiniciar la vía oral lo antes posible.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de manejo de líquidos y electrolitos en el paciente quirúrgico"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "perioperative",
+      "subtopic": "postoperative_fluids",
+      "vignette": "Mujer de 60 años con colectomía hace 2 días que recibe solución glucosada al 5% como único líquido intravenoso. Presenta náusea, cefalea y confusión. Sodio sérico de 122 mEq/L.",
+      "prompt": "¿Qué indica este hallazgo?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hiponatremia posoperatoria por aporte de líquidos hipotónicos y secreción de hormona antidiurética",
+          "correct": true,
+          "rationale": "La glucosada sola favorece la hiponatremia en el posoperatorio."
+        },
+        {
+          "key": "b",
+          "text": "Error de laboratorio sin importancia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Los síntomas son compatibles."
+        },
+        {
+          "key": "c",
+          "text": "Hipernatremia por deshidratación",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El sodio está bajo."
+        },
+        {
+          "key": "d",
+          "text": "Hiperpotasemia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica los síntomas neurológicos."
+        },
+        {
+          "key": "e",
+          "text": "Evento vascular cerebral",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La hiponatremia explica el cuadro."
+        },
+        {
+          "key": "f",
+          "text": "Confusión normal tras la anestesia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay un trastorno metabólico."
+        },
+        {
+          "key": "g",
+          "text": "Valor normal en el posoperatorio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es una hiponatremia sintomática."
+        },
+        {
+          "key": "h",
+          "text": "Hipoglucemia como única explicación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El sodio explica los síntomas."
+        },
+        {
+          "key": "i",
+          "text": "Delirium por opioides sin relación con el sodio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La hiponatremia es significativa."
+        },
+        {
+          "key": "j",
+          "text": "Insuficiencia suprarrenal primaria como causa principal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El contexto orienta a líquidos hipotónicos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "La hiponatremia es frecuente en el posoperatorio por la secreción de hormona antidiurética estimulada por el dolor, la náusea, los opioides y el estrés quirúrgico, combinada con la administración de líquidos hipotónicos como la glucosada. Los síntomas incluyen náusea, cefalea, confusión, convulsiones y coma. La hiponatremia sintomática grave se trata con solución salina hipertónica al 3%, sin corregir más de 8 a 10 mEq/L en 24 horas para evitar la desmielinización osmótica. Se previene usando líquidos isotónicos balanceados para el mantenimiento y vigilando el sodio.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de manejo de líquidos y electrolitos en el paciente quirúrgico"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "perioperative",
+      "subtopic": "postoperative_fluids",
+      "vignette": "Hombre de 55 años con oclusión intestinal que tiene sonda nasogástrica con gasto de 2 litros al día durante 3 días. Presenta debilidad y su gasometría muestra pH de 7.50 con bicarbonato de 34 mEq/L. Potasio de 2.8 mEq/L y cloro de 88 mEq/L.",
+      "prompt": "¿Cuál es el siguiente paso para corregir el trastorno?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hemodiálisis urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "b",
+          "text": "Potasio en bolo rápido sin dilución",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es peligroso."
+        },
+        {
+          "key": "c",
+          "text": "Solución glucosada al 5% sola",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No repone cloro ni potasio."
+        },
+        {
+          "key": "d",
+          "text": "La alcalosis se corrige sola sin reponer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere reposición."
+        },
+        {
+          "key": "e",
+          "text": "Restringir los líquidos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Empeora el déficit."
+        },
+        {
+          "key": "f",
+          "text": "No cuantificar las pérdidas por la sonda",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Deben reponerse."
+        },
+        {
+          "key": "g",
+          "text": "Administrar bicarbonato de sodio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Empeora la alcalosis."
+        },
+        {
+          "key": "h",
+          "text": "Retirar la sonda sin reponer",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Las pérdidas ya ocurrieron."
+        },
+        {
+          "key": "i",
+          "text": "Administrar acetazolamida como primera medida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es la primera elección."
+        },
+        {
+          "key": "j",
+          "text": "Reponer las pérdidas con solución salina al 0.9% con cloruro de potasio",
+          "correct": true,
+          "rationale": "La alcalosis metabólica hipoclorémica e hipopotasémica responde a cloro y potasio."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "Las pérdidas gástricas por vómito o sonda nasogástrica contienen ácido clorhídrico, sodio y potasio, por lo que producen alcalosis metabólica hipoclorémica e hipopotasémica. La hipovolemia activa la aldosterona, que retiene sodio y elimina potasio e hidrógeno, perpetuando la alcalosis. El tratamiento es reponer el volumen y el cloro con solución salina al 0.9% y el potasio con cloruro de potasio, a una velocidad segura, generalmente no mayor de 10 a 20 mEq por hora por vena periférica. Las pérdidas de la sonda se reponen mililitro a mililitro.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de manejo de líquidos y electrolitos en el paciente quirúrgico"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "perioperative",
+      "subtopic": "postoperative_fluids",
+      "vignette": "Hombre de 68 años con sepsis abdominal tras cirugía que recibe solución salina al 0.9% abundante durante 3 días. Gasometría con pH de 7.29, bicarbonato de 17 mEq/L, cloro de 118 mEq/L, sodio de 140 mEq/L y anión gap de 5.",
+      "prompt": "¿Qué indica este trastorno ácido base?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cetoacidosis diabética",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tendría anión gap elevado."
+        },
+        {
+          "key": "b",
+          "text": "Acidosis por pérdidas pancreáticas exclusivamente",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El contexto es el exceso de salina."
+        },
+        {
+          "key": "c",
+          "text": "Acidosis metabólica hiperclorémica con anión gap normal por exceso de solución salina",
+          "correct": true,
+          "rationale": "El aporte excesivo de cloro reduce el bicarbonato."
+        },
+        {
+          "key": "d",
+          "text": "Acidosis láctica por sepsis con anión gap elevado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El anión gap es normal."
+        },
+        {
+          "key": "e",
+          "text": "Valores normales",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El pH está bajo."
+        },
+        {
+          "key": "f",
+          "text": "Alcalosis metabólica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El pH está bajo."
+        },
+        {
+          "key": "g",
+          "text": "Acidosis respiratoria",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El bicarbonato bajo indica causa metabólica."
+        },
+        {
+          "key": "h",
+          "text": "La solución salina es completamente fisiológica",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Tiene más cloro que el plasma."
+        },
+        {
+          "key": "i",
+          "text": "Insuficiencia renal crónica con anión gap elevado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El anión gap es normal."
+        },
+        {
+          "key": "j",
+          "text": "Intoxicación por metanol",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tendría anión gap elevado."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "f"
+      ],
+      "explanation": "La solución salina al 0.9% contiene 154 mEq/L de sodio y cloro, más cloro que el plasma. Su administración en grandes volúmenes produce acidosis metabólica hiperclorémica con anión gap normal, que puede asociarse a lesión renal. Las soluciones balanceadas como Ringer lactato o Hartmann tienen una composición más parecida al plasma y se prefieren en la reanimación de grandes volúmenes en pacientes quirúrgicos y sépticos. El anión gap normal ayuda a distinguir esta acidosis de las causadas por lactato, cetonas o tóxicos, que tienen anión gap elevado.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de manejo de líquidos y electrolitos en el paciente quirúrgico"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "urolithiasis",
+      "vignette": "Hombre de 35 años con dolor lumbar izquierdo súbito, intenso, tipo cólico, irradiado a la ingle y al testículo, con náusea y vómito. Está inquieto y no encuentra una posición cómoda. Examen general de orina con hematuria microscópica.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Lumbalgia mecánica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la hematuria ni la irradiación."
+        },
+        {
+          "key": "b",
+          "text": "Apendicitis aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El dolor es lumbar irradiado a genitales."
+        },
+        {
+          "key": "c",
+          "text": "Aneurisma aórtico roto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es poco probable a esta edad sin choque."
+        },
+        {
+          "key": "d",
+          "text": "Infarto renal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es raro."
+        },
+        {
+          "key": "e",
+          "text": "Pielonefritis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría fiebre y piuria."
+        },
+        {
+          "key": "f",
+          "text": "Dolor por cargar algo pesado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay hematuria y dolor cólico."
+        },
+        {
+          "key": "g",
+          "text": "Torsión testicular",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El testículo no es la fuente primaria."
+        },
+        {
+          "key": "h",
+          "text": "Diverticulitis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El dolor es lumbar cólico."
+        },
+        {
+          "key": "i",
+          "text": "Herpes zóster preeruptivo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la hematuria."
+        },
+        {
+          "key": "j",
+          "text": "Cólico renoureteral por litiasis",
+          "correct": true,
+          "rationale": "Dolor lumbar cólico irradiado a genitales con hematuria y paciente inquieto."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "j"
+      ],
+      "explanation": "La litiasis urinaria es frecuente y más común en hombres de 30 a 50 años. El cólico renoureteral se debe a la obstrucción del uréter por un cálculo, con distensión de la vía urinaria. Se manifiesta con dolor súbito e intenso en la fosa renal, tipo cólico, irradiado a la ingle, los genitales o la cara interna del muslo, con náusea, vómito e inquietud. Hay hematuria en la mayoría. Los cálculos más frecuentes son de oxalato de calcio. La tomografía simple de abdomen es el estudio más sensible, y el ultrasonido es útil en embarazadas y niños.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la litiasis urinaria"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "urolithiasis",
+      "vignette": "Mujer de 40 años con cólico renoureteral derecho por un cálculo de 4 mm en el uréter distal confirmado por tomografía. Sin fiebre, función renal normal y dolor intenso.",
+      "prompt": "¿Cuál es el tratamiento inicial?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Nefrolitotomía percutánea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se usa en cálculos renales grandes."
+        },
+        {
+          "key": "b",
+          "text": "Ureteroscopia urgente en todos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los cálculos pequeños sin complicaciones pueden expulsarse."
+        },
+        {
+          "key": "c",
+          "text": "Antiinflamatorio no esteroideo para el dolor y tratamiento expulsivo con tamsulosina",
+          "correct": true,
+          "rationale": "Los cálculos menores de 5 a 10 mm suelen expulsarse solos."
+        },
+        {
+          "key": "d",
+          "text": "Evitar la analgesia para no ocultar síntomas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El dolor debe tratarse."
+        },
+        {
+          "key": "e",
+          "text": "Líquidos intravenosos forzados en grandes volúmenes",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No aceleran la expulsión."
+        },
+        {
+          "key": "f",
+          "text": "Antibióticos de rutina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay infección."
+        },
+        {
+          "key": "g",
+          "text": "Nefrectomía",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "h",
+          "text": "Butilhioscina como único analgésico eficaz",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos eficaz que los antiinflamatorios."
+        },
+        {
+          "key": "i",
+          "text": "Tomar cerveza para expulsar la piedra",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "j",
+          "text": "Litotricia de urgencia en todos los cálculos pequeños",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesaria."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "f"
+      ],
+      "explanation": "El tratamiento inicial del cólico renoureteral es la analgesia, y los antiinflamatorios no esteroideos como el diclofenaco o el ketorolaco son de primera línea porque reducen la presión en la vía urinaria. Los opioides se usan si no hay respuesta. Los cálculos menores de 5 mm se expulsan de forma espontánea en la mayoría, y entre 5 y 10 mm la expulsión puede facilitarse con alfabloqueadores como tamsulosina. No se recomienda la hidratación forzada. Se indica intervención urgente si hay infección con obstrucción, riñón único obstruido, insuficiencia renal o dolor refractario.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la litiasis urinaria"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "urolithiasis",
+      "vignette": "Hombre de 50 años con cálculo ureteral izquierdo obstructivo de 8 mm que presenta fiebre de 39 °C, escalofríos, hipotensión y leucocitosis. Hidronefrosis izquierda en el ultrasonido.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ureteroscopia con litotricia inmediata para extraer el cálculo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "En sepsis se prioriza la descompresión y se difiere el tratamiento definitivo."
+        },
+        {
+          "key": "b",
+          "text": "Solo antibióticos orales y egreso",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es una urgencia."
+        },
+        {
+          "key": "c",
+          "text": "Nefrectomía urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "d",
+          "text": "La piedra saldrá sola con la fiebre",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La obstrucción infectada puede ser mortal."
+        },
+        {
+          "key": "e",
+          "text": "Tratamiento expulsivo con tamsulosina y esperar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Está contraindicado con infección y obstrucción."
+        },
+        {
+          "key": "f",
+          "text": "Esperar el urocultivo para iniciar antibióticos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El retraso aumenta la mortalidad."
+        },
+        {
+          "key": "g",
+          "text": "Litotricia extracorpórea urgente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Está contraindicada con infección activa."
+        },
+        {
+          "key": "h",
+          "text": "No descomprimir por miedo al procedimiento",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es esencial."
+        },
+        {
+          "key": "i",
+          "text": "Analgésicos y observación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No resuelve la obstrucción infectada."
+        },
+        {
+          "key": "j",
+          "text": "Antibióticos de amplio espectro y descompresión urgente de la vía urinaria con catéter ureteral doble J o nefrostomía percutánea",
+          "correct": true,
+          "rationale": "La infección con obstrucción es una urgencia urológica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "j"
+      ],
+      "explanation": "La obstrucción de la vía urinaria por un cálculo con infección, pielonefritis obstructiva o urosepsis, es una urgencia urológica con alto riesgo de mortalidad. El tratamiento es la reanimación, los antibióticos de amplio espectro tras tomar cultivos y la descompresión urgente de la vía urinaria, con catéter ureteral doble J o nefrostomía percutánea, que tienen eficacia similar. El tratamiento definitivo del cálculo se difiere hasta resolver la infección, ya que manipularlo en presencia de infección puede empeorar la sepsis. Otras indicaciones de intervención urgente son riñón único obstruido e insuficiencia renal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la litiasis urinaria"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q19",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "urolithiasis",
+      "vignette": "Hombre de 42 años con su tercer episodio de litiasis por cálculos de oxalato de calcio. Bebe poca agua, consume mucha sal y carne roja y tiene obesidad.",
+      "prompt": "¿Cuál es la medida de prevención de recurrencias más importante?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aumentar la ingesta de líquidos para lograr una diuresis mayor de 2 a 2.5 litros al día y reducir la sal y la proteína animal",
+          "correct": true,
+          "rationale": "Reduce la sobresaturación urinaria."
+        },
+        {
+          "key": "b",
+          "text": "Tomar refrescos de cola en abundancia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aumentan el riesgo."
+        },
+        {
+          "key": "c",
+          "text": "Suplementos de vitamina C a dosis altas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumentan el oxalato urinario."
+        },
+        {
+          "key": "d",
+          "text": "Beber cerveza a diario como prevención",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es una medida recomendada."
+        },
+        {
+          "key": "e",
+          "text": "No estudiar el metabolismo en recurrentes",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Se recomienda estudio metabólico."
+        },
+        {
+          "key": "f",
+          "text": "Reducir los líquidos para no forzar los riñones",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Aumenta el riesgo."
+        },
+        {
+          "key": "g",
+          "text": "Ninguna medida tras expulsar el cálculo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La recurrencia es alta."
+        },
+        {
+          "key": "h",
+          "text": "Eliminar todo el calcio de la dieta",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta la absorción de oxalato y el riesgo de cálculos."
+        },
+        {
+          "key": "i",
+          "text": "Nefrectomía preventiva",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es absurda."
+        },
+        {
+          "key": "j",
+          "text": "Antibióticos profilácticos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No previenen la litiasis por oxalato."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "La litiasis urinaria tiene una recurrencia de hasta 50% a 5 años. La medida preventiva más eficaz es aumentar la ingesta de líquidos para lograr una diuresis de más de 2 a 2.5 litros al día. Se recomienda reducir el sodio y la proteína animal, mantener una ingesta normal de calcio de la dieta, que se une al oxalato en el intestino, limitar los alimentos ricos en oxalato y controlar el peso. En pacientes recurrentes se realiza estudio metabólico con orina de 24 horas y se usan tiazidas para la hipercalciuria o citrato de potasio para la hipocitraturia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la litiasis urinaria"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q20",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "urolithiasis",
+      "vignette": "Mujer de 45 años con un cálculo de 15 mm en la pelvis renal derecha, sintomático, sin infección, con densidad menor de 1 000 unidades Hounsfield.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Observación indefinida en un cálculo sintomático",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Requiere tratamiento."
+        },
+        {
+          "key": "b",
+          "text": "Nefrectomía",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "c",
+          "text": "Cirugía abierta como primera opción",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Las técnicas mínimamente invasivas son preferidas."
+        },
+        {
+          "key": "d",
+          "text": "Antibióticos como tratamiento principal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay infección."
+        },
+        {
+          "key": "e",
+          "text": "Litotricia extracorpórea por ondas de choque o ureteroscopia flexible con láser",
+          "correct": true,
+          "rationale": "Son opciones de primera línea para cálculos renales de 10 a 20 mm."
+        },
+        {
+          "key": "f",
+          "text": "Trasplante renal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "g",
+          "text": "Tratamiento expulsivo con tamsulosina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los cálculos de 15 mm rara vez se expulsan solos."
+        },
+        {
+          "key": "h",
+          "text": "Remedios caseros para disolver el cálculo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No son eficaces."
+        },
+        {
+          "key": "i",
+          "text": "No tratar por miedo al procedimiento",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El cálculo sintomático requiere tratamiento."
+        },
+        {
+          "key": "j",
+          "text": "Citrato de potasio para disolver un cálculo de oxalato de 15 mm",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No disuelve el oxalato de calcio."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "g"
+      ],
+      "explanation": "El tratamiento de los cálculos renales depende del tamaño, la localización, la composición y la anatomía. Los cálculos menores de 10 mm pueden tratarse con litotricia extracorpórea o ureteroscopia flexible. Los de 10 a 20 mm con litotricia, ureteroscopia o nefrolitotomía percutánea, según la densidad y la localización. Los mayores de 20 mm y los coraliformes se tratan con nefrolitotomía percutánea. Los cálculos de ácido úrico pueden disolverse con alcalinización de la orina. La cirugía abierta se reserva para casos excepcionales.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la litiasis urinaria"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q21",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "benign_prostatic_hyperplasia",
+      "vignette": "Hombre de 68 años con chorro urinario débil, dificultad para iniciar la micción, goteo terminal, sensación de vaciamiento incompleto y nicturia de 3 veces por noche. Tacto rectal con próstata aumentada de tamaño, lisa, elástica y no dolorosa.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Prostatitis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría fiebre y próstata muy dolorosa."
+        },
+        {
+          "key": "b",
+          "text": "Infección urinaria baja",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la próstata aumentada ni la evolución crónica."
+        },
+        {
+          "key": "c",
+          "text": "Diabetes insípida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Causa poliuria, no obstrucción."
+        },
+        {
+          "key": "d",
+          "text": "Vejiga neurogénica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay antecedente neurológico."
+        },
+        {
+          "key": "e",
+          "text": "Algo normal de la edad que no tiene tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es tratable."
+        },
+        {
+          "key": "f",
+          "text": "Cálculo vesical",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la próstata aumentada."
+        },
+        {
+          "key": "g",
+          "text": "Cáncer de próstata",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Daría próstata dura, irregular o nodular."
+        },
+        {
+          "key": "h",
+          "text": "Cáncer de vejiga",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Daría hematuria."
+        },
+        {
+          "key": "i",
+          "text": "Estenosis de uretra",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La próstata no estaría aumentada."
+        },
+        {
+          "key": "j",
+          "text": "Hiperplasia prostática benigna",
+          "correct": true,
+          "rationale": "Síntomas urinarios bajos obstructivos con próstata aumentada, lisa y elástica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "La hiperplasia prostática benigna es el crecimiento no maligno de la zona de transición de la próstata, muy frecuente con la edad. Causa síntomas del tracto urinario inferior de vaciamiento, como chorro débil, dificultad para iniciar, goteo y vaciamiento incompleto, y de llenado, como frecuencia, urgencia y nicturia. Su gravedad se valora con la escala internacional de síntomas prostáticos. El tacto rectal muestra una próstata aumentada, lisa y elástica. Se realizan examen de orina, creatinina y antígeno prostático específico según la expectativa de vida, y ultrasonido con medición del residuo posmiccional.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperplasia prostática benigna"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q22",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "benign_prostatic_hyperplasia",
+      "vignette": "Hombre de 65 años con hiperplasia prostática benigna y síntomas urinarios moderados que afectan su calidad de vida. Próstata de 35 g. Sin retención ni complicaciones.",
+      "prompt": "¿Cuál es el tratamiento farmacológico de elección para el alivio rápido de los síntomas?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Alfabloqueador como tamsulosina",
+          "correct": true,
+          "rationale": "Relaja el músculo liso prostático y mejora los síntomas en días."
+        },
+        {
+          "key": "b",
+          "text": "No tratar porque es benigna",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Los síntomas afectan su calidad de vida."
+        },
+        {
+          "key": "c",
+          "text": "Antibióticos prolongados",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay infección."
+        },
+        {
+          "key": "d",
+          "text": "Testosterona",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede empeorar el crecimiento prostático."
+        },
+        {
+          "key": "e",
+          "text": "Inhibidor de 5 alfa reductasa como alivio rápido",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Su efecto tarda meses y es más útil en próstatas grandes."
+        },
+        {
+          "key": "f",
+          "text": "Prostatectomía radical",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es para cáncer."
+        },
+        {
+          "key": "g",
+          "text": "Resección transuretral de próstata inmediata",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para complicaciones o falla del tratamiento médico."
+        },
+        {
+          "key": "h",
+          "text": "Semillas de calabaza como tratamiento comprobado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Su eficacia no está demostrada."
+        },
+        {
+          "key": "i",
+          "text": "Sonda permanente",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No está indicada sin retención."
+        },
+        {
+          "key": "j",
+          "text": "Anticolinérgicos como monoterapia en síntomas obstructivos importantes",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Pueden causar retención."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "g"
+      ],
+      "explanation": "El tratamiento de la hiperplasia prostática benigna depende de los síntomas y las complicaciones. Los síntomas leves se manejan con vigilancia y cambios en el estilo de vida, como reducir los líquidos nocturnos, la cafeína y el alcohol. Los alfabloqueadores como tamsulosina, alfuzosina o doxazosina son de primera línea y mejoran los síntomas en días. Los inhibidores de 5 alfa reductasa, como finasterida y dutasterida, reducen el tamaño de la próstata en meses y son útiles en próstatas mayores de 30 a 40 g. La combinación se usa en próstatas grandes. Los inhibidores de fosfodiesterasa 5 también mejoran los síntomas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperplasia prostática benigna"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q23",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "benign_prostatic_hyperplasia",
+      "vignette": "Hombre de 72 años con hiperplasia prostática benigna que tras tomar un antigripal con descongestionante presenta imposibilidad para orinar de 10 horas, dolor suprapúbico intenso y globo vesical palpable.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Iniciar finasterida y esperar el efecto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tarda meses."
+        },
+        {
+          "key": "b",
+          "text": "Evitar la sonda por miedo a infección",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La retención debe resolverse."
+        },
+        {
+          "key": "c",
+          "text": "Resección transuretral de urgencia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Primero se drena la vejiga."
+        },
+        {
+          "key": "d",
+          "text": "Analgésicos y esperar a que orine solo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El dolor y la distensión requieren drenaje."
+        },
+        {
+          "key": "e",
+          "text": "Ultrasonido renal antes de drenar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Retrasa el alivio."
+        },
+        {
+          "key": "f",
+          "text": "Antibióticos y egreso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No resuelve la retención."
+        },
+        {
+          "key": "g",
+          "text": "Dar un diurético para que orine",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Empeora la distensión vesical."
+        },
+        {
+          "key": "h",
+          "text": "Abrir la llave del agua para estimular la micción como único manejo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No resuelve la retención."
+        },
+        {
+          "key": "i",
+          "text": "Cistoscopia diagnóstica urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "j",
+          "text": "Colocar sonda vesical para drenar la vejiga",
+          "correct": true,
+          "rationale": "Retención urinaria aguda que requiere descompresión inmediata."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "g",
+        "j"
+      ],
+      "explanation": "La retención urinaria aguda es una complicación de la hiperplasia prostática benigna, desencadenada con frecuencia por fármacos con efecto anticolinérgico o simpaticomimético, como antigripales, antihistamínicos y antidepresivos, por alcohol, frío, estreñimiento o anestesia. Se manifiesta con imposibilidad para orinar, dolor suprapúbico y globo vesical. El tratamiento es el drenaje inmediato con sonda vesical o, si no es posible, cistostomía suprapúbica. Se inicia un alfabloqueador antes de retirar la sonda para aumentar el éxito de la micción espontánea. La retención recurrente es indicación de cirugía.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperplasia prostática benigna"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q24",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "benign_prostatic_hyperplasia",
+      "vignette": "Hombre de 70 años con hiperplasia prostática benigna de 60 g, con retención urinaria recurrente pese a alfabloqueador e inhibidor de 5 alfa reductasa, y litiasis vesical secundaria.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Antibióticos profilácticos como único tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No resuelven la obstrucción."
+        },
+        {
+          "key": "b",
+          "text": "Cistectomía",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "c",
+          "text": "Tratamiento quirúrgico con resección transuretral de próstata u otra técnica endoscópica",
+          "correct": true,
+          "rationale": "La retención recurrente y los cálculos vesicales son indicaciones quirúrgicas."
+        },
+        {
+          "key": "d",
+          "text": "Litotricia del cálculo sin tratar la próstata",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El cálculo recurrirá."
+        },
+        {
+          "key": "e",
+          "text": "Sonda permanente como tratamiento definitivo en un paciente operable",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La cirugía es preferible."
+        },
+        {
+          "key": "f",
+          "text": "Prostatectomía radical",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es para cáncer."
+        },
+        {
+          "key": "g",
+          "text": "Remedios herbolarios para reducir la próstata",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No son eficaces."
+        },
+        {
+          "key": "h",
+          "text": "Aumentar la dosis del alfabloqueador indefinidamente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ya falló el tratamiento médico."
+        },
+        {
+          "key": "i",
+          "text": "No operar por la edad sin valorar su estado",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede beneficiarse."
+        },
+        {
+          "key": "j",
+          "text": "Testosterona para mejorar la vejiga",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede empeorar la próstata."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "h"
+      ],
+      "explanation": "Las indicaciones de tratamiento quirúrgico en la hiperplasia prostática benigna incluyen retención urinaria recurrente o refractaria, insuficiencia renal por obstrucción, infecciones urinarias recurrentes, hematuria recurrente de origen prostático, litiasis vesical, divertículos vesicales y falla del tratamiento médico. La resección transuretral de próstata es el estándar para próstatas de 30 a 80 g. Otras técnicas son la enucleación con láser de holmio, la vaporización con láser y la prostatectomía simple abierta o robótica en próstatas muy grandes. Las complicaciones incluyen eyaculación retrógrada.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperplasia prostática benigna"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q25",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "benign_prostatic_hyperplasia",
+      "vignette": "Hombre de 74 años con hiperplasia prostática benigna no tratada durante años que presenta debilidad, náusea, edema y creatinina de 4.2 mg/dL. El ultrasonido muestra hidronefrosis bilateral y vejiga distendida con residuo de 900 mL.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Nefropatía diabética",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la hidronefrosis bilateral con vejiga distendida."
+        },
+        {
+          "key": "b",
+          "text": "Insuficiencia cardiaca",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la hidronefrosis."
+        },
+        {
+          "key": "c",
+          "text": "Insuficiencia prerrenal por deshidratación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la hidronefrosis."
+        },
+        {
+          "key": "d",
+          "text": "Nefritis intersticial por fármacos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la obstrucción."
+        },
+        {
+          "key": "e",
+          "text": "Glomerulonefritis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la obstrucción."
+        },
+        {
+          "key": "f",
+          "text": "Litiasis ureteral bilateral",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "La vejiga distendida orienta a obstrucción baja."
+        },
+        {
+          "key": "g",
+          "text": "Riñón poliquístico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica la vejiga distendida."
+        },
+        {
+          "key": "h",
+          "text": "Insuficiencia renal normal por la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una causa obstructiva tratable."
+        },
+        {
+          "key": "i",
+          "text": "Cáncer de vejiga obstructivo como primera causa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La próstata explica el cuadro."
+        },
+        {
+          "key": "j",
+          "text": "Insuficiencia renal posrenal por obstrucción crónica de la salida vesical",
+          "correct": true,
+          "rationale": "La retención crónica transmite presión a los riñones."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "La obstrucción crónica de la salida vesical por hiperplasia prostática benigna puede causar retención urinaria crónica con residuo elevado, hidronefrosis bilateral e insuficiencia renal posrenal. A veces se manifiesta con incontinencia por rebosamiento. El tratamiento inicial es la descompresión con sonda vesical, tras la cual puede presentarse diuresis posobstructiva importante que requiere vigilar los líquidos y los electrolitos. La función renal suele mejorar si la obstrucción se corrige a tiempo. Después se indica tratamiento quirúrgico de la obstrucción prostática para evitar el daño renal permanente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperplasia prostática benigna"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q26",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "prostate_cancer",
+      "vignette": "Hombre de 67 años con tacto rectal que muestra un nódulo duro, pétreo e irregular en el lóbulo derecho de la próstata. Antígeno prostático específico de 15 ng/mL. Asintomático.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cáncer de próstata",
+          "correct": true,
+          "rationale": "Nódulo duro e irregular con antígeno prostático elevado."
+        },
+        {
+          "key": "b",
+          "text": "Prostatitis crónica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No da nódulo pétreo."
+        },
+        {
+          "key": "c",
+          "text": "Infección urinaria",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el nódulo."
+        },
+        {
+          "key": "d",
+          "text": "Absceso prostático",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Daría fiebre y dolor."
+        },
+        {
+          "key": "e",
+          "text": "Cáncer de recto",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El nódulo es prostático."
+        },
+        {
+          "key": "f",
+          "text": "Hiperplasia prostática benigna",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La próstata sería lisa y elástica."
+        },
+        {
+          "key": "g",
+          "text": "Antígeno alto normal por la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El nódulo es sospechoso."
+        },
+        {
+          "key": "h",
+          "text": "Quiste prostático",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es duro ni irregular."
+        },
+        {
+          "key": "i",
+          "text": "Litiasis prostática como única explicación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el antígeno elevado con nódulo."
+        },
+        {
+          "key": "j",
+          "text": "Tuberculosis prostática",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "i"
+      ],
+      "explanation": "El cáncer de próstata es el cáncer más frecuente en hombres mexicanos y una de las principales causas de muerte por cáncer. Suele originarse en la zona periférica, accesible al tacto rectal, y es asintomático en etapas tempranas. Se sospecha con un tacto rectal anormal, con nódulo duro o irregular, o con antígeno prostático específico elevado. El diagnóstico se confirma con biopsia de próstata guiada por ultrasonido transrectal o por fusión con resonancia magnética multiparamétrica. La agresividad se gradúa con la escala de Gleason y los grupos de grado ISUP.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de próstata"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q27",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "prostate_cancer",
+      "vignette": "Hombre de 62 años con antígeno prostático específico de 8.5 ng/mL confirmado en dos mediciones y tacto rectal normal. Sin infección urinaria.",
+      "prompt": "¿Cuál es el estudio de elección para confirmar el diagnóstico?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Diagnóstico por el antígeno sin biopsia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El antígeno no es específico."
+        },
+        {
+          "key": "b",
+          "text": "Tomografía de abdomen como diagnóstico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No confirma el cáncer."
+        },
+        {
+          "key": "c",
+          "text": "Fosfatasa ácida",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Ya no se usa."
+        },
+        {
+          "key": "d",
+          "text": "Tomografía por emisión de positrones con PSMA como diagnóstico primario en todos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se usa en estadificación de casos seleccionados."
+        },
+        {
+          "key": "e",
+          "text": "Repetir el antígeno cada año sin otro estudio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Retrasa el diagnóstico."
+        },
+        {
+          "key": "f",
+          "text": "Iniciar tratamiento hormonal sin biopsia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere confirmación."
+        },
+        {
+          "key": "g",
+          "text": "Ultrasonido renal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No evalúa la próstata."
+        },
+        {
+          "key": "h",
+          "text": "Gammagrama óseo como estudio diagnóstico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Evalúa metástasis, no confirma el cáncer."
+        },
+        {
+          "key": "i",
+          "text": "Cistoscopia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No confirma el cáncer de próstata."
+        },
+        {
+          "key": "j",
+          "text": "Biopsia de próstata, idealmente guiada por resonancia magnética multiparamétrica previa",
+          "correct": true,
+          "rationale": "Solo el estudio histológico confirma el cáncer."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "El antígeno prostático específico es una proteína producida por la próstata que se eleva en el cáncer, pero también en la hiperplasia, la prostatitis, tras el tacto rectal, la eyaculación o la instrumentación. Un valor elevado confirmado requiere evaluación. La resonancia magnética multiparamétrica previa a la biopsia identifica lesiones sospechosas, mejora la detección de cánceres clínicamente significativos y puede evitar biopsias innecesarias. El diagnóstico se confirma con biopsia dirigida y sistemática. El gammagrama óseo y la tomografía se usan para estadificar en riesgo intermedio o alto.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de próstata"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q28",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "prostate_cancer",
+      "vignette": "Hombre de 58 años con cáncer de próstata localizado, Gleason 7, antígeno de 9 ng/mL, sin metástasis. Buen estado de salud con expectativa de vida mayor de 10 años.",
+      "prompt": "¿Cuál es el tratamiento de elección con intención curativa?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Prostatectomía radical o radioterapia con terapia hormonal de corta duración",
+          "correct": true,
+          "rationale": "Son opciones curativas en enfermedad localizada de riesgo intermedio."
+        },
+        {
+          "key": "b",
+          "text": "Quimioterapia como primera línea",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se usa en enfermedad avanzada."
+        },
+        {
+          "key": "c",
+          "text": "Cistoprostatectomía",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "d",
+          "text": "Vigilancia activa en todos los riesgos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para bajo riesgo."
+        },
+        {
+          "key": "e",
+          "text": "Terapia hormonal sola como tratamiento curativo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es curativa sola en enfermedad localizada."
+        },
+        {
+          "key": "f",
+          "text": "Finasterida como tratamiento del cáncer",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No trata el cáncer."
+        },
+        {
+          "key": "g",
+          "text": "Resección transuretral de próstata",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es para hiperplasia."
+        },
+        {
+          "key": "h",
+          "text": "Tratamiento herbolario",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "i",
+          "text": "No tratar por miedo a la impotencia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Hay opciones curativas."
+        },
+        {
+          "key": "j",
+          "text": "Orquiectomía bilateral como única medida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es curativa."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "g"
+      ],
+      "explanation": "El tratamiento del cáncer de próstata localizado depende del riesgo, la expectativa de vida y las preferencias. En bajo riesgo se prefiere la vigilancia activa con antígeno, tacto, resonancia y biopsias periódicas. En riesgo intermedio o alto con expectativa de vida mayor de 10 años, las opciones curativas son la prostatectomía radical y la radioterapia externa o braquiterapia, combinada con terapia de privación androgénica en riesgo intermedio desfavorable y alto. Las complicaciones incluyen incontinencia urinaria y disfunción eréctil. La enfermedad metastásica se trata con privación androgénica y otros fármacos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de próstata"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q29",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "prostate_cancer",
+      "vignette": "Hombre de 75 años con cáncer de próstata metastásico conocido que presenta dolor lumbar intenso de 2 semanas que empeora al acostarse, y ahora debilidad en ambas piernas, dificultad para caminar y retención urinaria.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de Guillain Barré",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica el contexto."
+        },
+        {
+          "key": "b",
+          "text": "Hiperplasia prostática con retención aislada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la debilidad."
+        },
+        {
+          "key": "c",
+          "text": "Lumbalgia mecánica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el déficit neurológico."
+        },
+        {
+          "key": "d",
+          "text": "Debilidad por la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia oncológica."
+        },
+        {
+          "key": "e",
+          "text": "Hipercalcemia aislada",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el déficit focal."
+        },
+        {
+          "key": "f",
+          "text": "Evento vascular cerebral",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El déficit es en ambas piernas con nivel medular."
+        },
+        {
+          "key": "g",
+          "text": "Hernia de disco simple",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El contexto oncológico orienta a metástasis."
+        },
+        {
+          "key": "h",
+          "text": "Infección urinaria con delirium",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la debilidad bilateral."
+        },
+        {
+          "key": "i",
+          "text": "Neuropatía periférica por quimioterapia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la retención ni el dolor."
+        },
+        {
+          "key": "j",
+          "text": "Compresión medular por metástasis vertebrales",
+          "correct": true,
+          "rationale": "Dolor lumbar con déficit motor y disfunción vesical en cáncer metastásico."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "La compresión medular maligna es una urgencia oncológica frecuente en cánceres que metastatizan al hueso, como próstata, mama y pulmón. El dolor de espalda que empeora al acostarse es el síntoma inicial más común, seguido de debilidad, alteraciones sensitivas con nivel y disfunción vesical o intestinal. El pronóstico funcional depende del estado neurológico al iniciar el tratamiento. Se realiza resonancia magnética de toda la columna de urgencia y se inicia dexametasona. El tratamiento definitivo es radioterapia o cirugía descompresiva. En cáncer de próstata se agrega privación androgénica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de próstata"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q30",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "prostate_cancer",
+      "vignette": "Hombre de 55 años sin síntomas urinarios ni antecedentes familiares que pregunta si debe hacerse el estudio de antígeno prostático.",
+      "prompt": "¿Cuál es la recomendación sobre el tamizaje de cáncer de próstata?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Antígeno obligatorio cada 6 meses desde los 30 años",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No se recomienda."
+        },
+        {
+          "key": "b",
+          "text": "Ningún hombre debe hacerse nunca el estudio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede beneficiar a algunos tras informarse."
+        },
+        {
+          "key": "c",
+          "text": "Tamizaje obligatorio a los 85 años",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No se recomienda a esa edad."
+        },
+        {
+          "key": "d",
+          "text": "Gammagrama óseo de rutina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es un tamizaje."
+        },
+        {
+          "key": "e",
+          "text": "No informar sobre las opciones",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe tomar una decisión informada."
+        },
+        {
+          "key": "f",
+          "text": "Tomografía abdominal anual",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es un método de tamizaje."
+        },
+        {
+          "key": "g",
+          "text": "Decisión compartida explicando beneficios y riesgos del antígeno prostático específico entre los 50 y 69 años",
+          "correct": true,
+          "rationale": "El tamizaje reduce ligeramente la mortalidad pero conlleva sobrediagnóstico."
+        },
+        {
+          "key": "h",
+          "text": "Si orina bien no puede tener cáncer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El cáncer temprano es asintomático."
+        },
+        {
+          "key": "i",
+          "text": "Biopsia de próstata de rutina a todos los mayores de 50",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es invasiva y sin indicación."
+        },
+        {
+          "key": "j",
+          "text": "Resonancia magnética anual en todos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es el tamizaje inicial."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "i"
+      ],
+      "explanation": "El tamizaje de cáncer de próstata con antígeno prostático específico reduce ligeramente la mortalidad por cáncer de próstata, pero conlleva falsos positivos, biopsias innecesarias, sobrediagnóstico de cánceres que nunca causarían síntomas y sobretratamiento con efectos adversos. Por ello se recomienda una decisión compartida e informada en hombres de 50 a 69 años, y desde los 40 a 45 años en hombres de alto riesgo, como afrodescendientes o con antecedente familiar o mutaciones BRCA. No se recomienda en mayores de 70 años o con expectativa de vida menor de 10 años.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de próstata"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q31",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "testicular_torsion",
+      "vignette": "Adolescente de 14 años que despertó con dolor súbito e intenso en el testículo derecho, náusea y vómito. El testículo está elevado, en posición horizontal, muy doloroso, con reflejo cremastérico ausente. El dolor no mejora al elevarlo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Traumatismo testicular",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay antecedente."
+        },
+        {
+          "key": "b",
+          "text": "Torsión del apéndice testicular",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da dolor localizado con punto azul y reflejo conservado."
+        },
+        {
+          "key": "c",
+          "text": "Tumor testicular",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Suele ser indoloro."
+        },
+        {
+          "key": "d",
+          "text": "Varicocele",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es indoloro o con molestia leve."
+        },
+        {
+          "key": "e",
+          "text": "Hernia inguinal incarcerada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Daría masa inguinal."
+        },
+        {
+          "key": "f",
+          "text": "Dolor por dormir en mala posición",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia."
+        },
+        {
+          "key": "g",
+          "text": "Torsión testicular",
+          "correct": true,
+          "rationale": "Dolor súbito con testículo elevado y horizontal, reflejo cremastérico ausente y signo de Prehn negativo."
+        },
+        {
+          "key": "h",
+          "text": "Cólico renal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El testículo no estaría elevado ni horizontal."
+        },
+        {
+          "key": "i",
+          "text": "Orquitis por parotiditis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se acompaña de parotiditis."
+        },
+        {
+          "key": "j",
+          "text": "Epididimitis aguda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Suele ser gradual, con fiebre, síntomas urinarios y alivio al elevar el testículo."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "La torsión testicular es la rotación del cordón espermático que compromete el flujo sanguíneo, más frecuente en adolescentes y recién nacidos. Se asocia a la deformidad en badajo de campana. Se manifiesta con dolor testicular súbito e intenso, náusea y vómito, testículo elevado y horizontal, ausencia del reflejo cremastérico y signo de Prehn negativo, es decir, el dolor no mejora al elevar el testículo. La escala TWIST estima la probabilidad. El ultrasonido Doppler muestra ausencia de flujo, pero no debe retrasar la cirugía cuando la sospecha es alta.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de torsión testicular"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q32",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "testicular_torsion",
+      "vignette": "Hombre de 25 años sexualmente activo con dolor testicular izquierdo progresivo de 3 días, fiebre de 38 °C y disuria. El epidídimo está engrosado y doloroso, el reflejo cremastérico está presente y el dolor mejora al elevar el testículo. Doppler con aumento del flujo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Orquitis tuberculosa",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es crónica."
+        },
+        {
+          "key": "b",
+          "text": "Hernia inguinal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la fiebre ni el epidídimo engrosado."
+        },
+        {
+          "key": "c",
+          "text": "Tumor testicular",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No da fiebre ni disuria."
+        },
+        {
+          "key": "d",
+          "text": "Hidrocele",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es indoloro y transilumina."
+        },
+        {
+          "key": "e",
+          "text": "Torsión testicular",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El dolor es gradual, el reflejo está presente y el flujo aumentado."
+        },
+        {
+          "key": "f",
+          "text": "Dolor por la ropa ajustada",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una infección."
+        },
+        {
+          "key": "g",
+          "text": "Varicocele",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No da fiebre."
+        },
+        {
+          "key": "h",
+          "text": "Torsión del apéndice testicular",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es más común en niños."
+        },
+        {
+          "key": "i",
+          "text": "Epididimitis aguda probablemente por Chlamydia trachomatis o Neisseria gonorrhoeae",
+          "correct": true,
+          "rationale": "Dolor progresivo con fiebre, disuria, reflejo conservado y aumento del flujo."
+        },
+        {
+          "key": "j",
+          "text": "Cólico renal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el epidídimo inflamado."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "i"
+      ],
+      "explanation": "La epididimitis aguda es la inflamación del epidídimo, generalmente infecciosa. En hombres menores de 35 años sexualmente activos suele deberse a Chlamydia trachomatis y Neisseria gonorrhoeae, y en mayores o con instrumentación urinaria a bacterias entéricas como Escherichia coli. Se manifiesta con dolor testicular de inicio gradual, fiebre, síntomas urinarios, epidídimo engrosado, signo de Prehn positivo con alivio al elevar y reflejo cremastérico presente. El Doppler muestra aumento del flujo. Se trata con ceftriaxona más doxiciclina en jóvenes y con quinolonas en mayores, y se tratan las parejas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de epididimitis y orquitis"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q33",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "testicular_torsion",
+      "vignette": "Adolescente de 15 años con torsión testicular que llega al hospital 18 horas después del inicio del dolor. La exploración quirúrgica muestra un testículo negro que no recupera la coloración tras la detorsión.",
+      "prompt": "¿Cuál es el pronóstico y la conducta ante este hallazgo?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dejar el testículo sin fijar el contralateral",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El contralateral tiene riesgo de torsión."
+        },
+        {
+          "key": "b",
+          "text": "Prótesis inmediata sin retirar el testículo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El tejido necrótico debe retirarse."
+        },
+        {
+          "key": "c",
+          "text": "Biopsia y esperar el resultado",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa el manejo."
+        },
+        {
+          "key": "d",
+          "text": "Castración bilateral",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es innecesaria."
+        },
+        {
+          "key": "e",
+          "text": "Testículo no viable que requiere orquiectomía y fijación del testículo contralateral",
+          "correct": true,
+          "rationale": "Tras más de 12 a 24 horas la viabilidad es muy baja."
+        },
+        {
+          "key": "f",
+          "text": "El testículo recuperará la función con el tiempo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La necrosis es irreversible."
+        },
+        {
+          "key": "g",
+          "text": "Solo antibióticos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No resuelven la necrosis."
+        },
+        {
+          "key": "h",
+          "text": "Perderá la fertilidad por completo de forma segura",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El otro testículo mantiene la fertilidad."
+        },
+        {
+          "key": "i",
+          "text": "No explicar la importancia de la fijación contralateral",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es fundamental."
+        },
+        {
+          "key": "j",
+          "text": "Fijar el testículo afectado y esperar recuperación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Un testículo necrótico debe retirarse."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "j"
+      ],
+      "explanation": "La viabilidad del testículo torcido depende del tiempo de isquemia. Si se corrige en menos de 6 horas, la tasa de salvamento es mayor de 90%, y disminuye a menos de 10% después de 24 horas. En la exploración se destuerce el cordón y se observa la recuperación de la coloración. Un testículo necrótico se retira con orquiectomía, ya que puede generar anticuerpos que afecten al otro testículo. Siempre se fija el testículo contralateral por el riesgo de torsión por la misma deformidad. La fertilidad suele conservarse con un testículo sano.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de torsión testicular"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q34",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "testicular_torsion",
+      "vignette": "Hombre de 28 años que nota un aumento de volumen indoloro y duro en el testículo izquierdo de 2 meses. No tiene fiebre ni antecedente de traumatismo. La masa no transilumina y el ultrasonido muestra una lesión sólida intratesticular.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hidrocele",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Transilumina y es quístico."
+        },
+        {
+          "key": "b",
+          "text": "Hematoma testicular",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay traumatismo."
+        },
+        {
+          "key": "c",
+          "text": "Varicocele",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da bolsa de gusanos en el cordón."
+        },
+        {
+          "key": "d",
+          "text": "Orquitis por parotiditis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es dolorosa y aguda."
+        },
+        {
+          "key": "e",
+          "text": "Espermatocele",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es quístico en el epidídimo."
+        },
+        {
+          "key": "f",
+          "text": "Quiste de epidídimo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es extratesticular."
+        },
+        {
+          "key": "g",
+          "text": "Tumor testicular de células germinales",
+          "correct": true,
+          "rationale": "Masa sólida intratesticular indolora en un hombre joven."
+        },
+        {
+          "key": "h",
+          "text": "Inflamación benigna que desaparecerá sola",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La masa sólida requiere estudio."
+        },
+        {
+          "key": "i",
+          "text": "Epididimitis crónica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Afecta el epidídimo y suele ser dolorosa."
+        },
+        {
+          "key": "j",
+          "text": "Hernia inguinoescrotal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es reductible."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "El cáncer testicular es el tumor sólido más frecuente en hombres de 15 a 35 años. Más de 90% son tumores de células germinales, seminomas y no seminomas. El principal factor de riesgo es la criptorquidia. Se manifiesta como una masa testicular dura e indolora. El ultrasonido muestra una lesión sólida intratesticular. Se miden marcadores como alfafetoproteína, fracción beta de gonadotropina coriónica y deshidrogenasa láctica. El tratamiento inicial es la orquiectomía radical por vía inguinal, nunca por vía escrotal. Tiene excelente pronóstico, incluso con metástasis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de testículo"
+      ]
+    },
+    {
+      "key": "cir-06-perioperatorio-urologia-q35",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "urology",
+      "subtopic": "testicular_torsion",
+      "vignette": "Adolescente de 16 años con una masa en el escroto izquierdo que se palpa como una bolsa de gusanos, aumenta de tamaño de pie y con la maniobra de Valsalva y disminuye al acostarse. Refiere pesadez escrotal.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Varicocele",
+          "correct": true,
+          "rationale": "Dilatación del plexo pampiniforme que se palpa como bolsa de gusanos y aumenta de pie."
+        },
+        {
+          "key": "b",
+          "text": "Venas normales del escroto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La dilatación es anormal."
+        },
+        {
+          "key": "c",
+          "text": "Espermatocele",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es un quiste del epidídimo."
+        },
+        {
+          "key": "d",
+          "text": "Epididimitis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es dolorosa con fiebre."
+        },
+        {
+          "key": "e",
+          "text": "Hernia inguinal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Contiene asas y es reductible al abdomen."
+        },
+        {
+          "key": "f",
+          "text": "Torsión testicular",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da dolor agudo intenso."
+        },
+        {
+          "key": "g",
+          "text": "Quiste sebáceo escrotal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es superficial en la piel."
+        },
+        {
+          "key": "h",
+          "text": "Linfadenopatía inguinal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No está en el escroto."
+        },
+        {
+          "key": "i",
+          "text": "Tumor testicular",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es una masa sólida intratesticular."
+        },
+        {
+          "key": "j",
+          "text": "Hidrocele",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es liso y transilumina."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "El varicocele es la dilatación de las venas del plexo pampiniforme. Es más frecuente del lado izquierdo, porque la vena espermática izquierda drena en ángulo recto en la vena renal izquierda. Se palpa como una bolsa de gusanos que aumenta de pie y con Valsalva y disminuye al acostarse. Puede causar pesadez, atrofia testicular e infertilidad. Un varicocele derecho aislado o que no disminuye al acostarse obliga a descartar una masa retroperitoneal o renal. El tratamiento quirúrgico o la embolización se indican por dolor, atrofia testicular o infertilidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del varicocele"
+      ]
+    }
+  ]
+}

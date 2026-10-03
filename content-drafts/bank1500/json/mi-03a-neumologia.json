@@ -1,0 +1,945 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-03a-neumologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "asthma_adult",
+      "vignette": "Mujer de 26 años con episodios de sibilancias, tos nocturna y disnea que empeoran con el polvo y el ejercicio desde hace un año. Exploración normal en este momento.",
+      "prompt": "¿Cuál es el estudio de elección para confirmar el diagnóstico de asma?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Prueba terapéutica con antibiótico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Trata una infección inexistente."
+        },
+        {
+          "key": "b",
+          "text": "Radiografía de tórax",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Suele ser normal y no confirma asma."
+        },
+        {
+          "key": "c",
+          "text": "Medición de IgE total como prueba definitiva",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la IgE confirma asma."
+        },
+        {
+          "key": "d",
+          "text": "Gasometría arterial",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No aporta al diagnóstico en una paciente estable."
+        },
+        {
+          "key": "e",
+          "text": "Biometría hemática con eosinófilos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la alergia, pero no confirma el diagnóstico."
+        },
+        {
+          "key": "f",
+          "text": "Ecocardiograma para descartar insuficiencia cardiaca",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No considera la baja probabilidad en una mujer joven."
+        },
+        {
+          "key": "g",
+          "text": "Pruebas cutáneas de alergia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Identifican sensibilización, no asma."
+        },
+        {
+          "key": "h",
+          "text": "Tomografía de alta resolución de tórax",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria para diagnosticar asma."
+        },
+        {
+          "key": "i",
+          "text": "Espirometría con prueba broncodilatadora",
+          "correct": true,
+          "rationale": "Demuestra obstrucción reversible con aumento del FEV1 de 12% y 200 mL o más."
+        },
+        {
+          "key": "j",
+          "text": "Oximetría de pulso en reposo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Medir oxígeno suena útil, pero suele ser normal."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "h",
+        "i"
+      ],
+      "explanation": "El diagnóstico de asma se basa en síntomas respiratorios variables, como sibilancias, disnea, opresión torácica y tos, más la demostración de limitación variable del flujo aéreo. La espirometría con prueba broncodilatadora es el estudio de elección. Un aumento del FEV1 de al menos 12% y 200 mL tras el broncodilatador confirma la reversibilidad. Si la espirometría es normal, se puede documentar variabilidad con flujometría seriada o una prueba de reto bronquial con metacolina. La radiografía de tórax suele ser normal y se usa para descartar otras causas. Las pruebas de alergia orientan desencadenantes pero no confirman asma.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años"
+      ]
+    },
+    {
+      "key": "mi-03a-neumologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "asthma_adult",
+      "vignette": "Hombre de 30 años con asma que usa salbutamol a demanda. Tiene síntomas diurnos tres veces por semana y despierta por tos una vez a la semana. Espirometría con FEV1 de 82%.",
+      "prompt": "¿Cuál es el tratamiento de elección para controlar su asma?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Antibiótico profiláctico mensual",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el asma es infecciosa."
+        },
+        {
+          "key": "b",
+          "text": "Salmeterol solo para un control prolongado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a control, pero el broncodilatador de acción larga sin corticosteroide aumenta riesgo de muerte."
+        },
+        {
+          "key": "c",
+          "text": "Montelukast como monoterapia de elección",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es menos eficaz que el corticosteroide inhalado."
+        },
+        {
+          "key": "d",
+          "text": "Omalizumab de inicio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es para asma grave no controlada."
+        },
+        {
+          "key": "e",
+          "text": "Corticosteroide oral diario",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Tiene efectos adversos y no es el control habitual."
+        },
+        {
+          "key": "f",
+          "text": "Teofilina oral",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es poco eficaz y tóxica."
+        },
+        {
+          "key": "g",
+          "text": "Continuar solo salbutamol a demanda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el rescate, que no controla la inflamación."
+        },
+        {
+          "key": "h",
+          "text": "Evitar esteroides inhalados por miedo a efectos adversos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Sobreestima efectos que a dosis baja son mínimos."
+        },
+        {
+          "key": "i",
+          "text": "Mismo tratamiento y revalorar en un año",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Mantiene un asma no controlada."
+        },
+        {
+          "key": "j",
+          "text": "Corticosteroide inhalado a dosis baja con formoterol, como tratamiento de mantenimiento o a demanda",
+          "correct": true,
+          "rationale": "El asma no controlada requiere corticosteroide inhalado."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "El asma es una enfermedad inflamatoria crónica, y los corticosteroides inhalados son la base de su control porque reducen síntomas, exacerbaciones y mortalidad. Las recomendaciones actuales desaconsejan tratar con salbutamol solo. En adultos y adolescentes se prefiere el esquema con dosis baja de budesonida con formoterol, que puede usarse a demanda en asma leve o como mantenimiento y rescate en escalones superiores. Un broncodilatador de acción larga nunca debe usarse sin corticosteroide inhalado. Antes de escalar el tratamiento se revisa la técnica inhalatoria, el apego, la exposición a desencadenantes y las comorbilidades, como rinitis y reflujo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años"
+      ]
+    },
+    {
+      "key": "mi-03a-neumologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "asthma_adult",
+      "vignette": "Mujer de 24 años con asma que llega con disnea intensa. Habla solo palabras sueltas, está somnolienta, frecuencia respiratoria de 34 rpm y saturación de 86%. A la auscultación el tórax está silencioso.",
+      "prompt": "¿Cuál es la conducta a seguir?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Oxígeno, salbutamol con ipratropio nebulizados continuos, corticosteroide sistémico y preparar intubación por riesgo de paro respiratorio",
+          "correct": true,
+          "rationale": "Es una crisis asmática que amenaza la vida."
+        },
+        {
+          "key": "b",
+          "text": "Esperar gasometría antes de cualquier tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retrasa medidas urgentes."
+        },
+        {
+          "key": "c",
+          "text": "Tranquilizarla con una benzodiacepina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Calmar la ansiedad suena humano, pero deprime la respiración."
+        },
+        {
+          "key": "d",
+          "text": "Aumentar la dosis de su corticosteroide inhalado y citar mañana",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Mantiene el manejo ambulatorio ante una crisis grave."
+        },
+        {
+          "key": "e",
+          "text": "Antibiótico intravenoso de amplio espectro como primer paso",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay datos de infección y retrasa el tratamiento."
+        },
+        {
+          "key": "f",
+          "text": "Interpretar el tórax silencioso como mejoría",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No reconoce un signo de gravedad extrema."
+        },
+        {
+          "key": "g",
+          "text": "Mucolítico nebulizado para aflojar flemas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el problema es la flema."
+        },
+        {
+          "key": "h",
+          "text": "Dar salbutamol inhalado y egresar si mejora",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el tratamiento de la crisis leve."
+        },
+        {
+          "key": "i",
+          "text": "Broncoscopia urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es invasiva e innecesaria."
+        },
+        {
+          "key": "j",
+          "text": "Adrenalina intramuscular como en anafilaxia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se reserva para anafilaxia, aunque puede usarse en casos excepcionales."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "Una crisis asmática con riesgo vital se reconoce por somnolencia o confusión, tórax silencioso, cianosis, bradicardia, agotamiento, saturación menor de 90% o hipercapnia. El tórax silencioso indica que casi no entra aire y no es mejoría. El tratamiento debe ser inmediato e incluye oxígeno para saturación de 93 a 95%, salbutamol nebulizado repetido o continuo con bromuro de ipratropio, corticosteroide sistémico temprano, y sulfato de magnesio intravenoso en casos graves. Se debe preparar el manejo avanzado de la vía aérea y valorar ingreso a terapia intensiva. Los sedantes están contraindicados.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años"
+      ]
+    },
+    {
+      "key": "mi-03a-neumologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "asthma_adult",
+      "vignette": "Hombre de 45 años con asma de inicio en la edad adulta, pólipos nasales y anosmia. Cada vez que toma ibuprofeno presenta broncoespasmo grave.",
+      "prompt": "¿Cuál es el factor desencadenante característico de su cuadro?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Infección por Aspergillus",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se asocia a asma, pero no a la tríada con pólipos y AINE."
+        },
+        {
+          "key": "b",
+          "text": "Ejercicio intenso",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No considera la relación con el fármaco."
+        },
+        {
+          "key": "c",
+          "text": "Ácaros del polvo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Son desencadenantes comunes, pero no explican la relación con el ibuprofeno."
+        },
+        {
+          "key": "d",
+          "text": "Reflujo gastroesofágico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en una comorbilidad frecuente sin relación con los AINE."
+        },
+        {
+          "key": "e",
+          "text": "Fibrosis quística",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara en esta edad sin otros datos."
+        },
+        {
+          "key": "f",
+          "text": "Lácteos en la dieta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que los lácteos producen moco y asma."
+        },
+        {
+          "key": "g",
+          "text": "Alergia a la penicilina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye otra alergia farmacológica sin relación."
+        },
+        {
+          "key": "h",
+          "text": "Paracetamol a dosis bajas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a analgésico similar, pero suele tolerarse."
+        },
+        {
+          "key": "i",
+          "text": "Contaminación ambiental",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en un factor general."
+        },
+        {
+          "key": "j",
+          "text": "Antiinflamatorios no esteroideos inhibidores de la ciclooxigenasa 1",
+          "correct": true,
+          "rationale": "Corresponde a enfermedad respiratoria exacerbada por AINE."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "j"
+      ],
+      "explanation": "La enfermedad respiratoria exacerbada por antiinflamatorios no esteroideos, antes llamada tríada de Samter, se caracteriza por asma de inicio en la edad adulta, rinosinusitis crónica con pólipos nasales y reacciones respiratorias tras tomar ácido acetilsalicílico u otros AINE que inhiben la ciclooxigenasa 1. La inhibición de esta enzima desvía el metabolismo del ácido araquidónico hacia la producción de leucotrienos, que provocan broncoespasmo. El manejo incluye evitar estos fármacos, usar paracetamol a dosis moderadas o inhibidores selectivos de la ciclooxigenasa 2 con precaución, antileucotrienos, corticosteroides inhalados y tratamiento de los pólipos. La desensibilización con aspirina es una opción especializada.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años"
+      ]
+    },
+    {
+      "key": "mi-03a-neumologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "asthma_adult",
+      "vignette": "Mujer de 32 años con asma que acude a urgencias con una crisis moderada. Habla en frases, frecuencia respiratoria de 24 rpm, saturación de 93% y sibilancias espiratorias difusas.",
+      "prompt": "Todas las siguientes son medidas del tratamiento inicial de la crisis asmática moderada, EXCEPTO:",
+      "polarity": "negative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Bromuro de ipratropio asociado al salbutamol",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es verdadero. Útil en crisis moderadas a graves."
+        },
+        {
+          "key": "b",
+          "text": "Corticosteroide sistémico oral temprano",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es verdadero. Reduce recaídas y hospitalizaciones."
+        },
+        {
+          "key": "c",
+          "text": "Salbutamol inhalado con espaciador o nebulizado repetido",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es verdadero. Es la base del tratamiento."
+        },
+        {
+          "key": "d",
+          "text": "Programar seguimiento en una semana",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es verdadero. Reduce recaídas."
+        },
+        {
+          "key": "e",
+          "text": "Revisar técnica inhalatoria antes del egreso",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es verdadero. Forma parte del plan de alta."
+        },
+        {
+          "key": "f",
+          "text": "Oxígeno para mantener saturación de 93 a 95%",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es verdadero. Se indica si hay hipoxemia."
+        },
+        {
+          "key": "g",
+          "text": "Dar un plan de acción escrito al alta",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Es verdadero. Mejora el automanejo."
+        },
+        {
+          "key": "h",
+          "text": "Iniciar o aumentar corticosteroide inhalado al egreso",
+          "correct": false,
+          "bias": "confirmation_bias",
+          "rationale": "Es verdadero. Previene nuevas crisis."
+        },
+        {
+          "key": "i",
+          "text": "Aminofilina intravenosa como tratamiento de primera línea",
+          "correct": true,
+          "rationale": "Tiene poco beneficio y muchos efectos adversos."
+        },
+        {
+          "key": "j",
+          "text": "Revalorar respuesta clínica y flujo espiratorio en una hora",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es verdadero. Guía la decisión de egreso o ingreso."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "En la crisis asmática moderada el tratamiento inicial consiste en salbutamol inhalado con espaciador o nebulizado, repetido cada 20 minutos durante la primera hora, oxígeno para mantener saturación de 93 a 95%, corticosteroide sistémico oral en la primera hora y bromuro de ipratropio en crisis moderadas a graves. Se revalora la respuesta clínica y el flujo espiratorio. Al egreso se inicia o intensifica el corticosteroide inhalado, se revisa la técnica, se entrega un plan de acción escrito y se programa seguimiento. Las metilxantinas como la aminofilina no se recomiendan de rutina por su escaso beneficio y su toxicidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en mayores de 18 años"
+      ]
+    },
+    {
+      "key": "mi-03a-neumologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "copd",
+      "vignette": "Hombre de 62 años con tabaquismo de 40 paquetes año. Refiere tos productiva matutina de varios años y disnea progresiva de esfuerzo.",
+      "prompt": "¿Cuál es el estudio que confirma el diagnóstico de EPOC?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Diagnóstico clínico por tabaquismo y tos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Cierra el diagnóstico sin demostrar obstrucción."
+        },
+        {
+          "key": "b",
+          "text": "Oximetría de pulso menor de 90%",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Medir oxígeno suena útil, pero no diagnostica."
+        },
+        {
+          "key": "c",
+          "text": "Tomografía de tórax de alta resolución",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Muestra enfisema, pero no es el estándar diagnóstico."
+        },
+        {
+          "key": "d",
+          "text": "Medir alfa 1 antitripsina en todos como prueba confirmatoria",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se mide en casos seleccionados."
+        },
+        {
+          "key": "e",
+          "text": "Espirometría con mejoría completa tras el broncodilatador",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La reversibilidad completa sugiere asma."
+        },
+        {
+          "key": "f",
+          "text": "Gasometría arterial con hipercapnia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la gravedad, no en el diagnóstico."
+        },
+        {
+          "key": "g",
+          "text": "Cultivo de esputo",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No diagnostica EPOC."
+        },
+        {
+          "key": "h",
+          "text": "Prueba de difusión de monóxido de carbono como único estudio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Complementa, no confirma la obstrucción."
+        },
+        {
+          "key": "i",
+          "text": "Radiografía de tórax con hiperinsuflación",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Sugiere, pero no confirma."
+        },
+        {
+          "key": "j",
+          "text": "Espirometría con relación FEV1 sobre FVC menor de 0.70 después del broncodilatador",
+          "correct": true,
+          "rationale": "Demuestra obstrucción persistente al flujo aéreo."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "i",
+        "j"
+      ],
+      "explanation": "La enfermedad pulmonar obstructiva crónica se sospecha en mayores de 40 años con exposición a tabaco, humo de leña u otros factores, y síntomas como disnea, tos crónica o expectoración. El diagnóstico se confirma con espirometría que muestra una relación FEV1 sobre FVC menor de 0.70 después del broncodilatador, lo que indica limitación persistente al flujo aéreo. El FEV1 posbroncodilatador clasifica la gravedad de la obstrucción. La radiografía y la tomografía apoyan y descartan otros diagnósticos. En México la exposición a humo de leña es una causa importante, sobre todo en mujeres de zonas rurales.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad pulmonar obstructiva crónica"
+      ]
+    },
+    {
+      "key": "mi-03a-neumologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "copd",
+      "vignette": "Hombre de 68 años con EPOC, disnea de grado 2 en la escala mMRC y una exacerbación en el último año sin hospitalización. FEV1 de 58%.",
+      "prompt": "¿Cuál es el tratamiento de mantenimiento de elección inicial?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Broncodilatador de acción prolongada, de preferencia combinación de LAMA con LABA",
+          "correct": true,
+          "rationale": "La doble broncodilatación mejora síntomas y reduce exacerbaciones."
+        },
+        {
+          "key": "b",
+          "text": "Salbutamol a demanda como único tratamiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es solo de rescate."
+        },
+        {
+          "key": "c",
+          "text": "Triple terapia desde el inicio en todos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para exacerbaciones frecuentes con eosinófilos altos."
+        },
+        {
+          "key": "d",
+          "text": "Sin tratamiento de mantenimiento por ser moderado",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Deja síntomas sin control."
+        },
+        {
+          "key": "e",
+          "text": "Corticosteroide inhalado como monoterapia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el esquema del asma, pero en EPOC no se usa solo."
+        },
+        {
+          "key": "f",
+          "text": "Antibiótico profiláctico continuo para todos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo paciente lo necesita."
+        },
+        {
+          "key": "g",
+          "text": "Teofilina como primera línea",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es poco eficaz y tóxica."
+        },
+        {
+          "key": "h",
+          "text": "Evitar inhaladores por miedo a la taquicardia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Teme efectos poco frecuentes."
+        },
+        {
+          "key": "i",
+          "text": "Oxígeno domiciliario sin evaluar hipoxemia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Indica oxígeno sin criterios."
+        },
+        {
+          "key": "j",
+          "text": "Corticosteroide oral crónico para controlar la inflamación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena antiinflamatorio, pero tiene efectos adversos graves."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "e"
+      ],
+      "explanation": "El tratamiento farmacológico de la EPOC estable se basa en broncodilatadores de acción prolongada. Los antagonistas muscarínicos de acción prolongada, como tiotropio, y los agonistas beta 2 de acción prolongada, como formoterol o indacaterol, mejoran la función pulmonar, los síntomas y reducen exacerbaciones. En pacientes sintomáticos se prefiere iniciar con la combinación de ambos. Los corticosteroides inhalados se agregan solo en pacientes con exacerbaciones frecuentes y eosinófilos de 300 o más por microlitro, porque aumentan el riesgo de neumonía. Además se indica dejar de fumar, vacunación, rehabilitación pulmonar y revisar la técnica inhalatoria.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad pulmonar obstructiva crónica"
+      ]
+    },
+    {
+      "key": "mi-03a-neumologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "copd",
+      "vignette": "Mujer de 70 años con EPOC por humo de leña. En reposo y estable, la gasometría al aire ambiente muestra PaO2 de 52 mmHg. Hematocrito normal.",
+      "prompt": "¿Cuál es la intervención que ha demostrado aumentar la supervivencia en esta paciente?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Continuar solo con inhaladores",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Omite la medida que salva vidas."
+        },
+        {
+          "key": "b",
+          "text": "Oxígeno solo durante la noche",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Menos horas no logran el beneficio."
+        },
+        {
+          "key": "c",
+          "text": "Mucolíticos diarios",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No aumentan la supervivencia."
+        },
+        {
+          "key": "d",
+          "text": "Ventilación mecánica invasiva programada",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que más soporte es mejor."
+        },
+        {
+          "key": "e",
+          "text": "Broncodilatadores de acción prolongada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Mejoran síntomas, pero no han demostrado aumentar la supervivencia de la misma forma."
+        },
+        {
+          "key": "f",
+          "text": "Evitar oxígeno por miedo a retener CO2",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El temor no justifica negar un tratamiento indicado."
+        },
+        {
+          "key": "g",
+          "text": "Cirugía de reducción de volumen pulmonar en todos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es para casos muy seleccionados."
+        },
+        {
+          "key": "h",
+          "text": "Corticosteroide inhalado a dosis alta",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la inflamación sin beneficio en supervivencia."
+        },
+        {
+          "key": "i",
+          "text": "Oxígeno a demanda cuando sienta falta de aire",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena práctico, pero no reduce mortalidad."
+        },
+        {
+          "key": "j",
+          "text": "Oxígeno domiciliario continuo por al menos 15 horas al día",
+          "correct": true,
+          "rationale": "Con PaO2 menor o igual a 55 mmHg reduce la mortalidad."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "En la EPOC con hipoxemia crónica grave en reposo, el oxígeno domiciliario continuo es una de las pocas intervenciones, junto con dejar de fumar, que aumentan la supervivencia. Está indicado con PaO2 menor o igual a 55 mmHg o saturación menor o igual a 88%, o con PaO2 de 56 a 59 mmHg si hay cor pulmonale, edema o policitemia. Debe usarse al menos 15 horas al día, incluyendo la noche, con flujo para lograr saturación de 88 a 92%. Se debe confirmar la hipoxemia en fase estable y revalorar la indicación. Los fumadores activos tienen riesgo de quemaduras.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad pulmonar obstructiva crónica"
+      ]
+    },
+    {
+      "key": "mi-03a-neumologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "copd",
+      "vignette": "Hombre de 66 años con EPOC que llega con aumento de la disnea, del volumen y de la purulencia del esputo desde hace 3 días. Saturación de 87%, frecuencia respiratoria de 26 rpm, pH de 7.37 y PaCO2 de 48 mmHg.",
+      "prompt": "¿Cuál es el tratamiento inicial más adecuado?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo antibiótico oral y egreso",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Omite broncodilatadores y esteroide."
+        },
+        {
+          "key": "b",
+          "text": "Intubación orotraqueal inmediata",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay acidosis respiratoria ni deterioro neurológico."
+        },
+        {
+          "key": "c",
+          "text": "Oxígeno controlado con meta de 88 a 92%, broncodilatadores de acción corta, corticosteroide sistémico por 5 días y antibiótico",
+          "correct": true,
+          "rationale": "Es una exacerbación con esputo purulento."
+        },
+        {
+          "key": "d",
+          "text": "Mucolíticos y fisioterapia como tratamiento principal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que retirar moco basta."
+        },
+        {
+          "key": "e",
+          "text": "Diurético de asa por la disnea",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Asocia disnea con insuficiencia cardiaca."
+        },
+        {
+          "key": "f",
+          "text": "Oxígeno a flujo alto para llevar la saturación a 100%",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la hipoxemia y puede causar hipercapnia."
+        },
+        {
+          "key": "g",
+          "text": "Continuar igual su tratamiento de casa",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Insuficiente en una exacerbación."
+        },
+        {
+          "key": "h",
+          "text": "Corticosteroide por 4 semanas para evitar recaídas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena preventivo, pero los ciclos largos no son mejores."
+        },
+        {
+          "key": "i",
+          "text": "Retrasar el antibiótico hasta tener cultivo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El cultivo no debe retrasar el tratamiento."
+        },
+        {
+          "key": "j",
+          "text": "Broncoscopia con lavado bronquial",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "h"
+      ],
+      "explanation": "La exacerbación de la EPOC es un empeoramiento agudo de los síntomas que requiere modificar el tratamiento. El manejo incluye oxígeno controlado con meta de saturación de 88 a 92% para evitar hipercapnia, broncodilatadores de acción corta como salbutamol con o sin ipratropio, y corticosteroide sistémico, como prednisona 40 mg por 5 días. Se indica antibiótico cuando aumenta la purulencia del esputo junto con más disnea o volumen de esputo, o si requiere ventilación. La ventilación no invasiva está indicada con acidosis respiratoria, pH menor o igual a 7.35 y PaCO2 mayor de 45 mmHg. Este paciente aún no la requiere, pero se vigila con gasometrías.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad pulmonar obstructiva crónica"
+      ]
+    },
+    {
+      "key": "mi-03a-neumologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "copd",
+      "vignette": "Hombre de 71 años con EPOC en exacerbación. Pese a broncodilatadores, esteroide y oxígeno controlado, a las 2 horas tiene frecuencia respiratoria de 30 rpm, uso de músculos accesorios, pH de 7.28 y PaCO2 de 64 mmHg. Está alerta y coopera.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ventilación mecánica no invasiva con presión positiva de dos niveles",
+          "correct": true,
+          "rationale": "Acidosis respiratoria en paciente alerta que coopera."
+        },
+        {
+          "key": "b",
+          "text": "Sedación para disminuir el trabajo respiratorio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Deprime la respiración."
+        },
+        {
+          "key": "c",
+          "text": "Retirar el oxígeno por la hipercapnia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Dejarlo sin oxígeno causa hipoxemia grave."
+        },
+        {
+          "key": "d",
+          "text": "Oxigenación por membrana extracorpórea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Medida extrema."
+        },
+        {
+          "key": "e",
+          "text": "Fisioterapia respiratoria intensiva como solución",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la fisioterapia corrige la acidosis."
+        },
+        {
+          "key": "f",
+          "text": "Intubación orotraqueal inmediata",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la gravedad, pero el paciente puede beneficiarse de ventilación no invasiva."
+        },
+        {
+          "key": "g",
+          "text": "Cánula nasal de alto flujo como primera opción en hipercapnia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede ser alternativa, pero la ventilación no invasiva tiene más evidencia."
+        },
+        {
+          "key": "h",
+          "text": "Continuar el mismo tratamiento y gasometría en 6 horas",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Retrasa una medida necesaria."
+        },
+        {
+          "key": "i",
+          "text": "Aumentar el oxígeno para corregir la hipoxemia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena correcto, pero empeora la hipercapnia."
+        },
+        {
+          "key": "j",
+          "text": "Bicarbonato intravenoso para la acidosis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La acidosis es respiratoria y se corrige con ventilación."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "i",
+        "j"
+      ],
+      "explanation": "La ventilación mecánica no invasiva es el tratamiento de elección en la exacerbación de la EPOC con acidosis respiratoria, definida por pH menor o igual a 7.35 y PaCO2 mayor de 45 mmHg, o con disnea grave y fatiga muscular, siempre que el paciente esté alerta, coopere, maneje secreciones y esté hemodinámicamente estable. Reduce la necesidad de intubación, las complicaciones y la mortalidad. Se revalora con gasometría a la hora. Se indica intubación si fracasa la ventilación no invasiva, hay paro respiratorio, alteración grave del estado de alerta, inestabilidad hemodinámica o incapacidad para proteger la vía aérea.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad pulmonar obstructiva crónica"
+      ]
+    }
+  ]
+}

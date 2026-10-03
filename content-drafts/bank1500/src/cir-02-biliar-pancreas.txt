@@ -1,0 +1,415 @@
+@ cir|hepatobiliary|cholecystitis|2|diagnosis
+V: Mujer de 45 años con obesidad que presenta dolor en hipocondrio derecho de 10 horas tras una comida grasosa, náusea, vómito y fiebre de 38.2 °C. Signo de Murphy positivo. Leucocitos de 14 000. Bilirrubina y amilasa normales.
+P: ¿Cuál es el diagnóstico más probable?
++ Colecistitis aguda litiásica || Dolor persistente en hipocondrio derecho con fiebre, Murphy positivo y leucocitosis.
+- anchoring | Cólico biliar simple || Dura menos de 6 horas y no da fiebre ni leucocitosis.
+- availability_heuristic | Coledocolitiasis || Daría ictericia y elevación de bilirrubina.
+- representativeness_heuristic | Pancreatitis aguda || La amilasa es normal.
+- premature_closure | Hepatitis viral aguda || No explica el Murphy ni el cuadro posprandial.
+- base_rate_fallacy | Colangitis aguda || Daría ictericia.
+- framing_effect | Úlcera péptica || El dolor es en hipocondrio derecho con Murphy.
+- inattentional_blindness | Neumonía basal derecha || No hay datos respiratorios.
+- focusing_illusion | Apendicitis subhepática || Es menos frecuente.
+- belief_bias | Indigestión por comer mucho || Hay infección e inflamación.
+E: La colecistitis aguda litiásica se debe a la obstrucción del conducto cístico por un cálculo, con inflamación y posible infección de la vesícula. Es más común en mujeres, obesas y mayores de 40 años. Se manifiesta con dolor en hipocondrio derecho persistente de más de 6 horas, náusea, vómito, fiebre y signo de Murphy. Los criterios de Tokio combinan signos locales, sistémicos e imagen. El ultrasonido es el estudio de elección y muestra cálculos, engrosamiento de la pared mayor de 4 mm, líquido perivesicular y Murphy ecográfico. Se clasifica en leve, moderada o grave para decidir el manejo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de colecistitis y colelitiasis ;; Guías de Tokio para colangitis y colecistitis agudas
+
+@ cir|hepatobiliary|cholecystitis|2|initial_study
+V: Hombre de 50 años con dolor en hipocondrio derecho, fiebre y Murphy positivo. Se sospecha colecistitis aguda.
+P: ¿Cuál es el estudio de imagen inicial de elección?
++ Ultrasonido de hígado y vías biliares || Es accesible, sensible para cálculos y muestra signos de inflamación.
+- anchoring | Tomografía abdominal como primer estudio || Es menos sensible para cálculos y se usa ante complicaciones.
+- availability_heuristic | Colangiopancreatografía retrógrada endoscópica || Es invasiva y terapéutica para coledocolitiasis.
+- representativeness_heuristic | Radiografía simple de abdomen || Detecta pocos cálculos.
+- premature_closure | Endoscopia superior || No evalúa la vesícula.
+- base_rate_fallacy | Colangiorresonancia como primer estudio || Se reserva para sospecha de coledocolitiasis.
+- framing_effect | Serie esofagogastroduodenal || No es útil.
+- complexity_bias | Gammagrama hepatobiliar como primer estudio || Se usa si el ultrasonido no es concluyente.
+- information_bias | Amilasa sérica como estudio de imagen || No es un estudio de imagen.
+- belief_bias | Esperar a que pase el dolor para estudiarlo || Retrasa el tratamiento.
+E: El ultrasonido es el estudio de imagen inicial de elección en la sospecha de colecistitis aguda. Detecta cálculos con alta sensibilidad y muestra engrosamiento de la pared vesicular, líquido perivesicular, distensión de la vesícula y signo de Murphy ecográfico. El gammagrama hepatobiliar con HIDA es el estudio más sensible y específico, y se usa cuando el ultrasonido no es concluyente, mostrando ausencia de llenado vesicular por obstrucción del cístico. La tomografía es útil para complicaciones como perforación, gangrena o colecistitis enfisematosa.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de colecistitis y colelitiasis
+
+@ cir|hepatobiliary|cholecystitis|3|treatment_of_choice
+V: Mujer de 42 años con colecistitis aguda leve de 36 horas de evolución, sin comorbilidades importantes, estable y con buena respuesta inicial al manejo médico.
+P: ¿Cuál es el tratamiento de elección?
++ Colecistectomía laparoscópica temprana en las primeras 72 horas, idealmente en el mismo internamiento || Reduce la estancia y las recurrencias sin aumentar las complicaciones.
+- anchoring | Antibióticos y colecistectomía diferida 6 a 8 semanas en todos || La cirugía temprana es preferida.
+- availability_heuristic | Solo analgésicos y dieta || No resuelve la enfermedad.
+- representativeness_heuristic | Colecistostomía percutánea en todos || Se reserva para pacientes de alto riesgo quirúrgico.
+- premature_closure | Ácido ursodesoxicólico para disolver los cálculos || No trata la colecistitis aguda.
+- framing_effect | Colangiopancreatografía en todos || Se reserva para coledocolitiasis.
+- complexity_bias | Colecistectomía abierta como primera opción || La laparoscópica es el estándar.
+- base_rate_fallacy | Litotricia extracorpórea || No está indicada.
+- belief_bias | Remedios caseros para expulsar las piedras || No son eficaces y son peligrosos.
+- omission_bias | Diferir la cirugía por miedo a complicaciones || La cirugía temprana es segura.
+E: El tratamiento de la colecistitis aguda incluye ayuno, líquidos, analgesia y antibióticos según la gravedad. El tratamiento definitivo es la colecistectomía laparoscópica, idealmente temprana, en las primeras 72 horas y hasta 7 días del inicio de los síntomas, en el mismo internamiento. La cirugía temprana reduce la estancia hospitalaria, los costos y las recurrencias sin aumentar las complicaciones. En pacientes con alto riesgo quirúrgico o colecistitis grave con falla orgánica, se realiza colecistostomía percutánea como puente. La conversión a cirugía abierta se considera ante anatomía no clara.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de colecistitis y colelitiasis ;; Guías de Tokio para colangitis y colecistitis agudas
+
+@ cir|hepatobiliary|cholecystitis|3|diagnosis
+V: Hombre de 70 años hospitalizado en terapia intensiva por quemaduras extensas, con nutrición parenteral, que presenta fiebre y dolor en hipocondrio derecho. El ultrasonido muestra vesícula distendida, pared engrosada y líquido perivesicular sin cálculos.
+P: ¿Cuál es el diagnóstico más probable?
++ Colecistitis aguda alitiásica || Inflamación vesicular sin cálculos en un paciente críticamente enfermo.
+- anchoring | Colecistitis litiásica || No hay cálculos.
+- availability_heuristic | Hepatitis isquémica || No explica los hallazgos vesiculares.
+- representativeness_heuristic | Colangitis aguda || No hay dilatación ni ictericia.
+- premature_closure | Pancreatitis aguda || No explica los hallazgos vesiculares.
+- base_rate_fallacy | Cáncer de vesícula || No explica el cuadro agudo en este contexto.
+- framing_effect | Absceso hepático || No explica la vesícula inflamada.
+- inattentional_blindness | Fiebre por catéter únicamente || Hay datos de inflamación vesicular.
+- focusing_illusion | Edema vesicular por hipoalbuminemia sin inflamación || Hay dolor y fiebre.
+- belief_bias | Molestia esperada en pacientes graves || Es una complicación seria.
+E: La colecistitis aguda alitiásica ocurre en pacientes críticamente enfermos, como quemados, politraumatizados, con sepsis, ventilación mecánica, nutrición parenteral prolongada o en el posoperatorio de cirugías mayores. Se debe a estasis biliar, isquemia de la pared y bilis concentrada. Tiene alta frecuencia de gangrena y perforación y mayor mortalidad que la litiásica. El diagnóstico es difícil porque los pacientes no pueden expresar síntomas. El tratamiento incluye antibióticos y colecistostomía percutánea en pacientes inestables, o colecistectomía si el estado lo permite. Un alto índice de sospecha en estos pacientes permite el diagnóstico oportuno.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de colecistitis y colelitiasis
+
+@ cir|hepatobiliary|cholecystitis|4|complication_prognosis
+V: Hombre de 66 años con diabetes y colecistitis aguda de 4 días que presenta dolor intenso, fiebre de 39.5 °C y aspecto séptico. La tomografía muestra gas en la pared vesicular.
+P: ¿Cuál es la complicación que presenta?
++ Colecistitis enfisematosa || Gas en la pared vesicular por anaerobios en un diabético.
+- anchoring | Colecistitis no complicada || El gas indica una forma grave.
+- availability_heuristic | Íleo biliar || Daría oclusión intestinal y neumobilia.
+- representativeness_heuristic | Fístula colecistoentérica sin infección || El paciente está séptico.
+- premature_closure | Pancreatitis enfisematosa || El gas está en la vesícula.
+- base_rate_fallacy | Perforación de úlcera duodenal || Daría neumoperitoneo libre.
+- framing_effect | Absceso hepático amebiano || No explica el gas en la pared vesicular.
+- inattentional_blindness | Artefacto de la tomografía || El gas es real y relevante.
+- focusing_illusion | Hidrops vesicular simple || No da gas.
+- belief_bias | Inflamación que mejora con más antibiótico oral || Requiere cirugía urgente.
+E: La colecistitis enfisematosa es una forma grave de colecistitis causada por bacterias productoras de gas, como Clostridium y Escherichia coli. Es más frecuente en hombres mayores con diabetes y puede ocurrir sin cálculos. Tiene alto riesgo de gangrena y perforación, con mortalidad elevada. La tomografía o el ultrasonido muestran gas en la pared o la luz vesicular. El tratamiento es reanimación, antibióticos de amplio espectro con cobertura de anaerobios y colecistectomía urgente, o colecistostomía percutánea si el riesgo quirúrgico es prohibitivo.
+R: Guías de Tokio para colangitis y colecistitis agudas
+
+@ cir|hepatobiliary|cholecystitis|2|data_interpretation
+V: Mujer de 38 años con episodios de dolor en hipocondrio derecho de 2 horas tras comidas grasosas que ceden solos, sin fiebre. El ultrasonido muestra múltiples cálculos en la vesícula sin engrosamiento de la pared.
+P: ¿Qué indican estos hallazgos?
++ Colelitiasis sintomática con cólicos biliares, que es indicación de colecistectomía electiva || Los episodios típicos de dolor indican enfermedad sintomática.
+- anchoring | Colecistitis aguda que requiere cirugía urgente || No hay fiebre ni inflamación.
+- availability_heuristic | Colelitiasis asintomática sin tratamiento || Tiene síntomas típicos.
+- representativeness_heuristic | Coledocolitiasis || No hay ictericia.
+- premature_closure | Pancreatitis biliar || No hay datos de pancreatitis.
+- base_rate_fallacy | Cáncer de vesícula || No hay datos.
+- framing_effect | Dispepsia funcional || El ultrasonido muestra cálculos y el patrón es típico.
+- inattentional_blindness | Úlcera péptica || El patrón posprandial con cálculos orienta a cólico biliar.
+- focusing_illusion | Indica disolución con medicamentos en todas || No es el tratamiento de elección.
+- belief_bias | Piedras que se expulsan solas con aceite de oliva || Es un mito peligroso.
+E: La colelitiasis es muy frecuente en México, sobre todo en mujeres, obesas y mayores de 40 años. La mayoría de las personas con cálculos son asintomáticas y no requieren cirugía. El cólico biliar se presenta como dolor en epigastrio o hipocondrio derecho de 30 minutos a 6 horas, a menudo tras comidas grasosas, que cede solo, sin fiebre. La colelitiasis sintomática tiene riesgo de complicaciones como colecistitis, coledocolitiasis y pancreatitis, por lo que se indica colecistectomía laparoscópica electiva. Las sales biliares rara vez se usan.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de colecistitis y colelitiasis
+
+@ cir|hepatobiliary|cholecystitis|3|next_step
+V: Mujer de 55 años con hallazgo incidental de colelitiasis en un ultrasonido realizado por otra razón. Nunca ha tenido dolor ni otros síntomas. No es diabética ni tiene vesícula en porcelana.
+P: ¿Cuál es la conducta más apropiada?
++ Observación sin cirugía y educación sobre los síntomas de alarma || La colelitiasis asintomática no requiere colecistectomía en la mayoría.
+- anchoring | Colecistectomía profiláctica inmediata en todos || No se recomienda en asintomáticos sin factores de riesgo.
+- availability_heuristic | Ácido ursodesoxicólico de por vida || No está indicado.
+- representativeness_heuristic | Colangiopancreatografía para retirar los cálculos || No está indicada.
+- premature_closure | Litotricia extracorpórea || No se usa en estos casos.
+- framing_effect | Dieta sin grasa estricta de por vida como único manejo || No es necesaria sin síntomas.
+- complexity_bias | Tomografía anual de control || No es necesaria.
+- base_rate_fallacy | Antibióticos profilácticos || No están indicados.
+- belief_bias | Limpiezas de hígado con remedios caseros || Son peligrosas.
+- omission_bias | No informar sobre los síntomas que deben vigilarse || Debe saber cuándo consultar.
+E: La mayoría de las personas con colelitiasis asintomática nunca desarrollan síntomas, y solo 1 a 2% al año presentan síntomas o complicaciones. Por ello no se recomienda la colecistectomía profiláctica de rutina. Las excepciones en las que se considera la cirugía incluyen vesícula en porcelana, cálculos mayores de 3 cm, pólipos vesiculares mayores de 1 cm, anemia hemolítica crónica, poblaciones con alto riesgo de cáncer de vesícula y algunos pacientes que serán trasplantados. Se educa al paciente para consultar ante dolor, fiebre o ictericia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de colecistitis y colelitiasis
+
+@ cir|hepatobiliary|cholecystitis|3|risk_factor
+V: Mujer de 68 años con colelitiasis de larga evolución, cálculo de 3.5 cm y vesícula con pared calcificada en la radiografía. Se descubre una masa vesicular en el ultrasonido.
+P: ¿Cuál es el factor de riesgo más importante para el cáncer de vesícula?
++ Colelitiasis de larga evolución con cálculos grandes y vesícula en porcelana || La inflamación crónica favorece la transformación maligna.
+- anchoring | Consumo de café || No es un factor.
+- availability_heuristic | Hepatitis A previa || No se relaciona.
+- representativeness_heuristic | Sexo masculino || Es más frecuente en mujeres.
+- premature_closure | Ejercicio regular || Es protector frente a la obesidad.
+- base_rate_fallacy | Grupo sanguíneo || No es un factor.
+- framing_effect | Dieta vegetariana || No es un factor.
+- inattentional_blindness | Hernia hiatal || No se relaciona.
+- focusing_illusion | Apendicectomía previa || No se relaciona.
+- belief_bias | Tomar mucha agua || No es un factor.
+E: El cáncer de vesícula es más frecuente en mujeres, en adultos mayores y en algunas poblaciones de Latinoamérica, incluido México. El principal factor de riesgo es la colelitiasis crónica, sobre todo con cálculos mayores de 3 cm. Otros factores son la vesícula en porcelana, los pólipos vesiculares mayores de 1 cm, la unión pancreatobiliar anómala, el quiste de colédoco, la infección crónica por Salmonella typhi y la obesidad. Suele diagnosticarse en etapas avanzadas, con mal pronóstico. A veces se encuentra de forma incidental en la pieza de colecistectomía.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de vesícula biliar
+
+@ cir|hepatobiliary|choledocholithiasis|2|diagnosis
+V: Mujer de 50 años con colelitiasis conocida que presenta dolor en hipocondrio derecho, ictericia, coluria y acolia. Bilirrubina total de 5.8 mg/dL de predominio directo y fosfatasa alcalina elevada. El ultrasonido muestra colédoco de 10 mm.
+P: ¿Cuál es el diagnóstico más probable?
++ Coledocolitiasis || Ictericia obstructiva con colédoco dilatado en una paciente con colelitiasis.
+- anchoring | Colecistitis aguda simple || No da ictericia obstructiva ni dilatación del colédoco.
+- availability_heuristic | Hepatitis viral aguda || Daría transaminasas muy elevadas sin dilatación biliar.
+- representativeness_heuristic | Cáncer de cabeza de páncreas || Da ictericia indolora progresiva.
+- premature_closure | Síndrome de Gilbert || Da bilirrubina indirecta leve.
+- base_rate_fallacy | Colangitis biliar primaria || No da dilatación del colédoco.
+- framing_effect | Ictericia por fármacos || No explica la dilatación.
+- inattentional_blindness | Anemia hemolítica || Da bilirrubina indirecta.
+- focusing_illusion | Colangiocarcinoma hiliar || Es menos frecuente.
+- belief_bias | Hígado cansado por comer grasas || Hay una obstrucción biliar.
+E: La coledocolitiasis es la presencia de cálculos en el colédoco, generalmente provenientes de la vesícula. Se manifiesta con dolor biliar, ictericia, coluria y acolia, aunque puede ser asintomática. Los estudios muestran bilirrubina directa y fosfatasa alcalina elevadas, con colédoco dilatado mayor de 6 mm en el ultrasonido. Las complicaciones son colangitis y pancreatitis. Según la probabilidad se decide el abordaje, con colangiopancreatografía retrógrada endoscópica en alto riesgo y colangiorresonancia o ultrasonido endoscópico en riesgo intermedio. La colecistectomía posterior previene nuevos episodios.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de coledocolitiasis
+
+@ cir|hepatobiliary|choledocholithiasis|3|treatment_of_choice
+V: Hombre de 55 años con colelitiasis y alta probabilidad de coledocolitiasis por colédoco de 12 mm con un cálculo visible en el ultrasonido y bilirrubina de 4.5 mg/dL. Estable.
+P: ¿Cuál es el tratamiento de elección?
++ Colangiopancreatografía retrógrada endoscópica con esfinterotomía y extracción de los cálculos, seguida de colecistectomía laparoscópica || Resuelve la obstrucción y previene recurrencias.
+- anchoring | Solo colecistectomía sin abordar el colédoco || Dejaría cálculos en el colédoco.
+- availability_heuristic | Ácido ursodesoxicólico para disolver los cálculos || No es eficaz para cálculos coledocianos.
+- representativeness_heuristic | Observación hasta que pase el cálculo || Tiene riesgo de colangitis y pancreatitis.
+- premature_closure | Antibióticos como único tratamiento || No resuelven la obstrucción.
+- framing_effect | Litotricia extracorpórea como primera opción || No es el estándar.
+- complexity_bias | Derivación biliodigestiva de inicio || Es excesiva.
+- base_rate_fallacy | Trasplante hepático || No está indicado.
+- belief_bias | Purgantes para expulsar las piedras || No son eficaces.
+- omission_bias | No retirar la vesícula tras limpiar el colédoco || Aumenta las recurrencias.
+E: En pacientes con alta probabilidad de coledocolitiasis, como cálculo visible en el colédoco por ultrasonido, colangitis o bilirrubina mayor de 4 con colédoco dilatado, se realiza colangiopancreatografía retrógrada endoscópica con esfinterotomía y extracción de los cálculos. Después se realiza colecistectomía laparoscópica, idealmente en el mismo internamiento, para evitar recurrencias. Una alternativa en centros con experiencia es la exploración laparoscópica del colédoco durante la colecistectomía. En probabilidad intermedia se confirma primero con colangiorresonancia o ultrasonido endoscópico antes de cualquier procedimiento invasivo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de coledocolitiasis
+
+@ cir|hepatobiliary|choledocholithiasis|3|diagnosis
+V: Mujer de 62 años con fiebre de 39.5 °C con escalofríos, ictericia y dolor en hipocondrio derecho. Leucocitos de 18 000, bilirrubina de 6 mg/dL y colédoco dilatado con cálculo en el ultrasonido.
+P: ¿Cuál es el diagnóstico más probable?
++ Colangitis aguda || Tríada de Charcot con fiebre, ictericia y dolor en hipocondrio derecho por obstrucción biliar.
+- anchoring | Colecistitis aguda || No explica la ictericia con colédoco obstruido.
+- availability_heuristic | Hepatitis viral aguda || No explica el colédoco dilatado con cálculo.
+- representativeness_heuristic | Absceso hepático piógeno || No explica la obstrucción del colédoco.
+- premature_closure | Pancreatitis aguda || No explica la tríada de Charcot.
+- base_rate_fallacy | Cáncer de páncreas || Da ictericia indolora sin fiebre alta.
+- framing_effect | Pielonefritis derecha || No explica la ictericia.
+- inattentional_blindness | Neumonía basal derecha || No explica la ictericia obstructiva.
+- focusing_illusion | Malaria || No explica la obstrucción biliar.
+- belief_bias | Fiebre por gripa con ictericia por cansancio || Es una infección biliar grave.
+E: La colangitis aguda es la infección de la vía biliar por obstrucción, generalmente por coledocolitiasis, y también por estenosis o tumores. Se manifiesta con la tríada de Charcot, fiebre con escalofríos, ictericia y dolor en hipocondrio derecho. La péntada de Reynolds agrega hipotensión y alteración del estado mental e indica colangitis grave. Los criterios de Tokio la clasifican en leve, moderada y grave. El tratamiento es reanimación, antibióticos de amplio espectro y drenaje biliar, preferentemente por colangiopancreatografía endoscópica, cuya urgencia depende de la gravedad.
+R: Guías de Tokio para colangitis y colecistitis agudas
+
+@ cir|hepatobiliary|choledocholithiasis|4|next_step
+V: Hombre de 70 años con colangitis aguda por coledocolitiasis que presenta confusión, presión de 80/50 mmHg pese a líquidos y requerimiento de vasopresores. Ya recibe antibióticos de amplio espectro.
+P: ¿Cuál es el siguiente paso?
++ Drenaje biliar urgente por colangiopancreatografía retrógrada endoscópica || La colangitis grave requiere descompresión biliar inmediata.
+- anchoring | Continuar solo con antibióticos 72 horas antes del drenaje || La colangitis grave requiere drenaje urgente.
+- availability_heuristic | Colecistectomía abierta urgente como primer procedimiento || El drenaje endoscópico es preferido.
+- representativeness_heuristic | Ácido ursodesoxicólico || No resuelve la obstrucción.
+- premature_closure | Esperar a la estabilización completa para drenar || El drenaje forma parte de la estabilización.
+- framing_effect | Litotricia extracorpórea || No es adecuada en urgencia.
+- complexity_bias | Trasplante hepático || No está indicado.
+- base_rate_fallacy | Ultrasonido de control en 48 horas || Retrasa el tratamiento.
+- belief_bias | Es solo una infección que cede con antibióticos || La obstrucción mantiene la sepsis.
+- omission_bias | Evitar procedimientos por su edad || El drenaje salva la vida.
+E: La colangitis grave, con disfunción orgánica como hipotensión que requiere vasopresores, alteración del estado mental, falla respiratoria, renal, hepática o hematológica, requiere drenaje biliar urgente además de los antibióticos y el soporte. El método de elección es la colangiopancreatografía retrógrada endoscópica con esfinterotomía o colocación de prótesis. Si no es posible, se realiza drenaje percutáneo transhepático. La cirugía abierta tiene mayor mortalidad en este contexto. En la colangitis moderada el drenaje se realiza en las primeras 24 a 48 horas.
+R: Guías de Tokio para colangitis y colecistitis agudas
+
+@ cir|hepatobiliary|choledocholithiasis|3|complication_prognosis
+V: Mujer de 45 años que tras una colangiopancreatografía retrógrada endoscópica para extraer cálculos presenta, a las 6 horas, dolor epigástrico intenso irradiado a la espalda, vómito y lipasa de 1 200 U/L.
+P: ¿Cuál es la complicación que presenta?
++ Pancreatitis post colangiopancreatografía || Es la complicación más frecuente del procedimiento.
+- anchoring | Perforación duodenal || Daría aire retroperitoneal y dolor diferente.
+- availability_heuristic | Colangitis por el procedimiento || Daría fiebre e ictericia.
+- representativeness_heuristic | Hemorragia por esfinterotomía || Daría melena o hematemesis.
+- premature_closure | Dolor esperado sin importancia || La lipasa elevada indica pancreatitis.
+- base_rate_fallacy | Infarto agudo de miocardio || No explica la lipasa.
+- framing_effect | Gastritis por el endoscopio || No explica la lipasa elevada.
+- inattentional_blindness | Reacción al contraste || No explica el cuadro.
+- focusing_illusion | Colecistitis aguda || No explica la lipasa.
+- belief_bias | Gases por el aire del estudio || La lipasa indica pancreatitis.
+E: La pancreatitis es la complicación más frecuente de la colangiopancreatografía retrógrada endoscópica, con una incidencia de 3 a 10%. Otras complicaciones son hemorragia por la esfinterotomía, perforación duodenal, colangitis y colecistitis. Los factores de riesgo de pancreatitis incluyen sexo femenino, edad joven, disfunción del esfínter de Oddi, canulación difícil e inyección repetida del conducto pancreático. Para prevenirla se administra indometacina o diclofenaco rectal antes o después del procedimiento, hidratación con Ringer lactato y, en pacientes de alto riesgo, la colocación de una prótesis pancreática temporal.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de coledocolitiasis
+
+@ cir|hepatobiliary|choledocholithiasis|3|initial_study
+V: Mujer de 48 años con colelitiasis, dolor biliar y elevación leve de bilirrubina de 2.2 mg/dL con colédoco de 7 mm sin cálculos visibles en el ultrasonido. Probabilidad intermedia de coledocolitiasis.
+P: ¿Cuál es el estudio indicado para confirmar o descartar la coledocolitiasis?
++ Colangiorresonancia magnética o ultrasonido endoscópico || Son estudios no invasivos o poco invasivos con alta precisión para probabilidad intermedia.
+- anchoring | Colangiopancreatografía retrógrada endoscópica diagnóstica directa || Es invasiva con riesgo de pancreatitis.
+- availability_heuristic | Repetir el ultrasonido abdominal en 6 meses || Retrasa el diagnóstico.
+- representativeness_heuristic | Radiografía simple de abdomen || No detecta cálculos coledocianos.
+- premature_closure | Colecistectomía sin evaluar el colédoco || Puede dejar cálculos.
+- base_rate_fallacy | Gammagrama óseo || No está indicado.
+- framing_effect | Endoscopia superior simple || No evalúa el colédoco.
+- complexity_bias | Biopsia hepática || No está indicada.
+- information_bias | Amilasa como diagnóstico de coledocolitiasis || No confirma.
+- belief_bias | Esperar a que aparezca ictericia intensa || Retrasa el diagnóstico.
+E: La probabilidad de coledocolitiasis se estratifica con criterios clínicos, bioquímicos y ecográficos. En probabilidad alta se indica colangiopancreatografía retrógrada endoscópica terapéutica. En probabilidad intermedia, como colédoco dilatado sin cálculo visible o elevación moderada de enzimas, se confirma primero con colangiorresonancia magnética o ultrasonido endoscópico, que tienen alta sensibilidad y evitan procedimientos invasivos innecesarios. Otra opción es la colangiografía transoperatoria durante la colecistectomía. En probabilidad baja se realiza colecistectomía directamente, con o sin colangiografía transoperatoria. Esta estrategia escalonada reduce las complicaciones de los procedimientos invasivos innecesarios.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de coledocolitiasis
+
+@ cir|hepatobiliary|choledocholithiasis|3|diagnosis
+V: Hombre de 66 años con ictericia progresiva indolora de 6 semanas, prurito, pérdida de peso de 8 kg y vesícula palpable no dolorosa. Bilirrubina de 14 mg/dL de predominio directo. CA 19 9 elevado.
+P: ¿Cuál es el diagnóstico más probable?
++ Cáncer de la cabeza del páncreas || Ictericia indolora progresiva con vesícula palpable, signo de Courvoisier, y pérdida de peso.
+- anchoring | Coledocolitiasis || Suele dar dolor y la vesícula no se palpa.
+- availability_heuristic | Hepatitis viral aguda || No explica la vesícula palpable.
+- representativeness_heuristic | Colecistitis crónica || No explica la ictericia indolora progresiva.
+- premature_closure | Cirrosis hepática || No explica la vesícula palpable con obstrucción.
+- base_rate_fallacy | Quiste de colédoco || Es más común en jóvenes.
+- framing_effect | Colangitis biliar primaria || No da vesícula palpable.
+- inattentional_blindness | Ictericia por fármacos || No explica la pérdida de peso con vesícula palpable.
+- focusing_illusion | Síndrome de Gilbert || Da bilirrubina indirecta leve.
+- belief_bias | Ictericia por comer grasas || Hay una obstrucción maligna.
+E: El signo de Courvoisier Terrier es la vesícula palpable no dolorosa en un paciente con ictericia, y sugiere obstrucción maligna distal de la vía biliar, como cáncer de cabeza de páncreas o ampuloma, porque la vesícula no está fibrosada como en la litiasis crónica. El cáncer de páncreas se manifiesta con ictericia indolora progresiva, prurito, pérdida de peso, dolor epigástrico irradiado a la espalda y diabetes de reciente inicio. La tomografía con protocolo de páncreas es el estudio de elección. El CA 19 9 apoya el diagnóstico y el seguimiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de páncreas
+
+@ cir|pancreas|acute_pancreatitis|2|diagnosis
+V: Hombre de 42 años con consumo intenso de alcohol que presenta dolor epigástrico intenso transfictivo irradiado a la espalda en cinturón, náusea y vómito de 12 horas. Lipasa sérica de 1 800 U/L.
+P: ¿Cuál es el diagnóstico más probable?
++ Pancreatitis aguda || Dolor epigástrico típico con lipasa mayor de tres veces el límite superior.
+- anchoring | Úlcera péptica perforada || Daría neumoperitoneo y abdomen en tabla.
+- availability_heuristic | Colecistitis aguda || El dolor sería en hipocondrio derecho con lipasa normal.
+- representativeness_heuristic | Gastritis alcohólica || No eleva la lipasa a este nivel.
+- premature_closure | Infarto agudo de miocardio inferior || No explica la lipasa.
+- base_rate_fallacy | Aneurisma aórtico disecante || No eleva la lipasa.
+- framing_effect | Isquemia mesentérica || El cuadro y la lipasa orientan a pancreatitis.
+- inattentional_blindness | Cólico renal || No explica la lipasa.
+- focusing_illusion | Cetoacidosis alcohólica || No explica la lipasa tan elevada.
+- belief_bias | Cruda intensa que se quita con suero || Es una enfermedad grave.
+E: La pancreatitis aguda se diagnostica con dos de tres criterios, dolor abdominal típico epigástrico irradiado a la espalda, lipasa o amilasa mayores de tres veces el límite superior y hallazgos característicos en imagen. Las causas más frecuentes son la litiasis biliar y el alcohol, seguidas de la hipertrigliceridemia, la colangiopancreatografía, fármacos e hipercalcemia. La lipasa es más específica y persiste más tiempo que la amilasa. La tomografía no es necesaria para el diagnóstico si la clínica y la lipasa son típicas, y se reserva para dudas o complicaciones después de 72 horas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de pancreatitis aguda
+
+@ cir|pancreas|acute_pancreatitis|3|initial_treatment
+V: Mujer de 50 años con pancreatitis aguda biliar de 8 horas de evolución. Frecuencia cardiaca de 110, presión de 105/70 mmHg, nitrógeno ureico de 28 mg/dL. Sin colangitis.
+P: ¿Cuál es el tratamiento inicial más importante?
++ Reanimación con líquidos intravenosos, preferentemente Ringer lactato, a ritmo moderado con metas, más analgesia || La hidratación temprana guiada por objetivos mejora el pronóstico.
+- anchoring | Antibióticos profilácticos de amplio espectro en todos || No se recomiendan sin infección.
+- availability_heuristic | Colecistectomía urgente en las primeras horas || Se realiza en el mismo internamiento tras la mejoría en casos leves.
+- representativeness_heuristic | Ayuno absoluto prolongado por una semana || Se recomienda alimentación oral temprana según tolerancia.
+- premature_closure | Colangiopancreatografía urgente en todas sin colangitis || Solo si hay colangitis u obstrucción persistente.
+- framing_effect | Restricción de líquidos para evitar edema || La hidratación es fundamental.
+- complexity_bias | Necrosectomía quirúrgica temprana || Está contraindicada en fase temprana.
+- base_rate_fallacy | Octreótido de rutina || No ha mostrado beneficio.
+- belief_bias | Suspender la analgesia para no ocultar síntomas || El dolor debe tratarse.
+- omission_bias | Evitar opioides en todos los casos || Pueden usarse para el dolor.
+E: El tratamiento inicial de la pancreatitis aguda es de soporte. La reanimación con líquidos intravenosos, preferentemente Ringer lactato, en las primeras 24 horas guiada por frecuencia cardiaca, presión, diuresis, hematocrito y nitrógeno ureico, es fundamental. Actualmente se recomienda una reanimación moderada para evitar la sobrecarga de volumen. Se da analgesia adecuada, incluidos opioides. Se inicia alimentación oral temprana en cuanto se tolere, y si no es posible, nutrición enteral. Los antibióticos profilácticos no se recomiendan. En la pancreatitis biliar se realiza colecistectomía en el mismo internamiento en casos leves.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de pancreatitis aguda
+
+@ cir|pancreas|acute_pancreatitis|3|complication_prognosis
+V: Hombre de 48 años con pancreatitis aguda grave de 3 semanas que presenta fiebre persistente, leucocitosis y deterioro clínico. La tomografía muestra necrosis pancreática con burbujas de gas en la colección.
+P: ¿Cuál es la complicación que presenta?
++ Necrosis pancreática infectada || El gas en la necrosis con fiebre y deterioro indica infección.
+- anchoring | Pseudoquiste pancreático no complicado || No explica el gas ni la fiebre.
+- availability_heuristic | Absceso hepático || La colección es pancreática.
+- representativeness_heuristic | Necrosis estéril sin infección || El gas indica infección.
+- premature_closure | Neumonía nosocomial como única explicación || El gas en la necrosis indica infección pancreática.
+- base_rate_fallacy | Cáncer de páncreas || No explica el cuadro agudo.
+- framing_effect | Trombosis de vena esplénica || No explica el gas.
+- inattentional_blindness | Perforación duodenal || El gas está dentro de la colección pancreática.
+- focusing_illusion | Infección urinaria por sonda || No explica la colección con gas.
+- belief_bias | Fiebre normal de la inflamación del páncreas || El gas indica infección.
+E: La necrosis pancreática infectada ocurre en alrededor de un tercio de los pacientes con necrosis, generalmente después de la segunda a cuarta semana, por translocación bacteriana. Se sospecha con fiebre, leucocitosis y deterioro clínico, y la presencia de gas en la colección en la tomografía es muy sugestiva. El tratamiento incluye antibióticos que penetren el tejido pancreático, como carbapenémicos, quinolonas o metronidazol, y un abordaje escalonado con drenaje percutáneo o endoscópico, seguido de necrosectomía mínimamente invasiva si no mejora. Se prefiere retrasar la intervención hasta que la necrosis esté encapsulada, alrededor de 4 semanas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de pancreatitis aguda
+
+@ cir|pancreas|acute_pancreatitis|3|data_interpretation
+V: Mujer de 55 años con pancreatitis aguda. A las 48 horas persiste con presión arterial baja que requiere vasopresores y creatinina en aumento pese a la reanimación.
+P: ¿Qué indica la persistencia de falla orgánica más de 48 horas?
++ Pancreatitis aguda grave según la clasificación de Atlanta revisada || La falla orgánica persistente define la gravedad.
+- anchoring | Pancreatitis leve || La leve no tiene falla orgánica.
+- availability_heuristic | Pancreatitis moderadamente grave || Esta tiene falla orgánica transitoria menor de 48 horas o complicaciones locales.
+- representativeness_heuristic | Pancreatitis crónica || Es una enfermedad diferente.
+- premature_closure | Respuesta normal a la reanimación || La falla persiste.
+- base_rate_fallacy | Indica pseudoquiste como causa única || La gravedad se define por la falla orgánica.
+- framing_effect | Indica que debe operarse de inmediato || La cirugía temprana no se recomienda.
+- inattentional_blindness | Indica que la amilasa debe repetirse cada día para pronóstico || La amilasa no predice gravedad.
+- focusing_illusion | Indica pancreatitis por hipertrigliceridemia || No indica la causa.
+- belief_bias | La pancreatitis siempre se cura sola en días || Puede ser grave.
+E: La clasificación de Atlanta revisada divide la pancreatitis aguda en leve, sin falla orgánica ni complicaciones locales o sistémicas; moderadamente grave, con falla orgánica transitoria que se resuelve en 48 horas o complicaciones locales; y grave, con falla orgánica persistente de más de 48 horas. La falla orgánica se evalúa con la escala de Marshall modificada en los sistemas respiratorio, cardiovascular y renal. La pancreatitis grave tiene una mortalidad de 15 a 30% y requiere manejo en terapia intensiva. Las escalas como BISAP y el nitrógeno ureico ayudan a predecir la gravedad.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de pancreatitis aguda
+
+@ cir|pancreas|acute_pancreatitis|3|risk_factor
+V: Hombre de 38 años con diabetes descontrolada y obesidad que presenta pancreatitis aguda. No consume alcohol y el ultrasonido no muestra cálculos. El suero es lechoso y los triglicéridos son de 2 400 mg/dL.
+P: ¿Cuál es la causa más probable de la pancreatitis?
++ Hipertrigliceridemia || Triglicéridos mayores de 1 000 mg/dL pueden causar pancreatitis.
+- anchoring | Litiasis biliar oculta || No hay cálculos y los triglicéridos explican el cuadro.
+- availability_heuristic | Alcohol || No consume alcohol.
+- representativeness_heuristic | Hipercalcemia || No hay datos.
+- premature_closure | Fármacos sin especificar || Los triglicéridos explican el cuadro.
+- base_rate_fallacy | Páncreas divisum || Es una causa poco frecuente.
+- framing_effect | Traumatismo abdominal || No hay antecedente.
+- inattentional_blindness | Infección viral por paperas || Es rara en adultos.
+- focusing_illusion | Cáncer de páncreas || Es menos probable a esta edad.
+- belief_bias | Comer mucho una sola vez como única causa || La causa es la hipertrigliceridemia.
+E: La hipertrigliceridemia es la tercera causa más frecuente de pancreatitis aguda, después de la litiasis biliar y el alcohol, y se presenta con triglicéridos generalmente mayores de 1 000 mg/dL. Se asocia a diabetes descontrolada, obesidad, alcohol, embarazo, hipotiroidismo, fármacos como estrógenos y causas genéticas. El suero puede verse lechoso y la amilasa puede ser falsamente normal. El tratamiento incluye el manejo habitual de la pancreatitis más reducción de los triglicéridos con insulina intravenosa, sobre todo en diabéticos, y en casos graves plasmaféresis. Después se usan fibratos y control dietético.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de pancreatitis aguda
+
+@ cir|pancreas|acute_pancreatitis|3|complication_prognosis
+V: Mujer de 46 años que tuvo pancreatitis aguda hace 7 semanas. Presenta saciedad temprana y dolor epigástrico. La tomografía muestra una colección de 8 cm, de pared bien definida, homogénea, sin necrosis, adyacente al estómago.
+P: ¿Cuál es la complicación que presenta?
++ Pseudoquiste pancreático || Colección líquida encapsulada sin necrosis más de 4 semanas después de la pancreatitis.
+- anchoring | Necrosis encapsulada || Tendría contenido sólido de necrosis.
+- availability_heuristic | Absceso pancreático || No hay fiebre ni gas.
+- representativeness_heuristic | Cistoadenoma pancreático || Es una neoplasia quística sin antecedente de pancreatitis.
+- premature_closure | Colección líquida aguda peripancreática || Ocurre en las primeras 4 semanas sin pared definida.
+- base_rate_fallacy | Cáncer de páncreas quístico || Es menos probable con el antecedente.
+- framing_effect | Quiste hepático simple || La colección es pancreática.
+- inattentional_blindness | Dilatación gástrica || No explica la colección encapsulada.
+- focusing_illusion | Aneurisma de arteria esplénica || No explica la colección.
+- belief_bias | Inflamación que desaparece sola siempre || Puede requerir drenaje si es sintomática.
+E: El pseudoquiste pancreático es una colección de líquido rodeada de una pared bien definida sin tejido epitelial y sin necrosis, que aparece más de 4 semanas después de una pancreatitis intersticial. La necrosis encapsulada, en cambio, contiene material sólido necrótico y deriva de una pancreatitis necrotizante. Muchos pseudoquistes se resuelven solos. Se tratan si causan síntomas como dolor, saciedad temprana u obstrucción, si crecen o se complican con infección, hemorragia o rotura. El drenaje endoscópico guiado por ultrasonido hacia el estómago es el tratamiento de elección.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de pancreatitis aguda
+
+@ cir|pancreas|acute_pancreatitis|3|next_step
+V: Mujer de 40 años con pancreatitis aguda biliar leve que mejoró en 3 días, tolera la vía oral y ya no tiene dolor. Enzimas hepáticas normalizándose.
+P: ¿Cuál es la conducta más apropiada respecto a la vesícula?
++ Colecistectomía laparoscópica durante el mismo internamiento || Reduce la recurrencia de eventos biliares.
+- anchoring | Colecistectomía diferida 6 meses || Aumenta el riesgo de recurrencia de pancreatitis.
+- availability_heuristic | Ningún tratamiento porque ya mejoró || El riesgo de recurrencia es alto.
+- representativeness_heuristic | Ácido ursodesoxicólico de por vida || No previene la recurrencia de forma adecuada.
+- premature_closure | Colangiopancreatografía con esfinterotomía como único tratamiento en todas || La colecistectomía es el tratamiento definitivo.
+- framing_effect | Dieta sin grasa como único manejo || No previene la recurrencia.
+- complexity_bias | Pancreatectomía distal || Es excesiva.
+- base_rate_fallacy | Esperar a un segundo episodio para operar || Aumenta la morbilidad.
+- belief_bias | Las piedras se disolverán con la dieta || No es así.
+- omission_bias | No operar para evitar riesgos quirúrgicos || El riesgo de recurrencia es mayor.
+E: Tras una pancreatitis aguda biliar leve, la colecistectomía laparoscópica debe realizarse durante el mismo internamiento, una vez que el paciente mejora. Retrasarla aumenta de forma importante el riesgo de eventos biliares recurrentes, como nueva pancreatitis, colecistitis o colangitis, en las semanas siguientes. En la pancreatitis grave con colecciones o necrosis, la colecistectomía se difiere hasta que se resuelva el proceso inflamatorio, generalmente 6 semanas. En pacientes con alto riesgo quirúrgico puede realizarse esfinterotomía endoscópica como alternativa para reducir la recurrencia de pancreatitis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de pancreatitis aguda
+
+@ cir|pancreas|pancreatic_cancer|3|confirmatory_study
+V: Hombre de 68 años con ictericia indolora, pérdida de peso y diabetes de reciente inicio. El ultrasonido muestra dilatación de la vía biliar intra y extrahepática y del conducto pancreático.
+P: ¿Cuál es el estudio de elección para el diagnóstico y la estadificación?
++ Tomografía multifásica con protocolo de páncreas || Evalúa la masa, la afección vascular y las metástasis para decidir la resecabilidad.
+- anchoring | Repetir el ultrasonido abdominal en 3 meses || Retrasa el diagnóstico.
+- availability_heuristic | Radiografía simple de abdomen || No es útil.
+- representativeness_heuristic | Colangiopancreatografía como estudio de estadificación || No estadifica.
+- premature_closure | CA 19 9 como diagnóstico definitivo || Es un marcador de apoyo.
+- base_rate_fallacy | Gammagrama óseo como primer estudio || No es el estudio inicial.
+- framing_effect | Endoscopia superior simple || No evalúa el páncreas.
+- complexity_bias | Laparotomía exploradora directa sin imagen || Primero se estadifica con imagen.
+- information_bias | Amilasa sérica || No es útil para el diagnóstico.
+- belief_bias | Biopsia percutánea obligatoria antes de cualquier imagen || Primero se realiza imagen.
+E: La tomografía multifásica con protocolo de páncreas es el estudio de elección para diagnosticar y estadificar el cáncer de páncreas. Muestra la masa hipodensa, la dilatación ductal en doble conducto, la relación con los vasos como la arteria mesentérica superior, el tronco celíaco y la vena porta, y las metástasis hepáticas. Con ella se clasifica el tumor como resecable, limítrofe, localmente avanzado o metastásico. El ultrasonido endoscópico permite la biopsia. El CA 19 9 apoya el diagnóstico y el seguimiento. Solo 15 a 20% son resecables al diagnóstico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de páncreas
+
+@ cir|pancreas|pancreatic_cancer|3|treatment_of_choice
+V: Hombre de 62 años con adenocarcinoma de la cabeza del páncreas de 2.5 cm sin afección vascular ni metástasis en la tomografía. Buen estado funcional.
+P: ¿Cuál es el tratamiento de elección?
++ Pancreatoduodenectomía de Whipple seguida de quimioterapia adyuvante || Es la única opción potencialmente curativa en tumores resecables.
+- anchoring | Quimioterapia sola como tratamiento definitivo || La cirugía es la única opción curativa.
+- availability_heuristic | Prótesis biliar como tratamiento definitivo || Es paliativa.
+- representativeness_heuristic | Pancreatectomía distal || Es para tumores del cuerpo y cola.
+- premature_closure | Derivación biliodigestiva paliativa || Es para tumores irresecables.
+- framing_effect | Radioterapia sola || No es curativa.
+- complexity_bias | Trasplante de páncreas || No está indicado.
+- base_rate_fallacy | Cuidados paliativos exclusivos || El tumor es resecable.
+- belief_bias | Tratamientos herbolarios || No son eficaces.
+- omission_bias | No operar por la edad || Tiene buen estado funcional.
+E: La resección quirúrgica es la única opción potencialmente curativa del cáncer de páncreas. Para los tumores de la cabeza se realiza pancreatoduodenectomía o procedimiento de Whipple, que reseca la cabeza del páncreas, el duodeno, la vía biliar distal y la vesícula, con reconstrucción. Para los tumores del cuerpo y cola se realiza pancreatectomía distal con esplenectomía. Después se administra quimioterapia adyuvante con esquemas como FOLFIRINOX modificado, que mejora la supervivencia. En tumores limítrofes se administra neoadyuvancia. Aun con resección, la supervivencia a 5 años es de 20 a 30%.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de páncreas
+
+@ cir|pancreas|pancreatic_cancer|3|risk_factor
+V: Hombre de 65 años con cáncer de páncreas. Fuma 1 cajetilla al día desde hace 40 años, tiene diabetes de 2 años de evolución, obesidad y pancreatitis crónica.
+P: ¿Cuál es el factor de riesgo modificable más importante?
++ Tabaquismo || Es el principal factor de riesgo modificable de cáncer de páncreas.
+- anchoring | Consumo de café || No es un factor establecido.
+- availability_heuristic | Consumo de lácteos || No es un factor.
+- representativeness_heuristic | Ejercicio moderado || Es protector.
+- premature_closure | Apendicectomía previa || No es un factor.
+- base_rate_fallacy | Grupo sanguíneo como factor modificable || No es modificable.
+- framing_effect | Dieta rica en frutas || Es protectora.
+- inattentional_blindness | Uso de aspirina || No aumenta el riesgo.
+- focusing_illusion | Edad de 65 años como factor modificable || No es modificable.
+- belief_bias | El estrés laboral como causa principal || No es un factor establecido.
+E: El tabaquismo es el principal factor de riesgo modificable del cáncer de páncreas y duplica el riesgo. Otros factores son la edad avanzada, la obesidad, la diabetes de larga evolución, la pancreatitis crónica, el alcohol y los síndromes hereditarios como BRCA2, síndrome de Lynch, síndrome de Peutz Jeghers y pancreatitis hereditaria. La diabetes de reciente inicio en mayores de 50 años con pérdida de peso puede ser una manifestación temprana del cáncer. No se recomienda el tamizaje en la población general, pero sí en personas con alto riesgo hereditario.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de páncreas
+
+@ cir|pancreas|pancreatic_cancer|3|treatment_of_choice
+V: Hombre de 72 años con cáncer de páncreas con metástasis hepáticas e ictericia obstructiva con prurito intenso. Desea mejorar su calidad de vida.
+P: ¿Cuál es el tratamiento paliativo de elección para la ictericia?
++ Colocación endoscópica de prótesis biliar metálica por colangiopancreatografía || Alivia la obstrucción con menor morbilidad que la cirugía.
+- anchoring | Pancreatoduodenectomía de Whipple || No está indicada con metástasis.
+- availability_heuristic | Ácido ursodesoxicólico || No resuelve la obstrucción maligna.
+- representativeness_heuristic | Trasplante hepático || No está indicado.
+- premature_closure | Ningún procedimiento || La prótesis mejora la calidad de vida.
+- framing_effect | Derivación quirúrgica abierta como primera opción || La prótesis endoscópica tiene menor morbilidad.
+- complexity_bias | Radioterapia del hígado || No resuelve la obstrucción biliar.
+- base_rate_fallacy | Antihistamínicos como único tratamiento del prurito || No resuelven la obstrucción.
+- belief_bias | Dieta sin grasa resolverá la ictericia || No resuelve la obstrucción.
+- omission_bias | No ofrecer paliación por el mal pronóstico || La paliación mejora la calidad de vida.
+E: La mayoría de los pacientes con cáncer de páncreas tienen enfermedad irresecable al diagnóstico. El tratamiento paliativo busca aliviar los síntomas. La ictericia obstructiva se trata con prótesis biliares metálicas autoexpandibles colocadas por colangiopancreatografía, que tienen mayor duración que las plásticas, o por vía percutánea. La obstrucción duodenal se trata con prótesis duodenal o gastroyeyunostomía. El dolor se maneja con analgésicos, incluidos opioides, y la neurólisis del plexo celíaco. La quimioterapia paliativa prolonga la supervivencia en pacientes con buen estado funcional.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de páncreas

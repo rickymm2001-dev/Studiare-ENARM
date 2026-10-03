@@ -1,0 +1,1620 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "fam-01b-inmunizaciones-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "adult_immunizations",
+      "vignette": "Mujer de 27 años con embarazo de 26 semanas, control prenatal normal. Su último refuerzo de tétanos fue hace 6 años. Es temporada invernal.",
+      "prompt": "¿Cuál es el esquema de vacunación más apropiado durante este embarazo?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ninguna vacuna porque recibió tétanos hace menos de 10 años",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La Tdpa se aplica en cada embarazo independientemente del refuerzo previo."
+        },
+        {
+          "key": "b",
+          "text": "Vacuna triple viral para proteger contra rubéola",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es de virus vivos y está contraindicada en el embarazo."
+        },
+        {
+          "key": "c",
+          "text": "Posponer todas las vacunas hasta después del parto",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se pierde la protección pasiva del recién nacido."
+        },
+        {
+          "key": "d",
+          "text": "Solo toxoide tetánico y diftérico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No protege contra tos ferina."
+        },
+        {
+          "key": "e",
+          "text": "Vacuna contra varicela",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es de virus vivos."
+        },
+        {
+          "key": "f",
+          "text": "Evitar la influenza por miedo a efectos en el feto",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es segura y reduce complicaciones maternas."
+        },
+        {
+          "key": "g",
+          "text": "Vacuna contra herpes zóster",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No está indicada en el embarazo."
+        },
+        {
+          "key": "h",
+          "text": "Vacuna Tdpa e influenza inactivada",
+          "correct": true,
+          "rationale": "Ambas se recomiendan en cada embarazo y protegen al recién nacido."
+        },
+        {
+          "key": "i",
+          "text": "Influenza intranasal de virus vivos atenuados",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No se usa en embarazadas."
+        },
+        {
+          "key": "j",
+          "text": "Inmunoglobulina antitetánica de rutina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada sin herida de riesgo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "En el embarazo se recomienda la vacuna Tdpa, con toxoide tetánico, diftérico y componente acelular de tos ferina, a partir de la semana 20, idealmente entre la 27 y la 36, en cada embarazo, para transferir anticuerpos al feto y proteger al lactante en sus primeros meses, cuando la tos ferina es más grave. La vacuna inactivada contra influenza se aplica en cualquier trimestre durante la temporada, porque las embarazadas tienen mayor riesgo de complicaciones. Las vacunas de virus vivos atenuados, como triple viral, varicela e influenza intranasal, están contraindicadas durante el embarazo.",
+      "gpcRefs": [
+        "Lineamientos de vacunación del Programa de Vacunación Universal",
+        "Guía de Práctica Clínica de control prenatal con enfoque de riesgo"
+      ]
+    },
+    {
+      "key": "fam-01b-inmunizaciones-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "adult_immunizations",
+      "vignette": "Hombre de 66 años, con diabetes tipo 2 controlada. Nunca ha recibido vacuna antineumocócica. Recibió influenza el año pasado.",
+      "prompt": "¿Cuál es la recomendación de vacunación antineumocócica más adecuada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Antibiótico profiláctico permanente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "b",
+          "text": "Repetir la vacuna de influenza en lugar de la antineumocócica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Previenen enfermedades distintas."
+        },
+        {
+          "key": "c",
+          "text": "Vacuna contra Haemophilus influenzae tipo b",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es la indicada en este adulto."
+        },
+        {
+          "key": "d",
+          "text": "La vacuna solo es para niños menores de 2 años",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "También está indicada en adultos mayores."
+        },
+        {
+          "key": "e",
+          "text": "Aplicar antineumocócica cada año",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es anual."
+        },
+        {
+          "key": "f",
+          "text": "Esperar a que cumpla 75 años",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La recomendación inicia a los 65."
+        },
+        {
+          "key": "g",
+          "text": "Aplicar vacuna antineumocócica según el esquema vigente para mayores de 65 años",
+          "correct": true,
+          "rationale": "La edad y la diabetes aumentan el riesgo de enfermedad neumocócica invasiva."
+        },
+        {
+          "key": "h",
+          "text": "Vacunar solo si tiene neumonía activa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La vacuna es preventiva."
+        },
+        {
+          "key": "i",
+          "text": "No vacunar por temor a reacción local",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Las reacciones locales son leves."
+        },
+        {
+          "key": "j",
+          "text": "No vacunar porque la diabetes está controlada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El riesgo persiste por edad."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "h",
+        "j"
+      ],
+      "explanation": "Streptococcus pneumoniae es la principal causa de neumonía adquirida en la comunidad y de enfermedad invasiva en el adulto mayor. En México se recomienda vacunar contra neumococo a los adultos de 65 años o más y a menores de esa edad con enfermedades crónicas, como diabetes, cardiopatía, neumopatía, nefropatía, asplenia o inmunosupresión. Existen vacunas conjugadas y la polisacárida de 23 serotipos; el esquema específico depende de la disponibilidad y de las vacunas recibidas antes. La vacuna antineumocócica no se aplica cada año, a diferencia de la de influenza. Ambas pueden aplicarse en la misma visita.",
+      "gpcRefs": [
+        "Lineamientos de vacunación del Programa de Vacunación Universal",
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la neumonía adquirida en la comunidad"
+      ]
+    },
+    {
+      "key": "fam-01b-inmunizaciones-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "adult_immunizations",
+      "vignette": "Mujer de 22 años, estudiante de enfermería, que iniciará prácticas hospitalarias. No tiene registro de vacuna contra hepatitis B.",
+      "prompt": "¿Cuál es el esquema de vacunación contra hepatitis B recomendado?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Una sola dosis es suficiente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El esquema estándar es de tres dosis."
+        },
+        {
+          "key": "b",
+          "text": "No vacunar porque es joven y sana",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El riesgo es ocupacional."
+        },
+        {
+          "key": "c",
+          "text": "Iniciar prácticas sin protección",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Aumenta el riesgo de infección."
+        },
+        {
+          "key": "d",
+          "text": "Vacunar solo a médicos cirujanos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Todo el personal expuesto requiere vacuna."
+        },
+        {
+          "key": "e",
+          "text": "Vacuna contra hepatitis A",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Previene otro virus."
+        },
+        {
+          "key": "f",
+          "text": "Esperar a tener un pinchazo para vacunarse",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La vacunación debe ser previa."
+        },
+        {
+          "key": "g",
+          "text": "Medir carga viral antes de vacunar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "h",
+          "text": "Inmunoglobulina contra hepatitis B como única medida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da protección temporal."
+        },
+        {
+          "key": "i",
+          "text": "Tres dosis a los 0, 1 y 6 meses con verificación de anticuerpos al terminar",
+          "correct": true,
+          "rationale": "Es personal de salud con riesgo ocupacional."
+        },
+        {
+          "key": "j",
+          "text": "Tratamiento antiviral profiláctico continuo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "h",
+        "i"
+      ],
+      "explanation": "La hepatitis B es una de las principales infecciones ocupacionales del personal de salud. La vacuna recombinante se aplica en tres dosis intramusculares en deltoides a los 0, 1 y 6 meses. En el personal de salud se recomienda medir los anticuerpos contra el antígeno de superficie de uno a dos meses después de la última dosis; un título de 10 mUI/mL o mayor indica protección. Si no responde, se repite un segundo esquema. La inmunoglobulina se usa como profilaxis posterior a la exposición en personas no inmunes, junto con la vacuna.",
+      "gpcRefs": [
+        "Lineamientos de vacunación del Programa de Vacunación Universal",
+        "Guía de Práctica Clínica de prevención de infecciones por exposición ocupacional en personal de salud"
+      ]
+    },
+    {
+      "key": "fam-01b-inmunizaciones-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "adult_immunizations",
+      "vignette": "Hombre de 35 años que se hizo una herida profunda en la mano con un clavo oxidado en una obra hace 3 horas. Recibió su esquema infantil completo y no recuerda refuerzos desde la secundaria, hace 20 años.",
+      "prompt": "¿Cuál es la conducta más apropiada para la prevención de tétanos?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aplicar toxoide tetánico y diftérico junto con inmunoglobulina antitetánica",
+          "correct": true,
+          "rationale": "Es una herida de alto riesgo y su último refuerzo fue hace más de 10 años."
+        },
+        {
+          "key": "b",
+          "text": "Solo inmunoglobulina antitetánica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Debe acompañarse de toxoide para inmunidad activa."
+        },
+        {
+          "key": "c",
+          "text": "Solo lavado de la herida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Requiere inmunización."
+        },
+        {
+          "key": "d",
+          "text": "Esperar a que aparezca trismo para tratar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Sería tardío."
+        },
+        {
+          "key": "e",
+          "text": "Metronidazol intravenoso y hospitalización",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No están indicados sin datos de tétanos."
+        },
+        {
+          "key": "f",
+          "text": "No desbridar la herida",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El desbridamiento es parte del manejo."
+        },
+        {
+          "key": "g",
+          "text": "Solo antibiótico oral",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No previene el tétanos por sí solo."
+        },
+        {
+          "key": "h",
+          "text": "Aplicar triple viral",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No protege contra tétanos."
+        },
+        {
+          "key": "i",
+          "text": "Aplicar toxoide solo si la herida se infecta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El tétanos no depende de infección visible."
+        },
+        {
+          "key": "j",
+          "text": "No aplicar nada porque tuvo esquema infantil completo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La protección disminuye con el tiempo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "La profilaxis antitetánica depende del tipo de herida y del estado de vacunación. Las heridas contaminadas con tierra, heces o saliva, las punzantes y las producidas por objetos oxidados se consideran de alto riesgo. Si el paciente tiene esquema completo y el último refuerzo fue hace más de 5 años, se aplica toxoide tetánico y diftérico; si el esquema es incompleto o desconocido, o el último refuerzo fue hace más de 10 años, se agrega inmunoglobulina antitetánica humana en un sitio diferente. Siempre se lava y desbrida la herida. Los adultos deben recibir un refuerzo cada 10 años.",
+      "gpcRefs": [
+        "Lineamientos de vacunación del Programa de Vacunación Universal",
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del tétanos"
+      ]
+    },
+    {
+      "key": "fam-01b-inmunizaciones-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "adult_immunizations",
+      "vignette": "Hombre de 45 años con infección por VIH diagnosticada hace 2 meses, conteo de linfocitos CD4 de 150 células/mm3, sin tratamiento antirretroviral aún. Pregunta qué vacunas debe recibir.",
+      "prompt": "¿Cuál vacuna está contraindicada en este momento?",
+      "polarity": "negative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Vacuna recombinante contra herpes zóster",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No contiene virus vivos."
+        },
+        {
+          "key": "b",
+          "text": "Vacuna contra hepatitis A",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es inactivada."
+        },
+        {
+          "key": "c",
+          "text": "Vacuna inactivada contra influenza",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Está indicada en personas con VIH."
+        },
+        {
+          "key": "d",
+          "text": "Vacuna meningocócica conjugada",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Es inactivada."
+        },
+        {
+          "key": "e",
+          "text": "Toxoide tetánico y diftérico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es seguro."
+        },
+        {
+          "key": "f",
+          "text": "Vacuna contra COVID-19 de ARN mensajero",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es de virus vivos."
+        },
+        {
+          "key": "g",
+          "text": "Vacuna contra fiebre amarilla",
+          "correct": true,
+          "rationale": "Es de virus vivos y está contraindicada con CD4 menores de 200."
+        },
+        {
+          "key": "h",
+          "text": "Vacuna antineumocócica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Está indicada."
+        },
+        {
+          "key": "i",
+          "text": "Vacuna contra hepatitis B",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Está indicada si no es inmune."
+        },
+        {
+          "key": "j",
+          "text": "Vacuna contra virus del papiloma humano",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es recombinante y no viva."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "Las vacunas de microorganismos vivos atenuados pueden causar enfermedad diseminada en personas con inmunosupresión grave. En personas con VIH y conteo de CD4 menor de 200 células/mm3 están contraindicadas vacunas como fiebre amarilla, triple viral, varicela y herpes zóster de virus vivos. Las vacunas inactivadas, recombinantes, de subunidades y de ARN mensajero son seguras, aunque la respuesta puede ser menor; por eso se recomienda vacunar idealmente cuando la carga viral está suprimida y el CD4 se recupera. Las personas con VIH deben recibir influenza anual, neumococo, hepatitis B y otras inactivadas según su edad.",
+      "gpcRefs": [
+        "Guía de manejo antirretroviral de las personas con VIH",
+        "Lineamientos de vacunación del Programa de Vacunación Universal"
+      ]
+    },
+    {
+      "key": "fam-01b-inmunizaciones-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "adult_immunizations",
+      "vignette": "Mujer de 25 años que planea embarazarse en los próximos meses. No tiene registro de vacunación contra sarampión y rubéola. Prueba de embarazo negativa.",
+      "prompt": "¿Cuál es la recomendación de vacunación más adecuada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aplicar vacuna contra sarampión y rubéola y evitar el embarazo durante un mes",
+          "correct": true,
+          "rationale": "La rubéola congénita es prevenible y la vacuna es de virus vivos."
+        },
+        {
+          "key": "b",
+          "text": "Vacuna contra influenza como sustituto",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No protege contra rubéola."
+        },
+        {
+          "key": "c",
+          "text": "Solo inmunoglobulina contra rubéola",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No genera inmunidad duradera."
+        },
+        {
+          "key": "d",
+          "text": "Medir anticuerpos y esperar un año para vacunar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa la protección."
+        },
+        {
+          "key": "e",
+          "text": "No vacunar porque ya es adulta",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La protección preconcepcional es prioritaria."
+        },
+        {
+          "key": "f",
+          "text": "Recomendar embarazo inmediato tras la vacuna",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se recomienda esperar un mes."
+        },
+        {
+          "key": "g",
+          "text": "Esperar al puerperio para cualquier vacuna",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se perdería la oportunidad de proteger el embarazo."
+        },
+        {
+          "key": "h",
+          "text": "La rubéola ya no existe en México por lo que no es necesaria",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La vacunación mantiene la eliminación."
+        },
+        {
+          "key": "i",
+          "text": "No preguntar por su estado vacunal en la consulta preconcepcional",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte de la valoración."
+        },
+        {
+          "key": "j",
+          "text": "Vacunar ya embarazada para mayor protección fetal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Está contraindicada en el embarazo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La consulta preconcepcional es la oportunidad para revisar el estado de vacunación. La vacuna contra sarampión y rubéola es de virus vivos atenuados y se aplica a mujeres en edad fértil sin antecedente documentado de vacunación o inmunidad. Se recomienda evitar el embarazo durante las cuatro semanas siguientes. La vacunación inadvertida durante el embarazo no justifica su interrupción, porque no se han documentado casos de síndrome de rubéola congénita por la vacuna. La rubéola en el primer trimestre puede causar sordera, cataratas, cardiopatía y retraso del desarrollo en el feto.",
+      "gpcRefs": [
+        "Lineamientos de vacunación del Programa de Vacunación Universal",
+        "Guía de Práctica Clínica de atención preconcepcional en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-01b-inmunizaciones-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "adult_immunizations",
+      "vignette": "Mujer de 62 años, sana, que acude en noviembre a consulta. Refiere alergia al huevo que le causa urticaria leve. No se ha vacunado contra influenza porque le dijeron que no podía.",
+      "prompt": "¿Cuál es la recomendación más adecuada respecto a la vacuna de influenza?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Contraindicar la vacuna de por vida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La cantidad de proteína de huevo es mínima."
+        },
+        {
+          "key": "b",
+          "text": "La vacuna causa influenza por lo que debe evitarse",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La vacuna inactivada no causa la enfermedad."
+        },
+        {
+          "key": "c",
+          "text": "Vacunar solo si es mayor de 65 años",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es mayor de 60 y se recomienda."
+        },
+        {
+          "key": "d",
+          "text": "Dividir la dosis en varias aplicaciones",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "e",
+          "text": "Realizar pruebas cutáneas con la vacuna antes de aplicarla",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ya no se recomiendan."
+        },
+        {
+          "key": "f",
+          "text": "Aplicarla solo en un hospital de tercer nivel",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Una urticaria leve no lo requiere."
+        },
+        {
+          "key": "g",
+          "text": "Administrar oseltamivir profiláctico toda la temporada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No sustituye la vacunación."
+        },
+        {
+          "key": "h",
+          "text": "No vacunar por precaución",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo de influenza grave es mayor."
+        },
+        {
+          "key": "i",
+          "text": "Aplicar la vacuna inactivada de influenza con observación habitual",
+          "correct": true,
+          "rationale": "La alergia al huevo no contraindica la vacuna actual."
+        },
+        {
+          "key": "j",
+          "text": "Premedicar con esteroides intravenosos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "Las vacunas inactivadas contra influenza contienen cantidades mínimas de ovoalbúmina y los estudios muestran que pueden aplicarse con seguridad a personas con alergia al huevo, incluso con antecedente de reacciones graves, sin pruebas cutáneas previas ni fraccionamiento de dosis. Se aplican con la observación habitual de 15 minutos. La única contraindicación absoluta es la anafilaxia a una dosis previa de la vacuna. En México se recomienda la vacunación anual en adultos de 60 años o más, embarazadas, personal de salud y personas con enfermedades crónicas. La vacuna inactivada no puede causar influenza.",
+      "gpcRefs": [
+        "Lineamientos de vacunación del Programa de Vacunación Universal",
+        "Lineamientos para la prevención y control de influenza estacional"
+      ]
+    },
+    {
+      "key": "fam-01b-inmunizaciones-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "adult_immunizations",
+      "vignette": "Hombre de 28 años con esplenectomía programada en 3 semanas por un trauma esplénico manejado de forma conservadora con resangrado. No tiene vacunas recientes.",
+      "prompt": "¿Cuál es el esquema de vacunación recomendado antes de la cirugía?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Vacunar hasta 6 meses después de la cirugía",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La respuesta es mejor antes de la esplenectomía."
+        },
+        {
+          "key": "b",
+          "text": "Vacuna contra fiebre tifoidea",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es una indicación por asplenia."
+        },
+        {
+          "key": "c",
+          "text": "Vacunas contra neumococo, meningococo y Haemophilus influenzae tipo b al menos 2 semanas antes",
+          "correct": true,
+          "rationale": "Protegen contra bacterias encapsuladas que causan sepsis fulminante tras la esplenectomía."
+        },
+        {
+          "key": "d",
+          "text": "Penicilina profiláctica en lugar de vacunas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es complementaria, no sustituta."
+        },
+        {
+          "key": "e",
+          "text": "No vacunar porque es joven",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La sepsis posesplenectomía puede ocurrir a cualquier edad."
+        },
+        {
+          "key": "f",
+          "text": "Vacuna triple viral",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicada por la esplenectomía."
+        },
+        {
+          "key": "g",
+          "text": "Inmunoglobulina intravenosa mensual",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "No informar sobre los signos de alarma de infección",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte de la educación del paciente."
+        },
+        {
+          "key": "i",
+          "text": "Vacuna contra hepatitis B como única indicación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es la prioridad."
+        },
+        {
+          "key": "j",
+          "text": "Solo vacuna contra influenza",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No protege contra bacterias encapsuladas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "El bazo es fundamental para eliminar bacterias encapsuladas como Streptococcus pneumoniae, Neisseria meningitidis y Haemophilus influenzae tipo b. Las personas con asplenia tienen riesgo de infección fulminante posesplenectomía, con mortalidad elevada. En cirugía electiva se recomienda vacunar al menos dos semanas antes del procedimiento; en una esplenectomía urgente, se vacuna a partir de las dos semanas posteriores. Además se recomienda la vacuna de influenza anual, educación sobre fiebre como urgencia y, en algunos casos, antibiótico profiláctico o de reserva. Se deben aplicar los refuerzos según el esquema.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención de infecciones en pacientes con asplenia",
+        "Lineamientos de vacunación del Programa de Vacunación Universal"
+      ]
+    },
+    {
+      "key": "fam-01b-inmunizaciones-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "adult_immunizations",
+      "vignette": "Mujer de 58 años, sana, que pregunta por una vacuna que vio anunciada para \"la culebrilla\". Tuvo varicela en la infancia. Su vecina tuvo neuralgia posherpética muy dolorosa.",
+      "prompt": "¿Cuál es la recomendación más adecuada respecto a la vacuna contra herpes zóster?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Vacunar solo después de un episodio de zóster",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede vacunarse sin episodio previo."
+        },
+        {
+          "key": "b",
+          "text": "No ofrecer la vacuna por ser costosa",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe informarse la recomendación."
+        },
+        {
+          "key": "c",
+          "text": "Una sola dosis de por vida de la vacuna recombinante",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Requiere dos dosis."
+        },
+        {
+          "key": "d",
+          "text": "Esperar a los 80 años",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El riesgo aumenta desde los 50."
+        },
+        {
+          "key": "e",
+          "text": "No vacunar porque ya tuvo varicela",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Precisamente por eso tiene riesgo de reactivación."
+        },
+        {
+          "key": "f",
+          "text": "Inmunoglobulina contra varicela zóster",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se usa en exposición de inmunodeprimidos."
+        },
+        {
+          "key": "g",
+          "text": "Aciclovir profiláctico continuo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicado en inmunocompetentes."
+        },
+        {
+          "key": "h",
+          "text": "Vacuna recombinante adyuvada en dos dosis separadas de 2 a 6 meses",
+          "correct": true,
+          "rationale": "Está indicada en adultos de 50 años o más y reduce el zóster y la neuralgia posherpética."
+        },
+        {
+          "key": "i",
+          "text": "Vacuna contra varicela pediátrica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es la indicada para prevenir zóster en adultos."
+        },
+        {
+          "key": "j",
+          "text": "Medir anticuerpos contra varicela antes de vacunar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        }
+      ],
+      "canonical": [
+        "e",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "El herpes zóster resulta de la reactivación del virus varicela zóster latente en los ganglios sensitivos, por lo que cualquier persona que tuvo varicela tiene riesgo, y este aumenta con la edad y la inmunosupresión. La neuralgia posherpética es su complicación más frecuente y discapacitante. La vacuna recombinante adyuvada contra zóster se recomienda en adultos de 50 años o más en dos dosis con intervalo de 2 a 6 meses, con eficacia superior al 90 por ciento. Al no contener virus vivos puede aplicarse en inmunodeprimidos. No se requiere medir anticuerpos antes.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del herpes zóster",
+        "Recomendaciones de vacunación en el adulto del Consejo Nacional de Vacunación"
+      ]
+    },
+    {
+      "key": "fam-01b-inmunizaciones-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "adult_immunizations",
+      "vignette": "Hombre de 30 años mordido en la pierna por un perro callejero que huyó hace 4 horas. La herida es profunda y sangrante. Nunca ha recibido vacuna antirrábica.",
+      "prompt": "¿Cuál es la conducta más apropiada para prevenir la rabia?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Toxoide tetánico como única medida",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "También se requiere profilaxis antirrábica."
+        },
+        {
+          "key": "b",
+          "text": "Esperar a que aparezcan síntomas neurológicos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La rabia sintomática es casi siempre mortal."
+        },
+        {
+          "key": "c",
+          "text": "Solo antibiótico oral",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No previene la rabia."
+        },
+        {
+          "key": "d",
+          "text": "No notificar el caso a la autoridad sanitaria",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es de notificación."
+        },
+        {
+          "key": "e",
+          "text": "Solo vacuna antirrábica sin inmunoglobulina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "En exposición grave se requiere ambas."
+        },
+        {
+          "key": "f",
+          "text": "Lavado de la herida con agua y jabón, vacuna antirrábica e inmunoglobulina antirrábica humana",
+          "correct": true,
+          "rationale": "Es una exposición grave en una persona no vacunada."
+        },
+        {
+          "key": "g",
+          "text": "No hay rabia canina en México por lo que no es necesario",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El riesgo existe con animales silvestres y no observables."
+        },
+        {
+          "key": "h",
+          "text": "Antivirales contra rabia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No existen tratamientos eficaces."
+        },
+        {
+          "key": "i",
+          "text": "Suturar la herida de inmediato y cerrar el caso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El cierre primario se difiere y se requiere profilaxis."
+        },
+        {
+          "key": "j",
+          "text": "Observar al perro durante 10 días antes de decidir",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El perro no está disponible."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "Ante una agresión por animal potencialmente transmisor de rabia, el primer paso es lavar la herida con agua y jabón durante 10 a 15 minutos. Una exposición grave, como mordedura profunda, múltiple o en cabeza, cuello y manos, o una agresión por animal no observable, requiere en personas no vacunadas inmunoglobulina antirrábica humana infiltrada alrededor de la herida y vacuna antirrábica en el esquema vigente. Si el animal es doméstico y puede observarse diez días sin enfermar, la profilaxis puede suspenderse. También se valora el estado antitetánico. Aunque México eliminó la rabia transmitida por perro, persisten casos por animales silvestres.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención y control de la rabia humana",
+        "Guía para la atención médica y antirrábica de la persona expuesta al virus de la rabia"
+      ]
+    },
+    {
+      "key": "fam-01b-inmunizaciones-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "adult_immunizations",
+      "vignette": "En un centro de salud se descubre que el refrigerador de vacunas registró 15 grados Celsius durante toda la noche por una falla eléctrica. Se cuestiona qué hacer con los biológicos.",
+      "prompt": "¿Cuál es el rango de temperatura que debe mantenerse para prevenir la pérdida de potencia de las vacunas?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Entre 2 y 8 grados Celsius",
+          "correct": true,
+          "rationale": "Es el rango de la cadena de frío para la mayoría de las vacunas en el primer nivel."
+        },
+        {
+          "key": "b",
+          "text": "Temperatura ambiente controlada de 20 a 25 grados",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Pierden potencia."
+        },
+        {
+          "key": "c",
+          "text": "Entre 0 y menos 20 grados en todas las vacunas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Congelar daña vacunas adsorbidas como hepatitis B y toxoides."
+        },
+        {
+          "key": "d",
+          "text": "Entre 10 y 15 grados",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Está fuera del rango recomendado."
+        },
+        {
+          "key": "e",
+          "text": "Congelar todos los toxoides para conservarlos mejor",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se dañan al congelarse."
+        },
+        {
+          "key": "f",
+          "text": "Cualquier temperatura si están protegidas de la luz",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La temperatura es crítica."
+        },
+        {
+          "key": "g",
+          "text": "Calentar las vacunas antes de usarlas para activarlas",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es una práctica válida."
+        },
+        {
+          "key": "h",
+          "text": "No registrar las temperaturas diarias",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El registro es obligatorio."
+        },
+        {
+          "key": "i",
+          "text": "Aplicar las vacunas expuestas sin reportar el evento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Debe notificarse y evaluarse."
+        },
+        {
+          "key": "j",
+          "text": "Solo las vacunas de virus vivos requieren refrigeración",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Todas requieren cadena de frío."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "f"
+      ],
+      "explanation": "La cadena de frío es el sistema de conservación, manejo y distribución que mantiene las vacunas dentro del rango de temperatura adecuado desde su fabricación hasta su aplicación. En el primer nivel la mayoría de los biológicos se conservan entre 2 y 8 grados Celsius. La congelación inactiva las vacunas que contienen adyuvantes de aluminio, como hepatitis B, toxoides y pentavalente acelular. Ante una ruptura de la cadena de frío se deben aislar los biológicos, registrar el tiempo y la temperatura y notificar a la jurisdicción para decidir si se usan o se desechan. La temperatura se registra al menos dos veces al día.",
+      "gpcRefs": [
+        "Manual de vacunación de la Secretaría de Salud",
+        "Lineamientos de cadena de frío del Programa de Vacunación Universal"
+      ]
+    },
+    {
+      "key": "fam-01b-inmunizaciones-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "adult_immunizations",
+      "vignette": "Enfermera de 30 años, vacunada contra hepatitis B con 3 dosis y anticuerpos antiHBs de 120 mUI/mL documentados. Sufre un pinchazo con aguja hueca de un paciente con antígeno de superficie positivo.",
+      "prompt": "¿Cuál es la medida de prevención de hepatitis B indicada tras esta exposición?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Inmunoglobulina y repetir el esquema completo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es necesario en respondedores documentados."
+        },
+        {
+          "key": "b",
+          "text": "Medir anticuerpos cada mes de por vida",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "c",
+          "text": "Biopsia hepática basal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "d",
+          "text": "Profilaxis contra VIH sin evaluar el caso fuente",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Debe evaluarse el riesgo de VIH por separado."
+        },
+        {
+          "key": "e",
+          "text": "Suspenderla del trabajo seis meses",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "f",
+          "text": "No requiere inmunoglobulina ni vacuna adicional",
+          "correct": true,
+          "rationale": "Tiene respuesta protectora documentada."
+        },
+        {
+          "key": "g",
+          "text": "Una dosis de refuerzo obligatoria",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es necesaria con respuesta previa documentada."
+        },
+        {
+          "key": "h",
+          "text": "No lavar el sitio porque ya está vacunada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El lavado siempre se realiza."
+        },
+        {
+          "key": "i",
+          "text": "No evaluar la exposición a VIH y hepatitis C",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Deben valorarse todos los riesgos."
+        },
+        {
+          "key": "j",
+          "text": "Tenofovir profiláctico por un mes",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se usa como profilaxis de hepatitis B."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "Tras una exposición percutánea a sangre de una fuente positiva para hepatitis B, la conducta depende del estado de vacunación y de la respuesta del trabajador. Una persona vacunada con anticuerpos antiHBs de 10 mUI/mL o más documentados en algún momento se considera protegida de por vida y no requiere tratamiento adicional. Si no está vacunada, recibe inmunoglobulina y se inicia la vacuna. Si es no respondedora, recibe inmunoglobulina y se revacuna. En todos los casos se lava el sitio con agua y jabón y se evalúa por separado el riesgo de VIH y hepatitis C para decidir profilaxis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención de infecciones por exposición ocupacional en personal de salud",
+        "Lineamientos de vacunación del Programa de Vacunación Universal"
+      ]
+    },
+    {
+      "key": "fam-01b-inmunizaciones-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "adult_immunizations",
+      "vignette": "Hombre de 40 años con enfermedad renal crónica en hemodiálisis desde hace 3 meses. No está vacunado contra hepatitis B y su antígeno de superficie es negativo.",
+      "prompt": "¿Cuál es la recomendación de vacunación contra hepatitis B más adecuada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esquema con dosis altas o formulación para diálisis con medición posterior de anticuerpos",
+          "correct": true,
+          "rationale": "Los pacientes en hemodiálisis responden menos a la vacuna."
+        },
+        {
+          "key": "b",
+          "text": "Contraindicar la vacuna por la insuficiencia renal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La vacuna es segura y prioritaria."
+        },
+        {
+          "key": "c",
+          "text": "No medir anticuerpos tras el esquema",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es necesario para documentar respuesta."
+        },
+        {
+          "key": "d",
+          "text": "Esquema estándar sin seguimiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La respuesta en diálisis suele ser insuficiente."
+        },
+        {
+          "key": "e",
+          "text": "Vacunar solo si se contagia otro paciente de la unidad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La prevención debe ser previa."
+        },
+        {
+          "key": "f",
+          "text": "Antiviral profiláctico permanente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "g",
+          "text": "Esperar a que reciba trasplante para vacunar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se debe vacunar cuanto antes."
+        },
+        {
+          "key": "h",
+          "text": "Vacuna contra hepatitis A en lugar de B",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El riesgo principal es hepatitis B."
+        },
+        {
+          "key": "i",
+          "text": "Solo inmunoglobulina cada mes",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No genera inmunidad duradera."
+        },
+        {
+          "key": "j",
+          "text": "La diálisis no implica riesgo de hepatitis B",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un factor de riesgo reconocido."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "i"
+      ],
+      "explanation": "Los pacientes en hemodiálisis tienen riesgo de adquirir hepatitis B por la exposición repetida a sangre y procedimientos, y su respuesta inmunitaria a la vacuna es menor por la uremia. Se recomienda un esquema con dosis más altas o con formulaciones específicas para diálisis, idealmente desde etapas tempranas de la enfermedad renal, antes de iniciar el reemplazo. Al terminar se miden anticuerpos antiHBs y se revisan anualmente; si bajan de 10 mUI/mL se aplica refuerzo. Los no respondedores se revacunan. La vacuna es segura en la insuficiencia renal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de tratamiento sustitutivo de la función renal",
+        "Lineamientos de vacunación del Programa de Vacunación Universal"
+      ]
+    },
+    {
+      "key": "fam-01b-inmunizaciones-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "adult_immunizations",
+      "vignette": "Mujer de 35 años que recibió una vacuna hace 2 años y presentó, en los primeros minutos, dificultad respiratoria, urticaria generalizada e hipotensión que requirió adrenalina. Hoy le corresponde la segunda dosis de esa vacuna.",
+      "prompt": "¿Cuál es la recomendación de vacunación más adecuada respecto a la nueva dosis?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aplicarla con premedicación con antihistamínico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No elimina el riesgo de anafilaxia."
+        },
+        {
+          "key": "b",
+          "text": "Esteroide intravenoso y aplicar la dosis completa",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No previene la anafilaxia."
+        },
+        {
+          "key": "c",
+          "text": "La fiebre leve tras una vacuna es igual a anafilaxia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Son eventos diferentes."
+        },
+        {
+          "key": "d",
+          "text": "Toda reacción a vacunas es leve",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Su antecedente fue grave."
+        },
+        {
+          "key": "e",
+          "text": "Aplicarla y observar 5 minutos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La observación no es suficiente ante contraindicación."
+        },
+        {
+          "key": "f",
+          "text": "No aplicar la dosis porque la anafilaxia previa a esa vacuna es contraindicación",
+          "correct": true,
+          "rationale": "La anafilaxia a una dosis previa contraindica las siguientes dosis."
+        },
+        {
+          "key": "g",
+          "text": "Aplicarla porque fue hace más de un año",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El riesgo persiste."
+        },
+        {
+          "key": "h",
+          "text": "No registrar el evento adverso",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe notificarse."
+        },
+        {
+          "key": "i",
+          "text": "Aplicarla en otro brazo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No cambia el riesgo."
+        },
+        {
+          "key": "j",
+          "text": "Aplicar media dosis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está validado y mantiene el riesgo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "La anafilaxia a una dosis previa de una vacuna, o a uno de sus componentes, es una contraindicación verdadera para dosis posteriores de esa vacuna. Se recomienda referir a alergología para evaluar el componente responsable y valorar alternativas. Las reacciones locales, la fiebre leve, las enfermedades agudas leves, el uso de antibióticos o la lactancia no son contraindicaciones, y considerarlas así genera oportunidades perdidas de vacunación. Los eventos supuestamente atribuibles a la vacunación o inmunización deben notificarse al sistema de vigilancia correspondiente.",
+      "gpcRefs": [
+        "Manual de eventos supuestamente atribuibles a la vacunación o inmunización",
+        "Lineamientos de vacunación del Programa de Vacunación Universal"
+      ]
+    },
+    {
+      "key": "fam-01b-inmunizaciones-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "adult_immunizations",
+      "vignette": "Hombre de 50 años que acude a consulta con resfriado común, temperatura de 37.6 grados, rinorrea y malestar leve. Le corresponde su refuerzo de toxoide tetánico y diftérico.",
+      "prompt": "¿Cuál es la recomendación más adecuada respecto a la vacunación hoy?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Iniciar antibiótico antes de vacunar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El resfriado es viral."
+        },
+        {
+          "key": "b",
+          "text": "Aplicar solo si no ha tomado paracetamol",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es una contraindicación."
+        },
+        {
+          "key": "c",
+          "text": "Aplicar solo la mitad de la dosis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "d",
+          "text": "Esperar a que tenga una herida para aplicar el refuerzo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El refuerzo programado es preventivo."
+        },
+        {
+          "key": "e",
+          "text": "Aplicar el refuerzo porque una enfermedad leve no es contraindicación",
+          "correct": true,
+          "rationale": "Diferirla genera una oportunidad perdida de vacunación."
+        },
+        {
+          "key": "f",
+          "text": "Solicitar biometría hemática antes de vacunar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "g",
+          "text": "Enviarlo a casa sin vacunar ni reagendar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es una oportunidad perdida."
+        },
+        {
+          "key": "h",
+          "text": "Contraindicar la vacuna por la febrícula",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Solo la enfermedad moderada o grave obliga a diferir."
+        },
+        {
+          "key": "i",
+          "text": "Posponer cualquier vacuna hasta que no tenga síntomas durante un mes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es innecesario."
+        },
+        {
+          "key": "j",
+          "text": "Las vacunas empeoran los resfriados",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay evidencia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "h",
+        "i"
+      ],
+      "explanation": "Las oportunidades perdidas de vacunación son un problema frecuente y ocurren cuando una persona acude a un servicio de salud y no recibe las vacunas que le corresponden por falsas contraindicaciones. Las enfermedades leves, como un resfriado con febrícula, una diarrea leve o una infección respiratoria superior, no contraindican la vacunación. Solo la enfermedad aguda moderada o grave justifica diferir la vacuna hasta la mejoría. Tampoco son contraindicaciones el uso de antibióticos, la convalecencia, la lactancia ni la alergia a medicamentos no relacionados. El refuerzo de toxoide tetánico y diftérico en adultos se aplica cada 10 años.",
+      "gpcRefs": [
+        "Manual de vacunación de la Secretaría de Salud",
+        "Lineamientos de vacunación del Programa de Vacunación Universal"
+      ]
+    },
+    {
+      "key": "fam-01b-inmunizaciones-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "adult_immunizations",
+      "vignette": "Hombre de 52 años en tratamiento con prednisona 40 mg diarios desde hace 2 meses por una enfermedad autoinmune. Quiere vacunarse contra sarampión porque hay un brote en su comunidad.",
+      "prompt": "¿Cuál es la recomendación más adecuada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Suspender abruptamente la prednisona para vacunar hoy",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede causar insuficiencia suprarrenal."
+        },
+        {
+          "key": "b",
+          "text": "Los esteroides no afectan la respuesta a las vacunas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Las dosis altas sí la afectan."
+        },
+        {
+          "key": "c",
+          "text": "Contraindicar todas las vacunas inactivadas también",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Las inactivadas pueden aplicarse."
+        },
+        {
+          "key": "d",
+          "text": "Aplicar vacuna y gammaglobulina en el mismo día",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La gammaglobulina interfiere con la vacuna."
+        },
+        {
+          "key": "e",
+          "text": "Aplicar la vacuna de inmediato por el brote",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es de virus vivos y está contraindicada."
+        },
+        {
+          "key": "f",
+          "text": "El sarampión no afecta a adultos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede ser grave en inmunodeprimidos."
+        },
+        {
+          "key": "g",
+          "text": "Vacunar porque solo las dosis mayores de 100 mg inmunosuprimen",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El umbral es menor."
+        },
+        {
+          "key": "h",
+          "text": "Diferir la vacuna de virus vivos hasta al menos un mes después de suspender el esteroide en dosis altas",
+          "correct": true,
+          "rationale": "Las dosis de 20 mg o más por más de 2 semanas causan inmunosupresión significativa."
+        },
+        {
+          "key": "i",
+          "text": "No valorar profilaxis posterior a una exposición",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede requerir inmunoglobulina si se expone."
+        },
+        {
+          "key": "j",
+          "text": "Duplicar la dosis de vacuna para compensar la inmunosupresión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicado y aumenta el riesgo."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "Los glucocorticoides en dosis de 20 mg o más de prednisona al día, o su equivalente, durante 14 días o más, producen inmunosupresión suficiente para contraindicar las vacunas de virus vivos, como triple viral, varicela y fiebre amarilla, por el riesgo de enfermedad por el virus vacunal. Se recomienda esperar al menos un mes tras suspender la dosis alta. Las vacunas inactivadas sí pueden aplicarse, aunque la respuesta puede ser menor. Si una persona inmunodeprimida no inmune se expone al sarampión, puede recibir inmunoglobulina como profilaxis. Los esteroides no deben suspenderse de forma abrupta.",
+      "gpcRefs": [
+        "Lineamientos de vacunación del Programa de Vacunación Universal",
+        "Recomendaciones de vacunación en pacientes con inmunosupresión"
+      ]
+    },
+    {
+      "key": "fam-01b-inmunizaciones-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "adult_immunizations",
+      "vignette": "Mujer de 70 años con enfermedad pulmonar obstructiva crónica que acude en octubre a su control. Recibió vacuna contra influenza en noviembre del año pasado.",
+      "prompt": "¿Cuál es la recomendación más adecuada respecto a la vacuna de influenza?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aplicar la vacuna de la temporada actual",
+          "correct": true,
+          "rationale": "La vacuna se aplica cada año porque cambian las cepas circulantes y disminuye la inmunidad."
+        },
+        {
+          "key": "b",
+          "text": "Vacuna intranasal de virus vivos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No se recomienda en mayores de 50 ni en enfermedad pulmonar."
+        },
+        {
+          "key": "c",
+          "text": "Esperar a que inicie un brote para vacunar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La protección tarda unas dos semanas en desarrollarse."
+        },
+        {
+          "key": "d",
+          "text": "Aplicar la vacuna cada cinco años",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La vacunación es anual."
+        },
+        {
+          "key": "e",
+          "text": "No revisar también su vacuna antineumocócica",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe actualizarse."
+        },
+        {
+          "key": "f",
+          "text": "Oseltamivir mensual como prevención",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No sustituye la vacuna."
+        },
+        {
+          "key": "g",
+          "text": "La vacuna causa exacerbaciones de la enfermedad pulmonar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Reduce las exacerbaciones."
+        },
+        {
+          "key": "h",
+          "text": "No vacunar porque se vacunó el año pasado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La protección no dura más de una temporada."
+        },
+        {
+          "key": "i",
+          "text": "Contraindicar la vacuna por la enfermedad pulmonar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es un grupo prioritario."
+        },
+        {
+          "key": "j",
+          "text": "La influenza es leve en adultos mayores",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tienen más hospitalizaciones y muertes."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "Los virus de influenza cambian por mutaciones en la hemaglutinina y la neuraminidasa, y la inmunidad generada por la vacuna disminuye en meses, por lo que la vacunación se recomienda cada temporada, en México de octubre a marzo. Los adultos de 60 años o más, las personas con enfermedad pulmonar crónica, cardiopatía, diabetes, obesidad, embarazadas y personal de salud son grupos prioritarios por su mayor riesgo de complicaciones. En pacientes con enfermedad pulmonar obstructiva crónica la vacuna reduce las exacerbaciones y las hospitalizaciones. También debe revisarse la vacunación antineumocócica en la misma visita.",
+      "gpcRefs": [
+        "Lineamientos para la prevención y control de influenza estacional",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad pulmonar obstructiva crónica"
+      ]
+    }
+  ]
+}

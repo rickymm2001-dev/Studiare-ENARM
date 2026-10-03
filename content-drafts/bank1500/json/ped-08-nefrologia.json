@@ -1,0 +1,1321 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "ped-08-nefrologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_nephrology",
+      "subtopic": "pediatric_uti",
+      "vignette": "Lactante femenina de 8 meses con fiebre de 39.5 °C de 2 días sin foco aparente, irritabilidad y rechazo parcial al alimento. Exploración sin datos de infección respiratoria ni otitis. El examen general de orina por sondeo muestra esterasa leucocitaria y nitritos positivos con 50 leucocitos por campo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Infección viral inespecífica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El examen de orina indica infección urinaria."
+        },
+        {
+          "key": "b",
+          "text": "Gastroenteritis aguda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay diarrea."
+        },
+        {
+          "key": "c",
+          "text": "Vulvovaginitis inespecífica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la fiebre ni el examen por sondeo."
+        },
+        {
+          "key": "d",
+          "text": "Orina concentrada por calor",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica nitritos y leucocitos."
+        },
+        {
+          "key": "e",
+          "text": "Apendicitis aguda",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara a esta edad y no explica el examen de orina."
+        },
+        {
+          "key": "f",
+          "text": "Exantema súbito en fase febril",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el examen de orina."
+        },
+        {
+          "key": "g",
+          "text": "Dentición",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No da fiebre alta ni alteraciones urinarias."
+        },
+        {
+          "key": "h",
+          "text": "Bacteriuria asintomática",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La lactante tiene fiebre."
+        },
+        {
+          "key": "i",
+          "text": "Infección de vías urinarias febril, probable pielonefritis",
+          "correct": true,
+          "rationale": "Fiebre sin foco en una lactante con examen de orina alterado."
+        },
+        {
+          "key": "j",
+          "text": "Meningitis bacteriana",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay signos neurológicos ni meníngeos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "La infección de vías urinarias es la causa bacteriana más frecuente de fiebre sin foco en lactantes. Los síntomas son inespecíficos, como fiebre, irritabilidad, vómito y rechazo al alimento. En menores de 2 años sin control de esfínteres la muestra debe obtenerse por sondeo vesical o punción suprapúbica, porque la bolsa recolectora tiene muchos falsos positivos. La esterasa leucocitaria y los nitritos orientan el diagnóstico, que se confirma con urocultivo. Escherichia coli es el agente más común. La infección febril en lactantes se considera pielonefritis y puede dejar cicatrices renales.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la infección de vías urinarias en niños"
+      ]
+    },
+    {
+      "key": "ped-08-nefrologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_nephrology",
+      "subtopic": "pediatric_uti",
+      "vignette": "Lactante de 10 meses con fiebre sin foco y examen de orina obtenido con bolsa recolectora que muestra leucocitos y bacterias. Los padres preguntan si eso confirma la infección.",
+      "prompt": "¿Cuál es el estudio de elección para confirmar el diagnóstico?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Gammagrama renal agudo de rutina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesario para el diagnóstico."
+        },
+        {
+          "key": "b",
+          "text": "Ultrasonido renal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No confirma la infección."
+        },
+        {
+          "key": "c",
+          "text": "Biometría hemática y proteína C reactiva",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No confirman el diagnóstico."
+        },
+        {
+          "key": "d",
+          "text": "Hemocultivo como único estudio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede ser negativo."
+        },
+        {
+          "key": "e",
+          "text": "Repetir el examen general de orina con bolsa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Sigue teniendo contaminación."
+        },
+        {
+          "key": "f",
+          "text": "Cistouretrografía miccional antes del cultivo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No confirma la infección aguda."
+        },
+        {
+          "key": "g",
+          "text": "Urocultivo de muestra obtenida por sondeo vesical o punción suprapúbica",
+          "correct": true,
+          "rationale": "Las muestras con bolsa tienen alta contaminación."
+        },
+        {
+          "key": "h",
+          "text": "Urocultivo de la misma muestra con bolsa recolectora",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Un cultivo positivo con bolsa no es confiable."
+        },
+        {
+          "key": "i",
+          "text": "Tira reactiva en orina de pañal",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No es confiable."
+        },
+        {
+          "key": "j",
+          "text": "El olor fuerte de la orina confirma la infección",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es un criterio diagnóstico."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "El urocultivo confirma la infección urinaria. En niños sin control de esfínteres se obtiene por sondeo vesical, en el que se considera positivo un crecimiento mayor de 10 000 a 50 000 unidades formadoras de colonias de un solo patógeno, o por punción suprapúbica, donde cualquier crecimiento es significativo. La bolsa recolectora solo es útil si el resultado es negativo, porque sus falsos positivos son muy frecuentes. En niños con control de esfínteres se usa chorro medio con aseo previo, con un umbral de 100 000. El cultivo debe tomarse antes de iniciar antibióticos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la infección de vías urinarias en niños"
+      ]
+    },
+    {
+      "key": "ped-08-nefrologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_nephrology",
+      "subtopic": "pediatric_uti",
+      "vignette": "Niña de 2 años con pielonefritis, fiebre de 39 °C, buen estado general, tolera la vía oral y está bien hidratada. El urocultivo está en proceso. La resistencia local de Escherichia coli a cefalosporinas de tercera generación es baja.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ceftriaxona intravenosa con hospitalización obligatoria",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es necesaria si tolera la vía oral y está estable."
+        },
+        {
+          "key": "b",
+          "text": "Fosfomicina en dosis única",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es para cistitis no complicada en mujeres adultas."
+        },
+        {
+          "key": "c",
+          "text": "Nitrofurantoína oral",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No alcanza niveles adecuados en el tejido renal."
+        },
+        {
+          "key": "d",
+          "text": "Meropenem intravenoso",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es excesivo sin factores de riesgo de resistencia."
+        },
+        {
+          "key": "e",
+          "text": "Amoxicilina sola",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La resistencia de Escherichia coli es alta."
+        },
+        {
+          "key": "f",
+          "text": "No dar antibiótico porque la fiebre puede ser viral",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El examen y la clínica indican infección."
+        },
+        {
+          "key": "g",
+          "text": "Jugo de arándano como tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No trata la pielonefritis."
+        },
+        {
+          "key": "h",
+          "text": "Cefalosporina oral, como cefixima, de forma ambulatoria por 7 a 14 días ajustada al cultivo",
+          "correct": true,
+          "rationale": "La vía oral es tan eficaz como la intravenosa en niños estables."
+        },
+        {
+          "key": "i",
+          "text": "Esperar el urocultivo para iniciar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El retraso aumenta el riesgo de cicatrices."
+        },
+        {
+          "key": "j",
+          "text": "Ciprofloxacino como primera elección",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se reserva para casos especiales."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "El tratamiento de la infección urinaria febril en niños debe iniciarse de forma empírica tras tomar el urocultivo. En niños mayores de 2 a 3 meses con buen estado, que toleran la vía oral, el tratamiento oral con cefalosporinas como cefixima o cefuroxima o con amoxicilina con clavulánico, según la resistencia local, es tan eficaz como la vía intravenosa. La hospitalización se reserva para menores de 2 a 3 meses, aspecto tóxico, intolerancia oral, deshidratación o falla del tratamiento. La duración es de 7 a 14 días. Se ajusta al antibiograma. La nitrofurantoína no se usa en pielonefritis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la infección de vías urinarias en niños"
+      ]
+    },
+    {
+      "key": "ped-08-nefrologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_nephrology",
+      "subtopic": "pediatric_uti",
+      "vignette": "Lactante masculino de 6 meses con su primer episodio de pielonefritis por Escherichia coli que respondió bien al tratamiento en 48 horas.",
+      "prompt": "¿Cuál es el estudio de imagen inicial indicado?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ultrasonido renal y de vías urinarias",
+          "correct": true,
+          "rationale": "Busca malformaciones, dilatación y complicaciones en el primer episodio febril."
+        },
+        {
+          "key": "b",
+          "text": "Tomografía abdominal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Expone a radiación sin necesidad."
+        },
+        {
+          "key": "c",
+          "text": "Radiografía simple de abdomen",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No aporta información útil."
+        },
+        {
+          "key": "d",
+          "text": "Repetir el urocultivo cada semana como estudio de imagen",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es un estudio de imagen."
+        },
+        {
+          "key": "e",
+          "text": "Ningún estudio de imagen",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El ultrasonido está indicado en lactantes."
+        },
+        {
+          "key": "f",
+          "text": "Resonancia magnética de rutina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "g",
+          "text": "Gammagrama con DMSA agudo de rutina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se recomienda de rutina en el primer episodio."
+        },
+        {
+          "key": "h",
+          "text": "Cistoscopia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "i",
+          "text": "Cistouretrografía miccional en todos los casos tras el primer episodio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para ultrasonido anormal o recurrencias."
+        },
+        {
+          "key": "j",
+          "text": "Urografía excretora",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Ya no se recomienda."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "Tras una primera infección urinaria febril en lactantes se recomienda ultrasonido renal y vesical para detectar malformaciones, hidronefrosis, cicatrices groseras o abscesos. La cistouretrografía miccional, que diagnostica reflujo vesicoureteral, no se indica de rutina tras el primer episodio, sino cuando el ultrasonido es anormal, hay infecciones recurrentes, agentes distintos de Escherichia coli o mala respuesta. El gammagrama con DMSA detecta cicatrices renales y se realiza de 4 a 6 meses después en casos seleccionados. Esta estrategia reduce la exposición a radiación y procedimientos invasivos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la infección de vías urinarias en niños"
+      ]
+    },
+    {
+      "key": "ped-08-nefrologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_nephrology",
+      "subtopic": "pediatric_uti",
+      "vignette": "Niña de 5 años con pielonefritis recurrente desde el primer año de vida. La cistouretrografía miccional mostró reflujo vesicoureteral grado IV bilateral. Ahora tiene presión arterial elevada y proteinuria.",
+      "prompt": "¿Cuál es la complicación a largo plazo que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hipertensión esencial",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Hay una causa renal clara."
+        },
+        {
+          "key": "b",
+          "text": "Litiasis renal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es la complicación característica."
+        },
+        {
+          "key": "c",
+          "text": "Cistitis intersticial",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la hipertensión ni la proteinuria."
+        },
+        {
+          "key": "d",
+          "text": "Tumor de Wilms",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No se relaciona con el reflujo."
+        },
+        {
+          "key": "e",
+          "text": "Ninguna, las infecciones no dejan secuelas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Las cicatrices renales son permanentes."
+        },
+        {
+          "key": "f",
+          "text": "Glomerulonefritis postestreptocócica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se relaciona con el reflujo."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome nefrótico de cambios mínimos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la hipertensión con reflujo."
+        },
+        {
+          "key": "h",
+          "text": "Vejiga neurogénica primaria",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay antecedente neurológico."
+        },
+        {
+          "key": "i",
+          "text": "Nefropatía por reflujo con cicatrices renales, hipertensión y riesgo de enfermedad renal crónica",
+          "correct": true,
+          "rationale": "Las pielonefritis repetidas con reflujo de alto grado dañan el parénquima."
+        },
+        {
+          "key": "j",
+          "text": "Riñón poliquístico",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es genético y sin relación con las infecciones."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "El reflujo vesicoureteral es el paso retrógrado de orina de la vejiga al uréter y riñón. Se clasifica en grados I a V. Los grados bajos suelen resolverse con el crecimiento, mientras que los altos, IV y V, se asocian a pielonefritis recurrentes y cicatrices renales. La nefropatía por reflujo puede causar hipertensión, proteinuria y enfermedad renal crónica. El manejo incluye tratamiento oportuno de cada infección, corrección de la disfunción vesical e intestinal, profilaxis antibiótica en casos seleccionados y corrección endoscópica o quirúrgica en reflujos de alto grado con infecciones recurrentes.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del reflujo vesicoureteral en niños"
+      ]
+    },
+    {
+      "key": "ped-08-nefrologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_nephrology",
+      "subtopic": "pediatric_uti",
+      "vignette": "Niña de 6 años con infecciones urinarias de repetición. Retiene la orina por mucho tiempo en la escuela, tiene urgencia y escapes de orina durante el día y estreñimiento crónico con evacuaciones duras cada 4 días.",
+      "prompt": "¿Cuál es el factor de riesgo modificable más importante de sus infecciones?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ingesta abundante de agua",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es protectora."
+        },
+        {
+          "key": "b",
+          "text": "Consumo de lácteos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un factor de riesgo."
+        },
+        {
+          "key": "c",
+          "text": "Baño diario",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No aumenta el riesgo."
+        },
+        {
+          "key": "d",
+          "text": "Uso de ropa interior de algodón",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es recomendable."
+        },
+        {
+          "key": "e",
+          "text": "Disfunción vesical e intestinal con retención urinaria y estreñimiento",
+          "correct": true,
+          "rationale": "Favorecen el vaciamiento incompleto y la colonización."
+        },
+        {
+          "key": "f",
+          "text": "Circuncisión del padre",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No tiene relación."
+        },
+        {
+          "key": "g",
+          "text": "Sentarse en superficies frías",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No causa infecciones."
+        },
+        {
+          "key": "h",
+          "text": "Vacunación completa",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No se relaciona."
+        },
+        {
+          "key": "i",
+          "text": "Asistencia a natación",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es el factor principal."
+        },
+        {
+          "key": "j",
+          "text": "Sexo femenino",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es modificable."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "j"
+      ],
+      "explanation": "La disfunción vesical e intestinal incluye alteraciones del vaciamiento vesical, como retención voluntaria, micción infrecuente, urgencia e incontinencia diurna, junto con estreñimiento. Es un factor de riesgo importante de infecciones urinarias recurrentes y empeora el reflujo vesicoureteral. El recto lleno comprime la vejiga y dificulta su vaciamiento. El tratamiento incluye micción programada cada 2 a 3 horas, postura adecuada, hidratación, dieta rica en fibra y tratamiento del estreñimiento con laxantes osmóticos. Corregir esta disfunción reduce de forma importante las recurrencias.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la infección de vías urinarias en niños"
+      ]
+    },
+    {
+      "key": "ped-08-nefrologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_nephrology",
+      "subtopic": "pediatric_uti",
+      "vignette": "Recién nacido masculino con ultrasonido prenatal que mostró hidronefrosis bilateral y vejiga distendida. Al nacer tiene chorro urinario débil y gotea constantemente. La cistouretrografía muestra dilatación de la uretra posterior.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ureterocele",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Suele ser unilateral en niñas."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de Prune Belly",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tiene ausencia de músculos abdominales."
+        },
+        {
+          "key": "c",
+          "text": "Vejiga neurogénica por mielomeningocele",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay defecto del tubo neural."
+        },
+        {
+          "key": "d",
+          "text": "Válvulas de uretra posterior",
+          "correct": true,
+          "rationale": "Obstrucción uretral en un varón con hidronefrosis bilateral y vejiga distendida."
+        },
+        {
+          "key": "e",
+          "text": "Reflujo vesicoureteral primario",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la dilatación de la uretra posterior."
+        },
+        {
+          "key": "f",
+          "text": "Estenosis ureteropiélica unilateral",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La afección es bilateral con vejiga distendida."
+        },
+        {
+          "key": "g",
+          "text": "Hipospadias",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es una alteración del meato sin obstrucción."
+        },
+        {
+          "key": "h",
+          "text": "Hidronefrosis fisiológica que desaparece sola",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La causa es obstructiva."
+        },
+        {
+          "key": "i",
+          "text": "Riñones poliquísticos",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la vejiga distendida."
+        },
+        {
+          "key": "j",
+          "text": "Fimosis fisiológica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No causa obstrucción grave."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "Las válvulas de uretra posterior son la causa más frecuente de obstrucción urinaria baja en varones. Son pliegues membranosos en la uretra prostática que obstruyen el flujo. Se sospechan desde el ultrasonido prenatal por hidronefrosis bilateral, vejiga engrosada y distendida y oligohidramnios, que puede causar hipoplasia pulmonar. Al nacer hay chorro débil, goteo, vejiga palpable e infecciones. La cistouretrografía miccional confirma la dilatación de la uretra posterior. El tratamiento inicial es derivación urinaria con sonda y después ablación endoscópica de las válvulas. Muchos pacientes desarrollan enfermedad renal crónica, por lo que requieren seguimiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de válvulas de uretra posterior"
+      ]
+    },
+    {
+      "key": "ped-08-nefrologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_nephrology",
+      "subtopic": "nephrotic_syndrome_child",
+      "vignette": "Niño de 4 años con edema palpebral matutino que progresó a edema de piernas y escroto en una semana. Presión arterial normal. Examen de orina con proteínas de 3 cruces sin hematuria. Albúmina sérica de 1.8 g/dL y colesterol de 380 mg/dL.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Insuficiencia cardiaca",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la proteinuria masiva."
+        },
+        {
+          "key": "b",
+          "text": "Glomerulonefritis postestreptocócica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da hematuria, hipertensión y C3 bajo."
+        },
+        {
+          "key": "c",
+          "text": "Enteropatía perdedora de proteínas",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la proteinuria."
+        },
+        {
+          "key": "d",
+          "text": "Nefropatía lúpica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es más frecuente en adolescentes con datos sistémicos."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome nefrótico idiopático, probable enfermedad de cambios mínimos",
+          "correct": true,
+          "rationale": "Edema, proteinuria masiva, hipoalbuminemia e hiperlipidemia sin hematuria ni hipertensión en un preescolar."
+        },
+        {
+          "key": "f",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No da proteinuria masiva."
+        },
+        {
+          "key": "g",
+          "text": "Alergia con angioedema",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la proteinuria y la hiperlipidemia."
+        },
+        {
+          "key": "h",
+          "text": "Desnutrición tipo kwashiorkor",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la proteinuria."
+        },
+        {
+          "key": "i",
+          "text": "Cirrosis hepática",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la proteinuria."
+        },
+        {
+          "key": "j",
+          "text": "Hinchazón por comer mucha sal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica la proteinuria."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "h"
+      ],
+      "explanation": "El síndrome nefrótico se define por proteinuria masiva, mayor de 40 mg/m2/hora o relación proteína creatinina mayor de 2 mg/mg, hipoalbuminemia menor de 2.5 g/dL, edema e hiperlipidemia. En niños de 1 a 10 años la causa más frecuente es la enfermedad de cambios mínimos, que se presenta sin hematuria macroscópica, con presión arterial y función renal normales y complemento normal, y responde a corticosteroides. La biopsia no es necesaria al inicio en estos casos típicos. Se indica en menores de un año, mayores de 12, con hematuria, hipertensión, complemento bajo o resistencia a esteroides.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome nefrótico en niños"
+      ]
+    },
+    {
+      "key": "ped-08-nefrologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_nephrology",
+      "subtopic": "nephrotic_syndrome_child",
+      "vignette": "Niña de 5 años con primer episodio de síndrome nefrótico típico, sin hematuria, con función renal y complemento normales.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Rituximab de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para casos dependientes de esteroides."
+        },
+        {
+          "key": "b",
+          "text": "Dieta sin proteínas para disminuir la proteinuria",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Empeora la nutrición."
+        },
+        {
+          "key": "c",
+          "text": "Solo diuréticos y restricción de sal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No inducen remisión."
+        },
+        {
+          "key": "d",
+          "text": "Diálisis peritoneal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La función renal es normal."
+        },
+        {
+          "key": "e",
+          "text": "Biopsia renal antes de iniciar cualquier tratamiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es necesaria en el cuadro típico."
+        },
+        {
+          "key": "f",
+          "text": "Prednisona oral a 60 mg/m2/día por 4 a 6 semanas seguida de días alternos con reducción gradual",
+          "correct": true,
+          "rationale": "La mayoría responde a corticosteroides."
+        },
+        {
+          "key": "g",
+          "text": "No usar corticosteroides por miedo a efectos adversos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son el tratamiento eficaz."
+        },
+        {
+          "key": "h",
+          "text": "Ciclofosfamida como primera línea",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se reserva para casos con recaídas frecuentes."
+        },
+        {
+          "key": "i",
+          "text": "Antibióticos de amplio espectro",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay infección."
+        },
+        {
+          "key": "j",
+          "text": "Albúmina intravenosa diaria como único tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No induce remisión."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "h"
+      ],
+      "explanation": "El tratamiento inicial del síndrome nefrótico idiopático en niños es prednisona oral a 60 mg/m2/día o 2 mg/kg/día, máximo 60 mg, durante 4 a 6 semanas, seguida de 40 mg/m2 en días alternos durante otras 4 a 6 semanas con reducción gradual. La mayoría logra remisión en las primeras 4 semanas. Se considera corticorresistente si no hay remisión tras 4 a 6 semanas. El manejo de soporte incluye restricción de sal, diuréticos con precaución y albúmina en edema grave sintomático. Muchos niños presentan recaídas, que se tratan con nuevos ciclos de esteroides.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome nefrótico en niños"
+      ]
+    },
+    {
+      "key": "ped-08-nefrologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_nephrology",
+      "subtopic": "nephrotic_syndrome_child",
+      "vignette": "Niño de 6 años con síndrome nefrótico en recaída, con ascitis importante. Presenta fiebre de 39 °C, dolor abdominal difuso intenso, rebote positivo y vómito. No ha tenido diarrea.",
+      "prompt": "¿Cuál es la complicación más probable?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Pancreatitis por esteroides",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara."
+        },
+        {
+          "key": "b",
+          "text": "Intususcepción",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es más frecuente en lactantes."
+        },
+        {
+          "key": "c",
+          "text": "Apendicitis aguda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es posible, pero la ascitis con síndrome nefrótico orienta a peritonitis espontánea."
+        },
+        {
+          "key": "d",
+          "text": "Infección urinaria baja",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la peritonitis."
+        },
+        {
+          "key": "e",
+          "text": "Insuficiencia renal aguda sin infección",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la fiebre y el rebote."
+        },
+        {
+          "key": "f",
+          "text": "Dolor por la hinchazón del abdomen",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La fiebre y el rebote indican infección."
+        },
+        {
+          "key": "g",
+          "text": "Trombosis de vena renal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da hematuria y dolor en flanco sin rebote difuso."
+        },
+        {
+          "key": "h",
+          "text": "Peritonitis bacteriana espontánea, frecuentemente por neumococo",
+          "correct": true,
+          "rationale": "La hipogammaglobulinemia y la ascitis predisponen a esta infección."
+        },
+        {
+          "key": "i",
+          "text": "Gastroenteritis viral",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica el rebote con fiebre alta."
+        },
+        {
+          "key": "j",
+          "text": "Efecto adverso de los esteroides sin infección",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La fiebre y el rebote indican infección."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "Los niños con síndrome nefrótico tienen mayor riesgo de infecciones por pérdida urinaria de inmunoglobulinas y factores del complemento, edema y tratamiento inmunosupresor. La peritonitis bacteriana espontánea es una complicación grave, causada con mayor frecuencia por Streptococcus pneumoniae y bacilos gramnegativos. Se manifiesta con fiebre, dolor abdominal y datos de irritación peritoneal. Se confirma con paracentesis y se trata con cefalosporina de tercera generación. Otras complicaciones son celulitis, trombosis venosa por hipercoagulabilidad, hipovolemia y lesión renal aguda. Se recomienda vacunar contra neumococo e influenza.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome nefrótico en niños"
+      ]
+    },
+    {
+      "key": "ped-08-nefrologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_nephrology",
+      "subtopic": "nephrotic_syndrome_child",
+      "vignette": "Niño de 4 años con síndrome nefrótico por enfermedad de cambios mínimos. La madre pregunta por qué se hincha si no tiene problemas del corazón.",
+      "prompt": "¿Cuál es el mecanismo principal del edema en esta enfermedad?",
+      "polarity": "affirmative",
+      "task": "mechanism",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "La pérdida urinaria de albúmina reduce la presión oncótica del plasma y favorece el paso de líquido al intersticio, junto con retención renal de sodio",
+          "correct": true,
+          "rationale": "Explica el edema por hipoalbuminemia."
+        },
+        {
+          "key": "b",
+          "text": "Obstrucción linfática",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es el mecanismo."
+        },
+        {
+          "key": "c",
+          "text": "Hipertensión portal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay hepatopatía."
+        },
+        {
+          "key": "d",
+          "text": "Exceso de ingesta de agua",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es la causa."
+        },
+        {
+          "key": "e",
+          "text": "Hipotiroidismo con mixedema",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "f",
+          "text": "Desnutrición calórica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es el mecanismo."
+        },
+        {
+          "key": "g",
+          "text": "Inflamación de los vasos sanguíneos",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay vasculitis."
+        },
+        {
+          "key": "h",
+          "text": "Aumento de la presión hidrostática por insuficiencia cardiaca",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El corazón es normal."
+        },
+        {
+          "key": "i",
+          "text": "Aumento de la permeabilidad capilar por alergia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es el mecanismo principal."
+        },
+        {
+          "key": "j",
+          "text": "Se debe a dormir boca abajo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No tiene relación."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "h",
+        "i"
+      ],
+      "explanation": "En el síndrome nefrótico la alteración de la barrera de filtración glomerular, en la enfermedad de cambios mínimos por fusión de los podocitos, permite la pérdida masiva de albúmina en la orina. La hipoalbuminemia reduce la presión oncótica del plasma, lo que favorece la salida de líquido al intersticio según la teoría de subllenado. Además, el riñón retiene sodio de forma primaria por activación de canales en el túbulo colector, según la teoría de sobrellenado. El edema predomina en tejidos laxos, como párpados por la mañana y escroto, y puede progresar a ascitis y derrames.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome nefrótico en niños"
+      ]
+    },
+    {
+      "key": "ped-08-nefrologia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_nephrology",
+      "subtopic": "nephrotic_syndrome_child",
+      "vignette": "Niña de 7 años con síndrome nefrótico que tras 6 semanas de prednisona a dosis plenas persiste con proteinuria masiva e hipoalbuminemia. Presión arterial normal.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Trasplante renal inmediato",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "b",
+          "text": "Cambiar a remedios herbolarios",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No son eficaces y pueden dañar el riñón."
+        },
+        {
+          "key": "c",
+          "text": "Antibióticos profilácticos como tratamiento principal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No trata la enfermedad."
+        },
+        {
+          "key": "d",
+          "text": "Mantener igual porque algunos responden tarde",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "La definición de resistencia ya se cumple."
+        },
+        {
+          "key": "e",
+          "text": "Continuar la prednisona a dosis plenas por 6 meses más",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta los efectos adversos sin beneficio."
+        },
+        {
+          "key": "f",
+          "text": "No biopsiar para evitar riesgos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La biopsia orienta el tratamiento."
+        },
+        {
+          "key": "g",
+          "text": "Iniciar diálisis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La función renal aún es normal."
+        },
+        {
+          "key": "h",
+          "text": "Suspender todo tratamiento y observar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La proteinuria persistente daña el riñón."
+        },
+        {
+          "key": "i",
+          "text": "Realizar biopsia renal y estudio genético por síndrome nefrótico corticorresistente",
+          "correct": true,
+          "rationale": "La falta de respuesta orienta a glomeruloesclerosis focal y segmentaria u otras causas."
+        },
+        {
+          "key": "j",
+          "text": "Dar albúmina semanal como único tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No induce remisión."
+        }
+      ],
+      "canonical": [
+        "e",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "El síndrome nefrótico corticorresistente se define por la falta de remisión tras 4 a 6 semanas de prednisona a dosis plenas. Afecta a una minoría de niños y su causa más frecuente es la glomeruloesclerosis focal y segmentaria, que puede ser genética. Se indican biopsia renal y estudio genético. El tratamiento incluye inhibidores de calcineurina como tacrolimus o ciclosporina, junto con inhibidores de la enzima convertidora de angiotensina o antagonistas del receptor de angiotensina para reducir la proteinuria. Las formas genéticas no suelen responder a inmunosupresión. Tiene mayor riesgo de progresar a enfermedad renal crónica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome nefrótico en niños"
+      ]
+    },
+    {
+      "key": "ped-08-nefrologia-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_nephrology",
+      "subtopic": "nephrotic_syndrome_child",
+      "vignette": "Niño de 5 años con síndrome nefrótico activo que presenta de forma súbita dolor en el flanco izquierdo, hematuria macroscópica y aumento del tamaño del riñón izquierdo en el ultrasonido.",
+      "prompt": "¿Cuál es la complicación más probable?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Glomerulonefritis rápidamente progresiva",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el dolor en flanco súbito."
+        },
+        {
+          "key": "b",
+          "text": "Efecto adverso del diurético",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No da trombosis."
+        },
+        {
+          "key": "c",
+          "text": "Pielonefritis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría fiebre y examen de orina con leucocitos."
+        },
+        {
+          "key": "d",
+          "text": "Hidronefrosis congénita",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la aparición súbita."
+        },
+        {
+          "key": "e",
+          "text": "Trombosis de la vena renal",
+          "correct": true,
+          "rationale": "El síndrome nefrótico produce estado de hipercoagulabilidad."
+        },
+        {
+          "key": "f",
+          "text": "Traumatismo renal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay antecedente."
+        },
+        {
+          "key": "g",
+          "text": "Cistitis hemorrágica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el aumento del riñón."
+        },
+        {
+          "key": "h",
+          "text": "Tumor de Wilms",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No aparece de forma súbita."
+        },
+        {
+          "key": "i",
+          "text": "Litiasis renal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el aumento del tamaño renal con hipercoagulabilidad."
+        },
+        {
+          "key": "j",
+          "text": "Dolor muscular por esfuerzo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica la hematuria."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "h",
+        "i"
+      ],
+      "explanation": "El síndrome nefrótico produce un estado de hipercoagulabilidad por pérdida urinaria de antitrombina III y proteínas S y C, aumento de fibrinógeno y factores hepáticos, hemoconcentración por diuréticos e inmovilidad. Las trombosis pueden afectar la vena renal, las venas profundas, los senos venosos cerebrales y la arteria pulmonar. La trombosis de vena renal se manifiesta con dolor en flanco, hematuria y aumento del tamaño renal, y se confirma con Doppler. El tratamiento es anticoagulación. Se previene evitando la hipovolemia, los catéteres innecesarios y el reposo prolongado.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome nefrótico en niños"
+      ]
+    },
+    {
+      "key": "ped-08-nefrologia-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_nephrology",
+      "subtopic": "nephrotic_syndrome_child",
+      "vignette": "Niño de 8 años con dolor abdominal tipo cólico, artralgias en rodillas y tobillos y lesiones purpúricas palpables en glúteos y piernas. El examen de orina muestra hematuria y proteinuria leve. Plaquetas normales.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Púrpura trombocitopénica inmune",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Las plaquetas son normales."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome urémico hemolítico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da anemia y trombocitopenia."
+        },
+        {
+          "key": "c",
+          "text": "Lupus eritematoso sistémico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es más frecuente en adolescentes con otros datos."
+        },
+        {
+          "key": "d",
+          "text": "Fiebre reumática",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No da púrpura."
+        },
+        {
+          "key": "e",
+          "text": "Vasculitis por IgA, púrpura de Henoch Schönlein, con afección renal",
+          "correct": true,
+          "rationale": "Púrpura palpable con plaquetas normales, dolor abdominal, artralgias y nefritis."
+        },
+        {
+          "key": "f",
+          "text": "Apendicitis aguda",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la púrpura ni la nefritis."
+        },
+        {
+          "key": "g",
+          "text": "Maltrato infantil",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La distribución y los demás datos orientan a vasculitis."
+        },
+        {
+          "key": "h",
+          "text": "Picaduras de insectos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica el cuadro sistémico."
+        },
+        {
+          "key": "i",
+          "text": "Meningococcemia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría fiebre alta y choque."
+        },
+        {
+          "key": "j",
+          "text": "Leucemia aguda",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Las plaquetas son normales."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "i"
+      ],
+      "explanation": "La vasculitis por IgA o púrpura de Henoch Schönlein es la vasculitis más frecuente en niños. Suele seguir a una infección respiratoria. Se caracteriza por púrpura palpable con plaquetas normales en glúteos y extremidades inferiores, artritis o artralgias, dolor abdominal que puede complicarse con invaginación y afección renal con hematuria y proteinuria. El tratamiento es de soporte con analgésicos, y los corticosteroides se usan en dolor abdominal intenso. El pronóstico depende de la afección renal, por lo que se vigilan la presión arterial y el examen de orina durante al menos 6 meses.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la púrpura de Henoch Schönlein"
+      ]
+    }
+  ]
+}

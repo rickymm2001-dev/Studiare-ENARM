@@ -1,0 +1,159 @@
+@ gyo|gynecologic_infections|hpv_infection|3|diagnosis
+V: Mujer de 26 años con úlceras genitales múltiples muy dolorosas sobre base eritematosa, precedidas de vesículas agrupadas, ardor y adenopatía inguinal dolorosa bilateral. Fiebre y malestar general. Es su primer episodio.
+P: ¿Cuál es el diagnóstico más probable?
++ Primoinfección por virus del herpes simple genital || Vesículas agrupadas que se ulceran, dolorosas, con síntomas sistémicos en el primer episodio.
+- anchoring | Sífilis primaria || El chancro es único, indoloro y de base indurada.
+- availability_heuristic | Chancroide || Da úlceras dolorosas de bordes irregulares y purulentas sin vesículas previas.
+- representativeness_heuristic | Linfogranuloma venéreo || Da úlcera pequeña transitoria con adenopatía fluctuante.
+- premature_closure | Condilomas acuminados || Son verrugas indoloras.
+- base_rate_fallacy | Enfermedad de Behçet || Es recurrente con úlceras orales.
+- framing_effect | Candidiasis vulvar || Da prurito y flujo sin úlceras agrupadas.
+- inattentional_blindness | Granuloma inguinal || Da úlceras indoloras rojas carnosas.
+- focusing_illusion | Foliculitis por rasurado || No explica las úlceras agrupadas con fiebre.
+- belief_bias | Irritación por ropa interior nueva || Es una infección.
+E: El herpes genital es causado principalmente por el virus del herpes simple tipo 2, aunque el tipo 1 es cada vez más frecuente. La primoinfección produce vesículas agrupadas que se rompen y forman úlceras muy dolorosas, con disuria, adenopatía inguinal dolorosa y síntomas sistémicos como fiebre y malestar. Las recurrencias son más leves. El diagnóstico se confirma con reacción en cadena de polimerasa de la lesión. El tratamiento con aciclovir, valaciclovir o famciclovir acorta la duración, y la terapia supresiva reduce las recurrencias y la transmisión. En el embarazo la primoinfección cercana al parto es indicación de cesárea por el riesgo neonatal.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del herpes genital
+
+@ gyo|gynecologic_infections|hpv_infection|3|diagnosis
+V: Mujer de 23 años con una úlcera única, indolora, de bordes indurados y fondo limpio en el labio mayor, aparecida hace 10 días, con adenopatía inguinal bilateral indolora. VDRL positivo.
+P: ¿Cuál es el diagnóstico más probable?
++ Sífilis primaria || Chancro único, indoloro e indurado con adenopatía indolora y VDRL positivo.
+- anchoring | Herpes genital || Da múltiples úlceras dolorosas.
+- availability_heuristic | Chancroide || Da úlceras dolorosas de fondo sucio.
+- representativeness_heuristic | Linfogranuloma venéreo || Da adenopatía fluctuante dolorosa.
+- premature_closure | Cáncer de vulva || Es más común en mujeres mayores y no explica el VDRL.
+- base_rate_fallacy | Úlcera de Lipschütz || Ocurre en adolescentes con cuadro viral sin VDRL positivo.
+- framing_effect | Condiloma plano || Es una lesión de sífilis secundaria, no una úlcera.
+- inattentional_blindness | Traumatismo vulvar || No explica la serología.
+- focusing_illusion | Granuloma inguinal || No explica el VDRL.
+- belief_bias | Grano infectado sin importancia || Es una infección de transmisión sexual.
+E: La sífilis es causada por Treponema pallidum. La sífilis primaria se manifiesta con el chancro, una úlcera única, indolora, de bordes indurados y fondo limpio, en el sitio de inoculación, con adenopatía regional indolora, que cura de forma espontánea en 3 a 6 semanas. Sin tratamiento progresa a sífilis secundaria con exantema palmoplantar y condilomas planos. El diagnóstico usa pruebas no treponémicas como VDRL o RPR y treponémicas como FTA ABS. El tratamiento de elección es penicilina benzatínica 2.4 millones de unidades intramuscular en dosis única. Se tratan las parejas y se tamiza el virus de la inmunodeficiencia humana.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la sífilis adquirida
+
+@ gyo|contraception|emergency_contraception|3|data_interpretation
+V: Mujer de 27 años con índice de masa corporal de 34 que tuvo relaciones sin protección hace 48 horas. Solicita anticoncepción de emergencia oral.
+P: ¿Qué indica su índice de masa corporal para la elección del método?
++ La eficacia del levonorgestrel puede disminuir con obesidad, por lo que se prefieren el dispositivo de cobre o el ulipristal || La obesidad reduce la eficacia del levonorgestrel.
+- anchoring | Contraindica toda anticoncepción de emergencia || No hay contraindicación.
+- availability_heuristic | Requiere duplicar la dosis de ulipristal || No se recomienda.
+- representativeness_heuristic | No influye en ningún método || Influye en el levonorgestrel.
+- premature_closure | Obliga a una prueba de embarazo antes de cualquier método || No es necesaria antes del método oral.
+- base_rate_fallacy | Indica que debe usar el método de Yuzpe || Es menos eficaz.
+- framing_effect | Contraindica el dispositivo de cobre || El dispositivo no se afecta por el peso.
+- inattentional_blindness | Indica riesgo de trombosis con levonorgestrel || No aumenta la trombosis.
+- focusing_illusion | Indica esperar a la menstruación || Pierde la ventana.
+- belief_bias | Las mujeres con sobrepeso no se embarazan fácilmente || No es cierto.
+E: Algunos estudios muestran que la eficacia del levonorgestrel de emergencia disminuye en mujeres con índice de masa corporal mayor de 25 a 30. En estos casos el dispositivo intrauterino de cobre, que no se afecta por el peso, es la opción más eficaz, y el acetato de ulipristal es la mejor alternativa oral. Si solo se dispone de levonorgestrel, debe ofrecerse de todos modos porque sigue siendo mejor que nada, y algunas guías sugieren duplicar la dosis. La anticoncepción de emergencia no está contraindicada en ninguna mujer por su peso.
+R: Organización Mundial de la Salud. Anticoncepción de emergencia
+
+@ gyo|contraception|emergency_contraception|3|mechanism
+V: Mujer de 24 años que solicita levonorgestrel de emergencia y pregunta si funciona interrumpiendo un embarazo.
+P: ¿Cuál es el mecanismo de acción principal del levonorgestrel de emergencia?
++ Inhibe o retrasa la ovulación al suprimir el pico de LH || Actúa antes de la fecundación.
+- anchoring | Interrumpe un embarazo implantado || No es abortivo.
+- availability_heuristic | Destruye el embrión en las trompas || No tiene ese efecto.
+- representativeness_heuristic | Provoca la menstruación de inmediato en todas || No es su mecanismo.
+- premature_closure | Funciona como espermicida vaginal || Se toma por vía oral.
+- base_rate_fallacy | Inflama el endometrio como el cobre || Ese es el mecanismo del dispositivo.
+- framing_effect | Bloquea las trompas temporalmente || No tiene efecto mecánico.
+- inattentional_blindness | Produce contracciones uterinas que expulsan el óvulo fecundado || No es su mecanismo.
+- focusing_illusion | Disminuye la producción de esperma de la pareja || Actúa en la mujer.
+- belief_bias | Es un aborto químico || No interrumpe embarazos establecidos.
+E: El levonorgestrel de emergencia actúa principalmente inhibiendo o retrasando la ovulación al suprimir el pico de LH, por lo que es más eficaz cuanto antes se toma y no funciona si la ovulación ya ocurrió. No interrumpe un embarazo implantado ni daña al embrión si la mujer ya está embarazada. El acetato de ulipristal, modulador del receptor de progesterona, puede retrasar la ovulación incluso cuando el pico de LH ha comenzado, por eso es más eficaz. Explicar el mecanismo ayuda a reducir los mitos que limitan su uso.
+R: Organización Mundial de la Salud. Anticoncepción de emergencia
+
+@ gyo|gynecologic_oncology|endometrial_cancer|3|complication_prognosis
+V: Mujer de 64 años operada por cáncer de endometrio. La estadificación quirúrgica muestra invasión de más de la mitad del miometrio sin afección del cérvix ni de ganglios. Pregunta por su pronóstico.
+P: ¿Cuál es el principal factor pronóstico en el cáncer de endometrio?
++ La etapa quirúrgica, junto con el grado, el tipo histológico, la profundidad de invasión miometrial y la clasificación molecular || Determinan el riesgo de recurrencia y el tratamiento adyuvante.
+- anchoring | El número de partos previos || No es un factor pronóstico.
+- availability_heuristic | El nivel de CA 125 como único factor || No es el principal.
+- representativeness_heuristic | La edad de la menarca || Influye en el riesgo, no en el pronóstico.
+- premature_closure | El tipo de anestesia usada || No influye.
+- base_rate_fallacy | El grupo sanguíneo || No influye.
+- framing_effect | El uso previo de anticonceptivos || No es un factor pronóstico.
+- inattentional_blindness | El tamaño del útero antes de la cirugía || No es el factor principal.
+- focusing_illusion | La presencia de miomas asociados || No influye.
+- belief_bias | La fe como único factor del pronóstico || No sustituye a los factores biológicos.
+E: El pronóstico del cáncer de endometrio depende principalmente de la etapa quirúrgica de la FIGO, el grado histológico, el tipo histológico, la profundidad de invasión miometrial, la invasión del espacio linfovascular y la afección ganglionar. Los carcinomas serosos y de células claras tienen peor pronóstico que los endometrioides. La clasificación molecular, con grupos POLE mutado de excelente pronóstico, deficiencia de reparación, perfil sin alteraciones específicas y p53 anormal de mal pronóstico, se integra en la estadificación actual. Estos factores definen el riesgo y la necesidad de braquiterapia, radioterapia o quimioterapia adyuvante.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de endometrio
+
+@ gyo|gynecologic_oncology|endometrial_cancer|3|prevention_screening
+V: Mujer de 50 años asintomática, posmenopáusica, sin factores de riesgo especiales. Pregunta si debe hacerse un estudio anual para detectar cáncer de endometrio.
+P: ¿Cuál es la recomendación de tamizaje para cáncer de endometrio en mujeres de riesgo promedio?
++ No se recomienda tamizaje en mujeres asintomáticas de riesgo promedio; se les enseña a consultar ante cualquier sangrado posmenopáusico || El sangrado es un síntoma temprano.
+- anchoring | Ultrasonido transvaginal anual a todas || No ha mostrado beneficio en riesgo promedio.
+- availability_heuristic | Biopsia endometrial anual a todas || Es invasiva y sin beneficio en riesgo promedio.
+- representativeness_heuristic | Citología cervical como tamizaje de endometrio || No es útil para el endometrio.
+- premature_closure | Marcador CA 125 anual || No es útil.
+- base_rate_fallacy | Histeroscopia anual || Es invasiva y no indicada.
+- framing_effect | Tomografía pélvica cada 2 años || No está indicada.
+- complexity_bias | Resonancia magnética anual || No está indicada.
+- belief_bias | Si no hay sangrado no hay ningún riesgo || Debe consultar si aparece.
+- omission_bias | No informar sobre el sangrado como señal de alarma || Es la clave del diagnóstico temprano.
+E: No se recomienda el tamizaje rutinario de cáncer de endometrio en mujeres asintomáticas de riesgo promedio, ya que no ha mostrado reducir la mortalidad. La mayoría de los cánceres se manifiestan tempranamente con sangrado posmenopáusico, por lo que se educa a las mujeres para consultar ante cualquier sangrado tras la menopausia. En mujeres con síndrome de Lynch se recomienda vigilancia con biopsia endometrial a partir de los 30 a 35 años y considerar histerectomía con salpingooforectomía al completar la paridad. En usuarias de tamoxifeno se investiga todo sangrado anormal.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de endometrio
+
+@ gyo|reproductive_endocrinology|menopause|3|treatment_of_choice
+V: Mujer de 59 años con menopausia hace 9 años que presenta solo sequedad vaginal, ardor y dispareunia. No tiene bochornos. Sin antecedentes de cáncer.
+P: ¿Cuál es el tratamiento de elección para sus síntomas?
++ Estrógenos vaginales a dosis bajas o hidratantes y lubricantes vaginales || Tratan el síndrome genitourinario con mínima absorción sistémica.
+- anchoring | Terapia hormonal sistémica oral combinada || No es necesaria si solo tiene síntomas vaginales.
+- availability_heuristic | Antimicóticos vaginales || No hay infección.
+- representativeness_heuristic | Antibióticos vaginales || No hay infección.
+- premature_closure | Ningún tratamiento porque es normal a su edad || Es tratable.
+- framing_effect | Cirugía de rejuvenecimiento vaginal con láser como primera línea || No es el tratamiento de primera línea.
+- complexity_bias | Histerectomía || No está indicada.
+- base_rate_fallacy | Testosterona oral || No es el tratamiento.
+- belief_bias | Duchas vaginales para mejorar la lubricación || Empeoran los síntomas.
+- omission_bias | No preguntar por la sexualidad de la paciente || Es parte de la atención.
+E: El síndrome genitourinario de la menopausia es crónico y progresivo. Cuando los síntomas son solo vaginales o urinarios, sin síntomas vasomotores, el tratamiento de elección es local. Los hidratantes y lubricantes vaginales son la primera línea en síntomas leves. Los estrógenos vaginales a dosis bajas en crema, tabletas u óvulos son muy eficaces y tienen mínima absorción sistémica, por lo que no requieren progestágeno. Otras opciones son la prasterona vaginal y el ospemifeno. El ejercicio del piso pélvico y la actividad sexual regular también ayudan.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia
+
+@ gyo|reproductive_endocrinology|menopause|3|data_interpretation
+V: Mujer de 46 años con ciclos regulares que solicita medición de FSH para saber si ya está en la menopausia. Tiene bochornos ocasionales.
+P: ¿Qué utilidad tiene la medición de FSH en esta situación?
++ Poca utilidad, porque en la perimenopausia la FSH fluctúa y el diagnóstico es clínico en mayores de 45 años || Un valor aislado no predice la menopausia.
+- anchoring | Un valor de FSH alto confirma la menopausia definitiva || Puede variar de un mes a otro.
+- availability_heuristic | Un valor normal descarta la perimenopausia || Las fluctuaciones son normales.
+- representativeness_heuristic | Permite decidir dejar la anticoncepción de inmediato || No es confiable para ello.
+- premature_closure | Es el único estudio necesario para iniciar terapia hormonal || El diagnóstico es clínico.
+- base_rate_fallacy | Predice con exactitud la edad de la menopausia || No lo hace.
+- framing_effect | Es más útil que la historia clínica || La clínica es suficiente.
+- inattentional_blindness | Indica insuficiencia ovárica prematura || Tiene más de 40 años.
+- focusing_illusion | Debe medirse cada mes hasta la menopausia || No es útil.
+- belief_bias | Un análisis de sangre siempre es mejor que preguntar || La clínica tiene más valor aquí.
+E: En la transición menopáusica las concentraciones de FSH y estradiol fluctúan de forma importante entre ciclos, por lo que una medición aislada no confirma ni descarta la menopausia y no permite decidir cuándo suspender la anticoncepción. En mujeres mayores de 45 años con síntomas típicos el diagnóstico de perimenopausia y menopausia es clínico. La medición de FSH es útil en mujeres menores de 40 a 45 años con amenorrea para diagnosticar insuficiencia ovárica prematura, o cuando la evaluación clínica es difícil, como tras histerectomía con ovarios conservados.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia
+
+@ gyo|climacteric|osteoporosis_postmenopausal|3|treatment_of_choice
+V: Mujer de 72 años con osteoporosis grave, dos fracturas vertebrales y fractura de cadera previa pese a 3 años de alendronato con buen apego. Función renal normal.
+P: ¿Cuál es el tratamiento de elección ante este muy alto riesgo de fractura?
++ Fármaco anabólico como teriparatida o romosozumab, seguido de un antirresortivo || Los anabólicos aumentan la formación ósea en pacientes de muy alto riesgo.
+- anchoring | Continuar alendronato sin cambios || Hubo nuevas fracturas pese al tratamiento.
+- availability_heuristic | Solo calcio y vitamina D || Es insuficiente.
+- representativeness_heuristic | Terapia hormonal a los 72 años como primera opción || No es adecuada a esta edad.
+- premature_closure | Suspender todo tratamiento || Aumenta el riesgo de fracturas.
+- framing_effect | Calcitonina nasal || Es poco eficaz.
+- complexity_bias | Trasplante de médula ósea || No está indicado.
+- base_rate_fallacy | Fluoruro de sodio || No reduce fracturas.
+- belief_bias | Reposo en cama para no caerse || Empeora la masa ósea.
+- omission_bias | No cambiar el tratamiento por su edad avanzada || Se benefician del cambio.
+E: En pacientes con muy alto riesgo de fractura, como fracturas múltiples, fracturas durante el tratamiento antirresortivo o densidad muy baja, se recomiendan los fármacos anabólicos. La teriparatida, análogo de la hormona paratiroidea administrado de forma intermitente, estimula la formación ósea y se usa hasta 2 años. El romosozumab, anticuerpo contra la esclerostina, tiene efecto dual y se usa por 12 meses, con precaución por eventos cardiovasculares. Después de un anabólico se debe continuar con un antirresortivo como bisfosfonato o denosumab para mantener la ganancia. También se previenen las caídas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis en la mujer posmenopáusica
+
+@ gyo|climacteric|osteoporosis_postmenopausal|2|prevention_screening
+V: Mujer de 68 años con osteoporosis en tratamiento que vive sola. Ha tenido dos caídas en el último año al levantarse por la noche al baño.
+P: ¿Cuál es la medida de prevención de fracturas más importante además del tratamiento farmacológico?
++ Prevención de caídas con revisión de fármacos, iluminación nocturna, retiro de obstáculos y ejercicio de equilibrio || La mayoría de las fracturas de cadera se deben a caídas.
+- anchoring | Aumentar la dosis del bisfosfonato || No previene las caídas.
+- availability_heuristic | Reposo en cama para no caerse || Empeora la fuerza y la masa ósea.
+- representativeness_heuristic | Suplementos de calcio en dosis muy altas || No previenen las caídas.
+- premature_closure | Ninguna medida adicional || Las caídas son el principal desencadenante.
+- base_rate_fallacy | Densitometría cada 3 meses || No previene las caídas.
+- framing_effect | Sedantes para dormir toda la noche sin levantarse || Aumentan el riesgo de caídas.
+- complexity_bias | Cirugía de cadera profiláctica || No está indicada.
+- belief_bias | Las caídas son inevitables con la edad || Muchas son prevenibles.
+- omission_bias | No preguntar por caídas en la consulta || Es una evaluación clave.
+E: La mayoría de las fracturas osteoporóticas, sobre todo de cadera, ocurren tras una caída. La prevención de caídas es fundamental en adultos mayores con osteoporosis. Incluye revisar y reducir los fármacos que aumentan el riesgo como sedantes, antihipertensivos y antidepresivos, corregir la visión, adaptar el hogar con iluminación nocturna, barras de apoyo y retiro de tapetes, usar calzado adecuado, tratar la hipotensión ortostática y la nicturia, y realizar ejercicios de fuerza y equilibrio como el tai chi. Los protectores de cadera pueden ser útiles en residencias.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis en la mujer posmenopáusica ;; Guía de Práctica Clínica de prevención de caídas en el adulto mayor

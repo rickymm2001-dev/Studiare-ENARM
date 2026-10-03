@@ -1,0 +1,1791 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "cir-10-complemento-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "anesthesiology",
+      "subtopic": "local_anesthetics",
+      "vignette": "Hombre de 35 años que refiere haber tenido una reacción alérgica con urticaria tras la aplicación de procaína en una consulta dental hace años. Requiere sutura de una herida en la mano.",
+      "prompt": "¿Cuál es la conducta más apropiada respecto al anestésico local?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Usar otro anestésico del grupo éster como tetracaína",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tiene reactividad cruzada con la procaína."
+        },
+        {
+          "key": "b",
+          "text": "Pruebas cutáneas con todos los anestésicos antes de cualquier sutura urgente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No son necesarias para elegir una amida."
+        },
+        {
+          "key": "c",
+          "text": "Usar un anestésico del grupo amida, como lidocaína sin conservadores",
+          "correct": true,
+          "rationale": "La alergia a los ésteres no implica reactividad cruzada con las amidas."
+        },
+        {
+          "key": "d",
+          "text": "Premedicar con corticosteroides en dosis altas y usar el mismo éster",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es adecuado."
+        },
+        {
+          "key": "e",
+          "text": "Usar benzocaína tópica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es un éster."
+        },
+        {
+          "key": "f",
+          "text": "Evitar cualquier anestésico local y suturar sin anestesia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Hay alternativas seguras."
+        },
+        {
+          "key": "g",
+          "text": "No preguntar por alergias antes de aplicar anestesia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es fundamental."
+        },
+        {
+          "key": "h",
+          "text": "Todos los anestésicos locales tienen la misma alergenicidad",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Los ésteres son más alergénicos."
+        },
+        {
+          "key": "i",
+          "text": "Aplicar hielo en lugar de anestesia como estándar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es una anestesia adecuada."
+        },
+        {
+          "key": "j",
+          "text": "Anestesia general para una sutura simple",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es excesiva."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "Los anestésicos locales se dividen en ésteres y amidas. Los ésteres, como procaína, tetracaína, benzocaína y cocaína, se metabolizan por las colinesterasas plasmáticas a ácido paraaminobenzoico, que es alergénico, por lo que las reacciones alérgicas son más frecuentes. Las amidas, como lidocaína, bupivacaína, ropivacaína y mepivacaína, se metabolizan en el hígado y rara vez causan alergia verdadera, aunque algunas reacciones se deben a conservadores como los parabenos. La alergia a un éster no implica reactividad cruzada con las amidas. Muchas reacciones atribuidas a alergia son vasovagales o por la adrenalina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de anestesia local y regional"
+      ]
+    },
+    {
+      "key": "cir-10-complemento-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "anesthesiology",
+      "subtopic": "local_anesthetics",
+      "vignette": "Mujer de 45 años que durante un bloqueo del plexo braquial con bupivacaína presenta convulsiones seguidas de taquicardia ventricular. Se suspende la inyección, se maneja la vía aérea y se administra midazolam.",
+      "prompt": "¿Cuál es el tratamiento específico de elección para la toxicidad cardiaca?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Lidocaína intravenosa para la arritmia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es otro anestésico local y empeora la toxicidad."
+        },
+        {
+          "key": "b",
+          "text": "No usar la emulsión por falta de experiencia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es el tratamiento recomendado."
+        },
+        {
+          "key": "c",
+          "text": "Adrenalina a dosis altas como en el paro habitual",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se usan dosis reducidas en esta toxicidad."
+        },
+        {
+          "key": "d",
+          "text": "Emulsión lipídica al 20% intravenosa en bolo y en infusión",
+          "correct": true,
+          "rationale": "Secuestra el anestésico liposoluble y revierte la cardiotoxicidad."
+        },
+        {
+          "key": "e",
+          "text": "Hemodiálisis urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "f",
+          "text": "Flumazenil",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es para benzodiacepinas."
+        },
+        {
+          "key": "g",
+          "text": "Dantroleno",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es para hipertermia maligna."
+        },
+        {
+          "key": "h",
+          "text": "Naloxona",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es para opioides."
+        },
+        {
+          "key": "i",
+          "text": "Gluconato de calcio como antídoto específico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es el antídoto."
+        },
+        {
+          "key": "j",
+          "text": "Esperar a que el anestésico se elimine solo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La cardiotoxicidad puede ser mortal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "g"
+      ],
+      "explanation": "La emulsión lipídica intravenosa al 20% es el tratamiento específico de la toxicidad sistémica por anestésicos locales, sobre todo de la cardiotoxicidad por bupivacaína. Se administra un bolo de 1.5 mL/kg seguido de una infusión, y puede repetirse el bolo. Su mecanismo incluye secuestrar el anestésico liposoluble en la fase lipídica. Junto con ella se maneja la vía aérea con oxígeno, se tratan las convulsiones con benzodiacepinas y se realiza reanimación cardiopulmonar si hay paro, con dosis reducidas de adrenalina y evitando la lidocaína y la vasopresina. Toda unidad que realiza bloqueos debe contar con emulsión lipídica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de anestesia local y regional"
+      ]
+    },
+    {
+      "key": "cir-10-complemento-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "diverticular_disease",
+      "vignette": "Hombre de 58 años que se recuperó de un primer episodio de diverticulitis aguda no complicada hace 6 semanas, confirmado por tomografía. Nunca se ha realizado colonoscopia.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Realizar colonoscopia para descartar cáncer colorrectal",
+          "correct": true,
+          "rationale": "La tomografía puede confundir un cáncer con diverticulitis."
+        },
+        {
+          "key": "b",
+          "text": "Los divertículos nunca se relacionan con el cáncer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Pueden coexistir o confundirse."
+        },
+        {
+          "key": "c",
+          "text": "Dieta sin semillas de por vida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "d",
+          "text": "Colonoscopia durante la fase aguda",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Está contraindicada."
+        },
+        {
+          "key": "e",
+          "text": "Ningún estudio porque ya se resolvió",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Debe descartarse cáncer."
+        },
+        {
+          "key": "f",
+          "text": "Sigmoidectomía electiva tras el primer episodio no complicado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No se recomienda de rutina."
+        },
+        {
+          "key": "g",
+          "text": "No ofrecer la colonoscopia por la incomodidad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es importante descartar cáncer."
+        },
+        {
+          "key": "h",
+          "text": "Tomografía cada 3 meses",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "i",
+          "text": "Colectomía total profiláctica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "j",
+          "text": "Antibióticos profilácticos mensuales",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No previenen la recurrencia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "Después de un episodio de diverticulitis, sobre todo el primero o complicado, se recomienda colonoscopia de 6 a 8 semanas después de la resolución si no se ha realizado recientemente, para descartar cáncer colorrectal, que puede simular diverticulitis en la tomografía. La sigmoidectomía electiva ya no se recomienda de forma rutinaria tras dos episodios, sino que se individualiza según la frecuencia, la gravedad, las complicaciones, la inmunosupresión y la calidad de vida. La fibra, la actividad física y el control del peso reducen las recurrencias.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de enfermedad diverticular"
+      ]
+    },
+    {
+      "key": "cir-10-complemento-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "ophthalmology",
+      "subtopic": "cataract",
+      "vignette": "Hombre de 65 años con diabetes de 20 años de evolución y mal control que presenta disminución progresiva de la visión. El fondo de ojo muestra microaneurismas, hemorragias en llama, exudados duros y neovasos en la papila.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Retinopatía hipertensiva",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Los neovasos y el contexto orientan a diabetes."
+        },
+        {
+          "key": "b",
+          "text": "Glaucoma de ángulo abierto",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica los hallazgos."
+        },
+        {
+          "key": "c",
+          "text": "Retinopatía diabética no proliferativa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La presencia de neovasos define la forma proliferativa."
+        },
+        {
+          "key": "d",
+          "text": "Vista cansada por la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay daño retiniano grave."
+        },
+        {
+          "key": "e",
+          "text": "Oclusión de la vena central de la retina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da hemorragias en los cuatro cuadrantes de forma aguda."
+        },
+        {
+          "key": "f",
+          "text": "Degeneración macular asociada a la edad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da drusas y neovascularización coroidea macular."
+        },
+        {
+          "key": "g",
+          "text": "Retinopatía diabética proliferativa",
+          "correct": true,
+          "rationale": "Neovasos en un diabético de larga evolución con hallazgos de retinopatía."
+        },
+        {
+          "key": "h",
+          "text": "Catarata senil",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica los hallazgos del fondo de ojo."
+        },
+        {
+          "key": "i",
+          "text": "Desprendimiento de retina aislado",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica los neovasos."
+        },
+        {
+          "key": "j",
+          "text": "Papiledema",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los microaneurismas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "La retinopatía diabética es una complicación microvascular de la diabetes y una de las principales causas de ceguera en adultos en edad productiva. Se clasifica en no proliferativa, con microaneurismas, hemorragias, exudados duros y algodonosos, y proliferativa, con neovasos en la papila o la retina por isquemia, que pueden sangrar o causar desprendimiento traccional. El edema macular puede ocurrir en cualquier etapa. Se recomienda fondo de ojo anual en diabéticos. El tratamiento incluye control de la glucosa y la presión, fotocoagulación panretiniana con láser, antiangiogénicos intravítreos y vitrectomía.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la retinopatía diabética"
+      ]
+    },
+    {
+      "key": "cir-10-complemento-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "ophthalmology",
+      "subtopic": "cataract",
+      "vignette": "Mujer de 70 años con pérdida súbita e indolora de la visión del ojo derecho al despertar. Tiene fibrilación auricular. El fondo de ojo muestra la retina pálida con una mancha rojo cereza en la mácula.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hemorragia vítrea",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Impediría ver el fondo de ojo."
+        },
+        {
+          "key": "b",
+          "text": "Neuritis óptica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es dolorosa con los movimientos oculares en jóvenes."
+        },
+        {
+          "key": "c",
+          "text": "Desprendimiento de retina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se precede de destellos y cortina."
+        },
+        {
+          "key": "d",
+          "text": "Glaucoma agudo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es doloroso con ojo rojo."
+        },
+        {
+          "key": "e",
+          "text": "Migraña con aura",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es transitoria y binocular."
+        },
+        {
+          "key": "f",
+          "text": "Oclusión de la vena central de la retina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da hemorragias en los cuatro cuadrantes."
+        },
+        {
+          "key": "g",
+          "text": "Oclusión de la arteria central de la retina",
+          "correct": true,
+          "rationale": "Pérdida visual súbita indolora con retina pálida y mancha rojo cereza."
+        },
+        {
+          "key": "h",
+          "text": "Vista nublada por dormir mal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia vascular."
+        },
+        {
+          "key": "i",
+          "text": "Degeneración macular",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es progresiva."
+        },
+        {
+          "key": "j",
+          "text": "Catarata",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es progresiva."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "La oclusión de la arteria central de la retina se manifiesta con pérdida visual súbita, indolora y profunda de un ojo. Se debe generalmente a émbolos de origen carotídeo o cardiaco, por fibrilación auricular, o a arteritis de células gigantes en mayores de 50 años. El fondo de ojo muestra la retina pálida y edematosa con una mancha rojo cereza en la mácula, porque la coroides subyacente se transparenta. Es una urgencia equivalente a un evento vascular cerebral, por lo que se refiere a un centro especializado y se estudia la fuente embólica. Se mide la velocidad de sedimentación para descartar arteritis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las oclusiones vasculares de la retina"
+      ]
+    },
+    {
+      "key": "cir-10-complemento-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "ophthalmology",
+      "subtopic": "glaucoma",
+      "vignette": "Mujer de 60 años con asma que usa corticosteroide inhalado y en ocasiones gotas oftálmicas de corticosteroide por conjuntivitis alérgica que se automedica. En su revisión tiene presión intraocular de 30 mmHg.",
+      "prompt": "¿Cuál es el factor que más probablemente elevó su presión intraocular?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "El uso de antihistamínicos orales como causa principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Pueden precipitar ángulo cerrado, pero los corticosteroides tópicos explican el aumento crónico."
+        },
+        {
+          "key": "b",
+          "text": "La conjuntivitis alérgica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No eleva la presión intraocular."
+        },
+        {
+          "key": "c",
+          "text": "El asma por sí misma",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No eleva la presión intraocular."
+        },
+        {
+          "key": "d",
+          "text": "El sexo femenino",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es la causa."
+        },
+        {
+          "key": "e",
+          "text": "Leer mucho de noche",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No eleva la presión intraocular."
+        },
+        {
+          "key": "f",
+          "text": "El uso de lentes de lectura",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No influye."
+        },
+        {
+          "key": "g",
+          "text": "La exposición al sol",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No eleva la presión."
+        },
+        {
+          "key": "h",
+          "text": "Uso de corticosteroides oftálmicos tópicos",
+          "correct": true,
+          "rationale": "Pueden causar glaucoma cortisónico por menor drenaje del humor acuoso."
+        },
+        {
+          "key": "i",
+          "text": "El consumo de café",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Su efecto es mínimo."
+        },
+        {
+          "key": "j",
+          "text": "El estrés",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es la causa principal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "Los corticosteroides, sobre todo los oftálmicos tópicos y también los sistémicos, inhalados y perioculares, pueden elevar la presión intraocular en personas susceptibles al disminuir el drenaje del humor acuoso por la malla trabecular. Esto puede causar glaucoma cortisónico con daño del nervio óptico si no se detecta. También favorecen la catarata subcapsular posterior. Por ello no deben usarse gotas de corticosteroide sin supervisión oftalmológica, y los pacientes que las usan por periodos prolongados requieren medición de la presión intraocular. La automedicación con gotas es un riesgo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del glaucoma primario de ángulo abierto"
+      ]
+    },
+    {
+      "key": "cir-10-complemento-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "otolaryngology",
+      "subtopic": "epistaxis",
+      "vignette": "Hombre de 45 años con epistaxis anterior izquierda recurrente que no cedió con compresión de 15 minutos ni con vasoconstrictor tópico. Se identifica un vaso sangrante en el área de Little.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Colocar algodón con pasta dental en la nariz",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "b",
+          "text": "Ligadura de la arteria carótida externa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "c",
+          "text": "Cauterizar ambos lados del tabique en la misma sesión",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumenta el riesgo de perforación septal."
+        },
+        {
+          "key": "d",
+          "text": "Antibióticos sistémicos como tratamiento del sangrado",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No detienen el sangrado."
+        },
+        {
+          "key": "e",
+          "text": "Repetir la compresión indefinidamente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Ya falló."
+        },
+        {
+          "key": "f",
+          "text": "Egresar sin tratar el sitio sangrante",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Recurrirá."
+        },
+        {
+          "key": "g",
+          "text": "Cauterización del vaso sangrante con nitrato de plata o eléctrica y, si persiste, taponamiento anterior",
+          "correct": true,
+          "rationale": "Es la siguiente medida tras la falla de la compresión."
+        },
+        {
+          "key": "h",
+          "text": "Taponamiento posterior con balón",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para epistaxis posterior."
+        },
+        {
+          "key": "i",
+          "text": "Embolización arterial como siguiente paso",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para casos refractarios."
+        },
+        {
+          "key": "j",
+          "text": "Transfusión",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay inestabilidad."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "h",
+        "j"
+      ],
+      "explanation": "Cuando la epistaxis anterior no cede con compresión y vasoconstrictores tópicos y se identifica el sitio sangrante, se realiza cauterización química con nitrato de plata o eléctrica. No se recomienda cauterizar ambos lados del tabique en la misma sesión por el riesgo de perforación septal. Si la cauterización falla o no se identifica el sitio, se coloca un taponamiento anterior con materiales reabsorbibles o no reabsorbibles, que se retira en 24 a 72 horas. Se buscan causas como coagulopatía, anticoagulantes, hipertensión y tumores en epistaxis recurrentes.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la epistaxis"
+      ]
+    },
+    {
+      "key": "cir-10-complemento-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "otolaryngology",
+      "subtopic": "epistaxis",
+      "vignette": "Mujer de 40 años con epistaxis recurrentes desde la infancia, telangiectasias en los labios, la lengua y los dedos, anemia ferropénica y su padre tiene el mismo problema.",
+      "prompt": "¿Cuál es el factor causal más probable de sus epistaxis?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sangrado por debilidad de la sangre sin causa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una enfermedad hereditaria."
+        },
+        {
+          "key": "b",
+          "text": "Enfermedad de von Willebrand",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica las telangiectasias."
+        },
+        {
+          "key": "c",
+          "text": "Angiofibroma juvenil",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ocurre en adolescentes varones."
+        },
+        {
+          "key": "d",
+          "text": "Hipertensión arterial",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica las telangiectasias."
+        },
+        {
+          "key": "e",
+          "text": "Hábito de hurgarse la nariz",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica las telangiectasias ni la herencia."
+        },
+        {
+          "key": "f",
+          "text": "Telangiectasia hemorrágica hereditaria o enfermedad de Rendu Osler Weber",
+          "correct": true,
+          "rationale": "Epistaxis recurrentes, telangiectasias mucocutáneas y herencia autosómica dominante."
+        },
+        {
+          "key": "g",
+          "text": "Resequedad ambiental",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el cuadro completo."
+        },
+        {
+          "key": "h",
+          "text": "Uso de anticoagulantes",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay antecedente."
+        },
+        {
+          "key": "i",
+          "text": "Cáncer nasofaríngeo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica las telangiectasias desde la infancia."
+        },
+        {
+          "key": "j",
+          "text": "Púrpura trombocitopénica inmune",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica las telangiectasias."
+        }
+      ],
+      "canonical": [
+        "b",
+        "d",
+        "e",
+        "f"
+      ],
+      "explanation": "La telangiectasia hemorrágica hereditaria es una enfermedad autosómica dominante por mutaciones de genes como ENG y ACVRL1, que causan malformaciones vasculares. Se caracteriza por epistaxis recurrentes, que suelen ser el primer síntoma, telangiectasias en labios, lengua, mucosas y dedos, y malformaciones arteriovenosas en pulmón, hígado, cerebro y tubo digestivo, con sangrado gastrointestinal y anemia ferropénica. El diagnóstico se basa en los criterios de Curaçao. Se buscan malformaciones arteriovenosas pulmonares y cerebrales. El tratamiento incluye hidratación nasal, láser, ácido tranexámico, hierro y antiangiogénicos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la epistaxis"
+      ]
+    },
+    {
+      "key": "cir-10-complemento-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "pancreas",
+      "subtopic": "pancreatic_cancer",
+      "vignette": "Mujer de 55 años con hallazgo incidental en una tomografía de un quiste en la cola del páncreas de 4 cm, con septos y paredes gruesas, sin comunicación con el conducto pancreático. Sin antecedente de pancreatitis. Asintomática.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Quiste simple sin importancia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Los septos y la pared gruesa son sospechosos."
+        },
+        {
+          "key": "b",
+          "text": "Pseudoquiste pancreático",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Requiere antecedente de pancreatitis."
+        },
+        {
+          "key": "c",
+          "text": "Neoplasia papilar mucinosa intraductal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se comunica con el conducto pancreático."
+        },
+        {
+          "key": "d",
+          "text": "Cistoadenoma seroso típico en panal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Suele ser microquístico con cicatriz central."
+        },
+        {
+          "key": "e",
+          "text": "Quiste hidatídico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es raro en el páncreas."
+        },
+        {
+          "key": "f",
+          "text": "Los quistes nunca son malignos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Algunos tienen potencial maligno."
+        },
+        {
+          "key": "g",
+          "text": "Neoplasia quística mucinosa del páncreas",
+          "correct": true,
+          "rationale": "Quiste con septos en la cola del páncreas en una mujer sin antecedente de pancreatitis."
+        },
+        {
+          "key": "h",
+          "text": "Tumor neuroendocrino funcional",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Daría síntomas hormonales."
+        },
+        {
+          "key": "i",
+          "text": "Absceso pancreático",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay fiebre."
+        },
+        {
+          "key": "j",
+          "text": "Adenocarcinoma sólido de páncreas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La lesión es quística."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "Las neoplasias quísticas del páncreas son hallazgos cada vez más frecuentes. Incluyen el cistoadenoma seroso, benigno y microquístico, la neoplasia quística mucinosa, en mujeres de mediana edad en el cuerpo y la cola, con potencial maligno, y la neoplasia papilar mucinosa intraductal, que se comunica con los conductos y también puede malignizarse. Deben distinguirse del pseudoquiste, que tiene antecedente de pancreatitis. El ultrasonido endoscópico con análisis del líquido ayuda en el diagnóstico. Las neoplasias mucinosas con datos de riesgo se resecan.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de páncreas"
+      ]
+    },
+    {
+      "key": "cir-10-complemento-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "perioperative",
+      "subtopic": "postoperative_fluids",
+      "vignette": "Hombre de 72 años con colectomía hace 1 día que presenta diuresis de 15 mL por hora en las últimas 3 horas, taquicardia de 110 y presión de 100/60 mmHg. Sonda vesical permeable.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Administrar un bolo de solución cristaloide balanceada de 250 a 500 mL y reevaluar la respuesta",
+          "correct": true,
+          "rationale": "La oliguria posoperatoria con taquicardia sugiere hipovolemia."
+        },
+        {
+          "key": "b",
+          "text": "La oliguria es normal el primer día y no requiere acciones",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Con taquicardia requiere evaluación."
+        },
+        {
+          "key": "c",
+          "text": "Biopsia renal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "d",
+          "text": "Dopamina a dosis renal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No protege el riñón."
+        },
+        {
+          "key": "e",
+          "text": "Iniciar hemodiálisis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay indicación."
+        },
+        {
+          "key": "f",
+          "text": "No buscar sangrado como causa de la hipovolemia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe descartarse."
+        },
+        {
+          "key": "g",
+          "text": "Esperar a que orine más por la mañana sin intervenir",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "h",
+          "text": "Furosemida intravenosa para aumentar la diuresis",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Empeora la hipovolemia."
+        },
+        {
+          "key": "i",
+          "text": "Restringir los líquidos para evitar sobrecarga",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Empeora la hipoperfusión."
+        },
+        {
+          "key": "j",
+          "text": "Cambiar la sonda vesical como única medida",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ya está permeable."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "h",
+        "i"
+      ],
+      "explanation": "La oliguria posoperatoria, diuresis menor de 0.5 mL/kg/h, es frecuente y suele deberse a hipovolemia por pérdidas, sangrado, tercer espacio o aporte insuficiente, aunque también a la respuesta hormonal al estrés. Primero se verifica la permeabilidad de la sonda. Si hay datos de hipovolemia se administran bolos de cristaloides balanceados y se reevalúa la respuesta. Se descartan sangrado, fuga de anastomosis y sepsis. Los diuréticos están contraindicados en la oliguria por hipovolemia, y la dopamina a dosis renal no protege el riñón.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de manejo de líquidos y electrolitos en el paciente quirúrgico"
+      ]
+    },
+    {
+      "key": "cir-10-complemento-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "vascular_surgery",
+      "subtopic": "peripheral_arterial_disease",
+      "vignette": "Hombre de 70 años diabético y fumador con dolor en el pie derecho en reposo que empeora en la noche y mejora al colgar la pierna. Tiene una úlcera seca en la punta del primer dedo, piel fría, brillante, sin vello y sin pulsos distales. Índice tobillo brazo de 0.3.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dolor por la edad que mejora con pomadas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una isquemia que amenaza la extremidad."
+        },
+        {
+          "key": "b",
+          "text": "Fenómeno de Raynaud",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es episódico."
+        },
+        {
+          "key": "c",
+          "text": "Claudicación intermitente estable",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ya tiene dolor en reposo y úlcera."
+        },
+        {
+          "key": "d",
+          "text": "Osteomielitis sin isquemia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "La isquemia es evidente."
+        },
+        {
+          "key": "e",
+          "text": "Neuropatía diabética sin isquemia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la ausencia de pulsos ni el índice bajo."
+        },
+        {
+          "key": "f",
+          "text": "Gota en el primer dedo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da inflamación aguda sin isquemia."
+        },
+        {
+          "key": "g",
+          "text": "Celulitis del pie",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la isquemia."
+        },
+        {
+          "key": "h",
+          "text": "Isquemia crítica crónica de la extremidad",
+          "correct": true,
+          "rationale": "Dolor en reposo, úlcera isquémica e índice tobillo brazo muy bajo."
+        },
+        {
+          "key": "i",
+          "text": "Isquemia arterial aguda embólica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es de inicio súbito."
+        },
+        {
+          "key": "j",
+          "text": "Úlcera venosa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es húmeda en el maléolo medial con edema."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "La isquemia crítica crónica de la extremidad es la etapa avanzada de la enfermedad arterial periférica. Se manifiesta con dolor en reposo, que empeora al acostarse y mejora al colgar la pierna, úlceras isquémicas que no cicatrizan o gangrena, con índice tobillo brazo generalmente menor de 0.4. Tiene alto riesgo de amputación y mortalidad. Requiere evaluación urgente por cirugía vascular con estudios de imagen para revascularización endovascular o quirúrgica, además de control de los factores de riesgo, antiagregación, estatinas y cuidado de las heridas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad arterial periférica"
+      ]
+    },
+    {
+      "key": "cir-10-complemento-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "vascular_surgery",
+      "subtopic": "peripheral_arterial_disease",
+      "vignette": "Mujer de 65 años con edema de ambas piernas de años, dermatitis ocre en la parte baja de las piernas, várices visibles y una úlcera húmeda, poco dolorosa, en el maléolo medial izquierdo. Pulsos pedios presentes.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Vasculitis cutánea",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica las várices y el edema crónico."
+        },
+        {
+          "key": "b",
+          "text": "Úlcera arterial isquémica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es dolorosa, seca, distal y sin pulsos."
+        },
+        {
+          "key": "c",
+          "text": "Linfedema primario",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la dermatitis ocre y las várices."
+        },
+        {
+          "key": "d",
+          "text": "Herida que se cura con remedios caseros",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere compresión."
+        },
+        {
+          "key": "e",
+          "text": "Úlcera neuropática diabética",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se localiza en puntos de presión de la planta."
+        },
+        {
+          "key": "f",
+          "text": "Carcinoma epidermoide de Marjolin",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un cáncer en úlceras crónicas de muchos años, se considera si no cicatriza."
+        },
+        {
+          "key": "g",
+          "text": "Úlcera venosa por insuficiencia venosa crónica",
+          "correct": true,
+          "rationale": "Úlcera en el maléolo medial con edema, dermatitis ocre, várices y pulsos presentes."
+        },
+        {
+          "key": "h",
+          "text": "Pioderma gangrenoso",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Tiene bordes violáceos de rápida progresión."
+        },
+        {
+          "key": "i",
+          "text": "Celulitis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica los cambios crónicos."
+        },
+        {
+          "key": "j",
+          "text": "Trombosis venosa profunda aguda",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El cuadro es crónico."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "La úlcera venosa es la úlcera de la pierna más frecuente y se debe a la hipertensión venosa crónica por insuficiencia valvular o secuelas de trombosis. Se localiza típicamente en la región del maléolo medial, es superficial, húmeda, con bordes irregulares y poco dolorosa, y se acompaña de edema, dermatitis ocre, lipodermatoesclerosis y várices. Los pulsos están presentes, aunque se debe medir el índice tobillo brazo antes de la compresión. El tratamiento principal es la terapia de compresión, la elevación de las piernas, el cuidado de la herida y el tratamiento de la insuficiencia venosa.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la insuficiencia venosa crónica"
+      ]
+    },
+    {
+      "key": "cir-10-complemento-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "thoracic_surgery",
+      "subtopic": "pneumothorax",
+      "vignette": "Hombre de 55 años con cáncer de pulmón que tras una biopsia transtorácica guiada por tomografía presenta disnea súbita, dolor torácico y disminución del murmullo en el lado puncionado. Estable con saturación de 92%.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Progresión del cáncer",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el inicio súbito tras la biopsia."
+        },
+        {
+          "key": "b",
+          "text": "Neumotórax iatrogénico",
+          "correct": true,
+          "rationale": "Complicación frecuente de la biopsia pulmonar transtorácica."
+        },
+        {
+          "key": "c",
+          "text": "Embolia gaseosa sistémica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Daría alteraciones neurológicas o cardiacas."
+        },
+        {
+          "key": "d",
+          "text": "Crisis de ansiedad tras el procedimiento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Hay hallazgos objetivos."
+        },
+        {
+          "key": "e",
+          "text": "Taponamiento cardiaco",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica los hallazgos pulmonares."
+        },
+        {
+          "key": "f",
+          "text": "Derrame pleural maligno",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el inicio súbito."
+        },
+        {
+          "key": "g",
+          "text": "Neumonía",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el inicio súbito."
+        },
+        {
+          "key": "h",
+          "text": "Dolor normal tras la punción",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay un neumotórax."
+        },
+        {
+          "key": "i",
+          "text": "Hemotórax masivo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Daría matidez e inestabilidad."
+        },
+        {
+          "key": "j",
+          "text": "Tromboembolia pulmonar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la relación con la biopsia ni el murmullo disminuido."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "El neumotórax iatrogénico es una complicación frecuente de procedimientos como la biopsia pulmonar transtorácica, la colocación de catéteres venosos centrales subclavios, la toracocentesis, la ventilación mecánica con presión positiva y la reanimación cardiopulmonar. Se sospecha con disnea, dolor torácico o hipoxemia tras el procedimiento. La radiografía de tórax confirma el diagnóstico. Los neumotórax pequeños y estables se observan con oxígeno, y los grandes o sintomáticos se drenan. En pacientes con ventilación mecánica se coloca sonda pleural por el riesgo de neumotórax a tensión.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del neumotórax espontáneo"
+      ]
+    },
+    {
+      "key": "cir-10-complemento-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "hernias",
+      "subtopic": "ventral_hernia",
+      "vignette": "Hombre de 45 años con dolor en el epigastrio y una pequeña masa dolorosa en la línea media entre el ombligo y el apéndice xifoides que aparece al hacer esfuerzo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Úlcera péptica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la masa en la pared."
+        },
+        {
+          "key": "b",
+          "text": "Hernia umbilical",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Está en el ombligo."
+        },
+        {
+          "key": "c",
+          "text": "Quiste sebáceo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es superficial en la piel."
+        },
+        {
+          "key": "d",
+          "text": "Lipoma subcutáneo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No aparece con el esfuerzo de esta forma."
+        },
+        {
+          "key": "e",
+          "text": "Diástasis de los rectos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es una separación difusa sin defecto aponeurótico ni masa dolorosa."
+        },
+        {
+          "key": "f",
+          "text": "Músculo inflamado por ejercicio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay un defecto herniario."
+        },
+        {
+          "key": "g",
+          "text": "Hernia epigástrica",
+          "correct": true,
+          "rationale": "Defecto en la línea alba por arriba del ombligo."
+        },
+        {
+          "key": "h",
+          "text": "Hernia de Spiegel",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Está en la línea semilunar."
+        },
+        {
+          "key": "i",
+          "text": "Pancreatitis crónica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la masa."
+        },
+        {
+          "key": "j",
+          "text": "Hernia hiatal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es interna y no palpable."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "g"
+      ],
+      "explanation": "La hernia epigástrica es la protrusión de grasa preperitoneal o epiplón a través de un defecto en la línea alba entre el apéndice xifoides y el ombligo. Es más frecuente en hombres de 20 a 50 años. Suele ser pequeña, puede ser múltiple y causar dolor desproporcionado por la incarceración de la grasa. Debe distinguirse de la diástasis de los rectos, que es una separación de los músculos rectos sin defecto aponeurótico verdadero y no requiere cirugía. El tratamiento de la hernia epigástrica sintomática es la reparación, con malla en defectos mayores.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hernia ventral e incisional"
+      ]
+    },
+    {
+      "key": "cir-10-complemento-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "trauma",
+      "subtopic": "abdominal_trauma",
+      "vignette": "Hombre de 28 años con traumatismo abdominal cerrado por golpe con el manubrio de la bicicleta en el epigastrio. A las 24 horas presenta dolor epigástrico irradiado a la espalda, vómito y amilasa elevada. La tomografía muestra edema peripancreático y una línea de fractura en el cuello del páncreas.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Lesión renal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la amilasa elevada."
+        },
+        {
+          "key": "b",
+          "text": "Hematoma duodenal aislado",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La tomografía muestra fractura pancreática."
+        },
+        {
+          "key": "c",
+          "text": "Pancreatitis alcohólica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El contexto es traumático."
+        },
+        {
+          "key": "d",
+          "text": "Úlcera péptica perforada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la fractura pancreática."
+        },
+        {
+          "key": "e",
+          "text": "Contusión de pared abdominal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la amilasa ni la fractura pancreática."
+        },
+        {
+          "key": "f",
+          "text": "Dolor muscular que se quita con reposo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una lesión de órgano."
+        },
+        {
+          "key": "g",
+          "text": "Lesión traumática del páncreas",
+          "correct": true,
+          "rationale": "Golpe epigástrico con manubrio, amilasa elevada y fractura pancreática."
+        },
+        {
+          "key": "h",
+          "text": "Gastritis por el golpe",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica los hallazgos."
+        },
+        {
+          "key": "i",
+          "text": "Lesión hepática aislada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La lesión es pancreática."
+        },
+        {
+          "key": "j",
+          "text": "Lesión esplénica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La tomografía muestra lesión pancreática."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "Las lesiones del páncreas son poco frecuentes en el trauma abdominal cerrado, pero el golpe con el manubrio de la bicicleta o el volante comprime el páncreas contra la columna vertebral, típicamente en el cuello. Los síntomas pueden ser tardíos. La amilasa elevada y la tomografía apoyan el diagnóstico, y la colangiopancreatografía por resonancia evalúa la integridad del conducto pancreático, que determina el manejo. Las lesiones sin afección ductal se manejan de forma conservadora o con drenaje, y las del cuerpo o cola con lesión ductal con pancreatectomía distal. Las complicaciones incluyen fístula y pseudoquiste.",
+      "gpcRefs": [
+        "Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos"
+      ]
+    },
+    {
+      "key": "cir-10-complemento-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "colorectal_anorectal",
+      "subtopic": "anal_fissure_fistula",
+      "vignette": "Hombre de 22 años con dolor y secreción purulenta intermitente en la región sacrococcígea, en el surco interglúteo, donde hay varios orificios pequeños con pelos saliendo de ellos. Es velludo y pasa muchas horas sentado.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Escara por presión",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay inmovilidad."
+        },
+        {
+          "key": "b",
+          "text": "Absceso perianal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se localiza junto al ano."
+        },
+        {
+          "key": "c",
+          "text": "Fístula anal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El orificio externo estaría cerca del ano y comunicado con el canal anal."
+        },
+        {
+          "key": "d",
+          "text": "Quiste sebáceo infectado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica los orificios con pelos en la línea media."
+        },
+        {
+          "key": "e",
+          "text": "Enfermedad pilonidal o quiste pilonidal",
+          "correct": true,
+          "rationale": "Orificios en el surco interglúteo con pelos en un joven velludo que pasa mucho tiempo sentado."
+        },
+        {
+          "key": "f",
+          "text": "Teratoma sacrococcígeo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es congénito en recién nacidos."
+        },
+        {
+          "key": "g",
+          "text": "Hidradenitis supurativa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Afecta axilas e ingles."
+        },
+        {
+          "key": "h",
+          "text": "Granos por sudar mucho",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una enfermedad crónica."
+        },
+        {
+          "key": "i",
+          "text": "Furúnculo simple",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica los orificios con pelos crónicos."
+        },
+        {
+          "key": "j",
+          "text": "Tuberculosis cutánea",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es rara."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "g"
+      ],
+      "explanation": "La enfermedad pilonidal es una infección crónica de la piel y el tejido subcutáneo en el surco interglúteo de la región sacrococcígea, causada por la penetración de pelos en la piel que generan una reacción a cuerpo extraño y senos. Es más frecuente en hombres jóvenes, velludos, obesos y que pasan mucho tiempo sentados. Se manifiesta como absceso agudo o como senos crónicos con secreción y orificios con pelos en la línea media. El absceso se trata con incisión y drenaje lateral, y la enfermedad crónica con escisión y cierre o colgajos. La depilación reduce la recurrencia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad pilonidal"
+      ]
+    },
+    {
+      "key": "cir-10-complemento-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "bowel_obstruction",
+      "vignette": "Hombre de 70 años en el tercer día posoperatorio de una cirugía de cadera que presenta distensión abdominal masiva, sin dolor intenso, con canalización escasa de gases. La radiografía muestra dilatación del colon derecho y transverso con ciego de 11 cm sin punto de obstrucción mecánica.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Vólvulo de sigmoides",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Daría imagen en grano de café con torsión."
+        },
+        {
+          "key": "b",
+          "text": "Íleo de intestino delgado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La dilatación es del colon."
+        },
+        {
+          "key": "c",
+          "text": "Megacolon tóxico por colitis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay colitis ni toxicidad."
+        },
+        {
+          "key": "d",
+          "text": "Enfermedad de Hirschsprung del adulto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es crónica."
+        },
+        {
+          "key": "e",
+          "text": "Oclusión por bridas",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay punto de transición mecánico."
+        },
+        {
+          "key": "f",
+          "text": "Gases por la comida del hospital",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay riesgo de perforación cecal."
+        },
+        {
+          "key": "g",
+          "text": "Pseudoobstrucción colónica aguda o síndrome de Ogilvie",
+          "correct": true,
+          "rationale": "Dilatación colónica masiva sin obstrucción mecánica en un paciente posoperado."
+        },
+        {
+          "key": "h",
+          "text": "Estreñimiento simple",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la dilatación masiva."
+        },
+        {
+          "key": "i",
+          "text": "Isquemia mesentérica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Daría dolor desproporcionado."
+        },
+        {
+          "key": "j",
+          "text": "Cáncer de colon obstructivo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay punto de obstrucción mecánica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "La pseudoobstrucción colónica aguda o síndrome de Ogilvie es una dilatación masiva del colon sin obstrucción mecánica, generalmente del ciego y el colon derecho. Ocurre en pacientes hospitalizados con enfermedades graves, posoperatorio de cirugía ortopédica o cardiaca, alteraciones electrolíticas y uso de opioides. El riesgo de perforación aumenta con un ciego mayor de 10 a 12 cm. El tratamiento inicial es conservador con ayuno, sonda nasogástrica y rectal, corrección de electrolitos y suspensión de opioides. Si no mejora se usa neostigmina intravenosa, colonoscopia descompresiva y cirugía si hay perforación.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de oclusión intestinal"
+      ]
+    },
+    {
+      "key": "cir-10-complemento-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "hollow_viscus_perforation",
+      "vignette": "Mujer de 45 años que tras una colonoscopia con polipectomía presenta, a las 6 horas, dolor abdominal intenso progresivo, distensión, fiebre y rebote. La radiografía de tórax muestra aire libre subdiafragmático.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Perforación colónica iatrogénica",
+          "correct": true,
+          "rationale": "Dolor, peritonitis y neumoperitoneo tras colonoscopia con polipectomía."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome postpolipectomía sin perforación",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No daría neumoperitoneo libre."
+        },
+        {
+          "key": "c",
+          "text": "Pancreatitis aguda",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No da neumoperitoneo."
+        },
+        {
+          "key": "d",
+          "text": "Gases que se eliminarán solos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia quirúrgica."
+        },
+        {
+          "key": "e",
+          "text": "Apendicitis aguda",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el antecedente ni el neumoperitoneo."
+        },
+        {
+          "key": "f",
+          "text": "Gastroenteritis por la preparación",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los hallazgos."
+        },
+        {
+          "key": "g",
+          "text": "Úlcera péptica perforada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El contexto es la colonoscopia."
+        },
+        {
+          "key": "h",
+          "text": "Distensión normal por el aire de la colonoscopia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El rebote y el neumoperitoneo indican perforación."
+        },
+        {
+          "key": "i",
+          "text": "Hemorragia postpolipectomía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Daría rectorragia."
+        },
+        {
+          "key": "j",
+          "text": "Diverticulitis aguda no complicada",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el neumoperitoneo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "h"
+      ],
+      "explanation": "La perforación es una complicación rara pero grave de la colonoscopia, más frecuente con procedimientos terapéuticos como polipectomía, dilatación o mucosectomía. Se manifiesta con dolor abdominal, distensión, fiebre y signos peritoneales en las horas siguientes. La radiografía o la tomografía muestran neumoperitoneo. Las perforaciones pequeñas detectadas durante el procedimiento pueden cerrarse con clips endoscópicos. Las que se presentan con peritonitis generalizada requieren cirugía. Se debe distinguir del síndrome postpolipectomía, que causa dolor y fiebre por quemadura transmural sin perforación libre.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección y diagnóstico del cáncer colorrectal"
+      ]
+    },
+    {
+      "key": "cir-10-complemento-q19",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "perioperative",
+      "subtopic": "preoperative_assessment",
+      "vignette": "Hombre de 62 años con diabetes tipo 2 en tratamiento con metformina e insulina glargina, programado para hernioplastia inguinal ambulatoria a las 8 de la mañana.",
+      "prompt": "¿Cuál es la conducta más apropiada sobre sus medicamentos para la diabetes?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "No dar indicaciones claras al paciente",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede causar errores."
+        },
+        {
+          "key": "b",
+          "text": "Hospitalizar 3 días antes para ajustar la insulina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "c",
+          "text": "Aplicar la dosis completa de insulina y la metformina el día de la cirugía sin comer",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta el riesgo de hipoglucemia."
+        },
+        {
+          "key": "d",
+          "text": "La diabetes no influye en la cirugía",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Aumenta las complicaciones."
+        },
+        {
+          "key": "e",
+          "text": "Cambiar a sulfonilureas el día de la cirugía",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Aumentan el riesgo de hipoglucemia."
+        },
+        {
+          "key": "f",
+          "text": "No medir la glucosa en el perioperatorio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Debe vigilarse."
+        },
+        {
+          "key": "g",
+          "text": "Cancelar la cirugía por tener diabetes",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicado si está controlado."
+        },
+        {
+          "key": "h",
+          "text": "Suspender la metformina el día de la cirugía y reducir la dosis de insulina basal de la noche previa alrededor de 20%, con monitoreo de glucosa",
+          "correct": true,
+          "rationale": "Previene la hipoglucemia y la acidosis láctica."
+        },
+        {
+          "key": "i",
+          "text": "Administrar glucosa al 50% de forma rutinaria antes de la cirugía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "j",
+          "text": "Suspender toda la insulina una semana antes",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Causa descontrol grave."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "h",
+        "j"
+      ],
+      "explanation": "El manejo perioperatorio de la diabetes busca evitar la hipoglucemia y la hiperglucemia, que se asocia a infecciones y mala cicatrización. La metformina suele suspenderse el día de la cirugía, y en cirugías mayores o con contraste se valora la función renal. Las sulfonilureas se suspenden el día de la cirugía. La insulina basal se reduce alrededor de 20% la noche previa o la mañana de la cirugía. Los inhibidores de SGLT2 se suspenden de 3 a 4 días antes por el riesgo de cetoacidosis euglucémica. Se mide la glucosa capilar y se corrige con insulina, con meta de 100 a 180 mg/dL.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de valoración perioperatoria en cirugía no cardiaca en el adulto"
+      ]
+    }
+  ]
+}

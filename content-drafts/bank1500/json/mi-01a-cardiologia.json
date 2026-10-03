@@ -1,0 +1,1134 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-01a-cardiologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "hypertension",
+      "vignette": "Hombre de 52 años sin otras enfermedades acude a revisión. En tres consultas distintas su presión arterial promedio es de 152/96 mmHg. Tiene IMC de 29, glucosa de 92 mg/dL, creatinina de 0.9 mg/dL y examen general de orina normal. No fuma.",
+      "prompt": "¿Cuál es el tratamiento inicial más adecuado?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Repetir mediciones cada mes sin tratamiento ni recomendaciones",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Evitar actuar parece prudente, pero deja sin manejo una hipertensión confirmada."
+        },
+        {
+          "key": "b",
+          "text": "Betabloqueador como monoterapia de primera elección",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Recuerda el betabloqueador por ser muy usado, pero no es primera línea sin indicación específica."
+        },
+        {
+          "key": "c",
+          "text": "Hidralazina oral como fármaco base",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La asocia con hipertensión en el embarazo, no con el adulto general."
+        },
+        {
+          "key": "d",
+          "text": "Ácido acetilsalicílico diario como medida principal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la aspirina protege a todos, aunque no trata la hipertensión ni se indica en prevención primaria rutinaria."
+        },
+        {
+          "key": "e",
+          "text": "Cambios en el estilo de vida y un fármaco de primera línea, como un IECA, ARA II, calcioantagonista o tiazida",
+          "correct": true,
+          "rationale": "Con hipertensión grado 1 confirmada en adulto se combinan medidas higiénico dietéticas y fármaco de primera línea."
+        },
+        {
+          "key": "f",
+          "text": "Alfabloqueador por su efecto rápido en la presión diastólica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la diastólica alta y elige un fármaco que no es de primera línea."
+        },
+        {
+          "key": "g",
+          "text": "Vigilancia sin intervención hasta que aparezca daño a órgano blanco",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Prefiere no cambiar nada, cuando la meta es prevenir el daño."
+        },
+        {
+          "key": "h",
+          "text": "Solo dieta y ejercicio durante un año antes de considerar fármacos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se queda con la idea de esperar, aunque sus cifras ya justifican tratamiento farmacológico."
+        },
+        {
+          "key": "i",
+          "text": "Triple terapia con IECA, calcioantagonista y espironolactona desde el inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Elige el esquema más complejo, reservado para hipertensión resistente."
+        },
+        {
+          "key": "j",
+          "text": "Diurético de asa a dosis altas para bajar rápido la presión",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El planteamiento de bajar rápido lleva a un diurético sin indicación aquí."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "El paciente tiene hipertensión confirmada en varias mediciones, con cifras de grado 1 cercanas al grado 2 y sobrepeso. Las guías mexicanas recomiendan iniciar medidas higiénico dietéticas en todos los casos, con reducción de sal, actividad física, control de peso y moderación del alcohol, y agregar un fármaco de primera línea cuando las cifras persisten o el riesgo lo justifica. Los grupos de primera línea son inhibidores de la enzima convertidora de angiotensina, antagonistas del receptor de angiotensina, calcioantagonistas dihidropiridínicos y diuréticos tiazídicos. Los betabloqueadores se reservan para indicaciones específicas, como cardiopatía isquémica o insuficiencia cardiaca. La triple terapia con espironolactona corresponde a la hipertensión resistente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel de atención"
+      ]
+    },
+    {
+      "key": "mi-01a-cardiologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "hypertension",
+      "vignette": "Mujer de 58 años con diabetes tipo 2 de 10 años de evolución e hipertensión. Su presión arterial es de 146/92 mmHg. El cociente albúmina creatinina en orina es de 210 mg/g en dos muestras y la tasa de filtración estimada es de 68 mL/min/1.73 m2.",
+      "prompt": "¿Cuál es el fármaco antihipertensivo de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Amlodipino como monoterapia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es un fármaco común y eficaz, pero no reduce la albuminuria como el bloqueo del sistema renina angiotensina."
+        },
+        {
+          "key": "b",
+          "text": "Metildopa por su seguridad renal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se asocia con el embarazo y no con la nefropatía diabética."
+        },
+        {
+          "key": "c",
+          "text": "IECA más ARA II juntos para un bloqueo doble",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El doble bloqueo parece más potente, pero aumenta hiperpotasemia y lesión renal sin beneficio."
+        },
+        {
+          "key": "d",
+          "text": "Aliskireno asociado a IECA",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se concentra en el sistema renina angiotensina pero elige una combinación contraindicada en diabetes."
+        },
+        {
+          "key": "e",
+          "text": "Un IECA o un ARA II",
+          "correct": true,
+          "rationale": "Con diabetes y albuminuria, el bloqueo del sistema renina angiotensina reduce la progresión renal."
+        },
+        {
+          "key": "f",
+          "text": "Betabloqueador para proteger el corazón en la diabetes",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La idea de protección cardiaca desvía de la protección renal que se necesita."
+        },
+        {
+          "key": "g",
+          "text": "Furosemida diaria para eliminar la proteína por orina",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el diurético saca la proteína, lo cual no tiene sustento."
+        },
+        {
+          "key": "h",
+          "text": "Espironolactona como fármaco inicial único",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Salta a un antagonista de mineralocorticoides sin el bloqueo base indicado."
+        },
+        {
+          "key": "i",
+          "text": "Mantener sin fármaco hasta que la filtración baje de 60",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Espera a que empeore, cuando la albuminuria ya indica tratamiento."
+        },
+        {
+          "key": "j",
+          "text": "Hidroclorotiazida como primera opción",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la regla general de la tiazida y pasa por alto la albuminuria."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "En la paciente con diabetes, hipertensión y albuminuria moderadamente elevada, el fármaco de elección es un inhibidor de la enzima convertidora de angiotensina o un antagonista del receptor de angiotensina. Estos fármacos disminuyen la presión intraglomerular, reducen la albuminuria y retrasan la progresión de la enfermedad renal diabética. Se deben vigilar potasio y creatinina a las dos a cuatro semanas de iniciar o ajustar la dosis. El doble bloqueo con IECA y ARA II o con aliskireno está contraindicado porque aumenta hiperpotasemia, hipotensión y lesión renal aguda. Si no se alcanza la meta se agrega un calcioantagonista o un diurético tiazídico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel de atención",
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la enfermedad renal crónica"
+      ]
+    },
+    {
+      "key": "mi-01a-cardiologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "hypertension",
+      "vignette": "Hombre de 49 años con hipertensión de larga evolución sin apego a tratamiento. Acude por cefalea intensa, visión borrosa y confusión de 6 horas. Presión arterial de 228/138 mmHg. El fondo de ojo muestra papiledema y hemorragias en flama. Creatinina de 2.4 mg/dL.",
+      "prompt": "¿Cuál es la conducta a seguir?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Reiniciar sus fármacos previos a dosis habituales por vía oral",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Volver a lo de siempre es insuficiente en una emergencia."
+        },
+        {
+          "key": "b",
+          "text": "Dar captopril sublingual y egresar si baja la presión",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en bajar la cifra y trata como urgencia sin daño, lo que es inadecuado."
+        },
+        {
+          "key": "c",
+          "text": "Hospitalizar en terapia intensiva y reducir la presión con un fármaco intravenoso titulable, sin bajar más de 25% en la primera hora",
+          "correct": true,
+          "rationale": "Es una emergencia hipertensiva con daño a órgano blanco que requiere descenso controlado intravenoso."
+        },
+        {
+          "key": "d",
+          "text": "Dar diurético de asa intravenoso a dosis alta como única medida",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo paciente hipertenso está sobrecargado de volumen."
+        },
+        {
+          "key": "e",
+          "text": "Nifedipino sublingual de acción rápida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se recuerda por su uso histórico, pero provoca caídas bruscas y peligrosas."
+        },
+        {
+          "key": "f",
+          "text": "Pedir perfil completo de hormonas suprarrenales antes de cualquier tratamiento",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Más estudios no cambian la conducta inmediata."
+        },
+        {
+          "key": "g",
+          "text": "Solicitar tomografía y esperar resultado antes de tratar la presión",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Busca otra causa y retrasa el control de una emergencia evidente."
+        },
+        {
+          "key": "h",
+          "text": "Ajustar su tratamiento oral y citar en una semana",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Evita intervenir, pese al daño neurológico y renal agudo."
+        },
+        {
+          "key": "i",
+          "text": "Normalizar la presión a menos de 120/80 en la primera hora",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Bajar rápido parece mejor, pero causa isquemia cerebral, coronaria y renal."
+        },
+        {
+          "key": "j",
+          "text": "Iniciar hemodiálisis urgente por la creatinina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Elige la medida más compleja cuando la lesión renal es por la crisis hipertensiva."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "Las cifras muy elevadas con encefalopatía, retinopatía grado IV y elevación de creatinina definen una emergencia hipertensiva por daño agudo a órgano blanco. El manejo es hospitalario, de preferencia en terapia intensiva, con fármacos intravenosos titulables como nitroprusiato, labetalol o nicardipino. La meta es reducir la presión arterial media no más de 25% en la primera hora, llegar a 160/100 mmHg en las siguientes dos a seis horas y normalizar gradualmente en 24 a 48 horas. Bajar demasiado rápido provoca hipoperfusión cerebral, coronaria y renal. El nifedipino sublingual está contraindicado por sus descensos impredecibles.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la crisis hipertensiva en adultos"
+      ]
+    },
+    {
+      "key": "mi-01a-cardiologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "heart_failure",
+      "vignette": "Hombre de 64 años con infarto previo. Refiere disnea de medianos esfuerzos. Presión arterial de 118/72 mmHg, frecuencia cardiaca de 84 lpm, sin edema. El ecocardiograma muestra fracción de expulsión de 30%. Potasio de 4.3 mEq/L y filtración de 72 mL/min.",
+      "prompt": "¿Cuál es el tratamiento de elección para reducir su mortalidad?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Furosemida diaria como base del tratamiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Alivia la congestión, pero no reduce la mortalidad."
+        },
+        {
+          "key": "b",
+          "text": "Trasplante cardiaco inmediato",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Elige la opción más extrema antes del tratamiento médico óptimo."
+        },
+        {
+          "key": "c",
+          "text": "Esperar a que la fracción baje de 25% para iniciar fármacos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retrasa un tratamiento que ya está indicado."
+        },
+        {
+          "key": "d",
+          "text": "Combinación de IECA o ARNI, betabloqueador, antagonista de mineralocorticoides e inhibidor de SGLT2",
+          "correct": true,
+          "rationale": "Los cuatro grupos reducen mortalidad en insuficiencia cardiaca con fracción reducida."
+        },
+        {
+          "key": "e",
+          "text": "Ivabradina como único fármaco",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que bajar la frecuencia basta, cuando es un complemento."
+        },
+        {
+          "key": "f",
+          "text": "Restricción estricta de líquidos sin fármacos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Evita medicar, aunque los fármacos son los que reducen mortalidad."
+        },
+        {
+          "key": "g",
+          "text": "Amiodarona profiláctica por el infarto previo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Asocia infarto con arritmia, sin indicación de antiarrítmico."
+        },
+        {
+          "key": "h",
+          "text": "Calcioantagonista no dihidropiridínico para controlar la frecuencia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Controlar frecuencia suena útil, pero el verapamilo y el diltiazem empeoran la fracción reducida."
+        },
+        {
+          "key": "i",
+          "text": "Solo IECA, por ser el tratamiento clásico",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Se queda con lo clásico y omite fármacos que también salvan vidas."
+        },
+        {
+          "key": "j",
+          "text": "Digoxina para mejorar la contractilidad",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la fracción baja, pero la digoxina no reduce mortalidad."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "i",
+        "j"
+      ],
+      "explanation": "En la insuficiencia cardiaca con fracción de expulsión reducida, cuatro grupos de fármacos han demostrado disminuir la mortalidad y las hospitalizaciones. Son los inhibidores del sistema renina angiotensina, de preferencia sacubitrilo con valsartán o, si no está disponible, un IECA o ARA II, los betabloqueadores con evidencia como carvedilol, bisoprolol o metoprolol de liberación prolongada, los antagonistas de mineralocorticoides y los inhibidores de SGLT2. Se recomienda iniciarlos de forma temprana y titular hasta dosis objetivo. Los diuréticos de asa se usan para la congestión y no cambian el pronóstico. La digoxina reduce hospitalizaciones pero no mortalidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la insuficiencia cardiaca crónica"
+      ]
+    },
+    {
+      "key": "mi-01a-cardiologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "heart_failure",
+      "vignette": "Mujer de 71 años con hipertensión que refiere disnea progresiva de dos meses, ortopnea y edema de piernas. Tiene estertores en ambas bases y presión venosa yugular elevada.",
+      "prompt": "¿Cuál es el estudio inicial más útil para apoyar el diagnóstico de insuficiencia cardiaca?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Medir péptidos natriuréticos, BNP o NT-proBNP",
+          "correct": true,
+          "rationale": "Un valor normal hace poco probable la insuficiencia cardiaca y uno elevado orienta al ecocardiograma."
+        },
+        {
+          "key": "b",
+          "text": "Radiografía de tórax como estudio que confirma el diagnóstico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ayuda, pero no confirma ni descarta por sí sola."
+        },
+        {
+          "key": "c",
+          "text": "Espirometría por la disnea",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el síntoma respiratorio e ignora la congestión."
+        },
+        {
+          "key": "d",
+          "text": "Troponina de alta sensibilidad",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se usa mucho en dolor torácico, pero no establece insuficiencia cardiaca."
+        },
+        {
+          "key": "e",
+          "text": "Prueba de esfuerzo para medir la tolerancia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Valorar la capacidad suena útil, pero no diagnostica y puede ser riesgosa."
+        },
+        {
+          "key": "f",
+          "text": "Resonancia magnética cardiaca como primera prueba",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es útil en casos seleccionados, no como estudio inicial."
+        },
+        {
+          "key": "g",
+          "text": "Gammagrama pulmonar ventilatorio y perfusorio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No considera que la causa más probable en ella es cardiaca."
+        },
+        {
+          "key": "h",
+          "text": "Dímero D para descartar tromboembolia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La disnea lo sugiere, pero el cuadro es de congestión."
+        },
+        {
+          "key": "i",
+          "text": "Perfil tiroideo, hepático y de hierro antes de cualquier otra prueba",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Son complementarios y no orientan el diagnóstico inicial."
+        },
+        {
+          "key": "j",
+          "text": "Cateterismo cardiaco directo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Salta al estudio invasivo sin pasos previos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "f"
+      ],
+      "explanation": "Ante sospecha clínica de insuficiencia cardiaca, junto con el electrocardiograma, se recomiendan los péptidos natriuréticos como estudio inicial. Un BNP menor de 35 pg/mL o un NT-proBNP menor de 125 pg/mL en el escenario crónico hacen poco probable el diagnóstico. Si están elevados, el siguiente paso es el ecocardiograma transtorácico, que confirma el diagnóstico, mide la fracción de expulsión y orienta la causa. La radiografía de tórax apoya mostrando cardiomegalia o congestión, pero no tiene sensibilidad suficiente. La troponina sirve para descartar síndrome coronario agudo. El cateterismo y la resonancia se reservan para casos seleccionados.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la insuficiencia cardiaca crónica"
+      ]
+    },
+    {
+      "key": "mi-01a-cardiologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "heart_failure",
+      "vignette": "Hombre de 68 años con insuficiencia cardiaca con fracción reducida. Llega con disnea en reposo, ortopnea y edema hasta muslos. Presión arterial de 132/80 mmHg, saturación de 91%, piel caliente y llenado capilar normal. Estertores bilaterales.",
+      "prompt": "¿Cuál es el tratamiento de elección inmediato para este perfil hemodinámico?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Balón de contrapulsación intraaórtico",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es una medida para choque cardiogénico, no para este perfil."
+        },
+        {
+          "key": "b",
+          "text": "Continuar su diurético oral a la misma dosis",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Mantener lo mismo no alcanza en una descompensación."
+        },
+        {
+          "key": "c",
+          "text": "Dobutamina en infusión",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la fracción baja, pero el paciente está bien perfundido."
+        },
+        {
+          "key": "d",
+          "text": "Digoxina intravenosa como primera medida",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo paciente con fracción baja necesita inotrópico."
+        },
+        {
+          "key": "e",
+          "text": "Morfina intravenosa de rutina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se recuerda del esquema clásico, pero su uso rutinario se asocia a peores desenlaces."
+        },
+        {
+          "key": "f",
+          "text": "Diurético de asa intravenoso, oxígeno si la saturación es baja y vasodilatador si la presión lo permite",
+          "correct": true,
+          "rationale": "El perfil es caliente y húmedo, con congestión y buena perfusión."
+        },
+        {
+          "key": "g",
+          "text": "Observación sin fármacos hasta tener ecocardiograma",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El estudio no debe retrasar el tratamiento de la congestión."
+        },
+        {
+          "key": "h",
+          "text": "Antibiótico por los estertores",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Asocia estertores con neumonía."
+        },
+        {
+          "key": "i",
+          "text": "Intubación orotraqueal inmediata",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Salta al soporte invasivo sin probar ventilación no invasiva ni diuréticos."
+        },
+        {
+          "key": "j",
+          "text": "Suspender betabloqueador y dar líquidos para mejorar el gasto",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Mejorar el gasto suena bien, pero los líquidos empeoran la congestión."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "El paciente presenta insuficiencia cardiaca aguda con perfil caliente y húmedo, es decir, congestión con perfusión conservada, que es el más frecuente. El tratamiento de elección es el diurético de asa intravenoso, a una dosis inicial igual o mayor a su dosis oral habitual, con oxígeno solo si la saturación es menor de 90% y ventilación no invasiva si hay dificultad respiratoria. Con presión sistólica mayor de 110 mmHg se pueden añadir vasodilatadores como nitroglicerina. Los inotrópicos se reservan para hipoperfusión con presión baja. Los betabloqueadores se mantienen salvo choque o bradicardia importante.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la insuficiencia cardiaca aguda"
+      ]
+    },
+    {
+      "key": "mi-01a-cardiologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "acute_coronary_syndrome",
+      "vignette": "Hombre de 58 años con diabetes y tabaquismo. Presenta dolor opresivo retroesternal de 40 minutos con diaforesis. El electrocardiograma muestra elevación del segmento ST de 3 mm en DII, DIII y aVF. Se encuentra en un hospital con sala de hemodinamia disponible en menos de 60 minutos.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dar antiagregación dual y realizar intervención coronaria percutánea primaria",
+          "correct": true,
+          "rationale": "Con IAM con elevación del ST y hemodinamia disponible a tiempo, la angioplastia primaria es la reperfusión preferida."
+        },
+        {
+          "key": "b",
+          "text": "Programar cateterismo electivo en 72 horas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La palabra cateterismo suena correcta, pero el momento es urgente."
+        },
+        {
+          "key": "c",
+          "text": "Tomografía para descartar disección aórtica en todos los casos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No considera la baja probabilidad previa sin datos clínicos de disección."
+        },
+        {
+          "key": "d",
+          "text": "Solo ácido acetilsalicílico y anticoagulación sin reperfusión",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Se queda en el manejo básico y omite la reperfusión."
+        },
+        {
+          "key": "e",
+          "text": "Trombólisis con estreptocinasa como primera opción",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es útil donde no hay hemodinamia oportuna, pero aquí la angioplastia es mejor."
+        },
+        {
+          "key": "f",
+          "text": "Dar nitroglicerina y observar si cede el dolor",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Trata el síntoma y retrasa la reperfusión."
+        },
+        {
+          "key": "g",
+          "text": "Esperar el resultado de troponina antes de decidir la reperfusión",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la troponina, cuando el electrocardiograma ya define la conducta."
+        },
+        {
+          "key": "h",
+          "text": "Analgesia y observación en urgencias por 12 horas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Evitar intervenir aumenta la necrosis."
+        },
+        {
+          "key": "i",
+          "text": "Cirugía de revascularización urgente como primera elección",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para anatomía no apta para angioplastia o complicaciones."
+        },
+        {
+          "key": "j",
+          "text": "Ecocardiograma y prueba de esfuerzo antes de decidir",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Más estudios retrasan la reperfusión."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "El paciente tiene un infarto agudo de miocardio con elevación del segmento ST de cara inferior. La prioridad es la reperfusión lo antes posible. Si la intervención coronaria percutánea primaria puede realizarse en menos de 120 minutos desde el diagnóstico, es la estrategia preferida sobre la trombólisis. Además se administra ácido acetilsalicílico, un segundo antiagregante como clopidogrel, ticagrelor o prasugrel, anticoagulación y estatina de alta intensidad. La troponina no debe retrasar la decisión porque el diagnóstico se establece con la clínica y el electrocardiograma. Si no hay hemodinamia oportuna, se da trombólisis en los primeros 30 minutos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del infarto agudo de miocardio con elevación del segmento ST"
+      ]
+    },
+    {
+      "key": "mi-01a-cardiologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "acute_coronary_syndrome",
+      "vignette": "Mujer de 63 años con hipertensión que presenta dolor torácico opresivo de 30 minutos en reposo. El electrocardiograma muestra infradesnivel del ST de 1.5 mm en V4 a V6. La troponina de alta sensibilidad está elevada y sube en la segunda muestra.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Espasmo esofágico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El dolor opresivo puede confundirse, pero hay troponina elevada."
+        },
+        {
+          "key": "b",
+          "text": "Pericarditis aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El dolor torácico lo sugiere, pero la pericarditis da elevación difusa del ST."
+        },
+        {
+          "key": "c",
+          "text": "Infarto con elevación del ST de cara anterior",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Ve cambios en precordiales y concluye elevación, cuando hay infradesnivel."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome de Takotsubo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es poco frecuente y no hay desencadenante emocional descrito."
+        },
+        {
+          "key": "e",
+          "text": "Miocarditis viral",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la troponina siempre indica miocarditis en mujeres."
+        },
+        {
+          "key": "f",
+          "text": "Disección aórtica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la hipertensión e ignora que el dolor no es desgarrante."
+        },
+        {
+          "key": "g",
+          "text": "Angina inestable",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la falta de elevación del ST, pero la troponina elevada indica necrosis."
+        },
+        {
+          "key": "h",
+          "text": "Infarto agudo de miocardio sin elevación del segmento ST",
+          "correct": true,
+          "rationale": "Dolor isquémico, cambios del ST sin elevación y troponina en ascenso."
+        },
+        {
+          "key": "i",
+          "text": "Tromboembolia pulmonar",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No se fija en que no hay disnea ni hipoxemia y sí hay cambios isquémicos."
+        },
+        {
+          "key": "j",
+          "text": "Angina estable",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es frecuente, pero el dolor en reposo y la troponina no corresponden."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "h",
+        "j"
+      ],
+      "explanation": "La paciente presenta dolor torácico de características isquémicas en reposo, infradesnivel del segmento ST y troponina de alta sensibilidad elevada con curva ascendente. Esto define un infarto agudo de miocardio sin elevación del ST. La diferencia con la angina inestable es la elevación de biomarcadores de necrosis, ya que en la angina inestable la troponina es normal. Se estratifica el riesgo con escalas como GRACE para decidir el momento del cateterismo, que en riesgo alto se realiza en las primeras 24 horas. El tratamiento incluye antiagregación dual, anticoagulación, estatina de alta intensidad, betabloqueador si no hay contraindicación y nitratos para el dolor.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome coronario agudo sin elevación del segmento ST"
+      ]
+    },
+    {
+      "key": "mi-01a-cardiologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "acute_coronary_syndrome",
+      "vignette": "Hombre de 66 años con infarto de cara anterior hace 5 días, tratado con trombólisis tardía. Presenta de forma súbita disnea, hipotensión y un soplo holosistólico nuevo en el borde esternal izquierdo con frémito. El ecocardiograma muestra flujo de izquierda a derecha a nivel ventricular.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ruptura del septum interventricular",
+          "correct": true,
+          "rationale": "Soplo holosistólico nuevo con frémito y cortocircuito de izquierda a derecha tras un infarto."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de Dressler",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Aparece semanas después y no causa cortocircuito."
+        },
+        {
+          "key": "c",
+          "text": "Reinfarto en la misma arteria",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el infarto previo e ignora el soplo y el cortocircuito."
+        },
+        {
+          "key": "d",
+          "text": "Bloqueo auriculoventricular completo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la hipotensión, sin relación con el soplo."
+        },
+        {
+          "key": "e",
+          "text": "Aneurisma ventricular izquierdo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a complicación tardía de infarto anterior, pero no explica el soplo."
+        },
+        {
+          "key": "f",
+          "text": "Pericarditis posinfarto",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es frecuente, pero da frote y dolor, no soplo holosistólico."
+        },
+        {
+          "key": "g",
+          "text": "Endocarditis infecciosa aguda",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo soplo nuevo es infeccioso."
+        },
+        {
+          "key": "h",
+          "text": "Insuficiencia mitral por ruptura de músculo papilar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También da soplo nuevo e hipotensión, pero sin cortocircuito ventricular y es más común en infarto inferior."
+        },
+        {
+          "key": "i",
+          "text": "Ruptura de pared libre con taponamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Piensa en ruptura, pero la de pared libre da taponamiento sin soplo."
+        },
+        {
+          "key": "j",
+          "text": "Tromboembolia pulmonar por reposo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta el soplo nuevo con frémito."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "h"
+      ],
+      "explanation": "Las complicaciones mecánicas del infarto aparecen sobre todo entre el tercer y quinto día, con mayor riesgo cuando la reperfusión es tardía o no se realiza. La ruptura del septum interventricular se presenta con deterioro hemodinámico súbito, soplo holosistólico nuevo en el borde esternal izquierdo, frecuentemente con frémito, y cortocircuito de izquierda a derecha en el ecocardiograma. Se asocia con más frecuencia al infarto anterior. La ruptura del músculo papilar causa insuficiencia mitral aguda, más común en el infarto inferior. El tratamiento es la estabilización con vasodilatadores y balón de contrapulsación, seguida de reparación quirúrgica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del infarto agudo de miocardio con elevación del segmento ST"
+      ]
+    },
+    {
+      "key": "mi-01a-cardiologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "atrial_fibrillation",
+      "vignette": "Mujer de 74 años con hipertensión y diabetes. Se detecta fibrilación auricular no valvular persistente. No tiene antecedente de sangrado. Su filtración glomerular es de 65 mL/min.",
+      "prompt": "¿Cuál es la mejor medida para la prevención de un evento vascular cerebral?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sin tratamiento antitrombótico por su edad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El temor al sangrado en la edad avanzada lleva a no actuar, aunque el beneficio es mayor."
+        },
+        {
+          "key": "b",
+          "text": "Anticoagulante oral más doble antiagregación",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Suma fármacos sin indicación y aumenta el sangrado."
+        },
+        {
+          "key": "c",
+          "text": "Anticoagulación oral, de preferencia con un anticoagulante oral directo",
+          "correct": true,
+          "rationale": "Su CHA2DS2-VASc es alto y la anticoagulación reduce el riesgo de embolia."
+        },
+        {
+          "key": "d",
+          "text": "Cierre de orejuela izquierda como primera opción",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es una alternativa solo cuando la anticoagulación está contraindicada."
+        },
+        {
+          "key": "e",
+          "text": "Cardioversión para que ya no necesite anticoagulante",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que restablecer el ritmo elimina el riesgo embólico."
+        },
+        {
+          "key": "f",
+          "text": "Ácido acetilsalicílico diario",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se usa mucho, pero no protege de forma suficiente en fibrilación auricular."
+        },
+        {
+          "key": "g",
+          "text": "Clopidogrel como alternativa equivalente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Lo asocia a prevención cardiovascular, pero no sustituye al anticoagulante."
+        },
+        {
+          "key": "h",
+          "text": "Evitar anticoagular por miedo a una caída futura",
+          "correct": false,
+          "bias": "loss_aversion",
+          "rationale": "Sobrevalora la pérdida por sangrado frente al beneficio."
+        },
+        {
+          "key": "i",
+          "text": "Controlar solo la frecuencia cardiaca",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "El control de frecuencia no previene la embolia."
+        },
+        {
+          "key": "j",
+          "text": "Heparina de bajo peso molecular indefinida como única opción",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la heparina hospitalaria."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "h"
+      ],
+      "explanation": "En la fibrilación auricular no valvular, el riesgo de evento vascular cerebral se estima con la escala CHA2DS2-VASc. Esta paciente suma al menos cuatro puntos por edad mayor de 65 años y menor de 75, hipertensión, diabetes y sexo femenino, por lo que tiene indicación clara de anticoagulación oral. Se prefieren los anticoagulantes orales directos, como apixabán o rivaroxabán, sobre la warfarina por menor riesgo de hemorragia intracraneal, ajustando la dosis según función renal. El ácido acetilsalicílico no es una alternativa eficaz. El riesgo de sangrado se valora con HAS-BLED para corregir factores modificables, no para negar la anticoagulación.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la fibrilación auricular"
+      ]
+    },
+    {
+      "key": "mi-01a-cardiologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "atrial_fibrillation",
+      "vignette": "Hombre de 69 años que llega con palpitaciones de 3 horas, presión arterial de 78/45 mmHg, diaforesis, confusión y dolor torácico. El monitor muestra ritmo irregular sin ondas P con frecuencia de 168 lpm.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Digoxina oral y revalorar en 24 horas",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Mantiene un enfoque lento ante inestabilidad."
+        },
+        {
+          "key": "b",
+          "text": "Ablación de venas pulmonares de urgencia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es tratamiento electivo de control de ritmo."
+        },
+        {
+          "key": "c",
+          "text": "Líquidos intravenosos y vigilancia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Trata la hipotensión sin tratar la causa."
+        },
+        {
+          "key": "d",
+          "text": "Adenosina intravenosa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La asocia con taquicardias supraventriculares regulares."
+        },
+        {
+          "key": "e",
+          "text": "Amiodarona intravenosa y observar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el antiarrítmico, pero el paciente está inestable."
+        },
+        {
+          "key": "f",
+          "text": "Ecocardiograma transesofágico antes de actuar",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Retrasa una medida urgente."
+        },
+        {
+          "key": "g",
+          "text": "Anticoagular tres semanas antes de cualquier cardioversión",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Aplica la regla del paciente estable a uno inestable."
+        },
+        {
+          "key": "h",
+          "text": "Metoprolol intravenoso para controlar la frecuencia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es útil en el estable, pero empeora la hipotensión."
+        },
+        {
+          "key": "i",
+          "text": "Desfibrilación no sincronizada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena igual de enérgica, pero en fibrilación auricular se sincroniza."
+        },
+        {
+          "key": "j",
+          "text": "Cardioversión eléctrica sincronizada inmediata",
+          "correct": true,
+          "rationale": "Fibrilación auricular con inestabilidad hemodinámica."
+        }
+      ],
+      "canonical": [
+        "e",
+        "g",
+        "h",
+        "j"
+      ],
+      "explanation": "El paciente presenta fibrilación auricular con respuesta ventricular rápida y datos de inestabilidad hemodinámica, como hipotensión, alteración del estado de alerta y dolor torácico. En este escenario la conducta es la cardioversión eléctrica sincronizada inmediata, sin esperar anticoagulación ni estudios de imagen, administrando heparina en cuanto sea posible. En el paciente estable se elige entre control de frecuencia con betabloqueador o calcioantagonista no dihidropiridínico y control de ritmo, y si la fibrilación lleva más de 48 horas se anticoagula tres semanas o se descarta trombo con ecocardiograma transesofágico antes de cardiovertir.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la fibrilación auricular"
+      ]
+    },
+    {
+      "key": "mi-01a-cardiologia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "atrial_fibrillation",
+      "vignette": "Mujer de 66 años con fibrilación auricular permanente, frecuencia cardiaca de 118 lpm, presión arterial de 130/80 mmHg y fracción de expulsión de 60%.",
+      "prompt": "Todos los siguientes son fármacos útiles para el control de la frecuencia cardiaca en esta paciente, EXCEPTO:",
+      "polarity": "negative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Flecainida",
+          "correct": true,
+          "rationale": "Es un antiarrítmico de clase IC para control de ritmo, no de frecuencia."
+        },
+        {
+          "key": "b",
+          "text": "Carvedilol",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es verdadero. Betabloqueador que controla la frecuencia."
+        },
+        {
+          "key": "c",
+          "text": "Bisoprolol",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es verdadero. Otro betabloqueador útil."
+        },
+        {
+          "key": "d",
+          "text": "Propranolol",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es verdadero. Aunque no es selectivo, reduce la frecuencia ventricular."
+        },
+        {
+          "key": "e",
+          "text": "Diltiazem",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es verdadero. Con fracción conservada es una opción para controlar la frecuencia."
+        },
+        {
+          "key": "f",
+          "text": "Atenolol",
+          "correct": false,
+          "bias": "confirmation_bias",
+          "rationale": "Es verdadero. Betabloqueador cardioselectivo útil para la frecuencia."
+        },
+        {
+          "key": "g",
+          "text": "Verapamilo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es verdadero. Calcioantagonista no dihidropiridínico útil con fracción conservada."
+        },
+        {
+          "key": "h",
+          "text": "Metoprolol",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es verdadero. Los betabloqueadores son de primera línea para control de frecuencia."
+        },
+        {
+          "key": "i",
+          "text": "Esmolol intravenoso en el contexto agudo",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Es verdadero. Betabloqueador de acción corta para control agudo."
+        },
+        {
+          "key": "j",
+          "text": "Digoxina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es verdadero. Se usa sola o combinada, sobre todo en pacientes sedentarios."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "El control de la frecuencia en la fibrilación auricular se logra con fármacos que enlentecen la conducción auriculoventricular. Los betabloqueadores son de primera línea en la mayoría de los pacientes. Los calcioantagonistas no dihidropiridínicos, diltiazem y verapamilo, son alternativas cuando la fracción de expulsión es mayor de 40%. La digoxina se usa sola en pacientes sedentarios o combinada cuando no se logra la meta. La meta inicial es una frecuencia en reposo menor de 110 lpm. La flecainida es un antiarrítmico de clase IC que se emplea para control de ritmo en corazones sin cardiopatía estructural y no sirve para controlar la frecuencia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la fibrilación auricular"
+      ]
+    }
+  ]
+}

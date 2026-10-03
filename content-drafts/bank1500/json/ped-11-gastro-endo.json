@@ -1,0 +1,1699 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "ped-11-gastro-endo-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_gastroenterology",
+      "subtopic": "pediatric_gerd",
+      "vignette": "Lactante de 3 meses que regurgita pequeñas cantidades de leche después de casi todas las tomas sin esfuerzo. Está contento, come bien y gana peso adecuadamente. No tiene llanto excesivo ni problemas respiratorios.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Reflujo gastroesofágico fisiológico",
+          "correct": true,
+          "rationale": "Regurgitaciones en un lactante feliz que crece bien."
+        },
+        {
+          "key": "b",
+          "text": "Estenosis hipertrófica del píloro",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da vómito en proyectil con pérdida de peso."
+        },
+        {
+          "key": "c",
+          "text": "Alergia a la proteína de la leche de vaca",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Suele tener otros síntomas como sangre en heces o dermatitis."
+        },
+        {
+          "key": "d",
+          "text": "Hipertensión intracraneal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay otros datos neurológicos."
+        },
+        {
+          "key": "e",
+          "text": "Infección urinaria",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay fiebre ni pérdida de peso."
+        },
+        {
+          "key": "f",
+          "text": "La leche materna es de mala calidad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El reflujo es fisiológico."
+        },
+        {
+          "key": "g",
+          "text": "Intolerancia a la lactosa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da diarrea y distensión."
+        },
+        {
+          "key": "h",
+          "text": "Acalasia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara en lactantes."
+        },
+        {
+          "key": "i",
+          "text": "Malrotación intestinal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da vómito biliar."
+        },
+        {
+          "key": "j",
+          "text": "Enfermedad por reflujo gastroesofágico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Requiere complicaciones o síntomas molestos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "El reflujo gastroesofágico fisiológico es muy común en lactantes por la inmadurez del esfínter esofágico inferior, la dieta líquida y la posición acostada. Se manifiesta con regurgitaciones sin esfuerzo en un lactante que está contento y gana peso. Alcanza su máximo hacia los 4 meses y se resuelve en la mayoría al año de edad. No requiere estudios ni medicamentos. El manejo consiste en tranquilizar a los padres, evitar sobrealimentar, sacar el aire y, en lactantes con fórmula, considerar espesarla. Los inhibidores de bomba de protones no son eficaces en el reflujo fisiológico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del reflujo gastroesofágico en pediatría"
+      ]
+    },
+    {
+      "key": "ped-11-gastro-endo-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_gastroenterology",
+      "subtopic": "pediatric_gerd",
+      "vignette": "Lactante de 5 meses con regurgitaciones frecuentes, irritabilidad durante las tomas, arqueo de la espalda y estancamiento del peso en los últimos 2 meses. Se alimenta con fórmula. No hay vómito biliar ni fiebre.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dar té de manzanilla después de cada toma",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "b",
+          "text": "Optimizar la alimentación y probar una fórmula extensamente hidrolizada por 2 a 4 semanas antes de considerar fármacos",
+          "correct": true,
+          "rationale": "La alergia a la proteína de leche puede simular enfermedad por reflujo."
+        },
+        {
+          "key": "c",
+          "text": "Iniciar omeprazol de inmediato de forma indefinida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es el primer paso en lactantes."
+        },
+        {
+          "key": "d",
+          "text": "Cirugía antirreflujo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se reserva para casos graves refractarios."
+        },
+        {
+          "key": "e",
+          "text": "Endoscopia como primer paso",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es necesaria inicialmente."
+        },
+        {
+          "key": "f",
+          "text": "Metoclopramida de rutina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tiene efectos adversos importantes."
+        },
+        {
+          "key": "g",
+          "text": "Tranquilizar sin cambios porque es fisiológico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Hay falla de medro."
+        },
+        {
+          "key": "h",
+          "text": "No hacer nada hasta el año",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Hay falla de medro."
+        },
+        {
+          "key": "i",
+          "text": "Posición prona para dormir",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumenta el riesgo de muerte súbita."
+        },
+        {
+          "key": "j",
+          "text": "pH impedanciometría a todos los lactantes",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para casos seleccionados."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "d",
+        "e"
+      ],
+      "explanation": "La enfermedad por reflujo gastroesofágico se diagnostica cuando el reflujo causa síntomas molestos o complicaciones, como falla de medro, esofagitis, rechazo al alimento o problemas respiratorios. En lactantes el primer paso es optimizar la alimentación, evitar sobrealimentar, espesar las tomas y probar una fórmula extensamente hidrolizada o eliminar la leche de vaca de la dieta materna durante 2 a 4 semanas, ya que la alergia a la proteína de la leche de vaca puede tener síntomas similares. Los inhibidores de bomba de protones se reservan para esofagitis comprobada o síntomas persistentes. La posición prona no se recomienda.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del reflujo gastroesofágico en pediatría"
+      ]
+    },
+    {
+      "key": "ped-11-gastro-endo-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_gastroenterology",
+      "subtopic": "pediatric_gerd",
+      "vignette": "Lactante de 2 meses alimentado con fórmula, con evacuaciones con moco y estrías de sangre, irritabilidad y dermatitis atópica. Está activo y gana peso. Fisura anal ausente y sin fiebre.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Deficiencia de vitamina K",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Daría sangrado en otros sitios."
+        },
+        {
+          "key": "b",
+          "text": "Invaginación intestinal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da dolor cólico intenso y mal estado."
+        },
+        {
+          "key": "c",
+          "text": "Enfermedad inflamatoria intestinal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara a esta edad."
+        },
+        {
+          "key": "d",
+          "text": "Fisura anal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No se encuentra en la exploración."
+        },
+        {
+          "key": "e",
+          "text": "Enterocolitis necrosante",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es propia de prematuros enfermos."
+        },
+        {
+          "key": "f",
+          "text": "Sangre por cambio de fórmula a una más cara",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La alergia es la causa."
+        },
+        {
+          "key": "g",
+          "text": "Proctocolitis alérgica por proteína de la leche de vaca",
+          "correct": true,
+          "rationale": "Sangre y moco en heces en un lactante sano con dermatitis atópica."
+        },
+        {
+          "key": "h",
+          "text": "Divertículo de Meckel",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da sangrado abundante."
+        },
+        {
+          "key": "i",
+          "text": "Intolerancia a la lactosa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No da sangre en heces."
+        },
+        {
+          "key": "j",
+          "text": "Gastroenteritis bacteriana",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay fiebre ni afección general."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La alergia a la proteína de la leche de vaca es la alergia alimentaria más frecuente en lactantes. Puede ser mediada por IgE, con urticaria, vómito o anafilaxia, o no mediada por IgE, como la proctocolitis alérgica. Esta se presenta en lactantes sanos de pocas semanas con evacuaciones con moco y estrías de sangre, sin afección del crecimiento. Otras manifestaciones son reflujo, cólico, diarrea, dermatitis y falla de medro. El diagnóstico se confirma con la mejoría tras eliminar la proteína y la reaparición con la reintroducción. Se trata con fórmula extensamente hidrolizada o dieta materna sin lácteos. La mayoría tolera la leche hacia el año.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de alergia a la proteína de la leche de vaca"
+      ]
+    },
+    {
+      "key": "ped-11-gastro-endo-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_gastroenterology",
+      "subtopic": "pediatric_gerd",
+      "vignette": "Lactante de 4 meses con alergia a la proteína de la leche de vaca no mediada por IgE confirmada, alimentado con fórmula. Persisten las evacuaciones con sangre con la fórmula de inicio habitual.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fórmula parcialmente hidrolizada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es adecuada para tratar alergia."
+        },
+        {
+          "key": "b",
+          "text": "Atole de arroz en lugar de fórmula",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es nutricionalmente adecuado."
+        },
+        {
+          "key": "c",
+          "text": "Fórmula deslactosada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Contiene proteína de leche de vaca."
+        },
+        {
+          "key": "d",
+          "text": "Antihistamínicos orales de rutina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No tratan la alergia no mediada por IgE."
+        },
+        {
+          "key": "e",
+          "text": "Continuar la misma fórmula hasta que tolere",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Mantiene el daño intestinal."
+        },
+        {
+          "key": "f",
+          "text": "Corticosteroides orales",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No están indicados."
+        },
+        {
+          "key": "g",
+          "text": "Fórmula de soya en menores de 6 meses como primera opción",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No se recomienda en menores de 6 meses por reactividad cruzada."
+        },
+        {
+          "key": "h",
+          "text": "Fórmula extensamente hidrolizada de proteínas de leche de vaca",
+          "correct": true,
+          "rationale": "Es eficaz en la mayoría de los lactantes con alergia."
+        },
+        {
+          "key": "i",
+          "text": "Leche de cabra",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Tiene reactividad cruzada."
+        },
+        {
+          "key": "j",
+          "text": "Fórmula de aminoácidos para todos de primera línea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para casos graves o falla."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "El tratamiento de la alergia a la proteína de la leche de vaca es la eliminación estricta de la proteína. En lactantes con seno materno se mantiene la lactancia y la madre elimina los lácteos de su dieta con suplemento de calcio. En lactantes con fórmula se usa fórmula extensamente hidrolizada como primera opción. La fórmula de aminoácidos se indica en casos graves, anafilaxia o falla a la hidrolizada. Las fórmulas deslactosadas, parcialmente hidrolizadas, de leche de cabra y de oveja no son adecuadas. La soya puede usarse después de los 6 meses en casos seleccionados. Se reintroduce bajo supervisión a los 9 a 12 meses.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de alergia a la proteína de la leche de vaca"
+      ]
+    },
+    {
+      "key": "ped-11-gastro-endo-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_gastroenterology",
+      "subtopic": "pediatric_diarrhea",
+      "vignette": "Niño de 2 años con diarrea crónica voluminosa y fétida, distensión abdominal, irritabilidad y caída en las curvas de peso desde que inició el consumo de pan y galletas a los 8 meses. Glúteos aplanados. Anemia ferropénica que no responde al hierro oral.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Enfermedad celiaca",
+          "correct": true,
+          "rationale": "Diarrea crónica, distensión y falla de medro tras introducir gluten, con anemia refractaria al hierro."
+        },
+        {
+          "key": "b",
+          "text": "Enfermedad de Crohn",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara a esta edad."
+        },
+        {
+          "key": "c",
+          "text": "Intolerancia a la lactosa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la falla de medro grave ni la anemia refractaria."
+        },
+        {
+          "key": "d",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da estreñimiento."
+        },
+        {
+          "key": "e",
+          "text": "Alergia a la proteína de la leche de vaca",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Inicia antes con la leche."
+        },
+        {
+          "key": "f",
+          "text": "Fibrosis quística",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da infecciones respiratorias y esteatorrea desde el nacimiento."
+        },
+        {
+          "key": "g",
+          "text": "Desnutrición por falta de alimentos",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "La familia aporta alimentos suficientes."
+        },
+        {
+          "key": "h",
+          "text": "Diarrea por comer muchos dulces",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica la falla de medro."
+        },
+        {
+          "key": "i",
+          "text": "Diarrea funcional del niño pequeño",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No afecta el crecimiento."
+        },
+        {
+          "key": "j",
+          "text": "Giardiasis",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede dar malabsorción, pero no explica la relación con el gluten."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "La enfermedad celiaca es una enteropatía autoinmune desencadenada por el gluten del trigo, cebada y centeno en personas genéticamente predispuestas con HLA DQ2 o DQ8. La forma clásica en niños pequeños aparece meses después de introducir el gluten con diarrea crónica, distensión abdominal, irritabilidad, atrofia de glúteos y falla de medro. Otras manifestaciones son anemia ferropénica refractaria, talla baja, retraso puberal, dermatitis herpetiforme y alteraciones del esmalte dental. Es más frecuente en diabetes tipo 1, síndrome de Down y déficit de IgA. Se tamiza con anticuerpos antitransglutaminasa IgA con IgA total.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad celiaca"
+      ]
+    },
+    {
+      "key": "ped-11-gastro-endo-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_gastroenterology",
+      "subtopic": "pediatric_diarrhea",
+      "vignette": "Niña de 6 años con talla baja y anemia ferropénica que no responde al hierro. Los anticuerpos antitransglutaminasa IgA son 15 veces el valor normal con IgA total normal. Consume gluten de forma habitual.",
+      "prompt": "¿Cuál es el estudio de elección para confirmar el diagnóstico?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Diagnóstico por mejoría con dieta casera sin estudios",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere confirmación."
+        },
+        {
+          "key": "b",
+          "text": "Iniciar dieta sin gluten antes de los estudios",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Altera los resultados."
+        },
+        {
+          "key": "c",
+          "text": "Coproparasitoscópico seriado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No confirma enfermedad celiaca."
+        },
+        {
+          "key": "d",
+          "text": "Cápsula endoscópica como primer estudio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estudio de elección."
+        },
+        {
+          "key": "e",
+          "text": "Estudio genético HLA como confirmación",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Solo sirve para descartar."
+        },
+        {
+          "key": "f",
+          "text": "Biopsia duodenal por endoscopia mientras consume gluten, o anticuerpos antiendomisio en otra muestra si cumple criterios para omitir la biopsia",
+          "correct": true,
+          "rationale": "La biopsia muestra atrofia de vellosidades e infiltrado linfocitario."
+        },
+        {
+          "key": "g",
+          "text": "Repetir los anticuerpos antitransglutaminasa sin otro estudio en cualquier caso",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se requiere confirmación con criterios establecidos."
+        },
+        {
+          "key": "h",
+          "text": "Prueba de aliento con hidrógeno",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Evalúa intolerancia a la lactosa."
+        },
+        {
+          "key": "i",
+          "text": "Prueba de sudor",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es para fibrosis quística."
+        },
+        {
+          "key": "j",
+          "text": "Colonoscopia con biopsia de colon",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La lesión está en el duodeno."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "El diagnóstico de enfermedad celiaca se basa en serología y biopsia duodenal, siempre mientras el paciente consume gluten. La biopsia muestra atrofia de vellosidades, hiperplasia de criptas y aumento de linfocitos intraepiteliales, clasificados según Marsh. En niños con anticuerpos antitransglutaminasa IgA mayores de 10 veces el valor normal y antiendomisio positivos en una segunda muestra, las guías europeas permiten omitir la biopsia. El estudio HLA DQ2 y DQ8 tiene alto valor predictivo negativo. No debe iniciarse la dieta sin gluten antes de completar el diagnóstico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad celiaca"
+      ]
+    },
+    {
+      "key": "ped-11-gastro-endo-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_gastroenterology",
+      "subtopic": "pediatric_diarrhea",
+      "vignette": "Niño de 8 años con distensión, cólico y diarrea acuosa con flatulencia 1 a 2 horas después de tomar leche o comer helado. No tiene sangre en heces ni pérdida de peso. Mejora al evitar los lácteos.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Apendicitis crónica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No existe como causa de este cuadro."
+        },
+        {
+          "key": "b",
+          "text": "Leche en mal estado cada vez",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El patrón repetido indica intolerancia."
+        },
+        {
+          "key": "c",
+          "text": "Enfermedad inflamatoria intestinal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Daría sangre y pérdida de peso."
+        },
+        {
+          "key": "d",
+          "text": "Galactosemia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se presenta en recién nacidos con ictericia y daño hepático."
+        },
+        {
+          "key": "e",
+          "text": "Intolerancia a la lactosa por deficiencia de lactasa de tipo adulto",
+          "correct": true,
+          "rationale": "Síntomas digestivos tras lácteos que mejoran al evitarlos, sin afección del crecimiento."
+        },
+        {
+          "key": "f",
+          "text": "Gastroenteritis viral recurrente",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la relación con los lácteos."
+        },
+        {
+          "key": "g",
+          "text": "Giardiasis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la relación con los lácteos."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome de intestino irritable",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Los síntomas se relacionan claramente con la lactosa."
+        },
+        {
+          "key": "i",
+          "text": "Enfermedad celiaca",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se relaciona con el gluten y afecta el crecimiento."
+        },
+        {
+          "key": "j",
+          "text": "Alergia a la proteína de la leche de vaca mediada por IgE",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Daría urticaria, angioedema o anafilaxia en minutos."
+        }
+      ],
+      "canonical": [
+        "e",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "La intolerancia a la lactosa se debe a deficiencia de lactasa en el borde en cepillo intestinal. La forma primaria de tipo adulto aparece después de los 5 años y es muy frecuente en población mexicana. La secundaria ocurre tras gastroenteritis o enfermedad celiaca. La lactosa no absorbida es fermentada por bacterias del colon y produce distensión, flatulencia, cólico y diarrea osmótica. No hay sangre ni afección del crecimiento. El diagnóstico se apoya en la prueba de aliento con hidrógeno o en la mejoría al retirar la lactosa. El tratamiento es reducir la lactosa, usar productos deslactosados o lactasa, y asegurar el calcio.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la intolerancia a la lactosa"
+      ]
+    },
+    {
+      "key": "ped-11-gastro-endo-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_gastroenterology",
+      "subtopic": "pediatric_diarrhea",
+      "vignette": "Niña de 5 años de una comunidad rural con diarrea de 3 semanas, evacuaciones grasosas y fétidas que flotan, distensión, flatulencia y pérdida de peso. Sin sangre en heces. Asiste a una guardería con agua de pozo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Amebiasis intestinal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da diarrea con moco y sangre."
+        },
+        {
+          "key": "b",
+          "text": "Fibrosis quística",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da afección respiratoria desde la infancia temprana."
+        },
+        {
+          "key": "c",
+          "text": "Diarrea por comer comida grasosa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica la duración ni la malabsorción."
+        },
+        {
+          "key": "d",
+          "text": "Intolerancia a la lactosa primaria",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la exposición y la evolución."
+        },
+        {
+          "key": "e",
+          "text": "Giardiasis",
+          "correct": true,
+          "rationale": "Diarrea crónica con esteatorrea y malabsorción por agua contaminada."
+        },
+        {
+          "key": "f",
+          "text": "Shigelosis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da disentería aguda con fiebre."
+        },
+        {
+          "key": "g",
+          "text": "Enfermedad celiaca",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Debe considerarse, pero la exposición al agua de pozo orienta a giardiasis."
+        },
+        {
+          "key": "h",
+          "text": "Diarrea viral aguda",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Duraría pocos días."
+        },
+        {
+          "key": "i",
+          "text": "Oxiuriasis",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da prurito anal nocturno."
+        },
+        {
+          "key": "j",
+          "text": "Ascariasis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da dolor y obstrucción, no esteatorrea."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "Giardia lamblia es un protozoario que se transmite por agua o alimentos contaminados con quistes y es frecuente en guarderías. Se adhiere al epitelio del duodeno y yeyuno y produce malabsorción, con diarrea acuosa o esteatorrea fétida, distensión, flatulencia, dolor abdominal y pérdida de peso. Puede causar intolerancia secundaria a la lactosa. No invade la mucosa, por lo que no hay sangre. El diagnóstico se hace con coproparasitoscópico seriado o detección de antígenos en heces. El tratamiento es metronidazol, tinidazol o nitazoxanida. La prevención incluye agua potable e higiene de manos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de parasitosis intestinal en niños"
+      ]
+    },
+    {
+      "key": "ped-11-gastro-endo-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_gastroenterology",
+      "subtopic": "pediatric_diarrhea",
+      "vignette": "Niño de 2 años con 3 a 5 evacuaciones blandas al día con restos de alimentos sin digerir desde hace 4 meses, que empeoran cuando toma mucho jugo. Crece bien, come bien y no tiene sangre en heces ni otros síntomas.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Giardiasis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Suele dar malabsorción y pérdida de peso."
+        },
+        {
+          "key": "b",
+          "text": "Alergia a la proteína de la leche de vaca",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es más común en lactantes con otros síntomas."
+        },
+        {
+          "key": "c",
+          "text": "Enfermedad inflamatoria intestinal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Daría sangre y afección general."
+        },
+        {
+          "key": "d",
+          "text": "Niño que mastica mal y debe hacer dieta astringente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No requiere restricción."
+        },
+        {
+          "key": "e",
+          "text": "Diarrea funcional del niño pequeño",
+          "correct": true,
+          "rationale": "Evacuaciones blandas con restos de alimento en un niño que crece bien."
+        },
+        {
+          "key": "f",
+          "text": "Hipertiroidismo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es raro y daría otros datos."
+        },
+        {
+          "key": "g",
+          "text": "Fibrosis quística",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Afecta el crecimiento y la respiración."
+        },
+        {
+          "key": "h",
+          "text": "Insuficiencia pancreática congénita",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara y afecta el crecimiento."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de intestino corto",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Requiere cirugía previa."
+        },
+        {
+          "key": "j",
+          "text": "Enfermedad celiaca",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Afecta el crecimiento."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La diarrea funcional del niño pequeño es la causa más común de diarrea crónica en niños de 6 meses a 5 años. Se caracteriza por tres o más evacuaciones blandas y sin dolor al día durante más de 4 semanas, a menudo con restos de alimentos visibles, en un niño que crece normalmente. Se relaciona con tránsito intestinal rápido y consumo excesivo de jugos con fructosa y sorbitol, así como dietas bajas en grasa. El manejo consiste en tranquilizar a los padres, reducir jugos y bebidas azucaradas, normalizar la grasa y la fibra de la dieta y evitar dietas restrictivas innecesarias.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de diarrea crónica en niños"
+      ]
+    },
+    {
+      "key": "ped-11-gastro-endo-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_endocrinology",
+      "subtopic": "congenital_hypothyroidism",
+      "vignette": "Recién nacido sano de término de 3 días de vida que será dado de alta. Los padres preguntan qué estudio se le hará en el talón y para qué sirve.",
+      "prompt": "¿Cuál es el propósito principal del tamiz metabólico neonatal en la prevención?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Detectar de forma temprana enfermedades como el hipotiroidismo congénito para tratarlas antes de que causen daño irreversible",
+          "correct": true,
+          "rationale": "Permite iniciar tratamiento antes de los síntomas."
+        },
+        {
+          "key": "b",
+          "text": "Medir la bilirrubina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es su propósito."
+        },
+        {
+          "key": "c",
+          "text": "Es un estudio opcional que no cambia nada",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Previene discapacidad intelectual."
+        },
+        {
+          "key": "d",
+          "text": "Medir la glucosa para descartar diabetes tipo 1",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es su propósito."
+        },
+        {
+          "key": "e",
+          "text": "Detectar hipoacusia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se tamiza con emisiones otoacústicas."
+        },
+        {
+          "key": "f",
+          "text": "Diferirlo hasta el mes de vida",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Se toma idealmente entre el día 3 y 5."
+        },
+        {
+          "key": "g",
+          "text": "Detectar cardiopatías congénitas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se tamizan con oximetría."
+        },
+        {
+          "key": "h",
+          "text": "Secuenciar el genoma completo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el tamiz estándar."
+        },
+        {
+          "key": "i",
+          "text": "Determinar el grupo sanguíneo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es su propósito."
+        },
+        {
+          "key": "j",
+          "text": "Diagnosticar infecciones del recién nacido",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No detecta infecciones."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "i",
+        "j"
+      ],
+      "explanation": "El tamiz metabólico neonatal se toma idealmente entre el tercer y quinto día de vida con una muestra de sangre del talón en papel filtro. En México detecta enfermedades como hipotiroidismo congénito, fenilcetonuria, hiperplasia suprarrenal congénita, galactosemia, fibrosis quística y deficiencia de glucosa 6 fosfato deshidrogenasa, según la versión del tamiz. Estas enfermedades no dan síntomas al nacer, pero sin tratamiento oportuno causan discapacidad intelectual, crisis o muerte. Un resultado sospechoso requiere estudios confirmatorios inmediatos. El hipotiroidismo congénito es la enfermedad más frecuente detectada por el tamiz.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención y control de los defectos al nacimiento",
+        "Lineamiento técnico de tamiz neonatal"
+      ]
+    },
+    {
+      "key": "ped-11-gastro-endo-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_endocrinology",
+      "subtopic": "congenital_hypothyroidism",
+      "vignette": "Lactante de 2 meses que no tuvo tamiz neonatal. Presenta ictericia prolongada, estreñimiento, llanto ronco, macroglosia, hernia umbilical, piel seca y fontanela posterior amplia. Duerme mucho y come poco.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de Beckwith Wiedemann",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da macroglosia con macrosomía e hipoglucemia."
+        },
+        {
+          "key": "b",
+          "text": "Hipotiroidismo congénito",
+          "correct": true,
+          "rationale": "Ictericia prolongada, macroglosia, hernia umbilical, estreñimiento y fontanela posterior amplia."
+        },
+        {
+          "key": "c",
+          "text": "Enfermedad de Hirschsprung",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da estreñimiento, pero no macroglosia ni llanto ronco."
+        },
+        {
+          "key": "d",
+          "text": "Ictericia por leche materna",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica los demás hallazgos."
+        },
+        {
+          "key": "e",
+          "text": "Mucopolisacaridosis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se manifiesta más tarde."
+        },
+        {
+          "key": "f",
+          "text": "Sepsis neonatal tardía",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la evolución crónica."
+        },
+        {
+          "key": "g",
+          "text": "Atresia biliar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Daría acolia y bilirrubina directa."
+        },
+        {
+          "key": "h",
+          "text": "Bebé tranquilo que duerme mucho",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La somnolencia y los demás datos son patológicos."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de Down",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Comparte algunos rasgos, pero no explica la ictericia prolongada y el estreñimiento."
+        },
+        {
+          "key": "j",
+          "text": "Desnutrición",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la macroglosia."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "d",
+        "i"
+      ],
+      "explanation": "El hipotiroidismo congénito es la causa prevenible más frecuente de discapacidad intelectual. La causa más común es la disgenesia tiroidea. Al nacer la mayoría no tiene síntomas por el paso de hormona materna, de ahí la importancia del tamiz. Sin tratamiento, en las primeras semanas aparecen ictericia prolongada, hipotonía, letargo, dificultad para alimentarse, estreñimiento, llanto ronco, macroglosia, hernia umbilical, piel seca y fría y fontanela posterior amplia. Se confirma con TSH elevada y T4 libre baja en suero. El tratamiento con levotiroxina debe iniciarse en las primeras 2 semanas de vida.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo congénito",
+        "Lineamiento técnico de tamiz neonatal"
+      ]
+    },
+    {
+      "key": "ped-11-gastro-endo-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_endocrinology",
+      "subtopic": "congenital_hypothyroidism",
+      "vignette": "Recién nacido de 6 días con tamiz neonatal que reporta TSH elevada. Está asintomático y con exploración normal.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tranquilizar porque el bebé se ve sano",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La ausencia de síntomas es lo esperado."
+        },
+        {
+          "key": "b",
+          "text": "Esperar a que aparezcan síntomas para tratar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El daño ocurre antes de los síntomas."
+        },
+        {
+          "key": "c",
+          "text": "Realizar gammagrama tiroideo antes de cualquier tratamiento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No debe retrasar el tratamiento."
+        },
+        {
+          "key": "d",
+          "text": "Revalorar en la consulta del mes",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Retrasa el diagnóstico."
+        },
+        {
+          "key": "e",
+          "text": "Dar té de hierbas para estimular la tiroides",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "f",
+          "text": "Resonancia magnética de hipófisis",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el paso inicial."
+        },
+        {
+          "key": "g",
+          "text": "No iniciar levotiroxina por miedo a efectos adversos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El beneficio es enorme."
+        },
+        {
+          "key": "h",
+          "text": "Dar yodo a la madre que amamanta",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No trata el hipotiroidismo del bebé."
+        },
+        {
+          "key": "i",
+          "text": "Medir TSH y T4 libre en suero de inmediato e iniciar levotiroxina sin esperar si la confirmación se retrasa o es compatible",
+          "correct": true,
+          "rationale": "El tratamiento temprano previene el daño neurológico."
+        },
+        {
+          "key": "j",
+          "text": "Repetir el tamiz en 3 meses",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El retraso causa daño irreversible."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "Ante un tamiz neonatal con TSH elevada se debe localizar al recién nacido de inmediato y realizar TSH y T4 libre en suero. Si se confirma hipotiroidismo, con TSH alta y T4 libre baja, se inicia levotiroxina a 10 a 15 mcg/kg/día. Si la confirmación se retrasa o la TSH es muy alta, se inicia el tratamiento tras tomar la muestra. El objetivo es normalizar la T4 libre en 2 semanas y la TSH en un mes. La levotiroxina se administra triturada en poca agua o leche, sin mezclarla con soya, hierro o calcio. El gammagrama o ultrasonido no deben retrasar el tratamiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo congénito"
+      ]
+    },
+    {
+      "key": "ped-11-gastro-endo-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_endocrinology",
+      "subtopic": "congenital_hypothyroidism",
+      "vignette": "Niño de 4 años con hipotiroidismo congénito diagnosticado a los 9 meses por síntomas, ya que no se realizó tamiz neonatal. Recibe levotiroxina desde entonces.",
+      "prompt": "¿Cuál es el pronóstico neurológico esperado por el diagnóstico tardío?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo talla baja sin afección cognitiva",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La afección cognitiva es la secuela principal."
+        },
+        {
+          "key": "b",
+          "text": "Hipoacusia aislada sin otras secuelas",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Puede haber, pero la secuela principal es cognitiva."
+        },
+        {
+          "key": "c",
+          "text": "Recuperará todo con dosis más altas de hormona",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El daño es irreversible."
+        },
+        {
+          "key": "d",
+          "text": "Parálisis cerebral espástica obligada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es la secuela típica."
+        },
+        {
+          "key": "e",
+          "text": "Discapacidad intelectual y alteraciones del neurodesarrollo que no se revierten por completo con el tratamiento",
+          "correct": true,
+          "rationale": "La hormona tiroidea es indispensable para el desarrollo cerebral en los primeros meses."
+        },
+        {
+          "key": "f",
+          "text": "Diabetes tipo 1 secundaria",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No se relaciona."
+        },
+        {
+          "key": "g",
+          "text": "Desarrollo normal porque ya recibe tratamiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El daño de los primeros meses es irreversible."
+        },
+        {
+          "key": "h",
+          "text": "Ceguera cortical",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es característica."
+        },
+        {
+          "key": "i",
+          "text": "Epilepsia refractaria en todos los casos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es la secuela característica."
+        },
+        {
+          "key": "j",
+          "text": "Hipertiroidismo por el tratamiento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El tratamiento se ajusta con estudios."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "La hormona tiroidea es esencial para la maduración del sistema nervioso central durante los primeros 2 a 3 años de vida. Si el hipotiroidismo congénito no se trata en las primeras semanas, se produce daño neurológico irreversible, con pérdida de varios puntos de coeficiente intelectual por cada mes de retraso. Las secuelas incluyen discapacidad intelectual, alteraciones motoras, de lenguaje, de atención y talla baja. Cuando el tratamiento inicia en las primeras 2 semanas el desarrollo es prácticamente normal. Por ello el tamiz neonatal universal es una de las intervenciones de salud pública más costo efectivas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo congénito"
+      ]
+    },
+    {
+      "key": "ped-11-gastro-endo-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_endocrinology",
+      "subtopic": "pediatric_diabetes",
+      "vignette": "Niña de 9 años con poliuria, polidipsia, enuresis nocturna reciente y pérdida de 4 kg en un mes a pesar de comer más. Glucosa capilar al azar de 320 mg/dL. Sin vómito ni dificultad respiratoria.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Diabetes tipo 1 de reciente inicio",
+          "correct": true,
+          "rationale": "Poliuria, polidipsia, pérdida de peso y glucosa al azar mayor de 200 con síntomas."
+        },
+        {
+          "key": "b",
+          "text": "Estrés escolar",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la hiperglucemia."
+        },
+        {
+          "key": "c",
+          "text": "Potomanía psicógena",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la hiperglucemia."
+        },
+        {
+          "key": "d",
+          "text": "Diabetes tipo MODY",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente y tiene herencia dominante."
+        },
+        {
+          "key": "e",
+          "text": "Hipertiroidismo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la glucosa alta."
+        },
+        {
+          "key": "f",
+          "text": "Enuresis primaria",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Era continente antes."
+        },
+        {
+          "key": "g",
+          "text": "Exceso de dulces que se corrige con dieta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una enfermedad autoinmune."
+        },
+        {
+          "key": "h",
+          "text": "Diabetes tipo 2",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es menos probable en una niña delgada que pierde peso."
+        },
+        {
+          "key": "i",
+          "text": "Diabetes insípida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da poliuria sin hiperglucemia."
+        },
+        {
+          "key": "j",
+          "text": "Infección urinaria con enuresis",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la hiperglucemia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "La diabetes tipo 1 es la forma más frecuente en niños y se debe a destrucción autoinmune de las células beta del páncreas. Se presenta con poliuria, polidipsia, polifagia, pérdida de peso y enuresis secundaria. El diagnóstico se establece con glucosa al azar de 200 mg/dL o más con síntomas, glucosa en ayuno de 126 o más, glucosa de 200 o más a las 2 horas de una carga o hemoglobina glucosilada de 6.5% o más. Los autoanticuerpos, como anti GAD, anti insulina y anti IA2, confirman el origen autoinmune. Requiere insulina desde el diagnóstico. Hasta un tercio debuta con cetoacidosis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de diabetes tipo 1 en niños y adolescentes"
+      ]
+    },
+    {
+      "key": "ped-11-gastro-endo-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_endocrinology",
+      "subtopic": "pediatric_diabetes",
+      "vignette": "Niño de 8 años con diabetes tipo 1 que llega con vómito, dolor abdominal, respiración profunda y rápida y deshidratación moderada. Glucosa de 480 mg/dL, pH de 7.12, bicarbonato de 8 mEq/L y cetonas positivas. Peso de 25 kg.",
+      "prompt": "¿Cuál es el tratamiento inicial?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Insulina subcutánea y egreso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es una cetoacidosis moderada a grave."
+        },
+        {
+          "key": "b",
+          "text": "Solución glucosada al 5% desde el inicio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La glucosa se agrega cuando baja de 250 a 300."
+        },
+        {
+          "key": "c",
+          "text": "Bolos repetidos de 40 mL/kg de solución",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumentan el riesgo de edema cerebral."
+        },
+        {
+          "key": "d",
+          "text": "Antibióticos de amplio espectro como primera medida",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Solo si hay infección."
+        },
+        {
+          "key": "e",
+          "text": "No dar potasio por miedo a hiperpotasemia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El potasio corporal total está bajo."
+        },
+        {
+          "key": "f",
+          "text": "Solución salina al 0.9% de 10 a 20 mL/kg en la primera hora y después insulina intravenosa en infusión a 0.05 a 0.1 U/kg/h",
+          "correct": true,
+          "rationale": "Corrige la deshidratación antes de iniciar la insulina."
+        },
+        {
+          "key": "g",
+          "text": "Dar refresco para corregir la deshidratación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Empeora la hiperglucemia."
+        },
+        {
+          "key": "h",
+          "text": "Bicarbonato de sodio de rutina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aumenta el riesgo de edema cerebral."
+        },
+        {
+          "key": "i",
+          "text": "Bolo de insulina intravenosa a dosis alta de inmediato",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta el riesgo de hipoglucemia, hipopotasemia y edema cerebral."
+        },
+        {
+          "key": "j",
+          "text": "Tomografía de cráneo antes de iniciar el tratamiento",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No debe retrasarlo."
+        }
+      ],
+      "canonical": [
+        "b",
+        "f",
+        "h",
+        "i"
+      ],
+      "explanation": "La cetoacidosis diabética se define por glucosa mayor de 200 mg/dL, pH menor de 7.3 o bicarbonato menor de 15 y cetonemia o cetonuria. El tratamiento inicia con expansión con solución salina de 10 a 20 mL/kg en la primera hora, seguida de reposición del déficit en 24 a 48 horas. La insulina intravenosa en infusión a 0.05 a 0.1 U/kg/h se inicia una o dos horas después de los líquidos, sin bolo. Se agrega potasio a los líquidos una vez que se confirma la diuresis y el potasio es menor de 5.5. Se agrega glucosa cuando la glucemia baja de 250 a 300. El bicarbonato no se recomienda de rutina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de cetoacidosis diabética en niños y adolescentes"
+      ]
+    },
+    {
+      "key": "ped-11-gastro-endo-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_endocrinology",
+      "subtopic": "pediatric_diabetes",
+      "vignette": "Niña de 7 años en tratamiento por cetoacidosis diabética grave. A las 6 horas de iniciar líquidos e insulina presenta cefalea, vómito, confusión, bradicardia e hipertensión. La glucosa ha bajado de forma adecuada.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hipopotasemia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la tríada de Cushing."
+        },
+        {
+          "key": "b",
+          "text": "Crisis de ansiedad",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Los datos neurológicos son graves."
+        },
+        {
+          "key": "c",
+          "text": "Migraña",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la bradicardia e hipertensión."
+        },
+        {
+          "key": "d",
+          "text": "Pancreatitis aguda",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la alteración neurológica."
+        },
+        {
+          "key": "e",
+          "text": "Empeoramiento de la acidosis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica los datos neurológicos con bradicardia."
+        },
+        {
+          "key": "f",
+          "text": "Meningitis bacteriana",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay fiebre y el contexto es la cetoacidosis."
+        },
+        {
+          "key": "g",
+          "text": "Trombosis de seno venoso sola",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente."
+        },
+        {
+          "key": "h",
+          "text": "Cansancio normal por el tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia neurológica."
+        },
+        {
+          "key": "i",
+          "text": "Edema cerebral",
+          "correct": true,
+          "rationale": "Cefalea, alteración del estado mental, bradicardia e hipertensión durante el tratamiento de la cetoacidosis."
+        },
+        {
+          "key": "j",
+          "text": "Hipoglucemia por insulina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La glucosa bajó de forma adecuada y no explica la bradicardia con hipertensión."
+        }
+      ],
+      "canonical": [
+        "e",
+        "f",
+        "i",
+        "j"
+      ],
+      "explanation": "El edema cerebral es la principal causa de muerte en niños con cetoacidosis diabética. Suele aparecer entre 4 y 12 horas después de iniciar el tratamiento. Los factores de riesgo son menor edad, debut de diabetes, acidosis grave, nitrógeno ureico elevado, pCO2 baja, bolos de insulina, bicarbonato y administración rápida de líquidos. Se manifiesta con cefalea, vómito, alteración del estado mental, irritabilidad, bradicardia, hipertensión, incontinencia o alteraciones pupilares. El tratamiento debe iniciarse de inmediato con manitol o solución salina hipertónica, reducción de los líquidos y elevación de la cabecera, sin esperar la tomografía.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de cetoacidosis diabética en niños y adolescentes"
+      ]
+    },
+    {
+      "key": "ped-11-gastro-endo-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_endocrinology",
+      "subtopic": "pediatric_diabetes",
+      "vignette": "Adolescente de 13 años con obesidad, acantosis nigricans en cuello y axilas, madre y abuela con diabetes y sedentarismo. Glucosa en ayuno de 135 mg/dL en dos ocasiones. Autoanticuerpos pancreáticos negativos.",
+      "prompt": "¿Cuál es el factor de riesgo más importante para su tipo de diabetes?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Autoinmunidad pancreática",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los anticuerpos son negativos."
+        },
+        {
+          "key": "b",
+          "text": "Pubertad tardía",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La pubertad aumenta la resistencia a la insulina, no la retrasa."
+        },
+        {
+          "key": "c",
+          "text": "Consumo de leche de vaca en la lactancia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un factor establecido."
+        },
+        {
+          "key": "d",
+          "text": "Comer dulces una vez a la semana",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El factor clave es la obesidad y el sedentarismo."
+        },
+        {
+          "key": "e",
+          "text": "Infección viral reciente",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se asocia a diabetes tipo 1."
+        },
+        {
+          "key": "f",
+          "text": "Uso de corticosteroides inhalados",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es lo más relevante."
+        },
+        {
+          "key": "g",
+          "text": "Mutación del gen HNF1A",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Corresponde a MODY."
+        },
+        {
+          "key": "h",
+          "text": "Obesidad con resistencia a la insulina, manifestada por acantosis nigricans",
+          "correct": true,
+          "rationale": "La diabetes tipo 2 en adolescentes se asocia sobre todo a obesidad."
+        },
+        {
+          "key": "i",
+          "text": "Fibrosis quística",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay antecedente."
+        },
+        {
+          "key": "j",
+          "text": "Exceso de horas de sueño",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es el factor principal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "La diabetes tipo 2 en niños y adolescentes ha aumentado con la epidemia de obesidad, y México tiene una de las prevalencias más altas. Los factores de riesgo incluyen obesidad, antecedente familiar de diabetes tipo 2, origen étnico de alto riesgo, signos de resistencia a la insulina como acantosis nigricans, síndrome de ovario poliquístico, hipertensión, dislipidemia y antecedente de diabetes gestacional materna o bajo peso al nacer. La pubertad aumenta la resistencia a la insulina. Se recomienda tamizar a partir de los 10 años o del inicio de la pubertad a niños con sobrepeso y factores de riesgo. El tratamiento incluye cambios de estilo de vida y metformina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de diabetes tipo 2 en niños y adolescentes"
+      ]
+    },
+    {
+      "key": "ped-11-gastro-endo-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_endocrinology",
+      "subtopic": "pediatric_diabetes",
+      "vignette": "Niño de 10 años con diabetes tipo 1 que recibe insulina basal y rápida. Una hora después de jugar futbol presenta sudoración, temblor, palidez, irritabilidad y confusión. Glucosa capilar de 52 mg/dL. Puede tragar.",
+      "prompt": "¿Cuál es el manejo inmediato de este cuadro?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Requiere glucagón intramuscular aunque pueda tragar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El glucagón se usa si no puede tragar."
+        },
+        {
+          "key": "b",
+          "text": "Glucosa normal para un niño diabético",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Menos de 70 es hipoglucemia."
+        },
+        {
+          "key": "c",
+          "text": "Dejarlo dormir para que se recupere",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede progresar a convulsiones."
+        },
+        {
+          "key": "d",
+          "text": "Trasladar al hospital antes de dar nada",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Debe corregirse de inmediato."
+        },
+        {
+          "key": "e",
+          "text": "Hipoglucemia que se trata con 10 a 15 g de carbohidratos de absorción rápida por vía oral y nueva medición a los 15 minutos",
+          "correct": true,
+          "rationale": "El ejercicio aumenta la sensibilidad a la insulina."
+        },
+        {
+          "key": "f",
+          "text": "No dar azúcar por miedo a subir la glucosa",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La hipoglucemia es más peligrosa."
+        },
+        {
+          "key": "g",
+          "text": "Indica crisis de ansiedad",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La glucosa confirma hipoglucemia."
+        },
+        {
+          "key": "h",
+          "text": "Aplicar una dosis extra de insulina rápida",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Empeora la hipoglucemia."
+        },
+        {
+          "key": "i",
+          "text": "Indica cetoacidosis y requiere más insulina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La glucosa está baja."
+        },
+        {
+          "key": "j",
+          "text": "Dar chocolate como mejor opción",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La grasa retrasa la absorción."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "La hipoglucemia es la complicación aguda más frecuente del tratamiento con insulina. Se define como glucosa menor de 70 mg/dL, y es grave si requiere ayuda de otra persona. Se desencadena por ejercicio, omisión de comidas o exceso de insulina. Los síntomas incluyen sudoración, temblor, palidez, hambre, irritabilidad, confusión y crisis. Si el paciente puede tragar se dan 10 a 15 g de carbohidratos de absorción rápida, como jugo o tabletas de glucosa, y se repite la medición a los 15 minutos. Si está inconsciente se administra glucagón intramuscular o intranasal. Se ajustan la insulina y los carbohidratos antes del ejercicio.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de diabetes tipo 1 en niños y adolescentes"
+      ]
+    }
+  ]
+}

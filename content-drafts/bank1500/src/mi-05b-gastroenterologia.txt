@@ -1,0 +1,175 @@
+@ mi|gastroenterology|viral_hepatitis|2|data_interpretation
+V: Hombre de 28 años con ictericia, coluria y malestar general de una semana. Transaminasas mayores de 1,500 U/L. Serología con HBsAg positivo, anti HBc IgM positivo y anti HBs negativo.
+P: ¿Cuál es la interpretación correcta de su serología?
++ Hepatitis B aguda || El anti HBc IgM positivo con HBsAg indica infección aguda.
+- anchoring | Hepatitis B crónica || Se ancla en el HBsAg, pero la IgM anti HBc indica infección reciente.
+- representativeness_heuristic | Inmunidad por vacunación || La vacuna da anti HBs positivo con HBsAg y anti HBc negativos.
+- availability_heuristic | Hepatitis A aguda || Es frecuente, pero la serología corresponde a hepatitis B.
+- framing_effect | Infección resuelta con inmunidad natural || Suena a recuperación, pero aquí no hay anti HBs.
+- premature_closure | Portador inactivo || Concluye sin considerar la IgM ni las transaminasas.
+- inattentional_blindness | Falso positivo por reacción cruzada || No acepta un patrón serológico coherente.
+- base_rate_fallacy | Hepatitis D aislada || Requiere coinfección y no hay marcadores de D.
+- focusing_illusion | Hepatitis C aguda || Se centra en la hepatitis sin revisar los marcadores.
+- belief_bias | Hepatitis autoinmune || Cree que toda transaminasemia alta es autoinmune.
+E: La serología de la hepatitis B se interpreta con varios marcadores. El HBsAg indica infección actual, aguda o crónica. El anti HBc IgM indica infección aguda o reciente. El anti HBc total indica contacto con el virus. El anti HBs indica inmunidad, ya sea por vacunación, cuando es el único positivo, o por infección resuelta, junto con anti HBc. Un paciente con HBsAg y anti HBc IgM positivos tiene hepatitis B aguda. Si el HBsAg persiste más de seis meses se considera crónica. La mayoría de los adultos inmunocompetentes eliminan el virus y el tratamiento de la forma aguda es de soporte.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hepatitis B crónica
+
+@ mi|gastroenterology|viral_hepatitis|2|risk_factor
+V: Niño de 8 años y su madre presentan fiebre, náusea e ictericia. En la escuela del niño hubo varios casos similares en las últimas semanas. Viven en una comunidad con abastecimiento irregular de agua potable.
+P: ¿Cuál es la vía de transmisión más probable, como factor de riesgo de su hepatitis?
++ Fecal oral por agua o alimentos contaminados, compatible con hepatitis A || Brotes escolares y agua insegura sugieren hepatitis A.
+- availability_heuristic | Transfusiones sanguíneas || Se asocia a hepatitis B y C.
+- anchoring | Vía sexual || Se ancla en la hepatitis B sin considerar la edad y el brote.
+- representativeness_heuristic | Uso de drogas inyectables || Se asocia a hepatitis C.
+- premature_closure | Transmisión vertical al nacer || El niño tiene 8 años y la madre enfermó al mismo tiempo.
+- base_rate_fallacy | Hepatitis E por carne de cerdo cruda || Es menos frecuente en México.
+- framing_effect | Contacto con sangre en el recreo || Suena plausible, pero el brote sugiere fuente común.
+- inattentional_blindness | Fármacos hepatotóxicos || No considera los casos múltiples.
+- focusing_illusion | Picadura de mosquito || Se centra en la fiebre.
+- belief_bias | Herencia familiar || Cree que la hepatitis familiar es genética.
+E: La hepatitis A se transmite por vía fecal oral, a través de agua o alimentos contaminados y contacto estrecho, y es frecuente en lugares con saneamiento deficiente. En niños suele ser asintomática o leve, mientras que en adultos es más sintomática, con fiebre, náusea, dolor abdominal, ictericia y coluria. No se cronifica y rara vez es fulminante. El diagnóstico es con anticuerpos IgM contra el virus de la hepatitis A. El tratamiento es de soporte. La prevención incluye agua segura, lavado de manos, saneamiento y vacunación, incluida en el esquema mexicano en niños.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hepatitis A ;; Norma Oficial Mexicana para la vigilancia epidemiológica
+
+@ mi|gastroenterology|viral_hepatitis|3|initial_study
+V: Mujer de 50 años con transaminasas discretamente elevadas por 1 año. Recibió una transfusión durante una cesárea hace 25 años. Asintomática.
+P: ¿Cuál es el estudio inicial para buscar la causa más probable?
++ Anticuerpos contra el virus de la hepatitis C, y si son positivos, carga viral del ARN || La transfusión antigua es factor de riesgo de hepatitis C.
+- availability_heuristic | Anticuerpos contra hepatitis A IgM || Es aguda y no crónica.
+- anchoring | Biopsia hepática como primer paso || Se ancla en el daño hepático y salta a lo invasivo.
+- representativeness_heuristic | Ceruloplasmina para enfermedad de Wilson || Es causa de enfermedad hepática en jóvenes.
+- premature_closure | Atribuirlo a hígado graso sin estudios || Cierra el diagnóstico sin descartar virus.
+- complexity_bias | Resonancia magnética hepática || No identifica la causa viral.
+- framing_effect | Genotipo viral como primer estudio || Suena específico, pero va después de confirmar la infección.
+- information_bias | Perfil completo autoinmune y metabólico antes que los virales || Pospone el estudio más probable.
+- base_rate_fallacy | Alfa 1 antitripsina || Es una causa rara.
+- belief_bias | Repetir transaminasas en un año más || Cree que observar basta.
+E: La hepatitis C es una causa importante de enfermedad hepática crónica, cirrosis y carcinoma hepatocelular. Los factores de riesgo incluyen transfusiones antes de 1995 en México, uso de drogas inyectables, hemodiálisis, tatuajes o procedimientos sin esterilidad y exposición laboral. Muchos pacientes son asintomáticos con transaminasas normales o levemente elevadas. El estudio inicial son los anticuerpos contra el virus. Si son positivos, se confirma la infección activa con la carga viral del ARN. Actualmente los antivirales de acción directa curan más de 95% de los casos en 8 a 12 semanas. Se recomienda tamizaje a todos los adultos al menos una vez.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hepatitis C
+
+@ mi|gastroenterology|viral_hepatitis|3|treatment_of_choice
+V: Hombre de 45 años con hepatitis C crónica confirmada por carga viral. Fibrosis leve por elastografía, sin cirrosis. Sin tratamiento previo.
+P: ¿Cuál es el tratamiento de elección?
++ Antivirales de acción directa pangenotípicos, como sofosbuvir con velpatasvir, por 12 semanas || Curan la gran mayoría de los casos.
+- availability_heuristic | Interferón pegilado con ribavirina || Fue el tratamiento clásico, con menor eficacia y más efectos adversos.
+- anchoring | Observación porque la fibrosis es leve || Se ancla en el daño leve, pero tratar evita la progresión.
+- representativeness_heuristic | Tenofovir || Es para hepatitis B.
+- framing_effect | Ribavirina sola por ser más barata || Lo barato suena práctico, pero es ineficaz sola.
+- premature_closure | Trasplante hepático || No tiene cirrosis.
+- complexity_bias | Combinación de tres antivirales por 48 semanas || Es más compleja sin beneficio.
+- status_quo_bias | Solo vacunarlo contra hepatitis A y B || Es útil, pero no trata la hepatitis C.
+- belief_bias | Silimarina como tratamiento curativo || Cree en un hepatoprotector sin efecto antiviral.
+- omission_bias | Evitar tratamiento por miedo a efectos adversos || Los antivirales actuales se toleran bien.
+E: El tratamiento de la hepatitis C cambió con los antivirales de acción directa, que actúan sobre proteínas del virus. Los esquemas pangenotípicos, como sofosbuvir con velpatasvir por 12 semanas o glecaprevir con pibrentasvir por 8 semanas, logran respuesta viral sostenida, considerada curación, en más de 95% de los pacientes. Se indica tratamiento a todos los pacientes con infección activa, con o sin fibrosis avanzada, porque previene la progresión y la transmisión. Antes de iniciarlo se evalúa la fibrosis, la coinfección con hepatitis B o VIH y las interacciones farmacológicas. Los pacientes con cirrosis continúan en vigilancia de carcinoma.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hepatitis C
+
+@ mi|gastroenterology|viral_hepatitis|4|complication_prognosis
+V: Mujer de 32 años con hepatitis aguda por virus A. Al quinto día presenta somnolencia, asterixis e INR de 2.6. No tiene enfermedad hepática previa.
+P: ¿Cuál es la complicación que presenta?
++ Insuficiencia hepática aguda grave || Coagulopatía y encefalopatía en hepatitis aguda sin hepatopatía previa.
+- anchoring | Hepatitis A con evolución habitual || Se ancla en que suele ser benigna e ignora la encefalopatía.
+- availability_heuristic | Colestasis prolongada por hepatitis A || Es una forma atípica, pero sin encefalopatía.
+- representativeness_heuristic | Cirrosis descompensada || Comparte encefalopatía, pero no hay enfermedad hepática previa.
+- premature_closure | Hepatitis recidivante || Es otra forma atípica sin falla hepática.
+- base_rate_fallacy | Hígado graso agudo del embarazo || No está embarazada.
+- framing_effect | Encefalopatía de Wernicke || La somnolencia confunde, pero hay asterixis e INR alto.
+- inattentional_blindness | Deshidratación por vómito || No toma en cuenta el INR elevado.
+- focusing_illusion | Meningitis viral || Se centra en la somnolencia.
+- belief_bias | Hepatitis crónica por virus A || Cree que la hepatitis A se cronifica.
+E: La insuficiencia hepática aguda se define por coagulopatía con INR de 1.5 o más y encefalopatía de cualquier grado en un paciente sin enfermedad hepática previa, con menos de 26 semanas de evolución. Las causas incluyen intoxicación por paracetamol, hepatitis virales A, B y E, fármacos, hepatitis autoinmune y enfermedad de Wilson. Aunque la hepatitis A suele ser benigna, en una pequeña proporción evoluciona a falla hepática, más en adultos mayores y con hepatopatía previa. El manejo es en terapia intensiva, con evaluación temprana para trasplante hepático según criterios como los del King's College, y N acetilcisteína en algunas causas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la insuficiencia hepática aguda
+
+@ mi|gastroenterology|viral_hepatitis|2|prevention_screening
+V: Enfermera de 24 años que inicia trabajo en un hospital. Nunca ha recibido la vacuna contra hepatitis B.
+P: ¿Cuál es la medida de prevención indicada?
++ Esquema de vacunación contra hepatitis B y verificar anti HBs al terminar || El personal de salud tiene riesgo ocupacional.
+- availability_heuristic | Vacuna contra hepatitis A || Es útil, pero no protege contra el riesgo ocupacional por sangre.
+- anchoring | Inmunoglobulina contra hepatitis B como única medida || Se usa tras exposición en no vacunados.
+- framing_effect | Usar guantes dobles siempre en lugar de vacunarse || Suena protector, pero no sustituye la vacuna.
+- status_quo_bias | Vacunar solo si tiene un accidente con aguja || Espera la exposición para prevenir.
+- representativeness_heuristic | Profilaxis con tenofovir antes de trabajar || Es tratamiento, no prevención rutinaria.
+- premature_closure | Medir anti HBc y decidir según su resultado sin vacunar || Retrasa la vacunación.
+- complexity_bias | Vacunar con dosis triple simultánea || Agrega dosis sin beneficio.
+- belief_bias | La hepatitis B no se transmite por accidentes laborales || Niega el riesgo ocupacional.
+- omission_bias | Evitar la vacuna por posibles reacciones || Sobreestima efectos leves.
+E: La vacunación contra la hepatitis B está indicada en el personal de salud y en otros grupos de riesgo, como pacientes en hemodiálisis, contactos de portadores, personas con varias parejas sexuales y usuarios de drogas inyectables. El esquema habitual es de tres dosis a los 0, 1 y 6 meses. En personal de salud se recomienda medir el anti HBs de uno a dos meses después de la última dosis para confirmar respuesta, con título de 10 mUI/mL o más. Si no responde se repite el esquema. En México la vacuna también forma parte del esquema universal desde el nacimiento.
+R: Guía de Práctica Clínica de vacunación en el adulto ;; Norma Oficial Mexicana para la prevención y control de enfermedades transmisibles por vacunación
+
+@ mi|gastroenterology|peptic_ulcer|2|risk_factor
+V: Hombre de 42 años con dolor epigástrico urente que mejora con los alimentos y reaparece 2 a 3 horas después, y lo despierta en la noche. No toma AINE ni fuma.
+P: ¿Cuál es el factor de riesgo más probable de su enfermedad?
++ Infección por Helicobacter pylori || Es la causa más frecuente de úlcera duodenal en pacientes sin AINE.
+- availability_heuristic | Estrés laboral || Se cree causa de úlceras, pero no es la principal.
+- anchoring | Consumo de alimentos picantes || Se ancla en la dieta, que no causa úlceras.
+- representativeness_heuristic | Síndrome de Zollinger Ellison || Da úlceras, pero es raro y suele ser múltiple o refractario.
+- premature_closure | Consumo de AINE no reportado || Supone una causa que el paciente negó.
+- base_rate_fallacy | Enfermedad de Crohn gastroduodenal || Es poco frecuente.
+- framing_effect | Exceso de café || Suena a irritante, pero no causa úlcera.
+- inattentional_blindness | Reflujo gastroesofágico || El patrón de dolor es duodenal.
+- focusing_illusion | Litiasis vesicular || Se centra en el dolor posprandial.
+- belief_bias | Herencia sin causa infecciosa || Cree que la úlcera es solo genética.
+E: Las dos causas principales de úlcera péptica son la infección por Helicobacter pylori y el consumo de antiinflamatorios no esteroideos. La úlcera duodenal típicamente produce dolor epigástrico urente que mejora con los alimentos o antiácidos y reaparece dos a tres horas después, con dolor nocturno. En México la prevalencia de Helicobacter pylori en adultos es alta. Todo paciente con úlcera debe someterse a búsqueda de la bacteria con prueba de aliento, antígeno en heces o biopsia, y recibir tratamiento de erradicación si es positiva, lo que reduce de forma importante la recurrencia. El estrés y la dieta no son causas directas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad ulcerosa péptica
+
+@ mi|gastroenterology|peptic_ulcer|3|treatment_of_choice
+V: Mujer de 38 años con úlcera duodenal confirmada por endoscopia. La prueba de ureasa en la biopsia es positiva para Helicobacter pylori. No tiene alergia a la penicilina y nunca ha recibido claritromicina.
+P: ¿Cuál es el tratamiento de elección para erradicar la bacteria?
++ Terapia cuádruple con inhibidor de bomba de protones, bismuto, tetraciclina y metronidazol, o cuádruple concomitante, por 14 días || En zonas de alta resistencia a claritromicina se prefieren esquemas cuádruples de 14 días.
+- availability_heuristic | Omeprazol solo por 8 semanas || Cicatriza la úlcera, pero no erradica la bacteria.
+- anchoring | Terapia triple clásica por 7 días || Se ancla en el esquema clásico, con baja eficacia por resistencia.
+- representativeness_heuristic | Amoxicilina sola por 10 días || La monoterapia no erradica.
+- framing_effect | Antiácidos y dieta blanda por un mes || Suena calmante, pero no elimina la bacteria.
+- premature_closure | Cirugía de vagotomía || Ya no se usa para úlcera no complicada.
+- complexity_bias | Seis antibióticos por 28 días || Exceso sin beneficio.
+- status_quo_bias | Tratar solo si la úlcera reaparece || Deja una causa conocida de recurrencia.
+- belief_bias | Probióticos solos para erradicar || Cree que los probióticos bastan.
+- omission_bias | Evitar antibióticos para no causar diarrea || Pierde la curación.
+E: La erradicación de Helicobacter pylori cura la úlcera y previene sus recurrencias y complicaciones. Debido a la alta resistencia a claritromicina y metronidazol en México, se recomiendan esquemas de 14 días. Las opciones incluyen la terapia cuádruple con bismuto, que combina inhibidor de la bomba de protones, subcitrato o subsalicilato de bismuto, tetraciclina y metronidazol, y la terapia cuádruple concomitante sin bismuto, con inhibidor de bomba, amoxicilina, claritromicina y metronidazol. La terapia triple con claritromicina solo se recomienda donde la resistencia es menor de 15%. Se confirma la erradicación con prueba de aliento o antígeno fecal cuatro semanas después.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la infección por Helicobacter pylori
+
+@ mi|gastroenterology|peptic_ulcer|4|complication_prognosis
+V: Hombre de 58 años con antecedente de úlcera péptica que toma ibuprofeno. Presenta dolor epigástrico súbito, intenso, que se generaliza. Abdomen en tabla, sin ruidos intestinales. La radiografía de tórax de pie muestra aire libre bajo los hemidiafragmas.
+P: ¿Cuál es la complicación que presenta?
++ Perforación de úlcera péptica || Dolor súbito, abdomen en tabla y neumoperitoneo.
+- representativeness_heuristic | Pancreatitis aguda || También da dolor epigástrico intenso, pero sin neumoperitoneo.
+- anchoring | Hemorragia digestiva alta || Se ancla en la úlcera, pero no hay sangrado.
+- availability_heuristic | Infarto agudo de miocardio inferior || Puede dar dolor epigástrico, pero no neumoperitoneo.
+- premature_closure | Obstrucción pilórica || Es otra complicación con vómito, no con peritonitis.
+- base_rate_fallacy | Isquemia mesentérica || Es menos probable en este contexto.
+- framing_effect | Colecistitis aguda || El dolor abdominal confunde, pero el aire libre indica perforación.
+- inattentional_blindness | Gastritis aguda por AINE || No toma en cuenta el neumoperitoneo.
+- focusing_illusion | Disección aórtica || Se centra en la intensidad del dolor.
+- belief_bias | Apendicitis perforada || Cree que todo neumoperitoneo es apendicular.
+E: La perforación es una complicación grave de la úlcera péptica, asociada a AINE, tabaquismo y Helicobacter pylori. Se presenta con dolor epigástrico súbito e intenso, en puñalada, que se generaliza por peritonitis química, con abdomen en tabla, ausencia de ruidos intestinales y, en ocasiones, choque. La radiografía de tórax de pie o la tomografía muestran aire libre subdiafragmático. El tratamiento es reanimación, sonda nasogástrica, inhibidor de bomba de protones intravenoso, antibióticos y cirugía urgente, generalmente cierre con parche de epiplón, seguida de erradicación de Helicobacter pylori.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad ulcerosa péptica
+
+@ mi|gastroenterology|peptic_ulcer|3|next_step
+V: Hombre de 63 años con pérdida de 8 kg en 3 meses, saciedad temprana, dispepsia de reciente inicio y anemia ferropénica.
+P: ¿Cuál es el siguiente paso?
++ Endoscopia superior con toma de biopsias || Dispepsia con datos de alarma en mayor de 60 años.
+- anchoring | Prueba y tratamiento empírico de Helicobacter pylori || Se ancla en la estrategia para jóvenes sin datos de alarma.
+- availability_heuristic | Inhibidor de bomba de protones por 8 semanas y revalorar || Retrasa el diagnóstico de una posible neoplasia.
+- framing_effect | Serie esofagogastroduodenal con bario || Suena a estudio del estómago, pero no permite biopsias.
+- premature_closure | Ultrasonido abdominal como único estudio || No evalúa la mucosa gástrica.
+- status_quo_bias | Dieta y antiácidos por un mes || Mantiene un enfoque sintomático.
+- complexity_bias | Tomografía por emisión de positrones || No es el estudio inicial.
+- representativeness_heuristic | Colonoscopia como único estudio por la anemia || La dispepsia orienta primero al tubo digestivo alto.
+- belief_bias | Hierro oral y observar la respuesta || Cree que corregir la anemia resuelve el problema.
+- omission_bias | Esperar más síntomas antes de estudiar || Retrasa un diagnóstico grave.
+E: En la dispepsia se buscan datos de alarma, como edad mayor de 60 años con síntomas nuevos, pérdida de peso no intencional, disfagia progresiva, vómito persistente, sangrado digestivo, anemia ferropénica, masa palpable o antecedente familiar de cáncer gástrico. Ante estos datos se indica endoscopia superior temprana con toma de biopsias para descartar cáncer gástrico o úlcera complicada. En menores de 60 años sin datos de alarma la estrategia es buscar y tratar Helicobacter pylori o dar inhibidor de bomba de protones. El cáncer gástrico suele diagnosticarse tarde en México, por lo que estos datos no deben pasarse por alto.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la dispepsia funcional ;; Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer gástrico
+
+@ mi|gastroenterology|peptic_ulcer|3|prevention_screening
+V: Mujer de 72 años con artritis reumatoide que requiere naproxeno de forma crónica. Tuvo una úlcera gástrica hace 3 años. También toma ácido acetilsalicílico a dosis baja por cardiopatía.
+P: ¿Cuál es la mejor medida de prevención de úlcera y sangrado?
++ Agregar un inhibidor de bomba de protones y valorar cambiar a un inhibidor selectivo de COX 2 si es posible || Tiene varios factores de riesgo de complicación por AINE.
+- availability_heuristic | Agregar ranitidina a dosis habitual || Es menos eficaz que el inhibidor de bomba.
+- anchoring | Suspender el ácido acetilsalicílico de inmediato || Se ancla en el riesgo digestivo y omite el beneficio cardiovascular.
+- framing_effect | Tomar el naproxeno con leche para proteger el estómago || Suena protector, pero no previene la úlcera.
+- representativeness_heuristic | Sucralfato como única protección || Tiene menor eficacia.
+- status_quo_bias | Mantener igual sin protección || Ignora un riesgo alto.
+- premature_closure | Endoscopia cada 3 meses de vigilancia || No previene la úlcera.
+- complexity_bias | Dos AINE distintos a menor dosis || Aumenta el riesgo.
+- belief_bias | Antiácidos líquidos como prevención suficiente || Cree que neutralizar basta.
+- omission_bias | Evitar el inhibidor de bomba por miedo a efectos a largo plazo || Sobreestima riesgos frente al beneficio.
+E: Los factores de riesgo de úlcera y sangrado por AINE incluyen edad mayor de 65 años, antecedente de úlcera o sangrado, uso de dosis altas o varios AINE, y uso concomitante de ácido acetilsalicílico, anticoagulantes, corticosteroides o inhibidores de la recaptura de serotonina. En pacientes de riesgo alto se recomienda gastroprotección con inhibidor de bomba de protones y, si es posible, un inhibidor selectivo de la ciclooxigenasa 2, valorando el riesgo cardiovascular. También debe buscarse y tratarse Helicobacter pylori antes de iniciar AINE crónicos en pacientes con antecedente de úlcera. Los antagonistas H2 a dosis habituales protegen menos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad ulcerosa péptica

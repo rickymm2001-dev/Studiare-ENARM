@@ -1,0 +1,239 @@
+@ ped|immunizations|vaccination_schedule|2|prevention_screening
+V: Recién nacido sano de término de 12 horas de vida, con peso de 3 200 g, antes de su egreso del hospital. La madre tiene serología negativa para hepatitis B.
+P: ¿Qué vacunas de prevención corresponden al nacer según el esquema nacional?
++ BCG y primera dosis de hepatitis B || Son las vacunas del nacimiento en el esquema mexicano.
+- anchoring | Solo BCG y hepatitis B hasta los 2 meses || La hepatitis B se aplica al nacer.
+- availability_heuristic | Hexavalente y rotavirus || Inician a los 2 meses.
+- representativeness_heuristic | Triple viral || Se aplica al año.
+- premature_closure | Neumocócica conjugada || Inicia a los 2 meses.
+- framing_effect | Influenza || Se aplica desde los 6 meses.
+- complexity_bias | Todas las vacunas del primer año juntas || No es el esquema.
+- base_rate_fallacy | Varicela || No forma parte del esquema al nacer.
+- belief_bias | Ninguna hasta que cumpla un mes || BCG y hepatitis B se aplican al nacer.
+- omission_bias | Diferir todas por ser muy pequeño || Al nacer el sistema inmune responde adecuadamente.
+E: En el esquema nacional de vacunación de México al nacer se aplican la vacuna BCG, que protege contra formas graves de tuberculosis como la meníngea y la miliar, y la primera dosis de hepatitis B. A los 2, 4 y 6 meses se aplica la vacuna hexavalente, que incluye difteria, tos ferina acelular, tétanos, poliomielitis inactivada, Haemophilus influenzae tipo b y hepatitis B, con refuerzo a los 18 meses. Rotavirus y neumococo conjugada inician a los 2 meses. La triple viral se aplica al año, e influenza cada temporada desde los 6 meses. El esquema vigente debe revisarse cada año.
+R: Secretaría de Salud. Esquema nacional de vacunación ;; Manual de vacunación de la Secretaría de Salud
+
+@ ped|immunizations|vaccination_schedule|2|prevention_screening
+V: Lactante de 2 meses, sano, que acude a su consulta de niño sano con su cartilla de vacunación completa para la edad del nacimiento.
+P: ¿Qué vacunas de prevención le corresponden a los 2 meses?
++ Hexavalente, rotavirus y neumocócica conjugada || Son las vacunas indicadas a los 2 meses.
+- anchoring | BCG y hepatitis B || Ya se aplicaron al nacer.
+- availability_heuristic | Triple viral || Corresponde a los 12 meses.
+- representativeness_heuristic | Solo influenza || Inicia a los 6 meses.
+- premature_closure | DPT de refuerzo || Se aplica a los 4 años.
+- framing_effect | Virus del papiloma humano || Se aplica en la preadolescencia.
+- complexity_bias | Hepatitis A y varicela || No son del esquema a esta edad.
+- base_rate_fallacy | Solo rotavirus || Faltan las demás.
+- belief_bias | Esperar a los 6 meses para iniciar el esquema || El esquema inicia a los 2 meses.
+- omission_bias | Aplicar una vacuna por consulta para no saturarlo || Aplicar varias el mismo día es seguro.
+E: A los 2 meses se inicia la serie primaria con la vacuna hexavalente, la primera dosis de rotavirus por vía oral y la primera dosis de neumocócica conjugada. A los 4 meses se repiten las tres, a los 6 meses se aplica la tercera dosis de hexavalente y, según el producto, de rotavirus, y se inicia influenza. Aplicar varias vacunas el mismo día es seguro y eficaz, y retrasarlas deja al lactante desprotegido en la etapa de mayor riesgo de tos ferina, neumonía y diarrea grave. Las vacunas de rotavirus tienen edades máximas para iniciar y completar el esquema.
+R: Secretaría de Salud. Esquema nacional de vacunación ;; Manual de vacunación de la Secretaría de Salud
+
+@ ped|immunizations|vaccination_schedule|3|next_step
+V: Lactante de 9 meses que llega a consulta. Su cartilla muestra solo BCG y hepatitis B al nacer, sin otras vacunas, por cambio de domicilio. Está sano.
+P: ¿Cuál es la conducta a seguir?
++ Iniciar el esquema de recuperación aplicando las vacunas atrasadas en esta visita sin reiniciar series || No se reinicia el esquema y se aplican las vacunas correspondientes.
+- anchoring | Reiniciar todo el esquema desde el nacimiento || No se repiten las dosis aplicadas.
+- availability_heuristic | Esperar a los 12 meses para aplicar todo junto || Prolonga el periodo sin protección.
+- representativeness_heuristic | Aplicar rotavirus como primera vacuna || Ya excedió la edad máxima para iniciarla.
+- premature_closure | Aplicar solo la triple viral || Faltan vacunas prioritarias.
+- framing_effect | Medir anticuerpos antes de vacunar || No se requiere.
+- complexity_bias | Aplicar una vacuna por mes para evitar reacciones || Retrasa la protección.
+- status_quo_bias | Dejarlo así porque ya pasó la edad || Siempre debe completarse el esquema.
+- belief_bias | Las vacunas atrasadas ya no sirven || Siguen siendo eficaces.
+- omission_bias | No vacunar para evitar eventos adversos || El riesgo de enfermedad es mayor.
+E: Cuando un niño tiene vacunas atrasadas se aplica un esquema de recuperación. La regla es que no se reinician series interrumpidas y que deben aplicarse en la misma visita todas las vacunas posibles, respetando los intervalos mínimos entre dosis. Algunas vacunas tienen límites de edad, como rotavirus, que no se inicia después de la edad máxima establecida por el fabricante, y la neumocócica, cuyo número de dosis depende de la edad de inicio. No es necesario medir anticuerpos. Aprovechar cualquier contacto con los servicios de salud para vacunar reduce las oportunidades perdidas.
+R: Manual de vacunación de la Secretaría de Salud
+
+@ ped|immunizations|vaccination_schedule|2|prevention_screening
+V: Niña de 12 meses sana que acude a vacunación. Tiene esquema completo hasta los 6 meses.
+P: ¿Qué vacuna de prevención le corresponde al año de edad?
++ Triple viral contra sarampión, rubéola y parotiditis, junto con la dosis correspondiente de neumocócica conjugada || A los 12 meses se aplican triple viral y refuerzo de neumococo.
+- anchoring | BCG de refuerzo || La BCG no se refuerza.
+- availability_heuristic | Rotavirus || Ya excedió su edad.
+- representativeness_heuristic | Virus del papiloma humano || Se aplica en la preadolescencia.
+- premature_closure | Solo hepatitis B || No corresponde a esta edad.
+- framing_effect | Triple viral a los 6 meses en todos los casos || Solo se adelanta en brotes.
+- complexity_bias | DPT de los 4 años || Se aplica más adelante.
+- base_rate_fallacy | Toxoide tetánico diftérico de adulto || No corresponde.
+- belief_bias | La triple viral causa autismo y debe evitarse || No existe tal relación.
+- omission_bias | Esperar a la edad escolar para la triple viral || Deja al niño sin protección.
+E: La vacuna triple viral es de virus vivos atenuados y protege contra sarampión, rubéola y parotiditis. En México se aplica una dosis a los 12 meses y una segunda dosis a los 18 meses, aunque el esquema puede actualizarse, por lo que se debe consultar el vigente. A los 12 meses también corresponde el refuerzo de la vacuna neumocócica conjugada. Los estudios han descartado de forma consistente la relación entre la triple viral y el autismo. Ante brotes de sarampión puede aplicarse una dosis cero desde los 6 meses, que no cuenta para el esquema.
+R: Secretaría de Salud. Esquema nacional de vacunación ;; Manual de vacunación de la Secretaría de Salud
+
+@ ped|immunizations|vaccination_schedule|3|prevention_screening
+V: Niña de 11 años, sana, que cursa el quinto año de primaria. La madre pregunta qué vacuna le corresponde para prevenir cáncer en el futuro.
+P: ¿Cuál es la vacuna de prevención indicada?
++ Vacuna contra el virus del papiloma humano || Previene cáncer cervicouterino y otros cánceres asociados.
+- anchoring | Hepatitis A || No previene cáncer cervicouterino.
+- availability_heuristic | BCG || Protege contra tuberculosis grave.
+- representativeness_heuristic | Vacuna contra herpes zóster || Se indica en adultos mayores.
+- premature_closure | Neumocócica polisacárida || No corresponde a esta edad.
+- framing_effect | Esperar a que inicie vida sexual para vacunar || Es más eficaz antes de la exposición.
+- complexity_bias | Realizar citología antes de vacunar || No se requiere.
+- base_rate_fallacy | Influenza como única vacuna || No previene cáncer.
+- belief_bias | La vacuna promueve el inicio temprano de la vida sexual || No hay evidencia de ello.
+- omission_bias | No vacunar porque es muy pequeña || Es la edad ideal.
+E: La vacuna contra el virus del papiloma humano previene la infección por los tipos de alto riesgo, principalmente 16 y 18, responsables de la mayoría de los cánceres cervicouterinos, además de cánceres anales, orofaríngeos y de pene. Es más eficaz si se aplica antes del inicio de la vida sexual, por lo que se aplica en la preadolescencia. En México se aplica en quinto de primaria o a los 11 años, y se ha ampliado a niños. No sustituye al tamizaje con citología o prueba de virus del papiloma en la edad adulta. No hay evidencia de que promueva conductas sexuales de riesgo.
+R: Secretaría de Salud. Esquema nacional de vacunación ;; Guía de Práctica Clínica de prevención y detección de cáncer cervicouterino
+
+@ ped|immunizations|vaccination_schedule|3|mechanism
+V: Lactante de 2 meses que recibirá vacuna de rotavirus y vacuna hexavalente. La madre pregunta por qué una se da por boca y la otra inyectada, y cuál contiene virus vivos.
+P: ¿Cuál es el mecanismo por el que protege el producto oral contra rotavirus?
++ Es una vacuna oral de virus vivos atenuados que induce inmunidad intestinal local y sistémica || Imita la infección natural en el intestino.
+- anchoring | Es un toxoide que neutraliza toxinas bacterianas || Los toxoides se usan en tétanos y difteria.
+- availability_heuristic | Es una vacuna conjugada de polisacárido || Ese es el tipo de neumococo y Haemophilus.
+- representativeness_heuristic | Contiene virus inactivados inyectables || Es oral y atenuada.
+- premature_closure | Contiene anticuerpos ya formados || Eso es inmunidad pasiva.
+- base_rate_fallacy | Es una vacuna de ácido ribonucleico mensajero || No es su plataforma.
+- framing_effect | Actúa como antibiótico intestinal || No es un antimicrobiano.
+- inattentional_blindness | Protege solo por inmunidad de mucosas respiratorias || Actúa en el intestino.
+- focusing_illusion | Funciona estimulando solo linfocitos T sin anticuerpos || Induce anticuerpos.
+- belief_bias | Causa la enfermedad completa para generar defensas || Está atenuada.
+E: Las vacunas se clasifican en vivas atenuadas e inactivadas. Las vivas atenuadas, como rotavirus, triple viral, varicela, BCG y fiebre amarilla, se replican de forma limitada y generan una respuesta inmune similar a la infección natural, con protección duradera. La vacuna de rotavirus se aplica por vía oral e induce inmunoglobulina A intestinal y anticuerpos séricos. Las inactivadas incluyen virus completos muertos, subunidades, toxoides y vacunas conjugadas, y suelen requerir varias dosis y refuerzos. La vacuna de rotavirus tiene un riesgo muy bajo de invaginación intestinal, por lo que se respetan las edades máximas de aplicación.
+R: Manual de vacunación de la Secretaría de Salud
+
+@ ped|immunizations|vaccination_schedule|3|complication_prognosis
+V: Lactante de 4 meses que 6 horas después de recibir la vacuna hexavalente presenta fiebre de 38.3 °C, irritabilidad y enrojecimiento con induración de 2 cm en el sitio de aplicación. Come bien y está consolable.
+P: ¿Cuál es el pronóstico de este evento?
++ Es un evento leve y esperado que se resuelve en uno a tres días con manejo sintomático || La reacción local y la fiebre baja son los eventos más frecuentes.
+- anchoring | Es una reacción anafiláctica que contraindica dosis futuras || La anafilaxia ocurre en minutos con datos sistémicos.
+- availability_heuristic | Es un absceso que requiere drenaje || No hay fluctuación ni pus.
+- representativeness_heuristic | Es encefalopatía postvacunal || No hay alteración neurológica.
+- premature_closure | Indica sepsis y requiere hemocultivo || Está activo y consolable.
+- framing_effect | Contraindica completar el esquema || No es una contraindicación.
+- complexity_bias | Requiere hospitalización para vigilancia || No es necesario.
+- base_rate_fallacy | Es síndrome de Guillain Barré || No hay debilidad.
+- belief_bias | Debe aplicarse alcohol o pomada en el sitio || No se recomienda.
+- omission_bias | Suspender las siguientes vacunas por precaución || Deja al niño sin protección.
+E: Los eventos supuestamente atribuibles a la vacunación o inmunización más frecuentes son leves. Incluyen dolor, enrojecimiento e induración en el sitio de aplicación y fiebre baja en las primeras 48 horas. Se manejan con compresas frías, paracetamol si hay malestar y vigilancia. No contraindican dosis futuras. Los eventos graves, como anafilaxia en los primeros minutos, encefalopatía en los siete días siguientes o crisis convulsivas, son raros y deben notificarse. Todo evento debe registrarse y notificarse según la normatividad de vigilancia epidemiológica vigente.
+R: Manual de eventos supuestamente atribuibles a la vacunación o inmunización ;; Manual de vacunación de la Secretaría de Salud
+
+@ ped|immunizations|vaccination_schedule|3|prevention_screening
+V: Mujer de 28 años con embarazo de 28 semanas, sana, en control prenatal. Tiene un hijo de 2 años con esquema completo. Pregunta qué vacuna protegerá a su bebé contra la tos ferina en los primeros meses.
+P: ¿Cuál es la vacuna de prevención indicada en el embarazo?
++ Tdpa, toxoide tetánico, diftérico y tos ferina acelular, entre las 20 y 36 semanas de cada embarazo || Los anticuerpos maternos pasan al bebé y lo protegen antes de su propia vacunación.
+- anchoring | Triple viral || Está contraindicada en el embarazo.
+- availability_heuristic | BCG a la madre || No protege contra tos ferina.
+- representativeness_heuristic | Vacunar solo al recién nacido al nacer contra tos ferina || La primera dosis infantil es a los 2 meses.
+- premature_closure | Varicela || Está contraindicada en el embarazo.
+- framing_effect | Esperar al puerperio para vacunar a la madre || Pierde la transferencia de anticuerpos.
+- complexity_bias | Dar azitromicina profiláctica durante el embarazo || No es la medida indicada.
+- base_rate_fallacy | Virus del papiloma humano || No protege contra tos ferina.
+- belief_bias | Las vacunas en el embarazo dañan al feto || La Tdpa es segura.
+- omission_bias | Evitar toda vacuna en el embarazo || La Tdpa y la influenza están indicadas.
+E: La tos ferina es más grave en lactantes menores de 3 meses, que aún no completan su vacunación. La vacunación con Tdpa durante cada embarazo, idealmente entre las semanas 20 y 36, genera anticuerpos maternos que atraviesan la placenta y protegen al recién nacido. También se recomienda la vacuna de influenza en cualquier trimestre durante la temporada. Las vacunas de virus vivos, como triple viral, varicela y fiebre amarilla, están contraindicadas en el embarazo. La estrategia de capullo, vacunar a convivientes, complementa la protección.
+R: Secretaría de Salud. Esquema nacional de vacunación ;; Guía de Práctica Clínica de control prenatal
+
+@ ped|immunizations|vaccine_contraindications|3|next_step
+V: Lactante de 6 meses con rinorrea hialina y tos leve desde hace 2 días, temperatura de 37.6 °C, activo y comiendo bien. Le corresponden vacunas del esquema.
+P: ¿Cuál es la conducta más apropiada respecto a la vacunación?
++ Vacunar en esta visita porque una enfermedad leve con o sin febrícula no contraindica la aplicación || Las enfermedades leves no son contraindicación.
+- anchoring | Diferir hasta que no tenga ningún síntoma || Es una falsa contraindicación.
+- availability_heuristic | Dar antibiótico y vacunar en una semana || No hay indicación de antibiótico.
+- representativeness_heuristic | Aplicar solo la mitad de la dosis || Las dosis no se fraccionan.
+- premature_closure | Diferir un mes por la tos || Pierde una oportunidad de vacunación.
+- framing_effect | Vacunar solo si los padres firman que asumen el riesgo || No es necesario.
+- complexity_bias | Solicitar biometría antes de vacunar || No se requiere.
+- status_quo_bias | Esperar a la siguiente campaña || Retrasa la protección.
+- belief_bias | Las vacunas empeoran el resfriado || No lo empeoran.
+- omission_bias | No vacunar para evitar culpar a la vacuna si empeora || Retrasa la protección.
+E: Las contraindicaciones verdaderas de las vacunas son pocas. Las falsas contraindicaciones son causa frecuente de oportunidades perdidas de vacunación. Entre ellas están las infecciones respiratorias leves con o sin fiebre baja, la diarrea leve, el uso de antibióticos, la prematurez, la lactancia materna, las alergias que no son a componentes de la vacuna, los antecedentes familiares de eventos adversos y la convalecencia de una enfermedad. Solo una enfermedad moderada o grave, con o sin fiebre, es una precaución para diferir la vacuna hasta la mejoría. Vacunar en cada contacto posible es una prioridad de salud pública.
+R: Manual de vacunación de la Secretaría de Salud
+
+@ ped|immunizations|vaccine_contraindications|3|data_interpretation
+V: Niño de 18 meses que hace 6 meses presentó urticaria generalizada, sibilancias e hipotensión a los 10 minutos de recibir una vacuna. Hoy le corresponde la siguiente dosis de la misma vacuna.
+P: ¿Qué indica este antecedente para la siguiente dosis?
++ Es una contraindicación absoluta para aplicar otra dosis de la misma vacuna o con el componente responsable || La anafilaxia a una dosis previa contraindica las siguientes.
+- anchoring | Puede aplicarse premedicando con antihistamínico || No previene una anafilaxia.
+- availability_heuristic | Es una reacción local sin importancia || Fue sistémica y grave.
+- representativeness_heuristic | Solo indica vacunar en el otro brazo || No cambia el riesgo.
+- premature_closure | Contraindica todas las vacunas de por vida || Solo las que contienen el componente responsable.
+- framing_effect | Puede aplicarse a mitad de dosis || No se fraccionan las dosis.
+- complexity_bias | Requiere repetir la dosis en terapia intensiva sin evaluación || Se refiere a alergología.
+- base_rate_fallacy | Es una precaución leve que no cambia nada || Es una contraindicación.
+- belief_bias | Indica que la vacuna estaba mal conservada || No es la explicación.
+- omission_bias | No referir a alergología para evitar trámites || La evaluación especializada orienta las siguientes vacunas.
+E: La anafilaxia a una dosis previa de una vacuna o a uno de sus componentes es una contraindicación absoluta para dosis posteriores de esa vacuna. Se recomienda referir a alergología para identificar el componente responsable, como gelatina, neomicina o levadura, y decidir qué vacunas pueden aplicarse. Toda unidad de vacunación debe contar con adrenalina y personal capacitado, y se recomienda observar al paciente 15 a 30 minutos después de vacunar. Las reacciones locales o la fiebre no son contraindicación. La alergia al huevo, incluso grave, ya no contraindica la triple viral ni la vacuna de influenza.
+R: Manual de vacunación de la Secretaría de Salud ;; Manual de eventos supuestamente atribuibles a la vacunación o inmunización
+
+@ ped|immunizations|vaccine_contraindications|4|next_step
+V: Niño de 5 años con leucemia linfoblástica aguda en quimioterapia de inducción. Le corresponde un refuerzo de vacunas y su hermana de 1 año necesita la triple viral.
+P: ¿Cuál es la conducta más apropiada respecto a la vacunación?
++ No aplicar vacunas de virus vivos al paciente y vacunar a la hermana con su esquema habitual, incluida la triple viral || Las vacunas vivas están contraindicadas en inmunosupresión, pero vacunar a los convivientes lo protege.
+- anchoring | Aplicar triple viral al paciente para protegerlo del sarampión || Las vacunas vivas pueden causar enfermedad en inmunosuprimidos.
+- availability_heuristic | No vacunar a la hermana para no contagiar al paciente || La triple viral no se transmite y la vacunación de convivientes lo protege.
+- representativeness_heuristic | Aplicar BCG de refuerzo al paciente || Es viva y está contraindicada.
+- premature_closure | Suspender toda vacunación familiar durante el tratamiento || Deja a todos desprotegidos.
+- framing_effect | Vacunar al paciente con rotavirus || Es viva y no corresponde por edad.
+- complexity_bias | Medir anticuerpos a toda la familia antes de vacunar || No es necesario.
+- base_rate_fallacy | La quimioterapia no afecta la respuesta a vacunas || La reduce de forma importante.
+- belief_bias | Las vacunas inactivadas están prohibidas en cáncer || Pueden aplicarse, aunque la respuesta sea menor.
+- omission_bias | No vacunar al paciente con influenza inactivada || Se recomienda en pacientes oncológicos.
+E: Las vacunas de virus vivos atenuados, como triple viral, varicela, BCG, rotavirus y fiebre amarilla, están contraindicadas en pacientes con inmunosupresión grave por quimioterapia, dosis altas de corticosteroides, trasplante o inmunodeficiencias primarias, porque pueden causar enfermedad diseminada. Las vacunas inactivadas son seguras, aunque su respuesta puede ser menor, y la influenza inactivada se recomienda cada año. Los convivientes deben estar bien vacunados, incluida la triple viral, que no se transmite. Tras terminar la quimioterapia se espera de 3 a 6 meses para revacunar según las recomendaciones de oncología.
+R: Manual de vacunación de la Secretaría de Salud
+
+@ ped|immunizations|vaccine_contraindications|3|data_interpretation
+V: Recién nacido de 32 semanas y 1 500 g, hijo de madre sana con serología negativa para hepatitis B, que cumple 2 meses de edad cronológica en la unidad de cuidados intermedios. Está estable y ganando peso.
+P: ¿Qué indica su prematurez para la vacunación?
++ Debe vacunarse según su edad cronológica con las mismas dosis que un recién nacido de término || La prematurez no es contraindicación ni requiere edad corregida.
+- anchoring | Debe vacunarse según su edad corregida || Se usa la edad cronológica.
+- availability_heuristic | Debe recibir dosis reducidas por su peso || Las dosis no se ajustan al peso.
+- representativeness_heuristic | Las vacunas están contraindicadas hasta que pese 2 500 g || Solo la BCG se difiere hasta 2 kg.
+- premature_closure | Debe esperar al egreso para vacunar || Se vacuna aunque esté hospitalizado.
+- framing_effect | La prematurez contraindica la vacuna de rotavirus en hospitalizados siempre || Depende de las políticas de la unidad.
+- complexity_bias | Medir títulos antes de cada vacuna || No se requiere.
+- base_rate_fallacy | Los prematuros no responden a las vacunas || Responden adecuadamente.
+- belief_bias | La vacunación temprana daña su desarrollo || No hay evidencia.
+- omission_bias | Diferir por precaución hasta el año || Aumenta el riesgo de tos ferina e infecciones.
+E: Los prematuros estables deben vacunarse según su edad cronológica, con las mismas dosis e intervalos que los recién nacidos de término, porque responden adecuadamente y tienen mayor riesgo de complicaciones por infecciones prevenibles. La BCG se difiere hasta que pesen al menos 2 kg. En hijos de madre con serología negativa que pesan menos de 2 kg, la dosis de hepatitis B al nacer puede diferirse o no contarse en el esquema según la norma, mientras que en hijos de madre positiva se aplican vacuna e inmunoglobulina en las primeras 12 horas. Los prematuros pueden presentar apneas tras vacunar, por lo que se vigilan si están hospitalizados.
+R: Manual de vacunación de la Secretaría de Salud
+
+@ ped|immunizations|vaccine_contraindications|4|prevention_screening
+V: Recién nacido de término, hijo de madre con antígeno de superficie de hepatitis B positivo detectado en el control prenatal. Nace sano por parto vaginal.
+P: ¿Cuál es la medida de prevención indicada para evitar la transmisión?
++ Vacuna de hepatitis B e inmunoglobulina contra hepatitis B en las primeras 12 horas de vida, en sitios diferentes || La combinación reduce la transmisión perinatal en más de 90%.
+- anchoring | Solo la vacuna de hepatitis B al mes de vida || Se requiere en las primeras horas junto con inmunoglobulina.
+- availability_heuristic | Cesárea obligatoria para evitar el contagio || No está indicada solo por hepatitis B.
+- representativeness_heuristic | Contraindicar la lactancia materna || Puede amamantar con profilaxis.
+- premature_closure | Dar antivirales al recién nacido || No es la medida estándar.
+- framing_effect | Solo la inmunoglobulina sin vacuna || No genera protección duradera.
+- complexity_bias | Biopsia hepática al recién nacido || No está indicada.
+- base_rate_fallacy | Esperar a los 6 meses para medir antígenos antes de actuar || Pierde la ventana de prevención.
+- belief_bias | Bañar al bebé con antisépticos elimina el riesgo || No previene la infección.
+- omission_bias | No vacunar para no interferir con los anticuerpos maternos || La vacuna es fundamental.
+E: La transmisión perinatal de hepatitis B produce infección crónica en hasta 90% de los recién nacidos infectados. Para prevenirla, los hijos de madres con antígeno de superficie positivo deben recibir la vacuna de hepatitis B y la inmunoglobulina específica en las primeras 12 horas de vida, en sitios anatómicos diferentes, y completar el esquema. Después se miden el antígeno de superficie y los anticuerpos entre los 9 y 12 meses. En madres con carga viral alta se considera tenofovir en el tercer trimestre. La lactancia materna está permitida y la vía de nacimiento se decide por indicación obstétrica.
+R: Guía de Práctica Clínica de prevención y diagnóstico de hepatitis B ;; Manual de vacunación de la Secretaría de Salud
+
+@ ped|immunizations|vaccine_contraindications|3|data_interpretation
+V: Niño de 3 años con alergia al huevo que presentó urticaria y vómito al comer huevo revuelto. Le falta la segunda dosis de triple viral. La madre cree que la vacuna está prohibida por su alergia.
+P: ¿Qué indica la alergia al huevo para aplicar la triple viral?
++ No contraindica la vacuna y puede aplicarse de forma habitual en una unidad con capacidad de atender reacciones || La triple viral contiene cantidades insignificantes de proteína de huevo.
+- anchoring | Contraindica la vacuna de por vida || Es una falsa contraindicación.
+- availability_heuristic | Requiere pruebas cutáneas con la vacuna antes de aplicarla || No se recomiendan de rutina.
+- representativeness_heuristic | Debe aplicarse fraccionada en varias dosis || No es necesario.
+- premature_closure | Solo puede aplicarse en terapia intensiva || No es necesario.
+- framing_effect | Debe sustituirse por gammaglobulina || No sustituye a la vacuna.
+- complexity_bias | Requiere desensibilización al huevo antes de vacunar || No es necesario.
+- base_rate_fallacy | La mayoría de los alérgicos al huevo hacen anafilaxia con la vacuna || Es excepcional.
+- belief_bias | Hay que evitar todas las vacunas en niños alérgicos || Solo se evitan si hay alergia a un componente.
+- omission_bias | No aplicarla para no arriesgarse || Deja al niño sin protección contra sarampión.
+E: La vacuna triple viral se cultiva en fibroblastos de embrión de pollo y contiene cantidades mínimas de proteína de huevo, insuficientes para provocar reacciones en alérgicos. Por ello la alergia al huevo, incluso grave, no contraindica la vacuna y no se requieren pruebas cutáneas previas. Las reacciones alérgicas a la triple viral, cuando ocurren, suelen deberse a gelatina o neomicina. Lo mismo aplica para la vacuna de influenza. La vacuna de fiebre amarilla sí contiene más proteína de huevo y requiere precaución. Toda vacunación se realiza en un sitio con capacidad de tratar anafilaxia.
+R: Manual de vacunación de la Secretaría de Salud
+
+@ ped|immunizations|vaccine_contraindications|4|next_step
+V: Lactante de 3 meses con diagnóstico reciente de inmunodeficiencia combinada grave. Le correspondía la segunda dosis de rotavirus y no recibió BCG al nacer por antecedente familiar de un hermano fallecido por infecciones.
+P: ¿Cuál es la conducta más apropiada respecto a las vacunas vivas?
++ Contraindicar rotavirus y BCG y referir a inmunología para el manejo específico || Las vacunas vivas pueden causar infección diseminada en inmunodeficiencias combinadas.
+- anchoring | Aplicar BCG de inmediato porque no la recibió || Puede causar becegeítis diseminada.
+- availability_heuristic | Aplicar la segunda dosis de rotavirus para completar el esquema || Puede causar diarrea crónica por el virus vacunal.
+- representativeness_heuristic | Vacunar con todas las vacunas vivas a mitad de dosis || Siguen siendo peligrosas.
+- premature_closure | Suspender también todas las inactivadas de forma permanente || Pueden aplicarse según indicación del inmunólogo.
+- framing_effect | Vacunar porque el beneficio siempre supera el riesgo || No en este caso.
+- complexity_bias | Aplicar BCG y vigilar con radiografía semanal || La complicación puede ser grave.
+- base_rate_fallacy | Las inmunodeficiencias no modifican la vacunación || Sí la modifican.
+- belief_bias | La lactancia sustituye todas las vacunas || No ofrece protección suficiente.
+- omission_bias | No referir porque no hay tratamiento || El trasplante de células madre puede ser curativo.
+E: La inmunodeficiencia combinada grave es una urgencia pediátrica. Los lactantes presentan infecciones graves, recurrentes u oportunistas, diarrea crónica y falla de medro desde los primeros meses, y un antecedente familiar de muerte temprana por infecciones es una señal de alarma. Las vacunas vivas, como BCG, rotavirus, triple viral y varicela, están contraindicadas porque pueden causar infección diseminada. El tratamiento definitivo es el trasplante de células progenitoras hematopoyéticas, idealmente antes de infecciones graves. El tamizaje neonatal ampliado puede detectarla con la medición de círculos de escisión del receptor de células T.
+R: Guía de Práctica Clínica de diagnóstico de inmunodeficiencias primarias ;; Manual de vacunación de la Secretaría de Salud

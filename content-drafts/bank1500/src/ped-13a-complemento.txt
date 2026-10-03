@@ -1,0 +1,191 @@
+@ ped|growth_development|breastfeeding|3|diagnosis
+V: Mujer de 25 años con 3 semanas de puerperio que amamanta. Presenta fiebre de 38.8 °C, malestar general y dolor en el cuadrante superior externo de la mama derecha, con zona enrojecida, caliente e indurada en forma de cuña. No hay fluctuación.
+P: ¿Cuál es el diagnóstico más probable?
++ Mastitis lactacional || Fiebre con área mamaria dolorosa, eritematosa e indurada durante la lactancia.
+- anchoring | Absceso mamario || Daría una masa fluctuante.
+- availability_heuristic | Congestión mamaria fisiológica || Es bilateral y sin fiebre alta.
+- representativeness_heuristic | Carcinoma inflamatorio de mama || Es raro en el puerperio y sin fiebre aguda.
+- premature_closure | Conducto obstruido sin infección || No da fiebre alta ni malestar general.
+- base_rate_fallacy | Endometritis puerperal || Da dolor uterino y loquios fétidos.
+- framing_effect | Galactocele || Es una masa quística sin inflamación.
+- inattentional_blindness | Tromboflebitis de la vena de Mondor || Da un cordón palpable sin fiebre alta.
+- focusing_illusion | Infección urinaria || No explica los hallazgos mamarios.
+- belief_bias | Leche cortada por enojo || No es una causa.
+E: La mastitis lactacional es la inflamación de la mama, con o sin infección, más frecuente en las primeras semanas posparto. Se relaciona con vaciamiento incompleto, mal agarre, grietas, tomas espaciadas y presión de ropa ajustada. Se manifiesta con dolor, eritema, calor e induración en una zona en forma de cuña, con fiebre y malestar. Staphylococcus aureus es el agente más común. El tratamiento incluye continuar la lactancia o extraer la leche para vaciar la mama, analgésicos antiinflamatorios y, si no mejora en 12 a 24 horas o hay datos de infección, dicloxacilina o cefalexina. La fluctuación sugiere absceso, que requiere ultrasonido y drenaje.
+R: Guía de Práctica Clínica de lactancia materna ;; Guía de Práctica Clínica de diagnóstico y tratamiento de mastitis
+
+@ ped|growth_development|breastfeeding|3|next_step
+V: Recién nacido de término de 4 días alimentado al seno materno que ha perdido 6% de su peso al nacer. Tiene 6 pañales mojados y 3 evacuaciones amarillas al día. La madre cree que no tiene suficiente leche y quiere dar fórmula.
+P: ¿Cuál es la conducta más apropiada?
++ Tranquilizar a la madre, confirmar que la lactancia es adecuada y continuar con lactancia exclusiva a libre demanda || La pérdida de peso y las excretas son normales.
+- anchoring | Iniciar fórmula complementaria de inmediato || No hay indicación.
+- availability_heuristic | Dar agua o té entre tomas || Desplaza la leche.
+- representativeness_heuristic | Hospitalizar por pérdida de peso || La pérdida es fisiológica.
+- premature_closure | Medir glucosa capilar cada 3 horas || No hay datos de hipoglucemia.
+- framing_effect | Espaciar las tomas cada 4 horas para que se llene el pecho || Disminuye la producción.
+- complexity_bias | Solicitar estudios de prolactina materna || No es necesario.
+- status_quo_bias | Seguir la costumbre familiar de dar fórmula nocturna || Reduce la producción materna.
+- belief_bias | La leche de los primeros días es insuficiente por ser poca || El calostro cubre las necesidades.
+- omission_bias | No revisar la técnica porque todo va bien || Revisar la técnica refuerza la confianza.
+E: La percepción de leche insuficiente es una causa frecuente de abandono de la lactancia. Los recién nacidos pierden hasta 7 a 10% de su peso en los primeros días y lo recuperan hacia los 10 a 14 días. Los indicadores de buena ingesta son 6 o más pañales mojados y 3 o más evacuaciones amarillas al día después del cuarto día, deglución audible, saciedad tras las tomas y ganancia de peso adecuada. Cuando estos datos son normales se tranquiliza a la madre, se revisa la técnica y se promueve la lactancia exclusiva a libre demanda, de 8 a 12 veces al día. La fórmula innecesaria reduce la producción de leche.
+R: Guía de Práctica Clínica de lactancia materna
+
+@ ped|pediatric_respiratory|croup|3|diagnosis
+V: Niño de 4 años con crup de 3 días que empeora de forma súbita con fiebre de 39.5 °C, aspecto tóxico, estridor intenso y secreciones purulentas abundantes. No responde a la adrenalina nebulizada. No tiene sialorrea ni postura en trípode.
+P: ¿Cuál es el diagnóstico más probable?
++ Traqueítis bacteriana || Empeoramiento de un crup con fiebre alta, aspecto tóxico, secreciones purulentas y falta de respuesta a adrenalina.
+- anchoring | Laringotraqueítis viral grave || No explica el aspecto tóxico ni las secreciones purulentas.
+- availability_heuristic | Epiglotitis aguda || Da sialorrea y postura en trípode sin tos perruna previa.
+- representativeness_heuristic | Absceso retrofaríngeo || Da rigidez de cuello y disfagia.
+- premature_closure | Crisis asmática || No da estridor.
+- base_rate_fallacy | Difteria laríngea || Es rara en vacunados.
+- framing_effect | Cuerpo extraño traqueal || No explica la fiebre ni las secreciones.
+- inattentional_blindness | Angioedema || No da fiebre.
+- focusing_illusion | Neumonía sin afección de vía aérea superior || No explica el estridor intenso.
+- belief_bias | Crup normal que tarda en mejorar || El aspecto tóxico indica otra causa.
+E: La traqueítis bacteriana es una infección grave de la tráquea, generalmente por Staphylococcus aureus, que complica una infección viral como el crup. Se sospecha cuando un niño con crup empeora de forma súbita con fiebre alta, aspecto tóxico, estridor intenso y secreciones purulentas abundantes, y no responde a la adrenalina nebulizada ni a los corticosteroides. Las membranas purulentas pueden obstruir la vía aérea. El tratamiento incluye asegurar la vía aérea, con intubación frecuente, broncoscopia para remover secreciones y antibióticos intravenosos con cobertura antiestafilocócica.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de laringotraqueítis aguda en niños
+
+@ ped|pediatric_respiratory|pediatric_pneumonia|3|next_step
+V: Lactante de 7 meses con neumonía, frecuencia respiratoria de 64 por minuto, tiraje subcostal, quejido, rechazo al alimento y saturación de 88% al aire ambiente.
+P: ¿Cuál es la conducta más apropiada?
++ Hospitalizar, administrar oxígeno e iniciar antibiótico intravenoso como ampicilina o cefalosporina de tercera generación || Neumonía grave con hipoxemia e incapacidad para alimentarse.
+- anchoring | Amoxicilina oral ambulatoria || Tiene criterios de gravedad.
+- availability_heuristic | Salbutamol nebulizado y egreso || No trata la neumonía grave.
+- representativeness_heuristic | Esperar el resultado del hemocultivo para iniciar antibiótico || El retraso aumenta la mortalidad.
+- premature_closure | Azitromicina oral como único tratamiento || No es adecuada en neumonía grave del lactante.
+- framing_effect | Antitusivos y vigilancia en casa || Tiene datos de gravedad.
+- complexity_bias | Tomografía de tórax antes de tratar || No es necesaria.
+- status_quo_bias | Mantener en observación sin oxígeno || La hipoxemia debe corregirse.
+- belief_bias | Ventosas en la espalda || No son eficaces.
+- omission_bias | No hospitalizar para evitar infecciones nosocomiales || Tiene criterios de hospitalización.
+E: Los criterios de hospitalización en neumonía pediátrica incluyen edad menor de 3 a 6 meses, saturación menor de 90 a 92%, dificultad respiratoria moderada a grave con tiraje subcostal, quejido o aleteo, apneas, incapacidad para beber o alimentarse, deshidratación, aspecto tóxico, complicaciones como derrame y falla al tratamiento oral. En estos casos se administra oxígeno, hidratación y antibiótico intravenoso, como ampicilina en niños vacunados o cefalosporina de tercera generación en no vacunados o casos graves. Se agrega cobertura contra estafilococo si se sospecha. Se pasa a la vía oral cuando mejora.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de neumonía adquirida en la comunidad en niños
+
+@ ped|pediatric_respiratory|pediatric_pneumonia|3|diagnosis
+V: Lactante de 4 meses sin vacunas con accesos de tos paroxística seguidos de un estridor inspiratorio y vómito, que se ponen cianóticos durante los accesos. Entre ellos se ve bien. Afebril. Leucocitos de 35 000 con 75% de linfocitos.
+P: ¿Cuál es el diagnóstico más probable?
++ Tos ferina por Bordetella pertussis || Tos paroxística con estridor inspiratorio, vómito y linfocitosis marcada en un lactante no vacunado.
+- anchoring | Bronquiolitis || Da sibilancias y taquipnea sin accesos con estridor.
+- availability_heuristic | Neumonía por Chlamydia trachomatis || Da tos en staccato con eosinofilia.
+- representativeness_heuristic | Laringotraqueítis viral || Da tos perruna con estridor continuo.
+- premature_closure | Asma del lactante || No explica la linfocitosis y los accesos.
+- base_rate_fallacy | Leucemia aguda || La linfocitosis es reactiva.
+- framing_effect | Reflujo gastroesofágico || No explica la linfocitosis.
+- inattentional_blindness | Fibrosis quística || No explica los accesos agudos.
+- focusing_illusion | Cuerpo extraño || No hay antecedente de atragantamiento.
+- belief_bias | Gripa fuerte que pasará sola || En lactantes puede ser mortal.
+E: La tos ferina es una infección respiratoria por Bordetella pertussis prevenible por vacunación. Tiene una fase catarral, una paroxística con accesos de tos seguidos de estridor inspiratorio, el gallo, vómito y cianosis, y una de convalecencia que dura semanas. En lactantes pequeños puede presentarse con apneas y cianosis sin estridor. La biometría muestra leucocitosis con linfocitosis marcada. Se confirma con reacción en cadena de polimerasa de exudado nasofaríngeo. El tratamiento es azitromicina, que reduce el contagio, y los contactos reciben profilaxis. Los menores de 3 meses suelen requerir hospitalización. La vacunación materna con Tdpa protege al recién nacido.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de tos ferina
+
+@ ped|pediatric_hematology_oncology|iron_deficiency_child|3|diagnosis
+V: Niño de 5 años con anemia, ictericia leve intermitente y esplenomegalia. Su padre fue esplenectomizado. Hemoglobina de 9.5 g/dL, reticulocitos de 8%, concentración media de hemoglobina corpuscular elevada, esferocitos en el frotis y Coombs directo negativo.
+P: ¿Cuál es el diagnóstico más probable?
++ Esferocitosis hereditaria || Anemia hemolítica con esferocitos, CMHC elevada, Coombs negativo y antecedente familiar.
+- anchoring | Anemia ferropénica || No da reticulocitosis ni esferocitos.
+- availability_heuristic | Anemia hemolítica autoinmune || El Coombs directo es negativo.
+- representativeness_heuristic | Talasemia beta mayor || Da microcitosis grave desde el primer año.
+- premature_closure | Hepatitis viral || No explica la anemia hemolítica.
+- base_rate_fallacy | Deficiencia de piruvato cinasa || Es menos frecuente.
+- framing_effect | Leucemia aguda || No explica los esferocitos.
+- inattentional_blindness | Deficiencia de glucosa 6 fosfato deshidrogenasa || Da crisis tras oxidantes con cuerpos de Heinz.
+- focusing_illusion | Síndrome de Gilbert || No da anemia.
+- belief_bias | Anemia por mala alimentación || Hay hemólisis.
+E: La esferocitosis hereditaria es la anemia hemolítica hereditaria más frecuente en personas de origen europeo, generalmente autosómica dominante. Se debe a defectos de proteínas de membrana como espectrina y anquirina, lo que produce eritrocitos esféricos que se destruyen en el bazo. Se manifiesta con anemia, ictericia, esplenomegalia y litiasis biliar por bilirrubinato. El frotis muestra esferocitos, la concentración media de hemoglobina corpuscular está elevada, el Coombs es negativo y la prueba de citometría con eosina 5 maleimida confirma. El parvovirus B19 puede causar crisis aplásicas. La esplenectomía se reserva para casos graves después de los 6 años.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de anemias hemolíticas hereditarias
+
+@ ped|pediatric_surgery|intussusception|3|diagnosis
+V: Niño de 10 años con dolor periumbilical de 12 horas que migró a la fosa iliaca derecha, anorexia, náusea, febrícula y dolor al saltar. Signo de McBurney positivo. Leucocitos de 14 500 con neutrofilia.
+P: ¿Cuál es el diagnóstico más probable?
++ Apendicitis aguda || Dolor periumbilical que migra a fosa iliaca derecha con anorexia, fiebre y leucocitosis.
+- anchoring | Gastroenteritis aguda || No explica la migración del dolor ni los signos peritoneales.
+- availability_heuristic | Adenitis mesentérica || Suele acompañar a infecciones respiratorias sin signos peritoneales claros.
+- representativeness_heuristic | Invaginación intestinal || Es más común en lactantes con dolor cólico.
+- premature_closure | Infección urinaria || No explica los signos peritoneales.
+- base_rate_fallacy | Divertículo de Meckel inflamado || Es menos frecuente.
+- framing_effect | Estreñimiento || No explica la fiebre ni la leucocitosis.
+- inattentional_blindness | Neumonía basal derecha || Puede dar dolor abdominal, pero habría datos respiratorios.
+- focusing_illusion | Torsión testicular || Daría dolor escrotal.
+- belief_bias | Dolor por comer mucho || No explica los signos peritoneales.
+E: La apendicitis aguda es la urgencia quirúrgica abdominal más frecuente en niños, con pico entre los 10 y 12 años. Se debe a obstrucción de la luz apendicular por fecalitos o hiperplasia linfoide. Inicia con dolor periumbilical que migra a la fosa iliaca derecha, anorexia, náusea, vómito y fiebre. Los signos de McBurney, Rovsing, psoas y obturador apoyan el diagnóstico. Las escalas de Alvarado o la pediátrica de apendicitis ayudan a estimar el riesgo. El ultrasonido es el estudio de imagen inicial en niños. En menores de 5 años el diagnóstico es más difícil y la perforación más frecuente. El tratamiento es apendicectomía con antibióticos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de apendicitis aguda en niños
+
+@ ped|pediatric_surgery|intussusception|3|initial_study
+V: Niña de 9 años con sospecha clínica de apendicitis aguda, dolor en fosa iliaca derecha y escala pediátrica de apendicitis intermedia.
+P: ¿Cuál es el estudio de imagen inicial de elección?
++ Ultrasonido abdominal || No emite radiación y tiene buena precisión en niños.
+- anchoring | Tomografía abdominal como primer estudio en todos los niños || Emite radiación y se reserva para ultrasonido no concluyente.
+- availability_heuristic | Radiografía simple de abdomen || Tiene baja sensibilidad.
+- representativeness_heuristic | Resonancia magnética como primer estudio || Es menos disponible.
+- premature_closure | Ningún estudio y cirugía directa en todos los casos || En riesgo intermedio la imagen ayuda.
+- base_rate_fallacy | Colonoscopia || No está indicada.
+- framing_effect | Serie esofagogastroduodenal || No es útil.
+- complexity_bias | Gammagrama con leucocitos marcados || No es necesario.
+- information_bias | Examen general de orina como prueba definitiva || No confirma apendicitis.
+- belief_bias | Laparoscopia diagnóstica como primer paso en riesgo intermedio || La imagen orienta antes de operar.
+E: En niños con sospecha de apendicitis y riesgo intermedio el ultrasonido abdominal es el estudio de imagen inicial de elección. Los hallazgos incluyen apéndice no compresible mayor de 6 mm, apendicolito, aumento de la ecogenicidad de la grasa periapendicular y líquido libre. Si el ultrasonido no es concluyente y persiste la duda, puede realizarse resonancia magnética o tomografía con protocolos de baja dosis. En riesgo alto se puede ir directamente a cirugía, y en riesgo bajo se vigila. Este enfoque reduce la exposición a radiación en niños.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de apendicitis aguda en niños
+
+@ ped|pediatric_surgery|pyloric_stenosis|3|diagnosis
+V: Recién nacido de 2 horas con salivación abundante y espumosa, tos y cianosis con el primer intento de alimentación. No es posible pasar la sonda orogástrica más allá de 10 cm. La radiografía muestra la sonda enrollada en el esófago superior y aire en el estómago. Antecedente de polihidramnios.
+P: ¿Cuál es el diagnóstico más probable?
++ Atresia esofágica con fístula traqueoesofágica distal || Imposibilidad de pasar la sonda, salivación y aire gástrico por la fístula.
+- anchoring | Reflujo gastroesofágico || No impide el paso de la sonda.
+- availability_heuristic | Estenosis hipertrófica del píloro || Aparece a las 2 a 8 semanas.
+- representativeness_heuristic | Atresia esofágica sin fístula || No habría aire en el estómago.
+- premature_closure | Neumonía congénita || No explica la imposibilidad de pasar la sonda.
+- base_rate_fallacy | Hendidura laringotraqueal || Es rara.
+- framing_effect | Atresia de coanas || Da cianosis que mejora con el llanto.
+- inattentional_blindness | Fístula traqueoesofágica en H sin atresia || La sonda sí pasa.
+- focusing_illusion | Síndrome de dificultad respiratoria || No explica la salivación ni la sonda.
+- belief_bias | Bebé que traga mal porque es nuevo || Hay una malformación.
+E: La atresia esofágica es una interrupción de la continuidad del esófago. La forma más frecuente, alrededor de 85%, tiene fístula traqueoesofágica distal. Se sospecha por polihidramnios y se manifiesta al nacer con salivación espumosa, tos, ahogamiento y cianosis con la alimentación. No se puede pasar la sonda al estómago. La radiografía muestra la sonda enrollada en el bolsón superior y aire en el estómago si hay fístula distal. Se asocia a la asociación VACTERL. El manejo inicial es aspiración continua del bolsón, cabecera elevada, ayuno, y después corrección quirúrgica.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de atresia de esófago
+
+@ ped|pediatric_surgery|cryptorchidism|3|initial_treatment
+V: Adolescente de 13 años que despertó con dolor testicular izquierdo súbito e intenso de 3 horas, náusea y vómito. El testículo está elevado y horizontal y el reflejo cremastérico está ausente. No mejora al elevarlo.
+P: ¿Cuál es el tratamiento inicial?
++ Exploración quirúrgica urgente con detorsión y orquidopexia bilateral || Torsión testicular con menos de 6 horas de evolución.
+- anchoring | Antibióticos por epididimitis || No explica el inicio súbito ni la ausencia de reflejo.
+- availability_heuristic | Analgésicos y revaloración en 24 horas || Se pierde el testículo.
+- representativeness_heuristic | Ultrasonido Doppler obligatorio antes de cualquier decisión aunque retrase la cirugía || La sospecha clínica alta justifica cirugía inmediata.
+- premature_closure | Hielo local y reposo || No trata la torsión.
+- framing_effect | Orquiectomía de inmediato sin intentar detorsión || Primero se intenta salvar el testículo.
+- complexity_bias | Tomografía abdominal || Retrasa el tratamiento.
+- base_rate_fallacy | Tratamiento de torsión de apéndice testicular con analgésicos || El cuadro sugiere torsión del cordón.
+- belief_bias | Masaje testicular en casa || Es peligroso.
+- omission_bias | Esperar a que llegue un familiar para decidir || El tiempo determina la viabilidad.
+E: La torsión testicular es una urgencia urológica más frecuente en adolescentes. Se debe a la rotación del cordón espermático, a menudo por fijación anómala en badajo de campana, que compromete el flujo sanguíneo. Se presenta con dolor testicular súbito e intenso, náusea y vómito, testículo elevado y horizontal, y ausencia del reflejo cremastérico. La viabilidad depende del tiempo y es alta si se corrige en menos de 6 horas. Ante sospecha alta se realiza exploración quirúrgica inmediata con detorsión y fijación bilateral. El Doppler ayuda en casos dudosos sin retrasar la cirugía. La detorsión manual puede intentarse mientras se prepara el quirófano.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de torsión testicular
+
+@ ped|pediatric_surgery|cryptorchidism|2|diagnosis
+V: Recién nacido masculino con meato uretral en la cara ventral del pene, a nivel del surco coronal, prepucio incompleto ventral en capuchón y leve curvatura ventral. Ambos testículos están en el escroto.
+P: ¿Cuál es el diagnóstico más probable?
++ Hipospadias distal || Meato ventral con prepucio en capuchón y testículos descendidos.
+- anchoring | Epispadias || El meato está en la cara dorsal.
+- availability_heuristic | Fimosis || No altera la posición del meato.
+- representativeness_heuristic | Trastorno del desarrollo sexual obligado || Con testículos descendidos y forma distal no es necesario.
+- premature_closure | Micropene || El tamaño no se describe reducido.
+- base_rate_fallacy | Extrofia vesical || Es una malformación grave de la pared abdominal.
+- framing_effect | Estenosis del meato || El meato está en posición normal.
+- inattentional_blindness | Pene oculto por grasa || No altera el meato.
+- focusing_illusion | Criptorquidia || Los testículos están en el escroto.
+- belief_bias | Variante normal que no requiere atención || Requiere valoración urológica.
+E: El hipospadias es la malformación congénita más frecuente del pene. El meato uretral se encuentra en la cara ventral, desde el glande hasta el periné. Se acompaña de prepucio incompleto ventral en forma de capuchón y, a veces, curvatura ventral. Las formas distales son las más comunes. Cuando el hipospadias es proximal o se acompaña de criptorquidia, especialmente bilateral, se debe estudiar un trastorno del desarrollo sexual. No debe realizarse circuncisión porque el prepucio se usa en la reparación. La corrección quirúrgica se realiza entre los 6 y 18 meses.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del hipospadias
+
+@ ped|pediatric_gastroenterology|pediatric_gerd|3|complication_prognosis
+V: Niño de 8 años con enfermedad por reflujo de larga evolución mal tratada que presenta disfagia a sólidos, impactación de alimento y pirosis. La endoscopia muestra un estrechamiento en el esófago distal.
+P: ¿Cuál es la complicación que presenta?
++ Estenosis esofágica péptica || La esofagitis crónica por reflujo produce fibrosis y estrechamiento.
+- anchoring | Esofagitis eosinofílica || Puede dar disfagia, pero el contexto es el reflujo crónico mal tratado.
+- availability_heuristic | Acalasia || Da disfagia a sólidos y líquidos con esfínter que no se relaja.
+- representativeness_heuristic | Cáncer de esófago || Es excepcional en niños.
+- premature_closure | Cuerpo extraño sin otra alteración || No explica la estenosis.
+- base_rate_fallacy | Esófago de Barrett con adenocarcinoma || Es raro en niños.
+- framing_effect | Anillo vascular || Es congénito y da síntomas desde la lactancia.
+- inattentional_blindness | Candidiasis esofágica || Da placas sin estenosis fibrosa.
+- focusing_illusion | Divertículo de Zenker || Es propio de adultos mayores.
+- belief_bias | Disfagia por comer rápido || Existe una lesión estructural.
+E: Las complicaciones de la enfermedad por reflujo gastroesofágico en niños incluyen esofagitis erosiva, estenosis péptica, esófago de Barrett, falla de medro, anemia y manifestaciones respiratorias como asma, neumonías por aspiración y laringitis. La estenosis péptica resulta de la fibrosis por inflamación crónica y se manifiesta con disfagia a sólidos e impactación de alimentos. Se diagnostica con endoscopia y esofagograma. Se trata con inhibidores de bomba de protones y dilataciones endoscópicas. La funduplicatura se considera en casos refractarios o con complicaciones graves.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del reflujo gastroesofágico en pediatría

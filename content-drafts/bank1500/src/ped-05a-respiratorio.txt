@@ -1,0 +1,207 @@
+@ ped|pediatric_respiratory|bronchiolitis|2|diagnosis
+V: Lactante de 4 meses en temporada invernal con rinorrea y tos de 3 días, ahora con dificultad respiratoria. Frecuencia respiratoria de 58 por minuto, tiraje intercostal leve, sibilancias y estertores finos bilaterales. Saturación de 94% al aire ambiente. Es su primer episodio.
+P: ¿Cuál es el diagnóstico más probable?
++ Bronquiolitis aguda || Primer episodio de sibilancias en menor de 2 años tras un cuadro catarral en invierno.
+- anchoring | Asma del lactante || Se diagnostica con episodios recurrentes, no con el primero.
+- availability_heuristic | Neumonía bacteriana || Daría fiebre alta, estado tóxico y hallazgos focales.
+- representativeness_heuristic | Laringotraqueítis || Da estridor y tos traqueal, no sibilancias.
+- premature_closure | Cuerpo extraño en vía aérea || Es raro a esta edad y sin antecedente de atragantamiento.
+- base_rate_fallacy | Fibrosis quística || No hay datos de falla de medro ni infecciones repetidas.
+- framing_effect | Tos ferina || Da accesos de tos con estridor inspiratorio sin sibilancias.
+- inattentional_blindness | Insuficiencia cardiaca por cardiopatía || No hay soplo ni hepatomegalia.
+- focusing_illusion | Reflujo gastroesofágico con aspiración || No explica el cuadro viral.
+- belief_bias | Gripa sin importancia || Tiene dificultad respiratoria que requiere vigilancia.
+E: La bronquiolitis es la infección respiratoria baja más frecuente en menores de 2 años, con mayor incidencia en menores de 6 meses y en invierno. El virus sincicial respiratorio es el agente principal. Inicia con rinorrea y tos, y en 2 a 3 días aparecen taquipnea, tiraje, sibilancias y estertores finos. El diagnóstico es clínico y no requiere radiografía ni estudios virales de rutina. Los factores de riesgo de enfermedad grave son edad menor de 3 meses, prematurez, cardiopatía congénita, enfermedad pulmonar crónica e inmunodeficiencia. El cuadro alcanza su máximo entre los días 3 y 5.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de bronquiolitis aguda
+
+@ ped|pediatric_respiratory|bronchiolitis|2|treatment_of_choice
+V: Lactante de 6 meses con bronquiolitis moderada, saturación de 91%, frecuencia respiratoria de 60 por minuto y dificultad para alimentarse. Está hospitalizado.
+P: ¿Cuál es el tratamiento de elección?
++ Medidas de soporte con oxígeno para saturación de 90 a 92% o más, aspiración nasal e hidratación || El tratamiento es de soporte.
+- anchoring | Salbutamol nebulizado de rutina || No mejora los desenlaces en la bronquiolitis.
+- availability_heuristic | Corticosteroides sistémicos || No son eficaces.
+- representativeness_heuristic | Antibióticos de amplio espectro || La causa es viral.
+- premature_closure | Adrenalina nebulizada de rutina || No se recomienda de rutina.
+- framing_effect | Fisioterapia torácica con percusión || No es útil.
+- complexity_bias | Ribavirina de rutina || Se reserva para casos muy seleccionados.
+- base_rate_fallacy | Montelukast || No es eficaz en la fase aguda.
+- belief_bias | Vaporizaciones con mentol || Pueden irritar la vía aérea.
+- omission_bias | Suspender la alimentación oral sin indicación || Solo se suspende si hay riesgo de aspiración.
+E: El tratamiento de la bronquiolitis es de soporte. Incluye oxígeno suplementario si la saturación es persistentemente menor de 90 a 92%, aspiración superficial de secreciones nasales, hidratación por vía oral, por sonda o intravenosa si no puede alimentarse, y vigilancia. Los broncodilatadores, corticosteroides, antibióticos, fisioterapia torácica y descongestionantes no han mostrado beneficio y no se recomiendan de rutina. La solución salina hipertónica nebulizada puede considerarse en hospitalizados. El oxígeno a alto flujo por cánula nasal o la presión positiva se usan en casos graves.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de bronquiolitis aguda
+
+@ ped|pediatric_respiratory|bronchiolitis|3|next_step
+V: Lactante de 2 meses, nacido a las 34 semanas, con bronquiolitis de 2 días. Presenta dos episodios de apnea, tiraje subcostal intenso, quejido y saturación de 87% con oxígeno por puntas nasales.
+P: ¿Cuál es la conducta más apropiada?
++ Hospitalizar en una unidad con capacidad de soporte ventilatorio e iniciar oxígeno a alto flujo o presión positiva || Tiene criterios de gravedad, apneas e hipoxemia.
+- anchoring | Manejo ambulatorio con salbutamol || Tiene criterios de gravedad.
+- availability_heuristic | Corticosteroides intravenosos como medida principal || No son eficaces.
+- representativeness_heuristic | Antibióticos y egreso en 24 horas || La causa es viral y tiene gravedad.
+- premature_closure | Solo aspiración nasal y observación en casa || Requiere soporte respiratorio.
+- framing_effect | Esperar a que el cuadro pase su pico antes de actuar || Puede presentar falla respiratoria.
+- complexity_bias | Broncoscopia diagnóstica urgente || No está indicada.
+- status_quo_bias | Mantener las puntas nasales sin cambios || La hipoxemia persiste.
+- belief_bias | Dar té de canela para la tos || No es útil y puede ser peligroso.
+- omission_bias | No intubar ni escalar el soporte por miedo a complicaciones || La falla respiratoria requiere soporte.
+E: Los criterios de hospitalización en bronquiolitis incluyen edad menor de 3 meses, prematurez, comorbilidades, apneas, dificultad respiratoria moderada a grave, saturación persistentemente menor de 90 a 92%, intolerancia a la vía oral y condiciones sociales que impiden la vigilancia. Las apneas son más frecuentes en menores de 2 meses y en prematuros. Los pacientes con hipoxemia o trabajo respiratorio que no mejoran con oxígeno convencional requieren oxígeno a alto flujo, presión positiva continua o ventilación mecánica en una unidad de cuidados intensivos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de bronquiolitis aguda
+
+@ ped|pediatric_respiratory|bronchiolitis|3|prevention_screening
+V: Lactante de 3 meses con displasia broncopulmonar, nacido a las 28 semanas. Inicia la temporada de virus sincicial respiratorio. La madre pregunta cómo protegerlo.
+P: ¿Cuál es la medida de prevención específica indicada?
++ Anticuerpo monoclonal contra el virus sincicial respiratorio, como nirsevimab o palivizumab, durante la temporada || Previene la enfermedad grave en lactantes de alto riesgo.
+- anchoring | Antibiótico profiláctico durante el invierno || No previene infecciones virales.
+- availability_heuristic | Vacuna de influenza al lactante de 3 meses || Se aplica desde los 6 meses.
+- representativeness_heuristic | Salbutamol inhalado diario || No previene la infección.
+- premature_closure | Corticosteroide inhalado preventivo || No previene la bronquiolitis.
+- framing_effect | Ribavirina profiláctica || No se usa como profilaxis.
+- complexity_bias | Gammaglobulina intravenosa mensual inespecífica || No es la medida indicada.
+- base_rate_fallacy | Ninguna medida porque todos se contagian || Existen medidas eficaces.
+- belief_bias | Mantenerlo muy abrigado en casa cerrada || No previene y puede aumentar el riesgo.
+- omission_bias | Evitar la lactancia materna para no contagiarlo || La lactancia protege.
+E: Los lactantes con prematurez extrema, displasia broncopulmonar o cardiopatía congénita con repercusión tienen alto riesgo de bronquiolitis grave. La inmunoprofilaxis con anticuerpos monoclonales contra la proteína F del virus sincicial respiratorio reduce las hospitalizaciones. El palivizumab se aplica mensualmente durante la temporada y el nirsevimab, de acción prolongada, en dosis única. También existe vacuna materna en el embarazo en algunos países. Las medidas generales incluyen lavado de manos, lactancia materna, evitar humo de tabaco y aglomeraciones y limitar el contacto con personas enfermas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de bronquiolitis aguda
+
+@ ped|pediatric_respiratory|bronchiolitis|2|risk_factor
+V: Lactante de 7 semanas hospitalizado por bronquiolitis grave con apneas. Se revisan sus antecedentes para identificar por qué cursó con mayor gravedad.
+P: ¿Cuál es el factor de riesgo más importante de gravedad en este caso?
++ Edad menor de 3 meses || Los lactantes pequeños tienen vías aéreas estrechas y mayor riesgo de apnea.
+- anchoring | Sexo femenino || No es un factor de riesgo relevante.
+- availability_heuristic | Lactancia materna exclusiva || Es protectora.
+- representativeness_heuristic | Vacunación al corriente || No aumenta el riesgo.
+- premature_closure | Peso adecuado al nacer || No aumenta el riesgo.
+- base_rate_fallacy | Nacimiento en verano || No es relevante.
+- framing_effect | Ser primogénito || Los hermanos mayores aumentan la exposición, no al revés.
+- inattentional_blindness | Uso de chupón || No es un factor de gravedad.
+- focusing_illusion | Antecedente de dermatitis atópica materna || No es el factor principal de gravedad.
+- belief_bias | Salir al frío sin gorro || No es una causa de gravedad.
+E: Los factores asociados a bronquiolitis grave son edad menor de 3 meses, prematurez, especialmente menor de 32 semanas, displasia broncopulmonar, cardiopatía congénita con repercusión hemodinámica, inmunodeficiencia, enfermedades neuromusculares y síndrome de Down. También influyen la exposición al humo de tabaco, la falta de lactancia materna y la convivencia con hermanos en edad escolar o asistencia a guardería. Los menores de 2 meses y los prematuros tienen mayor riesgo de apneas, que pueden ser la primera manifestación. Identificar estos factores ayuda a decidir hospitalización y profilaxis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de bronquiolitis aguda
+
+@ ped|pediatric_respiratory|bronchiolitis|3|initial_study
+V: Lactante de 5 meses con cuadro típico de bronquiolitis leve, saturación de 95%, buena alimentación y sin factores de riesgo. Los padres piden una radiografía y estudios de laboratorio.
+P: ¿Cuál es el abordaje inicial más apropiado?
++ Diagnóstico clínico sin radiografía ni estudios de laboratorio de rutina || En la bronquiolitis típica los estudios no cambian el manejo.
+- anchoring | Radiografía de tórax en todos los casos || Aumenta el uso innecesario de antibióticos.
+- availability_heuristic | Biometría hemática y proteína C reactiva || No distinguen bien y no cambian el manejo.
+- representativeness_heuristic | Gasometría arterial || No está indicada en casos leves.
+- premature_closure | Panel viral de rutina || No cambia el manejo en la mayoría.
+- framing_effect | Hemocultivo || El riesgo de bacteriemia es muy bajo.
+- complexity_bias | Tomografía de tórax || No está indicada.
+- information_bias | Prueba de sudor para descartar fibrosis quística || No hay indicación.
+- belief_bias | Solo una radiografía confirma la bronquiolitis || El diagnóstico es clínico.
+- omission_bias | No explicar signos de alarma porque es leve || La familia debe vigilar la evolución.
+E: El diagnóstico de bronquiolitis se basa en la historia y la exploración. En casos típicos no se recomiendan la radiografía de tórax, la biometría hemática, los reactantes de fase aguda ni las pruebas virales de rutina, porque no cambian el tratamiento y la radiografía puede mostrar atelectasias que se interpretan como neumonía y llevan a antibióticos innecesarios. Los estudios se reservan para casos graves, evolución atípica o sospecha de complicaciones. La oximetría de pulso es útil para valorar la gravedad. Se explican a los padres los signos de alarma, como dificultad respiratoria, apneas, cianosis y rechazo al alimento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de bronquiolitis aguda
+
+@ ped|pediatric_respiratory|bronchiolitis|3|complication_prognosis
+V: Niño de 3 años con antecedente de bronquiolitis grave por virus sincicial respiratorio a los 3 meses que requirió hospitalización. Desde entonces ha tenido varios episodios de sibilancias con infecciones virales.
+P: ¿Cuál es la secuela más frecuente asociada a la bronquiolitis grave en el lactante?
++ Sibilancias recurrentes en los años siguientes || La bronquiolitis grave se asocia a hiperreactividad bronquial posterior.
+- anchoring | Fibrosis pulmonar progresiva || No es una secuela habitual.
+- availability_heuristic | Bronquiectasias en todos los casos || Son raras salvo en bronquiolitis obliterante.
+- representativeness_heuristic | Inmunodeficiencia adquirida || No es consecuencia de la bronquiolitis.
+- premature_closure | Ninguna, siempre se resuelve sin consecuencias || Las sibilancias recurrentes son frecuentes.
+- base_rate_fallacy | Hipertensión pulmonar en todos los casos || Es rara.
+- framing_effect | Cardiopatía congénita adquirida || No se adquiere por la infección.
+- inattentional_blindness | Retraso del desarrollo neurológico || No es una secuela habitual.
+- focusing_illusion | Asma grave persistente obligada de por vida || No todos desarrollan asma.
+- belief_bias | Pulmones débiles para siempre || La mayoría mejora con el crecimiento.
+E: Muchos lactantes que tuvieron bronquiolitis grave presentan episodios recurrentes de sibilancias durante los años preescolares, generalmente desencadenados por infecciones virales. No está claro si el virus causa la hiperreactividad o si revela una predisposición previa. La mayoría mejora con la edad, pero algunos desarrollan asma, sobre todo si tienen atopia o antecedente familiar. Una complicación rara pero grave es la bronquiolitis obliterante, más asociada a adenovirus, con obstrucción persistente. El seguimiento permite identificar a los niños que requieren tratamiento controlador.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de bronquiolitis aguda
+
+@ ped|pediatric_respiratory|croup|2|diagnosis
+V: Niño de 2 años con rinorrea y febrícula de un día que en la noche despierta con tos perruna, disfonía y estridor inspiratorio al llorar. En reposo no tiene estridor ni tiraje y está tranquilo.
+P: ¿Cuál es el diagnóstico más probable?
++ Laringotraqueítis viral o crup leve || Tos perruna, disfonía y estridor inspiratorio tras pródromo catarral.
+- anchoring | Epiglotitis || Da fiebre alta, aspecto tóxico, sialorrea y postura en trípode.
+- availability_heuristic | Bronquiolitis || Da sibilancias espiratorias, no estridor.
+- representativeness_heuristic | Aspiración de cuerpo extraño || Inicia de forma súbita con atragantamiento.
+- premature_closure | Asma || Da sibilancias espiratorias.
+- base_rate_fallacy | Traqueítis bacteriana || Da aspecto tóxico y fiebre alta.
+- framing_effect | Absceso retrofaríngeo || Da sialorrea y rigidez de cuello.
+- inattentional_blindness | Laringomalacia || Es congénita y desde el nacimiento.
+- focusing_illusion | Angioedema || Se acompaña de edema facial y urticaria.
+- belief_bias | Tos por el frío de la noche || No explica el estridor.
+E: El crup o laringotraqueítis es la causa más frecuente de estridor agudo en niños de 6 meses a 3 años. El virus parainfluenza tipo 1 es el agente principal. Tras un pródromo catarral aparecen tos perruna, disfonía y estridor inspiratorio, que empeoran por la noche y con la agitación. La escala de Westley valora estridor, tiraje, entrada de aire, cianosis y estado de conciencia para clasificar la gravedad. El diagnóstico es clínico. La radiografía, que muestra el signo de la aguja o del campanario, solo se usa ante dudas diagnósticas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de laringotraqueítis aguda en niños
+
+@ ped|pediatric_respiratory|croup|2|treatment_of_choice
+V: Niña de 18 meses con crup leve, tos perruna y estridor solo al llorar, sin tiraje en reposo. Escala de Westley de 1.
+P: ¿Cuál es el tratamiento de elección?
++ Dexametasona oral en dosis única de 0.15 a 0.6 mg/kg || El corticosteroide reduce la gravedad y las consultas en todos los grados de crup.
+- anchoring | Adrenalina nebulizada de rutina || Se reserva para crup moderado a grave.
+- availability_heuristic | Antibiótico oral || La causa es viral.
+- representativeness_heuristic | Salbutamol nebulizado || No actúa sobre el edema laríngeo.
+- premature_closure | Solo nebulizaciones de vapor frío || No han mostrado beneficio.
+- framing_effect | Antitusivos con codeína || Están contraindicados en niños pequeños.
+- complexity_bias | Intubación preventiva || No está indicada.
+- base_rate_fallacy | Antihistamínicos || No son eficaces.
+- belief_bias | Sacar al niño al aire frío de la noche como único tratamiento || No sustituye al corticosteroide.
+- omission_bias | No dar nada porque es leve || El corticosteroide beneficia también al crup leve.
+E: Los corticosteroides son la base del tratamiento del crup en todos los grados de gravedad. La dexametasona oral en dosis única de 0.15 a 0.6 mg/kg reduce la gravedad, las consultas de regreso y las hospitalizaciones. Su efecto inicia en una a dos horas. La budesonida nebulizada es una alternativa si el niño vomita. La adrenalina nebulizada se agrega en crup moderado o grave por su efecto rápido, y se vigila al paciente 2 a 4 horas por posible efecto rebote. Los antibióticos, antitusivos, antihistamínicos y el vapor no se recomiendan.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de laringotraqueítis aguda en niños
+
+@ ped|pediatric_respiratory|croup|3|next_step
+V: Niño de 2 años con crup que presenta estridor en reposo, tiraje supraesternal e intercostal moderado y agitación. Saturación de 94%. Recibió dexametasona hace 20 minutos.
+P: ¿Cuál es el siguiente paso?
++ Administrar adrenalina nebulizada y vigilar al menos 2 a 4 horas || Crup moderado a grave con estridor en reposo.
+- anchoring | Egresar con dexametasona y vigilancia en casa || Tiene estridor en reposo y tiraje.
+- availability_heuristic | Nebulizar salbutamol || No actúa sobre el edema subglótico.
+- representativeness_heuristic | Intubar de inmediato || Primero se usa adrenalina nebulizada.
+- premature_closure | Repetir la dexametasona en 10 minutos || Su efecto aún no inicia y no es la medida rápida.
+- framing_effect | Explorar la faringe con abatelenguas a fondo || Puede agitarlo y empeorar la obstrucción.
+- complexity_bias | Radiografía lateral de cuello antes de tratar || Retrasa el tratamiento.
+- status_quo_bias | Observar sin intervenir hasta que actúe el corticosteroide || La obstrucción es moderada a grave.
+- belief_bias | Dar baños de vapor caliente || No son eficaces y pueden quemar.
+- omission_bias | No usar adrenalina por miedo a taquicardia || El beneficio supera el riesgo.
+E: En el crup moderado a grave, con estridor en reposo y tiraje, se administra adrenalina nebulizada, que produce vasoconstricción y reduce el edema subglótico en minutos. Puede usarse adrenalina racémica o L adrenalina 1 en 1 000 a 0.5 mL/kg con máximo de 5 mL. Como su efecto dura unas 2 horas, el paciente debe vigilarse al menos de 2 a 4 horas por posible regreso de los síntomas. Se mantiene al niño tranquilo en brazos de sus padres y se administra oxígeno si la saturación es baja. Si requiere más de una dosis o persiste grave, se hospitaliza.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de laringotraqueítis aguda en niños
+
+@ ped|pediatric_respiratory|croup|4|diagnosis
+V: Niño de 4 años sin vacunas que inicia de forma súbita con fiebre de 40 °C, aspecto tóxico, dolor de garganta intenso, voz apagada y sialorrea. Está sentado inclinado hacia adelante con el cuello extendido y la boca abierta. Tiene estridor suave sin tos perruna.
+P: ¿Cuál es el diagnóstico más probable?
++ Epiglotitis aguda || Inicio súbito con fiebre alta, aspecto tóxico, sialorrea y postura en trípode en un niño no vacunado.
+- anchoring | Laringotraqueítis viral || Tiene pródromo catarral y tos perruna, sin aspecto tóxico.
+- availability_heuristic | Faringoamigdalitis estreptocócica || No da estridor ni postura en trípode.
+- representativeness_heuristic | Aspiración de cuerpo extraño || Inicia con atragantamiento sin fiebre.
+- premature_closure | Absceso periamigdalino || Da trismus y desviación de la úvula.
+- base_rate_fallacy | Difteria || Da membrana grisácea con inicio más gradual.
+- framing_effect | Crisis asmática || Da sibilancias espiratorias.
+- inattentional_blindness | Angioedema hereditario || No da fiebre alta.
+- focusing_illusion | Mononucleosis infecciosa || No da obstrucción súbita con postura en trípode.
+- belief_bias | Berrinche con llanto prolongado || No explica la fiebre ni la sialorrea.
+E: La epiglotitis es una infección bacteriana de la epiglotis y estructuras supraglóticas que causa obstrucción rápida de la vía aérea. Históricamente se debía a Haemophilus influenzae tipo b y es rara en vacunados, aunque puede deberse a estreptococos y estafilococos. Se manifiesta con inicio súbito, fiebre alta, aspecto tóxico, odinofagia, disfagia, sialorrea, voz apagada y postura en trípode con cuello extendido. No suele haber tos perruna. Es una urgencia, por lo que no se debe explorar la faringe ni agitar al niño. Se asegura la vía aérea en quirófano por personal experto y se administran antibióticos como ceftriaxona.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de laringotraqueítis aguda en niños
+
+@ ped|pediatric_respiratory|croup|4|next_step
+V: Niño de 3 años con sospecha clínica de epiglotitis, sentado en trípode, con sialorrea y estridor. Está ansioso y su saturación es de 93%.
+P: ¿Cuál es la conducta inmediata más apropiada?
++ Mantenerlo tranquilo con sus padres, dar oxígeno sin forzarlo y asegurar la vía aérea en quirófano por el equipo experto || Evitar agitarlo previene la obstrucción completa.
+- anchoring | Explorar la faringe con abatelenguas para confirmar || Puede desencadenar obstrucción completa.
+- availability_heuristic | Acostarlo para tomar una radiografía lateral de cuello || Acostarlo puede empeorar la obstrucción.
+- representativeness_heuristic | Canalizar una vena antes de asegurar la vía aérea || Agitarlo es peligroso.
+- premature_closure | Dexametasona oral y egreso || Es una urgencia vital.
+- framing_effect | Nebulizar salbutamol || No trata la obstrucción supraglótica.
+- complexity_bias | Tomografía de cuello urgente || Retrasa el manejo de la vía aérea.
+- status_quo_bias | Observar en la sala de urgencias general || Requiere manejo inmediato de la vía aérea.
+- belief_bias | Inducir el vómito para limpiar la garganta || Es peligroso.
+- omission_bias | No avisar a anestesia hasta confirmar el diagnóstico || El retraso puede ser fatal.
+E: Ante la sospecha de epiglotitis la prioridad es proteger la vía aérea. Se evita cualquier maniobra que agite al niño, como explorar la faringe, acostarlo, canalizarlo o separarlo de sus padres, porque puede desencadenar obstrucción completa. Se administra oxígeno de forma no invasiva y se avisa de inmediato a anestesiología y otorrinolaringología para intubar en quirófano con equipo para traqueostomía de urgencia. Una vez asegurada la vía aérea se toman cultivos y se inicia ceftriaxona o cefotaxima intravenosa. La vacunación contra Haemophilus influenzae tipo b es la principal medida de prevención.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de laringotraqueítis aguda en niños
+
+@ ped|pediatric_respiratory|croup|3|diagnosis
+V: Niño de 18 meses que mientras comía cacahuates presentó un acceso súbito de tos, asfixia momentánea y cianosis que cedió. Desde entonces tiene tos persistente. Afebril. A la auscultación hay disminución del murmullo vesicular y sibilancias localizadas en el hemitórax derecho.
+P: ¿Cuál es el diagnóstico más probable?
++ Aspiración de cuerpo extraño en bronquio derecho || Inicio súbito con atragantamiento y hallazgos unilaterales.
+- anchoring | Crisis asmática || Las sibilancias suelen ser difusas y bilaterales.
+- availability_heuristic | Bronquiolitis || Tiene pródromo viral y hallazgos bilaterales.
+- representativeness_heuristic | Laringotraqueítis viral || Da estridor y tos perruna tras un catarro.
+- premature_closure | Neumonía bacteriana || No explica el inicio súbito con atragantamiento.
+- base_rate_fallacy | Tuberculosis endobronquial || Es rara y crónica.
+- framing_effect | Alergia al cacahuate con anafilaxia || Daría urticaria o hipotensión, no hallazgos unilaterales.
+- inattentional_blindness | Malformación pulmonar congénita || No explica el inicio súbito.
+- focusing_illusion | Reflujo gastroesofágico || No explica los hallazgos focales.
+- belief_bias | Ya se resolvió porque dejó de ahogarse || El objeto puede seguir en el bronquio.
+E: La aspiración de cuerpo extraño es más frecuente entre 1 y 3 años, sobre todo con alimentos como cacahuates, semillas y uvas. Tras el episodio de asfixia puede haber un periodo asintomático engañoso. Los hallazgos típicos son tos persistente, sibilancias unilaterales y disminución del murmullo vesicular, más a menudo en el lado derecho porque el bronquio es más vertical. La radiografía puede ser normal o mostrar atrapamiento aéreo unilateral, mejor visible en espiración o en decúbito lateral. Ante sospecha clínica se realiza broncoscopia rígida, que es diagnóstica y terapéutica. Se recomienda no dar alimentos duros y pequeños a menores de 4 años.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de cuerpo extraño en vía aérea en niños

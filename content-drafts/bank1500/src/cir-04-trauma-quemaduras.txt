@@ -1,0 +1,415 @@
+@ cir|trauma|thoracic_trauma|3|diagnosis
+V: Hombre de 30 años con herida por arma blanca en el hemitórax derecho. Presenta disnea grave, desviación de la tráquea a la izquierda, ingurgitación yugular, ausencia de ruidos respiratorios e hiperresonancia en el hemitórax derecho. Presión de 75/40 mmHg.
+P: ¿Cuál es el diagnóstico más probable?
++ Neumotórax a tensión || Hipotensión con desviación traqueal contralateral, ingurgitación yugular e hiperresonancia.
+- anchoring | Hemotórax masivo || Daría matidez, no hiperresonancia.
+- availability_heuristic | Taponamiento cardiaco || No explica la desviación traqueal ni la hiperresonancia.
+- representativeness_heuristic | Neumotórax simple || No causa hipotensión ni desviación traqueal.
+- premature_closure | Contusión pulmonar || No da hiperresonancia ni desviación.
+- base_rate_fallacy | Tórax inestable || Da movimiento paradójico.
+- framing_effect | Choque hipovolémico sin lesión torácica || No explica la ingurgitación yugular.
+- inattentional_blindness | Rotura diafragmática || Daría ruidos intestinales en el tórax.
+- focusing_illusion | Lesión de la aorta || No explica los hallazgos.
+- belief_bias | Crisis de ansiedad por la herida || Hay datos de compromiso grave.
+E: El neumotórax a tensión ocurre cuando el aire entra al espacio pleural sin poder salir, lo que colapsa el pulmón, desplaza el mediastino al lado contrario y reduce el retorno venoso, causando choque obstructivo. Se manifiesta con disnea grave, hipotensión, taquicardia, desviación traqueal contralateral, ingurgitación yugular, ausencia de ruidos respiratorios e hiperresonancia del lado afectado. El diagnóstico es clínico y no debe retrasarse por estudios de imagen. El tratamiento es la descompresión inmediata con aguja o toracostomía digital, seguida de colocación de sonda pleural.
+R: Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos
+
+@ cir|trauma|thoracic_trauma|3|initial_treatment
+V: Hombre de 25 años con neumotórax a tensión clínico tras un accidente de motocicleta. Presión de 70/40 mmHg y saturación de 80%.
+P: ¿Cuál es el tratamiento inicial inmediato?
++ Descompresión con aguja en el quinto espacio intercostal en la línea axilar media o toracostomía digital, seguida de sonda pleural || Revierte el choque obstructivo de inmediato.
+- anchoring | Radiografía de tórax antes de cualquier procedimiento || Retrasa un tratamiento que salva la vida.
+- availability_heuristic | Intubación y ventilación con presión positiva sin descompresión || Empeora el neumotórax a tensión.
+- representativeness_heuristic | Pericardiocentesis || Es para taponamiento cardiaco.
+- premature_closure | Oxígeno por mascarilla y observación || No resuelve la tensión.
+- framing_effect | Vasopresores como primera medida || No corrigen la causa.
+- complexity_bias | Toracotomía de urgencia como primer paso || La descompresión es más rápida.
+- base_rate_fallacy | Tomografía de tórax urgente || Retrasa el tratamiento.
+- belief_bias | Esperar a que el pulmón se reexpanda solo || Es una urgencia vital.
+- omission_bias | No puncionar por miedo a equivocarse || El beneficio supera el riesgo.
+E: El neumotórax a tensión es una causa de muerte prevenible en el trauma. Su tratamiento es la descompresión inmediata sin esperar estudios de imagen. En adultos se recomienda puncionar con un catéter de calibre grueso en el cuarto o quinto espacio intercostal en la línea axilar media o anterior, por la menor tasa de falla que el segundo espacio en la línea medioclavicular por el grosor de la pared torácica. La toracostomía digital es una alternativa eficaz. Después se coloca una sonda pleural en el quinto espacio intercostal, en el triángulo de seguridad.
+R: Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos
+
+@ cir|trauma|thoracic_trauma|3|diagnosis
+V: Hombre de 35 años con herida por proyectil de arma de fuego en el hemitórax izquierdo. Presenta hipotensión, ausencia de ruidos respiratorios y matidez en el hemitórax izquierdo. Al colocar la sonda pleural drenan de inmediato 1 600 mL de sangre.
+P: ¿Cuál es el diagnóstico más probable?
++ Hemotórax masivo || Drenaje inmediato de más de 1 500 mL de sangre por la sonda pleural.
+- anchoring | Neumotórax a tensión || Daría hiperresonancia, no matidez.
+- availability_heuristic | Hemotórax simple || El volumen indica hemotórax masivo.
+- representativeness_heuristic | Taponamiento cardiaco || No explica la matidez con drenaje de sangre pleural.
+- premature_closure | Derrame pleural paraneumónico || El contexto es traumático.
+- base_rate_fallacy | Quilotórax || El líquido es sangre.
+- framing_effect | Contusión pulmonar || No explica el drenaje de sangre.
+- inattentional_blindness | Rotura diafragmática con estómago en el tórax || Drenaría contenido gástrico.
+- focusing_illusion | Neumonía traumática || No explica el drenaje.
+- belief_bias | Sangrado normal que siempre se detiene solo || El volumen indica lesión grave.
+E: El hemotórax masivo es la acumulación rápida de más de 1 500 mL de sangre o más de un tercio del volumen sanguíneo en la cavidad pleural, generalmente por lesión penetrante de vasos sistémicos o hiliares. Se manifiesta con choque, ausencia de ruidos respiratorios y matidez del lado afectado. Se trata con reposición de volumen y transfusión y colocación de sonda pleural de calibre grueso. La toracotomía se indica si drenan más de 1 500 mL de inmediato, más de 200 mL por hora durante 2 a 4 horas o si se requieren transfusiones continuas.
+R: Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos
+
+@ cir|trauma|thoracic_trauma|4|diagnosis
+V: Hombre de 28 años con herida por arma blanca paraesternal izquierda. Presenta hipotensión, ingurgitación yugular, ruidos cardiacos apagados y pulso paradójico. Campos pulmonares con ruidos respiratorios normales y tráquea central.
+P: ¿Cuál es el diagnóstico más probable?
++ Taponamiento cardiaco || Tríada de Beck con hipotensión, ingurgitación yugular y ruidos cardiacos apagados.
+- anchoring | Neumotórax a tensión || Daría desviación traqueal y ausencia de ruidos respiratorios.
+- availability_heuristic | Hemotórax masivo || Los ruidos respiratorios son normales.
+- representativeness_heuristic | Contusión miocárdica || No explica el pulso paradójico con ruidos apagados.
+- premature_closure | Choque hipovolémico simple || No explica la ingurgitación yugular.
+- base_rate_fallacy | Infarto agudo de miocardio || El contexto es traumático.
+- framing_effect | Embolia gaseosa || Es menos probable.
+- inattentional_blindness | Tórax inestable || Da movimiento paradójico de la pared.
+- focusing_illusion | Neumomediastino simple || No causa choque obstructivo.
+- belief_bias | Herida superficial sin importancia || La localización es de alto riesgo.
+E: El taponamiento cardiaco en el trauma se produce por acumulación de sangre en el saco pericárdico, generalmente por heridas penetrantes en la zona precordial. Incluso volúmenes pequeños comprimen el corazón y reducen el llenado, causando choque obstructivo. Se manifiesta con la tríada de Beck, hipotensión, ingurgitación yugular y ruidos cardiacos apagados, además de pulso paradójico y signo de Kussmaul. El FAST pericárdico confirma el líquido. El tratamiento definitivo es la toracotomía o esternotomía con reparación de la lesión, y la pericardiocentesis puede servir como medida temporal.
+R: Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos
+
+@ cir|trauma|thoracic_trauma|3|diagnosis
+V: Hombre de 50 años atropellado que presenta dolor torácico intenso y dificultad respiratoria. Un segmento de la pared torácica derecha se mueve hacia dentro durante la inspiración y hacia fuera en la espiración. La radiografía muestra fracturas de 4 costillas consecutivas en dos sitios cada una.
+P: ¿Cuál es el diagnóstico más probable?
++ Tórax inestable con contusión pulmonar subyacente || Fracturas de tres o más costillas consecutivas en dos sitios con movimiento paradójico.
+- anchoring | Fractura costal simple || No da movimiento paradójico.
+- availability_heuristic | Neumotórax a tensión || No explica el movimiento paradójico.
+- representativeness_heuristic | Hemotórax masivo || No explica el movimiento paradójico.
+- premature_closure | Contusión de la pared sin fracturas || Hay fracturas múltiples.
+- base_rate_fallacy | Fractura de esternón aislada || No explica el patrón.
+- framing_effect | Rotura diafragmática || No explica el segmento móvil.
+- inattentional_blindness | Taponamiento cardiaco || No explica el movimiento paradójico.
+- focusing_illusion | Costocondritis || No hay fracturas.
+- belief_bias | Respiración rara por el dolor sin lesión || Hay un segmento inestable.
+E: El tórax inestable ocurre cuando tres o más costillas consecutivas se fracturan en dos o más sitios, creando un segmento de la pared que se mueve de forma paradójica con la respiración. Su mayor gravedad se debe a la contusión pulmonar subyacente, que causa hipoxemia. El tratamiento incluye analgesia eficaz, incluidos bloqueos regionales o epidural, oxígeno, fisioterapia respiratoria y manejo cuidadoso de líquidos para no empeorar la contusión. Puede requerir ventilación no invasiva o mecánica. La fijación quirúrgica de las costillas se considera en casos seleccionados.
+R: Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos
+
+@ cir|trauma|thoracic_trauma|4|initial_study
+V: Hombre de 45 años tras un choque frontal a alta velocidad. Estable. La radiografía de tórax muestra ensanchamiento del mediastino mayor de 8 cm, pérdida del contorno del botón aórtico y desviación de la sonda nasogástrica a la derecha.
+P: ¿Cuál es el estudio indicado ante esta sospecha?
++ Angiotomografía de tórax || Confirma la lesión traumática de la aorta torácica.
+- anchoring | Repetir la radiografía en 24 horas || Retrasa el diagnóstico de una lesión mortal.
+- availability_heuristic | Ecocardiograma transtorácico como estudio definitivo || Tiene baja sensibilidad para la aorta descendente.
+- representativeness_heuristic | Broncoscopia || No evalúa la aorta.
+- premature_closure | Ultrasonido FAST || No evalúa la aorta torácica.
+- base_rate_fallacy | Resonancia magnética urgente || Es lenta y poco práctica en trauma.
+- framing_effect | Esofagograma con bario || No evalúa la aorta.
+- complexity_bias | Toracotomía exploradora sin imagen en paciente estable || Primero se confirma.
+- information_bias | Troponinas como estudio de la aorta || No evalúan la aorta.
+- belief_bias | El mediastino ancho es normal en adultos robustos || Es un signo de alarma.
+E: La lesión traumática de la aorta torácica ocurre en traumatismos por desaceleración brusca, como choques a alta velocidad y caídas de altura, generalmente en el istmo aórtico distal a la subclavia izquierda. La mayoría de los pacientes muere en el sitio, y los que llegan tienen un hematoma contenido. La radiografía puede mostrar mediastino ensanchado, pérdida del botón aórtico, desviación de la tráquea o la sonda a la derecha y casquete apical. La angiotomografía es el estudio de elección. El tratamiento incluye control de la presión y la frecuencia cardiaca y reparación endovascular.
+R: Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos
+
+@ cir|trauma|head_trauma|3|diagnosis
+V: Hombre de 22 años golpeado en la región temporal con un bate. Perdió el conocimiento brevemente, luego habló normal durante una hora y después presentó cefalea intensa, vómito, somnolencia progresiva y midriasis derecha. La tomografía muestra una lesión biconvexa hiperdensa temporal derecha.
+P: ¿Cuál es el diagnóstico más probable?
++ Hematoma epidural || Intervalo lúcido con lesión biconvexa por lesión de la arteria meníngea media.
+- anchoring | Hematoma subdural agudo || Tiene forma de semiluna y suele no tener intervalo lúcido.
+- availability_heuristic | Conmoción cerebral simple || No explica la lesión en la tomografía.
+- representativeness_heuristic | Hemorragia subaracnoidea traumática || Da sangre en surcos y cisternas.
+- premature_closure | Contusión cerebral || No explica la lesión biconvexa.
+- base_rate_fallacy | Lesión axonal difusa || Da coma desde el inicio con tomografía casi normal.
+- framing_effect | Intoxicación alcohólica || No explica la lesión.
+- inattentional_blindness | Hematoma subdural crónico || Ocurre en ancianos semanas después.
+- focusing_illusion | Migraña postraumática || No explica la midriasis ni la lesión.
+- belief_bias | Ya se recuperó porque habló normal || El intervalo lúcido es engañoso.
+E: El hematoma epidural es la acumulación de sangre entre el cráneo y la duramadre, generalmente por lesión de la arteria meníngea media asociada a fractura del hueso temporal. Su presentación clásica es pérdida del conocimiento breve, seguida de un intervalo lúcido y después deterioro neurológico rápido con cefalea, vómito, somnolencia, midriasis ipsilateral y hemiparesia contralateral por herniación uncal. La tomografía muestra una lesión hiperdensa biconvexa o en lente que no cruza las suturas. El tratamiento es la craneotomía urgente con evacuación, con buen pronóstico si es oportuna.
+R: Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico
+
+@ cir|trauma|head_trauma|3|diagnosis
+V: Hombre de 78 años que toma warfarina, con caídas frecuentes. Hace 3 semanas se golpeó la cabeza levemente. Ahora presenta confusión progresiva, cefalea y debilidad del lado izquierdo. La tomografía muestra una colección hipodensa en forma de semiluna sobre el hemisferio derecho.
+P: ¿Cuál es el diagnóstico más probable?
++ Hematoma subdural crónico || Colección hipodensa en semiluna semanas después de un traumatismo leve en un anciano anticoagulado.
+- anchoring | Evento vascular cerebral isquémico || La tomografía muestra una colección extraaxial.
+- availability_heuristic | Demencia de Alzheimer || No explica la colección ni la evolución.
+- representativeness_heuristic | Hematoma epidural || Es biconvexo, agudo e hiperdenso.
+- premature_closure | Tumor cerebral primario || No explica la colección en semiluna.
+- base_rate_fallacy | Hidrocefalia normotensa || Da dilatación ventricular sin colección.
+- framing_effect | Delirium por infección urinaria || No explica la colección.
+- inattentional_blindness | Hemorragia subaracnoidea || Da sangre en surcos y cisternas.
+- focusing_illusion | Absceso cerebral || No explica la forma ni el contexto.
+- belief_bias | Confusión normal de la edad || Hay una lesión tratable.
+E: El hematoma subdural es la acumulación de sangre entre la duramadre y la aracnoides por rotura de las venas puente. El crónico es más frecuente en adultos mayores, alcohólicos y anticoagulados por la atrofia cerebral que estira las venas, y puede seguir a traumatismos leves que el paciente no recuerda. Se manifiesta semanas después con cefalea, confusión, alteraciones cognitivas y déficit focal. La tomografía muestra una colección en semiluna que cruza las suturas, hipodensa en la fase crónica. El tratamiento es revertir la anticoagulación y el drenaje quirúrgico por trépanos si es sintomático.
+R: Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico
+
+@ cir|trauma|head_trauma|3|next_step
+V: Mujer de 40 años con traumatismo craneoencefálico por caída. Glasgow de 15, sin pérdida del conocimiento, sin vómito, sin anticoagulantes y sin otros datos de alarma. Tiene un pequeño hematoma en la frente.
+P: ¿Cuál es la conducta más apropiada?
++ Egreso con vigilancia por un adulto y signos de alarma por escrito, sin tomografía || Cumple criterios de bajo riesgo según las reglas de decisión.
+- anchoring | Tomografía de cráneo en todos los traumatismos || Expone a radiación sin beneficio en bajo riesgo.
+- availability_heuristic | Hospitalización 72 horas || No es necesaria.
+- representativeness_heuristic | Resonancia magnética urgente || No está indicada.
+- premature_closure | Radiografía simple de cráneo || Tiene poca utilidad.
+- framing_effect | Despertarla cada hora durante 3 días en el hospital || No es necesario.
+- complexity_bias | Punción lumbar || No está indicada.
+- base_rate_fallacy | Iniciar anticonvulsivos profilácticos || No están indicados.
+- belief_bias | Todo golpe en la cabeza es grave || La mayoría son leves.
+- omission_bias | Egresar sin explicar los signos de alarma || Debe saber cuándo regresar.
+E: La mayoría de los traumatismos craneoencefálicos son leves. Las reglas de decisión como la regla canadiense de tomografía de cráneo o los criterios de Nueva Orleans identifican a los pacientes que requieren tomografía. Los factores de riesgo incluyen Glasgow menor de 15 a las 2 horas, sospecha de fractura abierta o deprimida, signos de fractura de base de cráneo, vómito repetido, edad mayor de 65 años, anticoagulación, amnesia o mecanismo peligroso. Los pacientes sin factores de riesgo pueden egresar con vigilancia y signos de alarma como cefalea progresiva, vómito, somnolencia, confusión o debilidad.
+R: Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico
+
+@ cir|trauma|head_trauma|3|data_interpretation
+V: Hombre de 30 años con traumatismo craneoencefálico que presenta equimosis periorbitaria bilateral, equimosis retroauricular y salida de líquido claro por la nariz que aumenta al inclinarse hacia adelante.
+P: ¿Qué indican estos hallazgos?
++ Fractura de la base del cráneo con fístula de líquido cefalorraquídeo || Ojos de mapache, signo de Battle y rinorraquia.
+- anchoring | Fractura de huesos nasales simple || No explica la equimosis retroauricular ni la rinorraquia.
+- availability_heuristic | Rinitis alérgica postraumática || No explica las equimosis.
+- representativeness_heuristic | Fractura de la órbita aislada || No explica el signo de Battle.
+- premature_closure | Contusión facial sin fractura || No explica la rinorraquia.
+- base_rate_fallacy | Sinusitis aguda || No explica las equimosis.
+- framing_effect | Hematoma subdural agudo || No explica estos signos externos.
+- inattentional_blindness | Fractura mandibular || No explica la rinorraquia.
+- focusing_illusion | Epistaxis anterior || El líquido es claro.
+- belief_bias | Moretones normales por el golpe || Indican una fractura grave.
+E: Los signos de fractura de la base del cráneo incluyen equimosis periorbitaria bilateral u ojos de mapache, equimosis retroauricular o signo de Battle, hemotímpano, otorraquia o rinorraquia por fístula de líquido cefalorraquídeo y lesión de pares craneales como el facial o el vestibulococlear. La tomografía con ventana ósea confirma la fractura. En la sospecha de fractura de la base no debe colocarse sonda nasogástrica, sino orogástrica, por el riesgo de introducirla al cráneo. La mayoría de las fístulas se cierran solas, y el riesgo de meningitis es la principal complicación.
+R: Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico
+
+@ cir|trauma|head_trauma|4|initial_treatment
+V: Hombre de 35 años con traumatismo craneoencefálico grave, Glasgow de 6, ya intubado. Presenta anisocoria con midriasis izquierda arreactiva, hipertensión y bradicardia. Saturación de 99%.
+P: ¿Cuál es el tratamiento inicial ante esta herniación inminente?
++ Elevar la cabecera a 30 grados, terapia hiperosmolar con solución salina hipertónica o manitol, hiperventilación breve y tomografía con valoración neuroquirúrgica urgente || Son medidas para reducir la presión intracraneal.
+- anchoring | Hiperventilación prolongada como único tratamiento || Causa isquemia cerebral.
+- availability_heuristic | Soluciones hipotónicas en bolo || Empeoran el edema cerebral.
+- representativeness_heuristic | Corticosteroides en dosis altas || Aumentan la mortalidad en trauma craneal.
+- premature_closure | Atropina para la bradicardia sin tratar la presión intracraneal || No trata la causa.
+- framing_effect | Antihipertensivos para bajar la presión arterial a valores bajos || Reducen la perfusión cerebral.
+- complexity_bias | Craniectomía sin imagen en todos los casos || Se valora con la tomografía.
+- base_rate_fallacy | Punción lumbar para bajar la presión || Puede precipitar la herniación.
+- belief_bias | Esperar a que despierte solo || Es una urgencia.
+- omission_bias | No tratar por el mal pronóstico || El tratamiento oportuno puede salvarlo.
+E: La tríada de Cushing, hipertensión, bradicardia y respiración irregular, junto con la midriasis unilateral, indica hipertensión intracraneal con herniación inminente. El tratamiento incluye elevar la cabecera a 30 grados con el cuello en posición neutra, sedación y analgesia, terapia hiperosmolar con solución salina hipertónica o manitol, mantener la presión arterial y la oxigenación para preservar la perfusión cerebral, y hiperventilación breve como puente. La tomografía urgente identifica lesiones quirúrgicas como hematomas. Los corticosteroides no se recomiendan en el traumatismo craneoencefálico.
+R: Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico
+
+@ cir|trauma|head_trauma|3|risk_factor
+V: Hombre de 72 años que toma rivaroxabán por fibrilación auricular y sufre una caída con golpe en la cabeza. Glasgow de 15 y sin síntomas.
+P: ¿Cuál es el factor de riesgo que obliga a realizar tomografía de cráneo pese a estar asintomático?
++ Anticoagulación junto con edad mayor de 65 años || Aumentan el riesgo de hemorragia intracraneal incluso sin síntomas.
+- anchoring | Sexo masculino || No es un criterio.
+- availability_heuristic | Hipertensión arterial controlada || No es un criterio de tomografía.
+- representativeness_heuristic | Diabetes tipo 2 || No es un criterio.
+- premature_closure | Haber caminado tras la caída || No es un factor de riesgo.
+- base_rate_fallacy | Uso de lentes || No es relevante.
+- framing_effect | Antecedente de cataratas || No es relevante.
+- inattentional_blindness | Vacunación al día || No es relevante.
+- focusing_illusion | El horario de la caída || No es relevante.
+- belief_bias | Si está asintomático no necesita estudios || La anticoagulación cambia el riesgo.
+E: Los adultos mayores y los pacientes anticoagulados o antiagregados tienen mayor riesgo de hemorragia intracraneal tras un traumatismo craneoencefálico, incluso leve y con Glasgow de 15, y pueden deteriorarse de forma tardía. Por ello se recomienda tomografía de cráneo en todos los pacientes anticoagulados con traumatismo craneal y en mayores de 65 años según las reglas de decisión. Si hay hemorragia se revierte la anticoagulación con el antídoto específico o concentrado de complejo protrombínico. Algunos protocolos recomiendan observación y repetir la tomografía.
+R: Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico
+
+@ cir|burns|burn_classification|2|data_interpretation
+V: Hombre de 30 años con quemadura por escaldadura en el antebrazo. La piel está roja, con ampollas, húmeda, muy dolorosa y blanquea a la presión con llenado capilar rápido.
+P: ¿Qué indica la profundidad de esta quemadura?
++ Quemadura de segundo grado superficial o espesor parcial superficial || Ampollas, piel húmeda, dolor intenso y blanqueamiento a la presión.
+- anchoring | Quemadura de primer grado || No tiene ampollas.
+- availability_heuristic | Quemadura de tercer grado || Sería indolora, seca, acartonada y no blanquearía.
+- representativeness_heuristic | Quemadura de segundo grado profundo || Sería menos dolorosa y no blanquearía bien.
+- premature_closure | Quemadura de cuarto grado || Afecta músculo o hueso.
+- base_rate_fallacy | Dermatitis de contacto || El contexto es una escaldadura.
+- framing_effect | Celulitis || No corresponde.
+- inattentional_blindness | Necrólisis epidérmica tóxica || El contexto es térmico localizado.
+- focusing_illusion | Quemadura química || El agente es líquido caliente.
+- belief_bias | Las ampollas indican quemadura muy profunda || Indican espesor parcial.
+E: Las quemaduras se clasifican por su profundidad. Las de primer grado o epidérmicas son rojas, secas, dolorosas y sin ampollas, como la quemadura solar. Las de segundo grado superficial afectan la dermis papilar, tienen ampollas, son húmedas, muy dolorosas y blanquean a la presión, y curan en 2 a 3 semanas sin cicatriz importante. Las de segundo grado profundo afectan la dermis reticular, son pálidas, menos dolorosas y tardan más en sanar. Las de tercer grado o espesor total son blancas o acartonadas, secas e indoloras y requieren injerto. Las de cuarto grado afectan tejidos profundos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado
+
+@ cir|burns|burn_classification|2|data_interpretation
+V: Hombre adulto de 70 kg con quemaduras de segundo y tercer grado en todo el miembro superior derecho, la cara anterior del tronco completa y todo el miembro inferior derecho.
+P: ¿Qué porcentaje de superficie corporal quemada indica la regla de los nueves?
++ 45% de superficie corporal quemada || Miembro superior 9%, tronco anterior 18% y miembro inferior 18%.
+- anchoring | 27% || No suma correctamente las regiones.
+- availability_heuristic | 36% || No suma correctamente las regiones.
+- representativeness_heuristic | 54% || Sobreestima la superficie.
+- premature_closure | 18% || Solo considera una región.
+- base_rate_fallacy | 63% || Sobreestima la superficie.
+- framing_effect | 9% || Solo cuenta el brazo.
+- inattentional_blindness | 40% || No corresponde a la regla.
+- focusing_illusion | 72% || Sobreestima la superficie.
+- belief_bias | No se puede calcular sin una báscula especial || La regla es clínica y rápida.
+E: La regla de los nueves de Wallace estima la superficie corporal quemada en adultos. La cabeza y el cuello equivalen a 9%, cada miembro superior a 9%, la cara anterior del tronco a 18%, la cara posterior del tronco a 18%, cada miembro inferior a 18% y el periné a 1%. En niños la cabeza representa una proporción mayor, por lo que se usa la tabla de Lund y Browder. Para quemaduras pequeñas o irregulares se usa la palma de la mano del paciente, que equivale a alrededor de 1%. Solo se cuentan las quemaduras de segundo y tercer grado.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado
+
+@ cir|burns|burn_classification|3|next_step
+V: Hombre de 40 años rescatado de un incendio en un espacio cerrado. Tiene quemaduras faciales, vello nasal chamuscado, esputo carbonáceo, voz ronca y estridor leve. Saturación de 94%.
+P: ¿Cuál es la conducta más apropiada?
++ Intubación orotraqueal temprana por sospecha de lesión por inhalación con riesgo de obstrucción de la vía aérea || El edema de la vía aérea progresa rápidamente.
+- anchoring | Oxígeno por puntas nasales y observación || El edema puede obstruir la vía aérea en horas.
+- availability_heuristic | Esperar a que la saturación baje de 90% para intubar || La intubación será más difícil después.
+- representativeness_heuristic | Nebulizaciones con salbutamol como único tratamiento || No previenen la obstrucción.
+- premature_closure | Traqueostomía electiva en semanas || El riesgo es inmediato.
+- framing_effect | Corticosteroides como medida principal || No previenen el edema por inhalación.
+- complexity_bias | Broncoscopia antes de asegurar la vía aérea en todos || La vía aérea va primero.
+- base_rate_fallacy | Radiografía de tórax como estudio que descarta la lesión || Suele ser normal al inicio.
+- belief_bias | La ronquera es por gritar durante el incendio || Indica lesión de la vía aérea.
+- omission_bias | Evitar intubar por miedo a complicaciones || La obstrucción es mortal.
+E: La lesión por inhalación es una causa importante de muerte en los quemados. Se sospecha en incendios en espacios cerrados con quemaduras faciales, vello nasal o cejas chamuscadas, esputo carbonáceo, hollín en la orofaringe, disfonía, estridor o dificultad respiratoria. El edema de la vía aérea superior progresa en las primeras 24 horas y puede causar obstrucción, por lo que se recomienda intubación temprana ante datos de lesión. También debe sospecharse intoxicación por monóxido de carbono y cianuro, y se administra oxígeno al 100%. La broncoscopia confirma la lesión.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado
+
+@ cir|burns|burn_classification|3|complication_prognosis
+V: Mujer de 35 años rescatada de un incendio en su casa que presenta cefalea, náusea, confusión y piel de color rojo cereza. La oximetría de pulso marca 99%.
+P: ¿Cuál es la complicación que presenta?
++ Intoxicación por monóxido de carbono || Cefalea, confusión y oximetría falsamente normal tras exposición al humo.
+- anchoring | Ansiedad por el incendio || No explica la confusión.
+- availability_heuristic | Hipoxemia descartada por la oximetría normal || La oximetría no distingue la carboxihemoglobina.
+- representativeness_heuristic | Golpe de calor || No explica el contexto.
+- premature_closure | Traumatismo craneoencefálico leve || No hay antecedente de golpe.
+- base_rate_fallacy | Hipoglucemia || No explica el contexto.
+- framing_effect | Migraña || No explica el contexto ni la confusión.
+- inattentional_blindness | Metahemoglobinemia por fármacos || No hay exposición a oxidantes.
+- focusing_illusion | Deshidratación || No explica la confusión aguda.
+- belief_bias | Piel rosada que indica buena oxigenación || Es un signo de intoxicación.
+E: El monóxido de carbono tiene una afinidad por la hemoglobina más de 200 veces mayor que el oxígeno, forma carboxihemoglobina y reduce el transporte y la liberación de oxígeno a los tejidos. Se manifiesta con cefalea, náusea, mareo, confusión, convulsiones y coma. La oximetría de pulso convencional muestra valores falsamente normales porque no distingue la carboxihemoglobina. El diagnóstico se confirma con gasometría con cooximetría. El tratamiento es oxígeno al 100% con mascarilla con reservorio, que reduce la vida media de la carboxihemoglobina, y oxígeno hiperbárico en casos graves.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado
+
+@ cir|burns|burn_classification|3|next_step
+V: Hombre de 28 años con quemadura de tercer grado circunferencial en todo el antebrazo derecho. A las 6 horas presenta dolor intenso, mano fría y pálida, llenado capilar lento y pulso radial disminuido.
+P: ¿Cuál es la conducta más apropiada?
++ Escarotomía de urgencia || La escara circunferencial produce síndrome compartimental que compromete la circulación.
+- anchoring | Elevar la extremidad y esperar || El compromiso vascular requiere liberación.
+- availability_heuristic | Vendaje compresivo || Empeora la compresión.
+- representativeness_heuristic | Amputación inmediata || Es prematura.
+- premature_closure | Injerto de piel urgente || No resuelve la compresión.
+- framing_effect | Analgésicos y observación || No resuelven la isquemia.
+- complexity_bias | Angiografía antes de actuar || Retrasa el tratamiento.
+- base_rate_fallacy | Anticoagulación como único manejo || No resuelve la compresión.
+- belief_bias | Aplicar hielo para disminuir la inflamación || Empeora la lesión.
+- omission_bias | Diferir el procedimiento por temor a sangrado || La isquemia puede ser irreversible.
+E: Las quemaduras de espesor total circunferenciales en las extremidades forman una escara inelástica que, con el edema de la reanimación, aumenta la presión en los tejidos y compromete la circulación, causando un síndrome compartimental. Se manifiesta con dolor, palidez, frialdad, parestesias, llenado capilar lento y disminución de pulsos. El tratamiento es la escarotomía, incisión longitudinal de la escara en las caras medial y lateral. En el tórax las quemaduras circunferenciales pueden restringir la ventilación y también requieren escarotomía. Si persiste el compromiso puede requerirse fasciotomía.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado
+
+@ cir|burns|burn_classification|3|next_step
+V: Niño de 4 años con quemaduras por escaldadura de segundo grado en ambos glúteos y la cara posterior de ambos muslos con patrón en calcetín bien delimitado. La madre refiere que se metió solo a la tina.
+P: ¿Cuál es la conducta más apropiada además del tratamiento de las quemaduras?
++ Sospechar maltrato infantil, hospitalizar y notificar a trabajo social y a las autoridades correspondientes || El patrón de inmersión simétrico y bien delimitado sugiere quemadura intencional.
+- anchoring | Egresar con curaciones en casa || El patrón sugiere maltrato.
+- availability_heuristic | Aceptar la explicación de la madre sin más estudio || El patrón no es congruente con un accidente.
+- representativeness_heuristic | Culpar a la madre frente al niño || No es adecuado.
+- premature_closure | Atenderlo solo como accidente doméstico || Debe descartarse maltrato.
+- framing_effect | Pedir a la madre que firme que no fue intencional || No protege al niño.
+- complexity_bias | Biopsia de piel para confirmar el maltrato || No es necesaria.
+- base_rate_fallacy | Tratar solo con antibióticos || No aborda la sospecha.
+- belief_bias | Los niños se queman solos con frecuencia en la tina de esta forma || El patrón es típico de inmersión forzada.
+- omission_bias | No notificar para evitar problemas legales || La notificación es obligatoria.
+E: Las quemaduras representan una proporción importante del maltrato infantil. Los datos de alarma son patrones de inmersión con bordes bien delimitados en guante o calcetín, quemaduras simétricas en glúteos y periné, ausencia de salpicaduras, quemaduras con forma de objetos como cigarros o planchas, retraso en la búsqueda de atención, explicaciones incongruentes con la lesión o el desarrollo del niño y otras lesiones en diferentes etapas. Ante la sospecha se hospitaliza, se documenta con fotografías, se buscan otras lesiones y se notifica a trabajo social y a las autoridades.
+R: Guía de Práctica Clínica de detección y atención del maltrato infantil
+
+@ cir|burns|burn_classification|2|initial_treatment
+V: Mujer de 25 años que hace 5 minutos se quemó el dorso de la mano con aceite caliente. Tiene una quemadura de segundo grado superficial de 2% de superficie corporal.
+P: ¿Cuál es el tratamiento inicial inmediato?
++ Enfriar la quemadura con agua corriente fresca de 15 a 25 °C durante 20 minutos || Reduce la profundidad de la lesión y el dolor.
+- anchoring | Aplicar hielo directamente || Causa vasoconstricción y empeora la lesión.
+- availability_heuristic | Aplicar pasta dental o mantequilla || Aumentan el riesgo de infección.
+- representativeness_heuristic | Reventar todas las ampollas de inmediato || Aumenta el riesgo de infección.
+- premature_closure | Antibióticos orales profilácticos || No están indicados.
+- framing_effect | Cubrir con algodón directamente || Se adhiere a la herida.
+- complexity_bias | Injerto de piel urgente || No es necesario.
+- base_rate_fallacy | Aplicar alcohol para desinfectar || Duele y daña el tejido.
+- belief_bias | Aplicar clara de huevo o remedios caseros || Aumentan la infección.
+- omission_bias | No enfriar para no causar hipotermia || En quemaduras pequeñas el riesgo es mínimo.
+E: El primer auxilio de una quemadura térmica es detener el proceso de quemado y enfriar la lesión con agua corriente fresca, idealmente de 15 a 25 °C, durante unos 20 minutos, en las primeras 3 horas. Esto reduce la profundidad, el edema y el dolor. No se debe usar hielo, que causa vasoconstricción y daño adicional, ni remedios caseros como pasta dental, mantequilla, aceite o clara de huevo. Se retiran anillos y ropa no adherida. Después se cubre con un apósito limpio no adherente y se administra analgesia. En quemaduras extensas se vigila la hipotermia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado
+
+@ cir|burns|burn_resuscitation|3|treatment_of_choice
+V: Hombre de 80 kg con quemaduras de segundo y tercer grado en 40% de superficie corporal, sin lesión por inhalación. Llega a urgencias una hora después de la quemadura.
+P: ¿Cuál es la reanimación hídrica de elección en las primeras 24 horas?
++ Ringer lactato a 4 mL por kg por porcentaje quemado, la mitad en las primeras 8 horas desde la quemadura, ajustado a la diuresis || Es la fórmula de Parkland.
+- anchoring | Solución glucosada al 5% || No repone sodio y causa hiponatremia.
+- availability_heuristic | Albúmina como líquido principal desde el inicio || No es la primera elección en las primeras horas.
+- representativeness_heuristic | Restringir los líquidos para evitar edema || Causa choque por quemadura.
+- premature_closure | Calcular las 8 horas desde la llegada al hospital || Se cuentan desde la quemadura.
+- framing_effect | Transfusión de concentrados eritrocitarios || No está indicada al inicio.
+- complexity_bias | Plasma fresco como líquido principal || No es el líquido de elección.
+- base_rate_fallacy | Solución salina hipertónica en todos || No es el estándar.
+- belief_bias | Dar solo líquidos orales || En quemaduras extensas se requiere vía intravenosa.
+- omission_bias | No ajustar los líquidos a la diuresis || La diuresis guía la reanimación.
+E: Las quemaduras extensas, mayores de 20% de superficie corporal en adultos, producen un aumento de la permeabilidad capilar con pérdida de líquido al intersticio y choque por quemadura. La reanimación se calcula con la fórmula de Parkland, 4 mL por kg de peso por porcentaje de superficie quemada de Ringer lactato en 24 horas, la mitad en las primeras 8 horas desde el momento de la quemadura y el resto en las 16 horas siguientes. Algunas guías recomiendan iniciar con 2 mL. El objetivo es una diuresis de 0.5 mL/kg/h en adultos y 1 mL/kg/h en niños, ajustando el ritmo para evitar la sobrecarga.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado
+
+@ cir|burns|burn_resuscitation|3|data_interpretation
+V: Hombre de 70 kg con 50% de superficie corporal quemada en reanimación con Ringer lactato. A las 4 horas tiene diuresis de 15 mL por hora, frecuencia cardiaca de 125 y presión de 95/60 mmHg.
+P: ¿Qué indica esta diuresis y cuál es el ajuste?
++ Reanimación insuficiente que requiere aumentar el ritmo de infusión || La meta es una diuresis de al menos 35 mL por hora en este paciente.
+- anchoring | Diuresis adecuada que no requiere cambios || Está por debajo de la meta.
+- availability_heuristic | Indica sobrecarga y debe darse furosemida || La diuresis baja indica hipovolemia.
+- representativeness_heuristic | Indica insuficiencia renal establecida que requiere diálisis inmediata || Primero se optimiza el volumen.
+- premature_closure | Indica que debe suspenderse la reanimación || Agravaría el choque.
+- base_rate_fallacy | Indica obstrucción de la sonda sin más acciones || Debe verificarse, pero la clínica sugiere hipovolemia.
+- framing_effect | Indica que debe iniciarse glucosa al 50% || No corrige la hipovolemia.
+- inattentional_blindness | Indica sepsis temprana que requiere solo antibióticos || El contexto es la reanimación.
+- focusing_illusion | Indica que debe restringirse el sodio || Requiere más volumen.
+- belief_bias | Los quemados orinan poco de forma normal || La oliguria indica hipoperfusión.
+E: La diuresis es el mejor indicador de la adecuación de la reanimación en el paciente quemado. La meta en adultos es de 0.5 mL/kg/h, alrededor de 30 a 50 mL por hora, y en niños de 1 mL/kg/h. Una diuresis menor indica reanimación insuficiente y requiere aumentar la infusión en 20 a 30%. Una diuresis mayor de la meta indica exceso y se reduce el ritmo para evitar edema, síndrome compartimental abdominal y de extremidades. Los diuréticos no se usan para aumentar la diuresis. En quemaduras eléctricas con mioglobinuria la meta es mayor, de 1 a 2 mL/kg/h, para proteger la función renal. La reanimación se reevalúa cada hora con signos vitales y estado mental.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado
+
+@ cir|burns|burn_resuscitation|3|next_step
+V: Hombre de 35 años con quemadura de segundo grado en 25% de superficie corporal que incluye la cara, ambas manos y el periné.
+P: ¿Cuál es la conducta más apropiada respecto al sitio de atención?
++ Referir a una unidad especializada de quemados || Las quemaduras en cara, manos, periné o mayores de 20% cumplen criterios de referencia.
+- anchoring | Manejo ambulatorio con curaciones en casa || Tiene criterios de gravedad.
+- availability_heuristic | Hospitalizar en piso general sin especialistas || Requiere atención especializada.
+- representativeness_heuristic | Egresar con antibióticos orales || No es adecuado.
+- premature_closure | Esperar a ver si se infecta para referir || Retrasa la atención.
+- framing_effect | Injertos inmediatos en urgencias generales || Requiere centro especializado.
+- complexity_bias | Trasladar solo si presenta choque || Cumple criterios sin choque.
+- base_rate_fallacy | Tratar las áreas especiales igual que el resto || Requieren manejo especializado.
+- belief_bias | Las quemaduras de segundo grado sanan solas siempre || Las áreas especiales tienen riesgo de secuelas.
+- omission_bias | No referir para no saturar la unidad || Cumple criterios.
+E: Los criterios de referencia a una unidad de quemados incluyen quemaduras de espesor parcial mayores de 10 a 20% de la superficie corporal, quemaduras de espesor total, quemaduras en cara, manos, pies, genitales, periné o articulaciones mayores, quemaduras circunferenciales, eléctricas incluidas las por rayo, químicas, lesión por inhalación, pacientes con comorbilidades, traumatismo asociado y niños en hospitales sin capacidad pediátrica. Estas quemaduras tienen riesgo de secuelas funcionales y estéticas y requieren manejo multidisciplinario con cirugía plástica, terapia intensiva, rehabilitación y apoyo psicológico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado
+
+@ cir|burns|burn_resuscitation|3|complication_prognosis
+V: Hombre de 30 años con quemadura eléctrica de alto voltaje con lesión de entrada en la mano y salida en el pie. Las lesiones cutáneas son pequeñas. A las 12 horas presenta orina color café oscuro y creatina cinasa de 40 000 U/L.
+P: ¿Cuál es la complicación que presenta?
++ Rabdomiólisis con riesgo de lesión renal aguda por mioglobinuria || La corriente daña los músculos profundos aunque la piel parezca poco afectada.
+- anchoring | Hematuria por infección urinaria || La creatina cinasa elevada orienta a rabdomiólisis.
+- availability_heuristic | Deshidratación simple || No explica la creatina cinasa.
+- representativeness_heuristic | Hemólisis por transfusión || No hubo transfusión.
+- premature_closure | Quemadura leve sin complicaciones || La lesión profunda es extensa.
+- base_rate_fallacy | Glomerulonefritis aguda || No explica la creatina cinasa.
+- framing_effect | Hepatitis por estrés || No explica la orina oscura con creatina cinasa alta.
+- inattentional_blindness | Porfiria aguda || No explica el contexto.
+- focusing_illusion | Litiasis renal || No explica la creatina cinasa.
+- belief_bias | La quemadura es pequeña y no puede haber daño interno || El daño eléctrico es profundo.
+E: Las quemaduras eléctricas de alto voltaje causan lesiones profundas de músculos, nervios y vasos a lo largo del trayecto de la corriente, con lesiones cutáneas que subestiman el daño. Las complicaciones incluyen arritmias, rabdomiólisis con mioglobinuria y lesión renal aguda, síndrome compartimental, fracturas, lesiones neurológicas y cataratas tardías. Se realiza electrocardiograma y monitoreo. La rabdomiólisis se trata con reanimación intensa para lograr una diuresis de 1 a 2 mL/kg/h hasta que la orina se aclare. La fasciotomía se indica si hay síndrome compartimental.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado
+
+@ cir|burns|burn_resuscitation|3|treatment_of_choice
+V: Mujer de 40 años con quemadura de tercer grado de 8% en el muslo, estable, en el quinto día. La herida está limpia, con escara blanca, seca e indolora.
+P: ¿Cuál es el tratamiento de elección para esta quemadura?
++ Escisión temprana de la escara e injerto de piel autólogo || Las quemaduras de espesor total no epitelizan y la escisión temprana reduce la infección.
+- anchoring | Curaciones con pomadas hasta que cierre sola || El espesor total no cierra sin injerto o lo hace con mala cicatriz.
+- availability_heuristic | Antibióticos sistémicos profilácticos prolongados || No están indicados de rutina.
+- representativeness_heuristic | Dejar la escara hasta que se desprenda sola en semanas || Aumenta la infección y la cicatriz.
+- premature_closure | Amputación de la extremidad || Es excesiva.
+- framing_effect | Vendaje compresivo como tratamiento definitivo || No cierra la herida.
+- complexity_bias | Colgajo libre microvascular en todos los casos || No es necesario.
+- base_rate_fallacy | Oxígeno hiperbárico como tratamiento principal || No sustituye la cirugía.
+- belief_bias | Remedios caseros para regenerar la piel || No son eficaces.
+- omission_bias | Diferir la cirugía por miedo al sangrado || La escisión temprana mejora los resultados.
+E: Las quemaduras de espesor total destruyen la dermis y sus anexos, por lo que no pueden epitelizar salvo desde los bordes en lesiones muy pequeñas. El tratamiento de elección es la escisión temprana de la escara, en los primeros 3 a 5 días, seguida de cobertura con autoinjerto de piel de espesor parcial. Esto reduce la infección, la estancia hospitalaria, la respuesta hipermetabólica y las cicatrices hipertróficas. Si no hay suficiente piel donadora se usan sustitutos cutáneos temporales. Las quemaduras de segundo grado superficial se manejan con curaciones y apósitos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado
+
+@ cir|burns|burn_resuscitation|3|complication_prognosis
+V: Paciente de 82 años con quemaduras de segundo y tercer grado en 30% de la superficie corporal y lesión por inhalación. La familia pregunta por el pronóstico.
+P: ¿Cuál es el principal determinante del pronóstico de mortalidad?
++ La combinación de edad avanzada, porcentaje de superficie quemada y lesión por inhalación || Son los factores del índice de Baux revisado.
+- anchoring | El agente que causó la quemadura como único factor || No es el principal.
+- availability_heuristic | El color de la piel quemada || No es un factor pronóstico.
+- representativeness_heuristic | El sexo del paciente || No es un factor principal.
+- premature_closure | El dolor que refiere el paciente || No es un factor pronóstico.
+- base_rate_fallacy | El grupo sanguíneo || No influye.
+- framing_effect | El tipo de ropa que usaba || No influye.
+- inattentional_blindness | La hora del día del accidente || No influye.
+- focusing_illusion | La temperatura del cuarto de hospital || No es el factor principal.
+- belief_bias | El tamaño de las ampollas || No es un factor pronóstico.
+E: El pronóstico del paciente quemado depende principalmente de la edad, la extensión de la superficie corporal quemada y la presencia de lesión por inhalación. El índice de Baux suma la edad y el porcentaje de superficie quemada, y la versión revisada agrega 17 puntos si hay lesión por inhalación. Valores mayores de 140 se asocian a mortalidad muy alta. Otros factores son las comorbilidades, la profundidad de las quemaduras y las complicaciones como sepsis y falla orgánica. Los adultos mayores tienen menor reserva fisiológica y piel más delgada, con quemaduras más profundas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado
+
+@ cir|burns|burn_resuscitation|3|complication_prognosis
+V: Hombre de 45 años con quemaduras en 45% de superficie corporal en su décimo día de hospitalización que presenta fiebre de 39 °C, hipotensión, confusión y una herida que cambió de color a negro con secreción purulenta y olor fétido.
+P: ¿Cuál es la complicación que presenta?
++ Infección invasiva de la herida por quemadura con sepsis || Cambio de color de la herida con secreción y datos de sepsis.
+- anchoring | Respuesta inflamatoria esperada de la quemadura || La hipotensión y el cambio de la herida indican infección.
+- availability_heuristic | Fiebre por transfusión || No explica los cambios en la herida.
+- representativeness_heuristic | Trombosis venosa profunda || No explica los cambios en la herida.
+- premature_closure | Reacción a la sulfadiazina de plata || No explica la sepsis.
+- base_rate_fallacy | Neumonía como única causa || La herida muestra infección.
+- framing_effect | Deshidratación || No explica la secreción fétida.
+- inattentional_blindness | Delirium por opioides || No explica la fiebre y la herida.
+- focusing_illusion | Úlcera de Curling || Da sangrado digestivo.
+- belief_bias | El color negro es parte normal de la cicatrización || Indica necrosis infectada.
+E: La infección es la principal causa de muerte en los quemados que sobreviven a la fase inicial. La pérdida de la barrera cutánea, la inmunosupresión y los dispositivos invasivos favorecen las infecciones por Pseudomonas aeruginosa, Staphylococcus aureus incluido el resistente a meticilina, Acinetobacter y hongos. Los datos de infección de la herida incluyen cambio de color a negro o violáceo, conversión a espesor total, separación rápida de la escara, secreción purulenta y celulitis en los bordes. Se toman cultivos y biopsia de la herida y se inician antibióticos y desbridamiento quirúrgico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado

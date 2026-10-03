@@ -1,0 +1,1321 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-08-neurologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "neurology",
+      "subtopic": "stroke",
+      "vignette": "Hombre de 68 años con hipertensión que presenta de forma súbita, hace 50 minutos, debilidad de brazo y pierna derechos y dificultad para hablar. Glucosa capilar de 110 mg/dL. Presión arterial de 172/96 mmHg.",
+      "prompt": "¿Cuál es el estudio inicial más urgente?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Resonancia magnética con difusión como primer estudio en todos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es más sensible, pero suele retrasar la decisión si no está disponible de inmediato."
+        },
+        {
+          "key": "b",
+          "text": "Electroencefalograma",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la alteración neurológica, pero no orienta la reperfusión."
+        },
+        {
+          "key": "c",
+          "text": "Iniciar trombólisis sin imagen",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Descartar hemorragia es indispensable."
+        },
+        {
+          "key": "d",
+          "text": "Tomografía de cráneo simple",
+          "correct": true,
+          "rationale": "Distingue isquemia de hemorragia antes de decidir trombólisis."
+        },
+        {
+          "key": "e",
+          "text": "Ecocardiograma para buscar la fuente embólica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a buscar la causa, pero no es urgente."
+        },
+        {
+          "key": "f",
+          "text": "Perfil de lípidos y hemoglobina glucosilada",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No cambia la conducta urgente."
+        },
+        {
+          "key": "g",
+          "text": "Ultrasonido Doppler carotídeo antes de la tomografía",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la causa carotídea es lo urgente."
+        },
+        {
+          "key": "h",
+          "text": "Radiografía de cráneo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No aporta información útil."
+        },
+        {
+          "key": "i",
+          "text": "Angiografía cerebral convencional de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es invasiva y no es el estudio inicial."
+        },
+        {
+          "key": "j",
+          "text": "Punción lumbar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se usa en sospecha de hemorragia subaracnoidea con tomografía normal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "i"
+      ],
+      "explanation": "En el paciente con déficit neurológico focal súbito, el tiempo es cerebro. Tras estabilizarlo y medir la glucosa capilar para descartar hipoglucemia, el estudio inicial es la tomografía de cráneo simple, que identifica hemorragia y define si el paciente es candidato a trombólisis intravenosa con alteplasa o tenecteplasa dentro de las primeras 4.5 horas. La angiotomografía permite detectar oclusión de grandes vasos para trombectomía mecánica. La resonancia es más sensible para isquemia temprana, pero no debe retrasar el tratamiento. La meta es que la imagen se realice en los primeros 20 minutos de la llegada.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica"
+      ]
+    },
+    {
+      "key": "mi-08-neurologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "neurology",
+      "subtopic": "stroke",
+      "vignette": "Mujer de 64 años con hemiparesia izquierda y negligencia de inicio hace 2 horas. NIHSS de 12. Tomografía sin hemorragia. Presión arterial de 168/94 mmHg. Glucosa normal. Sin cirugía, sangrado ni anticoagulantes.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Trombólisis intravenosa con alteplasa o tenecteplasa y valorar trombectomía si hay oclusión de gran vaso",
+          "correct": true,
+          "rationale": "Evento isquémico dentro de las 4.5 horas sin contraindicaciones."
+        },
+        {
+          "key": "b",
+          "text": "Manitol para el edema cerebral",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es el tratamiento inicial."
+        },
+        {
+          "key": "c",
+          "text": "Ácido acetilsalicílico como único tratamiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la antiagregación y pierde la reperfusión."
+        },
+        {
+          "key": "d",
+          "text": "Bajar la presión a menos de 120/80 antes de cualquier tratamiento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena protector, pero reduce la perfusión de la penumbra."
+        },
+        {
+          "key": "e",
+          "text": "Corticosteroides en dosis altas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No tienen beneficio en isquemia."
+        },
+        {
+          "key": "f",
+          "text": "Esperar 24 horas para ver si mejora sola",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Pierde la ventana de reperfusión."
+        },
+        {
+          "key": "g",
+          "text": "Craniectomía descompresiva de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para infarto maligno."
+        },
+        {
+          "key": "h",
+          "text": "Solo rehabilitación temprana",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Omite la reperfusión."
+        },
+        {
+          "key": "i",
+          "text": "Heparina intravenosa en dosis plena",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No mejora el pronóstico y aumenta el sangrado."
+        },
+        {
+          "key": "j",
+          "text": "Evitar la trombólisis por la edad de 64 años",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La edad no la contraindica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "i"
+      ],
+      "explanation": "La trombólisis intravenosa está indicada en el evento vascular cerebral isquémico dentro de las primeras 4.5 horas del inicio de los síntomas o desde la última vez que se vio al paciente sin síntomas, en ausencia de contraindicaciones como hemorragia en la tomografía, cirugía mayor o sangrado reciente, anticoagulación eficaz o plaquetas bajas. Antes y después se mantiene la presión arterial por debajo de 185/110 y 180/105 mmHg, respectivamente. En pacientes con oclusión de grandes vasos de la circulación anterior se indica además trombectomía mecánica, que puede realizarse hasta 24 horas en casos seleccionados.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica"
+      ]
+    },
+    {
+      "key": "mi-08-neurologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "neurology",
+      "subtopic": "stroke",
+      "vignette": "Mujer de 46 años que presenta de forma súbita la peor cefalea de su vida durante un esfuerzo, con vómito y rigidez de nuca. Glasgow de 14. Tomografía con sangre en las cisternas basales.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tumor cerebral",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que toda cefalea intensa es tumoral."
+        },
+        {
+          "key": "b",
+          "text": "Hemorragia subaracnoidea por probable ruptura de aneurisma",
+          "correct": true,
+          "rationale": "Cefalea en trueno con sangre en cisternas basales."
+        },
+        {
+          "key": "c",
+          "text": "Síndrome de vasoconstricción cerebral reversible",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la cefalea en trueno."
+        },
+        {
+          "key": "d",
+          "text": "Trombosis de senos venosos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente y no da sangre en cisternas típicamente."
+        },
+        {
+          "key": "e",
+          "text": "Hemorragia intraparenquimatosa hipertensiva",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es frecuente, pero da sangre en el parénquima."
+        },
+        {
+          "key": "f",
+          "text": "Migraña con aura",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la cefalea y no reconoce la gravedad."
+        },
+        {
+          "key": "g",
+          "text": "Crisis hipertensiva",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta la sangre en la tomografía."
+        },
+        {
+          "key": "h",
+          "text": "Hematoma subdural agudo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a sangrado, pero se asocia a trauma y tiene forma de semiluna."
+        },
+        {
+          "key": "i",
+          "text": "Meningitis bacteriana",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da rigidez de nuca, pero de forma no súbita y con fiebre."
+        },
+        {
+          "key": "j",
+          "text": "Cefalea tensional",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Subestima un cuadro grave."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "La hemorragia subaracnoidea no traumática se debe en la mayoría de los casos a ruptura de un aneurisma intracraneal. Se presenta con cefalea súbita e intensa, en trueno, descrita como la peor de la vida, con náusea, vómito, rigidez de nuca, fotofobia, alteración del estado de alerta o déficit focal. La tomografía simple es muy sensible en las primeras horas. Si es normal y la sospecha persiste, se realiza punción lumbar buscando xantocromía. Después se localiza el aneurisma con angiotomografía o angiografía. El tratamiento incluye asegurar el aneurisma con embolización o cirugía, nimodipino y prevenir el vasoespasmo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia subaracnoidea secundaria a aneurisma"
+      ]
+    },
+    {
+      "key": "mi-08-neurologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "neurology",
+      "subtopic": "stroke",
+      "vignette": "Hombre de 66 años que tuvo un ataque isquémico transitorio hace 1 semana. El ultrasonido Doppler muestra estenosis de 80% de la carótida interna izquierda, del mismo lado de los síntomas.",
+      "prompt": "¿Cuál es la mejor medida de prevención secundaria de un nuevo evento?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Derivación extra intracraneal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No tiene beneficio demostrado."
+        },
+        {
+          "key": "b",
+          "text": "Esperar 6 meses para operar cuando esté estable",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena prudente, pero el riesgo de recurrencia es alto en las primeras semanas."
+        },
+        {
+          "key": "c",
+          "text": "Anticoagulación con warfarina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es superior a la antiagregación en enfermedad carotídea."
+        },
+        {
+          "key": "d",
+          "text": "Cirugía de la carótida derecha",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Elige el lado equivocado."
+        },
+        {
+          "key": "e",
+          "text": "Stent carotídeo en todos los casos sin evaluar riesgo quirúrgico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es alternativa, no primera opción en todos."
+        },
+        {
+          "key": "f",
+          "text": "Mantener sin cambios porque los síntomas desaparecieron",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Ignora el alto riesgo."
+        },
+        {
+          "key": "g",
+          "text": "Dieta y ejercicio como única medida",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el estilo de vida basta."
+        },
+        {
+          "key": "h",
+          "text": "Solo ácido acetilsalicílico y vigilancia anual",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el tratamiento médico y omite la cirugía indicada."
+        },
+        {
+          "key": "i",
+          "text": "Endarterectomía carotídea en las primeras 2 semanas, además de antiagregante y estatina",
+          "correct": true,
+          "rationale": "Estenosis sintomática de 70 a 99%."
+        },
+        {
+          "key": "j",
+          "text": "Evitar la cirugía por miedo a complicaciones",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El beneficio supera el riesgo."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "El ataque isquémico transitorio es una alarma de alto riesgo de evento vascular cerebral, sobre todo en los primeros días. Se debe estudiar de forma urgente con imagen cerebral, de vasos del cuello, electrocardiograma y monitoreo cardiaco. En pacientes con estenosis carotídea sintomática de 70 a 99%, la endarterectomía carotídea reduce de forma importante el riesgo de recurrencia y debe realizarse en las primeras dos semanas. En estenosis de 50 a 69% se individualiza. Todos reciben antiagregación, estatina de alta intensidad, control de la presión y la glucosa, y suspensión del tabaco.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del ataque isquémico transitorio"
+      ]
+    },
+    {
+      "key": "mi-08-neurologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "neurology",
+      "subtopic": "stroke",
+      "vignette": "Hombre de 70 años con hemorragia intraparenquimatosa en los ganglios basales de 25 mL. Glasgow de 13. Presión arterial de 205/110 mmHg. No toma anticoagulantes.",
+      "prompt": "¿Cuál es el tratamiento inicial respecto a la presión arterial?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Nifedipino sublingual",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Causa descensos bruscos."
+        },
+        {
+          "key": "b",
+          "text": "Ácido acetilsalicílico para prevenir trombosis",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Empeora el sangrado."
+        },
+        {
+          "key": "c",
+          "text": "Cirugía de evacuación inmediata en todos los casos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se reserva para casos seleccionados."
+        },
+        {
+          "key": "d",
+          "text": "Coma barbitúrico para controlar la presión",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Medida extrema."
+        },
+        {
+          "key": "e",
+          "text": "Mantener la presión alta para asegurar la perfusión",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el manejo de la isquemia."
+        },
+        {
+          "key": "f",
+          "text": "No tratar la presión por miedo a la isquemia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pierde el beneficio sobre el hematoma."
+        },
+        {
+          "key": "g",
+          "text": "Reiniciar sus antihipertensivos orales y esperar",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Insuficiente en la fase aguda."
+        },
+        {
+          "key": "h",
+          "text": "Reducir la sistólica de forma controlada hacia 140 mmHg con fármaco intravenoso titulable",
+          "correct": true,
+          "rationale": "En la hemorragia intracerebral reduce el crecimiento del hematoma."
+        },
+        {
+          "key": "i",
+          "text": "Bajar a menos de 100 mmHg de sistólica para evitar sangrado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena seguro, pero causa isquemia."
+        },
+        {
+          "key": "j",
+          "text": "Trombólisis por el déficit neurológico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Está contraindicada en hemorragia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "h",
+        "i"
+      ],
+      "explanation": "En la hemorragia intracerebral espontánea, la presión arterial muy elevada se asocia a crecimiento del hematoma y peor pronóstico. En pacientes con presión sistólica entre 150 y 220 mmHg se recomienda reducirla de forma controlada hacia 140 mmHg, evitando descensos bruscos o por debajo de 110 a 130 mmHg, con fármacos intravenosos titulables como labetalol o nicardipino. Además se revierte cualquier anticoagulación, se maneja la hipertensión intracraneal, se controla la glucosa y la temperatura, y se valora cirugía en hematomas cerebelosos grandes o con deterioro. La hipertensión es la causa más frecuente, sobre todo en ganglios basales.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia intracerebral espontánea"
+      ]
+    },
+    {
+      "key": "mi-08-neurologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "neurology",
+      "subtopic": "epilepsy",
+      "vignette": "Mujer de 24 años con epilepsia generalizada idiopática con crisis tónico clónicas. Planea embarazarse en el próximo año.",
+      "prompt": "¿Cuál es el fármaco antiepiléptico de elección en esta paciente?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Lamotrigina o levetiracetam",
+          "correct": true,
+          "rationale": "Son eficaces en epilepsia generalizada y más seguros en el embarazo."
+        },
+        {
+          "key": "b",
+          "text": "Fenobarbital",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Tiene efectos sedantes y cognitivos."
+        },
+        {
+          "key": "c",
+          "text": "Suplementos naturales sin fármacos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que sustituyen el tratamiento."
+        },
+        {
+          "key": "d",
+          "text": "Politerapia con tres fármacos desde el inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Aumenta efectos adversos sin beneficio."
+        },
+        {
+          "key": "e",
+          "text": "Ningún fármaco hasta después del embarazo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena protector, pero las crisis son riesgosas."
+        },
+        {
+          "key": "f",
+          "text": "Ácido valproico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es muy eficaz, pero teratogénico y afecta el neurodesarrollo."
+        },
+        {
+          "key": "g",
+          "text": "Benzodiacepina diaria como tratamiento base",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "No es tratamiento de mantenimiento."
+        },
+        {
+          "key": "h",
+          "text": "Carbamazepina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es para crisis focales y puede empeorar algunas generalizadas."
+        },
+        {
+          "key": "i",
+          "text": "Fenitoína por ser clásica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en lo clásico, con efectos adversos y teratogenia."
+        },
+        {
+          "key": "j",
+          "text": "Evitar tratamiento por miedo a malformaciones",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Las crisis no tratadas también dañan."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "h",
+        "i"
+      ],
+      "explanation": "En mujeres en edad reproductiva con epilepsia, la elección del antiepiléptico debe considerar la eficacia y el riesgo teratogénico. El ácido valproico es muy eficaz en epilepsias generalizadas, pero se asocia a malformaciones mayores y alteraciones del neurodesarrollo, por lo que debe evitarse si existen otras opciones. La lamotrigina y el levetiracetam tienen el menor riesgo y son eficaces en crisis generalizadas. Se recomienda ácido fólico preconcepcional, planear el embarazo, usar la menor dosis eficaz en monoterapia y vigilar niveles de lamotrigina, que disminuyen durante el embarazo. Las crisis tónico clónicas no controladas también son peligrosas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la epilepsia en el adulto"
+      ]
+    },
+    {
+      "key": "mi-08-neurologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "neurology",
+      "subtopic": "epilepsy",
+      "vignette": "Hombre de 35 años con epilepsia que presenta crisis tónico clónica generalizada que dura 7 minutos sin recuperar la conciencia. Vía aérea permeable, glucosa capilar normal y acceso venoso disponible.",
+      "prompt": "¿Cuál es el tratamiento inicial?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Introducir un objeto en la boca para evitar que se muerda la lengua",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree en una práctica peligrosa."
+        },
+        {
+          "key": "b",
+          "text": "Intubación y anestesia general como primera medida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se reserva para estado refractario."
+        },
+        {
+          "key": "c",
+          "text": "Electroencefalograma antes de cualquier tratamiento",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "d",
+          "text": "Darle su dosis oral habitual",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "No es posible ni eficaz durante la crisis."
+        },
+        {
+          "key": "e",
+          "text": "Benzodiacepina intravenosa, como lorazepam o diazepam",
+          "correct": true,
+          "rationale": "Es estado epiléptico y la benzodiacepina es la primera línea."
+        },
+        {
+          "key": "f",
+          "text": "Solo oxígeno y observación",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasa el control de la crisis."
+        },
+        {
+          "key": "g",
+          "text": "Sujetar al paciente con fuerza para detener la crisis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena protector, pero causa lesiones."
+        },
+        {
+          "key": "h",
+          "text": "Fenitoína intravenosa como primer fármaco",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es de segunda línea."
+        },
+        {
+          "key": "i",
+          "text": "Esperar 30 minutos a que ceda sola",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la definición antigua."
+        },
+        {
+          "key": "j",
+          "text": "Haloperidol intravenoso",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede bajar el umbral convulsivo."
+        }
+      ],
+      "canonical": [
+        "e",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "El estado epiléptico se define operativamente como una crisis tónico clónica de más de cinco minutos o crisis repetidas sin recuperación entre ellas. Es una urgencia neurológica. Se aseguran la vía aérea, la oxigenación y la glucosa, y se administra una benzodiacepina como primera línea, lorazepam o diazepam intravenosos, o midazolam intramuscular si no hay acceso venoso. Si la crisis persiste tras dos dosis, se usa un fármaco de segunda línea, como levetiracetam, ácido valproico o fenitoína. Si continúa, se considera estado refractario y se requiere anestesia general con intubación en terapia intensiva.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del estado epiléptico en adultos"
+      ]
+    },
+    {
+      "key": "mi-08-neurologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "neurology",
+      "subtopic": "epilepsy",
+      "vignette": "Niña de 8 años a quien la maestra observa episodios de mirada fija de 10 segundos varias veces al día, con parpadeo, sin caerse, y que retoma su actividad de inmediato sin confusión. El electroencefalograma muestra punta onda generalizada de 3 Hz que se desencadena con hiperventilación.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ensoñación diurna normal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena benigno, pero el electroencefalograma es anormal."
+        },
+        {
+          "key": "b",
+          "text": "Crisis psicógenas no epilépticas",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta el electroencefalograma."
+        },
+        {
+          "key": "c",
+          "text": "Epilepsia de ausencias infantil",
+          "correct": true,
+          "rationale": "Ausencias breves frecuentes con punta onda de 3 Hz."
+        },
+        {
+          "key": "d",
+          "text": "Crisis focales con alteración de la conciencia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También dan desconexión, pero duran más y tienen confusión posterior."
+        },
+        {
+          "key": "e",
+          "text": "Epilepsia mioclónica juvenil",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la generalización, pero da sacudidas al despertar."
+        },
+        {
+          "key": "f",
+          "text": "Crisis febriles",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ocurren con fiebre en menores de 5 años."
+        },
+        {
+          "key": "g",
+          "text": "Trastorno por déficit de atención",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la distracción escolar."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome de Lennox Gastaut",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente y tiene otro patrón."
+        },
+        {
+          "key": "i",
+          "text": "Síncope vasovagal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye sin considerar el electroencefalograma."
+        },
+        {
+          "key": "j",
+          "text": "Hipoglucemia recurrente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo episodio breve es metabólico."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "f",
+        "g"
+      ],
+      "explanation": "La epilepsia de ausencias infantil inicia generalmente entre los cuatro y diez años. Se caracteriza por crisis de ausencia típicas, que son episodios breves de desconexión de 5 a 15 segundos, con mirada fija, a veces parpadeo o automatismos, de inicio y fin abruptos, sin confusión posterior, que pueden repetirse decenas de veces al día y afectar el rendimiento escolar. La hiperventilación las desencadena. El electroencefalograma muestra descargas de punta onda generalizadas a 3 Hz. El tratamiento de elección es etosuximida, o ácido valproico o lamotrigina. Suelen remitir en la adolescencia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la epilepsia en la infancia"
+      ]
+    },
+    {
+      "key": "mi-08-neurologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "neurology",
+      "subtopic": "epilepsy",
+      "vignette": "Hombre de 42 años sin antecedentes que presenta su primera crisis convulsiva tónico clónica generalizada. Ya se recuperó. Glucosa, sodio y calcio normales. Examen neurológico normal.",
+      "prompt": "¿Cuál es el estudio inicial de imagen más adecuado tras su primera crisis?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Radiografía de cráneo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No aporta información útil."
+        },
+        {
+          "key": "b",
+          "text": "Tomografía por emisión de positrones",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "c",
+          "text": "Ultrasonido Doppler transcraneal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que evalúa estructura cerebral."
+        },
+        {
+          "key": "d",
+          "text": "Estudio genético antes de la imagen",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No es prioritario."
+        },
+        {
+          "key": "e",
+          "text": "Iniciar antiepiléptico de por vida sin estudios",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Trata sin estudiar."
+        },
+        {
+          "key": "f",
+          "text": "Resonancia magnética de cráneo, o tomografía si no está disponible de inmediato",
+          "correct": true,
+          "rationale": "Una primera crisis en un adulto obliga a buscar una lesión estructural."
+        },
+        {
+          "key": "g",
+          "text": "Ningún estudio porque ya se recuperó",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la recuperación y omite causas estructurales."
+        },
+        {
+          "key": "h",
+          "text": "Asumir epilepsia idiopática sin estudiar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "A esta edad las causas estructurales son más frecuentes."
+        },
+        {
+          "key": "i",
+          "text": "Punción lumbar en todos los casos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se indica si hay fiebre o sospecha de infección."
+        },
+        {
+          "key": "j",
+          "text": "Angiografía cerebral para buscar aneurismas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena exhaustivo, pero no es el estudio inicial."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "Ante una primera crisis convulsiva en un adulto se debe buscar una causa. Se realizan estudios de laboratorio para descartar alteraciones metabólicas, como glucosa, sodio, calcio y magnesio, y tóxicos, además de un electroencefalograma y una neuroimagen. La resonancia magnética es el estudio de elección porque detecta tumores, malformaciones vasculares, esclerosis mesial o secuelas, y la tomografía se usa en urgencias si no hay resonancia o se sospecha hemorragia. En adultos de nueva aparición, las causas estructurales, como tumores o lesiones vasculares, son más frecuentes que en niños. La decisión de tratar depende del riesgo de recurrencia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la epilepsia en el adulto"
+      ]
+    },
+    {
+      "key": "mi-08-neurologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "neurology",
+      "subtopic": "epilepsy",
+      "vignette": "Mujer de 30 años originaria de una zona rural de Guerrero, con crisis focales de reciente inicio. La tomografía muestra varias lesiones quísticas pequeñas con un punto central y calcificaciones.",
+      "prompt": "¿Cuál es la causa más probable de sus crisis?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Absceso cerebral bacteriano",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da lesión con anillo, no quistes con punto central."
+        },
+        {
+          "key": "b",
+          "text": "Infección viral cerebral",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que las lesiones son virales."
+        },
+        {
+          "key": "c",
+          "text": "Tumor cerebral primario",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es posible, pero las imágenes múltiples con escólex sugieren cisticercosis."
+        },
+        {
+          "key": "d",
+          "text": "Epilepsia idiopática",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta las lesiones."
+        },
+        {
+          "key": "e",
+          "text": "Malformación arteriovenosa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en las calcificaciones."
+        },
+        {
+          "key": "f",
+          "text": "Esclerosis múltiple",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye una causa desmielinizante sin datos."
+        },
+        {
+          "key": "g",
+          "text": "Tuberculoma",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a infección granulomatosa, pero no tiene escólex."
+        },
+        {
+          "key": "h",
+          "text": "Toxoplasmosis cerebral",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en lesiones múltiples, pero ocurre en inmunosupresión y tiene anillo."
+        },
+        {
+          "key": "i",
+          "text": "Metástasis cerebrales",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Son menos probables en una mujer joven sin cáncer."
+        },
+        {
+          "key": "j",
+          "text": "Neurocisticercosis",
+          "correct": true,
+          "rationale": "Quistes con escólex y calcificaciones en zona endémica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "La neurocisticercosis es la infección parasitaria más frecuente del sistema nervioso central y una causa importante de epilepsia adquirida en México y Latinoamérica. Se produce por la ingestión de huevos de Taenia solium a través de alimentos contaminados con heces humanas. Se manifiesta con crisis convulsivas, cefalea e hipertensión intracraneal. La neuroimagen muestra quistes con escólex, que es el punto central, quistes en degeneración con realce en anillo y calcificaciones. El tratamiento incluye antiepilépticos, albendazol o praziquantel en quistes viables con corticosteroides, y cirugía en formas ventriculares.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la neurocisticercosis"
+      ]
+    },
+    {
+      "key": "mi-08-neurologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "neurology",
+      "subtopic": "headache",
+      "vignette": "Mujer de 27 años con cefaleas recurrentes desde la adolescencia, hemicraneales, pulsátiles, de 8 a 24 horas, con náusea, fotofobia y fonofobia, que empeoran con la actividad. Antes de algunas crisis ve luces en zigzag por 20 minutos. Exploración normal.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Migraña con aura",
+          "correct": true,
+          "rationale": "Cefalea unilateral pulsátil con síntomas asociados y aura visual reversible."
+        },
+        {
+          "key": "b",
+          "text": "Cefalea por uso excesivo de pantallas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la causa es la vista cansada."
+        },
+        {
+          "key": "c",
+          "text": "Cefalea tensional",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la frecuencia, pero la tensional es opresiva y bilateral."
+        },
+        {
+          "key": "d",
+          "text": "Neuralgia del trigémino",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta las características de la cefalea."
+        },
+        {
+          "key": "e",
+          "text": "Tumor cerebral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye una causa grave sin datos de alarma."
+        },
+        {
+          "key": "f",
+          "text": "Cefalea en racimos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es unilateral, pero orbitaria, breve, con síntomas autonómicos y más en hombres."
+        },
+        {
+          "key": "g",
+          "text": "Glaucoma de ángulo cerrado",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en los síntomas visuales."
+        },
+        {
+          "key": "h",
+          "text": "Sinusitis crónica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es un diagnóstico frecuente erróneo de la migraña."
+        },
+        {
+          "key": "i",
+          "text": "Migraña sin aura",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena similar, pero esta paciente tiene aura."
+        },
+        {
+          "key": "j",
+          "text": "Hemorragia subaracnoidea",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La evolución es crónica y recurrente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "h"
+      ],
+      "explanation": "La migraña es una cefalea primaria frecuente, más común en mujeres. Sus crisis duran de 4 a 72 horas y tienen al menos dos características, unilateral, pulsátil, intensidad moderada a grave o empeoramiento con la actividad, más náusea o vómito, o fotofobia y fonofobia. En un tercio de los pacientes hay aura, síntomas neurológicos reversibles que duran de 5 a 60 minutos, sobre todo visuales. El diagnóstico es clínico y no requiere imagen si no hay datos de alarma. El tratamiento agudo usa AINE o triptanos, y la prevención se indica con crisis frecuentes.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la migraña en el adulto"
+      ]
+    },
+    {
+      "key": "mi-08-neurologia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "neurology",
+      "subtopic": "headache",
+      "vignette": "Hombre de 62 años sin cefaleas previas que inicia con cefalea progresiva de 6 semanas, que empeora al toser y en la mañana, con vómito. A la exploración tiene papiledema bilateral.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Analgésicos y revalorar en un mes",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Retrasa el estudio de una causa grave."
+        },
+        {
+          "key": "b",
+          "text": "Biopsia cerebral",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es invasiva y prematura."
+        },
+        {
+          "key": "c",
+          "text": "Diagnosticar migraña y dar triptán",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en una cefalea primaria pese a datos de alarma."
+        },
+        {
+          "key": "d",
+          "text": "Atribuirlo a hipertensión arterial",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye sin estudiar."
+        },
+        {
+          "key": "e",
+          "text": "Observar si empeora",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Pone en riesgo al paciente."
+        },
+        {
+          "key": "f",
+          "text": "Medir velocidad de sedimentación solo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es útil en arteritis, pero el papiledema exige imagen."
+        },
+        {
+          "key": "g",
+          "text": "Cambiar de lentes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la cefalea es visual."
+        },
+        {
+          "key": "h",
+          "text": "Evitar estudios para no preocupar al paciente",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasa un diagnóstico grave."
+        },
+        {
+          "key": "i",
+          "text": "Punción lumbar inmediata antes de la imagen",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena diagnóstica, pero con papiledema puede causar herniación."
+        },
+        {
+          "key": "j",
+          "text": "Neuroimagen urgente, de preferencia resonancia magnética, o tomografía si no está disponible",
+          "correct": true,
+          "rationale": "Cefalea nueva en mayor de 50 años con datos de hipertensión intracraneal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "Ante una cefalea se buscan datos de alarma que sugieren una causa secundaria, como inicio después de los 50 años, cefalea súbita en trueno, patrón progresivo, empeoramiento con maniobras de Valsalva o al despertar, fiebre, signos neurológicos focales, papiledema, alteración del estado de alerta, inmunosupresión o cáncer. Estos datos obligan a realizar neuroimagen urgente. El papiledema indica hipertensión intracraneal, por lo que la punción lumbar está contraindicada hasta descartar una lesión con efecto de masa. Las causas probables a esta edad incluyen tumores primarios o metastásicos, hematoma subdural crónico y otras lesiones.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cefalea en el primer nivel de atención"
+      ]
+    },
+    {
+      "key": "mi-08-neurologia-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "neurology",
+      "subtopic": "headache",
+      "vignette": "Hombre de 34 años con crisis de dolor intenso periorbitario derecho de 45 minutos, una o dos veces al día durante 3 semanas, con lagrimeo, rinorrea y ptosis ipsilateral. Está inquieto durante el dolor. Le pasa cada año en primavera.",
+      "prompt": "¿Cuál es el tratamiento de elección para la crisis aguda?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Reposo en un cuarto oscuro sin fármacos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que ayuda como en la migraña."
+        },
+        {
+          "key": "b",
+          "text": "Propranolol",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la prevención de la migraña, sin utilidad aguda en racimos."
+        },
+        {
+          "key": "c",
+          "text": "Bloqueo anestésico del ganglio esfenopalatino como primera opción",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es una opción en casos refractarios."
+        },
+        {
+          "key": "d",
+          "text": "Esperar a que termine el periodo de crisis",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Deja un dolor muy intenso sin tratar."
+        },
+        {
+          "key": "e",
+          "text": "Oxígeno al 100% con mascarilla a flujo alto o sumatriptán subcutáneo",
+          "correct": true,
+          "rationale": "Es una cefalea en racimos."
+        },
+        {
+          "key": "f",
+          "text": "AINE orales como para cualquier cefalea",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Su efecto es lento."
+        },
+        {
+          "key": "g",
+          "text": "Carbamazepina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es para neuralgia del trigémino."
+        },
+        {
+          "key": "h",
+          "text": "Paracetamol oral",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Su inicio es lento e ineficaz en la crisis."
+        },
+        {
+          "key": "i",
+          "text": "Opioides orales para el dolor intenso",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena potente, pero no es eficaz y genera dependencia."
+        },
+        {
+          "key": "j",
+          "text": "Cirugía de descompresión",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es el tratamiento."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "La cefalea en racimos es una cefalea trigémino autonómica más frecuente en hombres. Se caracteriza por crisis de dolor unilateral muy intenso, orbitario o temporal, de 15 a 180 minutos, con síntomas autonómicos del mismo lado, como lagrimeo, inyección conjuntival, rinorrea, ptosis y miosis, e inquietud. Las crisis ocurren en periodos de semanas, a menudo estacionales. El tratamiento agudo de elección es el oxígeno al 100% con mascarilla sin reinhalación a 12 a 15 litros por minuto, o sumatriptán subcutáneo o nasal. El tratamiento preventivo de elección es el verapamilo, con corticosteroides como puente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cefalea en el primer nivel de atención"
+      ]
+    },
+    {
+      "key": "mi-08-neurologia-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "neurology",
+      "subtopic": "headache",
+      "vignette": "Mujer de 72 años con cefalea temporal derecha nueva, dolor al masticar, sensibilidad del cuero cabelludo y un episodio de pérdida visual transitoria. Velocidad de sedimentación de 88 mm/h.",
+      "prompt": "¿Cuál es el estudio de elección para confirmar el diagnóstico?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esperar la biopsia antes de iniciar esteroides",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la confirmación y arriesga la ceguera."
+        },
+        {
+          "key": "b",
+          "text": "Punción lumbar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es útil para este diagnóstico."
+        },
+        {
+          "key": "c",
+          "text": "Descartar por su edad avanzada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La edad mayor de 50 años es precisamente un criterio."
+        },
+        {
+          "key": "d",
+          "text": "Electroencefalograma",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena neurológico, pero no aporta."
+        },
+        {
+          "key": "e",
+          "text": "Ultrasonido carotídeo como estudio definitivo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que evalúa la arteria temporal."
+        },
+        {
+          "key": "f",
+          "text": "Tomografía de cráneo como estudio confirmatorio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No confirma la arteritis."
+        },
+        {
+          "key": "g",
+          "text": "Perfil completo de anticuerpos antes de tratar",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "h",
+          "text": "Angiografía cerebral convencional",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Invasiva e innecesaria."
+        },
+        {
+          "key": "i",
+          "text": "Diagnóstico de migraña tardía",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Subestima un cuadro grave."
+        },
+        {
+          "key": "j",
+          "text": "Biopsia de arteria temporal, sin retrasar el inicio de corticosteroides",
+          "correct": true,
+          "rationale": "Confirma arteritis de células gigantes."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "j"
+      ],
+      "explanation": "La arteritis de células gigantes es una vasculitis de grandes vasos en mayores de 50 años, que afecta ramas de la carótida externa, en especial la arteria temporal. Se presenta con cefalea temporal nueva, claudicación mandibular, sensibilidad del cuero cabelludo, síntomas visuales y velocidad de sedimentación y proteína C reactiva elevadas, y se asocia a polimialgia reumática. La complicación más grave es la ceguera por neuropatía óptica isquémica. Ante la sospecha se inician de inmediato corticosteroides a dosis altas y se realiza biopsia de la arteria temporal, que confirma el diagnóstico y sigue siendo útil días después.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la arteritis de células gigantes"
+      ]
+    }
+  ]
+}

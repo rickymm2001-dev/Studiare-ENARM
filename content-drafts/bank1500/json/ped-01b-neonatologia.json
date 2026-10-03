@@ -1,0 +1,1325 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "ped-01b-neonatologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_jaundice",
+      "vignette": "Recién nacido de 10 días, de término, alimentado exclusivamente al seno materno, con ictericia que persiste desde el cuarto día. Gana peso adecuadamente, está activo y sus evacuaciones son amarillas y su orina clara. Bilirrubina total de 14 mg/dL con directa de 0.6 mg/dL. Coombs negativo y hemoglobina normal.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Enfermedad hemolítica por incompatibilidad Rh",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da ictericia temprana con Coombs positivo y anemia."
+        },
+        {
+          "key": "b",
+          "text": "Hepatitis neonatal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Daría elevación de la bilirrubina directa."
+        },
+        {
+          "key": "c",
+          "text": "Ictericia por leche materna",
+          "correct": true,
+          "rationale": "Ictericia indirecta prolongada en un lactante sano que gana peso con lactancia exclusiva."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome de Crigler Najjar tipo 1",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es muy raro y la bilirrubina es mucho más alta."
+        },
+        {
+          "key": "e",
+          "text": "Galactosemia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da ictericia con vómito, hepatomegalia y mal estado general."
+        },
+        {
+          "key": "f",
+          "text": "Deficiencia de glucosa 6 fosfato deshidrogenasa",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay datos de hemólisis."
+        },
+        {
+          "key": "g",
+          "text": "Atresia de vías biliares",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la duración, pero la atresia da bilirrubina directa y acolia."
+        },
+        {
+          "key": "h",
+          "text": "Sepsis neonatal tardía",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es frecuente, pero el bebé está activo y sin datos de infección."
+        },
+        {
+          "key": "i",
+          "text": "Ictericia por falta de lactancia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Ocurre en la primera semana con mala ingesta y pérdida de peso."
+        },
+        {
+          "key": "j",
+          "text": "Leche materna de mala calidad que debe suspenderse",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La leche es adecuada y no se debe suspender."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "La ictericia por leche materna aparece después de la primera semana, puede durar de tres a doce semanas y se presenta en lactantes sanos con buena ganancia de peso. Se atribuye a factores de la leche que aumentan la circulación enterohepática de la bilirrubina. Es de predominio indirecto y sin hemólisis. Se distingue de la ictericia por falta de lactancia, que ocurre en los primeros días por ingesta insuficiente, con pérdida de peso y pocas evacuaciones. El manejo es continuar la lactancia y vigilar. Toda ictericia que persiste más de dos semanas obliga a medir bilirrubina directa para descartar colestasis y a revisar el tamiz de hipotiroidismo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección oportuna, diagnóstico y tratamiento de la hiperbilirrubinemia en recién nacidos"
+      ]
+    },
+    {
+      "key": "ped-01b-neonatologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_jaundice",
+      "vignette": "Recién nacido de 4 días, de 36 semanas, con ictericia hasta las piernas. Alimentado al seno materno con tomas cortas y poco frecuentes, ha perdido 11% de su peso al nacer, tiene pocas micciones y evacuaciones escasas. Bilirrubina total de 17 mg/dL de predominio indirecto. Coombs negativo.",
+      "prompt": "¿Cuál es el factor de riesgo más importante de su hiperbilirrubinemia?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "La composición de la leche materna madura",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la lactancia, pero eso ocurre después de la primera semana."
+        },
+        {
+          "key": "b",
+          "text": "Uso de fórmula en lugar de seno",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Recibe seno materno."
+        },
+        {
+          "key": "c",
+          "text": "Exposición a luz artificial en el cunero",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No causa ictericia."
+        },
+        {
+          "key": "d",
+          "text": "Cefalohematoma grande",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No se describe sangrado extravascular."
+        },
+        {
+          "key": "e",
+          "text": "Infección de vías urinarias",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay datos de infección."
+        },
+        {
+          "key": "f",
+          "text": "Incompatibilidad de grupo sanguíneo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El Coombs negativo y la ausencia de anemia no la apoyan."
+        },
+        {
+          "key": "g",
+          "text": "Atresia biliar",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La bilirrubina es indirecta."
+        },
+        {
+          "key": "h",
+          "text": "Ingesta insuficiente de leche con aumento de la circulación enterohepática, agravada por la prematurez tardía",
+          "correct": true,
+          "rationale": "La pérdida de peso mayor de 10% y las pocas evacuaciones indican mala alimentación."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de Gilbert",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es raro que se manifieste así en el recién nacido."
+        },
+        {
+          "key": "j",
+          "text": "Hipotiroidismo congénito",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Prolonga la ictericia, pero no explica la pérdida de peso con mala técnica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "h"
+      ],
+      "explanation": "La ictericia por falta de lactancia ocurre en los primeros días cuando la ingesta es insuficiente. La poca leche reduce las evacuaciones, aumenta la reabsorción intestinal de bilirrubina y produce deshidratación. Los prematuros tardíos, de 34 a 36 semanas, tienen mayor riesgo porque succionan con menos eficacia y su conjugación hepática es más inmadura. Una pérdida de peso mayor de 10% es señal de alarma. El manejo incluye apoyo a la técnica de lactancia, tomas de 8 a 12 veces al día, suplemento si es necesario y fototerapia según el nomograma. Prevenirla requiere vigilar peso, micciones y evacuaciones antes y después del egreso.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección oportuna, diagnóstico y tratamiento de la hiperbilirrubinemia en recién nacidos"
+      ]
+    },
+    {
+      "key": "ped-01b-neonatologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_jaundice",
+      "vignette": "Recién nacido de 2 días con ictericia moderada que recibe fototerapia. La madre pregunta cómo funciona la luz para bajar la bilirrubina.",
+      "prompt": "¿Cuál es el mecanismo de acción de la fototerapia?",
+      "polarity": "affirmative",
+      "task": "mechanism",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Calienta la piel y aumenta la sudoración que elimina bilirrubina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La bilirrubina no se elimina por el sudor."
+        },
+        {
+          "key": "b",
+          "text": "Oxida la bilirrubina directa conjugada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Actúa sobre la bilirrubina no conjugada."
+        },
+        {
+          "key": "c",
+          "text": "Convierte la bilirrubina de la piel en isómeros hidrosolubles que se eliminan por bilis y orina sin conjugarse",
+          "correct": true,
+          "rationale": "La luz azul transforma la molécula en fotoisómeros y lumirrubina."
+        },
+        {
+          "key": "d",
+          "text": "Une la bilirrubina a la albúmina",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No modifica la unión a albúmina."
+        },
+        {
+          "key": "e",
+          "text": "Estimula el vaciamiento de la vesícula",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es su mecanismo."
+        },
+        {
+          "key": "f",
+          "text": "Produce vitamina D que elimina la bilirrubina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La vitamina D no participa."
+        },
+        {
+          "key": "g",
+          "text": "Bloquea la producción de bilirrubina en el bazo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No actúa sobre la producción."
+        },
+        {
+          "key": "h",
+          "text": "Aumenta la actividad de la glucuroniltransferasa hepática",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ese es el efecto del fenobarbital."
+        },
+        {
+          "key": "i",
+          "text": "Destruye los eritrocitos envejecidos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No actúa sobre los eritrocitos."
+        },
+        {
+          "key": "j",
+          "text": "Funciona igual que la luz solar de una ventana",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La luz solar es ineficaz y riesgosa."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "h",
+        "i"
+      ],
+      "explanation": "La fototerapia usa luz azul de longitud de onda cercana a 460 nanómetros que penetra la piel. La bilirrubina no conjugada absorbe esa luz y se convierte en fotoisómeros configuracionales y en lumirrubina, un isómero estructural. Estas formas son más hidrosolubles y se excretan por bilis y orina sin necesidad de conjugación hepática. Su eficacia depende de la irradiancia, de la superficie corporal expuesta y de la distancia de la lámpara. Durante el tratamiento se protegen los ojos, se vigila la temperatura y la hidratación y se mantiene la lactancia. La exposición a luz solar no se recomienda porque es ineficaz y causa quemaduras e hipotermia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección oportuna, diagnóstico y tratamiento de la hiperbilirrubinemia en recién nacidos"
+      ]
+    },
+    {
+      "key": "ped-01b-neonatologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_resuscitation",
+      "vignette": "Recién nacido de término por parto vaginal que al nacer no llora, tiene tono disminuido y respira de forma irregular. El líquido amniótico es claro. Ya se colocó bajo una fuente de calor radiante.",
+      "prompt": "¿Cuál es la medida inicial a realizar?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esperar al minuto para valorar el Apgar",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "El Apgar no guía la reanimación."
+        },
+        {
+          "key": "b",
+          "text": "Observar sin intervenir hasta que llore",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasa la atención."
+        },
+        {
+          "key": "c",
+          "text": "Colgarlo de los pies y dar palmadas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es peligroso y no se recomienda."
+        },
+        {
+          "key": "d",
+          "text": "Dar compresiones torácicas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Solo se indican con frecuencia cardiaca menor de 60 tras ventilación eficaz."
+        },
+        {
+          "key": "e",
+          "text": "Bañar al bebé para estimularlo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumenta la pérdida de calor."
+        },
+        {
+          "key": "f",
+          "text": "Secar, estimular, posicionar la cabeza en olfateo y despejar la vía aérea si es necesario",
+          "correct": true,
+          "rationale": "Son los pasos iniciales en los primeros 30 segundos."
+        },
+        {
+          "key": "g",
+          "text": "Intubar de inmediato",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicado antes de los pasos iniciales."
+        },
+        {
+          "key": "h",
+          "text": "Tomar gasometría de cordón antes de actuar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa la reanimación."
+        },
+        {
+          "key": "i",
+          "text": "Administrar adrenalina intravenosa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se usa como medida inicial."
+        },
+        {
+          "key": "j",
+          "text": "Aspirar de rutina estómago y tráquea",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se recomienda la aspiración de rutina."
+        }
+      ],
+      "canonical": [
+        "d",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "La reanimación neonatal inicia con la evaluación rápida de tres preguntas, si es de término, si tiene buen tono y si respira o llora. Si alguna respuesta es negativa se realizan los pasos iniciales en los primeros 30 segundos, que son proporcionar calor, posicionar la cabeza en ligera extensión, despejar la vía aérea solo si hay secreciones, secar y estimular. Después se evalúa la respiración y la frecuencia cardiaca. Si persiste en apnea, con respiración en boqueo o frecuencia menor de 100, se inicia ventilación con presión positiva dentro del primer minuto. El Apgar describe al bebé pero no se usa para decidir cuándo reanimar.",
+      "gpcRefs": [
+        "Programa de Reanimación Neonatal de la Academia Americana de Pediatría",
+        "Guía de Práctica Clínica de reanimación neonatal"
+      ]
+    },
+    {
+      "key": "ped-01b-neonatologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_resuscitation",
+      "vignette": "Recién nacido de término en reanimación. Tras 30 segundos de ventilación eficaz con buena expansión torácica y 60 segundos de compresiones coordinadas con oxígeno al 100%, la frecuencia cardiaca se mantiene en 45 por minuto. Ya cuenta con catéter venoso umbilical.",
+      "prompt": "¿Cuál es el fármaco de elección en este momento?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Adrenalina intravenosa por catéter umbilical a 0.01 a 0.03 mg/kg",
+          "correct": true,
+          "rationale": "Indicada cuando la frecuencia sigue menor de 60 pese a ventilación y compresiones eficaces."
+        },
+        {
+          "key": "b",
+          "text": "Amiodarona",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se usa en la bradicardia neonatal."
+        },
+        {
+          "key": "c",
+          "text": "Bicarbonato de sodio de rutina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se recomienda de rutina."
+        },
+        {
+          "key": "d",
+          "text": "Naloxona",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Solo considerar en depresión por opioides con ventilación asegurada, y no corrige la bradicardia."
+        },
+        {
+          "key": "e",
+          "text": "Dopamina en infusión antes de la adrenalina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No sustituye a la adrenalina."
+        },
+        {
+          "key": "f",
+          "text": "Atropina intravenosa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No forma parte de la reanimación neonatal."
+        },
+        {
+          "key": "g",
+          "text": "Continuar solo compresiones sin fármacos",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "La bradicardia persistente requiere adrenalina."
+        },
+        {
+          "key": "h",
+          "text": "Surfactante endotraqueal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No trata la bradicardia."
+        },
+        {
+          "key": "i",
+          "text": "Gluconato de calcio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "j",
+          "text": "Adrenalina a dosis de adulto de 1 mg",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La dosis es por kilogramo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "f"
+      ],
+      "explanation": "En la reanimación neonatal la adrenalina se indica cuando la frecuencia cardiaca permanece menor de 60 por minuto después de al menos 30 segundos de ventilación que expande el tórax y 60 segundos de compresiones coordinadas en relación 3 a 1 con oxígeno al 100%. La vía preferida es intravenosa por catéter umbilical, con dosis de 0.01 a 0.03 mg/kg de la dilución 1 en 10 000, que puede repetirse cada 3 a 5 minutos. La vía endotraqueal es menos eficaz y requiere dosis mayor. Si no hay respuesta se considera hipovolemia y se administra solución salina a 10 mL/kg. El bicarbonato y la atropina no se usan de rutina.",
+      "gpcRefs": [
+        "Programa de Reanimación Neonatal de la Academia Americana de Pediatría",
+        "Guía de Práctica Clínica de reanimación neonatal"
+      ]
+    },
+    {
+      "key": "ped-01b-neonatologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_resuscitation",
+      "vignette": "Recién nacido de término que recibe ventilación con presión positiva con bolsa y mascarilla por apnea. A los 15 segundos la frecuencia cardiaca no aumenta y el tórax no se eleva con las insuflaciones.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Administrar adrenalina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No está indicada sin ventilación eficaz."
+        },
+        {
+          "key": "b",
+          "text": "Suspender la ventilación y estimular de nuevo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Retrasa la reanimación."
+        },
+        {
+          "key": "c",
+          "text": "Continuar igual por un minuto más",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "La ventilación sin expansión es ineficaz."
+        },
+        {
+          "key": "d",
+          "text": "Soplar boca a boca",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es la técnica recomendada."
+        },
+        {
+          "key": "e",
+          "text": "Solicitar radiografía de tórax antes de seguir",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa la reanimación."
+        },
+        {
+          "key": "f",
+          "text": "Realizar los pasos correctivos de la ventilación, ajustar mascarilla, reposicionar, aspirar, abrir la boca y aumentar la presión",
+          "correct": true,
+          "rationale": "Sin expansión torácica la ventilación no es eficaz."
+        },
+        {
+          "key": "g",
+          "text": "Iniciar compresiones torácicas de inmediato",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Primero debe lograrse una ventilación eficaz."
+        },
+        {
+          "key": "h",
+          "text": "Esperar a que llegue el pediatra sin actuar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La reanimación no debe detenerse."
+        },
+        {
+          "key": "i",
+          "text": "Dar naloxona",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No corrige un problema mecánico de ventilación."
+        },
+        {
+          "key": "j",
+          "text": "Aumentar solo la concentración de oxígeno",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Sin expansión el oxígeno no llega al alveolo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "g"
+      ],
+      "explanation": "La ventilación eficaz es la acción más importante de la reanimación neonatal. Si después de 15 segundos la frecuencia cardiaca no mejora y el tórax no se mueve, se aplican los pasos correctivos que se recuerdan como MR SOPA. Son ajustar la mascarilla, reposicionar la cabeza, aspirar boca y nariz, abrir la boca, aumentar la presión y considerar una vía aérea alternativa como cánula endotraqueal o mascarilla laríngea. Cuando el tórax se expande se ventila otros 30 segundos y se reevalúa. Las compresiones solo se inician si la frecuencia sigue menor de 60 tras 30 segundos de ventilación que sí expande el tórax.",
+      "gpcRefs": [
+        "Programa de Reanimación Neonatal de la Academia Americana de Pediatría",
+        "Guía de Práctica Clínica de reanimación neonatal"
+      ]
+    },
+    {
+      "key": "ped-01b-neonatologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_resuscitation",
+      "vignette": "Recién nacido de término que requirió pasos iniciales y respira espontáneamente. Se coloca oxímetro en la mano derecha. A los 3 minutos de vida la saturación es de 75%, la frecuencia cardiaca de 140 y está rosado de tronco con acrocianosis.",
+      "prompt": "¿Qué indica esta saturación a los 3 minutos?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Necesidad de intubación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Respira y tiene buena frecuencia."
+        },
+        {
+          "key": "b",
+          "text": "Cardiopatía congénita cianógena",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El aumento progresivo de saturación es fisiológico."
+        },
+        {
+          "key": "c",
+          "text": "Indicación de ecocardiograma urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay datos de cardiopatía."
+        },
+        {
+          "key": "d",
+          "text": "Todo recién nacido debe tener saturación mayor de 95% al nacer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Alcanza ese valor en unos 10 minutos."
+        },
+        {
+          "key": "e",
+          "text": "Es un valor esperado en la transición normal y no requiere oxígeno suplementario",
+          "correct": true,
+          "rationale": "A los 3 minutos la meta preductal es de 70 a 75%."
+        },
+        {
+          "key": "f",
+          "text": "Hipertensión pulmonar persistente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay dificultad ni diferencia que lo sugiera."
+        },
+        {
+          "key": "g",
+          "text": "Hipoxemia grave que requiere oxígeno al 100%",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el valor de adulto, pero en la transición es normal."
+        },
+        {
+          "key": "h",
+          "text": "Medición errónea por colocar el sensor en la mano derecha",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La mano derecha es el sitio correcto preductal."
+        },
+        {
+          "key": "i",
+          "text": "Metahemoglobinemia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara y no se sugiere."
+        },
+        {
+          "key": "j",
+          "text": "Retirar el oxímetro y no vigilar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe seguir vigilándose la saturación."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "Después del nacimiento la saturación preductal aumenta de forma gradual. Las metas aproximadas son 60 a 65% al minuto, 65 a 70% a los 2 minutos, 70 a 75% a los 3, 75 a 80% a los 4, 80 a 85% a los 5 y 85 a 95% a los 10 minutos. El sensor se coloca en la mano o muñeca derecha porque refleja la sangre preductal que llega al cerebro. Un recién nacido que respira y tiene buena frecuencia no necesita oxígeno si su saturación está dentro de la meta. El exceso de oxígeno produce daño por radicales libres, por lo que la reanimación de término inicia con aire ambiente al 21%.",
+      "gpcRefs": [
+        "Programa de Reanimación Neonatal de la Academia Americana de Pediatría"
+      ]
+    },
+    {
+      "key": "ped-01b-neonatologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_respiratory_distress",
+      "vignette": "Recién nacido de 28 semanas y 1050 g con quejido, aleteo nasal y retracciones a los 20 minutos de vida. Requiere FiO2 de 45% con presión positiva continua de 6 cmH2O para mantener saturación de 90%. La radiografía muestra patrón reticulogranular difuso con broncograma aéreo.",
+      "prompt": "¿Cuál es el tratamiento de elección para su enfermedad?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Antibióticos como único tratamiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La sepsis se cubre, pero no corrige la deficiencia de surfactante."
+        },
+        {
+          "key": "b",
+          "text": "Óxido nítrico inhalado de rutina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se reserva para hipertensión pulmonar."
+        },
+        {
+          "key": "c",
+          "text": "Surfactante exógeno endotraqueal manteniendo apoyo con presión positiva",
+          "correct": true,
+          "rationale": "Deficiencia de surfactante con requerimiento de oxígeno mayor de 30% pese a presión positiva."
+        },
+        {
+          "key": "d",
+          "text": "Mantener igual y esperar maduración espontánea",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Aumenta el riesgo de falla respiratoria."
+        },
+        {
+          "key": "e",
+          "text": "Furosemida intravenosa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es útil en la taquipnea transitoria por líquido, no aquí."
+        },
+        {
+          "key": "f",
+          "text": "Oxigenación por membrana extracorpórea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No se usa en prematuros de este peso."
+        },
+        {
+          "key": "g",
+          "text": "Aspiración de secreciones frecuente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No mejora la deficiencia de surfactante."
+        },
+        {
+          "key": "h",
+          "text": "Corticosteroides sistémicos al recién nacido",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No están indicados como tratamiento agudo."
+        },
+        {
+          "key": "i",
+          "text": "Salbutamol nebulizado",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay broncoespasmo."
+        },
+        {
+          "key": "j",
+          "text": "Oxígeno en casco a flujo libre sin presión positiva",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es insuficiente para el colapso alveolar."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "El síndrome de dificultad respiratoria del prematuro se debe a deficiencia de surfactante, lo que causa colapso alveolar, disminución de la distensibilidad e hipoxemia. Se presenta en las primeras horas con quejido, aleteo, retracciones y cianosis, y la radiografía muestra patrón en vidrio esmerilado con broncograma aéreo y bajo volumen pulmonar. El manejo inicial es presión positiva continua desde la sala de partos. Se administra surfactante exógeno cuando el prematuro requiere FiO2 mayor de 30% con presión positiva, por técnica de intubación o mínimamente invasiva. La prevención más eficaz son los corticosteroides prenatales. Las complicaciones incluyen neumotórax, displasia broncopulmonar y hemorragia intraventricular.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de dificultad respiratoria en el recién nacido",
+        "Consenso europeo de manejo del síndrome de dificultad respiratoria"
+      ]
+    },
+    {
+      "key": "ped-01b-neonatologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_respiratory_distress",
+      "vignette": "Recién nacido de 41 semanas con antecedente de líquido meconial, que a las 6 horas presenta cianosis grave y saturación preductal de 92% con postductal de 78%. Recibe oxígeno al 100% con poca mejoría. Radiografía con campos pulmonares poco infiltrados. El ecocardiograma muestra corazón estructuralmente normal con cortocircuito de derecha a izquierda por el conducto arterioso.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Neumonía congénita",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el cortocircuito por el conducto."
+        },
+        {
+          "key": "b",
+          "text": "Hernia diafragmática congénita",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se vería en la radiografía."
+        },
+        {
+          "key": "c",
+          "text": "Síndrome de dificultad respiratoria por surfactante",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es propio de prematuros."
+        },
+        {
+          "key": "d",
+          "text": "Coartación de aorta",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El ecocardiograma no la muestra."
+        },
+        {
+          "key": "e",
+          "text": "Transposición de grandes arterias",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El ecocardiograma muestra corazón estructuralmente normal."
+        },
+        {
+          "key": "f",
+          "text": "Síndrome de aspiración de meconio sin otra complicación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede coexistir, pero no explica la diferencia de saturaciones."
+        },
+        {
+          "key": "g",
+          "text": "Hipertensión pulmonar persistente del recién nacido",
+          "correct": true,
+          "rationale": "Diferencia de saturación pre y postductal con corazón estructuralmente normal y cortocircuito de derecha a izquierda."
+        },
+        {
+          "key": "h",
+          "text": "Taquipnea transitoria del recién nacido",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es leve y responde al oxígeno."
+        },
+        {
+          "key": "i",
+          "text": "Neumotórax a tensión",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La radiografía no lo muestra."
+        },
+        {
+          "key": "j",
+          "text": "Error del oxímetro por mala colocación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La diferencia es consistente con el cortocircuito."
+        }
+      ],
+      "canonical": [
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "La hipertensión pulmonar persistente del recién nacido ocurre cuando la resistencia vascular pulmonar no disminuye tras el nacimiento. La sangre se desvía de derecha a izquierda por el conducto arterioso y el foramen oval, lo que produce hipoxemia grave y poco sensible al oxígeno. Es más frecuente en recién nacidos de término o postérmino con aspiración de meconio, asfixia, sepsis o hernia diafragmática. Una saturación preductal mayor que la postductal en más de 10% es característica. El ecocardiograma confirma el cortocircuito y descarta cardiopatía. El manejo incluye oxígeno, ventilación adecuada, soporte inotrópico, sedación y óxido nítrico inhalado.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión pulmonar persistente del recién nacido"
+      ]
+    },
+    {
+      "key": "ped-01b-neonatologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_respiratory_distress",
+      "vignette": "Prematuro de 26 semanas que recibió ventilación mecánica y oxígeno por síndrome de dificultad respiratoria. A las 36 semanas de edad corregida sigue requiriendo oxígeno suplementario. La radiografía muestra áreas de hiperinsuflación alternadas con bandas de atelectasia.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Displasia broncopulmonar",
+          "correct": true,
+          "rationale": "Dependencia de oxígeno a las 36 semanas corregidas en un prematuro ventilado."
+        },
+        {
+          "key": "b",
+          "text": "Neumonía nosocomial",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Daría fiebre e infiltrado agudo."
+        },
+        {
+          "key": "c",
+          "text": "Pulmones normales que solo necesitan crecer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Existe daño pulmonar crónico."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome de dificultad respiratoria persistente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el diagnóstico inicial, pero ya es una secuela crónica."
+        },
+        {
+          "key": "e",
+          "text": "Taquipnea transitoria",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se resuelve en días."
+        },
+        {
+          "key": "f",
+          "text": "Persistencia del conducto arterioso sola",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Puede contribuir, pero no explica la radiografía."
+        },
+        {
+          "key": "g",
+          "text": "Asma del lactante",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la dependencia de oxígeno desde el periodo neonatal."
+        },
+        {
+          "key": "h",
+          "text": "Enfisema lobar congénito",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es raro y localizado."
+        },
+        {
+          "key": "i",
+          "text": "Retinopatía del prematuro",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es otra complicación, pero ocular."
+        },
+        {
+          "key": "j",
+          "text": "Fibrosis quística",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es genética y no se relaciona con la ventilación."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "g",
+        "j"
+      ],
+      "explanation": "La displasia broncopulmonar es la enfermedad pulmonar crónica más frecuente del prematuro. Se define por la necesidad de oxígeno suplementario a las 36 semanas de edad corregida en menores de 32 semanas al nacer. Resulta de la inmadurez pulmonar sumada a la lesión por ventilación mecánica, toxicidad por oxígeno, infección e inflamación, lo que detiene el desarrollo alveolar y vascular. Su prevención incluye corticosteroides prenatales, presión positiva no invasiva, surfactante oportuno, metas de saturación prudentes, cafeína y nutrición adecuada. Los pacientes tienen más riesgo de hipertensión pulmonar, infecciones respiratorias graves y alteraciones del neurodesarrollo, por lo que requieren seguimiento estrecho.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la displasia broncopulmonar"
+      ]
+    },
+    {
+      "key": "ped-01b-neonatologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_sepsis",
+      "vignette": "Recién nacido de 12 días, previamente sano, con rechazo al alimento, irritabilidad y fiebre de 38.5 °C. La fontanela anterior está abombada. Leucocitos de 4 000/mm3 y proteína C reactiva elevada.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sobrecalentamiento ambiental",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la leucopenia ni la fontanela."
+        },
+        {
+          "key": "b",
+          "text": "Sepsis neonatal temprana",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se presenta en las primeras 72 horas."
+        },
+        {
+          "key": "c",
+          "text": "Deshidratación por mala técnica de lactancia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La fiebre y la fontanela abombada sugieren infección."
+        },
+        {
+          "key": "d",
+          "text": "Fiebre por dentición",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El recién nacido no tiene dentición y la fiebre neonatal siempre es seria."
+        },
+        {
+          "key": "e",
+          "text": "Hidrocefalia congénita",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No daría fiebre aguda ni leucopenia."
+        },
+        {
+          "key": "f",
+          "text": "Reflujo gastroesofágico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No da fiebre."
+        },
+        {
+          "key": "g",
+          "text": "Cólico del lactante",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No causa fiebre ni fontanela abombada."
+        },
+        {
+          "key": "h",
+          "text": "Infección de vías respiratorias altas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la fontanela abombada."
+        },
+        {
+          "key": "i",
+          "text": "Sepsis neonatal tardía con probable meningitis",
+          "correct": true,
+          "rationale": "Fiebre, rechazo al alimento y fontanela abombada después de la primera semana."
+        },
+        {
+          "key": "j",
+          "text": "Hemorragia intraventricular",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es propia de prematuros en los primeros días."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "La sepsis neonatal tardía ocurre después de las 72 horas de vida y suele adquirirse del ambiente o de la comunidad, aunque el estreptococo del grupo B puede causarla hasta los 3 meses. Las manifestaciones son inespecíficas, como rechazo al alimento, irritabilidad, letargo, inestabilidad térmica, apneas o dificultad respiratoria. La meningitis acompaña a un porcentaje importante de casos y se sospecha con fontanela abombada o crisis convulsivas. Leucopenia, neutropenia o elevación de reactantes de fase aguda apoyan el diagnóstico. Se toman hemocultivo, urocultivo y punción lumbar, y se inicia tratamiento empírico sin demora según la epidemiología local.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de sepsis y choque séptico del recién nacido"
+      ]
+    },
+    {
+      "key": "ped-01b-neonatologia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_sepsis",
+      "vignette": "Recién nacido de 5 días hospitalizado con hipotermia, apneas y mala perfusión. Se sospecha sepsis neonatal y se inicia el abordaje.",
+      "prompt": "¿Cuál es el estudio de elección para confirmar el diagnóstico?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hemocultivo",
+          "correct": true,
+          "rationale": "Es el estándar para confirmar sepsis e identificar el agente."
+        },
+        {
+          "key": "b",
+          "text": "Procalcitonina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es un marcador, no confirma."
+        },
+        {
+          "key": "c",
+          "text": "Gasometría arterial",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Valora acidosis, no la infección."
+        },
+        {
+          "key": "d",
+          "text": "Cultivo de piel",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No confirma infección sistémica."
+        },
+        {
+          "key": "e",
+          "text": "Proteína C reactiva",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Apoya la sospecha pero no confirma ni identifica el agente."
+        },
+        {
+          "key": "f",
+          "text": "Diagnóstico solo por la clínica sin estudios",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere confirmación microbiológica."
+        },
+        {
+          "key": "g",
+          "text": "Biometría hemática completa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es útil para el índice de neutrófilos, pero no confirma."
+        },
+        {
+          "key": "h",
+          "text": "Reacción en cadena de polimerasa de rutina sin hemocultivo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No sustituye al hemocultivo."
+        },
+        {
+          "key": "i",
+          "text": "Cultivo de aspirado gástrico",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No es útil para el diagnóstico."
+        },
+        {
+          "key": "j",
+          "text": "Radiografía de tórax",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Solo valora neumonía."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "El hemocultivo es el estudio de referencia para confirmar la sepsis neonatal. Debe obtenerse antes de iniciar antibióticos y con un volumen mínimo de 1 mL para mejorar la sensibilidad. En la sepsis tardía también se toma urocultivo por sondeo o punción suprapúbica, y en ambos casos se realiza punción lumbar si el paciente está estable, ya que la meningitis puede presentarse con hemocultivo negativo. La biometría hemática, el índice de neutrófilos inmaduros entre totales, la proteína C reactiva y la procalcitonina ayudan a decidir el inicio o la suspensión de antibióticos, pero ninguno confirma el diagnóstico por sí solo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de sepsis y choque séptico del recién nacido"
+      ]
+    },
+    {
+      "key": "ped-01b-neonatologia-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_sepsis",
+      "vignette": "Prematuro de 29 semanas de 18 días de vida, con catéter venoso central para nutrición parenteral, que presenta inestabilidad térmica, apneas y distensión abdominal. El hemocultivo reporta cocos grampositivos en racimos coagulasa negativos.",
+      "prompt": "¿Cuál es el factor de riesgo más importante para su infección?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Corioamnionitis materna",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se relaciona con sepsis temprana."
+        },
+        {
+          "key": "b",
+          "text": "El catéter venoso central con nutrición parenteral",
+          "correct": true,
+          "rationale": "Los estafilococos coagulasa negativos colonizan los dispositivos invasivos."
+        },
+        {
+          "key": "c",
+          "text": "Parto por cesárea",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la infección asociada a dispositivo."
+        },
+        {
+          "key": "d",
+          "text": "Sexo masculino",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un factor menor."
+        },
+        {
+          "key": "e",
+          "text": "Colonización materna por estreptococo del grupo B",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se relaciona con sepsis temprana, no con este agente."
+        },
+        {
+          "key": "f",
+          "text": "Exposición al frío de la incubadora",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es un factor de riesgo de infección."
+        },
+        {
+          "key": "g",
+          "text": "Lactancia materna",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es protectora."
+        },
+        {
+          "key": "h",
+          "text": "Visitas de los padres",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La presencia de padres con lavado de manos no aumenta el riesgo."
+        },
+        {
+          "key": "i",
+          "text": "Fototerapia previa",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No aumenta el riesgo de infección."
+        },
+        {
+          "key": "j",
+          "text": "Vacuna de hepatitis B",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No causa infección."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "g"
+      ],
+      "explanation": "La sepsis neonatal tardía en prematuros hospitalizados suele ser nosocomial. Los principales factores de riesgo son la prematurez, el bajo peso, los catéteres venosos centrales, la nutrición parenteral, la ventilación mecánica, la estancia prolongada y el uso de antibióticos de amplio espectro. Los estafilococos coagulasa negativos son los agentes más frecuentes y se asocian a dispositivos. Otros agentes son Staphylococcus aureus, bacilos gramnegativos y Candida. La prevención se basa en higiene de manos, paquetes de inserción y mantenimiento de catéteres, retiro temprano de dispositivos, uso racional de antibióticos y promoción de la leche materna.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de sepsis y choque séptico del recién nacido"
+      ]
+    },
+    {
+      "key": "ped-01b-neonatologia-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_sepsis",
+      "vignette": "Recién nacido de 15 días, de término, que ingresa de su domicilio con fiebre, letargo y fontanela abombada. El líquido cefalorraquídeo muestra 1 200 leucocitos con predominio de neutrófilos, glucosa baja y proteínas elevadas. La tinción de Gram muestra bacilos gramnegativos.",
+      "prompt": "¿Cuál es el tratamiento antibiótico empírico de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ceftriaxona sola",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Desplaza la bilirrubina y no cubre Listeria."
+        },
+        {
+          "key": "b",
+          "text": "Evitar antibióticos por temor a resistencia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La meningitis requiere tratamiento inmediato."
+        },
+        {
+          "key": "c",
+          "text": "Ampicilina con cefotaxima intravenosas a dosis meníngeas",
+          "correct": true,
+          "rationale": "Cubren Listeria, estreptococo del grupo B y gramnegativos con buena penetración al sistema nervioso."
+        },
+        {
+          "key": "d",
+          "text": "Meropenem con colistina de primera elección",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para resistencia documentada."
+        },
+        {
+          "key": "e",
+          "text": "Amoxicilina oral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es adecuada para meningitis."
+        },
+        {
+          "key": "f",
+          "text": "Fluconazol",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay datos de infección por hongos."
+        },
+        {
+          "key": "g",
+          "text": "Esperar el cultivo antes de iniciar antibióticos",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "El retraso aumenta la mortalidad."
+        },
+        {
+          "key": "h",
+          "text": "Ampicilina con gentamicina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La gentamicina penetra mal al sistema nervioso central."
+        },
+        {
+          "key": "i",
+          "text": "Penicilina benzatínica intramuscular",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No alcanza niveles en meninges."
+        },
+        {
+          "key": "j",
+          "text": "Vancomicina sola",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No cubre gramnegativos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "La meningitis neonatal es una urgencia. En el recién nacido los agentes principales son estreptococo del grupo B, Escherichia coli y Listeria monocytogenes. El tratamiento empírico de elección es ampicilina para Listeria y estreptococo, más cefotaxima por su buena penetración al líquido cefalorraquídeo y cobertura de gramnegativos. La ceftriaxona se evita en neonatos por desplazar la bilirrubina de la albúmina y precipitar con calcio. La gentamicina se usa en sepsis sin meningitis, pero no alcanza niveles útiles en meninges. El tratamiento se ajusta al cultivo y dura al menos 14 días para grampositivos y 21 días para gramnegativos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de sepsis y choque séptico del recién nacido"
+      ]
+    }
+  ]
+}

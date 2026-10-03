@@ -1,0 +1,1134 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "ped-13a-complemento-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "breastfeeding",
+      "vignette": "Mujer de 25 años con 3 semanas de puerperio que amamanta. Presenta fiebre de 38.8 °C, malestar general y dolor en el cuadrante superior externo de la mama derecha, con zona enrojecida, caliente e indurada en forma de cuña. No hay fluctuación.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tromboflebitis de la vena de Mondor",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da un cordón palpable sin fiebre alta."
+        },
+        {
+          "key": "b",
+          "text": "Leche cortada por enojo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es una causa."
+        },
+        {
+          "key": "c",
+          "text": "Carcinoma inflamatorio de mama",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es raro en el puerperio y sin fiebre aguda."
+        },
+        {
+          "key": "d",
+          "text": "Endometritis puerperal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da dolor uterino y loquios fétidos."
+        },
+        {
+          "key": "e",
+          "text": "Galactocele",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es una masa quística sin inflamación."
+        },
+        {
+          "key": "f",
+          "text": "Mastitis lactacional",
+          "correct": true,
+          "rationale": "Fiebre con área mamaria dolorosa, eritematosa e indurada durante la lactancia."
+        },
+        {
+          "key": "g",
+          "text": "Absceso mamario",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Daría una masa fluctuante."
+        },
+        {
+          "key": "h",
+          "text": "Conducto obstruido sin infección",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No da fiebre alta ni malestar general."
+        },
+        {
+          "key": "i",
+          "text": "Congestión mamaria fisiológica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es bilateral y sin fiebre alta."
+        },
+        {
+          "key": "j",
+          "text": "Infección urinaria",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los hallazgos mamarios."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "La mastitis lactacional es la inflamación de la mama, con o sin infección, más frecuente en las primeras semanas posparto. Se relaciona con vaciamiento incompleto, mal agarre, grietas, tomas espaciadas y presión de ropa ajustada. Se manifiesta con dolor, eritema, calor e induración en una zona en forma de cuña, con fiebre y malestar. Staphylococcus aureus es el agente más común. El tratamiento incluye continuar la lactancia o extraer la leche para vaciar la mama, analgésicos antiinflamatorios y, si no mejora en 12 a 24 horas o hay datos de infección, dicloxacilina o cefalexina. La fluctuación sugiere absceso, que requiere ultrasonido y drenaje.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de lactancia materna",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de mastitis"
+      ]
+    },
+    {
+      "key": "ped-13a-complemento-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "breastfeeding",
+      "vignette": "Recién nacido de término de 4 días alimentado al seno materno que ha perdido 6% de su peso al nacer. Tiene 6 pañales mojados y 3 evacuaciones amarillas al día. La madre cree que no tiene suficiente leche y quiere dar fórmula.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solicitar estudios de prolactina materna",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "b",
+          "text": "Espaciar las tomas cada 4 horas para que se llene el pecho",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Disminuye la producción."
+        },
+        {
+          "key": "c",
+          "text": "Dar agua o té entre tomas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Desplaza la leche."
+        },
+        {
+          "key": "d",
+          "text": "No revisar la técnica porque todo va bien",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Revisar la técnica refuerza la confianza."
+        },
+        {
+          "key": "e",
+          "text": "Tranquilizar a la madre, confirmar que la lactancia es adecuada y continuar con lactancia exclusiva a libre demanda",
+          "correct": true,
+          "rationale": "La pérdida de peso y las excretas son normales."
+        },
+        {
+          "key": "f",
+          "text": "La leche de los primeros días es insuficiente por ser poca",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El calostro cubre las necesidades."
+        },
+        {
+          "key": "g",
+          "text": "Medir glucosa capilar cada 3 horas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay datos de hipoglucemia."
+        },
+        {
+          "key": "h",
+          "text": "Seguir la costumbre familiar de dar fórmula nocturna",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Reduce la producción materna."
+        },
+        {
+          "key": "i",
+          "text": "Iniciar fórmula complementaria de inmediato",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay indicación."
+        },
+        {
+          "key": "j",
+          "text": "Hospitalizar por pérdida de peso",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La pérdida es fisiológica."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "La percepción de leche insuficiente es una causa frecuente de abandono de la lactancia. Los recién nacidos pierden hasta 7 a 10% de su peso en los primeros días y lo recuperan hacia los 10 a 14 días. Los indicadores de buena ingesta son 6 o más pañales mojados y 3 o más evacuaciones amarillas al día después del cuarto día, deglución audible, saciedad tras las tomas y ganancia de peso adecuada. Cuando estos datos son normales se tranquiliza a la madre, se revisa la técnica y se promueve la lactancia exclusiva a libre demanda, de 8 a 12 veces al día. La fórmula innecesaria reduce la producción de leche.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de lactancia materna"
+      ]
+    },
+    {
+      "key": "ped-13a-complemento-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_respiratory",
+      "subtopic": "croup",
+      "vignette": "Niño de 4 años con crup de 3 días que empeora de forma súbita con fiebre de 39.5 °C, aspecto tóxico, estridor intenso y secreciones purulentas abundantes. No responde a la adrenalina nebulizada. No tiene sialorrea ni postura en trípode.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Absceso retrofaríngeo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da rigidez de cuello y disfagia."
+        },
+        {
+          "key": "b",
+          "text": "Difteria laríngea",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara en vacunados."
+        },
+        {
+          "key": "c",
+          "text": "Angioedema",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No da fiebre."
+        },
+        {
+          "key": "d",
+          "text": "Epiglotitis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da sialorrea y postura en trípode sin tos perruna previa."
+        },
+        {
+          "key": "e",
+          "text": "Crup normal que tarda en mejorar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El aspecto tóxico indica otra causa."
+        },
+        {
+          "key": "f",
+          "text": "Crisis asmática",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No da estridor."
+        },
+        {
+          "key": "g",
+          "text": "Laringotraqueítis viral grave",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el aspecto tóxico ni las secreciones purulentas."
+        },
+        {
+          "key": "h",
+          "text": "Cuerpo extraño traqueal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la fiebre ni las secreciones."
+        },
+        {
+          "key": "i",
+          "text": "Traqueítis bacteriana",
+          "correct": true,
+          "rationale": "Empeoramiento de un crup con fiebre alta, aspecto tóxico, secreciones purulentas y falta de respuesta a adrenalina."
+        },
+        {
+          "key": "j",
+          "text": "Neumonía sin afección de vía aérea superior",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el estridor intenso."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "g",
+        "i"
+      ],
+      "explanation": "La traqueítis bacteriana es una infección grave de la tráquea, generalmente por Staphylococcus aureus, que complica una infección viral como el crup. Se sospecha cuando un niño con crup empeora de forma súbita con fiebre alta, aspecto tóxico, estridor intenso y secreciones purulentas abundantes, y no responde a la adrenalina nebulizada ni a los corticosteroides. Las membranas purulentas pueden obstruir la vía aérea. El tratamiento incluye asegurar la vía aérea, con intubación frecuente, broncoscopia para remover secreciones y antibióticos intravenosos con cobertura antiestafilocócica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de laringotraqueítis aguda en niños"
+      ]
+    },
+    {
+      "key": "ped-13a-complemento-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_respiratory",
+      "subtopic": "pediatric_pneumonia",
+      "vignette": "Lactante de 7 meses con neumonía, frecuencia respiratoria de 64 por minuto, tiraje subcostal, quejido, rechazo al alimento y saturación de 88% al aire ambiente.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hospitalizar, administrar oxígeno e iniciar antibiótico intravenoso como ampicilina o cefalosporina de tercera generación",
+          "correct": true,
+          "rationale": "Neumonía grave con hipoxemia e incapacidad para alimentarse."
+        },
+        {
+          "key": "b",
+          "text": "Azitromicina oral como único tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es adecuada en neumonía grave del lactante."
+        },
+        {
+          "key": "c",
+          "text": "Salbutamol nebulizado y egreso",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No trata la neumonía grave."
+        },
+        {
+          "key": "d",
+          "text": "Mantener en observación sin oxígeno",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "La hipoxemia debe corregirse."
+        },
+        {
+          "key": "e",
+          "text": "Tomografía de tórax antes de tratar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "f",
+          "text": "No hospitalizar para evitar infecciones nosocomiales",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Tiene criterios de hospitalización."
+        },
+        {
+          "key": "g",
+          "text": "Antitusivos y vigilancia en casa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Tiene datos de gravedad."
+        },
+        {
+          "key": "h",
+          "text": "Amoxicilina oral ambulatoria",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene criterios de gravedad."
+        },
+        {
+          "key": "i",
+          "text": "Ventosas en la espalda",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No son eficaces."
+        },
+        {
+          "key": "j",
+          "text": "Esperar el resultado del hemocultivo para iniciar antibiótico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El retraso aumenta la mortalidad."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "Los criterios de hospitalización en neumonía pediátrica incluyen edad menor de 3 a 6 meses, saturación menor de 90 a 92%, dificultad respiratoria moderada a grave con tiraje subcostal, quejido o aleteo, apneas, incapacidad para beber o alimentarse, deshidratación, aspecto tóxico, complicaciones como derrame y falla al tratamiento oral. En estos casos se administra oxígeno, hidratación y antibiótico intravenoso, como ampicilina en niños vacunados o cefalosporina de tercera generación en no vacunados o casos graves. Se agrega cobertura contra estafilococo si se sospecha. Se pasa a la vía oral cuando mejora.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de neumonía adquirida en la comunidad en niños"
+      ]
+    },
+    {
+      "key": "ped-13a-complemento-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_respiratory",
+      "subtopic": "pediatric_pneumonia",
+      "vignette": "Lactante de 4 meses sin vacunas con accesos de tos paroxística seguidos de un estridor inspiratorio y vómito, que se ponen cianóticos durante los accesos. Entre ellos se ve bien. Afebril. Leucocitos de 35 000 con 75% de linfocitos.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Bronquiolitis",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da sibilancias y taquipnea sin accesos con estridor."
+        },
+        {
+          "key": "b",
+          "text": "Asma del lactante",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la linfocitosis y los accesos."
+        },
+        {
+          "key": "c",
+          "text": "Neumonía por Chlamydia trachomatis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da tos en staccato con eosinofilia."
+        },
+        {
+          "key": "d",
+          "text": "Reflujo gastroesofágico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la linfocitosis."
+        },
+        {
+          "key": "e",
+          "text": "Laringotraqueítis viral",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da tos perruna con estridor continuo."
+        },
+        {
+          "key": "f",
+          "text": "Gripa fuerte que pasará sola",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "En lactantes puede ser mortal."
+        },
+        {
+          "key": "g",
+          "text": "Leucemia aguda",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La linfocitosis es reactiva."
+        },
+        {
+          "key": "h",
+          "text": "Tos ferina por Bordetella pertussis",
+          "correct": true,
+          "rationale": "Tos paroxística con estridor inspiratorio, vómito y linfocitosis marcada en un lactante no vacunado."
+        },
+        {
+          "key": "i",
+          "text": "Fibrosis quística",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica los accesos agudos."
+        },
+        {
+          "key": "j",
+          "text": "Cuerpo extraño",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay antecedente de atragantamiento."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "La tos ferina es una infección respiratoria por Bordetella pertussis prevenible por vacunación. Tiene una fase catarral, una paroxística con accesos de tos seguidos de estridor inspiratorio, el gallo, vómito y cianosis, y una de convalecencia que dura semanas. En lactantes pequeños puede presentarse con apneas y cianosis sin estridor. La biometría muestra leucocitosis con linfocitosis marcada. Se confirma con reacción en cadena de polimerasa de exudado nasofaríngeo. El tratamiento es azitromicina, que reduce el contagio, y los contactos reciben profilaxis. Los menores de 3 meses suelen requerir hospitalización. La vacunación materna con Tdpa protege al recién nacido.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de tos ferina"
+      ]
+    },
+    {
+      "key": "ped-13a-complemento-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_hematology_oncology",
+      "subtopic": "iron_deficiency_child",
+      "vignette": "Niño de 5 años con anemia, ictericia leve intermitente y esplenomegalia. Su padre fue esplenectomizado. Hemoglobina de 9.5 g/dL, reticulocitos de 8%, concentración media de hemoglobina corpuscular elevada, esferocitos en el frotis y Coombs directo negativo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hepatitis viral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la anemia hemolítica."
+        },
+        {
+          "key": "b",
+          "text": "Leucemia aguda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica los esferocitos."
+        },
+        {
+          "key": "c",
+          "text": "Esferocitosis hereditaria",
+          "correct": true,
+          "rationale": "Anemia hemolítica con esferocitos, CMHC elevada, Coombs negativo y antecedente familiar."
+        },
+        {
+          "key": "d",
+          "text": "Deficiencia de piruvato cinasa",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente."
+        },
+        {
+          "key": "e",
+          "text": "Anemia hemolítica autoinmune",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El Coombs directo es negativo."
+        },
+        {
+          "key": "f",
+          "text": "Deficiencia de glucosa 6 fosfato deshidrogenasa",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da crisis tras oxidantes con cuerpos de Heinz."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome de Gilbert",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No da anemia."
+        },
+        {
+          "key": "h",
+          "text": "Anemia por mala alimentación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay hemólisis."
+        },
+        {
+          "key": "i",
+          "text": "Anemia ferropénica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No da reticulocitosis ni esferocitos."
+        },
+        {
+          "key": "j",
+          "text": "Talasemia beta mayor",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da microcitosis grave desde el primer año."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "La esferocitosis hereditaria es la anemia hemolítica hereditaria más frecuente en personas de origen europeo, generalmente autosómica dominante. Se debe a defectos de proteínas de membrana como espectrina y anquirina, lo que produce eritrocitos esféricos que se destruyen en el bazo. Se manifiesta con anemia, ictericia, esplenomegalia y litiasis biliar por bilirrubinato. El frotis muestra esferocitos, la concentración media de hemoglobina corpuscular está elevada, el Coombs es negativo y la prueba de citometría con eosina 5 maleimida confirma. El parvovirus B19 puede causar crisis aplásicas. La esplenectomía se reserva para casos graves después de los 6 años.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de anemias hemolíticas hereditarias"
+      ]
+    },
+    {
+      "key": "ped-13a-complemento-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "intussusception",
+      "vignette": "Niño de 10 años con dolor periumbilical de 12 horas que migró a la fosa iliaca derecha, anorexia, náusea, febrícula y dolor al saltar. Signo de McBurney positivo. Leucocitos de 14 500 con neutrofilia.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Estreñimiento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la fiebre ni la leucocitosis."
+        },
+        {
+          "key": "b",
+          "text": "Invaginación intestinal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es más común en lactantes con dolor cólico."
+        },
+        {
+          "key": "c",
+          "text": "Divertículo de Meckel inflamado",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente."
+        },
+        {
+          "key": "d",
+          "text": "Infección urinaria",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica los signos peritoneales."
+        },
+        {
+          "key": "e",
+          "text": "Neumonía basal derecha",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Puede dar dolor abdominal, pero habría datos respiratorios."
+        },
+        {
+          "key": "f",
+          "text": "Dolor por comer mucho",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica los signos peritoneales."
+        },
+        {
+          "key": "g",
+          "text": "Gastroenteritis aguda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la migración del dolor ni los signos peritoneales."
+        },
+        {
+          "key": "h",
+          "text": "Adenitis mesentérica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Suele acompañar a infecciones respiratorias sin signos peritoneales claros."
+        },
+        {
+          "key": "i",
+          "text": "Apendicitis aguda",
+          "correct": true,
+          "rationale": "Dolor periumbilical que migra a fosa iliaca derecha con anorexia, fiebre y leucocitosis."
+        },
+        {
+          "key": "j",
+          "text": "Torsión testicular",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Daría dolor escrotal."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "La apendicitis aguda es la urgencia quirúrgica abdominal más frecuente en niños, con pico entre los 10 y 12 años. Se debe a obstrucción de la luz apendicular por fecalitos o hiperplasia linfoide. Inicia con dolor periumbilical que migra a la fosa iliaca derecha, anorexia, náusea, vómito y fiebre. Los signos de McBurney, Rovsing, psoas y obturador apoyan el diagnóstico. Las escalas de Alvarado o la pediátrica de apendicitis ayudan a estimar el riesgo. El ultrasonido es el estudio de imagen inicial en niños. En menores de 5 años el diagnóstico es más difícil y la perforación más frecuente. El tratamiento es apendicectomía con antibióticos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de apendicitis aguda en niños"
+      ]
+    },
+    {
+      "key": "ped-13a-complemento-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "intussusception",
+      "vignette": "Niña de 9 años con sospecha clínica de apendicitis aguda, dolor en fosa iliaca derecha y escala pediátrica de apendicitis intermedia.",
+      "prompt": "¿Cuál es el estudio de imagen inicial de elección?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ningún estudio y cirugía directa en todos los casos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "En riesgo intermedio la imagen ayuda."
+        },
+        {
+          "key": "b",
+          "text": "Serie esofagogastroduodenal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es útil."
+        },
+        {
+          "key": "c",
+          "text": "Laparoscopia diagnóstica como primer paso en riesgo intermedio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La imagen orienta antes de operar."
+        },
+        {
+          "key": "d",
+          "text": "Tomografía abdominal como primer estudio en todos los niños",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Emite radiación y se reserva para ultrasonido no concluyente."
+        },
+        {
+          "key": "e",
+          "text": "Ultrasonido abdominal",
+          "correct": true,
+          "rationale": "No emite radiación y tiene buena precisión en niños."
+        },
+        {
+          "key": "f",
+          "text": "Gammagrama con leucocitos marcados",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "g",
+          "text": "Radiografía simple de abdomen",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tiene baja sensibilidad."
+        },
+        {
+          "key": "h",
+          "text": "Colonoscopia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "i",
+          "text": "Examen general de orina como prueba definitiva",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No confirma apendicitis."
+        },
+        {
+          "key": "j",
+          "text": "Resonancia magnética como primer estudio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es menos disponible."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "En niños con sospecha de apendicitis y riesgo intermedio el ultrasonido abdominal es el estudio de imagen inicial de elección. Los hallazgos incluyen apéndice no compresible mayor de 6 mm, apendicolito, aumento de la ecogenicidad de la grasa periapendicular y líquido libre. Si el ultrasonido no es concluyente y persiste la duda, puede realizarse resonancia magnética o tomografía con protocolos de baja dosis. En riesgo alto se puede ir directamente a cirugía, y en riesgo bajo se vigila. Este enfoque reduce la exposición a radiación en niños.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de apendicitis aguda en niños"
+      ]
+    },
+    {
+      "key": "ped-13a-complemento-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "pyloric_stenosis",
+      "vignette": "Recién nacido de 2 horas con salivación abundante y espumosa, tos y cianosis con el primer intento de alimentación. No es posible pasar la sonda orogástrica más allá de 10 cm. La radiografía muestra la sonda enrollada en el esófago superior y aire en el estómago. Antecedente de polihidramnios.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hendidura laringotraqueal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara."
+        },
+        {
+          "key": "b",
+          "text": "Atresia esofágica sin fístula",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No habría aire en el estómago."
+        },
+        {
+          "key": "c",
+          "text": "Reflujo gastroesofágico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No impide el paso de la sonda."
+        },
+        {
+          "key": "d",
+          "text": "Bebé que traga mal porque es nuevo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una malformación."
+        },
+        {
+          "key": "e",
+          "text": "Atresia esofágica con fístula traqueoesofágica distal",
+          "correct": true,
+          "rationale": "Imposibilidad de pasar la sonda, salivación y aire gástrico por la fístula."
+        },
+        {
+          "key": "f",
+          "text": "Atresia de coanas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da cianosis que mejora con el llanto."
+        },
+        {
+          "key": "g",
+          "text": "Estenosis hipertrófica del píloro",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aparece a las 2 a 8 semanas."
+        },
+        {
+          "key": "h",
+          "text": "Neumonía congénita",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la imposibilidad de pasar la sonda."
+        },
+        {
+          "key": "i",
+          "text": "Fístula traqueoesofágica en H sin atresia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "La sonda sí pasa."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome de dificultad respiratoria",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la salivación ni la sonda."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "g"
+      ],
+      "explanation": "La atresia esofágica es una interrupción de la continuidad del esófago. La forma más frecuente, alrededor de 85%, tiene fístula traqueoesofágica distal. Se sospecha por polihidramnios y se manifiesta al nacer con salivación espumosa, tos, ahogamiento y cianosis con la alimentación. No se puede pasar la sonda al estómago. La radiografía muestra la sonda enrollada en el bolsón superior y aire en el estómago si hay fístula distal. Se asocia a la asociación VACTERL. El manejo inicial es aspiración continua del bolsón, cabecera elevada, ayuno, y después corrección quirúrgica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de atresia de esófago"
+      ]
+    },
+    {
+      "key": "ped-13a-complemento-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "cryptorchidism",
+      "vignette": "Adolescente de 13 años que despertó con dolor testicular izquierdo súbito e intenso de 3 horas, náusea y vómito. El testículo está elevado y horizontal y el reflejo cremastérico está ausente. No mejora al elevarlo.",
+      "prompt": "¿Cuál es el tratamiento inicial?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Masaje testicular en casa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es peligroso."
+        },
+        {
+          "key": "b",
+          "text": "Ultrasonido Doppler obligatorio antes de cualquier decisión aunque retrase la cirugía",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La sospecha clínica alta justifica cirugía inmediata."
+        },
+        {
+          "key": "c",
+          "text": "Tomografía abdominal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "d",
+          "text": "Tratamiento de torsión de apéndice testicular con analgésicos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El cuadro sugiere torsión del cordón."
+        },
+        {
+          "key": "e",
+          "text": "Antibióticos por epididimitis",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el inicio súbito ni la ausencia de reflejo."
+        },
+        {
+          "key": "f",
+          "text": "Esperar a que llegue un familiar para decidir",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El tiempo determina la viabilidad."
+        },
+        {
+          "key": "g",
+          "text": "Exploración quirúrgica urgente con detorsión y orquidopexia bilateral",
+          "correct": true,
+          "rationale": "Torsión testicular con menos de 6 horas de evolución."
+        },
+        {
+          "key": "h",
+          "text": "Analgésicos y revaloración en 24 horas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se pierde el testículo."
+        },
+        {
+          "key": "i",
+          "text": "Orquiectomía de inmediato sin intentar detorsión",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Primero se intenta salvar el testículo."
+        },
+        {
+          "key": "j",
+          "text": "Hielo local y reposo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No trata la torsión."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "La torsión testicular es una urgencia urológica más frecuente en adolescentes. Se debe a la rotación del cordón espermático, a menudo por fijación anómala en badajo de campana, que compromete el flujo sanguíneo. Se presenta con dolor testicular súbito e intenso, náusea y vómito, testículo elevado y horizontal, y ausencia del reflejo cremastérico. La viabilidad depende del tiempo y es alta si se corrige en menos de 6 horas. Ante sospecha alta se realiza exploración quirúrgica inmediata con detorsión y fijación bilateral. El Doppler ayuda en casos dudosos sin retrasar la cirugía. La detorsión manual puede intentarse mientras se prepara el quirófano.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de torsión testicular"
+      ]
+    },
+    {
+      "key": "ped-13a-complemento-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_surgery",
+      "subtopic": "cryptorchidism",
+      "vignette": "Recién nacido masculino con meato uretral en la cara ventral del pene, a nivel del surco coronal, prepucio incompleto ventral en capuchón y leve curvatura ventral. Ambos testículos están en el escroto.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fimosis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No altera la posición del meato."
+        },
+        {
+          "key": "b",
+          "text": "Extrofia vesical",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es una malformación grave de la pared abdominal."
+        },
+        {
+          "key": "c",
+          "text": "Micropene",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El tamaño no se describe reducido."
+        },
+        {
+          "key": "d",
+          "text": "Pene oculto por grasa",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No altera el meato."
+        },
+        {
+          "key": "e",
+          "text": "Criptorquidia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Los testículos están en el escroto."
+        },
+        {
+          "key": "f",
+          "text": "Epispadias",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El meato está en la cara dorsal."
+        },
+        {
+          "key": "g",
+          "text": "Hipospadias distal",
+          "correct": true,
+          "rationale": "Meato ventral con prepucio en capuchón y testículos descendidos."
+        },
+        {
+          "key": "h",
+          "text": "Trastorno del desarrollo sexual obligado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Con testículos descendidos y forma distal no es necesario."
+        },
+        {
+          "key": "i",
+          "text": "Estenosis del meato",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El meato está en posición normal."
+        },
+        {
+          "key": "j",
+          "text": "Variante normal que no requiere atención",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere valoración urológica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "El hipospadias es la malformación congénita más frecuente del pene. El meato uretral se encuentra en la cara ventral, desde el glande hasta el periné. Se acompaña de prepucio incompleto ventral en forma de capuchón y, a veces, curvatura ventral. Las formas distales son las más comunes. Cuando el hipospadias es proximal o se acompaña de criptorquidia, especialmente bilateral, se debe estudiar un trastorno del desarrollo sexual. No debe realizarse circuncisión porque el prepucio se usa en la reparación. La corrección quirúrgica se realiza entre los 6 y 18 meses.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del hipospadias"
+      ]
+    },
+    {
+      "key": "ped-13a-complemento-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_gastroenterology",
+      "subtopic": "pediatric_gerd",
+      "vignette": "Niño de 8 años con enfermedad por reflujo de larga evolución mal tratada que presenta disfagia a sólidos, impactación de alimento y pirosis. La endoscopia muestra un estrechamiento en el esófago distal.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esofagitis eosinofílica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede dar disfagia, pero el contexto es el reflujo crónico mal tratado."
+        },
+        {
+          "key": "b",
+          "text": "Cáncer de esófago",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es excepcional en niños."
+        },
+        {
+          "key": "c",
+          "text": "Esófago de Barrett con adenocarcinoma",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es raro en niños."
+        },
+        {
+          "key": "d",
+          "text": "Divertículo de Zenker",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es propio de adultos mayores."
+        },
+        {
+          "key": "e",
+          "text": "Acalasia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da disfagia a sólidos y líquidos con esfínter que no se relaja."
+        },
+        {
+          "key": "f",
+          "text": "Anillo vascular",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es congénito y da síntomas desde la lactancia."
+        },
+        {
+          "key": "g",
+          "text": "Cuerpo extraño sin otra alteración",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la estenosis."
+        },
+        {
+          "key": "h",
+          "text": "Disfagia por comer rápido",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Existe una lesión estructural."
+        },
+        {
+          "key": "i",
+          "text": "Candidiasis esofágica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da placas sin estenosis fibrosa."
+        },
+        {
+          "key": "j",
+          "text": "Estenosis esofágica péptica",
+          "correct": true,
+          "rationale": "La esofagitis crónica por reflujo produce fibrosis y estrechamiento."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "j"
+      ],
+      "explanation": "Las complicaciones de la enfermedad por reflujo gastroesofágico en niños incluyen esofagitis erosiva, estenosis péptica, esófago de Barrett, falla de medro, anemia y manifestaciones respiratorias como asma, neumonías por aspiración y laringitis. La estenosis péptica resulta de la fibrosis por inflamación crónica y se manifiesta con disfagia a sólidos e impactación de alimentos. Se diagnostica con endoscopia y esofagograma. Se trata con inhibidores de bomba de protones y dilataciones endoscópicas. La funduplicatura se considera en casos refractarios o con complicaciones graves.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del reflujo gastroesofágico en pediatría"
+      ]
+    }
+  ]
+}

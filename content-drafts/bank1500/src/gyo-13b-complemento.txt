@@ -1,0 +1,191 @@
+@ gyo|early_pregnancy|gestational_trophoblastic|3|diagnosis
+V: Mujer de 33 años con embarazo de 10 semanas, sangrado vaginal y útero acorde a la edad gestacional. El ultrasonido muestra un feto con restricción del crecimiento y una placenta engrosada con espacios quísticos focales. Fracción beta de hCG moderadamente elevada. Cariotipo fetal triploide 69,XXY.
+P: ¿Cuál es el diagnóstico más probable?
++ Mola hidatiforme parcial || Feto presente con placenta con cambios quísticos y cariotipo triploide.
+- anchoring | Mola hidatiforme completa || No tiene feto y es diploide de origen paterno.
+- availability_heuristic | Aborto diferido simple || No explica la placenta quística ni la triploidía.
+- representativeness_heuristic | Coriocarcinoma || No suele presentarse con feto en el primer trimestre.
+- premature_closure | Embarazo gemelar con un gemelo evanescente || No explica el cariotipo triploide.
+- base_rate_fallacy | Tumor trofoblástico del sitio placentario || Es raro y tardío.
+- framing_effect | Placenta previa || No explica los cambios quísticos.
+- inattentional_blindness | Trisomía 21 aislada || El cariotipo es triploide.
+- focusing_illusion | Corioangioma placentario || Es un tumor vascular benigno.
+- belief_bias | Placenta grande por buena alimentación || Hay una alteración genética.
+E: La mola hidatiforme parcial resulta de la fecundación de un óvulo normal por dos espermatozoides, con un cariotipo triploide, generalmente 69,XXY. Hay tejido fetal o embrionario, a menudo con malformaciones y restricción del crecimiento, y vellosidades con edema focal. El útero suele ser acorde o pequeño para la edad gestacional y la hCG está menos elevada que en la completa. Se trata con aspiración uterina y seguimiento de la hCG. Su riesgo de neoplasia trofoblástica persistente es de 1 a 5%, menor que el de la mola completa, que es de 15 a 20%. Las mujeres Rh negativo reciben inmunoglobulina anti D.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad trofoblástica gestacional
+
+@ gyo|early_pregnancy|miscarriage|3|next_step
+V: Mujer de 25 años con embarazo de 7 semanas que presenta sangrado vaginal abundante, dolor tipo cólico intenso y el orificio cervical abierto con membranas íntegras visibles. Estable hemodinámicamente.
+P: ¿Cuál es la conducta más apropiada?
++ Ofrecer evacuación uterina por aspiración o tratamiento con misoprostol por aborto inevitable || El cérvix abierto indica que el embarazo no continuará.
+- anchoring | Reposo absoluto y progesterona para salvar el embarazo || El aborto es inevitable.
+- availability_heuristic | Cerclaje de urgencia || Está contraindicado en el primer trimestre con sangrado.
+- representativeness_heuristic | Esperar a que el cérvix se cierre || No se cerrará.
+- premature_closure | Metotrexato || Es para ectópico.
+- framing_effect | Histerectomía || Es excesiva.
+- complexity_bias | Laparoscopia diagnóstica || No está indicada.
+- base_rate_fallacy | Tocolíticos || No se usan en el primer trimestre.
+- belief_bias | Que la paciente cause el aborto por moverse || No es la causa.
+- omission_bias | No ofrecer apoyo emocional || Es parte de la atención.
+E: El aborto inevitable se caracteriza por sangrado y dolor con dilatación cervical o ruptura de membranas, sin expulsión del producto, de modo que el embarazo no puede continuar. El manejo puede ser expectante si la paciente está estable, médico con misoprostol o quirúrgico con aspiración manual endouterina, según su preferencia y el sangrado. Ante sangrado abundante o inestabilidad se prefiere la evacuación quirúrgica. Se aplica inmunoglobulina anti D si es Rh negativo, se ofrece anticoncepción y se brinda apoyo emocional. La progesterona y el reposo no evitan el aborto inevitable.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del aborto espontáneo
+
+@ gyo|early_pregnancy|miscarriage|3|data_interpretation
+V: Mujer de 31 años con embarazo de 8 semanas por fecha de última menstruación. El ultrasonido transvaginal muestra un saco gestacional de 28 mm sin embrión. Está asintomática.
+P: ¿Qué indica este hallazgo ecográfico?
++ Embarazo anembrionado no viable, por saco de 25 mm o más sin embrión || Cumple criterio diagnóstico de pérdida temprana.
+- anchoring | Embarazo muy temprano que debe esperarse semanas || Con saco de 25 mm ya debería verse embrión.
+- availability_heuristic | Embarazo ectópico || El saco está en el útero.
+- representativeness_heuristic | Mola hidatiforme completa || Daría imagen en tormenta de nieve.
+- premature_closure | Embarazo normal con error de fechas || El tamaño del saco ya define la falta de embrión.
+- base_rate_fallacy | Embarazo gemelar || No se observan embriones.
+- framing_effect | Quiste ovárico confundido con saco || El saco está en el útero.
+- inattentional_blindness | Pseudosaco de ectópico con certeza || Se valora el contexto y la morfología.
+- focusing_illusion | Hiperémesis gravídica || No es un diagnóstico ecográfico.
+- belief_bias | El embrión aparecerá si se alimenta mejor || No es viable.
+E: Los criterios ecográficos de pérdida temprana del embarazo son un embrión con longitud cráneo caudal de 7 mm o más sin actividad cardiaca, o un saco gestacional con diámetro medio de 25 mm o más sin embrión. Otros hallazgos sugestivos requieren repetir el ultrasonido en 7 a 14 días. El embarazo anembrionado, antes llamado huevo huero, es una forma de aborto diferido. Las opciones de manejo son expectante, médico con mifepristona y misoprostol o quirúrgico con aspiración. Aplicar estos criterios estrictos evita interrumpir un embarazo viable por error.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del aborto espontáneo
+
+@ gyo|obstetric_hemorrhage|placental_abruption|3|diagnosis
+V: Mujer de 31 años con embarazo de 38 semanas y cesárea previa, en trabajo de parto con oxitocina. De forma súbita presenta dolor abdominal intenso, cese de las contracciones, sangrado vaginal, pérdida de la estación de la presentación fetal y bradicardia fetal.
+P: ¿Cuál es el diagnóstico más probable?
++ Rotura uterina || Dolor súbito con cese de contracciones, pérdida de la estación y bradicardia en una mujer con cesárea previa.
+- anchoring | Desprendimiento prematuro de placenta || No explica el cese de contracciones ni la pérdida de la estación.
+- availability_heuristic | Placenta previa || No explica el dolor súbito en trabajo de parto.
+- representativeness_heuristic | Trabajo de parto normal con dolor intenso || No explica la bradicardia ni la pérdida de la estación.
+- premature_closure | Embolia de líquido amniótico || Da colapso cardiorrespiratorio y coagulopatía.
+- base_rate_fallacy | Vasa previa || Ocurre al romper membranas con madre estable.
+- framing_effect | Distocia de hombros || Ocurre tras la salida de la cabeza.
+- inattentional_blindness | Inversión uterina || Ocurre en el alumbramiento.
+- focusing_illusion | Hipertonía por oxitocina sin rotura || No explica la pérdida de la estación.
+- belief_bias | Cansancio que detiene el trabajo de parto || El cuadro es una urgencia.
+E: La rotura uterina es una complicación grave del trabajo de parto, más frecuente en mujeres con cicatriz uterina previa, sobre todo durante el trabajo de parto después de cesárea, y con el uso de oxitocina o prostaglandinas. El signo más temprano y frecuente es la alteración de la frecuencia cardiaca fetal, con bradicardia prolongada. Otros datos son dolor abdominal súbito, cese de las contracciones, pérdida de la estación de la presentación, sangrado vaginal, partes fetales palpables e inestabilidad materna. El tratamiento es laparotomía urgente con extracción fetal y reparación uterina o histerectomía.
+R: Guía de Práctica Clínica de atención del parto después de cesárea
+
+@ gyo|obstetric_hemorrhage|placental_abruption|4|diagnosis
+V: Mujer de 35 años en trabajo de parto a las 40 semanas que tras la ruptura de membranas presenta disnea súbita, hipoxemia, hipotensión grave y convulsiones, seguidas de sangrado difuso por sitios de venopunción.
+P: ¿Cuál es el diagnóstico más probable?
++ Embolia de líquido amniótico || Colapso cardiorrespiratorio súbito con coagulopatía durante el trabajo de parto.
+- anchoring | Eclampsia || No explica el colapso cardiorrespiratorio con coagulopatía inmediata.
+- availability_heuristic | Tromboembolia pulmonar || No suele dar coagulopatía inmediata.
+- representativeness_heuristic | Choque séptico || No explica el inicio súbito.
+- premature_closure | Desprendimiento de placenta aislado || No explica el colapso respiratorio súbito.
+- base_rate_fallacy | Infarto agudo de miocardio || No explica la coagulopatía.
+- framing_effect | Reacción anafiláctica a la oxitocina || No explica la coagulopatía.
+- inattentional_blindness | Toxicidad por anestésico local || No explica la coagulopatía.
+- focusing_illusion | Crisis de ansiedad || Hay colapso grave.
+- belief_bias | Agotamiento por el trabajo de parto || Es una urgencia vital.
+E: La embolia de líquido amniótico es una urgencia obstétrica rara pero con alta mortalidad. Ocurre durante el trabajo de parto, la cesárea o inmediatamente después, cuando componentes del líquido amniótico entran a la circulación materna y desencadenan una reacción inflamatoria. Se manifiesta de forma súbita con hipoxia, hipotensión o paro cardiaco y coagulación intravascular diseminada, a veces con convulsiones. El diagnóstico es clínico y de exclusión. El tratamiento es de soporte, con reanimación cardiopulmonar, oxígeno, vasopresores, corrección de la coagulopatía con hemoderivados y nacimiento inmediato si el feto no ha nacido.
+R: Guía de Práctica Clínica de prevención y manejo de la hemorragia obstétrica
+
+@ gyo|breast|breast_cancer_obstetrics|3|diagnosis
+V: Mujer de 34 años con 4 meses de lactancia que presenta una masa dura de 3 cm en la mama izquierda que no disminuye después de amamantar ni con el vaciamiento. No hay fiebre ni eritema. Persiste desde hace 6 semanas.
+P: ¿Cuál es el diagnóstico que debe descartarse?
++ Cáncer de mama asociado a la lactancia || Una masa persistente durante la lactancia requiere estudio.
+- anchoring | Conducto obstruido que se resolverá solo || Persiste más de 6 semanas sin cambios.
+- availability_heuristic | Mastitis || No hay fiebre ni eritema.
+- representativeness_heuristic | Galactocele || Suele ser blando y quístico, y debe confirmarse por imagen.
+- premature_closure | Congestión mamaria fisiológica || No persiste como masa dura localizada.
+- base_rate_fallacy | Fibroadenoma de la lactancia sin estudio || Debe confirmarse con biopsia.
+- framing_effect | Absceso mamario || No hay datos de infección.
+- inattentional_blindness | Necrosis grasa sin antecedente || No hay traumatismo.
+- focusing_illusion | Lipoma || Es blando.
+- belief_bias | La lactancia protege totalmente del cáncer || Reduce el riesgo, pero no lo elimina.
+E: Durante la lactancia la mayoría de las masas mamarias son benignas, como conductos obstruidos, galactoceles, abscesos o adenomas de la lactancia. Sin embargo, toda masa que persiste más de 2 a 4 semanas o que no se resuelve con el vaciamiento debe estudiarse con ultrasonido y biopsia si es sólida o sospechosa, para no retrasar el diagnóstico de cáncer de mama asociado al embarazo. La biopsia con aguja de corte es segura y no obliga a suspender la lactancia, aunque puede haber fístula láctea. La mastografía puede realizarse tras amamantar para reducir la densidad.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de mama
+
+@ gyo|reproductive_endocrinology|polycystic_ovary|3|mechanism
+V: Mujer de 24 años con síndrome de ovario poliquístico, índice de masa corporal de 34, acantosis nigricans y glucosa en ayuno de 108 mg/dL. Pregunta por qué tiene más riesgo de diabetes.
+P: ¿Cuál es el mecanismo de riesgo metabólico en esta paciente?
++ Resistencia a la insulina con hiperinsulinemia, agravada por la obesidad || La hiperinsulinemia también aumenta la producción ovárica de andrógenos.
+- anchoring | Exceso de estrógenos como causa principal de la diabetes || No es el mecanismo principal.
+- availability_heuristic | Destrucción autoinmune de las células beta || Corresponde a diabetes tipo 1.
+- representativeness_heuristic | Deficiencia de progesterona como causa de diabetes || No es el mecanismo.
+- premature_closure | Hipotiroidismo oculto || No es el mecanismo principal.
+- base_rate_fallacy | Exceso de prolactina || No es el mecanismo.
+- framing_effect | Consumo de anticonceptivos || No es el mecanismo.
+- inattentional_blindness | Deficiencia de hormona de crecimiento || No es el mecanismo.
+- focusing_illusion | Insuficiencia pancreática exocrina || No es el mecanismo.
+- belief_bias | Comer dulces como único mecanismo || La resistencia a la insulina es central.
+E: La resistencia a la insulina está presente en la mayoría de las mujeres con síndrome de ovario poliquístico, incluidas muchas delgadas, y se agrava con la obesidad. La hiperinsulinemia compensatoria estimula la producción de andrógenos por las células de la teca ovárica y reduce la globulina transportadora de hormonas sexuales, lo que aumenta los andrógenos libres. Con el tiempo, la falla de las células beta lleva a prediabetes y diabetes tipo 2. La acantosis nigricans es un signo clínico de resistencia a la insulina. La pérdida de peso y la metformina mejoran la sensibilidad a la insulina.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de ovarios poliquísticos
+
+@ gyo|maternal_fetal|preterm_labor_obstetrics|3|complication_prognosis
+V: Recién nacido de 27 semanas con 900 g. Los padres preguntan por las complicaciones más importantes que puede tener por su prematurez.
+P: ¿Cuál es una complicación característica de la prematurez extrema?
++ Retinopatía del prematuro, entre otras como hemorragia intraventricular y displasia broncopulmonar || La inmadurez vascular de la retina expone al daño.
+- anchoring | Macrosomía || No corresponde.
+- availability_heuristic | Distocia de hombros || No corresponde.
+- representativeness_heuristic | Postmadurez con descamación || Ocurre en postérmino.
+- premature_closure | Hipertensión arterial esencial infantil || No es característica.
+- base_rate_fallacy | Diabetes tipo 1 neonatal || No es característica.
+- framing_effect | Aspiración de meconio || Es más frecuente en postérmino.
+- inattentional_blindness | Cefalohematoma por parto prolongado || No es característico de la prematurez.
+- focusing_illusion | Fractura de clavícula || No es característica.
+- belief_bias | Los bebés prematuros no tienen secuelas si sobreviven || Pueden tener secuelas.
+E: Los recién nacidos prematuros, sobre todo los extremos menores de 28 semanas, tienen alto riesgo de complicaciones por inmadurez de sus órganos. Las principales son síndrome de dificultad respiratoria, displasia broncopulmonar, hemorragia intraventricular, leucomalacia periventricular, enterocolitis necrosante, persistencia del conducto arterioso, sepsis, retinopatía del prematuro y alteraciones del neurodesarrollo. La retinopatía se debe a la proliferación vascular anormal de la retina inmadura, favorecida por el oxígeno, y se tamiza en menores de 32 semanas o 1 500 g. Las intervenciones prenatales reducen estas complicaciones.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino
+
+@ gyo|labor_delivery|normal_labor|3|next_step
+V: Mujer de 30 años con una cesárea previa por presentación pélvica, con incisión transversal baja, que tiene embarazo de 39 semanas en presentación cefálica y desea parto vaginal. No tiene otras complicaciones.
+P: ¿Cuál es la conducta más apropiada?
++ Ofrecer prueba de trabajo de parto después de cesárea en un hospital con capacidad de cesárea urgente || Es una opción segura en candidatas adecuadas.
+- anchoring | Cesárea obligatoria por tener una cesárea previa || Una cesárea transversal baja permite intentar parto vaginal.
+- availability_heuristic | Inducción con misoprostol || Está contraindicado con cicatriz uterina.
+- representativeness_heuristic | Parto vaginal en casa sin vigilancia || Requiere hospital con capacidad quirúrgica.
+- premature_closure | Esperar hasta las 42 semanas sin vigilancia || Aumenta los riesgos.
+- framing_effect | Cesárea a las 36 semanas || No está indicada.
+- complexity_bias | Resonancia magnética de la cicatriz obligatoria || No es necesaria.
+- base_rate_fallacy | Contraindicar el parto vaginal por cualquier cicatriz || Depende del tipo de incisión.
+- belief_bias | Una vez cesárea siempre cesárea || Es un mito.
+- omission_bias | No informar de las opciones por temor legal || La decisión es compartida.
+E: La prueba de trabajo de parto después de una cesárea con incisión transversal baja tiene éxito en 60 a 80% de las mujeres y evita los riesgos de cesáreas repetidas, como placenta previa y acretismo. El principal riesgo es la rotura uterina, de alrededor de 0.5 a 1%. Se realiza en hospitales con capacidad de cesárea urgente, con monitorización continua. Las contraindicaciones incluyen cicatriz clásica o en T, rotura uterina previa y contraindicaciones para el parto vaginal. El misoprostol está contraindicado para inducir en mujeres con cesárea previa.
+R: Guía de Práctica Clínica de atención del parto después de cesárea
+
+@ gyo|labor_delivery|normal_labor|3|treatment_of_choice
+V: Mujer de 26 años en segundo periodo del trabajo de parto con dilatación completa, presentación cefálica occipitoanterior en plano más 3, que lleva 3 horas pujando con analgesia epidural y presenta agotamiento materno. La frecuencia cardiaca fetal muestra desaceleraciones prolongadas.
+P: ¿Cuál es el tratamiento de elección para terminar el parto?
++ Parto vaginal instrumentado con fórceps o ventosa por personal capacitado || La cabeza está baja y hay indicación materna y fetal.
+- anchoring | Cesárea urgente obligatoria || Con la cabeza en plano más 3 el parto instrumentado es más rápido.
+- availability_heuristic | Presión fúndica intensa || No se recomienda.
+- representativeness_heuristic | Esperar otras 2 horas sin intervenir || Hay compromiso fetal.
+- premature_closure | Aumentar la oxitocina como única medida || No resuelve el compromiso.
+- framing_effect | Retirar la analgesia epidural y esperar || No resuelve el compromiso.
+- complexity_bias | Sinfisiotomía || No es el procedimiento indicado.
+- base_rate_fallacy | Episiotomía como único procedimiento || No resuelve el expulsivo prolongado.
+- belief_bias | Pujar más fuerte resolverá el problema || La madre está agotada.
+- omission_bias | Evitar el parto instrumentado por miedo a lesiones || Bien indicado es seguro.
+E: El parto vaginal instrumentado con fórceps o ventosa está indicado en el segundo periodo prolongado, el agotamiento materno, las condiciones maternas que contraindican pujar y la sospecha de compromiso fetal, siempre que haya dilatación completa, membranas rotas, cabeza encajada en plano más 2 o más bajo, posición conocida, analgesia adecuada, vejiga vacía y personal capacitado. Es más rápido que la cesárea cuando la cabeza está baja. Sus complicaciones incluyen desgarros perineales, hemorragia y lesiones fetales como cefalohematoma. La presión fúndica no se recomienda.
+R: Guía de Práctica Clínica de vigilancia y manejo del trabajo de parto
+
+@ gyo|climacteric|menopause_obstetrics|3|diagnosis
+V: Mujer de 60 años con sensación de bulto en la vagina que empeora al estar de pie y al final del día, con dificultad para orinar. Tiene 5 partos vaginales. En la exploración el cérvix desciende hasta el introito con Valsalva.
+P: ¿Cuál es el diagnóstico más probable?
++ Prolapso de órganos pélvicos con prolapso uterino || Descenso del útero por debilidad del piso pélvico en una multípara posmenopáusica.
+- anchoring | Mioma pediculado parido || No desciende con Valsalva desde su posición.
+- availability_heuristic | Cáncer de cérvix || El cérvix está sano y desciende.
+- representativeness_heuristic | Quiste de Bartholin || Es una masa lateral del introito.
+- premature_closure | Cistitis || No explica el bulto.
+- base_rate_fallacy | Divertículo uretral || Es una masa anterior suburetral.
+- framing_effect | Pólipo cervical grande || No explica el descenso con Valsalva.
+- inattentional_blindness | Hernia inguinal || Es una masa inguinal.
+- focusing_illusion | Vaginitis atrófica aislada || No explica el bulto.
+- belief_bias | Algo normal tras tener muchos hijos que no se trata || Tiene tratamiento.
+E: El prolapso de órganos pélvicos es el descenso de la vejiga, el útero o el recto hacia la vagina por debilidad del piso pélvico. Sus factores de riesgo son partos vaginales múltiples, macrosomía, edad, menopausia, obesidad, estreñimiento y tos crónica. Se manifiesta con sensación de bulto, peso vaginal, síntomas urinarios o defecatorios. Se clasifica con el sistema POP Q. El tratamiento depende de los síntomas y puede incluir observación, ejercicios del piso pélvico, pesario vaginal o cirugía reconstructiva u obliterativa. Los estrógenos vaginales mejoran la calidad del tejido.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del prolapso de órganos pélvicos
+
+@ gyo|climacteric|menopause_obstetrics|3|treatment_of_choice
+V: Mujer de 78 años con prolapso uterino sintomático, enfermedad cardiaca grave y alto riesgo quirúrgico. Desea mejorar sus síntomas sin cirugía.
+P: ¿Cuál es el tratamiento de elección?
++ Pesario vaginal con estrógenos vaginales y vigilancia periódica || Es eficaz y evita la cirugía en pacientes de alto riesgo.
+- anchoring | Histerectomía vaginal con reconstrucción urgente || Tiene alto riesgo quirúrgico.
+- availability_heuristic | Ninguna opción porque es mayor || El pesario es eficaz.
+- representativeness_heuristic | Antibióticos vaginales || No tratan el prolapso.
+- premature_closure | Reposo absoluto en cama || No trata el prolapso.
+- framing_effect | Malla abdominal por laparotomía || Tiene alto riesgo.
+- complexity_bias | Cirugía robótica compleja || Tiene alto riesgo.
+- base_rate_fallacy | Diuréticos || No tratan el prolapso.
+- belief_bias | Fajar el abdomen muy apretado || Aumenta la presión abdominal.
+- omission_bias | No ofrecer tratamiento por su edad || El pesario mejora la calidad de vida.
+E: El pesario vaginal es un dispositivo de silicona que sostiene los órganos pélvicos. Es una opción eficaz de primera línea para el prolapso sintomático, sobre todo en mujeres que no desean cirugía, con alto riesgo quirúrgico o que desean más hijos. Requiere colocación y ajuste por personal capacitado, retiro y limpieza periódicos y vigilancia por posibles erosiones vaginales, que se previenen con estrógenos vaginales. La cirugía, reconstructiva o la colpocleisis obliterativa en mujeres sin vida sexual, se reserva para quienes la prefieren o fallan al pesario.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del prolapso de órganos pélvicos

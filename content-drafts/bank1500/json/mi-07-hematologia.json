@@ -1,0 +1,1321 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-07-hematologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "hematology",
+      "subtopic": "anemia_adult",
+      "vignette": "Mujer de 38 años con menstruaciones abundantes. Refiere fatiga y antojo de comer hielo. Hemoglobina de 8.9 g/dL, VCM de 68 fL, HCM baja, ferritina de 6 ng/mL y amplitud de distribución eritrocitaria elevada.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Talasemia menor",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También es microcítica, pero la ferritina es normal y el ADE suele ser normal."
+        },
+        {
+          "key": "b",
+          "text": "Anemia sideroblástica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye una causa rara sin datos."
+        },
+        {
+          "key": "c",
+          "text": "Intoxicación por plomo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la microcitosis con otra causa rara."
+        },
+        {
+          "key": "d",
+          "text": "Esferocitosis hereditaria",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es poco frecuente y no es microcítica por ferropenia."
+        },
+        {
+          "key": "e",
+          "text": "Anemia hemolítica autoinmune",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay datos de hemólisis."
+        },
+        {
+          "key": "f",
+          "text": "Anemia de enfermedad crónica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede ser microcítica, pero la ferritina estaría normal o alta."
+        },
+        {
+          "key": "g",
+          "text": "Anemia por estrés",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el estrés causa anemia."
+        },
+        {
+          "key": "h",
+          "text": "Anemia por enfermedad renal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena común, pero suele ser normocítica."
+        },
+        {
+          "key": "i",
+          "text": "Anemia megaloblástica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría VCM elevado."
+        },
+        {
+          "key": "j",
+          "text": "Anemia por deficiencia de hierro",
+          "correct": true,
+          "rationale": "Anemia microcítica hipocrómica con ferritina baja y pica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "i",
+        "j"
+      ],
+      "explanation": "La anemia por deficiencia de hierro es la causa más frecuente de anemia en el mundo y en México. En mujeres en edad reproductiva suele deberse a pérdidas menstruales, y en hombres y mujeres posmenopáusicas obliga a buscar sangrado digestivo. Se caracteriza por anemia microcítica e hipocrómica, ADE elevado, ferritina baja, que es el marcador más específico, saturación de transferrina baja y capacidad de fijación aumentada. Puede haber pica, coiloniquia, glositis y queilitis. El tratamiento es hierro oral, como sulfato ferroso, y corregir la causa. La respuesta se ve con aumento de reticulocitos en una semana.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la anemia por deficiencia de hierro"
+      ]
+    },
+    {
+      "key": "mi-07-hematologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "hematology",
+      "subtopic": "anemia_adult",
+      "vignette": "Hombre de 66 años con fatiga. Hemoglobina de 10.1 g/dL, VCM de 72 fL y ferritina de 9 ng/mL. No tiene síntomas digestivos ni sangrado visible.",
+      "prompt": "¿Cuál es el estudio inicial más importante para buscar la causa?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tomografía por emisión de positrones",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "b",
+          "text": "Aspirado de médula ósea",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es invasivo y la causa probable es digestiva."
+        },
+        {
+          "key": "c",
+          "text": "Atribuirla a mala alimentación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la dieta explica la ferropenia en un hombre adulto."
+        },
+        {
+          "key": "d",
+          "text": "Medir vitamina B12 y folatos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a estudio de anemia, pero la anemia es microcítica."
+        },
+        {
+          "key": "e",
+          "text": "Perfil tiroideo y hepático antes de estudios digestivos",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Retrasa el estudio clave."
+        },
+        {
+          "key": "f",
+          "text": "Dar hierro oral y ver la respuesta sin buscar causa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en corregir la anemia sin investigar."
+        },
+        {
+          "key": "g",
+          "text": "Endoscopia superior y colonoscopia",
+          "correct": true,
+          "rationale": "En un hombre mayor con ferropenia se debe descartar sangrado digestivo, incluido cáncer."
+        },
+        {
+          "key": "h",
+          "text": "Ultrasonido abdominal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No evalúa la mucosa."
+        },
+        {
+          "key": "i",
+          "text": "Sangre oculta en heces como único estudio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Un resultado negativo no descarta pérdida digestiva."
+        },
+        {
+          "key": "j",
+          "text": "Electroforesis de hemoglobina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Busca talasemia pese a ferritina baja."
+        }
+      ],
+      "canonical": [
+        "b",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "En hombres adultos y mujeres posmenopáusicas, la anemia por deficiencia de hierro sin causa evidente debe considerarse secundaria a pérdida digestiva hasta demostrar lo contrario. Por eso se recomienda estudio endoscópico superior e inferior para buscar cáncer colorrectal, cáncer gástrico, úlceras o angiodisplasias. También se busca enfermedad celíaca con anticuerpos o biopsias duodenales. Una prueba de sangre oculta negativa no descarta la pérdida. El tratamiento con hierro se inicia, pero no sustituye la búsqueda de la causa. La ferropenia en un hombre mayor puede ser la primera manifestación de un cáncer de colon derecho.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la anemia por deficiencia de hierro"
+      ]
+    },
+    {
+      "key": "mi-07-hematologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "hematology",
+      "subtopic": "anemia_adult",
+      "vignette": "Hombre de 58 años con fatiga, parestesias en pies, alteración de la marcha y glositis. Hemoglobina de 9.0 g/dL, VCM de 118 fL, neutrófilos hipersegmentados. Toma metformina desde hace 10 años.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Mielodisplasia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable con datos clásicos de deficiencia."
+        },
+        {
+          "key": "b",
+          "text": "Anemia por alcoholismo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede dar macrocitosis, pero sin neutrófilos hipersegmentados ni neuropatía de este tipo."
+        },
+        {
+          "key": "c",
+          "text": "Anemia por deficiencia de hierro",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la anemia, pero el VCM está elevado."
+        },
+        {
+          "key": "d",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena posible por la macrocitosis leve, pero no explica los neutrófilos hipersegmentados."
+        },
+        {
+          "key": "e",
+          "text": "Esclerosis múltiple",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en los síntomas neurológicos."
+        },
+        {
+          "key": "f",
+          "text": "Anemia hemolítica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay datos de hemólisis."
+        },
+        {
+          "key": "g",
+          "text": "Anemia por la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la anemia es normal en la vejez."
+        },
+        {
+          "key": "h",
+          "text": "Neuropatía diabética como causa de todo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Explica los pies, pero no la anemia macrocítica."
+        },
+        {
+          "key": "i",
+          "text": "Deficiencia de ácido fólico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También es megaloblástica, pero no da síntomas neurológicos."
+        },
+        {
+          "key": "j",
+          "text": "Anemia megaloblástica por deficiencia de vitamina B12",
+          "correct": true,
+          "rationale": "Macrocitosis, neutrófilos hipersegmentados y síntomas neurológicos."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "La deficiencia de vitamina B12 causa anemia megaloblástica con macrocitosis, neutrófilos hipersegmentados y, en ocasiones, pancitopenia. A diferencia del déficit de folato, produce manifestaciones neurológicas, como neuropatía periférica, degeneración combinada subaguda de la médula con alteración de la propiocepción y la marcha, y cambios cognitivos. Las causas incluyen anemia perniciosa, gastrectomía, enfermedades del íleon, dieta vegana estricta y uso prolongado de metformina o inhibidores de la bomba de protones. Se confirma con B12 baja y ácido metilmalónico elevado. Se trata con vitamina B12 intramuscular. Dar solo folato puede empeorar el daño neurológico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la anemia por deficiencia de vitamina B12"
+      ]
+    },
+    {
+      "key": "mi-07-hematologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "hematology",
+      "subtopic": "anemia_adult",
+      "vignette": "Mujer de 30 años con ictericia, fatiga y orina oscura. Hemoglobina de 7.8 g/dL, reticulocitos de 12%, DHL elevada, haptoglobina baja, bilirrubina indirecta elevada y esferocitos en el frotis. Prueba de Coombs directa positiva.",
+      "prompt": "¿Cuál es la interpretación correcta de estos resultados?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Púrpura trombocitopénica trombótica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a hemólisis, pero da esquistocitos y plaquetas bajas."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de Gilbert",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da hiperbilirrubinemia indirecta leve sin anemia."
+        },
+        {
+          "key": "c",
+          "text": "Talasemia mayor",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que toda hemólisis en jóvenes es genética."
+        },
+        {
+          "key": "d",
+          "text": "Deficiencia de glucosa 6 fosfato deshidrogenasa",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta el Coombs positivo."
+        },
+        {
+          "key": "e",
+          "text": "Hepatitis viral por la ictericia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la ictericia, pero es por bilirrubina indirecta y hemólisis."
+        },
+        {
+          "key": "f",
+          "text": "Esferocitosis hereditaria",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También tiene esferocitos, pero el Coombs es negativo."
+        },
+        {
+          "key": "g",
+          "text": "Coledocolitiasis",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la ictericia."
+        },
+        {
+          "key": "h",
+          "text": "Anemia por deficiencia de hierro",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay microcitosis ni datos de ferropenia."
+        },
+        {
+          "key": "i",
+          "text": "Anemia hemolítica autoinmune",
+          "correct": true,
+          "rationale": "Hemólisis con Coombs directo positivo."
+        },
+        {
+          "key": "j",
+          "text": "Hemoglobinuria paroxística nocturna",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara y tiene Coombs negativo."
+        }
+      ],
+      "canonical": [
+        "e",
+        "f",
+        "h",
+        "i"
+      ],
+      "explanation": "Los datos de hemólisis son anemia con reticulocitosis, deshidrogenasa láctica elevada, haptoglobina baja y bilirrubina indirecta elevada. La prueba de Coombs directa distingue el mecanismo. Si es positiva, indica anticuerpos o complemento sobre el eritrocito, es decir, anemia hemolítica autoinmune, que puede ser primaria o secundaria a lupus, linfomas, infecciones o fármacos. En la forma por anticuerpos calientes, la más frecuente, el frotis muestra esferocitos. El tratamiento de primera línea son los corticosteroides, como prednisona, y en casos refractarios rituximab o esplenectomía. Se debe buscar la causa subyacente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la anemia hemolítica autoinmune"
+      ]
+    },
+    {
+      "key": "mi-07-hematologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "hematology",
+      "subtopic": "anemia_adult",
+      "vignette": "Mujer de 29 años con anemia por deficiencia de hierro por menstruación abundante, hemoglobina de 9.5 g/dL. Tolera la vía oral sin problemas digestivos.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hierro oral solo hasta que la hemoglobina se normalice",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la hemoglobina y no repone depósitos."
+        },
+        {
+          "key": "b",
+          "text": "Eritropoyetina subcutánea",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es para enfermedad renal crónica."
+        },
+        {
+          "key": "c",
+          "text": "Hierro intravenoso como primera opción en todos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para intolerancia, malabsorción o necesidad rápida."
+        },
+        {
+          "key": "d",
+          "text": "Dieta rica en hierro sin suplemento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena natural, pero es insuficiente."
+        },
+        {
+          "key": "e",
+          "text": "Observar sin tratamiento",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Deja la anemia sin corregir."
+        },
+        {
+          "key": "f",
+          "text": "Vitamina B12 intramuscular",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es para anemia megaloblástica."
+        },
+        {
+          "key": "g",
+          "text": "Evitar el hierro por el estreñimiento que causa",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Sobreestima un efecto adverso manejable."
+        },
+        {
+          "key": "h",
+          "text": "Transfusión de concentrado eritrocitario",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicada en una paciente estable."
+        },
+        {
+          "key": "i",
+          "text": "Tomar el hierro con leche para evitar molestias",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El calcio disminuye su absorción."
+        },
+        {
+          "key": "j",
+          "text": "Hierro oral, como sulfato ferroso, por al menos 3 meses tras normalizar la hemoglobina, y manejo del sangrado menstrual",
+          "correct": true,
+          "rationale": "Repone hemoglobina y depósitos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "El tratamiento de la anemia por deficiencia de hierro incluye corregir la causa y reponer el hierro. El hierro oral, como sulfato ferroso, es la primera opción por su eficacia, seguridad y bajo costo. Se absorbe mejor en ayuno o con vitamina C y se evita tomarlo con leche, café, té o antiácidos. Esquemas en días alternos pueden mejorar la absorción y la tolerancia. La hemoglobina sube alrededor de 1 a 2 g/dL cada dos a tres semanas, y el tratamiento se continúa tres meses después de normalizarla para llenar depósitos. El hierro intravenoso se usa con intolerancia, malabsorción o sangrado persistente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la anemia por deficiencia de hierro"
+      ]
+    },
+    {
+      "key": "mi-07-hematologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "hematology",
+      "subtopic": "anticoagulation",
+      "vignette": "Hombre de 70 años anticoagulado con warfarina por fibrilación auricular. Acude por control y su INR es de 7.8. No tiene sangrado.",
+      "prompt": "¿Cuál es la conducta a seguir?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Suspender temporalmente la warfarina y dar vitamina K oral a dosis baja, con control de INR en 24 horas",
+          "correct": true,
+          "rationale": "INR mayor de 10 o entre 5 y 10 sin sangrado se maneja así."
+        },
+        {
+          "key": "b",
+          "text": "Comer más verduras verdes para bajar el INR como única medida",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la dieta basta."
+        },
+        {
+          "key": "c",
+          "text": "Concentrado de complejo protrombínico en todos los casos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es para sangrado grave."
+        },
+        {
+          "key": "d",
+          "text": "Hospitalizar en terapia intensiva sin tratamiento específico",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es innecesario y no corrige el INR."
+        },
+        {
+          "key": "e",
+          "text": "Vitamina K intravenosa a dosis alta para corregir rápido",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Corregir rápido suena bien, pero dificulta reanticoagular y tiene riesgo de reacción."
+        },
+        {
+          "key": "f",
+          "text": "Reducir la dosis y revisar en un mes",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "El control es demasiado tardío."
+        },
+        {
+          "key": "g",
+          "text": "Protamina intravenosa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Revierte heparina, no warfarina."
+        },
+        {
+          "key": "h",
+          "text": "Continuar la misma dosis porque no hay sangrado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la falta de síntomas y mantiene un riesgo alto."
+        },
+        {
+          "key": "i",
+          "text": "Plasma fresco congelado de inmediato",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se reserva para sangrado grave."
+        },
+        {
+          "key": "j",
+          "text": "Suspender la anticoagulación de forma definitiva",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Pierde la protección contra el evento vascular cerebral."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "h",
+        "i"
+      ],
+      "explanation": "El manejo de un INR supraterapéutico con warfarina depende del valor y de la presencia de sangrado. Sin sangrado y con INR por arriba del rango pero menor de 5, se reduce u omite una dosis. Con INR entre 5 y 10 sin sangrado se suspenden una o dos dosis y puede darse vitamina K oral a dosis baja si hay riesgo de sangrado. Con INR mayor de 10 sin sangrado se suspende la warfarina y se da vitamina K oral. Con sangrado grave se suspende, se da vitamina K intravenosa y concentrado de complejo protrombínico o, si no hay, plasma fresco congelado.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de tratamiento con anticoagulantes orales"
+      ]
+    },
+    {
+      "key": "mi-07-hematologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "hematology",
+      "subtopic": "anticoagulation",
+      "vignette": "Mujer de 62 años operada de cadera. Recibe heparina no fraccionada desde hace 7 días. Sus plaquetas bajaron de 260,000 a 95,000 y presenta una trombosis venosa profunda nueva en la pierna derecha.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Seudotrombocitopenia por EDTA",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la cifra."
+        },
+        {
+          "key": "b",
+          "text": "Coagulación intravascular diseminada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da plaquetas bajas, pero con alteración de tiempos y fibrinógeno."
+        },
+        {
+          "key": "c",
+          "text": "Púrpura trombocitopénica trombótica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara y daría hemólisis."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome antifosfolípido",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta la relación temporal con la heparina."
+        },
+        {
+          "key": "e",
+          "text": "Púrpura trombocitopénica inmune",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da plaquetas bajas, pero no trombosis ni relación con la heparina."
+        },
+        {
+          "key": "f",
+          "text": "Trombocitopenia por consumo en la cirugía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena posoperatoria, pero el momento y la trombosis orientan a la heparina."
+        },
+        {
+          "key": "g",
+          "text": "Dilución por líquidos posoperatorios",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Explica plaquetas bajas, no la trombosis."
+        },
+        {
+          "key": "h",
+          "text": "Reacción normal a la heparina sin importancia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que toda caída de plaquetas es esperada."
+        },
+        {
+          "key": "i",
+          "text": "Sangrado por exceso de heparina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la heparina, pero la paciente presenta trombosis."
+        },
+        {
+          "key": "j",
+          "text": "Trombocitopenia inducida por heparina",
+          "correct": true,
+          "rationale": "Caída de más de 50% de plaquetas entre el quinto y décimo día con trombosis."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "La trombocitopenia inducida por heparina tipo II es una reacción inmunológica mediada por anticuerpos contra el complejo heparina factor plaquetario 4, que activan las plaquetas. Paradójicamente produce trombosis venosas y arteriales. Se sospecha con una caída de plaquetas mayor de 50%, que aparece entre el quinto y el décimo día de exposición, con o sin trombosis, y se evalúa con la escala de 4T. Es más frecuente con heparina no fraccionada y en pacientes quirúrgicos. El tratamiento es suspender toda heparina, incluidas las lavadas de catéter, e iniciar un anticoagulante sin heparina, como argatrobán, fondaparinux o un anticoagulante oral directo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la trombocitopenia inducida por heparina"
+      ]
+    },
+    {
+      "key": "mi-07-hematologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "hematology",
+      "subtopic": "anticoagulation",
+      "vignette": "Hombre de 55 años que inicia rivaroxabán por trombosis venosa profunda.",
+      "prompt": "¿Cuál es el mecanismo de acción del rivaroxabán?",
+      "polarity": "affirmative",
+      "task": "mechanism",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Inhibición directa de la trombina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es el mecanismo del dabigatrán."
+        },
+        {
+          "key": "b",
+          "text": "Inhibición de la síntesis de factores dependientes de vitamina K",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es el mecanismo de la warfarina."
+        },
+        {
+          "key": "c",
+          "text": "Inhibición del factor VII activado",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en otro factor."
+        },
+        {
+          "key": "d",
+          "text": "Aumento de la producción de plasmina",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Confunde con fibrinolíticos."
+        },
+        {
+          "key": "e",
+          "text": "Inhibición directa del factor Xa",
+          "correct": true,
+          "rationale": "Es un anticoagulante oral directo anti Xa."
+        },
+        {
+          "key": "f",
+          "text": "Potenciación de la antitrombina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es el mecanismo de la heparina."
+        },
+        {
+          "key": "g",
+          "text": "Disolución directa del trombo formado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que disuelve el coágulo, efecto de los fibrinolíticos."
+        },
+        {
+          "key": "h",
+          "text": "Bloqueo del receptor de glucoproteína IIb IIIa",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es otro antiagregante intravenoso."
+        },
+        {
+          "key": "i",
+          "text": "Bloqueo del receptor plaquetario P2Y12",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena antitrombótico, pero es el mecanismo del clopidogrel."
+        },
+        {
+          "key": "j",
+          "text": "Inhibición de la ciclooxigenasa plaquetaria",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es el mecanismo del ácido acetilsalicílico."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "f"
+      ],
+      "explanation": "Los anticoagulantes orales directos actúan sobre un solo factor de la coagulación. Rivaroxabán, apixabán y edoxabán inhiben directamente el factor Xa, mientras que dabigatrán inhibe directamente la trombina. A diferencia de la warfarina, que inhibe la síntesis de los factores II, VII, IX y X dependientes de vitamina K, no requieren control rutinario del INR, tienen inicio de acción rápido y menos interacciones con alimentos. Su eliminación depende en parte del riñón, por lo que se ajustan según la filtración glomerular. Existen antídotos específicos, como andexanet alfa para los anti Xa e idarucizumab para dabigatrán.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de tratamiento con anticoagulantes orales"
+      ]
+    },
+    {
+      "key": "mi-07-hematologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "hematology",
+      "subtopic": "anticoagulation",
+      "vignette": "Mujer de 28 años con trombosis venosa profunda y diagnóstico de síndrome antifosfolípido triple positivo. Filtración glomerular normal.",
+      "prompt": "¿Cuál es el anticoagulante de elección a largo plazo?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Anticoagular solo 3 meses porque la trombosis fue la primera",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena estándar, pero el síndrome requiere tratamiento prolongado."
+        },
+        {
+          "key": "b",
+          "text": "Filtro de vena cava como tratamiento principal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No sustituye la anticoagulación."
+        },
+        {
+          "key": "c",
+          "text": "Corticosteroides para eliminar los anticuerpos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el esteroide trata la trombosis."
+        },
+        {
+          "key": "d",
+          "text": "Apixabán por ser joven y sin otras enfermedades",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la comodidad y omite el síndrome."
+        },
+        {
+          "key": "e",
+          "text": "Rivaroxabán por su comodidad",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se asoció a más trombosis arteriales en triple positivo."
+        },
+        {
+          "key": "f",
+          "text": "Evitar anticoagulantes por su edad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La juventud no reduce el riesgo trombótico."
+        },
+        {
+          "key": "g",
+          "text": "Heparina de bajo peso molecular por 2 semanas y suspender",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Es insuficiente."
+        },
+        {
+          "key": "h",
+          "text": "Warfarina más doble antiagregación de rutina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Aumenta el sangrado sin indicación."
+        },
+        {
+          "key": "i",
+          "text": "Ácido acetilsalicílico solo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es insuficiente tras una trombosis."
+        },
+        {
+          "key": "j",
+          "text": "Warfarina con meta de INR de 2 a 3",
+          "correct": true,
+          "rationale": "En el síndrome antifosfolípido de alto riesgo los anticoagulantes orales directos tienen más eventos."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "El síndrome antifosfolípido es una enfermedad autoinmune con trombosis venosas o arteriales o morbilidad obstétrica, y anticuerpos antifosfolípido persistentes, como anticoagulante lúpico, anticardiolipina y anti beta 2 glicoproteína I. Los pacientes triple positivos tienen el mayor riesgo de recurrencia. Tras una trombosis se indica anticoagulación prolongada, generalmente indefinida, con antagonista de vitamina K, como warfarina, con meta de INR de 2 a 3. Los anticoagulantes orales directos no se recomiendan en el síndrome antifosfolípido de alto riesgo, sobre todo triple positivo o con trombosis arterial, porque se asociaron a más eventos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome antifosfolípido"
+      ]
+    },
+    {
+      "key": "mi-07-hematologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "hematology",
+      "subtopic": "anticoagulation",
+      "vignette": "Hombre de 74 años que toma apixabán por fibrilación auricular. Sufre una caída y presenta hemorragia intracraneal en la tomografía, con deterioro neurológico.",
+      "prompt": "¿Cuál es el tratamiento inicial para revertir la anticoagulación?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Vitamina K intravenosa como reversor principal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la warfarina y no revierte el apixabán."
+        },
+        {
+          "key": "b",
+          "text": "Idarucizumab",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es el antídoto del dabigatrán."
+        },
+        {
+          "key": "c",
+          "text": "Transfusión de plaquetas como medida principal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No revierte un anti Xa."
+        },
+        {
+          "key": "d",
+          "text": "Continuar el anticoagulante para prevenir un evento vascular",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Agrava la hemorragia."
+        },
+        {
+          "key": "e",
+          "text": "Suspender apixabán y administrar andexanet alfa o, si no está disponible, concentrado de complejo protrombínico",
+          "correct": true,
+          "rationale": "Revierte el efecto anti Xa en sangrado grave."
+        },
+        {
+          "key": "f",
+          "text": "Solo vigilancia neurológica",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pierde la oportunidad de limitar el hematoma."
+        },
+        {
+          "key": "g",
+          "text": "Plasma fresco congelado como primera elección",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el plasma basta para revertir anti Xa."
+        },
+        {
+          "key": "h",
+          "text": "Esperar a que el fármaco se elimine solo en 24 horas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena conservador, pero el sangrado progresa."
+        },
+        {
+          "key": "i",
+          "text": "Hemodiálisis para eliminar el apixabán",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El apixabán se une mucho a proteínas y se dializa poco."
+        },
+        {
+          "key": "j",
+          "text": "Protamina intravenosa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Revierte heparina, no anti Xa."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "j"
+      ],
+      "explanation": "El sangrado grave en pacientes con anticoagulantes orales directos requiere suspender el fármaco, medidas de soporte y reversión específica cuando el sangrado pone en riesgo la vida, como la hemorragia intracraneal. Para los inhibidores del factor Xa, como apixabán y rivaroxabán, el antídoto específico es andexanet alfa, y si no está disponible se usa concentrado de complejo protrombínico de cuatro factores. Para el dabigatrán el antídoto es idarucizumab, y también puede eliminarse con hemodiálisis. La vitamina K solo es útil para la warfarina. Una vez controlado el sangrado se reevalúa cuándo reiniciar la anticoagulación.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de tratamiento con anticoagulantes orales"
+      ]
+    },
+    {
+      "key": "mi-07-hematologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "hematology",
+      "subtopic": "acute_leukemia_adult",
+      "vignette": "Hombre de 45 años con fatiga, fiebre, equimosis y gingivorragia de 3 semanas. Hemoglobina de 7.2 g/dL, plaquetas de 18,000 y leucocitos de 48,000 con 70% de blastos. Los blastos tienen bastones de Auer.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Leucemia mieloide aguda",
+          "correct": true,
+          "rationale": "Más de 20% de blastos con bastones de Auer."
+        },
+        {
+          "key": "b",
+          "text": "Mononucleosis infecciosa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da linfocitos atípicos, no blastos."
+        },
+        {
+          "key": "c",
+          "text": "Leucemia mieloide crónica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la leucocitosis, pero predominan formas maduras, no blastos."
+        },
+        {
+          "key": "d",
+          "text": "Leucemia linfoblástica aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También tiene blastos, pero los bastones de Auer son mieloides y es más frecuente en niños."
+        },
+        {
+          "key": "e",
+          "text": "Reacción leucemoide por infección",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye por la fiebre, pero no hay blastos en una reacción leucemoide."
+        },
+        {
+          "key": "f",
+          "text": "Anemia aplásica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en las citopenias, pero no hay blastos en la aplasia."
+        },
+        {
+          "key": "g",
+          "text": "Linfoma no Hodgkin leucemizado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena hematológico, pero los bastones de Auer orientan a mieloide."
+        },
+        {
+          "key": "h",
+          "text": "Leucemia de células peludas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara y no tiene este perfil."
+        },
+        {
+          "key": "i",
+          "text": "Leucemia linfocítica crónica",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que toda leucemia del adulto es linfocítica crónica."
+        },
+        {
+          "key": "j",
+          "text": "Púrpura trombocitopénica inmune",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta los blastos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "explanation": "La leucemia mieloide aguda es la leucemia aguda más frecuente en adultos. Se debe a la proliferación clonal de precursores mieloides que desplazan la hematopoyesis normal, con anemia, trombocitopenia y neutropenia funcional, que causan fatiga, sangrados e infecciones. El diagnóstico requiere 20% o más de blastos en sangre periférica o médula ósea. Los bastones de Auer son característicos del linaje mieloide. Se confirma con aspirado de médula, inmunofenotipo, citogenética y biología molecular, que definen el pronóstico y el tratamiento. La leucemia promielocítica es una variante con coagulación intravascular diseminada que se trata con ácido transretinoico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la leucemia mieloide aguda"
+      ]
+    },
+    {
+      "key": "mi-07-hematologia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "hematology",
+      "subtopic": "acute_leukemia_adult",
+      "vignette": "Mujer de 35 años con leucemia promielocítica aguda recién diagnosticada. Tiene sangrado de mucosas, fibrinógeno de 80 mg/dL, dímero D muy elevado y tiempos de coagulación prolongados.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esperar el resultado de la citogenética para iniciar tratamiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la confirmación y retrasa un tratamiento que salva la vida."
+        },
+        {
+          "key": "b",
+          "text": "Iniciar de inmediato ácido transretinoico, con soporte de plaquetas, plasma y crioprecipitados",
+          "correct": true,
+          "rationale": "La leucemia promielocítica con coagulopatía es una urgencia."
+        },
+        {
+          "key": "c",
+          "text": "Solo transfusiones hasta que se estabilice",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena de soporte, pero sin ácido transretinoico la coagulopatía persiste."
+        },
+        {
+          "key": "d",
+          "text": "Trasplante de médula ósea inmediato",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es el tratamiento inicial."
+        },
+        {
+          "key": "e",
+          "text": "Quimioterapia de inducción estándar sin ácido transretinoico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No aprovecha el tratamiento dirigido."
+        },
+        {
+          "key": "f",
+          "text": "Manejo ambulatorio con vigilancia",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Ignora una urgencia hemorrágica."
+        },
+        {
+          "key": "g",
+          "text": "Retrasar el tratamiento por miedo al síndrome de diferenciación",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El beneficio supera el riesgo, que se vigila y trata."
+        },
+        {
+          "key": "h",
+          "text": "Plasmaféresis urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el tratamiento."
+        },
+        {
+          "key": "i",
+          "text": "Vitamina K como tratamiento principal de la coagulopatía",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que corrige una coagulopatía de consumo."
+        },
+        {
+          "key": "j",
+          "text": "Heparina por la coagulopatía",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede empeorar el sangrado."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "La leucemia promielocítica aguda es un subtipo de leucemia mieloide aguda caracterizado por la translocación entre los cromosomas 15 y 17. Se asocia con frecuencia a coagulación intravascular diseminada e hiperfibrinólisis, con alto riesgo de sangrado grave y muerte temprana. Ante la sospecha clínica y morfológica, el ácido transretinoico debe iniciarse de inmediato, sin esperar la confirmación molecular, porque induce la diferenciación de los promielocitos y corrige la coagulopatía. Se combina con trióxido de arsénico o quimioterapia y soporte transfusional intensivo. Un efecto adverso es el síndrome de diferenciación, que se trata con dexametasona.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la leucemia promielocítica aguda"
+      ]
+    },
+    {
+      "key": "mi-07-hematologia-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "hematology",
+      "subtopic": "acute_leukemia_adult",
+      "vignette": "Hombre de 50 años con leucemia aguda y leucocitos de 160,000. Dos días después de iniciar quimioterapia presenta oliguria, calambres y arritmia. Potasio de 6.9 mEq/L, fósforo de 9.2 mg/dL, calcio de 6.8 mg/dL, ácido úrico de 14 mg/dL y creatinina de 3.1 mg/dL.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Insuficiencia renal crónica agudizada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena renal, pero no hay antecedente."
+        },
+        {
+          "key": "b",
+          "text": "Nefrotoxicidad directa por quimioterapia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el fármaco, pero no explica el patrón metabólico."
+        },
+        {
+          "key": "c",
+          "text": "Hipocalcemia por hipoparatiroidismo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el calcio."
+        },
+        {
+          "key": "d",
+          "text": "Deshidratación por vómito",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye una causa prerrenal sin explicar el patrón."
+        },
+        {
+          "key": "e",
+          "text": "Rabdomiólisis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede dar potasio alto, pero no se relaciona con la quimioterapia ni explica el fósforo."
+        },
+        {
+          "key": "f",
+          "text": "Hiperparatiroidismo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da alteraciones del calcio y fósforo, pero no este cuadro agudo."
+        },
+        {
+          "key": "g",
+          "text": "Sepsis por neutropenia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es frecuente, pero no explica las alteraciones electrolíticas."
+        },
+        {
+          "key": "h",
+          "text": "Reacción alérgica a la quimioterapia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo efecto agudo es alergia."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de lisis tumoral",
+          "correct": true,
+          "rationale": "Hiperpotasemia, hiperfosfatemia, hipocalcemia, hiperuricemia y lesión renal tras la quimioterapia."
+        },
+        {
+          "key": "j",
+          "text": "Hiperleucocitosis con leucostasis",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta las alteraciones electrolíticas."
+        }
+      ],
+      "canonical": [
+        "b",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "El síndrome de lisis tumoral se produce por la destrucción masiva de células tumorales, espontánea o tras iniciar el tratamiento, sobre todo en tumores con alta carga y proliferación, como leucemias agudas con hiperleucocitosis y linfoma de Burkitt. La liberación del contenido celular causa hiperpotasemia, hiperfosfatemia, hipocalcemia secundaria e hiperuricemia, con lesión renal aguda por depósito de ácido úrico y fosfato de calcio, arritmias y convulsiones. Se previene con hidratación intensa y alopurinol, o rasburicasa en alto riesgo. El tratamiento incluye manejo de la hiperpotasemia, rasburicasa y hemodiálisis si es refractario.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención y tratamiento del síndrome de lisis tumoral"
+      ]
+    },
+    {
+      "key": "mi-07-hematologia-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "hematology",
+      "subtopic": "acute_leukemia_adult",
+      "vignette": "Hombre de 42 años con leucemia mieloide aguda y leucocitos de 95,000, a punto de iniciar quimioterapia de inducción. Función renal normal.",
+      "prompt": "¿Cuál es la medida de prevención del síndrome de lisis tumoral más adecuada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Bicarbonato para alcalinizar la orina en todos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ya no se recomienda de rutina."
+        },
+        {
+          "key": "b",
+          "text": "Hemodiálisis profiláctica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada de rutina."
+        },
+        {
+          "key": "c",
+          "text": "Dieta baja en purinas como única medida",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la dieta basta."
+        },
+        {
+          "key": "d",
+          "text": "Sin profilaxis porque la función renal es normal",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Ignora el alto riesgo."
+        },
+        {
+          "key": "e",
+          "text": "Evitar el alopurinol por posibles reacciones cutáneas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pierde una protección importante."
+        },
+        {
+          "key": "f",
+          "text": "Corticosteroides profilácticos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No previenen la lisis."
+        },
+        {
+          "key": "g",
+          "text": "Retrasar la quimioterapia hasta normalizar los leucocitos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena prudente, pero la quimioterapia es el tratamiento."
+        },
+        {
+          "key": "h",
+          "text": "Hidratación intravenosa abundante y alopurinol o rasburicasa según el riesgo, con vigilancia de electrolitos",
+          "correct": true,
+          "rationale": "Es la profilaxis en riesgo intermedio a alto."
+        },
+        {
+          "key": "i",
+          "text": "Plasmaféresis previa a la quimioterapia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es la medida estándar."
+        },
+        {
+          "key": "j",
+          "text": "Restricción de líquidos para proteger el corazón",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en otra preocupación y favorece la lesión renal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "g",
+        "h",
+        "j"
+      ],
+      "explanation": "La prevención del síndrome de lisis tumoral se basa en estratificar el riesgo según el tipo de tumor, la carga tumoral, como leucocitos elevados o DHL alta, la función renal y la sensibilidad al tratamiento. En riesgo intermedio se indica hidratación intravenosa abundante para lograr una diuresis alta y alopurinol, que reduce la formación de ácido úrico. En riesgo alto se prefiere rasburicasa, que degrada el ácido úrico ya formado, salvo deficiencia de glucosa 6 fosfato deshidrogenasa. Se vigilan electrolitos, ácido úrico y creatinina cada 6 a 12 horas en los primeros días. La alcalinización urinaria ya no se recomienda.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención y tratamiento del síndrome de lisis tumoral"
+      ]
+    }
+  ]
+}

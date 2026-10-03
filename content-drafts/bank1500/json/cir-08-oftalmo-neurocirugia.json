@@ -1,0 +1,2355 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "ophthalmology",
+      "subtopic": "red_eye",
+      "vignette": "Mujer de 25 años con ojo rojo bilateral de 2 días, secreción acuosa, sensación de arena, adenopatía preauricular y antecedente de infección respiratoria reciente. Agudeza visual normal y sin dolor intenso.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Conjuntivitis alérgica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El síntoma principal sería prurito intenso."
+        },
+        {
+          "key": "b",
+          "text": "Glaucoma agudo de ángulo cerrado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da dolor intenso y visión borrosa."
+        },
+        {
+          "key": "c",
+          "text": "Conjuntivitis viral por adenovirus",
+          "correct": true,
+          "rationale": "Ojo rojo con secreción acuosa, adenopatía preauricular y antecedente de infección respiratoria."
+        },
+        {
+          "key": "d",
+          "text": "Ojo irritado por desvelo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una infección contagiosa."
+        },
+        {
+          "key": "e",
+          "text": "Escleritis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da dolor intenso profundo."
+        },
+        {
+          "key": "f",
+          "text": "Queratitis herpética",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da úlcera dendrítica unilateral."
+        },
+        {
+          "key": "g",
+          "text": "Uveítis anterior",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da dolor, fotofobia y miosis."
+        },
+        {
+          "key": "h",
+          "text": "Cuerpo extraño corneal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es unilateral con antecedente."
+        },
+        {
+          "key": "i",
+          "text": "Conjuntivitis bacteriana",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da secreción purulenta abundante sin adenopatía preauricular."
+        },
+        {
+          "key": "j",
+          "text": "Hemorragia subconjuntival",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es una mancha roja sin secreción."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "i"
+      ],
+      "explanation": "La conjuntivitis viral, generalmente por adenovirus, es la causa más frecuente de ojo rojo infeccioso en adultos. Se manifiesta con hiperemia conjuntival, secreción acuosa, sensación de cuerpo extraño, folículos conjuntivales y adenopatía preauricular, a menudo tras una infección respiratoria, y suele iniciar en un ojo y pasar al otro. Es muy contagiosa. El tratamiento es sintomático con compresas frías y lágrimas artificiales, con medidas de higiene para evitar el contagio. Los antibióticos no son útiles. La agudeza visual normal y la ausencia de dolor intenso distinguen el ojo rojo benigno del grave.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la conjuntivitis"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "ophthalmology",
+      "subtopic": "red_eye",
+      "vignette": "Mujer de 62 años hipermétrope que tras entrar a un cine oscuro presenta dolor ocular intenso en el ojo derecho, cefalea, náusea, vómito, visión borrosa con halos alrededor de las luces, ojo rojo con inyección ciliar, córnea turbia y pupila en midriasis media arreactiva. El ojo está duro a la palpación.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Migraña con aura",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el ojo rojo, la córnea turbia ni el ojo duro."
+        },
+        {
+          "key": "b",
+          "text": "Uveítis anterior aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da miosis, no midriasis."
+        },
+        {
+          "key": "c",
+          "text": "Glaucoma agudo de ángulo cerrado",
+          "correct": true,
+          "rationale": "Dolor intenso, halos, córnea edematosa, pupila en midriasis media y ojo duro tras la oscuridad."
+        },
+        {
+          "key": "d",
+          "text": "Arteritis de células gigantes",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No da ojo rojo ni córnea turbia."
+        },
+        {
+          "key": "e",
+          "text": "Queratitis bacteriana",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da úlcera corneal visible."
+        },
+        {
+          "key": "f",
+          "text": "Hemorragia subconjuntival",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es indolora sin pérdida visual."
+        },
+        {
+          "key": "g",
+          "text": "Gastroenteritis por el vómito",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El cuadro ocular es la causa."
+        },
+        {
+          "key": "h",
+          "text": "Dolor de cabeza por la película",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia que puede causar ceguera."
+        },
+        {
+          "key": "i",
+          "text": "Desprendimiento de retina",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es indoloro sin ojo rojo."
+        },
+        {
+          "key": "j",
+          "text": "Conjuntivitis bacteriana",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No da dolor intenso ni pérdida visual."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "El glaucoma agudo de ángulo cerrado ocurre cuando el iris bloquea el ángulo de drenaje del humor acuoso, con elevación súbita de la presión intraocular. Es más frecuente en mujeres mayores, hipermétropes y de origen asiático, y se desencadena con la midriasis en la oscuridad o por fármacos anticolinérgicos o simpaticomiméticos. Se manifiesta con dolor ocular intenso, cefalea, náusea y vómito, visión borrosa con halos, ojo rojo con inyección ciliar, córnea edematosa y pupila en midriasis media arreactiva. Es una urgencia que puede causar ceguera en horas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del glaucoma agudo de ángulo cerrado"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "ophthalmology",
+      "subtopic": "red_eye",
+      "vignette": "Mujer de 65 años con glaucoma agudo de ángulo cerrado del ojo izquierdo, presión intraocular de 58 mmHg, dolor intenso y vómito.",
+      "prompt": "¿Cuál es el tratamiento inicial?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Trasplante de córnea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "b",
+          "text": "Analgésicos y valoración oftalmológica en una semana",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es una urgencia."
+        },
+        {
+          "key": "c",
+          "text": "Atropina en gotas para dilatar la pupila",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Empeora el cierre del ángulo."
+        },
+        {
+          "key": "d",
+          "text": "Corticosteroides tópicos como tratamiento principal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No bajan la presión."
+        },
+        {
+          "key": "e",
+          "text": "No tratar el ojo contralateral",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Tiene riesgo y requiere iridotomía profiláctica."
+        },
+        {
+          "key": "f",
+          "text": "Lágrimas artificiales",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No bajan la presión."
+        },
+        {
+          "key": "g",
+          "text": "Reducir la presión con acetazolamida, betabloqueador tópico, alfa agonista y pilocarpina, con agentes hiperosmóticos si es necesario, seguido de iridotomía con láser",
+          "correct": true,
+          "rationale": "Baja la presión y abre el ángulo."
+        },
+        {
+          "key": "h",
+          "text": "Antibióticos tópicos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es una infección."
+        },
+        {
+          "key": "i",
+          "text": "Compresas calientes para aliviar el dolor como único manejo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No bajan la presión."
+        },
+        {
+          "key": "j",
+          "text": "Antihistamínicos orales",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Pueden empeorar el cierre angular."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "El tratamiento del glaucoma agudo de ángulo cerrado busca reducir de inmediato la presión intraocular y abrir el ángulo. Se usan inhibidores de la anhidrasa carbónica como acetazolamida oral o intravenosa, betabloqueadores tópicos como timolol, alfa agonistas, agentes hiperosmóticos como manitol y pilocarpina, que contrae la pupila y separa el iris del ángulo una vez que la presión baja. El tratamiento definitivo es la iridotomía periférica con láser, que crea una comunicación entre las cámaras. Se realiza iridotomía profiláctica en el ojo contralateral. Los midriáticos están contraindicados.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del glaucoma agudo de ángulo cerrado"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "ophthalmology",
+      "subtopic": "red_eye",
+      "vignette": "Hombre de 30 años con espondilitis anquilosante que presenta dolor ocular derecho, fotofobia intensa, lagrimeo, visión borrosa e inyección ciliar alrededor de la córnea. La pupila derecha está en miosis y es irregular.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Endoftalmitis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ocurre tras cirugía o trauma."
+        },
+        {
+          "key": "b",
+          "text": "Desprendimiento de retina",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es indoloro."
+        },
+        {
+          "key": "c",
+          "text": "Conjuntivitis viral",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No da fotofobia intensa, inyección ciliar ni miosis."
+        },
+        {
+          "key": "d",
+          "text": "Epiescleritis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es leve sin miosis ni fotofobia intensa."
+        },
+        {
+          "key": "e",
+          "text": "Queratitis herpética",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da úlcera dendrítica."
+        },
+        {
+          "key": "f",
+          "text": "Ojo irritado por la luz solar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una inflamación intraocular."
+        },
+        {
+          "key": "g",
+          "text": "Ojo seco",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No da miosis ni inyección ciliar."
+        },
+        {
+          "key": "h",
+          "text": "Hemorragia subconjuntival",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es indolora."
+        },
+        {
+          "key": "i",
+          "text": "Uveítis anterior aguda",
+          "correct": true,
+          "rationale": "Dolor, fotofobia, inyección ciliar y miosis en un paciente con espondiloartritis."
+        },
+        {
+          "key": "j",
+          "text": "Glaucoma agudo de ángulo cerrado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da midriasis media, no miosis."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "La uveítis anterior aguda o iritis es la inflamación del iris y el cuerpo ciliar. Se asocia a HLA B27 y a espondiloartritis, como espondilitis anquilosante, artritis reactiva, enfermedad inflamatoria intestinal y psoriasis, así como a sarcoidosis, infecciones y enfermedad de Behçet. Se manifiesta con dolor ocular, fotofobia, visión borrosa, inyección ciliar o perilímbica, miosis y, en la lámpara de hendidura, células y flare en la cámara anterior y precipitados queráticos. El tratamiento es con corticosteroides tópicos y midriáticos ciclopléjicos para aliviar el dolor y evitar sinequias.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la uveítis anterior"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "ophthalmology",
+      "subtopic": "red_eye",
+      "vignette": "Hombre de 28 años que usa lentes de contacto, incluso para dormir, y presenta dolor ocular intenso, fotofobia, ojo rojo y visión borrosa en el ojo izquierdo. En la exploración hay una opacidad blanquecina en la córnea con defecto epitelial que tiñe con fluoresceína.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Pterigión",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es una lesión crónica conjuntival."
+        },
+        {
+          "key": "b",
+          "text": "Ojo seco por los lentes",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la opacidad con defecto epitelial."
+        },
+        {
+          "key": "c",
+          "text": "Uveítis anterior",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No da úlcera corneal."
+        },
+        {
+          "key": "d",
+          "text": "Chalazión",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es una lesión del párpado."
+        },
+        {
+          "key": "e",
+          "text": "Glaucoma agudo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la úlcera corneal."
+        },
+        {
+          "key": "f",
+          "text": "Irritación que se quita durmiendo con los lentes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Dormir con lentes es un factor de riesgo."
+        },
+        {
+          "key": "g",
+          "text": "Queratitis bacteriana o úlcera corneal",
+          "correct": true,
+          "rationale": "Usuario de lentes de contacto con opacidad corneal y defecto epitelial."
+        },
+        {
+          "key": "h",
+          "text": "Catarata",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es aguda ni dolorosa."
+        },
+        {
+          "key": "i",
+          "text": "Conjuntivitis bacteriana simple",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No da opacidad corneal ni dolor intenso."
+        },
+        {
+          "key": "j",
+          "text": "Hemorragia subconjuntival",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No afecta la córnea."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "La queratitis bacteriana es una infección de la córnea que puede causar pérdida visual permanente. El principal factor de riesgo es el uso de lentes de contacto, sobre todo si se duerme con ellos o se usan con mala higiene, y Pseudomonas aeruginosa es un agente frecuente. Otros factores son traumatismos corneales, ojo seco y cirugía ocular. Se manifiesta con dolor intenso, fotofobia, ojo rojo, visión borrosa y opacidad corneal con defecto epitelial que tiñe con fluoresceína. Es una urgencia que requiere raspado para cultivo y antibióticos tópicos de amplio espectro intensivos. Se suspende el uso de lentes.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la queratitis infecciosa"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "ophthalmology",
+      "subtopic": "glaucoma",
+      "vignette": "Hombre de 65 años con antecedente familiar de glaucoma, asintomático, en revisión de rutina. Presión intraocular de 26 mmHg en ambos ojos, ángulo abierto en la gonioscopia, excavación papilar de 0.7 y defecto arqueado en el campo visual.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hipertensión ocular sin daño",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ya hay daño del nervio y del campo visual."
+        },
+        {
+          "key": "b",
+          "text": "Papiledema",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da edema de la papila, no excavación."
+        },
+        {
+          "key": "c",
+          "text": "Catarata",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la excavación papilar."
+        },
+        {
+          "key": "d",
+          "text": "Degeneración macular",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Afecta la visión central sin excavación papilar."
+        },
+        {
+          "key": "e",
+          "text": "Neuritis óptica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da pérdida visual aguda dolorosa."
+        },
+        {
+          "key": "f",
+          "text": "Desprendimiento de retina",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da pérdida visual aguda."
+        },
+        {
+          "key": "g",
+          "text": "Glaucoma primario de ángulo abierto",
+          "correct": true,
+          "rationale": "Presión elevada, ángulo abierto, excavación papilar aumentada y defecto del campo visual."
+        },
+        {
+          "key": "h",
+          "text": "Retinopatía diabética",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la excavación papilar."
+        },
+        {
+          "key": "i",
+          "text": "Visión normal porque no tiene síntomas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El glaucoma es silencioso."
+        },
+        {
+          "key": "j",
+          "text": "Glaucoma agudo de ángulo cerrado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El ángulo está abierto y es asintomático."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "El glaucoma primario de ángulo abierto es una neuropatía óptica crónica progresiva y la principal causa de ceguera irreversible en el mundo. Es asintomático hasta etapas avanzadas, ya que primero afecta la visión periférica. Los factores de riesgo son presión intraocular elevada, edad, antecedente familiar, ascendencia africana, miopía y diabetes. El diagnóstico se basa en la excavación papilar aumentada, los defectos del campo visual y la presión intraocular, aunque puede haber glaucoma con presión normal. Se recomienda revisión oftalmológica periódica después de los 40 años, sobre todo con factores de riesgo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del glaucoma primario de ángulo abierto"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "ophthalmology",
+      "subtopic": "glaucoma",
+      "vignette": "Mujer de 60 años con glaucoma primario de ángulo abierto recién diagnosticado, presión intraocular de 25 mmHg y defectos iniciales del campo visual. Sin asma ni otras comorbilidades.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Trasplante de nervio óptico",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No existe."
+        },
+        {
+          "key": "b",
+          "text": "Iridotomía con láser como tratamiento de elección",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es para el ángulo cerrado."
+        },
+        {
+          "key": "c",
+          "text": "Observación sin tratamiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ya hay daño del nervio."
+        },
+        {
+          "key": "d",
+          "text": "Corticosteroides tópicos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Elevan la presión intraocular."
+        },
+        {
+          "key": "e",
+          "text": "Acetazolamida oral como tratamiento crónico de primera línea",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene muchos efectos adversos."
+        },
+        {
+          "key": "f",
+          "text": "Vitaminas para el nervio óptico como único tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No bajan la presión."
+        },
+        {
+          "key": "g",
+          "text": "Análogo de prostaglandinas tópico como latanoprost o trabeculoplastia con láser",
+          "correct": true,
+          "rationale": "Reducen la presión intraocular y frenan el daño del nervio."
+        },
+        {
+          "key": "h",
+          "text": "Suspender las gotas cuando no hay síntomas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El tratamiento debe ser continuo."
+        },
+        {
+          "key": "i",
+          "text": "Atropina tópica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No baja la presión."
+        },
+        {
+          "key": "j",
+          "text": "Lentes de mayor graduación",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No tratan el glaucoma."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "El único tratamiento demostrado del glaucoma es la reducción de la presión intraocular, que frena la progresión del daño. Los análogos de prostaglandinas, como latanoprost, son la primera línea por su eficacia, aplicación una vez al día y pocos efectos sistémicos, aunque pueden oscurecer el iris y alargar las pestañas. Otras opciones son los betabloqueadores tópicos, contraindicados en asma y bradicardia, los inhibidores de la anhidrasa carbónica tópicos y los alfa agonistas. La trabeculoplastia selectiva con láser es una alternativa de primera línea. La cirugía filtrante se reserva para la falla del tratamiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del glaucoma primario de ángulo abierto"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "ophthalmology",
+      "subtopic": "glaucoma",
+      "vignette": "Hombre de 50 años con padre ciego por glaucoma, sin síntomas visuales. Pregunta qué debe hacer para prevenir la ceguera.",
+      "prompt": "¿Cuál es la medida de prevención recomendada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Revisión con optometrista solo para graduación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No evalúa el nervio óptico."
+        },
+        {
+          "key": "b",
+          "text": "No hacer revisiones porque el padre ya está ciego",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo familiar justifica la vigilancia."
+        },
+        {
+          "key": "c",
+          "text": "Cirugía preventiva de glaucoma",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicada sin enfermedad."
+        },
+        {
+          "key": "d",
+          "text": "Tomar vitamina A a dosis altas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No previene el glaucoma."
+        },
+        {
+          "key": "e",
+          "text": "Esperar a tener síntomas visuales para consultar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El glaucoma es asintomático hasta etapas avanzadas."
+        },
+        {
+          "key": "f",
+          "text": "Resonancia magnética de cráneo anual",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el tamizaje."
+        },
+        {
+          "key": "g",
+          "text": "Gotas lubricantes diarias",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No previenen el glaucoma."
+        },
+        {
+          "key": "h",
+          "text": "Comer zanahorias evita el glaucoma",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es una medida eficaz."
+        },
+        {
+          "key": "i",
+          "text": "Revisión oftalmológica completa con medición de la presión intraocular, valoración del nervio óptico y campo visual de forma periódica",
+          "correct": true,
+          "rationale": "La detección temprana del glaucoma previene la ceguera."
+        },
+        {
+          "key": "j",
+          "text": "Usar lentes oscuros todo el día",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No previene el glaucoma."
+        }
+      ],
+      "canonical": [
+        "e",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El glaucoma es asintomático hasta etapas avanzadas y el daño es irreversible, por lo que la detección temprana es fundamental. Se recomienda una evaluación oftalmológica completa con medición de la presión intraocular, valoración del nervio óptico por fondo de ojo y campo visual a partir de los 40 años, con mayor frecuencia en personas con factores de riesgo como antecedente familiar en primer grado, ascendencia africana, miopía alta, diabetes y uso de corticosteroides. Los familiares de pacientes con glaucoma tienen un riesgo varias veces mayor.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del glaucoma primario de ángulo abierto"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "ophthalmology",
+      "subtopic": "glaucoma",
+      "vignette": "Hombre de 70 años con glaucoma de ángulo abierto que abandonó el tratamiento hace años. Refiere que choca con objetos a los lados y tropieza con frecuencia, aunque lee bien de cerca.",
+      "prompt": "¿Cuál es la consecuencia que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Degeneración macular",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Afecta la visión central, no la periférica."
+        },
+        {
+          "key": "b",
+          "text": "Evento vascular cerebral occipital como causa más probable",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El antecedente orienta a glaucoma."
+        },
+        {
+          "key": "c",
+          "text": "Presbicia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Afecta la visión de cerca."
+        },
+        {
+          "key": "d",
+          "text": "Si lee bien no puede tener daño ocular grave",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La visión central se conserva hasta tarde."
+        },
+        {
+          "key": "e",
+          "text": "Pérdida del campo visual periférico con visión en túnel por daño glaucomatoso avanzado",
+          "correct": true,
+          "rationale": "El glaucoma afecta primero la periferia y conserva la visión central hasta etapas tardías."
+        },
+        {
+          "key": "f",
+          "text": "Desprendimiento de retina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es agudo."
+        },
+        {
+          "key": "g",
+          "text": "Retinopatía diabética",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay diabetes."
+        },
+        {
+          "key": "h",
+          "text": "Torpeza por la edad",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Hay una causa ocular."
+        },
+        {
+          "key": "i",
+          "text": "Catarata densa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Causa visión borrosa global."
+        },
+        {
+          "key": "j",
+          "text": "Neuritis óptica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es aguda y dolorosa."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "El glaucoma no tratado produce una pérdida progresiva del campo visual, que inicia en la periferia con escotomas arqueados y avanza hasta la visión en túnel, mientras la agudeza visual central se conserva hasta etapas muy avanzadas. Por ello los pacientes no notan el daño hasta que es grave, y suelen tener caídas y accidentes. El daño es irreversible, y el tratamiento solo detiene la progresión. La adherencia al tratamiento es fundamental, y muchas veces se requiere educación al paciente sobre la naturaleza silenciosa de la enfermedad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del glaucoma primario de ángulo abierto"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "ophthalmology",
+      "subtopic": "cataract",
+      "vignette": "Hombre de 72 años con disminución progresiva e indolora de la visión en ambos ojos de 2 años, deslumbramiento con las luces al manejar de noche y visión de colores apagados. El reflejo rojo está disminuido y se observa opacidad del cristalino.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Desprendimiento de retina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es agudo."
+        },
+        {
+          "key": "b",
+          "text": "Degeneración macular",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Afecta la visión central sin opacidad del cristalino."
+        },
+        {
+          "key": "c",
+          "text": "Ojo seco",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No da opacidad del cristalino."
+        },
+        {
+          "key": "d",
+          "text": "Uveítis crónica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Daría ojo rojo y dolor."
+        },
+        {
+          "key": "e",
+          "text": "Catarata senil",
+          "correct": true,
+          "rationale": "Pérdida visual progresiva indolora con deslumbramiento y opacidad del cristalino."
+        },
+        {
+          "key": "f",
+          "text": "Glaucoma de ángulo abierto",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Afecta el campo periférico sin opacidad del cristalino."
+        },
+        {
+          "key": "g",
+          "text": "Pérdida de visión normal por la edad sin tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es tratable con cirugía."
+        },
+        {
+          "key": "h",
+          "text": "Neuropatía óptica isquémica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es aguda."
+        },
+        {
+          "key": "i",
+          "text": "Retinopatía diabética",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay diabetes."
+        },
+        {
+          "key": "j",
+          "text": "Presbicia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Afecta solo la visión de cerca."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "La catarata es la opacificación del cristalino y la principal causa de ceguera reversible en el mundo. La más frecuente es la senil. Otros factores de riesgo son diabetes, tabaquismo, exposición a radiación ultravioleta, corticosteroides, traumatismos y uveítis. Se manifiesta con disminución progresiva e indolora de la visión, deslumbramiento, colores apagados y miopización. La exploración muestra disminución del reflejo rojo y opacidad en la lámpara de hendidura. El tratamiento es quirúrgico cuando la catarata afecta las actividades diarias, con facoemulsificación e implante de lente intraocular.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la catarata"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "ophthalmology",
+      "subtopic": "cataract",
+      "vignette": "Mujer de 70 años con catarata bilateral que le impide leer, ver televisión y salir sola. Agudeza visual de 20/200 en ambos ojos. Sin otras enfermedades oculares.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esperar a que la catarata madure por completo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es necesario esperar."
+        },
+        {
+          "key": "b",
+          "text": "Trasplante de córnea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "c",
+          "text": "Gotas para disolver la catarata",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No existen gotas eficaces."
+        },
+        {
+          "key": "d",
+          "text": "Vitrectomía",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es el tratamiento de la catarata."
+        },
+        {
+          "key": "e",
+          "text": "No operar por la edad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La cirugía es segura y mejora la calidad de vida."
+        },
+        {
+          "key": "f",
+          "text": "Vitaminas antioxidantes",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No revierten la catarata."
+        },
+        {
+          "key": "g",
+          "text": "Trabeculoplastia con láser",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es para glaucoma."
+        },
+        {
+          "key": "h",
+          "text": "Gotas de miel o limón para limpiar la vista",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Son peligrosas."
+        },
+        {
+          "key": "i",
+          "text": "Lentes de mayor graduación como tratamiento definitivo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No corrigen la opacidad."
+        },
+        {
+          "key": "j",
+          "text": "Facoemulsificación con implante de lente intraocular",
+          "correct": true,
+          "rationale": "Es el único tratamiento eficaz para la catarata que afecta la función visual."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "El tratamiento de la catarata es quirúrgico, y se indica cuando la pérdida visual afecta las actividades diarias del paciente, sin necesidad de esperar a que madure. La técnica de elección es la facoemulsificación, que fragmenta el cristalino con ultrasonido a través de una incisión pequeña, con implante de una lente intraocular plegable. Es una cirugía ambulatoria, rápida y con alta tasa de éxito. Las complicaciones incluyen opacificación de la cápsula posterior, tratable con láser YAG, endoftalmitis, edema macular y desprendimiento de retina. No existen tratamientos médicos eficaces.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la catarata"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "ophthalmology",
+      "subtopic": "cataract",
+      "vignette": "Hombre de 74 años operado de catarata del ojo derecho hace 3 días que presenta dolor ocular intenso, disminución importante de la visión, ojo muy rojo, edema palpebral e hipopión.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Conjuntivitis bacteriana",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No da hipopión ni pérdida visual importante."
+        },
+        {
+          "key": "b",
+          "text": "Opacificación de la cápsula posterior",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es tardía e indolora."
+        },
+        {
+          "key": "c",
+          "text": "Endoftalmitis posoperatoria",
+          "correct": true,
+          "rationale": "Dolor, pérdida visual, ojo rojo e hipopión en los primeros días tras cirugía intraocular."
+        },
+        {
+          "key": "d",
+          "text": "Desprendimiento de retina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es indoloro sin hipopión."
+        },
+        {
+          "key": "e",
+          "text": "Uveítis por alergia a las gotas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la gravedad."
+        },
+        {
+          "key": "f",
+          "text": "Hemorragia subconjuntival",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es indolora."
+        },
+        {
+          "key": "g",
+          "text": "Dolor normal que pasa en una semana",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia que amenaza la visión."
+        },
+        {
+          "key": "h",
+          "text": "Queratitis seca",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el hipopión."
+        },
+        {
+          "key": "i",
+          "text": "Inflamación esperada tras la cirugía",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La pérdida visual con hipopión es una complicación grave."
+        },
+        {
+          "key": "j",
+          "text": "Glaucoma de ángulo abierto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es agudo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "i"
+      ],
+      "explanation": "La endoftalmitis es una infección intraocular grave, y la forma aguda posoperatoria aparece en la primera semana tras la cirugía de catarata u otras cirugías intraoculares. Los agentes más frecuentes son estafilococos coagulasa negativos y Staphylococcus aureus de la flora del paciente. Se manifiesta con dolor, disminución importante de la visión, ojo rojo, edema palpebral e hipopión. Es una urgencia que requiere toma de muestras del vítreo e inyección intravítrea de antibióticos como vancomicina y ceftazidima, y vitrectomía en casos graves. La povidona yodada preoperatoria reduce su incidencia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la catarata"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "ophthalmology",
+      "subtopic": "cataract",
+      "vignette": "Hombre de 58 años miope que refiere la aparición súbita de muchas manchas flotantes y destellos de luz en el ojo izquierdo, seguidos de una sombra como cortina que avanza desde la periferia. No tiene dolor.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Neuritis óptica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es dolorosa con los movimientos oculares."
+        },
+        {
+          "key": "b",
+          "text": "Migraña con aura",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El aura es binocular y transitoria."
+        },
+        {
+          "key": "c",
+          "text": "Catarata",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es progresiva sin destellos ni cortina."
+        },
+        {
+          "key": "d",
+          "text": "Hemorragia vítrea por diabetes",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay diabetes."
+        },
+        {
+          "key": "e",
+          "text": "Desprendimiento de vítreo posterior simple",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la sombra en cortina."
+        },
+        {
+          "key": "f",
+          "text": "Degeneración macular",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Afecta la visión central."
+        },
+        {
+          "key": "g",
+          "text": "Glaucoma agudo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es doloroso con ojo rojo."
+        },
+        {
+          "key": "h",
+          "text": "Cansancio visual por usar el celular",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia."
+        },
+        {
+          "key": "i",
+          "text": "Oclusión de la arteria central de la retina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da pérdida visual súbita total sin destellos."
+        },
+        {
+          "key": "j",
+          "text": "Desprendimiento de retina regmatógeno",
+          "correct": true,
+          "rationale": "Miodesopsias y fotopsias seguidas de una sombra en cortina indolora en un miope."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "El desprendimiento de retina regmatógeno es la separación de la retina neurosensorial del epitelio pigmentario por un desgarro que permite el paso del vítreo. Es más frecuente en miopes, tras cirugía de catarata y traumatismos. Suele precederse de un desprendimiento de vítreo posterior con miodesopsias, manchas flotantes, y fotopsias, destellos de luz. Después aparece una sombra o cortina en el campo visual que avanza. Es indoloro. El fondo de ojo con pupila dilatada confirma el diagnóstico. Es una urgencia, sobre todo si la mácula está aplicada, y se trata con cirugía.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del desprendimiento de retina"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "neurosurgery",
+      "subtopic": "head_trauma_general",
+      "vignette": "Hombre de 25 años con traumatismo craneoencefálico grave por accidente de motocicleta, con Glasgow de 5 desde el momento del accidente. La tomografía inicial muestra pocas alteraciones, con pequeñas hemorragias puntiformes en la unión de la sustancia gris y blanca y en el cuerpo calloso.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Lesión axonal difusa",
+          "correct": true,
+          "rationale": "Coma desde el inicio con tomografía casi normal y hemorragias puntiformes en el cuerpo calloso."
+        },
+        {
+          "key": "b",
+          "text": "Hemorragia subaracnoidea aneurismática",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El contexto es traumático."
+        },
+        {
+          "key": "c",
+          "text": "Conmoción cerebral leve",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El Glasgow es muy bajo."
+        },
+        {
+          "key": "d",
+          "text": "Intoxicación por alcohol como causa del coma",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica las hemorragias."
+        },
+        {
+          "key": "e",
+          "text": "Encefalopatía hipóxica pura",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica las hemorragias en el cuerpo calloso."
+        },
+        {
+          "key": "f",
+          "text": "Como la tomografía casi es normal, despertará pronto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El pronóstico suele ser grave."
+        },
+        {
+          "key": "g",
+          "text": "Hematoma epidural",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Daría una lesión biconvexa con efecto de masa."
+        },
+        {
+          "key": "h",
+          "text": "Contusión cerebral frontal aislada",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el patrón difuso."
+        },
+        {
+          "key": "i",
+          "text": "Hematoma subdural agudo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Daría una colección en semiluna."
+        },
+        {
+          "key": "j",
+          "text": "Evento vascular cerebral isquémico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica el contexto traumático."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "La lesión axonal difusa se produce por fuerzas de aceleración y desaceleración rotacional que cizallan los axones, típicamente en accidentes de tráfico a alta velocidad. Se caracteriza por coma desde el momento del traumatismo, desproporcionado a los hallazgos de la tomografía, que puede ser normal o mostrar pequeñas hemorragias petequiales en la unión corticosubcortical, el cuerpo calloso y el tronco cerebral. La resonancia magnética es más sensible. El tratamiento es de soporte y control de la presión intracraneal. El pronóstico suele ser malo, con alta frecuencia de estado vegetativo o discapacidad grave.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "neurosurgery",
+      "subtopic": "head_trauma_general",
+      "vignette": "Hombre de 30 años con traumatismo craneoencefálico y herida en el cuero cabelludo. La tomografía muestra una fractura deprimida del hueso parietal con hundimiento mayor que el grosor del cráneo y la herida está abierta sobre la fractura.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Anticonvulsivos como único manejo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No resuelven la fractura."
+        },
+        {
+          "key": "b",
+          "text": "No dar profilaxis antitetánica",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Está indicada."
+        },
+        {
+          "key": "c",
+          "text": "Vendaje compresivo sobre la fractura",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede empujar los fragmentos."
+        },
+        {
+          "key": "d",
+          "text": "Observación sin cirugía en todos los casos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La fractura abierta deprimida requiere cirugía."
+        },
+        {
+          "key": "e",
+          "text": "Craneotomía amplia sin antibióticos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Los antibióticos son necesarios."
+        },
+        {
+          "key": "f",
+          "text": "Solo analgésicos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es adecuado."
+        },
+        {
+          "key": "g",
+          "text": "Sutura de la herida y egreso",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es una fractura abierta deprimida."
+        },
+        {
+          "key": "h",
+          "text": "El cráneo se alinea solo con el tiempo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La fractura deprimida no se corrige sola."
+        },
+        {
+          "key": "i",
+          "text": "Angiografía cerebral antes de cualquier tratamiento en todos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria de rutina."
+        },
+        {
+          "key": "j",
+          "text": "Antibióticos, profilaxis antitetánica y cirugía para levantar la fractura y desbridar",
+          "correct": true,
+          "rationale": "La fractura deprimida abierta con hundimiento mayor que el grosor del cráneo es quirúrgica."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "Las fracturas craneales deprimidas son aquellas en las que un fragmento se hunde hacia el interior. Se indica cirugía cuando el hundimiento es mayor que el grosor de la tabla ósea o mayor de 1 cm, cuando la fractura es abierta con contaminación, hay laceración de la duramadre, hematoma subyacente, afección de senos frontales o defecto estético. Las fracturas abiertas requieren antibióticos, profilaxis antitetánica y desbridamiento con elevación de los fragmentos. Tienen riesgo de infección, crisis convulsivas y lesión del parénquima. Se evita la compresión directa sobre la fractura.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "neurosurgery",
+      "subtopic": "head_trauma_general",
+      "vignette": "Hombre de 32 años con traumatismo craneoencefálico grave con contusiones corticales y Glasgow de 8, ingresado a terapia intensiva.",
+      "prompt": "¿Cuál es la medida de prevención indicada para las crisis convulsivas tempranas?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Profilaxis anticonvulsiva con levetiracetam o fenitoína durante 7 días",
+          "correct": true,
+          "rationale": "Reduce las crisis postraumáticas tempranas en traumatismo grave."
+        },
+        {
+          "key": "b",
+          "text": "Corticosteroides en dosis altas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumentan la mortalidad."
+        },
+        {
+          "key": "c",
+          "text": "Ninguna profilaxis en traumatismo grave",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Está indicada en los primeros 7 días."
+        },
+        {
+          "key": "d",
+          "text": "Magnesio intravenoso",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es la profilaxis estándar en trauma."
+        },
+        {
+          "key": "e",
+          "text": "Benzodiacepinas en infusión continua para todos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es la profilaxis estándar."
+        },
+        {
+          "key": "f",
+          "text": "Electroencefalograma continuo en todos como única medida",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No sustituye la profilaxis."
+        },
+        {
+          "key": "g",
+          "text": "Anticonvulsivos de por vida en todos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No previenen la epilepsia tardía."
+        },
+        {
+          "key": "h",
+          "text": "Las convulsiones no afectan el pronóstico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Aumentan la lesión secundaria."
+        },
+        {
+          "key": "i",
+          "text": "Evitar los anticonvulsivos por efectos adversos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El beneficio en la primera semana es claro."
+        },
+        {
+          "key": "j",
+          "text": "Profilaxis solo si ya convulsionó",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La profilaxis temprana se da sin crisis previas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "g"
+      ],
+      "explanation": "Las crisis convulsivas postraumáticas se clasifican en inmediatas, tempranas en los primeros 7 días y tardías después de una semana. En el traumatismo craneoencefálico grave se recomienda profilaxis anticonvulsiva con fenitoína o levetiracetam durante los primeros 7 días, ya que reduce las crisis tempranas, que aumentan la presión intracraneal y la lesión secundaria. La profilaxis no previene la epilepsia postraumática tardía, por lo que no se continúa después de la primera semana si no hubo crisis. Los factores de riesgo incluyen contusiones, hematomas, fracturas deprimidas y heridas penetrantes.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "neurosurgery",
+      "subtopic": "head_trauma_general",
+      "vignette": "Hombre de 40 años con traumatismo craneoencefálico grave hace 5 días que presenta poliuria de 6 litros al día, sodio sérico de 156 mEq/L y orina diluida con osmolaridad de 120 mOsm/kg.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de pérdida cerebral de sal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da hiponatremia con hipovolemia."
+        },
+        {
+          "key": "b",
+          "text": "Diabetes mellitus descompensada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La orina estaría concentrada por glucosa."
+        },
+        {
+          "key": "c",
+          "text": "Secreción inapropiada de hormona antidiurética",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da hiponatremia con orina concentrada."
+        },
+        {
+          "key": "d",
+          "text": "Orina mucho porque toma mucha agua",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay hipernatremia."
+        },
+        {
+          "key": "e",
+          "text": "Exceso de líquidos intravenosos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la hipernatremia."
+        },
+        {
+          "key": "f",
+          "text": "Hipercalcemia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es la causa más probable."
+        },
+        {
+          "key": "g",
+          "text": "Insuficiencia renal aguda poliúrica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica la orina tan diluida con hipernatremia."
+        },
+        {
+          "key": "h",
+          "text": "Diabetes insípida nefrogénica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El contexto es traumático central."
+        },
+        {
+          "key": "i",
+          "text": "Diuresis por manitol como única causa sin estudios",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La osmolaridad urinaria baja persistente sugiere diabetes insípida."
+        },
+        {
+          "key": "j",
+          "text": "Diabetes insípida central postraumática",
+          "correct": true,
+          "rationale": "Poliuria con orina diluida e hipernatremia por deficiencia de hormona antidiurética."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "El traumatismo craneoencefálico puede afectar el hipotálamo y la hipófisis, causando alteraciones del sodio. La diabetes insípida central se debe a la deficiencia de hormona antidiurética y se manifiesta con poliuria, orina diluida con osmolaridad baja e hipernatremia. Se trata con reposición de agua y desmopresina. La secreción inapropiada de hormona antidiurética produce hiponatremia euvolémica con orina concentrada y se trata con restricción de líquidos. El síndrome de pérdida cerebral de sal produce hiponatremia hipovolémica y se trata con sodio y volumen. Estas alteraciones requieren vigilancia estrecha de los electrolitos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "neurosurgery",
+      "subtopic": "head_trauma_general",
+      "vignette": "Hombre de 35 años con traumatismo craneoencefálico grave con monitor de presión intracraneal. Presión arterial media de 75 mmHg y presión intracraneal de 30 mmHg.",
+      "prompt": "¿Qué indica el cálculo de la presión de perfusión cerebral?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Presión de perfusión cerebral de 45 mmHg, baja, con riesgo de isquemia",
+          "correct": true,
+          "rationale": "Se calcula restando la presión intracraneal a la presión arterial media."
+        },
+        {
+          "key": "b",
+          "text": "Presión de perfusión normal mayor de 60",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El cálculo da 45."
+        },
+        {
+          "key": "c",
+          "text": "Presión de perfusión de 2.5 mmHg",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es un cálculo incorrecto."
+        },
+        {
+          "key": "d",
+          "text": "Indica que solo importa la presión arterial",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La presión intracraneal reduce la perfusión."
+        },
+        {
+          "key": "e",
+          "text": "Presión de perfusión de 105 mmHg adecuada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se resta, no se suma."
+        },
+        {
+          "key": "f",
+          "text": "La presión del cerebro no afecta su riego",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Lo reduce de forma directa."
+        },
+        {
+          "key": "g",
+          "text": "Indica que debe bajarse la presión arterial",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Bajaría más la perfusión."
+        },
+        {
+          "key": "h",
+          "text": "Presión intracraneal normal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La normal es menor de 20 a 22."
+        },
+        {
+          "key": "i",
+          "text": "Indica que el monitor está mal calibrado",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Los valores son plausibles."
+        },
+        {
+          "key": "j",
+          "text": "Indica muerte cerebral",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un criterio."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "h"
+      ],
+      "explanation": "La presión de perfusión cerebral es igual a la presión arterial media menos la presión intracraneal. En el traumatismo craneoencefálico grave se busca mantener una presión intracraneal menor de 22 mmHg y una presión de perfusión entre 60 y 70 mmHg. Una perfusión baja causa isquemia y lesión secundaria. Para mejorarla se reduce la presión intracraneal con elevación de la cabecera, sedación, terapia hiperosmolar, drenaje de líquido cefalorraquídeo y cirugía, y se mantiene la presión arterial con líquidos y vasopresores. La hipotensión y la hipoxia empeoran el pronóstico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q19",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "neurosurgery",
+      "subtopic": "head_trauma_general",
+      "vignette": "Mujer de 50 años con traumatismo craneoencefálico grave que desarrolla durante la hospitalización midriasis izquierda, hemiparesia derecha y deterioro del estado de conciencia. La tomografía muestra un hematoma temporal izquierdo con desplazamiento del uncus.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Infarto en el territorio de la cerebral media por embolia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El contexto es el hematoma con desplazamiento."
+        },
+        {
+          "key": "b",
+          "text": "Herniación subfalcina aislada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da debilidad de la pierna contralateral por compresión de la cerebral anterior."
+        },
+        {
+          "key": "c",
+          "text": "Pupila grande por colirio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una herniación."
+        },
+        {
+          "key": "d",
+          "text": "Parálisis del sexto par",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Afecta la abducción ocular."
+        },
+        {
+          "key": "e",
+          "text": "Crisis convulsiva focal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la midriasis fija con deterioro."
+        },
+        {
+          "key": "f",
+          "text": "Hipoglucemia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica los hallazgos focales."
+        },
+        {
+          "key": "g",
+          "text": "Efecto de sedantes en la pupila",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la midriasis unilateral con hemiparesia."
+        },
+        {
+          "key": "h",
+          "text": "Herniación amigdalina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da alteraciones respiratorias y cardiovasculares por compresión del bulbo."
+        },
+        {
+          "key": "i",
+          "text": "Lesión del nervio óptico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "j",
+          "text": "Herniación transtentorial uncal",
+          "correct": true,
+          "rationale": "Midriasis ipsilateral por compresión del tercer par y hemiparesia contralateral."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "La herniación uncal ocurre cuando una masa temporal, como un hematoma, empuja el uncus del lóbulo temporal a través de la tienda del cerebelo. Comprime el tercer par craneal, causando midriasis ipsilateral fija, y el pedúnculo cerebral, causando hemiparesia contralateral, además de deterioro del estado de conciencia. A veces la hemiparesia es ipsilateral por compresión del pedúnculo contralateral contra la tienda, el fenómeno de Kernohan. Es una urgencia neuroquirúrgica que requiere medidas para bajar la presión intracraneal y evacuación quirúrgica del hematoma.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q20",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "neurosurgery",
+      "subtopic": "intracranial_hemorrhage",
+      "vignette": "Mujer de 48 años con cefalea súbita, la peor de su vida, que inició mientras levantaba un objeto pesado, con vómito, rigidez de nuca y somnolencia breve. La tomografía muestra sangre en las cisternas basales y los surcos.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Migraña grave",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la sangre en la tomografía."
+        },
+        {
+          "key": "b",
+          "text": "Hemorragia subaracnoidea por rotura de aneurisma",
+          "correct": true,
+          "rationale": "Cefalea en trueno con rigidez de nuca y sangre en el espacio subaracnoideo."
+        },
+        {
+          "key": "c",
+          "text": "Crisis hipertensiva sin sangrado",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Hay sangre en la tomografía."
+        },
+        {
+          "key": "d",
+          "text": "Trombosis de senos venosos",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Suele tener evolución más gradual."
+        },
+        {
+          "key": "e",
+          "text": "Hemorragia intraparenquimatosa hipertensiva",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La sangre está en el espacio subaracnoideo."
+        },
+        {
+          "key": "f",
+          "text": "Cefalea por estrés del trabajo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia neuroquirúrgica."
+        },
+        {
+          "key": "g",
+          "text": "Hematoma epidural",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay traumatismo y la sangre es subaracnoidea."
+        },
+        {
+          "key": "h",
+          "text": "Meningitis bacteriana",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica el inicio súbito ni la sangre."
+        },
+        {
+          "key": "i",
+          "text": "Sinusitis aguda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "j",
+          "text": "Cefalea tensional",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la gravedad ni la sangre."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "h"
+      ],
+      "explanation": "La hemorragia subaracnoidea no traumática se debe en 80% a la rotura de un aneurisma sacular, generalmente en el polígono de Willis. Los factores de riesgo son hipertensión, tabaquismo, alcohol, antecedente familiar y enfermedades como el riñón poliquístico. Se manifiesta con cefalea súbita e intensa, en trueno, la peor de la vida, con náusea, vómito, rigidez de nuca, alteración del estado de conciencia y fotofobia. La tomografía simple es el estudio inicial, y si es negativa con sospecha alta se realiza punción lumbar. La angiotomografía o angiografía identifica el aneurisma.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia subaracnoidea aneurismática"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q21",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "neurosurgery",
+      "subtopic": "intracranial_hemorrhage",
+      "vignette": "Hombre de 50 años con cefalea súbita intensa de 10 horas de evolución y rigidez de nuca. La tomografía simple de cráneo es normal.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Realizar punción lumbar en busca de eritrocitos y xantocromía",
+          "correct": true,
+          "rationale": "La tomografía puede ser normal en algunas hemorragias subaracnoideas."
+        },
+        {
+          "key": "b",
+          "text": "Electroencefalograma",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es útil."
+        },
+        {
+          "key": "c",
+          "text": "Iniciar antibióticos empíricos como único manejo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La sospecha principal es hemorragia."
+        },
+        {
+          "key": "d",
+          "text": "Craneotomía exploradora",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada sin diagnóstico."
+        },
+        {
+          "key": "e",
+          "text": "Analgésicos opioides y observación en casa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede ser una hemorragia grave."
+        },
+        {
+          "key": "f",
+          "text": "Egresar con diagnóstico de migraña porque la tomografía es normal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La tomografía no descarta la hemorragia por completo."
+        },
+        {
+          "key": "g",
+          "text": "Si la tomografía es normal no hay sangrado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La sensibilidad disminuye con el tiempo."
+        },
+        {
+          "key": "h",
+          "text": "No estudiar más para evitar la punción",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo de omitir una hemorragia es alto."
+        },
+        {
+          "key": "i",
+          "text": "Repetir la tomografía en una semana",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Retrasa el diagnóstico."
+        },
+        {
+          "key": "j",
+          "text": "Resonancia de columna",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No evalúa la hemorragia subaracnoidea."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "La sensibilidad de la tomografía simple para detectar hemorragia subaracnoidea es cercana a 100% en las primeras 6 horas, pero disminuye con el tiempo. Si la sospecha clínica es alta y la tomografía es normal, se realiza punción lumbar, preferentemente 12 horas después del inicio, en busca de eritrocitos que no disminuyen entre los tubos y xantocromía por degradación de la hemoglobina. La angiotomografía es una alternativa en algunos centros. Una vez confirmada, se identifica el aneurisma con angiotomografía o angiografía para tratarlo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia subaracnoidea aneurismática"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q22",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "neurosurgery",
+      "subtopic": "intracranial_hemorrhage",
+      "vignette": "Mujer de 52 años con hemorragia subaracnoidea por aneurisma de la arteria comunicante anterior confirmado por angiotomografía. Está consciente y estable.",
+      "prompt": "¿Cuál es el tratamiento de elección para prevenir el resangrado?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo control de la presión arterial sin tratar el aneurisma",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No previene el resangrado."
+        },
+        {
+          "key": "b",
+          "text": "Radiocirugía como tratamiento urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es útil en la fase aguda."
+        },
+        {
+          "key": "c",
+          "text": "Diferir el tratamiento del aneurisma varias semanas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta el riesgo de resangrado."
+        },
+        {
+          "key": "d",
+          "text": "El aneurisma se cerrará solo tras sangrar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Tiene alto riesgo de resangrado."
+        },
+        {
+          "key": "e",
+          "text": "Corticosteroides en dosis altas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No previenen el resangrado."
+        },
+        {
+          "key": "f",
+          "text": "Reposo absoluto como tratamiento definitivo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No previene el resangrado."
+        },
+        {
+          "key": "g",
+          "text": "Anticoagulación para prevenir vasoespasmo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumenta el sangrado."
+        },
+        {
+          "key": "h",
+          "text": "Exclusión temprana del aneurisma con embolización endovascular con coils o clipaje quirúrgico en las primeras 24 a 72 horas",
+          "correct": true,
+          "rationale": "El resangrado es más frecuente en los primeros días."
+        },
+        {
+          "key": "i",
+          "text": "No tratar por miedo a la cirugía",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El resangrado es frecuentemente mortal."
+        },
+        {
+          "key": "j",
+          "text": "Trombólisis intravenosa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Está contraindicada."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "El resangrado es la complicación más temida de la hemorragia subaracnoidea, con mayor riesgo en las primeras 24 horas y alta mortalidad. Para prevenirlo se excluye el aneurisma de forma temprana, idealmente en las primeras 24 a 72 horas, con embolización endovascular con coils o con clipaje quirúrgico según la localización y las características del aneurisma. Mientras tanto se controla la presión arterial, se da analgesia y reposo. Se administra nimodipino oral para prevenir la isquemia cerebral tardía por vasoespasmo y se vigilan la hidrocefalia y la hiponatremia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia subaracnoidea aneurismática"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q23",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "neurosurgery",
+      "subtopic": "intracranial_hemorrhage",
+      "vignette": "Mujer de 55 años con hemorragia subaracnoidea aneurismática tratada con embolización. Al séptimo día presenta confusión y nueva hemiparesia derecha. La tomografía no muestra resangrado ni hidrocefalia.",
+      "prompt": "¿Cuál es la complicación más probable?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Crisis convulsiva con parálisis de Todd",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es transitoria y debe haber crisis previa."
+        },
+        {
+          "key": "b",
+          "text": "Migraña hemipléjica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "c",
+          "text": "Hidrocefalia aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se observa en la tomografía."
+        },
+        {
+          "key": "d",
+          "text": "Hiponatremia como única causa del déficit focal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Puede coexistir, pero el déficit focal sugiere vasoespasmo."
+        },
+        {
+          "key": "e",
+          "text": "Isquemia cerebral tardía por vasoespasmo",
+          "correct": true,
+          "rationale": "Déficit neurológico nuevo entre los días 4 y 14 sin resangrado ni hidrocefalia."
+        },
+        {
+          "key": "f",
+          "text": "Hipoglucemia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el contexto."
+        },
+        {
+          "key": "g",
+          "text": "Meningitis bacteriana",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el déficit focal."
+        },
+        {
+          "key": "h",
+          "text": "Resangrado del aneurisma",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La tomografía no lo muestra y el aneurisma fue tratado."
+        },
+        {
+          "key": "i",
+          "text": "Tumor cerebral",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica el cuadro agudo."
+        },
+        {
+          "key": "j",
+          "text": "Cansancio por la hospitalización",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un déficit neurológico nuevo."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "La isquemia cerebral tardía es una causa importante de morbilidad en la hemorragia subaracnoidea. Se asocia al vasoespasmo de las arterias cerebrales, que ocurre entre los días 4 y 14, con máximo hacia el séptimo día. Se manifiesta con deterioro del estado de conciencia o déficit focal nuevo no explicado por otras causas. El Doppler transcraneal ayuda a detectar el vasoespasmo. La prevención es con nimodipino oral y mantenimiento de la euvolemia. El tratamiento incluye elevar la presión arterial y, si no responde, angioplastia o vasodilatadores intraarteriales.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia subaracnoidea aneurismática"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q24",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "neurosurgery",
+      "subtopic": "intracranial_hemorrhage",
+      "vignette": "Hombre de 68 años con hipertensión mal controlada que presenta de forma súbita hemiparesia izquierda, disartria y somnolencia. Presión de 210/120 mmHg. La tomografía muestra una lesión hiperdensa en el putamen derecho.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Infarto isquémico de la cerebral media",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La tomografía muestra sangre, no isquemia."
+        },
+        {
+          "key": "b",
+          "text": "Tumor cerebral con sangrado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El contexto y la localización son típicos de hemorragia hipertensiva."
+        },
+        {
+          "key": "c",
+          "text": "Hemorragia intraparenquimatosa hipertensiva",
+          "correct": true,
+          "rationale": "Hemorragia en el putamen en un hipertenso con déficit súbito."
+        },
+        {
+          "key": "d",
+          "text": "Angiopatía amiloide",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Suele dar hemorragias lobares en ancianos."
+        },
+        {
+          "key": "e",
+          "text": "Hemorragia subaracnoidea aneurismática",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La sangre está en el parénquima."
+        },
+        {
+          "key": "f",
+          "text": "Hematoma subdural",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es extraaxial."
+        },
+        {
+          "key": "g",
+          "text": "Encefalopatía hipertensiva sin sangrado",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Hay una hemorragia."
+        },
+        {
+          "key": "h",
+          "text": "Mareo por la presión alta sin lesión cerebral",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una hemorragia."
+        },
+        {
+          "key": "i",
+          "text": "Malformación arteriovenosa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es más común en jóvenes."
+        },
+        {
+          "key": "j",
+          "text": "Absceso cerebral",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el cuadro súbito."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "e"
+      ],
+      "explanation": "La hemorragia intraparenquimatosa hipertensiva se debe a la rotura de pequeñas arterias penetrantes dañadas por la hipertensión crónica. Sus localizaciones típicas son el putamen, el tálamo, la protuberancia y el cerebelo. Se manifiesta con déficit neurológico súbito, cefalea, vómito y alteración del estado de conciencia. La tomografía simple confirma el diagnóstico. El tratamiento incluye control de la presión arterial, con meta sistólica de alrededor de 140 mmHg, revertir anticoagulantes y manejo de la presión intracraneal. La cirugía se considera en hemorragias cerebelosas mayores de 3 cm o con hidrocefalia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia intracerebral"
+      ]
+    },
+    {
+      "key": "cir-08-oftalmo-neurocirugia-q25",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "neurosurgery",
+      "subtopic": "intracranial_hemorrhage",
+      "vignette": "Hombre de 70 años con hemorragia cerebelosa de 4 cm diagnosticada hace 4 horas que presenta deterioro del estado de conciencia y la tomografía muestra compresión del cuarto ventrículo con hidrocefalia.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Evacuación quirúrgica urgente del hematoma cerebeloso",
+          "correct": true,
+          "rationale": "Las hemorragias cerebelosas mayores de 3 cm con deterioro o hidrocefalia requieren cirugía."
+        },
+        {
+          "key": "b",
+          "text": "Esperar 48 horas para ver la evolución",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede causar la muerte por compresión del tronco."
+        },
+        {
+          "key": "c",
+          "text": "Corticosteroides en dosis altas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No son útiles."
+        },
+        {
+          "key": "d",
+          "text": "No operar por la edad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La cirugía puede salvarle la vida."
+        },
+        {
+          "key": "e",
+          "text": "Solo drenaje ventricular sin evacuar el hematoma",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede causar herniación ascendente."
+        },
+        {
+          "key": "f",
+          "text": "Manejo médico exclusivo con control de la presión",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El deterioro con compresión del tronco requiere cirugía."
+        },
+        {
+          "key": "g",
+          "text": "Angiografía antes de cualquier tratamiento",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa la cirugía urgente."
+        },
+        {
+          "key": "h",
+          "text": "Las hemorragias cerebelosas siempre se reabsorben solas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Pueden ser mortales."
+        },
+        {
+          "key": "i",
+          "text": "Anticoagulación",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Está contraindicada."
+        },
+        {
+          "key": "j",
+          "text": "Trombólisis intravenosa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Está contraindicada."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "La hemorragia cerebelosa es una urgencia neuroquirúrgica porque la fosa posterior es un espacio pequeño. Puede comprimir el tronco encefálico y obstruir el cuarto ventrículo, causando hidrocefalia, deterioro rápido y muerte. Se indica evacuación quirúrgica urgente en hemorragias cerebelosas mayores de 3 cm, con deterioro neurológico, compresión del tronco o hidrocefalia. La ventriculostomía sola no se recomienda como tratamiento inicial porque puede causar herniación ascendente. La evacuación oportuna mejora el pronóstico, y muchos pacientes recuperan una buena función neurológica si se operan antes del deterioro grave.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia intracerebral"
+      ]
+    }
+  ]
+}

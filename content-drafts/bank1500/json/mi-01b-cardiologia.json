@@ -1,0 +1,1135 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-01b-cardiologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "hypertension",
+      "vignette": "Mujer de 38 años con hipertensión de difícil control pese a tres fármacos a dosis plenas, incluido un diurético. Refiere calambres y debilidad. Potasio sérico de 2.9 mEq/L sin uso de laxantes. Sodio de 145 mEq/L.",
+      "prompt": "¿Cuál es el estudio inicial para la causa más probable de su hipertensión?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Muestreo venoso suprarrenal de entrada",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es un paso posterior para lateralizar, no el inicial."
+        },
+        {
+          "key": "b",
+          "text": "Cociente aldosterona sobre actividad de renina plasmática",
+          "correct": true,
+          "rationale": "La hipertensión resistente con hipopotasemia sugiere hiperaldosteronismo primario."
+        },
+        {
+          "key": "c",
+          "text": "Ecocardiograma para buscar coartación aórtica",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que toda hipertensión joven es por coartación, sin diferencia de pulsos descrita."
+        },
+        {
+          "key": "d",
+          "text": "Polisomnografía para apnea del sueño",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Es causa de hipertensión resistente, pero no explica el potasio bajo."
+        },
+        {
+          "key": "e",
+          "text": "Tomografía de suprarrenales como primer estudio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la imagen, pero primero se confirma bioquímicamente."
+        },
+        {
+          "key": "f",
+          "text": "Perfil tiroideo completo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena como estudio de rutina, pero no orienta a la causa probable."
+        },
+        {
+          "key": "g",
+          "text": "Cortisol libre en orina por síndrome de Cushing",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Comparte hipertensión e hipopotasemia, pero no hay datos clínicos de Cushing."
+        },
+        {
+          "key": "h",
+          "text": "Metanefrinas en orina de 24 horas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El feocromocitoma es conocido, pero no explica la hipopotasemia sin crisis adrenérgicas."
+        },
+        {
+          "key": "i",
+          "text": "Ultrasonido Doppler de arterias renales",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Piensa en estenosis renal sin considerar primero el patrón de hipopotasemia."
+        },
+        {
+          "key": "j",
+          "text": "Gammagrama con MIBG",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Busca una causa rara sin datos que la sugieran."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "La hipertensión resistente, que persiste con tres fármacos incluido un diurético, obliga a buscar causas secundarias. La combinación con hipopotasemia espontánea orienta a hiperaldosteronismo primario, la causa endocrina más frecuente de hipertensión secundaria. El estudio inicial de tamizaje es el cociente de aldosterona sobre actividad de renina plasmática, idealmente corrigiendo el potasio antes. Si es positivo, se confirma con pruebas de supresión, como la infusión salina, y luego se realiza tomografía de suprarrenales y, en candidatos a cirugía, muestreo venoso suprarrenal para distinguir adenoma de hiperplasia bilateral. El tratamiento es suprarrenalectomía en el adenoma o espironolactona en la hiperplasia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial secundaria"
+      ]
+    },
+    {
+      "key": "mi-01b-cardiologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "hypertension",
+      "vignette": "Hombre de 61 años con hipertensión tratado con losartán, amlodipino e hidroclorotiazida a dosis máximas con buen apego. Su presión arterial en casa y en consultorio es de 154/94 mmHg. Potasio de 4.1 mEq/L y filtración de 70 mL/min. Se descartaron causas secundarias.",
+      "prompt": "¿Cuál es el fármaco de elección para agregar?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Agregar enalapril para doble bloqueo con losartán",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Combina dos bloqueadores del sistema renina angiotensina, lo cual daña el riñón."
+        },
+        {
+          "key": "b",
+          "text": "Clonidina por su efecto potente y rápido",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Lo potente suena bien, pero causa rebote y sedación."
+        },
+        {
+          "key": "c",
+          "text": "Espironolactona a dosis baja",
+          "correct": true,
+          "rationale": "En la hipertensión resistente es el cuarto fármaco con mejor evidencia."
+        },
+        {
+          "key": "d",
+          "text": "Mantener igual y esperar seis meses",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Deja sin control una hipertensión resistente."
+        },
+        {
+          "key": "e",
+          "text": "Denervación renal inmediata",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Salta a un procedimiento antes del cuarto fármaco."
+        },
+        {
+          "key": "f",
+          "text": "Hidralazina como primera opción de cuarto fármaco",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es una opción posterior, con taquicardia refleja."
+        },
+        {
+          "key": "g",
+          "text": "Ácido acetilsalicílico para mejorar la presión",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la aspirina baja la presión."
+        },
+        {
+          "key": "h",
+          "text": "Aumentar la hidroclorotiazida por encima de la dosis máxima",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el diurético que ya tiene, sin ganancia y con más efectos adversos."
+        },
+        {
+          "key": "i",
+          "text": "Doxazosina como cuarto fármaco preferido",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es alternativa, pero la espironolactona tiene mejor evidencia."
+        },
+        {
+          "key": "j",
+          "text": "Agregar nifedipino además del amlodipino",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Duplica el mismo grupo farmacológico."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "La hipertensión resistente se define como presión arterial por arriba de la meta pese a tres fármacos de distinta clase a dosis óptimas, incluido un diurético, después de confirmar apego, técnica de medición correcta, descartar efecto de bata blanca y causas secundarias. El cuarto fármaco recomendado es la espironolactona a dosis baja, de 25 a 50 mg al día, que mostró la mayor reducción de presión frente a alternativas como doxazosina o bisoprolol. Se debe vigilar potasio y función renal, sobre todo con filtración menor de 45 mL/min o potasio mayor de 4.5 mEq/L. El doble bloqueo del sistema renina angiotensina está contraindicado.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel de atención"
+      ]
+    },
+    {
+      "key": "mi-01b-cardiologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "hypertension",
+      "vignette": "Hombre de 70 años con hipertensión de 25 años de evolución y mal control. Refiere disnea de esfuerzo. El electrocardiograma muestra criterios de voltaje de crecimiento ventricular izquierdo.",
+      "prompt": "¿Cuál es la complicación cardiaca más frecuente de la hipertensión crónica mal controlada?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Estenosis aórtica calcificada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es común en el anciano, pero no es la complicación directa de la hipertensión."
+        },
+        {
+          "key": "b",
+          "text": "Miocardiopatía hipertrófica obstructiva",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es genética y mucho menos frecuente que la hipertrofia hipertensiva."
+        },
+        {
+          "key": "c",
+          "text": "Pericarditis constrictiva",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la disnea sin relación con la hipertensión."
+        },
+        {
+          "key": "d",
+          "text": "Taponamiento cardiaco",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No considera la evolución crónica del cuadro."
+        },
+        {
+          "key": "e",
+          "text": "Miocardiopatía dilatada idiopática",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La disnea la sugiere, pero la hipertensión produce hipertrofia, no dilatación primaria."
+        },
+        {
+          "key": "f",
+          "text": "Endocarditis infecciosa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye una causa infecciosa sin datos."
+        },
+        {
+          "key": "g",
+          "text": "Prolapso de la válvula mitral",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en lo valvular sin relación causal."
+        },
+        {
+          "key": "h",
+          "text": "Hipertrofia ventricular izquierda con disfunción diastólica",
+          "correct": true,
+          "rationale": "La sobrecarga de presión crónica engrosa el ventrículo y altera su relajación."
+        },
+        {
+          "key": "i",
+          "text": "Bloqueo auriculoventricular completo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a daño cardiaco, pero no es la complicación típica."
+        },
+        {
+          "key": "j",
+          "text": "Amiloidosis cardiaca",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo voltaje alterado es infiltrativo, cuando la amiloidosis suele dar bajo voltaje."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "La hipertensión arterial crónica impone una sobrecarga de presión al ventrículo izquierdo, que responde con hipertrofia concéntrica. Esta hipertrofia altera la relajación y el llenado ventricular, provocando disfunción diastólica y, con el tiempo, insuficiencia cardiaca con fracción de expulsión preservada. También aumenta el riesgo de fibrilación auricular, cardiopatía isquémica y muerte súbita. El electrocardiograma puede mostrar criterios de voltaje, como Sokolow Lyon, pero el ecocardiograma es más sensible para documentarla. El control estricto de la presión, en especial con bloqueadores del sistema renina angiotensina, puede producir regresión de la hipertrofia y mejorar el pronóstico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel de atención"
+      ]
+    },
+    {
+      "key": "mi-01b-cardiologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "heart_failure",
+      "vignette": "Mujer de 76 años con hipertensión, obesidad y diabetes. Tiene disnea de esfuerzo y edema leve. El ecocardiograma muestra fracción de expulsión de 60%, hipertrofia concéntrica y disfunción diastólica. NT-proBNP elevado.",
+      "prompt": "¿Cuál es el tratamiento de elección, además del diurético para la congestión, con beneficio demostrado en desenlaces?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Un inhibidor de SGLT2, como empagliflozina o dapagliflozina",
+          "correct": true,
+          "rationale": "En la insuficiencia cardiaca con fracción preservada reduce hospitalizaciones."
+        },
+        {
+          "key": "b",
+          "text": "Sacubitrilo con valsartán como tratamiento base único",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el esquema de fracción reducida, con beneficio limitado aquí."
+        },
+        {
+          "key": "c",
+          "text": "Digoxina para mejorar la contractilidad",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La contractilidad está conservada."
+        },
+        {
+          "key": "d",
+          "text": "Dobutamina en infusión intermitente ambulatoria",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La idea de apoyo cardiaco no aplica a fracción preservada."
+        },
+        {
+          "key": "e",
+          "text": "Amiodarona por riesgo de arritmia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Trata una arritmia inexistente."
+        },
+        {
+          "key": "f",
+          "text": "Suspender todo diurético para evitar deshidratación",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Teme el efecto adverso y deja la congestión."
+        },
+        {
+          "key": "g",
+          "text": "Trasplante cardiaco",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Medida extrema e injustificada."
+        },
+        {
+          "key": "h",
+          "text": "Ivabradina para bajar la frecuencia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No tiene beneficio en fracción preservada."
+        },
+        {
+          "key": "i",
+          "text": "Solo restricción de sal sin fármacos adicionales",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Omite un fármaco con beneficio demostrado."
+        },
+        {
+          "key": "j",
+          "text": "Betabloqueador en dosis máxima para todos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Lo asocia con insuficiencia cardiaca, pero en fracción preservada no reduce desenlaces sin otra indicación."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "La insuficiencia cardiaca con fracción de expulsión preservada se define por síntomas y signos de insuficiencia cardiaca, fracción mayor o igual a 50% y evidencia de alteración estructural o funcional, con péptidos natriuréticos elevados. Durante años ningún fármaco mostró beneficio, pero los inhibidores de SGLT2 redujeron la combinación de muerte cardiovascular y hospitalización por insuficiencia cardiaca, sobre todo por menos hospitalizaciones. Los diuréticos se usan para aliviar la congestión. Además, se deben tratar las comorbilidades, como hipertensión, obesidad, diabetes, fibrilación auricular y apnea del sueño, y promover actividad física supervisada.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la insuficiencia cardiaca crónica"
+      ]
+    },
+    {
+      "key": "mi-01b-cardiologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "heart_failure",
+      "vignette": "Hombre de 66 años con insuficiencia cardiaca con fracción reducida tratado con enalapril, carvedilol, espironolactona y dapagliflozina. Acude a control y el potasio es de 6.4 mEq/L con creatinina de 1.9 mg/dL, previamente de 1.2 mg/dL. El electrocardiograma muestra ondas T picudas.",
+      "prompt": "¿Cuál es la conducta a seguir?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Suspender solo la dapagliflozina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el fármaco más nuevo, que no causa hiperpotasemia."
+        },
+        {
+          "key": "b",
+          "text": "Suspender el carvedilol para proteger el corazón",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Proteger el corazón suena bien, pero el betabloqueador no es la causa principal."
+        },
+        {
+          "key": "c",
+          "text": "Dieta baja en potasio como única medida",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Insuficiente con cambios en el electrocardiograma."
+        },
+        {
+          "key": "d",
+          "text": "Continuar igual y repetir potasio en un mes",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Deja una hiperpotasemia peligrosa."
+        },
+        {
+          "key": "e",
+          "text": "Ecocardiograma urgente antes de tratar",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No cambia el manejo inmediato."
+        },
+        {
+          "key": "f",
+          "text": "Gluconato de calcio intravenoso, insulina con glucosa, suspender espironolactona y valorar el IECA",
+          "correct": true,
+          "rationale": "Hiperpotasemia grave con cambios electrocardiográficos requiere estabilizar la membrana y redistribuir potasio."
+        },
+        {
+          "key": "g",
+          "text": "Agregar furosemida, tiazida y acetazolamida juntas",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Sobretrata sin estabilizar la membrana."
+        },
+        {
+          "key": "h",
+          "text": "Hemodiálisis inmediata como primer paso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede necesitarse, pero primero se estabiliza la membrana."
+        },
+        {
+          "key": "i",
+          "text": "Resina de intercambio oral como única medida inmediata",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Su efecto es lento y no protege el corazón de inmediato."
+        },
+        {
+          "key": "j",
+          "text": "Bicarbonato como tratamiento principal sin acidosis",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Su efecto es pobre si no hay acidosis."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "f"
+      ],
+      "explanation": "Los antagonistas de mineralocorticoides y los inhibidores del sistema renina angiotensina pueden causar hiperpotasemia, sobre todo con deterioro de la función renal. Un potasio mayor de 6 mEq/L o con cambios electrocardiográficos es una urgencia. El manejo inicial es estabilizar la membrana miocárdica con gluconato de calcio intravenoso, redistribuir el potasio al interior de la célula con insulina rápida y glucosa y salbutamol nebulizado, y eliminarlo con diuréticos de asa, quelantes o diálisis si es refractario. Se suspende la espironolactona y se reduce o suspende temporalmente el IECA, para reintroducirlos con vigilancia cuando el potasio sea menor de 5 mEq/L.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la insuficiencia cardiaca crónica",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos del potasio"
+      ]
+    },
+    {
+      "key": "mi-01b-cardiologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "heart_failure",
+      "vignette": "Hombre de 59 años con disnea progresiva, ortopnea y edema. El NT-proBNP es de 2,400 pg/mL y la radiografía muestra cardiomegalia.",
+      "prompt": "¿Cuál es el estudio de elección para confirmar el diagnóstico y clasificar la insuficiencia cardiaca?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ecocardiograma transtorácico",
+          "correct": true,
+          "rationale": "Confirma la cardiopatía, mide la fracción de expulsión y orienta la causa."
+        },
+        {
+          "key": "b",
+          "text": "Prueba de esfuerzo con consumo de oxígeno",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Valora capacidad, no clasifica la insuficiencia."
+        },
+        {
+          "key": "c",
+          "text": "Cateterismo cardiaco derecho e izquierdo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Invasivo y no es el estudio inicial de confirmación."
+        },
+        {
+          "key": "d",
+          "text": "Repetir NT-proBNP en 48 horas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el biomarcador, que apoya pero no clasifica."
+        },
+        {
+          "key": "e",
+          "text": "Tomografía de tórax con contraste",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La cardiomegalia sugiere imagen, pero no evalúa la función."
+        },
+        {
+          "key": "f",
+          "text": "Gammagrama de perfusión miocárdica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Busca isquemia, pero no es el estudio de confirmación."
+        },
+        {
+          "key": "g",
+          "text": "Radiografía de tórax lateral",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la radiografía basta para clasificar."
+        },
+        {
+          "key": "h",
+          "text": "Holter de 24 horas",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Busca arritmias, no confirma insuficiencia cardiaca."
+        },
+        {
+          "key": "i",
+          "text": "Biopsia endomiocárdica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se reserva para sospecha de miocarditis o infiltración."
+        },
+        {
+          "key": "j",
+          "text": "Electrocardiograma de 12 derivaciones",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es necesario, pero no mide la fracción de expulsión."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "j"
+      ],
+      "explanation": "Ante sospecha clínica de insuficiencia cardiaca con péptidos natriuréticos elevados, el estudio de elección para confirmar el diagnóstico es el ecocardiograma transtorácico. Permite medir la fracción de expulsión del ventrículo izquierdo y clasificar la insuficiencia en reducida, levemente reducida o preservada, lo que define el tratamiento. Además evalúa la función diastólica, las válvulas, la presión pulmonar, el tamaño de las cavidades y el pericardio, y orienta la causa. La resonancia magnética cardiaca se reserva cuando la ventana ecocardiográfica es mala o se sospechan miocardiopatías específicas. El cateterismo se indica para buscar enfermedad coronaria.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la insuficiencia cardiaca crónica"
+      ]
+    },
+    {
+      "key": "mi-01b-cardiologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "acute_coronary_syndrome",
+      "vignette": "Hombre de 62 años con dolor torácico opresivo de 1 hora. El electrocardiograma muestra elevación del ST en DII, DIII y aVF, y también en V4R. Presión arterial de 86/58 mmHg, campos pulmonares limpios y ingurgitación yugular.",
+      "prompt": "¿Cuál es el manejo inicial de la hipotensión mientras se prepara la reperfusión?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Betabloqueador intravenoso",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es parte del manejo del infarto, pero empeora la hipotensión."
+        },
+        {
+          "key": "b",
+          "text": "Esperar a que la presión se recupere sola",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Deja la hipoperfusión sin tratar."
+        },
+        {
+          "key": "c",
+          "text": "Nitroglicerina sublingual para el dolor",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es común en el infarto, pero causa hipotensión grave en el ventrículo derecho."
+        },
+        {
+          "key": "d",
+          "text": "Restricción hídrica estricta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo infarto necesita restricción de líquidos."
+        },
+        {
+          "key": "e",
+          "text": "Carga de cristaloide intravenoso y evitar nitratos y diuréticos",
+          "correct": true,
+          "rationale": "El infarto del ventrículo derecho depende de la precarga."
+        },
+        {
+          "key": "f",
+          "text": "Furosemida por la ingurgitación yugular",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la yugular y reduce la precarga que necesita."
+        },
+        {
+          "key": "g",
+          "text": "Morfina para disminuir la demanda de oxígeno",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Disminuir demanda suena bien, pero su efecto venodilatador empeora la hipotensión."
+        },
+        {
+          "key": "h",
+          "text": "Dobutamina como primera medida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Salta al inotrópico sin optimizar volumen."
+        },
+        {
+          "key": "i",
+          "text": "Balón de contrapulsación como primer paso",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Medida avanzada antes de la carga de volumen."
+        },
+        {
+          "key": "j",
+          "text": "Manejo estándar idéntico al infarto anterior",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Ignora la fisiología distinta del ventrículo derecho."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "El infarto de cara inferior se acompaña en un tercio de los casos de afección del ventrículo derecho. Se sospecha con la tríada de hipotensión, ingurgitación yugular y campos pulmonares limpios, y se confirma con elevación del ST en derivaciones derechas, sobre todo V4R. El ventrículo derecho isquémico depende de la precarga, por lo que se administran cristaloides con vigilancia y se evitan nitratos, diuréticos y morfina. Si la hipotensión persiste se usan inotrópicos como dobutamina. La reperfusión temprana es el tratamiento definitivo. La bradicardia y el bloqueo auriculoventricular son frecuentes y pueden requerir marcapasos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del infarto agudo de miocardio con elevación del segmento ST"
+      ]
+    },
+    {
+      "key": "mi-01b-cardiologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "acute_coronary_syndrome",
+      "vignette": "Hombre de 55 años con infarto con elevación del ST de cara anterior de 2 horas de evolución. Está en un hospital sin sala de hemodinamia y el traslado a un centro con angioplastia tomaría 3 horas.",
+      "prompt": "Todas las siguientes son contraindicaciones absolutas para el tratamiento inicial con trombólisis, EXCEPTO:",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hipertensión controlada con presión actual de 150/90 mmHg",
+          "correct": true,
+          "rationale": "La hipertensión controlada no es contraindicación, solo la sistólica mayor de 180 mmHg es relativa."
+        },
+        {
+          "key": "b",
+          "text": "Evento vascular cerebral isquémico en los últimos 3 meses",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es verdadero. Contraindicación absoluta."
+        },
+        {
+          "key": "c",
+          "text": "Sospecha de disección aórtica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es verdadero. Contraindicación absoluta."
+        },
+        {
+          "key": "d",
+          "text": "Cirugía intracraneal o medular en los últimos 2 meses",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Es verdadero. Contraindicación absoluta."
+        },
+        {
+          "key": "e",
+          "text": "Evento vascular cerebral hemorrágico previo en cualquier momento",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es verdadero. Contraindicación absoluta."
+        },
+        {
+          "key": "f",
+          "text": "Malformación arteriovenosa cerebral conocida",
+          "correct": false,
+          "bias": "confirmation_bias",
+          "rationale": "Es verdadero. Contraindicación absoluta."
+        },
+        {
+          "key": "g",
+          "text": "Neoplasia intracraneal conocida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es verdadero. Contraindicación absoluta."
+        },
+        {
+          "key": "h",
+          "text": "Diátesis hemorrágica conocida",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es verdadero. Contraindicación absoluta."
+        },
+        {
+          "key": "i",
+          "text": "Traumatismo craneoencefálico grave en los últimos 3 meses",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es verdadero. Contraindicación absoluta."
+        },
+        {
+          "key": "j",
+          "text": "Sangrado activo interno, excepto menstruación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es verdadero. Contraindicación absoluta."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "Cuando la intervención coronaria percutánea primaria no puede realizarse en menos de 120 minutos, la trombólisis en los primeros 30 minutos es la estrategia de reperfusión, idealmente dentro de las primeras 12 horas. Antes de administrarla se revisan contraindicaciones. Las absolutas incluyen hemorragia intracraneal previa, evento vascular isquémico en los últimos tres meses, lesión vascular cerebral estructural o neoplasia intracraneal, sangrado activo, sospecha de disección aórtica, traumatismo craneal o facial grave reciente y cirugía intracraneal o medular reciente. La hipertensión no controlada con sistólica mayor de 180 mmHg es relativa. Una hipertensión controlada no impide trombolizar.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del infarto agudo de miocardio con elevación del segmento ST"
+      ]
+    },
+    {
+      "key": "mi-01b-cardiologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "acute_coronary_syndrome",
+      "vignette": "Hombre de 57 años que egresa tras un infarto sin elevación del ST tratado con angioplastia y stent farmacoactivo. Su colesterol LDL es de 128 mg/dL.",
+      "prompt": "¿Cuál es la medida de prevención secundaria más importante respecto a sus lípidos?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo dieta durante tres meses y revalorar",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Retrasa un fármaco que reduce mortalidad."
+        },
+        {
+          "key": "b",
+          "text": "Iniciar estatina solo si el LDL supera 190 mg/dL",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Usa el umbral de prevención primaria."
+        },
+        {
+          "key": "c",
+          "text": "Estatina de baja intensidad porque su LDL es casi normal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la cifra y subestima el riesgo muy alto."
+        },
+        {
+          "key": "d",
+          "text": "Suplementos de omega 3 en lugar de estatina",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que los suplementos sustituyen a la estatina."
+        },
+        {
+          "key": "e",
+          "text": "Aféresis de lipoproteínas de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Medida extrema para casos refractarios."
+        },
+        {
+          "key": "f",
+          "text": "Estatina de alta intensidad, como atorvastatina 40 a 80 mg, con meta de LDL menor de 55 mg/dL",
+          "correct": true,
+          "rationale": "Reduce eventos cardiovasculares recurrentes."
+        },
+        {
+          "key": "g",
+          "text": "Evitar estatina por miedo a dolor muscular",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Teme el efecto adverso y pierde el beneficio."
+        },
+        {
+          "key": "h",
+          "text": "Fibrato como fármaco principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se usa para triglicéridos, no para reducir LDL."
+        },
+        {
+          "key": "i",
+          "text": "Ezetimiba sola como primera línea",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es complemento cuando la estatina no basta."
+        },
+        {
+          "key": "j",
+          "text": "Niacina como fármaco de elección",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Ya no se recomienda por falta de beneficio."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "h"
+      ],
+      "explanation": "Todo paciente con síndrome coronario agudo tiene riesgo cardiovascular muy alto y debe recibir estatina de alta intensidad lo antes posible, independientemente del colesterol basal. Las metas actuales son reducir el LDL al menos 50% y llevarlo por debajo de 55 mg/dL. Se revisa el perfil lipídico a las cuatro a seis semanas. Si no se alcanza la meta se agrega ezetimiba y después un inhibidor de PCSK9. La prevención secundaria también incluye doble antiagregación por 12 meses, betabloqueador, inhibidor del sistema renina angiotensina si hay indicación, suspensión del tabaco, rehabilitación cardiaca y control de diabetes e hipertensión.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las dislipidemias",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome coronario agudo sin elevación del segmento ST"
+      ]
+    },
+    {
+      "key": "mi-01b-cardiologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "atrial_fibrillation",
+      "vignette": "Hombre de 67 años con fibrilación auricular. Tiene hipertensión controlada, diabetes tipo 2 e insuficiencia cardiaca. Sin antecedente de evento vascular cerebral ni enfermedad vascular.",
+      "prompt": "¿Cuál es la interpretación correcta de su riesgo con la escala CHA2DS2-VASc?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Suma 2 puntos y basta con aspirina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en solo dos factores y propone un tratamiento ineficaz."
+        },
+        {
+          "key": "b",
+          "text": "Suma 5 puntos por ser hombre",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El sexo masculino no suma puntos."
+        },
+        {
+          "key": "c",
+          "text": "Suma 3 puntos sin contar la insuficiencia cardiaca",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Pasa por alto un factor."
+        },
+        {
+          "key": "d",
+          "text": "Suma 4 puntos, pero por la edad se recomienda observar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Evita anticoagular sin razón válida."
+        },
+        {
+          "key": "e",
+          "text": "Suma 4 puntos, pero se recomienda doble antiagregación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Calcula bien y elige un tratamiento inadecuado."
+        },
+        {
+          "key": "f",
+          "text": "Riesgo intermedio y la decisión depende solo de HAS-BLED",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "HAS-BLED no decide quién se anticoagula."
+        },
+        {
+          "key": "g",
+          "text": "No aplica la escala porque la hipertensión está controlada",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el control elimina el punto, aunque el antecedente cuenta."
+        },
+        {
+          "key": "h",
+          "text": "Suma 4 puntos y tiene indicación de anticoagulación oral",
+          "correct": true,
+          "rationale": "Insuficiencia cardiaca, hipertensión, diabetes y edad de 65 a 74 años suman un punto cada uno."
+        },
+        {
+          "key": "i",
+          "text": "Suma 6 puntos porque la diabetes vale doble",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Confunde el peso de los factores, la diabetes vale un punto."
+        },
+        {
+          "key": "j",
+          "text": "Riesgo bajo por no tener evento vascular previo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Cree que sin evento previo el riesgo es bajo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "La escala CHA2DS2-VASc estima el riesgo de evento vascular cerebral en la fibrilación auricular no valvular. Asigna un punto a insuficiencia cardiaca, hipertensión, diabetes, enfermedad vascular, edad de 65 a 74 años y sexo femenino, y dos puntos a edad de 75 años o más y a evento vascular cerebral o isquémico transitorio previo. Este paciente suma cuatro puntos. En hombres con dos o más puntos se recomienda anticoagulación oral, de preferencia con un anticoagulante oral directo. La hipertensión cuenta aunque esté controlada. La escala HAS-BLED sirve para identificar y corregir factores de sangrado.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la fibrilación auricular"
+      ]
+    },
+    {
+      "key": "mi-01b-cardiologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "atrial_fibrillation",
+      "vignette": "Mujer de 45 años con estenosis mitral reumática moderada a grave y fibrilación auricular de reciente diagnóstico. Filtración glomerular normal.",
+      "prompt": "¿Cuál es el anticoagulante de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Warfarina más clopidogrel más aspirina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Triple esquema que aumenta el sangrado sin indicación."
+        },
+        {
+          "key": "b",
+          "text": "Sin anticoagulación hasta reparar la válvula",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Deja expuesta a la paciente a embolia."
+        },
+        {
+          "key": "c",
+          "text": "Ácido acetilsalicílico por su juventud",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "La edad no elimina el alto riesgo embólico."
+        },
+        {
+          "key": "d",
+          "text": "Heparina de bajo peso molecular indefinida por ser más segura",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La seguridad aparente no la hace el tratamiento crónico de elección."
+        },
+        {
+          "key": "e",
+          "text": "Warfarina con meta de INR de 2 a 3",
+          "correct": true,
+          "rationale": "En la estenosis mitral moderada a grave los anticoagulantes orales directos no están indicados."
+        },
+        {
+          "key": "f",
+          "text": "Edoxabán por menor sangrado intracraneal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el beneficio en fibrilación no valvular aplica a la valvular."
+        },
+        {
+          "key": "g",
+          "text": "Rivaroxabán por su comodidad",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la comodidad y omite la contraindicación valvular."
+        },
+        {
+          "key": "h",
+          "text": "Apixabán a dosis estándar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es preferido en la fibrilación no valvular, pero aquí la fibrilación es valvular."
+        },
+        {
+          "key": "i",
+          "text": "Dabigatrán como alternativa equivalente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Lo asocia a fibrilación, pero no está indicado en estenosis mitral."
+        },
+        {
+          "key": "j",
+          "text": "Valvuloplastia en lugar de anticoagular",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la válvula y olvida la prevención embólica."
+        }
+      ],
+      "canonical": [
+        "e",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "La fibrilación auricular asociada a estenosis mitral moderada a grave o a prótesis valvular mecánica se considera valvular y tiene un riesgo embólico muy alto. En estos pacientes el anticoagulante de elección es un antagonista de vitamina K, como warfarina o acenocumarina, con meta de INR de 2 a 3 en la estenosis mitral, y mayor en algunas prótesis mecánicas. Los anticoagulantes orales directos no están indicados en estas situaciones porque los estudios no los respaldan y uno mostró más eventos en prótesis mecánicas. En la fibrilación no valvular, incluso con otras valvulopatías, sí se prefieren los anticoagulantes orales directos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la fibrilación auricular"
+      ]
+    },
+    {
+      "key": "mi-01b-cardiologia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "cardiology",
+      "subtopic": "atrial_fibrillation",
+      "vignette": "Hombre de 72 años con palpitaciones intermitentes y fatiga. A la exploración el pulso es irregularmente irregular. El electrocardiograma muestra ausencia de ondas P, línea de base con ondulaciones finas y complejos QRS estrechos con intervalos RR variables.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Taquicardia por reentrada nodal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es regular y de inicio súbito."
+        },
+        {
+          "key": "b",
+          "text": "Taquicardia ventricular",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La palabra taquicardia confunde, pero el QRS es estrecho."
+        },
+        {
+          "key": "c",
+          "text": "Flutter auricular con conducción fija",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El flutter da ondas en sierra y suele tener RR regular."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome de Wolff Parkinson White",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente y daría preexcitación."
+        },
+        {
+          "key": "e",
+          "text": "Bloqueo de rama izquierda",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que toda alteración del electrocardiograma es un bloqueo, aunque el QRS es estrecho."
+        },
+        {
+          "key": "f",
+          "text": "Bloqueo auriculoventricular de segundo grado",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en los RR variables, pero en el bloqueo hay ondas P."
+        },
+        {
+          "key": "g",
+          "text": "Ritmo sinusal con arritmia respiratoria",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No nota la ausencia de ondas P."
+        },
+        {
+          "key": "h",
+          "text": "Taquicardia auricular multifocal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es irregular, pero tiene ondas P de al menos tres morfologías."
+        },
+        {
+          "key": "i",
+          "text": "Fibrilación auricular",
+          "correct": true,
+          "rationale": "Ritmo irregularmente irregular sin ondas P y con QRS estrecho."
+        },
+        {
+          "key": "j",
+          "text": "Extrasístoles auriculares frecuentes",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye por la irregularidad, pero las extrasístoles tienen ondas P."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "La fibrilación auricular es la arritmia sostenida más frecuente y su prevalencia aumenta con la edad. Se diagnostica con un electrocardiograma que muestra intervalos RR irregularmente irregulares, ausencia de ondas P bien definidas y actividad auricular caótica con ondas f finas o gruesas. El QRS suele ser estrecho salvo bloqueo de rama o preexcitación. Clínicamente se manifiesta con palpitaciones, fatiga, disnea o puede ser asintomática, y el pulso es irregular. Una vez documentada se clasifica en paroxística, persistente o permanente, se estima el riesgo embólico con CHA2DS2-VASc y se decide control de frecuencia o de ritmo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la fibrilación auricular"
+      ]
+    }
+  ]
+}

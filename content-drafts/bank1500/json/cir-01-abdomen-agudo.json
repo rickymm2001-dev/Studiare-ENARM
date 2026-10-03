@@ -1,0 +1,1791 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "cir-01-abdomen-agudo-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "appendicitis",
+      "vignette": "Hombre de 22 años con dolor periumbilical de 18 horas que migró a la fosa iliaca derecha, anorexia, náusea y fiebre de 38 °C. Dolor a la descompresión en el punto de McBurney y signo de Rovsing positivo. Leucocitos de 15 000 con neutrofilia.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Apendicitis aguda",
+          "correct": true,
+          "rationale": "Dolor migratorio a fosa iliaca derecha con anorexia, fiebre, signos peritoneales y leucocitosis."
+        },
+        {
+          "key": "b",
+          "text": "Dolor por gases que se quita con un té",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay datos de peritonitis localizada."
+        },
+        {
+          "key": "c",
+          "text": "Infección urinaria",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los signos peritoneales."
+        },
+        {
+          "key": "d",
+          "text": "Enfermedad de Crohn ileal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tiene evolución crónica."
+        },
+        {
+          "key": "e",
+          "text": "Cólico renoureteral derecho",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da dolor tipo cólico irradiado a genitales sin signos peritoneales."
+        },
+        {
+          "key": "f",
+          "text": "Torsión testicular",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Daría dolor escrotal."
+        },
+        {
+          "key": "g",
+          "text": "Diverticulitis derecha",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es rara a esta edad."
+        },
+        {
+          "key": "h",
+          "text": "Gastroenteritis aguda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la migración del dolor ni los signos peritoneales."
+        },
+        {
+          "key": "i",
+          "text": "Colecistitis aguda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El dolor estaría en hipocondrio derecho."
+        },
+        {
+          "key": "j",
+          "text": "Adenitis mesentérica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es más común en niños tras infección viral."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "La apendicitis aguda es la causa quirúrgica más frecuente de abdomen agudo. Se debe a la obstrucción de la luz apendicular, generalmente por fecalito o hiperplasia linfoide, con proliferación bacteriana, isquemia y perforación. La secuencia clásica de Murphy es dolor periumbilical o epigástrico que migra a la fosa iliaca derecha, anorexia, náusea o vómito, fiebre y leucocitosis. Los signos de McBurney, Rovsing, psoas, obturador y Blumberg apoyan el diagnóstico. La escala de Alvarado estima la probabilidad. El tratamiento es la apendicectomía, preferentemente laparoscópica, con antibiótico profiláctico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de apendicitis aguda"
+      ]
+    },
+    {
+      "key": "cir-01-abdomen-agudo-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "appendicitis",
+      "vignette": "Mujer de 26 años con dolor en fosa iliaca derecha de 12 horas, náusea y febrícula. Escala de Alvarado de 6. Prueba de embarazo negativa. Exploración ginecológica sin hallazgos claros.",
+      "prompt": "¿Cuál es el estudio de imagen inicial más adecuado?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Serie esofagogastroduodenal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es útil."
+        },
+        {
+          "key": "b",
+          "text": "Colonoscopia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "c",
+          "text": "Ultrasonido abdominal y pélvico",
+          "correct": true,
+          "rationale": "Evalúa el apéndice y descarta causas ginecológicas sin radiación."
+        },
+        {
+          "key": "d",
+          "text": "Esperar a que el dolor sea más intenso para estudiarla",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Aumenta el riesgo de perforación."
+        },
+        {
+          "key": "e",
+          "text": "Radiografía simple de abdomen",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene baja sensibilidad para apendicitis."
+        },
+        {
+          "key": "f",
+          "text": "Resonancia magnética como primer estudio en todas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se reserva para embarazadas con ultrasonido no concluyente."
+        },
+        {
+          "key": "g",
+          "text": "Ningún estudio y alta con analgésico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El riesgo es intermedio."
+        },
+        {
+          "key": "h",
+          "text": "Laparotomía exploradora inmediata",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La escala es intermedia y la imagen ayuda."
+        },
+        {
+          "key": "i",
+          "text": "Gammagrama con leucocitos marcados",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "j",
+          "text": "Examen general de orina como prueba definitiva",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No confirma apendicitis."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "En pacientes con sospecha de apendicitis y probabilidad intermedia la imagen mejora la precisión diagnóstica. En mujeres jóvenes y niños el ultrasonido es el estudio inicial por no emitir radiación y permitir evaluar causas ginecológicas como quistes, torsión ovárica o embarazo ectópico. La tomografía con contraste tiene mayor sensibilidad y especificidad y se usa en adultos cuando el ultrasonido no es concluyente o como estudio inicial en adultos mayores. En embarazadas, si el ultrasonido no es concluyente se usa resonancia magnética. Con alta probabilidad clínica en hombres jóvenes puede procederse directamente a cirugía.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de apendicitis aguda"
+      ]
+    },
+    {
+      "key": "cir-01-abdomen-agudo-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "appendicitis",
+      "vignette": "Hombre de 30 años con apendicitis aguda no complicada confirmada por tomografía, sin perforación ni absceso. Estable y sin comorbilidades.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Analgésicos y observación en casa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No trata la infección."
+        },
+        {
+          "key": "b",
+          "text": "Laparotomía media amplia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "c",
+          "text": "Apendicectomía laparoscópica con antibiótico profiláctico",
+          "correct": true,
+          "rationale": "Es el tratamiento estándar con menor dolor y recuperación más rápida."
+        },
+        {
+          "key": "d",
+          "text": "Cirugía diferida 8 semanas en todos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se reserva para plastrón o absceso."
+        },
+        {
+          "key": "e",
+          "text": "Laxantes para limpiar el intestino",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Están contraindicados."
+        },
+        {
+          "key": "f",
+          "text": "Antibióticos solos como tratamiento definitivo en todos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es una alternativa en casos seleccionados con riesgo de recurrencia."
+        },
+        {
+          "key": "g",
+          "text": "Enemas evacuantes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Están contraindicados."
+        },
+        {
+          "key": "h",
+          "text": "Retrasar la cirugía hasta que aparezca peritonitis",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Aumenta las complicaciones."
+        },
+        {
+          "key": "i",
+          "text": "Colectomía derecha",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "j",
+          "text": "Drenaje percutáneo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se usa en abscesos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "El tratamiento estándar de la apendicitis aguda es la apendicectomía, que puede ser abierta o laparoscópica. La vía laparoscópica se asocia a menos dolor, menor infección de herida, estancia más corta y regreso más rápido a las actividades, y permite explorar la cavidad, útil en mujeres con duda diagnóstica. Se administra antibiótico profiláctico antes de la cirugía y se continúa solo si hay perforación. El tratamiento con antibióticos sin cirugía es una opción en apendicitis no complicada seleccionada, aunque con riesgo de recurrencia de 25 a 40%.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de apendicitis aguda"
+      ]
+    },
+    {
+      "key": "cir-01-abdomen-agudo-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "appendicitis",
+      "vignette": "Hombre de 35 años con dolor en fosa iliaca derecha de 6 días, fiebre persistente y una masa palpable dolorosa en la fosa iliaca derecha. La tomografía muestra un absceso periapendicular de 5 cm bien delimitado. Hemodinámicamente estable.",
+      "prompt": "¿Cuál es la conducta más apropiada para esta complicación?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Apendicectomía de urgencia inmediata",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene mayor morbilidad con el proceso inflamatorio avanzado."
+        },
+        {
+          "key": "b",
+          "text": "No dar seguimiento tras resolverse",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Se recomienda colonoscopia en mayores por el riesgo de tumor."
+        },
+        {
+          "key": "c",
+          "text": "Colectomía derecha de urgencia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "d",
+          "text": "Antifúngicos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es una infección por hongos."
+        },
+        {
+          "key": "e",
+          "text": "Hemicolectomía con ileostomía",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "f",
+          "text": "Egreso con antibióticos orales sin drenaje",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El absceso de 5 cm requiere drenaje."
+        },
+        {
+          "key": "g",
+          "text": "Antibióticos intravenosos y drenaje percutáneo del absceso, con apendicectomía de intervalo opcional",
+          "correct": true,
+          "rationale": "El absceso bien delimitado se maneja inicialmente sin cirugía."
+        },
+        {
+          "key": "h",
+          "text": "Solo analgésicos y observación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No trata la infección."
+        },
+        {
+          "key": "i",
+          "text": "Colonoscopia diagnóstica inmediata",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Está contraindicada en fase aguda."
+        },
+        {
+          "key": "j",
+          "text": "Compresas calientes para desinflamar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No tratan el absceso."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "g"
+      ],
+      "explanation": "La apendicitis complicada incluye perforación con peritonitis, plastrón y absceso. Los pacientes con absceso periapendicular bien delimitado y estables se manejan con antibióticos intravenosos y drenaje percutáneo guiado por imagen si mide más de 3 a 4 cm, ya que la cirugía temprana en un proceso inflamatorio extenso tiene más complicaciones. La apendicectomía de intervalo, de 6 a 8 semanas después, es opcional. En mayores de 40 años se recomienda colonoscopia para descartar cáncer de colon o tumor apendicular. La peritonitis generalizada requiere cirugía urgente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de apendicitis aguda"
+      ]
+    },
+    {
+      "key": "cir-01-abdomen-agudo-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "appendicitis",
+      "vignette": "Hombre de 20 años con dolor abdominal. La escala de Alvarado suma dolor migratorio 1, anorexia 1, náusea 1, dolor en fosa iliaca derecha 2, rebote 1, fiebre 1, leucocitosis 2 y neutrofilia 1.",
+      "prompt": "¿Qué indica esta puntuación de Alvarado?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Requiere tomografía obligatoria antes de cualquier decisión en hombres jóvenes",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Con puntuación alta puede operarse."
+        },
+        {
+          "key": "b",
+          "text": "Indica alta y seguimiento ambulatorio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La probabilidad es alta."
+        },
+        {
+          "key": "c",
+          "text": "Las escalas no sirven en urgencias",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Ayudan a estratificar el riesgo."
+        },
+        {
+          "key": "d",
+          "text": "Puntuación de 4 con baja probabilidad",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El cálculo es incorrecto."
+        },
+        {
+          "key": "e",
+          "text": "Indica cólico renal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No evalúa cólico renal."
+        },
+        {
+          "key": "f",
+          "text": "Indica pancreatitis",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No evalúa pancreatitis."
+        },
+        {
+          "key": "g",
+          "text": "Puntuación de 10, probabilidad muy alta de apendicitis que justifica valoración quirúrgica",
+          "correct": true,
+          "rationale": "Una puntuación de 7 o más indica alta probabilidad."
+        },
+        {
+          "key": "h",
+          "text": "Indica cáncer de colon",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No evalúa cáncer."
+        },
+        {
+          "key": "i",
+          "text": "Puntuación de 6 dudosa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El cálculo es incorrecto."
+        },
+        {
+          "key": "j",
+          "text": "Indica gastroenteritis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La escala no evalúa gastroenteritis."
+        }
+      ],
+      "canonical": [
+        "b",
+        "d",
+        "g",
+        "j"
+      ],
+      "explanation": "La escala de Alvarado asigna puntos a dolor migratorio, anorexia, náusea o vómito, dolor en fosa iliaca derecha que vale 2, rebote, fiebre mayor de 37.3, leucocitosis mayor de 10 000 que vale 2 y desviación a la izquierda. El máximo es 10. Una puntuación de 1 a 4 indica baja probabilidad, de 5 a 6 probabilidad intermedia que se beneficia de imagen, y de 7 a 10 alta probabilidad. Las escalas como Alvarado, AIR o la pediátrica ayudan a reducir laparotomías negativas y el uso innecesario de tomografía.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de apendicitis aguda"
+      ]
+    },
+    {
+      "key": "cir-01-abdomen-agudo-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "appendicitis",
+      "vignette": "Mujer de 28 años con embarazo de 26 semanas que presenta dolor en el flanco derecho, a nivel del ombligo, de 24 horas con náusea, anorexia y febrícula. Leucocitos de 16 000. El útero no es doloroso y no hay sangrado ni contracciones.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Desprendimiento de placenta",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay sangrado ni útero doloroso."
+        },
+        {
+          "key": "b",
+          "text": "Molestias normales del embarazo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay datos de abdomen agudo."
+        },
+        {
+          "key": "c",
+          "text": "Trabajo de parto pretérmino",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay contracciones ni dolor uterino."
+        },
+        {
+          "key": "d",
+          "text": "Colecistitis aguda",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es posible, pero la anorexia y el cuadro orientan a apendicitis."
+        },
+        {
+          "key": "e",
+          "text": "Leucocitosis normal del embarazo sin patología",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El cuadro clínico sugiere apendicitis."
+        },
+        {
+          "key": "f",
+          "text": "Pielonefritis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Debe considerarse, pero no hay síntomas urinarios ni fiebre alta."
+        },
+        {
+          "key": "g",
+          "text": "Apendicitis aguda con apéndice desplazado por el útero",
+          "correct": true,
+          "rationale": "El útero desplaza el apéndice hacia arriba y lateral en el embarazo."
+        },
+        {
+          "key": "h",
+          "text": "Dolor de ligamento redondo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No da fiebre ni anorexia."
+        },
+        {
+          "key": "i",
+          "text": "Degeneración roja de mioma",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El útero no es doloroso."
+        },
+        {
+          "key": "j",
+          "text": "Gastroenteritis",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el dolor localizado persistente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "g"
+      ],
+      "explanation": "La apendicitis es la causa no obstétrica más frecuente de cirugía abdominal en el embarazo. El útero desplaza el apéndice hacia arriba y lateral, por lo que el dolor puede localizarse en el flanco o el hipocondrio derecho en el segundo y tercer trimestre. La leucocitosis fisiológica del embarazo dificulta la interpretación. El ultrasonido es el estudio inicial y la resonancia magnética sin gadolinio es útil si no es concluyente. El retraso en el diagnóstico aumenta la perforación, que eleva de forma importante la pérdida fetal. El tratamiento es apendicectomía, laparoscópica o abierta, en cualquier trimestre.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de apendicitis aguda"
+      ]
+    },
+    {
+      "key": "cir-01-abdomen-agudo-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "appendicitis",
+      "vignette": "Hombre de 78 años con diabetes que presenta dolor abdominal difuso leve de 4 días, hiporexia y confusión. Temperatura de 37.4 °C. Abdomen con dolor leve en fosa iliaca derecha y defensa mínima. Leucocitos de 11 000.",
+      "prompt": "¿Cuál es el diagnóstico que debe considerarse a pesar de la presentación atípica?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Neumonía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay datos respiratorios."
+        },
+        {
+          "key": "b",
+          "text": "Estreñimiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la defensa ni la evolución."
+        },
+        {
+          "key": "c",
+          "text": "Infección urinaria con delirium",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Debe considerarse, pero el dolor en fosa iliaca derecha orienta a apendicitis."
+        },
+        {
+          "key": "d",
+          "text": "Los ancianos no tienen apendicitis",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Ocurre y es más grave."
+        },
+        {
+          "key": "e",
+          "text": "Gastroenteritis viral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el dolor localizado."
+        },
+        {
+          "key": "f",
+          "text": "Cáncer de colon sin complicación aguda",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede coexistir, pero no explica el cuadro agudo."
+        },
+        {
+          "key": "g",
+          "text": "Apendicitis aguda, posiblemente complicada",
+          "correct": true,
+          "rationale": "En adultos mayores la apendicitis se presenta de forma atípica y se perfora con frecuencia."
+        },
+        {
+          "key": "h",
+          "text": "Hipoglucemia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el dolor abdominal."
+        },
+        {
+          "key": "i",
+          "text": "Hernia hiatal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "j",
+          "text": "Demencia de inicio reciente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El delirium sugiere una enfermedad aguda."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "En adultos mayores la apendicitis suele presentarse de forma atípica, con dolor leve o difuso, fiebre baja o ausente, leucocitosis discreta y alteraciones del estado mental. Por ello el diagnóstico se retrasa y la tasa de perforación es mucho mayor, hasta 50 a 70%, con mayor mortalidad. En este grupo la tomografía es el estudio de elección por su alta precisión y porque permite descartar diagnósticos alternativos como diverticulitis o cáncer de colon. Ante una apendicitis en mayores de 40 años se recomienda colonoscopia posterior. El umbral de sospecha debe ser bajo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de apendicitis aguda"
+      ]
+    },
+    {
+      "key": "cir-01-abdomen-agudo-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "bowel_obstruction",
+      "vignette": "Mujer de 60 años con antecedente de histerectomía abierta hace 10 años que presenta dolor abdominal tipo cólico, distensión, vómito y ausencia de evacuaciones y canalización de gases de 2 días. La radiografía muestra asas de intestino delgado dilatadas con niveles hidroaéreos en escalera.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Íleo paralítico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay cirugía reciente ni causa metabólica y el dolor es cólico."
+        },
+        {
+          "key": "b",
+          "text": "Vólvulo de sigmoides",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da imagen de grano de café con colon dilatado."
+        },
+        {
+          "key": "c",
+          "text": "Pancreatitis aguda",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica los niveles hidroaéreos en escalera."
+        },
+        {
+          "key": "d",
+          "text": "Estreñimiento crónico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el vómito ni los niveles."
+        },
+        {
+          "key": "e",
+          "text": "Gastroenteritis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la ausencia de gases ni los niveles en escalera."
+        },
+        {
+          "key": "f",
+          "text": "Isquemia mesentérica sin oclusión",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da dolor desproporcionado."
+        },
+        {
+          "key": "g",
+          "text": "Inflamación por comer mucho",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una obstrucción mecánica."
+        },
+        {
+          "key": "h",
+          "text": "Oclusión intestinal de intestino delgado por bridas",
+          "correct": true,
+          "rationale": "Cirugía abdominal previa con dolor cólico, distensión, vómito y niveles hidroaéreos."
+        },
+        {
+          "key": "i",
+          "text": "Cáncer de ovario recurrente",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable que las bridas."
+        },
+        {
+          "key": "j",
+          "text": "Pseudoobstrucción colónica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Afecta el colon."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "h"
+      ],
+      "explanation": "La oclusión intestinal de intestino delgado se debe con mayor frecuencia a adherencias o bridas posoperatorias, seguidas de hernias y tumores. Se manifiesta con dolor abdominal tipo cólico, distensión, vómito, que es más precoz en las obstrucciones altas, y ausencia de evacuaciones y gases. A la exploración hay distensión y ruidos de lucha. La radiografía muestra asas de delgado dilatadas con niveles hidroaéreos en escalera. La tomografía confirma el diagnóstico, localiza el sitio de transición y detecta signos de estrangulación, que requieren cirugía urgente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de oclusión intestinal"
+      ]
+    },
+    {
+      "key": "cir-01-abdomen-agudo-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "bowel_obstruction",
+      "vignette": "Hombre de 55 años con oclusión intestinal parcial por bridas de 24 horas. Está estable, sin fiebre, sin signos peritoneales ni datos de estrangulación en la tomografía. Lactato normal.",
+      "prompt": "¿Cuál es el tratamiento inicial?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ayuno, sonda nasogástrica a derivación, líquidos intravenosos con corrección de electrolitos y vigilancia, con contraste hidrosoluble",
+          "correct": true,
+          "rationale": "La mayoría de las oclusiones por bridas sin estrangulación se resuelven sin cirugía."
+        },
+        {
+          "key": "b",
+          "text": "Colonoscopia descompresiva",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es para obstrucción colónica."
+        },
+        {
+          "key": "c",
+          "text": "Masaje abdominal para mover el intestino",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "d",
+          "text": "Egreso con analgésicos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Requiere hospitalización."
+        },
+        {
+          "key": "e",
+          "text": "Antibióticos como tratamiento principal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No resuelven la obstrucción."
+        },
+        {
+          "key": "f",
+          "text": "No vigilar los signos de estrangulación",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pueden aparecer en la evolución."
+        },
+        {
+          "key": "g",
+          "text": "Enema de bario",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede ser peligroso."
+        },
+        {
+          "key": "h",
+          "text": "Laparotomía de urgencia en todos los casos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay datos de estrangulación."
+        },
+        {
+          "key": "i",
+          "text": "Laxantes orales para destapar el intestino",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Están contraindicados."
+        },
+        {
+          "key": "j",
+          "text": "Alimentación oral para estimular el intestino",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Empeora la distensión."
+        }
+      ],
+      "canonical": [
+        "a",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "El manejo inicial de la oclusión intestinal por bridas sin datos de estrangulación es conservador. Incluye ayuno, descompresión con sonda nasogástrica, líquidos intravenosos, corrección de electrolitos, analgesia y vigilancia clínica estrecha. La administración de contraste hidrosoluble oral tiene valor diagnóstico y terapéutico, ya que si llega al colon en 24 horas predice la resolución. La mayoría se resuelve en 48 a 72 horas. Se indica cirugía si aparecen fiebre, taquicardia, dolor continuo, signos peritoneales, leucocitosis, lactato elevado o datos de isquemia en la tomografía, o si no se resuelve.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de oclusión intestinal"
+      ]
+    },
+    {
+      "key": "cir-01-abdomen-agudo-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "bowel_obstruction",
+      "vignette": "Hombre de 75 años con estreñimiento crónico que presenta distensión abdominal masiva, dolor y ausencia de evacuaciones de 3 días. La radiografía muestra una asa colónica muy dilatada en forma de grano de café que se dirige del cuadrante inferior izquierdo hacia arriba.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Íleo paralítico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la imagen en grano de café."
+        },
+        {
+          "key": "b",
+          "text": "Pseudoobstrucción colónica aguda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No da la imagen en grano de café."
+        },
+        {
+          "key": "c",
+          "text": "Vólvulo de sigmoides",
+          "correct": true,
+          "rationale": "Distensión masiva con imagen en grano de café en un adulto mayor con estreñimiento."
+        },
+        {
+          "key": "d",
+          "text": "Impactación fecal simple",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la imagen."
+        },
+        {
+          "key": "e",
+          "text": "Cáncer de colon obstructivo sin vólvulo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es posible, pero la imagen es típica de vólvulo."
+        },
+        {
+          "key": "f",
+          "text": "Gases acumulados sin importancia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia."
+        },
+        {
+          "key": "g",
+          "text": "Megacolon tóxico por colitis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se asocia a colitis grave con fiebre."
+        },
+        {
+          "key": "h",
+          "text": "Vólvulo de ciego",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La asa se dirige hacia el cuadrante superior izquierdo desde la derecha."
+        },
+        {
+          "key": "i",
+          "text": "Diverticulitis aguda",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la distensión masiva con esta imagen."
+        },
+        {
+          "key": "j",
+          "text": "Oclusión por bridas de intestino delgado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da niveles en escalera de delgado."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "El vólvulo de sigmoides es la torsión del colon sigmoides sobre su mesenterio, más frecuente en adultos mayores con estreñimiento crónico, sigmoides redundante, enfermedades neurológicas y en zonas con dietas ricas en fibra. Causa obstrucción en asa cerrada con distensión masiva. La radiografía muestra el signo del grano de café o de la U invertida, y la tomografía el signo del remolino. Sin necrosis ni perforación, el tratamiento inicial es la devolvulación endoscópica con sigmoidoscopia y sonda rectal, seguida de sigmoidectomía electiva por la alta recurrencia. Con necrosis o perforación se realiza cirugía urgente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de oclusión intestinal"
+      ]
+    },
+    {
+      "key": "cir-01-abdomen-agudo-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "bowel_obstruction",
+      "vignette": "Hombre de 62 años con oclusión intestinal por bridas en manejo conservador desde hace 12 horas. Ahora presenta dolor continuo intenso, fiebre de 38.6 °C, taquicardia de 120, rebote y lactato de 4.5 mmol/L.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Evolución esperada del manejo conservador",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los datos indican complicación."
+        },
+        {
+          "key": "b",
+          "text": "Infección urinaria por la sonda",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el abdomen agudo."
+        },
+        {
+          "key": "c",
+          "text": "Deshidratación como única causa de la taquicardia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Hay signos peritoneales."
+        },
+        {
+          "key": "d",
+          "text": "Ansiedad por la hospitalización",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Hay datos objetivos de isquemia."
+        },
+        {
+          "key": "e",
+          "text": "Íleo paralítico por medicamentos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica los signos peritoneales."
+        },
+        {
+          "key": "f",
+          "text": "Estrangulación con isquemia intestinal",
+          "correct": true,
+          "rationale": "Dolor continuo, fiebre, taquicardia, signos peritoneales y lactato elevado indican compromiso vascular."
+        },
+        {
+          "key": "g",
+          "text": "Pancreatitis aguda",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "h",
+          "text": "El dolor aumenta antes de que se destape el intestino",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una señal de alarma."
+        },
+        {
+          "key": "i",
+          "text": "Neumonía por aspiración",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica los signos abdominales."
+        },
+        {
+          "key": "j",
+          "text": "Gastroenteritis agregada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica el cuadro."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "La estrangulación es la complicación más grave de la oclusión intestinal y ocurre cuando se compromete la irrigación del asa, con isquemia, necrosis y perforación. Es más frecuente en hernias, obstrucciones en asa cerrada y vólvulos. Se sospecha con dolor continuo e intenso, fiebre, taquicardia, signos peritoneales, leucocitosis, acidosis metabólica y lactato elevado. La tomografía puede mostrar engrosamiento de la pared, falta de realce y líquido libre. Requiere cirugía urgente para liberar la obstrucción y resecar el intestino no viable. El retraso aumenta la mortalidad de forma importante.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de oclusión intestinal"
+      ]
+    },
+    {
+      "key": "cir-01-abdomen-agudo-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "bowel_obstruction",
+      "vignette": "Mujer de 72 años con cambios del hábito intestinal y pérdida de peso de 4 meses que presenta distensión progresiva, dolor cólico y ausencia de evacuaciones de 3 días. La tomografía muestra colon dilatado hasta un engrosamiento circunferencial en el sigmoides con válvula ileocecal competente y ciego de 11 cm.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Oclusión de colon por cáncer colorrectal con riesgo de perforación cecal",
+          "correct": true,
+          "rationale": "Masa sigmoidea obstructiva con válvula competente y ciego muy dilatado."
+        },
+        {
+          "key": "b",
+          "text": "Diverticulitis no complicada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la obstrucción con pérdida de peso."
+        },
+        {
+          "key": "c",
+          "text": "Vólvulo de sigmoides",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay torsión, sino una masa."
+        },
+        {
+          "key": "d",
+          "text": "Inflamación por la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una masa."
+        },
+        {
+          "key": "e",
+          "text": "Íleo paralítico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Hay un punto de obstrucción."
+        },
+        {
+          "key": "f",
+          "text": "Estreñimiento crónico simple",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la masa ni la dilatación."
+        },
+        {
+          "key": "g",
+          "text": "Pseudoobstrucción colónica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Hay una causa mecánica."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome de colon irritable",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la obstrucción."
+        },
+        {
+          "key": "i",
+          "text": "Oclusión de intestino delgado por bridas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El colon está dilatado hasta la masa."
+        },
+        {
+          "key": "j",
+          "text": "Colitis isquémica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la masa circunferencial."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "El cáncer colorrectal es la causa más frecuente de oclusión del colon en adultos, seguido del vólvulo y la diverticulitis. Se sospecha con cambios del hábito intestinal, pérdida de peso, anemia y distensión progresiva. Cuando la válvula ileocecal es competente se forma una obstrucción en asa cerrada, con distensión progresiva del ciego. Un ciego mayor de 10 a 12 cm tiene riesgo alto de perforación. El manejo incluye reanimación y descompresión urgente con cirugía, como resección con colostomía, o con colocación de endoprótesis como puente a la cirugía electiva.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de oclusión intestinal"
+      ]
+    },
+    {
+      "key": "cir-01-abdomen-agudo-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "bowel_obstruction",
+      "vignette": "Mujer de 68 años con dolor abdominal cólico intermitente, vómito y distensión. La radiografía muestra oclusión de intestino delgado, aire en la vía biliar y una imagen cálcica en la fosa iliaca derecha. Tiene antecedente de colecistitis de repetición no operada.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Oclusión por bridas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No tiene cirugías previas y hay neumobilia."
+        },
+        {
+          "key": "b",
+          "text": "Vólvulo de sigmoides",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la neumobilia."
+        },
+        {
+          "key": "c",
+          "text": "Gases en la vesícula sin importancia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Indican fístula bilioentérica."
+        },
+        {
+          "key": "d",
+          "text": "Pancreatitis biliar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la oclusión con neumobilia."
+        },
+        {
+          "key": "e",
+          "text": "Apendicitis con fecalito",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la neumobilia."
+        },
+        {
+          "key": "f",
+          "text": "Invaginación intestinal del adulto",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la neumobilia."
+        },
+        {
+          "key": "g",
+          "text": "Cáncer de vesícula obstructivo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica el cálculo ectópico."
+        },
+        {
+          "key": "h",
+          "text": "Litiasis renal derecha",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la neumobilia."
+        },
+        {
+          "key": "i",
+          "text": "Íleo biliar",
+          "correct": true,
+          "rationale": "Tríada de Rigler con oclusión intestinal, neumobilia y cálculo ectópico."
+        },
+        {
+          "key": "j",
+          "text": "Colangitis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la oclusión intestinal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "El íleo biliar es una causa poco frecuente de oclusión intestinal, más común en mujeres de edad avanzada con colelitiasis de larga evolución. Un cálculo grande pasa al intestino a través de una fístula colecistoduodenal y se impacta, generalmente en el íleon terminal. La tríada de Rigler en la radiografía o tomografía incluye oclusión de intestino delgado, neumobilia y cálculo ectópico. El tratamiento es la enterolitotomía para extraer el cálculo, y la reparación de la fístula con colecistectomía se valora según el estado del paciente, generalmente de forma diferida.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de oclusión intestinal"
+      ]
+    },
+    {
+      "key": "cir-01-abdomen-agudo-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "hollow_viscus_perforation",
+      "vignette": "Hombre de 50 años con antecedente de consumo crónico de antiinflamatorios por artrosis que presenta dolor epigástrico súbito, intenso y en puñalada que se generalizó a todo el abdomen. Abdomen en tabla con rebote. La radiografía de tórax de pie muestra aire libre bajo los hemidiafragmas.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Apendicitis aguda no complicada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el neumoperitoneo."
+        },
+        {
+          "key": "b",
+          "text": "Aneurisma aórtico roto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No da neumoperitoneo."
+        },
+        {
+          "key": "c",
+          "text": "Infarto agudo de miocardio inferior",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica el neumoperitoneo."
+        },
+        {
+          "key": "d",
+          "text": "Colecistitis aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No da neumoperitoneo ni abdomen en tabla generalizado."
+        },
+        {
+          "key": "e",
+          "text": "Úlcera péptica perforada",
+          "correct": true,
+          "rationale": "Dolor súbito con abdomen en tabla y neumoperitoneo en un consumidor de antiinflamatorios."
+        },
+        {
+          "key": "f",
+          "text": "Gastritis aguda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el abdomen en tabla."
+        },
+        {
+          "key": "g",
+          "text": "Agruras fuertes que pasan con antiácidos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia quirúrgica."
+        },
+        {
+          "key": "h",
+          "text": "Isquemia mesentérica sin perforación",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el aire libre."
+        },
+        {
+          "key": "i",
+          "text": "Cólico biliar",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No da peritonitis."
+        },
+        {
+          "key": "j",
+          "text": "Pancreatitis aguda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No da neumoperitoneo."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "e",
+        "j"
+      ],
+      "explanation": "La perforación de una úlcera péptica es una urgencia quirúrgica. Sus principales factores de riesgo son el consumo de antiinflamatorios no esteroideos, la infección por Helicobacter pylori y el tabaquismo. Se manifiesta con dolor epigástrico súbito e intenso que se generaliza, abdomen en tabla, rebote y, en ocasiones, choque. La radiografía de tórax de pie muestra neumoperitoneo en la mayoría, y la tomografía es más sensible. El tratamiento es reanimación, antibióticos, inhibidor de bomba de protones intravenoso y cirugía con cierre de la perforación con parche de epiplón, laparoscópica o abierta. Después se erradica Helicobacter.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de úlcera péptica complicada"
+      ]
+    },
+    {
+      "key": "cir-01-abdomen-agudo-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "hollow_viscus_perforation",
+      "vignette": "Hombre de 45 años con dolor abdominal súbito y generalizado, abdomen rígido y taquicardia. Se sospecha perforación de víscera hueca. Está hemodinámicamente estable.",
+      "prompt": "¿Cuál es el estudio inicial más accesible para detectar neumoperitoneo?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Serie esofagogastroduodenal con bario",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El bario en peritoneo es peligroso."
+        },
+        {
+          "key": "b",
+          "text": "Radiografía de tórax de pie",
+          "correct": true,
+          "rationale": "Detecta aire libre subdiafragmático en la mayoría de las perforaciones."
+        },
+        {
+          "key": "c",
+          "text": "Gammagrama hepatobiliar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No detecta perforación."
+        },
+        {
+          "key": "d",
+          "text": "Amilasa sérica como diagnóstico de perforación",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No confirma perforación."
+        },
+        {
+          "key": "e",
+          "text": "Angiografía mesentérica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "f",
+          "text": "Ultrasonido como estudio definitivo para aire libre",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La radiografía o tomografía son más útiles."
+        },
+        {
+          "key": "g",
+          "text": "Colonoscopia urgente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Está contraindicada en perforación."
+        },
+        {
+          "key": "h",
+          "text": "Esperar a ver si el dolor cede",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia."
+        },
+        {
+          "key": "i",
+          "text": "Endoscopia superior urgente",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede empeorar la perforación."
+        },
+        {
+          "key": "j",
+          "text": "Resonancia magnética como primer estudio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es el estudio inicial."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "i"
+      ],
+      "explanation": "Ante sospecha de perforación de víscera hueca, la radiografía de tórax de pie o en decúbito lateral izquierdo es el estudio inicial más accesible y detecta neumoperitoneo en 70 a 80% de los casos. Debe permanecer el paciente erguido o en decúbito unos minutos antes. La tomografía de abdomen es más sensible, detecta cantidades pequeñas de aire, localiza el sitio de perforación y valora otras causas. La endoscopia, la colonoscopia y los estudios con bario están contraindicados ante sospecha de perforación. El hallazgo de neumoperitoneo con peritonitis indica cirugía urgente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de úlcera péptica complicada"
+      ]
+    },
+    {
+      "key": "cir-01-abdomen-agudo-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "hollow_viscus_perforation",
+      "vignette": "Mujer de 70 años con estreñimiento crónico que presenta dolor en la fosa iliaca izquierda de 3 días, fiebre de 38.5 °C y leucocitosis. La tomografía muestra engrosamiento del sigmoides con divertículos, inflamación de la grasa y una colección de 3 cm con aire.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Diverticulitis aguda complicada con absceso pericólico",
+          "correct": true,
+          "rationale": "Inflamación diverticular con colección y aire, clasificación de Hinchey I a II."
+        },
+        {
+          "key": "b",
+          "text": "Apendicitis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El dolor es en la fosa iliaca izquierda."
+        },
+        {
+          "key": "c",
+          "text": "Cáncer de sigmoides perforado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Debe descartarse después, pero el cuadro es típico de diverticulitis."
+        },
+        {
+          "key": "d",
+          "text": "Colitis isquémica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la colección con divertículos."
+        },
+        {
+          "key": "e",
+          "text": "Vólvulo de sigmoides",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica los divertículos inflamados."
+        },
+        {
+          "key": "f",
+          "text": "Infección urinaria",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la colección."
+        },
+        {
+          "key": "g",
+          "text": "Hernia inguinal incarcerada",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los hallazgos."
+        },
+        {
+          "key": "h",
+          "text": "Enfermedad de Crohn",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente a esta edad."
+        },
+        {
+          "key": "i",
+          "text": "Inflamación por estreñimiento sin importancia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una complicación."
+        },
+        {
+          "key": "j",
+          "text": "Diverticulitis no complicada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Hay una colección."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "La diverticulitis aguda es la inflamación de un divertículo, generalmente en el sigmoides, por obstrucción y microperforación. Se manifiesta con dolor en la fosa iliaca izquierda, fiebre y leucocitosis. La tomografía confirma el diagnóstico y clasifica la gravedad con la escala de Hinchey. La diverticulitis no complicada se trata de forma ambulatoria, con o sin antibióticos. Los abscesos pequeños se tratan con antibióticos y los mayores de 3 a 4 cm con drenaje percutáneo. La peritonitis purulenta o fecal requiere cirugía urgente, como el procedimiento de Hartmann o la resección con anastomosis. Tras el episodio se realiza colonoscopia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de enfermedad diverticular"
+      ]
+    },
+    {
+      "key": "cir-01-abdomen-agudo-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "hollow_viscus_perforation",
+      "vignette": "Hombre de 65 años con diverticulitis perforada, peritonitis fecal generalizada, presión de 85/50 mmHg y lactato elevado tras reanimación inicial.",
+      "prompt": "¿Cuál es el tratamiento quirúrgico de elección en este contexto?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "No operar por la edad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El control de la fuente salva la vida."
+        },
+        {
+          "key": "b",
+          "text": "Resección con anastomosis primaria sin estoma en un paciente en choque",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Tiene alto riesgo de fuga."
+        },
+        {
+          "key": "c",
+          "text": "Drenaje percutáneo y antibióticos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es suficiente en peritonitis fecal."
+        },
+        {
+          "key": "d",
+          "text": "Enemas para limpiar el colon",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Están contraindicados."
+        },
+        {
+          "key": "e",
+          "text": "Antibióticos orales y egreso",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es una urgencia vital."
+        },
+        {
+          "key": "f",
+          "text": "Esperar a estabilizar por completo con antibióticos días antes de operar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El control de la fuente es urgente."
+        },
+        {
+          "key": "g",
+          "text": "Colonoscopia descompresiva",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Está contraindicada."
+        },
+        {
+          "key": "h",
+          "text": "Lavado laparoscópico como único tratamiento en peritonitis fecal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es adecuado en peritonitis fecal."
+        },
+        {
+          "key": "i",
+          "text": "Laparotomía con resección del sigmoides y colostomía terminal con cierre del recto, procedimiento de Hartmann",
+          "correct": true,
+          "rationale": "Es el procedimiento de elección en peritonitis fecal con inestabilidad."
+        },
+        {
+          "key": "j",
+          "text": "Colectomía total con ileorrectoanastomosis",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es excesiva."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "i"
+      ],
+      "explanation": "La peritonitis fecal por diverticulitis perforada, Hinchey IV, es una urgencia con alta mortalidad. Requiere reanimación, antibióticos de amplio espectro y control de la fuente infecciosa con cirugía urgente. En pacientes inestables o con comorbilidades graves, el procedimiento de Hartmann, que reseca el segmento perforado con colostomía terminal y cierre del muñón rectal, es el de elección. En pacientes estables y seleccionados puede realizarse resección con anastomosis primaria con o sin ileostomía de protección. La reconexión del tránsito tras Hartmann se realiza meses después.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de enfermedad diverticular"
+      ]
+    },
+    {
+      "key": "cir-01-abdomen-agudo-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "hollow_viscus_perforation",
+      "vignette": "Hombre de 74 años con fibrilación auricular sin anticoagulación que presenta dolor abdominal difuso súbito muy intenso, desproporcionado a una exploración abdominal casi normal. Lactato de 5 mmol/L.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cólico renal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el lactato elevado."
+        },
+        {
+          "key": "b",
+          "text": "Gastroenteritis aguda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el dolor desproporcionado ni el lactato."
+        },
+        {
+          "key": "c",
+          "text": "Isquemia mesentérica aguda por embolia de la arteria mesentérica superior",
+          "correct": true,
+          "rationale": "Dolor desproporcionado a la exploración en un paciente con fibrilación auricular y lactato elevado."
+        },
+        {
+          "key": "d",
+          "text": "Exagera el dolor porque la exploración es normal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El dolor desproporcionado es la clave."
+        },
+        {
+          "key": "e",
+          "text": "Pancreatitis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica el contexto embólico."
+        },
+        {
+          "key": "f",
+          "text": "Colitis isquémica leve",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Suele dar dolor leve con rectorragia."
+        },
+        {
+          "key": "g",
+          "text": "Estreñimiento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la gravedad."
+        },
+        {
+          "key": "h",
+          "text": "Úlcera perforada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Daría abdomen en tabla con neumoperitoneo."
+        },
+        {
+          "key": "i",
+          "text": "Aneurisma aórtico roto",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Daría choque y masa pulsátil."
+        },
+        {
+          "key": "j",
+          "text": "Infarto agudo de miocardio",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Debe descartarse, pero el cuadro abdominal sugiere isquemia mesentérica."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "La isquemia mesentérica aguda es una urgencia con alta mortalidad. La causa más frecuente es la embolia de la arteria mesentérica superior, generalmente de origen cardiaco por fibrilación auricular o infarto, seguida de la trombosis arterial, la isquemia no oclusiva y la trombosis venosa. Se caracteriza por dolor abdominal intenso desproporcionado a los hallazgos de la exploración en las fases iniciales. El lactato elevado y la acidosis indican isquemia avanzada. La angiotomografía es el estudio de elección. El tratamiento incluye anticoagulación, revascularización endovascular o quirúrgica y resección del intestino necrótico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de isquemia mesentérica aguda"
+      ]
+    },
+    {
+      "key": "cir-01-abdomen-agudo-q19",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "acute_abdomen",
+      "subtopic": "hollow_viscus_perforation",
+      "vignette": "Hombre de 58 años con úlcera duodenal perforada operado 36 horas después del inicio de los síntomas por retraso en la atención. Tiene 72 años de edad fisiológica por comorbilidades y llegó en choque.",
+      "prompt": "¿Cuál es el principal factor que empeora el pronóstico en este caso?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "El tamaño pequeño de la perforación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es el factor principal."
+        },
+        {
+          "key": "b",
+          "text": "El tipo de sutura empleada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es determinante."
+        },
+        {
+          "key": "c",
+          "text": "El retraso de más de 24 horas en la cirugía junto con el choque al ingreso",
+          "correct": true,
+          "rationale": "Son los principales predictores de mortalidad en úlcera perforada."
+        },
+        {
+          "key": "d",
+          "text": "El sexo masculino",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es el factor principal."
+        },
+        {
+          "key": "e",
+          "text": "El grupo sanguíneo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No influye."
+        },
+        {
+          "key": "f",
+          "text": "El consumo de café",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No influye."
+        },
+        {
+          "key": "g",
+          "text": "La infección por Helicobacter pylori",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Influye en la recurrencia, no en la mortalidad aguda."
+        },
+        {
+          "key": "h",
+          "text": "La voluntad del paciente como único factor",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No sustituye a los factores clínicos."
+        },
+        {
+          "key": "i",
+          "text": "El uso de antiácidos previos",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es el factor principal."
+        },
+        {
+          "key": "j",
+          "text": "La localización duodenal en lugar de gástrica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es el factor principal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "La mortalidad de la úlcera péptica perforada es de 10 a 30% y depende principalmente del tiempo transcurrido hasta la cirugía, de la presencia de choque al ingreso, de la edad avanzada y de las comorbilidades. Cada hora de retraso aumenta la mortalidad. La escala de Boey considera choque, enfermedad médica grave y perforación de más de 24 horas. Por ello el diagnóstico y la cirugía tempranos son fundamentales. Las complicaciones incluyen sepsis, abscesos intraabdominales, fuga de la reparación y falla orgánica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de úlcera péptica complicada"
+      ]
+    }
+  ]
+}

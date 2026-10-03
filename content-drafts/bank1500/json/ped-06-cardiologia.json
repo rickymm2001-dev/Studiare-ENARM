@@ -1,0 +1,1322 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "ped-06-cardiologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_cardiology",
+      "subtopic": "congenital_heart_disease",
+      "vignette": "Lactante de 3 meses con sudoración al comer, tomas lentas, taquipnea y poca ganancia de peso. Soplo holosistólico grado III/VI en el borde esternal izquierdo bajo, con frémito. La radiografía muestra cardiomegalia y aumento del flujo pulmonar.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Persistencia del conducto arterioso",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da soplo continuo en maquinaria infraclavicular."
+        },
+        {
+          "key": "b",
+          "text": "Bebé flojo para comer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La sudoración y taquipnea indican insuficiencia cardiaca."
+        },
+        {
+          "key": "c",
+          "text": "Tetralogía de Fallot",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da cianosis con flujo pulmonar disminuido."
+        },
+        {
+          "key": "d",
+          "text": "Transposición de grandes arterias",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da cianosis intensa desde el nacimiento."
+        },
+        {
+          "key": "e",
+          "text": "Coartación de aorta",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da pulsos femorales disminuidos."
+        },
+        {
+          "key": "f",
+          "text": "Neumonía recurrente sin cardiopatía",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el soplo con frémito."
+        },
+        {
+          "key": "g",
+          "text": "Comunicación interauricular",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da desdoblamiento fijo del segundo ruido y rara vez síntomas tempranos."
+        },
+        {
+          "key": "h",
+          "text": "Comunicación interventricular",
+          "correct": true,
+          "rationale": "Soplo holosistólico paraesternal izquierdo bajo con insuficiencia cardiaca por flujo pulmonar aumentado."
+        },
+        {
+          "key": "i",
+          "text": "Estenosis aórtica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El soplo es expulsivo en foco aórtico."
+        },
+        {
+          "key": "j",
+          "text": "Soplo inocente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Los inocentes no dan insuficiencia cardiaca ni frémito."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "La comunicación interventricular es la cardiopatía congénita más frecuente. Produce un cortocircuito de izquierda a derecha que aumenta el flujo pulmonar. Los defectos pequeños son asintomáticos, con soplo intenso, y muchos cierran de forma espontánea. Los grandes causan insuficiencia cardiaca entre las 4 y 8 semanas, cuando baja la resistencia pulmonar, con taquipnea, sudoración al comer, falla de medro e infecciones respiratorias. El soplo es holosistólico en el borde esternal izquierdo bajo. Si no se corrige puede desarrollarse hipertensión pulmonar irreversible con inversión del cortocircuito, el síndrome de Eisenmenger. El ecocardiograma confirma el diagnóstico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la comunicación interventricular"
+      ]
+    },
+    {
+      "key": "ped-06-cardiologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_cardiology",
+      "subtopic": "congenital_heart_disease",
+      "vignette": "Niño de 2 años con cianosis que empeora al llorar. Durante los episodios se pone en cuclillas espontáneamente y mejora. Soplo sistólico expulsivo en el borde esternal izquierdo alto. La radiografía muestra corazón en forma de bota con flujo pulmonar disminuido.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Asma",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la cianosis con soplo."
+        },
+        {
+          "key": "b",
+          "text": "Crisis de espasmo del sollozo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es benigno sin soplo ni alteraciones radiológicas."
+        },
+        {
+          "key": "c",
+          "text": "Transposición de grandes arterias",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da cianosis intensa desde el nacimiento con corazón en huevo."
+        },
+        {
+          "key": "d",
+          "text": "Atresia tricuspídea",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente."
+        },
+        {
+          "key": "e",
+          "text": "Tetralogía de Fallot",
+          "correct": true,
+          "rationale": "Cianosis con crisis, posición en cuclillas, corazón en bota y flujo pulmonar disminuido."
+        },
+        {
+          "key": "f",
+          "text": "Retorno venoso pulmonar anómalo total",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da flujo pulmonar aumentado."
+        },
+        {
+          "key": "g",
+          "text": "Comunicación interventricular aislada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No da cianosis."
+        },
+        {
+          "key": "h",
+          "text": "Persistencia del conducto arterioso",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No da cianosis."
+        },
+        {
+          "key": "i",
+          "text": "Coartación de aorta",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No da cianosis central."
+        },
+        {
+          "key": "j",
+          "text": "Se pone morado por berrinche",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay cardiopatía estructural."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "La tetralogía de Fallot es la cardiopatía congénita cianótica más frecuente después del periodo neonatal. Tiene cuatro componentes, comunicación interventricular, obstrucción del tracto de salida del ventrículo derecho, cabalgamiento de la aorta e hipertrofia ventricular derecha. La cianosis depende del grado de obstrucción pulmonar. Las crisis hipoxémicas ocurren con el llanto o el esfuerzo, y la posición en cuclillas aumenta la resistencia sistémica y reduce el cortocircuito. La radiografía muestra corazón en forma de bota con flujo pulmonar disminuido. El soplo se debe a la estenosis pulmonar. El tratamiento definitivo es la corrección quirúrgica en el primer año.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la tetralogía de Fallot"
+      ]
+    },
+    {
+      "key": "ped-06-cardiologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_cardiology",
+      "subtopic": "congenital_heart_disease",
+      "vignette": "Niño de 18 meses con tetralogía de Fallot que mientras llora presenta cianosis intensa, taquipnea, irritabilidad y luego somnolencia. El soplo previamente audible casi desaparece. Saturación de 60%.",
+      "prompt": "¿Cuál es el tratamiento inicial de esta crisis?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esperar a que se calme solo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La crisis puede ser fatal."
+        },
+        {
+          "key": "b",
+          "text": "Salbutamol nebulizado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La taquicardia empeora la obstrucción."
+        },
+        {
+          "key": "c",
+          "text": "Adrenalina intravenosa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Empeora el espasmo infundibular."
+        },
+        {
+          "key": "d",
+          "text": "Cirugía de urgencia sin estabilizar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Primero se trata la crisis."
+        },
+        {
+          "key": "e",
+          "text": "Digoxina intravenosa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta la contractilidad y puede empeorar la obstrucción."
+        },
+        {
+          "key": "f",
+          "text": "Colocarlo en posición rodillas al pecho, oxígeno, morfina y líquidos intravenosos",
+          "correct": true,
+          "rationale": "Aumentan la resistencia sistémica y reducen el espasmo infundibular."
+        },
+        {
+          "key": "g",
+          "text": "Soplarle en la cara para que respire",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No trata la crisis."
+        },
+        {
+          "key": "h",
+          "text": "Furosemida intravenosa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Reduce la precarga y empeora la crisis."
+        },
+        {
+          "key": "i",
+          "text": "Antibióticos intravenosos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay infección."
+        },
+        {
+          "key": "j",
+          "text": "Dopamina en infusión",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Aumenta la contractilidad y la frecuencia."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "f",
+        "h"
+      ],
+      "explanation": "La crisis hipoxémica de la tetralogía de Fallot se debe a un aumento del espasmo infundibular o a una caída de la resistencia sistémica, lo que incrementa el cortocircuito de derecha a izquierda. El soplo disminuye porque pasa menos sangre por el tracto pulmonar. El tratamiento consiste en calmar al niño, colocarlo en posición rodillas al pecho para aumentar la resistencia sistémica, dar oxígeno, morfina para sedación y reducir el espasmo, y líquidos intravenosos. Si no responde se usan propranolol o esmolol y fenilefrina para elevar la resistencia sistémica. Las crisis indican necesidad de cirugía pronta.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la tetralogía de Fallot"
+      ]
+    },
+    {
+      "key": "ped-06-cardiologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_cardiology",
+      "subtopic": "congenital_heart_disease",
+      "vignette": "Recién nacido de término de 24 horas con cianosis intensa que no mejora con oxígeno al 100%, sin dificultad respiratoria importante. Saturación de 65%. La radiografía muestra corazón en forma de huevo con pedículo estrecho. El ecocardiograma confirma transposición de grandes arterias con septum íntegro.",
+      "prompt": "¿Cuál es el tratamiento inicial?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Prostaglandina E1 en infusión para mantener abierto el conducto arterioso y atrioseptostomía con balón si es necesario",
+          "correct": true,
+          "rationale": "Favorecen la mezcla de sangre entre circulaciones."
+        },
+        {
+          "key": "b",
+          "text": "Diferir el tratamiento hasta la cirugía programada",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La hipoxemia grave requiere manejo inmediato."
+        },
+        {
+          "key": "c",
+          "text": "Oxígeno al 100% como único tratamiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No corrige la circulación en paralelo."
+        },
+        {
+          "key": "d",
+          "text": "Esperar a que el corazón madure solo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es incompatible con la vida sin tratamiento."
+        },
+        {
+          "key": "e",
+          "text": "Antibióticos como primera medida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay infección."
+        },
+        {
+          "key": "f",
+          "text": "Indometacina para cerrar el conducto arterioso",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Empeoraría la mezcla y la hipoxemia."
+        },
+        {
+          "key": "g",
+          "text": "Propranolol oral",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se usa en las crisis de Fallot."
+        },
+        {
+          "key": "h",
+          "text": "Furosemida intravenosa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No resuelve la hipoxemia."
+        },
+        {
+          "key": "i",
+          "text": "Trasplante cardiaco urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el tratamiento."
+        },
+        {
+          "key": "j",
+          "text": "Surfactante endotraqueal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay enfermedad pulmonar."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "En la transposición de grandes arterias la aorta sale del ventrículo derecho y la pulmonar del izquierdo, formando dos circulaciones en paralelo. La supervivencia depende de la mezcla de sangre a través del conducto arterioso, el foramen oval o una comunicación interventricular. Se presenta con cianosis intensa en las primeras horas que no mejora con oxígeno, y la radiografía muestra corazón en huevo con pedículo estrecho. El tratamiento inicial es prostaglandina E1 para mantener el conducto abierto y, si la mezcla es insuficiente, atrioseptostomía con balón de Rashkind. La corrección definitiva es la cirugía de switch arterial en las primeras semanas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de cardiopatías congénitas cianógenas en el recién nacido"
+      ]
+    },
+    {
+      "key": "ped-06-cardiologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_cardiology",
+      "subtopic": "congenital_heart_disease",
+      "vignette": "Recién nacido prematuro de 30 semanas, de 8 días, con taquicardia, pulsos saltones, presión diferencial amplia y soplo continuo en región infraclavicular izquierda. Requiere más oxígeno que días previos. Madre con rubéola no confirmada en el embarazo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tetralogía de Fallot",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da cianosis."
+        },
+        {
+          "key": "b",
+          "text": "Coartación de aorta",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da pulsos femorales disminuidos."
+        },
+        {
+          "key": "c",
+          "text": "Comunicación interventricular",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da soplo holosistólico paraesternal bajo."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome de dificultad respiratoria sin cardiopatía",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el soplo ni los pulsos."
+        },
+        {
+          "key": "e",
+          "text": "Fístula arteriovenosa cerebral",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara y el soplo es craneal."
+        },
+        {
+          "key": "f",
+          "text": "Soplo normal del recién nacido",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El soplo continuo con repercusión no es inocente."
+        },
+        {
+          "key": "g",
+          "text": "Comunicación interauricular",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da desdoblamiento fijo del segundo ruido."
+        },
+        {
+          "key": "h",
+          "text": "Sepsis neonatal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el soplo continuo."
+        },
+        {
+          "key": "i",
+          "text": "Persistencia del conducto arterioso",
+          "correct": true,
+          "rationale": "Soplo continuo infraclavicular con pulsos saltones en un prematuro."
+        },
+        {
+          "key": "j",
+          "text": "Estenosis pulmonar",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da soplo sistólico expulsivo."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "La persistencia del conducto arterioso es muy frecuente en prematuros por inmadurez de la respuesta al oxígeno y a las prostaglandinas. También se asocia a rubéola congénita. Produce cortocircuito de la aorta a la pulmonar, con soplo continuo en maquinaria infraclavicular izquierda, pulsos saltones y presión diferencial amplia. En prematuros puede causar insuficiencia cardiaca, mayor requerimiento de oxígeno, hemorragia pulmonar y enterocolitis. El ecocardiograma confirma el diagnóstico. El cierre farmacológico se realiza con ibuprofeno, indometacina o paracetamol, y si fracasa se cierra por cateterismo o cirugía.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la persistencia del conducto arterioso"
+      ]
+    },
+    {
+      "key": "ped-06-cardiologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_cardiology",
+      "subtopic": "congenital_heart_disease",
+      "vignette": "Niño de 8 años con cefalea frecuente y hipertensión en brazos de 145/90 mmHg. Los pulsos femorales son débiles y retrasados respecto al radial. La presión en piernas es menor que en brazos. Tiene soplo sistólico interescapular.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Coartación de aorta",
+          "correct": true,
+          "rationale": "Hipertensión en brazos con pulsos femorales débiles y retrasados."
+        },
+        {
+          "key": "b",
+          "text": "Glomerulonefritis aguda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la diferencia de pulsos."
+        },
+        {
+          "key": "c",
+          "text": "Feocromocitoma",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da crisis paroxísticas sin diferencia de pulsos."
+        },
+        {
+          "key": "d",
+          "text": "Migraña",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la hipertensión."
+        },
+        {
+          "key": "e",
+          "text": "Error de medición de la presión",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La diferencia de pulsos es objetiva."
+        },
+        {
+          "key": "f",
+          "text": "Hipertensión arterial esencial",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la diferencia de pulsos y presiones."
+        },
+        {
+          "key": "g",
+          "text": "Arteritis de Takayasu",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es más frecuente en mujeres jóvenes con pulsos ausentes en brazos."
+        },
+        {
+          "key": "h",
+          "text": "Persistencia del conducto arterioso",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da pulsos saltones."
+        },
+        {
+          "key": "i",
+          "text": "Hipertiroidismo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los pulsos femorales débiles."
+        },
+        {
+          "key": "j",
+          "text": "Estenosis de arteria renal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la diferencia entre brazos y piernas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "La coartación de aorta es un estrechamiento, generalmente distal a la arteria subclavia izquierda, cerca del conducto arterioso. En la forma grave neonatal se presenta con choque al cerrarse el conducto. En niños mayores suele detectarse por hipertensión en brazos, pulsos femorales débiles y retrasados, presión menor en piernas, cefalea y claudicación. Puede haber soplo interescapular. En la radiografía de niños mayores aparecen muescas costales por circulación colateral y el signo del tres. Se asocia a válvula aórtica bivalva y síndrome de Turner. Se trata con angioplastia o cirugía. Siempre deben palparse los pulsos femorales en la exploración.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la coartación de aorta"
+      ]
+    },
+    {
+      "key": "ped-06-cardiologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_cardiology",
+      "subtopic": "congenital_heart_disease",
+      "vignette": "Niña de 4 años sana, con buen crecimiento, a quien se le ausculta en consulta de rutina un soplo sistólico grado II/VI, vibratorio y musical, en el borde esternal izquierdo medio, que disminuye al ponerse de pie. Ruidos cardiacos normales y pulsos simétricos.",
+      "prompt": "¿Qué indica este hallazgo?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Comunicación interventricular que requiere cirugía",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Daría soplo holosistólico rudo."
+        },
+        {
+          "key": "b",
+          "text": "Soplo inocente de Still",
+          "correct": true,
+          "rationale": "Soplo sistólico suave, musical, que cambia con la posición, en una niña asintomática."
+        },
+        {
+          "key": "c",
+          "text": "Miocardiopatía hipertrófica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El soplo aumenta al ponerse de pie."
+        },
+        {
+          "key": "d",
+          "text": "Estenosis aórtica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El soplo es rudo en foco aórtico."
+        },
+        {
+          "key": "e",
+          "text": "Todo soplo es enfermedad del corazón",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La mayoría de los soplos en niños son inocentes."
+        },
+        {
+          "key": "f",
+          "text": "Fiebre reumática",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay datos clínicos."
+        },
+        {
+          "key": "g",
+          "text": "Endocarditis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay fiebre ni otros datos."
+        },
+        {
+          "key": "h",
+          "text": "Insuficiencia cardiaca",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Está asintomática y crece bien."
+        },
+        {
+          "key": "i",
+          "text": "Coartación de aorta",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Los pulsos son simétricos."
+        },
+        {
+          "key": "j",
+          "text": "Comunicación interauricular grande",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Daría desdoblamiento fijo del segundo ruido."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "explanation": "Los soplos inocentes son muy frecuentes en la infancia. El soplo de Still es el más común, se escucha entre los 2 y 7 años en el borde esternal izquierdo medio, es sistólico, suave, de tono musical o vibratorio y disminuye al sentarse o ponerse de pie. Los soplos inocentes son sistólicos o continuos como el zumbido venoso, de intensidad menor a III/VI, sin frémito, con ruidos cardiacos normales, y no se acompañan de síntomas. Son señales de soplo patológico los diastólicos, los holosistólicos, intensidad III o mayor, frémito, clic, síntomas o alteraciones de los pulsos, que requieren ecocardiograma.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de evaluación del soplo cardiaco en niños"
+      ]
+    },
+    {
+      "key": "ped-06-cardiologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_cardiology",
+      "subtopic": "kawasaki_disease",
+      "vignette": "Niño de 3 años con fiebre de 39.5 °C de 6 días que no responde a antipiréticos. Tiene conjuntivitis bilateral sin secreción, labios rojos y agrietados, lengua en fresa, exantema polimorfo en tronco, edema y eritema de manos y pies, y una adenopatía cervical de 2 cm.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sarampión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da conjuntivitis con secreción, tos y manchas de Koplik."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de choque tóxico",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da hipotensión y falla orgánica."
+        },
+        {
+          "key": "c",
+          "text": "Mononucleosis infecciosa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica los cambios en extremidades."
+        },
+        {
+          "key": "d",
+          "text": "Adenitis cervical bacteriana",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica los demás datos."
+        },
+        {
+          "key": "e",
+          "text": "Enfermedad de Kawasaki",
+          "correct": true,
+          "rationale": "Fiebre de 5 días o más con conjuntivitis, mucositis, exantema, cambios en extremidades y adenopatía."
+        },
+        {
+          "key": "f",
+          "text": "Artritis idiopática juvenil sistémica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da fiebre en picos con exantema evanescente."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome de Stevens Johnson",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da ampollas y desprendimiento de mucosas por fármacos."
+        },
+        {
+          "key": "h",
+          "text": "Escarlatina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da exantema áspero sin conjuntivitis ni cambios en extremidades."
+        },
+        {
+          "key": "i",
+          "text": "Reacción alérgica a medicamento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la fiebre persistente con todos los criterios."
+        },
+        {
+          "key": "j",
+          "text": "Infección viral común que se quitará sola",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El retraso del tratamiento aumenta el daño coronario."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "La enfermedad de Kawasaki es una vasculitis aguda de vasos medianos que afecta sobre todo a menores de 5 años y es la principal causa de cardiopatía adquirida en niños de países desarrollados. El diagnóstico clínico requiere fiebre de 5 días o más y al menos cuatro de cinco criterios, conjuntivitis bilateral no exudativa, cambios en labios y mucosa oral, exantema polimorfo, cambios en extremidades con edema, eritema y después descamación periungueal, y adenopatía cervical mayor de 1.5 cm generalmente unilateral. Pueden elevarse los reactantes y después las plaquetas. La complicación más importante son los aneurismas coronarios.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad de Kawasaki"
+      ]
+    },
+    {
+      "key": "ped-06-cardiologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_cardiology",
+      "subtopic": "kawasaki_disease",
+      "vignette": "Niña de 2 años con diagnóstico de enfermedad de Kawasaki en el séptimo día de fiebre. El ecocardiograma inicial no muestra aneurismas.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esperar a que aparezca la descamación para confirmar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "b",
+          "text": "Antibiótico intravenoso",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es una infección bacteriana."
+        },
+        {
+          "key": "c",
+          "text": "Cateterismo cardiaco diagnóstico inmediato",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "d",
+          "text": "Anticoagulación con warfarina de rutina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se reserva para aneurismas gigantes."
+        },
+        {
+          "key": "e",
+          "text": "Solo ácido acetilsalicílico a dosis altas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Sin inmunoglobulina el riesgo coronario es mayor."
+        },
+        {
+          "key": "f",
+          "text": "No tratar porque el ecocardiograma es normal",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El tratamiento previene la aparición de aneurismas."
+        },
+        {
+          "key": "g",
+          "text": "Corticosteroide oral como única terapia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es el tratamiento de primera elección."
+        },
+        {
+          "key": "h",
+          "text": "Inmunoglobulina intravenosa a 2 g/kg en dosis única con ácido acetilsalicílico",
+          "correct": true,
+          "rationale": "Reduce el riesgo de aneurismas coronarios si se da en los primeros 10 días."
+        },
+        {
+          "key": "i",
+          "text": "Ibuprofeno junto con la aspirina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Interfiere con el efecto antiplaquetario."
+        },
+        {
+          "key": "j",
+          "text": "Paracetamol hasta que ceda la fiebre",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No previene aneurismas."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "El tratamiento de la enfermedad de Kawasaki es inmunoglobulina intravenosa a 2 g/kg en infusión única, idealmente en los primeros 10 días de fiebre, junto con ácido acetilsalicílico a dosis moderadas o altas hasta que ceda la fiebre y después a dosis bajas antiplaquetarias durante 6 a 8 semanas o más si hay aneurismas. Este tratamiento reduce el riesgo de aneurismas coronarios de alrededor de 25% a menos de 5%. Se realiza ecocardiograma al diagnóstico, a las 2 semanas y a las 6 semanas. En pacientes de alto riesgo o resistentes se agregan corticosteroides o infliximab.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad de Kawasaki"
+      ]
+    },
+    {
+      "key": "ped-06-cardiologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_cardiology",
+      "subtopic": "kawasaki_disease",
+      "vignette": "Niño de 4 años que hace 3 semanas tuvo enfermedad de Kawasaki diagnosticada tarde y sin tratamiento. Ahora presenta descamación de las puntas de los dedos. Plaquetas de 850 000.",
+      "prompt": "¿Cuál es la complicación más importante que debe buscarse?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hepatitis fulminante",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es característica."
+        },
+        {
+          "key": "b",
+          "text": "Descamación permanente de la piel",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es transitoria."
+        },
+        {
+          "key": "c",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es una complicación."
+        },
+        {
+          "key": "d",
+          "text": "Artritis crónica deformante",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La artritis es transitoria."
+        },
+        {
+          "key": "e",
+          "text": "Insuficiencia renal crónica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es la complicación característica."
+        },
+        {
+          "key": "f",
+          "text": "Ninguna, la descamación indica curación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El riesgo coronario persiste."
+        },
+        {
+          "key": "g",
+          "text": "Valvulopatía reumática",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se asocia a fiebre reumática."
+        },
+        {
+          "key": "h",
+          "text": "Encefalitis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es característica."
+        },
+        {
+          "key": "i",
+          "text": "Leucemia por la trombocitosis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La trombocitosis es reactiva."
+        },
+        {
+          "key": "j",
+          "text": "Aneurismas de arterias coronarias",
+          "correct": true,
+          "rationale": "Son la principal causa de morbimortalidad en Kawasaki no tratado."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "La complicación más grave de la enfermedad de Kawasaki son los aneurismas de arterias coronarias, que aparecen en alrededor de 25% de los pacientes no tratados. Suelen formarse entre la segunda y cuarta semana, en la fase subaguda, cuando también aparecen descamación periungueal y trombocitosis. Los aneurismas grandes o gigantes pueden causar trombosis, infarto, arritmias y muerte súbita. Otras complicaciones incluyen miocarditis, pericarditis e insuficiencia valvular. El seguimiento con ecocardiograma es indispensable. Los pacientes con aneurismas requieren antiagregación prolongada y, si son gigantes, anticoagulación.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad de Kawasaki"
+      ]
+    },
+    {
+      "key": "ped-06-cardiologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_cardiology",
+      "subtopic": "kawasaki_disease",
+      "vignette": "Lactante de 7 meses con fiebre de 8 días sin foco. Solo tiene conjuntivitis bilateral sin secreción y labios rojos. Proteína C reactiva de 12 mg/dL, albúmina baja, plaquetas de 600 000 y piuria estéril. El ecocardiograma muestra dilatación de la coronaria derecha.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Enfermedad de Kawasaki incompleta",
+          "correct": true,
+          "rationale": "Fiebre prolongada con pocos criterios, laboratorio compatible y alteración coronaria."
+        },
+        {
+          "key": "b",
+          "text": "Leucemia aguda",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La trombocitosis no apoya leucemia."
+        },
+        {
+          "key": "c",
+          "text": "Infección de vías urinarias",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La piuria es estéril."
+        },
+        {
+          "key": "d",
+          "text": "Descartar Kawasaki porque no cumple todos los criterios",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La forma incompleta es frecuente en lactantes."
+        },
+        {
+          "key": "e",
+          "text": "Fiebre por dentición",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No da fiebre prolongada ni alteraciones de laboratorio."
+        },
+        {
+          "key": "f",
+          "text": "Sepsis bacteriana oculta",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la dilatación coronaria."
+        },
+        {
+          "key": "g",
+          "text": "Infección viral inespecífica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la alteración coronaria."
+        },
+        {
+          "key": "h",
+          "text": "Miocarditis viral",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el patrón clínico."
+        },
+        {
+          "key": "i",
+          "text": "Conjuntivitis viral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la fiebre prolongada ni el laboratorio."
+        },
+        {
+          "key": "j",
+          "text": "Poliarteritis nodosa infantil",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es muy rara."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "g"
+      ],
+      "explanation": "La enfermedad de Kawasaki incompleta se presenta con fiebre de 5 días o más y solo dos o tres criterios clínicos. Es más frecuente en lactantes menores de un año, que tienen mayor riesgo de aneurismas. El diagnóstico se apoya en laboratorio, como proteína C reactiva o velocidad de sedimentación elevadas, albúmina baja, anemia, transaminasas elevadas, trombocitosis después del séptimo día, leucocitosis y piuria estéril, y en el ecocardiograma. Los lactantes con fiebre de 7 días o más sin explicación deben evaluarse para Kawasaki. Si se confirma se trata igual que la forma completa con inmunoglobulina y aspirina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad de Kawasaki"
+      ]
+    },
+    {
+      "key": "ped-06-cardiologia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_cardiology",
+      "subtopic": "kawasaki_disease",
+      "vignette": "Niño de 3 años con enfermedad de Kawasaki en su segunda semana. Los estudios muestran plaquetas de 780 000, velocidad de sedimentación de 90 mm/h y descamación periungueal. La fiebre cedió tras la inmunoglobulina.",
+      "prompt": "¿Qué indica la trombocitosis en esta fase?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Indica falla al tratamiento y requiere segunda dosis",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "La fiebre cedió y la trombocitosis es esperada."
+        },
+        {
+          "key": "b",
+          "text": "Indica trombocitemia esencial",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es reactiva y transitoria."
+        },
+        {
+          "key": "c",
+          "text": "Indica esplenectomía previa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay antecedente."
+        },
+        {
+          "key": "d",
+          "text": "Indica sepsis y requiere antibióticos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay infección."
+        },
+        {
+          "key": "e",
+          "text": "Es efecto adverso de la inmunoglobulina que obliga a suspenderla",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es un efecto adverso."
+        },
+        {
+          "key": "f",
+          "text": "Debe tratarse con transfusión",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "g",
+          "text": "Indica deficiencia de hierro como causa principal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El contexto es inflamatorio."
+        },
+        {
+          "key": "h",
+          "text": "No tiene importancia clínica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Aumenta el riesgo trombótico."
+        },
+        {
+          "key": "i",
+          "text": "Indica leucemia y requiere aspirado de médula",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es reactiva al proceso inflamatorio."
+        },
+        {
+          "key": "j",
+          "text": "Es una respuesta reactiva de la fase subaguda que aumenta el riesgo de trombosis y justifica la aspirina antiplaquetaria",
+          "correct": true,
+          "rationale": "Las plaquetas suben después de la primera semana."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "La enfermedad de Kawasaki tiene tres fases. La aguda dura de 1 a 2 semanas con fiebre y los criterios clínicos. La subaguda, de la segunda a la cuarta semana, se caracteriza por desaparición de la fiebre, descamación periungueal, trombocitosis que puede superar el millón y mayor riesgo de aneurismas y trombosis. La de convalecencia termina cuando se normalizan los reactantes, alrededor de las 6 a 8 semanas. La trombocitosis es reactiva y justifica la aspirina a dosis antiplaquetarias. Si la fiebre persiste 36 horas después de la inmunoglobulina se considera resistencia y se da una segunda dosis u otras terapias.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad de Kawasaki"
+      ]
+    },
+    {
+      "key": "ped-06-cardiologia-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_cardiology",
+      "subtopic": "kawasaki_disease",
+      "vignette": "Niño de 2 años con enfermedad de Kawasaki tratado con inmunoglobulina intravenosa y aspirina. A las 48 horas de terminar la infusión persiste con fiebre de 39 °C y conjuntivitis. Sin aneurismas en el ecocardiograma inicial.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Administrar una segunda dosis de inmunoglobulina intravenosa o agregar corticosteroides por resistencia al tratamiento",
+          "correct": true,
+          "rationale": "La fiebre persistente más de 36 horas indica resistencia."
+        },
+        {
+          "key": "b",
+          "text": "Cateterismo coronario urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "c",
+          "text": "Egresar con paracetamol",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La resistencia requiere tratamiento."
+        },
+        {
+          "key": "d",
+          "text": "Suspender la aspirina y observar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No trata la inflamación persistente."
+        },
+        {
+          "key": "e",
+          "text": "La fiebre es efecto adverso de la inmunoglobulina",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La persistencia indica resistencia."
+        },
+        {
+          "key": "f",
+          "text": "Esperar una semana para ver si cede",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumenta el riesgo de aneurismas."
+        },
+        {
+          "key": "g",
+          "text": "Mantener igual porque ya recibió el tratamiento estándar",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "La resistencia requiere escalar el manejo."
+        },
+        {
+          "key": "h",
+          "text": "No repetir el tratamiento por su costo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo coronario justifica el tratamiento."
+        },
+        {
+          "key": "i",
+          "text": "Iniciar antibióticos de amplio espectro",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es una infección."
+        },
+        {
+          "key": "j",
+          "text": "Dar ibuprofeno a dosis altas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Interfiere con la aspirina."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "f",
+        "i"
+      ],
+      "explanation": "Entre 10 y 20% de los pacientes con enfermedad de Kawasaki no responden a la primera dosis de inmunoglobulina, lo que se define por fiebre persistente o recurrente al menos 36 horas después de terminar la infusión. Estos pacientes tienen mayor riesgo de aneurismas coronarios. Las opciones son una segunda dosis de inmunoglobulina a 2 g/kg, corticosteroides como metilprednisolona en pulsos o prednisolona en esquema descendente, e infliximab. La ciclosporina o el anakinra se reservan para casos refractarios. Se continúa la aspirina y el seguimiento ecocardiográfico estrecho.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad de Kawasaki"
+      ]
+    },
+    {
+      "key": "ped-06-cardiologia-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_cardiology",
+      "subtopic": "kawasaki_disease",
+      "vignette": "Niña de 4 años con enfermedad de Kawasaki tratada hace un mes con inmunoglobulina. Toma aspirina a dosis baja por un aneurisma pequeño. Inicia la temporada de influenza y le corresponde la triple viral de refuerzo.",
+      "prompt": "¿Cuál es la recomendación de prevención más adecuada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aplicar la triple viral de inmediato",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La inmunoglobulina reduce su eficacia."
+        },
+        {
+          "key": "b",
+          "text": "Aplicar vacuna de influenza de virus vivos atenuados",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Está contraindicada con aspirina."
+        },
+        {
+          "key": "c",
+          "text": "Cambiar la aspirina por ibuprofeno",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Interfiere con el efecto antiplaquetario."
+        },
+        {
+          "key": "d",
+          "text": "Medir anticuerpos contra sarampión antes de decidir",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "e",
+          "text": "La enfermedad de Kawasaki contraindica las vacunas de por vida",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No las contraindica."
+        },
+        {
+          "key": "f",
+          "text": "No vacunar contra influenza por miedo a eventos adversos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo de Reye es mayor sin vacuna."
+        },
+        {
+          "key": "g",
+          "text": "Dar oseltamivir profiláctico toda la temporada en lugar de vacunar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No sustituye a la vacuna."
+        },
+        {
+          "key": "h",
+          "text": "Suspender la aspirina durante la temporada de influenza sin vacunar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Deja sin protección antiplaquetaria."
+        },
+        {
+          "key": "i",
+          "text": "Evitar todas las vacunas por un año",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La influenza inactivada se recomienda."
+        },
+        {
+          "key": "j",
+          "text": "Aplicar la vacuna de influenza inactivada y diferir la triple viral 11 meses tras la inmunoglobulina",
+          "correct": true,
+          "rationale": "La aspirina aumenta el riesgo de Reye con influenza y la inmunoglobulina interfiere con vacunas vivas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "Los niños que toman aspirina de forma prolongada tienen riesgo de síndrome de Reye si se infectan con influenza o varicela, por lo que deben recibir la vacuna de influenza inactivada cada temporada. La vacuna de virus vivos atenuados está contraindicada con aspirina. La inmunoglobulina intravenosa a dosis altas contiene anticuerpos que pueden neutralizar las vacunas de virus vivos, como triple viral y varicela, por lo que se recomienda diferirlas 11 meses tras la infusión. Si el riesgo de exposición al sarampión es alto puede vacunarse antes y repetir la dosis después. Las vacunas inactivadas pueden aplicarse sin restricción.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad de Kawasaki",
+        "Manual de vacunación de la Secretaría de Salud"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2451 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "cir-02-biliar-pancreas-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "hepatobiliary",
+      "subtopic": "cholecystitis",
+      "vignette": "Mujer de 45 años con obesidad que presenta dolor en hipocondrio derecho de 10 horas tras una comida grasosa, náusea, vómito y fiebre de 38.2 °C. Signo de Murphy positivo. Leucocitos de 14 000. Bilirrubina y amilasa normales.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Pancreatitis aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La amilasa es normal."
+        },
+        {
+          "key": "b",
+          "text": "Colangitis aguda",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Daría ictericia."
+        },
+        {
+          "key": "c",
+          "text": "Cólico biliar simple",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Dura menos de 6 horas y no da fiebre ni leucocitosis."
+        },
+        {
+          "key": "d",
+          "text": "Apendicitis subhepática",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es menos frecuente."
+        },
+        {
+          "key": "e",
+          "text": "Neumonía basal derecha",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay datos respiratorios."
+        },
+        {
+          "key": "f",
+          "text": "Indigestión por comer mucho",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay infección e inflamación."
+        },
+        {
+          "key": "g",
+          "text": "Hepatitis viral aguda",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el Murphy ni el cuadro posprandial."
+        },
+        {
+          "key": "h",
+          "text": "Úlcera péptica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El dolor es en hipocondrio derecho con Murphy."
+        },
+        {
+          "key": "i",
+          "text": "Coledocolitiasis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría ictericia y elevación de bilirrubina."
+        },
+        {
+          "key": "j",
+          "text": "Colecistitis aguda litiásica",
+          "correct": true,
+          "rationale": "Dolor persistente en hipocondrio derecho con fiebre, Murphy positivo y leucocitosis."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "La colecistitis aguda litiásica se debe a la obstrucción del conducto cístico por un cálculo, con inflamación y posible infección de la vesícula. Es más común en mujeres, obesas y mayores de 40 años. Se manifiesta con dolor en hipocondrio derecho persistente de más de 6 horas, náusea, vómito, fiebre y signo de Murphy. Los criterios de Tokio combinan signos locales, sistémicos e imagen. El ultrasonido es el estudio de elección y muestra cálculos, engrosamiento de la pared mayor de 4 mm, líquido perivesicular y Murphy ecográfico. Se clasifica en leve, moderada o grave para decidir el manejo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de colecistitis y colelitiasis",
+        "Guías de Tokio para colangitis y colecistitis agudas"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "hepatobiliary",
+      "subtopic": "cholecystitis",
+      "vignette": "Hombre de 50 años con dolor en hipocondrio derecho, fiebre y Murphy positivo. Se sospecha colecistitis aguda.",
+      "prompt": "¿Cuál es el estudio de imagen inicial de elección?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ultrasonido de hígado y vías biliares",
+          "correct": true,
+          "rationale": "Es accesible, sensible para cálculos y muestra signos de inflamación."
+        },
+        {
+          "key": "b",
+          "text": "Colangiopancreatografía retrógrada endoscópica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es invasiva y terapéutica para coledocolitiasis."
+        },
+        {
+          "key": "c",
+          "text": "Gammagrama hepatobiliar como primer estudio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se usa si el ultrasonido no es concluyente."
+        },
+        {
+          "key": "d",
+          "text": "Tomografía abdominal como primer estudio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es menos sensible para cálculos y se usa ante complicaciones."
+        },
+        {
+          "key": "e",
+          "text": "Serie esofagogastroduodenal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es útil."
+        },
+        {
+          "key": "f",
+          "text": "Radiografía simple de abdomen",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Detecta pocos cálculos."
+        },
+        {
+          "key": "g",
+          "text": "Endoscopia superior",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No evalúa la vesícula."
+        },
+        {
+          "key": "h",
+          "text": "Amilasa sérica como estudio de imagen",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No es un estudio de imagen."
+        },
+        {
+          "key": "i",
+          "text": "Esperar a que pase el dolor para estudiarlo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "j",
+          "text": "Colangiorresonancia como primer estudio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se reserva para sospecha de coledocolitiasis."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "f"
+      ],
+      "explanation": "El ultrasonido es el estudio de imagen inicial de elección en la sospecha de colecistitis aguda. Detecta cálculos con alta sensibilidad y muestra engrosamiento de la pared vesicular, líquido perivesicular, distensión de la vesícula y signo de Murphy ecográfico. El gammagrama hepatobiliar con HIDA es el estudio más sensible y específico, y se usa cuando el ultrasonido no es concluyente, mostrando ausencia de llenado vesicular por obstrucción del cístico. La tomografía es útil para complicaciones como perforación, gangrena o colecistitis enfisematosa.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de colecistitis y colelitiasis"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "hepatobiliary",
+      "subtopic": "cholecystitis",
+      "vignette": "Mujer de 42 años con colecistitis aguda leve de 36 horas de evolución, sin comorbilidades importantes, estable y con buena respuesta inicial al manejo médico.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Colecistectomía abierta como primera opción",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La laparoscópica es el estándar."
+        },
+        {
+          "key": "b",
+          "text": "Solo analgésicos y dieta",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No resuelve la enfermedad."
+        },
+        {
+          "key": "c",
+          "text": "Colecistostomía percutánea en todos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se reserva para pacientes de alto riesgo quirúrgico."
+        },
+        {
+          "key": "d",
+          "text": "Litotricia extracorpórea",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "e",
+          "text": "Colangiopancreatografía en todos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se reserva para coledocolitiasis."
+        },
+        {
+          "key": "f",
+          "text": "Diferir la cirugía por miedo a complicaciones",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La cirugía temprana es segura."
+        },
+        {
+          "key": "g",
+          "text": "Antibióticos y colecistectomía diferida 6 a 8 semanas en todos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La cirugía temprana es preferida."
+        },
+        {
+          "key": "h",
+          "text": "Remedios caseros para expulsar las piedras",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No son eficaces y son peligrosos."
+        },
+        {
+          "key": "i",
+          "text": "Ácido ursodesoxicólico para disolver los cálculos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No trata la colecistitis aguda."
+        },
+        {
+          "key": "j",
+          "text": "Colecistectomía laparoscópica temprana en las primeras 72 horas, idealmente en el mismo internamiento",
+          "correct": true,
+          "rationale": "Reduce la estancia y las recurrencias sin aumentar las complicaciones."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "El tratamiento de la colecistitis aguda incluye ayuno, líquidos, analgesia y antibióticos según la gravedad. El tratamiento definitivo es la colecistectomía laparoscópica, idealmente temprana, en las primeras 72 horas y hasta 7 días del inicio de los síntomas, en el mismo internamiento. La cirugía temprana reduce la estancia hospitalaria, los costos y las recurrencias sin aumentar las complicaciones. En pacientes con alto riesgo quirúrgico o colecistitis grave con falla orgánica, se realiza colecistostomía percutánea como puente. La conversión a cirugía abierta se considera ante anatomía no clara.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de colecistitis y colelitiasis",
+        "Guías de Tokio para colangitis y colecistitis agudas"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "hepatobiliary",
+      "subtopic": "cholecystitis",
+      "vignette": "Hombre de 70 años hospitalizado en terapia intensiva por quemaduras extensas, con nutrición parenteral, que presenta fiebre y dolor en hipocondrio derecho. El ultrasonido muestra vesícula distendida, pared engrosada y líquido perivesicular sin cálculos.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hepatitis isquémica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica los hallazgos vesiculares."
+        },
+        {
+          "key": "b",
+          "text": "Absceso hepático",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la vesícula inflamada."
+        },
+        {
+          "key": "c",
+          "text": "Pancreatitis aguda",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica los hallazgos vesiculares."
+        },
+        {
+          "key": "d",
+          "text": "Molestia esperada en pacientes graves",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una complicación seria."
+        },
+        {
+          "key": "e",
+          "text": "Colecistitis aguda alitiásica",
+          "correct": true,
+          "rationale": "Inflamación vesicular sin cálculos en un paciente críticamente enfermo."
+        },
+        {
+          "key": "f",
+          "text": "Fiebre por catéter únicamente",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Hay datos de inflamación vesicular."
+        },
+        {
+          "key": "g",
+          "text": "Colecistitis litiásica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay cálculos."
+        },
+        {
+          "key": "h",
+          "text": "Edema vesicular por hipoalbuminemia sin inflamación",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Hay dolor y fiebre."
+        },
+        {
+          "key": "i",
+          "text": "Colangitis aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay dilatación ni ictericia."
+        },
+        {
+          "key": "j",
+          "text": "Cáncer de vesícula",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica el cuadro agudo en este contexto."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "La colecistitis aguda alitiásica ocurre en pacientes críticamente enfermos, como quemados, politraumatizados, con sepsis, ventilación mecánica, nutrición parenteral prolongada o en el posoperatorio de cirugías mayores. Se debe a estasis biliar, isquemia de la pared y bilis concentrada. Tiene alta frecuencia de gangrena y perforación y mayor mortalidad que la litiásica. El diagnóstico es difícil porque los pacientes no pueden expresar síntomas. El tratamiento incluye antibióticos y colecistostomía percutánea en pacientes inestables, o colecistectomía si el estado lo permite. Un alto índice de sospecha en estos pacientes permite el diagnóstico oportuno.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de colecistitis y colelitiasis"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "hepatobiliary",
+      "subtopic": "cholecystitis",
+      "vignette": "Hombre de 66 años con diabetes y colecistitis aguda de 4 días que presenta dolor intenso, fiebre de 39.5 °C y aspecto séptico. La tomografía muestra gas en la pared vesicular.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Pancreatitis enfisematosa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El gas está en la vesícula."
+        },
+        {
+          "key": "b",
+          "text": "Fístula colecistoentérica sin infección",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El paciente está séptico."
+        },
+        {
+          "key": "c",
+          "text": "Inflamación que mejora con más antibiótico oral",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere cirugía urgente."
+        },
+        {
+          "key": "d",
+          "text": "Perforación de úlcera duodenal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Daría neumoperitoneo libre."
+        },
+        {
+          "key": "e",
+          "text": "Absceso hepático amebiano",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el gas en la pared vesicular."
+        },
+        {
+          "key": "f",
+          "text": "Artefacto de la tomografía",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El gas es real y relevante."
+        },
+        {
+          "key": "g",
+          "text": "Colecistitis no complicada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El gas indica una forma grave."
+        },
+        {
+          "key": "h",
+          "text": "Hidrops vesicular simple",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No da gas."
+        },
+        {
+          "key": "i",
+          "text": "Íleo biliar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría oclusión intestinal y neumobilia."
+        },
+        {
+          "key": "j",
+          "text": "Colecistitis enfisematosa",
+          "correct": true,
+          "rationale": "Gas en la pared vesicular por anaerobios en un diabético."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "La colecistitis enfisematosa es una forma grave de colecistitis causada por bacterias productoras de gas, como Clostridium y Escherichia coli. Es más frecuente en hombres mayores con diabetes y puede ocurrir sin cálculos. Tiene alto riesgo de gangrena y perforación, con mortalidad elevada. La tomografía o el ultrasonido muestran gas en la pared o la luz vesicular. El tratamiento es reanimación, antibióticos de amplio espectro con cobertura de anaerobios y colecistectomía urgente, o colecistostomía percutánea si el riesgo quirúrgico es prohibitivo.",
+      "gpcRefs": [
+        "Guías de Tokio para colangitis y colecistitis agudas"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "hepatobiliary",
+      "subtopic": "cholecystitis",
+      "vignette": "Mujer de 38 años con episodios de dolor en hipocondrio derecho de 2 horas tras comidas grasosas que ceden solos, sin fiebre. El ultrasonido muestra múltiples cálculos en la vesícula sin engrosamiento de la pared.",
+      "prompt": "¿Qué indican estos hallazgos?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Colelitiasis sintomática con cólicos biliares, que es indicación de colecistectomía electiva",
+          "correct": true,
+          "rationale": "Los episodios típicos de dolor indican enfermedad sintomática."
+        },
+        {
+          "key": "b",
+          "text": "Coledocolitiasis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay ictericia."
+        },
+        {
+          "key": "c",
+          "text": "Colelitiasis asintomática sin tratamiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tiene síntomas típicos."
+        },
+        {
+          "key": "d",
+          "text": "Pancreatitis biliar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay datos de pancreatitis."
+        },
+        {
+          "key": "e",
+          "text": "Dispepsia funcional",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El ultrasonido muestra cálculos y el patrón es típico."
+        },
+        {
+          "key": "f",
+          "text": "Piedras que se expulsan solas con aceite de oliva",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un mito peligroso."
+        },
+        {
+          "key": "g",
+          "text": "Úlcera péptica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El patrón posprandial con cálculos orienta a cólico biliar."
+        },
+        {
+          "key": "h",
+          "text": "Indica disolución con medicamentos en todas",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es el tratamiento de elección."
+        },
+        {
+          "key": "i",
+          "text": "Colecistitis aguda que requiere cirugía urgente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay fiebre ni inflamación."
+        },
+        {
+          "key": "j",
+          "text": "Cáncer de vesícula",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay datos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "i"
+      ],
+      "explanation": "La colelitiasis es muy frecuente en México, sobre todo en mujeres, obesas y mayores de 40 años. La mayoría de las personas con cálculos son asintomáticas y no requieren cirugía. El cólico biliar se presenta como dolor en epigastrio o hipocondrio derecho de 30 minutos a 6 horas, a menudo tras comidas grasosas, que cede solo, sin fiebre. La colelitiasis sintomática tiene riesgo de complicaciones como colecistitis, coledocolitiasis y pancreatitis, por lo que se indica colecistectomía laparoscópica electiva. Las sales biliares rara vez se usan.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de colecistitis y colelitiasis"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "hepatobiliary",
+      "subtopic": "cholecystitis",
+      "vignette": "Mujer de 55 años con hallazgo incidental de colelitiasis en un ultrasonido realizado por otra razón. Nunca ha tenido dolor ni otros síntomas. No es diabética ni tiene vesícula en porcelana.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Colecistectomía profiláctica inmediata en todos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No se recomienda en asintomáticos sin factores de riesgo."
+        },
+        {
+          "key": "b",
+          "text": "Colangiopancreatografía para retirar los cálculos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "c",
+          "text": "Limpiezas de hígado con remedios caseros",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Son peligrosas."
+        },
+        {
+          "key": "d",
+          "text": "Antibióticos profilácticos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No están indicados."
+        },
+        {
+          "key": "e",
+          "text": "Tomografía anual de control",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "f",
+          "text": "Ácido ursodesoxicólico de por vida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "g",
+          "text": "Dieta sin grasa estricta de por vida como único manejo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesaria sin síntomas."
+        },
+        {
+          "key": "h",
+          "text": "No informar sobre los síntomas que deben vigilarse",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe saber cuándo consultar."
+        },
+        {
+          "key": "i",
+          "text": "Litotricia extracorpórea",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No se usa en estos casos."
+        },
+        {
+          "key": "j",
+          "text": "Observación sin cirugía y educación sobre los síntomas de alarma",
+          "correct": true,
+          "rationale": "La colelitiasis asintomática no requiere colecistectomía en la mayoría."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "j"
+      ],
+      "explanation": "La mayoría de las personas con colelitiasis asintomática nunca desarrollan síntomas, y solo 1 a 2% al año presentan síntomas o complicaciones. Por ello no se recomienda la colecistectomía profiláctica de rutina. Las excepciones en las que se considera la cirugía incluyen vesícula en porcelana, cálculos mayores de 3 cm, pólipos vesiculares mayores de 1 cm, anemia hemolítica crónica, poblaciones con alto riesgo de cáncer de vesícula y algunos pacientes que serán trasplantados. Se educa al paciente para consultar ante dolor, fiebre o ictericia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de colecistitis y colelitiasis"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "hepatobiliary",
+      "subtopic": "cholecystitis",
+      "vignette": "Mujer de 68 años con colelitiasis de larga evolución, cálculo de 3.5 cm y vesícula con pared calcificada en la radiografía. Se descubre una masa vesicular en el ultrasonido.",
+      "prompt": "¿Cuál es el factor de riesgo más importante para el cáncer de vesícula?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Colelitiasis de larga evolución con cálculos grandes y vesícula en porcelana",
+          "correct": true,
+          "rationale": "La inflamación crónica favorece la transformación maligna."
+        },
+        {
+          "key": "b",
+          "text": "Consumo de café",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "c",
+          "text": "Ejercicio regular",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es protector frente a la obesidad."
+        },
+        {
+          "key": "d",
+          "text": "Apendicectomía previa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No se relaciona."
+        },
+        {
+          "key": "e",
+          "text": "Hepatitis A previa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se relaciona."
+        },
+        {
+          "key": "f",
+          "text": "Dieta vegetariana",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "g",
+          "text": "Tomar mucha agua",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "h",
+          "text": "Hernia hiatal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No se relaciona."
+        },
+        {
+          "key": "i",
+          "text": "Sexo masculino",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es más frecuente en mujeres."
+        },
+        {
+          "key": "j",
+          "text": "Grupo sanguíneo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un factor."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "i"
+      ],
+      "explanation": "El cáncer de vesícula es más frecuente en mujeres, en adultos mayores y en algunas poblaciones de Latinoamérica, incluido México. El principal factor de riesgo es la colelitiasis crónica, sobre todo con cálculos mayores de 3 cm. Otros factores son la vesícula en porcelana, los pólipos vesiculares mayores de 1 cm, la unión pancreatobiliar anómala, el quiste de colédoco, la infección crónica por Salmonella typhi y la obesidad. Suele diagnosticarse en etapas avanzadas, con mal pronóstico. A veces se encuentra de forma incidental en la pieza de colecistectomía.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de vesícula biliar"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "hepatobiliary",
+      "subtopic": "choledocholithiasis",
+      "vignette": "Mujer de 50 años con colelitiasis conocida que presenta dolor en hipocondrio derecho, ictericia, coluria y acolia. Bilirrubina total de 5.8 mg/dL de predominio directo y fosfatasa alcalina elevada. El ultrasonido muestra colédoco de 10 mm.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de Gilbert",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da bilirrubina indirecta leve."
+        },
+        {
+          "key": "b",
+          "text": "Hígado cansado por comer grasas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una obstrucción biliar."
+        },
+        {
+          "key": "c",
+          "text": "Colecistitis aguda simple",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No da ictericia obstructiva ni dilatación del colédoco."
+        },
+        {
+          "key": "d",
+          "text": "Anemia hemolítica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da bilirrubina indirecta."
+        },
+        {
+          "key": "e",
+          "text": "Cáncer de cabeza de páncreas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da ictericia indolora progresiva."
+        },
+        {
+          "key": "f",
+          "text": "Colangiocarcinoma hiliar",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es menos frecuente."
+        },
+        {
+          "key": "g",
+          "text": "Colangitis biliar primaria",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No da dilatación del colédoco."
+        },
+        {
+          "key": "h",
+          "text": "Ictericia por fármacos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la dilatación."
+        },
+        {
+          "key": "i",
+          "text": "Hepatitis viral aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría transaminasas muy elevadas sin dilatación biliar."
+        },
+        {
+          "key": "j",
+          "text": "Coledocolitiasis",
+          "correct": true,
+          "rationale": "Ictericia obstructiva con colédoco dilatado en una paciente con colelitiasis."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "La coledocolitiasis es la presencia de cálculos en el colédoco, generalmente provenientes de la vesícula. Se manifiesta con dolor biliar, ictericia, coluria y acolia, aunque puede ser asintomática. Los estudios muestran bilirrubina directa y fosfatasa alcalina elevadas, con colédoco dilatado mayor de 6 mm en el ultrasonido. Las complicaciones son colangitis y pancreatitis. Según la probabilidad se decide el abordaje, con colangiopancreatografía retrógrada endoscópica en alto riesgo y colangiorresonancia o ultrasonido endoscópico en riesgo intermedio. La colecistectomía posterior previene nuevos episodios.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de coledocolitiasis"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "hepatobiliary",
+      "subtopic": "choledocholithiasis",
+      "vignette": "Hombre de 55 años con colelitiasis y alta probabilidad de coledocolitiasis por colédoco de 12 mm con un cálculo visible en el ultrasonido y bilirrubina de 4.5 mg/dL. Estable.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo colecistectomía sin abordar el colédoco",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Dejaría cálculos en el colédoco."
+        },
+        {
+          "key": "b",
+          "text": "No retirar la vesícula tras limpiar el colédoco",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Aumenta las recurrencias."
+        },
+        {
+          "key": "c",
+          "text": "Litotricia extracorpórea como primera opción",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es el estándar."
+        },
+        {
+          "key": "d",
+          "text": "Purgantes para expulsar las piedras",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No son eficaces."
+        },
+        {
+          "key": "e",
+          "text": "Derivación biliodigestiva de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "f",
+          "text": "Trasplante hepático",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "g",
+          "text": "Observación hasta que pase el cálculo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Tiene riesgo de colangitis y pancreatitis."
+        },
+        {
+          "key": "h",
+          "text": "Antibióticos como único tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No resuelven la obstrucción."
+        },
+        {
+          "key": "i",
+          "text": "Colangiopancreatografía retrógrada endoscópica con esfinterotomía y extracción de los cálculos, seguida de colecistectomía laparoscópica",
+          "correct": true,
+          "rationale": "Resuelve la obstrucción y previene recurrencias."
+        },
+        {
+          "key": "j",
+          "text": "Ácido ursodesoxicólico para disolver los cálculos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es eficaz para cálculos coledocianos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "En pacientes con alta probabilidad de coledocolitiasis, como cálculo visible en el colédoco por ultrasonido, colangitis o bilirrubina mayor de 4 con colédoco dilatado, se realiza colangiopancreatografía retrógrada endoscópica con esfinterotomía y extracción de los cálculos. Después se realiza colecistectomía laparoscópica, idealmente en el mismo internamiento, para evitar recurrencias. Una alternativa en centros con experiencia es la exploración laparoscópica del colédoco durante la colecistectomía. En probabilidad intermedia se confirma primero con colangiorresonancia o ultrasonido endoscópico antes de cualquier procedimiento invasivo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de coledocolitiasis"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "hepatobiliary",
+      "subtopic": "choledocholithiasis",
+      "vignette": "Mujer de 62 años con fiebre de 39.5 °C con escalofríos, ictericia y dolor en hipocondrio derecho. Leucocitos de 18 000, bilirrubina de 6 mg/dL y colédoco dilatado con cálculo en el ultrasonido.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Colangitis aguda",
+          "correct": true,
+          "rationale": "Tríada de Charcot con fiebre, ictericia y dolor en hipocondrio derecho por obstrucción biliar."
+        },
+        {
+          "key": "b",
+          "text": "Hepatitis viral aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica el colédoco dilatado con cálculo."
+        },
+        {
+          "key": "c",
+          "text": "Pancreatitis aguda",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la tríada de Charcot."
+        },
+        {
+          "key": "d",
+          "text": "Fiebre por gripa con ictericia por cansancio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una infección biliar grave."
+        },
+        {
+          "key": "e",
+          "text": "Pielonefritis derecha",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la ictericia."
+        },
+        {
+          "key": "f",
+          "text": "Malaria",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la obstrucción biliar."
+        },
+        {
+          "key": "g",
+          "text": "Absceso hepático piógeno",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la obstrucción del colédoco."
+        },
+        {
+          "key": "h",
+          "text": "Cáncer de páncreas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da ictericia indolora sin fiebre alta."
+        },
+        {
+          "key": "i",
+          "text": "Colecistitis aguda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la ictericia con colédoco obstruido."
+        },
+        {
+          "key": "j",
+          "text": "Neumonía basal derecha",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la ictericia obstructiva."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "i"
+      ],
+      "explanation": "La colangitis aguda es la infección de la vía biliar por obstrucción, generalmente por coledocolitiasis, y también por estenosis o tumores. Se manifiesta con la tríada de Charcot, fiebre con escalofríos, ictericia y dolor en hipocondrio derecho. La péntada de Reynolds agrega hipotensión y alteración del estado mental e indica colangitis grave. Los criterios de Tokio la clasifican en leve, moderada y grave. El tratamiento es reanimación, antibióticos de amplio espectro y drenaje biliar, preferentemente por colangiopancreatografía endoscópica, cuya urgencia depende de la gravedad.",
+      "gpcRefs": [
+        "Guías de Tokio para colangitis y colecistitis agudas"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "hepatobiliary",
+      "subtopic": "choledocholithiasis",
+      "vignette": "Hombre de 70 años con colangitis aguda por coledocolitiasis que presenta confusión, presión de 80/50 mmHg pese a líquidos y requerimiento de vasopresores. Ya recibe antibióticos de amplio espectro.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ultrasonido de control en 48 horas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "b",
+          "text": "Drenaje biliar urgente por colangiopancreatografía retrógrada endoscópica",
+          "correct": true,
+          "rationale": "La colangitis grave requiere descompresión biliar inmediata."
+        },
+        {
+          "key": "c",
+          "text": "Continuar solo con antibióticos 72 horas antes del drenaje",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La colangitis grave requiere drenaje urgente."
+        },
+        {
+          "key": "d",
+          "text": "Litotricia extracorpórea",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es adecuada en urgencia."
+        },
+        {
+          "key": "e",
+          "text": "Es solo una infección que cede con antibióticos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La obstrucción mantiene la sepsis."
+        },
+        {
+          "key": "f",
+          "text": "Esperar a la estabilización completa para drenar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El drenaje forma parte de la estabilización."
+        },
+        {
+          "key": "g",
+          "text": "Ácido ursodesoxicólico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No resuelve la obstrucción."
+        },
+        {
+          "key": "h",
+          "text": "Trasplante hepático",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "i",
+          "text": "Evitar procedimientos por su edad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El drenaje salva la vida."
+        },
+        {
+          "key": "j",
+          "text": "Colecistectomía abierta urgente como primer procedimiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El drenaje endoscópico es preferido."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "La colangitis grave, con disfunción orgánica como hipotensión que requiere vasopresores, alteración del estado mental, falla respiratoria, renal, hepática o hematológica, requiere drenaje biliar urgente además de los antibióticos y el soporte. El método de elección es la colangiopancreatografía retrógrada endoscópica con esfinterotomía o colocación de prótesis. Si no es posible, se realiza drenaje percutáneo transhepático. La cirugía abierta tiene mayor mortalidad en este contexto. En la colangitis moderada el drenaje se realiza en las primeras 24 a 48 horas.",
+      "gpcRefs": [
+        "Guías de Tokio para colangitis y colecistitis agudas"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "hepatobiliary",
+      "subtopic": "choledocholithiasis",
+      "vignette": "Mujer de 45 años que tras una colangiopancreatografía retrógrada endoscópica para extraer cálculos presenta, a las 6 horas, dolor epigástrico intenso irradiado a la espalda, vómito y lipasa de 1 200 U/L.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Pancreatitis post colangiopancreatografía",
+          "correct": true,
+          "rationale": "Es la complicación más frecuente del procedimiento."
+        },
+        {
+          "key": "b",
+          "text": "Dolor esperado sin importancia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La lipasa elevada indica pancreatitis."
+        },
+        {
+          "key": "c",
+          "text": "Infarto agudo de miocardio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica la lipasa."
+        },
+        {
+          "key": "d",
+          "text": "Gastritis por el endoscopio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la lipasa elevada."
+        },
+        {
+          "key": "e",
+          "text": "Colangitis por el procedimiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría fiebre e ictericia."
+        },
+        {
+          "key": "f",
+          "text": "Perforación duodenal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Daría aire retroperitoneal y dolor diferente."
+        },
+        {
+          "key": "g",
+          "text": "Hemorragia por esfinterotomía",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Daría melena o hematemesis."
+        },
+        {
+          "key": "h",
+          "text": "Gases por el aire del estudio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La lipasa indica pancreatitis."
+        },
+        {
+          "key": "i",
+          "text": "Colecistitis aguda",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la lipasa."
+        },
+        {
+          "key": "j",
+          "text": "Reacción al contraste",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el cuadro."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "La pancreatitis es la complicación más frecuente de la colangiopancreatografía retrógrada endoscópica, con una incidencia de 3 a 10%. Otras complicaciones son hemorragia por la esfinterotomía, perforación duodenal, colangitis y colecistitis. Los factores de riesgo de pancreatitis incluyen sexo femenino, edad joven, disfunción del esfínter de Oddi, canulación difícil e inyección repetida del conducto pancreático. Para prevenirla se administra indometacina o diclofenaco rectal antes o después del procedimiento, hidratación con Ringer lactato y, en pacientes de alto riesgo, la colocación de una prótesis pancreática temporal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de coledocolitiasis"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "hepatobiliary",
+      "subtopic": "choledocholithiasis",
+      "vignette": "Mujer de 48 años con colelitiasis, dolor biliar y elevación leve de bilirrubina de 2.2 mg/dL con colédoco de 7 mm sin cálculos visibles en el ultrasonido. Probabilidad intermedia de coledocolitiasis.",
+      "prompt": "¿Cuál es el estudio indicado para confirmar o descartar la coledocolitiasis?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Colangiopancreatografía retrógrada endoscópica diagnóstica directa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es invasiva con riesgo de pancreatitis."
+        },
+        {
+          "key": "b",
+          "text": "Radiografía simple de abdomen",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No detecta cálculos coledocianos."
+        },
+        {
+          "key": "c",
+          "text": "Esperar a que aparezca ictericia intensa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Retrasa el diagnóstico."
+        },
+        {
+          "key": "d",
+          "text": "Colecistectomía sin evaluar el colédoco",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede dejar cálculos."
+        },
+        {
+          "key": "e",
+          "text": "Gammagrama óseo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "f",
+          "text": "Endoscopia superior simple",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No evalúa el colédoco."
+        },
+        {
+          "key": "g",
+          "text": "Biopsia hepática",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "Amilasa como diagnóstico de coledocolitiasis",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No confirma."
+        },
+        {
+          "key": "i",
+          "text": "Colangiorresonancia magnética o ultrasonido endoscópico",
+          "correct": true,
+          "rationale": "Son estudios no invasivos o poco invasivos con alta precisión para probabilidad intermedia."
+        },
+        {
+          "key": "j",
+          "text": "Repetir el ultrasonido abdominal en 6 meses",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Retrasa el diagnóstico."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "La probabilidad de coledocolitiasis se estratifica con criterios clínicos, bioquímicos y ecográficos. En probabilidad alta se indica colangiopancreatografía retrógrada endoscópica terapéutica. En probabilidad intermedia, como colédoco dilatado sin cálculo visible o elevación moderada de enzimas, se confirma primero con colangiorresonancia magnética o ultrasonido endoscópico, que tienen alta sensibilidad y evitan procedimientos invasivos innecesarios. Otra opción es la colangiografía transoperatoria durante la colecistectomía. En probabilidad baja se realiza colecistectomía directamente, con o sin colangiografía transoperatoria. Esta estrategia escalonada reduce las complicaciones de los procedimientos invasivos innecesarios.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de coledocolitiasis"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "hepatobiliary",
+      "subtopic": "choledocholithiasis",
+      "vignette": "Hombre de 66 años con ictericia progresiva indolora de 6 semanas, prurito, pérdida de peso de 8 kg y vesícula palpable no dolorosa. Bilirrubina de 14 mg/dL de predominio directo. CA 19 9 elevado.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cirrosis hepática",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la vesícula palpable con obstrucción."
+        },
+        {
+          "key": "b",
+          "text": "Quiste de colédoco",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es más común en jóvenes."
+        },
+        {
+          "key": "c",
+          "text": "Hepatitis viral aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la vesícula palpable."
+        },
+        {
+          "key": "d",
+          "text": "Ictericia por comer grasas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una obstrucción maligna."
+        },
+        {
+          "key": "e",
+          "text": "Colangitis biliar primaria",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No da vesícula palpable."
+        },
+        {
+          "key": "f",
+          "text": "Colecistitis crónica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la ictericia indolora progresiva."
+        },
+        {
+          "key": "g",
+          "text": "Cáncer de la cabeza del páncreas",
+          "correct": true,
+          "rationale": "Ictericia indolora progresiva con vesícula palpable, signo de Courvoisier, y pérdida de peso."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome de Gilbert",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da bilirrubina indirecta leve."
+        },
+        {
+          "key": "i",
+          "text": "Coledocolitiasis",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Suele dar dolor y la vesícula no se palpa."
+        },
+        {
+          "key": "j",
+          "text": "Ictericia por fármacos",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la pérdida de peso con vesícula palpable."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "El signo de Courvoisier Terrier es la vesícula palpable no dolorosa en un paciente con ictericia, y sugiere obstrucción maligna distal de la vía biliar, como cáncer de cabeza de páncreas o ampuloma, porque la vesícula no está fibrosada como en la litiasis crónica. El cáncer de páncreas se manifiesta con ictericia indolora progresiva, prurito, pérdida de peso, dolor epigástrico irradiado a la espalda y diabetes de reciente inicio. La tomografía con protocolo de páncreas es el estudio de elección. El CA 19 9 apoya el diagnóstico y el seguimiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de páncreas"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "pancreas",
+      "subtopic": "acute_pancreatitis",
+      "vignette": "Hombre de 42 años con consumo intenso de alcohol que presenta dolor epigástrico intenso transfictivo irradiado a la espalda en cinturón, náusea y vómito de 12 horas. Lipasa sérica de 1 800 U/L.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Úlcera péptica perforada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Daría neumoperitoneo y abdomen en tabla."
+        },
+        {
+          "key": "b",
+          "text": "Gastritis alcohólica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No eleva la lipasa a este nivel."
+        },
+        {
+          "key": "c",
+          "text": "Aneurisma aórtico disecante",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No eleva la lipasa."
+        },
+        {
+          "key": "d",
+          "text": "Cetoacidosis alcohólica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la lipasa tan elevada."
+        },
+        {
+          "key": "e",
+          "text": "Infarto agudo de miocardio inferior",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la lipasa."
+        },
+        {
+          "key": "f",
+          "text": "Isquemia mesentérica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El cuadro y la lipasa orientan a pancreatitis."
+        },
+        {
+          "key": "g",
+          "text": "Pancreatitis aguda",
+          "correct": true,
+          "rationale": "Dolor epigástrico típico con lipasa mayor de tres veces el límite superior."
+        },
+        {
+          "key": "h",
+          "text": "Cruda intensa que se quita con suero",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una enfermedad grave."
+        },
+        {
+          "key": "i",
+          "text": "Cólico renal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la lipasa."
+        },
+        {
+          "key": "j",
+          "text": "Colecistitis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El dolor sería en hipocondrio derecho con lipasa normal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "La pancreatitis aguda se diagnostica con dos de tres criterios, dolor abdominal típico epigástrico irradiado a la espalda, lipasa o amilasa mayores de tres veces el límite superior y hallazgos característicos en imagen. Las causas más frecuentes son la litiasis biliar y el alcohol, seguidas de la hipertrigliceridemia, la colangiopancreatografía, fármacos e hipercalcemia. La lipasa es más específica y persiste más tiempo que la amilasa. La tomografía no es necesaria para el diagnóstico si la clínica y la lipasa son típicas, y se reserva para dudas o complicaciones después de 72 horas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de pancreatitis aguda"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "pancreas",
+      "subtopic": "acute_pancreatitis",
+      "vignette": "Mujer de 50 años con pancreatitis aguda biliar de 8 horas de evolución. Frecuencia cardiaca de 110, presión de 105/70 mmHg, nitrógeno ureico de 28 mg/dL. Sin colangitis.",
+      "prompt": "¿Cuál es el tratamiento inicial más importante?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Colecistectomía urgente en las primeras horas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se realiza en el mismo internamiento tras la mejoría en casos leves."
+        },
+        {
+          "key": "b",
+          "text": "Antibióticos profilácticos de amplio espectro en todos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No se recomiendan sin infección."
+        },
+        {
+          "key": "c",
+          "text": "Necrosectomía quirúrgica temprana",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Está contraindicada en fase temprana."
+        },
+        {
+          "key": "d",
+          "text": "Restricción de líquidos para evitar edema",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La hidratación es fundamental."
+        },
+        {
+          "key": "e",
+          "text": "Colangiopancreatografía urgente en todas sin colangitis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Solo si hay colangitis u obstrucción persistente."
+        },
+        {
+          "key": "f",
+          "text": "Evitar opioides en todos los casos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pueden usarse para el dolor."
+        },
+        {
+          "key": "g",
+          "text": "Reanimación con líquidos intravenosos, preferentemente Ringer lactato, a ritmo moderado con metas, más analgesia",
+          "correct": true,
+          "rationale": "La hidratación temprana guiada por objetivos mejora el pronóstico."
+        },
+        {
+          "key": "h",
+          "text": "Ayuno absoluto prolongado por una semana",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se recomienda alimentación oral temprana según tolerancia."
+        },
+        {
+          "key": "i",
+          "text": "Suspender la analgesia para no ocultar síntomas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El dolor debe tratarse."
+        },
+        {
+          "key": "j",
+          "text": "Octreótido de rutina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No ha mostrado beneficio."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "h"
+      ],
+      "explanation": "El tratamiento inicial de la pancreatitis aguda es de soporte. La reanimación con líquidos intravenosos, preferentemente Ringer lactato, en las primeras 24 horas guiada por frecuencia cardiaca, presión, diuresis, hematocrito y nitrógeno ureico, es fundamental. Actualmente se recomienda una reanimación moderada para evitar la sobrecarga de volumen. Se da analgesia adecuada, incluidos opioides. Se inicia alimentación oral temprana en cuanto se tolere, y si no es posible, nutrición enteral. Los antibióticos profilácticos no se recomiendan. En la pancreatitis biliar se realiza colecistectomía en el mismo internamiento en casos leves.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de pancreatitis aguda"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "pancreas",
+      "subtopic": "acute_pancreatitis",
+      "vignette": "Hombre de 48 años con pancreatitis aguda grave de 3 semanas que presenta fiebre persistente, leucocitosis y deterioro clínico. La tomografía muestra necrosis pancreática con burbujas de gas en la colección.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Pseudoquiste pancreático no complicado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el gas ni la fiebre."
+        },
+        {
+          "key": "b",
+          "text": "Trombosis de vena esplénica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el gas."
+        },
+        {
+          "key": "c",
+          "text": "Necrosis estéril sin infección",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El gas indica infección."
+        },
+        {
+          "key": "d",
+          "text": "Necrosis pancreática infectada",
+          "correct": true,
+          "rationale": "El gas en la necrosis con fiebre y deterioro indica infección."
+        },
+        {
+          "key": "e",
+          "text": "Infección urinaria por sonda",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la colección con gas."
+        },
+        {
+          "key": "f",
+          "text": "Fiebre normal de la inflamación del páncreas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El gas indica infección."
+        },
+        {
+          "key": "g",
+          "text": "Perforación duodenal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El gas está dentro de la colección pancreática."
+        },
+        {
+          "key": "h",
+          "text": "Neumonía nosocomial como única explicación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El gas en la necrosis indica infección pancreática."
+        },
+        {
+          "key": "i",
+          "text": "Cáncer de páncreas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica el cuadro agudo."
+        },
+        {
+          "key": "j",
+          "text": "Absceso hepático",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La colección es pancreática."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "j"
+      ],
+      "explanation": "La necrosis pancreática infectada ocurre en alrededor de un tercio de los pacientes con necrosis, generalmente después de la segunda a cuarta semana, por translocación bacteriana. Se sospecha con fiebre, leucocitosis y deterioro clínico, y la presencia de gas en la colección en la tomografía es muy sugestiva. El tratamiento incluye antibióticos que penetren el tejido pancreático, como carbapenémicos, quinolonas o metronidazol, y un abordaje escalonado con drenaje percutáneo o endoscópico, seguido de necrosectomía mínimamente invasiva si no mejora. Se prefiere retrasar la intervención hasta que la necrosis esté encapsulada, alrededor de 4 semanas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de pancreatitis aguda"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q19",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "pancreas",
+      "subtopic": "acute_pancreatitis",
+      "vignette": "Mujer de 55 años con pancreatitis aguda. A las 48 horas persiste con presión arterial baja que requiere vasopresores y creatinina en aumento pese a la reanimación.",
+      "prompt": "¿Qué indica la persistencia de falla orgánica más de 48 horas?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Pancreatitis aguda grave según la clasificación de Atlanta revisada",
+          "correct": true,
+          "rationale": "La falla orgánica persistente define la gravedad."
+        },
+        {
+          "key": "b",
+          "text": "Indica pancreatitis por hipertrigliceridemia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No indica la causa."
+        },
+        {
+          "key": "c",
+          "text": "Pancreatitis crónica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es una enfermedad diferente."
+        },
+        {
+          "key": "d",
+          "text": "Pancreatitis leve",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La leve no tiene falla orgánica."
+        },
+        {
+          "key": "e",
+          "text": "Pancreatitis moderadamente grave",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Esta tiene falla orgánica transitoria menor de 48 horas o complicaciones locales."
+        },
+        {
+          "key": "f",
+          "text": "La pancreatitis siempre se cura sola en días",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede ser grave."
+        },
+        {
+          "key": "g",
+          "text": "Respuesta normal a la reanimación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La falla persiste."
+        },
+        {
+          "key": "h",
+          "text": "Indica pseudoquiste como causa única",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La gravedad se define por la falla orgánica."
+        },
+        {
+          "key": "i",
+          "text": "Indica que debe operarse de inmediato",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La cirugía temprana no se recomienda."
+        },
+        {
+          "key": "j",
+          "text": "Indica que la amilasa debe repetirse cada día para pronóstico",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "La amilasa no predice gravedad."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "e"
+      ],
+      "explanation": "La clasificación de Atlanta revisada divide la pancreatitis aguda en leve, sin falla orgánica ni complicaciones locales o sistémicas; moderadamente grave, con falla orgánica transitoria que se resuelve en 48 horas o complicaciones locales; y grave, con falla orgánica persistente de más de 48 horas. La falla orgánica se evalúa con la escala de Marshall modificada en los sistemas respiratorio, cardiovascular y renal. La pancreatitis grave tiene una mortalidad de 15 a 30% y requiere manejo en terapia intensiva. Las escalas como BISAP y el nitrógeno ureico ayudan a predecir la gravedad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de pancreatitis aguda"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q20",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "pancreas",
+      "subtopic": "acute_pancreatitis",
+      "vignette": "Hombre de 38 años con diabetes descontrolada y obesidad que presenta pancreatitis aguda. No consume alcohol y el ultrasonido no muestra cálculos. El suero es lechoso y los triglicéridos son de 2 400 mg/dL.",
+      "prompt": "¿Cuál es la causa más probable de la pancreatitis?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hipertrigliceridemia",
+          "correct": true,
+          "rationale": "Triglicéridos mayores de 1 000 mg/dL pueden causar pancreatitis."
+        },
+        {
+          "key": "b",
+          "text": "Fármacos sin especificar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Los triglicéridos explican el cuadro."
+        },
+        {
+          "key": "c",
+          "text": "Alcohol",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No consume alcohol."
+        },
+        {
+          "key": "d",
+          "text": "Páncreas divisum",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es una causa poco frecuente."
+        },
+        {
+          "key": "e",
+          "text": "Hipercalcemia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay datos."
+        },
+        {
+          "key": "f",
+          "text": "Infección viral por paperas",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es rara en adultos."
+        },
+        {
+          "key": "g",
+          "text": "Cáncer de páncreas",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es menos probable a esta edad."
+        },
+        {
+          "key": "h",
+          "text": "Litiasis biliar oculta",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay cálculos y los triglicéridos explican el cuadro."
+        },
+        {
+          "key": "i",
+          "text": "Traumatismo abdominal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay antecedente."
+        },
+        {
+          "key": "j",
+          "text": "Comer mucho una sola vez como única causa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La causa es la hipertrigliceridemia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "La hipertrigliceridemia es la tercera causa más frecuente de pancreatitis aguda, después de la litiasis biliar y el alcohol, y se presenta con triglicéridos generalmente mayores de 1 000 mg/dL. Se asocia a diabetes descontrolada, obesidad, alcohol, embarazo, hipotiroidismo, fármacos como estrógenos y causas genéticas. El suero puede verse lechoso y la amilasa puede ser falsamente normal. El tratamiento incluye el manejo habitual de la pancreatitis más reducción de los triglicéridos con insulina intravenosa, sobre todo en diabéticos, y en casos graves plasmaféresis. Después se usan fibratos y control dietético.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de pancreatitis aguda"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q21",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "pancreas",
+      "subtopic": "acute_pancreatitis",
+      "vignette": "Mujer de 46 años que tuvo pancreatitis aguda hace 7 semanas. Presenta saciedad temprana y dolor epigástrico. La tomografía muestra una colección de 8 cm, de pared bien definida, homogénea, sin necrosis, adyacente al estómago.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Necrosis encapsulada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tendría contenido sólido de necrosis."
+        },
+        {
+          "key": "b",
+          "text": "Cistoadenoma pancreático",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es una neoplasia quística sin antecedente de pancreatitis."
+        },
+        {
+          "key": "c",
+          "text": "Absceso pancreático",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay fiebre ni gas."
+        },
+        {
+          "key": "d",
+          "text": "Dilatación gástrica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la colección encapsulada."
+        },
+        {
+          "key": "e",
+          "text": "Aneurisma de arteria esplénica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la colección."
+        },
+        {
+          "key": "f",
+          "text": "Inflamación que desaparece sola siempre",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede requerir drenaje si es sintomática."
+        },
+        {
+          "key": "g",
+          "text": "Quiste hepático simple",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La colección es pancreática."
+        },
+        {
+          "key": "h",
+          "text": "Pseudoquiste pancreático",
+          "correct": true,
+          "rationale": "Colección líquida encapsulada sin necrosis más de 4 semanas después de la pancreatitis."
+        },
+        {
+          "key": "i",
+          "text": "Cáncer de páncreas quístico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable con el antecedente."
+        },
+        {
+          "key": "j",
+          "text": "Colección líquida aguda peripancreática",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Ocurre en las primeras 4 semanas sin pared definida."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "El pseudoquiste pancreático es una colección de líquido rodeada de una pared bien definida sin tejido epitelial y sin necrosis, que aparece más de 4 semanas después de una pancreatitis intersticial. La necrosis encapsulada, en cambio, contiene material sólido necrótico y deriva de una pancreatitis necrotizante. Muchos pseudoquistes se resuelven solos. Se tratan si causan síntomas como dolor, saciedad temprana u obstrucción, si crecen o se complican con infección, hemorragia o rotura. El drenaje endoscópico guiado por ultrasonido hacia el estómago es el tratamiento de elección.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de pancreatitis aguda"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q22",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "pancreas",
+      "subtopic": "acute_pancreatitis",
+      "vignette": "Mujer de 40 años con pancreatitis aguda biliar leve que mejoró en 3 días, tolera la vía oral y ya no tiene dolor. Enzimas hepáticas normalizándose.",
+      "prompt": "¿Cuál es la conducta más apropiada respecto a la vesícula?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Las piedras se disolverán con la dieta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es así."
+        },
+        {
+          "key": "b",
+          "text": "Dieta sin grasa como único manejo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No previene la recurrencia."
+        },
+        {
+          "key": "c",
+          "text": "Colecistectomía laparoscópica durante el mismo internamiento",
+          "correct": true,
+          "rationale": "Reduce la recurrencia de eventos biliares."
+        },
+        {
+          "key": "d",
+          "text": "Esperar a un segundo episodio para operar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Aumenta la morbilidad."
+        },
+        {
+          "key": "e",
+          "text": "Pancreatectomía distal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "f",
+          "text": "Colecistectomía diferida 6 meses",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta el riesgo de recurrencia de pancreatitis."
+        },
+        {
+          "key": "g",
+          "text": "Ningún tratamiento porque ya mejoró",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El riesgo de recurrencia es alto."
+        },
+        {
+          "key": "h",
+          "text": "Ácido ursodesoxicólico de por vida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No previene la recurrencia de forma adecuada."
+        },
+        {
+          "key": "i",
+          "text": "Colangiopancreatografía con esfinterotomía como único tratamiento en todas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La colecistectomía es el tratamiento definitivo."
+        },
+        {
+          "key": "j",
+          "text": "No operar para evitar riesgos quirúrgicos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo de recurrencia es mayor."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "Tras una pancreatitis aguda biliar leve, la colecistectomía laparoscópica debe realizarse durante el mismo internamiento, una vez que el paciente mejora. Retrasarla aumenta de forma importante el riesgo de eventos biliares recurrentes, como nueva pancreatitis, colecistitis o colangitis, en las semanas siguientes. En la pancreatitis grave con colecciones o necrosis, la colecistectomía se difiere hasta que se resuelva el proceso inflamatorio, generalmente 6 semanas. En pacientes con alto riesgo quirúrgico puede realizarse esfinterotomía endoscópica como alternativa para reducir la recurrencia de pancreatitis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de pancreatitis aguda"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q23",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "pancreas",
+      "subtopic": "pancreatic_cancer",
+      "vignette": "Hombre de 68 años con ictericia indolora, pérdida de peso y diabetes de reciente inicio. El ultrasonido muestra dilatación de la vía biliar intra y extrahepática y del conducto pancreático.",
+      "prompt": "¿Cuál es el estudio de elección para el diagnóstico y la estadificación?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Repetir el ultrasonido abdominal en 3 meses",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Retrasa el diagnóstico."
+        },
+        {
+          "key": "b",
+          "text": "Tomografía multifásica con protocolo de páncreas",
+          "correct": true,
+          "rationale": "Evalúa la masa, la afección vascular y las metástasis para decidir la resecabilidad."
+        },
+        {
+          "key": "c",
+          "text": "Gammagrama óseo como primer estudio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "d",
+          "text": "Amilasa sérica",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No es útil para el diagnóstico."
+        },
+        {
+          "key": "e",
+          "text": "Colangiopancreatografía como estudio de estadificación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No estadifica."
+        },
+        {
+          "key": "f",
+          "text": "Biopsia percutánea obligatoria antes de cualquier imagen",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Primero se realiza imagen."
+        },
+        {
+          "key": "g",
+          "text": "Endoscopia superior simple",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No evalúa el páncreas."
+        },
+        {
+          "key": "h",
+          "text": "Radiografía simple de abdomen",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es útil."
+        },
+        {
+          "key": "i",
+          "text": "Laparotomía exploradora directa sin imagen",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Primero se estadifica con imagen."
+        },
+        {
+          "key": "j",
+          "text": "CA 19 9 como diagnóstico definitivo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es un marcador de apoyo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "h"
+      ],
+      "explanation": "La tomografía multifásica con protocolo de páncreas es el estudio de elección para diagnosticar y estadificar el cáncer de páncreas. Muestra la masa hipodensa, la dilatación ductal en doble conducto, la relación con los vasos como la arteria mesentérica superior, el tronco celíaco y la vena porta, y las metástasis hepáticas. Con ella se clasifica el tumor como resecable, limítrofe, localmente avanzado o metastásico. El ultrasonido endoscópico permite la biopsia. El CA 19 9 apoya el diagnóstico y el seguimiento. Solo 15 a 20% son resecables al diagnóstico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de páncreas"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q24",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "pancreas",
+      "subtopic": "pancreatic_cancer",
+      "vignette": "Hombre de 62 años con adenocarcinoma de la cabeza del páncreas de 2.5 cm sin afección vascular ni metástasis en la tomografía. Buen estado funcional.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Pancreatoduodenectomía de Whipple seguida de quimioterapia adyuvante",
+          "correct": true,
+          "rationale": "Es la única opción potencialmente curativa en tumores resecables."
+        },
+        {
+          "key": "b",
+          "text": "Tratamientos herbolarios",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No son eficaces."
+        },
+        {
+          "key": "c",
+          "text": "No operar por la edad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Tiene buen estado funcional."
+        },
+        {
+          "key": "d",
+          "text": "Derivación biliodigestiva paliativa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es para tumores irresecables."
+        },
+        {
+          "key": "e",
+          "text": "Quimioterapia sola como tratamiento definitivo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La cirugía es la única opción curativa."
+        },
+        {
+          "key": "f",
+          "text": "Cuidados paliativos exclusivos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El tumor es resecable."
+        },
+        {
+          "key": "g",
+          "text": "Prótesis biliar como tratamiento definitivo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es paliativa."
+        },
+        {
+          "key": "h",
+          "text": "Radioterapia sola",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es curativa."
+        },
+        {
+          "key": "i",
+          "text": "Trasplante de páncreas",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "j",
+          "text": "Pancreatectomía distal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es para tumores del cuerpo y cola."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La resección quirúrgica es la única opción potencialmente curativa del cáncer de páncreas. Para los tumores de la cabeza se realiza pancreatoduodenectomía o procedimiento de Whipple, que reseca la cabeza del páncreas, el duodeno, la vía biliar distal y la vesícula, con reconstrucción. Para los tumores del cuerpo y cola se realiza pancreatectomía distal con esplenectomía. Después se administra quimioterapia adyuvante con esquemas como FOLFIRINOX modificado, que mejora la supervivencia. En tumores limítrofes se administra neoadyuvancia. Aun con resección, la supervivencia a 5 años es de 20 a 30%.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de páncreas"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q25",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "pancreas",
+      "subtopic": "pancreatic_cancer",
+      "vignette": "Hombre de 65 años con cáncer de páncreas. Fuma 1 cajetilla al día desde hace 40 años, tiene diabetes de 2 años de evolución, obesidad y pancreatitis crónica.",
+      "prompt": "¿Cuál es el factor de riesgo modificable más importante?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Consumo de café",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es un factor establecido."
+        },
+        {
+          "key": "b",
+          "text": "Uso de aspirina",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No aumenta el riesgo."
+        },
+        {
+          "key": "c",
+          "text": "Ejercicio moderado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es protector."
+        },
+        {
+          "key": "d",
+          "text": "Tabaquismo",
+          "correct": true,
+          "rationale": "Es el principal factor de riesgo modificable de cáncer de páncreas."
+        },
+        {
+          "key": "e",
+          "text": "Edad de 65 años como factor modificable",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es modificable."
+        },
+        {
+          "key": "f",
+          "text": "Dieta rica en frutas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es protectora."
+        },
+        {
+          "key": "g",
+          "text": "Consumo de lácteos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "h",
+          "text": "El estrés laboral como causa principal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es un factor establecido."
+        },
+        {
+          "key": "i",
+          "text": "Grupo sanguíneo como factor modificable",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es modificable."
+        },
+        {
+          "key": "j",
+          "text": "Apendicectomía previa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es un factor."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "g"
+      ],
+      "explanation": "El tabaquismo es el principal factor de riesgo modificable del cáncer de páncreas y duplica el riesgo. Otros factores son la edad avanzada, la obesidad, la diabetes de larga evolución, la pancreatitis crónica, el alcohol y los síndromes hereditarios como BRCA2, síndrome de Lynch, síndrome de Peutz Jeghers y pancreatitis hereditaria. La diabetes de reciente inicio en mayores de 50 años con pérdida de peso puede ser una manifestación temprana del cáncer. No se recomienda el tamizaje en la población general, pero sí en personas con alto riesgo hereditario.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de páncreas"
+      ]
+    },
+    {
+      "key": "cir-02-biliar-pancreas-q26",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "pancreas",
+      "subtopic": "pancreatic_cancer",
+      "vignette": "Hombre de 72 años con cáncer de páncreas con metástasis hepáticas e ictericia obstructiva con prurito intenso. Desea mejorar su calidad de vida.",
+      "prompt": "¿Cuál es el tratamiento paliativo de elección para la ictericia?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ningún procedimiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La prótesis mejora la calidad de vida."
+        },
+        {
+          "key": "b",
+          "text": "Ácido ursodesoxicólico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No resuelve la obstrucción maligna."
+        },
+        {
+          "key": "c",
+          "text": "Pancreatoduodenectomía de Whipple",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No está indicada con metástasis."
+        },
+        {
+          "key": "d",
+          "text": "No ofrecer paliación por el mal pronóstico",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La paliación mejora la calidad de vida."
+        },
+        {
+          "key": "e",
+          "text": "Colocación endoscópica de prótesis biliar metálica por colangiopancreatografía",
+          "correct": true,
+          "rationale": "Alivia la obstrucción con menor morbilidad que la cirugía."
+        },
+        {
+          "key": "f",
+          "text": "Radioterapia del hígado",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No resuelve la obstrucción biliar."
+        },
+        {
+          "key": "g",
+          "text": "Derivación quirúrgica abierta como primera opción",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La prótesis endoscópica tiene menor morbilidad."
+        },
+        {
+          "key": "h",
+          "text": "Antihistamínicos como único tratamiento del prurito",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No resuelven la obstrucción."
+        },
+        {
+          "key": "i",
+          "text": "Dieta sin grasa resolverá la ictericia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No resuelve la obstrucción."
+        },
+        {
+          "key": "j",
+          "text": "Trasplante hepático",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicado."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "La mayoría de los pacientes con cáncer de páncreas tienen enfermedad irresecable al diagnóstico. El tratamiento paliativo busca aliviar los síntomas. La ictericia obstructiva se trata con prótesis biliares metálicas autoexpandibles colocadas por colangiopancreatografía, que tienen mayor duración que las plásticas, o por vía percutánea. La obstrucción duodenal se trata con prótesis duodenal o gastroyeyunostomía. El dolor se maneja con analgésicos, incluidos opioides, y la neurólisis del plexo celíaco. La quimioterapia paliativa prolonga la supervivencia en pacientes con buen estado funcional.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de páncreas"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1321 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-13-geriatria-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "geriatrics",
+      "subtopic": "geriatric_syndromes",
+      "vignette": "Mujer de 81 años que en el último año perdió 5 kg sin intención, refiere agotamiento, camina muy lento, tiene poca fuerza de prensión en la mano y casi no realiza actividad física.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Depresión mayor",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el agotamiento, sin ánimo deprimido descrito."
+        },
+        {
+          "key": "b",
+          "text": "Insuficiencia cardiaca",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el agotamiento."
+        },
+        {
+          "key": "c",
+          "text": "Síndrome de fragilidad",
+          "correct": true,
+          "rationale": "Cumple los cinco criterios de Fried."
+        },
+        {
+          "key": "d",
+          "text": "Desnutrición por mala dieta como único problema",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a causa, pero el síndrome es más amplio."
+        },
+        {
+          "key": "e",
+          "text": "Cáncer oculto",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe descartarse, pero el cuadro define fragilidad."
+        },
+        {
+          "key": "f",
+          "text": "Sarcopenia aislada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Comparte la baja fuerza, pero no explica todos los criterios."
+        },
+        {
+          "key": "g",
+          "text": "Demencia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay alteración cognitiva descrita."
+        },
+        {
+          "key": "h",
+          "text": "Hipertiroidismo apático",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable."
+        },
+        {
+          "key": "i",
+          "text": "Pereza propia de la vejez",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que es falta de voluntad."
+        },
+        {
+          "key": "j",
+          "text": "Envejecimiento normal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Atribuye a la edad un síndrome clínico."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "La fragilidad es un síndrome geriátrico de disminución de la reserva fisiológica y de la resistencia al estrés, que aumenta el riesgo de caídas, discapacidad, hospitalización, institucionalización y muerte. El fenotipo de Fried la define con tres o más de cinco criterios, que son pérdida de peso no intencionada, agotamiento, debilidad medida por fuerza de prensión, velocidad de marcha lenta y baja actividad física. Con uno o dos criterios se considera prefragilidad. Es potencialmente reversible con ejercicio de resistencia y equilibrio, optimización nutricional con proteínas y vitamina D, revisión de fármacos y tratamiento de comorbilidades.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de fragilidad en el adulto mayor"
+      ]
+    },
+    {
+      "key": "mi-13-geriatria-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "geriatrics",
+      "subtopic": "geriatric_syndromes",
+      "vignette": "Hombre de 78 años que toma 11 medicamentos distintos indicados por varios especialistas, incluidos diazepam, amitriptilina y difenhidramina para dormir. Tiene mareo, estreñimiento y somnolencia diurna.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sin cambios y revisión en un año",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Ignora riesgos actuales."
+        },
+        {
+          "key": "b",
+          "text": "Solicitar resonancia de cráneo por el mareo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Busca otra causa sin revisar los fármacos."
+        },
+        {
+          "key": "c",
+          "text": "Revisión integral de la medicación con criterios como Beers o STOPP START y deprescribir fármacos inapropiados",
+          "correct": true,
+          "rationale": "Polifarmacia con medicamentos potencialmente inapropiados."
+        },
+        {
+          "key": "d",
+          "text": "Suspender todos los medicamentos de golpe",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede causar abstinencia y descompensación."
+        },
+        {
+          "key": "e",
+          "text": "Mantener todos porque fueron indicados por especialistas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena respetuoso, pero perpetúa el daño."
+        },
+        {
+          "key": "f",
+          "text": "Evitar modificar fármacos para no molestar a los especialistas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pierde una intervención segura."
+        },
+        {
+          "key": "g",
+          "text": "Agregar un laxante y un estimulante para la somnolencia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en tratar síntomas con más fármacos."
+        },
+        {
+          "key": "h",
+          "text": "Hospitalizar para estudio completo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La causa probable es farmacológica."
+        },
+        {
+          "key": "i",
+          "text": "Iniciar un antipsicótico para la somnolencia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Agrega otro fármaco inapropiado."
+        },
+        {
+          "key": "j",
+          "text": "Agregar vitaminas para contrarrestar los efectos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que las vitaminas corrigen los efectos adversos."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "e",
+        "g"
+      ],
+      "explanation": "La polifarmacia, generalmente definida como el uso de cinco o más medicamentos, es frecuente en adultos mayores y se asocia a interacciones, efectos adversos, caídas, deterioro cognitivo, hospitalizaciones y mortalidad. Algunos fármacos son potencialmente inapropiados en esta población, como benzodiacepinas, antihistamínicos de primera generación, antidepresivos tricíclicos y otros con efecto anticolinérgico. Las herramientas como los criterios de Beers y STOPP START ayudan a identificar medicamentos a suspender o a iniciar. La deprescripción debe ser gradual, priorizada y consensuada con el paciente, sobre todo para benzodiacepinas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prescripción farmacológica razonada para el adulto mayor"
+      ]
+    },
+    {
+      "key": "mi-13-geriatria-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "geriatrics",
+      "subtopic": "geriatric_syndromes",
+      "vignette": "Mujer de 79 años con pérdidas involuntarias de orina al toser, reír o levantar objetos. No tiene urgencia ni dificultad para orinar. Tuvo 4 partos vaginales.",
+      "prompt": "¿Cuál es el tipo de incontinencia más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Incontinencia urinaria de esfuerzo",
+          "correct": true,
+          "rationale": "Pérdida con aumento de presión abdominal por debilidad del piso pélvico."
+        },
+        {
+          "key": "b",
+          "text": "Incontinencia por rebosamiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la edad, pero se asocia a obstrucción o vejiga hipoactiva."
+        },
+        {
+          "key": "c",
+          "text": "Fístula vesicovaginal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da pérdida continua y es rara."
+        },
+        {
+          "key": "d",
+          "text": "Infección urinaria",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye sin síntomas urinarios irritativos."
+        },
+        {
+          "key": "e",
+          "text": "Parte normal del envejecimiento sin tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que no tiene solución."
+        },
+        {
+          "key": "f",
+          "text": "Incontinencia mixta",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena completa, pero no hay urgencia."
+        },
+        {
+          "key": "g",
+          "text": "Prolapso uterino como causa única",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la anatomía."
+        },
+        {
+          "key": "h",
+          "text": "Vejiga neurógena",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay datos neurológicos."
+        },
+        {
+          "key": "i",
+          "text": "Incontinencia de urgencia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se presenta con deseo súbito e intenso de orinar."
+        },
+        {
+          "key": "j",
+          "text": "Incontinencia funcional",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se debe a limitaciones físicas o cognitivas para llegar al baño."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "La incontinencia urinaria es un síndrome geriátrico frecuente y subdiagnosticado. La incontinencia de esfuerzo consiste en pérdida de orina con maniobras que aumentan la presión abdominal, como toser, reír o levantar objetos, y se debe a debilidad del piso pélvico y del esfínter, relacionada con partos vaginales, menopausia y obesidad. La de urgencia se debe a hiperactividad del detrusor. La de rebosamiento se asocia a obstrucción o vejiga hipoactiva con residuo alto. El tratamiento inicial de la de esfuerzo son los ejercicios de Kegel, control de peso y, en casos refractarios, cirugía con cabestrillo suburetral.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la incontinencia urinaria en el adulto mayor"
+      ]
+    },
+    {
+      "key": "mi-13-geriatria-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "geriatrics",
+      "subtopic": "geriatric_syndromes",
+      "vignette": "Hombre de 84 años hospitalizado por neumonía, en cama desde hace 5 días. Tiene desnutrición, incontinencia y poca movilidad. En el sacro aparece un área de eritema que no palidece a la presión, con piel íntegra.",
+      "prompt": "¿Cuál es la medida de prevención más importante para evitar que progrese?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Injerto de piel",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es para úlceras profundas."
+        },
+        {
+          "key": "b",
+          "text": "Mantener al paciente sentado todo el día para que no esté acostado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a movilizar, pero concentra la presión en el sacro."
+        },
+        {
+          "key": "c",
+          "text": "Desbridamiento quirúrgico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es para úlceras con tejido necrótico."
+        },
+        {
+          "key": "d",
+          "text": "Colocar flotador o dona bajo el sacro",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Aumenta la presión alrededor."
+        },
+        {
+          "key": "e",
+          "text": "Masaje vigoroso de la zona enrojecida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daña más el tejido."
+        },
+        {
+          "key": "f",
+          "text": "Continuar igual porque la piel está íntegra",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Permite que progrese."
+        },
+        {
+          "key": "g",
+          "text": "Evitar moverlo para no causarle dolor",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Aumenta el riesgo."
+        },
+        {
+          "key": "h",
+          "text": "Cambios de posición frecuentes, superficie de redistribución de presión, manejo de la humedad y nutrición adecuada",
+          "correct": true,
+          "rationale": "Es una úlcera por presión grado 1."
+        },
+        {
+          "key": "i",
+          "text": "Antibiótico tópico en el eritema",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la infección sin indicación."
+        },
+        {
+          "key": "j",
+          "text": "Aplicar alcohol para endurecer la piel",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Reseca y daña la piel."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "h",
+        "i"
+      ],
+      "explanation": "Las úlceras por presión se producen por presión sostenida sobre prominencias óseas, sobre todo en sacro y talones, en pacientes inmóviles, desnutridos e incontinentes. El grado 1 es eritema que no palidece con piel íntegra, el grado 2 pérdida parcial de la piel, el grado 3 pérdida total sin exposición de hueso y el grado 4 con exposición de hueso, tendón o músculo. El riesgo se valora con la escala de Braden. La prevención incluye cambios de posición cada dos horas, superficies de redistribución de presión, protección de talones, manejo de la humedad con limpieza y barreras, y nutrición con proteínas suficientes.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención y tratamiento de úlceras por presión"
+      ]
+    },
+    {
+      "key": "mi-13-geriatria-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "geriatrics",
+      "subtopic": "geriatric_syndromes",
+      "vignette": "Mujer de 80 años cuya hija nota que en el último año olvida conversaciones recientes, repite preguntas, se pierde en lugares conocidos y ya no puede manejar su dinero. Es independiente para bañarse y vestirse.",
+      "prompt": "¿Cuál es el estudio inicial más adecuado para evaluar su deterioro cognitivo?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Prueba de tamizaje cognitivo como MoCA o Minimental, más laboratorio para causas reversibles e imagen cerebral",
+          "correct": true,
+          "rationale": "Inicia el abordaje del probable síndrome demencial."
+        },
+        {
+          "key": "b",
+          "text": "Estudio genético de apolipoproteína E",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No se recomienda de rutina."
+        },
+        {
+          "key": "c",
+          "text": "Electroencefalograma como estudio principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es el estudio inicial del deterioro cognitivo."
+        },
+        {
+          "key": "d",
+          "text": "Iniciar donepezilo sin evaluación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a tratar pronto, pero omite causas reversibles."
+        },
+        {
+          "key": "e",
+          "text": "Biopsia cerebral",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Es invasiva e injustificada."
+        },
+        {
+          "key": "f",
+          "text": "Suplementos de ginkgo como prueba terapéutica",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree en un tratamiento sin evidencia."
+        },
+        {
+          "key": "g",
+          "text": "Tomografía por emisión de positrones con amiloide en todos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es especializada y no inicial."
+        },
+        {
+          "key": "h",
+          "text": "Atribuirlo a la edad sin estudios",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el envejecimiento normal."
+        },
+        {
+          "key": "i",
+          "text": "Descartar demencia por su independencia en el baño",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El deterioro en actividades instrumentales ya es significativo."
+        },
+        {
+          "key": "j",
+          "text": "Punción lumbar en todos los casos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se reserva para casos atípicos o rápidamente progresivos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "El deterioro cognitivo con afección de las actividades instrumentales de la vida diaria, como manejar dinero o medicamentos, sugiere un síndrome demencial. La evaluación inicial incluye historia clínica con un informante, pruebas de tamizaje como MoCA o Minimental, evaluación funcional y búsqueda de causas reversibles con biometría hemática, glucosa, electrolitos, calcio, función renal y hepática, TSH, vitamina B12 y, según el contexto, serología de sífilis y VIH. Se recomienda una neuroimagen, tomografía o resonancia, para descartar lesiones estructurales. También se descarta depresión y delirium. La causa más frecuente es la enfermedad de Alzheimer.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la demencia tipo Alzheimer"
+      ]
+    },
+    {
+      "key": "mi-13-geriatria-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "geriatrics",
+      "subtopic": "geriatric_syndromes",
+      "vignette": "Hombre de 77 años con demencia tipo Alzheimer leve a moderada confirmada. Sin bradicardia ni trastornos de conducción en el electrocardiograma.",
+      "prompt": "¿Cuál es el tratamiento farmacológico de elección para los síntomas cognitivos?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Benzodiacepina para mejorar el sueño y la memoria",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Empeora la cognición y aumenta caídas."
+        },
+        {
+          "key": "b",
+          "text": "Memantina sola como primera opción en demencia leve",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a tratamiento de demencia, pero se usa en moderada a grave."
+        },
+        {
+          "key": "c",
+          "text": "Vitamina E en dosis altas como tratamiento principal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Su beneficio es incierto."
+        },
+        {
+          "key": "d",
+          "text": "Sin tratamiento farmacológico por ser incurable",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Pierde un beneficio sintomático."
+        },
+        {
+          "key": "e",
+          "text": "Combinación de cinco fármacos nootrópicos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Sin evidencia."
+        },
+        {
+          "key": "f",
+          "text": "Evitar fármacos por miedo a efectos digestivos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son manejables con titulación."
+        },
+        {
+          "key": "g",
+          "text": "Antidepresivo tricíclico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Tiene efecto anticolinérgico que empeora la cognición."
+        },
+        {
+          "key": "h",
+          "text": "Antipsicótico atípico como tratamiento cognitivo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en los síntomas conductuales con riesgo aumentado de muerte."
+        },
+        {
+          "key": "i",
+          "text": "Un inhibidor de la acetilcolinesterasa, como donepezilo, rivastigmina o galantamina",
+          "correct": true,
+          "rationale": "Mejoran discretamente la cognición y la funcionalidad."
+        },
+        {
+          "key": "j",
+          "text": "Ginkgo biloba como tratamiento de elección",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree en un suplemento sin eficacia demostrada."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "El tratamiento de la enfermedad de Alzheimer combina intervenciones no farmacológicas, como estimulación cognitiva, actividad física, apoyo al cuidador y adaptación del entorno, con fármacos que mejoran discretamente los síntomas. Los inhibidores de la acetilcolinesterasa, donepezilo, rivastigmina y galantamina, están indicados en demencia leve a moderada. Sus efectos adversos incluyen náusea, diarrea, bradicardia y síncope, por lo que se valora el electrocardiograma. La memantina, un antagonista del receptor NMDA, se indica en demencia moderada a grave, sola o combinada. Se deben evitar fármacos anticolinérgicos y sedantes.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la demencia tipo Alzheimer"
+      ]
+    },
+    {
+      "key": "mi-13-geriatria-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "geriatrics",
+      "subtopic": "delirium",
+      "vignette": "Mujer de 85 años hospitalizada por fractura de cadera. Al segundo día de la cirugía presenta de forma aguda desorientación, inatención, habla incoherente y somnolencia que alterna con agitación en la noche. Antes era independiente y sin problemas de memoria.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Evento vascular cerebral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe descartarse si hay déficit focal, pero el cuadro es de delirium."
+        },
+        {
+          "key": "b",
+          "text": "Reacción normal a la anestesia que no requiere evaluación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena benigno, pero requiere buscar causas."
+        },
+        {
+          "key": "c",
+          "text": "Psicosis aguda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la agitación y el habla incoherente."
+        },
+        {
+          "key": "d",
+          "text": "Trastorno de ansiedad",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta la inatención y la fluctuación."
+        },
+        {
+          "key": "e",
+          "text": "Delirium",
+          "correct": true,
+          "rationale": "Alteración aguda y fluctuante de la atención y la conciencia."
+        },
+        {
+          "key": "f",
+          "text": "Insomnio por el hospital",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el sueño."
+        },
+        {
+          "key": "g",
+          "text": "Encefalitis herpética",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es poco probable."
+        },
+        {
+          "key": "h",
+          "text": "Simple confusión de la vejez",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que es normal en ancianos."
+        },
+        {
+          "key": "i",
+          "text": "Demencia de inicio reciente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También altera la cognición, pero es de inicio insidioso y sin fluctuación."
+        },
+        {
+          "key": "j",
+          "text": "Depresión posoperatoria",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da apatía, pero no alteración aguda de la atención."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "El delirium es un síndrome agudo y fluctuante de alteración de la atención, la conciencia y la cognición, causado por una condición médica, fármacos o abstinencia. Es muy frecuente en adultos mayores hospitalizados, sobre todo tras cirugía de cadera. Puede ser hiperactivo, hipoactivo, el más subdiagnosticado, o mixto. Se identifica con herramientas como CAM, que requiere inicio agudo y curso fluctuante, inatención, y pensamiento desorganizado o alteración del nivel de conciencia. Se asocia a mayor mortalidad, estancia y deterioro funcional. Siempre se buscan causas como infección, dolor, retención urinaria, fármacos, alteraciones metabólicas e hipoxemia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del delirium en el adulto mayor hospitalizado"
+      ]
+    },
+    {
+      "key": "mi-13-geriatria-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "geriatrics",
+      "subtopic": "delirium",
+      "vignette": "Hombre de 82 años con delirium hiperactivo por infección urinaria. Está inquieto e intenta levantarse, pero no se ha lesionado ni pone en riesgo a otros.",
+      "prompt": "¿Cuál es el tratamiento inicial?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sujeción mecánica para evitar caídas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la seguridad, pero aumenta la agitación y lesiones."
+        },
+        {
+          "key": "b",
+          "text": "Tomografía de cráneo urgente en todos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se indica si hay déficit focal o trauma."
+        },
+        {
+          "key": "c",
+          "text": "Mantener la luz encendida toda la noche para vigilarlo",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Altera el ciclo de sueño."
+        },
+        {
+          "key": "d",
+          "text": "Tratar la infección y aplicar medidas no farmacológicas, como reorientación, presencia familiar, lentes y auxiliares auditivos, movilización y sueño ordenado",
+          "correct": true,
+          "rationale": "El manejo inicial es la causa y las medidas no farmacológicas."
+        },
+        {
+          "key": "e",
+          "text": "Haloperidol de rutina a dosis altas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena eficaz, pero se reserva para agitación grave con riesgo."
+        },
+        {
+          "key": "f",
+          "text": "Esperar a que se le pase solo sin tratar la infección",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Deja la causa sin tratar."
+        },
+        {
+          "key": "g",
+          "text": "Sedación profunda en terapia intensiva",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Medida excesiva."
+        },
+        {
+          "key": "h",
+          "text": "Sonda vesical permanente para evitar que se moje",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumenta infecciones y agitación."
+        },
+        {
+          "key": "i",
+          "text": "Benzodiacepina para tranquilizarlo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Empeora el delirium, salvo abstinencia alcohólica."
+        },
+        {
+          "key": "j",
+          "text": "Aislarlo en un cuarto sin visitas para que descanse",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Empeora la desorientación."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "i"
+      ],
+      "explanation": "El tratamiento del delirium se basa en identificar y corregir la causa desencadenante, como infecciones, dolor, retención urinaria, estreñimiento, fármacos, deshidratación o alteraciones metabólicas, y en medidas no farmacológicas. Estas incluyen reorientación frecuente, presencia de familiares, uso de lentes y auxiliares auditivos, movilización temprana, hidratación, higiene del sueño con luz natural de día y oscuridad de noche, y evitar sujeciones y sondas innecesarias. Los antipsicóticos como haloperidol a dosis bajas se reservan para agitación grave con riesgo para el paciente u otros. Las benzodiacepinas se evitan salvo en abstinencia alcohólica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del delirium en el adulto mayor hospitalizado"
+      ]
+    },
+    {
+      "key": "mi-13-geriatria-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "geriatrics",
+      "subtopic": "delirium",
+      "vignette": "Mujer de 88 años con demencia leve, déficit visual y auditivo, que será hospitalizada para una cirugía. Toma oxibutinina y difenhidramina.",
+      "prompt": "¿Cuál es el factor de riesgo predisponente más importante de delirium en esta paciente?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "El tipo de anestesia como único factor",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tiene un papel menor."
+        },
+        {
+          "key": "b",
+          "text": "El horario de la cirugía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena logístico, sin relevancia."
+        },
+        {
+          "key": "c",
+          "text": "La demencia previa",
+          "correct": true,
+          "rationale": "El deterioro cognitivo previo es el principal factor predisponente."
+        },
+        {
+          "key": "d",
+          "text": "El sexo femenino",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es un factor determinante."
+        },
+        {
+          "key": "e",
+          "text": "La estatura",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No se relaciona."
+        },
+        {
+          "key": "f",
+          "text": "La personalidad de la paciente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el carácter predispone."
+        },
+        {
+          "key": "g",
+          "text": "La cirugía como único factor",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el desencadenante, que es precipitante, no predisponente."
+        },
+        {
+          "key": "h",
+          "text": "La dieta del hospital",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es un factor principal."
+        },
+        {
+          "key": "i",
+          "text": "El color de la habitación",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en un detalle irrelevante."
+        },
+        {
+          "key": "j",
+          "text": "La hipertensión arterial",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un factor importante."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "g",
+        "j"
+      ],
+      "explanation": "El delirium resulta de la interacción entre factores predisponentes, que aumentan la vulnerabilidad, y factores precipitantes, que lo desencadenan. Entre los predisponentes, el deterioro cognitivo o la demencia previa es el más importante, seguido de la edad avanzada, el déficit visual y auditivo, la fragilidad, la dependencia funcional, la comorbilidad y el antecedente de delirium. Entre los precipitantes están la cirugía, las infecciones, los fármacos anticolinérgicos y sedantes, el dolor, la deshidratación, las sondas y la privación de sueño. La prevención multicomponente, como el programa HELP, reduce su incidencia en pacientes de riesgo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del delirium en el adulto mayor hospitalizado"
+      ]
+    },
+    {
+      "key": "mi-13-geriatria-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "geriatrics",
+      "subtopic": "delirium",
+      "vignette": "Hombre de 80 años hospitalizado. La enfermera lo describe somnoliento, poco reactivo y con respuestas lentas desde ayer. Antes conversaba con normalidad. Al pedirle que diga los meses del año al revés se detiene y se distrae.",
+      "prompt": "¿Cuál es la interpretación correcta de este cuadro?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Delirium hipoactivo",
+          "correct": true,
+          "rationale": "Alteración aguda con inatención y disminución del nivel de alerta."
+        },
+        {
+          "key": "b",
+          "text": "Catatonia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente."
+        },
+        {
+          "key": "c",
+          "text": "Simple vejez",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que es parte de la edad."
+        },
+        {
+          "key": "d",
+          "text": "Insomnio nocturno compensatorio",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el sueño."
+        },
+        {
+          "key": "e",
+          "text": "Paciente tranquilo y cooperador sin problema",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena favorable, pero es un delirium subdiagnosticado."
+        },
+        {
+          "key": "f",
+          "text": "Demencia avanzada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es crónica y sin cambio agudo."
+        },
+        {
+          "key": "g",
+          "text": "Cansancio normal por la hospitalización",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Atribuye a la estancia un cuadro clínico."
+        },
+        {
+          "key": "h",
+          "text": "Hipoacusia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta la inatención."
+        },
+        {
+          "key": "i",
+          "text": "Sedación por fármacos sin importancia clínica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede ser causa, pero requiere evaluación."
+        },
+        {
+          "key": "j",
+          "text": "Depresión",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la apatía, sin el inicio agudo y la inatención."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "El delirium hipoactivo se caracteriza por somnolencia, disminución de la actividad motora, lentitud, apatía y escasa interacción, junto con inatención y alteración aguda del estado mental. Es el subtipo más frecuente en adultos mayores y el que con más frecuencia pasa desapercibido, porque el paciente parece tranquilo, y tiene peor pronóstico que el hiperactivo. La inatención se evalúa con tareas como recitar los meses del año al revés. Se confirma con herramientas como CAM. Requiere el mismo abordaje que cualquier delirium, con búsqueda activa de la causa, como infección, hipoxemia, fármacos o alteraciones metabólicas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del delirium en el adulto mayor hospitalizado"
+      ]
+    },
+    {
+      "key": "mi-13-geriatria-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "geriatrics",
+      "subtopic": "falls",
+      "vignette": "Mujer de 79 años que se ha caído dos veces en los últimos 6 meses. Toma lorazepam para dormir, tiene cataratas, usa tapetes sueltos en casa y camina con dificultad.",
+      "prompt": "¿Cuál es el factor de riesgo modificable más importante relacionado con fármacos?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Su edad avanzada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es un factor de riesgo, pero no modificable."
+        },
+        {
+          "key": "b",
+          "text": "El uso de estatinas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un factor importante de caídas."
+        },
+        {
+          "key": "c",
+          "text": "El calzado",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en otro factor."
+        },
+        {
+          "key": "d",
+          "text": "El sexo femenino",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es modificable ni farmacológico."
+        },
+        {
+          "key": "e",
+          "text": "Las cataratas como único factor",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Son un factor ambiental y visual, no farmacológico."
+        },
+        {
+          "key": "f",
+          "text": "El uso de benzodiacepinas",
+          "correct": true,
+          "rationale": "Aumentan el riesgo de caídas por sedación y alteración del equilibrio."
+        },
+        {
+          "key": "g",
+          "text": "Los tapetes sueltos como factor farmacológico",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Confunde un factor ambiental con uno farmacológico."
+        },
+        {
+          "key": "h",
+          "text": "La falta de calcio en la dieta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la dieta causa caídas."
+        },
+        {
+          "key": "i",
+          "text": "Que vive sola",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena relevante, pero no es farmacológico."
+        },
+        {
+          "key": "j",
+          "text": "La hipertensión controlada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Su papel es menor."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "f"
+      ],
+      "explanation": "Las caídas en adultos mayores son multifactoriales y se asocian a fracturas, miedo a caer, pérdida de independencia y muerte. Los factores de riesgo incluyen caídas previas, alteración de la marcha y el equilibrio, debilidad muscular, déficit visual, deterioro cognitivo, hipotensión ortostática, incontinencia, peligros en el hogar y fármacos. Entre los fármacos, las benzodiacepinas, los hipnóticos, los antidepresivos, los antipsicóticos, los antihipertensivos y los opioides aumentan el riesgo. La intervención multifactorial incluye ejercicio de fuerza y equilibrio, retirar fármacos de riesgo, corregir la visión, adaptar el hogar y tratar la hipotensión ortostática.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención de caídas en el adulto mayor"
+      ]
+    },
+    {
+      "key": "mi-13-geriatria-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "geriatrics",
+      "subtopic": "falls",
+      "vignette": "Hombre de 82 años con dos caídas en 3 meses. Refiere mareo al levantarse de la cama. Toma tamsulosina y enalapril.",
+      "prompt": "¿Cuál es el estudio inicial más útil para evaluar la causa de sus caídas?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Electroencefalograma",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es útil en este contexto."
+        },
+        {
+          "key": "b",
+          "text": "Audiometría como estudio definitivo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el oído explica todo."
+        },
+        {
+          "key": "c",
+          "text": "Holter de 7 días en todos los casos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena exhaustivo, pero no es el primer paso."
+        },
+        {
+          "key": "d",
+          "text": "Descartar hipotensión por tener hipertensión",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La hipertensión no excluye la hipotensión ortostática."
+        },
+        {
+          "key": "e",
+          "text": "Medir la presión arterial acostado y de pie para buscar hipotensión ortostática, junto con evaluar marcha y equilibrio",
+          "correct": true,
+          "rationale": "El mareo postural y sus fármacos sugieren hipotensión ortostática."
+        },
+        {
+          "key": "f",
+          "text": "Densitometría ósea como estudio de la causa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Evalúa el riesgo de fractura, no la causa de la caída."
+        },
+        {
+          "key": "g",
+          "text": "Estudio de conducción nerviosa",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es inicial."
+        },
+        {
+          "key": "h",
+          "text": "Atribuirlas a la edad sin estudio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Pierde una causa tratable."
+        },
+        {
+          "key": "i",
+          "text": "Tomografía de columna completa",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No aporta a la causa."
+        },
+        {
+          "key": "j",
+          "text": "Resonancia magnética de cráneo como primer estudio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el mareo con un estudio no inicial."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "Ante un adulto mayor con caídas recurrentes se realiza una evaluación multifactorial. Incluye la historia de la caída, revisión de fármacos, medición de la presión arterial acostado y de pie, evaluación de la marcha y el equilibrio con pruebas como levántate y anda cronometrada, fuerza, visión, cognición, pies y calzado y el entorno del hogar. La hipotensión ortostática se define por una caída de la presión sistólica de 20 mmHg o más o de la diastólica de 10 mmHg o más al ponerse de pie, y se asocia a alfabloqueadores como tamsulosina, antihipertensivos, diuréticos y deshidratación.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención de caídas en el adulto mayor"
+      ]
+    },
+    {
+      "key": "mi-13-geriatria-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "geriatrics",
+      "subtopic": "falls",
+      "vignette": "Mujer de 76 años con antecedente de una caída sin fractura. Vive sola y es independiente. Densitometría con osteoporosis.",
+      "prompt": "¿Cuál es la intervención con mayor evidencia para la prevención de nuevas caídas?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "No hacer nada porque solo fue una caída",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Una caída previa es el principal predictor de otra."
+        },
+        {
+          "key": "b",
+          "text": "Reposo para evitar riesgos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en evitar la actividad, lo que aumenta la debilidad."
+        },
+        {
+          "key": "c",
+          "text": "Usar andadera siempre aunque camine bien",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena seguro, pero no es necesario en todos."
+        },
+        {
+          "key": "d",
+          "text": "Contratar a un cuidador las 24 horas como única medida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No mejora la fuerza ni el equilibrio."
+        },
+        {
+          "key": "e",
+          "text": "Suplementos de vitamina D en dosis altas como única medida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No reducen caídas en personas sin deficiencia."
+        },
+        {
+          "key": "f",
+          "text": "Programa de ejercicio de fuerza y equilibrio, como tai chi o fisioterapia, junto con revisión del hogar y fármacos",
+          "correct": true,
+          "rationale": "El ejercicio de equilibrio es la intervención más eficaz."
+        },
+        {
+          "key": "g",
+          "text": "Calzado de tacón para mejorar la postura",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Aumenta el riesgo."
+        },
+        {
+          "key": "h",
+          "text": "Bifosfonato como medida para no caerse",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Previene fracturas, no caídas."
+        },
+        {
+          "key": "i",
+          "text": "Evitar el ejercicio por miedo a caer durante él",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pierde el beneficio principal."
+        },
+        {
+          "key": "j",
+          "text": "Cirugía de cadera profiláctica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Medida inexistente."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "f"
+      ],
+      "explanation": "La prevención de caídas en adultos mayores se basa en intervenciones individualizadas y multifactoriales. El ejercicio que incluye entrenamiento de equilibrio y fuerza, como programas de fisioterapia o tai chi, es la intervención con mayor evidencia para reducir el número de caídas. Se complementa con revisión y deprescripción de fármacos de riesgo, corrección de la visión, como la cirugía de cataratas, adaptación del hogar con iluminación, barras y retiro de tapetes, calzado adecuado y manejo de la hipotensión ortostática. En pacientes con osteoporosis se trata además el hueso para reducir el riesgo de fractura si se cae.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención de caídas en el adulto mayor"
+      ]
+    },
+    {
+      "key": "mi-13-geriatria-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "geriatrics",
+      "subtopic": "falls",
+      "vignette": "Hombre de 84 años que toma warfarina. Hace 3 semanas se cayó y se golpeó la cabeza. Ahora presenta cefalea, somnolencia progresiva, confusión y leve debilidad del lado izquierdo.",
+      "prompt": "¿Cuál es la complicación más probable?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hematoma subdural crónico",
+          "correct": true,
+          "rationale": "Deterioro neurológico semanas después de un trauma leve en anciano anticoagulado."
+        },
+        {
+          "key": "b",
+          "text": "Delirium por infección",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye sin buscar lesión estructural."
+        },
+        {
+          "key": "c",
+          "text": "Evento vascular cerebral isquémico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la debilidad sin considerar el antecedente de caída."
+        },
+        {
+          "key": "d",
+          "text": "Migraña tardía",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la cefalea."
+        },
+        {
+          "key": "e",
+          "text": "Efecto de la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el deterioro es normal."
+        },
+        {
+          "key": "f",
+          "text": "Hipoglucemia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta la anticoagulación y el trauma."
+        },
+        {
+          "key": "g",
+          "text": "Conmoción cerebral simple",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena benigno, pero los síntomas progresan semanas después."
+        },
+        {
+          "key": "h",
+          "text": "Demencia de rápida progresión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la relación con el trauma."
+        },
+        {
+          "key": "i",
+          "text": "Tumor cerebral primario",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable con el antecedente."
+        },
+        {
+          "key": "j",
+          "text": "Hematoma epidural",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También es traumático, pero agudo con intervalo lúcido de horas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "El hematoma subdural crónico es frecuente en adultos mayores, sobre todo con atrofia cerebral, consumo de alcohol y uso de anticoagulantes o antiagregantes. Se produce por ruptura de venas puente tras un traumatismo craneal, a veces leve o no recordado. Los síntomas aparecen días a semanas después, con cefalea, deterioro cognitivo, alteración del estado de alerta, cambios de conducta, hemiparesia o caídas, y puede confundirse con demencia o delirium. La tomografía muestra una colección en forma de semiluna, hipodensa o isodensa. El tratamiento incluye revertir la anticoagulación y drenaje quirúrgico si hay síntomas o efecto de masa.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del traumatismo craneoencefálico en el adulto mayor"
+      ]
+    }
+  ]
+}

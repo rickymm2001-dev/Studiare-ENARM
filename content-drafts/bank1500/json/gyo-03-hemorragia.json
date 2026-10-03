@@ -1,0 +1,1979 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "gyo-03-hemorragia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "placenta_previa",
+      "vignette": "Mujer de 34 años, multigesta con dos cesáreas previas, con embarazo de 32 semanas que presenta sangrado vaginal rojo brillante abundante, indoloro, de inicio súbito mientras dormía. Útero blando, no doloroso, frecuencia cardiaca fetal normal y presentación pélvica.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Vasa previa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Sangra al romper membranas con sufrimiento fetal."
+        },
+        {
+          "key": "b",
+          "text": "Pólipo cervical",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da sangrado escaso."
+        },
+        {
+          "key": "c",
+          "text": "Desprendimiento prematuro de placenta",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da dolor, útero hipertónico y sangrado oscuro."
+        },
+        {
+          "key": "d",
+          "text": "Sangrado normal del tercer trimestre",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Todo sangrado en el tercer trimestre es anormal."
+        },
+        {
+          "key": "e",
+          "text": "Rotura uterina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da dolor intenso y pérdida de la estática fetal."
+        },
+        {
+          "key": "f",
+          "text": "Hemorroides sangrantes",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El sangrado es vaginal."
+        },
+        {
+          "key": "g",
+          "text": "Placenta previa",
+          "correct": true,
+          "rationale": "Sangrado rojo indoloro en el tercer trimestre con útero blando y cesáreas previas."
+        },
+        {
+          "key": "h",
+          "text": "Cervicitis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da sangrado leve poscoital."
+        },
+        {
+          "key": "i",
+          "text": "Cáncer cervicouterino",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es menos probable en este contexto agudo."
+        },
+        {
+          "key": "j",
+          "text": "Trabajo de parto pretérmino",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay contracciones dolorosas."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La placenta previa es la implantación de la placenta sobre el orificio cervical interno o muy cerca de él. Se manifiesta con sangrado vaginal rojo brillante, indoloro, súbito y recurrente en el segundo o tercer trimestre, con útero blando y feto sin alteraciones. Se asocia a situaciones y presentaciones fetales anormales, como la pélvica o la transversa. Los factores de riesgo incluyen cesáreas previas, multiparidad, edad materna avanzada, legrados, tabaquismo, embarazo múltiple y reproducción asistida. El diagnóstico se confirma con ultrasonido, idealmente transvaginal. El tacto vaginal está contraindicado hasta descartar la placenta previa, porque puede provocar hemorragia grave.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la placenta previa"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "placenta_previa",
+      "vignette": "Mujer de 30 años con embarazo de 30 semanas que llega a urgencias con sangrado vaginal rojo brillante e indoloro. Está estable hemodinámicamente y el feto tiene buena frecuencia cardiaca. No se conoce la localización placentaria.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Amniotomía para acelerar el parto",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Está contraindicada."
+        },
+        {
+          "key": "b",
+          "text": "Egreso con reposo en casa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Requiere hospitalización."
+        },
+        {
+          "key": "c",
+          "text": "Aplicar tapones vaginales para detener el sangrado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es adecuado."
+        },
+        {
+          "key": "d",
+          "text": "Tacto vaginal para valorar el cérvix",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Está contraindicado hasta descartar placenta previa."
+        },
+        {
+          "key": "e",
+          "text": "Inducción del trabajo de parto con oxitocina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "f",
+          "text": "No hacer estudios hasta que el sangrado se detenga",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Se requiere localizar la placenta."
+        },
+        {
+          "key": "g",
+          "text": "Realizar ultrasonido para localizar la placenta antes de cualquier tacto vaginal",
+          "correct": true,
+          "rationale": "El tacto puede provocar hemorragia masiva en placenta previa."
+        },
+        {
+          "key": "h",
+          "text": "Cesárea inmediata en una paciente estable a las 30 semanas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Si está estable puede manejarse de forma expectante."
+        },
+        {
+          "key": "i",
+          "text": "Resonancia magnética como primer estudio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El ultrasonido es el estudio inicial."
+        },
+        {
+          "key": "j",
+          "text": "Colocar un pesario",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es el manejo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "g"
+      ],
+      "explanation": "Ante un sangrado del segundo o tercer trimestre debe descartarse placenta previa con ultrasonido antes de realizar tacto vaginal, ya que la exploración digital puede desprender la placenta y causar hemorragia masiva. La especuloscopia cuidadosa sí puede hacerse para valorar el origen del sangrado. En pacientes estables con feto pretérmino se hospitaliza, se canaliza, se solicitan biometría, grupo y Rh y pruebas cruzadas, se administran corticosteroides para madurez pulmonar entre las 24 y 34 semanas y se aplica inmunoglobulina anti D si es Rh negativo. Se vigila el sangrado y el bienestar fetal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la placenta previa"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "placenta_previa",
+      "vignette": "Mujer de 33 años con placenta previa total confirmada por ultrasonido, sin sangrado activo. Embarazo de 36 semanas y 4 días, con feto en buenas condiciones.",
+      "prompt": "¿Cuál es el tratamiento de elección para la resolución del embarazo?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Parto vaginal con vigilancia estrecha",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Está contraindicado en placenta previa total."
+        },
+        {
+          "key": "b",
+          "text": "La placenta subirá sola antes del parto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "A esta edad la migración es poco probable."
+        },
+        {
+          "key": "c",
+          "text": "Esperar al inicio espontáneo del trabajo de parto a las 40 semanas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumenta el riesgo de hemorragia."
+        },
+        {
+          "key": "d",
+          "text": "Histerectomía programada en todas",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para acretismo."
+        },
+        {
+          "key": "e",
+          "text": "Parto vaginal tras amniotomía",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Está contraindicado."
+        },
+        {
+          "key": "f",
+          "text": "No programar la cirugía por miedo a la prematurez",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo de hemorragia es mayor."
+        },
+        {
+          "key": "g",
+          "text": "Cesárea programada entre las 36 y 37.6 semanas",
+          "correct": true,
+          "rationale": "La placenta previa total impide el parto vaginal."
+        },
+        {
+          "key": "h",
+          "text": "Cesárea de urgencia a las 28 semanas sin sangrado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "i",
+          "text": "Cerclaje cervical",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "j",
+          "text": "Inducción con prostaglandinas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Está contraindicada."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "En la placenta previa que cubre el orificio cervical interno el parto vaginal está contraindicado y la vía de nacimiento es la cesárea. En pacientes sin sangrado se programa entre las 36 y 37.6 semanas. Si el borde placentario está a más de 2 cm del orificio puede intentarse el parto vaginal. Muchas placentas bajas diagnosticadas en el segundo trimestre migran por el crecimiento del segmento uterino, por lo que se repite el ultrasonido a las 32 semanas. Ante sangrado grave, inestabilidad materna o compromiso fetal se realiza cesárea urgente a cualquier edad gestacional.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la placenta previa"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "placenta_previa",
+      "vignette": "Mujer de 38 años con tres cesáreas previas y placenta previa anterior sobre la cicatriz uterina. El ultrasonido Doppler muestra pérdida de la zona hipoecoica retroplacentaria, lagunas vasculares e hipervascularidad en la interfase con la vejiga.",
+      "prompt": "¿Cuál es la complicación que debe sospecharse?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Desprendimiento prematuro de placenta",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay sangrado ni dolor."
+        },
+        {
+          "key": "b",
+          "text": "Placenta previa simple sin invasión",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los hallazgos indican invasión."
+        },
+        {
+          "key": "c",
+          "text": "Vasa previa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Son vasos fetales sobre el cérvix."
+        },
+        {
+          "key": "d",
+          "text": "Placenta grande por bebé grande",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Los hallazgos indican invasión anormal."
+        },
+        {
+          "key": "e",
+          "text": "Mioma uterino retroplacentario",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica las lagunas vasculares."
+        },
+        {
+          "key": "f",
+          "text": "Corioangioma placentario",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un tumor raro de la placenta."
+        },
+        {
+          "key": "g",
+          "text": "Espectro de placenta acreta",
+          "correct": true,
+          "rationale": "Placenta previa sobre cicatriz con signos ecográficos de invasión miometrial."
+        },
+        {
+          "key": "h",
+          "text": "Mola hidatiforme parcial",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No corresponde a un embarazo de tercer trimestre normal."
+        },
+        {
+          "key": "i",
+          "text": "Endometriosis vesical",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la invasión placentaria."
+        },
+        {
+          "key": "j",
+          "text": "Infección intraamniótica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica los hallazgos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "h"
+      ],
+      "explanation": "El espectro de placenta acreta incluye la placenta acreta, adherida al miometrio, increta, que lo invade, y percreta, que lo atraviesa hasta la serosa u órganos vecinos como la vejiga. Su principal factor de riesgo es la combinación de placenta previa y cesáreas previas, con riesgo creciente según el número de cesáreas. El ultrasonido muestra pérdida de la zona hipoecoica, lagunas placentarias, adelgazamiento miometrial e hipervascularidad, y la resonancia ayuda a valorar la extensión. Se planea cesárea con histerectomía entre las 34 y 35.6 semanas en un centro con equipo multidisciplinario y banco de sangre.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del acretismo placentario"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "placenta_previa",
+      "vignette": "Mujer de 36 años con embarazo de 20 semanas cuyo ultrasonido muestra placenta previa. Tiene dos cesáreas previas, un legrado y fuma 10 cigarros al día.",
+      "prompt": "¿Cuál es el factor de riesgo más importante de placenta previa en esta paciente?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Edad materna mayor de 35 años como factor principal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es un factor menor."
+        },
+        {
+          "key": "b",
+          "text": "Diabetes gestacional",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es un factor de placenta previa."
+        },
+        {
+          "key": "c",
+          "text": "Hipertensión arterial",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se asocia más a desprendimiento."
+        },
+        {
+          "key": "d",
+          "text": "Grupo sanguíneo O",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "e",
+          "text": "Feto femenino",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es relevante."
+        },
+        {
+          "key": "f",
+          "text": "Anemia leve",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No causa placenta previa."
+        },
+        {
+          "key": "g",
+          "text": "Cesáreas previas",
+          "correct": true,
+          "rationale": "La cicatriz uterina es el principal factor de riesgo de placenta previa y acretismo."
+        },
+        {
+          "key": "h",
+          "text": "Dormir boca abajo en el embarazo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "i",
+          "text": "Ejercicio moderado",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "j",
+          "text": "Primiparidad",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El riesgo es mayor en multíparas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "Los factores de riesgo de placenta previa incluyen cesáreas previas, que aumentan el riesgo de forma proporcional a su número, cirugías uterinas, legrados, multiparidad, edad materna avanzada, tabaquismo, consumo de cocaína, embarazo múltiple y técnicas de reproducción asistida. La cicatriz o el daño del endometrio en el segmento superior favorece que el blastocisto se implante en el segmento inferior, cerca del orificio cervical. La placenta previa en mujeres con cesáreas previas tiene alto riesgo de acretismo, por lo que siempre debe buscarse con ultrasonido Doppler.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la placenta previa"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "placenta_previa",
+      "vignette": "Mujer de 29 años en trabajo de parto a las 39 semanas. Al ocurrir la ruptura espontánea de membranas presenta sangrado vaginal moderado y de inmediato la frecuencia cardiaca fetal cae a 70 latidos por minuto con patrón sinusoidal. La madre está estable y sin dolor anormal. Embarazo por fertilización in vitro con placenta bilobulada.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sepsis fetal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el sangrado súbito."
+        },
+        {
+          "key": "b",
+          "text": "Rotura uterina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Daría dolor intenso y pérdida de la estática fetal."
+        },
+        {
+          "key": "c",
+          "text": "Desprendimiento de placenta",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría dolor e hipertonía."
+        },
+        {
+          "key": "d",
+          "text": "Sangrado normal al romper la fuente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El compromiso fetal indica sangrado fetal."
+        },
+        {
+          "key": "e",
+          "text": "Vasa previa rota",
+          "correct": true,
+          "rationale": "Sangrado al romper membranas con compromiso fetal grave y madre estable."
+        },
+        {
+          "key": "f",
+          "text": "Prolapso de cordón sin sangrado",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica el sangrado."
+        },
+        {
+          "key": "g",
+          "text": "Expulsión del tapón mucoso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es sangrado escaso sin afección fetal."
+        },
+        {
+          "key": "h",
+          "text": "Placenta previa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Sangraría antes y con compromiso materno."
+        },
+        {
+          "key": "i",
+          "text": "Laceración cervical",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No causa compromiso fetal inmediato."
+        },
+        {
+          "key": "j",
+          "text": "Hipotensión materna por posición",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "La madre está estable."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "La vasa previa ocurre cuando vasos fetales sin protección de la gelatina de Wharton ni de la placenta atraviesan las membranas sobre el orificio cervical interno. Se asocia a inserción velamentosa del cordón, placentas bilobuladas o con lóbulos accesorios, placenta previa en el segundo trimestre y fertilización in vitro. Al romperse las membranas se rompen los vasos y el sangrado es de origen fetal, con rápida bradicardia o patrón sinusoidal y alta mortalidad fetal, mientras la madre se mantiene estable. El tratamiento es cesárea inmediata. Si se diagnostica antes con Doppler transvaginal se programa cesárea a las 34 a 37 semanas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la placenta previa"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "placenta_previa",
+      "vignette": "Mujer de 27 años con embarazo de 34 semanas y sangrado vaginal escaso indoloro. Estable. No tiene ultrasonidos previos.",
+      "prompt": "¿Cuál es el estudio inicial de elección para diagnosticar placenta previa?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "El ultrasonido transvaginal provoca sangrado en placenta previa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es seguro con técnica adecuada."
+        },
+        {
+          "key": "b",
+          "text": "Tomografía abdominal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Expone al feto a radiación."
+        },
+        {
+          "key": "c",
+          "text": "Biometría hemática como estudio diagnóstico",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No localiza la placenta."
+        },
+        {
+          "key": "d",
+          "text": "Angiografía uterina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "e",
+          "text": "Tacto vaginal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Está contraindicado."
+        },
+        {
+          "key": "f",
+          "text": "Prueba sin estrés como único estudio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Valora al feto, no la placenta."
+        },
+        {
+          "key": "g",
+          "text": "Amnioscopia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "Ultrasonido transvaginal",
+          "correct": true,
+          "rationale": "Es seguro y más preciso que el abdominal para localizar el borde placentario."
+        },
+        {
+          "key": "i",
+          "text": "Colposcopia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No valora la placenta."
+        },
+        {
+          "key": "j",
+          "text": "Resonancia magnética como primer estudio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se reserva para valorar acretismo."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "El ultrasonido transvaginal es el estudio de elección para diagnosticar placenta previa. Es seguro, porque el transductor no entra en el canal cervical, y es más preciso que el ultrasonido abdominal para medir la distancia del borde placentario al orificio cervical interno. Se clasifica como placenta previa cuando cubre el orificio y como placenta de inserción baja cuando el borde está a menos de 2 cm. El ultrasonido abdominal puede ser el primer acercamiento, pero tiene más falsos positivos por la vejiga llena o la presentación fetal. La resonancia se reserva para sospecha de acretismo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la placenta previa"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "placental_abruption",
+      "vignette": "Mujer de 32 años con preeclampsia y embarazo de 35 semanas que presenta dolor abdominal súbito e intenso, sangrado vaginal oscuro escaso y útero duro y doloroso con contracciones frecuentes. La frecuencia cardiaca fetal muestra desaceleraciones tardías.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Desprendimiento prematuro de placenta normoinserta",
+          "correct": true,
+          "rationale": "Dolor súbito, útero hipertónico, sangrado oscuro y compromiso fetal en una paciente con preeclampsia."
+        },
+        {
+          "key": "b",
+          "text": "Pielonefritis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da fiebre y dolor lumbar."
+        },
+        {
+          "key": "c",
+          "text": "Degeneración roja de mioma",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da dolor localizado sin compromiso fetal."
+        },
+        {
+          "key": "d",
+          "text": "Apendicitis aguda en el embarazo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el sangrado ni la hipertonía."
+        },
+        {
+          "key": "e",
+          "text": "Rotura uterina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Ocurre con cicatriz previa y pérdida de la estática fetal."
+        },
+        {
+          "key": "f",
+          "text": "Placenta previa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da sangrado rojo indoloro con útero blando."
+        },
+        {
+          "key": "g",
+          "text": "Trabajo de parto normal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica el útero hipertónico doloroso ni el compromiso fetal."
+        },
+        {
+          "key": "h",
+          "text": "Contracciones de práctica fuertes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El cuadro es grave."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de HELLP aislado",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el útero hipertónico y el sangrado."
+        },
+        {
+          "key": "j",
+          "text": "Vasa previa",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Ocurre al romper membranas con madre estable."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "El desprendimiento prematuro de placenta normoinserta es la separación total o parcial de la placenta antes del nacimiento. Se manifiesta con dolor abdominal súbito, sangrado vaginal oscuro que puede ser escaso o ausente porque la sangre queda retenida, útero hipertónico y doloroso, contracciones frecuentes y compromiso fetal. El sangrado visible puede no reflejar la pérdida real. Los factores de riesgo son hipertensión y preeclampsia, traumatismo abdominal, cocaína, tabaquismo, ruptura prematura de membranas, descompresión uterina brusca y desprendimiento previo. El diagnóstico es clínico, ya que el ultrasonido tiene baja sensibilidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del desprendimiento prematuro de placenta normoinserta"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "placental_abruption",
+      "vignette": "Mujer de 28 años con embarazo de 37 semanas y desprendimiento de placenta. Presenta taquicardia de 120, presión de 90/60 mmHg, útero hipertónico y frecuencia cardiaca fetal con bradicardia sostenida de 80. Cérvix con 2 cm de dilatación.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esperar el parto vaginal con oxitocina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El feto tiene compromiso grave y el parto no es inminente."
+        },
+        {
+          "key": "b",
+          "text": "Manejo expectante con reposo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Hay compromiso materno y fetal."
+        },
+        {
+          "key": "c",
+          "text": "Reanimación materna con soluciones y hemoderivados y cesárea urgente",
+          "correct": true,
+          "rationale": "Feto vivo con compromiso y madre inestable sin parto inminente."
+        },
+        {
+          "key": "d",
+          "text": "Evitar la cesárea por la hipotensión materna",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La reanimación y cesárea se hacen en paralelo."
+        },
+        {
+          "key": "e",
+          "text": "Tacto vaginal repetido para valorar progreso",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Retrasa el nacimiento."
+        },
+        {
+          "key": "f",
+          "text": "Corticosteroides y esperar 48 horas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es un embarazo de término con compromiso."
+        },
+        {
+          "key": "g",
+          "text": "Masaje uterino para despegar la placenta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es inadecuado."
+        },
+        {
+          "key": "h",
+          "text": "Ultrasonido para confirmar antes de actuar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El diagnóstico es clínico y no debe retrasar."
+        },
+        {
+          "key": "i",
+          "text": "Vigilar la frecuencia fetal 1 hora más",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "La bradicardia sostenida requiere nacimiento inmediato."
+        },
+        {
+          "key": "j",
+          "text": "Uteroinhibidores para detener las contracciones",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Están contraindicados."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "El manejo del desprendimiento de placenta depende del estado materno y fetal y de la edad gestacional. Ante compromiso fetal con feto viable o inestabilidad materna sin parto inminente se realiza cesárea urgente mientras se reanima a la madre con soluciones, concentrados eritrocitarios y corrección de la coagulopatía. Si el feto ha muerto y la madre está estable se prefiere el parto vaginal. En desprendimientos leves con feto pretérmino y madre estable puede considerarse manejo expectante vigilado. Las complicaciones incluyen choque hemorrágico, coagulación intravascular diseminada, útero de Couvelaire, lesión renal y muerte fetal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del desprendimiento prematuro de placenta normoinserta"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "placental_abruption",
+      "vignette": "Mujer de 35 años con desprendimiento de placenta masivo y óbito fetal que presenta sangrado por sitios de venopunción y encías. Plaquetas de 50 000, fibrinógeno de 90 mg/dL, tiempos de coagulación prolongados y dímero D muy elevado.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Púrpura trombocitopénica inmune",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el fibrinógeno bajo ni los tiempos prolongados."
+        },
+        {
+          "key": "b",
+          "text": "Hígado graso agudo del embarazo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No corresponde al contexto."
+        },
+        {
+          "key": "c",
+          "text": "Enfermedad de von Willebrand",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es hereditaria y no explica el consumo."
+        },
+        {
+          "key": "d",
+          "text": "Sangrado normal tras perder al bebé",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una coagulopatía grave."
+        },
+        {
+          "key": "e",
+          "text": "Deficiencia de vitamina K",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la trombocitopenia ni el fibrinógeno bajo."
+        },
+        {
+          "key": "f",
+          "text": "Síndrome de HELLP",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la hipofibrinogenemia marcada."
+        },
+        {
+          "key": "g",
+          "text": "Hemofilia adquirida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la trombocitopenia ni el fibrinógeno bajo."
+        },
+        {
+          "key": "h",
+          "text": "Efecto de anticoagulantes",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay antecedente."
+        },
+        {
+          "key": "i",
+          "text": "Coagulación intravascular diseminada",
+          "correct": true,
+          "rationale": "Consumo de factores y plaquetas con fibrinógeno bajo tras desprendimiento con óbito."
+        },
+        {
+          "key": "j",
+          "text": "Anemia dilucional sin coagulopatía",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Hay sangrado por coagulopatía."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "El desprendimiento de placenta es la causa obstétrica más frecuente de coagulación intravascular diseminada. La liberación de tromboplastina tisular placentaria a la circulación activa la coagulación de forma masiva, con consumo de plaquetas y factores, hipofibrinogenemia y fibrinólisis secundaria. Es más probable con desprendimientos extensos y óbito fetal. Se manifiesta con sangrado por sitios de punción, mucosas y herida. El fibrinógeno menor de 200 mg/dL predice hemorragia grave. El tratamiento es resolver la causa con la evacuación uterina y reponer con concentrados eritrocitarios, plasma fresco, crioprecipitados o fibrinógeno y plaquetas, además de ácido tranexámico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del desprendimiento prematuro de placenta normoinserta"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "placental_abruption",
+      "vignette": "Mujer de 26 años con embarazo de 30 semanas que ingresa con dolor abdominal intenso, útero hipertónico y sangrado oscuro. Refiere consumo de cocaína hace 2 horas. Presión arterial de 160/100 mmHg.",
+      "prompt": "¿Cuál es el factor de riesgo más probable del desprendimiento en este caso?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Consumo de cocaína con vasoconstricción e hipertensión aguda",
+          "correct": true,
+          "rationale": "La cocaína es un factor de riesgo importante de desprendimiento."
+        },
+        {
+          "key": "b",
+          "text": "Actividad sexual en el embarazo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un factor establecido."
+        },
+        {
+          "key": "c",
+          "text": "Placenta previa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es otra entidad."
+        },
+        {
+          "key": "d",
+          "text": "Infección de vías urinarias tratada",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es un factor principal."
+        },
+        {
+          "key": "e",
+          "text": "Edad menor de 30 años",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "f",
+          "text": "Estrés emocional como causa única",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La cocaína explica el cuadro."
+        },
+        {
+          "key": "g",
+          "text": "Diabetes gestacional",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un factor principal."
+        },
+        {
+          "key": "h",
+          "text": "Embarazo de feto femenino",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es relevante."
+        },
+        {
+          "key": "i",
+          "text": "Primiparidad",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es un factor relevante."
+        },
+        {
+          "key": "j",
+          "text": "Anemia leve",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No causa desprendimiento."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "Los factores de riesgo de desprendimiento de placenta incluyen enfermedad hipertensiva del embarazo, desprendimiento previo, consumo de cocaína y tabaco, traumatismo abdominal como accidentes y violencia, ruptura prematura de membranas prolongada, corioamnionitis, descompresión uterina súbita tras ruptura de membranas en polihidramnios o nacimiento del primer gemelo, edad materna avanzada, multiparidad y trombofilias. La cocaína produce vasoconstricción intensa y crisis hipertensivas que favorecen la separación de la placenta. En toda embarazada con desprendimiento debe interrogarse de forma privada sobre violencia y consumo de sustancias.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del desprendimiento prematuro de placenta normoinserta"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "placental_abruption",
+      "vignette": "Mujer de 25 años con embarazo de 28 semanas que sufrió un choque automovilístico como conductora. Está estable, sin sangrado vaginal, con dolor abdominal leve y contracciones ocasionales. Frecuencia cardiaca fetal normal.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Egresar porque no hay sangrado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El desprendimiento puede ser oculto."
+        },
+        {
+          "key": "b",
+          "text": "Inmunoglobulina anti D sin conocer el Rh",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Solo si es Rh negativo."
+        },
+        {
+          "key": "c",
+          "text": "Monitorización fetal y de contracciones continua por al menos 4 a 6 horas",
+          "correct": true,
+          "rationale": "El desprendimiento puede manifestarse horas después del traumatismo."
+        },
+        {
+          "key": "d",
+          "text": "Tocolíticos de rutina y egreso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es adecuado."
+        },
+        {
+          "key": "e",
+          "text": "Evitar cualquier radiografía aunque esté indicada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Los estudios necesarios no deben omitirse."
+        },
+        {
+          "key": "f",
+          "text": "El útero protege siempre al bebé de los golpes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede haber desprendimiento."
+        },
+        {
+          "key": "g",
+          "text": "Ultrasonido como único estudio para descartar desprendimiento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Tiene baja sensibilidad."
+        },
+        {
+          "key": "h",
+          "text": "Amniocentesis diagnóstica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "i",
+          "text": "No vigilar porque el accidente fue leve",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Aun los traumatismos menores pueden causarlo."
+        },
+        {
+          "key": "j",
+          "text": "Cesárea inmediata",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay indicación."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "El traumatismo abdominal en el embarazo, incluso leve, puede causar desprendimiento de placenta por la fuerza de cizallamiento entre el útero elástico y la placenta inelástica. Después de las 20 semanas se recomienda monitorización cardiotocográfica continua de al menos 4 a 6 horas. Si hay contracciones frecuentes, sangrado, dolor uterino, alteraciones de la frecuencia fetal o hipotensión materna, la vigilancia se prolonga a 24 horas. El ultrasonido no descarta el desprendimiento. Se aplica inmunoglobulina anti D a mujeres Rh negativo y se considera la prueba de Kleihauer Betke. La prioridad es la reanimación materna.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención de la embarazada con traumatismo"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "placental_abruption",
+      "vignette": "Mujer de 33 años sometida a cesárea por desprendimiento de placenta. Durante la cirugía el útero se ve violáceo, con equimosis en toda la pared y sangre infiltrada en el miometrio, pero se contrae con uterotónicos.",
+      "prompt": "¿Cuál es el hallazgo descrito?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Acretismo placentario",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La placenta no está adherida."
+        },
+        {
+          "key": "b",
+          "text": "Mioma uterino degenerado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la infiltración difusa."
+        },
+        {
+          "key": "c",
+          "text": "Útero de Couvelaire por infiltración hemorrágica del miometrio",
+          "correct": true,
+          "rationale": "Es una complicación del desprendimiento que no obliga a histerectomía si el útero se contrae."
+        },
+        {
+          "key": "d",
+          "text": "Coriocarcinoma",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "e",
+          "text": "Rotura uterina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay solución de continuidad."
+        },
+        {
+          "key": "f",
+          "text": "Endometritis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es una infección posterior."
+        },
+        {
+          "key": "g",
+          "text": "Atonía uterina irreversible",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El útero se contrae."
+        },
+        {
+          "key": "h",
+          "text": "Útero muerto que siempre debe retirarse",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La histerectomía no siempre es necesaria."
+        },
+        {
+          "key": "i",
+          "text": "Torsión uterina",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "j",
+          "text": "Hematoma de ligamento ancho",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "La infiltración es miometrial."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "f"
+      ],
+      "explanation": "El útero de Couvelaire o apoplejía uteroplacentaria es la extravasación de sangre al miometrio y a veces a la serosa en desprendimientos de placenta extensos. El útero se ve violáceo y equimótico. Puede asociarse a atonía uterina, pero la mayoría responde a uterotónicos, por lo que no es indicación de histerectomía por sí mismo. La histerectomía se reserva para hemorragia que no responde a medidas médicas y quirúrgicas conservadoras. Es importante vigilar la coagulación por el riesgo de coagulación intravascular diseminada y la hemorragia posparto.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del desprendimiento prematuro de placenta normoinserta"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "postpartum_hemorrhage",
+      "vignette": "Mujer de 30 años con parto vaginal de un recién nacido de 4 200 g tras trabajo de parto prolongado con oxitocina. A los 20 minutos de la expulsión de la placenta completa presenta sangrado abundante. El útero está blando, por arriba del ombligo y no se contrae.",
+      "prompt": "¿Cuál es el diagnóstico etiológico más probable de la hemorragia posparto?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Desgarro del canal de parto",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El útero estaría contraído."
+        },
+        {
+          "key": "b",
+          "text": "Coagulopatía hereditaria",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay antecedentes."
+        },
+        {
+          "key": "c",
+          "text": "Retención de restos placentarios",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La placenta salió completa."
+        },
+        {
+          "key": "d",
+          "text": "Rotura uterina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara sin cicatriz previa."
+        },
+        {
+          "key": "e",
+          "text": "Acretismo placentario",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La placenta se desprendió completa."
+        },
+        {
+          "key": "f",
+          "text": "Inversión uterina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El útero se palpa en el abdomen."
+        },
+        {
+          "key": "g",
+          "text": "Hematoma vulvar",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da dolor perineal y masa."
+        },
+        {
+          "key": "h",
+          "text": "Sangrado que limpia el útero y es saludable",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una hemorragia grave."
+        },
+        {
+          "key": "i",
+          "text": "Atonía uterina",
+          "correct": true,
+          "rationale": "Útero blando y no contraído tras macrosomía y trabajo de parto prolongado."
+        },
+        {
+          "key": "j",
+          "text": "Sangrado normal del puerperio",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es abundante con útero atónico."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "i"
+      ],
+      "explanation": "La hemorragia posparto es la principal causa de muerte materna en el mundo. Se define como pérdida de 500 mL o más tras parto vaginal o de 1 000 mL o más tras cesárea, o cualquier pérdida con inestabilidad. Sus causas se recuerdan con las cuatro T, tono, que es la atonía uterina y causa la mayoría de los casos, trauma, tejido por restos placentarios y trombina por coagulopatía. Los factores de riesgo de atonía son sobredistensión uterina por macrosomía, gemelos o polihidramnios, trabajo de parto prolongado o precipitado, uso prolongado de oxitocina, corioamnionitis y multiparidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención y manejo de la hemorragia obstétrica"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "postpartum_hemorrhage",
+      "vignette": "Mujer de 27 años en el periodo expulsivo de un parto vaginal normal. El médico se prepara para la salida del recién nacido.",
+      "prompt": "¿Cuál es la medida de prevención más eficaz de la hemorragia posparto?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Balón intrauterino profiláctico",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "b",
+          "text": "Ergonovina a todas las mujeres de rutina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Está contraindicada en hipertensas y la oxitocina es preferida."
+        },
+        {
+          "key": "c",
+          "text": "Evitar la oxitocina para no causar dolor",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El beneficio es claro."
+        },
+        {
+          "key": "d",
+          "text": "Revisión manual de cavidad a todas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No se recomienda de rutina."
+        },
+        {
+          "key": "e",
+          "text": "Masaje uterino como única medida antes de la placenta",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La oxitocina es la medida principal."
+        },
+        {
+          "key": "f",
+          "text": "Ácido tranexámico de rutina sin oxitocina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No sustituye a la oxitocina."
+        },
+        {
+          "key": "g",
+          "text": "Manejo activo del tercer periodo del trabajo de parto con oxitocina tras la salida del hombro anterior o del recién nacido",
+          "correct": true,
+          "rationale": "Reduce la hemorragia posparto por atonía."
+        },
+        {
+          "key": "h",
+          "text": "Pujar fuerte después del parto expulsa mejor la placenta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No previene la hemorragia."
+        },
+        {
+          "key": "i",
+          "text": "Esperar la expulsión espontánea de la placenta sin uterotónicos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta el riesgo de hemorragia."
+        },
+        {
+          "key": "j",
+          "text": "Tracción enérgica del cordón antes de que se contraiga el útero",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede causar inversión uterina."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El manejo activo del tercer periodo del trabajo de parto es la medida más eficaz para prevenir la hemorragia posparto. Su componente principal es la administración de un uterotónico, de preferencia oxitocina 10 UI intramuscular o intravenosa, tras la salida del hombro anterior o del recién nacido. Se complementa con tracción controlada del cordón por personal capacitado y vigilancia del tono uterino con masaje tras la expulsión de la placenta. Si no hay oxitocina pueden usarse carbetocina, ergonovina o misoprostol. Se recomienda pinzamiento tardío del cordón en recién nacidos que no requieren reanimación.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención y manejo de la hemorragia obstétrica"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "postpartum_hemorrhage",
+      "vignette": "Mujer de 31 años con hemorragia posparto por atonía uterina tras parto vaginal. Ha perdido 900 mL, frecuencia cardiaca de 110 y presión de 100/65 mmHg. Ya se canalizó con dos vías.",
+      "prompt": "¿Cuál es el tratamiento inicial?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ergonovina en paciente con preeclampsia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Está contraindicada en hipertensas."
+        },
+        {
+          "key": "b",
+          "text": "Embolización arterial como primer paso",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se usa si fallan las medidas iniciales."
+        },
+        {
+          "key": "c",
+          "text": "Histerectomía inmediata",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para falla de medidas conservadoras."
+        },
+        {
+          "key": "d",
+          "text": "Antibióticos como primera medida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No tratan la atonía."
+        },
+        {
+          "key": "e",
+          "text": "Solo transfusión sin uterotónicos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No trata la causa."
+        },
+        {
+          "key": "f",
+          "text": "Retrasar el ácido tranexámico más allá de 3 horas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pierde eficacia."
+        },
+        {
+          "key": "g",
+          "text": "Masaje uterino bimanual, oxitocina intravenosa en infusión y ácido tranexámico en las primeras 3 horas, con reanimación con soluciones",
+          "correct": true,
+          "rationale": "Son las medidas iniciales para la atonía."
+        },
+        {
+          "key": "h",
+          "text": "Esperar que el útero se contraiga solo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aumenta la pérdida."
+        },
+        {
+          "key": "i",
+          "text": "Desmopresina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No trata la atonía."
+        },
+        {
+          "key": "j",
+          "text": "Colocar hielo en el abdomen como único tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es eficaz."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "El manejo de la hemorragia posparto por atonía incluye pedir ayuda, activar el código rojo obstétrico, canalizar dos vías, reponer volumen, vaciar la vejiga, masaje uterino y compresión bimanual. Los uterotónicos de primera línea son oxitocina en infusión, seguida de ergonovina si no hay hipertensión, carbetocina o misoprostol. El ácido tranexámico 1 g intravenoso, administrado en las primeras 3 horas, reduce la mortalidad por sangrado. Si no responde se usa balón de taponamiento intrauterino, y después medidas quirúrgicas como suturas compresivas de B Lynch, ligadura de arterias uterinas o hipogástricas y, como último recurso, histerectomía.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención y manejo de la hemorragia obstétrica"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "postpartum_hemorrhage",
+      "vignette": "Mujer de 25 años con parto vaginal hace 30 minutos y sangrado rojo brillante continuo. El útero está firme y bien contraído por debajo del ombligo. La placenta salió completa. Se aplicó episiotomía.",
+      "prompt": "¿Cuál es el diagnóstico etiológico más probable de la hemorragia?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Desgarro del canal de parto o de la episiotomía",
+          "correct": true,
+          "rationale": "Sangrado continuo con útero bien contraído."
+        },
+        {
+          "key": "b",
+          "text": "Atonía uterina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El útero está firme."
+        },
+        {
+          "key": "c",
+          "text": "Retención de restos placentarios",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La placenta salió completa y el útero está contraído."
+        },
+        {
+          "key": "d",
+          "text": "Inversión uterina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El útero se palpa normal."
+        },
+        {
+          "key": "e",
+          "text": "Acretismo placentario",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La placenta salió completa."
+        },
+        {
+          "key": "f",
+          "text": "Rotura uterina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara sin cicatriz."
+        },
+        {
+          "key": "g",
+          "text": "Sangrado por hemorroides",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica un sangrado abundante."
+        },
+        {
+          "key": "h",
+          "text": "Sangrado esperado tras la episiotomía",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El sangrado continuo requiere revisión."
+        },
+        {
+          "key": "i",
+          "text": "Loquios normales",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El sangrado continuo es anormal."
+        },
+        {
+          "key": "j",
+          "text": "Coagulopatía",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es menos probable sin otros sitios de sangrado."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "Cuando hay hemorragia posparto con el útero bien contraído debe sospecharse trauma del canal de parto, como desgarros cervicales, vaginales o perineales, extensión de la episiotomía o hematomas. Se realiza revisión sistemática del canal con buena iluminación y analgesia, y se reparan las lesiones. Los factores de riesgo incluyen parto instrumentado, macrosomía, expulsivo precipitado y episiotomía. Los hematomas vulvares o vaginales producen dolor intenso y masa. Siempre debe revisarse también la integridad de la placenta y descartarse una alteración de la coagulación.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención y manejo de la hemorragia obstétrica"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "postpartum_hemorrhage",
+      "vignette": "Mujer de 28 años primigesta, con tracción del cordón antes de que se desprendiera la placenta. Presenta dolor intenso, sangrado abundante y choque desproporcionado a la pérdida visible. No se palpa el fondo uterino en el abdomen y en la vagina se observa una masa rojiza.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Atonía uterina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El útero se palparía blando en el abdomen."
+        },
+        {
+          "key": "b",
+          "text": "Mioma pediculado parido",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la ausencia del fondo uterino."
+        },
+        {
+          "key": "c",
+          "text": "Hematoma vaginal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la ausencia del fondo."
+        },
+        {
+          "key": "d",
+          "text": "Retención placentaria simple",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El fondo uterino se palparía."
+        },
+        {
+          "key": "e",
+          "text": "Rotura uterina",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la masa vaginal."
+        },
+        {
+          "key": "f",
+          "text": "Inversión uterina",
+          "correct": true,
+          "rationale": "Masa vaginal, ausencia de fondo uterino palpable y choque tras tracción del cordón."
+        },
+        {
+          "key": "g",
+          "text": "Salida normal de la placenta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La ausencia del fondo indica inversión."
+        },
+        {
+          "key": "h",
+          "text": "Embolia de líquido amniótico",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la masa vaginal."
+        },
+        {
+          "key": "i",
+          "text": "Desgarro vaginal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la masa ni la ausencia del fondo."
+        },
+        {
+          "key": "j",
+          "text": "Prolapso uterino",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No ocurre de forma aguda en el alumbramiento."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "j"
+      ],
+      "explanation": "La inversión uterina es una urgencia rara en la que el fondo uterino se invagina hacia la cavidad y puede salir por la vagina. Se asocia a tracción excesiva del cordón antes del desprendimiento placentario, presión fúndica, placenta fúndica o acreta y relajación uterina. Se manifiesta con hemorragia, dolor intenso, choque desproporcionado por estímulo vagal, ausencia del fondo uterino al palpar el abdomen y masa en la vagina. El tratamiento es la reposición manual inmediata con la maniobra de Johnson, sin retirar la placenta, con relajantes uterinos si es necesario, y después uterotónicos. Si falla se recurre a cirugía.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención y manejo de la hemorragia obstétrica"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q19",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "postpartum_hemorrhage",
+      "vignette": "Mujer de 29 años con hemorragia posparto. Frecuencia cardiaca de 120 por minuto y presión arterial sistólica de 90 mmHg.",
+      "prompt": "¿Qué indica el índice de choque de esta paciente?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Índice de choque de 1.3, que indica pérdida importante y probable necesidad de transfusión",
+          "correct": true,
+          "rationale": "Un índice mayor de 0.9 a 1 sugiere hemorragia grave."
+        },
+        {
+          "key": "b",
+          "text": "Indica sepsis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El contexto es hemorrágico."
+        },
+        {
+          "key": "c",
+          "text": "Índice de 2 que indica paro inminente",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El cálculo es 120 entre 90."
+        },
+        {
+          "key": "d",
+          "text": "Las mujeres jóvenes compensan y no hay que preocuparse",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La compensación oculta pérdidas graves."
+        },
+        {
+          "key": "e",
+          "text": "Indica solo ansiedad materna",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La taquicardia refleja pérdida de volumen."
+        },
+        {
+          "key": "f",
+          "text": "Indica dolor por la episiotomía",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el índice alto."
+        },
+        {
+          "key": "g",
+          "text": "Índice de 0.75 sin relevancia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El cálculo es incorrecto."
+        },
+        {
+          "key": "h",
+          "text": "Indica hipertensión",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La presión está baja."
+        },
+        {
+          "key": "i",
+          "text": "Índice normal porque la presión es mayor de 80",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El índice integra frecuencia y presión."
+        },
+        {
+          "key": "j",
+          "text": "Indica efecto de la oxitocina",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el índice."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "El índice de choque es la frecuencia cardiaca dividida entre la presión arterial sistólica. En obstetricia un valor normal es de 0.7 a 0.9. Un índice mayor de 0.9 a 1 se asocia a pérdidas importantes, necesidad de transfusión y de ingreso a terapia intensiva. Es útil porque las mujeres jóvenes compensan bien y la presión puede mantenerse hasta pérdidas de 30 a 40% del volumen. La estimación visual de la pérdida suele subestimarla. Junto con la clínica, el índice ayuda a activar el código rojo y la transfusión masiva de forma temprana.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención y manejo de la hemorragia obstétrica"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q20",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "postpartum_hemorrhage",
+      "vignette": "Mujer de 32 años con parto vaginal hace 10 días que presenta sangrado vaginal abundante súbito. Útero subinvolucionado, blando y con orificio cervical abierto. El ultrasonido muestra material ecogénico en la cavidad.",
+      "prompt": "¿Cuál es el diagnóstico etiológico más probable del sangrado?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Retención de restos placentarios",
+          "correct": true,
+          "rationale": "Hemorragia posparto tardía con útero subinvolucionado y material intracavitario."
+        },
+        {
+          "key": "b",
+          "text": "Desgarro del canal de parto",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Sangraría desde el inicio."
+        },
+        {
+          "key": "c",
+          "text": "Cáncer cervicouterino",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "d",
+          "text": "Coagulopatía hereditaria",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es menos probable."
+        },
+        {
+          "key": "e",
+          "text": "Menstruación normal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No ocurre a los 10 días con lactancia."
+        },
+        {
+          "key": "f",
+          "text": "Enfermedad trofoblástica gestacional posparto como primera causa",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente."
+        },
+        {
+          "key": "g",
+          "text": "Pólipo endometrial",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el cuadro posparto."
+        },
+        {
+          "key": "h",
+          "text": "Atonía uterina primaria inmediata",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ocurre en las primeras 24 horas."
+        },
+        {
+          "key": "i",
+          "text": "Endometritis sin restos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El ultrasonido muestra material en cavidad."
+        },
+        {
+          "key": "j",
+          "text": "Limpieza normal del útero que no requiere atención",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una hemorragia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "h"
+      ],
+      "explanation": "La hemorragia posparto secundaria o tardía ocurre entre las 24 horas y las 12 semanas posparto. Sus causas más comunes son la retención de restos placentarios, la endometritis y la subinvolución del lecho placentario. Se manifiesta con sangrado abundante, útero blando y subinvolucionado y cérvix abierto, a veces con fiebre. El ultrasonido apoya la retención. El tratamiento incluye uterotónicos, antibióticos si hay infección y evacuación uterina por aspiración o legrado cuidadoso. Debe descartarse enfermedad trofoblástica gestacional con gonadotropina coriónica si el sangrado persiste.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención y manejo de la hemorragia obstétrica"
+      ]
+    },
+    {
+      "key": "gyo-03-hemorragia-q21",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "obstetric_hemorrhage",
+      "subtopic": "postpartum_hemorrhage",
+      "vignette": "Mujer de 34 años con hemorragia posparto por atonía que no responde a masaje, oxitocina, ergonovina, misoprostol y ácido tranexámico. Sigue sangrando y tiene presión de 85/50 mmHg pese a transfusión. Desea más hijos.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Elevar las piernas como tratamiento definitivo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No controla la hemorragia."
+        },
+        {
+          "key": "b",
+          "text": "Evitar procedimientos invasivos por su deseo de fertilidad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede intentarse conservar el útero."
+        },
+        {
+          "key": "c",
+          "text": "Repetir la misma dosis de oxitocina y esperar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ya falló el tratamiento médico."
+        },
+        {
+          "key": "d",
+          "text": "Mantener el manejo médico otra hora",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Aumenta la mortalidad."
+        },
+        {
+          "key": "e",
+          "text": "Más misoprostol en dosis repetidas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Ya falló."
+        },
+        {
+          "key": "f",
+          "text": "Histerectomía como primera medida quirúrgica sin otras opciones",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se intentan medidas conservadoras si es posible."
+        },
+        {
+          "key": "g",
+          "text": "Tomografía abdominal antes de actuar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "h",
+          "text": "Colocar balón de taponamiento intrauterino como puente mientras se prepara la cirugía conservadora",
+          "correct": true,
+          "rationale": "Es la siguiente medida tras la falla de los uterotónicos."
+        },
+        {
+          "key": "i",
+          "text": "Antibióticos de amplio espectro como medida principal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No detienen el sangrado."
+        },
+        {
+          "key": "j",
+          "text": "Solo transfusión sin control del sangrado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No resuelve la causa."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "h"
+      ],
+      "explanation": "Cuando la hemorragia posparto por atonía no responde a los uterotónicos se escalan las medidas de forma escalonada y rápida. El balón de taponamiento intrauterino, como el de Bakri o uno improvisado con condón, es eficaz y puede servir como puente. Si falla se procede a laparotomía con suturas compresivas como B Lynch, ligadura de arterias uterinas u ováricas e hipogástricas, o embolización arterial si hay disponibilidad y la paciente lo permite. La histerectomía se realiza si estas medidas fallan o la paciente está en riesgo vital. El traje antichoque no neumático ayuda durante el traslado.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención y manejo de la hemorragia obstétrica"
+      ]
+    }
+  ]
+}

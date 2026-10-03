@@ -1,0 +1,239 @@
+@ mi|rheumatology|rheumatoid_arthritis|2|diagnosis
+V: Mujer de 42 años con dolor e inflamación simétrica de articulaciones metacarpofalángicas e interfalángicas proximales de ambas manos y de muñecas por 4 meses. Rigidez matutina de 90 minutos. Factor reumatoide y anticuerpos anti CCP positivos.
+P: ¿Cuál es el diagnóstico más probable?
++ Artritis reumatoide || Poliartritis simétrica de pequeñas articulaciones con rigidez prolongada y anti CCP positivo.
+- representativeness_heuristic | Osteoartritis de manos || Afecta interfalángicas distales y proximales con rigidez breve.
+- anchoring | Lupus eritematoso sistémico || Se ancla en una mujer joven con artritis, pero los anti CCP orientan a artritis reumatoide.
+- availability_heuristic | Gota poliarticular || Es más frecuente en hombres y no simétrica de inicio.
+- premature_closure | Artritis viral || Es autolimitada en semanas, no de 4 meses.
+- base_rate_fallacy | Hemocromatosis || Es menos frecuente y afecta segunda y tercera metacarpofalángicas.
+- framing_effect | Artritis psoriásica || Suena a artritis inflamatoria, pero no hay psoriasis.
+- inattentional_blindness | Fibromialgia || No toma en cuenta la sinovitis y los anticuerpos.
+- focusing_illusion | Síndrome del túnel del carpo || Se centra en las muñecas.
+- belief_bias | Fiebre reumática || Cree que toda artritis con factor reumatoide es reumática.
+E: La artritis reumatoide es una enfermedad autoinmune crónica que produce sinovitis inflamatoria, típicamente poliarticular, simétrica y de pequeñas articulaciones de manos y pies, con rigidez matutina mayor de una hora. Sin tratamiento causa erosiones y deformidades. Los criterios de clasificación consideran el número y tipo de articulaciones afectadas, la serología con factor reumatoide y anticuerpos anti péptido citrulinado cíclico, los reactantes de fase aguda y la duración mayor de seis semanas. Los anti CCP son muy específicos y predicen enfermedad erosiva. El diagnóstico temprano permite iniciar tratamiento en la ventana de oportunidad.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la artritis reumatoide del adulto
+
+@ mi|rheumatology|rheumatoid_arthritis|3|treatment_of_choice
+V: Mujer de 45 años con artritis reumatoide recién diagnosticada, actividad moderada. Función hepática y renal normales. Sin planes de embarazo y usa anticoncepción.
+P: ¿Cuál es el tratamiento de elección inicial?
++ Metotrexato, con dosis baja de corticosteroide como puente y ácido fólico || Es el fármaco modificador de la enfermedad de primera línea.
+- availability_heuristic | AINE como tratamiento único a largo plazo || Alivian síntomas, pero no frenan el daño articular.
+- anchoring | Corticosteroide en dosis altas como tratamiento de mantenimiento || Se ancla en el control rápido con efectos adversos graves.
+- complexity_bias | Biológico anti TNF como primera línea en todos || Se reserva para falla a modificadores convencionales.
+- representativeness_heuristic | Colchicina || Es para gota.
+- framing_effect | Esperar a que aparezcan erosiones para iniciar modificador || Suena prudente, pero el daño ya sería irreversible.
+- premature_closure | Hidroxicloroquina sola en actividad moderada || Es menos eficaz como monoterapia en actividad moderada.
+- status_quo_bias | Solo fisioterapia || Omite el tratamiento que frena la enfermedad.
+- belief_bias | Dieta sin gluten como tratamiento principal || Cree que la dieta controla la artritis.
+- omission_bias | Evitar metotrexato por miedo a toxicidad || Sobreestima riesgos manejables con vigilancia.
+E: El tratamiento de la artritis reumatoide debe iniciarse lo antes posible con fármacos modificadores de la enfermedad, para alcanzar la remisión o baja actividad. El metotrexato es el fármaco de primera línea, a dosis semanal, acompañado de ácido fólico para reducir efectos adversos. Puede usarse un corticosteroide a dosis baja como puente durante pocos meses. Se vigilan biometría hemática, función hepática y renal. Si no se alcanza la meta en tres a seis meses, se agrega otro modificador convencional o un biológico, como un anti TNF, o un inhibidor de JAK. El metotrexato es teratogénico y requiere anticoncepción.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la artritis reumatoide del adulto
+
+@ mi|rheumatology|rheumatoid_arthritis|4|complication_prognosis
+V: Mujer de 58 años con artritis reumatoide de 15 años de evolución. Refiere dolor cervical y parestesias en manos que empeoran al flexionar el cuello. Será operada de rodilla con anestesia general.
+P: ¿Cuál es la complicación que debe descartarse antes de la intubación?
++ Inestabilidad atlantoaxoidea || La artritis reumatoide puede causar subluxación C1 C2 con riesgo de lesión medular al intubar.
+- anchoring | Hernia de disco lumbar || Se ancla en otra zona de la columna.
+- availability_heuristic | Síndrome del túnel del carpo como única causa || Explica las parestesias, pero no el empeoramiento con la flexión cervical.
+- representativeness_heuristic | Espondilitis anquilosante || Afecta la columna, pero es otra enfermedad.
+- premature_closure | Osteoartritis cervical sin importancia anestésica || Subestima el riesgo.
+- base_rate_fallacy | Mielopatía por esclerosis múltiple || Es poco probable en este contexto.
+- framing_effect | Fractura vertebral osteoporótica lumbar || Suena relacionada con el esteroide, pero no explica los síntomas cervicales.
+- inattentional_blindness | Neuropatía periférica por fármacos || No relaciona los síntomas con la flexión del cuello.
+- focusing_illusion | Tendinitis de hombro || Se centra en otra articulación.
+- belief_bias | Artritis de la articulación temporomandibular como único riesgo || Cree que solo afecta la apertura bucal.
+E: La artritis reumatoide de larga evolución puede afectar la columna cervical, sobre todo la articulación atlantoaxoidea, por erosión del ligamento transverso y de la apófisis odontoides. La subluxación atlantoaxoidea puede ser asintomática o causar dolor cervical, parestesias y mielopatía, y la flexión forzada del cuello durante la intubación puede comprimir la médula. Antes de una cirugía con anestesia general en estos pacientes se recomienda radiografía cervical con proyecciones en flexión y extensión para evaluar la estabilidad. Si hay inestabilidad, se planea intubación con manipulación mínima, como la intubación con fibroscopio.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la artritis reumatoide del adulto
+
+@ mi|rheumatology|rheumatoid_arthritis|3|prevention_screening
+V: Mujer de 50 años con artritis reumatoide que iniciará prednisona 10 mg diarios por varios meses, además de metotrexato. Es posmenopáusica.
+P: ¿Cuál es la medida de prevención indicada por el uso prolongado de corticosteroides?
++ Calcio, vitamina D, densitometría y valorar un bifosfonato || Previene la osteoporosis inducida por corticosteroides.
+- availability_heuristic | Inhibidor de bomba de protones como única medida || No previene la pérdida ósea.
+- anchoring | Suspender el metotrexato para evitar la osteoporosis || Se ancla en otro fármaco.
+- framing_effect | Usar el esteroide solo en días alternos sin otras medidas || Suena preventivo, pero no protege el hueso.
+- representativeness_heuristic | Estrógenos en dosis altas || Tienen riesgos y no son la primera opción.
+- status_quo_bias | Ninguna medida hasta que tenga una fractura || Espera el daño.
+- premature_closure | Densitometría solo después de 5 años de tratamiento || La pérdida ósea ocurre desde los primeros meses.
+- complexity_bias | Teriparatida como primera línea en todos || Se reserva para riesgo muy alto.
+- belief_bias | Leche abundante como única medida || Cree que la leche basta.
+- omission_bias | Evitar el esteroide por completo aunque sea necesario || Pierde el control de la enfermedad.
+E: Los corticosteroides son la causa más frecuente de osteoporosis secundaria. La pérdida ósea es más rápida en los primeros meses y aumenta el riesgo de fracturas vertebrales y de cadera, incluso con dosis bajas de 2.5 a 7.5 mg de prednisona. En todo paciente que recibirá corticosteroides por tres meses o más se recomienda calcio y vitamina D, ejercicio, evitar tabaco y alcohol, y evaluar el riesgo de fractura con densitometría y herramientas como FRAX. En riesgo moderado o alto, como en mujeres posmenopáusicas, se indica un bifosfonato. Siempre se usa la menor dosis de corticosteroide por el menor tiempo posible.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis inducida por glucocorticoides
+
+@ mi|rheumatology|rheumatoid_arthritis|3|risk_factor
+V: Hombre de 55 años con artritis reumatoide controlada con metotrexato. Presenta tos seca y disnea progresiva desde hace 3 semanas, fiebre de 38 grados e infiltrados intersticiales bilaterales. Inició metotrexato hace 2 meses.
+P: ¿Cuál es el factor más probable de su cuadro pulmonar?
++ Neumonitis por hipersensibilidad al metotrexato || Neumonitis subaguda con fiebre e infiltrados en los primeros meses de tratamiento.
+- availability_heuristic | Neumonía adquirida en la comunidad típica || Es frecuente, pero el patrón intersticial bilateral y el contexto sugieren toxicidad.
+- anchoring | Enfermedad pulmonar intersticial por la artritis sin relación con el fármaco || Se ancla en la enfermedad de base e ignora el fármaco nuevo.
+- representativeness_heuristic | Tuberculosis pulmonar || Debe descartarse, pero no es la causa más probable en este contexto.
+- premature_closure | Insuficiencia cardiaca || Concluye sin datos de congestión.
+- base_rate_fallacy | Sarcoidosis || Es poco probable.
+- framing_effect | Asma de inicio tardío || Suena respiratorio, pero no hay sibilancias.
+- inattentional_blindness | Tromboembolia pulmonar || No toma en cuenta los infiltrados y la fiebre.
+- focusing_illusion | Nódulos reumatoides pulmonares || Se centra en la artritis.
+- belief_bias | Alergia al ácido fólico || Cree que el suplemento causa neumonitis.
+E: El metotrexato puede causar neumonitis por hipersensibilidad, una complicación poco frecuente pero potencialmente grave, generalmente en el primer año de tratamiento. Se presenta con tos seca, disnea, fiebre e infiltrados intersticiales o en vidrio despulido bilaterales. Se deben descartar infecciones, incluidas oportunistas, y la enfermedad pulmonar intersticial propia de la artritis reumatoide. El tratamiento es suspender el metotrexato de forma definitiva y dar corticosteroides. Otros efectos adversos del metotrexato son hepatotoxicidad, citopenias, mucositis y teratogenicidad, por lo que se vigilan biometría y pruebas hepáticas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la artritis reumatoide del adulto
+
+@ mi|rheumatology|lupus|2|diagnosis
+V: Mujer de 26 años con eritema en alas de mariposa que empeora con el sol, úlceras orales, artritis de manos y fatiga. Tiene proteinuria de 800 mg en 24 horas. Anticuerpos antinucleares positivos 1:640 y anti ADN de doble cadena positivos. Complemento C3 bajo.
+P: ¿Cuál es el diagnóstico más probable?
++ Lupus eritematoso sistémico || Afección cutánea, mucosa, articular y renal con anti ADN de doble cadena positivo.
+- representativeness_heuristic | Artritis reumatoide || Comparte artritis en mujer joven, pero no explica la afección cutánea ni renal ni el anti ADN.
+- anchoring | Dermatomiositis || Se ancla en el exantema, pero no hay debilidad muscular.
+- availability_heuristic | Rosácea || Da eritema facial, pero sin afección sistémica.
+- premature_closure | Lupus inducido por fármacos || Concluye sin fármaco desencadenante y con anti ADN positivo.
+- base_rate_fallacy | Esclerosis sistémica || Es menos frecuente y no explica el cuadro.
+- framing_effect | Lupus cutáneo discoide aislado || Suena a lupus, pero hay afección sistémica.
+- inattentional_blindness | Glomerulonefritis posestreptocócica || No toma en cuenta la afección multisistémica.
+- focusing_illusion | Síndrome de Sjögren || Se centra en la autoinmunidad.
+- belief_bias | Fotosensibilidad por cosméticos || Cree que el eritema es cosmético.
+E: El lupus eritematoso sistémico es una enfermedad autoinmune multisistémica, mucho más frecuente en mujeres en edad reproductiva. Puede afectar piel, con eritema malar y fotosensibilidad, mucosas, articulaciones, serosas, riñón, sangre y sistema nervioso. Los anticuerpos antinucleares son muy sensibles y constituyen el criterio de entrada de la clasificación actual. Los anti ADN de doble cadena y los anti Smith son específicos, y los anti ADN y el complemento bajo se relacionan con actividad, sobre todo renal. La proteinuria significativa sugiere nefritis lúpica, que requiere biopsia renal para clasificarla y definir el tratamiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del lupus eritematoso sistémico
+
+@ mi|rheumatology|lupus|3|treatment_of_choice
+V: Mujer de 30 años con lupus eritematoso sistémico con afección articular y cutánea leve. Sin afección renal ni hematológica. No está embarazada.
+P: ¿Cuál es el tratamiento de base de elección para todos los pacientes con lupus?
++ Hidroxicloroquina || Reduce brotes, daño orgánico y mortalidad, y se indica en todos sin contraindicación.
+- availability_heuristic | Prednisona en dosis altas a largo plazo || Controla brotes, pero causa daño acumulado.
+- anchoring | Ciclofosfamida || Se ancla en el lupus grave, reservada para nefritis o afección grave.
+- complexity_bias | Rituximab como primera línea || Es para casos refractarios.
+- representativeness_heuristic | Metotrexato como fármaco base obligatorio || Es útil en la afección articular, pero no es la base para todos.
+- framing_effect | Solo protector solar como tratamiento || Suena preventivo, pero es insuficiente.
+- premature_closure | Micofenolato en todos los pacientes || Se usa en nefritis lúpica.
+- status_quo_bias | Sin tratamiento por ser leve || Pierde un fármaco que reduce brotes.
+- belief_bias | Suplementos inmunoestimulantes || Cree que estimular la inmunidad ayuda.
+- omission_bias | Evitar la hidroxicloroquina por miedo a la toxicidad retiniana || El riesgo es bajo con dosis y vigilancia adecuadas.
+E: La hidroxicloroquina es el tratamiento de base del lupus eritematoso sistémico y se recomienda en todos los pacientes sin contraindicación, independientemente de la gravedad. Reduce los brotes, el daño orgánico, la trombosis y la mortalidad, y es segura en el embarazo. Se usa a dosis máxima de 5 mg por kilogramo de peso real al día y requiere evaluación oftalmológica basal y periódica por el riesgo de retinopatía. Los corticosteroides se usan a la menor dosis y por el menor tiempo posible. En afección grave se agregan inmunosupresores, como micofenolato, azatioprina, ciclofosfamida o biológicos como belimumab.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del lupus eritematoso sistémico
+
+@ mi|rheumatology|lupus|4|confirmatory_study
+V: Mujer de 24 años con lupus que presenta edema, hipertensión, proteinuria de 3.2 g en 24 horas, sedimento con cilindros eritrocitarios y creatinina de 1.4 mg/dL.
+P: ¿Cuál es el estudio de elección para confirmar el tipo de afección renal y guiar el tratamiento?
++ Biopsia renal || Clasifica la nefritis lúpica, que define el tratamiento.
+- anchoring | Ultrasonido renal como estudio definitivo || Se ancla en la imagen, que no clasifica la nefritis.
+- availability_heuristic | Anti ADN de doble cadena como prueba confirmatoria del tipo || Indica actividad, pero no el tipo histológico.
+- representativeness_heuristic | Gammagrama renal || Evalúa función, no histología.
+- framing_effect | Proteinuria de 24 horas repetida || Cuantifica, pero no clasifica.
+- premature_closure | Iniciar tratamiento sin biopsia en todos los casos || Pierde información que cambia el manejo.
+- complexity_bias | Angiografía renal || No aporta al diagnóstico.
+- information_bias | Tomografía abdominal || No clasifica la nefritis.
+- belief_bias | Complemento sérico como estudio definitivo || Cree que el complemento define el tipo.
+- base_rate_fallacy | Asumir nefritis leve por su edad || La edad no predice la gravedad.
+E: La nefritis lúpica es una de las manifestaciones más graves del lupus y un determinante del pronóstico. Se sospecha con proteinuria de 500 mg o más en 24 horas, sedimento activo con cilindros eritrocitarios o hematuria, o deterioro de la función renal. La biopsia renal es indispensable para clasificarla según la clasificación de la Sociedad Internacional de Nefrología, de clase I a VI, y para evaluar actividad y cronicidad. Las clases III y IV, proliferativas, son las más graves y requieren inducción con micofenolato o ciclofosfamida más corticosteroides, seguidas de mantenimiento, además de hidroxicloroquina y bloqueo del sistema renina angiotensina.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la nefritis lúpica
+
+@ mi|rheumatology|lupus|3|complication_prognosis
+V: Mujer de 28 años con lupus y síndrome antifosfolípido. Tuvo tres abortos espontáneos antes de la semana 10 y una muerte fetal a las 24 semanas.
+P: ¿Cuál es la complicación obstétrica asociada que explica sus pérdidas?
++ Síndrome antifosfolípido obstétrico || Pérdidas recurrentes tempranas y muerte fetal con anticuerpos antifosfolípido.
+- availability_heuristic | Incompetencia ístmico cervical || Causa pérdidas del segundo trimestre sin dolor, pero no explica las tempranas.
+- anchoring | Nefritis lúpica como causa directa de los abortos || Se ancla en el lupus e ignora los anticuerpos.
+- representativeness_heuristic | Alteraciones cromosómicas fetales || Explican abortos esporádicos, pero no este patrón con anticuerpos.
+- premature_closure | Diabetes gestacional || Concluye otra causa sin datos.
+- base_rate_fallacy | Toxoplasmosis congénita recurrente || No causa pérdidas recurrentes así.
+- framing_effect | Lupus neonatal || Suena obstétrico, pero afecta al recién nacido.
+- inattentional_blindness | Útero septado || Es posible, pero no explica el síndrome descrito.
+- focusing_illusion | Hipotiroidismo materno || Se centra en otra causa.
+- belief_bias | Estrés emocional || Cree que el estrés causa abortos recurrentes.
+E: El síndrome antifosfolípido obstétrico se define por la presencia persistente de anticuerpos antifosfolípido y morbilidad obstétrica, como tres o más abortos consecutivos antes de la semana 10, una o más muertes fetales de morfología normal después de la semana 10, o parto pretérmino antes de la semana 34 por preeclampsia grave o insuficiencia placentaria. Se asocia frecuentemente al lupus. El tratamiento en el embarazo es ácido acetilsalicílico a dosis baja más heparina de bajo peso molecular, que mejora de forma importante la tasa de nacidos vivos. La warfarina está contraindicada por su teratogenia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome antifosfolípido
+
+@ mi|rheumatology|lupus|3|risk_factor
+V: Hombre de 60 años con artralgias, fiebre y serositis pleural. Anticuerpos antinucleares positivos y anticuerpos antihistona positivos. Anti ADN de doble cadena negativo. Sin afección renal.
+P: ¿Cuál es el factor desencadenante más probable a investigar?
++ Fármacos como hidralazina, procainamida o isoniazida, por lupus inducido por fármacos || Antihistona positivo con anti ADN negativo en un hombre mayor.
+- availability_heuristic | Exposición solar intensa || Exacerba el lupus, pero no explica el perfil de anticuerpos.
+- anchoring | Infección viral reciente || Se ancla en la fiebre sin considerar fármacos.
+- representativeness_heuristic | Herencia familiar de lupus || Es un factor de riesgo, pero el perfil sugiere causa farmacológica.
+- premature_closure | Neoplasia oculta || Concluye una causa grave sin datos.
+- base_rate_fallacy | Tabaquismo || No explica este perfil.
+- framing_effect | Estrés emocional || Suena desencadenante, sin relación clara.
+- inattentional_blindness | Vacunación reciente || No toma en cuenta los antihistona.
+- focusing_illusion | Embarazo || No aplica en un hombre.
+- belief_bias | Consumo de lácteos || Cree que la dieta desencadena lupus.
+E: El lupus inducido por fármacos se presenta tras meses o años de exposición a ciertos medicamentos, como hidralazina, procainamida, isoniazida, minociclina, quinidina y anti TNF. Es más frecuente en personas mayores y afecta por igual a hombres y mujeres. Se manifiesta con artralgias, fiebre, serositis y exantema, y rara vez con afección renal o neurológica. Los anticuerpos antinucleares y antihistona son positivos, mientras que los anti ADN de doble cadena suelen ser negativos, salvo con anti TNF. El tratamiento es suspender el fármaco, y los síntomas suelen resolver en semanas a meses.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del lupus eritematoso sistémico
+
+@ mi|rheumatology|gout|2|confirmatory_study
+V: Hombre de 50 años con dolor intenso, enrojecimiento y aumento de volumen de la primera articulación metatarsofalángica derecha de inicio nocturno, tras una cena abundante con alcohol.
+P: ¿Cuál es el estudio de elección para confirmar el diagnóstico?
++ Artrocentesis con identificación de cristales de urato monosódico en forma de aguja con birrefringencia negativa || Confirma gota.
+- anchoring | Ácido úrico sérico elevado || Se ancla en el ácido úrico, que puede ser normal en la crisis.
+- availability_heuristic | Radiografía del pie || En la crisis inicial suele ser normal.
+- representativeness_heuristic | Factor reumatoide || Es para artritis reumatoide.
+- framing_effect | Velocidad de sedimentación || Suena a inflamación, pero es inespecífica.
+- premature_closure | Diagnóstico solo por la respuesta a colchicina || Es apoyo, no confirmación.
+- complexity_bias | Resonancia magnética del pie || No es necesaria.
+- information_bias | Gammagrama óseo || No confirma gota.
+- belief_bias | Ultrasonido como único estudio definitivo || Es útil, pero el estándar es el cristal.
+- base_rate_fallacy | Cultivo de sangre en todos || Se toma si se sospecha artritis séptica.
+E: La gota es una artritis inflamatoria causada por el depósito de cristales de urato monosódico. Su forma típica es la monoartritis aguda de la primera articulación metatarsofalángica, llamada podagra, de inicio nocturno, con dolor intenso, eritema y edema, desencadenada por alcohol, comidas ricas en purinas, diuréticos o deshidratación. El diagnóstico de certeza es la identificación de cristales en forma de aguja con birrefringencia negativa en el líquido sinovial. El ácido úrico sérico puede ser normal durante la crisis y no confirma ni descarta. La artrocentesis también descarta artritis séptica, sobre todo con fiebre.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la gota
+
+@ mi|rheumatology|gout|3|initial_treatment
+V: Hombre de 56 años con crisis aguda de gota en la rodilla de 12 horas de evolución. Tiene enfermedad renal crónica con filtración de 35 mL/min y úlcera péptica previa.
+P: ¿Cuál es el tratamiento inicial más adecuado para la crisis?
++ Corticosteroide oral o intraarticular || Es seguro con enfermedad renal y antecedente de úlcera.
+- availability_heuristic | Indometacina a dosis altas || Los AINE están contraindicados por la función renal y la úlcera.
+- anchoring | Alopurinol de inicio durante la crisis para bajar el ácido úrico || Se ancla en el ácido úrico, pero no trata la crisis.
+- framing_effect | Colchicina a dosis altas cada hora hasta tener diarrea || Suena al esquema antiguo, con mucha toxicidad, y requiere ajuste renal.
+- representativeness_heuristic | Probenecid || Es uricosúrico, ineficaz con filtración baja y no trata la crisis.
+- premature_closure | Antibiótico intravenoso || Trata una infección no demostrada.
+- complexity_bias | Biológico anti interleucina 1 como primera opción || Se reserva para contraindicación de todo lo demás.
+- status_quo_bias | Solo reposo y hielo || Insuficiente para el dolor.
+- belief_bias | Dieta sin carne como tratamiento de la crisis || Cree que la dieta resuelve la crisis.
+- omission_bias | Esperar a que ceda sola en una semana || Deja dolor intenso sin tratar.
+E: El tratamiento de la crisis aguda de gota debe iniciarse lo antes posible, idealmente en las primeras 24 horas. Las opciones son colchicina a dosis bajas, AINE o corticosteroides, elegidos según las comorbilidades. En pacientes con enfermedad renal crónica, úlcera péptica, insuficiencia cardiaca o anticoagulación, los corticosteroides orales, intraarticulares o intramusculares son la opción más segura. La colchicina requiere ajuste de dosis con filtración baja y tiene interacciones. Los fármacos hipouricemiantes, como el alopurinol, no tratan la crisis, pero si el paciente ya los toma no se suspenden.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la gota
+
+@ mi|rheumatology|gout|3|treatment_of_choice
+V: Hombre de 52 años con 3 crisis de gota en el último año y tofos en el pabellón auricular. Ácido úrico de 9.4 mg/dL. Filtración glomerular normal. Sin crisis activa.
+P: ¿Cuál es el tratamiento de elección a largo plazo?
++ Alopurinol iniciado a dosis baja y titulado hasta ácido úrico menor de 6 mg/dL, con profilaxis de crisis con colchicina || Gota con crisis frecuentes y tofos.
+- availability_heuristic | Colchicina sola de forma indefinida || Previene crisis, pero no reduce el ácido úrico.
+- anchoring | Alopurinol a dosis máxima desde el primer día || Se ancla en el ácido úrico alto y aumenta las crisis y reacciones.
+- framing_effect | Tratar solo cada crisis cuando aparezca || Suena práctico, pero deja progresar los tofos.
+- representativeness_heuristic | Prednisona diaria a largo plazo || Tiene efectos adversos y no reduce el ácido úrico.
+- premature_closure | Cirugía de los tofos como tratamiento principal || No trata la hiperuricemia.
+- complexity_bias | Pegloticasa como primera línea || Se reserva para gota refractaria.
+- status_quo_bias | Solo dieta baja en purinas || Insuficiente con tofos.
+- belief_bias | Suspender el alopurinol cuando el ácido úrico se normalice || Cree que se cura, cuando debe continuar.
+- omission_bias | Evitar el alopurinol por miedo a reacciones cutáneas || El riesgo se reduce con dosis inicial baja.
+E: El tratamiento hipouricemiante está indicado en pacientes con dos o más crisis al año, tofos, artropatía gotosa con daño radiográfico o litiasis por ácido úrico. El alopurinol es el fármaco de primera línea. Se inicia a dosis baja, de 100 mg al día o menor en enfermedad renal, y se aumenta gradualmente hasta lograr ácido úrico menor de 6 mg/dL, o menor de 5 si hay tofos. Al iniciar el tratamiento se da profilaxis con colchicina a dosis baja o AINE durante tres a seis meses, porque la movilización de cristales desencadena crisis. El tratamiento es indefinido. El febuxostat es una alternativa.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la gota
+
+@ mi|rheumatology|gout|3|risk_factor
+V: Hombre de 63 años con hipertensión que inició tratamiento con hidroclorotiazida hace 2 meses. Presenta su primera crisis de gota en el tobillo.
+P: ¿Cuál es el factor de riesgo farmacológico más probable de su crisis?
++ La hidroclorotiazida, que disminuye la excreción renal de ácido úrico || Los diuréticos tiazídicos y de asa elevan el ácido úrico.
+- availability_heuristic | El consumo de café || El café se asocia a menor riesgo de gota.
+- anchoring | La hipertensión por sí sola sin relación con el fármaco || Se ancla en la enfermedad e ignora el fármaco nuevo.
+- representativeness_heuristic | El losartán || Es uricosúrico y reduce el ácido úrico.
+- framing_effect | Los suplementos de vitamina C || Suena posible, pero reducen el ácido úrico.
+- premature_closure | Un traumatismo menor no recordado || Concluye sin datos.
+- base_rate_fallacy | Una enfermedad hematológica oculta || Es menos probable.
+- inattentional_blindness | La edad avanzada como causa única || No relaciona el inicio con el fármaco.
+- focusing_illusion | El consumo de lácteos bajos en grasa || Se asocian a menor riesgo.
+- belief_bias | El frío ambiental || Cree que el clima causa la crisis.
+E: Los factores de riesgo de gota incluyen el sexo masculino, la edad, la obesidad, el síndrome metabólico, la enfermedad renal crónica, el consumo de alcohol, sobre todo cerveza, las bebidas azucaradas con fructosa, las carnes rojas y mariscos, y fármacos que elevan el ácido úrico, como diuréticos tiazídicos y de asa, ácido acetilsalicílico a dosis bajas, ciclosporina, tacrolimus, pirazinamida y etambutol. Cuando un antihipertensivo desencadena gota, puede cambiarse por losartán o un calcioantagonista, que tienen efecto uricosúrico leve. Los lácteos bajos en grasa, el café y la vitamina C se asocian a menor riesgo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la gota
+
+@ mi|rheumatology|gout|4|diagnosis
+V: Mujer de 74 años con dolor e inflamación aguda de la rodilla derecha. La radiografía muestra calcificación lineal del cartílago articular. El líquido sinovial tiene cristales romboidales con birrefringencia positiva débil.
+P: ¿Cuál es el diagnóstico más probable?
++ Enfermedad por depósito de pirofosfato de calcio, antes llamada seudogota || Cristales romboidales con birrefringencia positiva y condrocalcinosis.
+- representativeness_heuristic | Gota || También es por cristales, pero en la gota son en aguja con birrefringencia negativa.
+- anchoring | Osteoartritis de rodilla sin otra causa || Se ancla en la edad e ignora los cristales.
+- availability_heuristic | Artritis séptica || Debe descartarse, pero los cristales explican el cuadro.
+- premature_closure | Artritis reumatoide de inicio tardío || Concluye sin considerar los cristales.
+- base_rate_fallacy | Hemartrosis por anticoagulación || No se describe sangre ni anticoagulantes.
+- framing_effect | Artritis por hidroxiapatita || Suena similar, pero esos cristales no se ven al microscopio de luz polarizada.
+- inattentional_blindness | Bursitis prerrotuliana || No toma en cuenta el líquido articular.
+- focusing_illusion | Condromalacia rotuliana || Se centra en el cartílago.
+- belief_bias | Gota femenina atípica || Cree que en mujeres la gota cambia el tipo de cristal.
+E: La enfermedad por depósito de pirofosfato de calcio afecta sobre todo a personas mayores. La forma aguda, antes llamada seudogota, se manifiesta como monoartritis, más frecuente en rodilla y muñeca. En la radiografía puede verse condrocalcinosis, que es la calcificación lineal del cartílago. El diagnóstico se confirma con cristales romboidales con birrefringencia positiva débil en el líquido sinovial. Se asocia a hiperparatiroidismo, hemocromatosis, hipomagnesemia e hipofosfatasia, que deben descartarse en pacientes jóvenes o con afección extensa. El tratamiento de la crisis es similar al de la gota, con AINE, colchicina o corticosteroides intraarticulares.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la gota

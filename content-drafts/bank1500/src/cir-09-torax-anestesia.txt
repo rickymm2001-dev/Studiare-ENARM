@@ -1,0 +1,335 @@
+@ cir|thoracic_surgery|pneumothorax|2|diagnosis
+V: Hombre de 22 años, alto y delgado, fumador, que presenta dolor torácico súbito en el hemitórax derecho tipo pleurítico y disnea leve mientras estaba sentado. Disminución del murmullo vesicular e hiperresonancia en el hemitórax derecho. Estable.
+P: ¿Cuál es el diagnóstico más probable?
++ Neumotórax espontáneo primario || Varón joven, alto, delgado y fumador con dolor pleurítico súbito e hiperresonancia.
+- anchoring | Neumotórax a tensión || El paciente está estable sin desviación traqueal.
+- availability_heuristic | Tromboembolia pulmonar || No explica la hiperresonancia.
+- representativeness_heuristic | Neumonía || No explica el inicio súbito con hiperresonancia.
+- premature_closure | Pericarditis || No explica los hallazgos pulmonares.
+- base_rate_fallacy | Infarto agudo de miocardio || No explica la hiperresonancia.
+- framing_effect | Crisis asmática || Da sibilancias difusas.
+- inattentional_blindness | Derrame pleural || Daría matidez.
+- focusing_illusion | Costocondritis || No explica la hiperresonancia.
+- belief_bias | Ansiedad con hiperventilación || Hay hallazgos objetivos.
+E: El neumotórax espontáneo primario ocurre sin enfermedad pulmonar conocida, por rotura de bulas o blebs subpleurales apicales. Es más frecuente en varones jóvenes, altos, delgados y fumadores. Se manifiesta con dolor torácico pleurítico súbito y disnea, con disminución del murmullo vesicular, hiperresonancia y disminución de las vibraciones vocales del lado afectado. La radiografía de tórax confirma el diagnóstico con la línea pleural visceral sin trama pulmonar periférica. El neumotórax secundario ocurre en pacientes con enfermedad pulmonar, como enfermedad pulmonar obstructiva crónica, y es más grave.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del neumotórax espontáneo
+
+@ cir|thoracic_surgery|pneumothorax|3|treatment_of_choice
+V: Hombre de 25 años con primer episodio de neumotórax espontáneo primario derecho grande, con disnea y estabilidad hemodinámica.
+P: ¿Cuál es el tratamiento de elección?
++ Aspiración con aguja o colocación de sonda pleural de pequeño calibre || El neumotórax grande sintomático requiere evacuación del aire.
+- anchoring | Observación sin intervención en todos los neumotórax grandes || El grande sintomático requiere evacuación.
+- availability_heuristic | Toracotomía con resección pulmonar inmediata || Se reserva para recurrencia o fuga persistente.
+- representativeness_heuristic | Pleurodesis química en el primer episodio en todos || Se reserva para recurrencias.
+- premature_closure | Solo oxígeno y egreso inmediato || El neumotórax grande sintomático requiere drenaje.
+- framing_effect | Antibióticos || No hay infección.
+- complexity_bias | Ventilación mecánica || No está indicada.
+- base_rate_fallacy | Broncoscopia || No está indicada.
+- belief_bias | Reposo absoluto hasta que se reabsorba solo un neumotórax grande sintomático || Requiere evacuación.
+- omission_bias | No indicar dejar de fumar || Reduce la recurrencia.
+E: El tratamiento del neumotórax espontáneo primario depende del tamaño y los síntomas. Los neumotórax pequeños y poco sintomáticos pueden observarse con oxígeno, que acelera la reabsorción. Los grandes o sintomáticos se tratan con aspiración con aguja o con sonda pleural de pequeño calibre. Se indica cirugía videotoracoscópica con resección de bulas y pleurodesis en caso de recurrencia, neumotórax bilateral, fuga de aire persistente más de 3 a 5 días o profesiones de riesgo como pilotos o buzos. Dejar de fumar reduce de forma importante la recurrencia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del neumotórax espontáneo
+
+@ cir|thoracic_surgery|pneumothorax|3|diagnosis
+V: Hombre de 68 años con enfermedad pulmonar obstructiva crónica grave que presenta disnea súbita intensa e hipoxemia. Disminución del murmullo en el hemitórax izquierdo. La radiografía muestra una línea pleural con ausencia de trama pulmonar en la periferia izquierda.
+P: ¿Cuál es el diagnóstico más probable?
++ Neumotórax espontáneo secundario || Neumotórax en un paciente con enfermedad pulmonar de base.
+- anchoring | Exacerbación de la enfermedad pulmonar obstructiva crónica || No explica la línea pleural.
+- availability_heuristic | Neumotórax espontáneo primario || El paciente tiene enfermedad pulmonar de base.
+- representativeness_heuristic | Bula gigante sin neumotórax || La línea pleural indica aire en la pleura.
+- premature_closure | Neumonía || No explica la línea pleural.
+- base_rate_fallacy | Tromboembolia pulmonar || No explica la línea pleural.
+- framing_effect | Insuficiencia cardiaca || No explica los hallazgos.
+- inattentional_blindness | Derrame pleural || Daría opacidad.
+- focusing_illusion | Atelectasia || Daría opacidad con desplazamiento hacia el lado afectado.
+- belief_bias | Disnea normal de su enfermedad || Es un cambio agudo grave.
+E: El neumotórax espontáneo secundario ocurre en pacientes con enfermedad pulmonar subyacente, como enfermedad pulmonar obstructiva crónica, fibrosis quística, tuberculosis, neumonía por Pneumocystis o enfermedades intersticiales. Es más grave que el primario porque la reserva pulmonar está disminuida, y puede causar insuficiencia respiratoria incluso si es pequeño. Debe distinguirse de una bula gigante, para lo cual puede requerirse tomografía. El tratamiento suele requerir sonda pleural y hospitalización, y se recomienda prevenir la recurrencia con pleurodesis o cirugía por su mayor mortalidad.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del neumotórax espontáneo
+
+@ cir|thoracic_surgery|pneumothorax|3|risk_factor
+V: Hombre de 20 años con su segundo episodio de neumotórax espontáneo primario. Fuma 15 cigarros al día y consume marihuana. Mide 1.90 m y pesa 65 kg.
+P: ¿Cuál es el factor de riesgo modificable más importante?
++ Tabaquismo de cigarros y marihuana || Aumenta de forma importante el riesgo de neumotórax y su recurrencia.
+- anchoring | Su estatura alta || No es modificable.
+- availability_heuristic | El sexo masculino || No es modificable.
+- representativeness_heuristic | El ejercicio moderado || No es un factor.
+- premature_closure | Vivir a nivel del mar || No es un factor relevante.
+- base_rate_fallacy | El consumo de café || No es un factor.
+- framing_effect | El tipo de colchón || No es un factor.
+- inattentional_blindness | La vacunación || No es un factor.
+- focusing_illusion | El estrés académico || No es un factor establecido.
+- belief_bias | Cargar la mochila pesada || No es un factor establecido.
+E: Los factores de riesgo de neumotórax espontáneo primario incluyen sexo masculino, complexión alta y delgada, tabaquismo, consumo de marihuana, antecedente familiar y algunas enfermedades del tejido conectivo como el síndrome de Marfan. El tabaquismo es el principal factor modificable y aumenta el riesgo de forma dependiente de la dosis. La recurrencia tras un primer episodio es de 25 a 50%, sobre todo en los primeros 1 a 2 años. Tras un segundo episodio se recomienda cirugía para prevenir nuevas recurrencias. Dejar de fumar es una medida fundamental.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del neumotórax espontáneo
+
+@ cir|thoracic_surgery|pneumothorax|3|next_step
+V: Hombre de 30 años con neumotórax espontáneo tratado con sonda pleural que persiste con burbujeo continuo en la trampa de agua a los 6 días, con el pulmón parcialmente expandido.
+P: ¿Cuál es el siguiente paso?
++ Cirugía videotoracoscópica con resección de bulas y pleurodesis || La fuga de aire persistente más de 3 a 5 días es indicación quirúrgica.
+- anchoring | Retirar la sonda y observar || La fuga persiste.
+- availability_heuristic | Mantener la sonda indefinidamente || No resuelve la fuga.
+- representativeness_heuristic | Colocar una segunda sonda sin más estudio como única medida || No resuelve la causa.
+- premature_closure | Iniciar antibióticos de amplio espectro || No hay infección.
+- framing_effect | Ventilación mecánica con presión positiva || Empeora la fuga.
+- complexity_bias | Neumonectomía || Es excesiva.
+- base_rate_fallacy | Broncoscopia diagnóstica como tratamiento definitivo || No resuelve la fuga.
+- belief_bias | La fuga se cierra sola si se espera un mes || Aumenta las complicaciones.
+- omission_bias | No referir a cirugía de tórax || Es la conducta indicada.
+E: La fuga de aire persistente es la que continúa más de 3 a 5 días tras colocar la sonda pleural. Indica que la fístula alveolopleural no se ha cerrado y se asocia a mayor estancia e infección. La cirugía videotoracoscópica permite resecar las bulas o blebs responsables y realizar pleurodesis mecánica o química para evitar recurrencias, con baja morbilidad. En pacientes no candidatos a cirugía pueden usarse pleurodesis química por la sonda, parche hemático o válvulas endobronquiales. La cirugía también se indica en recurrencias y neumotórax bilaterales.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del neumotórax espontáneo
+
+@ cir|thoracic_surgery|pleural_effusion|2|data_interpretation
+V: Hombre de 60 años con derrame pleural derecho. La toracocentesis muestra relación de proteínas pleura suero de 0.7, relación de deshidrogenasa láctica pleura suero de 0.8 y deshidrogenasa láctica pleural mayor de dos tercios del límite sérico normal.
+P: ¿Qué indica este resultado según los criterios de Light?
++ Exudado || Cumple al menos un criterio de Light.
+- anchoring | Trasudado || Los valores superan los puntos de corte.
+- availability_heuristic | Derrame por insuficiencia cardiaca típico || Suele ser trasudado.
+- representativeness_heuristic | Quilotórax confirmado || Requiere triglicéridos elevados.
+- premature_closure | Hemotórax || Requiere hematocrito pleural elevado.
+- base_rate_fallacy | Derrame por cirrosis típico || Suele ser trasudado.
+- framing_effect | Líquido normal || El espacio pleural normal tiene muy poco líquido.
+- inattentional_blindness | Derrame por síndrome nefrótico típico || Suele ser trasudado.
+- focusing_illusion | Empiema confirmado || Requiere pus o pH bajo con cultivo.
+- belief_bias | Los criterios no son útiles || Son el estándar para clasificar.
+E: Los criterios de Light clasifican el derrame pleural como exudado si cumple al menos uno de los siguientes, relación de proteínas pleura suero mayor de 0.5, relación de deshidrogenasa láctica pleura suero mayor de 0.6 o deshidrogenasa láctica pleural mayor de dos tercios del límite superior normal del suero. Los trasudados se deben a alteraciones de la presión hidrostática u oncótica, como insuficiencia cardiaca, cirrosis y síndrome nefrótico. Los exudados se deben a inflamación o alteración de la permeabilidad, como neumonía, cáncer, tuberculosis y tromboembolia pulmonar.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del derrame pleural
+
+@ cir|thoracic_surgery|pleural_effusion|3|next_step
+V: Hombre de 55 años con neumonía y derrame pleural que persiste con fiebre. La toracocentesis muestra líquido turbio con pH de 7.0, glucosa de 30 mg/dL y tinción de Gram con cocos grampositivos.
+P: ¿Cuál es el siguiente paso?
++ Colocar sonda pleural para drenaje, además de antibióticos || El derrame paraneumónico complicado o empiema requiere drenaje.
+- anchoring | Continuar solo con antibióticos || El pH bajo y el Gram positivo indican derrame complicado.
+- availability_heuristic | Toracocentesis diagnóstica repetida cada semana || No drena adecuadamente.
+- representativeness_heuristic | Diuréticos para resolver el derrame || Es un exudado infeccioso.
+- premature_closure | Decorticación inmediata en todos sin intentar drenaje || Se reserva para falla del drenaje.
+- framing_effect | Corticosteroides || No están indicados.
+- complexity_bias | Neumonectomía || Es excesiva.
+- base_rate_fallacy | Pleurodesis química || Es para derrames malignos recurrentes.
+- belief_bias | El líquido se reabsorberá solo con el tiempo || El empiema requiere drenaje.
+- omission_bias | No drenar por miedo al procedimiento || El drenaje es necesario.
+E: El derrame paraneumónico se clasifica en no complicado, que se resuelve con antibióticos, y complicado o empiema, que requiere drenaje. Los criterios de derrame complicado incluyen pH menor de 7.2, glucosa menor de 60 mg/dL, deshidrogenasa láctica mayor de 1 000, tinción de Gram o cultivo positivos, líquido purulento o tabicación. El tratamiento es la colocación de sonda pleural con antibióticos. En derrames tabicados se usan fibrinolíticos intrapleurales con desoxirribonucleasa o cirugía videotoracoscópica. La decorticación se reserva para empiemas organizados con atrapamiento pulmonar.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del derrame pleural
+
+@ cir|thoracic_surgery|pleural_effusion|3|diagnosis
+V: Mujer de 62 años con pérdida de peso de 10 kg, disnea progresiva y derrame pleural derecho masivo que recidiva tras dos toracocentesis. El líquido es un exudado hemático con citología positiva para adenocarcinoma.
+P: ¿Cuál es el diagnóstico más probable?
++ Derrame pleural maligno || Exudado hemático recurrente con citología positiva para células malignas.
+- anchoring | Derrame paraneumónico || No explica la citología positiva.
+- availability_heuristic | Insuficiencia cardiaca || Sería un trasudado.
+- representativeness_heuristic | Tuberculosis pleural || La citología muestra adenocarcinoma.
+- premature_closure | Hemotórax traumático || No hay traumatismo.
+- base_rate_fallacy | Mesotelioma sin exposición a asbesto || El adenocarcinoma orienta a metástasis.
+- framing_effect | Derrame por cirrosis || Sería un trasudado.
+- inattentional_blindness | Derrame por artritis reumatoide || La citología lo descarta.
+- focusing_illusion | Quilotórax || El líquido es hemático.
+- belief_bias | Agua en el pulmón por la edad || Hay células malignas.
+E: El derrame pleural maligno es una causa frecuente de exudado, sobre todo en mayores de 60 años. Las causas más comunes son el cáncer de pulmón, el de mama y el linfoma, y en menor medida el mesotelioma. Se manifiesta con disnea progresiva, derrames grandes y recurrentes, a menudo hemáticos. El diagnóstico se confirma con citología del líquido o biopsia pleural. Indica enfermedad avanzada. El tratamiento es paliativo para aliviar la disnea, con toracocentesis evacuadora, pleurodesis con talco o catéter pleural tunelizado permanente.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del derrame pleural
+
+@ cir|thoracic_surgery|pleural_effusion|3|diagnosis
+V: Hombre de 35 años con fiebre vespertina, sudoración nocturna, pérdida de peso y derrame pleural derecho. El líquido es un exudado con predominio de linfocitos, adenosina desaminasa de 80 U/L y escasas células mesoteliales.
+P: ¿Cuál es el diagnóstico más probable?
++ Tuberculosis pleural || Exudado linfocítico con adenosina desaminasa elevada y síntomas constitucionales.
+- anchoring | Derrame paraneumónico bacteriano || Predominarían neutrófilos.
+- availability_heuristic | Derrame maligno || La adenosina desaminasa alta orienta a tuberculosis.
+- representativeness_heuristic | Insuficiencia cardiaca || Sería un trasudado.
+- premature_closure | Empiema || Tendría pus y neutrófilos.
+- base_rate_fallacy | Lupus eritematoso sistémico || Es menos probable con estos datos.
+- framing_effect | Tromboembolia pulmonar || No explica la adenosina desaminasa elevada.
+- inattentional_blindness | Quilotórax || Tendría triglicéridos altos.
+- focusing_illusion | Derrame por pancreatitis || Tendría amilasa elevada.
+- belief_bias | Infección viral sin importancia || Es una infección que requiere tratamiento.
+E: La tuberculosis pleural es una causa frecuente de exudado en países con alta prevalencia de tuberculosis, como México, sobre todo en adultos jóvenes. Se manifiesta con fiebre, tos, dolor pleurítico y síntomas constitucionales. El líquido es un exudado con predominio linfocítico, escasas células mesoteliales y adenosina desaminasa elevada, generalmente mayor de 40 U/L. La baciloscopia y el cultivo del líquido tienen baja sensibilidad, y la biopsia pleural con granulomas tiene mayor rendimiento. El tratamiento es el esquema antituberculoso estándar durante 6 meses, y el derrame suele resolverse sin drenaje.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del derrame pleural ;; Norma Oficial Mexicana para la prevención y control de la tuberculosis
+
+@ cir|thoracic_surgery|pleural_effusion|2|initial_study
+V: Mujer de 50 años con disnea y derrame pleural izquierdo de causa desconocida en la radiografía de tórax, de tamaño moderado, sin insuficiencia cardiaca evidente.
+P: ¿Cuál es el estudio inicial indicado para el diagnóstico de la causa?
++ Toracocentesis diagnóstica guiada por ultrasonido con análisis del líquido || Permite distinguir trasudado de exudado y orientar la causa.
+- anchoring | Diuréticos y radiografía de control sin estudiar el líquido || No identifica la causa.
+- availability_heuristic | Biopsia pleural abierta como primer paso || Es invasiva y se reserva para casos no diagnosticados.
+- representativeness_heuristic | Broncoscopia como primer estudio || No es el estudio inicial.
+- premature_closure | Pleurodesis inmediata || Primero se diagnostica la causa.
+- base_rate_fallacy | Repetir la radiografía en 3 meses || Retrasa el diagnóstico.
+- framing_effect | Antibióticos empíricos sin estudio || No se conoce la causa.
+- complexity_bias | Tomografía por emisión de positrones || No es el estudio inicial.
+- information_bias | Marcadores tumorales séricos como diagnóstico || No confirman la causa.
+- belief_bias | El derrame siempre es por el corazón || Hay muchas causas.
+E: La toracocentesis diagnóstica es el estudio inicial ante un derrame pleural de causa desconocida, salvo que la causa sea clara, como insuficiencia cardiaca con derrame bilateral típico. Se realiza preferentemente guiada por ultrasonido para reducir complicaciones como el neumotórax. El líquido se analiza con proteínas, deshidrogenasa láctica, glucosa, pH, cuenta celular, tinción de Gram, cultivo, citología y, según el caso, adenosina desaminasa, triglicéridos y amilasa. Los criterios de Light distinguen trasudado de exudado y orientan el diagnóstico y los estudios adicionales.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del derrame pleural
+
+@ cir|thoracic_surgery|pleural_effusion|3|diagnosis
+V: Hombre de 50 años operado de esofagectomía hace 7 días que presenta derrame pleural derecho de aspecto lechoso. El líquido tiene triglicéridos de 250 mg/dL y quilomicrones presentes.
+P: ¿Cuál es el diagnóstico más probable?
++ Quilotórax por lesión del conducto torácico || Líquido lechoso con triglicéridos mayores de 110 mg/dL y quilomicrones tras cirugía torácica.
+- anchoring | Empiema || El líquido sería purulento con pH bajo.
+- availability_heuristic | Pseudoquilotórax || Tiene colesterol elevado sin quilomicrones y es crónico.
+- representativeness_heuristic | Derrame paraneumónico || No explica los triglicéridos ni los quilomicrones.
+- premature_closure | Hemotórax || El líquido no es hemático.
+- base_rate_fallacy | Derrame maligno || El contexto es posquirúrgico.
+- framing_effect | Insuficiencia cardiaca || Sería un trasudado claro.
+- inattentional_blindness | Fuga esofágica || Tendría amilasa alta y contenido digestivo.
+- focusing_illusion | Derrame por pancreatitis || Tendría amilasa alta.
+- belief_bias | Líquido normal tras la cirugía || Es una complicación.
+E: El quilotórax es la acumulación de linfa en el espacio pleural por lesión u obstrucción del conducto torácico. Las causas más frecuentes son las traumáticas, sobre todo la cirugía torácica como esofagectomía y cirugía cardiaca, y las no traumáticas, sobre todo el linfoma. El líquido es lechoso con triglicéridos mayores de 110 mg/dL y presencia de quilomicrones. El tratamiento inicial es conservador con drenaje, dieta con triglicéridos de cadena media o nutrición parenteral y octreótido. Si el gasto es alto o persistente se realiza ligadura del conducto torácico o embolización.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del derrame pleural
+
+@ cir|anesthesiology|preoperative_assessment_general|2|data_interpretation
+V: Hombre de 50 años con hipertensión controlada con un fármaco y diabetes tipo 2 bien controlada, sin limitación funcional, programado para cirugía electiva.
+P: ¿Qué clasificación de la Sociedad Americana de Anestesiólogos le corresponde?
++ ASA II || Enfermedad sistémica leve sin limitación funcional.
+- anchoring | ASA I || Corresponde a pacientes sanos.
+- availability_heuristic | ASA III || Corresponde a enfermedad sistémica grave con limitación funcional.
+- representativeness_heuristic | ASA IV || Corresponde a enfermedad grave que amenaza la vida.
+- premature_closure | ASA V || Corresponde a pacientes moribundos.
+- base_rate_fallacy | ASA VI || Corresponde a muerte cerebral para donación.
+- framing_effect | ASA II E por ser electiva || La E se usa en cirugía de urgencia.
+- inattentional_blindness | ASA III por tener dos enfermedades || El número no define la clase, sino la gravedad.
+- focusing_illusion | No se puede clasificar sin estudios || La clasificación es clínica.
+- belief_bias | La clasificación ASA predice exactamente la mortalidad individual || Es una estimación del estado físico.
+E: La clasificación del estado físico de la Sociedad Americana de Anestesiólogos describe el estado de salud preoperatorio. ASA I es un paciente sano. ASA II tiene enfermedad sistémica leve sin limitación funcional, como hipertensión o diabetes bien controladas, tabaquismo u obesidad leve. ASA III tiene enfermedad sistémica grave con limitación funcional, como diabetes o hipertensión mal controladas u obesidad mórbida. ASA IV tiene enfermedad grave que amenaza la vida, ASA V es un paciente moribundo y ASA VI un donante con muerte cerebral. Se agrega la letra E en la cirugía de urgencia.
+R: Guía de Práctica Clínica de valoración preanestésica
+
+@ cir|anesthesiology|preoperative_assessment_general|2|next_step
+V: Mujer de 35 años sana programada para colecistectomía electiva a las 8 de la mañana. Pregunta cuánto tiempo debe estar en ayuno.
+P: ¿Cuál es la indicación de ayuno preoperatorio más apropiada?
++ Ayuno de 6 horas para alimentos ligeros y de 2 horas para líquidos claros || Reduce el riesgo de aspiración sin ayunos prolongados innecesarios.
+- anchoring | Ayuno absoluto desde la medianoche para todo, incluida el agua || Es innecesariamente prolongado.
+- availability_heuristic | Ayuno de 24 horas || Es excesivo y causa deshidratación.
+- representativeness_heuristic | Puede desayunar normalmente || Aumenta el riesgo de aspiración.
+- premature_closure | Ayuno de 2 horas para comidas grasosas || Las comidas grasosas requieren 8 horas.
+- framing_effect | Ayuno solo de líquidos y no de sólidos || Es al revés.
+- complexity_bias | Colocar sonda nasogástrica a todas || No es necesaria.
+- base_rate_fallacy | Ayuno de 12 horas para la leche materna en adultos || No aplica.
+- belief_bias | Entre más ayuno, más segura la anestesia || El ayuno prolongado no aporta beneficio.
+- omission_bias | No explicar las indicaciones de ayuno || Puede causar cancelaciones.
+E: Las recomendaciones de ayuno preoperatorio para pacientes sanos en cirugía electiva son de 2 horas para líquidos claros como agua, jugo sin pulpa y café sin leche, 4 horas para leche materna, 6 horas para fórmula, leche no humana y comidas ligeras, y 8 horas para comidas grasosas o abundantes. El ayuno prolongado no reduce el riesgo de aspiración y causa sed, hambre, deshidratación e hipoglucemia. Los pacientes con vaciamiento gástrico retardado, como diabéticos con gastroparesia, embarazadas o con obstrucción intestinal, tienen mayor riesgo de aspiración.
+R: Guía de Práctica Clínica de valoración preanestésica
+
+@ cir|anesthesiology|preoperative_assessment_general|3|data_interpretation
+V: Hombre de 45 años con obesidad, cuello corto y grueso, apertura bucal limitada. Al abrir la boca y sacar la lengua solo se ven el paladar duro y la base de la úvula.
+P: ¿Qué indica la clasificación de Mallampati de este paciente?
++ Mallampati III, que sugiere vía aérea difícil || Solo se observan el paladar blando y la base de la úvula.
+- anchoring | Mallampati I sin dificultad esperada || Se verían el paladar, las fauces, la úvula y los pilares.
+- availability_heuristic | Mallampati II || Se vería la úvula completa.
+- representativeness_heuristic | Mallampati IV || Solo se vería el paladar duro.
+- premature_closure | Indica que la intubación será fácil || Sugiere dificultad.
+- base_rate_fallacy | Indica obligatoriamente traqueostomía electiva || Indica preparación para vía aérea difícil.
+- framing_effect | No tiene relación con la intubación || Es un predictor de vía aérea difícil.
+- inattentional_blindness | Indica alergia a anestésicos || No evalúa alergias.
+- focusing_illusion | Indica riesgo cardiaco || Evalúa la vía aérea.
+- belief_bias | La obesidad nunca afecta la vía aérea || Es un factor de riesgo.
+E: La evaluación de la vía aérea antes de la anestesia permite anticipar dificultades para la ventilación y la intubación. La clasificación de Mallampati valora las estructuras visibles con la boca abierta y la lengua afuera. La clase I muestra paladar blando, fauces, úvula y pilares, la clase II paladar blando, fauces y úvula, la clase III paladar blando y base de la úvula, y la clase IV solo el paladar duro. Las clases III y IV sugieren intubación difícil. Otros predictores son la distancia tiromentoniana corta, la apertura bucal limitada, la movilidad cervical reducida y la obesidad.
+R: Guía de Práctica Clínica de manejo de la vía aérea difícil
+
+@ cir|anesthesiology|preoperative_assessment_general|4|diagnosis
+V: Hombre de 25 años durante una apendicectomía con anestesia general con sevoflurano y succinilcolina. Presenta rigidez muscular generalizada, taquicardia, aumento rápido del CO2 espirado, temperatura de 40.5 °C en ascenso y acidosis mixta. Su tío murió durante una cirugía.
+P: ¿Cuál es el diagnóstico más probable?
++ Hipertermia maligna || Hipercapnia, rigidez, taquicardia e hipertermia tras halogenados y succinilcolina con antecedente familiar.
+- anchoring | Sepsis por la apendicitis || No explica la rigidez ni el aumento rápido del CO2.
+- availability_heuristic | Síndrome neuroléptico maligno || Se asocia a antipsicóticos y evoluciona en días.
+- representativeness_heuristic | Crisis tiroidea || No explica la rigidez ni la relación con los anestésicos.
+- premature_closure | Reacción anafiláctica || Da hipotensión y broncoespasmo sin rigidez.
+- base_rate_fallacy | Feocromocitoma || No explica la rigidez ni la relación con los anestésicos.
+- framing_effect | Síndrome serotoninérgico || Se asocia a fármacos serotoninérgicos con clonus.
+- inattentional_blindness | Hipertermia por cobertores excesivos || No explica la hipercapnia ni la rigidez.
+- focusing_illusion | Anestesia superficial || No explica la hipertermia.
+- belief_bias | Fiebre normal por la infección del apéndice || Es una crisis farmacogenética.
+E: La hipertermia maligna es una enfermedad farmacogenética, generalmente autosómica dominante por mutaciones del receptor de rianodina RYR1, que se desencadena con anestésicos halogenados y succinilcolina. La liberación descontrolada de calcio en el músculo produce hipermetabolismo. El signo más temprano es el aumento inexplicable del CO2 espirado, con taquicardia, rigidez muscular incluido el espasmo del masetero, hipertermia tardía, acidosis, hiperpotasemia y rabdomiólisis. El tratamiento es suspender los desencadenantes, hiperventilar con oxígeno al 100%, administrar dantroleno intravenoso, enfriar y corregir las alteraciones metabólicas.
+R: Guía de Práctica Clínica de manejo de la hipertermia maligna
+
+@ cir|anesthesiology|preoperative_assessment_general|3|complication_prognosis
+V: Mujer de 30 años que recibió anestesia raquídea para cesárea. Al segundo día presenta cefalea frontooccipital intensa que empeora al sentarse o ponerse de pie y mejora al acostarse, con náusea y rigidez de nuca leve. Afebril y sin déficit neurológico.
+P: ¿Cuál es la complicación que presenta?
++ Cefalea pospunción dural || Cefalea postural que empeora al estar de pie tras anestesia neuroaxial.
+- anchoring | Preeclampsia posparto || No explica el componente postural, aunque debe considerarse si hay hipertensión.
+- availability_heuristic | Meningitis bacteriana || Daría fiebre y no sería postural.
+- representativeness_heuristic | Migraña || No tiene componente postural típico.
+- premature_closure | Hemorragia subaracnoidea || Es súbita sin componente postural.
+- base_rate_fallacy | Trombosis venosa cerebral || Debe considerarse si la cefalea cambia, pero no suele ser postural.
+- framing_effect | Cefalea tensional || No es postural.
+- inattentional_blindness | Hematoma epidural espinal || Daría déficit neurológico.
+- focusing_illusion | Sinusitis || No es postural.
+- belief_bias | Dolor de cabeza por desvelo con el bebé || Tiene una causa específica.
+E: La cefalea pospunción dural se debe a la fuga de líquido cefalorraquídeo por el orificio de la duramadre, con tracción de las estructuras intracraneales. Es más frecuente en mujeres jóvenes, embarazadas y con agujas de mayor calibre o de punta cortante. Aparece de 24 a 48 horas después, es frontooccipital y empeora de forma característica al sentarse o ponerse de pie, mejorando al acostarse, a veces con náusea, rigidez de nuca, tinnitus y diplopía. El tratamiento inicial es analgesia, hidratación y cafeína. Si persiste o es intensa se realiza parche hemático epidural.
+R: Guía de Práctica Clínica de anestesia neuroaxial
+
+@ cir|anesthesiology|preoperative_assessment_general|3|next_step
+V: Hombre de 60 años que no puede ser intubado tras la inducción anestésica y tampoco puede ser ventilado con mascarilla facial ni con dispositivo supraglótico. Saturación de 72% en descenso.
+P: ¿Cuál es el siguiente paso?
++ Realizar una vía aérea quirúrgica de urgencia con cricotiroidotomía || La situación de no intubar y no oxigenar requiere acceso quirúrgico inmediato.
+- anchoring | Seguir intentando la intubación orotraqueal || Retrasa la oxigenación.
+- availability_heuristic | Esperar a que el paciente despierte con la saturación en descenso || La hipoxia puede causar paro.
+- representativeness_heuristic | Traqueostomía reglada en el quirófano con calma || Es más lenta que la cricotiroidotomía.
+- premature_closure | Administrar más relajante muscular || No resuelve la falta de oxigenación.
+- framing_effect | Intubación nasotraqueal a ciegas repetida || Retrasa la oxigenación.
+- complexity_bias | Fibrobroncoscopia en un paciente sin oxigenación || Es lenta en esta situación.
+- base_rate_fallacy | Oxígeno por puntas nasales || No es suficiente.
+- belief_bias | La saturación se recuperará sola || Es una emergencia vital.
+- omission_bias | No hacer la cricotiroidotomía por miedo a la complicación || Es lo que salva la vida.
+E: La situación de no intubar y no oxigenar es una emergencia de la vía aérea. Los algoritmos de vía aérea difícil indican intentar la intubación un número limitado de veces, usar un dispositivo supraglótico y ventilar con mascarilla. Si ninguno logra oxigenar, se debe realizar de inmediato una vía aérea quirúrgica de urgencia con cricotiroidotomía, con bisturí y tubo o con cánula. Retrasar la decisión aumenta el riesgo de daño cerebral hipóxico y paro cardiaco. La preparación previa y la evaluación de la vía aérea reducen estas situaciones.
+R: Guía de Práctica Clínica de manejo de la vía aérea difícil
+
+@ cir|anesthesiology|local_anesthetics|2|mechanism
+V: Médico residente que aplicará lidocaína para suturar una herida y pregunta cómo funciona el anestésico local.
+P: ¿Cuál es el mecanismo de acción de los anestésicos locales?
++ Bloquean los canales de sodio dependientes de voltaje e impiden la conducción del impulso nervioso || Evitan la despolarización de la membrana neuronal.
+- anchoring | Bloquean los receptores de opioides || Es el mecanismo de los antagonistas opioides.
+- availability_heuristic | Activan los receptores GABA en el cerebro || Es el mecanismo de las benzodiacepinas.
+- representativeness_heuristic | Bloquean los canales de potasio exclusivamente || El mecanismo principal es el bloqueo del sodio.
+- premature_closure | Inhiben la ciclooxigenasa || Es el mecanismo de los antiinflamatorios.
+- base_rate_fallacy | Destruyen las terminaciones nerviosas || El efecto es reversible.
+- framing_effect | Producen vasoconstricción que impide el dolor || La vasoconstricción la aporta la adrenalina.
+- inattentional_blindness | Bloquean los receptores NMDA || Es el mecanismo de la ketamina.
+- focusing_illusion | Bloquean la placa neuromuscular || Es el mecanismo de los relajantes musculares.
+- belief_bias | Enfrían el tejido para quitar el dolor || No es su mecanismo.
+E: Los anestésicos locales bloquean de forma reversible los canales de sodio dependientes de voltaje desde el interior de la membrana neuronal, lo que impide la despolarización y la conducción del impulso nervioso. Las fibras pequeñas y mielinizadas se bloquean primero, por lo que se pierde primero el dolor y la temperatura y después el tacto y la función motora. Se clasifican en ésteres, como la procaína y la tetracaína, metabolizados por colinesterasas y con más alergias, y amidas, como la lidocaína y la bupivacaína, metabolizadas en el hígado. La acidosis de los tejidos inflamados reduce su eficacia.
+R: Guía de Práctica Clínica de anestesia local y regional
+
+@ cir|anesthesiology|local_anesthetics|3|complication_prognosis
+V: Mujer de 40 años que recibe un bloqueo regional con bupivacaína. A los pocos minutos refiere sabor metálico, entumecimiento peribucal y tinnitus, y luego presenta convulsiones y arritmia ventricular.
+P: ¿Cuál es la complicación que presenta?
++ Toxicidad sistémica por anestésico local || Síntomas neurológicos seguidos de convulsiones y toxicidad cardiaca tras un bloqueo.
+- anchoring | Reacción anafiláctica || Da urticaria, broncoespasmo e hipotensión.
+- availability_heuristic | Crisis de ansiedad || No explica las convulsiones ni la arritmia.
+- representativeness_heuristic | Reacción vasovagal || Da bradicardia e hipotensión sin convulsiones.
+- premature_closure | Hipoglucemia || No explica la secuencia.
+- base_rate_fallacy | Evento vascular cerebral || No explica la secuencia tras el bloqueo.
+- framing_effect | Epilepsia de nueva aparición || La relación con el bloqueo es clara.
+- inattentional_blindness | Efecto de la adrenalina || No explica las convulsiones.
+- focusing_illusion | Hipertermia maligna || No se asocia a anestésicos locales.
+- belief_bias | Nerviosismo por el procedimiento || Es una toxicidad grave.
+E: La toxicidad sistémica por anestésicos locales ocurre por inyección intravascular accidental o dosis excesivas. Inicia con síntomas neurológicos como sabor metálico, entumecimiento peribucal, tinnitus, mareo y agitación, seguidos de convulsiones y depresión del sistema nervioso central. La toxicidad cardiaca incluye arritmias, bradicardia, hipotensión y paro, y es más grave con la bupivacaína. El tratamiento incluye detener la inyección, manejar la vía aérea, tratar las convulsiones con benzodiacepinas y administrar emulsión lipídica al 20% intravenosa. La aspiración y la inyección fraccionada la previenen.
+R: Guía de Práctica Clínica de anestesia local y regional
+
+@ cir|anesthesiology|local_anesthetics|3|data_interpretation
+V: Hombre de 70 kg que requiere sutura de una herida extensa con lidocaína al 2% con adrenalina. Se pregunta la dosis máxima segura.
+P: ¿Qué indica la dosis máxima de lidocaína con adrenalina para este paciente?
++ Alrededor de 7 mg/kg, unos 490 mg, equivalentes a 24 mL de lidocaína al 2% || La adrenalina retrasa la absorción y permite una dosis mayor.
+- anchoring | 4.5 mg/kg como si no tuviera adrenalina || La adrenalina aumenta la dosis máxima.
+- availability_heuristic | 20 mg/kg || Es una dosis tóxica.
+- representativeness_heuristic | No hay dosis máxima para la lidocaína || Existe riesgo de toxicidad.
+- premature_closure | 1 mg/kg como dosis máxima || Es la dosis antiarrítmica, no la máxima anestésica.
+- base_rate_fallacy | 100 mL de lidocaína al 2% || Es una dosis tóxica.
+- framing_effect | La dosis máxima es igual para todos los anestésicos || Varía según el fármaco.
+- inattentional_blindness | Depende solo del tamaño de la herida || Depende del peso.
+- focusing_illusion | 2 mg/kg como máximo || Subestima la dosis permitida.
+- belief_bias | Entre más anestésico, mejor efecto sin riesgo || El exceso es tóxico.
+E: La dosis máxima recomendada de lidocaína es de alrededor de 4.5 mg/kg sin adrenalina y de 7 mg/kg con adrenalina. La bupivacaína tiene dosis máximas menores, de 2.5 mg/kg sin adrenalina y 3 mg/kg con adrenalina, y mayor cardiotoxicidad. Una solución al 1% contiene 10 mg/mL y una al 2% contiene 20 mg/mL. La adrenalina produce vasoconstricción, retrasa la absorción, prolonga el efecto y reduce el sangrado. Clásicamente se evitaba en zonas con circulación terminal como dedos, aunque la evidencia actual muestra que es segura en concentraciones bajas.
+R: Guía de Práctica Clínica de anestesia local y regional
+
+@ cir|anesthesiology|local_anesthetics|3|complication_prognosis
+V: Mujer de 28 años que recibe anestesia raquídea para cesárea. A los 5 minutos presenta náusea, mareo, presión de 75/40 mmHg y frecuencia cardiaca de 60.
+P: ¿Cuál es la complicación que presenta?
++ Hipotensión por bloqueo simpático de la anestesia neuroaxial || El bloqueo simpático produce vasodilatación y disminución del retorno venoso.
+- anchoring | Reacción anafiláctica al anestésico || No hay urticaria ni broncoespasmo.
+- availability_heuristic | Hemorragia obstétrica masiva || Aún no hay sangrado importante.
+- representativeness_heuristic | Embolia de líquido amniótico || No hay colapso respiratorio ni coagulopatía.
+- premature_closure | Toxicidad sistémica por anestésico local || No hay síntomas neurológicos.
+- base_rate_fallacy | Infarto agudo de miocardio || Es poco probable en este contexto.
+- framing_effect | Crisis de ansiedad || Hay hipotensión objetiva.
+- inattentional_blindness | Hipoglucemia || No explica la hipotensión.
+- focusing_illusion | Bloqueo espinal total || Daría paro respiratorio y pérdida de conciencia.
+- belief_bias | Presión baja normal en el embarazo || Requiere tratamiento.
+E: La hipotensión es la complicación más frecuente de la anestesia raquídea y epidural, por el bloqueo simpático que produce vasodilatación y disminución del retorno venoso, y bradicardia si el bloqueo alcanza las fibras cardioaceleradoras. En embarazadas se agrava por la compresión aortocava. Se previene y trata con desplazamiento uterino a la izquierda, carga de líquidos y vasopresores como fenilefrina o efedrina. La hipotensión materna reduce el flujo uteroplacentario. Otras complicaciones de la anestesia neuroaxial son la cefalea pospunción, el bloqueo alto y el hematoma epidural.
+R: Guía de Práctica Clínica de anestesia neuroaxial

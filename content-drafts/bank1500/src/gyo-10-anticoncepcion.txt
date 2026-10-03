@@ -1,0 +1,303 @@
+@ gyo|contraception|hormonal_contraception|2|mechanism
+V: Mujer de 22 años que inicia anticonceptivos orales combinados. Pregunta cómo evitan el embarazo.
+P: ¿Cuál es el mecanismo de acción principal de los anticonceptivos orales combinados?
++ Inhiben la ovulación al suprimir la secreción de FSH y LH, además de espesar el moco cervical || El efecto principal es la inhibición del pico de LH.
+- anchoring | Destruyen los espermatozoides en la vagina || Ese es el mecanismo de los espermicidas.
+- availability_heuristic | Provocan abortos tempranos || No son abortivos.
+- representativeness_heuristic | Bloquean de forma mecánica las trompas || No tienen efecto mecánico.
+- premature_closure | Solo adelgazan el endometrio || Es un efecto secundario, no el principal.
+- base_rate_fallacy | Inhiben la producción de prolactina || No es su mecanismo.
+- framing_effect | Aumentan la temperatura vaginal || No es un mecanismo.
+- inattentional_blindness | Liberan cobre que es tóxico para los espermatozoides || Es el mecanismo del dispositivo de cobre.
+- focusing_illusion | Bloquean los receptores de andrógenos en el ovario || No es el mecanismo principal.
+- belief_bias | Causan infertilidad permanente para evitar embarazos || La fertilidad regresa al suspenderlos.
+E: Los anticonceptivos hormonales combinados contienen un estrógeno, generalmente etinilestradiol, y un progestágeno. Su mecanismo principal es la inhibición de la ovulación mediante la supresión de la secreción de gonadotropinas y del pico de LH. El progestágeno también espesa el moco cervical, dificultando el paso de los espermatozoides, y modifica el endometrio. No son abortivos. Usados de forma perfecta tienen una tasa de falla menor de 1% al año, y con uso típico de alrededor de 7 a 9%. La fertilidad regresa pronto al suspenderlos. Están disponibles como píldora, parche y anillo vaginal.
+R: Norma Oficial Mexicana de los servicios de planificación familiar ;; Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos
+
+@ gyo|contraception|hormonal_contraception|3|data_interpretation
+V: Mujer de 36 años, fumadora de 20 cigarros al día, que solicita anticonceptivos orales combinados. Tiene presión arterial normal y sin otros antecedentes.
+P: ¿Qué indica su perfil según los criterios médicos de elegibilidad?
++ Categoría 4, contraindicación para anticonceptivos combinados por ser mayor de 35 años y fumar 15 o más cigarros al día || El riesgo cardiovascular es inaceptable.
+- anchoring | Categoría 1 sin restricciones || El tabaquismo después de los 35 años es una contraindicación.
+- availability_heuristic | Categoría 2 con beneficios superiores a los riesgos || El riesgo es mayor por el número de cigarros.
+- representativeness_heuristic | Contraindicación de todos los métodos hormonales || Puede usar métodos con solo progestágeno.
+- premature_closure | Contraindicación del dispositivo intrauterino || El dispositivo es una opción segura.
+- base_rate_fallacy | Indicación de anticonceptivos con dosis altas de estrógenos || Aumentan el riesgo.
+- framing_effect | Puede usar el parche porque no es pastilla || El parche también es combinado.
+- inattentional_blindness | Solo contraindicado si tiene hipertensión || El tabaquismo después de los 35 años basta.
+- focusing_illusion | Categoría 3 para cualquier fumadora joven || A menor edad el riesgo es menor.
+- belief_bias | Las pastillas protegen el corazón de las fumadoras || Aumentan el riesgo de infarto.
+E: Los criterios médicos de elegibilidad de la Organización Mundial de la Salud clasifican el uso de anticonceptivos en cuatro categorías, la 1 sin restricción, la 2 con beneficios mayores que los riesgos, la 3 con riesgos mayores que los beneficios y la 4 con riesgo inaceptable. Los anticonceptivos combinados son categoría 4 en mujeres de 35 años o más que fuman 15 o más cigarros al día, por el riesgo de infarto y evento vascular cerebral. Otras contraindicaciones son hipertensión no controlada, migraña con aura, trombosis previa, trombofilias, cáncer de mama y lactancia menor de 6 semanas. Los métodos con solo progestágeno o el dispositivo son alternativas.
+R: Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos ;; Norma Oficial Mexicana de los servicios de planificación familiar
+
+@ gyo|contraception|hormonal_contraception|3|treatment_of_choice
+V: Mujer de 28 años con migraña con aura visual que solicita un método anticonceptivo hormonal altamente eficaz.
+P: ¿Cuál es el método hormonal de elección?
++ Implante subdérmico de etonogestrel o dispositivo con levonorgestrel || Los métodos con solo progestágeno no aumentan el riesgo de evento vascular cerebral.
+- anchoring | Anticonceptivos orales combinados || Están contraindicados en migraña con aura.
+- availability_heuristic | Parche anticonceptivo combinado || Contiene estrógeno y está contraindicado.
+- representativeness_heuristic | Anillo vaginal combinado || Contiene estrógeno y está contraindicado.
+- premature_closure | Inyectable mensual combinado || Contiene estrógeno.
+- framing_effect | Ningún método hormonal || Los de solo progestágeno son seguros.
+- complexity_bias | Oclusión tubaria obligatoria || No es necesaria si desea métodos reversibles.
+- base_rate_fallacy | Coito interrumpido como método eficaz || Tiene alta tasa de falla.
+- belief_bias | Los anticonceptivos curan la migraña || Los combinados pueden empeorarla.
+- omission_bias | No ofrecer anticoncepción por su migraña || Hay opciones seguras.
+E: La migraña con aura aumenta el riesgo de evento vascular cerebral isquémico, y los estrógenos lo incrementan aún más, por lo que los anticonceptivos combinados en píldora, parche, anillo o inyectable mensual son categoría 4 en estas mujeres. Los métodos con solo progestágeno, como el implante subdérmico, el dispositivo con levonorgestrel, la píldora de solo progestágeno y el inyectable de medroxiprogesterona, son seguros. El implante y el dispositivo intrauterino son métodos reversibles de acción prolongada con eficacia superior a 99%. El dispositivo de cobre también es una opción no hormonal.
+R: Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos
+
+@ gyo|contraception|hormonal_contraception|3|complication_prognosis
+V: Mujer de 26 años que usa anticonceptivos orales combinados desde hace 4 meses y presenta dolor y edema unilateral de la pantorrilla izquierda con signo de Homans positivo. Dímero D elevado.
+P: ¿Cuál es la complicación más probable?
++ Trombosis venosa profunda asociada al componente estrogénico || Los estrógenos aumentan los factores de coagulación.
+- anchoring | Desgarro muscular por ejercicio || No explica el dímero D elevado.
+- availability_heuristic | Celulitis || Daría eritema y fiebre.
+- representativeness_heuristic | Quiste de Baker roto || Es menos probable en este contexto.
+- premature_closure | Insuficiencia venosa crónica || Es de evolución crónica bilateral.
+- base_rate_fallacy | Linfedema primario || Es crónico.
+- framing_effect | Efecto normal de retención de líquidos || Es unilateral y doloroso.
+- inattentional_blindness | Síndrome compartimental || Requiere traumatismo.
+- focusing_illusion | Tromboflebitis superficial solamente || Los datos sugieren trombosis profunda.
+- belief_bias | Calambres por falta de potasio || No explican el cuadro.
+E: Los anticonceptivos combinados aumentan el riesgo de trombosis venosa de 3 a 5 veces, sobre todo en el primer año de uso, por el efecto de los estrógenos sobre la síntesis hepática de factores de coagulación. El riesgo es mayor con algunos progestágenos de tercera y cuarta generación, en obesas, con trombofilias, inmovilización, cirugía o tabaquismo. Aun así, el riesgo absoluto es bajo y menor que en el embarazo y el puerperio. Ante trombosis se suspende el anticonceptivo combinado y se inicia anticoagulación. En adelante se usan métodos sin estrógeno, como el dispositivo intrauterino.
+R: Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos
+
+@ gyo|contraception|hormonal_contraception|3|treatment_of_choice
+V: Mujer de 25 años con 4 semanas de puerperio que amamanta de forma exclusiva y solicita un método anticonceptivo hormonal.
+P: ¿Cuál es el método hormonal de elección?
++ Método con solo progestágeno, como implante, píldora de solo progestágeno o dispositivo con levonorgestrel || No afectan la lactancia ni aumentan el riesgo de trombosis posparto.
+- anchoring | Anticonceptivos orales combinados || Están contraindicados en las primeras 6 semanas de lactancia.
+- availability_heuristic | Parche combinado || Contiene estrógeno.
+- representativeness_heuristic | Ninguno porque la lactancia protege siempre || La protección solo aplica con criterios estrictos.
+- premature_closure | Inyectable mensual combinado || Contiene estrógeno.
+- framing_effect | Anillo vaginal combinado || Contiene estrógeno.
+- complexity_bias | Esterilización obligatoria || No es necesaria.
+- base_rate_fallacy | Coito interrumpido || Tiene alta tasa de falla.
+- belief_bias | Los métodos hormonales secan la leche siempre || Los de solo progestágeno no la afectan.
+- omission_bias | Esperar a que termine la lactancia para planificar || Puede embarazarse antes.
+E: En el puerperio el riesgo de trombosis es alto y los estrógenos pueden reducir la producción de leche. Por ello los anticonceptivos combinados son categoría 4 en las primeras 6 semanas posparto en mujeres que amamantan y categoría 3 entre las 6 semanas y 6 meses. Los métodos con solo progestágeno, como el implante, la píldora, el inyectable trimestral y el dispositivo con levonorgestrel, pueden iniciarse desde el posparto inmediato o a las 6 semanas según el método. El dispositivo de cobre puede colocarse en las primeras 48 horas o después de 4 semanas. La lactancia exclusiva con amenorrea protege los primeros 6 meses.
+R: Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos ;; Norma Oficial Mexicana de los servicios de planificación familiar
+
+@ gyo|contraception|hormonal_contraception|2|next_step
+V: Mujer de 23 años que usa anticonceptivos orales combinados y olvidó tomar una pastilla activa ayer. Hoy en la mañana se dio cuenta. Está en la segunda semana del paquete.
+P: ¿Cuál es la conducta más apropiada?
++ Tomar la pastilla olvidada de inmediato aunque tome dos el mismo día y continuar el paquete normalmente || Una pastilla olvidada no reduce la eficacia de forma importante.
+- anchoring | Suspender el paquete e iniciar uno nuevo || No es necesario.
+- availability_heuristic | Tomar anticoncepción de emergencia siempre || No es necesaria con una sola pastilla olvidada en la segunda semana.
+- representativeness_heuristic | Descartar la pastilla olvidada y continuar || Debe tomarla en cuanto lo recuerde.
+- premature_closure | Usar condón por 3 meses || No es necesario.
+- framing_effect | Tomar tres pastillas juntas || No es necesario.
+- complexity_bias | Realizar prueba de embarazo inmediata || No es útil tan pronto.
+- base_rate_fallacy | Cambiar a otro método de inmediato || No es necesario.
+- belief_bias | Una pastilla olvidada siempre causa embarazo || El riesgo es bajo.
+- omission_bias | No hacer nada y esperar la siguiente toma programada || Debe tomar la olvidada.
+E: Ante el olvido de una pastilla activa, o retraso menor de 48 horas, se toma la pastilla olvidada en cuanto se recuerde, aunque implique tomar dos en un día, y se continúa el resto del paquete. No se requiere protección adicional. Si se olvidan dos o más pastillas, o el retraso es de 48 horas o más, se toma la última olvidada, se continúa el paquete y se usa condón o abstinencia por 7 días. Si el olvido ocurre en la tercera semana se omite el periodo de descanso. Si hubo relaciones sin protección en la primera semana se considera anticoncepción de emergencia.
+R: Norma Oficial Mexicana de los servicios de planificación familiar ;; Organización Mundial de la Salud. Recomendaciones sobre prácticas seleccionadas para el uso de anticonceptivos
+
+@ gyo|contraception|hormonal_contraception|3|complication_prognosis
+V: Mujer de 31 años que usa medroxiprogesterona inyectable trimestral desde hace 4 años. Pregunta por los efectos de su uso prolongado.
+P: ¿Cuál es el efecto adverso a largo plazo característico de este método?
++ Disminución reversible de la densidad mineral ósea y retraso en el regreso de la fertilidad || El hipoestrogenismo relativo reduce la masa ósea.
+- anchoring | Aumento del riesgo de cáncer de endometrio || Lo reduce.
+- availability_heuristic | Infertilidad permanente || La fertilidad regresa, aunque con retraso.
+- representativeness_heuristic | Aumento importante del riesgo de trombosis como los combinados || Su efecto trombótico es menor.
+- premature_closure | Menstruaciones más abundantes || Suele causar amenorrea o sangrado irregular.
+- base_rate_fallacy | Cáncer de ovario || Reduce el riesgo.
+- framing_effect | Hipertiroidismo || No es un efecto.
+- inattentional_blindness | Galactorrea || No es característica.
+- focusing_illusion | Insuficiencia renal || No es un efecto.
+- belief_bias | Acumulación de sangre en el cuerpo por no menstruar || La amenorrea no causa acumulación.
+E: La medroxiprogesterona de depósito trimestral inhibe la ovulación y es muy eficaz. Sus efectos adversos incluyen alteraciones del sangrado, con amenorrea frecuente tras un año, aumento de peso y retraso del regreso de la fertilidad de 6 a 10 meses tras suspenderla. Su uso prolongado causa disminución de la densidad mineral ósea por hipoestrogenismo relativo, que es reversible al suspenderla. No se recomienda limitar su duración, pero se valora el riesgo en adolescentes y mujeres con riesgo de osteoporosis. Se recomienda calcio, vitamina D y ejercicio. La amenorrea no implica acumulación de sangre.
+R: Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos
+
+@ gyo|contraception|intrauterine_device|2|mechanism
+V: Mujer de 30 años que considera colocarse un dispositivo intrauterino de cobre. Pregunta si actúa como abortivo.
+P: ¿Cuál es el mecanismo de acción del dispositivo intrauterino de cobre?
++ Los iones de cobre generan una reacción inflamatoria espermicida que impide la fecundación || Actúa antes de la fecundación.
+- anchoring | Provoca abortos al impedir la implantación de embriones de semanas || No es abortivo.
+- availability_heuristic | Inhibe la ovulación como los anticonceptivos orales || No inhibe la ovulación.
+- representativeness_heuristic | Libera hormonas que espesan el moco cervical || Ese es el dispositivo con levonorgestrel.
+- premature_closure | Bloquea mecánicamente las trompas || No obstruye las trompas.
+- base_rate_fallacy | Produce atrofia ovárica || No afecta los ovarios.
+- framing_effect | Aumenta la temperatura del útero || No es su mecanismo.
+- inattentional_blindness | Destruye el endometrio de forma permanente || No causa daño permanente.
+- focusing_illusion | Funciona solo en los días fértiles || Actúa de forma continua.
+- belief_bias | Causa infertilidad permanente || La fertilidad regresa al retirarlo.
+E: El dispositivo intrauterino de cobre actúa principalmente antes de la fecundación. Los iones de cobre y la reacción inflamatoria estéril que produce en el endometrio son tóxicos para los espermatozoides y los óvulos, alteran su movilidad y viabilidad e impiden la fecundación. No inhibe la ovulación ni es abortivo. Es eficaz por 10 a 12 años con tasa de falla menor de 1%. No contiene hormonas, por lo que es útil en mujeres con contraindicación para estrógenos. Sus efectos adversos son aumento del sangrado y de los cólicos menstruales. La fertilidad regresa de inmediato al retirarlo.
+R: Norma Oficial Mexicana de los servicios de planificación familiar ;; Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos
+
+@ gyo|contraception|intrauterine_device|3|treatment_of_choice
+V: Mujer de 38 años con miomatosis pequeña sin distorsión de la cavidad, sangrado menstrual abundante que le causa anemia y deseo de anticoncepción por varios años.
+P: ¿Cuál es el método anticonceptivo de elección?
++ Dispositivo intrauterino con levonorgestrel || Reduce el sangrado menstrual y es muy eficaz.
+- anchoring | Dispositivo intrauterino de cobre || Aumenta el sangrado menstrual.
+- availability_heuristic | Preservativo como único método || No reduce el sangrado.
+- representativeness_heuristic | Histerectomía de inmediato || Hay opciones menos invasivas.
+- premature_closure | Métodos naturales || No reducen el sangrado y tienen alta falla.
+- framing_effect | Espermicidas || No reducen el sangrado.
+- complexity_bias | Embolización de arterias uterinas como anticonceptivo || No es un método anticonceptivo.
+- base_rate_fallacy | Coito interrumpido || Tiene alta falla.
+- belief_bias | El dispositivo con hormona causa cáncer || Reduce el riesgo de cáncer de endometrio.
+- omission_bias | No ofrecer dispositivo por los miomas || Si no distorsionan la cavidad puede usarse.
+E: El dispositivo intrauterino con levonorgestrel libera el progestágeno localmente, lo que adelgaza el endometrio y espesa el moco cervical. Es muy eficaz, con duración de 5 a 8 años según el producto, y reduce de forma importante el sangrado menstrual, por lo que es el tratamiento médico de elección del sangrado uterino abundante. También protege el endometrio en la terapia hormonal y reduce la dismenorrea. Puede causar sangrado irregular en los primeros meses y amenorrea con el tiempo. Está contraindicado si los miomas distorsionan la cavidad uterina.
+R: Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos
+
+@ gyo|contraception|intrauterine_device|3|next_step
+V: Mujer de 27 años con dispositivo intrauterino de cobre que tiene retraso menstrual de 2 semanas. La prueba de embarazo es positiva y el ultrasonido muestra un embarazo intrauterino de 6 semanas con los hilos del dispositivo visibles en el cérvix. Desea continuar el embarazo.
+P: ¿Cuál es la conducta más apropiada?
++ Descartar embarazo ectópico y retirar el dispositivo traccionando suavemente los hilos || Retirarlo reduce el riesgo de aborto, infección y parto pretérmino.
+- anchoring | Dejar el dispositivo en su lugar hasta el parto || Aumenta el riesgo de complicaciones.
+- availability_heuristic | Interrumpir el embarazo de forma obligatoria || No es necesario.
+- representativeness_heuristic | Retirar el dispositivo por histeroscopia si los hilos son visibles || Se retira por tracción simple.
+- premature_closure | Iniciar antibióticos profilácticos y no retirar || No es el manejo.
+- framing_effect | Dar metotrexato || El embarazo es intrauterino.
+- complexity_bias | Cesárea programada a las 32 semanas || No es necesaria.
+- base_rate_fallacy | Asumir que el dispositivo causará malformaciones || No es teratógeno.
+- belief_bias | El bebé nacerá con el dispositivo en la mano || Es un mito.
+- omission_bias | No retirarlo por miedo a provocar aborto || El riesgo es mayor si se deja.
+E: El embarazo con dispositivo intrauterino es poco frecuente, pero cuando ocurre aumenta la proporción de embarazos ectópicos, por lo que primero debe descartarse. En un embarazo intrauterino con los hilos visibles se recomienda retirar el dispositivo, ya que dejarlo aumenta el riesgo de aborto espontáneo, aborto séptico, ruptura prematura de membranas y parto pretérmino. El retiro conlleva un pequeño riesgo de aborto. Si los hilos no son visibles el dispositivo se deja y se vigila el embarazo como de alto riesgo. El cobre no es teratógeno.
+R: Norma Oficial Mexicana de los servicios de planificación familiar
+
+@ gyo|contraception|intrauterine_device|3|next_step
+V: Mujer de 29 años con dispositivo intrauterino de cobre colocado hace 2 años que acude a revisión. En la especuloscopia no se ven los hilos. Está asintomática y la prueba de embarazo es negativa.
+P: ¿Cuál es el siguiente paso ante la ausencia de hilos visibles?
++ Puede deberse a hilos retraídos, expulsión o perforación, por lo que se realiza ultrasonido para localizar el dispositivo || La ubicación debe confirmarse.
+- anchoring | Expulsión segura sin necesidad de estudios || Puede estar en el útero o perforado.
+- availability_heuristic | Perforación segura que requiere laparotomía inmediata || Primero se localiza.
+- representativeness_heuristic | Embarazo confirmado || La prueba es negativa.
+- premature_closure | Colocar otro dispositivo sin estudiar || Puede haber dos dispositivos.
+- base_rate_fallacy | Infección pélvica || No hay síntomas.
+- framing_effect | Indicación de histerectomía || Es excesiva.
+- inattentional_blindness | Hallazgo normal sin seguimiento || Debe localizarse.
+- focusing_illusion | Indicación de tomografía como primer estudio || El ultrasonido es el primer paso.
+- belief_bias | El dispositivo se disolvió con el tiempo || No se disuelve.
+E: Cuando no se ven los hilos del dispositivo intrauterino, las posibilidades son que los hilos estén retraídos dentro del canal o la cavidad, que el dispositivo se haya expulsado sin que la mujer lo notara o que haya perforado el útero. Primero se descarta embarazo y se indica un método de respaldo. El ultrasonido transvaginal es el estudio inicial para localizarlo. Si no se encuentra en el útero se realiza radiografía de abdomen y, si está en la cavidad abdominal, se retira por laparoscopia. Si está en el útero puede dejarse o retirarse con pinzas o histeroscopia.
+R: Norma Oficial Mexicana de los servicios de planificación familiar
+
+@ gyo|contraception|intrauterine_device|2|data_interpretation
+V: Mujer de 19 años nulípara que solicita un método anticonceptivo de larga duración. Le dijeron que el dispositivo intrauterino no es para mujeres que no han tenido hijos.
+P: ¿Qué indica la nuliparidad para el uso del dispositivo intrauterino?
++ No es contraindicación, ya que los dispositivos son categoría 2 en nulíparas y adolescentes || Los beneficios superan los riesgos.
+- anchoring | Contraindicación absoluta, categoría 4 || Es un mito.
+- availability_heuristic | Riesgo alto de infertilidad posterior || No causa infertilidad.
+- representativeness_heuristic | Solo puede usarse tras el primer parto || No es necesario.
+- premature_closure | Requiere dilatación cervical bajo anestesia general siempre || La inserción suele ser ambulatoria.
+- base_rate_fallacy | Mayor riesgo de cáncer cervicouterino || No aumenta el riesgo.
+- framing_effect | Solo puede usar anticonceptivos orales || Hay más opciones.
+- inattentional_blindness | Riesgo de perforación muy alto que lo prohíbe || La perforación es rara.
+- focusing_illusion | Requiere permiso de los padres para cualquier método || La anticoncepción es un derecho de la adolescente.
+- belief_bias | El dispositivo causa enfermedad pélvica inflamatoria por sí mismo || El riesgo se relaciona con infecciones de transmisión sexual.
+E: Los métodos reversibles de acción prolongada, como el dispositivo intrauterino y el implante, son los más eficaces y se recomiendan como primera línea en adolescentes y nulíparas. Según los criterios de elegibilidad de la Organización Mundial de la Salud, el dispositivo intrauterino es categoría 2 en menores de 20 años y en nulíparas, es decir, los beneficios superan los riesgos. Puede haber más expulsiones y dolor en la inserción, pero no causa infertilidad. Se recomienda tamizar infecciones de transmisión sexual en mujeres de riesgo y promover el condón para la protección contra estas infecciones.
+R: Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos
+
+@ gyo|contraception|intrauterine_device|3|complication_prognosis
+V: Mujer de 32 años con dispositivo intrauterino colocado hace 2 semanas que presenta dolor pélvico, fiebre de 38.5 °C y flujo purulento. Dolor a la movilización del cérvix.
+P: ¿Cuál es la complicación que presenta?
++ Enfermedad pélvica inflamatoria asociada a la inserción || El riesgo de infección aumenta en las primeras 3 semanas tras la colocación.
+- anchoring | Expulsión del dispositivo || No explica la fiebre ni el flujo purulento.
+- availability_heuristic | Embarazo ectópico || No explica la fiebre.
+- representativeness_heuristic | Cólico normal por el dispositivo || La fiebre indica infección.
+- premature_closure | Perforación uterina sin infección || No explica la fiebre.
+- base_rate_fallacy | Actinomicosis pélvica || Se asocia a uso prolongado.
+- framing_effect | Alergia al cobre || Es rara y no da este cuadro.
+- inattentional_blindness | Infección urinaria baja || No explica el dolor a la movilización cervical.
+- focusing_illusion | Endometriosis || No explica la fiebre aguda.
+- belief_bias | Rechazo natural del cuerpo al dispositivo || Hay infección.
+E: El riesgo de enfermedad pélvica inflamatoria con el dispositivo intrauterino aumenta solo en las primeras 3 semanas tras la inserción, por introducción de bacterias o infección cervical previa, y después es similar al de las mujeres sin dispositivo. Se trata con los antibióticos habituales de la enfermedad pélvica inflamatoria, y no es necesario retirar el dispositivo si la paciente mejora en 48 a 72 horas. Si no mejora se retira. Para prevenirla se tamizan infecciones de transmisión sexual en mujeres de riesgo antes de la inserción. El uso prolongado se asocia rara vez a actinomicosis.
+R: Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos
+
+@ gyo|contraception|intrauterine_device|3|complication_prognosis
+V: Mujer de 34 años con dispositivo de cobre colocado hace 6 meses que refiere menstruaciones más abundantes y con más cólico que antes. No hay datos de infección ni embarazo. El dispositivo está bien colocado.
+P: ¿Cuál es el pronóstico de estos síntomas?
++ Son efectos adversos frecuentes que suelen mejorar con el tiempo y responden a antiinflamatorios no esteroideos || El cobre aumenta el sangrado y el dolor menstrual.
+- anchoring | Indican perforación uterina || El dispositivo está bien colocado.
+- availability_heuristic | Indican cáncer de endometrio || No hay datos.
+- representativeness_heuristic | Obligan a retirar el dispositivo de inmediato || Pueden manejarse.
+- premature_closure | Indican embarazo ectópico || No hay embarazo.
+- base_rate_fallacy | Indican infertilidad futura || No la causa.
+- framing_effect | Indican infección grave || No hay datos de infección.
+- inattentional_blindness | Indican trastorno de la coagulación || Es un efecto conocido del cobre.
+- focusing_illusion | Indican que el dispositivo es defectuoso || Es un efecto esperado.
+- belief_bias | Indican que el cuerpo está expulsando toxinas || No es la explicación.
+E: Los efectos adversos más frecuentes del dispositivo intrauterino de cobre son el aumento del volumen del sangrado menstrual y la dismenorrea, que son causa común de retiro. Suelen disminuir en los primeros 3 a 6 meses. Los antiinflamatorios no esteroideos, como ibuprofeno o ácido mefenámico durante la menstruación, reducen el sangrado y el dolor. Si el sangrado es intenso, causa anemia o persiste, se descartan otras causas y puede cambiarse por el dispositivo con levonorgestrel, que reduce el sangrado. Se vigila la hemoglobina.
+R: Norma Oficial Mexicana de los servicios de planificación familiar
+
+@ gyo|contraception|emergency_contraception|2|treatment_of_choice
+V: Mujer de 22 años que tuvo una relación sexual sin protección hace 36 horas por ruptura del condón. No desea embarazarse. No tiene contraindicaciones.
+P: ¿Cuál es el método de anticoncepción de emergencia más accesible?
++ Levonorgestrel 1.5 mg en dosis única lo antes posible || Es eficaz hasta 72 horas y más cuanto antes se tome.
+- anchoring | Esperar a ver si se retrasa la menstruación || Pierde la oportunidad de prevenir el embarazo.
+- availability_heuristic | Misoprostol || No es un anticonceptivo de emergencia.
+- representativeness_heuristic | Duchas vaginales con vinagre || No previenen el embarazo.
+- premature_closure | Prueba de embarazo inmediata antes de decidir || No es útil tan pronto.
+- framing_effect | Metotrexato || No es anticoncepción de emergencia.
+- complexity_bias | Legrado uterino || No está indicado.
+- base_rate_fallacy | Dosis alta de ácido fólico || No previene el embarazo.
+- belief_bias | La anticoncepción de emergencia es abortiva || Actúa antes de la implantación, principalmente retrasando la ovulación.
+- omission_bias | Negar el medicamento por ser joven || Es un derecho y no requiere receta.
+E: La anticoncepción de emergencia previene el embarazo tras una relación sin protección o con falla del método. El levonorgestrel 1.5 mg en dosis única es eficaz hasta 72 horas y su eficacia disminuye conforme pasa el tiempo. Actúa principalmente inhibiendo o retrasando la ovulación y no interrumpe un embarazo ya implantado. El acetato de ulipristal es eficaz hasta 120 horas y más eficaz que el levonorgestrel. El dispositivo intrauterino de cobre insertado hasta 5 días después es el método más eficaz. En México no requiere receta y no tiene contraindicaciones médicas absolutas salvo embarazo confirmado.
+R: Norma Oficial Mexicana de los servicios de planificación familiar ;; Organización Mundial de la Salud. Anticoncepción de emergencia
+
+@ gyo|contraception|emergency_contraception|3|treatment_of_choice
+V: Mujer de 28 años que tuvo una relación sin protección hace 4 días. Desea además un método anticonceptivo de largo plazo. No tiene infecciones ni contraindicaciones.
+P: ¿Cuál es el método de emergencia más eficaz en este caso?
++ Inserción de dispositivo intrauterino de cobre || Es el método de emergencia más eficaz hasta 5 días y sirve como anticoncepción continua.
+- anchoring | Levonorgestrel oral || Su eficacia es baja después de 72 horas.
+- availability_heuristic | Ninguno porque ya pasaron más de 72 horas || El dispositivo y el ulipristal funcionan hasta 120 horas.
+- representativeness_heuristic | Anticonceptivos orales combinados como método de Yuzpe de elección || Son menos eficaces y causan más náusea.
+- premature_closure | Esperar la menstruación || Pierde la oportunidad.
+- framing_effect | Implante subdérmico solo como emergencia || No es un método de emergencia por sí solo.
+- complexity_bias | Legrado preventivo || No está indicado.
+- base_rate_fallacy | Inyectable trimestral como emergencia || No es un método de emergencia.
+- belief_bias | El dispositivo de emergencia provoca aborto || Previene la fecundación y la implantación.
+- omission_bias | No ofrecer el dispositivo por complejidad || Es el más eficaz.
+E: El dispositivo intrauterino de cobre insertado en los primeros 5 días tras la relación sin protección es el método de anticoncepción de emergencia más eficaz, con tasa de falla menor de 0.1%. Además proporciona anticoncepción de larga duración. El acetato de ulipristal es eficaz hasta 120 horas y es la opción oral más eficaz después de 72 horas. El levonorgestrel tiene menor eficacia después de 72 horas y en mujeres con obesidad. El método de Yuzpe con anticonceptivos combinados es menos eficaz. Tras la anticoncepción oral de emergencia se recomienda iniciar un método regular.
+R: Organización Mundial de la Salud. Anticoncepción de emergencia ;; Norma Oficial Mexicana de los servicios de planificación familiar
+
+@ gyo|contraception|emergency_contraception|3|data_interpretation
+V: Mujer de 25 años que tomó levonorgestrel de emergencia hace 3 semanas. Su menstruación no ha llegado y tiene 5 días de retraso.
+P: ¿Qué indica este retraso menstrual?
++ Requiere prueba de embarazo, ya que el método puede fallar y también puede alterar la fecha de la siguiente menstruación || Un retraso mayor de 7 días obliga a descartar embarazo.
+- anchoring | Embarazo seguro por falla del método || Puede ser solo un cambio en el ciclo.
+- availability_heuristic | Efecto esperado que nunca requiere estudios || Debe descartarse embarazo.
+- representativeness_heuristic | Infertilidad causada por el levonorgestrel || No causa infertilidad.
+- premature_closure | Daño ovárico permanente || No causa daño.
+- base_rate_fallacy | Embarazo ectópico confirmado || No puede afirmarse sin estudios.
+- framing_effect | Indicación de tomar otra dosis de emergencia || No es útil ahora.
+- inattentional_blindness | Menopausia precoz || No corresponde.
+- focusing_illusion | Síndrome de ovario poliquístico de nueva aparición || No hay datos.
+- belief_bias | El medicamento abortó un embarazo y por eso no baja la regla || No es abortivo.
+E: Tras la anticoncepción oral de emergencia la siguiente menstruación suele presentarse en la fecha esperada, aunque puede adelantarse o retrasarse algunos días. Si la menstruación se retrasa más de 7 días, es inusualmente escasa o hay dolor abdominal se debe realizar una prueba de embarazo. Si la mujer está embarazada, el levonorgestrel no daña al embrión ni aumenta las malformaciones. El uso repetido de la anticoncepción de emergencia es seguro, pero es menos eficaz que los métodos regulares, por lo que se recomienda iniciar un método anticonceptivo continuo.
+R: Organización Mundial de la Salud. Anticoncepción de emergencia
+
+@ gyo|contraception|emergency_contraception|3|next_step
+V: Adolescente de 16 años que acude a urgencias 12 horas después de una agresión sexual. Está estable y sin lesiones graves. No usa anticonceptivos.
+P: ¿Cuál es la conducta más apropiada respecto a la prevención del embarazo y las infecciones?
++ Ofrecer anticoncepción de emergencia, profilaxis contra virus de la inmunodeficiencia humana y otras infecciones de transmisión sexual, vacunación contra hepatitis B y apoyo psicológico || La atención integral a la violencia sexual incluye estas medidas.
+- anchoring | Solo dar anticoncepción de emergencia || La profilaxis de infecciones también es urgente.
+- availability_heuristic | Esperar a la denuncia para dar tratamiento || La atención médica no se condiciona a la denuncia.
+- representativeness_heuristic | Esperar a la menstruación para decidir || Pierde la ventana de prevención.
+- premature_closure | Solo pruebas de embarazo y de virus sin profilaxis || La profilaxis es tiempo dependiente.
+- framing_effect | Pedir autorización de los padres antes de cualquier atención urgente || La atención urgente no se retrasa.
+- complexity_bias | Legrado uterino preventivo || No está indicado.
+- base_rate_fallacy | Dar antibióticos solo si hay síntomas || La profilaxis se da sin síntomas.
+- belief_bias | Bañarse elimina el riesgo de embarazo e infecciones || No los elimina.
+- omission_bias | Diferir la atención para no revictimizar || La atención oportuna es prioritaria.
+E: La atención a víctimas de violencia sexual es una urgencia médica. Según la normatividad mexicana se debe ofrecer anticoncepción de emergencia lo antes posible, hasta 120 horas, profilaxis postexposición contra virus de la inmunodeficiencia humana idealmente en las primeras 72 horas, profilaxis contra gonorrea, clamidia, tricomoniasis y sífilis, vacunación contra hepatitis B y virus del papiloma humano según el esquema, atención de lesiones, apoyo psicológico y orientación legal. La atención médica no está condicionada a una denuncia. Si resulta un embarazo, la mujer tiene derecho a la interrupción legal.
+R: Norma Oficial Mexicana sobre violencia familiar, sexual y contra las mujeres. Criterios para la prevención y atención
+
+@ gyo|contraception|emergency_contraception|2|data_interpretation
+V: Mujer de 30 años que pregunta si puede usar la anticoncepción de emergencia como su método habitual porque tiene relaciones esporádicas.
+P: ¿Qué indica la evidencia sobre el uso repetido de la anticoncepción de emergencia?
++ Es seguro, pero menos eficaz que un método regular, por lo que se recomienda un método continuo || El uso repetido no tiene riesgos graves.
+- anchoring | Causa infertilidad si se usa más de una vez || No causa infertilidad.
+- availability_heuristic | Está prohibido usarla más de una vez al año || No hay límite de uso.
+- representativeness_heuristic | Aumenta el riesgo de cáncer de mama || No hay evidencia.
+- premature_closure | Es igual de eficaz que los métodos de larga duración || Es menos eficaz.
+- base_rate_fallacy | Causa trombosis como los anticonceptivos combinados || El levonorgestrel solo no la aumenta.
+- framing_effect | Es abortiva si se usa con frecuencia || No es abortiva.
+- inattentional_blindness | Protege contra infecciones de transmisión sexual || No protege.
+- focusing_illusion | Debe acompañarse de una prueba de embarazo antes de cada toma || No es necesario.
+- belief_bias | Su uso frecuente daña los ovarios || No los daña.
+E: La anticoncepción de emergencia puede usarse cuantas veces sea necesario y su uso repetido es seguro, sin riesgos graves para la salud ni efectos sobre la fertilidad. Sin embargo, es menos eficaz que los métodos anticonceptivos regulares y puede causar alteraciones del ciclo. Por ello se recomienda orientar a la mujer hacia un método continuo adecuado a sus necesidades, como implante, dispositivo intrauterino o anticonceptivos hormonales. No protege contra infecciones de transmisión sexual, por lo que se recomienda el uso del condón en relaciones con parejas ocasionales.
+R: Organización Mundial de la Salud. Anticoncepción de emergencia

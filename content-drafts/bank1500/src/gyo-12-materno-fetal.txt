@@ -1,0 +1,207 @@
+@ gyo|maternal_fetal|fetal_growth_restriction|2|diagnosis
+V: Mujer de 30 años con embarazo de 32 semanas e hipertensión crónica. La altura del fondo uterino es de 27 cm. El ultrasonido muestra peso fetal estimado en la percentila 3 con circunferencia abdominal por debajo de la percentila 3 e índice de líquido amniótico disminuido.
+P: ¿Cuál es el diagnóstico más probable?
++ Restricción del crecimiento fetal || Peso fetal estimado menor de la percentila 3 en un embarazo con factor de riesgo placentario.
+- anchoring | Feto pequeño constitucional sano || Por debajo de la percentila 3 se considera restricción.
+- availability_heuristic | Error de fechas || Debe confirmarse, pero el contexto orienta a insuficiencia placentaria.
+- representativeness_heuristic | Macrosomía fetal || El feto es pequeño.
+- premature_closure | Polihidramnios || El líquido está disminuido.
+- base_rate_fallacy | Embarazo gemelar || No se describe.
+- framing_effect | Anencefalia || No explica la circunferencia abdominal baja.
+- inattentional_blindness | Ruptura de membranas como única causa || No explica la restricción del crecimiento.
+- focusing_illusion | Diabetes gestacional || Suele causar macrosomía.
+- belief_bias | Bebé pequeño porque la madre come poco || La causa más frecuente es placentaria.
+E: La restricción del crecimiento fetal es la incapacidad del feto para alcanzar su potencial de crecimiento. Se define por un peso fetal estimado o circunferencia abdominal menor de la percentila 3, o menor de la 10 con alteraciones del Doppler. La causa más frecuente es la insuficiencia placentaria, asociada a hipertensión, preeclampsia, tabaquismo, enfermedades autoinmunes y trombofilias. Otras causas son infecciones congénitas y alteraciones genéticas. El feto pequeño para la edad gestacional sin alteraciones del Doppler y por encima de la percentila 3 suele ser constitucionalmente pequeño. La confirmación de la edad gestacional es fundamental.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la restricción del crecimiento intrauterino
+
+@ gyo|maternal_fetal|fetal_growth_restriction|3|data_interpretation
+V: Mujer de 28 años con restricción del crecimiento fetal a las 30 semanas. El Doppler de la arteria umbilical muestra flujo diastólico ausente y el ductus venoso un índice de pulsatilidad elevado con onda a ausente.
+P: ¿Qué indica este patrón Doppler?
++ Deterioro fetal grave con alto riesgo de acidosis y muerte, que obliga a valorar el nacimiento tras corticosteroides || La alteración del ductus venoso indica descompensación cardiaca fetal.
+- anchoring | Hallazgo leve que permite esperar hasta las 37 semanas || Es una alteración grave.
+- availability_heuristic | Patrón normal del tercer trimestre || La diástole ausente es anormal.
+- representativeness_heuristic | Indica solo error técnico del estudio || El patrón es característico.
+- premature_closure | Indica macrosomía || El feto tiene restricción.
+- base_rate_fallacy | Indica anemia fetal aislada || Se valora con la arteria cerebral media.
+- framing_effect | Indica que el feto se está adaptando bien || Indica descompensación.
+- inattentional_blindness | Indica cardiopatía congénita estructural sin relación || Es consecuencia de la insuficiencia placentaria.
+- focusing_illusion | Requiere solo repetir el estudio en un mes || La vigilancia debe ser estrecha y valorar nacimiento.
+- belief_bias | El reposo absoluto revertirá el patrón || No modifica la insuficiencia placentaria.
+E: En la restricción del crecimiento por insuficiencia placentaria el Doppler permite seguir la secuencia de deterioro fetal. Primero aumenta la resistencia de la arteria umbilical, después aparece vasodilatación cerebral por redistribución, luego flujo diastólico ausente o reverso en la arteria umbilical y finalmente alteraciones del ductus venoso con onda a ausente o reversa, que indican falla cardiaca y alto riesgo de muerte. El momento del nacimiento se decide según la edad gestacional y el Doppler. Antes de las 34 semanas se administran corticosteroides y antes de las 32 sulfato de magnesio para neuroprotección.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la restricción del crecimiento intrauterino
+
+@ gyo|maternal_fetal|fetal_growth_restriction|3|risk_factor
+V: Mujer de 24 años con embarazo de 34 semanas y feto con restricción del crecimiento. Fuma 15 cigarros al día, tiene índice de masa corporal de 18 y no ha tenido otras complicaciones.
+P: ¿Cuál es el factor de riesgo modificable más importante?
++ Tabaquismo durante el embarazo || Produce vasoconstricción e hipoxia que reducen el crecimiento fetal.
+- anchoring | Edad materna joven || No es el factor principal.
+- availability_heuristic | Feto masculino || No es un factor relevante.
+- representativeness_heuristic | Consumo moderado de agua || No es un factor.
+- premature_closure | Ejercicio moderado || No restringe el crecimiento.
+- base_rate_fallacy | Grupo sanguíneo materno || No es un factor.
+- framing_effect | Diabetes gestacional bien controlada || No suele restringir el crecimiento.
+- inattentional_blindness | Vacunación con Tdpa || No es un factor.
+- focusing_illusion | Primiparidad || Es un factor menor.
+- belief_bias | Dormir boca arriba causa bebés pequeños || No es el factor principal.
+E: Los factores de riesgo de restricción del crecimiento fetal incluyen factores maternos como hipertensión, preeclampsia, diabetes con vasculopatía, enfermedad renal, enfermedades autoinmunes, trombofilias, bajo peso y desnutrición, tabaquismo, alcohol y drogas; factores placentarios como placenta previa, infartos y desprendimiento; y factores fetales como aneuploidías, malformaciones, infecciones congénitas y embarazo múltiple. El tabaquismo es el factor modificable más importante, ya que la nicotina y el monóxido de carbono reducen la oxigenación fetal. Dejar de fumar en cualquier momento del embarazo mejora el pronóstico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la restricción del crecimiento intrauterino
+
+@ gyo|maternal_fetal|fetal_growth_restriction|3|initial_study
+V: Mujer de 31 años con embarazo de 28 semanas cuya altura del fondo uterino es 4 cm menor de lo esperado para su edad gestacional confirmada por ultrasonido del primer trimestre.
+P: ¿Cuál es el estudio inicial indicado?
++ Ultrasonido obstétrico con biometría fetal, líquido amniótico y Doppler de la arteria umbilical || Evalúa el crecimiento y el bienestar fetal.
+- anchoring | Repetir la medición del fondo uterino en un mes || Retrasa el diagnóstico.
+- availability_heuristic | Amniocentesis como primer estudio || No es el estudio inicial.
+- representativeness_heuristic | Resonancia magnética fetal de rutina || No es el estudio inicial.
+- premature_closure | Prueba sin estrés como único estudio || No mide el crecimiento.
+- base_rate_fallacy | Cordocentesis || Es invasiva y no es el primer paso.
+- framing_effect | Tomografía abdominal || Expone al feto a radiación.
+- complexity_bias | Ecocardiograma fetal como primer estudio || No es el estudio inicial.
+- information_bias | Biometría hemática materna como diagnóstico || No evalúa el crecimiento fetal.
+- belief_bias | Que coma más para que el bebé crezca sin estudios || Requiere evaluación.
+E: Una altura del fondo uterino menor de lo esperado en más de 2 a 3 cm requiere ultrasonido. La biometría fetal estima el peso y la circunferencia abdominal, que es el parámetro más sensible para la restricción del crecimiento. Se evalúa el líquido amniótico, porque el oligohidramnios se asocia a insuficiencia placentaria, y el Doppler de la arteria umbilical, que distingue al feto pequeño constitucional del feto con restricción por insuficiencia placentaria. Si se confirma la restricción se buscan causas, se valora estudio genético e infecciones, y se vigila de forma seriada.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la restricción del crecimiento intrauterino
+
+@ gyo|maternal_fetal|fetal_growth_restriction|4|next_step
+V: Mujer de 33 años con restricción del crecimiento fetal a las 37 semanas, peso fetal en la percentila 2, Doppler de la arteria umbilical con índice de pulsatilidad elevado pero con diástole presente. Bienestar fetal adecuado.
+P: ¿Cuál es la conducta más apropiada?
++ Resolver el embarazo a las 37 semanas con vigilancia intraparto continua || En la restricción con peso menor de la percentila 3 se recomienda el nacimiento a las 37 semanas.
+- anchoring | Esperar al inicio espontáneo del parto a las 41 semanas || Aumenta el riesgo de muerte fetal.
+- availability_heuristic | Cesárea de urgencia inmediata en todas || La vía se decide por criterios obstétricos y el estado fetal.
+- representativeness_heuristic | Corticosteroides y esperar 2 semanas || A término no se requieren y aumenta el riesgo.
+- premature_closure | Egreso con control mensual || La restricción requiere vigilancia estrecha y resolución.
+- framing_effect | Dieta hiperproteica para que el bebé gane peso antes del parto || No mejora el crecimiento.
+- complexity_bias | Cordocentesis para gasometría fetal || No es necesaria.
+- status_quo_bias | Mantener la vigilancia sin plan de nacimiento || Aumenta el riesgo.
+- belief_bias | Reposo absoluto permitirá alcanzar el peso normal || No es eficaz.
+- omission_bias | No inducir por miedo a la cesárea || El riesgo de muerte fetal es mayor.
+E: El momento del nacimiento en la restricción del crecimiento depende de la gravedad y del Doppler. En fetos pequeños para la edad gestacional sin alteraciones se puede esperar hasta las 38 a 39 semanas. Con peso menor de la percentila 3 o aumento de la resistencia de la arteria umbilical o redistribución cerebral se recomienda el nacimiento a las 37 semanas. Con diástole ausente se adelanta a las 34 semanas y con diástole reversa o ductus venoso alterado a las 30 a 32 semanas. Puede intentarse inducción con monitorización continua si el Doppler lo permite.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la restricción del crecimiento intrauterino
+
+@ gyo|maternal_fetal|fetal_growth_restriction|3|complication_prognosis
+V: Recién nacido de 37 semanas con peso de 1 900 g por restricción del crecimiento intrauterino. Los padres preguntan sobre los riesgos para su hijo.
+P: ¿Cuál es la complicación neonatal temprana más frecuente en estos recién nacidos?
++ Hipoglucemia por reservas de glucógeno disminuidas || Los recién nacidos con restricción tienen pocas reservas energéticas.
+- anchoring | Macrosomía con distocia de hombros || El bebé es pequeño.
+- availability_heuristic | Hipotiroidismo congénito como consecuencia directa || No es la complicación característica.
+- representativeness_heuristic | Hiperglucemia neonatal || Predomina la hipoglucemia.
+- premature_closure | Ninguna, si nace a término está sano || Tiene riesgos específicos.
+- base_rate_fallacy | Síndrome de dificultad respiratoria grave por surfactante a término || Es más propio de prematuros.
+- framing_effect | Anemia por pérdida de sangre || Suele haber policitemia.
+- inattentional_blindness | Fractura de clavícula || No es característica.
+- focusing_illusion | Hidrocefalia || No es característica.
+- belief_bias | Crecerá igual que los demás sin vigilancia || Requiere seguimiento.
+E: Los recién nacidos con restricción del crecimiento tienen mayor riesgo de complicaciones neonatales, como hipoglucemia por escasas reservas de glucógeno y grasa, hipotermia, policitemia por hipoxia crónica, hipocalcemia, asfixia perinatal, aspiración de meconio y enterocolitis necrosante. A largo plazo tienen mayor riesgo de alteraciones del neurodesarrollo y, en la vida adulta, de obesidad, diabetes tipo 2, hipertensión y enfermedad cardiovascular, lo que se conoce como programación fetal. Se vigila la glucosa en las primeras horas, se promueve la alimentación temprana y se da seguimiento del crecimiento y desarrollo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la restricción del crecimiento intrauterino
+
+@ gyo|maternal_fetal|fetal_growth_restriction|3|prevention_screening
+V: Mujer de 29 años con embarazo de 11 semanas que tuvo restricción grave del crecimiento fetal con preeclampsia en su embarazo previo.
+P: ¿Cuál es la medida de prevención indicada en este embarazo?
++ Ácido acetilsalicílico a dosis baja desde antes de las 16 semanas || Reduce la recurrencia de enfermedad placentaria.
+- anchoring | Reposo absoluto desde el primer trimestre || No es eficaz.
+- availability_heuristic | Dieta hipercalórica para que el bebé crezca más || No previene la restricción.
+- representativeness_heuristic | Suplementos de vitamina C y E || No han mostrado beneficio.
+- premature_closure | Ninguna medida hasta el tercer trimestre || La prevención debe iniciar temprano.
+- framing_effect | Heparina a todas sin estudio || Se reserva para indicaciones específicas.
+- complexity_bias | Cerclaje cervical || No previene la restricción.
+- base_rate_fallacy | Progesterona vaginal || Se usa para prevenir parto pretérmino por cérvix corto.
+- belief_bias | Dormir más horas evitará el problema || No es eficaz.
+- omission_bias | No vigilar el crecimiento con ultrasonido || Requiere vigilancia estrecha.
+E: Las mujeres con antecedente de restricción del crecimiento por insuficiencia placentaria o de preeclampsia tienen riesgo de recurrencia. El ácido acetilsalicílico a dosis baja, de 100 a 150 mg por la noche, iniciado antes de las 16 semanas y mantenido hasta las 36 semanas, reduce la preeclampsia y la restricción del crecimiento en mujeres de riesgo. También se recomienda suspender el tabaco, controlar las enfermedades maternas, vigilar el crecimiento fetal con ultrasonidos seriados y Doppler de las arterias uterinas. Se buscan trombofilias como síndrome antifosfolípido en casos seleccionados.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la restricción del crecimiento intrauterino
+
+@ gyo|maternal_fetal|preterm_labor_obstetrics|3|data_interpretation
+V: Mujer de 27 años con embarazo de 30 semanas y contracciones irregulares. El cérvix tiene 1 cm de dilatación. La prueba de fibronectina fetal en secreción cervicovaginal es negativa y la longitud cervical por ultrasonido es de 32 mm.
+P: ¿Qué indican estos resultados?
++ Bajo riesgo de parto en los siguientes 7 a 14 días, por lo que pueden evitarse tratamientos innecesarios || La fibronectina negativa con cérvix largo tiene alto valor predictivo negativo.
+- anchoring | Trabajo de parto pretérmino establecido que requiere tocolisis || Los marcadores indican bajo riesgo.
+- availability_heuristic | Indicación de cesárea || No hay indicación.
+- representativeness_heuristic | Alto riesgo de parto en 24 horas || Los resultados indican lo contrario.
+- premature_closure | Indicación de corticosteroides inmediatos en todas || No se requieren si el riesgo es bajo.
+- base_rate_fallacy | Ruptura de membranas confirmada || No hay datos.
+- framing_effect | Insuficiencia cervical || El cérvix es largo.
+- inattentional_blindness | Indica infección intraamniótica || No hay datos.
+- focusing_illusion | Indica desprendimiento de placenta || No hay datos.
+- belief_bias | Toda contracción a las 30 semanas es trabajo de parto || Muchas no lo son.
+E: Muchas mujeres con contracciones pretérmino no progresan a trabajo de parto. La fibronectina fetal es una proteína de la interfase coriodecidual, y su presencia en la secreción cervicovaginal entre las 22 y 34 semanas se asocia a parto pretérmino. Su principal utilidad es su alto valor predictivo negativo, ya que un resultado negativo indica que menos de 1% dará a luz en los siguientes 7 a 14 días. Una longitud cervical mayor de 30 mm también indica bajo riesgo. Estas pruebas evitan hospitalizaciones, tocolíticos y corticosteroides innecesarios.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino
+
+@ gyo|maternal_fetal|preterm_labor_obstetrics|3|treatment_of_choice
+V: Mujer de 25 años con embarazo de 30 semanas en trabajo de parto pretérmino avanzado con 6 cm de dilatación. Se prevé el nacimiento en las próximas horas. No ha recibido medicamentos.
+P: ¿Cuál es el tratamiento de elección para la neuroprotección fetal?
++ Sulfato de magnesio intravenoso || Reduce el riesgo de parálisis cerebral en nacimientos antes de las 32 semanas.
+- anchoring | Diazepam intravenoso || No tiene efecto neuroprotector y causa depresión neonatal.
+- availability_heuristic | Fenitoína || No es neuroprotectora.
+- representativeness_heuristic | Corticosteroides como neuroprotección principal || Su efecto principal es la madurez pulmonar, aunque reducen la hemorragia intraventricular.
+- premature_closure | Nifedipino || Es un tocolítico.
+- framing_effect | Progesterona intramuscular || No es neuroprotectora.
+- complexity_bias | Hipotermia terapéutica intrauterina || No existe como tratamiento.
+- base_rate_fallacy | Indometacina || Es un tocolítico.
+- belief_bias | Oxígeno a la madre como neuroprotección || No tiene efecto demostrado.
+- omission_bias | No administrar nada porque el parto es inminente || El magnesio debe iniciarse aunque el parto sea pronto.
+E: El sulfato de magnesio administrado a la madre antes de un nacimiento pretérmino menor de 32 semanas reduce el riesgo de parálisis cerebral y disfunción motora gruesa en el niño. Se inicia cuando el nacimiento se considera inminente, con una dosis de impregnación de 4 g y mantenimiento de 1 g por hora hasta el nacimiento, máximo 24 horas. Su mecanismo se relaciona con la estabilización de membranas neuronales y la reducción de la excitotoxicidad. Se combina con corticosteroides para madurez pulmonar. Se vigila la toxicidad materna con reflejos, frecuencia respiratoria y diuresis.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino
+
+@ gyo|maternal_fetal|preterm_labor_obstetrics|3|mechanism
+V: Mujer de 29 años con riesgo de parto pretérmino a las 31 semanas que recibe betametasona. Pregunta cómo ayuda el medicamento a su bebé.
+P: ¿Cuál es el mecanismo de los corticosteroides prenatales?
++ Aceleran la maduración pulmonar fetal al estimular la producción de surfactante por los neumocitos tipo II || Reducen el síndrome de dificultad respiratoria.
+- anchoring | Detienen las contracciones uterinas || No son tocolíticos.
+- availability_heuristic | Previenen la infección intraamniótica || No tienen ese efecto.
+- representativeness_heuristic | Aumentan el peso fetal || No es su efecto.
+- premature_closure | Cierran el conducto arterioso || No es su mecanismo principal.
+- base_rate_fallacy | Estimulan la producción de insulina fetal || No es su mecanismo.
+- framing_effect | Suprimen el sistema inmune materno para evitar el parto || No es su mecanismo.
+- inattentional_blindness | Aumentan el líquido amniótico || No es su efecto.
+- focusing_illusion | Maduran solo el cerebro fetal || Su efecto principal es pulmonar.
+- belief_bias | Son vitaminas para el bebé || Son hormonas glucocorticoides.
+E: Los corticosteroides prenatales, betametasona o dexametasona, atraviesan la placenta y aceleran la maduración de varios órganos fetales. En el pulmón estimulan a los neumocitos tipo II para producir surfactante, aumentan la distensibilidad y el volumen pulmonar y favorecen la reabsorción del líquido pulmonar. Reducen el síndrome de dificultad respiratoria, la hemorragia intraventricular, la enterocolitis necrosante y la mortalidad neonatal. Su efecto máximo ocurre entre 24 horas y 7 días después de la primera dosis. Se indican entre las 24 y 34 semanas ante riesgo de nacimiento en los siguientes 7 días.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino
+
+@ gyo|maternal_fetal|preterm_labor_obstetrics|3|risk_factor
+V: Mujer de 34 años con embarazo gemelar bicorial de 26 semanas, asintomática. Pregunta por el riesgo de parto prematuro.
+P: ¿Cuál es el factor que más aumenta el riesgo de parto pretérmino en este caso?
++ Embarazo múltiple por sobredistensión uterina || La mitad de los embarazos gemelares terminan antes de las 37 semanas.
+- anchoring | Edad materna de 34 años || Es un factor menor.
+- availability_heuristic | Sexo de los fetos || No es relevante.
+- representativeness_heuristic | Tipo de placentación bicorial como factor principal || La gemelaridad por sí misma es el factor.
+- premature_closure | Ejercicio moderado || No es un factor.
+- base_rate_fallacy | Grupo sanguíneo materno || No es un factor.
+- framing_effect | Consumo de ácido fólico || No es un factor de riesgo.
+- inattentional_blindness | Vacunación en el embarazo || No es un factor.
+- focusing_illusion | Primiparidad || No es el factor principal.
+- belief_bias | Comer mucho picante provoca el parto || No es un factor.
+E: El embarazo múltiple es uno de los principales factores de riesgo de parto pretérmino por la sobredistensión uterina. Alrededor de 50 a 60% de los embarazos gemelares y casi todos los de trillizos nacen antes de las 37 semanas. Los embarazos monocoriales tienen además riesgos específicos como el síndrome de transfusión feto fetal. El reposo, la progesterona y el cerclaje profiláctico no han mostrado beneficio en gemelares sin cérvix corto. Se programa la resolución de los gemelares bicoriales sin complicaciones a las 37 a 38 semanas y de los monocoriales a las 36 a 37 semanas.
+R: Guía de Práctica Clínica de atención del embarazo múltiple
+
+@ gyo|maternal_fetal|preterm_labor_obstetrics|4|diagnosis
+V: Mujer de 28 años con embarazo gemelar monocorial biamniótico de 20 semanas. El ultrasonido muestra un feto con polihidramnios y vejiga distendida, y el otro con oligohidramnios grave, vejiga no visible y adherido a la pared uterina.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome de transfusión feto fetal || Discordancia de líquido amniótico en gemelos monocoriales por anastomosis vasculares placentarias.
+- anchoring | Restricción del crecimiento selectivo sin otra alteración || No explica la discordancia de líquido con polihidramnios.
+- availability_heuristic | Ruptura de membranas de un saco || No explica el polihidramnios del otro.
+- representativeness_heuristic | Agenesia renal de un gemelo || No explica el polihidramnios del otro.
+- premature_closure | Diabetes gestacional con polihidramnios || No explica la discordancia.
+- base_rate_fallacy | Gemelos siameses || Son monoamnióticos con fusión.
+- framing_effect | Secuencia TRAP con gemelo acárdico || Tiene un gemelo sin corazón.
+- inattentional_blindness | Infección congénita por citomegalovirus || No explica el patrón.
+- focusing_illusion | Atresia esofágica en un gemelo || No explica el oligohidramnios del otro.
+- belief_bias | Un gemelo es más fuerte y le quita el alimento al otro de forma normal || Es una complicación grave.
+E: El síndrome de transfusión feto fetal ocurre en 10 a 15% de los embarazos gemelares monocoriales biamnióticos. Se debe a anastomosis vasculares placentarias desequilibradas que transfieren sangre de un gemelo donante a uno receptor. El donante presenta hipovolemia, oliguria, oligohidramnios y queda adherido, y el receptor hipervolemia, poliuria, polihidramnios e insuficiencia cardiaca. Se clasifica con los estadios de Quintero. Sin tratamiento la mortalidad es muy alta. El tratamiento de elección entre las 16 y 26 semanas es la coagulación láser fetoscópica de las anastomosis. Los gemelos monocoriales requieren ultrasonido cada 2 semanas desde las 16 semanas.
+R: Guía de Práctica Clínica de atención del embarazo múltiple
+
+@ gyo|maternal_fetal|preterm_labor_obstetrics|3|next_step
+V: Mujer de 24 años con embarazo de 33 semanas en trabajo de parto pretérmino con 4 cm de dilatación. Se encuentra en un hospital sin unidad de cuidados intensivos neonatales. Está estable.
+P: ¿Cuál es la conducta más apropiada?
++ Iniciar corticosteroides y tocolisis breve y trasladar a la madre a un hospital con cuidados intensivos neonatales || El traslado intrauterino mejora el pronóstico neonatal.
+- anchoring | Esperar el nacimiento en el hospital actual y trasladar al recién nacido después || El traslado del recién nacido tiene peores resultados.
+- availability_heuristic | Cesárea inmediata en el hospital actual || No hay indicación de cesárea.
+- representativeness_heuristic | Tocolisis prolongada por semanas para evitar el traslado || No es adecuado.
+- premature_closure | Egreso con indicación de reposo || Está en trabajo de parto activo.
+- framing_effect | Amniotomía para acelerar el parto || No está indicada.
+- complexity_bias | Amniocentesis antes de decidir el traslado || Retrasa el manejo.
+- status_quo_bias | Mantenerla en observación sin plan || Pierde la oportunidad de traslado.
+- belief_bias | A las 33 semanas el bebé no necesita cuidados especiales || Puede requerir apoyo.
+- omission_bias | No trasladar por el riesgo del viaje || El traslado materno es más seguro para el recién nacido.
+E: Cuando se prevé un nacimiento pretérmino en un hospital sin cuidados intensivos neonatales adecuados, el traslado de la madre antes del nacimiento, conocido como traslado in utero, se asocia a menor morbilidad y mortalidad neonatal que el traslado del recién nacido después de nacer. Antes del traslado se inician corticosteroides, tocolisis breve si no hay contraindicaciones y sulfato de magnesio si es menor de 32 semanas, siempre que la madre esté estable y el parto no sea inminente. Si el nacimiento es inminente, es más seguro atenderlo en el hospital actual con personal capacitado en reanimación neonatal.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino

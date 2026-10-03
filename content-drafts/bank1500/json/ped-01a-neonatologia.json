@@ -1,0 +1,1322 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "ped-01a-neonatologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_jaundice",
+      "vignette": "Recién nacido de término de 3 días, alimentado al seno materno, con ictericia que inició a las 60 horas en cara y tórax. Activo, succiona bien y con evacuaciones amarillas. Bilirrubina total de 11 mg/dL de predominio indirecto. Madre y bebé grupo O Rh positivo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Enfermedad hemolítica por incompatibilidad ABO",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da ictericia indirecta, pero suele aparecer antes de las 24 horas y requiere madre O con hijo A o B."
+        },
+        {
+          "key": "b",
+          "text": "Ictericia por falta de sol",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la exposición solar es la causa."
+        },
+        {
+          "key": "c",
+          "text": "Ictericia fisiológica",
+          "correct": true,
+          "rationale": "Aparece después de las 24 horas, con bilirrubina indirecta moderada en un recién nacido sano."
+        },
+        {
+          "key": "d",
+          "text": "Ictericia por leche materna tardía",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Aparece después de la primera semana."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome de Crigler Najjar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es raro y da bilirrubina muy alta persistente."
+        },
+        {
+          "key": "f",
+          "text": "Esferocitosis hereditaria",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay datos de hemólisis ni antecedente familiar."
+        },
+        {
+          "key": "g",
+          "text": "Sepsis neonatal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es frecuente, pero el bebé está activo y succiona bien."
+        },
+        {
+          "key": "h",
+          "text": "Atresia de vías biliares",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la ictericia, pero esta da bilirrubina directa y acolia."
+        },
+        {
+          "key": "i",
+          "text": "Hipotiroidismo congénito",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede prolongar la ictericia, pero no explica este cuadro típico."
+        },
+        {
+          "key": "j",
+          "text": "Hepatitis neonatal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el hígado, pero daría bilirrubina directa."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "La ictericia fisiológica es la más frecuente en recién nacidos. Aparece después de las primeras 24 horas, alcanza su pico entre el tercer y quinto día en el recién nacido de término y se resuelve en una a dos semanas. Se debe a mayor producción de bilirrubina por la vida corta del eritrocito fetal, inmadurez de la conjugación hepática y aumento de la circulación enterohepática. Es de predominio indirecto, sin hemólisis ni otros datos de enfermedad. Toda ictericia en las primeras 24 horas, con bilirrubina directa elevada, de progresión rápida o persistente después de dos semanas se considera patológica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección oportuna, diagnóstico y tratamiento de la hiperbilirrubinemia en recién nacidos"
+      ]
+    },
+    {
+      "key": "ped-01a-neonatologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_jaundice",
+      "vignette": "Recién nacido de 18 horas de vida con ictericia hasta el abdomen. Madre grupo O positivo y bebé grupo A positivo. Coombs directo positivo. Bilirrubina total de 12 mg/dL.",
+      "prompt": "¿Cuál es la conducta a seguir?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Suspender la lactancia materna",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "b",
+          "text": "Exanguinotransfusión inmediata en todos los casos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se reserva para valores de riesgo o falla de fototerapia."
+        },
+        {
+          "key": "c",
+          "text": "Iniciar fototerapia intensiva y vigilar la bilirrubina según los nomogramas por horas de vida y riesgo",
+          "correct": true,
+          "rationale": "Ictericia en las primeras 24 horas por enfermedad hemolítica."
+        },
+        {
+          "key": "d",
+          "text": "Egresar con revisión en una semana",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "La bilirrubina puede subir rápido."
+        },
+        {
+          "key": "e",
+          "text": "Biopsia hepática",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es una ictericia indirecta hemolítica."
+        },
+        {
+          "key": "f",
+          "text": "Dar agua o té para eliminar la bilirrubina",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No sirve y desplaza la leche."
+        },
+        {
+          "key": "g",
+          "text": "Evitar la fototerapia por miedo a deshidratación",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El beneficio supera el riesgo con hidratación adecuada."
+        },
+        {
+          "key": "h",
+          "text": "Esperar a que la ictericia baje sola por ser fisiológica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la ictericia fisiológica, pero apareció antes de las 24 horas."
+        },
+        {
+          "key": "i",
+          "text": "Dar fenobarbital como tratamiento principal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es el tratamiento."
+        },
+        {
+          "key": "j",
+          "text": "Exponer al bebé a la luz solar directa en casa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena natural, pero es ineficaz y peligroso."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "La ictericia que aparece en las primeras 24 horas siempre es patológica y obliga a buscar hemólisis. La incompatibilidad ABO ocurre en madres grupo O con hijos A o B, y el Coombs directo puede ser positivo. El tratamiento se decide con nomogramas de bilirrubina según las horas de vida, la edad gestacional y los factores de riesgo, como hemólisis. La fototerapia convierte la bilirrubina en isómeros hidrosolubles que se eliminan sin conjugación. Si la bilirrubina se acerca al umbral de exanguinotransfusión o no responde, se realiza exanguinotransfusión, y en la hemólisis inmune puede darse inmunoglobulina intravenosa.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección oportuna, diagnóstico y tratamiento de la hiperbilirrubinemia en recién nacidos"
+      ]
+    },
+    {
+      "key": "ped-01a-neonatologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_jaundice",
+      "vignette": "Lactante de 5 semanas con ictericia persistente desde la segunda semana, evacuaciones blancas como masilla y orina oscura. Hepatomegalia firme. Bilirrubina total de 9 mg/dL con directa de 6.5 mg/dL.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ictericia por leche materna",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También es prolongada, pero indirecta y con evacuaciones normales."
+        },
+        {
+          "key": "b",
+          "text": "Cambio de fórmula como causa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la fórmula explica la acolia."
+        },
+        {
+          "key": "c",
+          "text": "Quiste de colédoco",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente."
+        },
+        {
+          "key": "d",
+          "text": "Estenosis hipertrófica de píloro",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a cirugía neonatal, pero da vómito."
+        },
+        {
+          "key": "e",
+          "text": "Hipotiroidismo congénito",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Prolonga la ictericia indirecta."
+        },
+        {
+          "key": "f",
+          "text": "Ictericia fisiológica prolongada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la ictericia común, pero es directa."
+        },
+        {
+          "key": "g",
+          "text": "Incompatibilidad Rh",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la bilirrubina directa tardía."
+        },
+        {
+          "key": "h",
+          "text": "Atresia de vías biliares",
+          "correct": true,
+          "rationale": "Colestasis con acolia y hepatomegalia en las primeras semanas."
+        },
+        {
+          "key": "i",
+          "text": "Hepatitis viral neonatal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe considerarse, pero la acolia persistente sugiere atresia."
+        },
+        {
+          "key": "j",
+          "text": "Galactosemia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el hígado, pero cursa con vómito y sepsis."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "h"
+      ],
+      "explanation": "La atresia de vías biliares es una obliteración progresiva de los conductos biliares extrahepáticos y es la causa más frecuente de colestasis neonatal quirúrgica. Se presenta con ictericia que persiste o reaparece después de las dos semanas, con hiperbilirrubinemia directa, acolia, coluria y hepatomegalia. Todo lactante con ictericia después de las dos semanas debe tener medición de bilirrubina directa. El diagnóstico se apoya en el ultrasonido y la gammagrafía y se confirma con colangiografía intraoperatoria. El tratamiento es la portoenterostomía de Kasai, idealmente antes de los 60 días de vida, porque su éxito disminuye con la edad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la atresia de vías biliares"
+      ]
+    },
+    {
+      "key": "ped-01a-neonatologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_jaundice",
+      "vignette": "Recién nacido de 5 días con bilirrubina indirecta de 28 mg/dL sin tratamiento previo. Presenta letargo, hipotonía, succión débil, llanto agudo y opistótonos.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hemorragia intraventricular",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es más frecuente en prematuros."
+        },
+        {
+          "key": "b",
+          "text": "Sepsis neonatal tardía",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el letargo, sin explicar la bilirrubina extrema."
+        },
+        {
+          "key": "c",
+          "text": "Hipoglucemia neonatal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da letargo, pero no explica la bilirrubina ni el opistótonos."
+        },
+        {
+          "key": "d",
+          "text": "Error innato del metabolismo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable con bilirrubina tan alta."
+        },
+        {
+          "key": "e",
+          "text": "Encefalopatía bilirrubínica aguda",
+          "correct": true,
+          "rationale": "La bilirrubina indirecta muy elevada atraviesa la barrera hematoencefálica."
+        },
+        {
+          "key": "f",
+          "text": "Cólico del lactante",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el llanto es por cólico."
+        },
+        {
+          "key": "g",
+          "text": "Ictericia fisiológica intensa sin riesgo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena benigno, pero hay signos neurológicos."
+        },
+        {
+          "key": "h",
+          "text": "Asfixia perinatal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la hipotonía."
+        },
+        {
+          "key": "i",
+          "text": "Deshidratación hipernatrémica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Puede coexistir, pero no explica el cuadro."
+        },
+        {
+          "key": "j",
+          "text": "Meningitis bacteriana",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Comparte signos neurológicos, pero la causa evidente es la bilirrubina."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "La bilirrubina indirecta no conjugada en concentraciones elevadas puede atravesar la barrera hematoencefálica y depositarse en los ganglios basales, el hipocampo y los núcleos del tallo, causando encefalopatía bilirrubínica. La fase aguda se manifiesta con letargo, hipotonía y succión débil, seguidas de hipertonía, opistótonos, llanto agudo, fiebre y convulsiones. Es una urgencia que requiere exanguinotransfusión inmediata. La secuela crónica es el kernícterus, con parálisis cerebral coreoatetósica, sordera neurosensorial, alteración de la mirada vertical y displasia dental. Se previene con tamizaje, seguimiento posterior al egreso y tratamiento oportuno de la hiperbilirrubinemia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección oportuna, diagnóstico y tratamiento de la hiperbilirrubinemia en recién nacidos"
+      ]
+    },
+    {
+      "key": "ped-01a-neonatologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_resuscitation",
+      "vignette": "Recién nacido de término, líquido amniótico claro, que al nacer no respira y está hipotónico. Se colocó bajo calor radiante, se secó, se posicionó la vía aérea y se estimuló, pero sigue sin respirar. Frecuencia cardiaca de 80 lpm.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Seguir estimulando con palmadas en la espalda por varios minutos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena útil, pero retrasa la ventilación."
+        },
+        {
+          "key": "b",
+          "text": "Aspiración traqueal de rutina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada con líquido claro."
+        },
+        {
+          "key": "c",
+          "text": "Compresiones torácicas de inmediato",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la frecuencia baja, pero las compresiones se inician con frecuencia menor de 60 tras ventilar."
+        },
+        {
+          "key": "d",
+          "text": "Adrenalina intravenosa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se usa si la frecuencia sigue menor de 60 tras ventilación y compresiones."
+        },
+        {
+          "key": "e",
+          "text": "Intubación inmediata en todos los casos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se considera si la ventilación con mascarilla no es eficaz."
+        },
+        {
+          "key": "f",
+          "text": "Iniciar ventilación con presión positiva con bolsa y mascarilla en el primer minuto",
+          "correct": true,
+          "rationale": "Apnea o frecuencia menor de 100 tras pasos iniciales."
+        },
+        {
+          "key": "g",
+          "text": "Esperar a la valoración de Apgar al minuto 5",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "El Apgar no guía la reanimación."
+        },
+        {
+          "key": "h",
+          "text": "Observar si respira solo en 2 minutos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasa la ventilación, que es la medida más importante."
+        },
+        {
+          "key": "i",
+          "text": "Bicarbonato intravenoso",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No se recomienda de rutina."
+        },
+        {
+          "key": "j",
+          "text": "Oxígeno al 100% de inicio en el recién nacido de término",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se inicia con aire ambiente al 21%."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "f"
+      ],
+      "explanation": "La reanimación neonatal sigue el algoritmo del programa de reanimación neonatal. Tras los pasos iniciales de calentar, secar, posicionar, despejar la vía aérea si es necesario y estimular, se evalúa la respiración y la frecuencia cardiaca. Si hay apnea, respiración en boqueadas o frecuencia menor de 100 lpm, se inicia ventilación con presión positiva en el primer minuto de vida, el llamado minuto de oro, con aire ambiente en el recién nacido de término y oxígeno ajustado a la saturación preductal. La ventilación eficaz es la medida más importante. Si la frecuencia es menor de 60 tras 30 segundos de ventilación eficaz se inician compresiones.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de reanimación neonatal"
+      ]
+    },
+    {
+      "key": "ped-01a-neonatologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_resuscitation",
+      "vignette": "Recién nacido que recibe ventilación con presión positiva eficaz, con movimiento del tórax, durante 30 segundos. Su frecuencia cardiaca es de 50 lpm.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Iniciar compresiones torácicas coordinadas con la ventilación en relación 3 a 1 y aumentar el oxígeno al 100%",
+          "correct": true,
+          "rationale": "Frecuencia menor de 60 tras ventilación eficaz."
+        },
+        {
+          "key": "b",
+          "text": "Adrenalina antes de las compresiones",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se usa después de 60 segundos de compresiones sin respuesta."
+        },
+        {
+          "key": "c",
+          "text": "Mantener el oxígeno al 21% sin cambios",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Se aumenta al iniciar compresiones."
+        },
+        {
+          "key": "d",
+          "text": "Desfibrilación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El paro neonatal casi nunca es por fibrilación."
+        },
+        {
+          "key": "e",
+          "text": "Continuar solo ventilación otros 2 minutos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la ventilación sin escalar."
+        },
+        {
+          "key": "f",
+          "text": "Esperar a confirmar la frecuencia con electrocardiograma por varios minutos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasa las compresiones."
+        },
+        {
+          "key": "g",
+          "text": "Toracotomía de urgencia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Medida inexistente."
+        },
+        {
+          "key": "h",
+          "text": "Expansores de volumen en todos los casos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se usan si hay sospecha de pérdida de sangre."
+        },
+        {
+          "key": "i",
+          "text": "Suspender la reanimación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es prematuro."
+        },
+        {
+          "key": "j",
+          "text": "Compresiones en relación 15 a 2 como en niños mayores",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a reanimación pediátrica, pero en neonatos es 3 a 1."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "j"
+      ],
+      "explanation": "Si la frecuencia cardiaca del recién nacido es menor de 60 lpm después de 30 segundos de ventilación con presión positiva eficaz, idealmente con vía aérea avanzada, se inician compresiones torácicas en el tercio inferior del esternón con la técnica de los dos pulgares, coordinadas con la ventilación en una relación de tres compresiones por una ventilación, 90 compresiones y 30 ventilaciones por minuto. Se aumenta la concentración de oxígeno al 100%. Si después de 60 segundos de compresiones y ventilación coordinadas la frecuencia sigue menor de 60, se administra adrenalina, de preferencia por vía umbilical.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de reanimación neonatal"
+      ]
+    },
+    {
+      "key": "ped-01a-neonatologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_resuscitation",
+      "vignette": "Recién nacido al minuto de vida con frecuencia cardiaca de 110 lpm, llanto débil, flexión leve de extremidades, muecas al estímulo y cuerpo rosado con extremidades azuladas.",
+      "prompt": "¿Cuál es su puntuación de Apgar al minuto?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "4 sin contar la frecuencia cardiaca",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Pasa por alto un componente de 2 puntos."
+        },
+        {
+          "key": "b",
+          "text": "7",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Calcula de más un componente."
+        },
+        {
+          "key": "c",
+          "text": "Normal porque la mayoría de los recién nacidos tienen Apgar alto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Usa la frecuencia general."
+        },
+        {
+          "key": "d",
+          "text": "5",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Asigna 1 a la frecuencia mayor de 100."
+        },
+        {
+          "key": "e",
+          "text": "9",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Sobreestima varios componentes."
+        },
+        {
+          "key": "f",
+          "text": "6",
+          "correct": true,
+          "rationale": "Frecuencia mayor de 100 es 2, llanto débil 1, flexión leve 1, mueca 1 y acrocianosis 1."
+        },
+        {
+          "key": "g",
+          "text": "8",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Asigna 2 al llanto débil y al tono leve."
+        },
+        {
+          "key": "h",
+          "text": "10 porque la frecuencia es normal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ignora el resto de parámetros."
+        },
+        {
+          "key": "i",
+          "text": "Se requiere gasometría para calcularlo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El Apgar es clínico."
+        },
+        {
+          "key": "j",
+          "text": "El Apgar al minuto define si requiere reanimación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el Apgar guía la reanimación."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "La escala de Apgar evalúa al recién nacido al minuto y a los cinco minutos con cinco parámetros, cada uno de 0 a 2 puntos. Frecuencia cardiaca, 0 si está ausente, 1 si es menor de 100 y 2 si es mayor de 100. Esfuerzo respiratorio, 0 ausente, 1 llanto débil o irregular y 2 llanto vigoroso. Tono muscular, 0 flácido, 1 flexión leve y 2 movimiento activo. Irritabilidad refleja, 0 sin respuesta, 1 mueca y 2 llanto o tos. Color, 0 pálido o cianótico, 1 acrocianosis y 2 completamente rosado. El Apgar no se usa para decidir el inicio de la reanimación.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de reanimación neonatal"
+      ]
+    },
+    {
+      "key": "ped-01a-neonatologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_respiratory_distress",
+      "vignette": "Recién nacido de 30 semanas de gestación, hijo de madre que no recibió esteroides prenatales. A los minutos de nacer presenta quejido, aleteo nasal, retracciones y cianosis que empeoran en las primeras horas. La radiografía muestra infiltrado reticulogranular en vidrio esmerilado con broncograma aéreo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Neumonía neonatal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la dificultad respiratoria y debe considerarse, pero el patrón es típico de deficiencia de surfactante."
+        },
+        {
+          "key": "b",
+          "text": "Displasia broncopulmonar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a enfermedad del prematuro, pero es crónica."
+        },
+        {
+          "key": "c",
+          "text": "Síndrome de dificultad respiratoria por deficiencia de surfactante",
+          "correct": true,
+          "rationale": "Prematuro con dificultad progresiva y patrón reticulogranular."
+        },
+        {
+          "key": "d",
+          "text": "Neumotórax",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta el patrón bilateral."
+        },
+        {
+          "key": "e",
+          "text": "Hernia diafragmática congénita",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Daría abdomen excavado y asas en tórax."
+        },
+        {
+          "key": "f",
+          "text": "Taquipnea transitoria del recién nacido",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También da dificultad respiratoria, pero en término o cesárea, con mejoría rápida y cisuras marcadas."
+        },
+        {
+          "key": "g",
+          "text": "Cardiopatía congénita cianógena",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye sin datos cardiacos."
+        },
+        {
+          "key": "h",
+          "text": "Hipertensión pulmonar persistente",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la cianosis."
+        },
+        {
+          "key": "i",
+          "text": "Llanto excesivo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la dificultad es por llanto."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome de aspiración de meconio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ocurre en término o postérmino con líquido meconial."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "El síndrome de dificultad respiratoria neonatal, antes llamado enfermedad de membrana hialina, se debe a deficiencia de surfactante pulmonar, que provoca colapso alveolar. Es más frecuente cuanto menor es la edad gestacional, en hijos de madre diabética y sin esteroides prenatales. Se presenta desde el nacimiento con taquipnea, quejido, aleteo nasal, retracciones y cianosis que empeoran en las primeras 48 a 72 horas. La radiografía muestra infiltrado reticulogranular difuso en vidrio esmerilado con broncograma aéreo y volúmenes pulmonares disminuidos. El tratamiento incluye presión positiva continua y surfactante exógeno.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de dificultad respiratoria en el recién nacido"
+      ]
+    },
+    {
+      "key": "ped-01a-neonatologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_respiratory_distress",
+      "vignette": "Mujer de 29 semanas de embarazo con trabajo de parto pretérmino que no se detiene. Se prevé el nacimiento en las próximas horas.",
+      "prompt": "¿Cuál es la medida de prevención más eficaz para reducir el síndrome de dificultad respiratoria del recién nacido?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cesárea inmediata sin otras medidas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No previene el síndrome."
+        },
+        {
+          "key": "b",
+          "text": "Retrasar el parto con reposo absoluto sin otras medidas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena preventivo, pero no madura el pulmón."
+        },
+        {
+          "key": "c",
+          "text": "Corticosteroides prenatales, como betametasona o dexametasona, a la madre",
+          "correct": true,
+          "rationale": "Aceleran la maduración pulmonar fetal."
+        },
+        {
+          "key": "d",
+          "text": "Ninguna medida porque nacerá pronto",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Incluso unas horas de esteroide dan beneficio."
+        },
+        {
+          "key": "e",
+          "text": "Surfactante profiláctico a la madre",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El surfactante se da al recién nacido, no a la madre."
+        },
+        {
+          "key": "f",
+          "text": "Ventilación mecánica profiláctica al recién nacido",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es invasiva."
+        },
+        {
+          "key": "g",
+          "text": "Sulfato de magnesio para madurar el pulmón",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El magnesio es neuroprotector, no madura el pulmón."
+        },
+        {
+          "key": "h",
+          "text": "Evitar esteroides por miedo a efectos en el feto",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El beneficio es muy superior."
+        },
+        {
+          "key": "i",
+          "text": "Antibióticos a la madre como medida principal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la infección, que no previene el síndrome."
+        },
+        {
+          "key": "j",
+          "text": "Hidratación materna intensa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la hidratación madura el pulmón."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "i"
+      ],
+      "explanation": "Los corticosteroides prenatales administrados a la madre con riesgo de parto pretérmino entre las 24 y 34 semanas aceleran la maduración pulmonar fetal y aumentan la producción de surfactante. Reducen el síndrome de dificultad respiratoria, la hemorragia intraventricular, la enterocolitis necrosante y la mortalidad neonatal. El esquema es betametasona 12 mg intramuscular dos dosis con 24 horas de diferencia, o dexametasona 6 mg cada 12 horas por cuatro dosis. El beneficio máximo ocurre entre 24 horas y siete días después, pero incluso dosis incompletas ayudan. En menores de 32 semanas se agrega sulfato de magnesio como neuroprotector.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y manejo del parto pretérmino",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de dificultad respiratoria en el recién nacido"
+      ]
+    },
+    {
+      "key": "ped-01a-neonatologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_respiratory_distress",
+      "vignette": "Recién nacido de 38 semanas nacido por cesárea electiva sin trabajo de parto. A las 2 horas presenta taquipnea de 80 rpm con retracciones leves. Saturación de 93%. La radiografía muestra líquido en las cisuras y trama vascular aumentada. Mejora en las siguientes 24 horas.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de dificultad respiratoria por deficiencia de surfactante",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Ocurre en prematuros y empeora en las primeras horas."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de aspiración de meconio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Requiere líquido meconial."
+        },
+        {
+          "key": "c",
+          "text": "Respiración normal del recién nacido",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que 80 rpm es normal."
+        },
+        {
+          "key": "d",
+          "text": "Hipertensión pulmonar persistente",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente y más grave."
+        },
+        {
+          "key": "e",
+          "text": "Hernia diafragmática",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a dificultad respiratoria neonatal, pero da asas en tórax."
+        },
+        {
+          "key": "f",
+          "text": "Neumotórax espontáneo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta el líquido en cisuras."
+        },
+        {
+          "key": "g",
+          "text": "Neumonía neonatal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la taquipnea, pero mejora rápido sin datos infecciosos."
+        },
+        {
+          "key": "h",
+          "text": "Sepsis temprana",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la taquipnea."
+        },
+        {
+          "key": "i",
+          "text": "Taquipnea transitoria del recién nacido",
+          "correct": true,
+          "rationale": "Retención de líquido pulmonar fetal tras cesárea sin trabajo de parto."
+        },
+        {
+          "key": "j",
+          "text": "Cardiopatía congénita",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye sin datos cardiacos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "i"
+      ],
+      "explanation": "La taquipnea transitoria del recién nacido se debe a la reabsorción lenta del líquido pulmonar fetal. Es más frecuente en recién nacidos de término o pretérmino tardío nacidos por cesárea, sobre todo sin trabajo de parto, hijos de madre diabética o asmática y macrosómicos. Se presenta en las primeras horas con taquipnea, retracciones leves y requerimiento bajo de oxígeno. La radiografía muestra líquido en las cisuras, trama vascular prominente e hiperinsuflación. Es autolimitada y mejora en 24 a 72 horas. El tratamiento es de soporte con oxígeno si es necesario y alimentación cuidadosa mientras persiste la taquipnea.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la taquipnea transitoria del recién nacido"
+      ]
+    },
+    {
+      "key": "ped-01a-neonatologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_respiratory_distress",
+      "vignette": "Recién nacido de 42 semanas con líquido amniótico meconial espeso. Al nacer presenta dificultad respiratoria grave, tórax en tonel y cianosis. La radiografía muestra infiltrados gruesos en parches con zonas de hiperinsuflación.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de aspiración de meconio",
+          "correct": true,
+          "rationale": "Postérmino con líquido meconial, dificultad grave e infiltrados en parches con atrapamiento de aire."
+        },
+        {
+          "key": "b",
+          "text": "Hernia diafragmática",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay asas en el tórax."
+        },
+        {
+          "key": "c",
+          "text": "Displasia broncopulmonar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a enfermedad pulmonar neonatal, pero es crónica."
+        },
+        {
+          "key": "d",
+          "text": "Cardiopatía congénita cianógena",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye sin explicar el antecedente de meconio."
+        },
+        {
+          "key": "e",
+          "text": "Hipoglucemia neonatal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta los hallazgos respiratorios."
+        },
+        {
+          "key": "f",
+          "text": "Neumonía por estreptococo del grupo B",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede dar infiltrados, pero el meconio espeso orienta a aspiración."
+        },
+        {
+          "key": "g",
+          "text": "Deficiencia de surfactante",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la dificultad respiratoria, pero ocurre en prematuros."
+        },
+        {
+          "key": "h",
+          "text": "Atresia de esófago",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la dificultad, sin datos de atresia."
+        },
+        {
+          "key": "i",
+          "text": "Taquipnea transitoria del recién nacido",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es leve y no tiene este patrón radiográfico."
+        },
+        {
+          "key": "j",
+          "text": "Reacción normal al parto prolongado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que es esperado."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "El síndrome de aspiración de meconio ocurre en recién nacidos de término o postérmino, sobre todo con sufrimiento fetal, que aspiran líquido amniótico teñido de meconio antes o durante el nacimiento. El meconio obstruye la vía aérea, causando atrapamiento de aire, inactiva el surfactante y produce neumonitis química. Se manifiesta con dificultad respiratoria grave, tórax hiperinsuflado y cianosis. La radiografía muestra infiltrados gruesos en parches con zonas de hiperinsuflación y puede haber neumotórax. Se complica con hipertensión pulmonar persistente. El tratamiento es de soporte, con oxígeno, ventilación, surfactante y, en casos graves, óxido nítrico inhalado.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de aspiración de meconio"
+      ]
+    },
+    {
+      "key": "ped-01a-neonatologia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_sepsis",
+      "vignette": "Recién nacido de término de 12 horas con hipotermia, letargo, rechazo al alimento y dificultad respiratoria. La madre tuvo ruptura de membranas 26 horas antes del parto, fiebre intraparto y cultivo vaginal positivo para estreptococo del grupo B sin profilaxis.",
+      "prompt": "¿Cuál es el factor de riesgo más importante de su cuadro?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "El frío del quirófano",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la hipotermia es la causa y no un signo."
+        },
+        {
+          "key": "b",
+          "text": "Sexo masculino como único factor",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumenta levemente el riesgo, pero no es el principal."
+        },
+        {
+          "key": "c",
+          "text": "Visitas familiares",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La sepsis temprana es de origen materno."
+        },
+        {
+          "key": "d",
+          "text": "Infección por Listeria como causa más probable",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente que el estreptococo del grupo B."
+        },
+        {
+          "key": "e",
+          "text": "Nacimiento por parto vaginal en sí",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es el factor principal."
+        },
+        {
+          "key": "f",
+          "text": "Colonización materna por estreptococo del grupo B sin profilaxis intraparto, con ruptura prolongada de membranas y fiebre materna",
+          "correct": true,
+          "rationale": "Son factores de sepsis neonatal temprana."
+        },
+        {
+          "key": "g",
+          "text": "Peso adecuado al nacer",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es factor."
+        },
+        {
+          "key": "h",
+          "text": "Ictericia fisiológica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en otro hallazgo."
+        },
+        {
+          "key": "i",
+          "text": "Lactancia materna exclusiva",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la alimentación, que protege."
+        },
+        {
+          "key": "j",
+          "text": "Baño temprano del recién nacido",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a exposición, sin relación."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "La sepsis neonatal temprana aparece en las primeras 72 horas de vida y se adquiere por transmisión vertical. Sus principales agentes son el estreptococo del grupo B y Escherichia coli. Los factores de riesgo incluyen colonización materna por estreptococo del grupo B sin profilaxis adecuada, ruptura prolongada de membranas de 18 horas o más, fiebre materna o corioamnionitis, prematurez y bajo peso. Las manifestaciones son inespecíficas, como inestabilidad térmica, letargo, rechazo al alimento, dificultad respiratoria, apnea e hipotensión. Se toman hemocultivos y se inicia ampicilina con gentamicina de forma empírica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la sepsis neonatal"
+      ]
+    },
+    {
+      "key": "ped-01a-neonatologia-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_sepsis",
+      "vignette": "Recién nacido de 2 días con sospecha de sepsis neonatal temprana. Se tomaron hemocultivos. Función renal normal. Sin datos de meningitis.",
+      "prompt": "¿Cuál es el tratamiento antibiótico empírico de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tres antibióticos de amplio espectro en todos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Sin indicación."
+        },
+        {
+          "key": "b",
+          "text": "Ceftriaxona sola",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Desplaza la bilirrubina y no cubre Listeria."
+        },
+        {
+          "key": "c",
+          "text": "Esperar el hemocultivo antes de iniciar antibióticos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena preciso, pero retrasa el tratamiento."
+        },
+        {
+          "key": "d",
+          "text": "Fluconazol empírico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Los hongos son causa de sepsis tardía en prematuros."
+        },
+        {
+          "key": "e",
+          "text": "Ampicilina con gentamicina intravenosas",
+          "correct": true,
+          "rationale": "Cubren estreptococo del grupo B, Listeria y bacilos gramnegativos."
+        },
+        {
+          "key": "f",
+          "text": "Observación en cunero sin antibióticos",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Riesgo de muerte."
+        },
+        {
+          "key": "g",
+          "text": "Vancomicina con meropenem de inicio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la gravedad con espectro excesivo."
+        },
+        {
+          "key": "h",
+          "text": "Penicilina benzatínica intramuscular",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que trata la sepsis neonatal."
+        },
+        {
+          "key": "i",
+          "text": "Amoxicilina oral",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La vía oral no es adecuada en sepsis."
+        },
+        {
+          "key": "j",
+          "text": "Evitar la gentamicina por miedo a ototoxicidad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Con dosis ajustadas el beneficio supera el riesgo."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "El tratamiento empírico de la sepsis neonatal temprana es la combinación de ampicilina y un aminoglucósido, generalmente gentamicina, que cubre estreptococo del grupo B, Listeria monocytogenes y bacilos gramnegativos como Escherichia coli. Si se sospecha meningitis se agrega o sustituye por cefotaxima, evitando la ceftriaxona en recién nacidos por el riesgo de desplazar la bilirrubina y precipitar con calcio. El tratamiento se ajusta según los cultivos y se suspende a las 36 a 48 horas si los cultivos son negativos y el bebé está bien. En la sepsis tardía hospitalaria se cubren estafilococos y gramnegativos resistentes.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la sepsis neonatal"
+      ]
+    },
+    {
+      "key": "ped-01a-neonatologia-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "neonatology",
+      "subtopic": "neonatal_sepsis",
+      "vignette": "Mujer de 36 semanas de embarazo con cultivo rectovaginal positivo para estreptococo del grupo B. No tiene alergia a la penicilina.",
+      "prompt": "¿Cuál es la medida de prevención indicada para evitar sepsis neonatal temprana?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Antibiótico oral durante el tercer trimestre",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No erradica la colonización al momento del parto."
+        },
+        {
+          "key": "b",
+          "text": "Cesárea electiva para evitar el contacto",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en evitar el canal vaginal, sin beneficio demostrado."
+        },
+        {
+          "key": "c",
+          "text": "Antibiótico al recién nacido en todos los casos sin profilaxis materna",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena preventivo, pero la profilaxis materna es la medida eficaz."
+        },
+        {
+          "key": "d",
+          "text": "Inmunoglobulina al recién nacido",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es la medida estándar."
+        },
+        {
+          "key": "e",
+          "text": "Penicilina o ampicilina intravenosa intraparto, iniciada al menos 4 horas antes del nacimiento",
+          "correct": true,
+          "rationale": "La profilaxis intraparto reduce la sepsis temprana por estreptococo del grupo B."
+        },
+        {
+          "key": "f",
+          "text": "Ninguna medida porque la madre está sana",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "La colonización es asintomática."
+        },
+        {
+          "key": "g",
+          "text": "Lavados vaginales con antiséptico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No han demostrado beneficio."
+        },
+        {
+          "key": "h",
+          "text": "Evitar la lactancia materna",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No tiene relación."
+        },
+        {
+          "key": "i",
+          "text": "Evitar antibiótico intraparto por miedo a resistencias",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pierde un beneficio claro."
+        },
+        {
+          "key": "j",
+          "text": "Vacuna contra estreptococo del grupo B",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está disponible de rutina."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "e"
+      ],
+      "explanation": "La profilaxis antibiótica intraparto es la principal medida para prevenir la sepsis neonatal temprana por estreptococo del grupo B. Se indica en mujeres con cultivo rectovaginal positivo entre las 36 y 37 semanas, bacteriuria por estreptococo del grupo B en el embarazo actual, hijo previo con enfermedad invasiva, o estado desconocido con factores de riesgo como parto pretérmino, ruptura de membranas de 18 horas o más o fiebre intraparto. El fármaco de elección es penicilina G o ampicilina intravenosa, iniciada al menos cuatro horas antes del nacimiento. En alergia sin riesgo de anafilaxia se usa cefazolina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la sepsis neonatal"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1982 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "gyo-08-oncologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "cervical_cancer",
+      "vignette": "Mujer de 48 años con inicio de vida sexual a los 15 años, múltiples parejas y sin citologías previas. Presenta sangrado poscoital y flujo fétido de 4 meses. En la especuloscopia se observa una lesión exofítica friable de 3 cm en el cérvix que sangra al contacto.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ectropión cervical",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es plano sin masa."
+        },
+        {
+          "key": "b",
+          "text": "Pólipo endocervical benigno",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es liso y pediculado."
+        },
+        {
+          "key": "c",
+          "text": "Sangrado por hormonas de la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La lesión visible exige biopsia."
+        },
+        {
+          "key": "d",
+          "text": "Condiloma cervical",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No suele ser friable de 3 cm con sangrado."
+        },
+        {
+          "key": "e",
+          "text": "Cáncer cervicouterino",
+          "correct": true,
+          "rationale": "Sangrado poscoital con lesión cervical exofítica friable en una mujer sin tamizaje."
+        },
+        {
+          "key": "f",
+          "text": "Endometriosis cervical",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es rara y sin masa friable."
+        },
+        {
+          "key": "g",
+          "text": "Mioma pediculado parido",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es liso, firme y sale por el orificio."
+        },
+        {
+          "key": "h",
+          "text": "Cáncer de endometrio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El origen de la lesión es el cérvix."
+        },
+        {
+          "key": "i",
+          "text": "Tricomoniasis con cérvix en fresa",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No da masa exofítica."
+        },
+        {
+          "key": "j",
+          "text": "Cervicitis crónica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la masa exofítica friable."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "El cáncer cervicouterino es una de las principales causas de muerte por cáncer en mujeres mexicanas. Su causa necesaria es la infección persistente por virus del papiloma humano de alto riesgo. Los factores de riesgo son inicio temprano de la vida sexual, múltiples parejas, tabaquismo, multiparidad, inmunosupresión y falta de tamizaje. En etapas tempranas es asintomático, y después causa sangrado poscoital o intermenstrual, flujo fétido y dolor pélvico. Ante una lesión visible se realiza biopsia directa, sin necesidad de citología. El tipo histológico más frecuente es el carcinoma epidermoide, seguido del adenocarcinoma.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer cervicouterino",
+        "Norma Oficial Mexicana para la prevención, detección, diagnóstico, tratamiento y control del cáncer del cuello del útero"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "cervical_cancer",
+      "vignette": "Mujer de 45 años con una lesión cervical exofítica visible de 2 cm que sangra al contacto. Su última citología fue hace 10 años.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tomar citología y esperar el resultado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La citología puede ser falsamente negativa en lesiones grandes."
+        },
+        {
+          "key": "b",
+          "text": "Óvulos vaginales para desinflamar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es adecuado."
+        },
+        {
+          "key": "c",
+          "text": "Histerectomía sin diagnóstico histológico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Requiere confirmar y estadificar antes."
+        },
+        {
+          "key": "d",
+          "text": "Prueba de virus del papiloma como único estudio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No sustituye a la biopsia de una lesión visible."
+        },
+        {
+          "key": "e",
+          "text": "Crioterapia de la lesión",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Está contraindicada ante sospecha de cáncer."
+        },
+        {
+          "key": "f",
+          "text": "Repetir la exploración en 6 meses",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Retrasa el diagnóstico."
+        },
+        {
+          "key": "g",
+          "text": "No biopsiar para no causar sangrado",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El diagnóstico es prioritario."
+        },
+        {
+          "key": "h",
+          "text": "Biopsia directa de la lesión",
+          "correct": true,
+          "rationale": "Toda lesión cervical macroscópica sospechosa requiere biopsia."
+        },
+        {
+          "key": "i",
+          "text": "Tratar como cervicitis con antibióticos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retrasa el diagnóstico de cáncer."
+        },
+        {
+          "key": "j",
+          "text": "Tomografía por emisión de positrones antes de la biopsia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Primero se confirma el diagnóstico."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "h"
+      ],
+      "explanation": "Ante una lesión cervical visible sospechosa de cáncer se realiza biopsia directa de la lesión, ya que la citología tiene alta tasa de falsos negativos en tumores grandes por necrosis e inflamación. Una vez confirmado el diagnóstico se estadifica con la clasificación de la FIGO, que combina exploración clínica, estudios de imagen como resonancia magnética de pelvis y tomografía, y hallazgos patológicos. La crioterapia y la ablación están contraindicadas ante sospecha de cáncer invasor. El tratamiento depende de la etapa, con cirugía en etapas tempranas y quimiorradiación en etapas localmente avanzadas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer cervicouterino"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "cervical_cancer",
+      "vignette": "Mujer de 50 años con carcinoma epidermoide de cérvix etapa IIB por extensión a parametrios sin llegar a la pared pélvica, sin hidronefrosis ni metástasis a distancia.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Quimiorradioterapia concomitante con cisplatino y braquiterapia",
+          "correct": true,
+          "rationale": "Es el estándar en enfermedad localmente avanzada."
+        },
+        {
+          "key": "b",
+          "text": "Cono cervical",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es para lesiones preinvasoras o microinvasoras."
+        },
+        {
+          "key": "c",
+          "text": "Quimioterapia sola sin radioterapia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es inferior."
+        },
+        {
+          "key": "d",
+          "text": "Histerectomía extrafascial simple",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es adecuada para cáncer invasor."
+        },
+        {
+          "key": "e",
+          "text": "Terapia hormonal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "f",
+          "text": "Tratamiento herbolario",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "g",
+          "text": "Exenteración pélvica primaria",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para recurrencias centrales."
+        },
+        {
+          "key": "h",
+          "text": "Retrasar el tratamiento para estudios adicionales innecesarios",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El retraso empeora el pronóstico."
+        },
+        {
+          "key": "i",
+          "text": "Solo cuidados paliativos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La enfermedad es potencialmente curable."
+        },
+        {
+          "key": "j",
+          "text": "Histerectomía radical como único tratamiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La afección parametrial contraindica la cirugía primaria."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "El tratamiento del cáncer cervicouterino depende de la etapa. Las lesiones microinvasoras IA1 se tratan con cono o histerectomía simple. Las etapas IA2 a IB2 y algunas IIA se tratan con histerectomía radical con linfadenectomía pélvica o con radioterapia. Las etapas localmente avanzadas, IB3, IIA2, IIB, III y IVA, se tratan con quimiorradioterapia concomitante con cisplatino semanal, radioterapia externa y braquiterapia. La etapa IVB se trata con quimioterapia sistémica y cuidados paliativos. La afección parametrial es la característica de la etapa IIB.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer cervicouterino"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "cervical_cancer",
+      "vignette": "Mujer de 55 años con cáncer cervicouterino avanzado no tratado que presenta oliguria, náusea, edema y creatinina de 6.2 mg/dL. El ultrasonido muestra hidronefrosis bilateral.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Nefrotoxicidad por cisplatino",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No ha recibido tratamiento."
+        },
+        {
+          "key": "b",
+          "text": "Litiasis renal bilateral",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable en este contexto."
+        },
+        {
+          "key": "c",
+          "text": "Deshidratación prerrenal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la hidronefrosis bilateral."
+        },
+        {
+          "key": "d",
+          "text": "Hipercalcemia maligna aislada",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la hidronefrosis."
+        },
+        {
+          "key": "e",
+          "text": "Infección urinaria baja",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la falla renal con hidronefrosis."
+        },
+        {
+          "key": "f",
+          "text": "Insuficiencia renal posrenal por obstrucción ureteral bilateral tumoral",
+          "correct": true,
+          "rationale": "La extensión a la pared pélvica obstruye los uréteres."
+        },
+        {
+          "key": "g",
+          "text": "Glomerulonefritis paraneoplásica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la hidronefrosis."
+        },
+        {
+          "key": "h",
+          "text": "Insuficiencia cardiaca con hipoperfusión renal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la hidronefrosis."
+        },
+        {
+          "key": "i",
+          "text": "Retención de líquidos por la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay obstrucción urinaria."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome nefrótico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la obstrucción."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "g"
+      ],
+      "explanation": "La obstrucción ureteral por extensión del tumor a la pared pélvica o a los parametrios es una complicación del cáncer cervicouterino avanzado y define la etapa IIIB cuando produce hidronefrosis o riñón no funcional. La uremia es una causa importante de muerte en estas pacientes. Se manifiesta con oliguria, edema, náusea y elevación de azoados, con hidronefrosis en el ultrasonido. El manejo incluye derivación urinaria con nefrostomía percutánea o catéteres ureterales para preservar la función renal, y tratamiento oncológico según la etapa y el estado general.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer cervicouterino"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "cervical_cancer",
+      "vignette": "Niña de 11 años en quinto grado de primaria. Su madre pregunta cuál es la medida más eficaz para prevenir el cáncer cervicouterino en el futuro.",
+      "prompt": "¿Cuál es la medida de prevención primaria más eficaz?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Colposcopia anual desde la adolescencia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es una medida de prevención primaria."
+        },
+        {
+          "key": "b",
+          "text": "Lavados vaginales frecuentes",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No previenen."
+        },
+        {
+          "key": "c",
+          "text": "Vacunación contra el virus del papiloma humano antes del inicio de la vida sexual",
+          "correct": true,
+          "rationale": "Previene la infección por los tipos de alto riesgo."
+        },
+        {
+          "key": "d",
+          "text": "Esperar a la edad adulta para vacunar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La eficacia es mayor antes de la exposición."
+        },
+        {
+          "key": "e",
+          "text": "Histerectomía preventiva",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "f",
+          "text": "No vacunar por miedo a efectos adversos raros",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es segura y eficaz."
+        },
+        {
+          "key": "g",
+          "text": "Antibióticos profilácticos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No previenen una infección viral."
+        },
+        {
+          "key": "h",
+          "text": "La vacuna promueve la promiscuidad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No hay evidencia."
+        },
+        {
+          "key": "i",
+          "text": "Vacunar solo a niñas con riesgo alto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se recomienda a todas."
+        },
+        {
+          "key": "j",
+          "text": "Citología anual desde los 11 años",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El tamizaje inicia en la edad adulta."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La prevención primaria del cáncer cervicouterino es la vacunación contra el virus del papiloma humano, que es más eficaz cuando se aplica antes del inicio de la vida sexual. En México se aplica a niñas y niños de quinto de primaria o de 11 años, con la ampliación reciente a varones. Las vacunas disponibles protegen contra los tipos 16 y 18, responsables de 70% de los cánceres, y la nonavalente contra otros cinco tipos de alto riesgo. La prevención secundaria es el tamizaje con prueba de virus y citología. Ambas estrategias se complementan.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención, detección, diagnóstico, tratamiento y control del cáncer del cuello del útero",
+        "Secretaría de Salud. Esquema nacional de vacunación"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "cervical_cancer",
+      "vignette": "Mujer de 38 años con cáncer cervicouterino. Tiene infección por virus de la inmunodeficiencia humana desde hace 10 años con mal apego al tratamiento, fuma 20 cigarros al día y tiene 5 hijos.",
+      "prompt": "¿Cuál es el factor de riesgo más importante que favoreció la persistencia del virus del papiloma en esta paciente?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Uso de anticonceptivos de barrera",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Son protectores."
+        },
+        {
+          "key": "b",
+          "text": "Consumo de café",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "c",
+          "text": "Uso de ropa interior ajustada",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "d",
+          "text": "Vacunación contra hepatitis B",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "e",
+          "text": "Grupo sanguíneo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "f",
+          "text": "Inmunosupresión por infección por virus de la inmunodeficiencia humana mal controlada",
+          "correct": true,
+          "rationale": "La inmunosupresión impide eliminar el virus del papiloma."
+        },
+        {
+          "key": "g",
+          "text": "Edad de 38 años como factor principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es el factor principal."
+        },
+        {
+          "key": "h",
+          "text": "Menarca tardía",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es un factor relevante."
+        },
+        {
+          "key": "i",
+          "text": "Ejercicio intenso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "j",
+          "text": "Dieta vegetariana",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un factor."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "g"
+      ],
+      "explanation": "La infección por virus del papiloma humano es necesaria pero no suficiente para el cáncer cervicouterino, ya que la mayoría de las infecciones se eliminan. Los cofactores que favorecen la persistencia y la progresión son la inmunosupresión, sobre todo por virus de la inmunodeficiencia humana o trasplante, el tabaquismo, la multiparidad, el uso prolongado de anticonceptivos orales, la coinfección por clamidia y el inicio temprano de la vida sexual. Las mujeres con virus de la inmunodeficiencia humana tienen mayor riesgo y progresión más rápida, por lo que requieren tamizaje más frecuente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención y detección oportuna del cáncer cervicouterino"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "cervical_cancer",
+      "vignette": "Mujer de 36 años con prueba de virus del papiloma humano positiva para el tipo 16 y citología negativa en su tamizaje de rutina.",
+      "prompt": "¿Qué indica este resultado y su manejo?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Alto riesgo de lesión precursora oculta que requiere colposcopia directa",
+          "correct": true,
+          "rationale": "Los tipos 16 y 18 positivos ameritan colposcopia aunque la citología sea negativa."
+        },
+        {
+          "key": "b",
+          "text": "Cono cervical inmediato sin colposcopia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Primero se realiza colposcopia."
+        },
+        {
+          "key": "c",
+          "text": "Tratamiento antiviral oral",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No existe tratamiento antiviral eficaz."
+        },
+        {
+          "key": "d",
+          "text": "La pareja le fue infiel con seguridad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La infección puede ser antigua."
+        },
+        {
+          "key": "e",
+          "text": "Cáncer invasor confirmado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay diagnóstico de cáncer."
+        },
+        {
+          "key": "f",
+          "text": "Histerectomía preventiva",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "g",
+          "text": "Repetir la prueba en 5 años",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es demasiado tiempo para un tipo 16 positivo."
+        },
+        {
+          "key": "h",
+          "text": "Resultado falso positivo sin seguimiento",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Debe evaluarse."
+        },
+        {
+          "key": "i",
+          "text": "Infección que siempre progresa a cáncer",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La mayoría no progresa, pero requiere vigilancia."
+        },
+        {
+          "key": "j",
+          "text": "Resultado tranquilizador porque la citología es negativa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El tipo 16 tiene alto riesgo de lesión."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "En el tamizaje con prueba de virus del papiloma humano, un resultado positivo para los tipos 16 o 18 indica alto riesgo de neoplasia intraepitelial de alto grado incluso con citología negativa, por lo que se envía directamente a colposcopia. Si la prueba es positiva para otros tipos de alto riesgo se usa la citología para decidir, con colposcopia si es anormal y repetición de la prueba en un año si es normal. Es importante explicar que la infección es muy común, que puede ser antigua y que no implica infidelidad, para evitar estigma.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención y detección oportuna del cáncer cervicouterino"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "cervical_cancer",
+      "vignette": "Mujer de 42 años con cáncer cervicouterino etapa IB1 tratada con histerectomía radical. Pregunta cuál es el factor que más influye en su pronóstico.",
+      "prompt": "¿Cuál es el principal factor pronóstico en el cáncer cervicouterino?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "El número de parejas sexuales previas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Influye en el riesgo, no en el pronóstico."
+        },
+        {
+          "key": "b",
+          "text": "La vía del parto de sus hijos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un factor pronóstico."
+        },
+        {
+          "key": "c",
+          "text": "El tipo de anticonceptivo usado previamente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es un factor pronóstico."
+        },
+        {
+          "key": "d",
+          "text": "La vacunación previa contra hepatitis B",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No influye."
+        },
+        {
+          "key": "e",
+          "text": "La actitud positiva como único factor",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No sustituye al factor biológico."
+        },
+        {
+          "key": "f",
+          "text": "El grupo sanguíneo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es un factor pronóstico."
+        },
+        {
+          "key": "g",
+          "text": "La etapa clínica al diagnóstico, incluida la afección ganglionar",
+          "correct": true,
+          "rationale": "La etapa es el determinante más importante de la supervivencia."
+        },
+        {
+          "key": "h",
+          "text": "El tipo de sutura usada en la cirugía",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No influye."
+        },
+        {
+          "key": "i",
+          "text": "La edad de la menarca",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es un factor pronóstico."
+        },
+        {
+          "key": "j",
+          "text": "El índice de masa corporal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es el factor principal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "El principal factor pronóstico del cáncer cervicouterino es la etapa al diagnóstico. La supervivencia a 5 años supera 90% en las etapas tempranas y disminuye de forma importante en las avanzadas. La afección de ganglios linfáticos es otro factor pronóstico fundamental. Otros factores son el tamaño tumoral, la profundidad de invasión estromal, la invasión del espacio linfovascular, los márgenes quirúrgicos y la afección parametrial. Estos factores determinan si se requiere tratamiento adyuvante con radioterapia o quimiorradioterapia después de la cirugía. El tamizaje permite detectar el cáncer en etapas tempranas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer cervicouterino"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "breast_cancer",
+      "vignette": "Mujer de 45 años sin antecedentes familiares de cáncer de mama, asintomática, que acude a consulta preventiva.",
+      "prompt": "¿Cuál es el estudio de tamizaje de cáncer de mama indicado a esta edad?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Mastografía de tamizaje cada 2 años a partir de los 40 años",
+          "correct": true,
+          "rationale": "Es el estudio que reduce la mortalidad por cáncer de mama."
+        },
+        {
+          "key": "b",
+          "text": "Resonancia magnética anual en todas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se reserva para alto riesgo."
+        },
+        {
+          "key": "c",
+          "text": "Mastografía solo a partir de los 60 años",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se inicia antes."
+        },
+        {
+          "key": "d",
+          "text": "Biopsia mamaria de rutina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es un estudio de tamizaje."
+        },
+        {
+          "key": "e",
+          "text": "Ningún estudio si la autoexploración es normal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La autoexploración no sustituye a la mastografía."
+        },
+        {
+          "key": "f",
+          "text": "Esperar a sentir una bolita para estudiarse",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Llega tarde."
+        },
+        {
+          "key": "g",
+          "text": "Termografía",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un método de tamizaje validado."
+        },
+        {
+          "key": "h",
+          "text": "La mastografía causa cáncer por la radiación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El beneficio supera ampliamente el riesgo."
+        },
+        {
+          "key": "i",
+          "text": "Marcadores tumorales séricos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No sirven para tamizaje."
+        },
+        {
+          "key": "j",
+          "text": "Ultrasonido mamario como tamizaje único",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No sustituye a la mastografía."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "El cáncer de mama es la principal causa de muerte por cáncer en mujeres mexicanas. La normatividad mexicana recomienda la mastografía de tamizaje cada 2 años en mujeres de 40 a 69 años. La exploración clínica de mama por personal capacitado se recomienda anualmente a partir de los 25 años y la autoexploración mensual como medida de conciencia. El ultrasonido complementa la mastografía en mamas densas o en mujeres jóvenes con síntomas. En mujeres de alto riesgo, como portadoras de mutaciones BRCA, se inicia antes y se agrega resonancia magnética.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención, diagnóstico, tratamiento, control y vigilancia epidemiológica del cáncer de mama",
+        "Guía de Práctica Clínica de tamizaje y diagnóstico de cáncer de mama"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "breast_cancer",
+      "vignette": "Mujer de 52 años con mastografía de tamizaje que muestra una masa espiculada de 1.5 cm con microcalcificaciones pleomórficas en el cuadrante superior externo de la mama izquierda. Se reporta BI RADS 5.",
+      "prompt": "¿Qué indica esta categoría BI RADS y cuál es la conducta?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Estudio normal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La categoría 1 es negativa."
+        },
+        {
+          "key": "b",
+          "text": "Fibroadenoma típico",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es redondo, de bordes lisos."
+        },
+        {
+          "key": "c",
+          "text": "Hallazgo benigno sin seguimiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Esa es la categoría 2."
+        },
+        {
+          "key": "d",
+          "text": "Hallazgo probablemente benigno con control en 6 meses",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Esa es la categoría 3."
+        },
+        {
+          "key": "e",
+          "text": "Altamente sugestivo de malignidad, mayor de 95%, que requiere biopsia",
+          "correct": true,
+          "rationale": "Los hallazgos espiculados con microcalcificaciones son típicos de cáncer."
+        },
+        {
+          "key": "f",
+          "text": "Cáncer confirmado que va directo a quimioterapia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Requiere confirmación histológica."
+        },
+        {
+          "key": "g",
+          "text": "Quiste simple",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No tiene microcalcificaciones ni espículas."
+        },
+        {
+          "key": "h",
+          "text": "Mastectomía sin biopsia previa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Primero se confirma el diagnóstico."
+        },
+        {
+          "key": "i",
+          "text": "Repetir la mastografía en un año",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Retrasa el diagnóstico."
+        },
+        {
+          "key": "j",
+          "text": "Estudio incompleto que requiere más imágenes",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Esa es la categoría 0."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "f"
+      ],
+      "explanation": "El sistema BI RADS clasifica los hallazgos de imagen mamaria. La categoría 0 es incompleta y requiere estudios adicionales, la 1 es negativa, la 2 hallazgo benigno, la 3 probablemente benigno con riesgo menor de 2% y vigilancia a 6 meses, la 4 sospechosa con riesgo de 2 a 95% que requiere biopsia, la 5 altamente sugestiva de malignidad con riesgo mayor de 95% que requiere biopsia, y la 6 malignidad comprobada por biopsia. La biopsia con aguja de corte guiada por imagen es el método de elección para confirmar el diagnóstico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de tamizaje y diagnóstico de cáncer de mama"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "breast_cancer",
+      "vignette": "Mujer de 35 años cuya madre tuvo cáncer de mama a los 40 años y cuya tía materna tuvo cáncer de ovario a los 50. Pregunta por su riesgo de cáncer.",
+      "prompt": "¿Cuál es el factor de riesgo más relevante en esta paciente?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Uso de desodorante con aluminio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "b",
+          "text": "Implantes mamarios estéticos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No aumentan el riesgo de carcinoma."
+        },
+        {
+          "key": "c",
+          "text": "Uso de sostén con varilla",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "d",
+          "text": "Multiparidad temprana",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es protectora."
+        },
+        {
+          "key": "e",
+          "text": "Consumo de soya",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un factor de riesgo establecido."
+        },
+        {
+          "key": "f",
+          "text": "El estrés emocional como causa principal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es un factor establecido."
+        },
+        {
+          "key": "g",
+          "text": "Lactancia prolongada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es protectora."
+        },
+        {
+          "key": "h",
+          "text": "Mamas grandes",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El tamaño no es un factor."
+        },
+        {
+          "key": "i",
+          "text": "Traumatismo previo en la mama",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No causa cáncer."
+        },
+        {
+          "key": "j",
+          "text": "Posible síndrome hereditario de cáncer de mama y ovario por mutación de BRCA1 o BRCA2",
+          "correct": true,
+          "rationale": "La historia familiar de cáncer de mama temprano y de ovario sugiere mutación hereditaria."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "Alrededor de 5 a 10% de los cánceres de mama son hereditarios, principalmente por mutaciones de BRCA1 y BRCA2, que también aumentan el riesgo de cáncer de ovario. Se sospechan con cáncer de mama antes de los 45 a 50 años, cáncer de mama y ovario en la misma familia, cáncer bilateral, cáncer de mama en hombres, cáncer triple negativo en jóvenes o ascendencia judía askenazi. Estas pacientes deben recibir asesoramiento genético y estudio. Las portadoras requieren tamizaje temprano con resonancia y mastografía y pueden considerar cirugía reductora de riesgo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de tamizaje y diagnóstico de cáncer de mama"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "breast_cancer",
+      "vignette": "Mujer de 58 años con eczema descamativo, eritematoso y pruriginoso en el pezón y la areola derechos de 3 meses, con secreción serosanguinolenta ocasional. No mejoró con corticosteroide tópico. No se palpa masa.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Candidiasis del pezón",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se asocia a lactancia y responde a antifúngicos."
+        },
+        {
+          "key": "b",
+          "text": "Irritación por el roce del sostén",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica la persistencia."
+        },
+        {
+          "key": "c",
+          "text": "Enfermedad de Paget del pezón",
+          "correct": true,
+          "rationale": "Lesión eczematosa unilateral del pezón que no responde a tratamiento tópico."
+        },
+        {
+          "key": "d",
+          "text": "Carcinoma basocelular del pezón",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es muy raro."
+        },
+        {
+          "key": "e",
+          "text": "Ectasia ductal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da secreción espesa sin eczema."
+        },
+        {
+          "key": "f",
+          "text": "Dermatitis atópica del pezón",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Suele ser bilateral y responde a corticosteroides."
+        },
+        {
+          "key": "g",
+          "text": "Dermatitis de contacto por la ropa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Respondería al retiro y corticosteroides."
+        },
+        {
+          "key": "h",
+          "text": "Mastitis periductal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da inflamación y fístulas."
+        },
+        {
+          "key": "i",
+          "text": "Psoriasis del pezón",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Suele haber placas en otras zonas."
+        },
+        {
+          "key": "j",
+          "text": "Papiloma intraductal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da secreción sin lesión cutánea."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "La enfermedad de Paget del pezón es una forma de cáncer de mama en la que células adenocarcinomatosas infiltran la epidermis del pezón y la areola. Se manifiesta con lesión eczematosa, descamativa, eritematosa, con prurito, ardor o secreción, generalmente unilateral, que no responde a los tratamientos tópicos. En la mayoría se asocia a carcinoma ductal in situ o invasor subyacente, incluso sin masa palpable. Ante toda lesión eczematosa unilateral persistente del pezón se realiza biopsia de piel y mastografía. El tratamiento depende de la enfermedad subyacente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de mama"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "breast_cancer",
+      "vignette": "Mujer de 50 años posmenopáusica con carcinoma ductal invasor de mama de 2 cm, receptores de estrógenos y progesterona positivos, HER2 negativo, sin afección ganglionar. Ya se realizó tumorectomía con márgenes negativos y radioterapia.",
+      "prompt": "¿Cuál es el tratamiento adyuvante sistémico de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Trastuzumab",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se usa en tumores HER2 positivos."
+        },
+        {
+          "key": "b",
+          "text": "Mastectomía bilateral adicional",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "c",
+          "text": "Radioterapia de cuerpo entero",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "d",
+          "text": "Dieta alcalina como tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "e",
+          "text": "Terapia de reemplazo hormonal con estrógenos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Está contraindicada."
+        },
+        {
+          "key": "f",
+          "text": "Suspender la terapia por los bochornos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El beneficio supera las molestias."
+        },
+        {
+          "key": "g",
+          "text": "Progesterona sola en dosis altas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es el tratamiento estándar."
+        },
+        {
+          "key": "h",
+          "text": "Trasplante de médula ósea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "i",
+          "text": "Ningún tratamiento adicional",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Los tumores con receptores positivos se benefician de terapia hormonal."
+        },
+        {
+          "key": "j",
+          "text": "Terapia hormonal con inhibidor de aromatasa por al menos 5 años",
+          "correct": true,
+          "rationale": "El tumor es hormonosensible en una mujer posmenopáusica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "El tratamiento sistémico del cáncer de mama depende de los receptores hormonales, el HER2 y el riesgo. En tumores con receptores de estrógenos positivos se indica terapia endocrina adyuvante por al menos 5 años. En posmenopáusicas se prefieren los inhibidores de aromatasa, como anastrozol o letrozol, y en premenopáusicas el tamoxifeno, con o sin supresión ovárica. Los tumores HER2 positivos reciben trastuzumab. La quimioterapia se indica según el tamaño, los ganglios, el grado y las plataformas genómicas. Los inhibidores de aromatasa causan pérdida ósea, por lo que se vigila la densidad mineral.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de mama"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "breast_cancer",
+      "vignette": "Mujer de 48 años premenopáusica con cáncer de mama con receptores hormonales positivos que recibe tamoxifeno desde hace 3 años. Presenta sangrado uterino anormal.",
+      "prompt": "¿Cuál es la complicación que debe descartarse?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hiperplasia o cáncer de endometrio por efecto agonista del tamoxifeno en el útero",
+          "correct": true,
+          "rationale": "El tamoxifeno estimula el endometrio."
+        },
+        {
+          "key": "b",
+          "text": "Mioma uterino como única explicación sin estudio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe descartarse patología endometrial."
+        },
+        {
+          "key": "c",
+          "text": "Recurrencia mamaria en el útero",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es la complicación característica."
+        },
+        {
+          "key": "d",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es una complicación del tamoxifeno."
+        },
+        {
+          "key": "e",
+          "text": "Osteoporosis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El tamoxifeno protege el hueso en posmenopáusicas."
+        },
+        {
+          "key": "f",
+          "text": "Cáncer cervicouterino por tamoxifeno",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es la asociación."
+        },
+        {
+          "key": "g",
+          "text": "Cáncer de ovario por tamoxifeno",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es la asociación principal."
+        },
+        {
+          "key": "h",
+          "text": "Embarazo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Debe descartarse, pero la complicación buscada es endometrial."
+        },
+        {
+          "key": "i",
+          "text": "Menstruación irregular por la edad sin estudios",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere evaluación."
+        },
+        {
+          "key": "j",
+          "text": "Efecto normal del tratamiento sin necesidad de estudio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Todo sangrado anormal debe estudiarse."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "El tamoxifeno es un modulador selectivo del receptor de estrógenos con efecto antiestrogénico en la mama y agonista en el endometrio y el hueso. Se asocia a mayor riesgo de pólipos, hiperplasia y cáncer de endometrio, sobre todo en posmenopáusicas, así como a trombosis venosa y bochornos. Todo sangrado uterino anormal en una paciente que toma tamoxifeno debe estudiarse con ultrasonido transvaginal y biopsia endometrial o histeroscopia. Los inhibidores de aromatasa no tienen este efecto endometrial pero causan pérdida ósea y artralgias.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de mama"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "breast_cancer",
+      "vignette": "Mujer de 46 años con una masa dura, irregular y fija de 2.5 cm en el cuadrante superior externo de la mama derecha, con retracción de la piel y una adenopatía axilar ipsilateral palpable.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Termografía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un método diagnóstico validado."
+        },
+        {
+          "key": "b",
+          "text": "Masajes para disolver la bolita",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Retrasa el diagnóstico."
+        },
+        {
+          "key": "c",
+          "text": "Vigilancia clínica en 6 meses",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La masa es sospechosa."
+        },
+        {
+          "key": "d",
+          "text": "Marcadores tumorales séricos como diagnóstico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No confirman el cáncer."
+        },
+        {
+          "key": "e",
+          "text": "Esperar a la siguiente mastografía programada",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La masa requiere estudio inmediato."
+        },
+        {
+          "key": "f",
+          "text": "Mastectomía radical sin biopsia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Primero se confirma el diagnóstico."
+        },
+        {
+          "key": "g",
+          "text": "Antibióticos por posible mastitis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay datos de infección."
+        },
+        {
+          "key": "h",
+          "text": "Mastografía diagnóstica con ultrasonido y biopsia con aguja de corte de la masa y la adenopatía",
+          "correct": true,
+          "rationale": "Masa sospechosa que requiere confirmación histológica."
+        },
+        {
+          "key": "i",
+          "text": "Punción con aguja fina como único estudio definitivo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La biopsia con aguja de corte da más información."
+        },
+        {
+          "key": "j",
+          "text": "Tomografía por emisión de positrones antes del diagnóstico",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Primero se confirma el diagnóstico."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "Ante una masa mamaria palpable sospechosa se realiza evaluación triple con exploración clínica, imagen y biopsia. En mujeres mayores de 30 a 35 años se realiza mastografía diagnóstica y ultrasonido, y en menores el ultrasonido es el primer estudio. La biopsia con aguja de corte guiada por imagen es el método de elección, ya que permite el diagnóstico histológico y la determinación de receptores hormonales, HER2 y Ki 67. La adenopatía axilar sospechosa también se biopsia. La retracción de la piel, la fijación y la adenopatía son datos que sugieren malignidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de tamizaje y diagnóstico de cáncer de mama"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "endometrial_cancer",
+      "vignette": "Mujer de 62 años, posmenopáusica desde los 52, con obesidad, diabetes e hipertensión, que presenta sangrado vaginal de 3 semanas. El ultrasonido transvaginal muestra un endometrio de 14 mm.",
+      "prompt": "¿Cuál es el diagnóstico más probable que debe descartarse?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cáncer de endometrio",
+          "correct": true,
+          "rationale": "Sangrado posmenopáusico con endometrio engrosado y factores de riesgo metabólicos."
+        },
+        {
+          "key": "b",
+          "text": "Vaginitis atrófica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el endometrio engrosado."
+        },
+        {
+          "key": "c",
+          "text": "Mioma uterino",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica el endometrio engrosado posmenopáusico."
+        },
+        {
+          "key": "d",
+          "text": "Sarcoma uterino",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es mucho menos frecuente."
+        },
+        {
+          "key": "e",
+          "text": "Sangrado normal de la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Todo sangrado posmenopáusico es anormal."
+        },
+        {
+          "key": "f",
+          "text": "Menstruación tardía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No ocurre 10 años después de la menopausia."
+        },
+        {
+          "key": "g",
+          "text": "Pólipo cervical",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el engrosamiento endometrial."
+        },
+        {
+          "key": "h",
+          "text": "Infección urinaria con hematuria",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El sangrado es vaginal."
+        },
+        {
+          "key": "i",
+          "text": "Cáncer de ovario",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El sangrado y el endometrio orientan al útero."
+        },
+        {
+          "key": "j",
+          "text": "Atrofia endometrial",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El endometrio atrófico mide menos de 4 mm."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "El cáncer de endometrio es el cáncer ginecológico más frecuente en países desarrollados y su incidencia aumenta en México. La mayoría son adenocarcinomas endometrioides tipo 1, relacionados con exposición prolongada a estrógenos sin oposición. Los factores de riesgo son obesidad, diabetes, hipertensión, nuliparidad, menarca temprana, menopausia tardía, anovulación crónica, tamoxifeno y síndrome de Lynch. El síntoma principal es el sangrado posmenopáusico, que permite el diagnóstico en etapas tempranas. Un endometrio de más de 4 mm en una posmenopáusica con sangrado requiere biopsia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de endometrio"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "endometrial_cancer",
+      "vignette": "Mujer de 58 años con sangrado posmenopáusico y endometrio de 9 mm por ultrasonido transvaginal.",
+      "prompt": "¿Cuál es el estudio de elección para confirmar el diagnóstico?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Repetir el ultrasonido en 6 meses",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Retrasa el diagnóstico."
+        },
+        {
+          "key": "b",
+          "text": "Histerectomía sin diagnóstico previo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se requiere confirmar antes."
+        },
+        {
+          "key": "c",
+          "text": "Diagnóstico por la clínica sin biopsia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere confirmación."
+        },
+        {
+          "key": "d",
+          "text": "Tomografía de abdomen y pelvis como diagnóstico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Valora extensión, no confirma."
+        },
+        {
+          "key": "e",
+          "text": "Tomografía por emisión de positrones",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estudio diagnóstico."
+        },
+        {
+          "key": "f",
+          "text": "Biopsia endometrial por aspiración o histeroscopia con biopsia dirigida",
+          "correct": true,
+          "rationale": "El diagnóstico requiere estudio histológico."
+        },
+        {
+          "key": "g",
+          "text": "Marcador CA 125",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No confirma el diagnóstico."
+        },
+        {
+          "key": "h",
+          "text": "Perfil hormonal completo",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No confirma."
+        },
+        {
+          "key": "i",
+          "text": "Citología cervical",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tiene baja sensibilidad para el endometrio."
+        },
+        {
+          "key": "j",
+          "text": "Colposcopia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Valora el cérvix."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "Ante sangrado posmenopáusico con endometrio mayor de 4 mm, o con sangrado persistente aunque el endometrio sea delgado, se requiere estudio histológico. La biopsia endometrial por aspiración con cánula de Pipelle es ambulatoria y tiene alta sensibilidad. Si es insuficiente, negativa con sospecha persistente o hay lesión focal, se realiza histeroscopia con biopsia dirigida o dilatación y legrado. La citología cervical no es útil para diagnosticar cáncer de endometrio. Una vez confirmado se estadifica de forma quirúrgica según la FIGO con apoyo de resonancia magnética.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de endometrio"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "endometrial_cancer",
+      "vignette": "Mujer de 60 años con adenocarcinoma endometrioide de endometrio grado 1 confirmado por biopsia, sin evidencia de extensión fuera del útero en la resonancia.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Progestágenos orales como único tratamiento en posmenopáusica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se reservan para preservar fertilidad en jóvenes."
+        },
+        {
+          "key": "b",
+          "text": "Legrado repetido",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No trata el cáncer."
+        },
+        {
+          "key": "c",
+          "text": "Exenteración pélvica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "d",
+          "text": "Terapia hormonal con estrógenos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Está contraindicada."
+        },
+        {
+          "key": "e",
+          "text": "Quimioterapia sola",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es el tratamiento inicial."
+        },
+        {
+          "key": "f",
+          "text": "Ablación endometrial",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No trata el cáncer."
+        },
+        {
+          "key": "g",
+          "text": "Histerectomía total con salpingooforectomía bilateral y estadificación quirúrgica con ganglio centinela",
+          "correct": true,
+          "rationale": "Es el tratamiento estándar y permite estadificar."
+        },
+        {
+          "key": "h",
+          "text": "Histerectomía supracervical conservando ovarios",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es adecuada."
+        },
+        {
+          "key": "i",
+          "text": "Vigilancia sin tratamiento por la edad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El cáncer requiere tratamiento."
+        },
+        {
+          "key": "j",
+          "text": "Radioterapia sola como primera opción en una paciente operable",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La cirugía es el estándar."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "El tratamiento estándar del cáncer de endometrio en etapa temprana es la histerectomía total con salpingooforectomía bilateral y estadificación quirúrgica, idealmente por vía laparoscópica, con biopsia de ganglio centinela o linfadenectomía según el riesgo. La estadificación de la FIGO es quirúrgica. El tratamiento adyuvante con braquiterapia, radioterapia o quimioterapia depende de la etapa, el grado, el tipo histológico, la invasión miometrial y la clasificación molecular. En mujeres jóvenes con enfermedad de bajo grado y deseo de fertilidad pueden usarse progestágenos con vigilancia estrecha.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de endometrio"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q19",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "endometrial_cancer",
+      "vignette": "Mujer de 55 años con cáncer de endometrio. Tiene índice de masa corporal de 38, ciclos anovulatorios desde joven por síndrome de ovario poliquístico, nunca se embarazó y su menopausia fue a los 56 años.",
+      "prompt": "¿Cuál es el mecanismo de riesgo común de estos factores?",
+      "polarity": "affirmative",
+      "task": "mechanism",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Infección por virus del papiloma humano",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se asocia a cáncer cervicouterino."
+        },
+        {
+          "key": "b",
+          "text": "Multiparidad",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es protectora."
+        },
+        {
+          "key": "c",
+          "text": "Uso de anticonceptivos orales combinados",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Son protectores."
+        },
+        {
+          "key": "d",
+          "text": "Exposición a radiación ionizante",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es el mecanismo principal."
+        },
+        {
+          "key": "e",
+          "text": "Comer mucha carne roja como causa principal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El mecanismo principal es hormonal."
+        },
+        {
+          "key": "f",
+          "text": "Exceso de progesterona",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La progesterona es protectora."
+        },
+        {
+          "key": "g",
+          "text": "Infección por clamidia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No se relaciona."
+        },
+        {
+          "key": "h",
+          "text": "Tabaquismo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Paradójicamente se asocia a menor riesgo."
+        },
+        {
+          "key": "i",
+          "text": "Exposición prolongada a estrógenos sin oposición de progesterona",
+          "correct": true,
+          "rationale": "La obesidad, la anovulación y la nuliparidad aumentan los estrógenos sin oposición."
+        },
+        {
+          "key": "j",
+          "text": "Deficiencia de vitamina D",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es el mecanismo principal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "El cáncer de endometrio tipo 1 se relaciona con estimulación estrogénica prolongada sin la oposición de la progesterona, lo que produce hiperplasia endometrial que puede progresar a cáncer. La obesidad aumenta los estrógenos por aromatización de andrógenos en el tejido adiposo. La anovulación crónica, como en el síndrome de ovario poliquístico, la nuliparidad, la menarca temprana, la menopausia tardía, la terapia estrogénica sin progestágeno y el tamoxifeno también aumentan la exposición. Los anticonceptivos orales combinados, la multiparidad y los dispositivos con levonorgestrel son protectores.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de endometrio"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q20",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "endometrial_cancer",
+      "vignette": "Mujer de 42 años con sangrado uterino abundante e irregular. La biopsia endometrial reporta hiperplasia endometrial con atipia. Ya no desea más hijos.",
+      "prompt": "¿Qué indica este resultado y cuál es el manejo recomendado?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Repetir la biopsia en 2 años",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "b",
+          "text": "Cáncer avanzado que requiere radioterapia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es una lesión precursora."
+        },
+        {
+          "key": "c",
+          "text": "Indicación de quimioterapia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es cáncer invasor confirmado."
+        },
+        {
+          "key": "d",
+          "text": "Infección endometrial que requiere antibióticos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es una infección."
+        },
+        {
+          "key": "e",
+          "text": "Hallazgo benigno sin riesgo que solo requiere vigilancia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene alto riesgo de cáncer."
+        },
+        {
+          "key": "f",
+          "text": "Ablación endometrial como tratamiento definitivo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No permite estudio y puede ocultar cáncer."
+        },
+        {
+          "key": "g",
+          "text": "Indicación de estrógenos",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Empeoran la hiperplasia."
+        },
+        {
+          "key": "h",
+          "text": "Pólipo endometrial simple",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El reporte es de hiperplasia atípica."
+        },
+        {
+          "key": "i",
+          "text": "Cambios normales de la perimenopausia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una lesión precancerosa."
+        },
+        {
+          "key": "j",
+          "text": "Lesión precursora con alto riesgo de cáncer concomitante o progresión, por lo que se recomienda histerectomía total",
+          "correct": true,
+          "rationale": "La hiperplasia con atipia es una neoplasia intraepitelial endometrial."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "La hiperplasia endometrial se clasifica en hiperplasia sin atipia, con bajo riesgo de progresión, que se trata con progestágenos como el dispositivo con levonorgestrel, e hiperplasia con atipia o neoplasia intraepitelial endometrial, que tiene alto riesgo de cáncer coexistente o de progresión. En mujeres sin deseo de fertilidad la hiperplasia atípica se trata con histerectomía total, generalmente con salpingooforectomía en posmenopáusicas. En mujeres que desean fertilidad se usan progestágenos en dosis altas con biopsias de control frecuentes. La ablación no se recomienda.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de endometrio"
+      ]
+    },
+    {
+      "key": "gyo-08-oncologia-q21",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "gynecologic_oncology",
+      "subtopic": "endometrial_cancer",
+      "vignette": "Mujer de 45 años con cáncer de endometrio. Su madre tuvo cáncer de colon a los 48 años y su hermano cáncer de colon a los 44. El tumor muestra pérdida de expresión de proteínas de reparación de errores de emparejamiento.",
+      "prompt": "¿Cuál es el factor de riesgo hereditario más probable?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Obesidad familiar compartida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la deficiencia de reparación."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de Peutz Jeghers",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da pólipos hamartomatosos con pigmentación oral."
+        },
+        {
+          "key": "c",
+          "text": "Poliposis adenomatosa familiar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da cientos de pólipos colónicos."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome de Li Fraumeni",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se asocia a sarcomas y tumores cerebrales."
+        },
+        {
+          "key": "e",
+          "text": "Coincidencia familiar sin importancia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El patrón sugiere un síndrome hereditario."
+        },
+        {
+          "key": "f",
+          "text": "Neurofibromatosis tipo 1",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No se asocia a este patrón."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome de Lynch o cáncer colorrectal hereditario no polipósico",
+          "correct": true,
+          "rationale": "Cáncer de endometrio y colon tempranos en la familia con deficiencia de reparación."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome de von Hippel Lindau",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se asocia a tumores renales y del sistema nervioso."
+        },
+        {
+          "key": "i",
+          "text": "Mutación de BRCA1",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se asocia a cáncer de mama y ovario."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome de Cowden",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se asocia a cáncer de mama, tiroides y endometrio con hamartomas."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "El síndrome de Lynch es una enfermedad autosómica dominante por mutaciones en los genes de reparación de errores de emparejamiento del ADN, como MLH1, MSH2, MSH6 y PMS2. Aumenta el riesgo de cáncer colorrectal, de endometrio, que puede ser el primer cáncer en las mujeres, de ovario, estómago, vías urinarias e intestino delgado, a edades tempranas. Se recomienda estudiar a todos los cánceres de endometrio con inmunohistoquímica para estas proteínas o inestabilidad de microsatélites. Las portadoras requieren colonoscopia cada 1 a 2 años y pueden considerar histerectomía con salpingooforectomía al completar su paridad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de endometrio"
+      ]
+    }
+  ]
+}

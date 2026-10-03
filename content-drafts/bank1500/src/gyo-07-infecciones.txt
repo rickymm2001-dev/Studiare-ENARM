@@ -1,0 +1,303 @@
+@ gyo|gynecologic_infections|vaginitis|2|diagnosis
+V: Mujer de 28 años con flujo vaginal grisáceo, homogéneo y con olor a pescado que empeora después de las relaciones sexuales. Sin prurito ni dolor. pH vaginal de 5.5, prueba de aminas positiva y células clave en el examen en fresco.
+P: ¿Cuál es el diagnóstico más probable?
++ Vaginosis bacteriana || Cumple los criterios de Amsel, flujo homogéneo, pH mayor de 4.5, aminas positivas y células clave.
+- anchoring | Candidiasis vulvovaginal || Da flujo blanco grumoso con prurito y pH normal.
+- availability_heuristic | Tricomoniasis || Da flujo amarillo verdoso espumoso con cérvix en fresa.
+- representativeness_heuristic | Cervicitis por gonorrea || Da secreción mucopurulenta cervical.
+- premature_closure | Leucorrea fisiológica || No tiene olor ni pH alto.
+- base_rate_fallacy | Vaginitis atrófica || Ocurre en la posmenopausia.
+- framing_effect | Cuerpo extraño vaginal || Da flujo fétido con antecedente.
+- inattentional_blindness | Vaginitis inflamatoria descamativa || Es rara y con leucocitos abundantes.
+- focusing_illusion | Herpes genital || Da úlceras dolorosas.
+- belief_bias | Falta de higiene que se resuelve con duchas vaginales || Las duchas favorecen la vaginosis.
+E: La vaginosis bacteriana es la causa más frecuente de flujo vaginal anormal en mujeres en edad reproductiva. Se debe a la sustitución de los lactobacilos por bacterias anaerobias como Gardnerella vaginalis. No es una infección de transmisión sexual en sentido estricto, aunque se asocia a la actividad sexual. Se diagnostica con tres de cuatro criterios de Amsel, flujo homogéneo grisáceo, pH mayor de 4.5, prueba de aminas positiva con olor a pescado al agregar hidróxido de potasio y células clave, o con la tinción de Gram por criterios de Nugent. No hay inflamación importante ni prurito.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la vaginitis infecciosa
+
+@ gyo|gynecologic_infections|vaginitis|2|treatment_of_choice
+V: Mujer de 25 años no embarazada con vaginosis bacteriana sintomática confirmada.
+P: ¿Cuál es el tratamiento de elección?
++ Metronidazol oral 500 mg cada 12 horas por 7 días || Es el tratamiento de primera línea.
+- anchoring | Fluconazol oral en dosis única || Es para candidiasis.
+- availability_heuristic | Tratar a la pareja masculina de rutina || No reduce las recurrencias.
+- representativeness_heuristic | Doxiciclina por 14 días || No es el tratamiento de elección.
+- premature_closure | Duchas vaginales con vinagre || Empeoran el cuadro.
+- framing_effect | Nistatina vaginal || Es para candidiasis.
+- complexity_bias | Ceftriaxona intramuscular || No cubre anaerobios.
+- base_rate_fallacy | Aciclovir || Es para herpes.
+- belief_bias | Lavar con jabón antibacteriano varias veces al día || Altera más la flora.
+- omission_bias | No tratar a las sintomáticas || Requieren tratamiento.
+E: El tratamiento de la vaginosis bacteriana sintomática es metronidazol oral 500 mg cada 12 horas por 7 días, metronidazol en gel vaginal por 5 días o clindamicina en crema vaginal por 7 días. Durante el tratamiento con metronidazol y 24 horas después se evita el alcohol por el efecto similar al disulfiram. En el embarazo se trata a las mujeres sintomáticas con metronidazol oral, que es seguro. No se recomienda tratar a la pareja masculina. Las recurrencias son frecuentes y pueden requerir esquemas supresivos. Se recomienda evitar las duchas vaginales.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la vaginitis infecciosa
+
+@ gyo|gynecologic_infections|vaginitis|2|diagnosis
+V: Mujer de 30 años con diabetes mal controlada que recibió amoxicilina recientemente. Presenta prurito vulvar intenso, ardor, dispareunia y flujo blanco espeso grumoso como requesón sin olor. Vulva eritematosa con fisuras. pH vaginal de 4.2.
+P: ¿Cuál es el diagnóstico más probable?
++ Candidiasis vulvovaginal || Prurito intenso con flujo grumoso, pH normal y factores predisponentes.
+- anchoring | Vaginosis bacteriana || Da flujo grisáceo con olor y pH alto.
+- availability_heuristic | Tricomoniasis || Da flujo espumoso con pH alto.
+- representativeness_heuristic | Dermatitis de contacto || No explica el flujo grumoso.
+- premature_closure | Liquen escleroso || Da placas blanquecinas atróficas sin flujo.
+- base_rate_fallacy | Herpes genital || Da vesículas y úlceras.
+- framing_effect | Vaginitis atrófica || Ocurre en la posmenopausia.
+- inattentional_blindness | Gonorrea || Da cervicitis mucopurulenta.
+- focusing_illusion | Escabiasis || Da prurito nocturno con surcos en otras zonas.
+- belief_bias | Alergia a la ropa interior de algodón || El algodón es recomendable.
+E: La candidiasis vulvovaginal es causada principalmente por Candida albicans. Los factores predisponentes son antibióticos de amplio espectro, diabetes mal controlada, embarazo, anticonceptivos con dosis altas de estrógenos, inmunosupresión y corticosteroides. Se manifiesta con prurito y ardor vulvar intensos, disuria externa, dispareunia y flujo blanco espeso y grumoso sin olor, con vulva eritematosa y edematosa. El pH vaginal es normal, menor de 4.5. El examen en fresco con hidróxido de potasio muestra levaduras e hifas. No se considera una infección de transmisión sexual.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la vaginitis infecciosa
+
+@ gyo|gynecologic_infections|vaginitis|3|treatment_of_choice
+V: Mujer de 26 años con embarazo de 20 semanas que presenta candidiasis vulvovaginal sintomática confirmada.
+P: ¿Cuál es el tratamiento de elección?
++ Azol tópico vaginal como clotrimazol o miconazol por 7 días || Es seguro y eficaz en el embarazo.
+- anchoring | Fluconazol oral en dosis altas || Se evita en el embarazo por posible teratogenicidad.
+- availability_heuristic | Metronidazol oral || Es para vaginosis y tricomoniasis.
+- representativeness_heuristic | Itraconazol oral || Se evita en el embarazo.
+- premature_closure | No tratar porque es normal en el embarazo || Los síntomas requieren tratamiento.
+- framing_effect | Clindamicina vaginal || Es para vaginosis.
+- complexity_bias | Anfotericina B intravenosa || Es excesiva.
+- base_rate_fallacy | Aciclovir || Es para herpes.
+- belief_bias | Aplicar yogur natural en la vagina como tratamiento único || No tiene evidencia suficiente.
+- omission_bias | Esperar al parto para tratar || Los síntomas pueden ser intensos.
+E: En el embarazo la candidiasis vulvovaginal es más frecuente por los cambios hormonales. El tratamiento de elección es un azol tópico vaginal, como clotrimazol o miconazol, durante 7 días, que es seguro y eficaz. Los azoles orales como el fluconazol se evitan en el embarazo, sobre todo a dosis altas y en el primer trimestre. En mujeres no embarazadas con candidiasis no complicada son eficaces el fluconazol oral 150 mg en dosis única o los azoles tópicos. La candidiasis recurrente, cuatro o más episodios al año, requiere cultivo y tratamiento de supresión prolongado.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la vaginitis infecciosa
+
+@ gyo|gynecologic_infections|vaginitis|2|diagnosis
+V: Mujer de 23 años con varias parejas sexuales que presenta flujo vaginal abundante, amarillo verdoso, espumoso y maloliente, prurito y disuria. En la especuloscopia se observan petequias en el cérvix. pH vaginal de 6. En el examen en fresco se ven microorganismos flagelados móviles.
+P: ¿Cuál es el diagnóstico más probable?
++ Tricomoniasis || Flujo espumoso amarillo verdoso, cérvix en fresa y protozoarios móviles.
+- anchoring | Vaginosis bacteriana || No da protozoarios ni cérvix en fresa.
+- availability_heuristic | Candidiasis vulvovaginal || Da flujo grumoso con pH normal.
+- representativeness_heuristic | Gonorrea || Da cervicitis mucopurulenta sin protozoarios.
+- premature_closure | Infección urinaria || No explica el flujo y el cérvix.
+- base_rate_fallacy | Vaginitis atrófica || Ocurre en la posmenopausia.
+- framing_effect | Cervicitis por clamidia aislada || No explica los protozoarios.
+- inattentional_blindness | Herpes genital || Da úlceras.
+- focusing_illusion | Cuerpo extraño vaginal || No explica los protozoarios.
+- belief_bias | Flujo normal por la ovulación || Es una infección de transmisión sexual.
+E: La tricomoniasis es una infección de transmisión sexual causada por el protozoario Trichomonas vaginalis. En la mujer produce flujo abundante, amarillo verdoso, espumoso y maloliente, prurito, disuria y dispareunia. En la especuloscopia puede verse el cérvix en fresa por petequias. El pH vaginal es mayor de 4.5. El examen en fresco muestra los protozoarios flagelados móviles, aunque las pruebas de amplificación de ácidos nucleicos son más sensibles. Muchas mujeres y la mayoría de los hombres son asintomáticos. Se asocia a mayor riesgo de adquirir otras infecciones de transmisión sexual y a parto pretérmino.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la vaginitis infecciosa
+
+@ gyo|gynecologic_infections|vaginitis|2|treatment_of_choice
+V: Mujer de 27 años con tricomoniasis confirmada. Tiene una pareja sexual estable.
+P: ¿Cuál es el tratamiento de elección?
++ Metronidazol oral 500 mg cada 12 horas por 7 días y tratamiento de la pareja sexual || Es una infección de transmisión sexual que requiere tratar a la pareja.
+- anchoring | Tratar solo a la paciente || La pareja puede reinfectarla.
+- availability_heuristic | Fluconazol oral || Es para candidiasis.
+- representativeness_heuristic | Clindamicina vaginal || No es eficaz contra tricomonas.
+- premature_closure | Ceftriaxona intramuscular || Es para gonorrea.
+- framing_effect | Metronidazol en gel vaginal || Tiene menor eficacia para tricomoniasis.
+- complexity_bias | Penicilina benzatínica || Es para sífilis.
+- base_rate_fallacy | Azitromicina sola || No cubre tricomonas.
+- belief_bias | Duchas vaginales con bicarbonato || No curan la infección.
+- omission_bias | No ofrecer tamizaje de otras infecciones || Debe ofrecerse.
+E: El tratamiento de la tricomoniasis en mujeres es metronidazol oral 500 mg cada 12 horas por 7 días, que es más eficaz que la dosis única de 2 g. En hombres se usa la dosis única. Las parejas sexuales deben tratarse al mismo tiempo y evitar relaciones sexuales hasta completar el tratamiento y estar asintomáticos. El metronidazol en gel vaginal no es eficaz porque no alcanza las glándulas parauretrales. Se evita el alcohol durante el tratamiento. Se recomienda realizar tamizaje de otras infecciones de transmisión sexual, como virus de la inmunodeficiencia humana, sífilis, gonorrea y clamidia, y reevaluar a los 3 meses.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la vaginitis infecciosa
+
+@ gyo|gynecologic_infections|vaginitis|3|diagnosis
+V: Mujer de 58 años, posmenopáusica desde hace 8 años sin terapia hormonal, que presenta sequedad vaginal, ardor, dispareunia y sangrado leve después de las relaciones. La mucosa vaginal está pálida, delgada, sin pliegues y con petequias. pH vaginal de 6.5.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome genitourinario de la menopausia o vaginitis atrófica || Deficiencia de estrógenos con mucosa atrófica, pH alto y dispareunia.
+- anchoring | Cáncer de endometrio || El sangrado poscoital y la mucosa atrófica orientan a atrofia, aunque debe descartarse.
+- availability_heuristic | Candidiasis vulvovaginal || Es poco frecuente en la posmenopausia sin estrógenos.
+- representativeness_heuristic | Vaginosis bacteriana || No explica la atrofia.
+- premature_closure | Tricomoniasis || No hay flujo espumoso ni protozoarios.
+- base_rate_fallacy | Liquen escleroso vulvar || Afecta la vulva con placas blancas.
+- framing_effect | Cáncer cervicouterino || Debe tamizarse, pero los hallazgos son de atrofia.
+- inattentional_blindness | Dermatitis de contacto || No explica la atrofia ni el pH.
+- focusing_illusion | Prolapso uterino || No explica los hallazgos de mucosa.
+- belief_bias | Molestias normales de la edad que deben aceptarse || Es tratable.
+E: El síndrome genitourinario de la menopausia se debe a la deficiencia de estrógenos que adelgaza el epitelio vaginal y uretral, reduce los lactobacilos y eleva el pH vaginal. Se manifiesta con sequedad, ardor, dispareunia, sangrado poscoital, urgencia urinaria e infecciones urinarias recurrentes. La mucosa se ve pálida, delgada, sin pliegues y friable. El tratamiento inicial incluye lubricantes e hidratantes vaginales, y en casos moderados o graves estrógenos vaginales a dosis bajas, que tienen mínima absorción sistémica. Todo sangrado posmenopáusico obliga a descartar cáncer de endometrio.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia
+
+@ gyo|gynecologic_infections|pelvic_inflammatory_disease|2|diagnosis
+V: Mujer de 22 años con varias parejas sexuales que presenta dolor pélvico bilateral de 5 días, fiebre de 38.3 °C, flujo mucopurulento y dispareunia. En la exploración tiene dolor a la movilización del cérvix y dolor anexial bilateral. Prueba de embarazo negativa.
+P: ¿Cuál es el diagnóstico más probable?
++ Enfermedad pélvica inflamatoria || Dolor pélvico con dolor a la movilización cervical y anexial en una mujer sexualmente activa.
+- anchoring | Apendicitis aguda || El dolor es bilateral con cervicitis.
+- availability_heuristic | Embarazo ectópico || La prueba de embarazo es negativa.
+- representativeness_heuristic | Infección urinaria baja || No explica el dolor a la movilización cervical.
+- premature_closure | Torsión de ovario || Da dolor súbito unilateral.
+- base_rate_fallacy | Endometriosis || Es crónica y sin fiebre.
+- framing_effect | Quiste ovárico roto || Da dolor súbito sin cervicitis.
+- inattentional_blindness | Diverticulitis || Es rara a esta edad.
+- focusing_illusion | Vaginosis bacteriana aislada || No explica la fiebre ni el dolor anexial.
+- belief_bias | Cólicos menstruales fuertes || Hay datos de infección.
+E: La enfermedad pélvica inflamatoria es la infección del tracto genital superior, que incluye endometritis, salpingitis, absceso tuboovárico y peritonitis pélvica. Es causada por Chlamydia trachomatis, Neisseria gonorrhoeae y flora vaginal polimicrobiana. Los criterios mínimos para el diagnóstico clínico en una mujer sexualmente activa con dolor pélvico son dolor a la movilización cervical, dolor uterino o dolor anexial. Los criterios adicionales son fiebre, flujo mucopurulento, leucocitos en secreción, velocidad de sedimentación o proteína C reactiva elevadas e infección por gonorrea o clamidia confirmada. Se debe descartar embarazo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad inflamatoria pélvica
+
+@ gyo|gynecologic_infections|pelvic_inflammatory_disease|3|treatment_of_choice
+V: Mujer de 24 años con enfermedad pélvica inflamatoria leve a moderada, sin absceso, tolera la vía oral, no está embarazada y puede acudir a revisión en 72 horas.
+P: ¿Cuál es el tratamiento ambulatorio de elección?
++ Ceftriaxona intramuscular en dosis única más doxiciclina oral por 14 días, con metronidazol oral || Cubre gonococo, clamidia y anaerobios.
+- anchoring | Amoxicilina oral sola || No cubre clamidia ni gonococo resistente.
+- availability_heuristic | Metronidazol solo || No cubre gonococo ni clamidia.
+- representativeness_heuristic | Fluconazol || No es una infección por hongos.
+- premature_closure | Azitromicina en dosis única como único tratamiento || Es insuficiente.
+- framing_effect | Retiro inmediato del dispositivo intrauterino en todas || No es necesario de rutina.
+- complexity_bias | Hospitalización con antibióticos intravenosos en todas || Los casos leves se tratan de forma ambulatoria.
+- base_rate_fallacy | Ciprofloxacino solo por resistencia gonocócica || No es adecuado.
+- belief_bias | Reposo y analgésicos sin antibióticos || Aumenta las secuelas.
+- omission_bias | No tratar a la pareja || Debe tratarse.
+E: El tratamiento de la enfermedad pélvica inflamatoria debe iniciarse de forma empírica ante el diagnóstico clínico para prevenir secuelas. El esquema ambulatorio recomendado es ceftriaxona 500 mg intramuscular en dosis única, más doxiciclina 100 mg cada 12 horas por 14 días y metronidazol 500 mg cada 12 horas por 14 días. Se revalora a las 72 horas. La hospitalización se indica en embarazo, absceso tuboovárico, enfermedad grave, intolerancia oral, falla del tratamiento oral o duda diagnóstica. Las parejas de los últimos 60 días deben evaluarse y tratarse. No es necesario retirar el dispositivo intrauterino si hay mejoría.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad inflamatoria pélvica
+
+@ gyo|gynecologic_infections|pelvic_inflammatory_disease|4|complication_prognosis
+V: Mujer de 31 años con 3 episodios previos de enfermedad pélvica inflamatoria que no logra embarazarse tras 2 años de relaciones sin protección. Sus ciclos son regulares y su pareja tiene espermatobioscopia normal.
+P: ¿Cuál es la secuela más probable que explica su infertilidad?
++ Factor tubario por obstrucción y daño de las trompas || La enfermedad pélvica inflamatoria repetida daña las trompas.
+- anchoring | Anovulación crónica || Sus ciclos son regulares.
+- availability_heuristic | Endometriosis grave || No es la secuela de la infección.
+- representativeness_heuristic | Insuficiencia ovárica prematura || No es una secuela habitual de la infección.
+- premature_closure | Factor masculino || El estudio de la pareja es normal.
+- base_rate_fallacy | Hiperprolactinemia || No se relaciona.
+- framing_effect | Síndrome de Asherman como causa principal || Se asocia a legrados.
+- inattentional_blindness | Hipotiroidismo || No es la secuela.
+- focusing_illusion | Mioma submucoso || No es la secuela de la infección.
+- belief_bias | Infertilidad por estrés de querer embarazarse || Hay una causa orgánica.
+E: Las secuelas de la enfermedad pélvica inflamatoria son infertilidad por factor tubario, embarazo ectópico y dolor pélvico crónico. El riesgo de infertilidad aumenta con cada episodio, alrededor de 10 a 15% tras el primero y mucho mayor tras tres o más. La inflamación produce adherencias, hidrosálpinx y obstrucción tubaria. El factor tubario se estudia con histerosalpingografía o laparoscopia con cromotubación. Las opciones de tratamiento incluyen cirugía tubaria en casos seleccionados y fertilización in vitro, que es más eficaz con trompas muy dañadas. La prevención y el tratamiento temprano de las infecciones son fundamentales.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad inflamatoria pélvica
+
+@ gyo|gynecologic_infections|pelvic_inflammatory_disease|3|diagnosis
+V: Mujer de 27 años con enfermedad pélvica inflamatoria que no mejora tras 72 horas de antibióticos orales. Persiste con fiebre, dolor pélvico intenso y una masa anexial dolorosa. El ultrasonido muestra una masa compleja multiloculada con niveles líquidos en el anexo izquierdo.
+P: ¿Cuál es el diagnóstico más probable?
++ Absceso tuboovárico || Masa anexial compleja con fiebre persistente en enfermedad pélvica inflamatoria.
+- anchoring | Enfermedad pélvica inflamatoria no complicada resistente || No explica la masa.
+- availability_heuristic | Quiste ovárico funcional || No explica la fiebre ni el aspecto complejo.
+- representativeness_heuristic | Endometrioma || No explica la fiebre aguda.
+- premature_closure | Embarazo ectópico || Requiere prueba positiva.
+- base_rate_fallacy | Cáncer de ovario || Es poco probable a esta edad con este contexto.
+- framing_effect | Torsión de ovario || Da dolor súbito sin este contexto.
+- inattentional_blindness | Apendicitis con plastrón || El dolor y la masa son anexiales.
+- focusing_illusion | Hidrosálpinx crónico sin infección || Hay fiebre persistente.
+- belief_bias | Inflamación que se quita con más analgésicos || Requiere manejo hospitalario.
+E: El absceso tuboovárico es una complicación grave de la enfermedad pélvica inflamatoria. Se sospecha ante falla del tratamiento, masa anexial dolorosa y fiebre persistente, y se confirma con ultrasonido o tomografía. Requiere hospitalización y antibióticos intravenosos de amplio espectro, como cefoxitina o cefotetán con doxiciclina, o clindamicina con gentamicina. Los abscesos mayores de 7 a 8 cm o los que no responden en 48 a 72 horas requieren drenaje guiado por imagen o cirugía. La rotura del absceso produce peritonitis generalizada y choque séptico, y es una urgencia quirúrgica.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad inflamatoria pélvica
+
+@ gyo|gynecologic_infections|pelvic_inflammatory_disease|3|diagnosis
+V: Mujer de 24 años con enfermedad pélvica inflamatoria que presenta además dolor intenso en el hipocondrio derecho que aumenta con la inspiración y se irradia al hombro derecho. Transaminasas normales y ultrasonido de vesícula normal.
+P: ¿Cuál es el diagnóstico más probable del dolor en el hipocondrio derecho?
++ Síndrome de Fitz Hugh Curtis por perihepatitis || Inflamación de la cápsula hepática asociada a enfermedad pélvica inflamatoria.
+- anchoring | Colecistitis aguda || El ultrasonido de vesícula es normal.
+- availability_heuristic | Hepatitis viral aguda || Las transaminasas son normales.
+- representativeness_heuristic | Neumonía basal derecha || No hay datos respiratorios.
+- premature_closure | Cólico renal derecho || No explica la relación con la enfermedad pélvica.
+- base_rate_fallacy | Absceso hepático amebiano || Daría imagen en el ultrasonido.
+- framing_effect | Úlcera duodenal perforada || Daría abdomen agudo con aire libre.
+- inattentional_blindness | Pancreatitis aguda || No explica el cuadro.
+- focusing_illusion | Apendicitis subhepática || No explica la relación con la enfermedad pélvica.
+- belief_bias | Dolor muscular por la tos || La inflamación es perihepática.
+E: El síndrome de Fitz Hugh Curtis es una perihepatitis que ocurre en algunas mujeres con enfermedad pélvica inflamatoria, sobre todo por Chlamydia trachomatis y Neisseria gonorrhoeae. La infección se extiende a la cápsula hepática y produce dolor pleurítico en el hipocondrio derecho, a veces irradiado al hombro. Las transaminasas suelen ser normales. En la laparoscopia se observan adherencias en cuerdas de violín entre el hígado y la pared abdominal. Se trata con los mismos antibióticos que la enfermedad pélvica inflamatoria. Es un diagnóstico diferencial de la colecistitis en mujeres jóvenes.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad inflamatoria pélvica
+
+@ gyo|gynecologic_infections|pelvic_inflammatory_disease|2|prevention_screening
+V: Mujer de 20 años sexualmente activa, con uso inconstante del condón, asintomática. Acude a su consulta de rutina.
+P: ¿Cuál es la medida de prevención de enfermedad pélvica inflamatoria más adecuada?
++ Tamizaje anual de Chlamydia trachomatis y Neisseria gonorrhoeae con pruebas de amplificación de ácidos nucleicos y promoción del condón || La detección y tratamiento de infecciones asintomáticas previenen la enfermedad pélvica inflamatoria.
+- anchoring | Antibióticos profilácticos mensuales || No se recomiendan.
+- availability_heuristic | Citología cervical anual como prueba de clamidia || La citología no detecta clamidia.
+- representativeness_heuristic | Duchas vaginales frecuentes || Aumentan el riesgo de infección.
+- premature_closure | Ningún estudio porque está asintomática || La mayoría de las infecciones por clamidia son asintomáticas.
+- framing_effect | Ultrasonido pélvico anual || No detecta infecciones.
+- complexity_bias | Laparoscopia diagnóstica || No está indicada.
+- base_rate_fallacy | Tamizaje solo a mujeres mayores de 35 años || El riesgo es mayor en jóvenes.
+- belief_bias | Las mujeres jóvenes no tienen infecciones || Son el grupo de mayor riesgo.
+- omission_bias | No preguntar por la vida sexual para no incomodarla || Es parte de la atención preventiva.
+E: Chlamydia trachomatis es la infección de transmisión sexual bacteriana más frecuente y es asintomática en la mayoría de las mujeres, pero puede ascender y causar enfermedad pélvica inflamatoria, infertilidad, embarazo ectópico y dolor pélvico crónico. Se recomienda tamizaje anual de clamidia y gonorrea en mujeres sexualmente activas menores de 25 años y en mayores con factores de riesgo, con pruebas de amplificación de ácidos nucleicos en orina o exudado vaginal. Otras medidas son el uso correcto del condón, la reducción de parejas y el tratamiento de las parejas sexuales.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad inflamatoria pélvica
+
+@ gyo|gynecologic_infections|pelvic_inflammatory_disease|3|risk_factor
+V: Mujer de 19 años con enfermedad pélvica inflamatoria. Inició vida sexual a los 14 años, tiene varias parejas recientes, usa dispositivo intrauterino desde hace 3 años y tuvo cervicitis por clamidia no tratada hace 6 meses.
+P: ¿Cuál es el factor de riesgo más importante para su enfermedad pélvica inflamatoria?
++ Infección cervical por clamidia no tratada con múltiples parejas sexuales || La infección cervical ascendente es la causa principal.
+- anchoring | El dispositivo intrauterino colocado hace 3 años || El riesgo por el dispositivo se limita a las primeras semanas tras la inserción.
+- availability_heuristic | El uso de tampones || No es un factor.
+- representativeness_heuristic | La menstruación abundante || No es un factor principal.
+- premature_closure | La edad de 19 años como factor único || La edad influye, pero la infección es el factor clave.
+- base_rate_fallacy | Los anticonceptivos orales || Pueden ser protectores.
+- framing_effect | El ejercicio intenso || No es un factor.
+- inattentional_blindness | La ropa interior sintética || No es un factor.
+- focusing_illusion | La vacuna contra el virus del papiloma humano || No es un factor.
+- belief_bias | Bañarse en albercas públicas || No es una vía de infección.
+E: Los factores de riesgo de enfermedad pélvica inflamatoria incluyen infección cervical por clamidia o gonorrea, edad menor de 25 años, múltiples parejas sexuales, nueva pareja, pareja con infección de transmisión sexual, antecedente de enfermedad pélvica inflamatoria, falta de uso de condón y duchas vaginales. El dispositivo intrauterino aumenta ligeramente el riesgo solo en las primeras 3 semanas tras la inserción, sobre todo si hay una infección cervical previa, por lo que se recomienda tamizar a mujeres de riesgo antes de colocarlo. Después de ese periodo no aumenta el riesgo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad inflamatoria pélvica
+
+@ gyo|gynecologic_infections|hpv_infection|2|diagnosis
+V: Mujer de 24 años con lesiones exofíticas en la vulva y región perianal, de aspecto verrugoso en coliflor, de color piel, indoloras, que han aumentado en número en los últimos 2 meses.
+P: ¿Cuál es el diagnóstico más probable?
++ Condilomas acuminados por virus del papiloma humano de bajo riesgo || Lesiones verrugosas exofíticas anogenitales por los tipos 6 y 11.
+- anchoring | Condiloma plano sifilítico || Es plano, húmedo y se acompaña de otros datos de sífilis secundaria.
+- availability_heuristic | Molusco contagioso || Da pápulas umbilicadas.
+- representativeness_heuristic | Herpes genital || Da vesículas y úlceras dolorosas.
+- premature_closure | Cáncer de vulva || Es más frecuente en mujeres mayores con lesión única.
+- base_rate_fallacy | Pápulas perladas || Son una variante normal en el pene.
+- framing_effect | Quistes de glándulas sebáceas || Son lisos y no verrugosos.
+- inattentional_blindness | Liquen plano genital || Da pápulas violáceas.
+- focusing_illusion | Chancroide || Da úlceras dolorosas.
+- belief_bias | Granitos por depilación || Son lesiones virales.
+E: Los condilomas acuminados son verrugas anogenitales causadas principalmente por los tipos 6 y 11 del virus del papiloma humano, de bajo riesgo oncogénico. Se transmiten por contacto sexual. Se manifiestan como lesiones exofíticas en coliflor, del color de la piel, en vulva, vagina, cérvix, periné y región perianal. El diagnóstico es clínico. El tratamiento incluye aplicaciones de podofilotoxina, imiquimod o ácido tricloroacético, crioterapia o escisión. Pueden recurrir. La vacuna tetravalente o nonavalente previene los condilomas y las lesiones precancerosas por tipos de alto riesgo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la infección por virus del papiloma humano
+
+@ gyo|gynecologic_infections|hpv_infection|3|data_interpretation
+V: Mujer de 32 años con resultado de citología cervical que reporta lesión intraepitelial escamosa de bajo grado. Prueba de virus del papiloma humano positiva para tipos de alto riesgo diferentes a 16 y 18.
+P: ¿Qué indica este resultado y su manejo?
++ Lesión de bajo grado que requiere colposcopia según las guías de riesgo || La lesión de bajo grado con prueba positiva se valora con colposcopia.
+- anchoring | Cáncer invasor que requiere histerectomía || La lesión de bajo grado no es cáncer.
+- availability_heuristic | Resultado normal sin seguimiento || Requiere evaluación.
+- representativeness_heuristic | Indicación de conización inmediata || No está indicada como primer paso.
+- premature_closure | Infección por herpes genital || No corresponde.
+- base_rate_fallacy | Resultado falso positivo sin importancia || Debe evaluarse.
+- framing_effect | Indicación de quimioterapia || No corresponde.
+- inattentional_blindness | Cambios por inflamación únicamente || Hay una lesión intraepitelial.
+- focusing_illusion | Indicación de radioterapia || No corresponde.
+- belief_bias | La lesión significa que tiene cáncer seguro || La mayoría de las lesiones de bajo grado regresan.
+E: La citología cervical se reporta con el sistema Bethesda. La lesión intraepitelial escamosa de bajo grado corresponde a infección por virus del papiloma humano o displasia leve, y la mayoría regresa espontáneamente en 1 a 2 años, sobre todo en mujeres jóvenes. En mujeres de 25 años o más con lesión de bajo grado se recomienda colposcopia, especialmente si la prueba de virus de alto riesgo es positiva. La lesión de alto grado requiere colposcopia y tratamiento escisional según los hallazgos. Los tipos 16 y 18 tienen el mayor riesgo de progresión.
+R: Guía de Práctica Clínica de prevención y detección oportuna del cáncer cervicouterino ;; Norma Oficial Mexicana para la prevención, detección, diagnóstico, tratamiento y control del cáncer del cuello del útero
+
+@ gyo|gynecologic_infections|hpv_infection|3|mechanism
+V: Estudiante de medicina pregunta cómo el virus del papiloma humano de alto riesgo produce cáncer cervicouterino.
+P: ¿Cuál es el mecanismo oncogénico del virus del papiloma humano de alto riesgo?
++ Las oncoproteínas E6 y E7 inactivan las proteínas supresoras de tumores p53 y retinoblastoma || Permite la proliferación celular descontrolada.
+- anchoring | Activa directamente el oncogén BCR ABL || Es propio de la leucemia mieloide crónica.
+- availability_heuristic | Produce inflamación crónica bacteriana || Es un virus.
+- representativeness_heuristic | Inserta el gen HER2 en la célula || No es su mecanismo.
+- premature_closure | Destruye las células inmunes como el virus de la inmunodeficiencia humana || No es su mecanismo.
+- base_rate_fallacy | Produce aflatoxinas || Son toxinas de hongos.
+- framing_effect | Estimula receptores de estrógenos || No es su mecanismo principal.
+- inattentional_blindness | Causa mutaciones por radiación || No es su mecanismo.
+- focusing_illusion | Bloquea la apoptosis activando BCL2 de forma primaria || No es su mecanismo principal.
+- belief_bias | Se debe a falta de higiene genital || Es una infección viral.
+E: Los tipos de alto riesgo del virus del papiloma humano, principalmente 16 y 18, se integran al genoma de las células de la zona de transformación del cérvix. Producen las oncoproteínas E6, que promueve la degradación de p53, y E7, que inactiva a la proteína del retinoblastoma. La pérdida de estos supresores tumorales permite la proliferación celular descontrolada, la inestabilidad genómica y la progresión de lesiones intraepiteliales a cáncer invasor en años. La mayoría de las infecciones se eliminan en 1 a 2 años, pero la persistencia, el tabaquismo, la inmunosupresión y la multiparidad aumentan el riesgo de cáncer.
+R: Guía de Práctica Clínica de prevención y detección oportuna del cáncer cervicouterino
+
+@ gyo|gynecologic_infections|hpv_infection|2|prevention_screening
+V: Mujer de 35 años sin antecedentes de lesiones cervicales. Acude a consulta preventiva y pregunta qué estudio le corresponde para detectar cáncer cervicouterino.
+P: ¿Cuál es la estrategia de tamizaje recomendada a esta edad?
++ Prueba de virus del papiloma humano de alto riesgo, sola o con citología, cada 5 años si es negativa || A partir de los 30 a 35 años la prueba molecular es más sensible.
+- anchoring | Citología anual sin prueba de virus || La prueba molecular con intervalo mayor es preferida.
+- availability_heuristic | Colposcopia anual a todas || No es una prueba de tamizaje.
+- representativeness_heuristic | Biopsia de cérvix de rutina || No es una prueba de tamizaje.
+- premature_closure | Ningún tamizaje si está asintomática || El tamizaje detecta lesiones antes de los síntomas.
+- framing_effect | Ultrasonido pélvico anual || No detecta lesiones cervicales.
+- complexity_bias | Marcadores tumorales séricos || No sirven para tamizaje.
+- base_rate_fallacy | Tamizaje solo si tiene varias parejas || Se recomienda a todas.
+- belief_bias | Si está vacunada no necesita tamizaje || La vacuna no cubre todos los tipos.
+- omission_bias | Esperar a tener sangrado para estudiarse || Llega tarde.
+E: El cáncer cervicouterino es prevenible con vacunación y tamizaje. En México la citología se ofrece desde los 25 años y la prueba de virus del papiloma humano de alto riesgo a partir de los 30 a 35 años, cada 5 años si es negativa, ya que es más sensible que la citología. Las mujeres con prueba positiva se clasifican con citología o genotipificación para decidir colposcopia. Las mujeres vacunadas también deben tamizarse. La inspección visual con ácido acético es una alternativa en lugares con pocos recursos. El tamizaje puede suspenderse después de los 65 años con resultados previos negativos.
+R: Norma Oficial Mexicana para la prevención, detección, diagnóstico, tratamiento y control del cáncer del cuello del útero ;; Guía de Práctica Clínica de prevención y detección oportuna del cáncer cervicouterino
+
+@ gyo|gynecologic_infections|hpv_infection|3|next_step
+V: Mujer de 29 años con citología que reporta lesión intraepitelial escamosa de alto grado. La colposcopia es satisfactoria con zona de transformación visible y la biopsia confirma neoplasia intraepitelial cervical grado 3.
+P: ¿Cuál es la conducta más apropiada?
++ Tratamiento escisional con cono por asa diatérmica de la zona de transformación || La neoplasia de alto grado se trata para prevenir el cáncer.
+- anchoring | Repetir la citología en un año sin tratamiento || La lesión de alto grado tiene riesgo de progresar.
+- availability_heuristic | Histerectomía radical || Es excesiva para una lesión preinvasora.
+- representativeness_heuristic | Quimioterapia || No está indicada.
+- premature_closure | Antivirales orales || No tratan la infección por virus del papiloma.
+- framing_effect | Solo vacunar contra el virus || No trata la lesión existente.
+- complexity_bias | Radioterapia pélvica || No está indicada.
+- base_rate_fallacy | Crioterapia sin confirmar la extensión en todas || El tratamiento escisional permite estudio histológico.
+- belief_bias | Óvulos vaginales caseros || No tratan la lesión.
+- omission_bias | No tratar para preservar la fertilidad || El cono preserva el útero.
+E: La neoplasia intraepitelial cervical de alto grado, grados 2 y 3, tiene riesgo de progresar a cáncer invasor si no se trata. El tratamiento de elección es escisional, mediante cono con asa diatérmica de la zona de transformación, que permite el estudio histopatológico de la pieza y de los márgenes. En mujeres jóvenes con neoplasia grado 2 y deseo de fertilidad puede considerarse la vigilancia estrecha. Tras el tratamiento se realiza seguimiento con prueba de virus del papiloma y citología a los 6 meses. El cono aumenta ligeramente el riesgo de parto pretérmino.
+R: Guía de Práctica Clínica de prevención y detección oportuna del cáncer cervicouterino
