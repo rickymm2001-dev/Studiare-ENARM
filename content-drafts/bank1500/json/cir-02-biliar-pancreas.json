@@ -374,7 +374,7 @@
         "g",
         "i"
       ],
-      "explanation": "La colecistitis aguda alitiásica ocurre en pacientes críticamente enfermos, como quemados, politraumatizados, con sepsis, ventilación mecánica, nutrición parenteral prolongada o en el posoperatorio de cirugías mayores. Se debe a estasis biliar, isquemia de la pared y bilis concentrada. Tiene alta frecuencia de gangrena y perforación y mayor mortalidad que la litiásica. El diagnóstico es difícil porque los pacientes no pueden expresar síntomas. El tratamiento incluye antibióticos y colecistostomía percutánea en pacientes inestables, o colecistectomía si el estado lo permite.",
+      "explanation": "La colecistitis aguda alitiásica ocurre en pacientes críticamente enfermos, como quemados, politraumatizados, con sepsis, ventilación mecánica, nutrición parenteral prolongada o en el posoperatorio de cirugías mayores. Se debe a estasis biliar, isquemia de la pared y bilis concentrada. Tiene alta frecuencia de gangrena y perforación y mayor mortalidad que la litiásica. El diagnóstico es difícil porque los pacientes no pueden expresar síntomas. El tratamiento incluye antibióticos y colecistostomía percutánea en pacientes inestables, o colecistectomía si el estado lo permite. Un alto índice de sospecha en estos pacientes permite el diagnóstico oportuno.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de colecistitis y colelitiasis"
       ]
@@ -844,7 +844,7 @@
         "i",
         "j"
       ],
-      "explanation": "La coledocolitiasis es la presencia de cálculos en el colédoco, generalmente provenientes de la vesícula. Se manifiesta con dolor biliar, ictericia, coluria y acolia, aunque puede ser asintomática. Los estudios muestran bilirrubina directa y fosfatasa alcalina elevadas, con colédoco dilatado mayor de 6 mm en el ultrasonido. Las complicaciones son colangitis y pancreatitis. Según la probabilidad se decide el abordaje, con colangiopancreatografía retrógrada endoscópica en alto riesgo y colangiorresonancia o ultrasonido endoscópico en riesgo intermedio.",
+      "explanation": "La coledocolitiasis es la presencia de cálculos en el colédoco, generalmente provenientes de la vesícula. Se manifiesta con dolor biliar, ictericia, coluria y acolia, aunque puede ser asintomática. Los estudios muestran bilirrubina directa y fosfatasa alcalina elevadas, con colédoco dilatado mayor de 6 mm en el ultrasonido. Las complicaciones son colangitis y pancreatitis. Según la probabilidad se decide el abordaje, con colangiopancreatografía retrógrada endoscópica en alto riesgo y colangiorresonancia o ultrasonido endoscópico en riesgo intermedio. La colecistectomía posterior previene nuevos episodios.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de coledocolitiasis"
       ]
@@ -938,7 +938,7 @@
         "i",
         "j"
       ],
-      "explanation": "En pacientes con alta probabilidad de coledocolitiasis, como cálculo visible en el colédoco por ultrasonido, colangitis o bilirrubina mayor de 4 con colédoco dilatado, se realiza colangiopancreatografía retrógrada endoscópica con esfinterotomía y extracción de los cálculos. Después se realiza colecistectomía laparoscópica, idealmente en el mismo internamiento, para evitar recurrencias. Una alternativa en centros con experiencia es la exploración laparoscópica del colédoco durante la colecistectomía. En probabilidad intermedia se confirma primero con colangiorresonancia o ultrasonido endoscópico.",
+      "explanation": "En pacientes con alta probabilidad de coledocolitiasis, como cálculo visible en el colédoco por ultrasonido, colangitis o bilirrubina mayor de 4 con colédoco dilatado, se realiza colangiopancreatografía retrógrada endoscópica con esfinterotomía y extracción de los cálculos. Después se realiza colecistectomía laparoscópica, idealmente en el mismo internamiento, para evitar recurrencias. Una alternativa en centros con experiencia es la exploración laparoscópica del colédoco durante la colecistectomía. En probabilidad intermedia se confirma primero con colangiorresonancia o ultrasonido endoscópico antes de cualquier procedimiento invasivo.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de coledocolitiasis"
       ]
@@ -1220,7 +1220,7 @@
         "f",
         "g"
       ],
-      "explanation": "La pancreatitis es la complicación más frecuente de la colangiopancreatografía retrógrada endoscópica, con una incidencia de 3 a 10%. Otras complicaciones son hemorragia por la esfinterotomía, perforación duodenal, colangitis y colecistitis. Los factores de riesgo de pancreatitis incluyen sexo femenino, edad joven, disfunción del esfínter de Oddi, canulación difícil e inyección del conducto pancreático. Para prevenirla se administra indometacina o diclofenaco rectal antes o después del procedimiento, hidratación con Ringer lactato y, en alto riesgo, prótesis pancreática.",
+      "explanation": "La pancreatitis es la complicación más frecuente de la colangiopancreatografía retrógrada endoscópica, con una incidencia de 3 a 10%. Otras complicaciones son hemorragia por la esfinterotomía, perforación duodenal, colangitis y colecistitis. Los factores de riesgo de pancreatitis incluyen sexo femenino, edad joven, disfunción del esfínter de Oddi, canulación difícil e inyección repetida del conducto pancreático. Para prevenirla se administra indometacina o diclofenaco rectal antes o después del procedimiento, hidratación con Ringer lactato y, en pacientes de alto riesgo, la colocación de una prótesis pancreática temporal.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de coledocolitiasis"
       ]
@@ -1314,7 +1314,7 @@
         "i",
         "j"
       ],
-      "explanation": "La probabilidad de coledocolitiasis se estratifica con criterios clínicos, bioquímicos y ecográficos. En probabilidad alta se indica colangiopancreatografía retrógrada endoscópica terapéutica. En probabilidad intermedia, como colédoco dilatado sin cálculo visible o elevación moderada de enzimas, se confirma primero con colangiorresonancia magnética o ultrasonido endoscópico, que tienen alta sensibilidad y evitan procedimientos invasivos innecesarios. Otra opción es la colangiografía transoperatoria durante la colecistectomía. En probabilidad baja se realiza colecistectomía directamente.",
+      "explanation": "La probabilidad de coledocolitiasis se estratifica con criterios clínicos, bioquímicos y ecográficos. En probabilidad alta se indica colangiopancreatografía retrógrada endoscópica terapéutica. En probabilidad intermedia, como colédoco dilatado sin cálculo visible o elevación moderada de enzimas, se confirma primero con colangiorresonancia magnética o ultrasonido endoscópico, que tienen alta sensibilidad y evitan procedimientos invasivos innecesarios. Otra opción es la colangiografía transoperatoria durante la colecistectomía. En probabilidad baja se realiza colecistectomía directamente, con o sin colangiografía transoperatoria. Esta estrategia escalonada reduce las complicaciones de los procedimientos invasivos innecesarios.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de coledocolitiasis"
       ]
@@ -2066,7 +2066,7 @@
         "g",
         "h"
       ],
-      "explanation": "Tras una pancreatitis aguda biliar leve, la colecistectomía laparoscópica debe realizarse durante el mismo internamiento, una vez que el paciente mejora. Retrasarla aumenta de forma importante el riesgo de eventos biliares recurrentes, como nueva pancreatitis, colecistitis o colangitis, en las semanas siguientes. En la pancreatitis grave con colecciones o necrosis, la colecistectomía se difiere hasta que se resuelva el proceso inflamatorio, generalmente 6 semanas. En pacientes con alto riesgo quirúrgico puede realizarse esfinterotomía endoscópica como alternativa.",
+      "explanation": "Tras una pancreatitis aguda biliar leve, la colecistectomía laparoscópica debe realizarse durante el mismo internamiento, una vez que el paciente mejora. Retrasarla aumenta de forma importante el riesgo de eventos biliares recurrentes, como nueva pancreatitis, colecistitis o colangitis, en las semanas siguientes. En la pancreatitis grave con colecciones o necrosis, la colecistectomía se difiere hasta que se resuelva el proceso inflamatorio, generalmente 6 semanas. En pacientes con alto riesgo quirúrgico puede realizarse esfinterotomía endoscópica como alternativa para reducir la recurrencia de pancreatitis.",
       "gpcRefs": [
         "Guía de Práctica Clínica de diagnóstico y tratamiento de pancreatitis aguda"
       ]
