@@ -1,0 +1,1980 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "cir-09-torax-anestesia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "thoracic_surgery",
+      "subtopic": "pneumothorax",
+      "vignette": "Hombre de 22 años, alto y delgado, fumador, que presenta dolor torácico súbito en el hemitórax derecho tipo pleurítico y disnea leve mientras estaba sentado. Disminución del murmullo vesicular e hiperresonancia en el hemitórax derecho. Estable.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Neumotórax a tensión",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El paciente está estable sin desviación traqueal."
+        },
+        {
+          "key": "b",
+          "text": "Derrame pleural",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Daría matidez."
+        },
+        {
+          "key": "c",
+          "text": "Ansiedad con hiperventilación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay hallazgos objetivos."
+        },
+        {
+          "key": "d",
+          "text": "Infarto agudo de miocardio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica la hiperresonancia."
+        },
+        {
+          "key": "e",
+          "text": "Tromboembolia pulmonar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la hiperresonancia."
+        },
+        {
+          "key": "f",
+          "text": "Neumotórax espontáneo primario",
+          "correct": true,
+          "rationale": "Varón joven, alto, delgado y fumador con dolor pleurítico súbito e hiperresonancia."
+        },
+        {
+          "key": "g",
+          "text": "Neumonía",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el inicio súbito con hiperresonancia."
+        },
+        {
+          "key": "h",
+          "text": "Costocondritis",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la hiperresonancia."
+        },
+        {
+          "key": "i",
+          "text": "Pericarditis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica los hallazgos pulmonares."
+        },
+        {
+          "key": "j",
+          "text": "Crisis asmática",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da sibilancias difusas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "El neumotórax espontáneo primario ocurre sin enfermedad pulmonar conocida, por rotura de bulas o blebs subpleurales apicales. Es más frecuente en varones jóvenes, altos, delgados y fumadores. Se manifiesta con dolor torácico pleurítico súbito y disnea, con disminución del murmullo vesicular, hiperresonancia y disminución de las vibraciones vocales del lado afectado. La radiografía de tórax confirma el diagnóstico con la línea pleural visceral sin trama pulmonar periférica. El neumotórax secundario ocurre en pacientes con enfermedad pulmonar, como enfermedad pulmonar obstructiva crónica, y es más grave.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del neumotórax espontáneo"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "thoracic_surgery",
+      "subtopic": "pneumothorax",
+      "vignette": "Hombre de 25 años con primer episodio de neumotórax espontáneo primario derecho grande, con disnea y estabilidad hemodinámica.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo oxígeno y egreso inmediato",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El neumotórax grande sintomático requiere drenaje."
+        },
+        {
+          "key": "b",
+          "text": "Toracotomía con resección pulmonar inmediata",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se reserva para recurrencia o fuga persistente."
+        },
+        {
+          "key": "c",
+          "text": "No indicar dejar de fumar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Reduce la recurrencia."
+        },
+        {
+          "key": "d",
+          "text": "Reposo absoluto hasta que se reabsorba solo un neumotórax grande sintomático",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere evacuación."
+        },
+        {
+          "key": "e",
+          "text": "Aspiración con aguja o colocación de sonda pleural de pequeño calibre",
+          "correct": true,
+          "rationale": "El neumotórax grande sintomático requiere evacuación del aire."
+        },
+        {
+          "key": "f",
+          "text": "Observación sin intervención en todos los neumotórax grandes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El grande sintomático requiere evacuación."
+        },
+        {
+          "key": "g",
+          "text": "Ventilación mecánica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "Broncoscopia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "i",
+          "text": "Pleurodesis química en el primer episodio en todos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se reserva para recurrencias."
+        },
+        {
+          "key": "j",
+          "text": "Antibióticos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay infección."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "El tratamiento del neumotórax espontáneo primario depende del tamaño y los síntomas. Los neumotórax pequeños y poco sintomáticos pueden observarse con oxígeno, que acelera la reabsorción. Los grandes o sintomáticos se tratan con aspiración con aguja o con sonda pleural de pequeño calibre. Se indica cirugía videotoracoscópica con resección de bulas y pleurodesis en caso de recurrencia, neumotórax bilateral, fuga de aire persistente más de 3 a 5 días o profesiones de riesgo como pilotos o buzos. Dejar de fumar reduce de forma importante la recurrencia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del neumotórax espontáneo"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "thoracic_surgery",
+      "subtopic": "pneumothorax",
+      "vignette": "Hombre de 68 años con enfermedad pulmonar obstructiva crónica grave que presenta disnea súbita intensa e hipoxemia. Disminución del murmullo en el hemitórax izquierdo. La radiografía muestra una línea pleural con ausencia de trama pulmonar en la periferia izquierda.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Neumonía",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la línea pleural."
+        },
+        {
+          "key": "b",
+          "text": "Bula gigante sin neumotórax",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La línea pleural indica aire en la pleura."
+        },
+        {
+          "key": "c",
+          "text": "Tromboembolia pulmonar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica la línea pleural."
+        },
+        {
+          "key": "d",
+          "text": "Atelectasia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Daría opacidad con desplazamiento hacia el lado afectado."
+        },
+        {
+          "key": "e",
+          "text": "Exacerbación de la enfermedad pulmonar obstructiva crónica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la línea pleural."
+        },
+        {
+          "key": "f",
+          "text": "Disnea normal de su enfermedad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un cambio agudo grave."
+        },
+        {
+          "key": "g",
+          "text": "Derrame pleural",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Daría opacidad."
+        },
+        {
+          "key": "h",
+          "text": "Insuficiencia cardiaca",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica los hallazgos."
+        },
+        {
+          "key": "i",
+          "text": "Neumotórax espontáneo primario",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El paciente tiene enfermedad pulmonar de base."
+        },
+        {
+          "key": "j",
+          "text": "Neumotórax espontáneo secundario",
+          "correct": true,
+          "rationale": "Neumotórax en un paciente con enfermedad pulmonar de base."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "El neumotórax espontáneo secundario ocurre en pacientes con enfermedad pulmonar subyacente, como enfermedad pulmonar obstructiva crónica, fibrosis quística, tuberculosis, neumonía por Pneumocystis o enfermedades intersticiales. Es más grave que el primario porque la reserva pulmonar está disminuida, y puede causar insuficiencia respiratoria incluso si es pequeño. Debe distinguirse de una bula gigante, para lo cual puede requerirse tomografía. El tratamiento suele requerir sonda pleural y hospitalización, y se recomienda prevenir la recurrencia con pleurodesis o cirugía por su mayor mortalidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del neumotórax espontáneo"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "thoracic_surgery",
+      "subtopic": "pneumothorax",
+      "vignette": "Hombre de 20 años con su segundo episodio de neumotórax espontáneo primario. Fuma 15 cigarros al día y consume marihuana. Mide 1.90 m y pesa 65 kg.",
+      "prompt": "¿Cuál es el factor de riesgo modificable más importante?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tabaquismo de cigarros y marihuana",
+          "correct": true,
+          "rationale": "Aumenta de forma importante el riesgo de neumotórax y su recurrencia."
+        },
+        {
+          "key": "b",
+          "text": "El consumo de café",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "c",
+          "text": "El sexo masculino",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es modificable."
+        },
+        {
+          "key": "d",
+          "text": "La vacunación",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "e",
+          "text": "Vivir a nivel del mar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es un factor relevante."
+        },
+        {
+          "key": "f",
+          "text": "El tipo de colchón",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "g",
+          "text": "El ejercicio moderado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "h",
+          "text": "El estrés académico",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es un factor establecido."
+        },
+        {
+          "key": "i",
+          "text": "Cargar la mochila pesada",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es un factor establecido."
+        },
+        {
+          "key": "j",
+          "text": "Su estatura alta",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es modificable."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "Los factores de riesgo de neumotórax espontáneo primario incluyen sexo masculino, complexión alta y delgada, tabaquismo, consumo de marihuana, antecedente familiar y algunas enfermedades del tejido conectivo como el síndrome de Marfan. El tabaquismo es el principal factor modificable y aumenta el riesgo de forma dependiente de la dosis. La recurrencia tras un primer episodio es de 25 a 50%, sobre todo en los primeros 1 a 2 años. Tras un segundo episodio se recomienda cirugía para prevenir nuevas recurrencias. Dejar de fumar es una medida fundamental.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del neumotórax espontáneo"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "thoracic_surgery",
+      "subtopic": "pneumothorax",
+      "vignette": "Hombre de 30 años con neumotórax espontáneo tratado con sonda pleural que persiste con burbujeo continuo en la trampa de agua a los 6 días, con el pulmón parcialmente expandido.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ventilación mecánica con presión positiva",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Empeora la fuga."
+        },
+        {
+          "key": "b",
+          "text": "Colocar una segunda sonda sin más estudio como única medida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No resuelve la causa."
+        },
+        {
+          "key": "c",
+          "text": "Retirar la sonda y observar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La fuga persiste."
+        },
+        {
+          "key": "d",
+          "text": "No referir a cirugía de tórax",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es la conducta indicada."
+        },
+        {
+          "key": "e",
+          "text": "Iniciar antibióticos de amplio espectro",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay infección."
+        },
+        {
+          "key": "f",
+          "text": "Mantener la sonda indefinidamente",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No resuelve la fuga."
+        },
+        {
+          "key": "g",
+          "text": "Broncoscopia diagnóstica como tratamiento definitivo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No resuelve la fuga."
+        },
+        {
+          "key": "h",
+          "text": "La fuga se cierra sola si se espera un mes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Aumenta las complicaciones."
+        },
+        {
+          "key": "i",
+          "text": "Cirugía videotoracoscópica con resección de bulas y pleurodesis",
+          "correct": true,
+          "rationale": "La fuga de aire persistente más de 3 a 5 días es indicación quirúrgica."
+        },
+        {
+          "key": "j",
+          "text": "Neumonectomía",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es excesiva."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "La fuga de aire persistente es la que continúa más de 3 a 5 días tras colocar la sonda pleural. Indica que la fístula alveolopleural no se ha cerrado y se asocia a mayor estancia e infección. La cirugía videotoracoscópica permite resecar las bulas o blebs responsables y realizar pleurodesis mecánica o química para evitar recurrencias, con baja morbilidad. En pacientes no candidatos a cirugía pueden usarse pleurodesis química por la sonda, parche hemático o válvulas endobronquiales. La cirugía también se indica en recurrencias y neumotórax bilaterales.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del neumotórax espontáneo"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "thoracic_surgery",
+      "subtopic": "pleural_effusion",
+      "vignette": "Hombre de 60 años con derrame pleural derecho. La toracocentesis muestra relación de proteínas pleura suero de 0.7, relación de deshidrogenasa láctica pleura suero de 0.8 y deshidrogenasa láctica pleural mayor de dos tercios del límite sérico normal.",
+      "prompt": "¿Qué indica este resultado según los criterios de Light?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Exudado",
+          "correct": true,
+          "rationale": "Cumple al menos un criterio de Light."
+        },
+        {
+          "key": "b",
+          "text": "Los criterios no son útiles",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Son el estándar para clasificar."
+        },
+        {
+          "key": "c",
+          "text": "Hemotórax",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Requiere hematocrito pleural elevado."
+        },
+        {
+          "key": "d",
+          "text": "Derrame por cirrosis típico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Suele ser trasudado."
+        },
+        {
+          "key": "e",
+          "text": "Derrame por insuficiencia cardiaca típico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Suele ser trasudado."
+        },
+        {
+          "key": "f",
+          "text": "Líquido normal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El espacio pleural normal tiene muy poco líquido."
+        },
+        {
+          "key": "g",
+          "text": "Derrame por síndrome nefrótico típico",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Suele ser trasudado."
+        },
+        {
+          "key": "h",
+          "text": "Empiema confirmado",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Requiere pus o pH bajo con cultivo."
+        },
+        {
+          "key": "i",
+          "text": "Quilotórax confirmado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Requiere triglicéridos elevados."
+        },
+        {
+          "key": "j",
+          "text": "Trasudado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los valores superan los puntos de corte."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "Los criterios de Light clasifican el derrame pleural como exudado si cumple al menos uno de los siguientes, relación de proteínas pleura suero mayor de 0.5, relación de deshidrogenasa láctica pleura suero mayor de 0.6 o deshidrogenasa láctica pleural mayor de dos tercios del límite superior normal del suero. Los trasudados se deben a alteraciones de la presión hidrostática u oncótica, como insuficiencia cardiaca, cirrosis y síndrome nefrótico. Los exudados se deben a inflamación o alteración de la permeabilidad, como neumonía, cáncer, tuberculosis y tromboembolia pulmonar.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del derrame pleural"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "thoracic_surgery",
+      "subtopic": "pleural_effusion",
+      "vignette": "Hombre de 55 años con neumonía y derrame pleural que persiste con fiebre. La toracocentesis muestra líquido turbio con pH de 7.0, glucosa de 30 mg/dL y tinción de Gram con cocos grampositivos.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Continuar solo con antibióticos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El pH bajo y el Gram positivo indican derrame complicado."
+        },
+        {
+          "key": "b",
+          "text": "Corticosteroides",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No están indicados."
+        },
+        {
+          "key": "c",
+          "text": "Decorticación inmediata en todos sin intentar drenaje",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se reserva para falla del drenaje."
+        },
+        {
+          "key": "d",
+          "text": "Pleurodesis química",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es para derrames malignos recurrentes."
+        },
+        {
+          "key": "e",
+          "text": "No drenar por miedo al procedimiento",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El drenaje es necesario."
+        },
+        {
+          "key": "f",
+          "text": "Colocar sonda pleural para drenaje, además de antibióticos",
+          "correct": true,
+          "rationale": "El derrame paraneumónico complicado o empiema requiere drenaje."
+        },
+        {
+          "key": "g",
+          "text": "Diuréticos para resolver el derrame",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es un exudado infeccioso."
+        },
+        {
+          "key": "h",
+          "text": "El líquido se reabsorberá solo con el tiempo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El empiema requiere drenaje."
+        },
+        {
+          "key": "i",
+          "text": "Toracocentesis diagnóstica repetida cada semana",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No drena adecuadamente."
+        },
+        {
+          "key": "j",
+          "text": "Neumonectomía",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es excesiva."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "El derrame paraneumónico se clasifica en no complicado, que se resuelve con antibióticos, y complicado o empiema, que requiere drenaje. Los criterios de derrame complicado incluyen pH menor de 7.2, glucosa menor de 60 mg/dL, deshidrogenasa láctica mayor de 1 000, tinción de Gram o cultivo positivos, líquido purulento o tabicación. El tratamiento es la colocación de sonda pleural con antibióticos. En derrames tabicados se usan fibrinolíticos intrapleurales con desoxirribonucleasa o cirugía videotoracoscópica. La decorticación se reserva para empiemas organizados con atrapamiento pulmonar.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del derrame pleural"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "thoracic_surgery",
+      "subtopic": "pleural_effusion",
+      "vignette": "Mujer de 62 años con pérdida de peso de 10 kg, disnea progresiva y derrame pleural derecho masivo que recidiva tras dos toracocentesis. El líquido es un exudado hemático con citología positiva para adenocarcinoma.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hemotórax traumático",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay traumatismo."
+        },
+        {
+          "key": "b",
+          "text": "Tuberculosis pleural",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La citología muestra adenocarcinoma."
+        },
+        {
+          "key": "c",
+          "text": "Derrame pleural maligno",
+          "correct": true,
+          "rationale": "Exudado hemático recurrente con citología positiva para células malignas."
+        },
+        {
+          "key": "d",
+          "text": "Derrame paraneumónico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la citología positiva."
+        },
+        {
+          "key": "e",
+          "text": "Derrame por cirrosis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Sería un trasudado."
+        },
+        {
+          "key": "f",
+          "text": "Derrame por artritis reumatoide",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "La citología lo descarta."
+        },
+        {
+          "key": "g",
+          "text": "Insuficiencia cardiaca",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Sería un trasudado."
+        },
+        {
+          "key": "h",
+          "text": "Quilotórax",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El líquido es hemático."
+        },
+        {
+          "key": "i",
+          "text": "Agua en el pulmón por la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay células malignas."
+        },
+        {
+          "key": "j",
+          "text": "Mesotelioma sin exposición a asbesto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El adenocarcinoma orienta a metástasis."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "d",
+        "g"
+      ],
+      "explanation": "El derrame pleural maligno es una causa frecuente de exudado, sobre todo en mayores de 60 años. Las causas más comunes son el cáncer de pulmón, el de mama y el linfoma, y en menor medida el mesotelioma. Se manifiesta con disnea progresiva, derrames grandes y recurrentes, a menudo hemáticos. El diagnóstico se confirma con citología del líquido o biopsia pleural. Indica enfermedad avanzada. El tratamiento es paliativo para aliviar la disnea, con toracocentesis evacuadora, pleurodesis con talco o catéter pleural tunelizado permanente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del derrame pleural"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "thoracic_surgery",
+      "subtopic": "pleural_effusion",
+      "vignette": "Hombre de 35 años con fiebre vespertina, sudoración nocturna, pérdida de peso y derrame pleural derecho. El líquido es un exudado con predominio de linfocitos, adenosina desaminasa de 80 U/L y escasas células mesoteliales.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Derrame paraneumónico bacteriano",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Predominarían neutrófilos."
+        },
+        {
+          "key": "b",
+          "text": "Lupus eritematoso sistémico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable con estos datos."
+        },
+        {
+          "key": "c",
+          "text": "Tromboembolia pulmonar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la adenosina desaminasa elevada."
+        },
+        {
+          "key": "d",
+          "text": "Infección viral sin importancia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una infección que requiere tratamiento."
+        },
+        {
+          "key": "e",
+          "text": "Insuficiencia cardiaca",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Sería un trasudado."
+        },
+        {
+          "key": "f",
+          "text": "Quilotórax",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Tendría triglicéridos altos."
+        },
+        {
+          "key": "g",
+          "text": "Derrame maligno",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La adenosina desaminasa alta orienta a tuberculosis."
+        },
+        {
+          "key": "h",
+          "text": "Derrame por pancreatitis",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Tendría amilasa elevada."
+        },
+        {
+          "key": "i",
+          "text": "Empiema",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Tendría pus y neutrófilos."
+        },
+        {
+          "key": "j",
+          "text": "Tuberculosis pleural",
+          "correct": true,
+          "rationale": "Exudado linfocítico con adenosina desaminasa elevada y síntomas constitucionales."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La tuberculosis pleural es una causa frecuente de exudado en países con alta prevalencia de tuberculosis, como México, sobre todo en adultos jóvenes. Se manifiesta con fiebre, tos, dolor pleurítico y síntomas constitucionales. El líquido es un exudado con predominio linfocítico, escasas células mesoteliales y adenosina desaminasa elevada, generalmente mayor de 40 U/L. La baciloscopia y el cultivo del líquido tienen baja sensibilidad, y la biopsia pleural con granulomas tiene mayor rendimiento. El tratamiento es el esquema antituberculoso estándar durante 6 meses, y el derrame suele resolverse sin drenaje.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del derrame pleural",
+        "Norma Oficial Mexicana para la prevención y control de la tuberculosis"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "thoracic_surgery",
+      "subtopic": "pleural_effusion",
+      "vignette": "Mujer de 50 años con disnea y derrame pleural izquierdo de causa desconocida en la radiografía de tórax, de tamaño moderado, sin insuficiencia cardiaca evidente.",
+      "prompt": "¿Cuál es el estudio inicial indicado para el diagnóstico de la causa?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Diuréticos y radiografía de control sin estudiar el líquido",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No identifica la causa."
+        },
+        {
+          "key": "b",
+          "text": "Toracocentesis diagnóstica guiada por ultrasonido con análisis del líquido",
+          "correct": true,
+          "rationale": "Permite distinguir trasudado de exudado y orientar la causa."
+        },
+        {
+          "key": "c",
+          "text": "Broncoscopia como primer estudio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "d",
+          "text": "Repetir la radiografía en 3 meses",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Retrasa el diagnóstico."
+        },
+        {
+          "key": "e",
+          "text": "Antibióticos empíricos sin estudio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se conoce la causa."
+        },
+        {
+          "key": "f",
+          "text": "Pleurodesis inmediata",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Primero se diagnostica la causa."
+        },
+        {
+          "key": "g",
+          "text": "Marcadores tumorales séricos como diagnóstico",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No confirman la causa."
+        },
+        {
+          "key": "h",
+          "text": "El derrame siempre es por el corazón",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay muchas causas."
+        },
+        {
+          "key": "i",
+          "text": "Tomografía por emisión de positrones",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "j",
+          "text": "Biopsia pleural abierta como primer paso",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es invasiva y se reserva para casos no diagnosticados."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "La toracocentesis diagnóstica es el estudio inicial ante un derrame pleural de causa desconocida, salvo que la causa sea clara, como insuficiencia cardiaca con derrame bilateral típico. Se realiza preferentemente guiada por ultrasonido para reducir complicaciones como el neumotórax. El líquido se analiza con proteínas, deshidrogenasa láctica, glucosa, pH, cuenta celular, tinción de Gram, cultivo, citología y, según el caso, adenosina desaminasa, triglicéridos y amilasa. Los criterios de Light distinguen trasudado de exudado y orientan el diagnóstico y los estudios adicionales.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del derrame pleural"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "thoracic_surgery",
+      "subtopic": "pleural_effusion",
+      "vignette": "Hombre de 50 años operado de esofagectomía hace 7 días que presenta derrame pleural derecho de aspecto lechoso. El líquido tiene triglicéridos de 250 mg/dL y quilomicrones presentes.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Quilotórax por lesión del conducto torácico",
+          "correct": true,
+          "rationale": "Líquido lechoso con triglicéridos mayores de 110 mg/dL y quilomicrones tras cirugía torácica."
+        },
+        {
+          "key": "b",
+          "text": "Hemotórax",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El líquido no es hemático."
+        },
+        {
+          "key": "c",
+          "text": "Insuficiencia cardiaca",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Sería un trasudado claro."
+        },
+        {
+          "key": "d",
+          "text": "Líquido normal tras la cirugía",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una complicación."
+        },
+        {
+          "key": "e",
+          "text": "Derrame maligno",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El contexto es posquirúrgico."
+        },
+        {
+          "key": "f",
+          "text": "Empiema",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El líquido sería purulento con pH bajo."
+        },
+        {
+          "key": "g",
+          "text": "Pseudoquilotórax",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tiene colesterol elevado sin quilomicrones y es crónico."
+        },
+        {
+          "key": "h",
+          "text": "Derrame paraneumónico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica los triglicéridos ni los quilomicrones."
+        },
+        {
+          "key": "i",
+          "text": "Derrame por pancreatitis",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Tendría amilasa alta."
+        },
+        {
+          "key": "j",
+          "text": "Fuga esofágica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Tendría amilasa alta y contenido digestivo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "El quilotórax es la acumulación de linfa en el espacio pleural por lesión u obstrucción del conducto torácico. Las causas más frecuentes son las traumáticas, sobre todo la cirugía torácica como esofagectomía y cirugía cardiaca, y las no traumáticas, sobre todo el linfoma. El líquido es lechoso con triglicéridos mayores de 110 mg/dL y presencia de quilomicrones. El tratamiento inicial es conservador con drenaje, dieta con triglicéridos de cadena media o nutrición parenteral y octreótido. Si el gasto es alto o persistente se realiza ligadura del conducto torácico o embolización.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del derrame pleural"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "anesthesiology",
+      "subtopic": "preoperative_assessment_general",
+      "vignette": "Hombre de 50 años con hipertensión controlada con un fármaco y diabetes tipo 2 bien controlada, sin limitación funcional, programado para cirugía electiva.",
+      "prompt": "¿Qué clasificación de la Sociedad Americana de Anestesiólogos le corresponde?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "ASA II E por ser electiva",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La E se usa en cirugía de urgencia."
+        },
+        {
+          "key": "b",
+          "text": "ASA V",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Corresponde a pacientes moribundos."
+        },
+        {
+          "key": "c",
+          "text": "ASA I",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Corresponde a pacientes sanos."
+        },
+        {
+          "key": "d",
+          "text": "No se puede clasificar sin estudios",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La clasificación es clínica."
+        },
+        {
+          "key": "e",
+          "text": "ASA IV",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Corresponde a enfermedad grave que amenaza la vida."
+        },
+        {
+          "key": "f",
+          "text": "ASA III por tener dos enfermedades",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El número no define la clase, sino la gravedad."
+        },
+        {
+          "key": "g",
+          "text": "La clasificación ASA predice exactamente la mortalidad individual",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una estimación del estado físico."
+        },
+        {
+          "key": "h",
+          "text": "ASA II",
+          "correct": true,
+          "rationale": "Enfermedad sistémica leve sin limitación funcional."
+        },
+        {
+          "key": "i",
+          "text": "ASA VI",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Corresponde a muerte cerebral para donación."
+        },
+        {
+          "key": "j",
+          "text": "ASA III",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Corresponde a enfermedad sistémica grave con limitación funcional."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "La clasificación del estado físico de la Sociedad Americana de Anestesiólogos describe el estado de salud preoperatorio. ASA I es un paciente sano. ASA II tiene enfermedad sistémica leve sin limitación funcional, como hipertensión o diabetes bien controladas, tabaquismo u obesidad leve. ASA III tiene enfermedad sistémica grave con limitación funcional, como diabetes o hipertensión mal controladas u obesidad mórbida. ASA IV tiene enfermedad grave que amenaza la vida, ASA V es un paciente moribundo y ASA VI un donante con muerte cerebral. Se agrega la letra E en la cirugía de urgencia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de valoración preanestésica"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "anesthesiology",
+      "subtopic": "preoperative_assessment_general",
+      "vignette": "Mujer de 35 años sana programada para colecistectomía electiva a las 8 de la mañana. Pregunta cuánto tiempo debe estar en ayuno.",
+      "prompt": "¿Cuál es la indicación de ayuno preoperatorio más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ayuno de 6 horas para alimentos ligeros y de 2 horas para líquidos claros",
+          "correct": true,
+          "rationale": "Reduce el riesgo de aspiración sin ayunos prolongados innecesarios."
+        },
+        {
+          "key": "b",
+          "text": "Ayuno de 2 horas para comidas grasosas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Las comidas grasosas requieren 8 horas."
+        },
+        {
+          "key": "c",
+          "text": "Ayuno solo de líquidos y no de sólidos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es al revés."
+        },
+        {
+          "key": "d",
+          "text": "No explicar las indicaciones de ayuno",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede causar cancelaciones."
+        },
+        {
+          "key": "e",
+          "text": "Entre más ayuno, más segura la anestesia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El ayuno prolongado no aporta beneficio."
+        },
+        {
+          "key": "f",
+          "text": "Puede desayunar normalmente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumenta el riesgo de aspiración."
+        },
+        {
+          "key": "g",
+          "text": "Ayuno de 24 horas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es excesivo y causa deshidratación."
+        },
+        {
+          "key": "h",
+          "text": "Ayuno absoluto desde la medianoche para todo, incluida el agua",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es innecesariamente prolongado."
+        },
+        {
+          "key": "i",
+          "text": "Colocar sonda nasogástrica a todas",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "j",
+          "text": "Ayuno de 12 horas para la leche materna en adultos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No aplica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "Las recomendaciones de ayuno preoperatorio para pacientes sanos en cirugía electiva son de 2 horas para líquidos claros como agua, jugo sin pulpa y café sin leche, 4 horas para leche materna, 6 horas para fórmula, leche no humana y comidas ligeras, y 8 horas para comidas grasosas o abundantes. El ayuno prolongado no reduce el riesgo de aspiración y causa sed, hambre, deshidratación e hipoglucemia. Los pacientes con vaciamiento gástrico retardado, como diabéticos con gastroparesia, embarazadas o con obstrucción intestinal, tienen mayor riesgo de aspiración.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de valoración preanestésica"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "anesthesiology",
+      "subtopic": "preoperative_assessment_general",
+      "vignette": "Hombre de 45 años con obesidad, cuello corto y grueso, apertura bucal limitada. Al abrir la boca y sacar la lengua solo se ven el paladar duro y la base de la úvula.",
+      "prompt": "¿Qué indica la clasificación de Mallampati de este paciente?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Mallampati I sin dificultad esperada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se verían el paladar, las fauces, la úvula y los pilares."
+        },
+        {
+          "key": "b",
+          "text": "Mallampati IV",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Solo se vería el paladar duro."
+        },
+        {
+          "key": "c",
+          "text": "Mallampati III, que sugiere vía aérea difícil",
+          "correct": true,
+          "rationale": "Solo se observan el paladar blando y la base de la úvula."
+        },
+        {
+          "key": "d",
+          "text": "La obesidad nunca afecta la vía aérea",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un factor de riesgo."
+        },
+        {
+          "key": "e",
+          "text": "Indica riesgo cardiaco",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Evalúa la vía aérea."
+        },
+        {
+          "key": "f",
+          "text": "Indica que la intubación será fácil",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Sugiere dificultad."
+        },
+        {
+          "key": "g",
+          "text": "Indica obligatoriamente traqueostomía electiva",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Indica preparación para vía aérea difícil."
+        },
+        {
+          "key": "h",
+          "text": "No tiene relación con la intubación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es un predictor de vía aérea difícil."
+        },
+        {
+          "key": "i",
+          "text": "Indica alergia a anestésicos",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No evalúa alergias."
+        },
+        {
+          "key": "j",
+          "text": "Mallampati II",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se vería la úvula completa."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "La evaluación de la vía aérea antes de la anestesia permite anticipar dificultades para la ventilación y la intubación. La clasificación de Mallampati valora las estructuras visibles con la boca abierta y la lengua afuera. La clase I muestra paladar blando, fauces, úvula y pilares, la clase II paladar blando, fauces y úvula, la clase III paladar blando y base de la úvula, y la clase IV solo el paladar duro. Las clases III y IV sugieren intubación difícil. Otros predictores son la distancia tiromentoniana corta, la apertura bucal limitada, la movilidad cervical reducida y la obesidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de manejo de la vía aérea difícil"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "anesthesiology",
+      "subtopic": "preoperative_assessment_general",
+      "vignette": "Hombre de 25 años durante una apendicectomía con anestesia general con sevoflurano y succinilcolina. Presenta rigidez muscular generalizada, taquicardia, aumento rápido del CO2 espirado, temperatura de 40.5 °C en ascenso y acidosis mixta. Su tío murió durante una cirugía.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hipertermia maligna",
+          "correct": true,
+          "rationale": "Hipercapnia, rigidez, taquicardia e hipertermia tras halogenados y succinilcolina con antecedente familiar."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome neuroléptico maligno",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se asocia a antipsicóticos y evoluciona en días."
+        },
+        {
+          "key": "c",
+          "text": "Síndrome serotoninérgico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se asocia a fármacos serotoninérgicos con clonus."
+        },
+        {
+          "key": "d",
+          "text": "Crisis tiroidea",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la rigidez ni la relación con los anestésicos."
+        },
+        {
+          "key": "e",
+          "text": "Reacción anafiláctica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da hipotensión y broncoespasmo sin rigidez."
+        },
+        {
+          "key": "f",
+          "text": "Sepsis por la apendicitis",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la rigidez ni el aumento rápido del CO2."
+        },
+        {
+          "key": "g",
+          "text": "Feocromocitoma",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica la rigidez ni la relación con los anestésicos."
+        },
+        {
+          "key": "h",
+          "text": "Fiebre normal por la infección del apéndice",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una crisis farmacogenética."
+        },
+        {
+          "key": "i",
+          "text": "Anestesia superficial",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la hipertermia."
+        },
+        {
+          "key": "j",
+          "text": "Hipertermia por cobertores excesivos",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la hipercapnia ni la rigidez."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "f"
+      ],
+      "explanation": "La hipertermia maligna es una enfermedad farmacogenética, generalmente autosómica dominante por mutaciones del receptor de rianodina RYR1, que se desencadena con anestésicos halogenados y succinilcolina. La liberación descontrolada de calcio en el músculo produce hipermetabolismo. El signo más temprano es el aumento inexplicable del CO2 espirado, con taquicardia, rigidez muscular incluido el espasmo del masetero, hipertermia tardía, acidosis, hiperpotasemia y rabdomiólisis. El tratamiento es suspender los desencadenantes, hiperventilar con oxígeno al 100%, administrar dantroleno intravenoso, enfriar y corregir las alteraciones metabólicas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de manejo de la hipertermia maligna"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "anesthesiology",
+      "subtopic": "preoperative_assessment_general",
+      "vignette": "Mujer de 30 años que recibió anestesia raquídea para cesárea. Al segundo día presenta cefalea frontooccipital intensa que empeora al sentarse o ponerse de pie y mejora al acostarse, con náusea y rigidez de nuca leve. Afebril y sin déficit neurológico.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Preeclampsia posparto",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el componente postural, aunque debe considerarse si hay hipertensión."
+        },
+        {
+          "key": "b",
+          "text": "Migraña",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No tiene componente postural típico."
+        },
+        {
+          "key": "c",
+          "text": "Dolor de cabeza por desvelo con el bebé",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Tiene una causa específica."
+        },
+        {
+          "key": "d",
+          "text": "Cefalea tensional",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es postural."
+        },
+        {
+          "key": "e",
+          "text": "Sinusitis",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es postural."
+        },
+        {
+          "key": "f",
+          "text": "Hematoma epidural espinal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Daría déficit neurológico."
+        },
+        {
+          "key": "g",
+          "text": "Trombosis venosa cerebral",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Debe considerarse si la cefalea cambia, pero no suele ser postural."
+        },
+        {
+          "key": "h",
+          "text": "Hemorragia subaracnoidea",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es súbita sin componente postural."
+        },
+        {
+          "key": "i",
+          "text": "Cefalea pospunción dural",
+          "correct": true,
+          "rationale": "Cefalea postural que empeora al estar de pie tras anestesia neuroaxial."
+        },
+        {
+          "key": "j",
+          "text": "Meningitis bacteriana",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría fiebre y no sería postural."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "La cefalea pospunción dural se debe a la fuga de líquido cefalorraquídeo por el orificio de la duramadre, con tracción de las estructuras intracraneales. Es más frecuente en mujeres jóvenes, embarazadas y con agujas de mayor calibre o de punta cortante. Aparece de 24 a 48 horas después, es frontooccipital y empeora de forma característica al sentarse o ponerse de pie, mejorando al acostarse, a veces con náusea, rigidez de nuca, tinnitus y diplopía. El tratamiento inicial es analgesia, hidratación y cafeína. Si persiste o es intensa se realiza parche hemático epidural.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de anestesia neuroaxial"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "anesthesiology",
+      "subtopic": "preoperative_assessment_general",
+      "vignette": "Hombre de 60 años que no puede ser intubado tras la inducción anestésica y tampoco puede ser ventilado con mascarilla facial ni con dispositivo supraglótico. Saturación de 72% en descenso.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esperar a que el paciente despierte con la saturación en descenso",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La hipoxia puede causar paro."
+        },
+        {
+          "key": "b",
+          "text": "Traqueostomía reglada en el quirófano con calma",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es más lenta que la cricotiroidotomía."
+        },
+        {
+          "key": "c",
+          "text": "Administrar más relajante muscular",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No resuelve la falta de oxigenación."
+        },
+        {
+          "key": "d",
+          "text": "Fibrobroncoscopia en un paciente sin oxigenación",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es lenta en esta situación."
+        },
+        {
+          "key": "e",
+          "text": "Realizar una vía aérea quirúrgica de urgencia con cricotiroidotomía",
+          "correct": true,
+          "rationale": "La situación de no intubar y no oxigenar requiere acceso quirúrgico inmediato."
+        },
+        {
+          "key": "f",
+          "text": "La saturación se recuperará sola",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una emergencia vital."
+        },
+        {
+          "key": "g",
+          "text": "No hacer la cricotiroidotomía por miedo a la complicación",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es lo que salva la vida."
+        },
+        {
+          "key": "h",
+          "text": "Intubación nasotraqueal a ciegas repetida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Retrasa la oxigenación."
+        },
+        {
+          "key": "i",
+          "text": "Seguir intentando la intubación orotraqueal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Retrasa la oxigenación."
+        },
+        {
+          "key": "j",
+          "text": "Oxígeno por puntas nasales",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es suficiente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "i"
+      ],
+      "explanation": "La situación de no intubar y no oxigenar es una emergencia de la vía aérea. Los algoritmos de vía aérea difícil indican intentar la intubación un número limitado de veces, usar un dispositivo supraglótico y ventilar con mascarilla. Si ninguno logra oxigenar, se debe realizar de inmediato una vía aérea quirúrgica de urgencia con cricotiroidotomía, con bisturí y tubo o con cánula. Retrasar la decisión aumenta el riesgo de daño cerebral hipóxico y paro cardiaco. La preparación previa y la evaluación de la vía aérea reducen estas situaciones.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de manejo de la vía aérea difícil"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "anesthesiology",
+      "subtopic": "local_anesthetics",
+      "vignette": "Médico residente que aplicará lidocaína para suturar una herida y pregunta cómo funciona el anestésico local.",
+      "prompt": "¿Cuál es el mecanismo de acción de los anestésicos locales?",
+      "polarity": "affirmative",
+      "task": "mechanism",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Producen vasoconstricción que impide el dolor",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La vasoconstricción la aporta la adrenalina."
+        },
+        {
+          "key": "b",
+          "text": "Bloquean los canales de sodio dependientes de voltaje e impiden la conducción del impulso nervioso",
+          "correct": true,
+          "rationale": "Evitan la despolarización de la membrana neuronal."
+        },
+        {
+          "key": "c",
+          "text": "Bloquean los canales de potasio exclusivamente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El mecanismo principal es el bloqueo del sodio."
+        },
+        {
+          "key": "d",
+          "text": "Inhiben la ciclooxigenasa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es el mecanismo de los antiinflamatorios."
+        },
+        {
+          "key": "e",
+          "text": "Destruyen las terminaciones nerviosas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El efecto es reversible."
+        },
+        {
+          "key": "f",
+          "text": "Bloquean los receptores NMDA",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es el mecanismo de la ketamina."
+        },
+        {
+          "key": "g",
+          "text": "Bloquean los receptores de opioides",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es el mecanismo de los antagonistas opioides."
+        },
+        {
+          "key": "h",
+          "text": "Bloquean la placa neuromuscular",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es el mecanismo de los relajantes musculares."
+        },
+        {
+          "key": "i",
+          "text": "Enfrían el tejido para quitar el dolor",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es su mecanismo."
+        },
+        {
+          "key": "j",
+          "text": "Activan los receptores GABA en el cerebro",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es el mecanismo de las benzodiacepinas."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "Los anestésicos locales bloquean de forma reversible los canales de sodio dependientes de voltaje desde el interior de la membrana neuronal, lo que impide la despolarización y la conducción del impulso nervioso. Las fibras pequeñas y mielinizadas se bloquean primero, por lo que se pierde primero el dolor y la temperatura y después el tacto y la función motora. Se clasifican en ésteres, como la procaína y la tetracaína, metabolizados por colinesterasas y con más alergias, y amidas, como la lidocaína y la bupivacaína, metabolizadas en el hígado. La acidosis de los tejidos inflamados reduce su eficacia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de anestesia local y regional"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q19",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "anesthesiology",
+      "subtopic": "local_anesthetics",
+      "vignette": "Mujer de 40 años que recibe un bloqueo regional con bupivacaína. A los pocos minutos refiere sabor metálico, entumecimiento peribucal y tinnitus, y luego presenta convulsiones y arritmia ventricular.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Toxicidad sistémica por anestésico local",
+          "correct": true,
+          "rationale": "Síntomas neurológicos seguidos de convulsiones y toxicidad cardiaca tras un bloqueo."
+        },
+        {
+          "key": "b",
+          "text": "Epilepsia de nueva aparición",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La relación con el bloqueo es clara."
+        },
+        {
+          "key": "c",
+          "text": "Hipoglucemia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la secuencia."
+        },
+        {
+          "key": "d",
+          "text": "Nerviosismo por el procedimiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una toxicidad grave."
+        },
+        {
+          "key": "e",
+          "text": "Crisis de ansiedad",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica las convulsiones ni la arritmia."
+        },
+        {
+          "key": "f",
+          "text": "Evento vascular cerebral",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica la secuencia tras el bloqueo."
+        },
+        {
+          "key": "g",
+          "text": "Reacción anafiláctica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da urticaria, broncoespasmo e hipotensión."
+        },
+        {
+          "key": "h",
+          "text": "Reacción vasovagal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da bradicardia e hipotensión sin convulsiones."
+        },
+        {
+          "key": "i",
+          "text": "Hipertermia maligna",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No se asocia a anestésicos locales."
+        },
+        {
+          "key": "j",
+          "text": "Efecto de la adrenalina",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica las convulsiones."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "La toxicidad sistémica por anestésicos locales ocurre por inyección intravascular accidental o dosis excesivas. Inicia con síntomas neurológicos como sabor metálico, entumecimiento peribucal, tinnitus, mareo y agitación, seguidos de convulsiones y depresión del sistema nervioso central. La toxicidad cardiaca incluye arritmias, bradicardia, hipotensión y paro, y es más grave con la bupivacaína. El tratamiento incluye detener la inyección, manejar la vía aérea, tratar las convulsiones con benzodiacepinas y administrar emulsión lipídica al 20% intravenosa. La aspiración y la inyección fraccionada la previenen.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de anestesia local y regional"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q20",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "anesthesiology",
+      "subtopic": "local_anesthetics",
+      "vignette": "Hombre de 70 kg que requiere sutura de una herida extensa con lidocaína al 2% con adrenalina. Se pregunta la dosis máxima segura.",
+      "prompt": "¿Qué indica la dosis máxima de lidocaína con adrenalina para este paciente?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "20 mg/kg",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es una dosis tóxica."
+        },
+        {
+          "key": "b",
+          "text": "1 mg/kg como dosis máxima",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es la dosis antiarrítmica, no la máxima anestésica."
+        },
+        {
+          "key": "c",
+          "text": "La dosis máxima es igual para todos los anestésicos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Varía según el fármaco."
+        },
+        {
+          "key": "d",
+          "text": "100 mL de lidocaína al 2%",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es una dosis tóxica."
+        },
+        {
+          "key": "e",
+          "text": "4.5 mg/kg como si no tuviera adrenalina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La adrenalina aumenta la dosis máxima."
+        },
+        {
+          "key": "f",
+          "text": "Depende solo del tamaño de la herida",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Depende del peso."
+        },
+        {
+          "key": "g",
+          "text": "Alrededor de 7 mg/kg, unos 490 mg, equivalentes a 24 mL de lidocaína al 2%",
+          "correct": true,
+          "rationale": "La adrenalina retrasa la absorción y permite una dosis mayor."
+        },
+        {
+          "key": "h",
+          "text": "2 mg/kg como máximo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Subestima la dosis permitida."
+        },
+        {
+          "key": "i",
+          "text": "Entre más anestésico, mejor efecto sin riesgo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El exceso es tóxico."
+        },
+        {
+          "key": "j",
+          "text": "No hay dosis máxima para la lidocaína",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Existe riesgo de toxicidad."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La dosis máxima recomendada de lidocaína es de alrededor de 4.5 mg/kg sin adrenalina y de 7 mg/kg con adrenalina. La bupivacaína tiene dosis máximas menores, de 2.5 mg/kg sin adrenalina y 3 mg/kg con adrenalina, y mayor cardiotoxicidad. Una solución al 1% contiene 10 mg/mL y una al 2% contiene 20 mg/mL. La adrenalina produce vasoconstricción, retrasa la absorción, prolonga el efecto y reduce el sangrado. Clásicamente se evitaba en zonas con circulación terminal como dedos, aunque la evidencia actual muestra que es segura en concentraciones bajas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de anestesia local y regional"
+      ]
+    },
+    {
+      "key": "cir-09-torax-anestesia-q21",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "anesthesiology",
+      "subtopic": "local_anesthetics",
+      "vignette": "Mujer de 28 años que recibe anestesia raquídea para cesárea. A los 5 minutos presenta náusea, mareo, presión de 75/40 mmHg y frecuencia cardiaca de 60.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Crisis de ansiedad",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Hay hipotensión objetiva."
+        },
+        {
+          "key": "b",
+          "text": "Embolia de líquido amniótico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay colapso respiratorio ni coagulopatía."
+        },
+        {
+          "key": "c",
+          "text": "Infarto agudo de miocardio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es poco probable en este contexto."
+        },
+        {
+          "key": "d",
+          "text": "Hipoglucemia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la hipotensión."
+        },
+        {
+          "key": "e",
+          "text": "Reacción anafiláctica al anestésico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay urticaria ni broncoespasmo."
+        },
+        {
+          "key": "f",
+          "text": "Hipotensión por bloqueo simpático de la anestesia neuroaxial",
+          "correct": true,
+          "rationale": "El bloqueo simpático produce vasodilatación y disminución del retorno venoso."
+        },
+        {
+          "key": "g",
+          "text": "Toxicidad sistémica por anestésico local",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay síntomas neurológicos."
+        },
+        {
+          "key": "h",
+          "text": "Presión baja normal en el embarazo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere tratamiento."
+        },
+        {
+          "key": "i",
+          "text": "Hemorragia obstétrica masiva",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aún no hay sangrado importante."
+        },
+        {
+          "key": "j",
+          "text": "Bloqueo espinal total",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Daría paro respiratorio y pérdida de conciencia."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "La hipotensión es la complicación más frecuente de la anestesia raquídea y epidural, por el bloqueo simpático que produce vasodilatación y disminución del retorno venoso, y bradicardia si el bloqueo alcanza las fibras cardioaceleradoras. En embarazadas se agrava por la compresión aortocava. Se previene y trata con desplazamiento uterino a la izquierda, carga de líquidos y vasopresores como fenilefrina o efedrina. La hipotensión materna reduce el flujo uteroplacentario. Otras complicaciones de la anestesia neuroaxial son la cefalea pospunción, el bloqueo alto y el hematoma epidural.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de anestesia neuroaxial"
+      ]
+    }
+  ]
+}
