@@ -1,0 +1,207 @@
+@ urg|respiratory_emergencies|pulmonary_embolism_emergency|2|initial_study
+V: Mujer de 35 años con disnea súbita y dolor pleurítico. Frecuencia cardiaca de 95, saturación de 96 por ciento. Sin cirugía reciente, sin edema de extremidades ni antecedente de trombosis. Toma anticonceptivos orales. Escala de Wells de baja probabilidad.
+P: ¿Cuál es el estudio inicial más apropiado?
++ Dímero D || En probabilidad clínica baja, un dímero D negativo descarta la tromboembolia.
+- anchoring | Angiotomografía pulmonar en todos los pacientes con disnea || En baja probabilidad se inicia con dímero D.
+- availability_heuristic | Gammagrama ventilación perfusión como primer estudio || No es el primer paso en baja probabilidad.
+- representativeness_heuristic | Iniciar anticoagulación sin estudios || Primero se estratifica.
+- premature_closure | Radiografía de tórax como estudio que descarta la tromboembolia || Suele ser normal.
+- framing_effect | Arteriografía pulmonar || Es invasiva.
+- complexity_bias | Resonancia magnética de tórax || No es el estudio inicial.
+- base_rate_fallacy | El dímero D positivo confirma la tromboembolia || Tiene baja especificidad.
+- belief_bias | Los anticonceptivos no aumentan el riesgo de trombosis || Lo aumentan.
+- omission_bias | No usar una escala de probabilidad clínica || Guía la elección de estudios.
+E: El diagnóstico de tromboembolia pulmonar se basa en la probabilidad clínica, estimada con escalas como Wells o Ginebra. En pacientes con probabilidad baja o intermedia, o tromboembolia improbable, se solicita dímero D; un resultado negativo descarta la tromboembolia por su alta sensibilidad. Un dímero D positivo no confirma el diagnóstico, por su baja especificidad, y obliga a realizar angiotomografía pulmonar. En pacientes con probabilidad alta se realiza directamente la angiotomografía. En pacientes con muy baja probabilidad pueden aplicarse los criterios PERC para evitar el dímero D. Los anticonceptivos con estrógenos aumentan el riesgo trombótico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa ;; Guía de la Sociedad Europea de Cardiología para tromboembolia pulmonar
+
+@ urg|respiratory_emergencies|pulmonary_embolism_emergency|2|confirmatory_study
+V: Hombre de 60 años operado de prótesis de rodilla hace 10 días que presenta disnea súbita, taquicardia de 115, saturación de 89 por ciento y edema de la pantorrilla derecha. Escala de Wells de alta probabilidad. Presión arterial normal. Función renal normal.
+P: ¿Cuál es el estudio de elección para confirmar el diagnóstico?
++ Angiotomografía pulmonar || Es el estudio de elección en pacientes con alta probabilidad clínica.
+- anchoring | Dímero D para decidir || En alta probabilidad no es útil para descartar.
+- availability_heuristic | Electrocardiograma como estudio confirmatorio || No confirma.
+- representativeness_heuristic | Radiografía de tórax || No confirma.
+- premature_closure | Ecocardiograma como único estudio en paciente estable || No confirma en estables.
+- framing_effect | Gasometría arterial || No confirma.
+- complexity_bias | Arteriografía pulmonar invasiva de rutina || Fue sustituida por la angiotomografía.
+- base_rate_fallacy | Un dímero D negativo descarta la tromboembolia en alta probabilidad || No es suficiente en alta probabilidad.
+- belief_bias | La cirugía de rodilla no aumenta el riesgo de trombosis || Es un factor de riesgo mayor.
+- information_bias | Gammagrama óseo || No evalúa la circulación pulmonar.
+E: La angiotomografía pulmonar es el estudio de elección para confirmar la tromboembolia pulmonar, con alta sensibilidad y especificidad, y permite evaluar el tamaño del ventrículo derecho. En pacientes con alta probabilidad clínica se realiza directamente, sin dímero D. El gammagrama de ventilación perfusión es una alternativa en pacientes con insuficiencia renal, alergia al contraste o embarazo. El ultrasonido Doppler de extremidades puede confirmar una trombosis venosa profunda y justificar el tratamiento. En pacientes inestables que no pueden trasladarse, el ecocardiograma con dilatación del ventrículo derecho apoya el diagnóstico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa ;; Guía de la Sociedad Europea de Cardiología para tromboembolia pulmonar
+
+@ urg|respiratory_emergencies|pulmonary_embolism_emergency|3|treatment_of_choice
+V: Mujer de 55 años con tromboembolia pulmonar confirmada que presenta presión de 75/45 mmHg sostenida, frecuencia de 130 y ventrículo derecho muy dilatado en el ecocardiograma. Sin contraindicaciones para trombólisis.
+P: ¿Cuál es el tratamiento de elección?
++ Trombólisis sistémica con alteplasa junto con anticoagulación con heparina no fraccionada || Es una tromboembolia de alto riesgo con choque.
+- anchoring | Solo anticoagulación oral directa || Es insuficiente en choque.
+- availability_heuristic | Filtro de vena cava como tratamiento principal || No disuelve el trombo.
+- representativeness_heuristic | Ácido acetilsalicílico || No es un tratamiento de la tromboembolia.
+- premature_closure | Solo líquidos en grandes volúmenes || Pueden empeorar la falla del ventrículo derecho.
+- framing_effect | Heparina de bajo peso molecular sola en choque || No es suficiente en alto riesgo.
+- complexity_bias | Esperar 48 horas para ver la evolución || El choque requiere tratamiento inmediato.
+- base_rate_fallacy | La trombólisis está contraindicada en toda tromboembolia || Está indicada en alto riesgo.
+- belief_bias | La hipotensión en tromboembolia siempre responde a líquidos abundantes || El exceso dilata más el ventrículo derecho.
+- omission_bias | No considerar embolectomía si hay contraindicación para trombólisis || Es una alternativa.
+E: La tromboembolia pulmonar de alto riesgo, antes llamada masiva, se define por inestabilidad hemodinámica: paro cardiaco, choque obstructivo o hipotensión persistente con sistólica menor de 90 mmHg. Tiene alta mortalidad. El tratamiento de elección es la trombólisis sistémica, como alteplasa 100 mg en 2 horas, junto con heparina no fraccionada. Si la trombólisis está contraindicada o falla, se considera la embolectomía quirúrgica o el tratamiento dirigido por catéter. Los líquidos deben administrarse con cautela porque pueden empeorar la falla del ventrículo derecho; se usa norepinefrina para la hipotensión.
+R: Guía de la Sociedad Europea de Cardiología para tromboembolia pulmonar ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa
+
+@ urg|respiratory_emergencies|pulmonary_embolism_emergency|2|treatment_of_choice
+V: Hombre de 45 años con tromboembolia pulmonar confirmada tras un viaje largo. Hemodinámicamente estable, sin dilatación del ventrículo derecho y troponina normal. Función renal normal. Sin cáncer.
+P: ¿Cuál es el tratamiento anticoagulante de elección?
++ Anticoagulante oral directo, como rivaroxabán o apixabán || Son de primera línea en tromboembolia de bajo riesgo sin contraindicaciones.
+- anchoring | Trombólisis sistémica || No está indicada en bajo riesgo.
+- availability_heuristic | Ácido acetilsalicílico como único tratamiento || No es suficiente.
+- representativeness_heuristic | Filtro de vena cava rutinario || Solo si hay contraindicación para anticoagular.
+- premature_closure | Ningún tratamiento porque está estable || La anticoagulación previene recurrencias y muerte.
+- framing_effect | Embolectomía quirúrgica || No está indicada.
+- complexity_bias | Heparina no fraccionada en infusión prolongada en todos los casos || Se reserva para casos específicos.
+- base_rate_fallacy | La tromboembolia de bajo riesgo no requiere anticoagulación || Siempre la requiere.
+- belief_bias | Los anticoagulantes directos son menos eficaces que la warfarina || Son igual de eficaces con menos sangrado.
+- omission_bias | No definir la duración de la anticoagulación || Depende de si fue provocada.
+E: El tratamiento de la tromboembolia pulmonar estable se basa en la anticoagulación. Los anticoagulantes orales directos, como rivaroxabán, apixabán, edoxabán y dabigatrán, son de primera línea por su eficacia similar y menor riesgo de sangrado que la warfarina, sin necesidad de monitoreo. El rivaroxabán y el apixabán pueden iniciarse directamente; el edoxabán y el dabigatrán requieren heparina previa. Están contraindicados en insuficiencia renal grave, embarazo, síndrome antifosfolípido y válvulas mecánicas. Los pacientes de bajo riesgo según la escala PESI pueden tratarse de forma ambulatoria.
+R: Guía de la Sociedad Europea de Cardiología para tromboembolia pulmonar ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa
+
+@ urg|respiratory_emergencies|pulmonary_embolism_emergency|3|treatment_of_choice
+V: Mujer de 30 años con embarazo de 28 semanas y tromboembolia pulmonar confirmada. Hemodinámicamente estable.
+P: ¿Cuál es el tratamiento anticoagulante de elección?
++ Heparina de bajo peso molecular en dosis terapéutica ajustada al peso || No atraviesa la placenta y es segura en el embarazo.
+- anchoring | Warfarina || Es teratógena y causa sangrado fetal.
+- availability_heuristic | Rivaroxabán || No se recomienda en el embarazo.
+- representativeness_heuristic | Ácido acetilsalicílico como único tratamiento || No es suficiente.
+- premature_closure | No anticoagular por el embarazo || La tromboembolia es una causa importante de muerte materna.
+- framing_effect | Trombólisis en paciente estable || No está indicada.
+- complexity_bias | Filtro de vena cava rutinario || Solo si hay contraindicación.
+- base_rate_fallacy | El embarazo disminuye el riesgo de trombosis || Lo aumenta.
+- belief_bias | La heparina de bajo peso molecular atraviesa la placenta || No la atraviesa.
+- omission_bias | No planear el manejo de la anticoagulación alrededor del parto || Es indispensable.
+E: El embarazo y el puerperio aumentan el riesgo de enfermedad tromboembólica, que es una causa importante de muerte materna. La heparina de bajo peso molecular en dosis terapéutica es el tratamiento de elección, porque no atraviesa la placenta y tiene un perfil de seguridad favorable. La warfarina está contraindicada en el embarazo por su teratogenicidad en el primer trimestre y el riesgo de sangrado fetal, y los anticoagulantes orales directos no se recomiendan. La anticoagulación se mantiene durante el embarazo y al menos 6 semanas posparto, con un total mínimo de 3 meses, y se planifica su suspensión antes del parto.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la enfermedad tromboembólica venosa en el embarazo ;; Guía de la Sociedad Europea de Cardiología para tromboembolia pulmonar
+
+@ urg|respiratory_emergencies|pulmonary_embolism_emergency|2|data_interpretation
+V: Hombre de 50 años con tromboembolia pulmonar. El electrocardiograma muestra taquicardia sinusal con onda S profunda en DI, onda Q y onda T negativa en DIII.
+P: ¿Qué indica este patrón electrocardiográfico?
++ Patrón S1Q3T3, un signo de sobrecarga aguda del ventrículo derecho poco sensible || Sugiere tromboembolia pero no la confirma ni la descarta.
+- anchoring | Infarto inferior agudo que requiere fibrinólisis || El patrón sugiere sobrecarga derecha en el contexto.
+- availability_heuristic | Pericarditis aguda || No corresponde.
+- representativeness_heuristic | Hallazgo presente en la mayoría de los pacientes con tromboembolia || Solo aparece en una minoría.
+- premature_closure | Hiperpotasemia || No corresponde.
+- framing_effect | Bloqueo auriculoventricular completo || No corresponde.
+- complexity_bias | Síndrome de Brugada || No corresponde.
+- base_rate_fallacy | Un electrocardiograma normal descarta la tromboembolia || Puede ser normal.
+- belief_bias | La taquicardia sinusal no tiene relación con la tromboembolia || Es el hallazgo más frecuente.
+- focusing_illusion | Hipertrofia ventricular izquierda || No corresponde.
+E: En la tromboembolia pulmonar, el hallazgo electrocardiográfico más frecuente es la taquicardia sinusal. Los signos de sobrecarga aguda del ventrículo derecho incluyen el patrón S1Q3T3, el bloqueo de rama derecha nuevo, la inversión de la onda T en V1 a V4 y la desviación del eje a la derecha. Estos hallazgos son poco sensibles y no confirman ni descartan el diagnóstico, pero se asocian con mayor gravedad. El electrocardiograma es útil para descartar otros diagnósticos, como el infarto. Un electrocardiograma normal no descarta la tromboembolia.
+R: Guía de la Sociedad Europea de Cardiología para tromboembolia pulmonar ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa
+
+@ urg|respiratory_emergencies|pulmonary_embolism_emergency|3|next_step
+V: Hombre de 68 años con tromboembolia pulmonar confirmada, normotenso, con dilatación del ventrículo derecho en la tomografía y troponina elevada.
+P: ¿Cuál es la conducta más apropiada?
++ Anticoagulación con heparina y vigilancia estrecha en una unidad monitorizada, con trombólisis de rescate si se descompensa || Es una tromboembolia de riesgo intermedio alto.
+- anchoring | Trombólisis sistémica inmediata de rutina || En riesgo intermedio no se recomienda de rutina por el riesgo de sangrado.
+- availability_heuristic | Tratamiento ambulatorio con anticoagulante oral || Tiene riesgo de deterioro.
+- representativeness_heuristic | Solo observación sin anticoagulación || Requiere anticoagulación.
+- premature_closure | Embolectomía quirúrgica inmediata || No está indicada en estable.
+- framing_effect | Filtro de vena cava rutinario || No está indicado.
+- complexity_bias | Oxigenación por membrana extracorpórea profiláctica || No está indicada.
+- base_rate_fallacy | La troponina no tiene valor pronóstico en tromboembolia || Indica daño del ventrículo derecho.
+- belief_bias | Todo paciente con ventrículo derecho dilatado requiere trombólisis || No si está normotenso.
+- omission_bias | No vigilar signos de descompensación hemodinámica || Es fundamental.
+E: La tromboembolia pulmonar se estratifica en riesgo alto, con inestabilidad hemodinámica; intermedio, sin inestabilidad pero con escala PESI elevada o disfunción del ventrículo derecho; y bajo. El riesgo intermedio alto se define por disfunción del ventrículo derecho en imagen y troponina elevada. Estos pacientes requieren anticoagulación con heparina y vigilancia estrecha en una unidad monitorizada, porque pueden descompensarse. La trombólisis sistémica de rutina no se recomienda por el riesgo de hemorragia, pero se indica como rescate si aparece inestabilidad. El tratamiento dirigido por catéter es una alternativa.
+R: Guía de la Sociedad Europea de Cardiología para tromboembolia pulmonar ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa
+
+@ urg|respiratory_emergencies|pulmonary_embolism_emergency|3|treatment_of_choice
+V: Hombre de 65 años con trombosis venosa profunda proximal y tromboembolia pulmonar que sufrió una hemorragia intracraneal hace 1 semana.
+P: ¿Cuál es el tratamiento de elección para prevenir nuevas embolias?
++ Filtro de vena cava inferior temporal || La anticoagulación está contraindicada por el sangrado reciente.
+- anchoring | Anticoagulación plena con heparina || Está contraindicada por la hemorragia intracraneal reciente.
+- availability_heuristic | Trombólisis sistémica || Está absolutamente contraindicada.
+- representativeness_heuristic | Ácido acetilsalicílico como sustituto eficaz || No es suficiente.
+- premature_closure | Ningún tratamiento || Tiene riesgo alto de nueva embolia.
+- framing_effect | Anticoagulante oral directo a dosis plena || Está contraindicado.
+- complexity_bias | Embolectomía quirúrgica en paciente estable || No está indicada.
+- base_rate_fallacy | El filtro sustituye a la anticoagulación de forma definitiva || Es temporal y se anticoagula al resolverse la contraindicación.
+- belief_bias | Los filtros no tienen complicaciones || Pueden causar trombosis y migración.
+- omission_bias | No planear el retiro del filtro || Debe retirarse cuando sea posible.
+E: El filtro de vena cava inferior está indicado en pacientes con trombosis venosa profunda proximal o tromboembolia pulmonar que tienen una contraindicación absoluta para la anticoagulación, como sangrado activo o hemorragia intracraneal reciente, o que presentan recurrencia a pesar de una anticoagulación adecuada. No se recomienda de rutina en pacientes que pueden anticoagularse. Se prefieren los filtros recuperables, que se retiran cuando se resuelve la contraindicación, y en ese momento se inicia la anticoagulación. Las complicaciones incluyen trombosis de la vena cava, migración y perforación.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa ;; Guía de la Sociedad Europea de Cardiología para tromboembolia pulmonar
+
+@ urg|respiratory_emergencies|pulmonary_embolism_emergency|3|complication_prognosis
+V: Mujer de 60 años que recibe heparina no fraccionada por tromboembolia pulmonar. Al séptimo día las plaquetas bajan de 250,000 a 90,000 y presenta una nueva trombosis venosa en el brazo.
+P: ¿Cuál es la complicación más probable?
++ Trombocitopenia inducida por heparina || Caída de plaquetas mayor de 50 por ciento entre los días 5 y 10 con nueva trombosis.
+- anchoring | Trombocitopenia por consumo en la tromboembolia || El patrón temporal y la nueva trombosis sugieren otra causa.
+- availability_heuristic | Púrpura trombocitopénica inmunológica primaria || El contexto de heparina orienta.
+- representativeness_heuristic | Coagulación intravascular diseminada || No hay datos de sangrado ni consumo de factores.
+- premature_closure | Error de laboratorio || La caída y la trombosis son concordantes.
+- framing_effect | Efecto esperado y benigno de la heparina que no requiere cambios || Es grave y requiere suspenderla.
+- complexity_bias | Púrpura trombótica trombocitopénica || No hay anemia hemolítica descrita.
+- base_rate_fallacy | La trombocitopenia por heparina causa sangrado y no trombosis || Causa trombosis paradójica.
+- belief_bias | Puede cambiarse a heparina de bajo peso molecular con seguridad || Tiene reactividad cruzada.
+- omission_bias | No suspender toda heparina y no iniciar un anticoagulante alternativo || Es el tratamiento.
+E: La trombocitopenia inducida por heparina tipo 2 es una reacción inmunitaria mediada por anticuerpos contra el complejo heparina factor plaquetario 4, que activa las plaquetas. Se manifiesta con una caída de plaquetas mayor de 50 por ciento, típicamente entre los días 5 y 10 de exposición, y paradójicamente con trombosis venosas o arteriales. Es más frecuente con heparina no fraccionada. Se evalúa con la escala de las 4 T y se confirma con anticuerpos y pruebas funcionales. El tratamiento es suspender toda heparina, incluida la de bajo peso molecular, e iniciar un anticoagulante no heparínico, como argatrobán, fondaparinux o un anticoagulante oral directo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la trombocitopenia inducida por heparina ;; Guía de la Sociedad Americana de Hematología
+
+@ urg|respiratory_emergencies|pulmonary_embolism_emergency|2|next_step
+V: Hombre de 40 años con tromboembolia pulmonar provocada por una fractura de fémur con inmovilización, ya resuelta. Recibe anticoagulante oral directo desde hace 3 meses sin complicaciones.
+P: ¿Cuál es la conducta más apropiada respecto a la duración de la anticoagulación?
++ Suspender la anticoagulación después de 3 meses || Una tromboembolia provocada por un factor transitorio mayor requiere 3 meses.
+- anchoring | Anticoagulación de por vida || No está indicada en un evento provocado por un factor resuelto.
+- availability_heuristic | Suspender después de 2 semanas || Es insuficiente.
+- representativeness_heuristic | Continuar 5 años de forma obligatoria || No es necesario.
+- premature_closure | Cambiar a warfarina indefinidamente || No está indicado.
+- framing_effect | Agregar ácido acetilsalicílico de por vida en todos los casos || No es una indicación rutinaria.
+- complexity_bias | Solicitar estudio completo de trombofilia antes de suspender en todos los casos || No está indicado en eventos provocados.
+- base_rate_fallacy | Toda tromboembolia recurre si se suspende el anticoagulante || El riesgo es bajo en eventos provocados.
+- belief_bias | La duración es igual para eventos provocados y no provocados || Difiere.
+- omission_bias | No dar recomendaciones de tromboprofilaxis en situaciones futuras de riesgo || Es importante.
+E: La duración de la anticoagulación tras una tromboembolia venosa depende de la causa y del riesgo de recurrencia. En eventos provocados por un factor de riesgo transitorio mayor, como cirugía, trauma o inmovilización, se recomiendan 3 meses, porque el riesgo de recurrencia es bajo. En eventos no provocados, con factores de riesgo persistentes como cáncer o síndrome antifosfolípido, o recurrentes, se considera la anticoagulación extendida, valorando el riesgo de sangrado. En situaciones futuras de riesgo, como cirugías o inmovilización, se indica tromboprofilaxis. El estudio de trombofilia no se recomienda de rutina en eventos provocados.
+R: Guía de la Sociedad Europea de Cardiología para tromboembolia pulmonar ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa
+
+@ urg|respiratory_emergencies|pulmonary_embolism_emergency|3|confirmatory_study
+V: Mujer de 70 años con sospecha de tromboembolia pulmonar de alta probabilidad clínica. Tiene enfermedad renal crónica con filtración de 20 mL/min y antecedente de anafilaxia al contraste yodado. Radiografía de tórax normal.
+P: ¿Cuál es el estudio de elección para confirmar el diagnóstico?
++ Gammagrama pulmonar de ventilación perfusión || Es la alternativa cuando el contraste está contraindicado y la radiografía es normal.
+- anchoring | Angiotomografía pulmonar con contraste || Está contraindicada por la anafilaxia y la función renal.
+- availability_heuristic | Dímero D como estudio confirmatorio || No confirma.
+- representativeness_heuristic | Arteriografía pulmonar con contraste || También usa contraste.
+- premature_closure | Electrocardiograma como estudio confirmatorio || No confirma.
+- framing_effect | Anticoagular de por vida sin confirmar || Debe confirmarse.
+- complexity_bias | Biopsia pulmonar || No está indicada.
+- base_rate_fallacy | El gammagrama no sirve en ningún caso de tromboembolia || Es útil con radiografía normal.
+- belief_bias | La premedicación siempre elimina el riesgo de anafilaxia al contraste || No lo elimina por completo.
+- information_bias | Ultrasonido abdominal || No evalúa la circulación pulmonar.
+E: El gammagrama pulmonar de ventilación perfusión es una alternativa a la angiotomografía en pacientes con contraindicación para el contraste yodado, como alergia grave o insuficiencia renal, y en embarazadas. Es más útil cuando la radiografía de tórax es normal. Un resultado normal descarta la tromboembolia y uno de alta probabilidad la confirma, aunque los resultados intermedios no son diagnósticos. El ultrasonido Doppler de extremidades inferiores puede apoyar el diagnóstico si muestra trombosis venosa profunda. La angiorresonancia es otra opción en algunos centros.
+R: Guía de la Sociedad Europea de Cardiología para tromboembolia pulmonar ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa
+
+@ urg|respiratory_emergencies|pulmonary_embolism_emergency|2|data_interpretation
+V: Hombre de 50 años con tromboembolia pulmonar estable, sin cáncer, sin enfermedad cardiopulmonar crónica, frecuencia cardiaca de 88, presión de 130/80 mmHg y saturación de 96 por ciento. Escala PESI simplificada de 0.
+P: ¿Qué indica este resultado de la escala PESI simplificada?
++ Bajo riesgo de mortalidad a 30 días, con posibilidad de tratamiento ambulatorio si las condiciones lo permiten || Una puntuación de 0 identifica a pacientes de bajo riesgo.
+- anchoring | Riesgo alto que requiere trombólisis || La puntuación es baja.
+- availability_heuristic | Que no requiere anticoagulación || Siempre requiere anticoagulación.
+- representativeness_heuristic | Que debe ingresar a terapia intensiva || No está indicado.
+- premature_closure | Que se descarta la tromboembolia || Ya está confirmada.
+- framing_effect | Riesgo intermedio alto || Requeriría disfunción del ventrículo derecho y troponina elevada.
+- complexity_bias | Indicación de filtro de vena cava || No está indicado.
+- base_rate_fallacy | Todas las tromboembolias requieren hospitalización prolongada || Los de bajo riesgo pueden manejarse en casa.
+- belief_bias | La escala PESI no tiene validez clínica || Está validada.
+- omission_bias | No asegurar acceso al anticoagulante y seguimiento || Es requisito para el manejo ambulatorio.
+E: La escala PESI simplificada estima la mortalidad a 30 días en la tromboembolia pulmonar con seis variables: edad mayor de 80 años, cáncer, enfermedad cardiopulmonar crónica, frecuencia cardiaca de 110 o más, sistólica menor de 100 mmHg y saturación menor de 90 por ciento. Una puntuación de 0 indica bajo riesgo, con mortalidad alrededor de 1 por ciento, y permite considerar el egreso temprano o el tratamiento ambulatorio si el paciente tiene acceso a la anticoagulación, apoyo familiar y seguimiento. Con una puntuación de 1 o más, se evalúa la función del ventrículo derecho y la troponina.
+R: Guía de la Sociedad Europea de Cardiología para tromboembolia pulmonar ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa
+
+@ urg|respiratory_emergencies|pulmonary_embolism_emergency|3|treatment_of_choice
+V: Mujer de 58 años con cáncer de páncreas en quimioterapia que presenta tromboembolia pulmonar estable. Función renal normal, sin sangrado gastrointestinal activo.
+P: ¿Cuál es el tratamiento anticoagulante de elección?
++ Heparina de bajo peso molecular o un anticoagulante oral directo como apixabán || Ambos son eficaces en la trombosis asociada a cáncer.
+- anchoring | Warfarina como primera opción || Es menos eficaz y tiene más interacciones.
+- availability_heuristic | Ácido acetilsalicílico || No es suficiente.
+- representativeness_heuristic | Trombólisis en paciente estable || No está indicada.
+- premature_closure | No anticoagular por el cáncer avanzado || La anticoagulación reduce recurrencias.
+- framing_effect | Filtro de vena cava como tratamiento rutinario || Solo si hay contraindicación.
+- complexity_bias | Heparina no fraccionada en infusión ambulatoria || No es práctica.
+- base_rate_fallacy | El cáncer no aumenta el riesgo de trombosis || Lo aumenta de forma importante.
+- belief_bias | La anticoagulación en cáncer debe durar solo 2 semanas || Se mantiene al menos 6 meses o mientras el cáncer esté activo.
+- omission_bias | No evaluar el riesgo de sangrado en tumores gastrointestinales || Influye en la elección.
+E: El cáncer es un factor de riesgo importante de enfermedad tromboembólica venosa, especialmente el de páncreas, estómago, pulmón, cerebro y los hematológicos, y durante la quimioterapia. Para la trombosis asociada a cáncer se recomienda la heparina de bajo peso molecular o anticoagulantes orales directos como apixabán, edoxabán o rivaroxabán, que son más eficaces que la warfarina. Los directos pueden aumentar el sangrado en tumores gastrointestinales o genitourinarios no resecados. La anticoagulación se mantiene al menos 6 meses y mientras el cáncer esté activo o en tratamiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa ;; Guía de la Sociedad Americana de Oncología Clínica para trombosis asociada a cáncer

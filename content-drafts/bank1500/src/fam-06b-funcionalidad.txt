@@ -1,0 +1,223 @@
+@ fam|family_health|family_functionality|2|initial_study
+V: Mujer de 42 años con diabetes descontrolada a pesar de buen tratamiento. Refiere problemas en casa y siente que su familia no la apoya. El médico desea una evaluación rápida de la percepción de la funcionalidad familiar.
+P: ¿Cuál es el instrumento inicial más apropiado?
++ APGAR familiar de Smilkstein || Es un cuestionario breve de cinco preguntas que evalúa la percepción de la funcionalidad familiar.
+- anchoring | Escala de depresión de Beck || Evalúa depresión, no funcionalidad familiar.
+- availability_heuristic | Escala de Zarit || Mide sobrecarga del cuidador.
+- representativeness_heuristic | Familiograma como medida de funcionalidad || Describe la estructura, no mide funcionalidad.
+- premature_closure | Minimental || Evalúa deterioro cognitivo.
+- framing_effect | Escala de Glasgow || Evalúa estado de conciencia.
+- complexity_bias | Entrevista psiquiátrica estructurada completa a toda la familia || No es una evaluación rápida inicial.
+- base_rate_fallacy | Escala de Barthel || Mide dependencia funcional.
+- belief_bias | La familia no influye en el control de la diabetes || Influye en el apego y el autocuidado.
+- information_bias | Índice de Katz || Evalúa actividades básicas.
+E: El APGAR familiar, diseñado por Smilkstein, es un cuestionario de cinco preguntas que evalúa la percepción de un miembro sobre la funcionalidad de su familia en cinco áreas: adaptación, participación, crecimiento, afecto y recursos. Cada pregunta se puntúa de 0 a 2 en la versión original, o de 0 a 4 en la versión ampliada. En la versión de 0 a 10, una puntuación de 7 a 10 indica familia funcional, de 4 a 6 disfunción moderada y de 0 a 3 disfunción grave. Es breve y útil en el primer nivel, sobre todo en pacientes con enfermedades crónicas y mal control.
+R: Guía de Práctica Clínica de estudio de salud familiar en el primer nivel ;; Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar
+
+@ fam|family_health|family_functionality|2|data_interpretation
+V: En el APGAR familiar de Smilkstein, una de las preguntas explora si el paciente está satisfecho con la ayuda que recibe de su familia cuando tiene un problema.
+P: ¿Qué componente del APGAR familiar indica esta pregunta?
++ Adaptación || Evalúa la utilización de los recursos familiares para resolver problemas en crisis.
+- anchoring | Participación || Evalúa cómo se comparten las decisiones y responsabilidades.
+- availability_heuristic | Crecimiento || Evalúa el apoyo para el desarrollo personal.
+- representativeness_heuristic | Afecto || Evalúa la expresión de emociones y cariño.
+- premature_closure | Recursos || Evalúa el compromiso de dedicar tiempo y espacio.
+- framing_effect | Cohesión de FACES III || Pertenece a otro instrumento.
+- complexity_bias | Adaptabilidad de FACES III || Pertenece a otro instrumento.
+- base_rate_fallacy | Comunicación del modelo McMaster || Pertenece a otro modelo.
+- belief_bias | Autoridad || No es componente del APGAR.
+- focusing_illusion | Jerarquía || No es componente del APGAR.
+E: Los cinco componentes del APGAR familiar son: adaptación, la satisfacción con la ayuda recibida de la familia ante un problema; participación, la satisfacción con la forma en que la familia comparte las decisiones; crecimiento, el apoyo para emprender nuevas actividades y el desarrollo personal; afecto, la satisfacción con la forma en que la familia expresa cariño y responde a las emociones; y resolución o recursos, la satisfacción con el tiempo, el espacio y el dinero que comparten. El acrónimo en inglés corresponde a adaptation, partnership, growth, affection y resolve.
+R: Guía de Práctica Clínica de estudio de salud familiar en el primer nivel ;; Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar
+
+@ fam|family_health|family_functionality|3|data_interpretation
+V: En la escala FACES III aplicada a una familia, el resultado muestra una cohesión muy alta, en la que los miembros no tienen espacio individual y todas las decisiones dependen del grupo, y una adaptabilidad muy baja con reglas inflexibles.
+P: ¿Qué tipo de familia indica este resultado según el modelo circumplejo de Olson?
++ Familia aglutinada y rígida, del tipo extremo || Los extremos de cohesión y adaptabilidad se asocian con disfunción.
+- anchoring | Familia balanceada flexible y conectada || Corresponde a niveles intermedios.
+- availability_heuristic | Familia desligada y caótica || Corresponde a cohesión baja y adaptabilidad muy alta.
+- representativeness_heuristic | Familia separada y estructurada || Son niveles intermedios.
+- premature_closure | Familia funcional porque es muy unida || La cohesión extrema limita la autonomía.
+- framing_effect | Familia monoparental || Es una clasificación estructural.
+- complexity_bias | Familia reconstituida || Es una clasificación estructural.
+- base_rate_fallacy | Familia moderna || Es una clasificación por desarrollo.
+- belief_bias | Las reglas rígidas siempre protegen a la familia || Impiden adaptarse a los cambios.
+- focusing_illusion | Familia extensa || Es una clasificación por composición.
+E: La escala FACES III, basada en el modelo circumplejo de Olson, evalúa dos dimensiones de la funcionalidad familiar. La cohesión es el vínculo emocional entre los miembros y se clasifica en desligada, separada, conectada y aglutinada. La adaptabilidad es la capacidad de cambiar reglas, roles y estructura de poder ante las situaciones, y se clasifica en rígida, estructurada, flexible y caótica. Los niveles intermedios se consideran balanceados y funcionales, mientras que los extremos, como aglutinada o desligada y rígida o caótica, se asocian con disfunción. Combinando ambas dimensiones se obtienen 16 tipos de familia.
+R: Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar ;; Guía de Práctica Clínica de estudio de salud familiar en el primer nivel
+
+@ fam|family_health|family_functionality|3|data_interpretation
+V: En una familia, cuando los padres discuten, ambos buscan a su hija de 12 años para que tome partido. La niña presenta dolor abdominal recurrente cada vez que hay conflicto entre ellos.
+P: ¿Qué patrón de relación familiar indica esta situación?
++ Triangulación || Un tercer miembro es involucrado en el conflicto de una díada para reducir la tensión.
+- anchoring | Alianza saludable entre madre e hija || No es saludable involucrar a la hija en el conflicto.
+- availability_heuristic | Coalición adecuada de los padres || Los padres no forman un subsistema unido.
+- representativeness_heuristic | Límites claros entre subsistemas || Los límites están alterados.
+- premature_closure | Enfermedad orgánica gastrointestinal como única explicación || La relación con el conflicto es evidente.
+- framing_effect | Familia desligada || Hay sobreinvolucramiento.
+- complexity_bias | Trastorno de conversión grave || No explica el patrón relacional.
+- base_rate_fallacy | Comunicación directa y clara || La comunicación es indirecta.
+- belief_bias | Es normal que los hijos medien en los conflictos de los padres || Es un patrón disfuncional.
+- focusing_illusion | Jerarquía adecuada || La hija ocupa un lugar que no le corresponde.
+E: La triangulación es un patrón relacional disfuncional en el que dos miembros en conflicto, habitualmente la pareja, involucran a un tercero, frecuentemente un hijo, para desviar o reducir la tensión. El hijo triangulado puede presentar síntomas físicos o conductuales, como dolor abdominal recurrente, cefalea o problemas de conducta, que funcionan como regulador del conflicto. Según la teoría estructural de Minuchin, también altera los límites entre el subsistema conyugal y el filial. El abordaje incluye identificar el patrón, fortalecer el subsistema conyugal para que resuelva sus conflictos y referir a terapia familiar cuando sea necesario.
+R: Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar ;; Manual de medicina familiar del Instituto Mexicano del Seguro Social
+
+@ fam|family_health|family_functionality|3|data_interpretation
+V: En una familia, la madre conoce todos los detalles de la vida de sus hijos adolescentes, revisa sus mensajes, decide por ellos y no tolera que tengan opiniones diferentes. Los hijos no pueden tomar decisiones propias.
+P: ¿Qué tipo de límites familiares indica esta situación según Minuchin?
++ Límites difusos con aglutinamiento || La diferenciación entre los miembros es escasa y se pierde la autonomía.
+- anchoring | Límites claros || Permiten autonomía con apoyo.
+- availability_heuristic | Límites rígidos con desligamiento || Producen distancia emocional y poco apoyo.
+- representativeness_heuristic | Familia balanceada || Los límites están alterados.
+- premature_closure | Supervisión normal de adolescentes || Es excesiva e impide la autonomía.
+- framing_effect | Familia caótica por falta de reglas || Hay control excesivo.
+- complexity_bias | Trastorno de personalidad de la madre confirmado || No se puede concluir con estos datos.
+- base_rate_fallacy | Los límites no influyen en el desarrollo de los hijos || Influyen en su autonomía.
+- belief_bias | Mayor control siempre previene conductas de riesgo || El control excesivo puede ser contraproducente.
+- focusing_illusion | Jerarquía invertida || La madre mantiene el control.
+E: Según la teoría estructural de Minuchin, los límites son las reglas que definen quién participa y cómo en cada subsistema familiar. Los límites claros permiten la autonomía de los miembros con apoyo y comunicación, y caracterizan a las familias funcionales. Los límites difusos se asocian con aglutinamiento: hay sobreinvolucramiento, poca privacidad y dificultad para la autonomía y la diferenciación individual. Los límites rígidos se asocian con desligamiento: hay distancia emocional, poca comunicación y escaso apoyo. En la adolescencia, los límites difusos dificultan la formación de la identidad y la toma de decisiones propias.
+R: Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar ;; Manual de medicina familiar del Instituto Mexicano del Seguro Social
+
+@ fam|family_health|family_functionality|2|data_interpretation
+V: Una familia obtiene en el APGAR familiar de Smilkstein, versión de 0 a 10 puntos, una puntuación de 3 puntos según la madre.
+P: ¿Qué indica esta puntuación?
++ Disfunción familiar grave según la percepción de la madre || Una puntuación de 0 a 3 indica disfunción grave.
+- anchoring | Familia funcional || Corresponde a 7 a 10 puntos.
+- availability_heuristic | Disfunción moderada || Corresponde a 4 a 6 puntos.
+- representativeness_heuristic | Disfunción leve || No es una categoría de esta versión.
+- premature_closure | Que todos los miembros perciben lo mismo || Es la percepción de un solo miembro.
+- framing_effect | Familia aglutinada y rígida || Es una clasificación de FACES III.
+- complexity_bias | Sobrecarga del cuidador || Se mide con la escala de Zarit.
+- base_rate_fallacy | Depresión mayor confirmada || No diagnostica depresión.
+- belief_bias | La familia debe separarse || No es una indicación del instrumento.
+- focusing_illusion | Riesgo cardiovascular alto || No es lo que mide.
+E: El APGAR familiar en su versión de 0 a 2 puntos por pregunta permite una puntuación total de 0 a 10. Una puntuación de 7 a 10 indica familia funcional, de 4 a 6 disfunción moderada y de 0 a 3 disfunción grave. Es importante recordar que mide la percepción de un solo miembro, por lo que puede aplicarse a varios integrantes para comparar. Un resultado bajo no establece un diagnóstico por sí solo, sino que orienta a profundizar en el estudio de la familia con entrevista, familiograma y otros instrumentos, e identificar áreas de intervención.
+R: Guía de Práctica Clínica de estudio de salud familiar en el primer nivel ;; Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar
+
+@ fam|family_health|family_functionality|3|data_interpretation
+V: Una familia es evaluada con un modelo que analiza seis dimensiones del funcionamiento: resolución de problemas, comunicación, roles, respuesta afectiva, involucramiento afectivo y control de la conducta.
+P: ¿Qué modelo de funcionamiento familiar indica esta descripción?
++ Modelo McMaster de funcionamiento familiar || Evalúa esas seis dimensiones.
+- anchoring | Modelo circumplejo de Olson || Evalúa cohesión y adaptabilidad.
+- availability_heuristic | APGAR familiar de Smilkstein || Evalúa cinco áreas de percepción.
+- representativeness_heuristic | Modelo estructural de Minuchin || Se centra en límites, jerarquías y subsistemas.
+- premature_closure | Ciclo vital de Geyman || Describe etapas, no funcionamiento.
+- framing_effect | Modelo de historia natural de Leavell y Clark || Describe la historia de la enfermedad.
+- complexity_bias | Modelo biomédico tradicional || No evalúa la familia.
+- base_rate_fallacy | Escala de Holmes y Rahe || Mide eventos estresantes.
+- belief_bias | Modelo de creencias en salud || Explica conductas de salud individuales.
+- focusing_illusion | Modelo transteórico de cambio || Describe etapas de cambio de conducta.
+E: El modelo McMaster de funcionamiento familiar evalúa seis dimensiones: resolución de problemas, la capacidad de resolver problemas instrumentales y afectivos; comunicación, si es clara y directa; roles, la distribución de funciones como provisión de recursos, crianza y apoyo; respuesta afectiva, la capacidad de responder con emociones adecuadas; involucramiento afectivo, el interés de los miembros entre sí; y control de la conducta, las normas para manejar el comportamiento. Su instrumento es el Family Assessment Device. Complementa otros modelos como el circumplejo de Olson y el estructural de Minuchin.
+R: Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar ;; Manual de medicina familiar del Instituto Mexicano del Seguro Social
+
+@ fam|family_health|family_functionality|3|next_step
+V: Niño de 8 años con asma de difícil control a pesar de un tratamiento adecuado. Los padres están separados, discuten frente al niño y cada uno administra los medicamentos de forma diferente. El niño falta mucho a la escuela.
+P: ¿Cuál es la conducta más apropiada para mejorar el control?
++ Estudiar la dinámica familiar, acordar un plan de tratamiento único con ambos padres y considerar terapia familiar || La disfunción familiar afecta el apego y el control de la enfermedad crónica.
+- anchoring | Aumentar la dosis de esteroides sin evaluar la familia || No aborda la causa del mal control.
+- availability_heuristic | Hospitalizar al niño hasta que se controle || No resuelve el problema de fondo.
+- representativeness_heuristic | Considerar que el problema es solo farmacológico || Hay un componente familiar evidente.
+- premature_closure | Cambiar todo el tratamiento a una opción más potente || Primero debe asegurarse el apego.
+- framing_effect | Indicar que solo uno de los padres puede verlo || No es una decisión médica.
+- complexity_bias | Solicitar tomografía de tórax de alta resolución || No es el primer paso.
+- base_rate_fallacy | La familia no influye en el control del asma || Influye en el apego y la exposición a desencadenantes.
+- belief_bias | El estrés emocional no afecta al asma || Puede desencadenar exacerbaciones.
+- omission_bias | No revisar la técnica de inhalación || Es parte de la evaluación del mal control.
+E: Las enfermedades crónicas en niños dependen en gran medida de la familia para el apego al tratamiento, la identificación de síntomas y el control de desencadenantes. La disfunción familiar, como el conflicto entre los padres, la triangulación del hijo o la falta de acuerdos, se asocia con mal control del asma, la diabetes y otras enfermedades. Ante un mal control con tratamiento adecuado se deben evaluar la técnica de inhalación, el apego, la exposición a desencadenantes y la dinámica familiar. El médico familiar puede establecer un plan único con ambos padres, involucrar a la escuela y referir a terapia familiar.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del asma en menores de 18 años ;; Guía de Práctica Clínica de estudio de salud familiar en el primer nivel
+
+@ fam|family_health|family_functionality|3|data_interpretation
+V: En una familia, el padre trabaja todo el día y no participa en las decisiones del hogar. La hija mayor de 15 años cuida a sus hermanos menores, cocina y administra el dinero porque la madre está deprimida y no sale de la cama.
+P: ¿Qué alteración de la estructura familiar indica esta situación?
++ Parentalización de la hija, con inversión de jerarquías || La hija asume funciones que corresponden a los padres.
+- anchoring | Organización familiar funcional porque las tareas se cumplen || La hija asume un rol inadecuado para su edad.
+- availability_heuristic | Límites claros entre subsistemas || Los límites están alterados.
+- representativeness_heuristic | Familia balanceada según Olson || Hay disfunción.
+- premature_closure | Familia extensa || La clasificación es estructural.
+- framing_effect | Alianza saludable entre hermanos || El problema es la inversión de roles.
+- complexity_bias | Trastorno de conducta de la hija || No hay datos de trastorno de conducta.
+- base_rate_fallacy | Es esperado que los hijos mayores asuman el rol de los padres || Afecta su desarrollo.
+- belief_bias | La depresión de la madre no afecta a la familia || Afecta toda la dinámica.
+- focusing_illusion | Familia desligada sin más alteraciones || Hay inversión de roles.
+E: La parentalización ocurre cuando un hijo asume funciones y responsabilidades que corresponden a los padres, como el cuidado de hermanos, las tareas del hogar, la administración económica o el apoyo emocional a uno de los padres. Implica una inversión de las jerarquías familiares. Es frecuente cuando un padre está ausente, enfermo, deprimido o con adicciones. Aunque puede desarrollar responsabilidad, suele afectar la educación, la socialización y la salud mental del hijo. El médico familiar debe identificar la causa, como la depresión de la madre, tratarla, redistribuir roles y apoyar al adolescente.
+R: Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar ;; Manual de medicina familiar del Instituto Mexicano del Seguro Social
+
+@ fam|family_health|family_functionality|3|next_step
+V: Mujer de 38 años que acude por cefalea y dolor muscular crónico. En la entrevista refiere que su esposo controla su dinero, le prohíbe ver a sus amigas y la insulta. Niega agresión física. Tiene miedo de que él se entere de lo que dice.
+P: ¿Cuál es la conducta más apropiada?
++ Escuchar sin juzgar, reconocer la violencia psicológica y económica, evaluar el riesgo, elaborar un plan de seguridad y orientar sobre servicios especializados, registrando conforme a la norma || Es violencia familiar aunque no haya agresión física.
+- anchoring | Tratar solo la cefalea con analgésicos || Se pierde la oportunidad de intervenir.
+- availability_heuristic | Citar a ambos para terapia de pareja de inmediato || Puede aumentar el riesgo de la paciente.
+- representativeness_heuristic | Considerarlo un conflicto de pareja normal || El control y los insultos son violencia.
+- premature_closure | Indicar que denuncie de inmediato como única opción || Debe respetarse su decisión y evaluar el riesgo.
+- framing_effect | Hablar con el esposo para que cambie su conducta || Puede aumentar el riesgo.
+- complexity_bias | Solicitar resonancia magnética por la cefalea || No hay datos de alarma.
+- base_rate_fallacy | Sin golpes no hay violencia || La violencia psicológica y económica también lo es.
+- belief_bias | La violencia familiar es un asunto privado que no compete al médico || La norma obliga a detectar y atender.
+- omission_bias | No preguntar por hijos expuestos a la violencia || Son también víctimas.
+E: La violencia familiar incluye la violencia física, psicológica, sexual, económica y patrimonial. La violencia psicológica, como insultos, humillaciones, control y aislamiento, y la económica, como el control del dinero, son frecuentes y suelen manifestarse con síntomas somáticos como cefalea, dolor crónico, ansiedad y depresión. La norma mexicana sobre violencia familiar, sexual y contra las mujeres obliga al personal de salud a detectar, atender, registrar y notificar estos casos, respetando la autonomía de la paciente. Se recomienda entrevistar en privado, evaluar el riesgo, elaborar un plan de seguridad y referir a servicios especializados.
+R: Norma Oficial Mexicana sobre violencia familiar, sexual y contra las mujeres ;; Guía de Práctica Clínica de detección y atención de la violencia de pareja
+
+@ fam|family_health|family_functionality|2|data_interpretation
+V: En la consulta, un médico familiar explica que las familias cumplen funciones básicas para sus miembros, como la socialización de los hijos, el cuidado, el afecto, el estatus y la reproducción.
+P: ¿Qué función familiar indica la transmisión de valores, normas y costumbres a los hijos?
++ Socialización || Es la función mediante la cual la familia transmite cultura, normas y valores.
+- anchoring | Cuidado || Se refiere a cubrir necesidades físicas y de salud.
+- availability_heuristic | Afecto || Se refiere a dar y recibir cariño.
+- representativeness_heuristic | Reproducción || Se refiere a la procreación.
+- premature_closure | Estatus || Se refiere a la posición social de la familia.
+- framing_effect | Adaptabilidad || Es una dimensión de FACES III.
+- complexity_bias | Cohesión || Es una dimensión de FACES III.
+- base_rate_fallacy | Recursos económicos exclusivamente || Es parte del cuidado.
+- belief_bias | La escuela es la única responsable de transmitir valores || La familia es el primer agente.
+- focusing_illusion | Participación del APGAR || Es un componente del instrumento.
+E: Las funciones básicas de la familia, descritas en el consenso académico de medicina familiar, son: socialización, la transmisión de cultura, valores, normas y costumbres para la integración de los hijos a la sociedad; cuidado, la satisfacción de necesidades físicas, de alimentación, vivienda y salud; afecto, la expresión de cariño, amor y apoyo emocional; reproducción, la procreación y la sexualidad dentro de la pareja; y estatus o nivel socioeconómico, la posición social que la familia transmite. Cuando la familia no cumple sus funciones se habla de disfunción, que puede afectar la salud de sus miembros.
+R: Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar ;; Manual de medicina familiar del Instituto Mexicano del Seguro Social
+
+@ fam|family_health|family_functionality|3|next_step
+V: Familia que acude con su hijo de 10 años con diabetes tipo 1. Desde el diagnóstico la madre dejó de trabajar, duerme con el niño, no permite que vaya a fiestas ni de campamento y el padre y los hermanos se sienten desplazados.
+P: ¿Cuál es la conducta más apropiada?
++ Orientar sobre la sobreprotección, promover la autonomía progresiva del niño en su autocuidado y la participación de toda la familia en el plan de manejo || La enfermedad crónica puede generar sobreprotección y disfunción.
+- anchoring | Reforzar la conducta de la madre porque protege al niño || Limita su desarrollo y afecta a la familia.
+- availability_heuristic | Indicar que el niño no puede participar en actividades sociales por su enfermedad || Puede hacerlo con planeación.
+- representativeness_heuristic | Hospitalizar al niño para educación de la madre || No está indicado.
+- premature_closure | Considerar que solo importa el control glucémico || La dinámica familiar influye en el control.
+- framing_effect | Recomendar que el padre asuma todo el cuidado en lugar de la madre || El objetivo es compartir, no sustituir.
+- complexity_bias | Iniciar ansiolítico a la madre sin evaluación || No es el primer paso.
+- base_rate_fallacy | La sobreprotección no afecta a los hermanos || Los hermanos pueden sentirse desplazados.
+- belief_bias | Los niños con diabetes no deben participar en campamentos || Existen campamentos especializados.
+- omission_bias | No evaluar el estado emocional de la madre || Puede tener sobrecarga o ansiedad.
+E: El diagnóstico de una enfermedad crónica en un hijo genera una crisis familiar que exige reorganizar roles y rutinas. Una respuesta frecuente es la sobreprotección, con un cuidador principal sobreinvolucrado, aglutinamiento con el niño enfermo y desplazamiento de la pareja y los hermanos. Esto limita la autonomía del niño, su desarrollo social y el aprendizaje del autocuidado, y genera sobrecarga del cuidador. El médico familiar debe promover la participación de todos los miembros, la autonomía progresiva del niño según su edad, la participación en actividades sociales con planeación y la atención del estado emocional de los padres y hermanos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la diabetes tipo 1 en niños y adolescentes ;; Manual de medicina familiar del Instituto Mexicano del Seguro Social
+
+@ fam|family_health|family_functionality|3|data_interpretation
+V: En una familia, el padre y el hijo mayor se alían de forma permanente contra la madre, descalificando sus decisiones y excluyéndola de la toma de decisiones.
+P: ¿Qué patrón relacional indica esta situación?
++ Coalición, una unión de dos miembros contra un tercero || Es un patrón disfuncional que altera las jerarquías.
+- anchoring | Alianza saludable padre e hijo || Una alianza no se dirige contra otro miembro.
+- availability_heuristic | Límites claros entre subsistemas || Los subsistemas están alterados.
+- representativeness_heuristic | Triangulación por conflicto conyugal entre padre e hijo || El patrón descrito es una unión estable contra un tercero.
+- premature_closure | Familia balanceada || Hay disfunción.
+- framing_effect | Parentalización del hijo menor || El patrón no corresponde.
+- complexity_bias | Trastorno psicótico compartido || No hay síntomas psicóticos.
+- base_rate_fallacy | Es esperado que los hijos se alíen con un padre || La coalición contra otro es disfuncional.
+- belief_bias | Las coaliciones fortalecen a la familia || La dañan.
+- focusing_illusion | Familia desligada sin alteración de jerarquías || La jerarquía está alterada.
+E: En la terapia familiar estructural se distinguen las alianzas, uniones de dos miembros por intereses comunes que no van dirigidas contra un tercero y pueden ser funcionales, de las coaliciones, uniones de dos miembros contra un tercero, que son disfuncionales. Las coaliciones transgeneracionales, entre un padre y un hijo contra el otro padre, alteran la jerarquía familiar y debilitan el subsistema conyugal. Se asocian con conflicto, problemas de conducta en los hijos y síntomas en el miembro excluido. Su identificación permite orientar la intervención y la referencia a terapia familiar.
+R: Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar ;; Manual de medicina familiar del Instituto Mexicano del Seguro Social
+
+@ fam|family_health|family_functionality|2|initial_study
+V: Hombre de 70 años con enfermedad pulmonar obstructiva crónica que vive solo. El médico desea conocer la cantidad y calidad del apoyo social con el que cuenta.
+P: ¿Cuál es el instrumento inicial más apropiado?
++ Cuestionario de apoyo social funcional de Duke-UNC || Mide el apoyo social percibido confidencial y afectivo.
+- anchoring | APGAR familiar como único instrumento || Mide funcionalidad familiar, no el apoyo social amplio.
+- availability_heuristic | Escala de Zarit || Mide sobrecarga del cuidador.
+- representativeness_heuristic | Minimental || Evalúa deterioro cognitivo.
+- premature_closure | Escala de Barthel || Mide dependencia funcional.
+- framing_effect | Escala de Glasgow || Mide estado de conciencia.
+- complexity_bias | Espirometría || Evalúa la función pulmonar.
+- base_rate_fallacy | Escala FACES III || Mide cohesión y adaptabilidad familiar.
+- belief_bias | El apoyo social no influye en la salud de los adultos mayores || Influye en el pronóstico.
+- omission_bias | No evaluar el apoyo social en pacientes que viven solos || Es un factor de riesgo importante.
+E: El apoyo social es un determinante importante de la salud, especialmente en adultos mayores y personas con enfermedades crónicas. El cuestionario de apoyo social funcional de Duke-UNC evalúa la percepción del apoyo confidencial, es decir, tener con quién hablar de problemas, y del apoyo afectivo, como recibir cariño y empatía. Un bajo apoyo social se asocia con peor apego al tratamiento, más hospitalizaciones, depresión y mayor mortalidad. Junto con el ecomapa permite identificar redes de apoyo familiares, comunitarias e institucionales, y orientar intervenciones como grupos de autoayuda o visitas domiciliarias.
+R: Guía de Práctica Clínica de valoración geronto-geriátrica integral ;; Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar

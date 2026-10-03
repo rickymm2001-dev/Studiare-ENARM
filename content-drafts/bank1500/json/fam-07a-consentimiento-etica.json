@@ -1,0 +1,1525 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "fam-07a-consentimiento-etica-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "informed_consent",
+      "vignette": "Hombre de 60 años al que se le propone una colecistectomía laparoscópica. El cirujano le explica el diagnóstico, el procedimiento, los beneficios, los riesgos, las alternativas y las consecuencias de no operarse. El paciente comprende y firma.",
+      "prompt": "¿Qué principio bioético se respeta principalmente con este proceso?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Principio del doble efecto",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se aplica a acciones con efectos buenos y malos."
+        },
+        {
+          "key": "b",
+          "text": "El consentimiento es solo un trámite administrativo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un proceso ético y legal."
+        },
+        {
+          "key": "c",
+          "text": "Veracidad exclusivamente",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es parte del proceso, pero el principio central es la autonomía."
+        },
+        {
+          "key": "d",
+          "text": "Confidencialidad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se refiere a proteger la información."
+        },
+        {
+          "key": "e",
+          "text": "No maleficencia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se refiere a no causar daño."
+        },
+        {
+          "key": "f",
+          "text": "Paternalismo médico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es lo opuesto a respetar la autonomía."
+        },
+        {
+          "key": "g",
+          "text": "Autonomía",
+          "correct": true,
+          "rationale": "El paciente decide de forma libre e informada sobre su atención."
+        },
+        {
+          "key": "h",
+          "text": "Utilitarismo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Busca el mayor bien para el mayor número."
+        },
+        {
+          "key": "i",
+          "text": "Beneficencia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se refiere a actuar en beneficio del paciente."
+        },
+        {
+          "key": "j",
+          "text": "Justicia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se refiere a la distribución equitativa de recursos."
+        }
+      ],
+      "canonical": [
+        "e",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "Los cuatro principios de la bioética de Beauchamp y Childress son autonomía, el respeto a la capacidad de la persona para decidir sobre su cuerpo y su salud; beneficencia, actuar en beneficio del paciente; no maleficencia, evitar causar daño; y justicia, la distribución equitativa de los recursos y el trato igualitario. El consentimiento informado es la expresión práctica del principio de autonomía: es un proceso de comunicación en el que el paciente capaz recibe información suficiente y comprensible sobre el diagnóstico, el procedimiento, los beneficios, los riesgos, las alternativas y las consecuencias de no tratarse, y decide de forma libre y voluntaria.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana del expediente clínico",
+        "Guía nacional para la integración y el funcionamiento de los comités hospitalarios de bioética"
+      ]
+    },
+    {
+      "key": "fam-07a-consentimiento-etica-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "informed_consent",
+      "vignette": "Hombre de 35 años llega a urgencias inconsciente tras un accidente de tránsito, con hemorragia intraabdominal y choque. No hay familiares presentes ni documentos sobre sus preferencias. Requiere cirugía inmediata.",
+      "prompt": "¿Cuál es la conducta más apropiada respecto al consentimiento?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esperar a localizar a un familiar para que firme",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El retraso pone en riesgo su vida."
+        },
+        {
+          "key": "b",
+          "text": "No operar porque no hay consentimiento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es una excepción reconocida."
+        },
+        {
+          "key": "c",
+          "text": "Solicitar autorización a un juez antes de operar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay tiempo y no es necesario."
+        },
+        {
+          "key": "d",
+          "text": "Trasladarlo a otro hospital para que allá decidan",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Retrasa una atención urgente."
+        },
+        {
+          "key": "e",
+          "text": "No registrar la justificación en el expediente",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe documentarse."
+        },
+        {
+          "key": "f",
+          "text": "Toda cirugía sin firma es ilegal sin excepción",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La urgencia es una excepción."
+        },
+        {
+          "key": "g",
+          "text": "Realizar la cirugía de urgencia sin consentimiento escrito, documentando la urgencia en el expediente",
+          "correct": true,
+          "rationale": "En una urgencia que pone en riesgo la vida y sin posibilidad de obtener consentimiento, se actúa en beneficio del paciente."
+        },
+        {
+          "key": "h",
+          "text": "Pedir a un desconocido que firme como testigo responsable",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es válido como representante."
+        },
+        {
+          "key": "i",
+          "text": "Solo el director del hospital puede autorizar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La norma prevé la autorización de dos médicos en urgencias."
+        },
+        {
+          "key": "j",
+          "text": "Convocar al comité de bioética antes de operar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay tiempo en una urgencia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "g"
+      ],
+      "explanation": "La norma mexicana del expediente clínico establece que en casos de urgencia, cuando el paciente no puede otorgar su consentimiento y no está presente un familiar o representante legal, los médicos autorizados del hospital pueden realizar el procedimiento necesario para salvar la vida o evitar un daño grave, previa valoración del caso y con el acuerdo de al menos dos de ellos, dejando constancia por escrito en el expediente clínico. Esta excepción se basa en los principios de beneficencia y en el consentimiento presunto. Cuando el paciente recupera la capacidad, se le informa de lo realizado.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana del expediente clínico",
+        "Reglamento de la Ley General de Salud en materia de prestación de servicios de atención médica"
+      ]
+    },
+    {
+      "key": "fam-07a-consentimiento-etica-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "informed_consent",
+      "vignette": "Mujer de 40 años, testigo de Jehová, consciente, orientada y con capacidad para decidir, con sangrado digestivo y hemoglobina de 7 g/dL, hemodinámicamente estable. Rechaza transfusiones de sangre aun conociendo los riesgos.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solicitar a su esposo que autorice la transfusión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La decisión corresponde a la paciente capaz."
+        },
+        {
+          "key": "b",
+          "text": "Declararla incapaz por su creencia religiosa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Sus creencias no la hacen incapaz."
+        },
+        {
+          "key": "c",
+          "text": "Solicitar una orden judicial para transfundir a una adulta capaz",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No procede."
+        },
+        {
+          "key": "d",
+          "text": "El rechazo de transfusión nunca es válido",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es válido en adultos capaces."
+        },
+        {
+          "key": "e",
+          "text": "Dar de alta voluntaria inmediata sin otras opciones",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe seguir recibiendo atención con alternativas."
+        },
+        {
+          "key": "f",
+          "text": "No explorar alternativas como hierro intravenoso o eritropoyetina",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son opciones válidas."
+        },
+        {
+          "key": "g",
+          "text": "Respetar su decisión equivale a abandonarla",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se continúa la atención con alternativas."
+        },
+        {
+          "key": "h",
+          "text": "Transfundirla mientras está sedada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es una violación grave de su autonomía."
+        },
+        {
+          "key": "i",
+          "text": "Respetar su decisión, documentar el rechazo informado y ofrecer alternativas sin sangre",
+          "correct": true,
+          "rationale": "Una adulta capaz tiene derecho a rechazar un tratamiento."
+        },
+        {
+          "key": "j",
+          "text": "Transfundir de todas formas porque la vida es prioritaria",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Viola su autonomía y es ilegal en una adulta capaz."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "Una persona adulta con capacidad para decidir tiene derecho a aceptar o rechazar cualquier tratamiento, incluso si el rechazo pone en riesgo su vida, como ocurre con los testigos de Jehová que rechazan transfusiones. El médico debe asegurarse de que la paciente comprenda los riesgos, respetar su decisión, documentar el rechazo informado en el expediente y ofrecer alternativas, como agentes hemostáticos, hierro intravenoso, eritropoyetina, técnicas de ahorro de sangre y control endoscópico del sangrado. La situación es distinta en menores de edad, en quienes prevalece el interés superior del menor.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana del expediente clínico",
+        "Guía nacional para la integración y el funcionamiento de los comités hospitalarios de bioética"
+      ]
+    },
+    {
+      "key": "fam-07a-consentimiento-etica-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "informed_consent",
+      "vignette": "Niño de 6 años con leucemia que requiere transfusión urgente de concentrado eritrocitario por hemoglobina de 4 g/dL e inestabilidad hemodinámica. Sus padres, testigos de Jehová, rechazan la transfusión.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Transferir la responsabilidad a otro hospital sin atender",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Retrasa una atención urgente."
+        },
+        {
+          "key": "b",
+          "text": "Transfundir para salvar la vida del niño, documentar e informar a las autoridades conforme al interés superior del menor",
+          "correct": true,
+          "rationale": "En menores en riesgo vital prevalece su derecho a la vida y la salud."
+        },
+        {
+          "key": "c",
+          "text": "Dar de alta al niño con sus padres",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Lo expone a la muerte."
+        },
+        {
+          "key": "d",
+          "text": "Los padres tienen derecho absoluto sobre los tratamientos de sus hijos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Su autoridad tiene límites."
+        },
+        {
+          "key": "e",
+          "text": "Transfundir implica faltar al respeto a la familia sin justificación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se justifica por el riesgo vital del menor."
+        },
+        {
+          "key": "f",
+          "text": "No intentar dialogar con los padres ni ofrecer alternativas cuando sea posible",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El diálogo debe intentarse."
+        },
+        {
+          "key": "g",
+          "text": "Solo administrar soluciones cristaloides indefinidamente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No corrige la anemia grave."
+        },
+        {
+          "key": "h",
+          "text": "Esperar a que el niño decida por sí mismo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No tiene capacidad legal ni hay tiempo."
+        },
+        {
+          "key": "i",
+          "text": "Respetar la decisión de los padres sin transfundir",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El interés superior del menor prevalece en riesgo vital."
+        },
+        {
+          "key": "j",
+          "text": "Esperar una sesión ordinaria del comité de bioética para decidir",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay tiempo en una urgencia vital."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "En los menores de edad, las decisiones las toman los padres o tutores en función del interés superior del niño. Cuando los padres rechazan un tratamiento necesario para salvar la vida de su hijo, como una transfusión en una urgencia, prevalece el derecho del menor a la vida y la salud. En urgencias se procede a transfundir, se documenta en el expediente la justificación médica y se da aviso a las autoridades correspondientes, como el sistema de protección de niñas, niños y adolescentes. En situaciones no urgentes se busca el diálogo, alternativas sin sangre y, de ser necesario, la intervención del comité de bioética y la autoridad judicial.",
+      "gpcRefs": [
+        "Ley General de los Derechos de Niñas, Niños y Adolescentes",
+        "Guía nacional para la integración y el funcionamiento de los comités hospitalarios de bioética"
+      ]
+    },
+    {
+      "key": "fam-07a-consentimiento-etica-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "informed_consent",
+      "vignette": "Hombre de 78 años con demencia moderada al que se propone una cirugía de cadera. No comprende la información, no puede repetir lo que se le explica ni razonar sobre las opciones. Su hija es su cuidadora principal.",
+      "prompt": "¿Qué indica la evaluación de la capacidad del paciente para decidir?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Que debe esperarse a que mejore la demencia para operar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La demencia es progresiva."
+        },
+        {
+          "key": "b",
+          "text": "Que el paciente puede firmar porque sabe escribir su nombre",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Firmar no es lo mismo que comprender."
+        },
+        {
+          "key": "c",
+          "text": "Que el diagnóstico de demencia anula cualquier decisión en cualquier tema",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La capacidad se evalúa para cada decisión."
+        },
+        {
+          "key": "d",
+          "text": "Que su opinión no debe considerarse en absoluto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se debe buscar su asentimiento en lo posible."
+        },
+        {
+          "key": "e",
+          "text": "Que se requiere una resolución judicial de interdicción para cualquier procedimiento",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No siempre es necesaria."
+        },
+        {
+          "key": "f",
+          "text": "Que la hija debe decidir según sus propios valores y no los del paciente",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Debe decidir según los valores y el interés del paciente."
+        },
+        {
+          "key": "g",
+          "text": "Que no tiene capacidad para esta decisión y el consentimiento lo otorga su representante legal o familiar responsable",
+          "correct": true,
+          "rationale": "Carece de comprensión, apreciación y razonamiento."
+        },
+        {
+          "key": "h",
+          "text": "Que el médico debe decidir solo sin involucrar a la familia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Debe involucrarse al representante."
+        },
+        {
+          "key": "i",
+          "text": "Que todos los adultos mayores carecen de capacidad",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La capacidad depende del individuo."
+        },
+        {
+          "key": "j",
+          "text": "Que tiene capacidad plena porque es adulto",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La edad adulta no garantiza capacidad."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "h",
+        "j"
+      ],
+      "explanation": "La capacidad para tomar decisiones médicas es específica para cada decisión y se evalúa con cuatro criterios: comprender la información, apreciar cómo se aplica a la propia situación, razonar sobre las opciones y expresar una elección. Un diagnóstico como la demencia no implica por sí solo incapacidad, pero cuando el paciente no cumple estos criterios, el consentimiento lo otorga su representante legal o familiar responsable, quien debe decidir según los valores conocidos y el interés del paciente. Aun así, se busca la participación y el asentimiento del paciente en la medida de lo posible, y se documenta la evaluación.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana del expediente clínico",
+        "Guía nacional para la integración y el funcionamiento de los comités hospitalarios de bioética"
+      ]
+    },
+    {
+      "key": "fam-07a-consentimiento-etica-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "informed_consent",
+      "vignette": "Paciente de 80 años con cáncer metastásico y dolor intenso refractario en etapa terminal. Se indica morfina en dosis crecientes para controlar el dolor, sabiendo que puede deprimir la respiración y acortar la vida.",
+      "prompt": "¿Qué principio bioético justifica este tratamiento?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Principio de no maleficencia que prohíbe la morfina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El alivio del dolor es beneficio."
+        },
+        {
+          "key": "b",
+          "text": "Encarnizamiento terapéutico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es lo opuesto, prolongar la vida sin beneficio."
+        },
+        {
+          "key": "c",
+          "text": "Eutanasia activa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La intención no es causar la muerte."
+        },
+        {
+          "key": "d",
+          "text": "La morfina en cuidados paliativos casi siempre acorta la vida",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Bien titulada rara vez lo hace."
+        },
+        {
+          "key": "e",
+          "text": "Principio de justicia distributiva",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se refiere a la distribución de recursos."
+        },
+        {
+          "key": "f",
+          "text": "Principio de autonomía exclusivamente",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El fundamento principal es el doble efecto."
+        },
+        {
+          "key": "g",
+          "text": "Suicidio médicamente asistido",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El paciente no busca morir con este tratamiento."
+        },
+        {
+          "key": "h",
+          "text": "Principio del doble efecto",
+          "correct": true,
+          "rationale": "La intención es aliviar el dolor; el posible acortamiento de la vida es un efecto previsto pero no buscado."
+        },
+        {
+          "key": "i",
+          "text": "Aliviar el dolor con opioides está prohibido en México",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un derecho del paciente."
+        },
+        {
+          "key": "j",
+          "text": "Principio de precaución ambiental",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No aplica."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "El principio del doble efecto justifica una acción que tiene un efecto bueno y uno malo cuando la acción en sí es buena o neutra, la intención es lograr el efecto bueno, el efecto malo no es el medio para lograr el bueno y existe una razón proporcionada. En cuidados paliativos justifica el uso de opioides y la sedación paliativa para aliviar síntomas refractarios, aunque exista riesgo de depresión respiratoria. Se distingue de la eutanasia, en la que la intención es causar la muerte, prohibida en México. La Ley General de Salud reconoce el derecho a los cuidados paliativos.",
+      "gpcRefs": [
+        "Ley General de Salud en materia de cuidados paliativos",
+        "Guía de Práctica Clínica de cuidados paliativos en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-07a-consentimiento-etica-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "informed_consent",
+      "vignette": "Hombre de 70 años con insuficiencia cardiaca terminal que, en pleno uso de sus facultades, firmó ante notario un documento en el que manifiesta su deseo de no ser reanimado ni recibir medidas que prolonguen artificialmente su vida.",
+      "prompt": "¿Qué figura legal indica este documento?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Obliga al médico a practicar eutanasia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Solo rechaza medidas que prolongan la vida."
+        },
+        {
+          "key": "b",
+          "text": "Carta de consentimiento para cirugía",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se refiere a un procedimiento concreto."
+        },
+        {
+          "key": "c",
+          "text": "Solicitud de eutanasia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La eutanasia no está permitida en México."
+        },
+        {
+          "key": "d",
+          "text": "Declaración de interdicción",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La declara un juez."
+        },
+        {
+          "key": "e",
+          "text": "Alta voluntaria",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se refiere al egreso hospitalario."
+        },
+        {
+          "key": "f",
+          "text": "Un documento sin validez legal en México",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Varias entidades tienen ley de voluntad anticipada."
+        },
+        {
+          "key": "g",
+          "text": "Poder notarial para asuntos bancarios",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No se refiere a decisiones médicas."
+        },
+        {
+          "key": "h",
+          "text": "Carta de rechazo de transfusiones exclusivamente",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es más amplia."
+        },
+        {
+          "key": "i",
+          "text": "Voluntad anticipada",
+          "correct": true,
+          "rationale": "Expresa la decisión de una persona capaz sobre tratamientos futuros en caso de enfermedad terminal."
+        },
+        {
+          "key": "j",
+          "text": "Testamento de bienes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se refiere a la distribución del patrimonio."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "La voluntad anticipada es el documento en el que una persona capaz manifiesta su decisión de recibir o no ciertos tratamientos médicos, como reanimación cardiopulmonar o ventilación mecánica, en caso de encontrarse en una situación de enfermedad terminal en la que no pueda expresar su voluntad. En México existen leyes de voluntad anticipada en la Ciudad de México y varias entidades federativas, y la Ley General de Salud reconoce el derecho a los cuidados paliativos y a rechazar tratamientos que prolonguen la vida de forma desproporcionada. No es eutanasia: busca evitar la obstinación terapéutica y permitir una muerte digna.",
+      "gpcRefs": [
+        "Ley de voluntad anticipada para el Distrito Federal",
+        "Ley General de Salud en materia de cuidados paliativos"
+      ]
+    },
+    {
+      "key": "fam-07a-consentimiento-etica-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "informed_consent",
+      "vignette": "Hombre de 55 años con diagnóstico reciente de cáncer de páncreas avanzado. Su familia pide al médico que no le diga el diagnóstico porque \"no lo soportaría\". El paciente es capaz y pregunta qué tiene.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Los pacientes prefieren no conocer malas noticias",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La mayoría desea saber."
+        },
+        {
+          "key": "b",
+          "text": "Delegar en la familia la decisión de informarle",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La información corresponde al paciente."
+        },
+        {
+          "key": "c",
+          "text": "Darle la información por escrito sin conversación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La noticia requiere diálogo."
+        },
+        {
+          "key": "d",
+          "text": "Mentirle diciéndole que tiene una gastritis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Viola el principio de veracidad."
+        },
+        {
+          "key": "e",
+          "text": "Informarle de golpe todos los detalles sin preparación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La comunicación debe ser cuidadosa."
+        },
+        {
+          "key": "f",
+          "text": "Informar al paciente su diagnóstico de forma gradual, empática y según lo que desee saber, escuchando también a la familia",
+          "correct": true,
+          "rationale": "El paciente capaz tiene derecho a conocer su diagnóstico."
+        },
+        {
+          "key": "g",
+          "text": "Ocultar el diagnóstico porque la familia lo pide",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Viola el derecho del paciente a la información."
+        },
+        {
+          "key": "h",
+          "text": "Ocultar el diagnóstico protege siempre al paciente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Le impide tomar decisiones."
+        },
+        {
+          "key": "i",
+          "text": "No ofrecer apoyo emocional ni plan de seguimiento",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte de la comunicación."
+        },
+        {
+          "key": "j",
+          "text": "Solicitar autorización judicial para informarle",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "El paciente capaz tiene derecho a recibir información veraz, suficiente y comprensible sobre su diagnóstico, pronóstico y tratamiento, como lo establece la Carta de los Derechos Generales de los Pacientes. La familia puede ser aliada, pero no tiene derecho a decidir que el paciente no sea informado. El protocolo SPIKES orienta la comunicación de malas noticias: preparar el entorno, explorar lo que el paciente sabe, preguntar cuánto quiere saber, dar la información de forma clara y gradual, responder a las emociones y acordar un plan. El paciente puede decidir no conocer detalles y delegar en un familiar.",
+      "gpcRefs": [
+        "Carta de los derechos generales de los pacientes de la Comisión Nacional de Arbitraje Médico",
+        "Guía de Práctica Clínica de cuidados paliativos en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-07a-consentimiento-etica-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "informed_consent",
+      "vignette": "Adolescente de 16 años con diagnóstico reciente de VIH que pide al médico que no informe a sus padres. Es capaz de comprender su situación y acepta iniciar tratamiento antirretroviral.",
+      "prompt": "¿Cuál es la conducta más apropiada respecto a la confidencialidad?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Respetar la confidencialidad, brindar el tratamiento, fomentar que involucre a un adulto de confianza y orientar sobre la notificación a sus parejas",
+          "correct": true,
+          "rationale": "Se protege su derecho a la confidencialidad y a la atención."
+        },
+        {
+          "key": "b",
+          "text": "Solicitar una orden judicial para iniciar tratamiento",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "c",
+          "text": "No ofrecer apoyo psicológico",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte de la atención integral."
+        },
+        {
+          "key": "d",
+          "text": "Informar a todos sus contactos sin su autorización como primera medida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se busca la notificación asistida y voluntaria."
+        },
+        {
+          "key": "e",
+          "text": "Negar el tratamiento hasta que acuda con sus padres",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Retrasa una atención necesaria."
+        },
+        {
+          "key": "f",
+          "text": "Informar a su escuela",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Viola la confidencialidad."
+        },
+        {
+          "key": "g",
+          "text": "Publicar el caso para fines epidemiológicos con su nombre",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La notificación epidemiológica es confidencial."
+        },
+        {
+          "key": "h",
+          "text": "Respetar la confidencialidad impide la notificación epidemiológica",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La notificación al sistema de vigilancia es confidencial."
+        },
+        {
+          "key": "i",
+          "text": "Los adolescentes no tienen derecho a la confidencialidad",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La norma la reconoce."
+        },
+        {
+          "key": "j",
+          "text": "Informar de inmediato a los padres sin su consentimiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Viola su confidencialidad sin justificación de riesgo inminente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "La confidencialidad es un deber del médico y un derecho del paciente, incluidos los adolescentes, especialmente en temas de salud sexual y reproductiva, VIH y salud mental. Las normas mexicanas sobre VIH y salud del adolescente reconocen el derecho a recibir atención con confidencialidad. Se recomienda fomentar que el adolescente involucre a un adulto de confianza, sin imponerlo. Las excepciones a la confidencialidad incluyen el riesgo grave para el paciente o terceros, como ideación suicida o abuso, y la notificación al sistema de vigilancia epidemiológica, que también es confidencial. Se orienta sobre la notificación a las parejas sexuales.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención y el control de la infección por virus de la inmunodeficiencia humana",
+        "Norma Oficial Mexicana para la atención a la salud del grupo etario de 10 a 19 años"
+      ]
+    },
+    {
+      "key": "fam-07a-consentimiento-etica-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "informed_consent",
+      "vignette": "Un hospital debe decidir a qué paciente asignar la única cama disponible en la unidad de terapia intensiva entre varios pacientes graves. Se aplican criterios clínicos objetivos de gravedad y probabilidad de beneficio, sin considerar la capacidad de pago ni la condición social.",
+      "prompt": "¿Qué principio bioético se aplica principalmente en esta decisión?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Confidencialidad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se refiere a proteger la información."
+        },
+        {
+          "key": "b",
+          "text": "No maleficencia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se refiere a no causar daño."
+        },
+        {
+          "key": "c",
+          "text": "Beneficencia individual exclusivamente",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La decisión involucra la distribución entre varios pacientes."
+        },
+        {
+          "key": "d",
+          "text": "Principio de precaución",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "e",
+          "text": "Justicia",
+          "correct": true,
+          "rationale": "Distribuye recursos limitados de forma equitativa con criterios objetivos."
+        },
+        {
+          "key": "f",
+          "text": "Asignar la cama al primero que llegue sin evaluar es lo más justo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Deben considerarse criterios clínicos."
+        },
+        {
+          "key": "g",
+          "text": "Paternalismo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No describe la decisión."
+        },
+        {
+          "key": "h",
+          "text": "Autonomía",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se refiere a la decisión libre del paciente."
+        },
+        {
+          "key": "i",
+          "text": "Veracidad",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se refiere a decir la verdad."
+        },
+        {
+          "key": "j",
+          "text": "Doble efecto",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se aplica a acciones con efectos buenos y malos."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "El principio de justicia en bioética se refiere a la distribución equitativa de los recursos sanitarios y al trato igualitario de las personas, sin discriminación por condición social, económica, étnica, religiosa o de otro tipo. Cuando los recursos son escasos, como camas de terapia intensiva o ventiladores, se usan criterios clínicos objetivos y transparentes, como gravedad, probabilidad de beneficio y pronóstico, generalmente con el apoyo de un comité o un protocolo de triaje. Durante la pandemia de COVID-19 se elaboraron guías de asignación de recursos de medicina crítica basadas en este principio.",
+      "gpcRefs": [
+        "Guía nacional para la integración y el funcionamiento de los comités hospitalarios de bioética",
+        "Guía bioética para asignación de recursos de medicina crítica del Consejo de Salubridad General"
+      ]
+    },
+    {
+      "key": "fam-07a-consentimiento-etica-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "informed_consent",
+      "vignette": "Mujer de 45 años que habla solo náhuatl acude con su hija de 12 años, quien traduce. Se le propone una histerectomía por miomatosis con sangrado anemizante. El hospital cuenta con un intérprete institucional.",
+      "prompt": "¿Cuál es la conducta más apropiada para obtener el consentimiento informado?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Con mostrar dibujos es suficiente sin intérprete",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No garantiza comprensión completa."
+        },
+        {
+          "key": "b",
+          "text": "Decidir por ella porque no habla español",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Viola su autonomía."
+        },
+        {
+          "key": "c",
+          "text": "Pedir al esposo que firme en su lugar sin informarla",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La decisión corresponde a la paciente."
+        },
+        {
+          "key": "d",
+          "text": "Los pacientes indígenas no requieren consentimiento detallado",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tienen los mismos derechos."
+        },
+        {
+          "key": "e",
+          "text": "Trasladarla a otra ciudad para encontrar un intérprete sin necesidad",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El hospital ya cuenta con uno."
+        },
+        {
+          "key": "f",
+          "text": "Pedirle que firme en español aunque no lo entienda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El consentimiento no sería válido."
+        },
+        {
+          "key": "g",
+          "text": "Usar a la hija de 12 años como intérprete para toda la información",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es adecuado por su edad y por el contenido."
+        },
+        {
+          "key": "h",
+          "text": "No documentar la participación del intérprete",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe registrarse."
+        },
+        {
+          "key": "i",
+          "text": "Operar sin consentimiento porque la comunicación es difícil",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es una urgencia vital."
+        },
+        {
+          "key": "j",
+          "text": "Solicitar el apoyo del intérprete capacitado para informar en su lengua y verificar la comprensión",
+          "correct": true,
+          "rationale": "Garantiza información comprensible y respeta su derecho lingüístico."
+        }
+      ],
+      "canonical": [
+        "b",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "El consentimiento informado solo es válido si el paciente comprende la información. Las personas que hablan lenguas indígenas tienen derecho a recibir atención y información en su lengua, conforme a la Ley General de Derechos Lingüísticos de los Pueblos Indígenas y la Ley General de Salud. Se recomienda usar intérpretes capacitados y evitar a menores de edad como intérpretes, especialmente en temas delicados, por su edad, la posible omisión de información y el impacto emocional. Se verifica la comprensión pidiendo al paciente que explique con sus palabras lo que entendió y se documenta la participación del intérprete en el expediente.",
+      "gpcRefs": [
+        "Ley General de Derechos Lingüísticos de los Pueblos Indígenas",
+        "Norma Oficial Mexicana del expediente clínico"
+      ]
+    },
+    {
+      "key": "fam-07a-consentimiento-etica-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "informed_consent",
+      "vignette": "Un investigador desea realizar un ensayo clínico con un nuevo antihipertensivo en pacientes de su consulta. Planea iniciar el estudio sin someterlo a ningún comité y obtener solo un consentimiento verbal.",
+      "prompt": "¿Qué requisito ético indica la normativa para este tipo de investigación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo se requiere la autorización del director de la clínica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se requiere la revisión de comités."
+        },
+        {
+          "key": "b",
+          "text": "Basta con el consentimiento verbal del paciente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La investigación con riesgo requiere consentimiento escrito."
+        },
+        {
+          "key": "c",
+          "text": "Aprobación previa por comités de ética en investigación e investigación y consentimiento informado por escrito",
+          "correct": true,
+          "rationale": "La investigación en humanos requiere revisión independiente y consentimiento documentado."
+        },
+        {
+          "key": "d",
+          "text": "El beneficio para la ciencia justifica omitir el consentimiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Los derechos del participante prevalecen."
+        },
+        {
+          "key": "e",
+          "text": "Se requiere aprobación del Congreso de la Unión",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el requisito."
+        },
+        {
+          "key": "f",
+          "text": "Solo se requiere registrar el estudio después de publicarlo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El registro y la aprobación son previos."
+        },
+        {
+          "key": "g",
+          "text": "Es suficiente con informar a los pacientes al terminar el estudio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Deben ser informados antes."
+        },
+        {
+          "key": "h",
+          "text": "No se requiere consentimiento si el fármaco es prometedor",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El consentimiento es indispensable."
+        },
+        {
+          "key": "i",
+          "text": "La investigación en la consulta privada no está regulada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Está regulada."
+        },
+        {
+          "key": "j",
+          "text": "Pagar a los pacientes elimina la necesidad de consentimiento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No la elimina."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "La investigación en seres humanos se rige por principios internacionales como el Código de Núremberg, la Declaración de Helsinki y el Informe Belmont, que establecen el respeto por las personas, la beneficencia y la justicia. En México, el Reglamento de la Ley General de Salud en materia de investigación exige que los protocolos sean aprobados por los comités de investigación y de ética en investigación de la institución, y que los participantes otorguen un consentimiento informado por escrito, de forma libre, con información sobre objetivos, riesgos, beneficios, alternativas, confidencialidad y el derecho a retirarse en cualquier momento sin consecuencias.",
+      "gpcRefs": [
+        "Reglamento de la Ley General de Salud en materia de investigación para la salud",
+        "Declaración de Helsinki de la Asociación Médica Mundial"
+      ]
+    },
+    {
+      "key": "fam-07a-consentimiento-etica-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "informed_consent",
+      "vignette": "Hombre de 85 años con demencia avanzada, inmóvil, sin comunicación verbal y con neumonía por aspiración recurrente. Su familia, de acuerdo con el equipo médico, decide no intubarlo ni ingresarlo a terapia intensiva y priorizar su confort.",
+      "prompt": "¿Qué indica esta decisión desde el punto de vista bioético?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Eutanasia activa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No se busca provocar la muerte."
+        },
+        {
+          "key": "b",
+          "text": "Limitar tratamientos equivale a matar al paciente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La muerte se debe a la enfermedad."
+        },
+        {
+          "key": "c",
+          "text": "Negligencia médica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es una decisión clínica y ética fundamentada."
+        },
+        {
+          "key": "d",
+          "text": "Violación del principio de beneficencia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se busca el mayor beneficio posible para el paciente."
+        },
+        {
+          "key": "e",
+          "text": "Principio de justicia distributiva exclusivamente",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El fundamento principal es la proporcionalidad."
+        },
+        {
+          "key": "f",
+          "text": "Toda medida disponible debe aplicarse siempre",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Las medidas desproporcionadas no benefician."
+        },
+        {
+          "key": "g",
+          "text": "Suicidio asistido",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No aplica."
+        },
+        {
+          "key": "h",
+          "text": "Abandono del paciente",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se continúa con cuidados de confort."
+        },
+        {
+          "key": "i",
+          "text": "Requiere autorización judicial obligatoria",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria en este contexto."
+        },
+        {
+          "key": "j",
+          "text": "Adecuación del esfuerzo terapéutico para evitar la obstinación terapéutica",
+          "correct": true,
+          "rationale": "Se evitan medidas desproporcionadas y se priorizan los cuidados paliativos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "La adecuación o limitación del esfuerzo terapéutico consiste en no iniciar o retirar medidas que solo prolongan la vida de forma desproporcionada sin ofrecer un beneficio real, en pacientes con enfermedades avanzadas e irreversibles, priorizando el confort y la dignidad. Se basa en los principios de beneficencia, no maleficencia y autonomía, y evita la obstinación terapéutica o encarnizamiento. Se diferencia de la eutanasia porque la muerte se debe a la evolución de la enfermedad. Debe ser una decisión compartida con el paciente o su representante, documentada en el expediente, y puede apoyarse en el comité de bioética.",
+      "gpcRefs": [
+        "Ley General de Salud en materia de cuidados paliativos",
+        "Guía nacional para la integración y el funcionamiento de los comités hospitalarios de bioética"
+      ]
+    },
+    {
+      "key": "fam-07a-consentimiento-etica-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "informed_consent",
+      "vignette": "Un representante de un laboratorio farmacéutico ofrece a un médico familiar un viaje con todos los gastos pagados a un destino turístico a cambio de prescribir su nuevo medicamento.",
+      "prompt": "¿Qué indica esta situación desde el punto de vista ético?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Una forma válida de educación médica continua",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es educativa si está condicionada."
+        },
+        {
+          "key": "b",
+          "text": "Un asunto exclusivo de la Comisión Federal de Competencia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es principalmente ético."
+        },
+        {
+          "key": "c",
+          "text": "Un conflicto de interés que debe rechazarse porque compromete la objetividad de las decisiones clínicas",
+          "correct": true,
+          "rationale": "La prescripción debe basarse en la evidencia y el interés del paciente."
+        },
+        {
+          "key": "d",
+          "text": "Una práctica aceptable si el medicamento es bueno",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Condicionar la prescripción a un beneficio personal no es ético."
+        },
+        {
+          "key": "e",
+          "text": "Un incentivo que no influye en la prescripción",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Los estudios muestran que sí influye."
+        },
+        {
+          "key": "f",
+          "text": "Los conflictos de interés son raros en medicina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Son frecuentes."
+        },
+        {
+          "key": "g",
+          "text": "Una decisión solo de la vida privada del médico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Afecta a los pacientes."
+        },
+        {
+          "key": "h",
+          "text": "Los médicos son inmunes a la influencia de la industria",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Están expuestos a ella."
+        },
+        {
+          "key": "i",
+          "text": "Un problema de confidencialidad",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El problema es la objetividad."
+        },
+        {
+          "key": "j",
+          "text": "Aceptable si no se informa a los pacientes",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La ocultación agrava el problema."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "e"
+      ],
+      "explanation": "Un conflicto de interés ocurre cuando un interés secundario, como un beneficio económico o personal, puede influir indebidamente en el juicio profesional, cuyo interés primario es el bienestar del paciente. Aceptar regalos, viajes o beneficios condicionados a la prescripción de un medicamento compromete la objetividad, afecta la confianza de los pacientes y puede aumentar costos sin beneficio clínico. Los códigos de ética médica recomiendan rechazar estos incentivos, declarar los conflictos de interés en investigación y docencia y basar las decisiones en la mejor evidencia disponible.",
+      "gpcRefs": [
+        "Código de bioética para el personal de salud de la Comisión Nacional de Bioética",
+        "Lineamientos de transparencia en la relación con la industria farmacéutica"
+      ]
+    },
+    {
+      "key": "fam-07a-consentimiento-etica-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "informed_consent",
+      "vignette": "Mujer de 30 años que acude por lesiones en la cara y el brazo compatibles con agresión. Refiere que su pareja la golpeó. Pide que no se haga nada legal porque teme represalias.",
+      "prompt": "¿Cuál es la conducta más apropiada desde el punto de vista legal y ético?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Atender las lesiones y no registrar nada por respeto a su decisión",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La norma obliga a registrar y dar aviso."
+        },
+        {
+          "key": "b",
+          "text": "Recomendarle que regrese a casa y evite provocar a su pareja",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Culpabiliza a la víctima."
+        },
+        {
+          "key": "c",
+          "text": "Negarle la atención hasta que denuncie",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La atención no se condiciona."
+        },
+        {
+          "key": "d",
+          "text": "No documentar las lesiones en el expediente",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Deben documentarse con detalle."
+        },
+        {
+          "key": "e",
+          "text": "Hospitalizarla obligatoriamente para protegerla",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado si no lo requiere."
+        },
+        {
+          "key": "f",
+          "text": "Llamar a la pareja para mediar el conflicto",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede aumentar el riesgo."
+        },
+        {
+          "key": "g",
+          "text": "La violencia de pareja es un asunto privado sin implicaciones legales",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un delito."
+        },
+        {
+          "key": "h",
+          "text": "Dar de alta sin evaluar el riesgo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe evaluarse el riesgo de nuevas agresiones."
+        },
+        {
+          "key": "i",
+          "text": "El médico no tiene obligaciones en casos de violencia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La norma establece obligaciones."
+        },
+        {
+          "key": "j",
+          "text": "Atender las lesiones, informarle de sus derechos, elaborar un plan de seguridad y dar aviso al ministerio público conforme a la norma, explicándole el procedimiento",
+          "correct": true,
+          "rationale": "Las lesiones por violencia requieren aviso, respetando la atención integral."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "La norma mexicana sobre violencia familiar, sexual y contra las mujeres establece que el personal de salud debe brindar atención médica y psicológica, informar a la usuaria sobre sus derechos y las opciones de apoyo, elaborar un plan de seguridad, registrar el caso y dar aviso al ministerio público cuando las lesiones lo ameriten, mediante el formato establecido. El aviso al ministerio público no equivale a una denuncia por parte de la paciente. Las lesiones deben documentarse con detalle en el expediente. El médico no debe culpabilizar a la víctima ni condicionar la atención a que denuncie.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana sobre violencia familiar, sexual y contra las mujeres",
+        "Norma Oficial Mexicana del expediente clínico"
+      ]
+    },
+    {
+      "key": "fam-07a-consentimiento-etica-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "informed_consent",
+      "vignette": "Mujer de 26 años con 2 hijos que solicita salpingoclasia después de su parto. Su esposo se opone. Ella es mayor de edad, capaz y ha recibido información sobre métodos reversibles y la naturaleza permanente del procedimiento.",
+      "prompt": "¿Cuál es la conducta más apropiada respecto al consentimiento?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solicitar autorización judicial",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "b",
+          "text": "Diferir la decisión hasta que el esposo acepte",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Viola su autonomía."
+        },
+        {
+          "key": "c",
+          "text": "Exigir la firma del esposo como requisito indispensable",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es requisito legal."
+        },
+        {
+          "key": "d",
+          "text": "No ofrecer consejería sobre métodos reversibles de larga duración",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe ofrecerse."
+        },
+        {
+          "key": "e",
+          "text": "Negar el procedimiento por ser joven",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La edad adulta y la capacidad le permiten decidir."
+        },
+        {
+          "key": "f",
+          "text": "Realizar vasectomía al esposo en su lugar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La decisión es de la paciente."
+        },
+        {
+          "key": "g",
+          "text": "Realizar el procedimiento con el consentimiento informado por escrito de la paciente, sin requerir la autorización del esposo",
+          "correct": true,
+          "rationale": "La decisión sobre su cuerpo corresponde a la paciente capaz."
+        },
+        {
+          "key": "h",
+          "text": "La familia debe decidir sobre la anticoncepción de la mujer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La decisión es personal."
+        },
+        {
+          "key": "i",
+          "text": "Los métodos definitivos solo se permiten a mayores de 35 años",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay ese requisito legal."
+        },
+        {
+          "key": "j",
+          "text": "Realizarlo sin explicar que es permanente",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El consentimiento requiere información completa."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "La norma mexicana de los servicios de planificación familiar establece que la elección de un método anticonceptivo, incluidos los definitivos, es una decisión libre e informada de la persona usuaria. Para la oclusión tubaria bilateral o la vasectomía se requiere consejería sobre su carácter permanente y las alternativas reversibles, y el consentimiento informado por escrito de la persona que se someterá al procedimiento, sin necesidad de la autorización de la pareja. Realizar un procedimiento anticonceptivo sin consentimiento es una violación de derechos. En personas jóvenes se debe asegurar una consejería cuidadosa por el riesgo de arrepentimiento.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana de los servicios de planificación familiar",
+        "Norma Oficial Mexicana del expediente clínico"
+      ]
+    }
+  ]
+}

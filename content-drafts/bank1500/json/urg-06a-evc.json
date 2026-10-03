@@ -1,0 +1,1145 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "urg-06a-evc-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "neurologic_emergencies",
+      "subtopic": "stroke_emergency",
+      "vignette": "Hombre de 68 años que inicia hace 1 hora con debilidad del brazo y la pierna derechos y dificultad para hablar. Presión de 170/95 mmHg. Glucosa capilar de 110 mg/dL.",
+      "prompt": "¿Cuál es el estudio inicial más apropiado?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Resonancia magnética con espectroscopia antes de cualquier decisión",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede retrasar el tratamiento si no está disponible de inmediato."
+        },
+        {
+          "key": "b",
+          "text": "Electroencefalograma",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No distingue isquemia de hemorragia."
+        },
+        {
+          "key": "c",
+          "text": "La tomografía normal descarta un evento isquémico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "En las primeras horas suele ser normal."
+        },
+        {
+          "key": "d",
+          "text": "Punción lumbar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "e",
+          "text": "No registrar la hora exacta de inicio de los síntomas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Determina la ventana terapéutica."
+        },
+        {
+          "key": "f",
+          "text": "Los síntomas de evento vascular no permiten distinguir isquemia de hemorragia sin imagen",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es cierto, por eso se requiere imagen."
+        },
+        {
+          "key": "g",
+          "text": "Iniciar ácido acetilsalicílico antes de la imagen",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Podría empeorar una hemorragia."
+        },
+        {
+          "key": "h",
+          "text": "Angiografía cerebral convencional de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es invasiva."
+        },
+        {
+          "key": "i",
+          "text": "Ultrasonido Doppler carotídeo como primer estudio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No descarta hemorragia."
+        },
+        {
+          "key": "j",
+          "text": "Tomografía de cráneo simple urgente",
+          "correct": true,
+          "rationale": "Distingue un evento isquémico de uno hemorrágico antes de decidir la trombólisis."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "j"
+      ],
+      "explanation": "Ante la sospecha de evento vascular cerebral agudo se activa el código cerebro y se realiza una tomografía de cráneo simple urgente, idealmente en los primeros 20 minutos de la llegada, para descartar una hemorragia antes de considerar la trombólisis. En las primeras horas del evento isquémico la tomografía suele ser normal o mostrar signos tempranos sutiles. La angiotomografía identifica oclusiones de grandes vasos candidatas a trombectomía. Se mide la glucosa capilar para descartar hipoglucemia, que puede simular un evento. La hora de inicio o la última vez que se vio normal al paciente define la ventana terapéutica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica",
+        "Guía de la Asociación Americana del Corazón para evento vascular cerebral isquémico agudo"
+      ]
+    },
+    {
+      "key": "urg-06a-evc-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "neurologic_emergencies",
+      "subtopic": "stroke_emergency",
+      "vignette": "Mujer de 65 años con hemiparesia izquierda y disartria que inició hace 2 horas. Tomografía sin hemorragia. Presión de 165/90 mmHg. Glucosa de 130 mg/dL. Sin anticoagulantes ni cirugías recientes. Escala NIHSS de 9.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Heparina intravenosa en dosis plena",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicada en el evento agudo."
+        },
+        {
+          "key": "b",
+          "text": "Bajar la presión a 120/80 antes de cualquier tratamiento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Solo se requiere menor de 185/110 para trombolizar."
+        },
+        {
+          "key": "c",
+          "text": "Craniectomía descompresiva inmediata",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "d",
+          "text": "La trombólisis solo sirve en la primera hora",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es útil hasta 4.5 horas."
+        },
+        {
+          "key": "e",
+          "text": "Trombólisis intravenosa con alteplasa o tenecteplasa",
+          "correct": true,
+          "rationale": "Está dentro de la ventana de 4.5 horas sin contraindicaciones."
+        },
+        {
+          "key": "f",
+          "text": "Solo ácido acetilsalicílico y observación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Pierde el beneficio de la trombólisis."
+        },
+        {
+          "key": "g",
+          "text": "Esperar 24 horas para ver si mejora sola",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Pierde la ventana terapéutica."
+        },
+        {
+          "key": "h",
+          "text": "No evaluar oclusión de gran vaso para trombectomía",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe evaluarse."
+        },
+        {
+          "key": "i",
+          "text": "La trombólisis está contraindicada en mayores de 60 años",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No hay límite de edad estricto."
+        },
+        {
+          "key": "j",
+          "text": "Manitol de rutina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicado."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "f"
+      ],
+      "explanation": "La trombólisis intravenosa con alteplasa, 0.9 mg por kilo con 10 por ciento en bolo y el resto en una hora, o con tenecteplasa en bolo único, está indicada en el evento vascular cerebral isquémico agudo con déficit discapacitante dentro de las primeras 4.5 horas del inicio de los síntomas, sin contraindicaciones. Antes se requiere tomografía sin hemorragia, glucosa normal y presión menor de 185/110 mmHg. Las contraindicaciones incluyen hemorragia intracraneal, cirugía o trauma mayor recientes, sangrado activo, anticoagulación eficaz y plaquetas bajas. Cuanto antes se administra, mayor es el beneficio, por lo que se busca un tiempo puerta aguja menor de 60 minutos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica",
+        "Guía de la Asociación Americana del Corazón para evento vascular cerebral isquémico agudo"
+      ]
+    },
+    {
+      "key": "urg-06a-evc-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "neurologic_emergencies",
+      "subtopic": "stroke_emergency",
+      "vignette": "Hombre de 60 años con afasia y hemiplejía derecha de 3 horas de evolución, NIHSS de 18. Recibió trombólisis intravenosa. La angiotomografía muestra oclusión del segmento proximal de la arteria cerebral media izquierda.",
+      "prompt": "¿Cuál es el siguiente paso más apropiado?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Endarterectomía carotídea urgente",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es el tratamiento de la oclusión de la cerebral media."
+        },
+        {
+          "key": "b",
+          "text": "Heparina intravenosa en dosis plena",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "c",
+          "text": "Repetir la dosis de alteplasa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "d",
+          "text": "No trasladar a un centro con terapia endovascular",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es necesario si no está disponible."
+        },
+        {
+          "key": "e",
+          "text": "Solo vigilancia porque ya recibió trombólisis",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La trombectomía agrega beneficio en oclusiones proximales."
+        },
+        {
+          "key": "f",
+          "text": "Hipotermia terapéutica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No tiene evidencia en este contexto."
+        },
+        {
+          "key": "g",
+          "text": "La trombectomía está contraindicada si se dio trombólisis",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se usan juntas."
+        },
+        {
+          "key": "h",
+          "text": "Esperar a la resonancia de 24 horas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retrasa un tratamiento eficaz."
+        },
+        {
+          "key": "i",
+          "text": "La trombectomía solo sirve en las primeras 2 horas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es útil hasta 6 y, en casos seleccionados, 24 horas."
+        },
+        {
+          "key": "j",
+          "text": "Trombectomía mecánica endovascular",
+          "correct": true,
+          "rationale": "Está indicada en oclusión de gran vaso anterior, incluso después de la trombólisis."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "La trombectomía mecánica endovascular está indicada en pacientes con evento vascular cerebral isquémico por oclusión de un gran vaso de la circulación anterior, como la carótida interna o el segmento proximal de la cerebral media, con déficit significativo, dentro de las primeras 6 horas, y en pacientes seleccionados con imagen de penumbra hasta las 24 horas. Se realiza aunque el paciente haya recibido trombólisis intravenosa, sin esperar su respuesta. Mejora de forma importante la independencia funcional. Por ello, en pacientes con déficit grave se realiza angiotomografía para identificar estas oclusiones.",
+      "gpcRefs": [
+        "Guía de la Asociación Americana del Corazón para evento vascular cerebral isquémico agudo",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica"
+      ]
+    },
+    {
+      "key": "urg-06a-evc-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "neurologic_emergencies",
+      "subtopic": "stroke_emergency",
+      "vignette": "Mujer de 72 años con evento vascular cerebral isquémico de 10 horas de evolución, fuera de ventana para trombólisis y sin oclusión de gran vaso. Presión de 200/105 mmHg. No recibirá tratamiento de reperfusión.",
+      "prompt": "¿Cuál es la conducta más apropiada respecto a la presión arterial?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "No bajar la presión salvo que supere 220/120 mmHg, y en ese caso reducirla alrededor de 15 por ciento en 24 horas",
+          "correct": true,
+          "rationale": "Se mantiene la perfusión de la penumbra."
+        },
+        {
+          "key": "b",
+          "text": "La hipertensión en la fase aguda no tiene función compensatoria",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Ayuda a perfundir la penumbra."
+        },
+        {
+          "key": "c",
+          "text": "Nifedipino sublingual",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Causa descensos bruscos."
+        },
+        {
+          "key": "d",
+          "text": "La hipertensión siempre debe corregirse rápidamente en el evento vascular",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "En el isquémico agudo se tolera."
+        },
+        {
+          "key": "e",
+          "text": "No iniciar antiagregación",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Está indicada en las primeras 24 a 48 horas."
+        },
+        {
+          "key": "f",
+          "text": "Bajar la presión a 120/80 de inmediato",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede ampliar el infarto."
+        },
+        {
+          "key": "g",
+          "text": "Bajar a menos de 185/110 como si fuera a recibir trombólisis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No recibirá trombólisis."
+        },
+        {
+          "key": "h",
+          "text": "Iniciar tres antihipertensivos orales a dosis plenas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede causar hipoperfusión."
+        },
+        {
+          "key": "i",
+          "text": "Nitroprusiato en dosis altas para normalizar la presión",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "j",
+          "text": "Suspender los antihipertensivos crónicos de por vida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se reinician después de la fase aguda."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "h"
+      ],
+      "explanation": "En el evento vascular cerebral isquémico agudo la hipertensión es frecuente y puede ser compensatoria para mantener la perfusión de la penumbra isquémica, donde la autorregulación está alterada. En pacientes que no recibirán reperfusión, no se recomienda bajar la presión salvo que supere 220/120 mmHg, y en ese caso se reduce alrededor de 15 por ciento en las primeras 24 horas. En pacientes candidatos a trombólisis se requiere menor de 185/110 antes y menor de 180/105 durante las 24 horas siguientes. Se inicia ácido acetilsalicílico en las primeras 24 a 48 horas y se reinician los antihipertensivos después de la fase aguda.",
+      "gpcRefs": [
+        "Guía de la Asociación Americana del Corazón para evento vascular cerebral isquémico agudo",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica"
+      ]
+    },
+    {
+      "key": "urg-06a-evc-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "neurologic_emergencies",
+      "subtopic": "stroke_emergency",
+      "vignette": "Mujer de 45 años con cefalea súbita, la peor de su vida, que alcanzó su máxima intensidad en segundos mientras hacía ejercicio. Presenta vómito, rigidez de nuca y somnolencia. Tomografía de cráneo con sangre en las cisternas basales.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Trombosis de senos venosos como primera opción",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La sangre en cisternas orienta a aneurisma."
+        },
+        {
+          "key": "b",
+          "text": "Una tomografía normal siempre descarta hemorragia subaracnoidea",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede ser normal y requerir punción lumbar."
+        },
+        {
+          "key": "c",
+          "text": "Hemorragia intraparenquimatosa hipertensiva",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se localiza en el parénquima."
+        },
+        {
+          "key": "d",
+          "text": "Cefalea tensional",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "e",
+          "text": "Toda cefalea intensa es benigna en mujeres jóvenes",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La cefalea en trueno requiere descartar hemorragia."
+        },
+        {
+          "key": "f",
+          "text": "Sinusitis aguda",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "g",
+          "text": "Migraña con aura",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la sangre en la tomografía."
+        },
+        {
+          "key": "h",
+          "text": "Meningitis bacteriana",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La sangre en cisternas indica hemorragia."
+        },
+        {
+          "key": "i",
+          "text": "Evento isquémico de la arteria cerebral media",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la sangre subaracnoidea."
+        },
+        {
+          "key": "j",
+          "text": "Hemorragia subaracnoidea por probable ruptura de aneurisma",
+          "correct": true,
+          "rationale": "Cefalea en trueno con rigidez de nuca y sangre en cisternas."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "h",
+        "j"
+      ],
+      "explanation": "La hemorragia subaracnoidea no traumática se debe con mayor frecuencia a la ruptura de un aneurisma intracraneal. Se manifiesta con cefalea súbita e intensa, descrita como la peor de la vida o cefalea en trueno, que alcanza su máximo en segundos a un minuto, acompañada de vómito, rigidez de nuca, fotofobia, alteración de la conciencia o déficit focal. La tomografía simple en las primeras 6 horas tiene una sensibilidad cercana al 100 por ciento; si es negativa y la sospecha persiste, se realiza punción lumbar en busca de xantocromía. La angiotomografía identifica el aneurisma, que se trata con embolización o clipaje temprano.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia subaracnoidea secundaria a ruptura de aneurisma",
+        "Guía de la Asociación Americana del Corazón para hemorragia subaracnoidea"
+      ]
+    },
+    {
+      "key": "urg-06a-evc-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "neurologic_emergencies",
+      "subtopic": "stroke_emergency",
+      "vignette": "Hombre de 50 años con hemorragia subaracnoidea aneurismática. Al tercer día presenta deterioro neurológico y se descarta resangrado e hidrocefalia.",
+      "prompt": "¿Cuál es el fármaco de elección desde el inicio frente al deterioro por vasoespasmo?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Nimodipino oral",
+          "correct": true,
+          "rationale": "Mejora el pronóstico neurológico en la hemorragia subaracnoidea aneurismática."
+        },
+        {
+          "key": "b",
+          "text": "La hipovolemia ayuda a prevenir el vasoespasmo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se mantiene la euvolemia."
+        },
+        {
+          "key": "c",
+          "text": "No vigilar con Doppler transcraneal",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Ayuda a detectar el vasoespasmo."
+        },
+        {
+          "key": "d",
+          "text": "Trombólisis intravenosa",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Está contraindicada."
+        },
+        {
+          "key": "e",
+          "text": "Ácido acetilsalicílico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aumenta el riesgo de sangrado."
+        },
+        {
+          "key": "f",
+          "text": "Heparina en dosis plena",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumenta el riesgo de sangrado."
+        },
+        {
+          "key": "g",
+          "text": "El vasoespasmo ocurre en las primeras horas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ocurre típicamente entre los días 3 y 14."
+        },
+        {
+          "key": "h",
+          "text": "Nifedipino sublingual",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Causa hipotensión brusca."
+        },
+        {
+          "key": "i",
+          "text": "Manitol de rutina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No previene el vasoespasmo."
+        },
+        {
+          "key": "j",
+          "text": "Dexametasona",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No tiene beneficio."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "h"
+      ],
+      "explanation": "La isquemia cerebral tardía por vasoespasmo es una complicación importante de la hemorragia subaracnoidea aneurismática, que aparece típicamente entre los días 3 y 14. El nimodipino oral, 60 mg cada 4 horas durante 21 días, se administra desde el diagnóstico a todos los pacientes porque mejora el pronóstico neurológico, aunque no reduce el vasoespasmo angiográfico. Se mantiene la euvolemia, se evita la hipotensión y se vigila con Doppler transcraneal. Ante un deterioro por vasoespasmo se induce hipertensión y se considera la angioplastia o vasodilatadores intraarteriales. Otras complicaciones son el resangrado, la hidrocefalia y la hiponatremia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia subaracnoidea secundaria a ruptura de aneurisma",
+        "Guía de la Asociación Americana del Corazón para hemorragia subaracnoidea"
+      ]
+    },
+    {
+      "key": "urg-06a-evc-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "neurologic_emergencies",
+      "subtopic": "stroke_emergency",
+      "vignette": "Hombre de 70 años hipertenso con hemiparesia izquierda súbita. Tomografía con hemorragia intraparenquimatosa en el putamen derecho de 20 mL, sin extensión ventricular. Presión de 200/110 mmHg. No toma anticoagulantes.",
+      "prompt": "¿Cuál es la conducta más apropiada respecto a la presión arterial?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Bajar la presión a 90/60 mmHg",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Causa hipoperfusión."
+        },
+        {
+          "key": "b",
+          "text": "Trombólisis intravenosa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Está contraindicada."
+        },
+        {
+          "key": "c",
+          "text": "Cirugía de evacuación inmediata en todos los casos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada de rutina en este tamaño."
+        },
+        {
+          "key": "d",
+          "text": "Iniciar ácido acetilsalicílico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumenta el sangrado."
+        },
+        {
+          "key": "e",
+          "text": "Nifedipino sublingual",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Causa descensos bruscos e impredecibles."
+        },
+        {
+          "key": "f",
+          "text": "La meta de presión es igual en el evento isquémico y en el hemorrágico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Difiere."
+        },
+        {
+          "key": "g",
+          "text": "No tratar la presión como en el evento isquémico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "En la hemorragia se recomienda reducirla."
+        },
+        {
+          "key": "h",
+          "text": "No revertir la anticoagulación si el paciente la tomara",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es fundamental."
+        },
+        {
+          "key": "i",
+          "text": "La presión no influye en el crecimiento del hematoma",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Influye."
+        },
+        {
+          "key": "j",
+          "text": "Reducir la presión sistólica a una meta de alrededor de 140 mmHg de forma controlada con fármacos intravenosos",
+          "correct": true,
+          "rationale": "Reduce la expansión del hematoma."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "En la hemorragia intracerebral espontánea, la hipertensión es la principal causa, y su localización típica son los ganglios basales, el tálamo, el puente y el cerebelo. La reducción de la presión arterial en las primeras horas se asocia con menor expansión del hematoma. En pacientes con sistólica entre 150 y 220 mmHg se recomienda reducirla a una meta de alrededor de 140 mmHg de forma controlada con fármacos intravenosos como labetalol o nicardipino, evitando descensos bruscos o por debajo de 130. Se revierte la anticoagulación si existe. La cirugía se considera en hemorragias cerebelosas grandes con compresión o hidrocefalia.",
+      "gpcRefs": [
+        "Guía de la Asociación Americana del Corazón para hemorragia intracerebral",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia intracerebral espontánea"
+      ]
+    },
+    {
+      "key": "urg-06a-evc-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "neurologic_emergencies",
+      "subtopic": "stroke_emergency",
+      "vignette": "Hombre de 62 años que presentó debilidad del brazo derecho y dificultad para hablar durante 20 minutos, con recuperación completa. Hipertenso y diabético. Escala ABCD2 de 5.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Trombólisis intravenosa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay déficit actual."
+        },
+        {
+          "key": "b",
+          "text": "Si los síntomas desaparecen no hubo daño ni riesgo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El riesgo persiste."
+        },
+        {
+          "key": "c",
+          "text": "Citar en 3 meses para estudios",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El riesgo es mayor en los primeros días."
+        },
+        {
+          "key": "d",
+          "text": "No buscar fibrilación auricular ni estenosis carotídea",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Cambian el tratamiento."
+        },
+        {
+          "key": "e",
+          "text": "Evaluación urgente con imagen cerebral y vascular, iniciar antiagregación y control de factores de riesgo",
+          "correct": true,
+          "rationale": "El ataque isquémico transitorio tiene alto riesgo de evento vascular en los días siguientes."
+        },
+        {
+          "key": "f",
+          "text": "Angiografía cerebral convencional como primer estudio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "g",
+          "text": "Anticoagulación plena sin estudio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada sin fibrilación auricular u otra causa."
+        },
+        {
+          "key": "h",
+          "text": "El ataque isquémico transitorio rara vez precede a un evento establecido",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un predictor importante."
+        },
+        {
+          "key": "i",
+          "text": "Dar de alta sin estudios porque se recuperó",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El riesgo de evento en los primeros días es alto."
+        },
+        {
+          "key": "j",
+          "text": "Considerarlo una crisis de ansiedad",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Los síntomas focales sugieren isquemia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "El ataque isquémico transitorio es un episodio de disfunción neurológica focal por isquemia sin infarto en la imagen, con recuperación habitual en menos de una hora. Tiene un riesgo alto de evento vascular cerebral, sobre todo en las primeras 48 horas y semanas. Requiere evaluación urgente con imagen cerebral, preferentemente resonancia, estudio de vasos de cuello, como ultrasonido Doppler o angiotomografía, electrocardiograma y monitoreo del ritmo. Se inicia antiagregación, con doble antiagregación por 21 días en casos de alto riesgo, estatina y control de factores de riesgo. Se indica endarterectomía en estenosis carotídea sintomática significativa y anticoagulación en fibrilación auricular.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del ataque isquémico transitorio",
+        "Guía de la Asociación Americana del Corazón para prevención secundaria de evento vascular cerebral"
+      ]
+    },
+    {
+      "key": "urg-06a-evc-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "neurologic_emergencies",
+      "subtopic": "stroke_emergency",
+      "vignette": "Mujer de 55 años con diabetes que es traída por confusión, hemiparesia derecha y dificultad para hablar de inicio súbito. Toma insulina.",
+      "prompt": "¿Cuál es el estudio inicial más apropiado al pie de cama?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Trombólisis sin medir la glucosa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La glucosa es requisito previo."
+        },
+        {
+          "key": "b",
+          "text": "La hipoglucemia nunca causa déficit focal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede causarlo."
+        },
+        {
+          "key": "c",
+          "text": "Gasometría arterial como primer estudio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "d",
+          "text": "Electroencefalograma",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "e",
+          "text": "Resonancia magnética antes de cualquier otra prueba",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La glucosa se mide primero."
+        },
+        {
+          "key": "f",
+          "text": "Los síntomas focales siempre son vasculares",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay simuladores."
+        },
+        {
+          "key": "g",
+          "text": "Punción lumbar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "Angiografía cerebral convencional",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "i",
+          "text": "No preguntar la hora de inicio de los síntomas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es fundamental."
+        },
+        {
+          "key": "j",
+          "text": "Glucosa capilar",
+          "correct": true,
+          "rationale": "La hipoglucemia puede simular un evento vascular cerebral."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "Varias condiciones pueden simular un evento vascular cerebral, como la hipoglucemia, las crisis convulsivas con parálisis de Todd, la migraña con aura, los tumores, las infecciones, la encefalopatía hipertensiva y los trastornos conversivos. La hipoglucemia es el simulador más importante a descartar de inmediato, sobre todo en pacientes diabéticos tratados con insulina o sulfonilureas, porque es fácilmente tratable y su corrección revierte el déficit. Por ello se mide la glucosa capilar al pie de cama antes de cualquier decisión, y una glucosa menor de 50 mg/dL debe corregirse antes de considerar la trombólisis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica",
+        "Guía de la Asociación Americana del Corazón para evento vascular cerebral isquémico agudo"
+      ]
+    },
+    {
+      "key": "urg-06a-evc-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "neurologic_emergencies",
+      "subtopic": "stroke_emergency",
+      "vignette": "Mujer de 75 años con fibrilación auricular en tratamiento con warfarina que presenta hemorragia intraparenquimatosa. INR de 3.8. Glasgow de 13.",
+      "prompt": "¿Cuál es el tratamiento de elección para revertir la anticoagulación?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo suspender la warfarina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La reversión debe ser inmediata."
+        },
+        {
+          "key": "b",
+          "text": "Idarucizumab",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Revierte el dabigatrán."
+        },
+        {
+          "key": "c",
+          "text": "Plaquetas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No revierten la warfarina."
+        },
+        {
+          "key": "d",
+          "text": "Concentrado de complejo protrombínico con vitamina K intravenosa",
+          "correct": true,
+          "rationale": "Revierte el INR rápidamente y reduce la expansión del hematoma."
+        },
+        {
+          "key": "e",
+          "text": "La reversión de la warfarina no influye en el pronóstico de la hemorragia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Reduce la expansión."
+        },
+        {
+          "key": "f",
+          "text": "No controlar la presión arterial",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte del manejo."
+        },
+        {
+          "key": "g",
+          "text": "La anticoagulación nunca debe reiniciarse después de una hemorragia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se valora su reinicio después."
+        },
+        {
+          "key": "h",
+          "text": "Vitamina K oral sola",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Actúa lentamente."
+        },
+        {
+          "key": "i",
+          "text": "Protamina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Revierte la heparina."
+        },
+        {
+          "key": "j",
+          "text": "Plasma fresco como única opción preferida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es más lento y requiere más volumen."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "i",
+        "j"
+      ],
+      "explanation": "La hemorragia intracerebral asociada a anticoagulantes tiene mayor riesgo de expansión del hematoma y mortalidad. En pacientes con warfarina se revierte de inmediato con concentrado de complejo protrombínico de cuatro factores, que normaliza el INR en minutos, junto con vitamina K intravenosa de 10 mg para mantener la reversión. El plasma fresco es una alternativa menos eficaz. Para el dabigatrán se usa idarucizumab y para los inhibidores del factor Xa, andexanet alfa o complejo protrombínico. También se controla la presión arterial. La decisión de reiniciar la anticoagulación se toma semanas después, valorando el riesgo trombótico y hemorrágico.",
+      "gpcRefs": [
+        "Guía de la Asociación Americana del Corazón para hemorragia intracerebral",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia asociada a anticoagulantes"
+      ]
+    },
+    {
+      "key": "urg-06a-evc-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "neurologic_emergencies",
+      "subtopic": "stroke_emergency",
+      "vignette": "Hombre de 66 años con debilidad facial derecha, debilidad del brazo derecho y alteración del lenguaje. Un paramédico aplicó una escala prehospitalaria en el lugar.",
+      "prompt": "¿Qué indica la escala prehospitalaria de Cincinnati positiva en este paciente?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Que permite iniciar trombólisis en la ambulancia sin imagen",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se requiere tomografía."
+        },
+        {
+          "key": "b",
+          "text": "Que sustituye a la escala NIHSS en el hospital",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es una herramienta de tamizaje."
+        },
+        {
+          "key": "c",
+          "text": "Alta probabilidad de evento vascular cerebral, que justifica traslado a un centro con atención de código cerebro",
+          "correct": true,
+          "rationale": "Evalúa asimetría facial, debilidad del brazo y alteración del lenguaje."
+        },
+        {
+          "key": "d",
+          "text": "Que confirma la causa hemorrágica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No distingue isquemia de hemorragia."
+        },
+        {
+          "key": "e",
+          "text": "Un solo signo positivo no tiene importancia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Un solo signo aumenta mucho la probabilidad."
+        },
+        {
+          "key": "f",
+          "text": "Que indica crisis convulsiva",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es su propósito."
+        },
+        {
+          "key": "g",
+          "text": "Que descarta hipoglucemia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Debe medirse la glucosa."
+        },
+        {
+          "key": "h",
+          "text": "Que mide el estado de conciencia como la escala de Glasgow",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Evalúa signos focales."
+        },
+        {
+          "key": "i",
+          "text": "Que el paciente puede ser trasladado a cualquier unidad sin importar sus recursos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se prefieren centros con capacidad de reperfusión."
+        },
+        {
+          "key": "j",
+          "text": "Las escalas prehospitalarias no tienen utilidad",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Aceleran la atención."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "g"
+      ],
+      "explanation": "Las escalas prehospitalarias de evento vascular cerebral permiten identificar rápidamente a pacientes con probable evento para activar el código cerebro y trasladarlos a centros con capacidad de reperfusión. La escala de Cincinnati evalúa la asimetría facial al sonreír, la caída del brazo al extender ambos brazos y la alteración del lenguaje al repetir una frase; la presencia de un solo signo anormal sugiere un evento. El acrónimo en inglés BE FAST agrega equilibrio y visión. La hora de inicio de los síntomas debe registrarse. En el hospital se usa la escala NIHSS para cuantificar el déficit.",
+      "gpcRefs": [
+        "Guía de la Asociación Americana del Corazón para evento vascular cerebral isquémico agudo",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica"
+      ]
+    },
+    {
+      "key": "urg-06a-evc-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "neurologic_emergencies",
+      "subtopic": "stroke_emergency",
+      "vignette": "Mujer de 50 años con evento vascular cerebral isquémico extenso de la arteria cerebral media derecha. Al segundo día presenta deterioro del estado de conciencia y la tomografía muestra edema con desviación de la línea media.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo observar la evolución",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El edema maligno puede causar herniación."
+        },
+        {
+          "key": "b",
+          "text": "Punción lumbar para bajar la presión",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Está contraindicada con desviación de línea media."
+        },
+        {
+          "key": "c",
+          "text": "Valoración urgente por neurocirugía para craniectomía descompresiva",
+          "correct": true,
+          "rationale": "En el infarto maligno de la cerebral media reduce la mortalidad en menores de 60 años."
+        },
+        {
+          "key": "d",
+          "text": "La cirugía no cambia el pronóstico en el infarto maligno",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Reduce la mortalidad."
+        },
+        {
+          "key": "e",
+          "text": "Dexametasona en dosis altas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es eficaz en el edema citotóxico del infarto."
+        },
+        {
+          "key": "f",
+          "text": "No elevar la cabecera ni usar osmoterapia como medidas temporales",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son medidas de soporte."
+        },
+        {
+          "key": "g",
+          "text": "El edema cerebral no causa deterioro en el infarto isquémico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede causar herniación."
+        },
+        {
+          "key": "h",
+          "text": "Hipotermia profunda como tratamiento estándar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No tiene evidencia suficiente."
+        },
+        {
+          "key": "i",
+          "text": "Anticoagulación plena",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumenta el riesgo de transformación hemorrágica."
+        },
+        {
+          "key": "j",
+          "text": "Trombólisis intravenosa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Está fuera de ventana y contraindicada."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "El infarto maligno de la arteria cerebral media es un infarto extenso que produce edema citotóxico, con aumento de la presión intracraneal y riesgo de herniación entre los días 2 y 5. Es más frecuente en pacientes jóvenes, con menos atrofia cerebral. La craniectomía descompresiva temprana, idealmente en las primeras 48 horas, reduce la mortalidad en pacientes menores de 60 años, aunque muchos sobreviven con discapacidad. Las medidas temporales incluyen elevar la cabecera, osmoterapia con manitol o solución salina hipertónica y control de la temperatura y la glucosa. Los esteroides no son eficaces en este edema.",
+      "gpcRefs": [
+        "Guía de la Asociación Americana del Corazón para evento vascular cerebral isquémico agudo",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica"
+      ]
+    }
+  ]
+}

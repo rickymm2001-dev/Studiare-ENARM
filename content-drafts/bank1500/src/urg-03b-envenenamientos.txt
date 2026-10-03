@@ -1,0 +1,175 @@
+@ urg|toxicology|envenomations|2|treatment_of_choice
+V: Niño de 6 años en Morelos picado por un alacrán en la mano hace 40 minutos. Presenta inquietud, sialorrea, sensación de cuerpo extraño en la garganta, estornudos, nistagmo y taquicardia.
+P: ¿Cuál es el tratamiento de elección?
++ Faboterápico antialacrán intravenoso || Está indicado en la intoxicación por picadura de alacrán con signos sistémicos.
+- anchoring | Solo hielo local y observación || Tiene signos sistémicos que requieren antiveneno.
+- availability_heuristic | Gluconato de calcio como tratamiento principal || No neutraliza el veneno.
+- representativeness_heuristic | Antihistamínico como único tratamiento || No neutraliza el veneno.
+- premature_closure | Torniquete en el brazo || Está contraindicado.
+- framing_effect | Incisión y succión del sitio || Está contraindicada.
+- complexity_bias | Hemodiálisis || No está indicada.
+- base_rate_fallacy | Las picaduras de alacrán siempre son leves en niños || Los niños tienen mayor riesgo de cuadros graves.
+- belief_bias | El antiveneno siempre causa anafilaxia grave y no debe usarse en niños || Los faboterápicos son seguros.
+- omission_bias | No vigilar complicaciones respiratorias y cardiovasculares || Son las causas de muerte.
+E: La intoxicación por picadura de alacrán del género Centruroides es un problema de salud pública en México, especialmente en Morelos, Guerrero, Jalisco, Guanajuato y Michoacán. Su veneno es neurotóxico y actúa sobre los canales de sodio. Se clasifica en leve, con dolor y parestesias locales; moderada, con inquietud, sialorrea, sensación de cuerpo extraño en la faringe, estornudos, prurito nasal, nistagmo y taquicardia; y grave, con dificultad respiratoria, arritmias, convulsiones o edema pulmonar. Los niños menores de 5 años y los adultos mayores tienen mayor riesgo. El tratamiento de los casos moderados y graves es el faboterápico antialacrán intravenoso.
+R: Norma Oficial Mexicana para la prevención y control de la intoxicación por picadura de alacrán ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la intoxicación por picadura de alacrán
+
+@ urg|toxicology|envenomations|3|diagnosis
+V: Hombre de 40 años que mientras limpiaba una bodega sintió un piquete en la mano. Una hora después presenta dolor intenso que se extiende al abdomen, rigidez abdominal en tabla, sudoración, hipertensión y calambres musculares. Abdomen sin datos de irritación peritoneal real.
+P: ¿Cuál es el diagnóstico más probable?
++ Latrodectismo por mordedura de viuda negra || Dolor y rigidez muscular con abdomen en tabla tras una mordedura.
+- anchoring | Abdomen agudo quirúrgico por perforación || El antecedente y la ausencia de irritación peritoneal orientan a envenenamiento.
+- availability_heuristic | Loxoscelismo || Causa lesión necrótica local.
+- representativeness_heuristic | Picadura de alacrán || Produce sialorrea y síntomas neurológicos distintos.
+- premature_closure | Tétanos || Tiene un periodo de incubación de días.
+- framing_effect | Pancreatitis aguda || No explica el antecedente ni los calambres.
+- complexity_bias | Porfiria aguda intermitente || No explica el antecedente.
+- base_rate_fallacy | Las arañas no causan síntomas sistémicos || La viuda negra sí.
+- belief_bias | Requiere laparotomía exploradora urgente || No hay abdomen quirúrgico.
+- focusing_illusion | Reacción alérgica local || No explica el cuadro sistémico.
+E: El latrodectismo es causado por la mordedura de la araña viuda negra, del género Latrodectus, cuyo veneno, la alfa latrotoxina, provoca liberación masiva de neurotransmisores. Produce dolor local que se extiende a grupos musculares grandes, rigidez y calambres, característicamente abdomen en tabla que puede confundirse con un abdomen agudo, además de sudoración, hipertensión, taquicardia, sialorrea y ansiedad. El tratamiento incluye analgesia con opioides, benzodiacepinas para los espasmos y el faboterápico antiarácnido en casos moderados a graves. El gluconato de calcio ya no se recomienda.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la mordedura de araña viuda negra ;; Manual de toxicología clínica de urgencias
+
+@ urg|toxicology|envenomations|3|diagnosis
+V: Mujer de 35 años que despertó con dolor en el muslo después de dormir en una cabaña. A las 24 horas presenta una lesión con centro violáceo, halo isquémico pálido y eritema periférico, conocida como placa marmórea. Orina oscura y anemia.
+P: ¿Cuál es el diagnóstico más probable?
++ Loxoscelismo cutáneo visceral por mordedura de araña violinista || Lesión necrótica en placa marmórea con hemólisis.
+- anchoring | Celulitis bacteriana simple || No explica la hemólisis ni la placa marmórea.
+- availability_heuristic | Latrodectismo || No causa necrosis local.
+- representativeness_heuristic | Picadura de alacrán || No causa necrosis.
+- premature_closure | Trombosis venosa profunda || No explica la lesión cutánea.
+- framing_effect | Fascitis necrosante por estreptococo || La evolución y la hemólisis orientan a loxoscelismo.
+- complexity_bias | Pioderma gangrenoso || No explica la hemólisis aguda.
+- base_rate_fallacy | Las lesiones necróticas siempre son bacterianas || Pueden ser tóxicas.
+- belief_bias | La araña violinista no se encuentra en México || Es frecuente en México.
+- focusing_illusion | Picadura de abeja || No causa necrosis extensa.
+E: El loxoscelismo es causado por la mordedura de la araña violinista, del género Loxosceles, frecuente en México dentro de las casas. Su veneno contiene esfingomielinasa D, que causa necrosis tisular y hemólisis. La forma cutánea, la más frecuente, se manifiesta con una lesión dolorosa que evoluciona a la placa marmórea, con centro violáceo, halo pálido isquémico y eritema periférico, que puede ulcerarse. La forma cutánea visceral incluye hemólisis, hemoglobinuria, insuficiencia renal y coagulopatía, más frecuente en niños. El tratamiento incluye el faboterápico antiloxosceles, analgesia, cuidado de la herida y vigilancia de la función renal.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del loxoscelismo ;; Manual de toxicología clínica de urgencias
+
+@ urg|toxicology|envenomations|2|treatment_of_choice
+V: Hombre de 45 años, campesino de Sonora, mordido por una víbora de cascabel en la pierna hace 1 hora. Presenta edema que se extiende a la rodilla, equimosis, dolor intenso y sangrado por las encías. Tiempo de protrombina prolongado.
+P: ¿Cuál es el tratamiento de elección?
++ Faboterápico antiviperino intravenoso en dosis según la gravedad || Neutraliza el veneno y revierte la coagulopatía.
+- anchoring | Torniquete arterial y succión de la herida || Están contraindicados.
+- availability_heuristic | Plasma fresco congelado como tratamiento principal || No neutraliza el veneno.
+- representativeness_heuristic | Fasciotomía profiláctica inmediata || Solo con síndrome compartimental confirmado.
+- premature_closure | Solo antibiótico y observación || No neutraliza el veneno.
+- framing_effect | Aplicar hielo directo sobre la herida || Puede causar más daño tisular.
+- complexity_bias | Heparina para la coagulopatía || Está contraindicada.
+- base_rate_fallacy | Las mordeduras de víbora siempre requieren amputación || El antiveneno previene complicaciones.
+- belief_bias | El antiveneno solo sirve en las primeras 2 horas || Es útil mientras haya envenenamiento activo.
+- omission_bias | No marcar el avance del edema cada hora || Guía la dosis.
+E: Las mordeduras por víboras de la familia Viperidae, como cascabel y nauyaca, causan envenenamiento con efectos locales, como edema progresivo, equimosis, flictenas y necrosis, y sistémicos, como coagulopatía de consumo, sangrado, hipotensión y lesión renal. La gravedad se clasifica según la extensión del edema y las alteraciones sistémicas. El tratamiento es el faboterápico antiviperino intravenoso en dosis según la gravedad, repetido si progresa el edema o persiste la coagulopatía, con inmovilización de la extremidad a la altura del corazón. Están contraindicados el torniquete, la incisión, la succión y el hielo directo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la mordedura de serpiente venenosa ;; Manual de toxicología clínica de urgencias
+
+@ urg|toxicology|envenomations|3|treatment_of_choice
+V: Niño de 10 años mordido en la mano por una serpiente con anillos rojos, amarillos y negros mientras jugaba en el campo en Veracruz. Una hora después presenta ptosis palpebral, diplopía, disartria y dificultad para deglutir, con edema local mínimo.
+P: ¿Cuál es el tratamiento de elección?
++ Faboterápico anticoral intravenoso y vigilancia estrecha de la función respiratoria || El veneno de coralillo es neurotóxico y puede causar parálisis respiratoria.
+- anchoring | Faboterápico antiviperino || No neutraliza el veneno de coralillo.
+- availability_heuristic | Solo observación porque no hay edema importante || El veneno de coralillo causa poco edema pero es grave.
+- representativeness_heuristic | Atropina sola como tratamiento definitivo || No neutraliza el veneno.
+- premature_closure | Torniquete arterial || Está contraindicado.
+- framing_effect | Fasciotomía || No está indicada.
+- complexity_bias | Plasmaféresis de inicio || No es el tratamiento de elección.
+- base_rate_fallacy | Las serpientes de colores son siempre inofensivas || El coralillo es muy venenoso.
+- belief_bias | La ausencia de dolor local indica que no hubo envenenamiento || El coralillo causa pocos síntomas locales.
+- omission_bias | No preparar el manejo de la vía aérea || Puede requerir intubación.
+E: Las serpientes coralillo, del género Micrurus, de la familia Elapidae, tienen un veneno neurotóxico que bloquea la unión neuromuscular. Producen pocos signos locales, por lo que la mordedura puede subestimarse, y síntomas neurológicos que inician en horas: ptosis, diplopía, disartria, disfagia, sialorrea, debilidad y parálisis respiratoria, que es la causa de muerte. El tratamiento es el faboterápico anticoral intravenoso, idealmente antes de que aparezcan síntomas graves, y vigilancia estrecha con soporte ventilatorio. Los inhibidores de la acetilcolinesterasa con atropina pueden ayudar como medida complementaria.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la mordedura de serpiente venenosa ;; Manual de toxicología clínica de urgencias
+
+@ urg|toxicology|envenomations|2|treatment_of_choice
+V: Mujer de 30 años picada por una abeja en el jardín. A los 10 minutos presenta urticaria generalizada, edema de labios, disnea con sibilancias y presión de 80/50 mmHg.
+P: ¿Cuál es el tratamiento de elección inmediato?
++ Adrenalina intramuscular 0.5 mg en la cara anterolateral del muslo || Es el tratamiento de primera línea de la anafilaxia.
+- anchoring | Antihistamínico oral como única medida || No trata la anafilaxia grave.
+- availability_heuristic | Hidrocortisona intravenosa como primera medida || Actúa en horas.
+- representativeness_heuristic | Adrenalina intravenosa en bolo de 1 mg || Es la dosis del paro y causa arritmias.
+- premature_closure | Solo salbutamol inhalado || No trata la hipotensión.
+- framing_effect | Aplicar hielo y observar || No trata la anafilaxia.
+- complexity_bias | Intubación inmediata antes de la adrenalina || La adrenalina es prioritaria.
+- base_rate_fallacy | La anafilaxia por abeja nunca es mortal || Puede ser mortal.
+- belief_bias | La adrenalina está contraindicada si hay hipertensión previa || En anafilaxia no hay contraindicación absoluta.
+- omission_bias | No prescribir autoinyector de adrenalina y referir a alergología || Previene muertes futuras.
+E: La anafilaxia es una reacción de hipersensibilidad sistémica grave, de inicio rápido, que puede ser mortal. Las picaduras de himenópteros, como abejas y avispas, son una causa frecuente. El tratamiento de primera línea es la adrenalina intramuscular en la cara anterolateral del muslo, 0.01 mg por kilo, máximo 0.5 mg en adultos, que puede repetirse cada 5 a 15 minutos. Se complementa con posición supina, oxígeno, líquidos intravenosos y broncodilatadores. Los antihistamínicos y esteroides son coadyuvantes. Se recomienda prescribir un autoinyector de adrenalina y referir a alergología para inmunoterapia con veneno.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la anafilaxia ;; Guía de la Organización Mundial de Alergia para anafilaxia
+
+@ urg|toxicology|envenomations|3|complication_prognosis
+V: Hombre de 60 años atacado por un enjambre de abejas africanizadas, con más de 300 picaduras. A las 12 horas presenta orina oscura, disminución del volumen urinario, creatinina de 3.5 mg/dL y creatina cinasa muy elevada.
+P: ¿Cuál es la complicación más probable?
++ Rabdomiólisis y hemólisis con lesión renal aguda por toxicidad directa del veneno || El envenenamiento masivo causa daño muscular, hemólisis y falla renal.
+- anchoring | Anafilaxia tardía || El cuadro es tóxico, no alérgico.
+- availability_heuristic | Glomerulonefritis postestreptocócica || No hay antecedente infeccioso.
+- representativeness_heuristic | Infección urinaria complicada || No explica la creatina cinasa elevada.
+- premature_closure | Deshidratación simple || No explica la creatina cinasa tan elevada.
+- framing_effect | Nefropatía por contraste || No hubo contraste.
+- complexity_bias | Vasculitis sistémica primaria || El antecedente explica el cuadro.
+- base_rate_fallacy | Las picaduras múltiples solo causan problemas alérgicos || Pueden causar toxicidad sistémica.
+- belief_bias | La orina oscura es por deshidratación sin importancia || Indica mioglobinuria o hemoglobinuria.
+- omission_bias | No hidratar intensamente ni vigilar el potasio || Es el manejo de la rabdomiólisis.
+E: Las picaduras masivas de abejas africanizadas, generalmente más de 50 a 100, pueden causar toxicidad sistémica por la gran cantidad de veneno, independiente de la alergia. El veneno contiene melitina y fosfolipasa A2, que causan hemólisis, rabdomiólisis, lesión renal aguda, hepatotoxicidad, miocarditis y síndrome de dificultad respiratoria. El manejo incluye retirar los aguijones, tratar la anafilaxia si existe, hidratación intensa para prevenir la lesión renal, vigilancia de potasio, creatina cinasa y función renal, y hemodiálisis si es necesario. No existe un antiveneno de uso general en México.
+R: Manual de toxicología clínica de urgencias ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la rabdomiólisis
+
+@ urg|toxicology|envenomations|2|treatment_of_choice
+V: Mujer de 25 años mordida en la mano por su gato hace 6 horas. La herida es punzante y profunda, con eritema inicial. Tiene esquema antitetánico vigente.
+P: ¿Cuál es el tratamiento antibiótico de elección?
++ Amoxicilina con ácido clavulánico || Cubre Pasteurella multocida, anaerobios y estafilococos.
+- anchoring | No dar antibiótico porque la herida es pequeña || Las mordeduras de gato tienen alto riesgo de infección.
+- availability_heuristic | Dicloxacilina sola || No cubre bien Pasteurella.
+- representativeness_heuristic | Cefalexina sola || Tiene poca actividad contra Pasteurella.
+- premature_closure | Cerrar la herida con sutura primaria sin lavar || Las heridas punzantes de mano no se suturan.
+- framing_effect | Solo antisépticos tópicos || No previenen la infección profunda.
+- complexity_bias | Vancomicina intravenosa de inicio || No es la primera opción.
+- base_rate_fallacy | Las mordeduras de gato se infectan menos que las de perro || Se infectan más.
+- belief_bias | La rabia nunca se transmite por gatos || Los gatos pueden transmitir rabia.
+- omission_bias | No valorar el riesgo de rabia || Debe evaluarse.
+E: Las mordeduras de gato causan heridas punzantes profundas que se infectan con mayor frecuencia que las de perro, hasta en 30 a 50 por ciento. El microorganismo característico es Pasteurella multocida, que produce celulitis de inicio rápido, en las primeras 12 a 24 horas. También participan estafilococos, estreptococos y anaerobios. El tratamiento incluye lavado abundante, no suturar las heridas punzantes de la mano, profilaxis antitetánica según el esquema, evaluación del riesgo de rabia y amoxicilina con ácido clavulánico, que es el antibiótico de elección para la profilaxis y el tratamiento. En alérgicos se usa doxiciclina o una combinación con clindamicina.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las mordeduras por animales ;; Guía para la atención médica y antirrábica de la persona expuesta al virus de la rabia
+
+@ urg|toxicology|envenomations|2|complication_prognosis
+V: Hombre de 30 años que golpeó a otra persona en la boca durante una pelea hace 2 días. Presenta una herida pequeña sobre la articulación metacarpofalángica del tercer dedo con eritema, edema y dolor al mover el dedo.
+P: ¿Cuál es la complicación más probable que debe descartarse?
++ Artritis séptica o tenosinovitis por mordedura humana de puño cerrado || La herida sobre el nudillo puede penetrar la articulación y los tendones.
+- anchoring | Contusión simple sin riesgo || El eritema y el dolor a la movilización sugieren infección profunda.
+- availability_heuristic | Fractura del boxeador como única lesión || La herida y los signos inflamatorios sugieren infección.
+- representativeness_heuristic | Gota aguda || La herida explica el cuadro.
+- premature_closure | Picadura de insecto || No hay antecedente.
+- framing_effect | Reacción alérgica local || No explica el cuadro.
+- complexity_bias | Osteosarcoma || No corresponde.
+- base_rate_fallacy | Las mordeduras humanas rara vez se infectan || Tienen alto riesgo de infección.
+- belief_bias | Puede suturarse de inmediato para cerrar la herida || No deben suturarse.
+- omission_bias | No referir a cirugía de mano para exploración y lavado || Suele requerirse.
+E: La lesión de puño cerrado ocurre al golpear la boca de otra persona, causando una herida sobre la articulación metacarpofalángica que puede penetrar la cápsula articular y las vainas tendinosas. Al extender los dedos, la herida se desplaza y oculta la profundidad. Tiene alto riesgo de infección por la flora oral humana, incluida Eikenella corrodens, estreptococos, estafilococos y anaerobios, con artritis séptica, tenosinovitis y osteomielitis. Requiere radiografía, exploración y lavado quirúrgico por cirugía de mano, no sutura primaria, y antibiótico con amoxicilina y ácido clavulánico o intravenoso si hay infección establecida.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las mordeduras por animales ;; Guía de Práctica Clínica de infecciones de mano
+
+@ urg|toxicology|envenomations|2|next_step
+V: Mujer de 28 años que mientras nadaba en una playa de Quintana Roo tuvo contacto con una medusa. Presenta dolor intenso urente y lesiones lineales eritematosas en la pierna. Sin síntomas sistémicos.
+P: ¿Cuál es la conducta inicial más apropiada?
++ Retirar los tentáculos con pinzas, irrigar con agua de mar o vinagre según la especie y aplicar calor local || Inactiva los nematocistos y alivia el dolor.
+- anchoring | Lavar con agua dulce abundante || Puede activar los nematocistos.
+- availability_heuristic | Frotar la piel con arena || Libera más veneno.
+- representativeness_heuristic | Aplicar orina sobre la lesión || No es eficaz.
+- premature_closure | Torniquete en la pierna || No está indicado.
+- framing_effect | Antibiótico intravenoso de inmediato || No hay infección.
+- complexity_bias | Antiveneno específico en todos los casos || Solo en especies muy peligrosas.
+- base_rate_fallacy | Las picaduras de medusa siempre son mortales || La mayoría son leves.
+- belief_bias | Retirar los tentáculos con las manos desnudas es seguro || Puede causar más picaduras.
+- omission_bias | No vigilar datos de anafilaxia || Puede ocurrir.
+E: Las medusas tienen nematocistos que inyectan veneno al contacto, causando dolor urente intenso y lesiones lineales eritematosas. El manejo incluye salir del agua, retirar los tentáculos con pinzas o guantes sin frotar, irrigar con agua de mar, y en muchas especies aplicar vinagre para inactivar los nematocistos, y después inmersión en agua caliente, alrededor de 43 a 45 grados, por 20 a 45 minutos para aliviar el dolor. El agua dulce y el frotamiento pueden activar los nematocistos. Se vigila la anafilaxia y las reacciones sistémicas, que son raras.
+R: Manual de toxicología clínica de urgencias ;; Guía de atención de lesiones por fauna marina
+
+@ urg|toxicology|envenomations|3|data_interpretation
+V: Hombre de 50 años mordido por una víbora de cascabel en el pie hace 2 horas. Presenta edema limitado al pie y tobillo, sin equimosis extensa. Tiempo de protrombina, fibrinógeno y plaquetas normales. Sin síntomas sistémicos.
+P: ¿Qué indica esta evaluación sobre la gravedad del envenenamiento?
++ Envenenamiento leve, que requiere vigilancia con repetición de estudios y valorar antiveneno según la progresión || El edema limitado sin alteraciones de laboratorio indica un grado leve.
+- anchoring | Envenenamiento grave con indicación de fasciotomía || No hay datos de gravedad.
+- availability_heuristic | Que no hubo envenenamiento y puede darse de alta de inmediato || Debe vigilarse al menos 12 a 24 horas.
+- representativeness_heuristic | Envenenamiento neurotóxico || Las víboras de cascabel causan principalmente daño local y hematotóxico.
+- premature_closure | Que el laboratorio normal descarta progresión futura || Puede alterarse en horas.
+- framing_effect | Que requiere amputación || No está indicada.
+- complexity_bias | Indicación de oxigenación por membrana extracorpórea || No corresponde.
+- base_rate_fallacy | Todas las mordeduras de víbora son graves || Hay mordeduras secas y leves.
+- belief_bias | La gravedad no cambia después de la primera hora || Puede progresar.
+- omission_bias | No marcar los bordes del edema || Permite vigilar la progresión.
+E: La gravedad del envenenamiento por víboras se clasifica según los efectos locales y sistémicos. En el envenenamiento leve el edema se limita a la zona de la mordedura sin alteraciones sistémicas ni de laboratorio; en el moderado el edema progresa a una articulación mayor con alteraciones leves de la coagulación; y en el grave hay edema extenso, sangrado, hipotensión o coagulopatía importante. Hasta una cuarta parte de las mordeduras son secas, sin envenenamiento. Todo paciente mordido debe vigilarse al menos 12 a 24 horas, marcando el avance del edema y repitiendo los estudios de coagulación, porque el cuadro puede progresar.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la mordedura de serpiente venenosa ;; Manual de toxicología clínica de urgencias

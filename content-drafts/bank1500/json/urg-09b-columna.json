@@ -1,0 +1,1145 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "urg-09b-columna-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "spinal_trauma",
+      "vignette": "Mujer de 35 años tras un choque por alcance a baja velocidad. Está alerta, sin intoxicación, sin dolor en la línea media cervical a la palpación, sin déficit neurológico ni otras lesiones dolorosas que distraigan.",
+      "prompt": "¿Qué indican los criterios NEXUS en esta paciente?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Que requiere radiografía de columna completa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "b",
+          "text": "Que requiere tomografía cervical obligatoria por el mecanismo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los criterios permiten omitirla."
+        },
+        {
+          "key": "c",
+          "text": "Que requiere resonancia magnética urgente",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "d",
+          "text": "Que debe hospitalizarse para observación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "e",
+          "text": "Que requiere angiotomografía de vasos del cuello",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "f",
+          "text": "Que tiene lesión medular sin alteración radiológica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay déficit."
+        },
+        {
+          "key": "g",
+          "text": "Que no requiere estudios de imagen de la columna cervical",
+          "correct": true,
+          "rationale": "Cumple todos los criterios de bajo riesgo."
+        },
+        {
+          "key": "h",
+          "text": "Los criterios NEXUS no son aplicables en adultos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Están validados en adultos."
+        },
+        {
+          "key": "i",
+          "text": "Que debe mantener collarín durante 6 semanas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay indicación."
+        },
+        {
+          "key": "j",
+          "text": "Todo paciente de trauma requiere imagen cervical",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Las reglas de decisión evitan estudios innecesarios."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "Los criterios NEXUS permiten omitir los estudios de imagen de la columna cervical en pacientes de trauma que cumplen todos los siguientes: ausencia de dolor en la línea media cervical a la palpación, ausencia de déficit neurológico focal, estado de alerta normal, ausencia de intoxicación y ausencia de lesiones dolorosas que distraigan. La regla canadiense de columna cervical es una alternativa que considera la edad, el mecanismo peligroso y la capacidad de rotar el cuello. Cuando se requiere imagen, la tomografía es el estudio de elección en adultos. Estas reglas reducen estudios innecesarios y exposición a radiación.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Criterios NEXUS para imagen de columna cervical"
+      ]
+    },
+    {
+      "key": "urg-09b-columna-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "spinal_trauma",
+      "vignette": "Hombre de 30 años tras caída de 5 metros con lesión de la columna cervical. Presenta presión de 75/40 mmHg, frecuencia cardiaca de 50, piel caliente y seca en las extremidades, y cuadriplejía. Sin sangrado evidente y FAST negativo.",
+      "prompt": "¿Cuál es el diagnóstico más probable del estado hemodinámico?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Anafilaxia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay datos de alergia."
+        },
+        {
+          "key": "b",
+          "text": "Choque espinal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se refiere a la pérdida de reflejos, no a la hemodinamia."
+        },
+        {
+          "key": "c",
+          "text": "Insuficiencia suprarrenal aguda",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El contexto explica el cuadro."
+        },
+        {
+          "key": "d",
+          "text": "Taponamiento cardiaco",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay ingurgitación ni derrame."
+        },
+        {
+          "key": "e",
+          "text": "Choque hipovolémico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Cursaría con taquicardia y piel fría."
+        },
+        {
+          "key": "f",
+          "text": "La bradicardia excluye cualquier tipo de choque",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "En el choque neurogénico hay bradicardia."
+        },
+        {
+          "key": "g",
+          "text": "Choque cardiogénico por contusión miocárdica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El patrón sugiere choque neurogénico."
+        },
+        {
+          "key": "h",
+          "text": "En trauma toda hipotensión es hemorrágica hasta demostrar lo contrario, y por ello el choque neurogénico es imposible",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Debe descartarse la hemorragia, pero el neurogénico existe."
+        },
+        {
+          "key": "i",
+          "text": "Choque neurogénico",
+          "correct": true,
+          "rationale": "Hipotensión con bradicardia y piel caliente por pérdida del tono simpático."
+        },
+        {
+          "key": "j",
+          "text": "Choque séptico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay infección."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "El choque neurogénico se debe a la pérdida del tono simpático por lesión medular cervical o torácica alta, generalmente por arriba de T6. Se caracteriza por hipotensión con bradicardia relativa o absoluta, vasodilatación con piel caliente y seca, sin datos de hipoperfusión típica de la hemorragia. Antes de atribuir la hipotensión a la lesión medular debe descartarse la hemorragia. El tratamiento incluye líquidos con cautela, vasopresores con efecto alfa y beta como norepinefrina, y atropina para la bradicardia. Se distingue del choque espinal, que es la pérdida transitoria de reflejos y tono por debajo de la lesión.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de atención del paciente con lesión medular aguda"
+      ]
+    },
+    {
+      "key": "urg-09b-columna-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "spinal_trauma",
+      "vignette": "Hombre de 72 años con espondilosis cervical que sufre una caída hacia adelante golpeándose la frente. Presenta debilidad mucho mayor en los brazos que en las piernas, con alteración sensitiva variable y retención urinaria.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome medular central",
+          "correct": true,
+          "rationale": "La hiperextensión en un cuello con espondilosis afecta más a las extremidades superiores."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome medular anterior",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Causa parálisis y pérdida de dolor con propiocepción conservada."
+        },
+        {
+          "key": "c",
+          "text": "Síndrome de cauda equina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Afecta las raíces lumbosacras."
+        },
+        {
+          "key": "d",
+          "text": "Esclerosis lateral amiotrófica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es una enfermedad degenerativa de evolución lenta."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome de Guillain-Barré",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No tiene relación con el trauma."
+        },
+        {
+          "key": "f",
+          "text": "Evento vascular cerebral bilateral",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El mecanismo traumático orienta a lesión medular."
+        },
+        {
+          "key": "g",
+          "text": "Lesión medular completa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Hay función parcial."
+        },
+        {
+          "key": "h",
+          "text": "Siempre se acompaña de fractura evidente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede ocurrir sin fractura."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de Brown-Séquard",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Causa debilidad ipsilateral y pérdida de dolor contralateral."
+        },
+        {
+          "key": "j",
+          "text": "El síndrome medular central afecta más las piernas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Afecta más los brazos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "i"
+      ],
+      "explanation": "El síndrome medular central es la lesión medular incompleta más frecuente. Típicamente ocurre en adultos mayores con espondilosis o estenosis cervical que sufren una hiperextensión del cuello, como en caídas hacia adelante, muchas veces sin fractura. La lesión afecta la parte central de la médula, donde se ubican las fibras de las extremidades superiores, por lo que la debilidad es mayor en los brazos que en las piernas, con alteración sensitiva variable y disfunción vesical. Tiene un pronóstico relativamente favorable, con recuperación de las piernas y la vejiga antes que de las manos.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de atención del paciente con lesión medular aguda"
+      ]
+    },
+    {
+      "key": "urg-09b-columna-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "spinal_trauma",
+      "vignette": "Hombre de 25 años con herida por arma blanca en la región dorsal izquierda. Presenta parálisis y pérdida de la propiocepción en la pierna izquierda, con pérdida de la sensibilidad al dolor y la temperatura en la pierna derecha.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome medular central",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Afecta más los brazos."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de cauda equina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No corresponde al nivel ni al patrón."
+        },
+        {
+          "key": "c",
+          "text": "La pérdida del dolor es siempre del mismo lado que la debilidad",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es contralateral porque las fibras cruzan."
+        },
+        {
+          "key": "d",
+          "text": "Tiene el peor pronóstico de las lesiones incompletas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Tiene el mejor pronóstico."
+        },
+        {
+          "key": "e",
+          "text": "Lesión medular completa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La afectación es asimétrica y parcial."
+        },
+        {
+          "key": "f",
+          "text": "Lesión del nervio ciático aislada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la pérdida contralateral del dolor."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome de Brown-Séquard por hemisección medular",
+          "correct": true,
+          "rationale": "Déficit motor y propioceptivo ipsilateral con pérdida de dolor y temperatura contralateral."
+        },
+        {
+          "key": "h",
+          "text": "Esclerosis múltiple",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El trauma explica el cuadro."
+        },
+        {
+          "key": "i",
+          "text": "Evento vascular cerebral",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El patrón y el trauma orientan a lesión medular."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome medular anterior",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Causa déficit motor bilateral."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "El síndrome de Brown-Séquard resulta de la hemisección de la médula espinal, generalmente por trauma penetrante. Produce pérdida de la función motora y de la propiocepción y vibración del mismo lado de la lesión, por afectación del tracto corticoespinal y de las columnas posteriores, que cruzan en el bulbo, y pérdida de la sensibilidad al dolor y la temperatura del lado contrario, porque el tracto espinotalámico cruza a pocos niveles de su entrada. Tiene el mejor pronóstico de las lesiones medulares incompletas. El síndrome medular anterior tiene el peor pronóstico.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de atención del paciente con lesión medular aguda"
+      ]
+    },
+    {
+      "key": "urg-09b-columna-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "spinal_trauma",
+      "vignette": "Hombre de 28 años con lesión medular cervical aguda completa a nivel de C6 tras un clavado, con estabilidad hemodinámica tras la reanimación. Ingresa a la unidad de cuidados intensivos.",
+      "prompt": "¿Cuál es la conducta más apropiada para el manejo médico de la lesión medular?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Permitir hipotensión para proteger la médula",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La hipotensión empeora la lesión."
+        },
+        {
+          "key": "b",
+          "text": "Diuréticos para reducir el edema medular",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No están indicados."
+        },
+        {
+          "key": "c",
+          "text": "Mantener la presión arterial media entre 85 y 90 mmHg durante la primera semana y valorar descompresión quirúrgica temprana",
+          "correct": true,
+          "rationale": "Mejora la perfusión medular."
+        },
+        {
+          "key": "d",
+          "text": "Movilización temprana sin estabilización de la columna",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede agravar la lesión."
+        },
+        {
+          "key": "e",
+          "text": "Células madre como tratamiento estándar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es experimental."
+        },
+        {
+          "key": "f",
+          "text": "Metilprednisolona en dosis altas de rutina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No se recomienda por falta de beneficio y efectos adversos."
+        },
+        {
+          "key": "g",
+          "text": "Los esteroides siempre mejoran la recuperación medular",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No hay beneficio demostrado claro."
+        },
+        {
+          "key": "h",
+          "text": "No prevenir la trombosis venosa ni las úlceras por presión",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son complicaciones frecuentes."
+        },
+        {
+          "key": "i",
+          "text": "Hipotermia terapéutica sistémica de rutina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No tiene evidencia suficiente."
+        },
+        {
+          "key": "j",
+          "text": "Una lesión completa no puede beneficiarse de ningún manejo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La perfusión y la cirugía temprana influyen."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "El manejo de la lesión medular aguda busca prevenir la lesión secundaria. Se recomienda mantener la presión arterial media entre 85 y 90 mmHg durante los primeros 7 días con líquidos y vasopresores, evitar la hipoxia y valorar la descompresión y estabilización quirúrgica temprana, idealmente en las primeras 24 horas. La metilprednisolona en dosis altas ya no se recomienda de rutina por la falta de beneficio claro y el aumento de complicaciones como infecciones y sangrado. Se previenen la trombosis venosa, las úlceras por presión, la retención urinaria y las complicaciones respiratorias, especialmente en lesiones cervicales.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención del paciente con lesión medular aguda",
+        "Guía de la Asociación Americana de Neurocirujanos para lesión medular"
+      ]
+    },
+    {
+      "key": "urg-09b-columna-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "spinal_trauma",
+      "vignette": "Hombre de 50 años tras un accidente automovilístico de alta velocidad. Tiene dolor en la línea media cervical y Glasgow de 14 por intoxicación alcohólica. No cumple criterios para omitir la imagen.",
+      "prompt": "¿Cuál es el estudio de elección para evaluar la columna cervical?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Radiografía de columna cervical de tres proyecciones como estudio preferido",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene menor sensibilidad que la tomografía."
+        },
+        {
+          "key": "b",
+          "text": "Ningún estudio si se mantiene el collarín",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Debe evaluarse la columna."
+        },
+        {
+          "key": "c",
+          "text": "No mantener la restricción del movimiento cervical hasta descartar la lesión",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe mantenerse."
+        },
+        {
+          "key": "d",
+          "text": "Mielografía con contraste",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "e",
+          "text": "Ultrasonido de cuello",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No evalúa la columna."
+        },
+        {
+          "key": "f",
+          "text": "La radiografía simple detecta todas las fracturas cervicales",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tiene baja sensibilidad."
+        },
+        {
+          "key": "g",
+          "text": "Tomografía de columna cervical",
+          "correct": true,
+          "rationale": "Es el estudio de elección en adultos que requieren imagen por trauma."
+        },
+        {
+          "key": "h",
+          "text": "La intoxicación no influye en la evaluación clínica",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Impide confiar en la exploración."
+        },
+        {
+          "key": "i",
+          "text": "Flexión y extensión dinámica bajo fluoroscopia de inicio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es peligrosa en la fase aguda."
+        },
+        {
+          "key": "j",
+          "text": "Resonancia magnética como primer estudio en todos los casos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se usa para lesiones ligamentarias y medulares."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "En adultos que requieren estudios de imagen de la columna cervical tras un trauma, la tomografía es el estudio de elección por su mayor sensibilidad que la radiografía simple para detectar fracturas. La resonancia magnética se indica cuando hay déficit neurológico, sospecha de lesión ligamentaria o medular, o discordancia entre la clínica y la tomografía. La intoxicación, la alteración del estado de conciencia y las lesiones que distraen impiden confiar en la exploración clínica y obligan a realizar imagen. Se mantiene la restricción del movimiento cervical hasta descartar la lesión.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Criterios del Colegio Americano de Radiología para trauma cervical"
+      ]
+    },
+    {
+      "key": "urg-09b-columna-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "spinal_trauma",
+      "vignette": "Hombre de 30 años que viajaba como copiloto con cinturón solo abdominal en un choque frontal. Presenta equimosis abdominal transversal, dolor lumbar y dolor abdominal. La tomografía muestra una fractura horizontal del cuerpo vertebral de L2 que se extiende a los elementos posteriores.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Metástasis vertebral",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El contexto traumático lo explica."
+        },
+        {
+          "key": "b",
+          "text": "Espondilolistesis degenerativa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es traumática aguda."
+        },
+        {
+          "key": "c",
+          "text": "Fractura del ahorcado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es cervical."
+        },
+        {
+          "key": "d",
+          "text": "Fractura de odontoides",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es cervical."
+        },
+        {
+          "key": "e",
+          "text": "Contusión muscular lumbar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La imagen muestra fractura."
+        },
+        {
+          "key": "f",
+          "text": "La equimosis del cinturón no tiene importancia clínica",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Sugiere lesiones intraabdominales."
+        },
+        {
+          "key": "g",
+          "text": "Fractura de Chance con riesgo de lesión de víscera hueca asociada",
+          "correct": true,
+          "rationale": "El cinturón abdominal causa flexión y distracción."
+        },
+        {
+          "key": "h",
+          "text": "Fractura de Jefferson",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es del atlas."
+        },
+        {
+          "key": "i",
+          "text": "Fractura por compresión simple estable",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La extensión a los elementos posteriores indica fractura de Chance."
+        },
+        {
+          "key": "j",
+          "text": "Las fracturas lumbares no se asocian con lesiones abdominales",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La de Chance se asocia con lesión intestinal."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "La fractura de Chance es una fractura por flexión y distracción de la columna toracolumbar, típicamente en la unión toracolumbar, que se extiende horizontalmente a través del cuerpo vertebral y los elementos posteriores. Se asocia al uso del cinturón de seguridad solo abdominal en choques frontales. Con frecuencia se acompaña del signo del cinturón de seguridad, una equimosis abdominal transversal, y de lesiones de víscera hueca, como perforación intestinal o del mesenterio, y de páncreas. Requiere búsqueda activa de lesiones abdominales y, por ser inestable, estabilización quirúrgica en muchos casos.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de manejo de fracturas toracolumbares"
+      ]
+    },
+    {
+      "key": "urg-09b-columna-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "spinal_trauma",
+      "vignette": "Hombre de 45 años con dolor lumbar tras levantar una carga pesada que ahora presenta anestesia en silla de montar, retención urinaria y debilidad en ambas piernas.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Radiografía simple lumbar como único estudio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No evalúa la compresión de las raíces."
+        },
+        {
+          "key": "b",
+          "text": "Resonancia magnética urgente de columna lumbosacra y valoración neuroquirúrgica para descompresión",
+          "correct": true,
+          "rationale": "Es un probable síndrome de cauda equina."
+        },
+        {
+          "key": "c",
+          "text": "Electromiografía antes de la imagen",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa el diagnóstico."
+        },
+        {
+          "key": "d",
+          "text": "Esteroides orales y cita en un mes",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "e",
+          "text": "Considerarlo una lumbalgia mecánica simple",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Tiene datos de alarma."
+        },
+        {
+          "key": "f",
+          "text": "La retención urinaria en lumbalgia siempre es por el dolor",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un dato de alarma."
+        },
+        {
+          "key": "g",
+          "text": "Analgésicos y reposo en casa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Retrasa una descompresión urgente."
+        },
+        {
+          "key": "h",
+          "text": "La descompresión puede esperar semanas sin consecuencias",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El retraso aumenta las secuelas."
+        },
+        {
+          "key": "i",
+          "text": "No colocar sonda vesical",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La retención debe tratarse."
+        },
+        {
+          "key": "j",
+          "text": "Fisioterapia ambulatoria",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es el manejo urgente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "El síndrome de cauda equina se debe a la compresión de las raíces nerviosas lumbosacras, más frecuentemente por una hernia discal central grande, y también por tumores, abscesos, hematomas o fracturas. Se manifiesta con dolor lumbar, ciática bilateral, anestesia en silla de montar, debilidad de las extremidades inferiores y disfunción de esfínteres, como retención urinaria con incontinencia por rebosamiento e incontinencia fecal. Es una urgencia neuroquirúrgica. Se confirma con resonancia magnética urgente y se trata con descompresión quirúrgica, idealmente en las primeras 48 horas, para mejorar el pronóstico funcional.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la lumbalgia",
+        "Guía de Práctica Clínica de atención del paciente con lesión medular aguda"
+      ]
+    },
+    {
+      "key": "urg-09b-columna-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "spinal_trauma",
+      "vignette": "Durante la atención de un paciente con sospecha de lesión de columna, se requiere voltearlo para explorar la espalda.",
+      "prompt": "¿Cuál es la técnica más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Movilización en bloque con al menos cuatro personas, manteniendo la alineación cabeza cuello tronco",
+          "correct": true,
+          "rationale": "Evita movimientos que agraven una lesión medular."
+        },
+        {
+          "key": "b",
+          "text": "Esperar la resonancia antes de cualquier movimiento",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La exploración es necesaria."
+        },
+        {
+          "key": "c",
+          "text": "Pedir al paciente que se voltee solo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede agravar la lesión."
+        },
+        {
+          "key": "d",
+          "text": "No explorar el tono del esfínter anal",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte de la evaluación neurológica."
+        },
+        {
+          "key": "e",
+          "text": "Omitir la exploración de la espalda",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Pueden pasar desapercibidas lesiones."
+        },
+        {
+          "key": "f",
+          "text": "Mantener al paciente sobre la tabla rígida durante horas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Causa úlceras por presión."
+        },
+        {
+          "key": "g",
+          "text": "Sentar al paciente para explorar la espalda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede agravar la lesión."
+        },
+        {
+          "key": "h",
+          "text": "Voltearlo tomándolo solo de los hombros",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No mantiene la alineación."
+        },
+        {
+          "key": "i",
+          "text": "La movilización en bloque solo es necesaria en lesiones cervicales",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "También en lesiones toracolumbares."
+        },
+        {
+          "key": "j",
+          "text": "La tabla rígida debe usarse durante toda la hospitalización",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se retira pronto."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "En pacientes con sospecha de lesión de columna se realiza la restricción del movimiento espinal, que incluye collarín cervical y mantener la alineación del eje cabeza cuello tronco. Para explorar la espalda se usa la movilización en bloque con al menos cuatro personas, una de las cuales controla la cabeza y el cuello. La tabla rígida se usa para el traslado y debe retirarse lo antes posible, porque causa dolor, úlceras por presión y compromiso respiratorio. En la exploración se palpa la columna en busca de dolor, escalones o deformidades, y se evalúa el tono del esfínter anal.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de atención del paciente con lesión medular aguda"
+      ]
+    },
+    {
+      "key": "urg-09b-columna-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "spinal_trauma",
+      "vignette": "Niño de 7 años con trauma por accidente automovilístico que presenta debilidad en las cuatro extremidades. La radiografía y la tomografía de columna cervical son normales. La resonancia muestra edema medular.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de Guillain-Barré",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El trauma y la resonancia explican el cuadro."
+        },
+        {
+          "key": "b",
+          "text": "Una tomografía normal descarta lesión medular en niños",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No la descarta."
+        },
+        {
+          "key": "c",
+          "text": "Considerarlo normal por la tomografía normal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La resonancia confirma la lesión."
+        },
+        {
+          "key": "d",
+          "text": "Tumor medular",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El contexto traumático lo explica."
+        },
+        {
+          "key": "e",
+          "text": "Lesión medular sin anormalidad radiológica",
+          "correct": true,
+          "rationale": "Es más frecuente en niños por la elasticidad de su columna."
+        },
+        {
+          "key": "f",
+          "text": "Mielitis transversa idiopática",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El trauma es la causa."
+        },
+        {
+          "key": "g",
+          "text": "Simulación o trastorno conversivo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La resonancia muestra lesión medular."
+        },
+        {
+          "key": "h",
+          "text": "Esta lesión solo ocurre en adultos mayores",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es más frecuente en niños."
+        },
+        {
+          "key": "i",
+          "text": "Atrofia muscular espinal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No se relaciona con trauma."
+        },
+        {
+          "key": "j",
+          "text": "Lesión del plexo braquial aislada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Afecta las cuatro extremidades."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "La lesión medular sin anormalidad radiológica, conocida por sus siglas en inglés SCIWORA, es una lesión de la médula espinal sin fractura ni luxación visible en la radiografía ni en la tomografía. Es más frecuente en niños menores de 8 años, por la elasticidad de los ligamentos de su columna, que permite deformaciones transitorias que lesionan la médula sin lesionar el hueso, y por la proporción mayor de la cabeza. La resonancia magnética puede mostrar edema, hemorragia o lesión ligamentaria. Ante déficit neurológico con imagen ósea normal, se debe realizar resonancia y mantener la restricción del movimiento.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de atención del niño politraumatizado"
+      ]
+    },
+    {
+      "key": "urg-09b-columna-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "spinal_trauma",
+      "vignette": "Hombre de 35 años con lesión medular torácica aguda que en las primeras horas presenta flacidez, arreflexia y ausencia total de sensibilidad y movimiento por debajo de T8. A los 3 días reaparece el reflejo bulbocavernoso.",
+      "prompt": "¿Qué indica la reaparición del reflejo bulbocavernoso?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "El choque espinal y el neurogénico son lo mismo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Son conceptos distintos."
+        },
+        {
+          "key": "b",
+          "text": "Que la lesión es incompleta con certeza",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Solo indica fin del choque espinal."
+        },
+        {
+          "key": "c",
+          "text": "Inicio de un choque neurogénico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es un concepto hemodinámico."
+        },
+        {
+          "key": "d",
+          "text": "Infección urinaria",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es su significado."
+        },
+        {
+          "key": "e",
+          "text": "Necesidad de cirugía de urgencia por este hallazgo aislado",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No lo indica."
+        },
+        {
+          "key": "f",
+          "text": "Síndrome medular anterior",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No se deduce del reflejo."
+        },
+        {
+          "key": "g",
+          "text": "Recuperación completa de la lesión medular",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No indica recuperación."
+        },
+        {
+          "key": "h",
+          "text": "El choque espinal dura meses en todos los casos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Suele durar horas a días."
+        },
+        {
+          "key": "i",
+          "text": "Empeoramiento de la lesión medular",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No indica empeoramiento."
+        },
+        {
+          "key": "j",
+          "text": "Fin del choque espinal, lo que permite valorar si la lesión es completa",
+          "correct": true,
+          "rationale": "Durante el choque espinal no puede determinarse la extensión real."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "El choque espinal es la pérdida transitoria de toda la actividad refleja, el tono y la sensibilidad por debajo del nivel de una lesión medular aguda, que dura de horas a días. Durante este periodo no puede determinarse si la lesión es completa o incompleta. La reaparición del reflejo bulbocavernoso, la contracción del esfínter anal al comprimir el glande o el clítoris, suele marcar el fin del choque espinal. Si en ese momento persiste la ausencia total de función motora y sensitiva por debajo de la lesión, incluido el segmento sacro, la lesión se considera completa, con mal pronóstico de recuperación. Es distinto del choque neurogénico, que es hemodinámico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención del paciente con lesión medular aguda",
+        "Clasificación de la Asociación Americana de Lesión Medular"
+      ]
+    },
+    {
+      "key": "urg-09b-columna-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "spinal_trauma",
+      "vignette": "Hombre de 40 años con lesión medular completa a nivel de T4 desde hace un año. Presenta cefalea intensa súbita, presión de 210/120 mmHg, bradicardia, rubor y sudoración por arriba de la lesión. Tiene la sonda urinaria acodada.",
+      "prompt": "¿Cuál es la complicación más probable?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Feocromocitoma",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El desencadenante vesical explica el cuadro."
+        },
+        {
+          "key": "b",
+          "text": "Tormenta tiroidea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay datos de hipertiroidismo."
+        },
+        {
+          "key": "c",
+          "text": "Disreflexia autonómica desencadenada por distensión vesical",
+          "correct": true,
+          "rationale": "Ocurre en lesiones por arriba de T6 ante estímulos por debajo de la lesión."
+        },
+        {
+          "key": "d",
+          "text": "Ansiedad aguda",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "e",
+          "text": "Migraña",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la hipertensión grave con el desencadenante."
+        },
+        {
+          "key": "f",
+          "text": "Evento vascular cerebral hemorrágico como causa primaria",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es una complicación posible, no la causa."
+        },
+        {
+          "key": "g",
+          "text": "Crisis hipertensiva por hipertensión esencial",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El contexto y el desencadenante orientan a disreflexia."
+        },
+        {
+          "key": "h",
+          "text": "Lo primero es dar antihipertensivo sin buscar el desencadenante",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Lo primero es retirar el estímulo."
+        },
+        {
+          "key": "i",
+          "text": "La disreflexia ocurre en lesiones lumbares bajas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ocurre en lesiones por arriba de T6."
+        },
+        {
+          "key": "j",
+          "text": "Choque neurogénico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Cursa con hipotensión."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "g"
+      ],
+      "explanation": "La disreflexia autonómica es una urgencia que ocurre en pacientes con lesión medular por arriba de T6. Un estímulo nocivo por debajo de la lesión, más frecuentemente la distensión vesical por sonda obstruida, la impactación fecal o las úlceras por presión, desencadena una respuesta simpática masiva no regulada, con hipertensión grave, mientras que por arriba de la lesión hay respuesta parasimpática compensatoria con bradicardia, rubor, sudoración y cefalea intensa. El tratamiento es sentar al paciente, aflojar la ropa, identificar y retirar el desencadenante, como desobstruir la sonda, y si persiste, antihipertensivos de acción rápida. Puede causar evento vascular cerebral y convulsiones.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención del paciente con lesión medular crónica",
+        "Guía del Consorcio de Medicina de Lesión Medular"
+      ]
+    }
+  ]
+}

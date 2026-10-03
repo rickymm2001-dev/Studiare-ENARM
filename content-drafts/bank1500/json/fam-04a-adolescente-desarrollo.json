@@ -1,0 +1,1335 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "fam-04a-adolescente-desarrollo-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_development",
+      "vignette": "Niña de 11 años que acude a revisión del niño sano. A la exploración presenta botón mamario con elevación de la mama y la areola como un pequeño montículo, sin vello púbico. Su madre pregunta si es normal.",
+      "prompt": "¿Qué indica este hallazgo en la escala de Tanner?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ginecomastia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es un término para varones."
+        },
+        {
+          "key": "b",
+          "text": "Estadio 1 de Tanner prepuberal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Ya hay botón mamario."
+        },
+        {
+          "key": "c",
+          "text": "Telarquia en estadio 2 de Tanner, un inicio puberal normal para su edad",
+          "correct": true,
+          "rationale": "El botón mamario es el primer signo de pubertad en niñas."
+        },
+        {
+          "key": "d",
+          "text": "Indicación de edad ósea y hormonas inmediata",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario en una pubertad normal."
+        },
+        {
+          "key": "e",
+          "text": "Estadio 4 de Tanner mamario",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "En el estadio 4 la areola forma un montículo secundario."
+        },
+        {
+          "key": "f",
+          "text": "Menarquia inminente en semanas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ocurre en promedio dos a tres años después de la telarquia."
+        },
+        {
+          "key": "g",
+          "text": "Pubertad precoz que requiere estudio urgente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La pubertad precoz en niñas inicia antes de los 8 años."
+        },
+        {
+          "key": "h",
+          "text": "Tumor mamario que requiere ultrasonido",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es un desarrollo normal."
+        },
+        {
+          "key": "i",
+          "text": "Adrenarquia aislada",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se refiere al vello púbico y axilar."
+        },
+        {
+          "key": "j",
+          "text": "Retraso puberal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Está dentro del rango normal."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La pubertad normal en niñas inicia entre los 8 y los 13 años, y el primer signo suele ser la telarquia, el botón mamario, correspondiente al estadio 2 de Tanner. Después aparece el vello púbico, pubarquia, y el estirón de crecimiento ocurre de forma temprana en la pubertad femenina. La menarquia ocurre en promedio 2 a 2.5 años después de la telarquia, habitualmente en el estadio 4 de Tanner mamario, alrededor de los 12 a 13 años. En niños, el primer signo es el aumento del volumen testicular a 4 mL o más, entre los 9 y los 14 años. La escala de Tanner tiene cinco estadios.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de control y seguimiento de la salud en la niña y el niño",
+        "Guía de Práctica Clínica de atención integral del adolescente en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-04a-adolescente-desarrollo-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_development",
+      "vignette": "Niño de 14 años, sano, que acude porque es el más bajo de su salón. Talla en percentil 3, velocidad de crecimiento normal. Testículos de 3 mL. Su padre refiere que él creció hasta los 17 años. Talla de los padres promedio.",
+      "prompt": "¿Cuál es el estudio inicial más apropiado?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Iniciar testosterona sin estudios",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Primero se evalúa."
+        },
+        {
+          "key": "b",
+          "text": "Cariotipo de rutina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se solicita ante datos dismórficos o en niñas con talla baja."
+        },
+        {
+          "key": "c",
+          "text": "Tomografía de abdomen",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "d",
+          "text": "Prueba de estimulación de hormona de crecimiento como primer estudio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "e",
+          "text": "Iniciar hormona de crecimiento empírica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No está indicada sin deficiencia demostrada."
+        },
+        {
+          "key": "f",
+          "text": "Gammagrama óseo de cuerpo completo",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No evalúa edad ósea."
+        },
+        {
+          "key": "g",
+          "text": "Resonancia magnética de hipófisis de inicio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay datos de lesión."
+        },
+        {
+          "key": "h",
+          "text": "Biopsia testicular",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "i",
+          "text": "Radiografía de mano y muñeca izquierda para edad ósea",
+          "correct": true,
+          "rationale": "Una edad ósea retrasada apoya un retraso constitucional del crecimiento y la pubertad."
+        },
+        {
+          "key": "j",
+          "text": "Ultrasonido de rodilla para placas de crecimiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La edad ósea se evalúa en la mano."
+        }
+      ],
+      "canonical": [
+        "b",
+        "d",
+        "g",
+        "i"
+      ],
+      "explanation": "El retraso constitucional del crecimiento y la pubertad es la causa más frecuente de pubertad tardía y talla baja en varones. Se caracteriza por talla baja con velocidad de crecimiento normal, pubertad tardía, antecedente familiar de desarrollo tardío y edad ósea retrasada respecto a la cronológica, lo que indica potencial de crecimiento conservado. Estos niños alcanzan una talla final normal. El estudio inicial es la radiografía de mano y muñeca izquierda para edad ósea. En la talla baja familiar, en cambio, la edad ósea es acorde a la cronológica y los padres son de talla baja.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de talla baja en niños",
+        "Guía de Práctica Clínica de atención integral del adolescente en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-04a-adolescente-desarrollo-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_development",
+      "vignette": "Adolescente varón de 13 años, en estadio 3 de Tanner, que acude preocupado por un aumento de volumen doloroso debajo de ambas areolas de 2 centímetros, de consistencia firme y móvil. No toma medicamentos ni consume drogas. Testículos normales.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ginecomastia puberal fisiológica",
+          "correct": true,
+          "rationale": "Es frecuente en la pubertad media y suele resolverse en 1 a 2 años."
+        },
+        {
+          "key": "b",
+          "text": "Tumor testicular productor de estrógenos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La exploración testicular es normal."
+        },
+        {
+          "key": "c",
+          "text": "Seudoginecomastia por obesidad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Hay tejido glandular firme."
+        },
+        {
+          "key": "d",
+          "text": "Absceso mamario bilateral",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay datos de infección."
+        },
+        {
+          "key": "e",
+          "text": "Prolactinoma",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay galactorrea ni otros datos."
+        },
+        {
+          "key": "f",
+          "text": "Lipoma bilateral",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es tejido glandular retroareolar."
+        },
+        {
+          "key": "g",
+          "text": "Hipertiroidismo como causa principal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No hay otros síntomas."
+        },
+        {
+          "key": "h",
+          "text": "Ginecomastia por anabólicos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Niega su consumo."
+        },
+        {
+          "key": "i",
+          "text": "Cáncer de mama masculino",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es extremadamente raro en adolescentes."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome de Klinefelter",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se asocia con testículos pequeños."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "La ginecomastia puberal es una proliferación benigna del tejido glandular mamario que ocurre hasta en la mitad o más de los varones adolescentes, con mayor frecuencia en los estadios 3 y 4 de Tanner. Se debe a un desequilibrio transitorio entre estrógenos y andrógenos. Puede ser unilateral o bilateral, ligeramente dolorosa, y se resuelve espontáneamente en 6 meses a 2 años en la mayoría. El manejo es tranquilizar al paciente y vigilar. Se estudia si es mayor de 4 centímetros, persiste después de los 17 años, ocurre antes de la pubertad o hay testículos anormales.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de ginecomastia",
+        "Guía de Práctica Clínica de atención integral del adolescente en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-04a-adolescente-desarrollo-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_development",
+      "vignette": "Adolescente de 15 años que acude sola a consulta. Durante la entrevista, el médico desea conocer sus hábitos, actividades, relaciones y posibles conductas de riesgo de forma estructurada.",
+      "prompt": "¿Cuál es la conducta más apropiada para realizar la entrevista?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solicitar pruebas toxicológicas de rutina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No sustituyen la entrevista."
+        },
+        {
+          "key": "b",
+          "text": "Prometer confidencialidad absoluta en cualquier situación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Existen límites, como riesgo de daño."
+        },
+        {
+          "key": "c",
+          "text": "Entrevistarla siempre en presencia de la madre",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Limita la información sobre conductas de riesgo."
+        },
+        {
+          "key": "d",
+          "text": "No preguntar por estado de ánimo ni ideación suicida",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte esencial."
+        },
+        {
+          "key": "e",
+          "text": "Iniciar con preguntas sobre sexualidad y drogas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se inicia con temas menos sensibles."
+        },
+        {
+          "key": "f",
+          "text": "Preguntar solo por su motivo de consulta",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se pierden oportunidades de prevención."
+        },
+        {
+          "key": "g",
+          "text": "Entregar un cuestionario y no comentar las respuestas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La entrevista requiere diálogo."
+        },
+        {
+          "key": "h",
+          "text": "Aplicar la entrevista HEEADSSS en privado y explicar los límites de la confidencialidad",
+          "correct": true,
+          "rationale": "Es la herramienta estructurada para evaluar riesgos en adolescentes."
+        },
+        {
+          "key": "i",
+          "text": "Los adolescentes rara vez tienen conductas de riesgo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Son frecuentes."
+        },
+        {
+          "key": "j",
+          "text": "Juzgar sus conductas para disuadirla",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Rompe la confianza."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "f",
+        "h"
+      ],
+      "explanation": "La entrevista HEEADSSS es una herramienta estructurada para evaluar la salud psicosocial de los adolescentes. Explora hogar, educación y empleo, alimentación, actividades, drogas, sexualidad, suicidio y depresión, y seguridad. Se recomienda entrevistar al adolescente a solas en parte de la consulta, explicar desde el inicio la confidencialidad y sus límites, como el riesgo de daño para sí o para otros o el abuso, e iniciar con temas menos sensibles. Un enfoque sin juicios favorece la confianza y la detección temprana de riesgos. La entrevista permite también identificar fortalezas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención integral del adolescente en el primer nivel",
+        "Norma Oficial Mexicana para la atención a la salud del grupo etario de 10 a 19 años"
+      ]
+    },
+    {
+      "key": "fam-04a-adolescente-desarrollo-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_development",
+      "vignette": "Adolescente de 16 años que nunca ha menstruado. Tiene desarrollo mamario en estadio 4 de Tanner y vello púbico normal. Talla normal. Niega actividad sexual.",
+      "prompt": "¿Cuál es el estudio inicial más apropiado?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Prueba de embarazo y ultrasonido pélvico para evaluar útero y vagina",
+          "correct": true,
+          "rationale": "Con caracteres sexuales normales se busca una alteración anatómica."
+        },
+        {
+          "key": "b",
+          "text": "Resonancia de hipófisis como primer estudio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es el primer paso con desarrollo normal."
+        },
+        {
+          "key": "c",
+          "text": "No explorar los genitales externos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede revelar himen imperforado."
+        },
+        {
+          "key": "d",
+          "text": "Omitir la prueba de embarazo porque niega actividad sexual",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Siempre debe descartarse."
+        },
+        {
+          "key": "e",
+          "text": "Laparoscopia diagnóstica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es invasiva."
+        },
+        {
+          "key": "f",
+          "text": "Prueba genética amplia de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se usa según hallazgos."
+        },
+        {
+          "key": "g",
+          "text": "Biopsia de endometrio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "Considerarla normal y esperar hasta los 18 años",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "A los 15 años sin menarquia se estudia."
+        },
+        {
+          "key": "i",
+          "text": "Medir solo hormona del crecimiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es la causa probable."
+        },
+        {
+          "key": "j",
+          "text": "Iniciar anticonceptivos para inducir la menstruación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No se ha identificado la causa."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "h",
+        "j"
+      ],
+      "explanation": "La amenorrea primaria se define como ausencia de menarquia a los 15 años con caracteres sexuales secundarios presentes, o a los 13 años sin ellos. Siempre se descarta embarazo. Cuando el desarrollo mamario es normal, lo que indica producción de estrógenos, se buscan alteraciones anatómicas del tracto de salida, como himen imperforado, tabique vaginal transverso o agenesia mülleriana, y la insensibilidad a andrógenos. El ultrasonido pélvico evalúa la presencia de útero. Si no hay útero se solicita cariotipo y testosterona. Sin desarrollo mamario se miden gonadotropinas para distinguir causas centrales y gonadales.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la amenorrea primaria",
+        "Guía de Práctica Clínica de atención integral del adolescente en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-04a-adolescente-desarrollo-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_development",
+      "vignette": "Niña de 7 años con desarrollo mamario en estadio 3 de Tanner y vello púbico desde hace 6 meses. Ha crecido 9 centímetros en el último año. Sin cefalea ni alteraciones visuales.",
+      "prompt": "¿Cuál es el estudio inicial más apropiado?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Considerarlo normal por la variación individual",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Antes de los 8 años es pubertad precoz."
+        },
+        {
+          "key": "b",
+          "text": "No preguntar por exposición a estrógenos exógenos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede ser una causa."
+        },
+        {
+          "key": "c",
+          "text": "Esperar a la menarquia para evaluar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La talla final puede afectarse."
+        },
+        {
+          "key": "d",
+          "text": "Biopsia ovárica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "e",
+          "text": "Mastografía",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "f",
+          "text": "Medir solo hormonas tiroideas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica todo el cuadro."
+        },
+        {
+          "key": "g",
+          "text": "Tomografía de abdomen como primer estudio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se reserva para sospecha de causa periférica."
+        },
+        {
+          "key": "h",
+          "text": "Iniciar análogos de GnRH sin estudios",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Primero se establece la causa."
+        },
+        {
+          "key": "i",
+          "text": "Edad ósea y medición de gonadotropinas y estradiol",
+          "correct": true,
+          "rationale": "Se sospecha pubertad precoz y se requiere distinguir si es central o periférica."
+        },
+        {
+          "key": "j",
+          "text": "El crecimiento acelerado es una buena noticia para la talla final",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La maduración ósea adelantada la reduce."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "h",
+        "i"
+      ],
+      "explanation": "La pubertad precoz se define como el inicio de caracteres sexuales secundarios antes de los 8 años en niñas y de los 9 en niños. Se acompaña de aceleración del crecimiento y avance de la edad ósea, que puede reducir la talla final. La forma central, dependiente de gonadotropinas, es la más frecuente en niñas y suele ser idiopática; en niños es más frecuente encontrar lesiones del sistema nervioso central. La evaluación inicial incluye edad ósea, hormona luteinizante, hormona foliculoestimulante y estradiol o testosterona. Si es central se solicita resonancia de cráneo y el tratamiento son los análogos de GnRH.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de pubertad precoz",
+        "Guía de Práctica Clínica de control y seguimiento de la salud en la niña y el niño"
+      ]
+    },
+    {
+      "key": "fam-04a-adolescente-desarrollo-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_development",
+      "vignette": "Adolescente de 15 años cuya madre refiere que se duerme después de la medianoche y le cuesta mucho levantarse para la escuela. Los fines de semana duerme hasta mediodía. Rendimiento escolar adecuado y sin síntomas depresivos.",
+      "prompt": "¿Cuál es el mecanismo que explica este patrón de sueño?",
+      "polarity": "affirmative",
+      "task": "mechanism",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Retraso fisiológico de la fase circadiana con secreción tardía de melatonina en la pubertad",
+          "correct": true,
+          "rationale": "Es un cambio normal del desarrollo."
+        },
+        {
+          "key": "b",
+          "text": "Exceso de hormona del crecimiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica el patrón."
+        },
+        {
+          "key": "c",
+          "text": "Narcolepsia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Cursa con somnolencia y cataplejía."
+        },
+        {
+          "key": "d",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay otros síntomas."
+        },
+        {
+          "key": "e",
+          "text": "Trastorno bipolar en fase maníaca",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay otros síntomas."
+        },
+        {
+          "key": "f",
+          "text": "Tumor hipofisario",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay datos neurológicos."
+        },
+        {
+          "key": "g",
+          "text": "Pereza por mala crianza",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es un cambio biológico."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome de piernas inquietas",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay síntomas sensitivos."
+        },
+        {
+          "key": "i",
+          "text": "Insomnio por depresión mayor",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay síntomas depresivos."
+        },
+        {
+          "key": "j",
+          "text": "Apnea obstructiva del sueño",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay ronquido ni pausas descritas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "Durante la pubertad ocurre un retraso fisiológico de la fase circadiana: la secreción de melatonina inicia más tarde por la noche, por lo que los adolescentes tienden a dormirse y despertarse más tarde. Además, requieren entre 8 y 10 horas de sueño. Los horarios escolares tempranos, el uso de pantallas por la noche y la cafeína agravan la privación de sueño, que se asocia con bajo rendimiento, problemas de ánimo y accidentes. Se recomienda higiene del sueño, horarios regulares incluso en fines de semana, limitar pantallas antes de dormir y exposición a luz por la mañana.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención integral del adolescente en el primer nivel",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del insomnio"
+      ]
+    },
+    {
+      "key": "fam-04a-adolescente-desarrollo-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_development",
+      "vignette": "Varón de 15 años sin ningún dato de desarrollo puberal. Testículos de 2 mL. Refiere que no percibe olores. Talla en percentil 25.",
+      "prompt": "¿Cuál es el estudio inicial más apropiado?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Medir solo cortisol",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "b",
+          "text": "Tomografía de tórax",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "c",
+          "text": "Ultrasonido testicular como único estudio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No evalúa el eje hormonal."
+        },
+        {
+          "key": "d",
+          "text": "Medición de hormona luteinizante, hormona foliculoestimulante y testosterona",
+          "correct": true,
+          "rationale": "La anosmia con pubertad ausente sugiere hipogonadismo hipogonadotrópico."
+        },
+        {
+          "key": "e",
+          "text": "Esperar a los 18 años por retraso constitucional",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La anosmia orienta a otra causa."
+        },
+        {
+          "key": "f",
+          "text": "No preguntar por el sentido del olfato",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es un dato clave."
+        },
+        {
+          "key": "g",
+          "text": "Iniciar testosterona sin estudios",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Primero se establece el diagnóstico."
+        },
+        {
+          "key": "h",
+          "text": "Biopsia testicular",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es invasiva."
+        },
+        {
+          "key": "i",
+          "text": "La anosmia no tiene relación con la pubertad",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se asocia en el síndrome de Kallmann."
+        },
+        {
+          "key": "j",
+          "text": "Medir solo hormona del crecimiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es la primera prioridad."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "e",
+        "g"
+      ],
+      "explanation": "La pubertad tardía en varones se define como ausencia de aumento del volumen testicular a 4 mL o más a los 14 años. La causa más frecuente es el retraso constitucional, pero deben descartarse causas patológicas. El hipogonadismo hipogonadotrópico se caracteriza por gonadotropinas y testosterona bajas. Cuando se asocia con anosmia o hiposmia corresponde al síndrome de Kallmann, por un defecto en la migración de las neuronas productoras de GnRH y olfatorias. El hipogonadismo hipergonadotrópico, con gonadotropinas altas, indica falla testicular primaria, como el síndrome de Klinefelter. Se completa con resonancia de cráneo si es central.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de pubertad tardía",
+        "Guía de Práctica Clínica de atención integral del adolescente en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-04a-adolescente-desarrollo-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_development",
+      "vignette": "Adolescente de 13 años que discute con frecuencia con sus padres, pasa más tiempo con amigos y se preocupa mucho por su imagen. Sus padres temen que tenga un problema psicológico. Rendimiento escolar normal, sin cambios de sueño ni apetito.",
+      "prompt": "¿Qué indica este comportamiento en el contexto del desarrollo?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Trastorno dismórfico corporal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La preocupación por la imagen es frecuente y no incapacitante."
+        },
+        {
+          "key": "b",
+          "text": "No orientar a los padres sobre la comunicación",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La orientación es útil."
+        },
+        {
+          "key": "c",
+          "text": "Una conducta esperada en la adolescencia temprana, con búsqueda de autonomía e importancia del grupo de pares",
+          "correct": true,
+          "rationale": "Forma parte del desarrollo psicosocial normal."
+        },
+        {
+          "key": "d",
+          "text": "Trastorno de ansiedad social",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay evitación."
+        },
+        {
+          "key": "e",
+          "text": "Esquizofrenia de inicio temprano",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay síntomas psicóticos."
+        },
+        {
+          "key": "f",
+          "text": "Trastorno negativista desafiante",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay patrón persistente de hostilidad con disfunción."
+        },
+        {
+          "key": "g",
+          "text": "Depresión mayor",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay síntomas depresivos."
+        },
+        {
+          "key": "h",
+          "text": "Trastorno por consumo de sustancias",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay datos."
+        },
+        {
+          "key": "i",
+          "text": "Necesita tratamiento farmacológico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No hay trastorno."
+        },
+        {
+          "key": "j",
+          "text": "Trastorno de personalidad",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No se diagnostica en la adolescencia temprana con estos datos."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "La adolescencia temprana, de los 10 a los 13 años, se caracteriza por cambios corporales rápidos, preocupación por la imagen, búsqueda de independencia de los padres y creciente importancia del grupo de amigos. En la adolescencia media, de 14 a 16 años, aumentan la experimentación y las conductas de riesgo, y en la tardía, de 17 a 19, se consolida la identidad y el pensamiento abstracto. Los conflictos con los padres son frecuentes y normales. Se deben buscar señales de alarma, como deterioro escolar, aislamiento, cambios de sueño y apetito, consumo de sustancias o ideación suicida.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención integral del adolescente en el primer nivel",
+        "Norma Oficial Mexicana para la atención a la salud del grupo etario de 10 a 19 años"
+      ]
+    },
+    {
+      "key": "fam-04a-adolescente-desarrollo-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_development",
+      "vignette": "Adolescente de 16 años con acné en la cara caracterizado por comedones abiertos y cerrados y algunas pápulas inflamatorias, sin nódulos ni cicatrices. Le afecta su autoestima.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Retinoide tópico combinado con peróxido de benzoilo",
+          "correct": true,
+          "rationale": "Es el tratamiento de primera línea del acné leve a moderado mixto."
+        },
+        {
+          "key": "b",
+          "text": "Lavar la cara cinco veces al día con jabón abrasivo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Irrita la piel."
+        },
+        {
+          "key": "c",
+          "text": "No explicar que la mejoría tarda semanas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Afecta el apego."
+        },
+        {
+          "key": "d",
+          "text": "Dieta sin chocolate como único tratamiento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es suficiente."
+        },
+        {
+          "key": "e",
+          "text": "Terapia hormonal con antiandrógenos en varón",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "f",
+          "text": "Exprimir las lesiones para eliminarlas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Aumenta el riesgo de cicatrices."
+        },
+        {
+          "key": "g",
+          "text": "Antibiótico oral como monoterapia prolongada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Favorece la resistencia."
+        },
+        {
+          "key": "h",
+          "text": "El acné se cura solo y no requiere tratamiento",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede dejar cicatrices y afectar la autoestima."
+        },
+        {
+          "key": "i",
+          "text": "Corticoide tópico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede empeorar el acné."
+        },
+        {
+          "key": "j",
+          "text": "Isotretinoína oral de inicio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para acné nodular grave o refractario."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "g",
+        "j"
+      ],
+      "explanation": "El acné vulgar afecta a la mayoría de los adolescentes. Su fisiopatología incluye hiperqueratinización folicular, aumento de sebo, proliferación de Cutibacterium acnes e inflamación. En el acné leve a moderado con comedones y pápulas, el tratamiento de primera línea son los retinoides tópicos, como adapaleno, combinados con peróxido de benzoilo, que reduce la bacteria sin generar resistencia. En acné inflamatorio moderado se agrega un antibiótico oral, como doxiciclina, por tiempo limitado. La isotretinoína oral se reserva para acné nodular grave o refractario. La mejoría se observa en 8 a 12 semanas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del acné",
+        "Guía de Práctica Clínica de atención integral del adolescente en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-04a-adolescente-desarrollo-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_development",
+      "vignette": "Adolescente de 12 años que acude a revisión. Al inclinarse hacia adelante con los brazos colgando se observa una giba costal derecha prominente. Sin dolor de espalda.",
+      "prompt": "¿Cuál es la prueba de tamizaje que permitió detectar el hallazgo?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Prueba de Lasègue",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Evalúa radiculopatía lumbar."
+        },
+        {
+          "key": "b",
+          "text": "Maniobra de Barlow",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se usa en recién nacidos."
+        },
+        {
+          "key": "c",
+          "text": "Prueba de inclinación anterior de Adams",
+          "correct": true,
+          "rationale": "Detecta la rotación vertebral de la escoliosis."
+        },
+        {
+          "key": "d",
+          "text": "Prueba de Thomas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Evalúa contractura de flexión de cadera."
+        },
+        {
+          "key": "e",
+          "text": "Prueba de Phalen",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Evalúa síndrome del túnel del carpo."
+        },
+        {
+          "key": "f",
+          "text": "Prueba de Schober como tamizaje de escoliosis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Evalúa movilidad lumbar."
+        },
+        {
+          "key": "g",
+          "text": "Maniobra de Ortolani",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se usa en displasia de cadera neonatal."
+        },
+        {
+          "key": "h",
+          "text": "Prueba de Finkelstein",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Evalúa tenosinovitis de De Quervain."
+        },
+        {
+          "key": "i",
+          "text": "Signo de Trendelenburg",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Evalúa los abductores de la cadera."
+        },
+        {
+          "key": "j",
+          "text": "Maniobra de McMurray",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Evalúa lesiones de menisco."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "g"
+      ],
+      "explanation": "La escoliosis idiopática del adolescente es una curvatura lateral de la columna con rotación vertebral, más frecuente en niñas durante el estirón puberal. Suele ser asintomática. La prueba de inclinación anterior de Adams consiste en que el paciente se incline hacia adelante con las rodillas extendidas y los brazos colgando; la rotación vertebral produce una giba costal o lumbar. Un escoliómetro con 7 grados o más indica solicitar radiografía de columna completa en bipedestación para medir el ángulo de Cobb. Curvas mayores de 25 grados en crecimiento suelen requerir corsé, y mayores de 45 a 50, cirugía.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de escoliosis idiopática del adolescente",
+        "Guía de Práctica Clínica de control y seguimiento de la salud en la niña y el niño"
+      ]
+    },
+    {
+      "key": "fam-04a-adolescente-desarrollo-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_development",
+      "vignette": "Niña de 10 años con talla en percentil 5 y velocidad de crecimiento normal. Su madre mide 150 centímetros y su padre 160. Edad ósea igual a la cronológica. Exploración física normal.",
+      "prompt": "¿Qué indica este patrón de crecimiento?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Retraso constitucional del crecimiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "En este la edad ósea está retrasada."
+        },
+        {
+          "key": "b",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La velocidad de crecimiento es normal."
+        },
+        {
+          "key": "c",
+          "text": "Talla baja familiar",
+          "correct": true,
+          "rationale": "La talla es acorde al potencial genético y la edad ósea es normal."
+        },
+        {
+          "key": "d",
+          "text": "Displasia esquelética",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La exploración es normal."
+        },
+        {
+          "key": "e",
+          "text": "Requiere hormona del crecimiento de inmediato",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "f",
+          "text": "Pubertad precoz",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay desarrollo puberal descrito."
+        },
+        {
+          "key": "g",
+          "text": "Enfermedad celiaca oculta",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay síntomas ni deterioro de la velocidad."
+        },
+        {
+          "key": "h",
+          "text": "Desnutrición crónica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay datos."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de Turner sin estudio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La exploración es normal, aunque en niñas con talla baja se considera."
+        },
+        {
+          "key": "j",
+          "text": "Deficiencia de hormona del crecimiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La velocidad de crecimiento es normal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "La talla baja familiar es una variante normal del crecimiento. Estos niños tienen talla baja pero dentro del canal de crecimiento esperado según la talla de los padres, con velocidad de crecimiento normal y edad ósea acorde a la cronológica. Su talla final será baja pero acorde al potencial genético. La talla blanco familiar en niñas se calcula como el promedio de la talla de los padres menos 6.5 centímetros. En niñas con talla baja sin causa clara se recomienda cariotipo para descartar síndrome de Turner. La velocidad de crecimiento baja es el dato que obliga a estudiar causas patológicas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de talla baja en niños",
+        "Guía de Práctica Clínica de control y seguimiento de la salud en la niña y el niño"
+      ]
+    },
+    {
+      "key": "fam-04a-adolescente-desarrollo-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_development",
+      "vignette": "Adolescente de 14 años que acude para revisión antes de unirse al equipo de fútbol de su escuela. Sin síntomas. Un tío murió súbitamente a los 30 años mientras corría.",
+      "prompt": "¿Cuál es la evaluación preventiva más importante antes de autorizar la actividad deportiva?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Autorizar sin evaluación porque es joven y asintomático",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El antecedente familiar requiere estudio."
+        },
+        {
+          "key": "b",
+          "text": "La miocardiopatía hipertrófica siempre produce síntomas antes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede debutar con muerte súbita."
+        },
+        {
+          "key": "c",
+          "text": "Prueba de esfuerzo con consumo de oxígeno a todos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es de rutina."
+        },
+        {
+          "key": "d",
+          "text": "Historia clínica cardiovascular dirigida, exploración con auscultación en reposo y de pie, y electrocardiograma por el antecedente familiar",
+          "correct": true,
+          "rationale": "Busca cardiopatías que causan muerte súbita."
+        },
+        {
+          "key": "e",
+          "text": "Biometría hemática como única prueba",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No evalúa el riesgo cardiaco."
+        },
+        {
+          "key": "f",
+          "text": "La muerte súbita en jóvenes no es hereditaria",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Muchas causas son hereditarias."
+        },
+        {
+          "key": "g",
+          "text": "No preguntar por síncope durante el ejercicio",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es un síntoma de alarma."
+        },
+        {
+          "key": "h",
+          "text": "Prohibir el deporte de manera permanente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Primero se evalúa."
+        },
+        {
+          "key": "i",
+          "text": "Radiografía de tórax como única prueba",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No detecta la mayoría de las causas de muerte súbita."
+        },
+        {
+          "key": "j",
+          "text": "Cateterismo cardiaco",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es invasivo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "i"
+      ],
+      "explanation": "La evaluación previa a la participación deportiva busca identificar condiciones que aumentan el riesgo de muerte súbita, como miocardiopatía hipertrófica, anomalías coronarias, canalopatías como síndrome de QT largo y de Brugada, y miocardiopatía arritmogénica. Incluye preguntas sobre dolor torácico, síncope o palpitaciones con el ejercicio y antecedentes familiares de muerte súbita antes de los 50 años, y exploración con auscultación en reposo y de pie, pulsos femorales y presión arterial. El antecedente familiar de muerte súbita justifica electrocardiograma y, según hallazgos, ecocardiograma.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención integral del adolescente en el primer nivel",
+        "Recomendaciones para la evaluación precompetitiva del deportista joven"
+      ]
+    },
+    {
+      "key": "fam-04a-adolescente-desarrollo-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_development",
+      "vignette": "Adolescente de 17 años que en la consulta plantea hipótesis sobre las consecuencias a largo plazo de sus decisiones, reflexiona sobre valores y discute temas abstractos como la justicia y su futuro profesional.",
+      "prompt": "¿Qué etapa del desarrollo cognitivo indica esta forma de pensar?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Etapa de operaciones formales de Piaget",
+          "correct": true,
+          "rationale": "Se caracteriza por pensamiento abstracto e hipotético deductivo."
+        },
+        {
+          "key": "b",
+          "text": "Etapa de confianza contra desconfianza de Erikson",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Corresponde al lactante."
+        },
+        {
+          "key": "c",
+          "text": "Etapa preoperacional",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Corresponde a niños pequeños."
+        },
+        {
+          "key": "d",
+          "text": "Pensamiento mágico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es preoperacional."
+        },
+        {
+          "key": "e",
+          "text": "Etapa de latencia de Freud",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es una etapa cognitiva de Piaget."
+        },
+        {
+          "key": "f",
+          "text": "Regresión cognitiva",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No hay regresión."
+        },
+        {
+          "key": "g",
+          "text": "Etapa de intimidad contra aislamiento como único descriptor",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es psicosocial y del adulto joven."
+        },
+        {
+          "key": "h",
+          "text": "Etapa sensoriomotora",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Corresponde a lactantes."
+        },
+        {
+          "key": "i",
+          "text": "Egocentrismo preoperacional",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "j",
+          "text": "Etapa de operaciones concretas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El pensamiento se limita a lo concreto."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "Según Piaget, el desarrollo cognitivo pasa por cuatro etapas: sensoriomotora, del nacimiento a los 2 años; preoperacional, de 2 a 7 años, con pensamiento simbólico y egocéntrico; operaciones concretas, de 7 a 11 años, con razonamiento lógico sobre objetos concretos; y operaciones formales, a partir de los 11 o 12 años, con pensamiento abstracto, hipotético y deductivo. En la adolescencia se desarrolla esta última etapa de forma gradual, junto con la maduración de la corteza prefrontal, que continúa hasta los 25 años y explica la mayor impulsividad. Según Erikson, la tarea del adolescente es la identidad frente a la confusión de roles.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención integral del adolescente en el primer nivel",
+        "Norma Oficial Mexicana para la atención a la salud del grupo etario de 10 a 19 años"
+      ]
+    }
+  ]
+}

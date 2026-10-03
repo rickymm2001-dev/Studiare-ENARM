@@ -1,0 +1,335 @@
+@ urg|environmental_emergencies|heat_stroke|2|diagnosis
+V: Hombre de 22 años, militar en entrenamiento, que se desploma durante una marcha bajo el sol a 38 grados. Presenta confusión, agitación, piel caliente y temperatura central de 41.5 grados. Frecuencia cardiaca de 140.
+P: ¿Cuál es el diagnóstico más probable?
++ Golpe de calor por esfuerzo || Hipertermia mayor de 40 grados con disfunción del sistema nervioso central tras ejercicio en calor.
+- anchoring | Agotamiento por calor || En este no hay disfunción neurológica grave.
+- availability_heuristic | Calambres por calor || Son espasmos musculares sin alteración mental.
+- representativeness_heuristic | Meningitis bacteriana || El contexto de esfuerzo en calor orienta a golpe de calor.
+- premature_closure | Síncope vasovagal simple || No explica la hipertermia ni la confusión persistente.
+- framing_effect | Hipoglucemia por ejercicio || No explica la temperatura de 41.5 grados.
+- complexity_bias | Hipertermia maligna || Se asocia con anestésicos.
+- base_rate_fallacy | El golpe de calor solo ocurre en adultos mayores || También en jóvenes con esfuerzo.
+- belief_bias | La sudoración presente descarta golpe de calor || En el golpe de calor por esfuerzo puede haber sudoración.
+- focusing_illusion | Síndrome neuroléptico maligno || No hay antipsicóticos.
+E: El golpe de calor es una urgencia definida por temperatura central mayor de 40 grados con disfunción del sistema nervioso central, como confusión, delirio, convulsiones o coma. Hay dos formas: el clásico, en adultos mayores, niños y enfermos crónicos durante olas de calor, con piel seca, y el de esfuerzo, en personas jóvenes que realizan ejercicio intenso en ambientes calurosos, frecuentemente con sudoración. Puede causar rabdomiólisis, lesión renal, coagulación intravascular diseminada, falla hepática y muerte. Se distingue del agotamiento por calor, con temperatura menor de 40 grados y sin alteración neurológica grave.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del golpe de calor ;; Guía de la Sociedad de Medicina de Montaña para enfermedades por calor
+
+@ urg|environmental_emergencies|heat_stroke|2|treatment_of_choice
+V: Hombre de 25 años con golpe de calor por esfuerzo, temperatura de 41.8 grados y confusión. Está en el área de atención médica de un maratón con equipo disponible.
+P: ¿Cuál es el tratamiento de elección?
++ Enfriamiento rápido por inmersión en agua fría o helada hasta bajar la temperatura a 38.5 a 39 grados || Es el método más eficaz y reduce la mortalidad.
+- anchoring | Paracetamol intravenoso como tratamiento principal || Los antipiréticos no son eficaces en el golpe de calor.
+- availability_heuristic | Ácido acetilsalicílico || No es eficaz y puede empeorar la coagulopatía.
+- representativeness_heuristic | Dantroleno de rutina || No ha demostrado beneficio.
+- premature_closure | Trasladar al hospital antes de iniciar el enfriamiento || El enfriamiento debe iniciarse de inmediato.
+- framing_effect | Cubrir con mantas para evitar escalofríos || Retiene el calor.
+- complexity_bias | Esperar estudios de laboratorio antes de enfriar || Retrasa el tratamiento.
+- base_rate_fallacy | El enfriamiento lento es más seguro || El enfriamiento rápido reduce la mortalidad.
+- belief_bias | La inmersión en agua fría está contraindicada en jóvenes || Es el tratamiento de elección.
+- omission_bias | No vigilar rabdomiólisis y lesión renal || Son complicaciones frecuentes.
+E: El tratamiento del golpe de calor es el enfriamiento rápido, que debe iniciarse en el lugar. En el golpe de calor por esfuerzo, la inmersión en agua fría o helada es el método más eficaz, con descensos de 0.15 a 0.35 grados por minuto, y se mantiene hasta que la temperatura llega a 38.5 a 39 grados para evitar la hipotermia. Si no es posible, se usa enfriamiento por evaporación con agua y ventiladores, compresas frías en cuello, axilas e ingles y líquidos fríos. Los antipiréticos no son eficaces porque el mecanismo no es un cambio del termostato hipotalámico. Se vigilan rabdomiólisis, lesión renal y coagulopatía.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del golpe de calor ;; Guía de la Sociedad de Medicina de Montaña para enfermedades por calor
+
+@ urg|environmental_emergencies|heat_stroke|2|next_step
+V: Mujer de 82 años que vive sola en un departamento sin ventilación durante una ola de calor. La encuentran confusa, con piel caliente y seca y temperatura de 40.8 grados. Toma diuréticos y anticolinérgicos.
+P: ¿Cuál es la conducta más apropiada?
++ Enfriamiento rápido por evaporación con agua tibia y ventiladores, compresas frías y soporte, vigilando complicaciones || Es un golpe de calor clásico en una adulta mayor.
+- anchoring | Paracetamol y observación || Los antipiréticos no son eficaces.
+- availability_heuristic | Dar de alta con recomendaciones de hidratación || Es una urgencia.
+- representativeness_heuristic | Considerarlo una infección y dar solo antibióticos || El contexto sugiere golpe de calor.
+- premature_closure | Esperar a que la temperatura baje sola en la sala || El retraso aumenta la mortalidad.
+- framing_effect | Cubrirla con cobijas por la edad || Retiene el calor.
+- complexity_bias | Hemodiálisis para enfriar como primera opción || No es el primer paso.
+- base_rate_fallacy | Los adultos mayores toleran mejor el calor || Tienen mayor riesgo.
+- belief_bias | Los diuréticos y anticolinérgicos no influyen en el riesgo || Lo aumentan.
+- omission_bias | No revisar los medicamentos que alteran la termorregulación || Es parte de la prevención.
+E: El golpe de calor clásico afecta a adultos mayores, niños y personas con enfermedades crónicas durante olas de calor, especialmente si viven solos, sin ventilación, con movilidad reducida o toman fármacos que alteran la termorregulación, como diuréticos, anticolinérgicos, antipsicóticos y betabloqueadores. La piel suele estar seca. El tratamiento es el enfriamiento rápido; en adultos mayores se usa con frecuencia el enfriamiento por evaporación, con agua tibia rociada y ventiladores, más compresas frías, aunque la inmersión también es eficaz. Se brinda soporte y se vigilan las complicaciones. La prevención incluye identificar a personas vulnerables durante las olas de calor.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del golpe de calor ;; Lineamientos de la Secretaría de Salud para la atención de temperaturas extremas
+
+@ urg|environmental_emergencies|heat_stroke|2|treatment_of_choice
+V: Hombre de 30 años, obrero de la construcción, que tras trabajar bajo el sol presenta cefalea, náusea, debilidad, sudoración profusa y mareo. Temperatura de 38.6 grados, estado mental normal y presión de 100/60 mmHg.
+P: ¿Cuál es el tratamiento de elección?
++ Retirarlo del calor, reposo en lugar fresco, enfriamiento y rehidratación oral o intravenosa || Es un agotamiento por calor.
+- anchoring | Inmersión en agua helada y traslado a terapia intensiva || No tiene criterios de golpe de calor.
+- availability_heuristic | Antipiréticos como tratamiento principal || No son eficaces.
+- representativeness_heuristic | Continuar trabajando con más agua || Puede progresar a golpe de calor.
+- premature_closure | Antibiótico por la fiebre || No hay infección.
+- framing_effect | Restringir líquidos || Agrava la deshidratación.
+- complexity_bias | Hemodiálisis || No está indicada.
+- base_rate_fallacy | El agotamiento por calor nunca progresa || Puede progresar a golpe de calor.
+- belief_bias | La sudoración indica que no hay riesgo || La deshidratación sigue siendo un riesgo.
+- omission_bias | No recomendar pausas e hidratación en el trabajo || Es la prevención.
+E: El agotamiento por calor es un cuadro de deshidratación y depleción de sal por exposición al calor, con temperatura menor de 40 grados y sin alteración neurológica significativa. Se manifiesta con cefalea, náusea, vómito, debilidad, mareo, sudoración profusa, taquicardia e hipotensión ortostática. El tratamiento es retirar al paciente del calor, reposo en un lugar fresco, enfriamiento y rehidratación oral con soluciones con electrolitos o intravenosa si no tolera la vía oral. Si no mejora o aparece alteración mental, debe tratarse como golpe de calor. La prevención en trabajadores incluye aclimatación, pausas, sombra e hidratación.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del golpe de calor ;; Lineamientos de la Secretaría de Salud para la atención de temperaturas extremas
+
+@ urg|environmental_emergencies|heat_stroke|3|complication_prognosis
+V: Hombre de 24 años con golpe de calor por esfuerzo, enfriado en el lugar. A las 24 horas presenta orina color refresco de cola, creatina cinasa de 85,000 U/L, creatinina de 3 mg/dL y sangrado en los sitios de punción con plaquetas bajas.
+P: ¿Cuáles son las complicaciones más probables?
++ Rabdomiólisis con lesión renal aguda y coagulación intravascular diseminada || Son complicaciones graves del golpe de calor por esfuerzo.
+- anchoring | Infección urinaria con hematuria || No explica la creatina cinasa tan elevada.
+- availability_heuristic | Glomerulonefritis aguda || El contexto explica el cuadro.
+- representativeness_heuristic | Púrpura trombocitopénica inmunológica aislada || No explica la rabdomiólisis.
+- premature_closure | Deshidratación simple sin daño orgánico || Hay daño muscular, renal y hematológico.
+- framing_effect | Hemofilia no diagnosticada || La coagulopatía es adquirida.
+- complexity_bias | Vasculitis sistémica || El contexto explica el cuadro.
+- base_rate_fallacy | El golpe de calor no afecta a otros órganos || Causa falla multiorgánica.
+- belief_bias | Una vez enfriado el paciente no hay más riesgo || Las complicaciones aparecen después.
+- omission_bias | No hidratar intensamente para proteger el riñón || Es fundamental.
+E: El golpe de calor puede causar falla multiorgánica por daño térmico directo, isquemia y respuesta inflamatoria sistémica. Las complicaciones incluyen rabdomiólisis, más frecuente en la forma por esfuerzo, con mioglobinuria y lesión renal aguda; coagulación intravascular diseminada; falla hepática con elevación de transaminasas en 24 a 72 horas; síndrome de dificultad respiratoria aguda; y alteraciones electrolíticas como hiperpotasemia, hipocalcemia e hipofosfatemia. El manejo incluye hidratación intensa para la rabdomiólisis, corrección de electrolitos, hemoderivados para la coagulopatía y soporte orgánico. Aunque el paciente se enfríe, las complicaciones pueden aparecer en las horas o días siguientes.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del golpe de calor ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la rabdomiólisis
+
+@ urg|environmental_emergencies|heat_stroke|3|diagnosis
+V: Hombre de 28 años con esquizofrenia que recibe haloperidol desde hace 2 semanas. Presenta fiebre de 40 grados, rigidez muscular generalizada en tubo de plomo, alteración de la conciencia, diaforesis e hipertensión lábil. Creatina cinasa de 12,000 U/L.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome neuroléptico maligno || Hipertermia, rigidez, alteración mental y disautonomía tras iniciar un antipsicótico.
+- anchoring | Golpe de calor clásico || El antecedente del antipsicótico y la rigidez orientan a otra causa.
+- availability_heuristic | Síndrome serotoninérgico || Cursa con clonus e hiperreflexia, no con rigidez en tubo de plomo.
+- representativeness_heuristic | Hipertermia maligna || Se asocia con anestésicos inhalados.
+- premature_closure | Meningitis bacteriana || La rigidez generalizada y el antecedente orientan a síndrome neuroléptico.
+- framing_effect | Catatonia sin fiebre || Hay fiebre y disautonomía.
+- complexity_bias | Tétanos generalizado || No hay herida ni trismo descrito.
+- base_rate_fallacy | El síndrome neuroléptico solo ocurre con sobredosis || Ocurre con dosis terapéuticas.
+- belief_bias | Los antipsicóticos atípicos nunca lo causan || También pueden causarlo.
+- focusing_illusion | Intoxicación anticolinérgica || Cursa con piel seca y sin rigidez.
+E: El síndrome neuroléptico maligno es una reacción idiosincrática grave a fármacos antagonistas de la dopamina, como el haloperidol, y menos frecuentemente a antipsicóticos atípicos y antieméticos, o tras suspender agonistas dopaminérgicos. Se desarrolla en días a semanas y se caracteriza por hipertermia, rigidez muscular generalizada en tubo de plomo, alteración del estado mental e inestabilidad autonómica, con creatina cinasa elevada. Se distingue del síndrome serotoninérgico, de inicio en horas y con clonus e hiperreflexia. El tratamiento es suspender el fármaco, enfriamiento, hidratación, benzodiacepinas y, en casos graves, bromocriptina o dantroleno.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome neuroléptico maligno ;; Manual de toxicología clínica de urgencias
+
+@ urg|environmental_emergencies|heat_stroke|2|prevention_screening
+V: Durante una ola de calor, el centro de salud de una comunidad planea acciones para reducir los casos graves por calor.
+P: ¿Cuál es la medida de prevención más eficaz?
++ Identificar a personas vulnerables, promover la hidratación, evitar actividades en las horas de mayor calor y procurar espacios frescos || Son las medidas que reducen la morbilidad y mortalidad.
+- anchoring | Recomendar bebidas alcohólicas frías || El alcohol favorece la deshidratación.
+- availability_heuristic | Distribuir antipiréticos a la población || No previenen las enfermedades por calor.
+- representativeness_heuristic | Recomendar ejercicio intenso al mediodía para aclimatarse rápido || Aumenta el riesgo.
+- premature_closure | Suspender todos los medicamentos crónicos de los adultos mayores || Deben revisarse, no suspenderse sin indicación.
+- framing_effect | Recomendar ropa oscura y gruesa || Retiene el calor.
+- complexity_bias | Hospitalizar preventivamente a todos los adultos mayores || No es práctico ni necesario.
+- base_rate_fallacy | Los niños pequeños no tienen riesgo por calor || Tienen mayor riesgo.
+- belief_bias | Basta con beber agua solo cuando se tiene sed || En personas vulnerables la sed es tardía.
+- omission_bias | No vigilar a adultos mayores que viven solos || Son el grupo de mayor riesgo.
+E: Las olas de calor aumentan la mortalidad, sobre todo en adultos mayores, niños pequeños, personas con enfermedades crónicas, trabajadores al aire libre y personas en situación de calle. La prevención incluye identificar a las personas vulnerables y verificar su estado, promover la hidratación frecuente aunque no haya sed, evitar el ejercicio y la exposición en las horas de mayor calor, usar ropa ligera y clara, procurar espacios frescos o refugios climatizados, no dejar a niños ni adultos mayores en vehículos cerrados, revisar los fármacos que afectan la termorregulación y evitar el alcohol. La Secretaría de Salud emite alertas durante la temporada de calor.
+R: Lineamientos de la Secretaría de Salud para la atención de temperaturas extremas ;; Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del golpe de calor
+
+@ urg|environmental_emergencies|drowning|2|next_step
+V: Niño de 4 años rescatado de una alberca después de 3 minutos sumergido. No respira y no tiene pulso. Un adulto capacitado lo saca del agua.
+P: ¿Cuál es el primer paso más apropiado?
++ Iniciar con 5 ventilaciones de rescate seguidas de compresiones torácicas || En el ahogamiento la causa del paro es la hipoxia.
+- anchoring | Solo compresiones sin ventilaciones || En el ahogamiento las ventilaciones son prioritarias.
+- availability_heuristic | Maniobra de Heimlich para sacar el agua de los pulmones || Retrasa la reanimación y aumenta el riesgo de aspiración.
+- representativeness_heuristic | Colocarlo boca abajo para drenar el agua || Retrasa la reanimación.
+- premature_closure | Inmovilizar la columna cervical antes de cualquier maniobra en todos los casos || Solo si hay sospecha de trauma.
+- framing_effect | Esperar a la ambulancia sin reanimar || El tiempo es crítico.
+- complexity_bias | Buscar un desfibrilador antes de ventilar || La ventilación es prioritaria en el ahogamiento.
+- base_rate_fallacy | Después de 3 minutos no tiene sentido reanimar || La reanimación puede ser exitosa.
+- belief_bias | El agua en los pulmones impide ventilar || La cantidad aspirada suele ser pequeña.
+- omission_bias | No activar el sistema de emergencias || Es fundamental.
+E: El ahogamiento es una de las principales causas de muerte accidental en niños en México, sobre todo en albercas, cubetas, tinas y cuerpos de agua. La causa del paro es la hipoxia, por lo que la reanimación se inicia con 5 ventilaciones de rescate, seguidas de compresiones y ventilaciones en relación de 30 por 2 o 15 por 2 en niños con dos reanimadores. No se deben realizar maniobras para expulsar el agua, como la de Heimlich o colocar al paciente boca abajo, porque retrasan la reanimación. La inmovilización cervical solo se indica si hay sospecha de trauma, como clavados en aguas poco profundas.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de atención del paciente pediátrico por ahogamiento
+
+@ urg|environmental_emergencies|drowning|2|next_step
+V: Niña de 7 años rescatada de una alberca tras estar sumergida por un breve periodo. Tosió y vomitó agua. Ahora está alerta, con saturación de 98 por ciento, sin dificultad respiratoria y con auscultación normal.
+P: ¿Cuál es la conducta más apropiada?
++ Observación en urgencias durante 6 a 8 horas antes del egreso || Las complicaciones respiratorias pueden aparecer horas después.
+- anchoring | Alta inmediata porque está asintomática || Puede presentar deterioro respiratorio tardío.
+- availability_heuristic | Antibiótico profiláctico de rutina || No está indicado.
+- representativeness_heuristic | Esteroides de rutina || No están indicados.
+- premature_closure | Intubación profiláctica || No está indicada.
+- framing_effect | Hospitalización en terapia intensiva por 3 días || No es necesaria si permanece estable.
+- complexity_bias | Tomografía de tórax de rutina || No está indicada.
+- base_rate_fallacy | El ahogamiento seco ocurre días después sin síntomas iniciales || Los síntomas aparecen en horas.
+- belief_bias | Si tose después del rescate ya no hay riesgo || La tos indica aspiración.
+- omission_bias | No educar a los padres sobre supervisión en el agua || Es la prevención.
+E: Después de un ahogamiento, los pacientes que están alertas, sin dificultad respiratoria, con saturación normal y auscultación normal pueden egresar tras un periodo de observación de 6 a 8 horas, porque las complicaciones respiratorias, como edema pulmonar o neumonitis, suelen aparecer en ese lapso. Los pacientes con síntomas respiratorios, hipoxemia, alteración mental o necesidad de reanimación requieren hospitalización. No se recomiendan antibióticos ni esteroides profilácticos. La prevención incluye la supervisión constante de los niños, cercas alrededor de albercas, chalecos salvavidas y enseñar a nadar.
+R: Guía de Práctica Clínica de atención del paciente pediátrico por ahogamiento ;; Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón
+
+@ urg|environmental_emergencies|drowning|3|next_step
+V: Joven de 17 años que se lanzó de clavado en la parte poco profunda de un río. Lo sacan del agua consciente, con dolor cervical y sin movimiento de las extremidades. Respira por sí mismo.
+P: ¿Cuál es la conducta más apropiada?
++ Restricción del movimiento de la columna cervical, evaluación ABCDE y traslado para imagen de columna || El clavado en aguas poco profundas sugiere lesión medular cervical.
+- anchoring | Ponerlo de pie para ver si camina || Puede agravar la lesión.
+- availability_heuristic | Maniobra de Heimlich para sacar el agua || No está indicada.
+- representativeness_heuristic | Hiperextender el cuello para abrir la vía aérea || Puede agravar la lesión medular.
+- premature_closure | Solo observar porque respira || Tiene déficit neurológico.
+- framing_effect | Dar masaje en el cuello para aliviar el dolor || Puede agravar la lesión.
+- complexity_bias | Esteroides en dosis altas de rutina || No se recomiendan.
+- base_rate_fallacy | Todo ahogamiento requiere inmovilización cervical || Solo si hay sospecha de trauma.
+- belief_bias | La ausencia de dolor descarta lesión cervical || No la descarta.
+- omission_bias | No vigilar la función respiratoria || Las lesiones cervicales altas afectan la respiración.
+E: Las lesiones de la columna cervical en el contexto acuático se asocian sobre todo a clavados en aguas poco profundas, accidentes en tobogán o trauma con olas, y pueden causar lesión medular. En estos casos se realiza restricción del movimiento de la columna cervical desde el rescate, manteniendo la alineación, y se aplica la evaluación primaria ABCDE. Si se requiere abrir la vía aérea se usa la tracción mandibular sin hiperextensión. Se vigila la función respiratoria, porque las lesiones por arriba de C5 pueden comprometer el diafragma. Los esteroides en dosis altas no se recomiendan de rutina. En los ahogamientos sin datos de trauma no se inmoviliza de rutina.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de atención del paciente con lesión medular aguda
+
+@ urg|environmental_emergencies|drowning|3|complication_prognosis
+V: Hombre de 30 años rescatado tras un ahogamiento con reanimación prolongada. Recuperó la circulación. A las 12 horas presenta hipoxemia grave con infiltrados pulmonares bilaterales y cociente PaO2 entre FiO2 de 110.
+P: ¿Cuál es la complicación más probable?
++ Síndrome de dificultad respiratoria aguda por aspiración y daño alveolar || El agua aspirada lava el surfactante y causa daño alveolar.
+- anchoring | Neumonía bacteriana inmediata que requiere antibiótico de amplio espectro de rutina || El cuadro temprano se debe al daño alveolar.
+- availability_heuristic | Edema pulmonar cardiogénico || La causa es el daño alveolar por aspiración.
+- representativeness_heuristic | Neumotórax bilateral || No explica los infiltrados bilaterales.
+- premature_closure | Asma de inicio tardío || No explica el cuadro.
+- framing_effect | Tromboembolia pulmonar como única causa || No explica los infiltrados bilaterales.
+- complexity_bias | Fibrosis pulmonar idiopática || No corresponde.
+- base_rate_fallacy | La diferencia entre agua dulce y salada cambia por completo el tratamiento || El manejo es similar.
+- belief_bias | Siempre se ventila con volúmenes corrientes altos || Se ventila de forma protectora.
+- omission_bias | No usar PEEP adecuada || Mejora la oxigenación.
+E: En el ahogamiento, la aspiración de agua, dulce o salada, causa lavado o inactivación del surfactante, atelectasias, aumento de la permeabilidad alveolocapilar y edema pulmonar no cardiogénico, que puede evolucionar a síndrome de dificultad respiratoria aguda. Clásicamente se describían diferencias entre agua dulce y salada, pero en la práctica el manejo es similar. El tratamiento incluye oxígeno, ventilación mecánica protectora con volumen corriente bajo y PEEP adecuada. Las neumonías pueden aparecer después, sobre todo en aguas contaminadas, y se tratan si hay datos de infección, no de forma profiláctica.
+R: Guía de Práctica Clínica de atención del paciente por ahogamiento ;; Definición de Berlín del síndrome de dificultad respiratoria aguda
+
+@ urg|environmental_emergencies|drowning|3|next_step
+V: Niño de 6 años rescatado de un lago helado tras 20 minutos sumergido. Llega en paro cardiaco con temperatura central de 26 grados.
+P: ¿Cuál es la conducta más apropiada?
++ Reanimación prolongada con recalentamiento activo interno, idealmente con circulación extracorpórea || La hipotermia tiene efecto protector y la reanimación puede tener éxito.
+- anchoring | Declarar la muerte por el tiempo de sumersión || En hipotermia no se declara la muerte hasta recalentar.
+- availability_heuristic | Suspender la reanimación a los 20 minutos como en normotermia || Debe prolongarse en hipotermia.
+- representativeness_heuristic | Recalentamiento pasivo con cobijas como única medida || Es insuficiente en hipotermia grave en paro.
+- premature_closure | Administrar adrenalina cada 3 minutos igual que en normotermia || En hipotermia grave se espacian o se omiten.
+- framing_effect | Desfibrilaciones repetidas ilimitadas a 26 grados || Son poco eficaces con temperatura muy baja.
+- complexity_bias | Inmersión en agua caliente a 45 grados || Puede causar colapso y quemaduras.
+- base_rate_fallacy | Los niños nunca sobreviven a sumersiones prolongadas || Hay supervivencias en agua helada.
+- belief_bias | Las pupilas fijas indican muerte cerebral irreversible en hipotermia || No son confiables en hipotermia.
+- omission_bias | No medir la temperatura central || Guía el manejo.
+E: La hipotermia grave reduce el metabolismo cerebral y puede proteger frente a la hipoxia, por lo que se han descrito supervivencias con buena función neurológica tras sumersiones prolongadas en agua helada, sobre todo en niños. Por ello se aplica el principio de que nadie está muerto hasta que esté caliente y muerto. Se prolonga la reanimación y se realiza recalentamiento activo interno, idealmente con oxigenación por membrana extracorpórea o derivación cardiopulmonar. Con temperatura menor de 30 grados las desfibrilaciones y los fármacos son poco eficaces, por lo que se limitan hasta alcanzar mayor temperatura. Las pupilas fijas no son confiables.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía del Consejo Europeo de Resucitación para circunstancias especiales
+
+@ urg|environmental_emergencies|drowning|2|prevention_screening
+V: Una madre pregunta en la consulta de su hijo de 2 años cómo prevenir accidentes en casa. Viven en una casa con cubetas de agua en el patio y una pequeña alberca inflable.
+P: ¿Cuál es la recomendación más eficaz para prevenir el ahogamiento?
++ Supervisión constante y a distancia de un brazo cuando el niño esté cerca del agua, y vaciar cubetas y albercas después de usarlas || Los niños pequeños pueden ahogarse en pocos centímetros de agua.
+- anchoring | Basta con que el niño use flotadores inflables sin supervisión || No sustituyen la supervisión.
+- availability_heuristic | Los niños menores de 3 años no se ahogan en cubetas || Es una causa frecuente de ahogamiento en esta edad.
+- representativeness_heuristic | Enseñar a nadar a los 2 años elimina el riesgo || No lo elimina.
+- premature_closure | Dejar al niño con un hermano de 5 años cerca del agua || No es una supervisión adecuada.
+- framing_effect | El riesgo solo existe en el mar || Existe en cualquier cuerpo de agua.
+- complexity_bias | Instalar cámaras en lugar de supervisar directamente || No sustituyen la supervisión.
+- base_rate_fallacy | El ahogamiento siempre es ruidoso y fácil de notar || Suele ser silencioso.
+- belief_bias | Los niños se ahogan solo en agua profunda || Pueden ahogarse en pocos centímetros.
+- omission_bias | No recomendar que los cuidadores aprendan reanimación || Mejora la supervivencia.
+E: El ahogamiento es una de las principales causas de muerte accidental en niños de 1 a 4 años en México. Los niños pequeños pueden ahogarse en pocos centímetros de agua, en cubetas, tinas, cisternas, tinacos y albercas inflables, y el ahogamiento suele ser silencioso y rápido. La medida más eficaz es la supervisión constante, a distancia de un brazo, por un adulto sin distracciones. Además se recomienda vaciar cubetas y albercas después de usarlas, tapar cisternas y tinacos, instalar cercas con puertas que se cierren solas alrededor de albercas, usar chalecos salvavidas aprobados y que los cuidadores aprendan reanimación.
+R: Guía de Práctica Clínica de prevención de accidentes en el hogar en menores de 5 años ;; Programa de acción específico de prevención de accidentes
+
+@ urg|environmental_emergencies|hypothermia|2|data_interpretation
+V: Hombre de 50 años en situación de calle encontrado en la madrugada en invierno. Temperatura central de 31 grados, confuso, sin escalofríos y con bradicardia. El electrocardiograma muestra una deflexión positiva al final del QRS.
+P: ¿Qué indica este hallazgo electrocardiográfico?
++ Onda J de Osborn, característica de la hipotermia || Es una deflexión al final del QRS que aumenta con la hipotermia.
+- anchoring | Infarto agudo con elevación del ST || El contexto y la morfología orientan a hipotermia.
+- availability_heuristic | Hiperpotasemia || No produce onda J.
+- representativeness_heuristic | Bloqueo de rama derecha sin relación con la hipotermia || Es característica de la hipotermia.
+- premature_closure | Pericarditis || No corresponde.
+- framing_effect | Síndrome de Brugada como única explicación || El contexto orienta a hipotermia.
+- complexity_bias | Artefacto por temblor || No hay escalofríos.
+- base_rate_fallacy | La hipotermia no altera el electrocardiograma || Lo altera de forma característica.
+- belief_bias | La onda de Osborn indica muerte inminente en todos los casos || Indica hipotermia, no necesariamente muerte.
+- focusing_illusion | Hipercalcemia || Puede producir onda J, pero el contexto es hipotermia.
+E: La hipotermia se define por temperatura central menor de 35 grados y se clasifica en leve, de 32 a 35, con escalofríos y confusión leve; moderada, de 28 a 32, con pérdida de los escalofríos, disminución del estado de conciencia y bradicardia; y grave, menor de 28, con coma, riesgo de fibrilación ventricular y asistolia. El electrocardiograma puede mostrar bradicardia, prolongación de los intervalos, fibrilación auricular y la onda J de Osborn, una deflexión positiva al final del QRS que aumenta conforme baja la temperatura. Los factores de riesgo incluyen situación de calle, alcohol, edad avanzada y enfermedades.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipotermia accidental ;; Guía del Consejo Europeo de Resucitación para circunstancias especiales
+
+@ urg|environmental_emergencies|hypothermia|2|treatment_of_choice
+V: Mujer de 40 años rescatada en la montaña con temperatura de 33.5 grados, escalofríos intensos, alerta y hemodinámicamente estable.
+P: ¿Cuál es el tratamiento de elección?
++ Retirar la ropa mojada, aislamiento y recalentamiento pasivo con cobijas, más recalentamiento activo externo y bebidas calientes azucaradas si está alerta || Es una hipotermia leve.
+- anchoring | Circulación extracorpórea || Se reserva para hipotermia grave o paro.
+- availability_heuristic | Dar alcohol para calentar || Causa vasodilatación y pérdida de calor.
+- representativeness_heuristic | Frotar enérgicamente las extremidades || Puede causar lesiones y no es útil.
+- premature_closure | Dejar la ropa mojada y solo esperar || Aumenta la pérdida de calor.
+- framing_effect | Lavado peritoneal caliente || Es un método invasivo para casos graves.
+- complexity_bias | Intubación profiláctica || No está indicada en hipotermia leve.
+- base_rate_fallacy | La hipotermia solo ocurre a temperaturas bajo cero || Puede ocurrir con frío moderado y humedad.
+- belief_bias | Los escalofríos indican hipotermia grave || Indican que la termorregulación funciona.
+- omission_bias | No medir la temperatura central || Guía el manejo.
+E: El tratamiento de la hipotermia depende de su gravedad. En la hipotermia leve, con escalofríos y estado mental conservado, se retira la ropa mojada, se aísla al paciente del frío y del viento con cobijas, y se aplica recalentamiento pasivo y activo externo con mantas térmicas, fuentes de calor y bebidas calientes azucaradas si está alerta y puede deglutir. El alcohol está contraindicado. En la hipotermia moderada y grave se usa recalentamiento activo externo e interno, con líquidos intravenosos calientes, oxígeno caliente y, en casos graves o paro, circulación extracorpórea. Se manipula al paciente con suavidad.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipotermia accidental ;; Guía de la Sociedad de Medicina de Montaña para hipotermia
+
+@ urg|environmental_emergencies|hypothermia|3|next_step
+V: Hombre de 60 años con hipotermia grave de 26 grados, con pulso débil y bradicardia de 30. Los paramédicos planean trasladarlo.
+P: ¿Cuál es la conducta más apropiada durante el traslado?
++ Manipulación suave en posición horizontal, evitar movimientos bruscos y trasladar a un centro con capacidad de circulación extracorpórea || El movimiento brusco puede desencadenar fibrilación ventricular.
+- anchoring | Iniciar compresiones torácicas porque la frecuencia es baja || Tiene pulso y las compresiones pueden desencadenar fibrilación.
+- availability_heuristic | Ponerlo de pie para mejorar la circulación || Puede causar colapso.
+- representativeness_heuristic | Administrar atropina para la bradicardia como prioridad || La bradicardia es fisiológica en hipotermia.
+- premature_closure | Colocar marcapasos transcutáneo de inmediato || La bradicardia suele mejorar con el recalentamiento.
+- framing_effect | Frotar las extremidades para recalentar || Puede causar caída de la temperatura central.
+- complexity_bias | Inmersión en agua caliente durante el traslado || No es práctica y puede causar colapso.
+- base_rate_fallacy | La bradicardia en hipotermia siempre requiere tratamiento farmacológico || Es una respuesta fisiológica.
+- belief_bias | El miocardio frío es resistente a las arritmias || Es muy irritable.
+- omission_bias | No prevenir más pérdida de calor durante el traslado || Es fundamental.
+E: En la hipotermia grave el miocardio es muy irritable, y los movimientos bruscos, como sentar o poner de pie al paciente, pueden desencadenar fibrilación ventricular. Se recomienda manipular al paciente con suavidad, mantenerlo en posición horizontal, prevenir más pérdida de calor y trasladarlo a un centro con capacidad de circulación extracorpórea si está inestable. La bradicardia es una respuesta fisiológica a la hipotermia y suele mejorar con el recalentamiento, por lo que no siempre requiere atropina o marcapasos. Si el paciente tiene pulso, aunque débil, no se inician compresiones.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipotermia accidental ;; Guía del Consejo Europeo de Resucitación para circunstancias especiales
+
+@ urg|environmental_emergencies|hypothermia|3|treatment_of_choice
+V: Hombre de 35 años, montañista, con dedos de los pies blancos, duros e insensibles tras exposición prolongada al frío. Ya está en un refugio y no volverá a exponerse al frío. Temperatura central normal.
+P: ¿Cuál es el tratamiento de elección para las lesiones?
++ Recalentamiento rápido por inmersión en agua a 37 a 39 grados durante 15 a 30 minutos, con analgesia || Es el tratamiento de la congelación una vez que no hay riesgo de recongelación.
+- anchoring | Frotar los dedos con nieve || Causa más daño tisular.
+- availability_heuristic | Recalentar con fuego directo o secadora || Puede causar quemaduras por la insensibilidad.
+- representativeness_heuristic | Amputación inmediata || Se difiere semanas hasta delimitar la necrosis.
+- premature_closure | Recalentar si existe riesgo de que se vuelvan a congelar || La recongelación causa más daño.
+- framing_effect | Masaje vigoroso de los dedos || Daña los tejidos.
+- complexity_bias | Fasciotomía de rutina || No está indicada de rutina.
+- base_rate_fallacy | La congelación se cura sola sin tratamiento || Requiere manejo.
+- belief_bias | El agua muy caliente acelera la recuperación || Causa quemaduras.
+- omission_bias | No administrar analgesia durante el recalentamiento || Es muy doloroso.
+E: La congelación es la lesión de los tejidos por congelamiento, más frecuente en dedos, nariz y orejas. Los tejidos se ven blancos o grisáceos, duros e insensibles. El tratamiento, una vez que no hay riesgo de recongelación, es el recalentamiento rápido por inmersión en agua a 37 a 39 grados durante 15 a 30 minutos, hasta que el tejido se vuelva rojo o violáceo y flexible, con analgesia porque es muy doloroso. No se debe frotar, usar nieve, ni calor directo. Se elevan las extremidades, se protegen las flictenas y se aplica profilaxis antitetánica. La amputación se difiere semanas hasta que se delimite la necrosis.
+R: Guía de la Sociedad de Medicina de Montaña para congelación ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la hipotermia accidental
+
+@ urg|environmental_emergencies|hypothermia|3|next_step
+V: Hombre de 45 años con hipotermia grave de 27 grados que presenta paro cardiaco con fibrilación ventricular. Se inicia reanimación y se aplica una descarga sin éxito.
+P: ¿Cuál es la conducta más apropiada?
++ Continuar la reanimación, recalentar activamente y diferir más descargas y fármacos hasta que la temperatura supere 30 grados || Con temperatura menor de 30 grados las descargas y los fármacos son poco eficaces.
+- anchoring | Descargas repetidas cada 2 minutos sin límite || Son poco eficaces con temperatura muy baja.
+- availability_heuristic | Adrenalina cada 3 minutos igual que en normotermia || Se acumula y es poco eficaz en hipotermia grave.
+- representativeness_heuristic | Suspender la reanimación porque no respondió a la descarga || Se continúa mientras se recalienta.
+- premature_closure | Amiodarona en dosis repetidas como prioridad || Es poco eficaz y se acumula.
+- framing_effect | Recalentamiento pasivo con cobijas como única medida || Es insuficiente.
+- complexity_bias | Marcapasos transcutáneo || No trata la fibrilación ventricular.
+- base_rate_fallacy | La fibrilación ventricular en hipotermia responde igual a las descargas || Responde mal por debajo de 30 grados.
+- belief_bias | El paciente está muerto si no responde a la primera descarga || Puede recuperarse tras recalentar.
+- omission_bias | No considerar circulación extracorpórea || Es el método de elección en paro hipotérmico.
+E: En el paro cardiaco por hipotermia grave, la fibrilación ventricular y los fármacos responden mal cuando la temperatura central es menor de 30 grados. Se recomienda continuar la reanimación de alta calidad, limitar a tres descargas iniciales y diferir más descargas y fármacos hasta que la temperatura supere 30 grados, y espaciar la adrenalina hasta los 35 grados. El recalentamiento activo interno, idealmente con oxigenación por membrana extracorpórea o derivación cardiopulmonar, es fundamental. La reanimación debe prolongarse, porque el pronóstico puede ser bueno. Un potasio sérico mayor de 12 mEq/L sugiere que la reanimación no será exitosa.
+R: Guía del Consejo Europeo de Resucitación para circunstancias especiales ;; Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón
+
+@ urg|environmental_emergencies|hypothermia|3|complication_prognosis
+V: Mujer de 70 años con hipotermia moderada que es recalentada activamente con mantas térmicas en todo el cuerpo. Durante el recalentamiento presenta hipotensión y la temperatura central baja de 31 a 30 grados.
+P: ¿Cuál es la complicación más probable del recalentamiento?
++ Caída posterior de la temperatura central y colapso por recalentamiento, por retorno de sangre fría periférica y vasodilatación || El recalentamiento de las extremidades libera sangre fría y causa vasodilatación.
+- anchoring | Infección grave como única explicación || La relación temporal con el recalentamiento sugiere otra causa.
+- availability_heuristic | Hipertermia por sobrecalentamiento || La temperatura bajó.
+- representativeness_heuristic | Infarto agudo de miocardio como única causa || El fenómeno es característico del recalentamiento.
+- premature_closure | Error del termómetro || Es un fenómeno fisiológico descrito.
+- framing_effect | Reacción alérgica a las mantas térmicas || No es la explicación.
+- complexity_bias | Insuficiencia suprarrenal primaria como única explicación || El contexto lo explica.
+- base_rate_fallacy | El recalentamiento nunca tiene complicaciones || Puede causar colapso.
+- belief_bias | Hay que recalentar primero las extremidades || Se prioriza el tronco.
+- omission_bias | No administrar líquidos calientes intravenosos || Ayudan a prevenir la hipotensión.
+E: Durante el recalentamiento de la hipotermia pueden ocurrir complicaciones. La caída posterior de la temperatura central se debe al retorno de sangre fría y acidótica de las extremidades al recalentarlas y a la vasodilatación periférica. El colapso por recalentamiento es la hipotensión por vasodilatación con hipovolemia relativa. Para prevenirlas se recalienta primero el tronco, se administran líquidos intravenosos calientes, se manipula con suavidad y se vigila la presión arterial, el ritmo cardiaco, el potasio y la glucosa. Las arritmias también pueden aparecer durante el recalentamiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipotermia accidental ;; Guía del Consejo Europeo de Resucitación para circunstancias especiales
+
+@ urg|environmental_emergencies|hypothermia|2|initial_study
+V: Hombre de 75 años encontrado en su casa sin calefacción en invierno, con temperatura axilar que no registra en el termómetro digital convencional. Está somnoliento y frío al tacto.
+P: ¿Cuál es la medición inicial más apropiada?
++ Temperatura central con termómetro de baja lectura, como esofágico, rectal o vesical || Los termómetros convencionales no miden temperaturas bajas.
+- anchoring | Temperatura axilar repetida con el mismo termómetro || No registra temperaturas bajas.
+- availability_heuristic | Temperatura timpánica como único método en hipotermia grave || Puede ser poco confiable.
+- representativeness_heuristic | Estimar la temperatura por el tacto || No es confiable.
+- premature_closure | Asumir normotermia porque el termómetro no marcó nada || Puede estar en hipotermia grave.
+- framing_effect | Temperatura oral con el paciente somnoliento || No es segura ni confiable.
+- complexity_bias | Termografía infrarroja corporal || No mide la temperatura central.
+- base_rate_fallacy | La hipotermia solo ocurre al aire libre || También en casa sin calefacción.
+- belief_bias | La temperatura de la piel refleja la central || No la refleja.
+- omission_bias | No medir glucosa ni buscar causas como hipotiroidismo o sepsis || Son causas asociadas.
+E: El diagnóstico de la hipotermia requiere medir la temperatura central, porque la temperatura de la piel y las mediciones axilares u orales no son confiables, y muchos termómetros convencionales no registran valores menores de 34 grados. Se recomiendan termómetros de baja lectura en el esófago inferior, que es el método más preciso en pacientes intubados, o en el recto o la vejiga. En adultos mayores la hipotermia puede ocurrir en interiores sin calefacción, y se asocia con hipotiroidismo, sepsis, hipoglucemia, fármacos sedantes, alcohol y deterioro cognitivo, que deben buscarse.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipotermia accidental ;; Guía del Consejo Europeo de Resucitación para circunstancias especiales
+
+@ urg|environmental_emergencies|hypothermia|2|prevention_screening
+V: Durante la temporada invernal, la jurisdicción sanitaria de una ciudad del norte del país planea acciones para reducir las muertes por frío.
+P: ¿Cuál es la medida de prevención más eficaz?
++ Identificar y proteger a grupos vulnerables, como personas en situación de calle y adultos mayores, con refugios temporales, abrigo y orientación sobre el uso seguro de calentadores || Reduce las lesiones por frío y las intoxicaciones por monóxido de carbono.
+- anchoring | Recomendar el consumo de alcohol para calentarse || Aumenta la pérdida de calor.
+- availability_heuristic | Recomendar usar anafres de carbón en habitaciones cerradas || Causa intoxicación por monóxido de carbono.
+- representativeness_heuristic | Solo vacunar contra la influenza sin otras acciones || Es útil, pero no previene la hipotermia.
+- premature_closure | Distribuir antipiréticos || No previenen la hipotermia.
+- framing_effect | Recomendar dormir con ropa húmeda || Aumenta la pérdida de calor.
+- complexity_bias | Hospitalizar a todos los adultos mayores durante el invierno || No es práctico.
+- base_rate_fallacy | Las muertes por frío solo ocurren en la montaña || Ocurren también en zonas urbanas.
+- belief_bias | Los calentadores de gas son seguros en cualquier espacio || Requieren ventilación.
+- omission_bias | No vigilar a adultos mayores que viven solos || Son de alto riesgo.
+E: Las temperaturas bajas aumentan la mortalidad por hipotermia, infecciones respiratorias, eventos cardiovasculares e intoxicaciones por monóxido de carbono por el uso de calentadores y anafres en espacios cerrados. Los grupos de mayor riesgo son las personas en situación de calle, adultos mayores que viven solos, niños pequeños, personas con alcoholismo y enfermedades crónicas. Las medidas preventivas incluyen refugios temporales, abrigo con varias capas de ropa, alimentación adecuada, evitar el alcohol, ventilar los espacios con calentadores, vacunación contra influenza y vigilancia de personas vulnerables. La Secretaría de Salud emite alertas en temporada invernal.
+R: Lineamientos de la Secretaría de Salud para la atención de temperaturas extremas ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la hipotermia accidental

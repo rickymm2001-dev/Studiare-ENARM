@@ -1,0 +1,1145 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "urg-07a-cetoacidosis-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "diabetic_ketoacidosis",
+      "vignette": "Mujer de 19 años con diabetes tipo 1 que suspendió la insulina hace 2 días. Presenta vómito, dolor abdominal, respiración profunda y rápida y aliento afrutado. Glucosa de 480 mg/dL, pH de 7.15, bicarbonato de 9 mEq/L, brecha aniónica de 24 y cetonas séricas positivas.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Abdomen agudo quirúrgico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El dolor abdominal es parte de la cetoacidosis."
+        },
+        {
+          "key": "b",
+          "text": "Acidosis láctica por metformina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No toma metformina y hay cetonas."
+        },
+        {
+          "key": "c",
+          "text": "La respiración de Kussmaul indica neumonía",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es compensación respiratoria de la acidosis."
+        },
+        {
+          "key": "d",
+          "text": "Hipoglucemia grave",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La glucosa está alta."
+        },
+        {
+          "key": "e",
+          "text": "Cetoacidosis diabética grave",
+          "correct": true,
+          "rationale": "Hiperglucemia, acidosis metabólica con brecha aniónica elevada y cetonemia."
+        },
+        {
+          "key": "f",
+          "text": "Estado hiperosmolar hiperglucémico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "En este no hay acidosis importante ni cetosis significativa."
+        },
+        {
+          "key": "g",
+          "text": "Intoxicación por metanol",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Las cetonas y la hiperglucemia orientan a cetoacidosis."
+        },
+        {
+          "key": "h",
+          "text": "Cetoacidosis alcohólica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La glucosa está muy elevada en un diabético tipo 1."
+        },
+        {
+          "key": "i",
+          "text": "Gastroenteritis aguda con deshidratación simple",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la acidosis con cetonas."
+        },
+        {
+          "key": "j",
+          "text": "La cetoacidosis solo ocurre en el debut de la diabetes",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "También por omisión de insulina o infección."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "f"
+      ],
+      "explanation": "La cetoacidosis diabética se caracteriza por la tríada de hiperglucemia, generalmente mayor de 250 mg/dL, acidosis metabólica con pH menor de 7.3 y bicarbonato menor de 18 mEq/L con brecha aniónica elevada, y cetonemia o cetonuria. Es más frecuente en la diabetes tipo 1, desencadenada por omisión de insulina, infecciones, debut de la enfermedad, infarto o fármacos como los inhibidores del cotransportador de sodio y glucosa tipo 2. Se manifiesta con poliuria, polidipsia, vómito, dolor abdominal, deshidratación, respiración de Kussmaul y aliento afrutado. Se clasifica en leve, moderada y grave según el pH, el bicarbonato y el estado mental.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en el adulto",
+        "Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas"
+      ]
+    },
+    {
+      "key": "urg-07a-cetoacidosis-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "diabetic_ketoacidosis",
+      "vignette": "Hombre de 25 años con cetoacidosis diabética. Presión de 95/60 mmHg, frecuencia cardiaca de 120 y mucosas secas. Potasio sérico de 4.8 mEq/L.",
+      "prompt": "¿Cuál es el tratamiento inicial más importante en la primera hora?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Insulina en bolo antes de cualquier líquido",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede agravar la hipotensión y la hipopotasemia."
+        },
+        {
+          "key": "b",
+          "text": "Solución glucosada al 5 por ciento desde el inicio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se agrega cuando la glucosa baja a 200 a 250 mg/dL."
+        },
+        {
+          "key": "c",
+          "text": "Reposición de volumen con solución salina al 0.9 por ciento o cristaloide balanceado, 15 a 20 mL por kilo en la primera hora",
+          "correct": true,
+          "rationale": "La rehidratación es la medida inicial prioritaria."
+        },
+        {
+          "key": "d",
+          "text": "La insulina corrige la deshidratación por sí sola",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No repone el volumen."
+        },
+        {
+          "key": "e",
+          "text": "Restringir líquidos para evitar edema cerebral en adultos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La deshidratación es importante."
+        },
+        {
+          "key": "f",
+          "text": "El déficit de líquidos en cetoacidosis es pequeño",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Suele ser de 5 a 7 litros."
+        },
+        {
+          "key": "g",
+          "text": "No buscar el factor desencadenante",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte del manejo."
+        },
+        {
+          "key": "h",
+          "text": "Hemodiálisis urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "i",
+          "text": "Insulina subcutánea de acción prolongada como única medida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es el tratamiento inicial en cetoacidosis grave."
+        },
+        {
+          "key": "j",
+          "text": "Bicarbonato de sodio de rutina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicado con pH mayor de 6.9."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "El tratamiento de la cetoacidosis diabética incluye reposición de líquidos, insulina, corrección de electrolitos, en especial potasio, y tratamiento del factor desencadenante. La rehidratación es la medida inicial más importante: se administran 15 a 20 mL por kilo de solución salina al 0.9 por ciento o cristaloide balanceado en la primera hora, y después se ajusta según el sodio corregido y el estado hemodinámico. La rehidratación por sí sola reduce la glucosa y mejora la perfusión. Antes de iniciar la insulina se verifica que el potasio sea de al menos 3.3 mEq/L. Cuando la glucosa baja a 200 a 250 mg/dL se agrega glucosa a los líquidos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en el adulto",
+        "Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas"
+      ]
+    },
+    {
+      "key": "urg-07a-cetoacidosis-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "diabetic_ketoacidosis",
+      "vignette": "Mujer de 30 años con cetoacidosis diabética que recibió 1 litro de solución salina. Glucosa de 520 mg/dL, pH de 7.10 y potasio sérico de 2.9 mEq/L.",
+      "prompt": "¿Cuál es el siguiente paso más apropiado?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "El potasio sérico normal descarta un déficit corporal en cetoacidosis",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La acidosis desplaza el potasio fuera de la célula."
+        },
+        {
+          "key": "b",
+          "text": "Iniciar insulina en infusión de inmediato",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede causar hipopotasemia grave con arritmias."
+        },
+        {
+          "key": "c",
+          "text": "Reponer potasio intravenoso y diferir la insulina hasta que el potasio sea de al menos 3.3 mEq/L",
+          "correct": true,
+          "rationale": "La insulina desplaza el potasio a la célula y puede causar arritmias."
+        },
+        {
+          "key": "d",
+          "text": "Suspender los líquidos intravenosos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Siguen siendo necesarios."
+        },
+        {
+          "key": "e",
+          "text": "Esperar al siguiente control sin reponer potasio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La hipopotasemia es peligrosa."
+        },
+        {
+          "key": "f",
+          "text": "Potasio en bolo intravenoso rápido sin dilución",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es peligroso."
+        },
+        {
+          "key": "g",
+          "text": "Administrar bicarbonato de sodio para corregir el pH",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Agrava la hipopotasemia y no está indicado con pH de 7.10."
+        },
+        {
+          "key": "h",
+          "text": "No monitorear el electrocardiograma",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es indispensable."
+        },
+        {
+          "key": "i",
+          "text": "Hemodiálisis",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "j",
+          "text": "El potasio corporal total es normal en la cetoacidosis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Hay un déficit corporal total."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "d",
+        "g"
+      ],
+      "explanation": "En la cetoacidosis diabética existe un déficit corporal total de potasio por la diuresis osmótica y el vómito, aunque el potasio sérico inicial puede ser normal o alto porque la acidosis y la falta de insulina lo desplazan fuera de la célula. La insulina y la corrección de la acidosis lo devuelven al interior de la célula y pueden causar hipopotasemia grave. Si el potasio es menor de 3.3 mEq/L, se repone y se difiere la insulina hasta superarlo. Si está entre 3.3 y 5.2 mEq/L, se agrega potasio a los líquidos. Si es mayor de 5.2, se vigila sin reponer. Se monitoriza el electrocardiograma.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en el adulto",
+        "Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas"
+      ]
+    },
+    {
+      "key": "urg-07a-cetoacidosis-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "diabetic_ketoacidosis",
+      "vignette": "Hombre de 28 años con cetoacidosis diabética grave, potasio de 4.2 mEq/L, que ya recibió reanimación inicial con líquidos.",
+      "prompt": "¿Cuál es el esquema de insulina de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "No medir glucosa capilar cada hora",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es indispensable."
+        },
+        {
+          "key": "b",
+          "text": "Suspender la insulina cuando la glucosa baja a 250 mg/dL",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se continúa agregando glucosa hasta resolver la acidosis."
+        },
+        {
+          "key": "c",
+          "text": "Insulina NPH subcutánea cada 12 horas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es adecuada en la fase aguda grave."
+        },
+        {
+          "key": "d",
+          "text": "La meta es normalizar la glucosa en la primera hora",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se busca un descenso gradual."
+        },
+        {
+          "key": "e",
+          "text": "Bomba de insulina subcutánea programable en urgencias",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estándar en cetoacidosis grave."
+        },
+        {
+          "key": "f",
+          "text": "Hipoglucemiantes orales",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No están indicados."
+        },
+        {
+          "key": "g",
+          "text": "La cetoacidosis se resuelve cuando se normaliza la glucosa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se resuelve cuando se corrige la acidosis."
+        },
+        {
+          "key": "h",
+          "text": "Insulina regular en infusión intravenosa continua a 0.1 unidades por kilo por hora",
+          "correct": true,
+          "rationale": "Es el esquema estándar en cetoacidosis moderada a grave."
+        },
+        {
+          "key": "i",
+          "text": "Bolos grandes de insulina intravenosa cada hora sin infusión",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Causan descensos bruscos e hipopotasemia."
+        },
+        {
+          "key": "j",
+          "text": "Insulina glargina como única terapia inicial",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es el tratamiento inicial de la cetoacidosis grave."
+        }
+      ],
+      "canonical": [
+        "c",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "En la cetoacidosis moderada a grave se usa insulina regular en infusión intravenosa continua, habitualmente a 0.1 unidades por kilo por hora, con o sin bolo inicial, una vez que el potasio es de al menos 3.3 mEq/L. Se busca un descenso de la glucosa de 50 a 75 mg/dL por hora. Cuando la glucosa baja a 200 a 250 mg/dL se agrega solución glucosada y se reduce la infusión, sin suspenderla, hasta resolver la cetoacidosis, que se define por pH mayor de 7.3, bicarbonato de 15 o más y brecha aniónica normal. En la cetoacidosis leve puede usarse insulina rápida subcutánea.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en el adulto",
+        "Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas"
+      ]
+    },
+    {
+      "key": "urg-07a-cetoacidosis-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "diabetic_ketoacidosis",
+      "vignette": "Mujer de 22 años con cetoacidosis diabética que ya se resolvió: pH de 7.35, bicarbonato de 19 y brecha aniónica normal. Tolera la vía oral. Recibe insulina en infusión.",
+      "prompt": "¿Cuál es la conducta más apropiada para la transición de la insulina?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aplicar insulina basal subcutánea 1 a 2 horas antes de suspender la infusión intravenosa",
+          "correct": true,
+          "rationale": "Evita el rebote de hiperglucemia y la recurrencia de la cetoacidosis."
+        },
+        {
+          "key": "b",
+          "text": "La cetoacidosis no recurre tras resolverse",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Recurre si se suspende la insulina."
+        },
+        {
+          "key": "c",
+          "text": "Iniciar bomba de insulina antes del egreso en todos los casos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es obligatorio."
+        },
+        {
+          "key": "d",
+          "text": "Aplicar solo insulina rápida antes de comer sin basal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Falta la insulina basal."
+        },
+        {
+          "key": "e",
+          "text": "Suspender toda la insulina porque ya se resolvió",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La paciente con diabetes tipo 1 requiere insulina siempre."
+        },
+        {
+          "key": "f",
+          "text": "No educar sobre el manejo de días de enfermedad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Previene nuevas crisis."
+        },
+        {
+          "key": "g",
+          "text": "Cambiar a hipoglucemiantes orales",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No son útiles en diabetes tipo 1."
+        },
+        {
+          "key": "h",
+          "text": "Suspender la infusión y aplicar la insulina subcutánea al día siguiente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Causa recurrencia de la cetoacidosis."
+        },
+        {
+          "key": "i",
+          "text": "Mantener la infusión intravenosa indefinidamente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es necesario si tolera la vía oral."
+        },
+        {
+          "key": "j",
+          "text": "La insulina intravenosa tiene una vida media larga",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es de pocos minutos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "Una vez resuelta la cetoacidosis y cuando el paciente tolera la vía oral, se realiza la transición a insulina subcutánea. La insulina basal subcutánea debe aplicarse 1 a 2 horas antes de suspender la infusión intravenosa, porque la insulina intravenosa tiene una vida media de pocos minutos y su suspensión sin cobertura causa hiperglucemia de rebote y recurrencia de la cetoacidosis. Se usa un esquema basal bolo. Antes del egreso se educa al paciente sobre el manejo de días de enfermedad, el monitoreo de glucosa y cetonas, y no suspender la insulina aunque no coma.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en el adulto",
+        "Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas"
+      ]
+    },
+    {
+      "key": "urg-07a-cetoacidosis-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "diabetic_ketoacidosis",
+      "vignette": "Hombre de 72 años con diabetes tipo 2 que vive solo y es traído por confusión progresiva de 5 días. Glucosa de 980 mg/dL, osmolaridad sérica efectiva de 345 mOsm/kg, pH de 7.34, bicarbonato de 22 y cetonas negativas.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cetoacidosis diabética",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay acidosis ni cetosis significativas."
+        },
+        {
+          "key": "b",
+          "text": "Estado hiperosmolar hiperglucémico",
+          "correct": true,
+          "rationale": "Hiperglucemia extrema con hiperosmolaridad y sin acidosis significativa."
+        },
+        {
+          "key": "c",
+          "text": "Acidosis láctica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El pH es casi normal."
+        },
+        {
+          "key": "d",
+          "text": "Solo ocurre en diabetes tipo 1",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es típico de la diabetes tipo 2."
+        },
+        {
+          "key": "e",
+          "text": "El estado hiperosmolar es más leve que la cetoacidosis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tiene mayor mortalidad."
+        },
+        {
+          "key": "f",
+          "text": "Demencia avanzada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El cuadro es agudo."
+        },
+        {
+          "key": "g",
+          "text": "Encefalitis viral como primera opción",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La hiperosmolaridad explica el cuadro."
+        },
+        {
+          "key": "h",
+          "text": "Diabetes insípida",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La glucosa muy alta explica el cuadro."
+        },
+        {
+          "key": "i",
+          "text": "Hipoglucemia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La glucosa está alta."
+        },
+        {
+          "key": "j",
+          "text": "Evento vascular cerebral como única causa de la confusión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La hiperosmolaridad explica la alteración mental."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "El estado hiperosmolar hiperglucémico es típico de adultos mayores con diabetes tipo 2, frecuentemente desencadenado por infecciones, ingesta inadecuada de líquidos o fármacos. Se caracteriza por hiperglucemia extrema, habitualmente mayor de 600 mg/dL, osmolaridad sérica efectiva mayor de 320 mOsm/kg, deshidratación grave y alteración del estado mental, sin acidosis significativa, con pH mayor de 7.3 y bicarbonato mayor de 15, y sin cetosis importante, porque la insulina residual impide la cetogénesis. Su evolución es de días y tiene mayor mortalidad que la cetoacidosis. El tratamiento es rehidratación intensa, insulina a dosis bajas y corrección de electrolitos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del estado hiperosmolar hiperglucémico",
+        "Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas"
+      ]
+    },
+    {
+      "key": "urg-07a-cetoacidosis-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "diabetic_ketoacidosis",
+      "vignette": "Hombre de 35 años con cetoacidosis diabética grave, pH de 6.85, bicarbonato de 3 mEq/L y potasio de 4.5 mEq/L, con inestabilidad hemodinámica.",
+      "prompt": "¿Cuál es el tratamiento adicional indicado en este caso?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Bicarbonato de sodio intravenoso con reposición de potasio",
+          "correct": true,
+          "rationale": "Se considera solo con pH menor de 6.9."
+        },
+        {
+          "key": "b",
+          "text": "Solo líquidos sin insulina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La insulina es necesaria."
+        },
+        {
+          "key": "c",
+          "text": "Suspender la insulina hasta corregir el pH",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La insulina es esencial para resolver la cetosis."
+        },
+        {
+          "key": "d",
+          "text": "No vigilar el potasio durante el bicarbonato",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede bajar."
+        },
+        {
+          "key": "e",
+          "text": "Ácido clorhídrico intravenoso",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Agrava la acidosis."
+        },
+        {
+          "key": "f",
+          "text": "Bicarbonato en todos los pacientes con cetoacidosis",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Solo con pH menor de 6.9."
+        },
+        {
+          "key": "g",
+          "text": "El pH se normaliza más rápido solo con bicarbonato",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El tratamiento de la causa es la insulina."
+        },
+        {
+          "key": "h",
+          "text": "Hiperventilación mecánica como único tratamiento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No corrige la causa."
+        },
+        {
+          "key": "i",
+          "text": "Trasplante de páncreas urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "j",
+          "text": "El bicarbonato no tiene efectos adversos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede causar hipopotasemia y edema cerebral."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "h"
+      ],
+      "explanation": "El bicarbonato de sodio no se recomienda de rutina en la cetoacidosis diabética, porque la insulina y los líquidos corrigen la acidosis al detener la cetogénesis. Su uso se asocia con hipopotasemia, alcalosis de rebote y, en niños, edema cerebral. Se considera solo en acidosis muy grave, con pH menor de 6.9, por el riesgo de depresión miocárdica y arritmias, administrándolo en infusión con potasio y repitiendo hasta que el pH supere 7.0. La insulina, los líquidos y la reposición de potasio siguen siendo la base del tratamiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en el adulto",
+        "Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas"
+      ]
+    },
+    {
+      "key": "urg-07a-cetoacidosis-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "diabetic_ketoacidosis",
+      "vignette": "Niño de 9 años con cetoacidosis diabética en tratamiento con líquidos e insulina. A las 6 horas presenta cefalea, bradicardia, hipertensión y disminución del estado de conciencia.",
+      "prompt": "¿Cuál es la complicación más probable?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hipoglucemia por la insulina como única causa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La tríada de Cushing sugiere edema cerebral."
+        },
+        {
+          "key": "b",
+          "text": "El edema cerebral siempre aparece antes del tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Suele aparecer en las primeras horas del tratamiento."
+        },
+        {
+          "key": "c",
+          "text": "Hiperglucemia persistente",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la tríada."
+        },
+        {
+          "key": "d",
+          "text": "El edema cerebral solo ocurre en adultos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es más frecuente en niños."
+        },
+        {
+          "key": "e",
+          "text": "Crisis de ansiedad por el ambiente hospitalario",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "f",
+          "text": "Tumor cerebral no diagnosticado",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El contexto orienta a edema cerebral."
+        },
+        {
+          "key": "g",
+          "text": "Edema cerebral",
+          "correct": true,
+          "rationale": "Es la complicación más temida de la cetoacidosis en niños."
+        },
+        {
+          "key": "h",
+          "text": "Hipopotasemia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la hipertensión con bradicardia."
+        },
+        {
+          "key": "i",
+          "text": "Mejoría de la cetoacidosis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El cuadro neurológico indica complicación."
+        },
+        {
+          "key": "j",
+          "text": "Meningitis bacteriana",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay datos infecciosos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El edema cerebral es la complicación más grave de la cetoacidosis diabética en niños y adolescentes, con alta mortalidad y secuelas. Suele aparecer entre 4 y 12 horas después de iniciar el tratamiento. Los factores de riesgo incluyen edad pequeña, debut de la diabetes, acidosis grave, nitrógeno ureico elevado, uso de bicarbonato y una corrección rápida de la osmolaridad. Se manifiesta con cefalea, vómito, alteración del estado mental, irritabilidad y la tríada de Cushing, con bradicardia, hipertensión y respiración irregular. Se trata de inmediato con manitol o solución salina hipertónica, reduciendo el aporte de líquidos, sin esperar la imagen.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en niños",
+        "Guía de la Sociedad Internacional de Diabetes Pediátrica y del Adolescente"
+      ]
+    },
+    {
+      "key": "urg-07a-cetoacidosis-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "diabetic_ketoacidosis",
+      "vignette": "Mujer de 45 años con diabetes tipo 2 en tratamiento con empagliflozina que se sometió a una cirugía hace 2 días con ayuno prolongado. Presenta náusea, taquipnea y malestar. Glucosa de 190 mg/dL, pH de 7.18, bicarbonato de 10 y cetonas séricas elevadas.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Acidosis láctica por metformina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Hay cetonas elevadas."
+        },
+        {
+          "key": "b",
+          "text": "No suspender el fármaco antes de cirugías",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Se suspende días antes."
+        },
+        {
+          "key": "c",
+          "text": "Cetoacidosis diabética euglucémica asociada a inhibidor del cotransportador de sodio y glucosa tipo 2",
+          "correct": true,
+          "rationale": "Acidosis con cetonas y glucosa menor de 250 mg/dL."
+        },
+        {
+          "key": "d",
+          "text": "Descartar cetoacidosis porque la glucosa es menor de 250 mg/dL",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Estos fármacos causan cetoacidosis con glucosa casi normal."
+        },
+        {
+          "key": "e",
+          "text": "Los inhibidores del cotransportador no tienen efectos metabólicos graves",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Pueden causar cetoacidosis."
+        },
+        {
+          "key": "f",
+          "text": "Intoxicación por salicilatos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El contexto orienta a cetoacidosis euglucémica."
+        },
+        {
+          "key": "g",
+          "text": "Estado hiperosmolar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La glucosa no es muy alta y hay acidosis."
+        },
+        {
+          "key": "h",
+          "text": "Cetosis de ayuno benigna",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La acidosis es grave."
+        },
+        {
+          "key": "i",
+          "text": "Náusea posoperatoria simple",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la acidosis."
+        },
+        {
+          "key": "j",
+          "text": "La cetoacidosis no ocurre en diabetes tipo 2",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede ocurrir, sobre todo con estos fármacos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "g"
+      ],
+      "explanation": "La cetoacidosis diabética euglucémica se caracteriza por acidosis metabólica con cetonemia y glucosa menor de 250 mg/dL. Se asocia con los inhibidores del cotransportador de sodio y glucosa tipo 2, como empagliflozina, dapagliflozina y canagliflozina, sobre todo en situaciones de ayuno, cirugía, enfermedad aguda, deshidratación, consumo de alcohol o reducción de la insulina. También ocurre en el embarazo. Puede pasar desapercibida por la glucosa casi normal. El tratamiento es suspender el fármaco, líquidos, insulina con glucosa desde el inicio y reposición de potasio. Se recomienda suspender estos fármacos 3 a 4 días antes de una cirugía programada.",
+      "gpcRefs": [
+        "Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas",
+        "Estándares de atención en diabetes de la Asociación Americana de Diabetes"
+      ]
+    },
+    {
+      "key": "urg-07a-cetoacidosis-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "diabetic_ketoacidosis",
+      "vignette": "Hombre de 30 años con cetoacidosis diabética. Sodio de 128 mEq/L, cloro de 92 mEq/L, bicarbonato de 8 mEq/L y glucosa de 600 mg/dL.",
+      "prompt": "¿Qué indica el cálculo de la brecha aniónica?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Una brecha de 8",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "b",
+          "text": "Que hay alcalosis metabólica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Hay acidosis."
+        },
+        {
+          "key": "c",
+          "text": "Que el sodio real es de 128 sin corrección",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe corregirse por la glucosa."
+        },
+        {
+          "key": "d",
+          "text": "Que se requiere medir lactato para calcular la brecha",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario para el cálculo."
+        },
+        {
+          "key": "e",
+          "text": "Una brecha aniónica de 28, elevada por los cetoácidos",
+          "correct": true,
+          "rationale": "Se calcula como sodio menos cloro más bicarbonato."
+        },
+        {
+          "key": "f",
+          "text": "Una glucosa alta no afecta el sodio medido",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Causa seudohiponatremia dilucional."
+        },
+        {
+          "key": "g",
+          "text": "Que la acidosis es hiperclorémica de brecha normal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La brecha está elevada."
+        },
+        {
+          "key": "h",
+          "text": "La brecha aniónica no tiene utilidad en la cetoacidosis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ayuda a vigilar la resolución."
+        },
+        {
+          "key": "i",
+          "text": "Una brecha de 12, normal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "j",
+          "text": "Una brecha de 36",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es un cálculo erróneo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "La brecha aniónica se calcula como sodio menos la suma de cloro y bicarbonato; su valor normal es de 8 a 12 mEq/L. En este paciente es 128 menos 100, es decir, 28 mEq/L, elevada por la acumulación de cetoácidos como el beta hidroxibutirato y el acetoacetato. La normalización de la brecha es uno de los criterios de resolución de la cetoacidosis. Además, la hiperglucemia causa hiponatremia por desplazamiento de agua al espacio extracelular, por lo que el sodio debe corregirse sumando 1.6 a 2.4 mEq/L por cada 100 mg/dL de glucosa por arriba de 100; aquí el sodio corregido sería de unos 136 a 140.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en el adulto",
+        "Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas"
+      ]
+    },
+    {
+      "key": "urg-07a-cetoacidosis-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "diabetic_ketoacidosis",
+      "vignette": "Mujer de 20 años con diabetes tipo 1 que llega con cetoacidosis diabética. Refiere tos y fiebre de 3 días. Es su tercer episodio de cetoacidosis en un año.",
+      "prompt": "¿Cuál es el estudio inicial más importante además de los de laboratorio metabólico?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Péptido C como estudio urgente prioritario",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No cambia el manejo agudo."
+        },
+        {
+          "key": "b",
+          "text": "Prueba de tolerancia a la glucosa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "c",
+          "text": "Las infecciones rara vez desencadenan cetoacidosis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Son una causa frecuente."
+        },
+        {
+          "key": "d",
+          "text": "Resonancia magnética de páncreas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "e",
+          "text": "Ningún estudio adicional porque la causa siempre es la omisión de insulina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Debe buscarse el desencadenante."
+        },
+        {
+          "key": "f",
+          "text": "Biopsia pancreática",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "g",
+          "text": "Los episodios repetidos no requieren investigar factores psicosociales",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Deben investigarse."
+        },
+        {
+          "key": "h",
+          "text": "Tomografía de cuerpo completo de rutina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "i",
+          "text": "No evaluar la adherencia y el acceso a insulina",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son causas frecuentes de recurrencia."
+        },
+        {
+          "key": "j",
+          "text": "Búsqueda del factor desencadenante con radiografía de tórax, cultivos, examen general de orina y prueba de embarazo",
+          "correct": true,
+          "rationale": "Las infecciones y la omisión de insulina son los desencadenantes más frecuentes."
+        }
+      ],
+      "canonical": [
+        "b",
+        "d",
+        "e",
+        "j"
+      ],
+      "explanation": "Los factores desencadenantes de la cetoacidosis diabética deben buscarse en todos los pacientes. Los más frecuentes son las infecciones, como neumonía e infección urinaria, y la omisión o dosis insuficiente de insulina. Otros son el debut de la diabetes, el infarto, la pancreatitis, el evento vascular cerebral, el embarazo, el consumo de alcohol o drogas y los fármacos como esteroides e inhibidores del cotransportador. En pacientes con episodios recurrentes, sobre todo jóvenes, se deben investigar problemas de adherencia, acceso a la insulina, trastornos de la conducta alimentaria, depresión y factores psicosociales.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en el adulto",
+        "Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas"
+      ]
+    },
+    {
+      "key": "urg-07a-cetoacidosis-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "diabetic_ketoacidosis",
+      "vignette": "Hombre de 75 años con estado hiperosmolar hiperglucémico, glucosa de 900 mg/dL, sodio corregido de 158 mEq/L y deshidratación grave. Presión de 90/60 mmHg.",
+      "prompt": "¿Cuál es el tratamiento de elección inicial?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solución glucosada al 5 por ciento desde el inicio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Agrava la hiperglucemia."
+        },
+        {
+          "key": "b",
+          "text": "Bajar la glucosa a 100 mg/dL en la primera hora",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El descenso rápido aumenta el riesgo de edema cerebral."
+        },
+        {
+          "key": "c",
+          "text": "Hemodiálisis urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "d",
+          "text": "Restricción de líquidos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Agrava la deshidratación."
+        },
+        {
+          "key": "e",
+          "text": "El déficit de líquidos es menor que en la cetoacidosis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Suele ser mayor."
+        },
+        {
+          "key": "f",
+          "text": "Insulina en dosis altas antes de líquidos para bajar rápido la glucosa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede causar colapso circulatorio."
+        },
+        {
+          "key": "g",
+          "text": "Solución salina al 0.9 por ciento para restaurar el volumen, seguida de soluciones según el sodio corregido, con descenso gradual de la osmolaridad",
+          "correct": true,
+          "rationale": "La rehidratación es la base del tratamiento."
+        },
+        {
+          "key": "h",
+          "text": "No buscar infección como desencadenante",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es frecuente."
+        },
+        {
+          "key": "i",
+          "text": "La osmolaridad debe normalizarse en minutos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Debe descender gradualmente."
+        },
+        {
+          "key": "j",
+          "text": "Bicarbonato de sodio de rutina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay acidosis importante."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "g"
+      ],
+      "explanation": "El tratamiento del estado hiperosmolar hiperglucémico se basa en la rehidratación, porque el déficit de agua es mayor que en la cetoacidosis, de 8 a 12 litros. Se inicia con solución salina al 0.9 por ciento para restaurar el volumen circulante, y después se ajusta según el sodio corregido, con soluciones hipotónicas si el sodio es alto. La osmolaridad debe descender gradualmente, no más de 3 a 8 mOsm/kg por hora, para evitar el edema cerebral. La insulina se inicia a dosis bajas cuando el paciente ha recibido líquidos y el potasio es adecuado. Se busca y trata el desencadenante y se previene la trombosis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del estado hiperosmolar hiperglucémico",
+        "Consenso de la Asociación Americana de Diabetes sobre crisis hiperglucémicas"
+      ]
+    }
+  ]
+}

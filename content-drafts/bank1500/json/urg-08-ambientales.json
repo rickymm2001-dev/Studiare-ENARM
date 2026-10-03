@@ -1,0 +1,2000 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "urg-08-ambientales-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "heat_stroke",
+      "vignette": "Hombre de 22 años, militar en entrenamiento, que se desploma durante una marcha bajo el sol a 38 grados. Presenta confusión, agitación, piel caliente y temperatura central de 41.5 grados. Frecuencia cardiaca de 140.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Agotamiento por calor",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "En este no hay disfunción neurológica grave."
+        },
+        {
+          "key": "b",
+          "text": "Meningitis bacteriana",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El contexto de esfuerzo en calor orienta a golpe de calor."
+        },
+        {
+          "key": "c",
+          "text": "El golpe de calor solo ocurre en adultos mayores",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "También en jóvenes con esfuerzo."
+        },
+        {
+          "key": "d",
+          "text": "Calambres por calor",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Son espasmos musculares sin alteración mental."
+        },
+        {
+          "key": "e",
+          "text": "Síncope vasovagal simple",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la hipertermia ni la confusión persistente."
+        },
+        {
+          "key": "f",
+          "text": "Golpe de calor por esfuerzo",
+          "correct": true,
+          "rationale": "Hipertermia mayor de 40 grados con disfunción del sistema nervioso central tras ejercicio en calor."
+        },
+        {
+          "key": "g",
+          "text": "La sudoración presente descarta golpe de calor",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "En el golpe de calor por esfuerzo puede haber sudoración."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome neuroléptico maligno",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay antipsicóticos."
+        },
+        {
+          "key": "i",
+          "text": "Hipoglucemia por ejercicio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la temperatura de 41.5 grados."
+        },
+        {
+          "key": "j",
+          "text": "Hipertermia maligna",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se asocia con anestésicos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "f"
+      ],
+      "explanation": "El golpe de calor es una urgencia definida por temperatura central mayor de 40 grados con disfunción del sistema nervioso central, como confusión, delirio, convulsiones o coma. Hay dos formas: el clásico, en adultos mayores, niños y enfermos crónicos durante olas de calor, con piel seca, y el de esfuerzo, en personas jóvenes que realizan ejercicio intenso en ambientes calurosos, frecuentemente con sudoración. Puede causar rabdomiólisis, lesión renal, coagulación intravascular diseminada, falla hepática y muerte. Se distingue del agotamiento por calor, con temperatura menor de 40 grados y sin alteración neurológica grave.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del golpe de calor",
+        "Guía de la Sociedad de Medicina de Montaña para enfermedades por calor"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "heat_stroke",
+      "vignette": "Hombre de 25 años con golpe de calor por esfuerzo, temperatura de 41.8 grados y confusión. Está en el área de atención médica de un maratón con equipo disponible.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ácido acetilsalicílico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es eficaz y puede empeorar la coagulopatía."
+        },
+        {
+          "key": "b",
+          "text": "Esperar estudios de laboratorio antes de enfriar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "c",
+          "text": "La inmersión en agua fría está contraindicada en jóvenes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es el tratamiento de elección."
+        },
+        {
+          "key": "d",
+          "text": "No vigilar rabdomiólisis y lesión renal",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son complicaciones frecuentes."
+        },
+        {
+          "key": "e",
+          "text": "Enfriamiento rápido por inmersión en agua fría o helada hasta bajar la temperatura a 38.5 a 39 grados",
+          "correct": true,
+          "rationale": "Es el método más eficaz y reduce la mortalidad."
+        },
+        {
+          "key": "f",
+          "text": "Dantroleno de rutina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No ha demostrado beneficio."
+        },
+        {
+          "key": "g",
+          "text": "El enfriamiento lento es más seguro",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El enfriamiento rápido reduce la mortalidad."
+        },
+        {
+          "key": "h",
+          "text": "Cubrir con mantas para evitar escalofríos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Retiene el calor."
+        },
+        {
+          "key": "i",
+          "text": "Trasladar al hospital antes de iniciar el enfriamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El enfriamiento debe iniciarse de inmediato."
+        },
+        {
+          "key": "j",
+          "text": "Paracetamol intravenoso como tratamiento principal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los antipiréticos no son eficaces en el golpe de calor."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "El tratamiento del golpe de calor es el enfriamiento rápido, que debe iniciarse en el lugar. En el golpe de calor por esfuerzo, la inmersión en agua fría o helada es el método más eficaz, con descensos de 0.15 a 0.35 grados por minuto, y se mantiene hasta que la temperatura llega a 38.5 a 39 grados para evitar la hipotermia. Si no es posible, se usa enfriamiento por evaporación con agua y ventiladores, compresas frías en cuello, axilas e ingles y líquidos fríos. Los antipiréticos no son eficaces porque el mecanismo no es un cambio del termostato hipotalámico. Se vigilan rabdomiólisis, lesión renal y coagulopatía.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del golpe de calor",
+        "Guía de la Sociedad de Medicina de Montaña para enfermedades por calor"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "heat_stroke",
+      "vignette": "Mujer de 82 años que vive sola en un departamento sin ventilación durante una ola de calor. La encuentran confusa, con piel caliente y seca y temperatura de 40.8 grados. Toma diuréticos y anticolinérgicos.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Paracetamol y observación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los antipiréticos no son eficaces."
+        },
+        {
+          "key": "b",
+          "text": "Los diuréticos y anticolinérgicos no influyen en el riesgo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Lo aumentan."
+        },
+        {
+          "key": "c",
+          "text": "No revisar los medicamentos que alteran la termorregulación",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte de la prevención."
+        },
+        {
+          "key": "d",
+          "text": "Los adultos mayores toleran mejor el calor",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tienen mayor riesgo."
+        },
+        {
+          "key": "e",
+          "text": "Enfriamiento rápido por evaporación con agua tibia y ventiladores, compresas frías y soporte, vigilando complicaciones",
+          "correct": true,
+          "rationale": "Es un golpe de calor clásico en una adulta mayor."
+        },
+        {
+          "key": "f",
+          "text": "Dar de alta con recomendaciones de hidratación",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es una urgencia."
+        },
+        {
+          "key": "g",
+          "text": "Cubrirla con cobijas por la edad",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Retiene el calor."
+        },
+        {
+          "key": "h",
+          "text": "Esperar a que la temperatura baje sola en la sala",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El retraso aumenta la mortalidad."
+        },
+        {
+          "key": "i",
+          "text": "Considerarlo una infección y dar solo antibióticos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El contexto sugiere golpe de calor."
+        },
+        {
+          "key": "j",
+          "text": "Hemodiálisis para enfriar como primera opción",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el primer paso."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "El golpe de calor clásico afecta a adultos mayores, niños y personas con enfermedades crónicas durante olas de calor, especialmente si viven solos, sin ventilación, con movilidad reducida o toman fármacos que alteran la termorregulación, como diuréticos, anticolinérgicos, antipsicóticos y betabloqueadores. La piel suele estar seca. El tratamiento es el enfriamiento rápido; en adultos mayores se usa con frecuencia el enfriamiento por evaporación, con agua tibia rociada y ventiladores, más compresas frías, aunque la inmersión también es eficaz. Se brinda soporte y se vigilan las complicaciones. La prevención incluye identificar a personas vulnerables durante las olas de calor.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del golpe de calor",
+        "Lineamientos de la Secretaría de Salud para la atención de temperaturas extremas"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "heat_stroke",
+      "vignette": "Hombre de 30 años, obrero de la construcción, que tras trabajar bajo el sol presenta cefalea, náusea, debilidad, sudoración profusa y mareo. Temperatura de 38.6 grados, estado mental normal y presión de 100/60 mmHg.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Retirarlo del calor, reposo en lugar fresco, enfriamiento y rehidratación oral o intravenosa",
+          "correct": true,
+          "rationale": "Es un agotamiento por calor."
+        },
+        {
+          "key": "b",
+          "text": "Antibiótico por la fiebre",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay infección."
+        },
+        {
+          "key": "c",
+          "text": "La sudoración indica que no hay riesgo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La deshidratación sigue siendo un riesgo."
+        },
+        {
+          "key": "d",
+          "text": "El agotamiento por calor nunca progresa",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede progresar a golpe de calor."
+        },
+        {
+          "key": "e",
+          "text": "No recomendar pausas e hidratación en el trabajo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es la prevención."
+        },
+        {
+          "key": "f",
+          "text": "Hemodiálisis",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "g",
+          "text": "Restringir líquidos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Agrava la deshidratación."
+        },
+        {
+          "key": "h",
+          "text": "Continuar trabajando con más agua",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede progresar a golpe de calor."
+        },
+        {
+          "key": "i",
+          "text": "Antipiréticos como tratamiento principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No son eficaces."
+        },
+        {
+          "key": "j",
+          "text": "Inmersión en agua helada y traslado a terapia intensiva",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No tiene criterios de golpe de calor."
+        }
+      ],
+      "canonical": [
+        "a",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "El agotamiento por calor es un cuadro de deshidratación y depleción de sal por exposición al calor, con temperatura menor de 40 grados y sin alteración neurológica significativa. Se manifiesta con cefalea, náusea, vómito, debilidad, mareo, sudoración profusa, taquicardia e hipotensión ortostática. El tratamiento es retirar al paciente del calor, reposo en un lugar fresco, enfriamiento y rehidratación oral con soluciones con electrolitos o intravenosa si no tolera la vía oral. Si no mejora o aparece alteración mental, debe tratarse como golpe de calor. La prevención en trabajadores incluye aclimatación, pausas, sombra e hidratación.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del golpe de calor",
+        "Lineamientos de la Secretaría de Salud para la atención de temperaturas extremas"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "heat_stroke",
+      "vignette": "Hombre de 24 años con golpe de calor por esfuerzo, enfriado en el lugar. A las 24 horas presenta orina color refresco de cola, creatina cinasa de 85,000 U/L, creatinina de 3 mg/dL y sangrado en los sitios de punción con plaquetas bajas.",
+      "prompt": "¿Cuáles son las complicaciones más probables?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Deshidratación simple sin daño orgánico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Hay daño muscular, renal y hematológico."
+        },
+        {
+          "key": "b",
+          "text": "Rabdomiólisis con lesión renal aguda y coagulación intravascular diseminada",
+          "correct": true,
+          "rationale": "Son complicaciones graves del golpe de calor por esfuerzo."
+        },
+        {
+          "key": "c",
+          "text": "Púrpura trombocitopénica inmunológica aislada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la rabdomiólisis."
+        },
+        {
+          "key": "d",
+          "text": "Hemofilia no diagnosticada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La coagulopatía es adquirida."
+        },
+        {
+          "key": "e",
+          "text": "Una vez enfriado el paciente no hay más riesgo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Las complicaciones aparecen después."
+        },
+        {
+          "key": "f",
+          "text": "No hidratar intensamente para proteger el riñón",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es fundamental."
+        },
+        {
+          "key": "g",
+          "text": "El golpe de calor no afecta a otros órganos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Causa falla multiorgánica."
+        },
+        {
+          "key": "h",
+          "text": "Glomerulonefritis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El contexto explica el cuadro."
+        },
+        {
+          "key": "i",
+          "text": "Infección urinaria con hematuria",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la creatina cinasa tan elevada."
+        },
+        {
+          "key": "j",
+          "text": "Vasculitis sistémica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El contexto explica el cuadro."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "El golpe de calor puede causar falla multiorgánica por daño térmico directo, isquemia y respuesta inflamatoria sistémica. Las complicaciones incluyen rabdomiólisis, más frecuente en la forma por esfuerzo, con mioglobinuria y lesión renal aguda; coagulación intravascular diseminada; falla hepática con elevación de transaminasas en 24 a 72 horas; síndrome de dificultad respiratoria aguda; y alteraciones electrolíticas como hiperpotasemia, hipocalcemia e hipofosfatemia. El manejo incluye hidratación intensa para la rabdomiólisis, corrección de electrolitos, hemoderivados para la coagulopatía y soporte orgánico. Aunque el paciente se enfríe, las complicaciones pueden aparecer en las horas o días siguientes.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del golpe de calor",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la rabdomiólisis"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "heat_stroke",
+      "vignette": "Hombre de 28 años con esquizofrenia que recibe haloperidol desde hace 2 semanas. Presenta fiebre de 40 grados, rigidez muscular generalizada en tubo de plomo, alteración de la conciencia, diaforesis e hipertensión lábil. Creatina cinasa de 12,000 U/L.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Los antipsicóticos atípicos nunca lo causan",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "También pueden causarlo."
+        },
+        {
+          "key": "b",
+          "text": "Meningitis bacteriana",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La rigidez generalizada y el antecedente orientan a síndrome neuroléptico."
+        },
+        {
+          "key": "c",
+          "text": "Hipertermia maligna",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se asocia con anestésicos inhalados."
+        },
+        {
+          "key": "d",
+          "text": "El síndrome neuroléptico solo ocurre con sobredosis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ocurre con dosis terapéuticas."
+        },
+        {
+          "key": "e",
+          "text": "Tétanos generalizado",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay herida ni trismo descrito."
+        },
+        {
+          "key": "f",
+          "text": "Catatonia sin fiebre",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Hay fiebre y disautonomía."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome serotoninérgico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Cursa con clonus e hiperreflexia, no con rigidez en tubo de plomo."
+        },
+        {
+          "key": "h",
+          "text": "Intoxicación anticolinérgica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Cursa con piel seca y sin rigidez."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome neuroléptico maligno",
+          "correct": true,
+          "rationale": "Hipertermia, rigidez, alteración mental y disautonomía tras iniciar un antipsicótico."
+        },
+        {
+          "key": "j",
+          "text": "Golpe de calor clásico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El antecedente del antipsicótico y la rigidez orientan a otra causa."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El síndrome neuroléptico maligno es una reacción idiosincrática grave a fármacos antagonistas de la dopamina, como el haloperidol, y menos frecuentemente a antipsicóticos atípicos y antieméticos, o tras suspender agonistas dopaminérgicos. Se desarrolla en días a semanas y se caracteriza por hipertermia, rigidez muscular generalizada en tubo de plomo, alteración del estado mental e inestabilidad autonómica, con creatina cinasa elevada. Se distingue del síndrome serotoninérgico, de inicio en horas y con clonus e hiperreflexia. El tratamiento es suspender el fármaco, enfriamiento, hidratación, benzodiacepinas y, en casos graves, bromocriptina o dantroleno.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome neuroléptico maligno",
+        "Manual de toxicología clínica de urgencias"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "heat_stroke",
+      "vignette": "Durante una ola de calor, el centro de salud de una comunidad planea acciones para reducir los casos graves por calor.",
+      "prompt": "¿Cuál es la medida de prevención más eficaz?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Suspender todos los medicamentos crónicos de los adultos mayores",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Deben revisarse, no suspenderse sin indicación."
+        },
+        {
+          "key": "b",
+          "text": "Basta con beber agua solo cuando se tiene sed",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "En personas vulnerables la sed es tardía."
+        },
+        {
+          "key": "c",
+          "text": "Recomendar bebidas alcohólicas frías",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El alcohol favorece la deshidratación."
+        },
+        {
+          "key": "d",
+          "text": "Los niños pequeños no tienen riesgo por calor",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tienen mayor riesgo."
+        },
+        {
+          "key": "e",
+          "text": "Recomendar ropa oscura y gruesa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Retiene el calor."
+        },
+        {
+          "key": "f",
+          "text": "No vigilar a adultos mayores que viven solos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son el grupo de mayor riesgo."
+        },
+        {
+          "key": "g",
+          "text": "Distribuir antipiréticos a la población",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No previenen las enfermedades por calor."
+        },
+        {
+          "key": "h",
+          "text": "Identificar a personas vulnerables, promover la hidratación, evitar actividades en las horas de mayor calor y procurar espacios frescos",
+          "correct": true,
+          "rationale": "Son las medidas que reducen la morbilidad y mortalidad."
+        },
+        {
+          "key": "i",
+          "text": "Recomendar ejercicio intenso al mediodía para aclimatarse rápido",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumenta el riesgo."
+        },
+        {
+          "key": "j",
+          "text": "Hospitalizar preventivamente a todos los adultos mayores",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es práctico ni necesario."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "Las olas de calor aumentan la mortalidad, sobre todo en adultos mayores, niños pequeños, personas con enfermedades crónicas, trabajadores al aire libre y personas en situación de calle. La prevención incluye identificar a las personas vulnerables y verificar su estado, promover la hidratación frecuente aunque no haya sed, evitar el ejercicio y la exposición en las horas de mayor calor, usar ropa ligera y clara, procurar espacios frescos o refugios climatizados, no dejar a niños ni adultos mayores en vehículos cerrados, revisar los fármacos que afectan la termorregulación y evitar el alcohol. La Secretaría de Salud emite alertas durante la temporada de calor.",
+      "gpcRefs": [
+        "Lineamientos de la Secretaría de Salud para la atención de temperaturas extremas",
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del golpe de calor"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "drowning",
+      "vignette": "Niño de 4 años rescatado de una alberca después de 3 minutos sumergido. No respira y no tiene pulso. Un adulto capacitado lo saca del agua.",
+      "prompt": "¿Cuál es el primer paso más apropiado?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Iniciar con 5 ventilaciones de rescate seguidas de compresiones torácicas",
+          "correct": true,
+          "rationale": "En el ahogamiento la causa del paro es la hipoxia."
+        },
+        {
+          "key": "b",
+          "text": "Buscar un desfibrilador antes de ventilar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La ventilación es prioritaria en el ahogamiento."
+        },
+        {
+          "key": "c",
+          "text": "No activar el sistema de emergencias",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es fundamental."
+        },
+        {
+          "key": "d",
+          "text": "Inmovilizar la columna cervical antes de cualquier maniobra en todos los casos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Solo si hay sospecha de trauma."
+        },
+        {
+          "key": "e",
+          "text": "Colocarlo boca abajo para drenar el agua",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Retrasa la reanimación."
+        },
+        {
+          "key": "f",
+          "text": "Esperar a la ambulancia sin reanimar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El tiempo es crítico."
+        },
+        {
+          "key": "g",
+          "text": "El agua en los pulmones impide ventilar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La cantidad aspirada suele ser pequeña."
+        },
+        {
+          "key": "h",
+          "text": "Después de 3 minutos no tiene sentido reanimar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La reanimación puede ser exitosa."
+        },
+        {
+          "key": "i",
+          "text": "Maniobra de Heimlich para sacar el agua de los pulmones",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Retrasa la reanimación y aumenta el riesgo de aspiración."
+        },
+        {
+          "key": "j",
+          "text": "Solo compresiones sin ventilaciones",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "En el ahogamiento las ventilaciones son prioritarias."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "El ahogamiento es una de las principales causas de muerte accidental en niños en México, sobre todo en albercas, cubetas, tinas y cuerpos de agua. La causa del paro es la hipoxia, por lo que la reanimación se inicia con 5 ventilaciones de rescate, seguidas de compresiones y ventilaciones en relación de 30 por 2 o 15 por 2 en niños con dos reanimadores. No se deben realizar maniobras para expulsar el agua, como la de Heimlich o colocar al paciente boca abajo, porque retrasan la reanimación. La inmovilización cervical solo se indica si hay sospecha de trauma, como clavados en aguas poco profundas.",
+      "gpcRefs": [
+        "Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón",
+        "Guía de Práctica Clínica de atención del paciente pediátrico por ahogamiento"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "drowning",
+      "vignette": "Niña de 7 años rescatada de una alberca tras estar sumergida por un breve periodo. Tosió y vomitó agua. Ahora está alerta, con saturación de 98 por ciento, sin dificultad respiratoria y con auscultación normal.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Si tose después del rescate ya no hay riesgo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La tos indica aspiración."
+        },
+        {
+          "key": "b",
+          "text": "Hospitalización en terapia intensiva por 3 días",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesaria si permanece estable."
+        },
+        {
+          "key": "c",
+          "text": "Observación en urgencias durante 6 a 8 horas antes del egreso",
+          "correct": true,
+          "rationale": "Las complicaciones respiratorias pueden aparecer horas después."
+        },
+        {
+          "key": "d",
+          "text": "Antibiótico profiláctico de rutina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "e",
+          "text": "Esteroides de rutina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No están indicados."
+        },
+        {
+          "key": "f",
+          "text": "Intubación profiláctica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "g",
+          "text": "El ahogamiento seco ocurre días después sin síntomas iniciales",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Los síntomas aparecen en horas."
+        },
+        {
+          "key": "h",
+          "text": "No educar a los padres sobre supervisión en el agua",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es la prevención."
+        },
+        {
+          "key": "i",
+          "text": "Alta inmediata porque está asintomática",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede presentar deterioro respiratorio tardío."
+        },
+        {
+          "key": "j",
+          "text": "Tomografía de tórax de rutina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "e",
+        "i"
+      ],
+      "explanation": "Después de un ahogamiento, los pacientes que están alertas, sin dificultad respiratoria, con saturación normal y auscultación normal pueden egresar tras un periodo de observación de 6 a 8 horas, porque las complicaciones respiratorias, como edema pulmonar o neumonitis, suelen aparecer en ese lapso. Los pacientes con síntomas respiratorios, hipoxemia, alteración mental o necesidad de reanimación requieren hospitalización. No se recomiendan antibióticos ni esteroides profilácticos. La prevención incluye la supervisión constante de los niños, cercas alrededor de albercas, chalecos salvavidas y enseñar a nadar.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención del paciente pediátrico por ahogamiento",
+        "Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "drowning",
+      "vignette": "Joven de 17 años que se lanzó de clavado en la parte poco profunda de un río. Lo sacan del agua consciente, con dolor cervical y sin movimiento de las extremidades. Respira por sí mismo.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "No vigilar la función respiratoria",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Las lesiones cervicales altas afectan la respiración."
+        },
+        {
+          "key": "b",
+          "text": "Hiperextender el cuello para abrir la vía aérea",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede agravar la lesión medular."
+        },
+        {
+          "key": "c",
+          "text": "Dar masaje en el cuello para aliviar el dolor",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede agravar la lesión."
+        },
+        {
+          "key": "d",
+          "text": "Restricción del movimiento de la columna cervical, evaluación ABCDE y traslado para imagen de columna",
+          "correct": true,
+          "rationale": "El clavado en aguas poco profundas sugiere lesión medular cervical."
+        },
+        {
+          "key": "e",
+          "text": "La ausencia de dolor descarta lesión cervical",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No la descarta."
+        },
+        {
+          "key": "f",
+          "text": "Maniobra de Heimlich para sacar el agua",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "g",
+          "text": "Ponerlo de pie para ver si camina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede agravar la lesión."
+        },
+        {
+          "key": "h",
+          "text": "Solo observar porque respira",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Tiene déficit neurológico."
+        },
+        {
+          "key": "i",
+          "text": "Todo ahogamiento requiere inmovilización cervical",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Solo si hay sospecha de trauma."
+        },
+        {
+          "key": "j",
+          "text": "Esteroides en dosis altas de rutina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No se recomiendan."
+        }
+      ],
+      "canonical": [
+        "b",
+        "d",
+        "f",
+        "g"
+      ],
+      "explanation": "Las lesiones de la columna cervical en el contexto acuático se asocian sobre todo a clavados en aguas poco profundas, accidentes en tobogán o trauma con olas, y pueden causar lesión medular. En estos casos se realiza restricción del movimiento de la columna cervical desde el rescate, manteniendo la alineación, y se aplica la evaluación primaria ABCDE. Si se requiere abrir la vía aérea se usa la tracción mandibular sin hiperextensión. Se vigila la función respiratoria, porque las lesiones por arriba de C5 pueden comprometer el diafragma. Los esteroides en dosis altas no se recomiendan de rutina. En los ahogamientos sin datos de trauma no se inmoviliza de rutina.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de atención del paciente con lesión medular aguda"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "drowning",
+      "vignette": "Hombre de 30 años rescatado tras un ahogamiento con reanimación prolongada. Recuperó la circulación. A las 12 horas presenta hipoxemia grave con infiltrados pulmonares bilaterales y cociente PaO2 entre FiO2 de 110.",
+      "prompt": "¿Cuál es la complicación más probable?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de dificultad respiratoria aguda por aspiración y daño alveolar",
+          "correct": true,
+          "rationale": "El agua aspirada lava el surfactante y causa daño alveolar."
+        },
+        {
+          "key": "b",
+          "text": "La diferencia entre agua dulce y salada cambia por completo el tratamiento",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El manejo es similar."
+        },
+        {
+          "key": "c",
+          "text": "Edema pulmonar cardiogénico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La causa es el daño alveolar por aspiración."
+        },
+        {
+          "key": "d",
+          "text": "Fibrosis pulmonar idiopática",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "e",
+          "text": "Siempre se ventila con volúmenes corrientes altos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se ventila de forma protectora."
+        },
+        {
+          "key": "f",
+          "text": "Neumotórax bilateral",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica los infiltrados bilaterales."
+        },
+        {
+          "key": "g",
+          "text": "No usar PEEP adecuada",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Mejora la oxigenación."
+        },
+        {
+          "key": "h",
+          "text": "Tromboembolia pulmonar como única causa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica los infiltrados bilaterales."
+        },
+        {
+          "key": "i",
+          "text": "Asma de inicio tardío",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "j",
+          "text": "Neumonía bacteriana inmediata que requiere antibiótico de amplio espectro de rutina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El cuadro temprano se debe al daño alveolar."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "En el ahogamiento, la aspiración de agua, dulce o salada, causa lavado o inactivación del surfactante, atelectasias, aumento de la permeabilidad alveolocapilar y edema pulmonar no cardiogénico, que puede evolucionar a síndrome de dificultad respiratoria aguda. Clásicamente se describían diferencias entre agua dulce y salada, pero en la práctica el manejo es similar. El tratamiento incluye oxígeno, ventilación mecánica protectora con volumen corriente bajo y PEEP adecuada. Las neumonías pueden aparecer después, sobre todo en aguas contaminadas, y se tratan si hay datos de infección, no de forma profiláctica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención del paciente por ahogamiento",
+        "Definición de Berlín del síndrome de dificultad respiratoria aguda"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "drowning",
+      "vignette": "Niño de 6 años rescatado de un lago helado tras 20 minutos sumergido. Llega en paro cardiaco con temperatura central de 26 grados.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Los niños nunca sobreviven a sumersiones prolongadas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Hay supervivencias en agua helada."
+        },
+        {
+          "key": "b",
+          "text": "Las pupilas fijas indican muerte cerebral irreversible en hipotermia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No son confiables en hipotermia."
+        },
+        {
+          "key": "c",
+          "text": "Administrar adrenalina cada 3 minutos igual que en normotermia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "En hipotermia grave se espacian o se omiten."
+        },
+        {
+          "key": "d",
+          "text": "Suspender la reanimación a los 20 minutos como en normotermia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Debe prolongarse en hipotermia."
+        },
+        {
+          "key": "e",
+          "text": "Recalentamiento pasivo con cobijas como única medida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es insuficiente en hipotermia grave en paro."
+        },
+        {
+          "key": "f",
+          "text": "Reanimación prolongada con recalentamiento activo interno, idealmente con circulación extracorpórea",
+          "correct": true,
+          "rationale": "La hipotermia tiene efecto protector y la reanimación puede tener éxito."
+        },
+        {
+          "key": "g",
+          "text": "Declarar la muerte por el tiempo de sumersión",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "En hipotermia no se declara la muerte hasta recalentar."
+        },
+        {
+          "key": "h",
+          "text": "No medir la temperatura central",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Guía el manejo."
+        },
+        {
+          "key": "i",
+          "text": "Desfibrilaciones repetidas ilimitadas a 26 grados",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Son poco eficaces con temperatura muy baja."
+        },
+        {
+          "key": "j",
+          "text": "Inmersión en agua caliente a 45 grados",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Puede causar colapso y quemaduras."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "La hipotermia grave reduce el metabolismo cerebral y puede proteger frente a la hipoxia, por lo que se han descrito supervivencias con buena función neurológica tras sumersiones prolongadas en agua helada, sobre todo en niños. Por ello se aplica el principio de que nadie está muerto hasta que esté caliente y muerto. Se prolonga la reanimación y se realiza recalentamiento activo interno, idealmente con oxigenación por membrana extracorpórea o derivación cardiopulmonar. Con temperatura menor de 30 grados las desfibrilaciones y los fármacos son poco eficaces, por lo que se limitan hasta alcanzar mayor temperatura. Las pupilas fijas no son confiables.",
+      "gpcRefs": [
+        "Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón",
+        "Guía del Consejo Europeo de Resucitación para circunstancias especiales"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "drowning",
+      "vignette": "Una madre pregunta en la consulta de su hijo de 2 años cómo prevenir accidentes en casa. Viven en una casa con cubetas de agua en el patio y una pequeña alberca inflable.",
+      "prompt": "¿Cuál es la recomendación más eficaz para prevenir el ahogamiento?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Los niños menores de 3 años no se ahogan en cubetas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es una causa frecuente de ahogamiento en esta edad."
+        },
+        {
+          "key": "b",
+          "text": "Los niños se ahogan solo en agua profunda",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Pueden ahogarse en pocos centímetros."
+        },
+        {
+          "key": "c",
+          "text": "Supervisión constante y a distancia de un brazo cuando el niño esté cerca del agua, y vaciar cubetas y albercas después de usarlas",
+          "correct": true,
+          "rationale": "Los niños pequeños pueden ahogarse en pocos centímetros de agua."
+        },
+        {
+          "key": "d",
+          "text": "Dejar al niño con un hermano de 5 años cerca del agua",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es una supervisión adecuada."
+        },
+        {
+          "key": "e",
+          "text": "El riesgo solo existe en el mar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Existe en cualquier cuerpo de agua."
+        },
+        {
+          "key": "f",
+          "text": "Enseñar a nadar a los 2 años elimina el riesgo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No lo elimina."
+        },
+        {
+          "key": "g",
+          "text": "No recomendar que los cuidadores aprendan reanimación",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Mejora la supervivencia."
+        },
+        {
+          "key": "h",
+          "text": "El ahogamiento siempre es ruidoso y fácil de notar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Suele ser silencioso."
+        },
+        {
+          "key": "i",
+          "text": "Instalar cámaras en lugar de supervisar directamente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No sustituyen la supervisión."
+        },
+        {
+          "key": "j",
+          "text": "Basta con que el niño use flotadores inflables sin supervisión",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No sustituyen la supervisión."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "El ahogamiento es una de las principales causas de muerte accidental en niños de 1 a 4 años en México. Los niños pequeños pueden ahogarse en pocos centímetros de agua, en cubetas, tinas, cisternas, tinacos y albercas inflables, y el ahogamiento suele ser silencioso y rápido. La medida más eficaz es la supervisión constante, a distancia de un brazo, por un adulto sin distracciones. Además se recomienda vaciar cubetas y albercas después de usarlas, tapar cisternas y tinacos, instalar cercas con puertas que se cierren solas alrededor de albercas, usar chalecos salvavidas aprobados y que los cuidadores aprendan reanimación.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención de accidentes en el hogar en menores de 5 años",
+        "Programa de acción específico de prevención de accidentes"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "hypothermia",
+      "vignette": "Hombre de 50 años en situación de calle encontrado en la madrugada en invierno. Temperatura central de 31 grados, confuso, sin escalofríos y con bradicardia. El electrocardiograma muestra una deflexión positiva al final del QRS.",
+      "prompt": "¿Qué indica este hallazgo electrocardiográfico?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Pericarditis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "b",
+          "text": "Artefacto por temblor",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay escalofríos."
+        },
+        {
+          "key": "c",
+          "text": "La onda de Osborn indica muerte inminente en todos los casos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Indica hipotermia, no necesariamente muerte."
+        },
+        {
+          "key": "d",
+          "text": "La hipotermia no altera el electrocardiograma",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Lo altera de forma característica."
+        },
+        {
+          "key": "e",
+          "text": "Infarto agudo con elevación del ST",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El contexto y la morfología orientan a hipotermia."
+        },
+        {
+          "key": "f",
+          "text": "Hipercalcemia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Puede producir onda J, pero el contexto es hipotermia."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome de Brugada como única explicación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El contexto orienta a hipotermia."
+        },
+        {
+          "key": "h",
+          "text": "Onda J de Osborn, característica de la hipotermia",
+          "correct": true,
+          "rationale": "Es una deflexión al final del QRS que aumenta con la hipotermia."
+        },
+        {
+          "key": "i",
+          "text": "Bloqueo de rama derecha sin relación con la hipotermia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es característica de la hipotermia."
+        },
+        {
+          "key": "j",
+          "text": "Hiperpotasemia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No produce onda J."
+        }
+      ],
+      "canonical": [
+        "e",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "La hipotermia se define por temperatura central menor de 35 grados y se clasifica en leve, de 32 a 35, con escalofríos y confusión leve; moderada, de 28 a 32, con pérdida de los escalofríos, disminución del estado de conciencia y bradicardia; y grave, menor de 28, con coma, riesgo de fibrilación ventricular y asistolia. El electrocardiograma puede mostrar bradicardia, prolongación de los intervalos, fibrilación auricular y la onda J de Osborn, una deflexión positiva al final del QRS que aumenta conforme baja la temperatura. Los factores de riesgo incluyen situación de calle, alcohol, edad avanzada y enfermedades.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipotermia accidental",
+        "Guía del Consejo Europeo de Resucitación para circunstancias especiales"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "hypothermia",
+      "vignette": "Mujer de 40 años rescatada en la montaña con temperatura de 33.5 grados, escalofríos intensos, alerta y hemodinámicamente estable.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dar alcohol para calentar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Causa vasodilatación y pérdida de calor."
+        },
+        {
+          "key": "b",
+          "text": "Frotar enérgicamente las extremidades",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede causar lesiones y no es útil."
+        },
+        {
+          "key": "c",
+          "text": "Retirar la ropa mojada, aislamiento y recalentamiento pasivo con cobijas, más recalentamiento activo externo y bebidas calientes azucaradas si está alerta",
+          "correct": true,
+          "rationale": "Es una hipotermia leve."
+        },
+        {
+          "key": "d",
+          "text": "Los escalofríos indican hipotermia grave",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Indican que la termorregulación funciona."
+        },
+        {
+          "key": "e",
+          "text": "No medir la temperatura central",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Guía el manejo."
+        },
+        {
+          "key": "f",
+          "text": "Intubación profiláctica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada en hipotermia leve."
+        },
+        {
+          "key": "g",
+          "text": "Lavado peritoneal caliente",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es un método invasivo para casos graves."
+        },
+        {
+          "key": "h",
+          "text": "Circulación extracorpórea",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para hipotermia grave o paro."
+        },
+        {
+          "key": "i",
+          "text": "Dejar la ropa mojada y solo esperar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Aumenta la pérdida de calor."
+        },
+        {
+          "key": "j",
+          "text": "La hipotermia solo ocurre a temperaturas bajo cero",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede ocurrir con frío moderado y humedad."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "El tratamiento de la hipotermia depende de su gravedad. En la hipotermia leve, con escalofríos y estado mental conservado, se retira la ropa mojada, se aísla al paciente del frío y del viento con cobijas, y se aplica recalentamiento pasivo y activo externo con mantas térmicas, fuentes de calor y bebidas calientes azucaradas si está alerta y puede deglutir. El alcohol está contraindicado. En la hipotermia moderada y grave se usa recalentamiento activo externo e interno, con líquidos intravenosos calientes, oxígeno caliente y, en casos graves o paro, circulación extracorpórea. Se manipula al paciente con suavidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipotermia accidental",
+        "Guía de la Sociedad de Medicina de Montaña para hipotermia"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "hypothermia",
+      "vignette": "Hombre de 60 años con hipotermia grave de 26 grados, con pulso débil y bradicardia de 30. Los paramédicos planean trasladarlo.",
+      "prompt": "¿Cuál es la conducta más apropiada durante el traslado?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Administrar atropina para la bradicardia como prioridad",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La bradicardia es fisiológica en hipotermia."
+        },
+        {
+          "key": "b",
+          "text": "Colocar marcapasos transcutáneo de inmediato",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La bradicardia suele mejorar con el recalentamiento."
+        },
+        {
+          "key": "c",
+          "text": "Iniciar compresiones torácicas porque la frecuencia es baja",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene pulso y las compresiones pueden desencadenar fibrilación."
+        },
+        {
+          "key": "d",
+          "text": "No prevenir más pérdida de calor durante el traslado",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es fundamental."
+        },
+        {
+          "key": "e",
+          "text": "Manipulación suave en posición horizontal, evitar movimientos bruscos y trasladar a un centro con capacidad de circulación extracorpórea",
+          "correct": true,
+          "rationale": "El movimiento brusco puede desencadenar fibrilación ventricular."
+        },
+        {
+          "key": "f",
+          "text": "La bradicardia en hipotermia siempre requiere tratamiento farmacológico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es una respuesta fisiológica."
+        },
+        {
+          "key": "g",
+          "text": "El miocardio frío es resistente a las arritmias",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es muy irritable."
+        },
+        {
+          "key": "h",
+          "text": "Ponerlo de pie para mejorar la circulación",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede causar colapso."
+        },
+        {
+          "key": "i",
+          "text": "Frotar las extremidades para recalentar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede causar caída de la temperatura central."
+        },
+        {
+          "key": "j",
+          "text": "Inmersión en agua caliente durante el traslado",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es práctica y puede causar colapso."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "En la hipotermia grave el miocardio es muy irritable, y los movimientos bruscos, como sentar o poner de pie al paciente, pueden desencadenar fibrilación ventricular. Se recomienda manipular al paciente con suavidad, mantenerlo en posición horizontal, prevenir más pérdida de calor y trasladarlo a un centro con capacidad de circulación extracorpórea si está inestable. La bradicardia es una respuesta fisiológica a la hipotermia y suele mejorar con el recalentamiento, por lo que no siempre requiere atropina o marcapasos. Si el paciente tiene pulso, aunque débil, no se inician compresiones.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipotermia accidental",
+        "Guía del Consejo Europeo de Resucitación para circunstancias especiales"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "hypothermia",
+      "vignette": "Hombre de 35 años, montañista, con dedos de los pies blancos, duros e insensibles tras exposición prolongada al frío. Ya está en un refugio y no volverá a exponerse al frío. Temperatura central normal.",
+      "prompt": "¿Cuál es el tratamiento de elección para las lesiones?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Recalentar si existe riesgo de que se vuelvan a congelar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La recongelación causa más daño."
+        },
+        {
+          "key": "b",
+          "text": "Recalentar con fuego directo o secadora",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede causar quemaduras por la insensibilidad."
+        },
+        {
+          "key": "c",
+          "text": "El agua muy caliente acelera la recuperación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Causa quemaduras."
+        },
+        {
+          "key": "d",
+          "text": "La congelación se cura sola sin tratamiento",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Requiere manejo."
+        },
+        {
+          "key": "e",
+          "text": "Recalentamiento rápido por inmersión en agua a 37 a 39 grados durante 15 a 30 minutos, con analgesia",
+          "correct": true,
+          "rationale": "Es el tratamiento de la congelación una vez que no hay riesgo de recongelación."
+        },
+        {
+          "key": "f",
+          "text": "Masaje vigoroso de los dedos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Daña los tejidos."
+        },
+        {
+          "key": "g",
+          "text": "No administrar analgesia durante el recalentamiento",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es muy doloroso."
+        },
+        {
+          "key": "h",
+          "text": "Amputación inmediata",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se difiere semanas hasta delimitar la necrosis."
+        },
+        {
+          "key": "i",
+          "text": "Fasciotomía de rutina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada de rutina."
+        },
+        {
+          "key": "j",
+          "text": "Frotar los dedos con nieve",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Causa más daño tisular."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "La congelación es la lesión de los tejidos por congelamiento, más frecuente en dedos, nariz y orejas. Los tejidos se ven blancos o grisáceos, duros e insensibles. El tratamiento, una vez que no hay riesgo de recongelación, es el recalentamiento rápido por inmersión en agua a 37 a 39 grados durante 15 a 30 minutos, hasta que el tejido se vuelva rojo o violáceo y flexible, con analgesia porque es muy doloroso. No se debe frotar, usar nieve, ni calor directo. Se elevan las extremidades, se protegen las flictenas y se aplica profilaxis antitetánica. La amputación se difiere semanas hasta que se delimite la necrosis.",
+      "gpcRefs": [
+        "Guía de la Sociedad de Medicina de Montaña para congelación",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipotermia accidental"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "hypothermia",
+      "vignette": "Hombre de 45 años con hipotermia grave de 27 grados que presenta paro cardiaco con fibrilación ventricular. Se inicia reanimación y se aplica una descarga sin éxito.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Descargas repetidas cada 2 minutos sin límite",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Son poco eficaces con temperatura muy baja."
+        },
+        {
+          "key": "b",
+          "text": "Recalentamiento pasivo con cobijas como única medida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es insuficiente."
+        },
+        {
+          "key": "c",
+          "text": "Marcapasos transcutáneo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No trata la fibrilación ventricular."
+        },
+        {
+          "key": "d",
+          "text": "Continuar la reanimación, recalentar activamente y diferir más descargas y fármacos hasta que la temperatura supere 30 grados",
+          "correct": true,
+          "rationale": "Con temperatura menor de 30 grados las descargas y los fármacos son poco eficaces."
+        },
+        {
+          "key": "e",
+          "text": "El paciente está muerto si no responde a la primera descarga",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede recuperarse tras recalentar."
+        },
+        {
+          "key": "f",
+          "text": "La fibrilación ventricular en hipotermia responde igual a las descargas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Responde mal por debajo de 30 grados."
+        },
+        {
+          "key": "g",
+          "text": "No considerar circulación extracorpórea",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es el método de elección en paro hipotérmico."
+        },
+        {
+          "key": "h",
+          "text": "Amiodarona en dosis repetidas como prioridad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es poco eficaz y se acumula."
+        },
+        {
+          "key": "i",
+          "text": "Suspender la reanimación porque no respondió a la descarga",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se continúa mientras se recalienta."
+        },
+        {
+          "key": "j",
+          "text": "Adrenalina cada 3 minutos igual que en normotermia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se acumula y es poco eficaz en hipotermia grave."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "i",
+        "j"
+      ],
+      "explanation": "En el paro cardiaco por hipotermia grave, la fibrilación ventricular y los fármacos responden mal cuando la temperatura central es menor de 30 grados. Se recomienda continuar la reanimación de alta calidad, limitar a tres descargas iniciales y diferir más descargas y fármacos hasta que la temperatura supere 30 grados, y espaciar la adrenalina hasta los 35 grados. El recalentamiento activo interno, idealmente con oxigenación por membrana extracorpórea o derivación cardiopulmonar, es fundamental. La reanimación debe prolongarse, porque el pronóstico puede ser bueno. Un potasio sérico mayor de 12 mEq/L sugiere que la reanimación no será exitosa.",
+      "gpcRefs": [
+        "Guía del Consejo Europeo de Resucitación para circunstancias especiales",
+        "Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q19",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "hypothermia",
+      "vignette": "Mujer de 70 años con hipotermia moderada que es recalentada activamente con mantas térmicas en todo el cuerpo. Durante el recalentamiento presenta hipotensión y la temperatura central baja de 31 a 30 grados.",
+      "prompt": "¿Cuál es la complicación más probable del recalentamiento?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Caída posterior de la temperatura central y colapso por recalentamiento, por retorno de sangre fría periférica y vasodilatación",
+          "correct": true,
+          "rationale": "El recalentamiento de las extremidades libera sangre fría y causa vasodilatación."
+        },
+        {
+          "key": "b",
+          "text": "Hay que recalentar primero las extremidades",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se prioriza el tronco."
+        },
+        {
+          "key": "c",
+          "text": "Insuficiencia suprarrenal primaria como única explicación",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El contexto lo explica."
+        },
+        {
+          "key": "d",
+          "text": "No administrar líquidos calientes intravenosos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Ayudan a prevenir la hipotensión."
+        },
+        {
+          "key": "e",
+          "text": "Infarto agudo de miocardio como única causa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El fenómeno es característico del recalentamiento."
+        },
+        {
+          "key": "f",
+          "text": "Infección grave como única explicación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La relación temporal con el recalentamiento sugiere otra causa."
+        },
+        {
+          "key": "g",
+          "text": "Hipertermia por sobrecalentamiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La temperatura bajó."
+        },
+        {
+          "key": "h",
+          "text": "Reacción alérgica a las mantas térmicas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es la explicación."
+        },
+        {
+          "key": "i",
+          "text": "Error del termómetro",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es un fenómeno fisiológico descrito."
+        },
+        {
+          "key": "j",
+          "text": "El recalentamiento nunca tiene complicaciones",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede causar colapso."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "Durante el recalentamiento de la hipotermia pueden ocurrir complicaciones. La caída posterior de la temperatura central se debe al retorno de sangre fría y acidótica de las extremidades al recalentarlas y a la vasodilatación periférica. El colapso por recalentamiento es la hipotensión por vasodilatación con hipovolemia relativa. Para prevenirlas se recalienta primero el tronco, se administran líquidos intravenosos calientes, se manipula con suavidad y se vigila la presión arterial, el ritmo cardiaco, el potasio y la glucosa. Las arritmias también pueden aparecer durante el recalentamiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipotermia accidental",
+        "Guía del Consejo Europeo de Resucitación para circunstancias especiales"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q20",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "hypothermia",
+      "vignette": "Hombre de 75 años encontrado en su casa sin calefacción en invierno, con temperatura axilar que no registra en el termómetro digital convencional. Está somnoliento y frío al tacto.",
+      "prompt": "¿Cuál es la medición inicial más apropiada?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Temperatura timpánica como único método en hipotermia grave",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede ser poco confiable."
+        },
+        {
+          "key": "b",
+          "text": "Temperatura oral con el paciente somnoliento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es segura ni confiable."
+        },
+        {
+          "key": "c",
+          "text": "La temperatura de la piel refleja la central",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No la refleja."
+        },
+        {
+          "key": "d",
+          "text": "La hipotermia solo ocurre al aire libre",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "También en casa sin calefacción."
+        },
+        {
+          "key": "e",
+          "text": "Termografía infrarroja corporal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No mide la temperatura central."
+        },
+        {
+          "key": "f",
+          "text": "No medir glucosa ni buscar causas como hipotiroidismo o sepsis",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son causas asociadas."
+        },
+        {
+          "key": "g",
+          "text": "Asumir normotermia porque el termómetro no marcó nada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede estar en hipotermia grave."
+        },
+        {
+          "key": "h",
+          "text": "Temperatura axilar repetida con el mismo termómetro",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No registra temperaturas bajas."
+        },
+        {
+          "key": "i",
+          "text": "Temperatura central con termómetro de baja lectura, como esofágico, rectal o vesical",
+          "correct": true,
+          "rationale": "Los termómetros convencionales no miden temperaturas bajas."
+        },
+        {
+          "key": "j",
+          "text": "Estimar la temperatura por el tacto",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es confiable."
+        }
+      ],
+      "canonical": [
+        "a",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "El diagnóstico de la hipotermia requiere medir la temperatura central, porque la temperatura de la piel y las mediciones axilares u orales no son confiables, y muchos termómetros convencionales no registran valores menores de 34 grados. Se recomiendan termómetros de baja lectura en el esófago inferior, que es el método más preciso en pacientes intubados, o en el recto o la vejiga. En adultos mayores la hipotermia puede ocurrir en interiores sin calefacción, y se asocia con hipotiroidismo, sepsis, hipoglucemia, fármacos sedantes, alcohol y deterioro cognitivo, que deben buscarse.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipotermia accidental",
+        "Guía del Consejo Europeo de Resucitación para circunstancias especiales"
+      ]
+    },
+    {
+      "key": "urg-08-ambientales-q21",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "hypothermia",
+      "vignette": "Durante la temporada invernal, la jurisdicción sanitaria de una ciudad del norte del país planea acciones para reducir las muertes por frío.",
+      "prompt": "¿Cuál es la medida de prevención más eficaz?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Recomendar el consumo de alcohol para calentarse",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta la pérdida de calor."
+        },
+        {
+          "key": "b",
+          "text": "Recomendar usar anafres de carbón en habitaciones cerradas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Causa intoxicación por monóxido de carbono."
+        },
+        {
+          "key": "c",
+          "text": "No vigilar a adultos mayores que viven solos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son de alto riesgo."
+        },
+        {
+          "key": "d",
+          "text": "Hospitalizar a todos los adultos mayores durante el invierno",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es práctico."
+        },
+        {
+          "key": "e",
+          "text": "Recomendar dormir con ropa húmeda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumenta la pérdida de calor."
+        },
+        {
+          "key": "f",
+          "text": "Las muertes por frío solo ocurren en la montaña",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ocurren también en zonas urbanas."
+        },
+        {
+          "key": "g",
+          "text": "Distribuir antipiréticos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No previenen la hipotermia."
+        },
+        {
+          "key": "h",
+          "text": "Identificar y proteger a grupos vulnerables, como personas en situación de calle y adultos mayores, con refugios temporales, abrigo y orientación sobre el uso seguro de calentadores",
+          "correct": true,
+          "rationale": "Reduce las lesiones por frío y las intoxicaciones por monóxido de carbono."
+        },
+        {
+          "key": "i",
+          "text": "Solo vacunar contra la influenza sin otras acciones",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es útil, pero no previene la hipotermia."
+        },
+        {
+          "key": "j",
+          "text": "Los calentadores de gas son seguros en cualquier espacio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requieren ventilación."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "h",
+        "i"
+      ],
+      "explanation": "Las temperaturas bajas aumentan la mortalidad por hipotermia, infecciones respiratorias, eventos cardiovasculares e intoxicaciones por monóxido de carbono por el uso de calentadores y anafres en espacios cerrados. Los grupos de mayor riesgo son las personas en situación de calle, adultos mayores que viven solos, niños pequeños, personas con alcoholismo y enfermedades crónicas. Las medidas preventivas incluyen refugios temporales, abrigo con varias capas de ropa, alimentación adecuada, evitar el alcohol, ventilar los espacios con calentadores, vacunación contra influenza y vigilancia de personas vulnerables. La Secretaría de Salud emite alertas en temporada invernal.",
+      "gpcRefs": [
+        "Lineamientos de la Secretaría de Salud para la atención de temperaturas extremas",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipotermia accidental"
+      ]
+    }
+  ]
+}

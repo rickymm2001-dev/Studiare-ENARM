@@ -1,0 +1,223 @@
+@ fam|chronic_disease_primary|diabetes_primary_care|2|initial_treatment
+V: Hombre de 48 años con diagnóstico reciente de diabetes tipo 2. Glucosa en ayuno de 165 mg/dL, hemoglobina glucosilada de 7.8 por ciento, índice de masa corporal de 31, tasa de filtración glomerular de 90 mL/min. Sin síntomas de hiperglucemia ni cardiopatía.
+P: ¿Cuál es el tratamiento inicial farmacológico más apropiado junto con cambios en el estilo de vida?
++ Metformina || Es el fármaco de primera línea por su eficacia, seguridad, bajo costo y neutralidad en el peso.
+- anchoring | Insulina basal desde el diagnóstico || Se reserva para hiperglucemia grave o síntomas catabólicos.
+- availability_heuristic | Glibenclamida como primera opción || Causa hipoglucemia y aumento de peso.
+- representativeness_heuristic | Solo dieta por un año antes de cualquier fármaco || Con hemoglobina de 7.8 se recomienda iniciar fármaco.
+- premature_closure | Pioglitazona || Causa retención de líquidos y aumento de peso.
+- framing_effect | Acarbosa como monoterapia inicial || Tiene menor eficacia y más efectos gastrointestinales.
+- complexity_bias | Triple terapia oral desde el inicio || No está indicada con esta cifra.
+- base_rate_fallacy | Insulina rápida antes de cada comida || No es el inicio adecuado.
+- belief_bias | Suplementos herbolarios como sustituto || No tienen evidencia suficiente.
+- omission_bias | No iniciar tratamiento porque no tiene síntomas || La hiperglucemia asintomática causa daño.
+E: En la diabetes tipo 2 la metformina es el fármaco de primera línea, junto con cambios en el estilo de vida, cuando no hay contraindicaciones. Reduce la producción hepática de glucosa, disminuye la hemoglobina glucosilada entre 1 y 1.5 puntos, no causa hipoglucemia en monoterapia, es neutral o favorable en el peso y es barata. Se inicia en dosis bajas con los alimentos y se aumenta gradualmente para reducir los efectos gastrointestinales. Si el paciente tiene enfermedad cardiovascular, insuficiencia cardiaca o enfermedad renal, se agregan inhibidores del cotransportador de sodio y glucosa tipo 2 o agonistas del receptor de GLP-1.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento farmacológico de la diabetes mellitus tipo 2 en el primer nivel ;; Estándares de atención en diabetes de la Asociación Americana de Diabetes
+
+@ fam|chronic_disease_primary|diabetes_primary_care|2|prevention_screening
+V: Mujer de 58 años con diabetes tipo 2 de 8 años de evolución, en tratamiento con metformina. Acude a su control trimestral. No refiere síntomas en los pies y nunca le han revisado los pies con instrumentos.
+P: ¿Cuál es la medida de tamizaje de pie diabético recomendada?
++ Exploración anual con monofilamento de 10 gramos, diapasón y palpación de pulsos || Detecta pérdida de sensibilidad protectora y enfermedad arterial.
+- anchoring | Revisar los pies solo si refiere dolor || La neuropatía suele ser indolora.
+- availability_heuristic | Radiografía de pies anual || No detecta la neuropatía.
+- representativeness_heuristic | Electromiografía de rutina || No es necesaria para el tamizaje.
+- premature_closure | Angiografía de miembros inferiores || Es invasiva.
+- framing_effect | Exploración cada cinco años || Debe ser al menos anual.
+- complexity_bias | Biopsia de nervio sural || Es invasiva y no es de tamizaje.
+- base_rate_fallacy | Solo revisar a pacientes insulinodependientes || Todos los diabéticos lo requieren.
+- belief_bias | Gammagrama óseo || Se usa ante sospecha de osteomielitis.
+- omission_bias | No educar sobre el autocuidado de los pies || La educación reduce amputaciones.
+E: La neuropatía periférica diabética es la principal causa de úlceras y amputaciones no traumáticas. Se recomienda revisar los pies de todos los pacientes con diabetes al menos una vez al año, con inspección de piel y uñas, deformidades, palpación de pulsos pedios y tibiales posteriores, y evaluación de la sensibilidad protectora con monofilamento de 10 gramos, junto con diapasón de 128 Hz o reflejos aquíleos. Los pacientes con pérdida de sensibilidad o enfermedad arterial requieren revisión en cada consulta, calzado adecuado y educación para la inspección diaria. El índice tobillo brazo se usa si hay pulsos disminuidos.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del pie diabético ;; Norma Oficial Mexicana para la prevención, tratamiento y control de la diabetes mellitus
+
+@ fam|chronic_disease_primary|diabetes_primary_care|2|prevention_screening
+V: Hombre de 52 años con diabetes tipo 2 de 3 años de evolución, bien controlado. Su agudeza visual es normal y nunca ha acudido a revisión oftalmológica.
+P: ¿Cuál es la recomendación de tamizaje de retinopatía diabética?
++ Fondo de ojo con pupila dilatada o retinografía y repetir anualmente || Se recomienda desde el diagnóstico de diabetes tipo 2.
+- anchoring | No requiere revisión porque ve bien || La retinopatía es asintomática hasta etapas avanzadas.
+- availability_heuristic | Revisión solo a los 10 años de evolución || En diabetes tipo 2 se inicia al diagnóstico.
+- representativeness_heuristic | Medición de presión intraocular como único estudio || No detecta retinopatía.
+- premature_closure | Angiografía con fluoresceína de rutina || Se reserva para casos específicos.
+- framing_effect | Agudeza visual con cartilla de Snellen como tamizaje suficiente || No detecta lesiones tempranas.
+- complexity_bias | Tomografía de coherencia óptica de rutina a todos || Se usa en edema macular.
+- base_rate_fallacy | Revisión solo si tiene hipertensión || Todos los diabéticos lo requieren.
+- belief_bias | Lentes graduados para prevenir retinopatía || No la previenen.
+- omission_bias | Esperar a que tenga visión borrosa || Sería tardío.
+E: La retinopatía diabética es una de las principales causas de ceguera prevenible en adultos en edad productiva. En la diabetes tipo 2 el tamizaje se realiza desde el momento del diagnóstico, porque la enfermedad puede llevar años sin detectarse, y en la tipo 1 a los cinco años del diagnóstico. Se realiza con fondo de ojo bajo dilatación pupilar por un oftalmólogo o con retinografía digital interpretada. Si no hay retinopatía y el control es bueno, puede repetirse cada uno o dos años; si hay lesiones, con mayor frecuencia. El buen control de glucosa, presión y lípidos reduce la progresión.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de retinopatía diabética ;; Estándares de atención en diabetes de la Asociación Americana de Diabetes
+
+@ fam|chronic_disease_primary|diabetes_primary_care|3|treatment_of_choice
+V: Hombre de 62 años con diabetes tipo 2 en tratamiento con metformina, hemoglobina glucosilada de 8.1 por ciento. Tuvo un infarto agudo de miocardio hace un año y tiene insuficiencia cardiaca con fracción de expulsión de 35 por ciento. Tasa de filtración de 65 mL/min.
+P: ¿Cuál es el fármaco de elección para agregar a la metformina?
++ Inhibidor del cotransportador de sodio y glucosa tipo 2, como empagliflozina o dapagliflozina || Reduce hospitalizaciones por insuficiencia cardiaca y mortalidad cardiovascular.
+- anchoring | Glibenclamida || No tiene beneficio cardiovascular y causa hipoglucemia.
+- availability_heuristic | Pioglitazona || Está contraindicada en insuficiencia cardiaca.
+- representativeness_heuristic | Aumentar solo la dosis de metformina sin agregar otro fármaco || No aprovecha el beneficio cardiovascular.
+- premature_closure | Saxagliptina || Se asoció con más hospitalizaciones por insuficiencia cardiaca.
+- framing_effect | Insulina rápida en cada comida || No es la siguiente opción.
+- complexity_bias | Acarbosa más repaglinida || No tienen beneficio cardiovascular demostrado.
+- base_rate_fallacy | Suspender la metformina por el infarto || No está contraindicada.
+- belief_bias | Clorpropamida || Está en desuso por hipoglucemia prolongada.
+- omission_bias | Mantener el mismo tratamiento hasta el próximo año || El descontrol requiere ajuste.
+E: En pacientes con diabetes tipo 2 e insuficiencia cardiaca, enfermedad renal crónica o enfermedad cardiovascular aterosclerótica establecida, se recomienda agregar un fármaco con beneficio cardiovascular o renal demostrado, independientemente de la hemoglobina glucosilada. Los inhibidores del cotransportador de sodio y glucosa tipo 2 reducen hospitalizaciones por insuficiencia cardiaca, mortalidad cardiovascular y progresión de la enfermedad renal. Los agonistas del receptor de GLP-1 reducen eventos cardiovasculares ateroscleróticos. Las tiazolidinedionas están contraindicadas en insuficiencia cardiaca por la retención de líquidos. La metformina se mantiene como base del tratamiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento farmacológico de la diabetes mellitus tipo 2 en el primer nivel ;; Estándares de atención en diabetes de la Asociación Americana de Diabetes
+
+@ fam|chronic_disease_primary|diabetes_primary_care|2|treatment_of_choice
+V: Mujer de 70 años con diabetes tipo 2 tratada con glibenclamida. La traen por confusión, sudoración y temblor. Glucosa capilar de 45 mg/dL. Está consciente y puede deglutir.
+P: ¿Cuál es el tratamiento de elección inmediato?
++ 15 a 20 gramos de glucosa o carbohidratos de absorción rápida por vía oral y repetir la glucosa en 15 minutos || Es la regla de los 15 en una paciente que puede deglutir.
+- anchoring | Glucagón intramuscular como primera opción || Se usa si no puede deglutir.
+- availability_heuristic | Insulina rápida subcutánea || Agravaría la hipoglucemia.
+- representativeness_heuristic | Esperar a que se recupere sola || Puede progresar a coma.
+- premature_closure | Dar solo una comida rica en grasa || La grasa retrasa la absorción.
+- framing_effect | Solución glucosada al 50 por ciento intravenosa en una paciente que puede deglutir como primera opción || La vía oral es preferible si puede deglutir.
+- complexity_bias | Tomografía de cráneo antes de dar glucosa || Retrasa el tratamiento.
+- base_rate_fallacy | Aumentar la dosis de glibenclamida || Es la causa de la hipoglucemia.
+- belief_bias | Chocolate como mejor opción por su contenido de azúcar || La grasa retrasa la absorción.
+- omission_bias | No vigilar recurrencia por la sulfonilurea || Puede repetirse durante horas.
+E: La hipoglucemia es la complicación aguda más frecuente del tratamiento de la diabetes, sobre todo con insulina y sulfonilureas como la glibenclamida, especialmente en adultos mayores y con insuficiencia renal. En una persona consciente que puede deglutir se aplica la regla de los 15: dar 15 a 20 gramos de glucosa o carbohidratos simples, como jugo o refresco regular, y revalorar la glucosa en 15 minutos, repitiendo si sigue baja. Al recuperarse se da un alimento con carbohidratos complejos. Si no puede deglutir se usa glucagón o glucosa intravenosa. Las sulfonilureas causan hipoglucemias prolongadas, por lo que se vigila y se ajusta el tratamiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipoglucemia en el adulto ;; Estándares de atención en diabetes de la Asociación Americana de Diabetes
+
+@ fam|chronic_disease_primary|diabetes_primary_care|3|next_step
+V: Hombre de 65 años con diabetes tipo 2 tratada con metformina 2 gramos al día. En su control, la tasa de filtración glomerular estimada es de 25 mL/min/1.73 m2, previamente de 45.
+P: ¿Cuál es la conducta más apropiada respecto a la metformina?
++ Suspender la metformina || Está contraindicada con filtración menor de 30 por el riesgo de acidosis láctica.
+- anchoring | Mantener la misma dosis || El riesgo de acidosis láctica aumenta.
+- availability_heuristic | Duplicar la dosis para mejorar el control || Está contraindicada.
+- representativeness_heuristic | Cambiar a metformina de liberación prolongada a la misma dosis || La contraindicación es igual.
+- premature_closure | Agregar glibenclamida y mantener la metformina || Ambas son problemáticas en insuficiencia renal.
+- framing_effect | Suspender todos los antidiabéticos sin sustituto || Se debe mantener el control.
+- complexity_bias | Iniciar hemodiálisis para continuar la metformina || No es una indicación.
+- base_rate_fallacy | La metformina solo se ajusta con filtración menor de 10 || El umbral es 30.
+- belief_bias | La metformina daña el riñón y causó el deterioro || No es nefrotóxica.
+- omission_bias | No buscar la causa del deterioro renal || Debe evaluarse.
+E: La metformina se elimina por vía renal y su acumulación aumenta el riesgo de acidosis láctica. Con una tasa de filtración glomerular de 45 o más puede usarse a dosis completa; entre 30 y 44 se reduce la dosis, habitualmente a un máximo de 1 gramo al día, y no se inicia; con filtración menor de 30 está contraindicada. También se suspende temporalmente ante estudios con contraste yodado en pacientes con función renal reducida o en situaciones de hipoperfusión. Como alternativas se consideran inhibidores de DPP-4 con ajuste renal, como linagliptina, agonistas de GLP-1 o insulina. La metformina no es nefrotóxica.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento farmacológico de la diabetes mellitus tipo 2 en el primer nivel ;; Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la enfermedad renal crónica temprana
+
+@ fam|chronic_disease_primary|diabetes_primary_care|2|prevention_screening
+V: Mujer de 55 años con diabetes tipo 2 de 5 años de evolución y presión arterial de 128/78 mmHg. Nunca se le ha medido albúmina en orina. Creatinina sérica normal.
+P: ¿Cuál es el estudio de tamizaje de nefropatía diabética recomendado?
++ Cociente albúmina creatinina en muestra aislada de orina y tasa de filtración estimada anualmente || Detecta daño renal temprano.
+- anchoring | No es necesario porque la creatinina es normal || La albuminuria aparece antes de que suba la creatinina.
+- availability_heuristic | Examen general de orina con tira reactiva como única prueba || No detecta albuminuria moderada.
+- representativeness_heuristic | Ultrasonido renal anual || No detecta nefropatía temprana.
+- premature_closure | Biopsia renal || No es una prueba de tamizaje.
+- framing_effect | Urografía excretora || Usa contraste y no está indicada.
+- complexity_bias | Gammagrama renal || No es una prueba de tamizaje.
+- base_rate_fallacy | Tamizar solo si tiene hipertensión descontrolada || Todos los diabéticos lo requieren.
+- belief_bias | Medir nitrógeno ureico como única prueba || Es poco sensible.
+- omission_bias | Esperar a que tenga edema || Sería tardío.
+E: La enfermedad renal diabética es la principal causa de enfermedad renal crónica terminal en México. Se recomienda tamizaje anual en todos los pacientes con diabetes tipo 2 desde el diagnóstico, y en la tipo 1 a partir de los cinco años, con cociente albúmina creatinina en una muestra aislada de orina y tasa de filtración glomerular estimada. Un cociente de 30 a 300 mg/g indica albuminuria moderada, y debe confirmarse en dos de tres muestras en tres a seis meses. La albuminuria precede a la caída de la filtración. Su detección indica iniciar inhibidores de la enzima convertidora o antagonistas del receptor de angiotensina.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la enfermedad renal crónica temprana ;; Estándares de atención en diabetes de la Asociación Americana de Diabetes
+
+@ fam|chronic_disease_primary|diabetes_primary_care|3|treatment_of_choice
+V: Hombre de 56 años con diabetes tipo 2 e hipertensión arterial. Presión arterial de 142/88 mmHg en varias consultas. Cociente albúmina creatinina de 180 mg/g. Tasa de filtración de 70 mL/min.
+P: ¿Cuál es el antihipertensivo de elección?
++ Inhibidor de la enzima convertidora de angiotensina, como enalapril, o un antagonista del receptor de angiotensina || Reducen la presión y la albuminuria y retrasan la progresión renal.
+- anchoring | Hidroclorotiazida como monoterapia inicial || No tiene el efecto antiproteinúrico.
+- availability_heuristic | Propranolol || No es de elección en este contexto.
+- representativeness_heuristic | Combinar enalapril con losartán || La doble inhibición aumenta hiperpotasemia y daño renal.
+- premature_closure | Nifedipino de acción rápida || No es adecuado.
+- framing_effect | Solo dieta baja en sal sin fármaco || Ya requiere tratamiento farmacológico.
+- complexity_bias | Alfa bloqueador como prazosina || No es de primera línea.
+- base_rate_fallacy | Esperar a que la presión supere 160/100 || La meta es menor de 130/80.
+- belief_bias | Los inhibidores de la enzima convertidora dañan el riñón diabético || Lo protegen.
+- omission_bias | No vigilar potasio y creatinina al iniciar || Deben medirse.
+E: En pacientes con diabetes e hipertensión con albuminuria, los inhibidores de la enzima convertidora de angiotensina o los antagonistas del receptor de angiotensina son de elección porque, además de bajar la presión, reducen la albuminuria y retrasan la progresión de la enfermedad renal. La meta de presión arterial habitual es menor de 130/80 mmHg. No deben combinarse entre sí por el riesgo de hiperpotasemia e insuficiencia renal aguda. Se miden potasio y creatinina de una a dos semanas después de iniciarlos; un aumento de creatinina de hasta 30 por ciento es aceptable. Los inhibidores del cotransportador de sodio y glucosa tipo 2 agregan protección renal.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel ;; Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la enfermedad renal crónica temprana
+
+@ fam|chronic_disease_primary|diabetes_primary_care|3|next_step
+V: Mujer de 60 años con diabetes tipo 2 tratada con metformina y glibenclamida a dosis máximas durante un año, con buena adherencia. Hemoglobina glucosilada de 9.5 por ciento. Peso estable, sin cetosis.
+P: ¿Cuál es la conducta más apropiada para mejorar el control glucémico?
++ Iniciar insulina basal nocturna con 10 unidades o 0.1 a 0.2 unidades por kilo y titular según la glucosa en ayuno || La falla a dos orales con hemoglobina mayor de 9 justifica insulina.
+- anchoring | Mantener el mismo esquema y reforzar dieta por otro año || La inercia terapéutica aumenta complicaciones.
+- availability_heuristic | Iniciar insulina rápida en cada comida como primer paso || Se inicia con insulina basal.
+- representativeness_heuristic | Suspender todos los orales y usar solo insulina en dosis altas || Se puede mantener la metformina.
+- premature_closure | Agregar un cuarto antidiabético oral sin evaluar insulina || Tiene menor eficacia con esta cifra.
+- framing_effect | Hospitalizar para iniciar insulina || Se inicia de forma ambulatoria.
+- complexity_bias | Bomba de insulina de inicio || No es el primer paso.
+- base_rate_fallacy | La insulina solo se usa en diabetes tipo 1 || También en tipo 2.
+- belief_bias | La insulina causa ceguera || La hiperglucemia es la que causa daño.
+- omission_bias | No enseñar automonitoreo ni manejo de hipoglucemia || Es indispensable al iniciar insulina.
+E: La diabetes tipo 2 es progresiva y muchos pacientes requieren insulina con el tiempo. Cuando hay falla a dos o más antidiabéticos orales con buena adherencia, o hemoglobina glucosilada mayor de 9 a 10 por ciento, se recomienda iniciar insulina basal, como NPH nocturna o un análogo de acción prolongada como glargina, con 10 unidades o 0.1 a 0.2 unidades por kilo al día, titulando cada tres días según la glucosa en ayuno. La metformina se mantiene, y puede reducirse o suspenderse la sulfonilurea por el riesgo de hipoglucemia. Es indispensable enseñar automonitoreo, técnica de aplicación y reconocimiento de hipoglucemia.
+R: Guía de Práctica Clínica de tratamiento de la diabetes mellitus tipo 2 con insulina en el primer nivel ;; Estándares de atención en diabetes de la Asociación Americana de Diabetes
+
+@ fam|chronic_disease_primary|diabetes_primary_care|2|prevention_screening
+V: Hombre de 42 años con glucosa en ayuno de 112 mg/dL y hemoglobina glucosilada de 6.0 por ciento en dos ocasiones. Índice de masa corporal de 30, sedentario.
+P: ¿Cuál es la intervención de prevención de diabetes más eficaz en este paciente?
++ Cambios intensivos en el estilo de vida con pérdida de 7 por ciento del peso y 150 minutos semanales de actividad física || Reduce la progresión a diabetes en cerca de 58 por ciento.
+- anchoring | Insulina basal preventiva || No está indicada en prediabetes.
+- availability_heuristic | Glibenclamida preventiva || Causa hipoglucemia y no se recomienda.
+- representativeness_heuristic | No requiere intervención porque no es diabético || La prediabetes tiene alto riesgo de progresión.
+- premature_closure | Repetir estudios en 10 años sin intervención || Debe intervenirse y vigilarse anualmente.
+- framing_effect | Dieta sin carbohidratos absoluta || No es sostenible ni recomendada.
+- complexity_bias | Cirugía bariátrica inmediata || No está indicada con estos datos.
+- base_rate_fallacy | La prediabetes revierte sola en la mayoría || Muchos progresan sin intervención.
+- belief_bias | Suplementos de canela como tratamiento principal || No tienen evidencia suficiente.
+- omission_bias | No medir glucosa anualmente || Se requiere vigilancia.
+E: La prediabetes se define por glucosa en ayuno de 100 a 125 mg/dL, glucosa a las 2 horas de la curva de tolerancia de 140 a 199 mg/dL o hemoglobina glucosilada de 5.7 a 6.4 por ciento. Estas personas tienen alto riesgo de diabetes y enfermedad cardiovascular. El Programa de Prevención de Diabetes demostró que los cambios intensivos en el estilo de vida, con pérdida de al menos 7 por ciento del peso y 150 minutos semanales de actividad física moderada, reducen la progresión a diabetes en 58 por ciento, más que la metformina. La metformina puede considerarse en menores de 60 años con obesidad importante o antecedente de diabetes gestacional.
+R: Norma Oficial Mexicana para la prevención, tratamiento y control de la diabetes mellitus ;; Estándares de atención en diabetes de la Asociación Americana de Diabetes
+
+@ fam|chronic_disease_primary|diabetes_primary_care|3|next_step
+V: Hombre de 50 años con diabetes tipo 2 en tratamiento con metformina e inhibidor del cotransportador de sodio y glucosa tipo 2. Presenta gastroenteritis con vómito y diarrea desde hace 2 días y casi no ha comido.
+P: ¿Cuál es la conducta más apropiada respecto a sus medicamentos?
++ Suspender temporalmente metformina y el inhibidor del cotransportador, hidratarse y vigilar glucosa y cetonas || Son las reglas de días de enfermedad.
+- anchoring | Mantener todos los medicamentos igual || Aumenta el riesgo de acidosis láctica y cetoacidosis.
+- availability_heuristic | Duplicar la metformina por la hiperglucemia del estrés || Aumenta el riesgo.
+- representativeness_heuristic | Suspender la hidratación oral || Empeora la deshidratación.
+- premature_closure | Iniciar glibenclamida en lugar de los fármacos suspendidos || Causa hipoglucemia sin ingesta.
+- framing_effect | Ayuno absoluto sin líquidos || Favorece la deshidratación.
+- complexity_bias | Hospitalización inmediata en todos los casos || Solo si no tolera la vía oral o hay datos de alarma.
+- base_rate_fallacy | La cetoacidosis no ocurre en diabetes tipo 2 || Puede ocurrir con estos fármacos.
+- belief_bias | El inhibidor del cotransportador protege contra la deshidratación || Aumenta las pérdidas urinarias.
+- omission_bias | No dar datos de alarma para acudir a urgencias || Son parte de la educación.
+E: Durante enfermedades agudas con deshidratación, vómito o ingesta reducida se aplican las reglas de días de enfermedad. Se suspenden temporalmente los fármacos que aumentan el riesgo en esas condiciones: metformina por acidosis láctica, inhibidores del cotransportador de sodio y glucosa tipo 2 por cetoacidosis euglucémica y depleción de volumen, y también diuréticos, inhibidores de la enzima convertidora y antiinflamatorios por lesión renal. Se recomienda hidratación frecuente, monitoreo de glucosa y, si es posible, de cetonas. La insulina basal habitualmente no se suspende. Se reinician al recuperar la ingesta.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento farmacológico de la diabetes mellitus tipo 2 en el primer nivel ;; Estándares de atención en diabetes de la Asociación Americana de Diabetes
+
+@ fam|chronic_disease_primary|diabetes_primary_care|2|prevention_screening
+V: Mujer de 50 años con diabetes tipo 2 sin enfermedad cardiovascular conocida. Colesterol LDL de 115 mg/dL. Presión arterial controlada. No fuma.
+P: ¿Cuál es la recomendación más adecuada respecto a la prevención cardiovascular con estatinas?
++ Iniciar estatina de intensidad moderada || Se recomienda en diabéticos de 40 a 75 años independientemente del colesterol.
+- anchoring | No dar estatina porque el LDL es menor de 130 || En diabéticos la indicación no depende solo del LDL.
+- availability_heuristic | Fibrato como primera opción || La estatina es el fármaco de primera línea.
+- representativeness_heuristic | Ácido acetilsalicílico como única medida preventiva || En prevención primaria se individualiza.
+- premature_closure | Esperar a que tenga un evento cardiovascular || La prevención primaria está indicada.
+- framing_effect | Omega 3 como sustituto de estatina || No sustituye.
+- complexity_bias | Ezetimiba más inhibidor de PCSK9 de inicio || No es el primer paso.
+- base_rate_fallacy | Las estatinas solo se usan en hombres || Benefician a ambos sexos.
+- belief_bias | Las estatinas causan diabetes por lo que no deben usarse en diabéticos || El beneficio supera el riesgo.
+- omission_bias | No medir lípidos en el seguimiento || Debe evaluarse la respuesta.
+E: Las personas con diabetes tienen un riesgo cardiovascular elevado. En adultos con diabetes de 40 a 75 años sin enfermedad cardiovascular se recomienda una estatina de intensidad al menos moderada, como atorvastatina 10 a 20 mg o rosuvastatina 5 a 10 mg, independientemente del colesterol basal. Si tienen factores de riesgo adicionales o daño a órgano blanco, se prefiere alta intensidad con meta de LDL menor de 70 mg/dL. En prevención secundaria la meta es menor de 55 mg/dL. Se controla el perfil de lípidos a las 4 a 12 semanas para valorar respuesta y apego.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en el adulto ;; Estándares de atención en diabetes de la Asociación Americana de Diabetes
+
+@ fam|chronic_disease_primary|diabetes_primary_care|3|next_step
+V: Mujer de 82 años con diabetes tipo 2, deterioro cognitivo leve y caídas frecuentes. Vive sola. Recibe glibenclamida e insulina NPH. Hemoglobina glucosilada de 6.2 por ciento y episodios de mareo y sudoración por las tardes.
+P: ¿Cuál es la conducta más apropiada?
++ Desintensificar el tratamiento con una meta de hemoglobina glucosilada menos estricta, de 7.5 a 8 por ciento, y suspender la glibenclamida || Tiene alto riesgo de hipoglucemia y una meta estricta no es apropiada.
+- anchoring | Mantener el esquema porque la hemoglobina está en meta || Está sobretratada con riesgo de hipoglucemia.
+- availability_heuristic | Aumentar la insulina para bajar la hemoglobina a 5.5 || Aumenta el riesgo de hipoglucemia y muerte.
+- representativeness_heuristic | Agregar pioglitazona || Aumenta el riesgo de fracturas y edema.
+- premature_closure | Atribuir los síntomas a la edad || Son compatibles con hipoglucemia.
+- framing_effect | Suspender todo tratamiento y dejar sin control || Debe mantenerse un control individualizado.
+- complexity_bias | Hospitalizar para infusión de insulina || No está indicado.
+- base_rate_fallacy | La meta es igual para todos los diabéticos || Se individualiza.
+- belief_bias | Las hipoglucemias no afectan a los adultos mayores || Causan caídas y eventos cardiovasculares.
+- omission_bias | No revisar quién administra los medicamentos || Su deterioro cognitivo afecta el apego.
+E: Las metas de control glucémico deben individualizarse según la edad, la esperanza de vida, las comorbilidades, el deterioro cognitivo y el riesgo de hipoglucemia. En adultos mayores frágiles, con deterioro cognitivo o con alto riesgo de hipoglucemia, se recomienda una meta de hemoglobina glucosilada menos estricta, entre 7.5 y 8 por ciento, e incluso más alta si la esperanza de vida es limitada. La hipoglucemia en adultos mayores causa caídas, fracturas, arritmias y deterioro cognitivo. Se deben suspender las sulfonilureas de acción prolongada como glibenclamida y simplificar los esquemas de insulina. La desintensificación es una práctica recomendada.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la diabetes en el adulto mayor ;; Estándares de atención en diabetes de la Asociación Americana de Diabetes
+
+@ fam|chronic_disease_primary|diabetes_primary_care|2|data_interpretation
+V: Hombre de 45 años sin síntomas de hiperglucemia acude con resultados de laboratorio. Glucosa plasmática en ayuno de 132 mg/dL hace un mes y hemoglobina glucosilada de 6.8 por ciento hoy.
+P: ¿Qué indica la combinación de estos resultados?
++ Diabetes mellitus confirmada por dos pruebas diferentes por arriba del umbral || Dos pruebas anormales en un paciente asintomático confirman el diagnóstico.
+- anchoring | Prediabetes || Ambas cifras superan el umbral de diabetes.
+- availability_heuristic | Resultados normales || Están elevados.
+- representativeness_heuristic | Se requiere una curva de tolerancia obligatoria antes de concluir || Ya hay dos pruebas anormales.
+- premature_closure | Diabetes tipo 1 por los valores altos || No hay datos para esa clasificación.
+- framing_effect | Intolerancia a la glucosa posprandial aislada || No se midió la posprandial.
+- complexity_bias | Requiere anticuerpos antiGAD para confirmar diabetes || No son necesarios para el diagnóstico.
+- base_rate_fallacy | Solo la glucosa al azar mayor de 200 confirma diabetes || Hay varios criterios válidos.
+- belief_bias | La hemoglobina glucosilada no sirve para diagnóstico || Es un criterio aceptado.
+- focusing_illusion | Error de laboratorio por diferencia entre pruebas || Ambos resultados son concordantes.
+E: El diagnóstico de diabetes se establece con glucosa plasmática en ayuno de 126 mg/dL o más, glucosa a las 2 horas de una curva de tolerancia con 75 gramos de 200 mg/dL o más, hemoglobina glucosilada de 6.5 por ciento o más con método estandarizado, o glucosa al azar de 200 mg/dL o más con síntomas clásicos. En ausencia de hiperglucemia inequívoca, se requieren dos resultados anormales, ya sea de la misma prueba en dos ocasiones o de dos pruebas diferentes. En este paciente, la glucosa en ayuno de 132 y la hemoglobina de 6.8 confirman diabetes.
+R: Norma Oficial Mexicana para la prevención, tratamiento y control de la diabetes mellitus ;; Estándares de atención en diabetes de la Asociación Americana de Diabetes

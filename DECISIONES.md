@@ -641,3 +641,12 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Suscripción y portada marcan como Próximamente lo que aún no existe y muestran el ahorro del plan anual
 - Mazos en cuadrícula a todo lo ancho. Banco con búsqueda, filtros, páginas de 25 y detalle de cada pregunta
 - Botones de guardar con el mismo texto, encabezado que no se sale en el teléfono, textos que mandaban a Perfil o hablaban de fases y bloques
+
+### D-077. Banco grande de 1500 preguntas en borrador
+- Fecha 2026-10-03. Origen R
+- Ricardo pidió completar todas las ramas troncales y subespecialidades con 1500 preguntas, en Supabase o en Excel si no se podía en la nube
+- Reparto parejo, 250 por troncal, con 10 opciones como el banco actual, según lo que eligió Ricardo
+- Fuentes en content-drafts/bank1500/src en formato compacto, convertidas a JSON con scripts/content/bank-convert.ts y validadas con scripts/content/check-draft.ts. Las 1500 pasan la validación, sin claves repetidas y con subtemas que existen en la taxonomía
+- Se entrega en Excel con scripts/content/bank-excel.ts porque la segunda parte de la nube, que sube el banco a Supabase, sigue pendiente
+- Es borrador generado con IA. Queda fuera del banco de la app y de la demo hasta que un médico lo revise y se cite la frase que respalda cada respuesta
+- Algunos temas sin subtema exacto quedaron en el subtema más cercano. La lista vive en content-drafts/bank1500/README.md

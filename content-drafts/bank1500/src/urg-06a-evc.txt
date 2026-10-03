@@ -1,0 +1,191 @@
+@ urg|neurologic_emergencies|stroke_emergency|2|initial_study
+V: Hombre de 68 años que inicia hace 1 hora con debilidad del brazo y la pierna derechos y dificultad para hablar. Presión de 170/95 mmHg. Glucosa capilar de 110 mg/dL.
+P: ¿Cuál es el estudio inicial más apropiado?
++ Tomografía de cráneo simple urgente || Distingue un evento isquémico de uno hemorrágico antes de decidir la trombólisis.
+- anchoring | Resonancia magnética con espectroscopia antes de cualquier decisión || Puede retrasar el tratamiento si no está disponible de inmediato.
+- availability_heuristic | Punción lumbar || No está indicada.
+- representativeness_heuristic | Electroencefalograma || No distingue isquemia de hemorragia.
+- premature_closure | Iniciar ácido acetilsalicílico antes de la imagen || Podría empeorar una hemorragia.
+- framing_effect | Ultrasonido Doppler carotídeo como primer estudio || No descarta hemorragia.
+- complexity_bias | Angiografía cerebral convencional de inicio || Es invasiva.
+- base_rate_fallacy | Los síntomas de evento vascular no permiten distinguir isquemia de hemorragia sin imagen || Es cierto, por eso se requiere imagen.
+- belief_bias | La tomografía normal descarta un evento isquémico || En las primeras horas suele ser normal.
+- omission_bias | No registrar la hora exacta de inicio de los síntomas || Determina la ventana terapéutica.
+E: Ante la sospecha de evento vascular cerebral agudo se activa el código cerebro y se realiza una tomografía de cráneo simple urgente, idealmente en los primeros 20 minutos de la llegada, para descartar una hemorragia antes de considerar la trombólisis. En las primeras horas del evento isquémico la tomografía suele ser normal o mostrar signos tempranos sutiles. La angiotomografía identifica oclusiones de grandes vasos candidatas a trombectomía. Se mide la glucosa capilar para descartar hipoglucemia, que puede simular un evento. La hora de inicio o la última vez que se vio normal al paciente define la ventana terapéutica.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica ;; Guía de la Asociación Americana del Corazón para evento vascular cerebral isquémico agudo
+
+@ urg|neurologic_emergencies|stroke_emergency|3|treatment_of_choice
+V: Mujer de 65 años con hemiparesia izquierda y disartria que inició hace 2 horas. Tomografía sin hemorragia. Presión de 165/90 mmHg. Glucosa de 130 mg/dL. Sin anticoagulantes ni cirugías recientes. Escala NIHSS de 9.
+P: ¿Cuál es el tratamiento de elección?
++ Trombólisis intravenosa con alteplasa o tenecteplasa || Está dentro de la ventana de 4.5 horas sin contraindicaciones.
+- anchoring | Solo ácido acetilsalicílico y observación || Pierde el beneficio de la trombólisis.
+- availability_heuristic | Heparina intravenosa en dosis plena || No está indicada en el evento agudo.
+- representativeness_heuristic | Bajar la presión a 120/80 antes de cualquier tratamiento || Solo se requiere menor de 185/110 para trombolizar.
+- premature_closure | Esperar 24 horas para ver si mejora sola || Pierde la ventana terapéutica.
+- framing_effect | Manitol de rutina || No está indicado.
+- complexity_bias | Craniectomía descompresiva inmediata || No está indicada.
+- base_rate_fallacy | La trombólisis solo sirve en la primera hora || Es útil hasta 4.5 horas.
+- belief_bias | La trombólisis está contraindicada en mayores de 60 años || No hay límite de edad estricto.
+- omission_bias | No evaluar oclusión de gran vaso para trombectomía || Debe evaluarse.
+E: La trombólisis intravenosa con alteplasa, 0.9 mg por kilo con 10 por ciento en bolo y el resto en una hora, o con tenecteplasa en bolo único, está indicada en el evento vascular cerebral isquémico agudo con déficit discapacitante dentro de las primeras 4.5 horas del inicio de los síntomas, sin contraindicaciones. Antes se requiere tomografía sin hemorragia, glucosa normal y presión menor de 185/110 mmHg. Las contraindicaciones incluyen hemorragia intracraneal, cirugía o trauma mayor recientes, sangrado activo, anticoagulación eficaz y plaquetas bajas. Cuanto antes se administra, mayor es el beneficio, por lo que se busca un tiempo puerta aguja menor de 60 minutos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica ;; Guía de la Asociación Americana del Corazón para evento vascular cerebral isquémico agudo
+
+@ urg|neurologic_emergencies|stroke_emergency|3|next_step
+V: Hombre de 60 años con afasia y hemiplejía derecha de 3 horas de evolución, NIHSS de 18. Recibió trombólisis intravenosa. La angiotomografía muestra oclusión del segmento proximal de la arteria cerebral media izquierda.
+P: ¿Cuál es el siguiente paso más apropiado?
++ Trombectomía mecánica endovascular || Está indicada en oclusión de gran vaso anterior, incluso después de la trombólisis.
+- anchoring | Solo vigilancia porque ya recibió trombólisis || La trombectomía agrega beneficio en oclusiones proximales.
+- availability_heuristic | Repetir la dosis de alteplasa || No está indicado.
+- representativeness_heuristic | Heparina intravenosa en dosis plena || No está indicada.
+- premature_closure | Esperar a la resonancia de 24 horas || Retrasa un tratamiento eficaz.
+- framing_effect | Endarterectomía carotídea urgente || No es el tratamiento de la oclusión de la cerebral media.
+- complexity_bias | Hipotermia terapéutica || No tiene evidencia en este contexto.
+- base_rate_fallacy | La trombectomía solo sirve en las primeras 2 horas || Es útil hasta 6 y, en casos seleccionados, 24 horas.
+- belief_bias | La trombectomía está contraindicada si se dio trombólisis || Se usan juntas.
+- omission_bias | No trasladar a un centro con terapia endovascular || Es necesario si no está disponible.
+E: La trombectomía mecánica endovascular está indicada en pacientes con evento vascular cerebral isquémico por oclusión de un gran vaso de la circulación anterior, como la carótida interna o el segmento proximal de la cerebral media, con déficit significativo, dentro de las primeras 6 horas, y en pacientes seleccionados con imagen de penumbra hasta las 24 horas. Se realiza aunque el paciente haya recibido trombólisis intravenosa, sin esperar su respuesta. Mejora de forma importante la independencia funcional. Por ello, en pacientes con déficit grave se realiza angiotomografía para identificar estas oclusiones.
+R: Guía de la Asociación Americana del Corazón para evento vascular cerebral isquémico agudo ;; Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica
+
+@ urg|neurologic_emergencies|stroke_emergency|3|next_step
+V: Mujer de 72 años con evento vascular cerebral isquémico de 10 horas de evolución, fuera de ventana para trombólisis y sin oclusión de gran vaso. Presión de 200/105 mmHg. No recibirá tratamiento de reperfusión.
+P: ¿Cuál es la conducta más apropiada respecto a la presión arterial?
++ No bajar la presión salvo que supere 220/120 mmHg, y en ese caso reducirla alrededor de 15 por ciento en 24 horas || Se mantiene la perfusión de la penumbra.
+- anchoring | Bajar la presión a 120/80 de inmediato || Puede ampliar el infarto.
+- availability_heuristic | Nifedipino sublingual || Causa descensos bruscos.
+- representativeness_heuristic | Iniciar tres antihipertensivos orales a dosis plenas || Puede causar hipoperfusión.
+- premature_closure | Bajar a menos de 185/110 como si fuera a recibir trombólisis || No recibirá trombólisis.
+- framing_effect | Suspender los antihipertensivos crónicos de por vida || Se reinician después de la fase aguda.
+- complexity_bias | Nitroprusiato en dosis altas para normalizar la presión || No está indicado.
+- base_rate_fallacy | La hipertensión siempre debe corregirse rápidamente en el evento vascular || En el isquémico agudo se tolera.
+- belief_bias | La hipertensión en la fase aguda no tiene función compensatoria || Ayuda a perfundir la penumbra.
+- omission_bias | No iniciar antiagregación || Está indicada en las primeras 24 a 48 horas.
+E: En el evento vascular cerebral isquémico agudo la hipertensión es frecuente y puede ser compensatoria para mantener la perfusión de la penumbra isquémica, donde la autorregulación está alterada. En pacientes que no recibirán reperfusión, no se recomienda bajar la presión salvo que supere 220/120 mmHg, y en ese caso se reduce alrededor de 15 por ciento en las primeras 24 horas. En pacientes candidatos a trombólisis se requiere menor de 185/110 antes y menor de 180/105 durante las 24 horas siguientes. Se inicia ácido acetilsalicílico en las primeras 24 a 48 horas y se reinician los antihipertensivos después de la fase aguda.
+R: Guía de la Asociación Americana del Corazón para evento vascular cerebral isquémico agudo ;; Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica
+
+@ urg|neurologic_emergencies|stroke_emergency|2|diagnosis
+V: Mujer de 45 años con cefalea súbita, la peor de su vida, que alcanzó su máxima intensidad en segundos mientras hacía ejercicio. Presenta vómito, rigidez de nuca y somnolencia. Tomografía de cráneo con sangre en las cisternas basales.
+P: ¿Cuál es el diagnóstico más probable?
++ Hemorragia subaracnoidea por probable ruptura de aneurisma || Cefalea en trueno con rigidez de nuca y sangre en cisternas.
+- anchoring | Migraña con aura || No explica la sangre en la tomografía.
+- availability_heuristic | Meningitis bacteriana || La sangre en cisternas indica hemorragia.
+- representativeness_heuristic | Hemorragia intraparenquimatosa hipertensiva || Se localiza en el parénquima.
+- premature_closure | Cefalea tensional || No explica el cuadro.
+- framing_effect | Evento isquémico de la arteria cerebral media || No explica la sangre subaracnoidea.
+- complexity_bias | Trombosis de senos venosos como primera opción || La sangre en cisternas orienta a aneurisma.
+- base_rate_fallacy | Toda cefalea intensa es benigna en mujeres jóvenes || La cefalea en trueno requiere descartar hemorragia.
+- belief_bias | Una tomografía normal siempre descarta hemorragia subaracnoidea || Puede ser normal y requerir punción lumbar.
+- focusing_illusion | Sinusitis aguda || No explica el cuadro.
+E: La hemorragia subaracnoidea no traumática se debe con mayor frecuencia a la ruptura de un aneurisma intracraneal. Se manifiesta con cefalea súbita e intensa, descrita como la peor de la vida o cefalea en trueno, que alcanza su máximo en segundos a un minuto, acompañada de vómito, rigidez de nuca, fotofobia, alteración de la conciencia o déficit focal. La tomografía simple en las primeras 6 horas tiene una sensibilidad cercana al 100 por ciento; si es negativa y la sospecha persiste, se realiza punción lumbar en busca de xantocromía. La angiotomografía identifica el aneurisma, que se trata con embolización o clipaje temprano.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia subaracnoidea secundaria a ruptura de aneurisma ;; Guía de la Asociación Americana del Corazón para hemorragia subaracnoidea
+
+@ urg|neurologic_emergencies|stroke_emergency|3|treatment_of_choice
+V: Hombre de 50 años con hemorragia subaracnoidea aneurismática. Al tercer día presenta deterioro neurológico y se descarta resangrado e hidrocefalia.
+P: ¿Cuál es el fármaco de elección desde el inicio frente al deterioro por vasoespasmo?
++ Nimodipino oral || Mejora el pronóstico neurológico en la hemorragia subaracnoidea aneurismática.
+- anchoring | Nifedipino sublingual || Causa hipotensión brusca.
+- availability_heuristic | Ácido acetilsalicílico || Aumenta el riesgo de sangrado.
+- representativeness_heuristic | Heparina en dosis plena || Aumenta el riesgo de sangrado.
+- premature_closure | Manitol de rutina || No previene el vasoespasmo.
+- framing_effect | Dexametasona || No tiene beneficio.
+- complexity_bias | Trombólisis intravenosa || Está contraindicada.
+- base_rate_fallacy | El vasoespasmo ocurre en las primeras horas || Ocurre típicamente entre los días 3 y 14.
+- belief_bias | La hipovolemia ayuda a prevenir el vasoespasmo || Se mantiene la euvolemia.
+- omission_bias | No vigilar con Doppler transcraneal || Ayuda a detectar el vasoespasmo.
+E: La isquemia cerebral tardía por vasoespasmo es una complicación importante de la hemorragia subaracnoidea aneurismática, que aparece típicamente entre los días 3 y 14. El nimodipino oral, 60 mg cada 4 horas durante 21 días, se administra desde el diagnóstico a todos los pacientes porque mejora el pronóstico neurológico, aunque no reduce el vasoespasmo angiográfico. Se mantiene la euvolemia, se evita la hipotensión y se vigila con Doppler transcraneal. Ante un deterioro por vasoespasmo se induce hipertensión y se considera la angioplastia o vasodilatadores intraarteriales. Otras complicaciones son el resangrado, la hidrocefalia y la hiponatremia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia subaracnoidea secundaria a ruptura de aneurisma ;; Guía de la Asociación Americana del Corazón para hemorragia subaracnoidea
+
+@ urg|neurologic_emergencies|stroke_emergency|3|next_step
+V: Hombre de 70 años hipertenso con hemiparesia izquierda súbita. Tomografía con hemorragia intraparenquimatosa en el putamen derecho de 20 mL, sin extensión ventricular. Presión de 200/110 mmHg. No toma anticoagulantes.
+P: ¿Cuál es la conducta más apropiada respecto a la presión arterial?
++ Reducir la presión sistólica a una meta de alrededor de 140 mmHg de forma controlada con fármacos intravenosos || Reduce la expansión del hematoma.
+- anchoring | No tratar la presión como en el evento isquémico || En la hemorragia se recomienda reducirla.
+- availability_heuristic | Bajar la presión a 90/60 mmHg || Causa hipoperfusión.
+- representativeness_heuristic | Nifedipino sublingual || Causa descensos bruscos e impredecibles.
+- premature_closure | Trombólisis intravenosa || Está contraindicada.
+- framing_effect | Iniciar ácido acetilsalicílico || Aumenta el sangrado.
+- complexity_bias | Cirugía de evacuación inmediata en todos los casos || No está indicada de rutina en este tamaño.
+- base_rate_fallacy | La presión no influye en el crecimiento del hematoma || Influye.
+- belief_bias | La meta de presión es igual en el evento isquémico y en el hemorrágico || Difiere.
+- omission_bias | No revertir la anticoagulación si el paciente la tomara || Es fundamental.
+E: En la hemorragia intracerebral espontánea, la hipertensión es la principal causa, y su localización típica son los ganglios basales, el tálamo, el puente y el cerebelo. La reducción de la presión arterial en las primeras horas se asocia con menor expansión del hematoma. En pacientes con sistólica entre 150 y 220 mmHg se recomienda reducirla a una meta de alrededor de 140 mmHg de forma controlada con fármacos intravenosos como labetalol o nicardipino, evitando descensos bruscos o por debajo de 130. Se revierte la anticoagulación si existe. La cirugía se considera en hemorragias cerebelosas grandes con compresión o hidrocefalia.
+R: Guía de la Asociación Americana del Corazón para hemorragia intracerebral ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia intracerebral espontánea
+
+@ urg|neurologic_emergencies|stroke_emergency|2|next_step
+V: Hombre de 62 años que presentó debilidad del brazo derecho y dificultad para hablar durante 20 minutos, con recuperación completa. Hipertenso y diabético. Escala ABCD2 de 5.
+P: ¿Cuál es la conducta más apropiada?
++ Evaluación urgente con imagen cerebral y vascular, iniciar antiagregación y control de factores de riesgo || El ataque isquémico transitorio tiene alto riesgo de evento vascular en los días siguientes.
+- anchoring | Dar de alta sin estudios porque se recuperó || El riesgo de evento en los primeros días es alto.
+- availability_heuristic | Trombólisis intravenosa || No hay déficit actual.
+- representativeness_heuristic | Anticoagulación plena sin estudio || No está indicada sin fibrilación auricular u otra causa.
+- premature_closure | Citar en 3 meses para estudios || El riesgo es mayor en los primeros días.
+- framing_effect | Considerarlo una crisis de ansiedad || Los síntomas focales sugieren isquemia.
+- complexity_bias | Angiografía cerebral convencional como primer estudio || No es el primer paso.
+- base_rate_fallacy | El ataque isquémico transitorio rara vez precede a un evento establecido || Es un predictor importante.
+- belief_bias | Si los síntomas desaparecen no hubo daño ni riesgo || El riesgo persiste.
+- omission_bias | No buscar fibrilación auricular ni estenosis carotídea || Cambian el tratamiento.
+E: El ataque isquémico transitorio es un episodio de disfunción neurológica focal por isquemia sin infarto en la imagen, con recuperación habitual en menos de una hora. Tiene un riesgo alto de evento vascular cerebral, sobre todo en las primeras 48 horas y semanas. Requiere evaluación urgente con imagen cerebral, preferentemente resonancia, estudio de vasos de cuello, como ultrasonido Doppler o angiotomografía, electrocardiograma y monitoreo del ritmo. Se inicia antiagregación, con doble antiagregación por 21 días en casos de alto riesgo, estatina y control de factores de riesgo. Se indica endarterectomía en estenosis carotídea sintomática significativa y anticoagulación en fibrilación auricular.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del ataque isquémico transitorio ;; Guía de la Asociación Americana del Corazón para prevención secundaria de evento vascular cerebral
+
+@ urg|neurologic_emergencies|stroke_emergency|2|initial_study
+V: Mujer de 55 años con diabetes que es traída por confusión, hemiparesia derecha y dificultad para hablar de inicio súbito. Toma insulina.
+P: ¿Cuál es el estudio inicial más apropiado al pie de cama?
++ Glucosa capilar || La hipoglucemia puede simular un evento vascular cerebral.
+- anchoring | Resonancia magnética antes de cualquier otra prueba || La glucosa se mide primero.
+- availability_heuristic | Electroencefalograma || No es el primer paso.
+- representativeness_heuristic | Punción lumbar || No está indicada.
+- premature_closure | Trombólisis sin medir la glucosa || La glucosa es requisito previo.
+- framing_effect | Gasometría arterial como primer estudio || No es el primer paso.
+- complexity_bias | Angiografía cerebral convencional || No es el primer paso.
+- base_rate_fallacy | La hipoglucemia nunca causa déficit focal || Puede causarlo.
+- belief_bias | Los síntomas focales siempre son vasculares || Hay simuladores.
+- omission_bias | No preguntar la hora de inicio de los síntomas || Es fundamental.
+E: Varias condiciones pueden simular un evento vascular cerebral, como la hipoglucemia, las crisis convulsivas con parálisis de Todd, la migraña con aura, los tumores, las infecciones, la encefalopatía hipertensiva y los trastornos conversivos. La hipoglucemia es el simulador más importante a descartar de inmediato, sobre todo en pacientes diabéticos tratados con insulina o sulfonilureas, porque es fácilmente tratable y su corrección revierte el déficit. Por ello se mide la glucosa capilar al pie de cama antes de cualquier decisión, y una glucosa menor de 50 mg/dL debe corregirse antes de considerar la trombólisis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica ;; Guía de la Asociación Americana del Corazón para evento vascular cerebral isquémico agudo
+
+@ urg|neurologic_emergencies|stroke_emergency|3|treatment_of_choice
+V: Mujer de 75 años con fibrilación auricular en tratamiento con warfarina que presenta hemorragia intraparenquimatosa. INR de 3.8. Glasgow de 13.
+P: ¿Cuál es el tratamiento de elección para revertir la anticoagulación?
++ Concentrado de complejo protrombínico con vitamina K intravenosa || Revierte el INR rápidamente y reduce la expansión del hematoma.
+- anchoring | Solo suspender la warfarina || La reversión debe ser inmediata.
+- availability_heuristic | Plasma fresco como única opción preferida || Es más lento y requiere más volumen.
+- representativeness_heuristic | Protamina || Revierte la heparina.
+- premature_closure | Vitamina K oral sola || Actúa lentamente.
+- framing_effect | Plaquetas || No revierten la warfarina.
+- complexity_bias | Idarucizumab || Revierte el dabigatrán.
+- base_rate_fallacy | La reversión de la warfarina no influye en el pronóstico de la hemorragia || Reduce la expansión.
+- belief_bias | La anticoagulación nunca debe reiniciarse después de una hemorragia || Se valora su reinicio después.
+- omission_bias | No controlar la presión arterial || Es parte del manejo.
+E: La hemorragia intracerebral asociada a anticoagulantes tiene mayor riesgo de expansión del hematoma y mortalidad. En pacientes con warfarina se revierte de inmediato con concentrado de complejo protrombínico de cuatro factores, que normaliza el INR en minutos, junto con vitamina K intravenosa de 10 mg para mantener la reversión. El plasma fresco es una alternativa menos eficaz. Para el dabigatrán se usa idarucizumab y para los inhibidores del factor Xa, andexanet alfa o complejo protrombínico. También se controla la presión arterial. La decisión de reiniciar la anticoagulación se toma semanas después, valorando el riesgo trombótico y hemorrágico.
+R: Guía de la Asociación Americana del Corazón para hemorragia intracerebral ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia asociada a anticoagulantes
+
+@ urg|neurologic_emergencies|stroke_emergency|2|data_interpretation
+V: Hombre de 66 años con debilidad facial derecha, debilidad del brazo derecho y alteración del lenguaje. Un paramédico aplicó una escala prehospitalaria en el lugar.
+P: ¿Qué indica la escala prehospitalaria de Cincinnati positiva en este paciente?
++ Alta probabilidad de evento vascular cerebral, que justifica traslado a un centro con atención de código cerebro || Evalúa asimetría facial, debilidad del brazo y alteración del lenguaje.
+- anchoring | Que confirma la causa hemorrágica || No distingue isquemia de hemorragia.
+- availability_heuristic | Que permite iniciar trombólisis en la ambulancia sin imagen || Se requiere tomografía.
+- representativeness_heuristic | Que descarta hipoglucemia || Debe medirse la glucosa.
+- premature_closure | Que el paciente puede ser trasladado a cualquier unidad sin importar sus recursos || Se prefieren centros con capacidad de reperfusión.
+- framing_effect | Que mide el estado de conciencia como la escala de Glasgow || Evalúa signos focales.
+- complexity_bias | Que sustituye a la escala NIHSS en el hospital || Es una herramienta de tamizaje.
+- base_rate_fallacy | Las escalas prehospitalarias no tienen utilidad || Aceleran la atención.
+- belief_bias | Un solo signo positivo no tiene importancia || Un solo signo aumenta mucho la probabilidad.
+- focusing_illusion | Que indica crisis convulsiva || No es su propósito.
+E: Las escalas prehospitalarias de evento vascular cerebral permiten identificar rápidamente a pacientes con probable evento para activar el código cerebro y trasladarlos a centros con capacidad de reperfusión. La escala de Cincinnati evalúa la asimetría facial al sonreír, la caída del brazo al extender ambos brazos y la alteración del lenguaje al repetir una frase; la presencia de un solo signo anormal sugiere un evento. El acrónimo en inglés BE FAST agrega equilibrio y visión. La hora de inicio de los síntomas debe registrarse. En el hospital se usa la escala NIHSS para cuantificar el déficit.
+R: Guía de la Asociación Americana del Corazón para evento vascular cerebral isquémico agudo ;; Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica
+
+@ urg|neurologic_emergencies|stroke_emergency|3|next_step
+V: Mujer de 50 años con evento vascular cerebral isquémico extenso de la arteria cerebral media derecha. Al segundo día presenta deterioro del estado de conciencia y la tomografía muestra edema con desviación de la línea media.
+P: ¿Cuál es la conducta más apropiada?
++ Valoración urgente por neurocirugía para craniectomía descompresiva || En el infarto maligno de la cerebral media reduce la mortalidad en menores de 60 años.
+- anchoring | Solo observar la evolución || El edema maligno puede causar herniación.
+- availability_heuristic | Trombólisis intravenosa || Está fuera de ventana y contraindicada.
+- representativeness_heuristic | Dexametasona en dosis altas || No es eficaz en el edema citotóxico del infarto.
+- premature_closure | Punción lumbar para bajar la presión || Está contraindicada con desviación de línea media.
+- framing_effect | Anticoagulación plena || Aumenta el riesgo de transformación hemorrágica.
+- complexity_bias | Hipotermia profunda como tratamiento estándar || No tiene evidencia suficiente.
+- base_rate_fallacy | El edema cerebral no causa deterioro en el infarto isquémico || Puede causar herniación.
+- belief_bias | La cirugía no cambia el pronóstico en el infarto maligno || Reduce la mortalidad.
+- omission_bias | No elevar la cabecera ni usar osmoterapia como medidas temporales || Son medidas de soporte.
+E: El infarto maligno de la arteria cerebral media es un infarto extenso que produce edema citotóxico, con aumento de la presión intracraneal y riesgo de herniación entre los días 2 y 5. Es más frecuente en pacientes jóvenes, con menos atrofia cerebral. La craniectomía descompresiva temprana, idealmente en las primeras 48 horas, reduce la mortalidad en pacientes menores de 60 años, aunque muchos sobreviven con discapacidad. Las medidas temporales incluyen elevar la cabecera, osmoterapia con manitol o solución salina hipertónica y control de la temperatura y la glucosa. Los esteroides no son eficaces en este edema.
+R: Guía de la Asociación Americana del Corazón para evento vascular cerebral isquémico agudo ;; Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica

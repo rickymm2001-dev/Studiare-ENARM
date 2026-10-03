@@ -1,0 +1,1335 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "urg-04b-arritmias-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "arrhythmia",
+      "vignette": "Mujer de 30 años con palpitaciones súbitas de 30 minutos. Frecuencia cardiaca de 190, presión de 110/70 mmHg, sin datos de inestabilidad. El electrocardiograma muestra taquicardia regular de complejos estrechos sin ondas P visibles. Las maniobras vagales no fueron eficaces.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Adenosina 6 mg intravenosa en bolo rápido seguida de solución, con 12 mg si no responde",
+          "correct": true,
+          "rationale": "Es el fármaco de elección para la taquicardia supraventricular por reentrada estable."
+        },
+        {
+          "key": "b",
+          "text": "La adenosina tiene efectos adversos prolongados",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Sus efectos duran segundos."
+        },
+        {
+          "key": "c",
+          "text": "No advertir a la paciente sobre la sensación transitoria de malestar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es frecuente."
+        },
+        {
+          "key": "d",
+          "text": "Digoxina intravenosa como primera línea",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Tiene inicio lento."
+        },
+        {
+          "key": "e",
+          "text": "Desfibrilación no sincronizada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Está indicada solo en ritmos de paro."
+        },
+        {
+          "key": "f",
+          "text": "Atropina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumentaría la frecuencia."
+        },
+        {
+          "key": "g",
+          "text": "Ablación urgente en urgencias",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es un tratamiento electivo."
+        },
+        {
+          "key": "h",
+          "text": "La adenosina se administra en infusión lenta",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se da en bolo rápido por su vida media corta."
+        },
+        {
+          "key": "i",
+          "text": "Amiodarona como primera opción",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es la primera elección en reentrada nodal estable."
+        },
+        {
+          "key": "j",
+          "text": "Cardioversión eléctrica sincronizada inmediata en paciente estable",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para inestabilidad o falla farmacológica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "i",
+        "j"
+      ],
+      "explanation": "La taquicardia supraventricular paroxística por reentrada, nodal o por vía accesoria ortodrómica, se presenta con palpitaciones súbitas y taquicardia regular de complejos estrechos. En pacientes estables, el primer paso son las maniobras vagales, como la maniobra de Valsalva modificada. Si fallan, el tratamiento de elección es la adenosina intravenosa en bolo rápido de 6 mg, seguido de 12 mg si no hay respuesta, administrada en una vena proximal con lavado inmediato. Causa una sensación transitoria de opresión y rubor. Si hay inestabilidad, se realiza cardioversión sincronizada. Los calcioantagonistas no dihidropiridínicos son una alternativa.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las taquiarritmias supraventriculares",
+        "Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón"
+      ]
+    },
+    {
+      "key": "urg-04b-arritmias-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "arrhythmia",
+      "vignette": "Hombre de 65 años con palpitaciones, presión de 70/40 mmHg, confusión y dolor torácico. El monitor muestra taquicardia regular de complejos anchos a 180 por minuto con pulso palpable.",
+      "prompt": "¿Cuál es el siguiente paso más apropiado?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "La hipotensión en taquicardia siempre se corrige con líquidos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Requiere control del ritmo."
+        },
+        {
+          "key": "b",
+          "text": "Esperar el ecocardiograma",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "c",
+          "text": "Adenosina para diferenciar el ritmo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Retrasa el tratamiento en un paciente inestable."
+        },
+        {
+          "key": "d",
+          "text": "Cardioversión eléctrica sincronizada inmediata con sedación si es posible",
+          "correct": true,
+          "rationale": "Es una taquicardia con pulso e inestabilidad."
+        },
+        {
+          "key": "e",
+          "text": "Amiodarona intravenosa en infusión lenta como primera medida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Con inestabilidad se requiere cardioversión inmediata."
+        },
+        {
+          "key": "f",
+          "text": "Desfibrilación no sincronizada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Hay pulso, se usa la cardioversión sincronizada."
+        },
+        {
+          "key": "g",
+          "text": "No buscar la causa como isquemia o alteraciones electrolíticas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe investigarse."
+        },
+        {
+          "key": "h",
+          "text": "Verapamilo intravenoso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Está contraindicado en taquicardia de complejos anchos."
+        },
+        {
+          "key": "i",
+          "text": "La cardioversión sincronizada solo sirve en ritmos auriculares",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "También en taquicardia ventricular con pulso."
+        },
+        {
+          "key": "j",
+          "text": "Ablación urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el primer paso."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "e",
+        "f"
+      ],
+      "explanation": "Ante una taquicardia con pulso, lo primero es evaluar si hay inestabilidad: hipotensión, alteración del estado mental, signos de choque, dolor torácico isquémico o insuficiencia cardiaca aguda. Si la hay, se realiza cardioversión eléctrica sincronizada inmediata, con sedación si el tiempo lo permite. La sincronización evita que la descarga caiga en el periodo vulnerable de la onda T y desencadene una fibrilación ventricular. En la taquicardia de complejos anchos regular se asume taquicardia ventricular hasta demostrar lo contrario. El verapamilo está contraindicado en taquicardias de complejos anchos.",
+      "gpcRefs": [
+        "Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las arritmias ventriculares"
+      ]
+    },
+    {
+      "key": "urg-04b-arritmias-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "arrhythmia",
+      "vignette": "Hombre de 55 años con taquicardia regular de complejos anchos a 160 por minuto, presión de 125/80 mmHg, sin dolor torácico ni alteración mental. Antecedente de infarto previo.",
+      "prompt": "¿Cuál es el tratamiento farmacológico de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Digoxina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "b",
+          "text": "Atropina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "c",
+          "text": "Desfibrilación no sincronizada en paciente estable con pulso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "d",
+          "text": "No preparar cardioversión por si se deteriora",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe estar disponible."
+        },
+        {
+          "key": "e",
+          "text": "La estabilidad hemodinámica descarta taquicardia ventricular",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede ser ventricular aunque sea estable."
+        },
+        {
+          "key": "f",
+          "text": "Toda taquicardia de complejos anchos es supraventricular con aberrancia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Con cardiopatía es casi siempre ventricular."
+        },
+        {
+          "key": "g",
+          "text": "Ablación urgente sin control inicial",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "h",
+          "text": "Solo observación porque está estable",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede deteriorarse."
+        },
+        {
+          "key": "i",
+          "text": "Amiodarona intravenosa 150 mg en 10 minutos",
+          "correct": true,
+          "rationale": "Es el antiarrítmico de elección en taquicardia ventricular estable con cardiopatía estructural."
+        },
+        {
+          "key": "j",
+          "text": "Verapamilo intravenoso",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede causar colapso hemodinámico en taquicardia ventricular."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "En pacientes con taquicardia de complejos anchos, especialmente con antecedente de infarto o cardiopatía estructural, debe asumirse taquicardia ventricular. Si el paciente está estable, puede tratarse con antiarrítmicos intravenosos como amiodarona, 150 mg en 10 minutos seguida de infusión, o procainamida, mientras se prepara la cardioversión sincronizada por si se deteriora. La estabilidad hemodinámica no descarta el origen ventricular. Los calcioantagonistas como el verapamilo están contraindicados, porque pueden causar hipotensión grave y paro. Se buscan causas como isquemia, hipopotasemia e hipomagnesemia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las arritmias ventriculares",
+        "Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón"
+      ]
+    },
+    {
+      "key": "urg-04b-arritmias-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "arrhythmia",
+      "vignette": "Mujer de 50 años con hipopotasemia por diuréticos que presenta síncope. El monitor muestra una taquicardia ventricular polimórfica con complejos que giran alrededor de la línea de base. El electrocardiograma previo mostraba QT de 560 milisegundos.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "El magnesio solo sirve si está bajo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es eficaz aunque el magnesio sea normal."
+        },
+        {
+          "key": "b",
+          "text": "Sulfato de magnesio intravenoso, con corrección del potasio y retiro de fármacos que prolongan el QT",
+          "correct": true,
+          "rationale": "Es una torsade de pointes."
+        },
+        {
+          "key": "c",
+          "text": "Ablación urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el tratamiento inicial."
+        },
+        {
+          "key": "d",
+          "text": "Solo observación porque cedió",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede recurrir y degenerar en fibrilación ventricular."
+        },
+        {
+          "key": "e",
+          "text": "Adenosina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "f",
+          "text": "La hipopotasemia no influye en el QT",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Lo prolonga."
+        },
+        {
+          "key": "g",
+          "text": "Sotalol",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Prolonga el QT."
+        },
+        {
+          "key": "h",
+          "text": "No revisar la lista de fármacos que prolongan el QT",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es fundamental."
+        },
+        {
+          "key": "i",
+          "text": "Amiodarona",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Prolonga el QT y puede empeorar."
+        },
+        {
+          "key": "j",
+          "text": "Procainamida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Prolonga el QT."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "La torsade de pointes es una taquicardia ventricular polimórfica asociada a QT prolongado, en la que los complejos parecen girar alrededor de la línea de base. Las causas incluyen fármacos como antiarrítmicos de clase Ia y III, macrólidos, antipsicóticos, antieméticos y metadona, hipopotasemia, hipomagnesemia, bradicardia y síndromes congénitos de QT largo. El tratamiento es el sulfato de magnesio intravenoso, eficaz aunque el magnesio sérico sea normal, junto con la corrección del potasio y el retiro de los fármacos causales. En casos recurrentes se usa estimulación con marcapasos o isoproterenol. Si hay paro se desfibrila.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las arritmias ventriculares",
+        "Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón"
+      ]
+    },
+    {
+      "key": "urg-04b-arritmias-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "arrhythmia",
+      "vignette": "Hombre de 70 años con mareo y presión de 80/50 mmHg. Frecuencia cardiaca de 35 por minuto con bloqueo auriculoventricular de tercer grado. Está confuso.",
+      "prompt": "¿Cuál es el tratamiento inicial de elección?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Adenosina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Empeoraría la bradicardia."
+        },
+        {
+          "key": "b",
+          "text": "Cardioversión sincronizada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada en bradicardia."
+        },
+        {
+          "key": "c",
+          "text": "Atropina intravenosa y, si no responde, marcapasos transcutáneo o infusión de dopamina o adrenalina",
+          "correct": true,
+          "rationale": "Es una bradicardia sintomática con inestabilidad."
+        },
+        {
+          "key": "d",
+          "text": "Marcapasos definitivo inmediato sin estabilización",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Primero se estabiliza."
+        },
+        {
+          "key": "e",
+          "text": "No revisar fármacos como betabloqueadores o digoxina ni el potasio",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pueden ser la causa."
+        },
+        {
+          "key": "f",
+          "text": "Amiodarona",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Empeoraría la conducción."
+        },
+        {
+          "key": "g",
+          "text": "La bradicardia nunca causa inestabilidad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede causar choque."
+        },
+        {
+          "key": "h",
+          "text": "Betabloqueador intravenoso",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Empeoraría la bradicardia."
+        },
+        {
+          "key": "i",
+          "text": "La atropina siempre es eficaz en el bloqueo completo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Con frecuencia no lo es, por eso se prepara el marcapasos."
+        },
+        {
+          "key": "j",
+          "text": "Solo observación en espera de cardiología",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La inestabilidad requiere tratamiento inmediato."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "La bradicardia sintomática con inestabilidad, como hipotensión, alteración mental, signos de choque, dolor torácico o insuficiencia cardiaca, requiere tratamiento inmediato. La atropina intravenosa de 1 mg, repetible hasta 3 mg, es el primer fármaco. Si no hay respuesta, se usa marcapasos transcutáneo o infusiones de dopamina o adrenalina mientras se coloca un marcapasos transvenoso. En el bloqueo auriculoventricular de tercer grado y el Mobitz II, la atropina con frecuencia es ineficaz porque el bloqueo es infranodal. Se buscan causas reversibles como fármacos, hiperpotasemia, isquemia inferior e hipotiroidismo.",
+      "gpcRefs": [
+        "Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las bradiarritmias"
+      ]
+    },
+    {
+      "key": "urg-04b-arritmias-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "arrhythmia",
+      "vignette": "Hombre de 68 años con fibrilación auricular de inicio hace 4 días, frecuencia ventricular de 135, presión de 130/80 mmHg, sin datos de insuficiencia cardiaca. Fracción de expulsión normal.",
+      "prompt": "¿Cuál es el tratamiento inicial más apropiado?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "No calcular la escala CHA2DS2-VASc",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Guía la anticoagulación."
+        },
+        {
+          "key": "b",
+          "text": "Digoxina como primera opción en paciente activo sin insuficiencia cardiaca",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es menos eficaz."
+        },
+        {
+          "key": "c",
+          "text": "Cardioversión eléctrica inmediata sin anticoagulación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Con más de 48 horas hay riesgo de embolia."
+        },
+        {
+          "key": "d",
+          "text": "La fibrilación auricular no aumenta el riesgo de embolia cerebral",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Lo aumenta cinco veces."
+        },
+        {
+          "key": "e",
+          "text": "Ablación urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "f",
+          "text": "Esperar sin tratamiento a que revierta sola",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La frecuencia alta debe controlarse."
+        },
+        {
+          "key": "g",
+          "text": "Solo ácido acetilsalicílico como anticoagulante",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es eficaz para prevenir embolias."
+        },
+        {
+          "key": "h",
+          "text": "Control de la frecuencia con betabloqueador o calcioantagonista no dihidropiridínico y anticoagulación según el riesgo embólico",
+          "correct": true,
+          "rationale": "Con más de 48 horas no se cardiovierte sin anticoagulación previa o descartar trombos."
+        },
+        {
+          "key": "i",
+          "text": "Todos los pacientes con fibrilación auricular deben cardiovertirse en urgencias",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Depende de la duración y la estabilidad."
+        },
+        {
+          "key": "j",
+          "text": "Adenosina para revertir la fibrilación",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No revierte la fibrilación auricular."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "h",
+        "j"
+      ],
+      "explanation": "En la fibrilación auricular estable, el manejo inicial incluye el control de la frecuencia ventricular con betabloqueadores o calcioantagonistas no dihidropiridínicos, como diltiazem, en pacientes con fracción de expulsión conservada, o digoxina y amiodarona en insuficiencia cardiaca. Si la duración es mayor de 48 horas o desconocida, no se debe cardiovertir sin anticoagulación de al menos 3 semanas o sin descartar trombos con ecocardiograma transesofágico, por el riesgo de embolia. La anticoagulación a largo plazo se decide con la escala CHA2DS2-VASc, preferentemente con anticoagulantes orales directos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la fibrilación auricular",
+        "Guía de la Sociedad Europea de Cardiología para fibrilación auricular"
+      ]
+    },
+    {
+      "key": "urg-04b-arritmias-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "arrhythmia",
+      "vignette": "Hombre de 25 años con palpitaciones. El electrocardiograma muestra una taquicardia irregular de complejos anchos y de morfología variable a 250 por minuto. Su electrocardiograma previo mostraba PR corto y onda delta. Presión de 110/70 mmHg.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Los bloqueadores del nodo son seguros en cualquier fibrilación auricular",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No en la preexcitada."
+        },
+        {
+          "key": "b",
+          "text": "Amiodarona como primera línea universal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se prefiere procainamida o cardioversión."
+        },
+        {
+          "key": "c",
+          "text": "Betabloqueador intravenoso como primera opción",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Bloquea el nodo y puede ser peligroso."
+        },
+        {
+          "key": "d",
+          "text": "Solo observación porque está estable",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede degenerar en fibrilación ventricular."
+        },
+        {
+          "key": "e",
+          "text": "Verapamilo intravenoso",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Bloquea el nodo y favorece la conducción por la vía accesoria."
+        },
+        {
+          "key": "f",
+          "text": "No referir para ablación de la vía accesoria",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es el tratamiento definitivo."
+        },
+        {
+          "key": "g",
+          "text": "Digoxina intravenosa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Está contraindicada."
+        },
+        {
+          "key": "h",
+          "text": "Adenosina intravenosa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede favorecer la conducción por la vía accesoria y causar fibrilación ventricular."
+        },
+        {
+          "key": "i",
+          "text": "Procainamida intravenosa o cardioversión eléctrica sincronizada, evitando bloqueadores del nodo auriculoventricular",
+          "correct": true,
+          "rationale": "Es una fibrilación auricular preexcitada por Wolff-Parkinson-White."
+        },
+        {
+          "key": "j",
+          "text": "Toda taquicardia irregular de complejos anchos es fibrilación ventricular",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tiene pulso y es preexcitada."
+        }
+      ],
+      "canonical": [
+        "e",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "En el síndrome de Wolff-Parkinson-White existe una vía accesoria que conduce de aurículas a ventrículos sin pasar por el nodo auriculoventricular, con PR corto y onda delta en el electrocardiograma basal. Si se presenta una fibrilación auricular, los impulsos pueden conducirse muy rápido por la vía accesoria, generando una taquicardia irregular de complejos anchos y morfología variable que puede degenerar en fibrilación ventricular. Están contraindicados los bloqueadores del nodo, como adenosina, verapamilo, diltiazem, digoxina y betabloqueadores. El tratamiento es la procainamida o la cardioversión sincronizada si hay inestabilidad. El tratamiento definitivo es la ablación.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las taquiarritmias supraventriculares",
+        "Guía de la Sociedad Europea de Cardiología para taquicardias supraventriculares"
+      ]
+    },
+    {
+      "key": "urg-04b-arritmias-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "arrhythmia",
+      "vignette": "Hombre de 72 años con mareo. El electrocardiograma muestra un PR constante de 0.18 segundos con ondas P que súbitamente no se siguen de QRS, sin prolongación progresiva del PR previo. QRS ancho.",
+      "prompt": "¿Qué indica este hallazgo electrocardiográfico?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Bloqueo de tercer grado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Hay disociación completa entre P y QRS."
+        },
+        {
+          "key": "b",
+          "text": "El Mobitz II es benigno como el Mobitz I",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tiene riesgo de progresar a bloqueo completo."
+        },
+        {
+          "key": "c",
+          "text": "Bloqueo de segundo grado Mobitz I o Wenckebach",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "En este hay prolongación progresiva del PR."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome de Wolff-Parkinson-White",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay preexcitación."
+        },
+        {
+          "key": "e",
+          "text": "Extrasístoles auriculares bloqueadas sin importancia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El patrón es de bloqueo."
+        },
+        {
+          "key": "f",
+          "text": "Ritmo sinusal normal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Hay ondas P no conducidas."
+        },
+        {
+          "key": "g",
+          "text": "Bloqueo auriculoventricular de segundo grado Mobitz II, con indicación de marcapasos",
+          "correct": true,
+          "rationale": "Hay ondas P bloqueadas sin prolongación previa del PR."
+        },
+        {
+          "key": "h",
+          "text": "Responde siempre a la atropina",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Suele ser infranodal y no responde."
+        },
+        {
+          "key": "i",
+          "text": "Fibrilación auricular",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Hay ondas P organizadas."
+        },
+        {
+          "key": "j",
+          "text": "Bloqueo de primer grado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Todas las P conducen con PR prolongado."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "Los bloqueos auriculoventriculares se clasifican en primer grado, con PR mayor de 0.20 segundos y todas las P conducidas; segundo grado Mobitz I o Wenckebach, con prolongación progresiva del PR hasta que una P no conduce, generalmente benigno y nodal; segundo grado Mobitz II, con PR constante y P bloqueadas súbitamente, generalmente infranodal, con QRS ancho y riesgo de progresar a bloqueo completo; y tercer grado, con disociación auriculoventricular completa. El Mobitz II y el bloqueo de tercer grado tienen indicación de marcapasos, aun sin síntomas graves, y la atropina suele ser ineficaz.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las bradiarritmias",
+        "Guía de la Sociedad Europea de Cardiología para estimulación cardiaca"
+      ]
+    },
+    {
+      "key": "urg-04b-arritmias-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "arrhythmia",
+      "vignette": "Hombre de 60 años con enfermedad renal crónica que no acudió a hemodiálisis. Presenta debilidad. El electrocardiograma muestra ondas T picudas y simétricas, PR prolongado, ondas P aplanadas y QRS ensanchado.",
+      "prompt": "¿Qué indican estos hallazgos electrocardiográficos?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de Brugada",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Tiene otro patrón."
+        },
+        {
+          "key": "b",
+          "text": "Infarto agudo hiperagudo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El cuadro y los demás cambios sugieren hiperpotasemia."
+        },
+        {
+          "key": "c",
+          "text": "Pericarditis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No produce estos cambios."
+        },
+        {
+          "key": "d",
+          "text": "Hallazgos normales para un paciente renal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Son patológicos."
+        },
+        {
+          "key": "e",
+          "text": "Hipercalcemia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Acorta el QT."
+        },
+        {
+          "key": "f",
+          "text": "Hipopotasemia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Produce ondas U y aplanamiento de T."
+        },
+        {
+          "key": "g",
+          "text": "Hiperpotasemia grave, que requiere calcio intravenoso inmediato",
+          "correct": true,
+          "rationale": "El ensanchamiento del QRS indica riesgo inminente de arritmia."
+        },
+        {
+          "key": "h",
+          "text": "Basta con dar resina oral y esperar al día siguiente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere tratamiento urgente."
+        },
+        {
+          "key": "i",
+          "text": "No programar hemodiálisis urgente",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es el tratamiento definitivo."
+        },
+        {
+          "key": "j",
+          "text": "La hiperpotasemia siempre produce síntomas antes de alterar el electrocardiograma",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede ser silenciosa."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "La hiperpotasemia produce cambios electrocardiográficos progresivos: ondas T picudas y simétricas, después prolongación del PR y aplanamiento de la onda P, ensanchamiento del QRS, patrón sinusoidal, fibrilación ventricular y asistolia. Los cambios no siempre se correlacionan con el nivel de potasio. Ante cambios electrocardiográficos se administra gluconato o cloruro de calcio intravenoso para estabilizar la membrana miocárdica, seguido de insulina con glucosa, agonistas beta 2 inhalados y bicarbonato si hay acidosis para desplazar el potasio al interior de la célula, y medidas para eliminarlo, como diuréticos, resinas y hemodiálisis, que es el tratamiento definitivo en insuficiencia renal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperpotasemia",
+        "Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón"
+      ]
+    },
+    {
+      "key": "urg-04b-arritmias-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "arrhythmia",
+      "vignette": "Mujer de 45 años con fibrilación auricular de inicio hace 6 horas, documentado. Frecuencia de 150, presión de 75/45 mmHg, confusa y con dolor torácico.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ecocardiograma transesofágico obligatorio antes de cardiovertir a una paciente inestable",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No debe retrasar la cardioversión."
+        },
+        {
+          "key": "b",
+          "text": "Adenosina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No revierte la fibrilación auricular."
+        },
+        {
+          "key": "c",
+          "text": "Esperar 3 semanas de anticoagulación antes de cardiovertir",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La inestabilidad no permite esperar."
+        },
+        {
+          "key": "d",
+          "text": "Desfibrilación no sincronizada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Hay pulso; se usa la sincronizada."
+        },
+        {
+          "key": "e",
+          "text": "La fibrilación auricular nunca causa inestabilidad",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede causarla."
+        },
+        {
+          "key": "f",
+          "text": "La cardioversión eléctrica no requiere sedación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se seda si es posible."
+        },
+        {
+          "key": "g",
+          "text": "Cardioversión eléctrica sincronizada inmediata con anticoagulación con heparina",
+          "correct": true,
+          "rationale": "La inestabilidad hemodinámica requiere cardioversión urgente."
+        },
+        {
+          "key": "h",
+          "text": "No decidir la anticoagulación a largo plazo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Se basa en el riesgo embólico."
+        },
+        {
+          "key": "i",
+          "text": "Digoxina oral",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Actúa lentamente."
+        },
+        {
+          "key": "j",
+          "text": "Control de la frecuencia con diltiazem intravenoso en dosis altas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede empeorar la hipotensión."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "En la fibrilación auricular con inestabilidad hemodinámica, como hipotensión, alteración del estado mental, choque, dolor torácico isquémico o edema pulmonar, el tratamiento es la cardioversión eléctrica sincronizada inmediata, con sedación si es posible. Se inicia heparina lo antes posible sin retrasar el procedimiento. Las precauciones de anticoagulación previa se aplican en pacientes estables. Después de la cardioversión se decide la anticoagulación a largo plazo según la escala CHA2DS2-VASc, y se recomienda al menos 4 semanas tras la cardioversión. En pacientes estables con menos de 48 horas puede considerarse la cardioversión eléctrica o farmacológica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la fibrilación auricular",
+        "Guía de la Sociedad Europea de Cardiología para fibrilación auricular"
+      ]
+    },
+    {
+      "key": "urg-04b-arritmias-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "arrhythmia",
+      "vignette": "Hombre de 66 años con palpitaciones. El electrocardiograma muestra ondas auriculares en dientes de sierra en DII, DIII y aVF a 300 por minuto, con respuesta ventricular regular a 150 por minuto.",
+      "prompt": "¿Qué indica este hallazgo electrocardiográfico?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Taquicardia sinusal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay ondas P sinusales normales."
+        },
+        {
+          "key": "b",
+          "text": "Taquicardia ventricular",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Los complejos son estrechos."
+        },
+        {
+          "key": "c",
+          "text": "Una frecuencia regular de 150 nunca es flutter",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un indicio clásico de flutter 2 a 1."
+        },
+        {
+          "key": "d",
+          "text": "Bloqueo auriculoventricular completo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay disociación."
+        },
+        {
+          "key": "e",
+          "text": "Ritmo nodal acelerado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "f",
+          "text": "Fibrilación auricular",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La respuesta ventricular es regular y hay ondas F organizadas."
+        },
+        {
+          "key": "g",
+          "text": "El flutter no requiere anticoagulación",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Requiere la misma estratificación que la fibrilación auricular."
+        },
+        {
+          "key": "h",
+          "text": "Flutter auricular típico con conducción 2 a 1",
+          "correct": true,
+          "rationale": "Ondas F en dientes de sierra a 300 con respuesta ventricular a 150."
+        },
+        {
+          "key": "i",
+          "text": "Taquicardia supraventricular por reentrada nodal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Las ondas en dientes de sierra indican flutter."
+        },
+        {
+          "key": "j",
+          "text": "Taquicardia auricular multifocal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Tiene ondas P de varias morfologías e irregularidad."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "h"
+      ],
+      "explanation": "El flutter auricular típico se debe a un circuito de macrorreentrada en la aurícula derecha alrededor del istmo cavotricuspídeo. Produce ondas F en dientes de sierra, más visibles en las derivaciones inferiores, a una frecuencia de alrededor de 300 por minuto. La conducción auriculoventricular suele ser 2 a 1, con una frecuencia ventricular regular cercana a 150 por minuto, lo que debe hacer sospecharlo. El tratamiento incluye control de la frecuencia, cardioversión eléctrica, que es muy eficaz con baja energía, y anticoagulación con los mismos criterios que la fibrilación auricular. La ablación del istmo es el tratamiento definitivo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las taquiarritmias supraventriculares",
+        "Guía de la Sociedad Europea de Cardiología para taquicardias supraventriculares"
+      ]
+    },
+    {
+      "key": "urg-04b-arritmias-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "arrhythmia",
+      "vignette": "Hombre de 72 años con fibrilación auricular permanente, hipertensión y diabetes. Escala CHA2DS2-VASc de 4. Función renal normal. Sin antecedentes de sangrado.",
+      "prompt": "¿Cuál es el tratamiento antitrombótico de elección en este paciente?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ninguna anticoagulación por la edad",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La edad aumenta el riesgo embólico."
+        },
+        {
+          "key": "b",
+          "text": "No evaluar el riesgo de sangrado con HAS-BLED",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Ayuda a corregir factores modificables."
+        },
+        {
+          "key": "c",
+          "text": "Heparina subcutánea de por vida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es la opción práctica a largo plazo."
+        },
+        {
+          "key": "d",
+          "text": "Clopidogrel solo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es eficaz para esta indicación."
+        },
+        {
+          "key": "e",
+          "text": "Anticoagulante oral directo, como apixabán o rivaroxabán",
+          "correct": true,
+          "rationale": "Con una escala de 2 o más en hombres se indica anticoagulación, y los directos son preferidos sobre la warfarina."
+        },
+        {
+          "key": "f",
+          "text": "Cierre de orejuela como primera opción en todos los casos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para contraindicación a anticoagulantes."
+        },
+        {
+          "key": "g",
+          "text": "El riesgo de sangrado siempre supera el beneficio en adultos mayores",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El beneficio suele ser mayor."
+        },
+        {
+          "key": "h",
+          "text": "Doble antiagregación como sustituto de anticoagulación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es menos eficaz."
+        },
+        {
+          "key": "i",
+          "text": "La fibrilación auricular permanente no requiere anticoagulación",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tiene el mismo riesgo que la paroxística."
+        },
+        {
+          "key": "j",
+          "text": "Ácido acetilsalicílico como monoterapia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es eficaz para prevenir el evento vascular en fibrilación auricular."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "La fibrilación auricular aumenta cinco veces el riesgo de evento vascular cerebral. La escala CHA2DS2-VASc estima el riesgo embólico: insuficiencia cardiaca, hipertensión, edad de 75 años o más con 2 puntos, diabetes, evento vascular o embolia previa con 2 puntos, enfermedad vascular, edad de 65 a 74 años y sexo femenino. Se recomienda anticoagulación oral con una puntuación de 2 o más en hombres y 3 o más en mujeres, y considerarla con 1 en hombres o 2 en mujeres. Los anticoagulantes orales directos se prefieren sobre la warfarina, salvo en estenosis mitral moderada a grave y válvulas mecánicas. El ácido acetilsalicílico no se recomienda para esta indicación.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la fibrilación auricular",
+        "Guía de la Sociedad Europea de Cardiología para fibrilación auricular"
+      ]
+    },
+    {
+      "key": "urg-04b-arritmias-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "arrhythmia",
+      "vignette": "Hombre de 35 años con síncope durante el ejercicio. El electrocardiograma basal muestra elevación del ST en V1 y V2 de morfología en aleta de tiburón descendente con onda T negativa. Su hermano murió súbitamente a los 30 años.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Considerarlo una repolarización precoz benigna y dar de alta",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El patrón y el antecedente sugieren Brugada."
+        },
+        {
+          "key": "b",
+          "text": "Iniciar betabloqueador como único tratamiento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No previene la muerte súbita en Brugada."
+        },
+        {
+          "key": "c",
+          "text": "Prueba de esfuerzo y alta si es normal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No descarta el riesgo."
+        },
+        {
+          "key": "d",
+          "text": "El síncope en jóvenes siempre es vasovagal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El antecedente familiar obliga a descartar causas arrítmicas."
+        },
+        {
+          "key": "e",
+          "text": "Prescribir flecainida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede desenmascarar o empeorar el patrón."
+        },
+        {
+          "key": "f",
+          "text": "La fiebre no influye en este síndrome",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La fiebre puede desencadenar arritmias."
+        },
+        {
+          "key": "g",
+          "text": "Referir a electrofisiología para estratificación y valorar desfibrilador implantable por síndrome de Brugada con síncope",
+          "correct": true,
+          "rationale": "El síncope y el antecedente familiar indican alto riesgo de muerte súbita."
+        },
+        {
+          "key": "h",
+          "text": "Fibrinólisis por elevación del ST",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es un infarto."
+        },
+        {
+          "key": "i",
+          "text": "No estudiar a los familiares de primer grado",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es una enfermedad hereditaria."
+        },
+        {
+          "key": "j",
+          "text": "Cateterismo cardiaco urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay sospecha de isquemia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "h"
+      ],
+      "explanation": "El síndrome de Brugada es una canalopatía hereditaria, generalmente por mutaciones del canal de sodio SCN5A, que predispone a arritmias ventriculares y muerte súbita, sobre todo en varones jóvenes, frecuentemente durante el sueño o con fiebre. El patrón tipo 1 consiste en elevación del ST de 2 mm o más en V1 y V2 con morfología descendente en aleta de tiburón y onda T negativa. Los pacientes con síncope de origen arrítmico o muerte súbita recuperada tienen indicación de desfibrilador implantable. Se evitan los fármacos que bloquean el canal de sodio y se trata la fiebre de forma agresiva. Se estudia a los familiares.",
+      "gpcRefs": [
+        "Guía de la Sociedad Europea de Cardiología para arritmias ventriculares y prevención de muerte súbita",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síncope"
+      ]
+    },
+    {
+      "key": "urg-04b-arritmias-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "arrhythmia",
+      "vignette": "Mujer de 80 años con insuficiencia cardiaca con fracción de expulsión de 25 por ciento que presenta fibrilación auricular con frecuencia de 140 por minuto, presión de 110/70 mmHg y congestión pulmonar leve.",
+      "prompt": "¿Cuál es el fármaco de elección para el control agudo de la frecuencia?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Amiodarona o digoxina intravenosa",
+          "correct": true,
+          "rationale": "Controlan la frecuencia sin deprimir de forma importante la contractilidad."
+        },
+        {
+          "key": "b",
+          "text": "Verapamilo intravenoso",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es inotrópico negativo."
+        },
+        {
+          "key": "c",
+          "text": "Todos los fármacos de control de frecuencia son igual de seguros en insuficiencia cardiaca",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Difieren en su efecto inotrópico."
+        },
+        {
+          "key": "d",
+          "text": "No tratar la congestión con diurético",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte del manejo."
+        },
+        {
+          "key": "e",
+          "text": "Adenosina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No controla la frecuencia en la fibrilación auricular."
+        },
+        {
+          "key": "f",
+          "text": "Ablación del nodo como primera medida en urgencias",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el tratamiento agudo."
+        },
+        {
+          "key": "g",
+          "text": "Betabloqueador intravenoso en dosis altas con congestión",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede empeorar la insuficiencia descompensada."
+        },
+        {
+          "key": "h",
+          "text": "La digoxina no tiene utilidad actual",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es útil en insuficiencia cardiaca."
+        },
+        {
+          "key": "i",
+          "text": "Atropina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumentaría la frecuencia."
+        },
+        {
+          "key": "j",
+          "text": "Diltiazem intravenoso",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es inotrópico negativo y está contraindicado en fracción de expulsión reducida descompensada."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "En la fibrilación auricular con insuficiencia cardiaca con fracción de expulsión reducida o descompensada, los calcioantagonistas no dihidropiridínicos, como diltiazem y verapamilo, están contraindicados por su efecto inotrópico negativo, y los betabloqueadores intravenosos en dosis altas deben usarse con precaución durante la descompensación. Para el control agudo de la frecuencia se prefieren la digoxina y la amiodarona intravenosas. A largo plazo, los betabloqueadores con evidencia en insuficiencia cardiaca son la base del tratamiento una vez compensado el paciente. Si hay inestabilidad, se realiza cardioversión eléctrica. Se trata la congestión y se decide la anticoagulación.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la fibrilación auricular",
+        "Guía de la Sociedad Europea de Cardiología para insuficiencia cardiaca"
+      ]
+    }
+  ]
+}

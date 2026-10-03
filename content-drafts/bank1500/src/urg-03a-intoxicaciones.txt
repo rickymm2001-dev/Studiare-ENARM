@@ -1,0 +1,303 @@
+@ urg|toxicology|poisonings|2|treatment_of_choice
+V: Mujer de 19 años que ingirió hace 6 horas 30 tabletas de paracetamol de 500 mg con fines suicidas. Asintomática salvo náusea leve. Concentración sérica de paracetamol por arriba de la línea de tratamiento del nomograma.
+P: ¿Cuál es el tratamiento de elección?
++ N-acetilcisteína intravenosa || Repone el glutatión y previene la necrosis hepática.
+- anchoring | Esperar a que aparezcan síntomas hepáticos para tratar || El daño ocurre aunque esté asintomática.
+- availability_heuristic | Lavado gástrico como único tratamiento a las 6 horas || Ya no es útil y no sustituye al antídoto.
+- representativeness_heuristic | Flumazenil || Revierte benzodiacepinas.
+- premature_closure | Naloxona || Revierte opioides.
+- framing_effect | Vitamina K intravenosa || No previene la hepatotoxicidad.
+- complexity_bias | Trasplante hepático inmediato || Solo en falla hepática fulminante.
+- base_rate_fallacy | El paracetamol es seguro en cualquier dosis || Es una causa frecuente de falla hepática.
+- belief_bias | La N-acetilcisteína solo sirve en las primeras 2 horas || Es más eficaz en 8 horas pero útil después.
+- omission_bias | No evaluar el riesgo suicida || Es parte del manejo.
+E: La intoxicación por paracetamol es una de las más frecuentes y una causa importante de falla hepática aguda. Con dosis tóxicas, la vía de glucuronidación se satura y aumenta la producción de N-acetil-p-benzoquinoneimina, un metabolito tóxico que se neutraliza con glutatión. Cuando el glutatión se agota, se produce necrosis hepática centrolobulillar. Los síntomas iniciales son leves o ausentes, y la hepatotoxicidad aparece a las 24 a 72 horas. El nomograma de Rumack-Matthew, aplicado a partir de las 4 horas de la ingesta, indica el tratamiento. La N-acetilcisteína es más eficaz en las primeras 8 horas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la intoxicación aguda por paracetamol ;; Manual de toxicología clínica de urgencias
+
+@ urg|toxicology|poisonings|2|treatment_of_choice
+V: Hombre de 35 años, jornalero agrícola, que llega tras fumigar sin protección. Presenta sialorrea, lagrimeo, miosis, sudoración, broncorrea, diarrea, bradicardia y fasciculaciones.
+P: ¿Cuál es el tratamiento de elección?
++ Atropina intravenosa en dosis crecientes hasta secar las secreciones bronquiales, más pralidoxima y descontaminación || Es una intoxicación por organofosforados.
+- anchoring | Fisostigmina || Agravaría el cuadro colinérgico.
+- availability_heuristic | Naloxona por la miosis || La miosis es colinérgica, no opioide.
+- representativeness_heuristic | Flumazenil || No está indicado.
+- premature_closure | Solo oxígeno y observación || El cuadro puede ser mortal.
+- framing_effect | Succinilcolina para intubar || Su efecto se prolonga con estos tóxicos.
+- complexity_bias | Hemodiálisis urgente como primer tratamiento || No es útil.
+- base_rate_fallacy | La atropina debe darse solo hasta normalizar la frecuencia cardiaca || La meta es secar las secreciones bronquiales.
+- belief_bias | El personal puede atenderlo sin protección || Debe protegerse de la contaminación.
+- omission_bias | No retirar la ropa contaminada ni lavar la piel || Es parte de la descontaminación.
+E: Los organofosforados y carbamatos inhiben la acetilcolinesterasa y causan acumulación de acetilcolina. Producen el síndrome colinérgico muscarínico, con miosis, sialorrea, lagrimeo, broncorrea, broncoespasmo, bradicardia, vómito, diarrea e incontinencia; nicotínico, con fasciculaciones y debilidad; y central, con convulsiones y coma. La causa de muerte es la insuficiencia respiratoria. El tratamiento incluye descontaminación con retiro de ropa y lavado de piel, atropina en dosis crecientes hasta secar las secreciones bronquiales, y pralidoxima para reactivar la enzima. Las benzodiacepinas tratan las convulsiones. El personal debe usar protección para evitar contaminarse.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la intoxicación por plaguicidas organofosforados ;; Manual de toxicología clínica de urgencias
+
+@ urg|toxicology|poisonings|2|treatment_of_choice
+V: Familia de 4 personas encontrada en su casa con un calentador de gas en el baño cerrado. Todos presentan cefalea, náusea y mareo. La madre está confusa y tiene saturación de 98 por ciento por oximetría de pulso.
+P: ¿Cuál es el tratamiento de elección inicial?
++ Oxígeno al 100 por ciento con mascarilla con reservorio y medición de carboxihemoglobina || Acelera la eliminación del monóxido de carbono.
+- anchoring | Considerar normal la oxigenación por la saturación de 98 por ciento || La oximetría no detecta la carboxihemoglobina.
+- availability_heuristic | Analgésicos para la cefalea y alta || Omite una intoxicación grave.
+- representativeness_heuristic | Azul de metileno || Se usa en metahemoglobinemia.
+- premature_closure | Hidroxocobalamina como primera opción en todos los casos || Se usa en intoxicación por cianuro.
+- framing_effect | Oxígeno a 2 litros por cánula nasal || Es insuficiente.
+- complexity_bias | Esperar a la gasometría para iniciar oxígeno || Retrasa el tratamiento.
+- base_rate_fallacy | El monóxido de carbono tiene olor característico || Es inodoro.
+- belief_bias | Los síntomas leves no requieren tratamiento || Puede haber secuelas neurológicas tardías.
+- omission_bias | No considerar oxígeno hiperbárico en casos graves || Está indicado en pacientes graves o embarazadas.
+E: El monóxido de carbono es un gas incoloro e inodoro producido por combustión incompleta, como calentadores en espacios cerrados. Se une a la hemoglobina con afinidad 200 a 250 veces mayor que el oxígeno, formando carboxihemoglobina, y causa hipoxia tisular. Los síntomas incluyen cefalea, náusea, mareo, confusión, síncope, convulsiones y coma. La oximetría de pulso convencional da valores falsamente normales, por lo que se mide la carboxihemoglobina por cooximetría. El tratamiento es oxígeno al 100 por ciento, que reduce su vida media de 4 a 6 horas a 60 a 90 minutos, y oxígeno hiperbárico en casos graves.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la intoxicación por monóxido de carbono ;; Manual de toxicología clínica de urgencias
+
+@ urg|toxicology|poisonings|3|treatment_of_choice
+V: Hombre de 45 años que bebió alcohol adulterado en una fiesta. A las 24 horas presenta visión borrosa, sensación de estar en una tormenta de nieve y dolor abdominal. Gasometría con acidosis metabólica de brecha aniónica elevada y brecha osmolar aumentada.
+P: ¿Cuál es el tratamiento específico de elección?
++ Fomepizol o etanol, junto con bicarbonato y hemodiálisis si es grave || Inhiben la alcohol deshidrogenasa y evitan la formación de ácido fórmico.
+- anchoring | Solo hidratación y observación || El metanol puede causar ceguera y muerte.
+- availability_heuristic | Naloxona || No está indicada.
+- representativeness_heuristic | N-acetilcisteína || Se usa en intoxicación por paracetamol.
+- premature_closure | Carbón activado como tratamiento principal || No adsorbe bien los alcoholes.
+- framing_effect | Lavado gástrico tardío como única medida || No es útil a las 24 horas.
+- complexity_bias | Atropina || No está indicada.
+- base_rate_fallacy | La alteración visual se recupera sin tratamiento || Puede causar ceguera permanente.
+- belief_bias | El etanol empeora la intoxicación por metanol || Compite por la enzima y la reduce.
+- omission_bias | No notificar el caso como posible brote por bebidas adulteradas || Debe notificarse.
+E: El metanol se encuentra en bebidas adulteradas, solventes y anticongelantes. Se metaboliza por la alcohol deshidrogenasa a formaldehído y ácido fórmico, que causa acidosis metabólica con brecha aniónica elevada y daño al nervio óptico, con visión borrosa y en tormenta de nieve, y lesión de ganglios basales. Típicamente aparece una brecha osmolar elevada al inicio. El tratamiento incluye fomepizol o etanol para bloquear la alcohol deshidrogenasa, bicarbonato para corregir la acidosis, ácido fólico para acelerar la eliminación del ácido fórmico y hemodiálisis en casos graves con acidosis, alteraciones visuales o concentraciones altas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la intoxicación por alcoholes tóxicos ;; Manual de toxicología clínica de urgencias
+
+@ urg|toxicology|poisonings|3|treatment_of_choice
+V: Mujer de 25 años que ingirió una gran cantidad de ácido acetilsalicílico hace 4 horas. Presenta tinnitus, vómito, taquipnea y confusión. Gasometría con alcalosis respiratoria y acidosis metabólica con brecha aniónica elevada.
+P: ¿Cuál es el tratamiento de elección?
++ Alcalinización con bicarbonato de sodio intravenoso y hemodiálisis si hay criterios de gravedad || La alcalinización de la orina aumenta la eliminación del salicilato.
+- anchoring | Acidificación de la orina con cloruro de amonio || Disminuye la eliminación del salicilato.
+- availability_heuristic | N-acetilcisteína || Se usa en intoxicación por paracetamol.
+- representativeness_heuristic | Intubación con hipoventilación para corregir la taquipnea || Empeora la acidosis.
+- premature_closure | Solo antieméticos y observación || La intoxicación es grave.
+- framing_effect | Vitamina K como tratamiento principal || No es el tratamiento central.
+- complexity_bias | Fisostigmina || No está indicada.
+- base_rate_fallacy | La aspirina no causa intoxicaciones graves || Puede ser mortal.
+- belief_bias | Las alteraciones mentales indican que el cuadro es leve || Indican gravedad.
+- omission_bias | No vigilar glucosa ni potasio || La hipopotasemia impide la alcalinización.
+E: La intoxicación por salicilatos produce inicialmente alcalosis respiratoria por estimulación directa del centro respiratorio, seguida de acidosis metabólica con brecha aniónica elevada por desacoplamiento de la fosforilación oxidativa. Los síntomas incluyen tinnitus, vómito, taquipnea, fiebre, confusión y, en casos graves, convulsiones, edema pulmonar y coma. El tratamiento incluye carbón activado si la ingesta es reciente, alcalinización con bicarbonato de sodio para atrapar el salicilato en la orina y fuera del sistema nervioso, reposición de potasio y glucosa, y hemodiálisis en casos graves con alteración neurológica, edema pulmonar, insuficiencia renal o concentraciones muy altas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de intoxicaciones por medicamentos ;; Manual de toxicología clínica de urgencias
+
+@ urg|toxicology|poisonings|3|treatment_of_choice
+V: Mujer de 78 años en tratamiento con digoxina y furosemida que presenta náusea, visión amarilla, confusión y bradicardia de 40 con bloqueo auriculoventricular. Potasio de 6.2 mEq/L y digoxinemia elevada.
+P: ¿Cuál es el tratamiento de elección?
++ Fragmentos Fab de anticuerpos antidigoxina || Están indicados en intoxicación grave con arritmias o hiperpotasemia.
+- anchoring | Calcio intravenoso para la hiperpotasemia en todos los casos || Clásicamente se evita en intoxicación digitálica.
+- availability_heuristic | Cardioversión eléctrica || Puede desencadenar arritmias graves.
+- representativeness_heuristic | Aumentar la dosis de furosemida como único tratamiento || No trata la intoxicación.
+- premature_closure | Solo suspender la digoxina y observar || Tiene criterios de gravedad.
+- framing_effect | Potasio intravenoso || Agravaría la hiperpotasemia.
+- complexity_bias | Hemodiálisis para eliminar la digoxina || No es eficaz por su gran volumen de distribución.
+- base_rate_fallacy | La intoxicación digitálica solo ocurre con sobredosis intencional || Es frecuente en adultos mayores con insuficiencia renal.
+- belief_bias | La visión amarilla es un efecto adverso sin importancia || Es un signo de toxicidad.
+- omission_bias | No evaluar la función renal || Su deterioro favorece la toxicidad.
+E: La intoxicación por digoxina es frecuente en adultos mayores, especialmente con insuficiencia renal, hipopotasemia, hipomagnesemia o interacciones con fármacos como amiodarona y verapamilo. Produce síntomas gastrointestinales, alteraciones visuales como visión amarilla o halos, confusión y arritmias, como bradicardia, bloqueos, extrasístoles ventriculares y taquicardia auricular con bloqueo. En la intoxicación aguda la hiperpotasemia es un marcador de gravedad. Los fragmentos Fab antidigoxina son el tratamiento de elección en arritmias graves, hiperpotasemia mayor de 5 a 5.5 mEq/L o alteración del estado mental. La hemodiálisis no es eficaz.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de intoxicaciones por medicamentos ;; Manual de toxicología clínica de urgencias
+
+@ urg|toxicology|poisonings|2|next_step
+V: Niño de 3 años que ingirió hace 30 minutos un limpiador de hornos con sosa cáustica. Tiene sialorrea y quemaduras en labios. Está estable.
+P: ¿Cuál es la conducta más apropiada?
++ No inducir el vómito ni neutralizar, mantener ayuno y realizar endoscopia en las primeras 12 a 24 horas || La endoscopia define la gravedad de las lesiones.
+- anchoring | Inducir el vómito con jarabe de ipecacuana || Reexpone el esófago al cáustico.
+- availability_heuristic | Dar vinagre para neutralizar el álcali || Genera calor y agrava las lesiones.
+- representativeness_heuristic | Carbón activado || No adsorbe cáusticos y dificulta la endoscopia.
+- premature_closure | Lavado gástrico con sonda gruesa || Aumenta el riesgo de perforación.
+- framing_effect | Dar de alta si no tiene síntomas graves || Puede haber lesiones esofágicas sin lesiones orales.
+- complexity_bias | Cirugía inmediata en todos los casos || Solo si hay perforación.
+- base_rate_fallacy | Las lesiones orales predicen siempre las esofágicas || La correlación es pobre.
+- belief_bias | Dar leche abundante neutraliza completamente el cáustico || No es una medida recomendada.
+- omission_bias | No evaluar la vía aérea por posible edema || Puede requerir intubación.
+E: La ingesta de cáusticos, ácidos o álcalis, es frecuente en niños por accidentes domésticos y en adultos por intento suicida. Los álcalis, como la sosa, causan necrosis por licuefacción con lesiones profundas en el esófago. Está contraindicado inducir el vómito, neutralizar, usar carbón activado o colocar sondas de lavado. Se mantiene en ayuno, se evalúa la vía aérea y se realiza endoscopia en las primeras 12 a 24 horas para clasificar las lesiones según Zargar y definir el pronóstico. La ausencia de lesiones orales no descarta lesiones esofágicas. La complicación tardía más importante es la estenosis esofágica.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la ingesta de cáusticos ;; Manual de toxicología clínica de urgencias
+
+@ urg|toxicology|poisonings|3|treatment_of_choice
+V: Hombre de 50 años que ingirió intencionalmente una gran cantidad de propranolol. Presenta bradicardia de 38, presión de 70/40 mmHg e hipoglucemia. No mejora con atropina ni líquidos.
+P: ¿Cuál es el tratamiento específico de elección?
++ Glucagón intravenoso, con insulina en dosis altas y glucosa como siguiente opción || El glucagón aumenta el AMP cíclico sin depender de los receptores beta.
+- anchoring | Flumazenil || No está indicado.
+- availability_heuristic | Naloxona || No está indicada.
+- representativeness_heuristic | Más atropina en dosis repetidas como única medida || Ya fracasó.
+- premature_closure | Cardioversión eléctrica || No está indicada en la bradicardia.
+- framing_effect | Hemodiálisis para propranolol || Es poco dializable.
+- complexity_bias | Fragmentos Fab antidigoxina || Se usan en intoxicación digitálica.
+- base_rate_fallacy | Los betabloqueadores no causan hipoglucemia || Pueden causarla.
+- belief_bias | El glucagón solo sirve para la hipoglucemia || También tiene efecto inotrópico.
+- omission_bias | No considerar marcapasos transcutáneo si persiste la bradicardia || Es una opción de rescate.
+E: La intoxicación por betabloqueadores produce bradicardia, bloqueos, hipotensión y choque cardiogénico, y en el caso del propranolol, por su efecto estabilizador de membrana, convulsiones y ensanchamiento del QRS. También puede causar hipoglucemia y broncoespasmo. El tratamiento incluye atropina y líquidos, y si fracasan, glucagón intravenoso, que aumenta el AMP cíclico en el miocardio sin depender de los receptores beta. La terapia con insulina en dosis altas con glucosa es eficaz en casos refractarios. Otras opciones son calcio, vasopresores, marcapasos, emulsión lipídica y oxigenación por membrana extracorpórea.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de intoxicaciones por medicamentos ;; Manual de toxicología clínica de urgencias
+
+@ urg|toxicology|poisonings|3|treatment_of_choice
+V: Hombre de 40 años rescatado de un incendio en un espacio cerrado con muebles de plástico. Presenta confusión, hipotensión y lactato de 12 mmol/L. Carboxihemoglobina del 15 por ciento.
+P: ¿Cuál es el tratamiento específico de elección además del oxígeno al 100 por ciento?
++ Hidroxocobalamina intravenosa || Un lactato muy elevado en un incendio sugiere intoxicación por cianuro.
+- anchoring | Solo oxígeno porque la carboxihemoglobina explica todo || El lactato muy elevado sugiere cianuro.
+- availability_heuristic | Azul de metileno || Se usa en metahemoglobinemia.
+- representativeness_heuristic | Nitritos como primera opción en un paciente con monóxido de carbono || Inducen metahemoglobina y empeoran el transporte de oxígeno.
+- premature_closure | Naloxona || No está indicada.
+- framing_effect | Atropina || No está indicada.
+- complexity_bias | Esperar la concentración sérica de cianuro para tratar || Tarda horas.
+- base_rate_fallacy | El cianuro solo se encuentra en venenos industriales || Se produce al quemar plásticos y textiles.
+- belief_bias | La hidroxocobalamina es tóxica en dosis altas || Es segura.
+- omission_bias | No evaluar quemadura de vía aérea || Puede requerir intubación.
+E: En los incendios en espacios cerrados, la combustión de plásticos, lana, seda y poliuretano libera cianuro de hidrógeno, que bloquea la citocromo oxidasa mitocondrial e impide el uso del oxígeno, causando acidosis láctica grave, alteración del estado mental, convulsiones, hipotensión y paro. Un lactato mayor de 8 a 10 mmol/L en una víctima de incendio sugiere intoxicación por cianuro. El tratamiento de elección es la hidroxocobalamina, que se une al cianuro formando cianocobalamina, eliminada por la orina. Los nitritos inducen metahemoglobinemia y se evitan en presencia de monóxido de carbono.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la intoxicación por cianuro ;; Manual de toxicología clínica de urgencias
+
+@ urg|toxicology|poisonings|2|next_step
+V: Hombre de 30 años que ingirió hace 40 minutos una cantidad tóxica de carbamazepina. Está consciente, con vía aérea protegida y somnolencia leve.
+P: ¿Cuál es la conducta de descontaminación más apropiada?
++ Carbón activado en dosis de 1 gramo por kilo || Es útil si la ingesta es reciente y el tóxico es adsorbible, con vía aérea protegida.
+- anchoring | Inducir el vómito con ipecacuana || Ya no se recomienda.
+- availability_heuristic | Lavado gástrico de rutina en todos los casos || Tiene riesgos y beneficio limitado.
+- representativeness_heuristic | Ninguna descontaminación porque está consciente || El carbón es útil en ingestas recientes.
+- premature_closure | Catárticos como única medida || No mejoran el pronóstico.
+- framing_effect | Irrigación intestinal total de rutina || Se reserva para casos específicos.
+- complexity_bias | Hemodiálisis inmediata en todos los casos || Solo en intoxicación grave.
+- base_rate_fallacy | El carbón activado sirve para cualquier tóxico || No adsorbe metales, alcoholes ni cáusticos.
+- belief_bias | El carbón activado es útil 24 horas después de cualquier ingesta || Su utilidad disminuye con el tiempo.
+- omission_bias | No vigilar el nivel de conciencia y la vía aérea || Puede deteriorarse.
+E: El carbón activado adsorbe muchos tóxicos en el tubo digestivo y reduce su absorción. Se recomienda en dosis de 1 gramo por kilo, idealmente en la primera hora después de la ingesta de una cantidad potencialmente tóxica, en pacientes con vía aérea protegida. En tóxicos con circulación enterohepática, como la carbamazepina, el fenobarbital y la teofilina, pueden usarse dosis múltiples. No adsorbe metales como hierro y litio, alcoholes, hidrocarburos ni cáusticos, en los que está contraindicado. La inducción del vómito ya no se recomienda y el lavado gástrico se reserva para casos muy seleccionados.
+R: Manual de toxicología clínica de urgencias ;; Guía de Práctica Clínica de diagnóstico y tratamiento de intoxicaciones por medicamentos
+
+@ urg|toxicology|poisonings|2|diagnosis
+V: Hombre de 22 años traído de una fiesta con agitación, alucinaciones, piel roja, seca y caliente, midriasis, taquicardia, retención urinaria y ruidos intestinales disminuidos. Temperatura de 38.9 grados.
+P: ¿Cuál es el diagnóstico sindromático más probable?
++ Síndrome anticolinérgico || Piel seca y roja, midriasis, hipertermia, delirio, retención urinaria e íleo.
+- anchoring | Síndrome simpaticomimético || Cursa con piel sudorosa, no seca.
+- availability_heuristic | Síndrome colinérgico || Cursa con miosis y secreciones abundantes.
+- representativeness_heuristic | Síndrome opioide || Cursa con miosis y depresión respiratoria.
+- premature_closure | Síndrome serotoninérgico || Cursa con diaforesis, clonus e hiperreflexia.
+- framing_effect | Síndrome sedante hipnótico || Cursa con depresión del estado de conciencia sin hipertermia.
+- complexity_bias | Síndrome neuroléptico maligno || Cursa con rigidez y no con piel seca.
+- base_rate_fallacy | Golpe de calor sin intoxicación || Los demás signos sugieren un tóxico.
+- belief_bias | La midriasis siempre indica estimulantes || También ocurre con anticolinérgicos.
+- focusing_illusion | Abstinencia alcohólica || Cursa con diaforesis.
+E: Los síndromes tóxicos o toxíndromes agrupan signos que orientan al tóxico. El síndrome anticolinérgico, causado por antihistamínicos, antidepresivos tricíclicos, atropina, escopolamina, toloache o antiparkinsonianos, se resume con la frase rojo como un betabel, seco como un hueso, caliente como una liebre, ciego como un murciélago y loco como una cabra: piel roja, seca y caliente, midriasis, delirio, taquicardia, retención urinaria e íleo. Se distingue del simpaticomimético, que cursa con diaforesis. El tratamiento incluye medidas de soporte, benzodiacepinas para la agitación y, en casos seleccionados, fisostigmina.
+R: Manual de toxicología clínica de urgencias ;; Guía de Práctica Clínica de diagnóstico y tratamiento de intoxicaciones por medicamentos
+
+@ urg|toxicology|poisonings|3|treatment_of_choice
+V: Hombre de 28 años que consumió cocaína y llega con dolor torácico, agitación, diaforesis, presión de 190/110 mmHg y frecuencia cardiaca de 130. Electrocardiograma sin elevación del ST.
+P: ¿Cuál es el tratamiento de elección inicial?
++ Benzodiacepinas intravenosas, junto con ácido acetilsalicílico y nitratos para el dolor torácico || Reducen la estimulación simpática y la presión.
+- anchoring | Betabloqueador no selectivo como propranolol || Puede causar estimulación alfa sin oposición y empeorar la vasoconstricción.
+- availability_heuristic | Haloperidol como primera opción para la agitación || Disminuye el umbral convulsivo y dificulta la termorregulación.
+- representativeness_heuristic | Trombólisis inmediata sin elevación del ST || No está indicada.
+- premature_closure | Solo observación porque es joven || Puede tener isquemia o disección.
+- framing_effect | Naloxona || No está indicada.
+- complexity_bias | Cateterismo inmediato en todos los casos sin elevación del ST || No es el primer paso.
+- base_rate_fallacy | El dolor torácico por cocaína nunca es isquémico || Puede causar infarto.
+- belief_bias | Los betabloqueadores son seguros en todos los síndromes coronarios || En cocaína se evitan inicialmente.
+- omission_bias | No considerar disección aórtica || Es una complicación posible.
+E: La cocaína bloquea la recaptura de catecolaminas y causa un síndrome simpaticomimético con agitación, hipertensión, taquicardia, hipertermia, diaforesis y midriasis. Puede producir vasoespasmo coronario, infarto, arritmias, disección aórtica, evento vascular cerebral y convulsiones. El tratamiento inicial de la agitación y la hiperactividad simpática son las benzodiacepinas. Para el dolor torácico se usan ácido acetilsalicílico, nitratos y, si es necesario, calcioantagonistas o fentolamina. Clásicamente se evitan los betabloqueadores en la fase aguda por el riesgo de estimulación alfa sin oposición. El enfriamiento trata la hipertermia.
+R: Manual de toxicología clínica de urgencias ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la intoxicación por estimulantes
+
+@ urg|toxicology|poisonings|3|treatment_of_choice
+V: Niño de 2 años que ingirió varias tabletas de sulfato ferroso de su madre hace 3 horas. Presenta vómito, diarrea con sangre y letargo. Hierro sérico muy elevado y acidosis metabólica.
+P: ¿Cuál es el tratamiento específico de elección?
++ Deferoxamina intravenosa || Quela el hierro libre en la intoxicación grave.
+- anchoring | Carbón activado || No adsorbe el hierro.
+- availability_heuristic | Penicilamina || Se usa en intoxicación por cobre o plomo.
+- representativeness_heuristic | Dimercaprol || Se usa en intoxicación por arsénico o plomo.
+- premature_closure | Solo hidratación y observación || La intoxicación es grave.
+- framing_effect | Vitamina C para mejorar la eliminación del hierro || Aumenta su absorción.
+- complexity_bias | Hemodiálisis como primera opción || No es eficaz para el hierro unido a proteínas.
+- base_rate_fallacy | Las tabletas de hierro son inocuas en niños || Son una causa importante de muerte por intoxicación pediátrica.
+- belief_bias | La mejoría a las 12 horas indica recuperación definitiva || Puede seguir una fase de falla multiorgánica.
+- omission_bias | No realizar radiografía abdominal para ver tabletas || Ayuda a evaluar la carga de hierro.
+E: La intoxicación por hierro es una causa importante de muerte por intoxicación en niños pequeños. Evoluciona en fases: gastrointestinal, con vómito, diarrea y sangrado en las primeras 6 horas; latente, con aparente mejoría; de choque y acidosis metabólica por toxicidad celular; hepatotoxicidad; y estenosis pilórica tardía. Las tabletas son radioopacas y pueden verse en la radiografía. El carbón activado no adsorbe el hierro, y puede usarse irrigación intestinal total. La deferoxamina intravenosa es el quelante indicado en intoxicación grave con síntomas sistémicos, acidosis, choque o hierro sérico mayor de 500 microgramos por decilitro.
+R: Manual de toxicología clínica de urgencias ;; Guía de Práctica Clínica de diagnóstico y tratamiento de intoxicaciones en pediatría
+
+@ urg|toxicology|poisonings|2|treatment_of_choice
+V: Mujer de 70 años en tratamiento con warfarina por fibrilación auricular que presenta sangrado intracraneal. INR de 6.5.
+P: ¿Cuál es el tratamiento de elección para revertir la anticoagulación?
++ Concentrado de complejo protrombínico junto con vitamina K intravenosa || Revierte rápidamente el efecto de la warfarina en sangrado grave.
+- anchoring | Solo suspender la warfarina y esperar || El sangrado intracraneal requiere reversión inmediata.
+- availability_heuristic | Protamina || Revierte la heparina.
+- representativeness_heuristic | Idarucizumab || Revierte el dabigatrán.
+- premature_closure | Vitamina K oral como única medida || Actúa lento.
+- framing_effect | Plaquetas como tratamiento principal || No revierten la warfarina.
+- complexity_bias | Andexanet alfa || Revierte inhibidores del factor Xa.
+- base_rate_fallacy | El plasma fresco es siempre superior al complejo protrombínico || El complejo es más rápido y requiere menos volumen.
+- belief_bias | La vitamina K revierte el efecto en minutos || Tarda horas.
+- omission_bias | No controlar la presión arterial || Es parte del manejo del sangrado intracraneal.
+E: En el sangrado grave asociado a warfarina, como el intracraneal, se requiere reversión inmediata. El concentrado de complejo protrombínico de cuatro factores corrige el INR en minutos con poco volumen, y es superior al plasma fresco congelado, que requiere grandes volúmenes y tiempo de descongelación. Se agrega vitamina K intravenosa de 5 a 10 mg, que actúa en horas pero mantiene la reversión. Para los anticoagulantes directos se usan antídotos específicos: idarucizumab para dabigatrán y andexanet alfa para inhibidores del factor Xa, o complejo protrombínico si no están disponibles. La protamina revierte la heparina.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia asociada a anticoagulantes ;; Guía de la Asociación Americana del Corazón para hemorragia intracerebral
+
+@ urg|toxicology|poisonings|3|treatment_of_choice
+V: Mujer de 30 años que ingirió una gran cantidad de verapamilo. Presenta bradicardia de 40, presión de 65/40 mmHg e hiperglucemia de 280 mg/dL, refractaria a atropina y líquidos.
+P: ¿Cuál es el tratamiento de elección además del calcio intravenoso?
++ Terapia con insulina en dosis altas con glucosa || Mejora la contractilidad y el metabolismo miocárdico en la intoxicación por calcioantagonistas.
+- anchoring | Glucagón como único tratamiento eficaz || Tiene menor eficacia que la insulina en dosis altas.
+- availability_heuristic | Naloxona || No está indicada.
+- representativeness_heuristic | Evitar la insulina por la hiperglucemia || Es parte del tratamiento.
+- premature_closure | Solo más líquidos || No resuelve el choque.
+- framing_effect | Flumazenil || No está indicado.
+- complexity_bias | Hemodiálisis para eliminar el verapamilo || No es dializable de forma eficaz.
+- base_rate_fallacy | Los calcioantagonistas no causan hiperglucemia || Inhiben la secreción de insulina.
+- belief_bias | La hiperglucemia indica que no es una intoxicación grave || Se asocia con mayor gravedad.
+- omission_bias | No vigilar glucosa y potasio durante la terapia || Es indispensable.
+E: La intoxicación por calcioantagonistas no dihidropiridínicos, como verapamilo y diltiazem, produce bradicardia, bloqueos e hipotensión por vasodilatación y depresión miocárdica. Característicamente causa hiperglucemia por inhibición de la secreción de insulina, que se correlaciona con la gravedad. El tratamiento incluye calcio intravenoso, atropina, vasopresores y la terapia con insulina en dosis altas con glucosa, que mejora la utilización de carbohidratos por el miocardio y la contractilidad. Se vigilan glucosa y potasio. En casos refractarios se usan emulsión lipídica, marcapasos y oxigenación por membrana extracorpórea.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de intoxicaciones por medicamentos ;; Manual de toxicología clínica de urgencias
+
+@ urg|toxicology|poisonings|3|treatment_of_choice
+V: Mujer de 45 años con litio por trastorno bipolar que presenta temblor grueso, ataxia, confusión y diarrea después de iniciar un antiinflamatorio. Litemia de 4.2 mEq/L y creatinina elevada.
+P: ¿Cuál es el tratamiento de elección?
++ Hemodiálisis || El litio es dializable y la toxicidad neurológica con niveles altos e insuficiencia renal la indica.
+- anchoring | Carbón activado || No adsorbe el litio.
+- availability_heuristic | Diuréticos tiazídicos para eliminarlo || Aumentan la reabsorción del litio.
+- representativeness_heuristic | Solo suspender el litio y observar || Tiene toxicidad grave.
+- premature_closure | Flumazenil || No está indicado.
+- framing_effect | Agregar otro antiinflamatorio || Reduce la eliminación del litio.
+- complexity_bias | Fragmentos Fab || Se usan en digoxina.
+- base_rate_fallacy | El litio tiene un margen terapéutico amplio || Es estrecho.
+- belief_bias | Los antiinflamatorios no interactúan con el litio || Aumentan su concentración.
+- omission_bias | No hidratar con solución salina || Favorece su eliminación.
+E: El litio tiene un margen terapéutico estrecho, de 0.6 a 1.2 mEq/L. La intoxicación ocurre por sobredosis o de forma crónica por deshidratación, insuficiencia renal o interacciones con fármacos que reducen su eliminación, como antiinflamatorios no esteroideos, tiazidas e inhibidores de la enzima convertidora. Produce síntomas gastrointestinales, temblor grueso, ataxia, confusión, convulsiones y coma. El carbón activado no lo adsorbe. El tratamiento incluye hidratación con solución salina, irrigación intestinal en preparaciones de liberación prolongada y hemodiálisis en casos graves, con niveles altos, toxicidad neurológica o insuficiencia renal.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de intoxicaciones por medicamentos ;; Manual de toxicología clínica de urgencias
+
+@ urg|toxicology|poisonings|3|treatment_of_choice
+V: Hombre de 25 años con tuberculosis en tratamiento que ingirió una gran cantidad de isoniazida. Presenta convulsiones repetidas que no responden a diazepam y acidosis metabólica.
+P: ¿Cuál es el tratamiento específico de elección?
++ Piridoxina intravenosa en dosis equivalente a la isoniazida ingerida || La isoniazida reduce el GABA al depletar la piridoxina.
+- anchoring | Más diazepam en dosis crecientes como única medida || Las convulsiones son refractarias sin piridoxina.
+- availability_heuristic | Fenitoína || Es poco eficaz en estas convulsiones.
+- representativeness_heuristic | Naloxona || No está indicada.
+- premature_closure | Solo bicarbonato para la acidosis || No trata la causa.
+- framing_effect | Atropina || No está indicada.
+- complexity_bias | Hemodiálisis como primera medida || La piridoxina es prioritaria.
+- base_rate_fallacy | La isoniazida no causa convulsiones || Es una causa clásica.
+- belief_bias | La piridoxina solo previene la neuropatía || También trata las convulsiones de la intoxicación.
+- omission_bias | No proteger la vía aérea durante las convulsiones || Es prioritaria.
+E: La intoxicación aguda por isoniazida produce la tríada de convulsiones refractarias, acidosis metabólica con brecha aniónica elevada y coma. La isoniazida inhibe la conversión de piridoxina a su forma activa, cofactor de la descarboxilasa del ácido glutámico, lo que reduce la síntesis de GABA. Las convulsiones no responden bien a las benzodiacepinas solas. El tratamiento específico es la piridoxina intravenosa en dosis de 1 gramo por cada gramo de isoniazida ingerida, o 5 gramos si se desconoce, junto con benzodiacepinas. La piridoxina también se usa de forma preventiva para evitar la neuropatía periférica.
+R: Manual de toxicología clínica de urgencias ;; Norma Oficial Mexicana para la prevención y control de la tuberculosis
+
+@ urg|toxicology|poisonings|3|treatment_of_choice
+V: Lactante de 3 meses alimentado con fórmula preparada con agua de pozo, que presenta cianosis grisácea que no mejora con oxígeno, saturación de 85 por ciento y sangre de color chocolate. Gasometría con PaO2 normal.
+P: ¿Cuál es el tratamiento de elección?
++ Azul de metileno intravenoso || Revierte la metahemoglobinemia por nitratos.
+- anchoring | Solo aumentar el oxígeno || No mejora la metahemoglobinemia significativa.
+- availability_heuristic | Hidroxocobalamina || Se usa en cianuro.
+- representativeness_heuristic | Considerarlo una cardiopatía congénita sin estudiar || La sangre color chocolate y la PaO2 normal sugieren metahemoglobinemia.
+- premature_closure | Naloxona || No está indicada.
+- framing_effect | Transfusión como primera opción en todos los casos || Se reserva para casos refractarios.
+- complexity_bias | Oxigenación por membrana extracorpórea inmediata || No es el primer paso.
+- base_rate_fallacy | La saturación baja con PaO2 normal es un error del oxímetro sin importancia || Sugiere una hemoglobina anormal.
+- belief_bias | El agua de pozo es siempre segura para fórmulas || Puede contener nitratos.
+- omission_bias | No medir metahemoglobina por cooximetría || Confirma el diagnóstico.
+E: La metahemoglobinemia ocurre cuando el hierro de la hemoglobina se oxida a su forma férrica, que no transporta oxígeno. Puede ser causada por nitratos del agua de pozo en lactantes, anestésicos locales como benzocaína y lidocaína, dapsona, nitritos y otros fármacos. Se caracteriza por cianosis que no mejora con oxígeno, sangre color chocolate, saturación por oximetría alrededor de 85 por ciento y PaO2 normal en la gasometría. Se confirma con cooximetría. El tratamiento es el azul de metileno intravenoso cuando la metahemoglobina es mayor de 20 a 30 por ciento o hay síntomas. Está contraindicado en deficiencia de glucosa 6 fosfato deshidrogenasa.
+R: Manual de toxicología clínica de urgencias ;; Guía de Práctica Clínica de diagnóstico y tratamiento de intoxicaciones en pediatría
+
+@ urg|toxicology|poisonings|3|next_step
+V: Mujer de 35 años traída a urgencias somnolienta tras ingerir 20 tabletas de clonazepam. Responde a estímulos verbales, respira con frecuencia de 14 y saturación de 96 por ciento. Toma también imipramina.
+P: ¿Cuál es la conducta más apropiada?
++ Vigilancia y medidas de soporte sin flumazenil || El flumazenil puede precipitar convulsiones en usuarios crónicos y con tricíclicos.
+- anchoring | Flumazenil en bolo de inmediato || Puede causar convulsiones y arritmias en coingesta con tricíclicos.
+- availability_heuristic | Intubación inmediata con respiración adecuada || No está indicada.
+- representativeness_heuristic | Naloxona como antídoto específico || No revierte benzodiacepinas.
+- premature_closure | Dar de alta porque está estable || Requiere vigilancia y electrocardiograma por el tricíclico.
+- framing_effect | Inducir el vómito || Está contraindicado con somnolencia.
+- complexity_bias | Hemodiálisis urgente || No es útil.
+- base_rate_fallacy | Las benzodiacepinas solas suelen causar depresión respiratoria grave || Solas rara vez la causan.
+- belief_bias | El flumazenil es seguro en todos los casos || Tiene contraindicaciones.
+- omission_bias | No realizar electrocardiograma por la imipramina || Es indispensable.
+E: La intoxicación aislada por benzodiacepinas suele causar sedación con poca depresión respiratoria, y el manejo de soporte es suficiente en la mayoría de los casos. El flumazenil, antagonista competitivo, puede revertir la sedación, pero puede precipitar abstinencia con convulsiones en usuarios crónicos y convulsiones y arritmias en coingesta con fármacos proconvulsivos, como los antidepresivos tricíclicos. Por ello no se recomienda de rutina, y se reserva para sedaciones iatrogénicas en pacientes sin uso crónico. La coingesta con tricíclicos obliga a realizar electrocardiograma y vigilar el QRS. Se evalúa el riesgo suicida.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de intoxicaciones por medicamentos ;; Manual de toxicología clínica de urgencias

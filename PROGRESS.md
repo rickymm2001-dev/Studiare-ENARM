@@ -48,6 +48,8 @@
 - Análisis docente del ENARM en docs/ANALISIS_DOCENTE_ENARM.md y protección del contenido al final (D-073)
 - Conócete en Progreso con el motor de autoconocimiento, 19 lecturas en tres áreas más un foco por cada trampa detectada con acción concreta (D-074). 346 pruebas pasan
 - Proyecto de Supabase creado por Ricardo. Cuenta en la nube con enlace al correo, rol desde el servidor y datos de cuenta sincronizados (D-075). 353 pruebas pasan
+- Auditoría completa de la página con corrección de tarjetas nuevas por día (D-076)
+- Banco grande de 1500 preguntas terminado en borrador (D-077). 250 por troncal con 10 opciones, todas validadas. Excel en content-drafts/bank1500/Studiare-banco-1500-borrador.xlsx y guía en content-drafts/bank1500/README.md. Falta la revisión médica y subirlo a Supabase con la segunda parte de la nube
 - Siguiente. Ricardo prueba su cuenta y se hace dueño. Luego segunda parte de la nube con bitácora, usuarios y banco. Después Fase B del banco con trampas explícitas y luego Fase D con IA en modo simulado, como pidió Ricardo. Después bloque 5 de pagos
 
 ## Fase C. Pantallas del alumno (esqueleto funcionando)

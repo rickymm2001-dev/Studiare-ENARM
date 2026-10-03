@@ -1,0 +1,287 @@
+@ urg|environmental_emergencies|drowning|3|initial_study
+V: Adolescente de 15 años, buen nadador, que sufre un ahogamiento en una alberca tranquila sin causa aparente. Es reanimado con éxito. Su madre refiere que él ha tenido desmayos con el ejercicio y un tío murió súbitamente joven.
+P: ¿Cuál es el estudio inicial más apropiado para buscar la causa?
++ Electrocardiograma para buscar QT largo u otra canalopatía || Una arritmia puede causar el ahogamiento en un nadador experto.
+- anchoring | Ningún estudio porque el ahogamiento se explica por sí solo || Un nadador experto sin causa obliga a buscar arritmias.
+- availability_heuristic | Prueba de embarazo como único estudio || No explica el cuadro.
+- representativeness_heuristic | Electroencefalograma como único estudio || Debe descartarse primero una arritmia.
+- premature_closure | Considerarlo un accidente sin investigar || Los antecedentes sugieren una causa cardiaca.
+- framing_effect | Tomografía de senos paranasales || No está indicada.
+- complexity_bias | Biopsia muscular || No está indicada.
+- base_rate_fallacy | Los nadadores expertos nunca se ahogan || Pueden hacerlo por arritmias o convulsiones.
+- belief_bias | Los desmayos con el ejercicio son normales en adolescentes || Son un dato de alarma cardiaco.
+- omission_bias | No estudiar a los familiares de primer grado || El síndrome puede ser hereditario.
+E: El ahogamiento puede ser consecuencia de un evento previo que causa pérdida de la conciencia en el agua, como convulsiones, hipoglucemia, trauma, intoxicación o arritmias. El síndrome de QT largo congénito, sobre todo el tipo 1, se asocia con arritmias desencadenadas por el ejercicio y la natación, y puede causar ahogamientos inexplicables en nadadores competentes. El síncope con el ejercicio y la muerte súbita familiar son datos de alarma. Se realiza electrocardiograma para medir el QT corregido, y se completa con estudios genéticos, pruebas de esfuerzo y estudio de familiares.
+R: Guía de la Sociedad Europea de Cardiología para arritmias ventriculares y prevención de muerte súbita ;; Guía de Práctica Clínica de atención del paciente pediátrico por ahogamiento
+
+@ urg|environmental_emergencies|drowning|2|treatment_of_choice
+V: Hombre de 35 años rescatado tras un ahogamiento, consciente, con tos persistente, estertores bilaterales, frecuencia respiratoria de 28 y saturación de 88 por ciento con mascarilla con reservorio.
+P: ¿Cuál es el tratamiento de soporte respiratorio de elección inicial?
++ Ventilación no invasiva con presión positiva o CPAP si coopera y protege la vía aérea || Recluta alvéolos y mejora la oxigenación.
+- anchoring | Solo oxígeno por cánula nasal a 2 litros || Es insuficiente.
+- availability_heuristic | Antibiótico intravenoso profiláctico como tratamiento principal || No mejora la oxigenación.
+- representativeness_heuristic | Maniobra de Heimlich para extraer el agua || No está indicada.
+- premature_closure | Dar de alta con saturación de 88 por ciento || Requiere soporte.
+- framing_effect | Diuréticos como tratamiento principal || El edema no es cardiogénico.
+- complexity_bias | Oxigenación por membrana extracorpórea inmediata || No es el primer paso.
+- base_rate_fallacy | La presión positiva está contraindicada tras un ahogamiento || Es útil.
+- belief_bias | La hipoxemia tras el ahogamiento siempre se resuelve sola en minutos || Puede empeorar.
+- omission_bias | No vigilar el deterioro que requiera intubación || Puede ser necesaria.
+E: Tras un ahogamiento, la hipoxemia se debe a la aspiración de agua, la pérdida del surfactante y las atelectasias. En pacientes conscientes, que cooperan y protegen la vía aérea, con hipoxemia que no mejora con oxígeno, se puede usar ventilación no invasiva con presión positiva o CPAP, que recluta alvéolos y mejora la oxigenación. Si hay deterioro del estado de conciencia, fatiga o hipoxemia refractaria, se realiza intubación y ventilación mecánica protectora con PEEP. Los diuréticos no son el tratamiento principal porque el edema no es cardiogénico. Los antibióticos se reservan para signos de infección.
+R: Guía de Práctica Clínica de atención del paciente por ahogamiento ;; Guía del Consejo Europeo de Resucitación para circunstancias especiales
+
+@ urg|environmental_emergencies|heat_stroke|2|treatment_of_choice
+V: Hombre de 28 años que juega fútbol bajo el sol y presenta contracciones musculares dolorosas en las pantorrillas. Temperatura normal, estado mental normal y signos vitales estables. Sudó mucho y solo bebió agua.
+P: ¿Cuál es el tratamiento de elección?
++ Reposo en lugar fresco, estiramiento y rehidratación oral con solución con electrolitos || Son calambres por calor por pérdida de sodio.
+- anchoring | Inmersión en agua helada || No tiene golpe de calor.
+- availability_heuristic | Relajantes musculares intravenosos || No son necesarios.
+- representativeness_heuristic | Seguir jugando bebiendo solo agua || Puede empeorar por la pérdida de sodio.
+- premature_closure | Hospitalización en terapia intensiva || No está indicada.
+- framing_effect | Antipiréticos || No tiene fiebre.
+- complexity_bias | Dantroleno || No está indicado.
+- base_rate_fallacy | Los calambres por calor siempre progresan a golpe de calor || No necesariamente.
+- belief_bias | Los calambres se deben a falta de calcio exclusivamente || Se deben sobre todo a pérdida de sodio.
+- omission_bias | No recomendar hidratación con electrolitos durante el ejercicio || Es la prevención.
+E: Los calambres por calor son contracciones musculares dolorosas e involuntarias, generalmente en pantorrillas, muslos y abdomen, que aparecen durante o después del ejercicio intenso en ambientes calurosos. Se asocian con pérdida de sodio por sudoración abundante, sobre todo cuando se repone solo con agua. La temperatura y el estado mental son normales. El tratamiento es reposo en un lugar fresco, estiramiento suave y rehidratación oral con soluciones que contengan electrolitos. La prevención incluye aclimatación, hidratación con electrolitos y pausas durante el ejercicio en calor.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del golpe de calor ;; Guía de la Sociedad de Medicina de Montaña para enfermedades por calor
+
+@ urg|environmental_emergencies|heat_stroke|3|treatment_of_choice
+V: Hombre de 30 años que durante una cirugía con anestesia inhalada y succinilcolina presenta rigidez del masetero, taquicardia, aumento rápido del dióxido de carbono espirado y temperatura de 40 grados.
+P: ¿Cuál es el tratamiento de elección?
++ Suspender el anestésico inhalado y administrar dantroleno intravenoso || Es una hipertermia maligna.
+- anchoring | Paracetamol intravenoso como tratamiento principal || No trata la hipertermia maligna.
+- availability_heuristic | Aumentar la dosis del anestésico inhalado || Agrava el cuadro.
+- representativeness_heuristic | Repetir la succinilcolina para relajar el masetero || Agrava el cuadro.
+- premature_closure | Solo enfriamiento externo || El dantroleno es el tratamiento específico.
+- framing_effect | Antibióticos por fiebre posoperatoria || No es una infección.
+- complexity_bias | Bromocriptina || Se usa en síndrome neuroléptico maligno.
+- base_rate_fallacy | La hipertermia maligna es benigna y autolimitada || Es mortal sin tratamiento.
+- belief_bias | La hipertermia maligna no es hereditaria || Es hereditaria autosómica dominante.
+- omission_bias | No vigilar hiperpotasemia y rabdomiólisis || Son complicaciones graves.
+E: La hipertermia maligna es un trastorno farmacogenético autosómico dominante, generalmente por mutaciones del receptor de rianodina RYR1, que causa liberación descontrolada de calcio en el músculo esquelético ante anestésicos inhalados halogenados y succinilcolina. Se manifiesta con aumento del dióxido de carbono espirado, rigidez muscular, incluida la del masetero, taquicardia, hipertermia, acidosis, hiperpotasemia y rabdomiólisis. El tratamiento es suspender los fármacos desencadenantes, hiperventilar con oxígeno al 100 por ciento, administrar dantroleno intravenoso, enfriar y tratar la hiperpotasemia. Se informa a la familia por el carácter hereditario.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la hipertermia maligna ;; Guía de la Asociación de Hipertermia Maligna
+
+@ urg|environmental_emergencies|hypothermia|2|prevention_screening
+V: Hombre de 35 años con politrauma que llega en invierno. Temperatura de 35.2 grados. Se planea reanimación con hemoderivados y cirugía.
+P: ¿Cuál es la medida preventiva más importante respecto a la temperatura?
++ Prevenir la hipotermia con líquidos y hemoderivados calientes, mantas térmicas y ambiente cálido || La hipotermia agrava la coagulopatía y aumenta la mortalidad en trauma.
+- anchoring | Mantener al paciente descubierto para facilitar la exploración todo el tiempo || Favorece la pérdida de calor.
+- availability_heuristic | Administrar líquidos fríos para reducir el metabolismo || Agrava la hipotermia y la coagulopatía.
+- representativeness_heuristic | Inducir hipotermia terapéutica en el choque hemorrágico || Está contraindicada.
+- premature_closure | Ignorar la temperatura porque es mayor de 35 grados || La tendencia a enfriarse debe prevenirse.
+- framing_effect | Dar alcohol para calentar || Está contraindicado.
+- complexity_bias | Circulación extracorpórea profiláctica || No está indicada.
+- base_rate_fallacy | La hipotermia leve no afecta la coagulación || La afecta de forma importante.
+- belief_bias | La hipotermia protege al paciente con hemorragia || Empeora la coagulopatía.
+- omission_bias | No medir la temperatura de forma seriada || Es indispensable.
+E: La hipotermia es un componente de la tríada letal del trauma junto con la acidosis y la coagulopatía. Incluso una hipotermia leve reduce la actividad de las enzimas de la coagulación y la función plaquetaria, y aumenta el sangrado y la mortalidad. En el paciente politraumatizado se previene exponiéndolo solo lo necesario para la exploración, cubriéndolo con mantas térmicas, calentando la sala, administrando líquidos y hemoderivados calientes con calentadores rápidos y midiendo la temperatura de forma seriada. La hipotermia terapéutica está contraindicada en el choque hemorrágico.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía europea para el manejo del sangrado mayor y la coagulopatía en trauma
+
+@ urg|environmental_emergencies|hypothermia|2|diagnosis
+V: Hombre de 30 años, migrante, que caminó varios días con los pies mojados a temperaturas frías pero sobre cero. Presenta pies pálidos, fríos, edematosos y entumecidos, que al recalentarse se tornan rojos, dolorosos y con ampollas.
+P: ¿Cuál es el diagnóstico más probable?
++ Pie de trinchera o pie de inmersión || Lesión por frío no congelante con exposición prolongada a humedad y frío.
+- anchoring | Congelación profunda || Requiere temperaturas bajo cero con congelamiento del tejido.
+- availability_heuristic | Celulitis bilateral || El antecedente de frío y humedad explica el cuadro.
+- representativeness_heuristic | Trombosis venosa profunda bilateral || No explica la evolución con el recalentamiento.
+- premature_closure | Pie diabético || No hay diabetes.
+- framing_effect | Gota bilateral || No corresponde.
+- complexity_bias | Vasculitis sistémica || El antecedente explica el cuadro.
+- base_rate_fallacy | Las lesiones por frío solo ocurren bajo cero || El pie de trinchera ocurre sobre cero.
+- belief_bias | Debe frotarse vigorosamente para recalentar || Daña los tejidos.
+- omission_bias | No secar, elevar y proteger los pies || Es el manejo.
+E: El pie de trinchera o pie de inmersión es una lesión por frío no congelante causada por la exposición prolongada de los pies a la humedad y al frío por arriba de cero grados, frecuente en militares, personas en situación de calle y migrantes. Inicialmente los pies están pálidos, fríos, entumecidos y edematosos; al recalentarse aparece hiperemia dolorosa, edema y ampollas, y puede haber necrosis e infección. El tratamiento consiste en secar, recalentar gradualmente, elevar y proteger los pies, analgesia y cuidado de las heridas. La prevención incluye calzado seco, cambiar calcetines y evitar la humedad prolongada.
+R: Guía de la Sociedad de Medicina de Montaña para lesiones por frío ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la hipotermia accidental
+
+@ urg|respiratory_emergencies|asthma_exacerbation|3|treatment_of_choice
+V: Mujer de 24 años con crisis asmática grave refractaria que requiere intubación orotraqueal. Presión de 110/70 mmHg.
+P: ¿Cuál es el inductor de elección para la intubación en esta paciente?
++ Ketamina || Tiene efecto broncodilatador y mantiene la estabilidad hemodinámica.
+- anchoring | Tiopental || Puede liberar histamina y empeorar el broncoespasmo.
+- availability_heuristic | Morfina como inductor || Libera histamina.
+- representativeness_heuristic | Intubar sin inductor || Es inhumano y aumenta complicaciones.
+- premature_closure | Diazepam como inductor único || Tiene inicio lento.
+- framing_effect | Succinilcolina sin sedante || El relajante no seda.
+- complexity_bias | Anestesia inhalada con desflurano en urgencias || No es la técnica de secuencia rápida.
+- base_rate_fallacy | Todos los inductores tienen el mismo efecto sobre los bronquios || Difieren.
+- belief_bias | La ketamina está contraindicada en asma || Es la preferida por su efecto broncodilatador.
+- omission_bias | No ajustar la ventilación para evitar el atrapamiento aéreo || Es fundamental.
+E: La intubación en la crisis asmática grave es de alto riesgo por la hipoxemia, el atrapamiento aéreo y la inestabilidad hemodinámica. La ketamina es el inductor preferido porque tiene efecto broncodilatador por liberación de catecolaminas y mantiene la estabilidad hemodinámica. Se usa con un relajante neuromuscular de inicio rápido, como rocuronio o succinilcolina, y un tubo de diámetro grande. Después de la intubación se usa una estrategia ventilatoria con frecuencia baja, volumen corriente bajo, flujo inspiratorio alto y tiempo espiratorio prolongado, aceptando hipercapnia permisiva para evitar el atrapamiento aéreo.
+R: Iniciativa global para el asma ;; Guía de Práctica Clínica de manejo de la vía aérea en urgencias
+
+@ urg|respiratory_emergencies|asthma_exacerbation|2|initial_treatment
+V: Mujer de 30 años con embarazo de 28 semanas y asma que presenta una exacerbación moderada con disnea, sibilancias y saturación de 93 por ciento.
+P: ¿Cuál es el tratamiento inicial más apropiado?
++ Salbutamol inhalado, corticosteroide sistémico y oxígeno para mantener saturación mayor de 95 por ciento, igual que fuera del embarazo || El asma no controlada es más peligrosa para el feto que los fármacos.
+- anchoring | Evitar todo medicamento por el embarazo || La hipoxemia materna daña al feto.
+- availability_heuristic | Solo salbutamol sin esteroide por miedo a efectos fetales || Los esteroides están indicados.
+- representativeness_heuristic | Teofilina como primera línea || No es la primera opción.
+- premature_closure | Interrumpir el embarazo para tratar el asma || No está indicado.
+- framing_effect | Sedantes para disminuir la ansiedad || Pueden causar depresión respiratoria.
+- complexity_bias | Intubación inmediata por el embarazo || No está indicada en una crisis moderada.
+- base_rate_fallacy | El embarazo siempre mejora el asma || Puede empeorarla.
+- belief_bias | Los broncodilatadores inhalados son teratógenos || Son seguros.
+- omission_bias | No vigilar el bienestar fetal || Es parte del manejo.
+E: El asma es la enfermedad respiratoria crónica más frecuente en el embarazo, y su control puede empeorar, mejorar o mantenerse. El asma no controlada y las exacerbaciones se asocian con preeclampsia, parto pretérmino, bajo peso y muerte perinatal, por lo que los riesgos de los fármacos son menores que los de la enfermedad. La exacerbación se trata igual que fuera del embarazo: agonistas beta 2 de acción corta, corticosteroides sistémicos, bromuro de ipratropio si es grave, y oxígeno para mantener la saturación mayor de 95 por ciento para proteger la oxigenación fetal. Se vigila el bienestar fetal.
+R: Iniciativa global para el asma ;; Guía de Práctica Clínica de diagnóstico y tratamiento del asma en el embarazo
+
+@ urg|resuscitation|airway_management|3|next_step
+V: Hombre de 50 años en paro respiratorio en quien fallan dos intentos de intubación orotraqueal. Se logra ventilar con dificultad con bolsa válvula mascarilla y la saturación es de 88 por ciento.
+P: ¿Cuál es el siguiente paso más apropiado?
++ Colocar un dispositivo supraglótico, como mascarilla laríngea, para oxigenar y ventilar || Es el dispositivo de rescate tras intubación fallida.
+- anchoring | Un tercer, cuarto y quinto intento de laringoscopia sin cambios || Aumenta el riesgo de traumatismo y edema.
+- availability_heuristic | Cricotiroidotomía inmediata cuando aún se puede oxigenar || Se reserva para no poder oxigenar.
+- representativeness_heuristic | Dejar de ventilar para preparar otro intento || La oxigenación es prioritaria.
+- premature_closure | Intubación nasotraqueal a ciegas || No es la siguiente opción recomendada.
+- framing_effect | Despertar al paciente en paro respiratorio || No es una opción en paro.
+- complexity_bias | Traqueostomía reglada en quirófano || Es lenta.
+- base_rate_fallacy | Los dispositivos supraglóticos no permiten ventilar de forma eficaz || Permiten oxigenar y ventilar.
+- belief_bias | La intubación es la única forma válida de oxigenar || La oxigenación es el objetivo.
+- omission_bias | No pedir ayuda experta || Debe solicitarse.
+E: Los algoritmos de vía aérea difícil establecen que, tras un intento fallido de intubación, la prioridad es mantener la oxigenación. Se limita el número de intentos de laringoscopia, idealmente a tres, optimizando la técnica en cada uno, por ejemplo con videolaringoscopio o bujía. Si falla la intubación, se coloca un dispositivo supraglótico, como la mascarilla laríngea, que permite oxigenar y ventilar y puede servir como conducto para la intubación. Si no se logra oxigenar con mascarilla facial ni dispositivo supraglótico, se realiza una vía aérea quirúrgica de urgencia. Se solicita ayuda experta desde el inicio.
+R: Guía de la Sociedad de Vía Aérea Difícil ;; Guía de Práctica Clínica de manejo de la vía aérea en urgencias
+
+@ urg|resuscitation|airway_management|3|diagnosis
+V: Mujer de 60 años afroamericana en tratamiento con enalapril desde hace 2 años que presenta edema progresivo de labios y lengua, sin urticaria ni prurito. Presión de 140/85 mmHg y voz ronca.
+P: ¿Cuál es el diagnóstico más probable?
++ Angioedema mediado por bradicinina por inhibidor de la enzima convertidora || Edema sin urticaria en una usuaria de enalapril.
+- anchoring | Anafilaxia mediada por histamina || No hay urticaria, prurito ni hipotensión.
+- availability_heuristic | Reacción alérgica a alimentos || El enalapril es la causa más probable.
+- representativeness_heuristic | Celulitis facial || No hay datos infecciosos.
+- premature_closure | Considerarlo imposible porque lleva 2 años con el fármaco || Puede aparecer en cualquier momento.
+- framing_effect | Angioedema hereditario como primera opción en una mujer de 60 años || El fármaco explica mejor el cuadro.
+- complexity_bias | Síndrome de vena cava superior || No explica el cuadro.
+- base_rate_fallacy | El angioedema por inhibidores siempre aparece en la primera semana || Puede aparecer años después.
+- belief_bias | Responde bien a antihistamínicos y adrenalina como la anafilaxia || Responde poco.
+- omission_bias | No vigilar la vía aérea por la voz ronca || Puede requerir intubación.
+E: El angioedema por inhibidores de la enzima convertidora de angiotensina se debe a la acumulación de bradicinina, porque la enzima convertidora también la degrada. Se manifiesta con edema de labios, lengua, cara y vía aérea superior, sin urticaria ni prurito, y puede aparecer en cualquier momento del tratamiento, incluso años después. Es más frecuente en personas afrodescendientes. Responde poco a antihistamínicos, esteroides y adrenalina, porque no está mediado por histamina. El manejo es suspender el fármaco, vigilar y proteger la vía aérea, que puede requerir intubación con fibrobroncoscopio o vía quirúrgica, y en casos graves considerar icatibant o plasma fresco. El fármaco no debe reiniciarse.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del angioedema ;; Guía de Práctica Clínica de manejo de la vía aérea en urgencias
+
+@ urg|toxicology|envenomations|2|next_step
+V: Hombre de 35 años en Guerrero picado por un alacrán en el pie hace 30 minutos. Presenta dolor y parestesias locales, sin sialorrea, sin nistagmo, sin dificultad respiratoria y con signos vitales normales.
+P: ¿Cuál es la conducta más apropiada?
++ Analgesia, compresas frías locales y observación al menos 4 horas, con faboterápico si aparecen signos sistémicos || Es una intoxicación leve en un adulto.
+- anchoring | Faboterápico intravenoso de inmediato en todos los casos sin importar la gravedad || En adultos con cuadro leve se puede observar.
+- availability_heuristic | Torniquete en la pierna || Está contraindicado.
+- representativeness_heuristic | Incisión y succión del sitio || Está contraindicada.
+- premature_closure | Alta inmediata sin observación || Puede progresar.
+- framing_effect | Gluconato de calcio intravenoso || No está indicado.
+- complexity_bias | Intubación profiláctica || No está indicada.
+- base_rate_fallacy | Las picaduras en adultos siempre son graves || En adultos suelen ser leves.
+- belief_bias | Los niños con picadura leve pueden observarse igual que los adultos sin vigilancia estrecha || Los niños tienen mayor riesgo y se tratan con más facilidad.
+- omission_bias | No explicar los datos de alarma || Son parte de la atención.
+E: La intoxicación por picadura de alacrán se clasifica en leve, con dolor, parestesias y edema local; moderada, con manifestaciones sistémicas como sialorrea, sensación de cuerpo extraño en la faringe, nistagmo, inquietud y taquicardia; y grave, con dificultad respiratoria, arritmias, convulsiones o edema pulmonar. En adultos con intoxicación leve se indica analgesia, compresas frías y observación de al menos 4 horas, y se administra el faboterápico si aparecen signos sistémicos. En niños menores de 5 años y en adultos mayores se recomienda una conducta más activa por su mayor riesgo de cuadros graves.
+R: Norma Oficial Mexicana para la prevención y control de la intoxicación por picadura de alacrán ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la intoxicación por picadura de alacrán
+
+@ urg|toxicology|envenomations|2|next_step
+V: Niña de 5 años mordida en la mejilla por el perro de un vecino hace 2 horas. Herida lineal de 3 centímetros, limpia, sin pérdida de tejido. El perro está vacunado y puede observarse. Esquema de vacunación completo.
+P: ¿Cuál es la conducta más apropiada?
++ Lavado abundante, cierre primario de la herida facial, amoxicilina con ácido clavulánico profiláctica y observación del perro durante 10 días || Las heridas faciales se cierran por razones estéticas y vascularidad.
+- anchoring | Dejar la herida facial abierta para cierre por segunda intención || Las heridas faciales limpias se cierran.
+- availability_heuristic | Iniciar vacuna e inmunoglobulina antirrábica de inmediato aunque el perro esté vacunado y observable || Se puede observar al perro.
+- representativeness_heuristic | No dar antibiótico por ser una herida pequeña || En la cara de un niño se recomienda profilaxis.
+- premature_closure | Solo antiséptico sin lavado || El lavado es fundamental.
+- framing_effect | Sacrificar al perro de inmediato para estudiarlo || No es necesario si puede observarse.
+- complexity_bias | Cirugía plástica diferida a 2 semanas sin cierre inicial || No es necesario.
+- base_rate_fallacy | Las mordeduras de perro en la cara rara vez se infectan || El riesgo existe y se previene.
+- belief_bias | La rabia ya no existe en perros de México por lo que no debe evaluarse || Siempre se evalúa el riesgo.
+- omission_bias | No notificar la agresión a la autoridad sanitaria || Debe notificarse.
+E: Las mordeduras de perro son frecuentes en niños y suelen afectar la cara. El manejo incluye lavado abundante con agua y jabón, desbridamiento si es necesario y evaluación del riesgo de rabia. Las heridas faciales limpias de menos de 24 horas pueden cerrarse de forma primaria por su buena vascularidad y por razones estéticas, mientras que las heridas punzantes y de manos se dejan abiertas. Se recomienda profilaxis con amoxicilina y ácido clavulánico en heridas de cara, manos o profundas. Si el perro es doméstico, vacunado y puede observarse 10 días, se difiere la profilaxis antirrábica. Se verifica el esquema antitetánico y se notifica el caso.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las mordeduras por animales ;; Norma Oficial Mexicana para la prevención y control de la rabia humana
+
+@ urg|toxicology|poisonings|3|treatment_of_choice
+V: Hombre de 40 años que ingirió anticongelante con fines suicidas hace 6 horas. Presenta alteración del estado mental, acidosis metabólica con brecha aniónica elevada, brecha osmolar elevada y cristales de oxalato de calcio en la orina. Hipocalcemia.
+P: ¿Cuál es el tratamiento específico de elección?
++ Fomepizol, con hemodiálisis si hay acidosis grave o lesión renal || Es una intoxicación por etilenglicol.
+- anchoring | Carbón activado como tratamiento principal || No adsorbe bien los alcoholes.
+- availability_heuristic | N-acetilcisteína || Se usa en paracetamol.
+- representativeness_heuristic | Solo hidratación sin antídoto || El etilenglicol causa daño renal grave.
+- premature_closure | Naloxona || No está indicada.
+- framing_effect | Atropina || No está indicada.
+- complexity_bias | Trasplante renal urgente || No es el primer paso.
+- base_rate_fallacy | El etilenglicol no causa daño renal || Causa lesión renal por cristales de oxalato.
+- belief_bias | La ausencia de cristales descarta la intoxicación || Su ausencia no la descarta.
+- omission_bias | No corregir la hipocalcemia sintomática || Debe tratarse si causa síntomas.
+E: El etilenglicol, presente en anticongelantes, se metaboliza por la alcohol deshidrogenasa a ácido glicólico y ácido oxálico, que causan acidosis metabólica con brecha aniónica elevada y lesión renal aguda por depósito de cristales de oxalato de calcio, con hipocalcemia. Al inicio predomina una brecha osmolar elevada y síntomas similares a la embriaguez. El tratamiento es el fomepizol o, si no está disponible, el etanol, para bloquear la alcohol deshidrogenasa, junto con bicarbonato para la acidosis y hemodiálisis en casos con acidosis grave, lesión renal o concentraciones altas. Se administran tiamina y piridoxina como cofactores.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la intoxicación por alcoholes tóxicos ;; Manual de toxicología clínica de urgencias
+
+@ urg|toxicology|poisonings|3|complication_prognosis
+V: Hombre de 30 años, jornalero, que ingirió un herbicida con fines suicidas. A las 24 horas presenta úlceras orales, lesión renal y hepatitis, y días después insuficiencia respiratoria progresiva con fibrosis pulmonar.
+P: ¿Cuál es la complicación característica de este tóxico?
++ Fibrosis pulmonar progresiva por paraquat, agravada por el oxígeno suplementario en exceso || El paraquat genera radicales libres en el pulmón.
+- anchoring | Síndrome colinérgico por organofosforados || Los síntomas no son colinérgicos.
+- availability_heuristic | Neumonía por aspiración simple || No explica la fibrosis progresiva con falla multiorgánica.
+- representativeness_heuristic | Edema pulmonar cardiogénico || No explica el cuadro.
+- premature_closure | Asma ocupacional || No explica el cuadro tras la ingesta.
+- framing_effect | Intoxicación por monóxido de carbono || No explica las úlceras ni la fibrosis.
+- complexity_bias | Sarcoidosis aguda || No corresponde.
+- base_rate_fallacy | El paraquat tiene buen pronóstico con oxígeno abundante || El oxígeno en exceso empeora el daño.
+- belief_bias | Existe un antídoto específico eficaz para el paraquat || No existe.
+- omission_bias | No restringir la venta de plaguicidas altamente tóxicos || Es una medida preventiva de salud pública.
+E: El paraquat es un herbicida muy tóxico cuya ingesta, frecuentemente con fines suicidas en zonas rurales, tiene una mortalidad muy elevada. Causa lesiones corrosivas orales y esofágicas, falla renal y hepática y, de forma característica, daño pulmonar progresivo por generación de radicales libres en los neumocitos, que evoluciona a fibrosis pulmonar en días o semanas. El oxígeno suplementario en exceso aumenta la generación de radicales y empeora el daño, por lo que se administra solo para mantener una saturación mínima aceptable. No existe un antídoto específico. La prevención mediante la restricción de plaguicidas altamente tóxicos reduce las muertes.
+R: Manual de toxicología clínica de urgencias ;; Guía de Práctica Clínica de diagnóstico y tratamiento de intoxicación por plaguicidas
+
+@ urg|metabolic_emergencies|diabetic_ketoacidosis|3|initial_treatment
+V: Niña de 10 años con cetoacidosis diabética grave de debut, pH de 7.08, deshidratación moderada y estado mental normal. Peso de 30 kilos.
+P: ¿Cuál es el tratamiento inicial de líquidos más apropiado?
++ Bolo de solución salina de 10 a 20 mL por kilo en la primera hora y después reposición gradual del déficit en 24 a 48 horas || La reposición gradual reduce el riesgo de edema cerebral.
+- anchoring | Bolos repetidos de 20 mL por kilo hasta 80 mL por kilo en la primera hora || La rehidratación excesiva rápida aumenta el riesgo de edema cerebral.
+- availability_heuristic | Iniciar insulina en bolo antes de los líquidos || Se inicia después de la primera hora de líquidos.
+- representativeness_heuristic | Bicarbonato de sodio de rutina || Aumenta el riesgo de edema cerebral.
+- premature_closure | Solución glucosada al 5 por ciento desde el inicio || Se agrega cuando baja la glucosa.
+- framing_effect | Restricción absoluta de líquidos || La deshidratación debe corregirse.
+- complexity_bias | Hemodiálisis || No está indicada.
+- base_rate_fallacy | Los niños requieren la misma velocidad de líquidos que los adultos || Se prefiere una reposición más gradual.
+- belief_bias | El edema cerebral no tiene relación con el tratamiento || Se asocia con factores del tratamiento.
+- omission_bias | No vigilar el estado neurológico cada hora || Permite detectar el edema cerebral.
+E: En la cetoacidosis diabética pediátrica, la reposición de líquidos debe ser cuidadosa. Se recomienda un bolo inicial de 10 a 20 mL por kilo de solución salina al 0.9 por ciento en la primera hora, repetible si hay choque, y después la reposición del déficit de forma gradual durante 24 a 48 horas, junto con los requerimientos de mantenimiento. La insulina en infusión de 0.05 a 0.1 unidades por kilo por hora se inicia después de la primera hora de líquidos, sin bolo. Se evita el bicarbonato. Se vigila el estado neurológico de forma estrecha por el riesgo de edema cerebral.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en niños ;; Guía de la Sociedad Internacional de Diabetes Pediátrica y del Adolescente
+
+@ urg|neurologic_emergencies|status_epilepticus|3|treatment_of_choice
+V: Mujer de 26 años con eclampsia en tratamiento con sulfato de magnesio en infusión. A las 8 horas presenta somnolencia, reflejos rotulianos ausentes, frecuencia respiratoria de 8 y diuresis de 15 mL por hora.
+P: ¿Cuál es el tratamiento de elección inmediato?
++ Suspender el sulfato de magnesio y administrar gluconato de calcio intravenoso || Es una intoxicación por magnesio.
+- anchoring | Aumentar la infusión de magnesio por la somnolencia || Agrava la intoxicación.
+- availability_heuristic | Diazepam intravenoso || Agrava la depresión respiratoria.
+- representativeness_heuristic | Furosemida como único tratamiento sin suspender el magnesio || El primer paso es suspenderlo.
+- premature_closure | Solo observación || La depresión respiratoria es grave.
+- framing_effect | Naloxona || No revierte el magnesio.
+- complexity_bias | Cesárea inmediata como tratamiento de la intoxicación || No trata la intoxicación.
+- base_rate_fallacy | El magnesio no se acumula en la oliguria || Se acumula porque se elimina por riñón.
+- belief_bias | La pérdida de reflejos es un efecto terapéutico deseado || Es un signo de toxicidad.
+- omission_bias | No apoyar la ventilación si es necesario || Puede requerir soporte ventilatorio.
+E: El sulfato de magnesio se elimina por vía renal, por lo que se acumula en pacientes con oliguria o insuficiencia renal. La toxicidad es progresiva: la pérdida de los reflejos osteotendinosos aparece con concentraciones de 8 a 10 mEq/L, la depresión respiratoria con 10 a 13 y el paro cardiaco con concentraciones mayores. Por ello se vigilan cada hora los reflejos, la frecuencia respiratoria y la diuresis. Ante signos de toxicidad se suspende la infusión y se administra gluconato de calcio intravenoso al 10 por ciento, 1 gramo en 10 minutos, como antídoto, con soporte ventilatorio si es necesario.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en el segundo y tercer nivel ;; Guía de Práctica Clínica de diagnóstico y tratamiento del estado epiléptico
+
+@ urg|neurologic_emergencies|stroke_emergency|3|next_step
+V: Hombre de 66 años que tuvo un evento vascular cerebral isquémico menor del hemisferio izquierdo con recuperación casi completa hace 5 días. El ultrasonido Doppler muestra estenosis de la carótida interna izquierda del 80 por ciento.
+P: ¿Cuál es la conducta más apropiada?
++ Endarterectomía carotídea en las primeras 2 semanas, además de tratamiento médico óptimo || La estenosis sintomática de 70 a 99 por ciento se beneficia de la revascularización temprana.
+- anchoring | Solo tratamiento médico sin revascularización || La estenosis sintomática grave se beneficia de cirugía.
+- availability_heuristic | Esperar 6 meses para operar || El beneficio es mayor si se realiza pronto.
+- representativeness_heuristic | Endarterectomía de la carótida derecha || La estenosis sintomática es la izquierda.
+- premature_closure | Anticoagulación plena como único tratamiento || No es el tratamiento de la estenosis carotídea.
+- framing_effect | Trombólisis intravenosa tardía || No está indicada.
+- complexity_bias | Derivación extracraneal intracraneal || No está indicada.
+- base_rate_fallacy | La estenosis carotídea asintomática y sintomática tienen el mismo manejo || Difieren.
+- belief_bias | La cirugía está contraindicada después de un evento vascular cerebral reciente || Se recomienda en las primeras 2 semanas en eventos menores.
+- omission_bias | No iniciar antiagregante y estatina de alta intensidad || Son parte del tratamiento médico óptimo.
+E: La estenosis carotídea sintomática, es decir, ipsilateral a un evento vascular cerebral isquémico menor o un ataque isquémico transitorio reciente, de 70 a 99 por ciento, se beneficia de la endarterectomía carotídea, que reduce el riesgo de nuevo evento. El mayor beneficio se obtiene cuando se realiza en las primeras 2 semanas. En estenosis de 50 a 69 por ciento el beneficio es menor e individualizado. La angioplastia con stent es una alternativa en pacientes con alto riesgo quirúrgico. Además se indica tratamiento médico óptimo con antiagregantes, estatina de alta intensidad y control de factores de riesgo.
+R: Guía de la Asociación Americana del Corazón para prevención secundaria de evento vascular cerebral ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad carotídea
+
+@ urg|polytrauma|spinal_trauma|3|diagnosis
+V: Hombre de 40 años con lesión por hiperflexión cervical en un accidente. Presenta parálisis completa y pérdida de la sensibilidad al dolor y la temperatura por debajo de la lesión, con propiocepción y vibración conservadas.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome medular anterior || Afecta los tractos corticoespinal y espinotalámico con columnas posteriores conservadas.
+- anchoring | Síndrome medular central || Afecta más los brazos.
+- availability_heuristic | Síndrome de Brown-Séquard || Causa déficit asimétrico.
+- representativeness_heuristic | Lesión medular completa || La propiocepción está conservada.
+- premature_closure | Síndrome de cauda equina || Afecta raíces lumbosacras.
+- framing_effect | Síndrome medular posterior || Afectaría la propiocepción.
+- complexity_bias | Esclerosis múltiple || El trauma explica el cuadro.
+- base_rate_fallacy | El síndrome medular anterior tiene el mejor pronóstico || Tiene el peor pronóstico de las lesiones incompletas.
+- belief_bias | La propiocepción conservada indica una lesión leve || Hay parálisis completa.
+- focusing_illusion | Neuropatía periférica aguda || El trauma y el patrón orientan a lesión medular.
+E: El síndrome medular anterior se debe a la lesión de los dos tercios anteriores de la médula espinal, por hiperflexión, compresión por fragmentos de disco o hueso, o isquemia de la arteria espinal anterior. Afecta los tractos corticoespinales y espinotalámicos, causando parálisis y pérdida de la sensibilidad al dolor y la temperatura por debajo de la lesión, con conservación de las columnas posteriores, es decir, de la propiocepción, la vibración y el tacto fino. Tiene el peor pronóstico de las lesiones medulares incompletas. Requiere estudio de imagen y valoración neuroquirúrgica para descompresión si hay compresión.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de atención del paciente con lesión medular aguda

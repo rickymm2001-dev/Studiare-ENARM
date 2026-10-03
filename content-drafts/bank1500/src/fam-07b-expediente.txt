@@ -1,0 +1,271 @@
+@ fam|medical_ethics_law|clinical_record_nom|2|data_interpretation
+V: Un médico familiar se pregunta durante cuánto tiempo debe conservar los expedientes clínicos de los pacientes atendidos en su consultorio privado.
+P: ¿Qué indica la norma mexicana del expediente clínico sobre su conservación?
++ Conservarlo por un periodo mínimo de 5 años contados a partir de la fecha del último acto médico || Es el plazo que establece la norma.
+- anchoring | Conservarlo solo 1 año || Es menor al plazo establecido.
+- availability_heuristic | Destruirlo al dar de alta al paciente || Debe conservarse.
+- representativeness_heuristic | Entregarlo al paciente en original al terminar la atención || Se le entrega un resumen, no el original.
+- premature_closure | Conservarlo 30 años en todos los casos || No es el plazo establecido.
+- framing_effect | Conservarlo solo si hubo una complicación || Todos se conservan.
+- complexity_bias | Enviarlo a la Secretaría de Salud para su resguardo || Lo resguarda el prestador.
+- base_rate_fallacy | Los consultorios privados no están obligados a llevar expediente || Están obligados.
+- belief_bias | El expediente es propiedad exclusiva del paciente || Es propiedad del prestador, con derechos del paciente.
+- focusing_illusion | Conservarlo hasta la muerte del médico || No es el criterio.
+E: La norma oficial mexicana del expediente clínico establece que los expedientes deben conservarse por un periodo mínimo de cinco años contados a partir de la fecha del último acto médico. El expediente es propiedad de la institución o del prestador de servicios médicos que lo genera, quien es responsable de su resguardo, pero el paciente es titular de los derechos sobre los datos y tiene derecho a recibir un resumen clínico. Aplica a instituciones públicas, sociales y privadas, y a consultorios. La información es confidencial y solo puede darse a conocer a terceros por orden de autoridad competente o con autorización del paciente.
+R: Norma Oficial Mexicana del expediente clínico ;; Ley General de Salud
+
+@ fam|medical_ethics_law|clinical_record_nom|2|next_step
+V: Paciente de 50 años que fue atendido en un hospital y se cambió a otra institución. Solicita al hospital una copia completa de su expediente original para llevarla a su nuevo médico.
+P: ¿Cuál es la conducta más apropiada según la norma?
++ Entregarle un resumen clínico por escrito, conservando el expediente original en la institución || El paciente tiene derecho a un resumen clínico; el original pertenece al prestador.
+- anchoring | Entregarle el expediente original completo || El original debe resguardarlo la institución.
+- availability_heuristic | Negarle cualquier información por confidencialidad || La confidencialidad no aplica frente al propio paciente.
+- representativeness_heuristic | Enviar el expediente por correo electrónico a cualquier persona que lo pida || Requiere autorización.
+- premature_closure | Exigir una orden judicial para darle información || No es necesaria para el propio paciente.
+- framing_effect | Entregarlo solo a su empleador || Viola la confidencialidad.
+- complexity_bias | Destruir el expediente porque el paciente se cambió de institución || Debe conservarse.
+- base_rate_fallacy | El paciente no tiene derecho a ninguna información de su expediente || Tiene derecho a un resumen.
+- belief_bias | Solo los abogados pueden solicitar información del expediente || El paciente puede solicitarla.
+- omission_bias | No registrar la entrega del resumen || Debe documentarse.
+E: Según la norma del expediente clínico, el expediente original es propiedad de la institución o del prestador y debe resguardarse. El paciente, su familiar, tutor o representante legal tiene derecho a solicitar por escrito un resumen clínico, que debe contener los datos relevantes del padecimiento, diagnósticos, tratamientos, estudios y pronóstico. Las copias del expediente pueden entregarse a autoridades judiciales, órganos de procuración de justicia o autoridades sanitarias que lo soliciten formalmente, y al paciente en los términos que establece la ley de protección de datos personales. La confidencialidad protege al paciente frente a terceros, no frente a sí mismo.
+R: Norma Oficial Mexicana del expediente clínico ;; Ley General de Protección de Datos Personales en Posesión de Sujetos Obligados
+
+@ fam|medical_ethics_law|clinical_record_nom|2|data_interpretation
+V: Un residente redacta la nota de evolución diaria de un paciente hospitalizado. Su adscrito le pide que incluya los elementos que exige la norma del expediente clínico.
+P: ¿Qué elementos indica la norma para una nota de evolución?
++ Evolución y actualización del cuadro clínico, signos vitales, resultados de estudios, diagnósticos, tratamiento e indicaciones y pronóstico || Son los elementos mínimos de la nota de evolución.
+- anchoring | Solo el diagnóstico de ingreso || Es insuficiente.
+- availability_heuristic | Solo los signos vitales || Faltan otros elementos.
+- representativeness_heuristic | Opiniones personales sobre la familia del paciente || No corresponden al expediente.
+- premature_closure | Solo las indicaciones de enfermería || Es una sección del expediente, no la nota.
+- framing_effect | Únicamente la firma del médico || Es un requisito, pero no suficiente.
+- complexity_bias | Una transcripción completa de todas las conversaciones || No es necesario.
+- base_rate_fallacy | La nota de evolución es opcional en pacientes estables || Es obligatoria.
+- belief_bias | Puede escribirse con abreviaturas no estandarizadas || Deben evitarse.
+- focusing_illusion | Solo los resultados de laboratorio || Faltan otros elementos.
+E: La norma oficial mexicana del expediente clínico establece que la nota de evolución debe elaborarse cada vez que se proporciona atención al paciente, y en hospitalización al menos una vez por día. Debe contener la evolución y actualización del cuadro clínico, incluido el abuso o dependencia de sustancias si existe, los signos vitales, los resultados relevantes de estudios, los diagnósticos o problemas clínicos, el pronóstico y el tratamiento e indicaciones médicas, con la dosis, vía y periodicidad de los medicamentos. Todas las notas deben tener fecha, hora, nombre completo y firma de quien las elabora, y escribirse con letra legible, sin abreviaturas ni tachaduras.
+R: Norma Oficial Mexicana del expediente clínico ;; Manual de procedimientos para la integración del expediente clínico
+
+@ fam|medical_ethics_law|clinical_record_nom|2|next_step
+V: Un médico se percata de que escribió una dosis equivocada en la nota de evolución del día anterior, ya firmada. Desea corregirla.
+P: ¿Cuál es la conducta más apropiada según la norma del expediente clínico?
++ Elaborar una nota aclaratoria con fecha, hora y firma, sin borrar ni alterar la nota original || Las correcciones no deben ocultar lo escrito previamente.
+- anchoring | Usar corrector líquido y escribir la dosis correcta encima || Está prohibido alterar el expediente.
+- availability_heuristic | Arrancar la hoja y rehacer la nota || Constituye alteración del expediente.
+- representativeness_heuristic | Tachar hasta que no se lea y escribir encima || No deben hacerse tachaduras que oculten.
+- premature_closure | No corregir para evitar problemas legales || El error debe aclararse.
+- framing_effect | Pedir a enfermería que corrija la nota || Debe corregirla quien la elaboró.
+- complexity_bias | Solicitar autorización judicial para corregir || No es necesaria.
+- base_rate_fallacy | Los errores en el expediente no tienen relevancia legal || Pueden tenerla.
+- belief_bias | Modificar el expediente es aceptable si el error fue menor || Toda alteración es indebida.
+- omission_bias | No informar al equipo sobre el error de dosis || Debe asegurarse la seguridad del paciente.
+E: El expediente clínico es un documento médico legal. La norma establece que las notas deben escribirse con letra legible, sin abreviaturas, sin enmendaduras ni tachaduras, y conservarse en buen estado. Si se comete un error, no se debe borrar, usar corrector, arrancar hojas ni sobrescribir, porque eso constituye una alteración del documento. Lo correcto es elaborar una nota aclaratoria con fecha, hora, nombre y firma que explique el error y la información correcta. Además, si el error afectó la atención, se informa al equipo y se toman medidas para la seguridad del paciente.
+R: Norma Oficial Mexicana del expediente clínico ;; Acciones esenciales para la seguridad del paciente
+
+@ fam|medical_ethics_law|clinical_record_nom|2|data_interpretation
+V: Un paciente es dado de alta del hospital después de 5 días por neumonía. El residente debe elaborar la nota correspondiente al egreso.
+P: ¿Qué contenido indica la norma para la nota de egreso?
++ Fecha de ingreso y egreso, motivo del egreso, diagnósticos finales, resumen de la evolución, manejo, problemas pendientes, plan y recomendaciones de seguimiento || Son los elementos de la nota de egreso.
+- anchoring | Solo el diagnóstico de ingreso || Es insuficiente.
+- availability_heuristic | Solo la receta de medicamentos || Es una parte, no la nota completa.
+- representativeness_heuristic | Solo la firma de alta del paciente || No sustituye la nota médica.
+- premature_closure | La nota de egreso es opcional || Es obligatoria.
+- framing_effect | Solo la cuenta hospitalaria || Es un documento administrativo.
+- complexity_bias | Una copia de todas las notas de evolución sin resumen || Debe ser un resumen.
+- base_rate_fallacy | Solo se elabora si el paciente fallece || Se elabora en todo egreso.
+- belief_bias | Puede omitir los problemas pendientes si el paciente mejoró || Deben incluirse.
+- focusing_illusion | Solo los signos vitales del último día || Faltan elementos.
+E: La norma del expediente clínico establece que la nota de egreso debe contener la fecha de ingreso y de egreso, el motivo del egreso, como mejoría, curación, alta voluntaria, traslado o defunción, los diagnósticos finales, un resumen de la evolución y el estado actual, el manejo durante la estancia, los problemas clínicos pendientes, el plan de manejo y tratamiento, las recomendaciones para la vigilancia ambulatoria, la atención de factores de riesgo y el pronóstico. En caso de defunción, se señalan las causas de la muerte y si se solicitó necropsia. La nota de egreso facilita la continuidad de la atención en el primer nivel.
+R: Norma Oficial Mexicana del expediente clínico ;; Manual de procedimientos para la integración del expediente clínico
+
+@ fam|medical_ethics_law|clinical_record_nom|3|next_step
+V: Hombre de 28 años que acude a urgencias con una herida por arma blanca en el abdomen. Refiere que fue asaltado. Se estabiliza y se programa para laparotomía.
+P: ¿Cuál es la obligación médico legal del médico respecto a esta lesión?
++ Dar aviso al ministerio público y documentar detalladamente las lesiones en el expediente || Las lesiones que pueden constituir un delito requieren aviso.
+- anchoring | No dar aviso porque el paciente no quiere denunciar || El aviso es obligatorio.
+- availability_heuristic | Esperar a que el paciente se recupere para decidir si se avisa || El aviso debe ser oportuno.
+- representativeness_heuristic | Llamar a los medios de comunicación || Viola la confidencialidad.
+- premature_closure | Negar la atención hasta que llegue la policía || La atención médica es prioritaria.
+- framing_effect | Solo dar aviso si el paciente fallece || El aviso es por las lesiones.
+- complexity_bias | Solicitar autorización del paciente para atenderlo || Es una urgencia.
+- base_rate_fallacy | Los médicos no tienen obligación de dar aviso de lesiones || Están obligados.
+- belief_bias | El aviso al ministerio público rompe el secreto profesional de forma ilegal || Es una excepción legal.
+- omission_bias | No describir las lesiones con detalle || Son relevantes para el proceso legal.
+E: La norma del expediente clínico y la legislación penal establecen que el médico que atiende a una persona con lesiones que pueden constituir un delito, como heridas por arma blanca o de fuego, agresiones o intoxicaciones intencionales, debe dar aviso al ministerio público. El aviso se realiza mediante el formato correspondiente y se registra en el expediente. Las lesiones deben describirse con detalle: tipo, localización, dimensiones, características y gravedad. La atención médica no se condiciona ni se retrasa por el aviso. Es una excepción legal al secreto profesional.
+R: Norma Oficial Mexicana del expediente clínico ;; Código Nacional de Procedimientos Penales
+
+@ fam|medical_ethics_law|clinical_record_nom|2|data_interpretation
+V: En la elaboración de la historia clínica de un paciente nuevo en medicina familiar, el médico debe registrar los apartados que exige la norma.
+P: ¿Qué apartados indica la norma para la historia clínica?
++ Interrogatorio con ficha de identificación, antecedentes heredofamiliares, personales patológicos y no patológicos, padecimiento actual e interrogatorio por aparatos y sistemas, exploración física, resultados de estudios, diagnósticos, tratamiento y pronóstico || Son los elementos de la historia clínica.
+- anchoring | Solo el motivo de consulta y la receta || Es insuficiente.
+- availability_heuristic | Solo los signos vitales y el peso || Es insuficiente.
+- representativeness_heuristic | Solo los antecedentes familiares || Faltan elementos.
+- premature_closure | La historia clínica solo es obligatoria en hospitalización || Es obligatoria también en consulta externa.
+- framing_effect | Solo los estudios de laboratorio || Faltan elementos.
+- complexity_bias | Un cuestionario de 500 preguntas obligatorio || No es el requisito.
+- base_rate_fallacy | La historia clínica puede omitirse en pacientes jóvenes sanos || Es obligatoria.
+- belief_bias | La exploración física es opcional si hay estudios de imagen || Es obligatoria.
+- focusing_illusion | Solo el pronóstico || Faltan elementos.
+E: La norma oficial mexicana del expediente clínico establece que la historia clínica debe elaborarse por el médico y contener: interrogatorio con ficha de identificación, grupo étnico, antecedentes heredofamiliares, personales patológicos, incluidos alergias, consumo de sustancias y transfusiones, y personales no patológicos, padecimiento actual e interrogatorio por aparatos y sistemas; exploración física con signos vitales, peso, talla y datos de cabeza, cuello, tórax, abdomen, extremidades y genitales; resultados de estudios previos; diagnósticos o problemas clínicos; pronóstico; e indicación terapéutica. En consulta externa se complementa con notas de evolución en cada visita.
+R: Norma Oficial Mexicana del expediente clínico ;; Manual de procedimientos para la integración del expediente clínico
+
+@ fam|medical_ethics_law|clinical_record_nom|2|data_interpretation
+V: Un médico redacta una receta para un paciente con hipertensión. El farmacéutico la rechaza porque le faltan datos.
+P: ¿Qué datos indica la normativa sanitaria que debe contener una receta médica?
++ Nombre, cédula profesional y domicilio del médico, nombre del paciente, fecha, medicamento con dosis, vía, frecuencia y duración, y firma autógrafa || Son los requisitos de la receta.
+- anchoring | Solo el nombre del medicamento || Es insuficiente.
+- availability_heuristic | Solo la firma del médico || Faltan datos.
+- representativeness_heuristic | El diagnóstico detallado es el único requisito || Faltan otros datos.
+- premature_closure | La cédula profesional es opcional || Es obligatoria.
+- framing_effect | Puede omitirse la fecha si el tratamiento es crónico || Siempre debe tener fecha.
+- complexity_bias | Requiere sello de la Secretaría de Salud en todos los casos || No es requisito general.
+- base_rate_fallacy | Las recetas verbales son válidas para cualquier medicamento || Se requiere receta escrita.
+- belief_bias | Puede usarse un recetario sin datos del médico || Debe contener sus datos.
+- focusing_illusion | Solo la dosis y no la duración || Debe incluir la duración.
+E: El Reglamento de Insumos para la Salud establece que la receta médica debe contener el nombre del médico, el nombre de la institución que expidió su título, la cédula profesional, el domicilio, la fecha de expedición, el nombre del paciente, el nombre del medicamento preferentemente por su denominación genérica, la presentación, la dosis, la vía, la frecuencia y la duración del tratamiento, y la firma autógrafa del médico. Los medicamentos controlados, como los estupefacientes, requieren recetarios especiales con código de barras. Una receta incompleta puede ser rechazada y favorece errores de medicación.
+R: Reglamento de Insumos para la Salud ;; Ley General de Salud
+
+@ fam|medical_ethics_law|clinical_record_nom|3|data_interpretation
+V: Un hospital implementa un sistema de expediente clínico electrónico. El área de informática pregunta qué norma regula el intercambio de información y la seguridad de estos sistemas.
+P: ¿Qué normativa indica los requisitos del expediente clínico electrónico en México?
++ La norma oficial mexicana de sistemas de información de registro electrónico para la salud, junto con la norma del expediente clínico || Regula la interoperabilidad, la seguridad y la confidencialidad.
+- anchoring | La norma de residuos peligrosos biológico infecciosos || No regula expedientes.
+- availability_heuristic | La norma de vigilancia epidemiológica || Regula la notificación de enfermedades.
+- representativeness_heuristic | No existe regulación para el expediente electrónico || Sí existe.
+- premature_closure | La norma de planificación familiar || No aplica.
+- framing_effect | Solo el reglamento interno del hospital || Debe cumplir la norma nacional.
+- complexity_bias | Una ley exclusiva de cada estado sin norma federal || Hay una norma federal.
+- base_rate_fallacy | El expediente electrónico no requiere firma del médico || Requiere firma electrónica.
+- belief_bias | El expediente electrónico puede compartirse libremente entre hospitales sin controles || Requiere controles de acceso.
+- focusing_illusion | La norma de atención del embarazo || No aplica.
+E: En México, la norma oficial mexicana sobre sistemas de información de registro electrónico para la salud establece las características que deben tener los sistemas de expediente clínico electrónico para garantizar la interoperabilidad, el procesamiento, la interpretación, la confidencialidad, la seguridad y el uso de estándares y catálogos de la información de los registros electrónicos en salud. Complementa a la norma del expediente clínico, que define su contenido. Los sistemas deben permitir la firma electrónica, el control de accesos con registro de quién consulta o modifica la información y la protección de datos personales.
+R: Norma Oficial Mexicana de sistemas de información de registro electrónico para la salud ;; Norma Oficial Mexicana del expediente clínico
+
+@ fam|medical_ethics_law|clinical_record_nom|3|next_step
+V: Hombre de 75 años con diabetes e hipertensión fallece en su domicilio, atendido por su médico familiar, quien lo trataba regularmente. La causa de muerte es un infarto en un paciente con enfermedad conocida. La familia solicita el certificado de defunción.
+P: ¿Cuál es la conducta más apropiada?
++ Expedir el certificado de defunción con la secuencia de causas de muerte y dar el certificado a la familia || La muerte es natural, en un paciente con enfermedad conocida y seguimiento médico.
+- anchoring | Negarse y enviar siempre el caso al ministerio público || Solo procede si la muerte es violenta o sospechosa.
+- availability_heuristic | Exigir necropsia obligatoria antes de certificar || No es necesaria en muerte natural con causa conocida.
+- representativeness_heuristic | Escribir solo paro cardiorrespiratorio como causa básica || Es el mecanismo, no la causa.
+- premature_closure | Esperar 72 horas antes de certificar || No es un requisito.
+- framing_effect | Pedir que la familia llene el certificado || Lo llena el médico.
+- complexity_bias | Solicitar autorización del juez familiar || No es necesaria.
+- base_rate_fallacy | Solo el médico forense puede expedir certificados de defunción || El médico tratante puede hacerlo.
+- belief_bias | Toda muerte en domicilio es sospechosa || No necesariamente.
+- omission_bias | No registrar la diabetes e hipertensión como causas contribuyentes || Deben registrarse.
+E: El certificado de defunción es un documento médico legal obligatorio que lo expide el médico que conoce las causas de la muerte, como el médico tratante, en casos de muerte natural. Debe registrar la secuencia de causas: la causa directa o inmediata, las causas intermedias y la causa básica, que es la enfermedad que inició la cadena de eventos, además de otras condiciones contribuyentes. No se deben anotar mecanismos como paro cardiorrespiratorio como causa. Si la muerte es violenta, accidental, sospechosa o de causa desconocida, se da aviso al ministerio público y el certificado lo expide el médico legista. Las causas se codifican para las estadísticas de mortalidad.
+R: Manual de llenado del certificado de defunción de la Dirección General de Información en Salud ;; Ley General de Salud
+
+@ fam|medical_ethics_law|clinical_record_nom|2|data_interpretation
+V: Un residente escribe en el expediente las siglas IAM, EPOC y DM2 en sus notas, además de abreviaturas propias como "pte. c/ dlr abd". El jefe de servicio le recuerda la norma.
+P: ¿Qué indica la norma del expediente clínico sobre el uso de abreviaturas?
++ Las notas deben escribirse con lenguaje técnico médico, letra legible y sin abreviaturas || El uso de abreviaturas favorece errores de interpretación.
+- anchoring | Cualquier abreviatura es válida si el autor la entiende || La norma prohíbe las abreviaturas.
+- availability_heuristic | Las abreviaturas son obligatorias para ahorrar espacio || No es así.
+- representativeness_heuristic | Solo los diagnósticos pueden abreviarse libremente || La norma pide evitarlas.
+- premature_closure | Las abreviaturas en medicamentos son seguras || Son una causa frecuente de errores.
+- framing_effect | Solo importa que la nota esté firmada || El contenido también debe cumplir la norma.
+- complexity_bias | Cada hospital puede crear sus propias abreviaturas sin restricción || La norma pide evitarlas.
+- base_rate_fallacy | Las abreviaturas nunca causan errores clínicos || Son causa frecuente de errores.
+- belief_bias | Las notas legibles no tienen importancia legal || Son un documento médico legal.
+- focusing_illusion | La norma solo regula el formato de las hojas || Regula el contenido y la redacción.
+E: La norma oficial mexicana del expediente clínico establece que las notas médicas deben elaborarse con lenguaje técnico médico, sin abreviaturas, con letra legible, sin enmendaduras ni tachaduras, y conservarse en buen estado. Las abreviaturas, sobre todo las no estandarizadas, generan errores de interpretación de diagnósticos, dosis y vías de administración, y son una causa reconocida de eventos adversos. Las acciones esenciales para la seguridad del paciente de la Secretaría de Salud incluyen la comunicación efectiva y la prescripción segura. El expediente es un documento médico legal, por lo que su claridad es indispensable.
+R: Norma Oficial Mexicana del expediente clínico ;; Acciones esenciales para la seguridad del paciente
+
+@ fam|medical_ethics_law|clinical_record_nom|3|next_step
+V: Un abogado acude a la clínica y solicita una copia completa del expediente de un paciente para un juicio laboral, sin presentar autorización del paciente ni orden de una autoridad.
+P: ¿Cuál es la conducta más apropiada?
++ Negar la entrega por la confidencialidad del expediente y solicitar autorización por escrito del paciente u orden de autoridad competente || La información solo se entrega a terceros con autorización o por mandato legal.
+- anchoring | Entregar la copia porque es un abogado || No tiene autorización.
+- availability_heuristic | Entregar solo los diagnósticos sin autorización || También son confidenciales.
+- representativeness_heuristic | Destruir el expediente para evitar problemas || Es ilegal.
+- premature_closure | Entregar el original para agilizar el juicio || El original se resguarda.
+- framing_effect | Informar verbalmente el contenido al abogado || También viola la confidencialidad.
+- complexity_bias | Publicar el expediente en un registro público || Viola la confidencialidad.
+- base_rate_fallacy | La confidencialidad no aplica en juicios laborales || Requiere orden de autoridad.
+- belief_bias | Los empleadores tienen derecho a conocer los expedientes de sus trabajadores || No sin autorización.
+- omission_bias | No registrar la solicitud y la respuesta || Debe documentarse.
+E: La información contenida en el expediente clínico es confidencial y está protegida por la norma del expediente clínico y la legislación de protección de datos personales. Solo puede darse a conocer a terceros con autorización por escrito del paciente o su representante legal, o por solicitud de autoridad judicial, órganos de procuración de justicia, autoridades sanitarias o la Comisión Nacional de Arbitraje Médico, en el ejercicio de sus funciones. Una solicitud de un abogado o de un empleador sin estos requisitos debe negarse. Se recomienda registrar la solicitud y la respuesta, y orientar al solicitante sobre el procedimiento correcto.
+R: Norma Oficial Mexicana del expediente clínico ;; Ley Federal de Protección de Datos Personales en Posesión de los Particulares
+
+@ fam|medical_ethics_law|clinical_record_nom|2|data_interpretation
+V: Un paciente es enviado desde la unidad de medicina familiar a un hospital de segundo nivel para valoración por cardiología. El médico familiar elabora el documento correspondiente.
+P: ¿Qué documento indica la norma para este envío y qué debe contener?
++ Nota de referencia con establecimiento que envía y que recibe, resumen clínico, motivo del envío, impresión diagnóstica y terapéutica empleada || Es el documento para la referencia entre niveles.
+- anchoring | Solo una receta con el nombre del especialista || No es el documento adecuado.
+- availability_heuristic | Nota de egreso hospitalario || Corresponde al alta de hospitalización.
+- representativeness_heuristic | Certificado médico de salud || No es para referencia.
+- premature_closure | Nota de interconsulta interna únicamente || Se usa dentro del mismo establecimiento.
+- framing_effect | Solo una llamada telefónica sin documento || Debe documentarse por escrito.
+- complexity_bias | Una copia completa del expediente original || Se envía un resumen.
+- base_rate_fallacy | No es necesario documentar las referencias || Es obligatorio.
+- belief_bias | El paciente debe explicar verbalmente su caso al especialista || La nota garantiza la continuidad.
+- focusing_illusion | Hoja de enfermería || No es el documento de referencia.
+E: La norma del expediente clínico establece que la nota de referencia y traslado debe elaborarse por el médico cuando un paciente se envía a otro establecimiento, y debe contener el establecimiento que envía y el que recibe, el resumen clínico con los motivos del envío, la impresión diagnóstica, incluidos el abuso y la dependencia de sustancias, y la terapéutica empleada. La nota de interconsulta se usa para solicitar la opinión de otro especialista dentro del mismo establecimiento. La contrarreferencia es la respuesta del nivel receptor al nivel que envió, para asegurar la continuidad de la atención.
+R: Norma Oficial Mexicana del expediente clínico ;; Lineamientos del sistema de referencia y contrarreferencia
+
+@ fam|medical_ethics_law|clinical_record_nom|3|next_step
+V: Paciente de 60 años hospitalizado por neumonía que, en contra de la recomendación médica, decide irse a su casa antes de completar el tratamiento intravenoso. Es capaz y comprende los riesgos.
+P: ¿Cuál es la conducta más apropiada?
++ Explicarle los riesgos, documentar en el expediente la información dada y que firme la hoja de egreso voluntario, ofreciendo tratamiento y seguimiento alternativos || El paciente capaz puede rechazar la hospitalización.
+- anchoring | Retenerlo en el hospital contra su voluntad || Viola su autonomía.
+- availability_heuristic | Darle de alta sin documentar nada || Debe documentarse el egreso voluntario.
+- representativeness_heuristic | Sedarlo para evitar que se vaya || Es ilegal y no ético.
+- premature_closure | Negarle cualquier receta o seguimiento por su decisión || Debe ofrecerse la mejor alternativa posible.
+- framing_effect | Llamar a la policía para que lo detengan || No procede.
+- complexity_bias | Solicitar una orden judicial para mantenerlo internado || No procede en un paciente capaz.
+- base_rate_fallacy | El alta voluntaria libera al médico de toda responsabilidad sin importar la información dada || Debe haber información documentada.
+- belief_bias | Un paciente que rechaza el tratamiento es incapaz por definición || El rechazo no implica incapacidad.
+- omission_bias | No darle datos de alarma para regresar || Son parte de la atención.
+E: El egreso voluntario ocurre cuando un paciente capaz, o su representante, decide abandonar el hospital en contra de la recomendación médica. La norma del expediente clínico establece que debe elaborarse una hoja de egreso voluntario firmada por el paciente o su representante y por el médico, en la que se registra la información proporcionada sobre los riesgos y las consecuencias. El médico debe explicar los riesgos, ofrecer alternativas como tratamiento oral y seguimiento cercano, dar datos de alarma y dejar abierta la posibilidad de regresar. El paciente capaz tiene derecho a rechazar el tratamiento.
+R: Norma Oficial Mexicana del expediente clínico ;; Carta de los derechos generales de los pacientes de la Comisión Nacional de Arbitraje Médico
+
+@ fam|medical_ethics_law|clinical_record_nom|2|data_interpretation
+V: Un paciente insatisfecho con la atención recibida en una clínica privada desea presentar una queja por una posible mala práctica sin acudir de inmediato a un juicio.
+P: ¿Qué instancia indica la normativa mexicana para la resolución de conflictos entre pacientes y prestadores de servicios médicos?
++ La Comisión Nacional de Arbitraje Médico o la comisión estatal correspondiente || Ofrece conciliación y arbitraje en conflictos médico paciente.
+- anchoring | Solo el ministerio público || Es para delitos, no para conciliación.
+- availability_heuristic | La Procuraduría Federal del Consumidor como única vía || No es la instancia especializada.
+- representativeness_heuristic | El Colegio de Médicos como autoridad sancionadora || No es una autoridad legal de arbitraje.
+- premature_closure | No existe una instancia para estos conflictos || Sí existe.
+- framing_effect | La Comisión Federal para la Protección contra Riesgos Sanitarios para quejas individuales || Regula productos y establecimientos.
+- complexity_bias | La Suprema Corte de Justicia como primera instancia || No es la primera instancia.
+- base_rate_fallacy | Solo las redes sociales || No es una instancia formal.
+- belief_bias | Las quejas médicas solo pueden resolverse en juicio penal || Existen vías alternativas.
+- focusing_illusion | El Instituto Nacional de Transparencia || Regula el acceso a la información.
+E: La Comisión Nacional de Arbitraje Médico, creada en 1996, es un órgano desconcentrado de la Secretaría de Salud que ofrece mecanismos alternativos para la resolución de conflictos entre usuarios y prestadores de servicios médicos, públicos y privados, mediante orientación, gestión inmediata, conciliación y arbitraje, sin costo. Existen comisiones estatales en la mayoría de las entidades. También promovió la Carta de los Derechos Generales de los Pacientes y la de los médicos. Su objetivo es mejorar la calidad de la atención y la seguridad del paciente. El expediente clínico completo y bien elaborado es fundamental en estos procesos.
+R: Decreto de creación de la Comisión Nacional de Arbitraje Médico ;; Carta de los derechos generales de los pacientes de la Comisión Nacional de Arbitraje Médico
+
+@ fam|medical_ethics_law|clinical_record_nom|2|data_interpretation
+V: Antes de una cirugía programada, el cirujano elabora una nota en el expediente con los datos del procedimiento que realizará al día siguiente.
+P: ¿Qué contenido indica la norma para la nota preoperatoria?
++ Fecha de la cirugía, diagnóstico, plan quirúrgico, tipo de intervención, riesgo quirúrgico, cuidados y plan terapéutico preoperatorios y pronóstico || Son los elementos de la nota preoperatoria.
+- anchoring | Solo el nombre del cirujano || Es insuficiente.
+- availability_heuristic | Solo los resultados de laboratorio || Faltan elementos.
+- representativeness_heuristic | La nota preoperatoria es opcional en cirugía menor || Es obligatoria.
+- premature_closure | Solo la técnica anestésica || Corresponde a la nota preanestésica.
+- framing_effect | Solo el consentimiento informado || Es otro documento.
+- complexity_bias | Una descripción de los hallazgos operatorios || Corresponde a la nota posoperatoria.
+- base_rate_fallacy | Basta con una nota verbal al equipo || Debe ser escrita.
+- belief_bias | El riesgo quirúrgico no debe registrarse para no alarmar || Debe registrarse.
+- focusing_illusion | Solo los signos vitales del día || Faltan elementos.
+E: La norma del expediente clínico establece que la nota preoperatoria debe ser elaborada por el cirujano dentro de un periodo no mayor de 24 horas antes de la cirugía programada, y contener la fecha de la cirugía, el diagnóstico, el plan quirúrgico, el tipo de intervención quirúrgica, el riesgo quirúrgico, los cuidados y el plan terapéutico preoperatorios y el pronóstico. Además, el anestesiólogo elabora la nota preanestésica con la valoración del riesgo anestésico, y después de la cirugía se elabora la nota posoperatoria con la técnica, los hallazgos, los incidentes, el sangrado y el estado del paciente.
+R: Norma Oficial Mexicana del expediente clínico ;; Manual de procedimientos para la integración del expediente clínico
+
+@ fam|medical_ethics_law|clinical_record_nom|3|data_interpretation
+V: Un hospital revisa qué procedimientos requieren carta de consentimiento informado por escrito según la norma del expediente clínico.
+P: ¿Qué situación indica la norma como requisito de carta de consentimiento informado?
++ Ingreso hospitalario, procedimientos quirúrgicos, anestesia, salpingoclasia y vasectomía, transfusiones e investigación clínica, entre otros || La norma enumera los eventos que la requieren.
+- anchoring | Solo las cirugías mayores || También otros procedimientos.
+- availability_heuristic | Cualquier consulta externa de rutina || No se requiere carta escrita en cada consulta.
+- representativeness_heuristic | Solo los procedimientos estéticos || La lista es más amplia.
+- premature_closure | Ningún procedimiento requiere carta escrita || Varios la requieren.
+- framing_effect | Solo cuando el paciente lo solicite || Es obligatoria en ciertos eventos.
+- complexity_bias | Solo procedimientos realizados en hospitales privados || Aplica a todas las instituciones.
+- base_rate_fallacy | La toma de presión arterial || No requiere carta escrita.
+- belief_bias | La carta firmada libera al médico de toda responsabilidad por negligencia || No exime de la mala práctica.
+- focusing_illusion | Solo la necropsia || Es solo uno de los eventos.
+E: La norma oficial mexicana del expediente clínico establece que se requiere carta de consentimiento informado por escrito, entre otros, en el ingreso hospitalario, los procedimientos de cirugía mayor, los procedimientos que requieren anestesia general o regional, la salpingoclasia y la vasectomía, el trasplante, la investigación clínica en seres humanos, la necropsia hospitalaria, los procedimientos diagnósticos y terapéuticos considerados de alto riesgo y la amputación o mutilación. La carta debe incluir el acto autorizado, los riesgos y beneficios esperados, la autorización para atender contingencias y las firmas del paciente, del médico y de dos testigos. No exime de responsabilidad por negligencia.
+R: Norma Oficial Mexicana del expediente clínico ;; Manual de procedimientos para la integración del expediente clínico

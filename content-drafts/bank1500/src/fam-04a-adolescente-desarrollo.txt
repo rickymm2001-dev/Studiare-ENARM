@@ -1,0 +1,223 @@
+@ fam|adolescent_health|adolescent_development|2|data_interpretation
+V: Niña de 11 años que acude a revisión del niño sano. A la exploración presenta botón mamario con elevación de la mama y la areola como un pequeño montículo, sin vello púbico. Su madre pregunta si es normal.
+P: ¿Qué indica este hallazgo en la escala de Tanner?
++ Telarquia en estadio 2 de Tanner, un inicio puberal normal para su edad || El botón mamario es el primer signo de pubertad en niñas.
+- anchoring | Pubertad precoz que requiere estudio urgente || La pubertad precoz en niñas inicia antes de los 8 años.
+- availability_heuristic | Estadio 4 de Tanner mamario || En el estadio 4 la areola forma un montículo secundario.
+- representativeness_heuristic | Retraso puberal || Está dentro del rango normal.
+- premature_closure | Ginecomastia || Es un término para varones.
+- framing_effect | Tumor mamario que requiere ultrasonido || Es un desarrollo normal.
+- complexity_bias | Indicación de edad ósea y hormonas inmediata || No es necesario en una pubertad normal.
+- base_rate_fallacy | Menarquia inminente en semanas || Ocurre en promedio dos a tres años después de la telarquia.
+- belief_bias | Adrenarquia aislada || Se refiere al vello púbico y axilar.
+- focusing_illusion | Estadio 1 de Tanner prepuberal || Ya hay botón mamario.
+E: La pubertad normal en niñas inicia entre los 8 y los 13 años, y el primer signo suele ser la telarquia, el botón mamario, correspondiente al estadio 2 de Tanner. Después aparece el vello púbico, pubarquia, y el estirón de crecimiento ocurre de forma temprana en la pubertad femenina. La menarquia ocurre en promedio 2 a 2.5 años después de la telarquia, habitualmente en el estadio 4 de Tanner mamario, alrededor de los 12 a 13 años. En niños, el primer signo es el aumento del volumen testicular a 4 mL o más, entre los 9 y los 14 años. La escala de Tanner tiene cinco estadios.
+R: Guía de Práctica Clínica de control y seguimiento de la salud en la niña y el niño ;; Guía de Práctica Clínica de atención integral del adolescente en el primer nivel
+
+@ fam|adolescent_health|adolescent_development|3|initial_study
+V: Niño de 14 años, sano, que acude porque es el más bajo de su salón. Talla en percentil 3, velocidad de crecimiento normal. Testículos de 3 mL. Su padre refiere que él creció hasta los 17 años. Talla de los padres promedio.
+P: ¿Cuál es el estudio inicial más apropiado?
++ Radiografía de mano y muñeca izquierda para edad ósea || Una edad ósea retrasada apoya un retraso constitucional del crecimiento y la pubertad.
+- anchoring | Resonancia magnética de hipófisis de inicio || No hay datos de lesión.
+- availability_heuristic | Prueba de estimulación de hormona de crecimiento como primer estudio || No es el primer paso.
+- representativeness_heuristic | Cariotipo de rutina || Se solicita ante datos dismórficos o en niñas con talla baja.
+- premature_closure | Iniciar testosterona sin estudios || Primero se evalúa.
+- framing_effect | Tomografía de abdomen || No está indicada.
+- complexity_bias | Biopsia testicular || No está indicada.
+- base_rate_fallacy | Iniciar hormona de crecimiento empírica || No está indicada sin deficiencia demostrada.
+- belief_bias | Ultrasonido de rodilla para placas de crecimiento || La edad ósea se evalúa en la mano.
+- information_bias | Gammagrama óseo de cuerpo completo || No evalúa edad ósea.
+E: El retraso constitucional del crecimiento y la pubertad es la causa más frecuente de pubertad tardía y talla baja en varones. Se caracteriza por talla baja con velocidad de crecimiento normal, pubertad tardía, antecedente familiar de desarrollo tardío y edad ósea retrasada respecto a la cronológica, lo que indica potencial de crecimiento conservado. Estos niños alcanzan una talla final normal. El estudio inicial es la radiografía de mano y muñeca izquierda para edad ósea. En la talla baja familiar, en cambio, la edad ósea es acorde a la cronológica y los padres son de talla baja.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de talla baja en niños ;; Guía de Práctica Clínica de atención integral del adolescente en el primer nivel
+
+@ fam|adolescent_health|adolescent_development|2|diagnosis
+V: Adolescente varón de 13 años, en estadio 3 de Tanner, que acude preocupado por un aumento de volumen doloroso debajo de ambas areolas de 2 centímetros, de consistencia firme y móvil. No toma medicamentos ni consume drogas. Testículos normales.
+P: ¿Cuál es el diagnóstico más probable?
++ Ginecomastia puberal fisiológica || Es frecuente en la pubertad media y suele resolverse en 1 a 2 años.
+- anchoring | Cáncer de mama masculino || Es extremadamente raro en adolescentes.
+- availability_heuristic | Tumor testicular productor de estrógenos || La exploración testicular es normal.
+- representativeness_heuristic | Síndrome de Klinefelter || Se asocia con testículos pequeños.
+- premature_closure | Seudoginecomastia por obesidad || Hay tejido glandular firme.
+- framing_effect | Absceso mamario bilateral || No hay datos de infección.
+- complexity_bias | Prolactinoma || No hay galactorrea ni otros datos.
+- base_rate_fallacy | Ginecomastia por anabólicos || Niega su consumo.
+- belief_bias | Hipertiroidismo como causa principal || No hay otros síntomas.
+- focusing_illusion | Lipoma bilateral || Es tejido glandular retroareolar.
+E: La ginecomastia puberal es una proliferación benigna del tejido glandular mamario que ocurre hasta en la mitad o más de los varones adolescentes, con mayor frecuencia en los estadios 3 y 4 de Tanner. Se debe a un desequilibrio transitorio entre estrógenos y andrógenos. Puede ser unilateral o bilateral, ligeramente dolorosa, y se resuelve espontáneamente en 6 meses a 2 años en la mayoría. El manejo es tranquilizar al paciente y vigilar. Se estudia si es mayor de 4 centímetros, persiste después de los 17 años, ocurre antes de la pubertad o hay testículos anormales.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de ginecomastia ;; Guía de Práctica Clínica de atención integral del adolescente en el primer nivel
+
+@ fam|adolescent_health|adolescent_development|2|next_step
+V: Adolescente de 15 años que acude sola a consulta. Durante la entrevista, el médico desea conocer sus hábitos, actividades, relaciones y posibles conductas de riesgo de forma estructurada.
+P: ¿Cuál es la conducta más apropiada para realizar la entrevista?
++ Aplicar la entrevista HEEADSSS en privado y explicar los límites de la confidencialidad || Es la herramienta estructurada para evaluar riesgos en adolescentes.
+- anchoring | Entrevistarla siempre en presencia de la madre || Limita la información sobre conductas de riesgo.
+- availability_heuristic | Preguntar solo por su motivo de consulta || Se pierden oportunidades de prevención.
+- representativeness_heuristic | Prometer confidencialidad absoluta en cualquier situación || Existen límites, como riesgo de daño.
+- premature_closure | Iniciar con preguntas sobre sexualidad y drogas || Se inicia con temas menos sensibles.
+- framing_effect | Entregar un cuestionario y no comentar las respuestas || La entrevista requiere diálogo.
+- complexity_bias | Solicitar pruebas toxicológicas de rutina || No sustituyen la entrevista.
+- base_rate_fallacy | Los adolescentes rara vez tienen conductas de riesgo || Son frecuentes.
+- belief_bias | Juzgar sus conductas para disuadirla || Rompe la confianza.
+- omission_bias | No preguntar por estado de ánimo ni ideación suicida || Es parte esencial.
+E: La entrevista HEEADSSS es una herramienta estructurada para evaluar la salud psicosocial de los adolescentes. Explora hogar, educación y empleo, alimentación, actividades, drogas, sexualidad, suicidio y depresión, y seguridad. Se recomienda entrevistar al adolescente a solas en parte de la consulta, explicar desde el inicio la confidencialidad y sus límites, como el riesgo de daño para sí o para otros o el abuso, e iniciar con temas menos sensibles. Un enfoque sin juicios favorece la confianza y la detección temprana de riesgos. La entrevista permite también identificar fortalezas.
+R: Guía de Práctica Clínica de atención integral del adolescente en el primer nivel ;; Norma Oficial Mexicana para la atención a la salud del grupo etario de 10 a 19 años
+
+@ fam|adolescent_health|adolescent_development|3|initial_study
+V: Adolescente de 16 años que nunca ha menstruado. Tiene desarrollo mamario en estadio 4 de Tanner y vello púbico normal. Talla normal. Niega actividad sexual.
+P: ¿Cuál es el estudio inicial más apropiado?
++ Prueba de embarazo y ultrasonido pélvico para evaluar útero y vagina || Con caracteres sexuales normales se busca una alteración anatómica.
+- anchoring | Considerarla normal y esperar hasta los 18 años || A los 15 años sin menarquia se estudia.
+- availability_heuristic | Resonancia de hipófisis como primer estudio || No es el primer paso con desarrollo normal.
+- representativeness_heuristic | Iniciar anticonceptivos para inducir la menstruación || No se ha identificado la causa.
+- premature_closure | Laparoscopia diagnóstica || Es invasiva.
+- framing_effect | Biopsia de endometrio || No está indicada.
+- complexity_bias | Prueba genética amplia de inicio || Se usa según hallazgos.
+- base_rate_fallacy | Omitir la prueba de embarazo porque niega actividad sexual || Siempre debe descartarse.
+- belief_bias | Medir solo hormona del crecimiento || No es la causa probable.
+- omission_bias | No explorar los genitales externos || Puede revelar himen imperforado.
+E: La amenorrea primaria se define como ausencia de menarquia a los 15 años con caracteres sexuales secundarios presentes, o a los 13 años sin ellos. Siempre se descarta embarazo. Cuando el desarrollo mamario es normal, lo que indica producción de estrógenos, se buscan alteraciones anatómicas del tracto de salida, como himen imperforado, tabique vaginal transverso o agenesia mülleriana, y la insensibilidad a andrógenos. El ultrasonido pélvico evalúa la presencia de útero. Si no hay útero se solicita cariotipo y testosterona. Sin desarrollo mamario se miden gonadotropinas para distinguir causas centrales y gonadales.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la amenorrea primaria ;; Guía de Práctica Clínica de atención integral del adolescente en el primer nivel
+
+@ fam|adolescent_health|adolescent_development|3|initial_study
+V: Niña de 7 años con desarrollo mamario en estadio 3 de Tanner y vello púbico desde hace 6 meses. Ha crecido 9 centímetros en el último año. Sin cefalea ni alteraciones visuales.
+P: ¿Cuál es el estudio inicial más apropiado?
++ Edad ósea y medición de gonadotropinas y estradiol || Se sospecha pubertad precoz y se requiere distinguir si es central o periférica.
+- anchoring | Considerarlo normal por la variación individual || Antes de los 8 años es pubertad precoz.
+- availability_heuristic | Iniciar análogos de GnRH sin estudios || Primero se establece la causa.
+- representativeness_heuristic | Mastografía || No está indicada.
+- premature_closure | Esperar a la menarquia para evaluar || La talla final puede afectarse.
+- framing_effect | Tomografía de abdomen como primer estudio || Se reserva para sospecha de causa periférica.
+- complexity_bias | Biopsia ovárica || No está indicada.
+- base_rate_fallacy | Medir solo hormonas tiroideas || No explica todo el cuadro.
+- belief_bias | El crecimiento acelerado es una buena noticia para la talla final || La maduración ósea adelantada la reduce.
+- omission_bias | No preguntar por exposición a estrógenos exógenos || Puede ser una causa.
+E: La pubertad precoz se define como el inicio de caracteres sexuales secundarios antes de los 8 años en niñas y de los 9 en niños. Se acompaña de aceleración del crecimiento y avance de la edad ósea, que puede reducir la talla final. La forma central, dependiente de gonadotropinas, es la más frecuente en niñas y suele ser idiopática; en niños es más frecuente encontrar lesiones del sistema nervioso central. La evaluación inicial incluye edad ósea, hormona luteinizante, hormona foliculoestimulante y estradiol o testosterona. Si es central se solicita resonancia de cráneo y el tratamiento son los análogos de GnRH.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de pubertad precoz ;; Guía de Práctica Clínica de control y seguimiento de la salud en la niña y el niño
+
+@ fam|adolescent_health|adolescent_development|2|mechanism
+V: Adolescente de 15 años cuya madre refiere que se duerme después de la medianoche y le cuesta mucho levantarse para la escuela. Los fines de semana duerme hasta mediodía. Rendimiento escolar adecuado y sin síntomas depresivos.
+P: ¿Cuál es el mecanismo que explica este patrón de sueño?
++ Retraso fisiológico de la fase circadiana con secreción tardía de melatonina en la pubertad || Es un cambio normal del desarrollo.
+- anchoring | Insomnio por depresión mayor || No hay síntomas depresivos.
+- availability_heuristic | Narcolepsia || Cursa con somnolencia y cataplejía.
+- representativeness_heuristic | Apnea obstructiva del sueño || No hay ronquido ni pausas descritas.
+- premature_closure | Hipotiroidismo || No hay otros síntomas.
+- framing_effect | Pereza por mala crianza || Es un cambio biológico.
+- complexity_bias | Tumor hipofisario || No hay datos neurológicos.
+- base_rate_fallacy | Trastorno bipolar en fase maníaca || No hay otros síntomas.
+- belief_bias | Exceso de hormona del crecimiento || No explica el patrón.
+- focusing_illusion | Síndrome de piernas inquietas || No hay síntomas sensitivos.
+E: Durante la pubertad ocurre un retraso fisiológico de la fase circadiana: la secreción de melatonina inicia más tarde por la noche, por lo que los adolescentes tienden a dormirse y despertarse más tarde. Además, requieren entre 8 y 10 horas de sueño. Los horarios escolares tempranos, el uso de pantallas por la noche y la cafeína agravan la privación de sueño, que se asocia con bajo rendimiento, problemas de ánimo y accidentes. Se recomienda higiene del sueño, horarios regulares incluso en fines de semana, limitar pantallas antes de dormir y exposición a luz por la mañana.
+R: Guía de Práctica Clínica de atención integral del adolescente en el primer nivel ;; Guía de Práctica Clínica de diagnóstico y tratamiento del insomnio
+
+@ fam|adolescent_health|adolescent_development|3|initial_study
+V: Varón de 15 años sin ningún dato de desarrollo puberal. Testículos de 2 mL. Refiere que no percibe olores. Talla en percentil 25.
+P: ¿Cuál es el estudio inicial más apropiado?
++ Medición de hormona luteinizante, hormona foliculoestimulante y testosterona || La anosmia con pubertad ausente sugiere hipogonadismo hipogonadotrópico.
+- anchoring | Esperar a los 18 años por retraso constitucional || La anosmia orienta a otra causa.
+- availability_heuristic | Iniciar testosterona sin estudios || Primero se establece el diagnóstico.
+- representativeness_heuristic | Ultrasonido testicular como único estudio || No evalúa el eje hormonal.
+- premature_closure | Biopsia testicular || Es invasiva.
+- framing_effect | Medir solo cortisol || No explica el cuadro.
+- complexity_bias | Tomografía de tórax || No está indicada.
+- base_rate_fallacy | La anosmia no tiene relación con la pubertad || Se asocia en el síndrome de Kallmann.
+- belief_bias | Medir solo hormona del crecimiento || No es la primera prioridad.
+- omission_bias | No preguntar por el sentido del olfato || Es un dato clave.
+E: La pubertad tardía en varones se define como ausencia de aumento del volumen testicular a 4 mL o más a los 14 años. La causa más frecuente es el retraso constitucional, pero deben descartarse causas patológicas. El hipogonadismo hipogonadotrópico se caracteriza por gonadotropinas y testosterona bajas. Cuando se asocia con anosmia o hiposmia corresponde al síndrome de Kallmann, por un defecto en la migración de las neuronas productoras de GnRH y olfatorias. El hipogonadismo hipergonadotrópico, con gonadotropinas altas, indica falla testicular primaria, como el síndrome de Klinefelter. Se completa con resonancia de cráneo si es central.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de pubertad tardía ;; Guía de Práctica Clínica de atención integral del adolescente en el primer nivel
+
+@ fam|adolescent_health|adolescent_development|2|data_interpretation
+V: Adolescente de 13 años que discute con frecuencia con sus padres, pasa más tiempo con amigos y se preocupa mucho por su imagen. Sus padres temen que tenga un problema psicológico. Rendimiento escolar normal, sin cambios de sueño ni apetito.
+P: ¿Qué indica este comportamiento en el contexto del desarrollo?
++ Una conducta esperada en la adolescencia temprana, con búsqueda de autonomía e importancia del grupo de pares || Forma parte del desarrollo psicosocial normal.
+- anchoring | Trastorno negativista desafiante || No hay patrón persistente de hostilidad con disfunción.
+- availability_heuristic | Depresión mayor || No hay síntomas depresivos.
+- representativeness_heuristic | Trastorno de personalidad || No se diagnostica en la adolescencia temprana con estos datos.
+- premature_closure | Trastorno de ansiedad social || No hay evitación.
+- framing_effect | Trastorno por consumo de sustancias || No hay datos.
+- complexity_bias | Trastorno dismórfico corporal || La preocupación por la imagen es frecuente y no incapacitante.
+- base_rate_fallacy | Esquizofrenia de inicio temprano || No hay síntomas psicóticos.
+- belief_bias | Necesita tratamiento farmacológico || No hay trastorno.
+- omission_bias | No orientar a los padres sobre la comunicación || La orientación es útil.
+E: La adolescencia temprana, de los 10 a los 13 años, se caracteriza por cambios corporales rápidos, preocupación por la imagen, búsqueda de independencia de los padres y creciente importancia del grupo de amigos. En la adolescencia media, de 14 a 16 años, aumentan la experimentación y las conductas de riesgo, y en la tardía, de 17 a 19, se consolida la identidad y el pensamiento abstracto. Los conflictos con los padres son frecuentes y normales. Se deben buscar señales de alarma, como deterioro escolar, aislamiento, cambios de sueño y apetito, consumo de sustancias o ideación suicida.
+R: Guía de Práctica Clínica de atención integral del adolescente en el primer nivel ;; Norma Oficial Mexicana para la atención a la salud del grupo etario de 10 a 19 años
+
+@ fam|adolescent_health|adolescent_development|2|treatment_of_choice
+V: Adolescente de 16 años con acné en la cara caracterizado por comedones abiertos y cerrados y algunas pápulas inflamatorias, sin nódulos ni cicatrices. Le afecta su autoestima.
+P: ¿Cuál es el tratamiento de elección?
++ Retinoide tópico combinado con peróxido de benzoilo || Es el tratamiento de primera línea del acné leve a moderado mixto.
+- anchoring | Isotretinoína oral de inicio || Se reserva para acné nodular grave o refractario.
+- availability_heuristic | Antibiótico oral como monoterapia prolongada || Favorece la resistencia.
+- representativeness_heuristic | Dieta sin chocolate como único tratamiento || No es suficiente.
+- premature_closure | Lavar la cara cinco veces al día con jabón abrasivo || Irrita la piel.
+- framing_effect | Corticoide tópico || Puede empeorar el acné.
+- complexity_bias | Terapia hormonal con antiandrógenos en varón || No está indicada.
+- base_rate_fallacy | El acné se cura solo y no requiere tratamiento || Puede dejar cicatrices y afectar la autoestima.
+- belief_bias | Exprimir las lesiones para eliminarlas || Aumenta el riesgo de cicatrices.
+- omission_bias | No explicar que la mejoría tarda semanas || Afecta el apego.
+E: El acné vulgar afecta a la mayoría de los adolescentes. Su fisiopatología incluye hiperqueratinización folicular, aumento de sebo, proliferación de Cutibacterium acnes e inflamación. En el acné leve a moderado con comedones y pápulas, el tratamiento de primera línea son los retinoides tópicos, como adapaleno, combinados con peróxido de benzoilo, que reduce la bacteria sin generar resistencia. En acné inflamatorio moderado se agrega un antibiótico oral, como doxiciclina, por tiempo limitado. La isotretinoína oral se reserva para acné nodular grave o refractario. La mejoría se observa en 8 a 12 semanas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del acné ;; Guía de Práctica Clínica de atención integral del adolescente en el primer nivel
+
+@ fam|adolescent_health|adolescent_development|2|prevention_screening
+V: Adolescente de 12 años que acude a revisión. Al inclinarse hacia adelante con los brazos colgando se observa una giba costal derecha prominente. Sin dolor de espalda.
+P: ¿Cuál es la prueba de tamizaje que permitió detectar el hallazgo?
++ Prueba de inclinación anterior de Adams || Detecta la rotación vertebral de la escoliosis.
+- anchoring | Prueba de Lasègue || Evalúa radiculopatía lumbar.
+- availability_heuristic | Maniobra de Ortolani || Se usa en displasia de cadera neonatal.
+- representativeness_heuristic | Prueba de Phalen || Evalúa síndrome del túnel del carpo.
+- premature_closure | Signo de Trendelenburg || Evalúa los abductores de la cadera.
+- framing_effect | Prueba de Thomas || Evalúa contractura de flexión de cadera.
+- complexity_bias | Maniobra de McMurray || Evalúa lesiones de menisco.
+- base_rate_fallacy | Prueba de Schober como tamizaje de escoliosis || Evalúa movilidad lumbar.
+- belief_bias | Maniobra de Barlow || Se usa en recién nacidos.
+- focusing_illusion | Prueba de Finkelstein || Evalúa tenosinovitis de De Quervain.
+E: La escoliosis idiopática del adolescente es una curvatura lateral de la columna con rotación vertebral, más frecuente en niñas durante el estirón puberal. Suele ser asintomática. La prueba de inclinación anterior de Adams consiste en que el paciente se incline hacia adelante con las rodillas extendidas y los brazos colgando; la rotación vertebral produce una giba costal o lumbar. Un escoliómetro con 7 grados o más indica solicitar radiografía de columna completa en bipedestación para medir el ángulo de Cobb. Curvas mayores de 25 grados en crecimiento suelen requerir corsé, y mayores de 45 a 50, cirugía.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de escoliosis idiopática del adolescente ;; Guía de Práctica Clínica de control y seguimiento de la salud en la niña y el niño
+
+@ fam|adolescent_health|adolescent_development|2|data_interpretation
+V: Niña de 10 años con talla en percentil 5 y velocidad de crecimiento normal. Su madre mide 150 centímetros y su padre 160. Edad ósea igual a la cronológica. Exploración física normal.
+P: ¿Qué indica este patrón de crecimiento?
++ Talla baja familiar || La talla es acorde al potencial genético y la edad ósea es normal.
+- anchoring | Deficiencia de hormona del crecimiento || La velocidad de crecimiento es normal.
+- availability_heuristic | Retraso constitucional del crecimiento || En este la edad ósea está retrasada.
+- representativeness_heuristic | Síndrome de Turner sin estudio || La exploración es normal, aunque en niñas con talla baja se considera.
+- premature_closure | Hipotiroidismo || La velocidad de crecimiento es normal.
+- framing_effect | Desnutrición crónica || No hay datos.
+- complexity_bias | Enfermedad celiaca oculta || No hay síntomas ni deterioro de la velocidad.
+- base_rate_fallacy | Pubertad precoz || No hay desarrollo puberal descrito.
+- belief_bias | Requiere hormona del crecimiento de inmediato || No está indicada.
+- focusing_illusion | Displasia esquelética || La exploración es normal.
+E: La talla baja familiar es una variante normal del crecimiento. Estos niños tienen talla baja pero dentro del canal de crecimiento esperado según la talla de los padres, con velocidad de crecimiento normal y edad ósea acorde a la cronológica. Su talla final será baja pero acorde al potencial genético. La talla blanco familiar en niñas se calcula como el promedio de la talla de los padres menos 6.5 centímetros. En niñas con talla baja sin causa clara se recomienda cariotipo para descartar síndrome de Turner. La velocidad de crecimiento baja es el dato que obliga a estudiar causas patológicas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de talla baja en niños ;; Guía de Práctica Clínica de control y seguimiento de la salud en la niña y el niño
+
+@ fam|adolescent_health|adolescent_development|2|prevention_screening
+V: Adolescente de 14 años que acude para revisión antes de unirse al equipo de fútbol de su escuela. Sin síntomas. Un tío murió súbitamente a los 30 años mientras corría.
+P: ¿Cuál es la evaluación preventiva más importante antes de autorizar la actividad deportiva?
++ Historia clínica cardiovascular dirigida, exploración con auscultación en reposo y de pie, y electrocardiograma por el antecedente familiar || Busca cardiopatías que causan muerte súbita.
+- anchoring | Autorizar sin evaluación porque es joven y asintomático || El antecedente familiar requiere estudio.
+- availability_heuristic | Radiografía de tórax como única prueba || No detecta la mayoría de las causas de muerte súbita.
+- representativeness_heuristic | Prueba de esfuerzo con consumo de oxígeno a todos || No es de rutina.
+- premature_closure | Prohibir el deporte de manera permanente || Primero se evalúa.
+- framing_effect | Biometría hemática como única prueba || No evalúa el riesgo cardiaco.
+- complexity_bias | Cateterismo cardiaco || Es invasivo.
+- base_rate_fallacy | La muerte súbita en jóvenes no es hereditaria || Muchas causas son hereditarias.
+- belief_bias | La miocardiopatía hipertrófica siempre produce síntomas antes || Puede debutar con muerte súbita.
+- omission_bias | No preguntar por síncope durante el ejercicio || Es un síntoma de alarma.
+E: La evaluación previa a la participación deportiva busca identificar condiciones que aumentan el riesgo de muerte súbita, como miocardiopatía hipertrófica, anomalías coronarias, canalopatías como síndrome de QT largo y de Brugada, y miocardiopatía arritmogénica. Incluye preguntas sobre dolor torácico, síncope o palpitaciones con el ejercicio y antecedentes familiares de muerte súbita antes de los 50 años, y exploración con auscultación en reposo y de pie, pulsos femorales y presión arterial. El antecedente familiar de muerte súbita justifica electrocardiograma y, según hallazgos, ecocardiograma.
+R: Guía de Práctica Clínica de atención integral del adolescente en el primer nivel ;; Recomendaciones para la evaluación precompetitiva del deportista joven
+
+@ fam|adolescent_health|adolescent_development|3|data_interpretation
+V: Adolescente de 17 años que en la consulta plantea hipótesis sobre las consecuencias a largo plazo de sus decisiones, reflexiona sobre valores y discute temas abstractos como la justicia y su futuro profesional.
+P: ¿Qué etapa del desarrollo cognitivo indica esta forma de pensar?
++ Etapa de operaciones formales de Piaget || Se caracteriza por pensamiento abstracto e hipotético deductivo.
+- anchoring | Etapa de operaciones concretas || El pensamiento se limita a lo concreto.
+- availability_heuristic | Etapa preoperacional || Corresponde a niños pequeños.
+- representativeness_heuristic | Etapa sensoriomotora || Corresponde a lactantes.
+- premature_closure | Etapa de latencia de Freud || No es una etapa cognitiva de Piaget.
+- framing_effect | Etapa de confianza contra desconfianza de Erikson || Corresponde al lactante.
+- complexity_bias | Etapa de intimidad contra aislamiento como único descriptor || Es psicosocial y del adulto joven.
+- base_rate_fallacy | Pensamiento mágico || Es preoperacional.
+- belief_bias | Regresión cognitiva || No hay regresión.
+- focusing_illusion | Egocentrismo preoperacional || No corresponde.
+E: Según Piaget, el desarrollo cognitivo pasa por cuatro etapas: sensoriomotora, del nacimiento a los 2 años; preoperacional, de 2 a 7 años, con pensamiento simbólico y egocéntrico; operaciones concretas, de 7 a 11 años, con razonamiento lógico sobre objetos concretos; y operaciones formales, a partir de los 11 o 12 años, con pensamiento abstracto, hipotético y deductivo. En la adolescencia se desarrolla esta última etapa de forma gradual, junto con la maduración de la corteza prefrontal, que continúa hasta los 25 años y explica la mayor impulsividad. Según Erikson, la tarea del adolescente es la identidad frente a la confusión de roles.
+R: Guía de Práctica Clínica de atención integral del adolescente en el primer nivel ;; Norma Oficial Mexicana para la atención a la salud del grupo etario de 10 a 19 años

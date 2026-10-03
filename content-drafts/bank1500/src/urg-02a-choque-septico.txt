@@ -1,0 +1,223 @@
+@ urg|shock|septic_shock|2|next_step
+V: Mujer de 70 años con fiebre, disuria y confusión de 2 días. Presión arterial de 82/50 mmHg, frecuencia cardiaca de 118, frecuencia respiratoria de 26. Lactato de 4.5 mmol/L.
+P: ¿Cuál es la conducta inicial más apropiada en la primera hora?
++ Tomar hemocultivos, medir lactato, iniciar antibiótico de amplio espectro y administrar 30 mL por kilo de cristaloide || Es el paquete de la primera hora en sepsis con hipotensión o lactato elevado.
+- anchoring | Esperar el resultado del urocultivo para iniciar antibiótico || Cada hora de retraso aumenta la mortalidad.
+- availability_heuristic | Iniciar solo paracetamol y observar || No trata la sepsis.
+- representativeness_heuristic | Iniciar vasopresor sin administrar líquidos en ningún caso || Primero se reanima con líquidos salvo hipotensión grave.
+- premature_closure | Solicitar tomografía antes de cualquier tratamiento || Retrasa el tratamiento.
+- framing_effect | Administrar coloides sintéticos como almidones || Aumentan la lesión renal.
+- complexity_bias | Iniciar hidrocortisona como primera medida || Se reserva para choque refractario.
+- base_rate_fallacy | Una infección urinaria no puede causar choque || Es una causa frecuente de sepsis.
+- belief_bias | Los cultivos deben tomarse aunque retrasen varias horas el antibiótico || No deben retrasarlo.
+- omission_bias | No buscar y controlar el foco infeccioso || Es parte del manejo.
+E: La sepsis es una disfunción orgánica que pone en riesgo la vida, causada por una respuesta desregulada del huésped a la infección. La Campaña para Sobrevivir a la Sepsis recomienda en la primera hora medir lactato, tomar hemocultivos antes del antibiótico sin retrasarlo, iniciar antibióticos de amplio espectro, administrar 30 mL por kilo de cristaloide en caso de hipotensión o lactato de 4 mmol/L o más, e iniciar vasopresores si la hipotensión persiste para mantener una presión arterial media de 65 mmHg o más. También se busca y controla el foco infeccioso. El tratamiento temprano reduce la mortalidad.
+R: Campaña para sobrevivir a la sepsis ;; Guía de Práctica Clínica de diagnóstico y tratamiento de sepsis grave y choque séptico en el adulto
+
+@ urg|shock|septic_shock|2|treatment_of_choice
+V: Hombre de 62 años con neumonía y choque séptico. Después de 30 mL por kilo de cristaloide persiste con presión arterial media de 55 mmHg y extremidades frías.
+P: ¿Cuál es el vasopresor de elección?
++ Norepinefrina || Es el vasopresor de primera línea en el choque séptico.
+- anchoring | Dopamina || Tiene más arritmias y mayor mortalidad que la norepinefrina.
+- availability_heuristic | Dobutamina como vasopresor inicial || Es un inotrópico que puede causar hipotensión.
+- representativeness_heuristic | Seguir administrando líquidos sin límite || Puede causar sobrecarga.
+- premature_closure | Fenilefrina como primera línea || No es de primera línea.
+- framing_effect | Adrenalina en bolo como en el paro || No es la indicación inicial.
+- complexity_bias | Azul de metileno de inicio || No es de primera línea.
+- base_rate_fallacy | La norepinefrina solo puede administrarse por vía central || Puede iniciarse por vía periférica de forma temporal.
+- belief_bias | Los vasopresores siempre causan isquemia de extremidades por lo que se evitan || El beneficio supera el riesgo.
+- omission_bias | No colocar línea arterial para vigilar la presión || Se recomienda cuando sea posible.
+E: La norepinefrina es el vasopresor de primera elección en el choque séptico, porque aumenta la resistencia vascular sistémica con menor riesgo de arritmias que la dopamina, que se asoció con más eventos adversos y mayor mortalidad. Se titula para mantener una presión arterial media de 65 mmHg o más. Puede iniciarse por una vía periférica de buen calibre mientras se coloca un acceso central, para no retrasar el tratamiento. Si se requieren dosis crecientes se agrega vasopresina para reducir la dosis de norepinefrina. La dobutamina se reserva para disfunción miocárdica con hipoperfusión persistente.
+R: Campaña para sobrevivir a la sepsis ;; Guía de Práctica Clínica de diagnóstico y tratamiento de sepsis grave y choque séptico en el adulto
+
+@ urg|shock|septic_shock|3|treatment_of_choice
+V: Mujer de 55 años con peritonitis y choque séptico que requiere norepinefrina a dosis de 0.5 microgramos por kilo por minuto más vasopresina para mantener la presión arterial media de 65 mmHg, a pesar de reanimación adecuada.
+P: ¿Cuál es el tratamiento adicional de elección?
++ Hidrocortisona 200 mg al día por vía intravenosa || Se recomienda en choque séptico que requiere vasopresores en dosis moderadas a altas.
+- anchoring | Dexametasona en dosis altas por 3 meses || No es el esquema recomendado.
+- availability_heuristic | Fludrocortisona como monoterapia || No es el tratamiento recomendado solo.
+- representativeness_heuristic | Prueba de estimulación con corticotropina antes de decidir || No se requiere para iniciar.
+- premature_closure | Suspender vasopresores para evaluar la presión basal || Es peligroso.
+- framing_effect | Metilprednisolona en pulsos de 1 gramo || No es el esquema recomendado.
+- complexity_bias | Inmunoglobulina intravenosa de rutina || No se recomienda.
+- base_rate_fallacy | Los esteroides están contraindicados en infecciones || Tienen indicación en choque refractario.
+- belief_bias | Los esteroides siempre aumentan la mortalidad en sepsis || Aceleran la resolución del choque.
+- omission_bias | No asegurar el control quirúrgico del foco abdominal || Es fundamental en peritonitis.
+E: En el choque séptico que requiere dosis moderadas a altas de vasopresores, habitualmente norepinefrina de 0.25 microgramos por kilo por minuto o más durante al menos 4 horas, se recomienda hidrocortisona intravenosa a dosis de 200 mg al día, en bolos de 50 mg cada 6 horas o en infusión. Acelera la resolución del choque y reduce los días con vasopresores. No se requiere una prueba de estimulación con corticotropina para iniciarla. Se suspende de forma gradual al retirar los vasopresores. En la peritonitis el control quirúrgico del foco es indispensable.
+R: Campaña para sobrevivir a la sepsis ;; Guía de Práctica Clínica de diagnóstico y tratamiento de sepsis grave y choque séptico en el adulto
+
+@ urg|shock|septic_shock|2|data_interpretation
+V: Hombre de 68 años con neumonía que requiere norepinefrina para mantener la presión arterial media de 65 mmHg después de la reanimación con líquidos. Lactato de 3.5 mmol/L.
+P: ¿Qué indica esta combinación de hallazgos según la definición vigente?
++ Choque séptico || Requiere vasopresores para una presión media de 65 mmHg o más y lactato mayor de 2 mmol/L pese a líquidos.
+- anchoring | Sepsis sin choque || El requerimiento de vasopresores y el lactato definen el choque.
+- availability_heuristic | Síndrome de respuesta inflamatoria sistémica sin infección || Hay infección.
+- representativeness_heuristic | Choque hipovolémico || Hay un foco infeccioso y hipotensión pese a líquidos.
+- premature_closure | Choque cardiogénico || No hay datos de falla cardiaca primaria.
+- framing_effect | Bacteriemia transitoria || No explica la disfunción.
+- complexity_bias | Choque anafiláctico || No hay datos de alergia.
+- base_rate_fallacy | Infección localizada sin repercusión sistémica || Hay disfunción circulatoria.
+- belief_bias | El lactato no tiene valor pronóstico || Se asocia con mortalidad.
+- focusing_illusion | Choque neurogénico || No hay lesión medular.
+E: Según el consenso Sepsis-3, la sepsis se define como una disfunción orgánica que pone en riesgo la vida causada por una respuesta desregulada a la infección, identificada por un aumento de 2 o más puntos en la escala SOFA. El choque séptico es un subgrupo de sepsis con alteraciones circulatorias, celulares y metabólicas profundas, definido por la necesidad de vasopresores para mantener una presión arterial media de 65 mmHg o más y un lactato mayor de 2 mmol/L a pesar de una reanimación adecuada con líquidos. Su mortalidad hospitalaria supera el 40 por ciento.
+R: Tercer consenso internacional de definiciones de sepsis y choque séptico ;; Campaña para sobrevivir a la sepsis
+
+@ urg|shock|septic_shock|2|treatment_of_choice
+V: Hombre de 50 años con choque séptico de origen urinario. Se inicia reanimación con líquidos intravenosos.
+P: ¿Cuál es el tipo de líquido de elección para la reanimación?
++ Cristaloides, preferentemente balanceados como Hartmann o lactato de Ringer || Son de primera línea y los balanceados se asocian con menos lesión renal que grandes volúmenes de solución salina.
+- anchoring | Almidones hidroxietílicos || Aumentan la lesión renal y la mortalidad.
+- availability_heuristic | Albúmina como primera opción en todos los pacientes || Se reserva para quienes requieren grandes volúmenes.
+- representativeness_heuristic | Solución glucosada al 5 por ciento || No expande el volumen intravascular de forma eficaz.
+- premature_closure | Gelatinas || No se recomiendan.
+- framing_effect | Sangre total como líquido de reanimación en sepsis sin anemia || No está indicada.
+- complexity_bias | Plasma fresco congelado como expansor || No se usa como expansor.
+- base_rate_fallacy | Todos los líquidos tienen el mismo efecto renal || Difieren.
+- belief_bias | Los cristaloides balanceados empeoran la acidosis láctica || No la empeoran.
+- omission_bias | No reevaluar la respuesta a líquidos con parámetros dinámicos || Evita la sobrecarga.
+E: Los cristaloides son los líquidos de primera línea en la reanimación de la sepsis y el choque séptico. Los cristaloides balanceados, como la solución Hartmann o el lactato de Ringer, se prefieren sobre la solución salina al 0.9 por ciento, porque grandes volúmenes de salina causan acidosis hiperclorémica y se asocian con más lesión renal. La albúmina puede considerarse en pacientes que reciben grandes volúmenes de cristaloides. Los almidones hidroxietílicos están contraindicados por aumentar la lesión renal y la mortalidad. La respuesta a los líquidos se reevalúa con parámetros clínicos y dinámicos para evitar la sobrecarga.
+R: Campaña para sobrevivir a la sepsis ;; Guía de Práctica Clínica de diagnóstico y tratamiento de sepsis grave y choque séptico en el adulto
+
+@ urg|shock|septic_shock|2|initial_study
+V: Mujer de 45 años que acude a urgencias con fiebre de 39 grados y tos productiva. Frecuencia respiratoria de 24, presión arterial sistólica de 96 mmHg y está confusa.
+P: ¿Cuál es la herramienta clínica inicial al pie de cama que sugiere riesgo de mala evolución?
++ Escala qSOFA, con frecuencia respiratoria de 22 o más, alteración mental y sistólica de 100 o menos || Tiene 3 de 3 criterios.
+- anchoring | Escala de Glasgow como único criterio || No evalúa la sepsis de forma global.
+- availability_heuristic | Escala de Apache II completa en la puerta de urgencias || Es compleja y se usa en terapia intensiva.
+- representativeness_heuristic | Escala de Wells || Se usa para tromboembolia.
+- premature_closure | Escala de Ranson || Se usa en pancreatitis.
+- framing_effect | Escala de Child-Pugh || Se usa en cirrosis.
+- complexity_bias | Procalcitonina como único tamizaje || No es una escala clínica.
+- base_rate_fallacy | Escala CURB-65 como única herramienta de sepsis || Evalúa gravedad de neumonía, no sepsis global.
+- belief_bias | La escala qSOFA diagnostica sepsis por sí sola || Es una herramienta de alerta.
+- information_bias | Escala de Alvarado || Se usa en apendicitis.
+E: La escala qSOFA o SOFA rápida es una herramienta clínica al pie de cama que identifica a pacientes con infección y mayor riesgo de mala evolución. Incluye frecuencia respiratoria de 22 o más por minuto, alteración del estado mental y presión arterial sistólica de 100 mmHg o menos. Dos o más criterios se asocian con mayor mortalidad. No es una herramienta diagnóstica de sepsis y tiene baja sensibilidad, por lo que no debe usarse como único tamizaje. La sepsis se define por el aumento de la escala SOFA completa. El lactato y la evaluación clínica completan la estratificación.
+R: Tercer consenso internacional de definiciones de sepsis y choque séptico ;; Campaña para sobrevivir a la sepsis
+
+@ urg|shock|septic_shock|3|treatment_of_choice
+V: Hombre de 55 años con leucemia en quimioterapia que acude con fiebre de 38.8 grados. Cuenta de neutrófilos de 200 por microlitro. Presión arterial de 100/60 mmHg. Sin foco evidente.
+P: ¿Cuál es el tratamiento antibiótico empírico de elección?
++ Betalactámico antipseudomónico, como cefepima o piperacilina con tazobactam, en la primera hora || La neutropenia febril requiere cobertura contra Pseudomonas de inmediato.
+- anchoring | Esperar a tener un foco identificado para iniciar antibiótico || Retrasa un tratamiento urgente.
+- availability_heuristic | Amoxicilina oral ambulatoria || No es adecuada en neutropenia de alto riesgo.
+- representativeness_heuristic | Vancomicina como monoterapia empírica || No cubre gramnegativos.
+- premature_closure | Solo antipiréticos y vigilancia || La infección puede progresar rápidamente.
+- framing_effect | Fluconazol como único tratamiento inicial || Los antifúngicos se agregan si la fiebre persiste.
+- complexity_bias | Esperar el aspirado de médula ósea || No es necesario para iniciar.
+- base_rate_fallacy | Los pacientes neutropénicos siempre muestran un foco claro || A menudo no hay foco evidente.
+- belief_bias | La fiebre en quimioterapia siempre es por el fármaco || Debe considerarse infección.
+- omission_bias | No tomar hemocultivos antes del antibiótico || Deben tomarse sin retrasarlo.
+E: La neutropenia febril se define como temperatura de 38.3 grados o más, o de 38 sostenida, con neutrófilos menores de 500 o que se espera que bajen de ese nivel. Es una urgencia oncológica porque la infección puede progresar rápidamente a choque, y la respuesta inflamatoria y los signos de infección pueden estar ausentes. Se toman hemocultivos y se inicia en la primera hora un betalactámico con actividad antipseudomónica, como cefepima, piperacilina con tazobactam o un carbapenémico. Se agrega vancomicina ante inestabilidad, infección de catéter o de piel. Los antifúngicos se agregan si la fiebre persiste.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de neutropenia febril ;; Guía de la Sociedad Americana de Enfermedades Infecciosas para neutropenia febril
+
+@ urg|shock|septic_shock|3|next_step
+V: Mujer de 60 años con choque séptico por colangitis aguda. Recibe antibióticos, líquidos y norepinefrina. El ultrasonido muestra dilatación de la vía biliar por coledocolitiasis.
+P: ¿Cuál es la conducta más apropiada para el control del foco?
++ Drenaje urgente de la vía biliar por colangiopancreatografía retrógrada endoscópica || El control del foco es esencial en la sepsis por obstrucción biliar.
+- anchoring | Continuar solo antibióticos y esperar mejoría || Sin drenaje la sepsis persiste.
+- availability_heuristic | Colecistectomía abierta urgente en choque como primera opción || El drenaje endoscópico es más seguro.
+- representativeness_heuristic | Esperar 2 semanas para el drenaje electivo || El drenaje debe ser urgente.
+- premature_closure | Solo agregar un segundo antibiótico || No resuelve la obstrucción.
+- framing_effect | Solicitar resonancia de control antes de cualquier intervención || Retrasa el control del foco.
+- complexity_bias | Trasplante hepático || No está indicado.
+- base_rate_fallacy | La colangitis siempre responde solo a antibióticos || Los casos graves requieren drenaje.
+- belief_bias | El control del foco puede posponerse hasta que el paciente esté estable || Es parte de la estabilización.
+- omission_bias | No ajustar el antibiótico según los cultivos || Debe desescalarse.
+E: El control del foco infeccioso es un componente esencial del tratamiento de la sepsis, junto con los antibióticos y el soporte hemodinámico. Incluye el drenaje de abscesos, la desobstrucción de vías biliares o urinarias, el desbridamiento de tejido necrótico y el retiro de dispositivos infectados. Se recomienda realizarlo lo antes posible, idealmente en las primeras 6 a 12 horas, con la intervención menos invasiva eficaz. En la colangitis aguda grave el drenaje biliar urgente por colangiopancreatografía retrógrada endoscópica es de elección, y si no está disponible, el drenaje percutáneo transhepático.
+R: Campaña para sobrevivir a la sepsis ;; Guías de Tokio para el manejo de colangitis y colecistitis agudas
+
+@ urg|shock|septic_shock|2|data_interpretation
+V: Hombre de 65 años con choque séptico por neumonía. Lactato inicial de 6 mmol/L. A las 2 horas de tratamiento con líquidos, antibióticos y norepinefrina, el lactato es de 3 mmol/L.
+P: ¿Qué indica la evolución del lactato?
++ Una respuesta favorable a la reanimación con mejoría de la perfusión tisular || La disminución del lactato se asocia con mejor pronóstico.
+- anchoring | Fracaso del tratamiento || Disminuyó a la mitad.
+- availability_heuristic | Que debe suspenderse el antibiótico || El lactato no indica suspender antibióticos.
+- representativeness_heuristic | Que ya no requiere vigilancia || Aún está elevado.
+- premature_closure | Que el diagnóstico de sepsis era incorrecto || No lo descarta.
+- framing_effect | Que debe aumentarse el vasopresor de inmediato || Responde al tratamiento actual.
+- complexity_bias | Error de laboratorio sin significado || Es un marcador útil.
+- base_rate_fallacy | El lactato no se modifica con el tratamiento || Sí se modifica.
+- belief_bias | El lactato elevado siempre se debe a hipoxia tisular exclusivamente || También influyen otros mecanismos.
+- focusing_illusion | Insuficiencia hepática aguda || No hay datos que la sugieran.
+E: El lactato sérico es un marcador de hipoperfusión y estrés celular en la sepsis, aunque también puede elevarse por aumento de la glucólisis adrenérgica y menor depuración hepática. Un lactato mayor de 2 mmol/L se asocia con mayor mortalidad. La Campaña para Sobrevivir a la Sepsis recomienda medirlo al inicio y repetirlo en 2 a 4 horas si está elevado, y guiar la reanimación para normalizarlo. Una disminución del lactato indica respuesta favorable. El tiempo de llenado capilar también es una herramienta útil para guiar la reanimación, sobre todo cuando no se dispone de lactato.
+R: Campaña para sobrevivir a la sepsis ;; Guía de Práctica Clínica de diagnóstico y tratamiento de sepsis grave y choque séptico en el adulto
+
+@ urg|shock|septic_shock|3|treatment_of_choice
+V: Mujer de 58 años con choque séptico por neumonía, con presión arterial media en meta con norepinefrina. Persiste con lactato elevado, extremidades frías y llenado capilar prolongado. El ecocardiograma muestra fracción de expulsión del 25 por ciento.
+P: ¿Cuál es el tratamiento adicional de elección?
++ Dobutamina || Mejora el gasto cardiaco en la disfunción miocárdica asociada a sepsis con hipoperfusión persistente.
+- anchoring | Aumentar los líquidos sin límite || La disfunción miocárdica favorece el edema pulmonar.
+- availability_heuristic | Betabloqueador intravenoso || Reduciría más el gasto cardiaco.
+- representativeness_heuristic | Suspender la norepinefrina || Mantiene la presión arterial.
+- premature_closure | Diurético de asa en dosis altas || No corrige la hipoperfusión.
+- framing_effect | Nitroprusiato || Causaría hipotensión.
+- complexity_bias | Trasplante cardiaco urgente || No está indicado.
+- base_rate_fallacy | La sepsis no afecta la función cardiaca || Puede causar miocardiopatía séptica.
+- belief_bias | La dobutamina siempre empeora la hipotensión y nunca se usa en sepsis || Se usa junto con norepinefrina.
+- omission_bias | No reevaluar con ecocardiograma la respuesta || Es útil para guiar el tratamiento.
+E: La sepsis puede causar disfunción miocárdica, conocida como miocardiopatía séptica, con disminución de la fracción de expulsión que suele ser reversible. Cuando persiste la hipoperfusión, con lactato elevado, llenado capilar prolongado o extremidades frías, a pesar de una presión arterial media en meta y un volumen intravascular adecuado, se recomienda agregar dobutamina o, como alternativa, cambiar a adrenalina. La dobutamina aumenta el gasto cardiaco por su efecto inotrópico beta 1. El ecocardiograma en el punto de atención ayuda a identificar la disfunción y a guiar el tratamiento.
+R: Campaña para sobrevivir a la sepsis ;; Guía de Práctica Clínica de diagnóstico y tratamiento de sepsis grave y choque séptico en el adulto
+
+@ urg|shock|septic_shock|2|next_step
+V: Hombre de 72 años con choque séptico por neumonía, en tratamiento con ceftriaxona y azitromicina desde hace 72 horas. Mejoró clínicamente y ya no requiere vasopresores. El hemocultivo aisló Streptococcus pneumoniae sensible a penicilina.
+P: ¿Cuál es la conducta más apropiada respecto al antibiótico?
++ Desescalar a un antibiótico de espectro reducido según la sensibilidad y planear una duración corta || Reduce la resistencia y los efectos adversos.
+- anchoring | Agregar un carbapenémico por la gravedad inicial || No está indicado ante buena respuesta y germen sensible.
+- availability_heuristic | Mantener el mismo esquema por 21 días || Una duración prolongada no es necesaria.
+- representativeness_heuristic | Suspender todo antibiótico de inmediato || Aún requiere completar el tratamiento.
+- premature_closure | Agregar vancomicina empírica || No está indicada.
+- framing_effect | Cambiar a un antifúngico || No hay infección fúngica.
+- complexity_bias | Repetir todos los cultivos diariamente durante 2 semanas || No es necesario.
+- base_rate_fallacy | Una vez iniciado, el antibiótico de amplio espectro no debe modificarse || Debe desescalarse.
+- belief_bias | Más días de antibiótico siempre son mejores || Aumentan resistencia y efectos adversos.
+- omission_bias | No usar procalcitonina para apoyar la suspensión cuando esté disponible || Puede ayudar a acortar la duración.
+E: En la sepsis se inicia un antibiótico empírico de amplio espectro, pero debe reevaluarse diariamente. Una vez identificado el microorganismo y su sensibilidad, y con mejoría clínica, se recomienda desescalar a un antibiótico de espectro más reducido y dirigido. La duración suele ser de 5 a 7 días en la mayoría de las infecciones con buen control del foco y respuesta clínica, y la procalcitonina puede ayudar a decidir la suspensión. La desescalada reduce la resistencia bacteriana, la infección por Clostridioides difficile, la toxicidad y el costo, y es un pilar de los programas de optimización de antimicrobianos.
+R: Campaña para sobrevivir a la sepsis ;; Programa de optimización del uso de antimicrobianos
+
+@ urg|shock|septic_shock|3|data_interpretation
+V: Mujer de 35 años con cesárea hace 5 días, que presenta fiebre de 39.5 grados, frecuencia cardiaca de 125, presión de 85/50 mmHg y dolor abdominal con loquios fétidos. Leucocitos de 22,000.
+P: ¿Qué indica este cuadro?
++ Sepsis materna de origen pélvico con choque, probablemente por endometritis o infección de herida || Requiere manejo urgente del choque y del foco.
+- anchoring | Fiebre puerperal normal || La fiebre con choque nunca es normal.
+- availability_heuristic | Tromboembolia pulmonar como única explicación || No explica la fiebre y los loquios fétidos.
+- representativeness_heuristic | Mastitis puerperal || No explica los loquios fétidos ni el choque.
+- premature_closure | Depresión posparto || No explica el cuadro.
+- framing_effect | Hemorragia posparto tardía como única causa || No explica la fiebre.
+- complexity_bias | Preeclampsia posparto || No explica la fiebre ni los loquios.
+- base_rate_fallacy | La sepsis materna es rara y benigna || Es una causa importante de muerte materna.
+- belief_bias | La lactancia contraindica los antibióticos || Hay antibióticos compatibles.
+- focusing_illusion | Infección urinaria baja simple || No explica el choque y los loquios.
+E: La sepsis materna es una de las principales causas de muerte materna. En el puerperio, sobre todo después de una cesárea, las causas más frecuentes son la endometritis, la infección de la herida quirúrgica, la infección urinaria y la mastitis. La endometritis se manifiesta con fiebre, dolor uterino y loquios fétidos. Ante choque séptico se aplica el paquete de la primera hora: cultivos, antibióticos de amplio espectro que cubran anaerobios, como clindamicina con gentamicina o piperacilina con tazobactam, líquidos y vasopresores, y se busca el control del foco, que puede requerir legrado, drenaje de abscesos o histerectomía.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la sepsis materna ;; Campaña para sobrevivir a la sepsis
+
+@ urg|shock|septic_shock|3|complication_prognosis
+V: Hombre de 60 años con choque séptico que a las 48 horas presenta disnea progresiva, saturación de 85 por ciento con oxígeno al 100 por ciento, infiltrados bilaterales en la radiografía y presión de oclusión normal en el ecocardiograma. Cociente PaO2 entre FiO2 de 120.
+P: ¿Cuál es la complicación más probable?
++ Síndrome de dificultad respiratoria aguda moderado || Infiltrados bilaterales con hipoxemia grave sin causa cardiaca dentro de una semana de un insulto.
+- anchoring | Edema pulmonar cardiogénico || La función cardiaca no lo explica.
+- availability_heuristic | Neumonía unilateral simple || Los infiltrados son bilaterales.
+- representativeness_heuristic | Asma aguda || No explica los infiltrados.
+- premature_closure | Atelectasia del lóbulo inferior || No explica el cuadro bilateral grave.
+- framing_effect | Derrame pleural bilateral simple || No explica la hipoxemia grave.
+- complexity_bias | Fibrosis pulmonar idiopática agudizada || No corresponde.
+- base_rate_fallacy | La sepsis no afecta al pulmón si el foco no es pulmonar || Es la causa más frecuente de dificultad respiratoria aguda.
+- belief_bias | Siempre debe tratarse con volúmenes corrientes altos || Se ventila con volúmenes bajos.
+- focusing_illusion | Tromboembolia pulmonar como única causa || No explica los infiltrados bilaterales.
+E: El síndrome de dificultad respiratoria aguda se define, según Berlín, por insuficiencia respiratoria de inicio en la primera semana de un insulto conocido, infiltrados bilaterales no explicados por derrames, atelectasias o nódulos, y un edema no explicado por falla cardiaca o sobrecarga. Se clasifica por el cociente PaO2 entre FiO2: leve de 200 a 300, moderado de 100 a 200 y grave menor de 100. La sepsis es su causa más frecuente. El tratamiento incluye ventilación protectora con volumen corriente de 6 mL por kilo de peso ideal, presión meseta menor de 30, PEEP adecuada y posición prona en los casos graves.
+R: Definición de Berlín del síndrome de dificultad respiratoria aguda ;; Campaña para sobrevivir a la sepsis
+
+@ urg|shock|septic_shock|2|next_step
+V: Mujer de 50 años con choque séptico en reanimación. Ha recibido 4 litros de cristaloides. Ahora presenta estertores bilaterales, saturación en descenso y el ultrasonido muestra líneas B difusas y vena cava dilatada sin variación respiratoria.
+P: ¿Cuál es la conducta más apropiada respecto a los líquidos?
++ Suspender los bolos de líquido y continuar con vasopresores para mantener la presión || Hay signos de sobrecarga y ya no responde a volumen.
+- anchoring | Administrar otros 2 litros de cristaloide || Agravaría el edema pulmonar.
+- availability_heuristic | Suspender la norepinefrina || Es necesaria para la presión.
+- representativeness_heuristic | Administrar albúmina en bolo rápido para expandir más || No está indicada con sobrecarga.
+- premature_closure | Ignorar los hallazgos del ultrasonido || Guían el manejo.
+- framing_effect | Administrar solución glucosada al 5 por ciento en lugar de cristaloides || No resuelve el problema.
+- complexity_bias | Hemodiálisis urgente de rutina || Solo si hay indicación.
+- base_rate_fallacy | En la sepsis nunca hay riesgo de sobrecarga de líquidos || La sobrecarga aumenta la mortalidad.
+- belief_bias | Más líquido siempre mejora la presión en sepsis || No en pacientes que no responden a volumen.
+- omission_bias | No valorar soporte ventilatorio || La hipoxemia puede requerirlo.
+E: La reanimación con líquidos en la sepsis es esencial, pero el exceso de líquidos se asocia con edema pulmonar, hipertensión intraabdominal, lesión renal y mayor mortalidad. Después de la reanimación inicial, los líquidos adicionales deben guiarse por la evaluación de la respuesta a volumen con parámetros dinámicos, como la elevación pasiva de piernas, la variación de la presión de pulso o el ultrasonido. Cuando aparecen signos de sobrecarga, como estertores, líneas B difusas y vena cava dilatada sin variación respiratoria, se suspenden los bolos y se mantiene la presión con vasopresores.
+R: Campaña para sobrevivir a la sepsis ;; Guía de Práctica Clínica de diagnóstico y tratamiento de sepsis grave y choque séptico en el adulto

@@ -1,0 +1,367 @@
+@ fam|chronic_disease_primary|hypertension_primary_care|2|confirmatory_study
+V: Hombre de 45 años, asintomático, con presión arterial de 148/94 mmHg en dos consultas separadas, medida con técnica correcta. No tiene daño a órgano blanco conocido. Refiere que en la farmacia le han medido cifras normales.
+P: ¿Cuál es el estudio de elección para confirmar el diagnóstico de hipertensión arterial?
++ Monitoreo ambulatorio de presión arterial de 24 horas o automonitoreo domiciliario estandarizado || Confirma la hipertensión y descarta la hipertensión de bata blanca.
+- anchoring | Ecocardiograma transtorácico || Evalúa daño a órgano blanco, no confirma el diagnóstico.
+- availability_heuristic | Una sola medición más en el consultorio || Persiste el riesgo de bata blanca.
+- representativeness_heuristic | Iniciar tratamiento sin confirmar || Puede sobretratar una hipertensión de bata blanca.
+- premature_closure | Electrocardiograma de esfuerzo || No confirma hipertensión.
+- framing_effect | Medir catecolaminas en orina || Solo ante sospecha de feocromocitoma.
+- complexity_bias | Angiotomografía de arterias renales || Se usa ante sospecha de causa renovascular.
+- base_rate_fallacy | Medición en la farmacia sin estandarizar como diagnóstico definitivo || No es un método validado.
+- belief_bias | Radiografía de tórax || No confirma el diagnóstico.
+- information_bias | Fondo de ojo como prueba diagnóstica de hipertensión || Evalúa daño, no confirma.
+E: El diagnóstico de hipertensión arterial requiere mediciones repetidas con técnica adecuada. Antes de iniciar tratamiento en pacientes sin daño a órgano blanco ni cifras muy elevadas, se recomienda confirmar con mediciones fuera del consultorio. El monitoreo ambulatorio de 24 horas es el estándar de referencia; un promedio de 24 horas de 130/80 mmHg o más confirma hipertensión. El automonitoreo domiciliario con equipo validado, con promedio de 135/85 o más, es una alternativa accesible. Estas mediciones identifican la hipertensión de bata blanca, cifras elevadas solo en consultorio, y la hipertensión enmascarada, cifras normales en consultorio pero elevadas fuera.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel ;; Norma Oficial Mexicana para la prevención, detección, diagnóstico, tratamiento y control de la hipertensión arterial sistémica
+
+@ fam|chronic_disease_primary|hypertension_primary_care|2|initial_treatment
+V: Mujer de 52 años con hipertensión arterial confirmada de 146/92 mmHg. Sin diabetes, sin enfermedad renal ni cardiopatía. Ya intentó 3 meses de cambios en el estilo de vida sin alcanzar la meta.
+P: ¿Cuál es el tratamiento inicial farmacológico más apropiado?
++ Un fármaco de primera línea, como inhibidor de la enzima convertidora, antagonista del receptor de angiotensina, calcioantagonista dihidropiridínico o diurético tiazídico || Todos reducen eventos cardiovasculares.
+- anchoring | Betabloqueador como única primera opción en todos los casos || Se reserva para indicaciones específicas.
+- availability_heuristic | Alfa bloqueador como prazosina || No es de primera línea.
+- representativeness_heuristic | Seguir solo con cambios en el estilo de vida indefinidamente || Ya fallaron.
+- premature_closure | Clonidina || Causa hipertensión de rebote.
+- framing_effect | Combinar inhibidor de la enzima convertidora con antagonista del receptor de angiotensina || La doble inhibición está contraindicada.
+- complexity_bias | Cuatro fármacos desde el inicio || No está indicado.
+- base_rate_fallacy | Nifedipino sublingual || Es peligroso por hipotensión brusca.
+- belief_bias | Diurético de asa como furosemida de primera línea || No es de elección sin edema o insuficiencia renal avanzada.
+- omission_bias | No dar seguimiento al mes || Debe evaluarse la respuesta.
+E: El tratamiento de la hipertensión arterial inicia con cambios en el estilo de vida: reducción de sodio a menos de 2 gramos al día, dieta tipo DASH, actividad física, pérdida de peso y moderación del alcohol. Si no se alcanza la meta, o desde el inicio con cifras altas o riesgo cardiovascular elevado, se agregan fármacos. Los de primera línea son inhibidores de la enzima convertidora de angiotensina, antagonistas del receptor de angiotensina, calcioantagonistas dihidropiridínicos y diuréticos tiazídicos o similares. Los betabloqueadores se reservan para indicaciones como cardiopatía isquémica, insuficiencia cardiaca o control de frecuencia. Se revalúa en 4 semanas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel ;; Norma Oficial Mexicana para la prevención, detección, diagnóstico, tratamiento y control de la hipertensión arterial sistémica
+
+@ fam|chronic_disease_primary|hypertension_primary_care|3|initial_treatment
+V: Hombre de 55 años con hipertensión recién diagnosticada, presión arterial de 168/102 mmHg confirmada. Sin síntomas ni datos de daño agudo a órgano blanco. Sin comorbilidades.
+P: ¿Cuál es el tratamiento inicial más apropiado?
++ Combinación de dos fármacos de primera línea, idealmente en una sola tableta || Está a más de 20/10 mmHg por arriba de la meta.
+- anchoring | Monoterapia a dosis bajas || Tiene baja probabilidad de alcanzar la meta.
+- availability_heuristic | Hospitalización para tratamiento intravenoso || No hay urgencia hipertensiva con daño agudo.
+- representativeness_heuristic | Solo cambios en el estilo de vida por 6 meses || Las cifras requieren tratamiento farmacológico.
+- premature_closure | Nifedipino sublingual en consultorio || Puede causar isquemia por hipotensión brusca.
+- framing_effect | Combinar dos fármacos del mismo grupo || No es una combinación racional.
+- complexity_bias | Iniciar con cuatro fármacos || No está indicado.
+- base_rate_fallacy | Esperar a tener daño renal para tratar || Se debe tratar ya.
+- belief_bias | Betabloqueador con diurético como primera combinación obligatoria || No es la combinación preferida.
+- omission_bias | No solicitar estudios basales || Se requieren laboratorio y electrocardiograma.
+E: En pacientes con presión arterial 20/10 mmHg o más por encima de la meta, o con hipertensión grado 2, se recomienda iniciar con una combinación de dos fármacos de primera línea, preferentemente en una sola tableta para mejorar el apego. Las combinaciones preferidas son un bloqueador del sistema renina angiotensina con un calcioantagonista dihidropiridínico o con un diurético tiazídico. Si no se alcanza la meta, se usa triple terapia. Al diagnóstico se solicitan química sanguínea, electrolitos, examen general de orina, cociente albúmina creatinina, perfil de lípidos y electrocardiograma. Una cifra elevada sin daño agudo no requiere descenso inmediato.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel ;; Guía de la Sociedad Europea de Hipertensión
+
+@ fam|chronic_disease_primary|hypertension_primary_care|2|next_step
+V: Mujer de 60 años con hipertensión en tratamiento con enalapril desde hace 2 meses. Presión controlada, pero refiere tos seca persistente que le impide dormir. Sin fiebre ni otros síntomas respiratorios.
+P: ¿Cuál es la conducta más apropiada?
++ Cambiar el enalapril por un antagonista del receptor de angiotensina, como losartán || La tos por inhibidores de la enzima convertidora se debe a bradicinina y es menos frecuente con los antagonistas.
+- anchoring | Mantener el enalapril y dar antitusivo || La tos persistirá.
+- availability_heuristic | Solicitar radiografía y tomografía de tórax de inmediato || El cuadro es típico del fármaco.
+- representativeness_heuristic | Agregar antibiótico || No hay datos de infección.
+- premature_closure | Suspender todo tratamiento antihipertensivo || Debe mantener el control.
+- framing_effect | Cambiar a otro inhibidor de la enzima convertidora || Es un efecto de clase.
+- complexity_bias | Broncoscopia || No está indicada.
+- base_rate_fallacy | Asumir que tiene asma de inicio tardío || La relación temporal con el fármaco es clara.
+- belief_bias | Agregar losartán al enalapril || La combinación está contraindicada.
+- omission_bias | No preguntar por angioedema || Es un efecto grave que debe vigilarse.
+E: La tos seca es un efecto adverso frecuente de los inhibidores de la enzima convertidora de angiotensina, en 5 a 20 por ciento de los pacientes, más común en mujeres. Se debe a la acumulación de bradicinina y sustancia P, que normalmente degrada la enzima convertidora. Es un efecto de clase, por lo que cambiar a otro inhibidor no sirve. Los antagonistas del receptor de angiotensina tienen beneficios similares y rara vez causan tos. La tos desaparece de días a semanas después de suspender el fármaco. El angioedema es un efecto raro pero grave relacionado con el mismo mecanismo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel ;; Guía de farmacovigilancia de antihipertensivos
+
+@ fam|chronic_disease_primary|hypertension_primary_care|3|treatment_of_choice
+V: Hombre de 62 años con hipertensión tratada con losartán 100 mg, amlodipino 10 mg e hidroclorotiazida 25 mg con buen apego confirmado. Presión de 150/92 mmHg en monitoreo ambulatorio. Potasio sérico de 4.1 mEq/L y filtración de 70 mL/min.
+P: ¿Cuál es el fármaco de elección para agregar?
++ Espironolactona || Es el cuarto fármaco de elección en la hipertensión resistente.
+- anchoring | Aumentar la hidroclorotiazida a 100 mg || Aumenta efectos adversos sin beneficio proporcional.
+- availability_heuristic | Agregar enalapril al losartán || La doble inhibición está contraindicada.
+- representativeness_heuristic | Clonidina como primera opción || Tiene más efectos adversos y rebote.
+- premature_closure | Sustituir todo el esquema por un betabloqueador || Empeora el control.
+- framing_effect | Nifedipino además del amlodipino || Duplica la misma clase.
+- complexity_bias | Denervación renal como primer paso || No es el primer paso.
+- base_rate_fallacy | Asumir falta de apego sin evidencia || El apego está confirmado.
+- belief_bias | Furosemida con función renal normal || Las tiazidas o la espironolactona son preferibles.
+- omission_bias | No buscar causas secundarias como hiperaldosteronismo || La resistencia obliga a buscarlas.
+E: La hipertensión resistente se define como presión arterial por arriba de la meta a pesar de tres fármacos de diferentes clases a dosis óptimas, incluido un diurético, una vez confirmado el apego y descartada la hipertensión de bata blanca con monitoreo ambulatorio. Se deben buscar causas secundarias, como hiperaldosteronismo primario, apnea obstructiva del sueño y enfermedad renal, y fármacos que suben la presión, como antiinflamatorios. El estudio PATHWAY-2 demostró que la espironolactona es el cuarto fármaco más eficaz. Se vigilan potasio y función renal por el riesgo de hiperpotasemia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel ;; Guía de la Sociedad Europea de Hipertensión
+
+@ fam|chronic_disease_primary|hypertension_primary_care|3|initial_study
+V: Mujer de 32 años con hipertensión de 160/100 mmHg de reciente diagnóstico, sin antecedentes familiares ni obesidad. Potasio sérico de 2.9 mEq/L sin usar diuréticos. Refiere debilidad muscular.
+P: ¿Cuál es el estudio inicial más apropiado para buscar la causa?
++ Cociente aldosterona renina plasmática || La hipopotasemia espontánea sugiere hiperaldosteronismo primario.
+- anchoring | Tomografía de suprarrenales como primer estudio || Se realiza después de confirmar bioquímicamente.
+- availability_heuristic | Ecocardiograma || No identifica la causa.
+- representativeness_heuristic | Considerarla hipertensión esencial sin estudios || La edad y la hipopotasemia sugieren causa secundaria.
+- premature_closure | Cortisol en saliva nocturna como primer estudio || Corresponde a sospecha de Cushing.
+- framing_effect | Gammagrama tiroideo || No está indicado.
+- complexity_bias | Muestreo venoso suprarrenal de inicio || Se realiza al final del algoritmo.
+- base_rate_fallacy | Metanefrinas como primer estudio sin crisis paroxísticas || No es la primera sospecha.
+- belief_bias | La hipopotasemia es siempre por dieta || Es espontánea y sugiere exceso de mineralocorticoides.
+- omission_bias | Iniciar diurético tiazídico sin estudiar || Empeoraría la hipopotasemia.
+E: Se sospecha hipertensión secundaria en pacientes jóvenes, con hipertensión grave o resistente, de inicio súbito, o con hallazgos sugestivos. El hiperaldosteronismo primario es la causa endocrina más frecuente y se caracteriza por hipertensión con hipopotasemia espontánea o inducida por diuréticos, aunque la mayoría tiene potasio normal. El estudio de tamizaje es el cociente aldosterona renina plasmática. Si es positivo se confirma con pruebas de supresión, como la infusión de solución salina, y después se localiza con tomografía y muestreo venoso suprarrenal para distinguir adenoma de hiperplasia bilateral.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de hiperaldosteronismo primario ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel
+
+@ fam|chronic_disease_primary|hypertension_primary_care|3|next_step
+V: Hombre de 58 años con hipertensión conocida que suspendió su tratamiento hace 2 semanas. En consulta tiene presión arterial de 186/112 mmHg. Asintomático, sin dolor torácico, disnea, cefalea intensa ni déficit neurológico. Electrocardiograma y examen general de orina sin cambios agudos.
+P: ¿Cuál es la conducta más apropiada?
++ Reiniciar tratamiento antihipertensivo oral y revalorar en días || Es una hipertensión grave sin daño agudo a órgano blanco.
+- anchoring | Enviar a urgencias para nitroprusiato intravenoso || No es una emergencia hipertensiva.
+- availability_heuristic | Nifedipino sublingual en el consultorio || Puede causar hipotensión e isquemia.
+- representativeness_heuristic | Bajar la presión a 120/80 en una hora || El descenso rápido es peligroso.
+- premature_closure | No hacer nada porque está asintomático || Requiere reiniciar tratamiento.
+- framing_effect | Hospitalizar en terapia intensiva || No está indicado.
+- complexity_bias | Tomografía de cráneo urgente || No hay datos neurológicos.
+- base_rate_fallacy | Toda presión mayor de 180/110 es una emergencia || Depende del daño agudo.
+- belief_bias | Captopril sublingual cada 15 minutos hasta normalizar || El descenso rápido no está indicado.
+- omission_bias | No investigar el motivo del abandono del tratamiento || Es clave para el apego.
+E: La hipertensión grave con presión mayor de 180/110 mmHg sin daño agudo a órgano blanco, antes llamada urgencia hipertensiva, se maneja con tratamiento oral, reiniciando o ajustando los antihipertensivos, con descenso gradual en horas a días y seguimiento cercano. La emergencia hipertensiva se distingue por la presencia de daño agudo, como encefalopatía, evento vascular cerebral, síndrome coronario agudo, edema pulmonar, disección aórtica, preeclampsia o lesión renal aguda, y requiere fármacos intravenosos en una unidad de cuidados intensivos. El nifedipino sublingual está proscrito por el riesgo de hipotensión brusca e isquemia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las crisis hipertensivas ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel
+
+@ fam|chronic_disease_primary|hypertension_primary_care|2|complication_prognosis
+V: Hombre de 68 años con hipertensión tratada con hidroclorotiazida 25 mg desde hace un año. Acude por dolor intenso, enrojecimiento y aumento de volumen de la primera articulación metatarsofalángica derecha de inicio nocturno.
+P: ¿Cuál es la complicación del tratamiento que explica este cuadro?
++ Hiperuricemia inducida por tiazidas que desencadena gota || Las tiazidas reducen la excreción renal de ácido úrico.
+- anchoring | Hipopotasemia que causa artritis || La hipopotasemia no causa artritis.
+- availability_heuristic | Artritis séptica por bacteriemia del diurético || No hay relación.
+- representativeness_heuristic | Hiponatremia que causa inflamación articular || No causa artritis.
+- premature_closure | Reacción alérgica cutánea localizada || El cuadro es articular.
+- framing_effect | Osteoartritis primaria aguda || No tiene este inicio.
+- complexity_bias | Vasculitis por hidroclorotiazida || Es muy rara.
+- base_rate_fallacy | Hipercalcemia que causa seudogota exclusivamente || La gota es más probable.
+- belief_bias | Las tiazidas disminuyen el ácido úrico || Lo aumentan.
+- focusing_illusion | Fractura por estrés del primer metatarsiano || No explica la inflamación.
+E: Los diuréticos tiazídicos tienen efectos metabólicos que deben vigilarse: hiperuricemia, hipopotasemia, hiponatremia, hipercalcemia, hiperglucemia y dislipidemia. La hiperuricemia se debe a la competencia con el ácido úrico por la secreción en el túbulo proximal y al aumento de su reabsorción por la contracción de volumen, y puede desencadenar ataques de gota, típicamente en la primera articulación metatarsofalángica. En pacientes con gota se prefieren otros antihipertensivos; el losartán tiene un efecto uricosúrico modesto. La crisis aguda se trata con antiinflamatorios no esteroideos, colchicina o esteroides.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la gota ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel
+
+@ fam|chronic_disease_primary|hypertension_primary_care|2|prevention_screening
+V: Hombre de 50 años con hipertensión grado 1 recién diagnosticada. Consume comida rápida frecuentemente, agrega sal a la mesa y es sedentario. Índice de masa corporal de 29.
+P: ¿Cuál es la recomendación de estilo de vida con mayor efecto sobre la presión arterial?
++ Dieta tipo DASH rica en frutas, verduras y lácteos bajos en grasa con reducción de sodio || Puede reducir la presión sistólica hasta 11 mmHg.
+- anchoring | Suspender solo el café || Tiene un efecto mínimo.
+- availability_heuristic | Suplementos de ajo como medida principal || No tienen evidencia suficiente.
+- representativeness_heuristic | Reposo absoluto para bajar la presión || El ejercicio la reduce.
+- premature_closure | Dieta alta en proteína sin restricción de sodio || No reduce la presión.
+- framing_effect | Sustituir sal por consomé en cubos || Contiene mucho sodio.
+- complexity_bias | Ayuno intermitente prolongado como única medida || No es la recomendación principal.
+- base_rate_fallacy | Los cambios en el estilo de vida no reducen la presión || Tienen un efecto comparable a un fármaco.
+- belief_bias | La sal de mar no eleva la presión || Contiene la misma cantidad de sodio.
+- omission_bias | No recomendar actividad física || Reduce la presión entre 4 y 8 mmHg.
+E: Los cambios en el estilo de vida son la base del tratamiento de la hipertensión y pueden tener un efecto similar al de un fármaco. La dieta tipo DASH, rica en frutas, verduras, granos enteros y lácteos bajos en grasa, reduce la presión sistólica alrededor de 11 mmHg en hipertensos. La reducción de sodio a menos de 2 gramos al día, equivalente a 5 gramos de sal, la reduce de 5 a 6 mmHg. La pérdida de peso reduce 1 mmHg por cada kilo perdido, la actividad física aeróbica de 150 minutos semanales de 5 a 8 mmHg y la moderación del alcohol unos 4 mmHg. Los consomés en cubo y los embutidos son fuentes ocultas de sodio.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel ;; Norma Oficial Mexicana para la prevención, detección, diagnóstico, tratamiento y control de la hipertensión arterial sistémica
+
+@ fam|chronic_disease_primary|hypertension_primary_care|3|next_step
+V: Hombre de 70 años con hipertensión y cardiopatía isquémica, en tratamiento con enalapril. Dos semanas después de iniciarlo, la creatinina aumentó de 1.0 a 1.9 mg/dL. Se escucha un soplo abdominal periumbilical.
+P: ¿Cuál es la conducta más apropiada?
++ Suspender el enalapril y estudiar estenosis bilateral de arterias renales || Un aumento mayor de 30 por ciento de la creatinina sugiere enfermedad renovascular.
+- anchoring | Mantener el enalapril porque todo aumento de creatinina es aceptable || Un aumento mayor de 30 por ciento no lo es.
+- availability_heuristic | Duplicar la dosis de enalapril || Empeoraría la función renal.
+- representativeness_heuristic | Agregar losartán al enalapril || Está contraindicado.
+- premature_closure | Atribuir el aumento a deshidratación sin estudiar || El soplo sugiere causa renovascular.
+- framing_effect | Iniciar hemodiálisis de inmediato || No está indicada.
+- complexity_bias | Biopsia renal urgente || No es el estudio inicial.
+- base_rate_fallacy | La estenosis renal solo ocurre en mujeres jóvenes || La aterosclerótica es la más frecuente en adultos mayores.
+- belief_bias | Los inhibidores de la enzima convertidora siempre protegen el riñón || En estenosis bilateral pueden causar insuficiencia renal.
+- omission_bias | No medir potasio || Puede haber hiperpotasemia.
+E: En la estenosis bilateral de arterias renales, o unilateral en riñón único, la filtración glomerular depende de la vasoconstricción de la arteriola eferente mediada por angiotensina II. Los inhibidores de la enzima convertidora y los antagonistas del receptor de angiotensina bloquean este mecanismo y pueden causar insuficiencia renal aguda. Un aumento de creatinina mayor de 30 por ciento tras iniciarlos, sobre todo en un adulto mayor con aterosclerosis, soplo abdominal o hipertensión resistente, obliga a suspender el fármaco y estudiar la causa renovascular con ultrasonido Doppler, angiotomografía o angiorresonancia. La causa más frecuente en adultos mayores es la aterosclerosis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión renovascular ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel
+
+@ fam|chronic_disease_primary|hypertension_primary_care|2|initial_treatment
+V: Mujer de 78 años con presión arterial de 164/76 mmHg en varias tomas y confirmada con automonitoreo. Funcional, independiente, sin hipotensión ortostática. Sin otras enfermedades.
+P: ¿Cuál es el tratamiento inicial más apropiado?
++ Calcioantagonista dihidropiridínico o diurético tiazídico a dosis bajas con titulación gradual || Son eficaces en la hipertensión sistólica aislada del adulto mayor.
+- anchoring | No tratar por la edad || El tratamiento reduce eventos cardiovasculares en adultos mayores.
+- availability_heuristic | Betabloqueador como primera opción || Es menos eficaz para prevenir eventos cerebrovasculares.
+- representativeness_heuristic | Bajar la presión a menos de 110/60 rápidamente || Aumenta el riesgo de caídas.
+- premature_closure | Alfa bloqueador como doxazosina || Causa hipotensión ortostática.
+- framing_effect | Clonidina como primera línea || Tiene efectos adversos centrales.
+- complexity_bias | Triple terapia desde el inicio || Aumenta el riesgo de hipotensión.
+- base_rate_fallacy | La hipertensión sistólica aislada es normal en el envejecimiento || Es un factor de riesgo importante.
+- belief_bias | La presión diastólica normal excluye la necesidad de tratamiento || La sistólica es la que predice el riesgo.
+- omission_bias | No medir la presión de pie en el seguimiento || Debe vigilarse la hipotensión ortostática.
+E: La hipertensión sistólica aislada, con sistólica de 140 o más y diastólica menor de 90 mmHg, es la forma más frecuente en adultos mayores, por la rigidez arterial. Su tratamiento reduce el riesgo de evento vascular cerebral, insuficiencia cardiaca y muerte, incluso en mayores de 80 años, como mostró el estudio HYVET. Se prefieren calcioantagonistas dihidropiridínicos o diuréticos tiazídicos, iniciando a dosis bajas y titulando gradualmente. En adultos mayores funcionales la meta sistólica habitual es de 130 a 139 mmHg si se tolera. Se debe vigilar la hipotensión ortostática y las caídas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el adulto mayor ;; Guía de la Sociedad Europea de Hipertensión
+
+@ fam|chronic_disease_primary|hypertension_primary_care|3|next_step
+V: Hombre de 65 años con hipertensión, diabetes y enfermedad renal crónica, en tratamiento con losartán y espironolactona. En el control, potasio sérico de 6.2 mEq/L sin cambios en el electrocardiograma. Asintomático.
+P: ¿Cuál es la conducta más apropiada?
++ Suspender la espironolactona, revisar la dieta y otros fármacos y repetir el potasio pronto || La hiperpotasemia moderada obliga a retirar el ahorrador de potasio.
+- anchoring | Mantener los fármacos y repetir el potasio en 6 meses || Es un riesgo de arritmia.
+- availability_heuristic | Agregar suplementos de potasio || Agravaría la hiperpotasemia.
+- representativeness_heuristic | Agregar enalapril || Aumenta el potasio.
+- premature_closure | Atribuirlo siempre a hemólisis sin repetir || Debe confirmarse, pero no ignorarse.
+- framing_effect | Recomendar sustitutos de sal con cloruro de potasio || Aumentan el potasio.
+- complexity_bias | Hemodiálisis urgente en un paciente estable sin cambios eléctricos || No es el primer paso.
+- base_rate_fallacy | La espironolactona no afecta el potasio || Lo retiene.
+- belief_bias | Agregar un antiinflamatorio no esteroideo || Aumenta el potasio y daña el riñón.
+- omission_bias | No revisar la función renal || Debe evaluarse.
+E: La hiperpotasemia es un efecto adverso frecuente de los bloqueadores del sistema renina angiotensina aldosterona, sobre todo combinados con antagonistas de mineralocorticoides como la espironolactona, en pacientes con diabetes y enfermedad renal crónica. Ante un potasio mayor de 6 mEq/L sin cambios en el electrocardiograma, se suspende el ahorrador de potasio, se revisan otros fármacos que lo elevan, como antiinflamatorios, trimetoprim y heparina, se limita el potasio en la dieta y en los sustitutos de sal, y se repite la medición. Si hay cambios en el electrocardiograma o un potasio mayor de 6.5, se trata como urgencia.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la enfermedad renal crónica temprana ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel
+
+@ fam|chronic_disease_primary|hypertension_primary_care|2|prevention_screening
+V: Hombre de 47 años con hipertensión controlada con amlodipino. Fumador de 10 cigarros al día, colesterol LDL de 140 mg/dL. Pregunta cuál es su riesgo de tener un infarto.
+P: ¿Cuál es la herramienta preventiva más adecuada para guiar su tratamiento integral?
++ Estimar el riesgo cardiovascular global a 10 años con una escala validada || Permite decidir la intensidad de las intervenciones preventivas.
+- anchoring | Considerar solo la presión arterial porque ya está controlada || El riesgo depende de todos los factores.
+- availability_heuristic | Prueba de esfuerzo de tamizaje || No está indicada en asintomáticos de este perfil.
+- representativeness_heuristic | Cateterismo cardiaco diagnóstico || Es invasivo.
+- premature_closure | Medir solo el colesterol HDL || No basta.
+- framing_effect | Esperar a que tenga angina para evaluarlo || La prevención debe ser previa.
+- complexity_bias | Puntuación de calcio coronario a todos los pacientes || Se reserva para casos de riesgo intermedio.
+- base_rate_fallacy | El tabaquismo leve no aumenta el riesgo || Cualquier consumo aumenta el riesgo.
+- belief_bias | Ecocardiograma anual como prevención || No modifica el riesgo.
+- omission_bias | No ofrecer cesación tabáquica || Es la intervención más eficaz.
+E: El riesgo cardiovascular global integra varios factores, como edad, sexo, presión arterial, colesterol, tabaquismo y diabetes, para estimar la probabilidad de un evento cardiovascular en 10 años. Escalas como Globorisk, calibrada para México, o la de Framingham permiten clasificar el riesgo y decidir la intensidad del tratamiento, por ejemplo el uso de estatinas. En pacientes hipertensos, el control de la presión es solo una parte de la prevención: la cesación del tabaquismo, el control de lípidos, la actividad física y la alimentación saludable son igualmente importantes. Se recalcula el riesgo periódicamente.
+R: Guía de Práctica Clínica de prevención primaria de enfermedad cardiovascular ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel
+
+@ fam|chronic_disease_primary|dyslipidemia_family|3|treatment_of_choice
+V: Hombre de 58 años que sufrió un infarto agudo de miocardio hace 3 meses. Colesterol LDL de 118 mg/dL. Tolera bien los medicamentos. Función hepática y renal normales.
+P: ¿Cuál es el tratamiento hipolipemiante de elección?
++ Estatina de alta intensidad, como atorvastatina 40 a 80 mg o rosuvastatina 20 a 40 mg || En prevención secundaria la meta de LDL es menor de 55 mg/dL.
+- anchoring | Estatina de baja intensidad porque el LDL es casi normal || En prevención secundaria se requiere alta intensidad.
+- availability_heuristic | Fibrato como primera opción || La estatina es la base.
+- representativeness_heuristic | Solo dieta durante 6 meses antes de decidir || El riesgo es muy alto.
+- premature_closure | Omega 3 como único tratamiento || No sustituye la estatina.
+- framing_effect | Ezetimiba sola como primera línea || Se agrega a la estatina.
+- complexity_bias | Aféresis de lipoproteínas || Se reserva para casos extremos.
+- base_rate_fallacy | Niacina como primera opción || No reduce eventos con estatina.
+- belief_bias | No tratar porque el LDL es menor de 130 || El umbral depende del riesgo.
+- omission_bias | No medir lípidos a las 4 a 12 semanas || Se debe evaluar la respuesta.
+E: En pacientes con enfermedad cardiovascular aterosclerótica establecida, como infarto, evento vascular cerebral isquémico o enfermedad arterial periférica, se recomienda estatina de alta intensidad con meta de colesterol LDL menor de 55 mg/dL y reducción de al menos 50 por ciento respecto al basal. Las estatinas de alta intensidad reducen el LDL en 50 por ciento o más. Si no se alcanza la meta con la dosis máxima tolerada se agrega ezetimiba, y después un inhibidor de PCSK9. Se mide el perfil de lípidos a las 4 a 12 semanas. Las estatinas reducen eventos y mortalidad en prevención secundaria.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en el adulto ;; Guía de la Sociedad Europea de Cardiología para dislipidemias
+
+@ fam|chronic_disease_primary|dyslipidemia_family|3|treatment_of_choice
+V: Mujer de 45 años con triglicéridos de 1,100 mg/dL en ayuno. Tiene diabetes tipo 2 descontrolada y consume alcohol los fines de semana. Refiere un episodio previo de dolor abdominal intenso.
+P: ¿Cuál es el tratamiento farmacológico de elección para reducir el riesgo inmediato?
++ Fibrato, como fenofibrato, junto con control de la glucosa y suspensión del alcohol || Con triglicéridos mayores de 500 a 1,000 el objetivo es prevenir pancreatitis.
+- anchoring | Estatina como única medida || Tiene efecto modesto sobre triglicéridos tan elevados.
+- availability_heuristic | Ezetimiba || Actúa sobre el colesterol LDL.
+- representativeness_heuristic | Solo vigilar porque los triglicéridos no causan problemas || Aumentan el riesgo de pancreatitis.
+- premature_closure | Resinas secuestradoras de ácidos biliares || Aumentan los triglicéridos.
+- framing_effect | Dieta alta en carbohidratos y baja en grasa sin restricción de azúcares || Los azúcares elevan los triglicéridos.
+- complexity_bias | Plasmaféresis ambulatoria rutinaria || Se reserva para casos especiales.
+- base_rate_fallacy | Continuar con alcohol moderado || El alcohol eleva los triglicéridos.
+- belief_bias | Inhibidor de PCSK9 como primera opción || Actúa sobre LDL.
+- omission_bias | No buscar causas secundarias || La diabetes y el alcohol contribuyen.
+E: La hipertrigliceridemia grave, con triglicéridos mayores de 500 y sobre todo de 1,000 mg/dL, aumenta el riesgo de pancreatitis aguda. En este caso el objetivo inmediato es reducir los triglicéridos con fibratos, como fenofibrato o bezafibrato, junto con dieta muy baja en grasa y azúcares simples, suspensión del alcohol y control de causas secundarias como diabetes descontrolada, hipotiroidismo, obesidad y fármacos. Los ácidos grasos omega 3 en dosis altas son un complemento. Una vez controlados los triglicéridos, se evalúa el riesgo cardiovascular para decidir el uso de estatina. Las resinas están contraindicadas porque elevan los triglicéridos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en el adulto ;; Norma Oficial Mexicana para la prevención, tratamiento y control de las dislipidemias
+
+@ fam|chronic_disease_primary|dyslipidemia_family|3|diagnosis
+V: Hombre de 32 años con colesterol LDL de 260 mg/dL. Tiene xantomas en los tendones de Aquiles y arco corneal. Su padre murió de infarto a los 45 años.
+P: ¿Cuál es el diagnóstico más probable?
++ Hipercolesterolemia familiar heterocigota || LDL muy elevado, xantomas tendinosos y antecedente de cardiopatía prematura.
+- anchoring | Hipercolesterolemia secundaria a dieta || No explica los xantomas tendinosos.
+- availability_heuristic | Hipertrigliceridemia familiar || Afecta principalmente los triglicéridos.
+- representativeness_heuristic | Hipotiroidismo como única causa || Puede elevar el LDL, pero no explica el cuadro completo.
+- premature_closure | Dislipidemia mixta por obesidad || No tiene obesidad mencionada.
+- framing_effect | Disbetalipoproteinemia || Se asocia con xantomas palmares.
+- complexity_bias | Abetalipoproteinemia || Cursa con colesterol muy bajo.
+- base_rate_fallacy | Síndrome nefrótico || No hay datos renales.
+- belief_bias | Es normal por la edad || Es muy alto para cualquier edad.
+- focusing_illusion | Hiperquilomicronemia familiar || Cursa con triglicéridos muy altos y xantomas eruptivos.
+E: La hipercolesterolemia familiar es un trastorno autosómico dominante, causado principalmente por mutaciones del receptor de LDL, de APOB o de PCSK9. La forma heterocigota afecta a alrededor de 1 de cada 250 personas y se caracteriza por colesterol LDL mayor de 190 mg/dL en adultos, xantomas tendinosos, arco corneal antes de los 45 años y enfermedad coronaria prematura en el paciente o su familia. Se usan los criterios de la Red de Clínicas de Lípidos Holandesa. El tratamiento es estatina de alta intensidad, con ezetimiba e inhibidores de PCSK9 si es necesario. Se recomienda el tamizaje en cascada de los familiares.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en el adulto ;; Guía de Práctica Clínica de diagnóstico y tratamiento de hipercolesterolemia familiar
+
+@ fam|chronic_disease_primary|dyslipidemia_family|3|next_step
+V: Mujer de 66 años que inició atorvastatina 40 mg hace 6 semanas. Refiere dolor muscular simétrico en muslos sin debilidad. Creatina cinasa de 280 U/L, límite superior normal de 170. Orina de color normal.
+P: ¿Cuál es la conducta más apropiada?
++ Suspender temporalmente la estatina y reintentar con otra estatina o dosis menor al resolver los síntomas || La creatina cinasa es menor de 4 veces el límite y no hay rabdomiólisis.
+- anchoring | Suspender todas las estatinas de por vida || La mayoría tolera otro esquema.
+- availability_heuristic | Continuar la misma dosis sin cambios || Los síntomas afectan el apego.
+- representativeness_heuristic | Hospitalizar por rabdomiólisis || No hay datos de rabdomiólisis.
+- premature_closure | Duplicar la dosis de atorvastatina || Empeora los síntomas.
+- framing_effect | Agregar gemfibrozil || Aumenta el riesgo de miopatía.
+- complexity_bias | Biopsia muscular inmediata || No está indicada.
+- base_rate_fallacy | Asumir que el dolor no tiene relación con la estatina || La relación temporal es compatible.
+- belief_bias | La coenzima Q10 es obligatoria antes de cualquier ajuste || No tiene evidencia sólida.
+- omission_bias | No medir hormona estimulante de la tiroides || El hipotiroidismo aumenta el riesgo de miopatía.
+E: Los síntomas musculares asociados a estatinas son frecuentes, aunque la miopatía verdadera es rara y la rabdomiólisis muy rara. Ante mialgias se mide creatina cinasa. Si es menor de 4 veces el límite superior, se puede suspender temporalmente la estatina, esperar la resolución de los síntomas y reintentar con otra estatina, una dosis menor o dosis en días alternos. Si es mayor de 10 veces o hay datos de rabdomiólisis, como orina oscura o lesión renal, se suspende de inmediato. Se deben buscar factores predisponentes, como hipotiroidismo, deficiencia de vitamina D, interacciones con fármacos como gemfibrozil o macrólidos, y edad avanzada.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en el adulto ;; Guía de la Sociedad Europea de Cardiología para dislipidemias
+
+@ fam|chronic_disease_primary|dyslipidemia_family|2|initial_study
+V: Mujer de 50 años con colesterol LDL de 210 mg/dL de reciente detección. Refiere cansancio, intolerancia al frío, estreñimiento y aumento de peso en los últimos meses.
+P: ¿Cuál es el estudio inicial más apropiado antes de iniciar tratamiento hipolipemiante?
++ Hormona estimulante de la tiroides || El hipotiroidismo es una causa secundaria frecuente de hipercolesterolemia.
+- anchoring | Iniciar estatina sin estudios adicionales || Debe descartarse la causa secundaria.
+- availability_heuristic | Prueba genética de hipercolesterolemia familiar || No es el primer paso con síntomas sugestivos.
+- representativeness_heuristic | Angiotomografía coronaria || No identifica la causa.
+- premature_closure | Biopsia hepática || No está indicada.
+- framing_effect | Ultrasonido tiroideo como primer estudio || La función se evalúa primero con laboratorio.
+- complexity_bias | Medir apolipoproteína B y lipoproteína a como prioridad || No buscan causas secundarias.
+- base_rate_fallacy | Gammagrama tiroideo de inicio || No es el primer estudio.
+- belief_bias | El colesterol alto en mujeres siempre es genético || Hay causas secundarias frecuentes.
+- omission_bias | No preguntar por fármacos que elevan el colesterol || Son otra causa secundaria.
+E: Antes de iniciar tratamiento hipolipemiante se deben descartar causas secundarias de dislipidemia. Las más frecuentes son hipotiroidismo, diabetes descontrolada, síndrome nefrótico, enfermedad hepática colestásica, obesidad, consumo de alcohol y fármacos como glucocorticoides, retinoides, antirretrovirales, tiazidas y algunos anticonceptivos. El hipotiroidismo reduce la expresión del receptor de LDL y aumenta el colesterol LDL. Su tratamiento con levotiroxina puede normalizar los lípidos. Además, el hipotiroidismo no tratado aumenta el riesgo de miopatía por estatinas. Por ello se recomienda medir la hormona estimulante de la tiroides en todo paciente con dislipidemia de reciente diagnóstico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en el adulto ;; Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo primario en el adulto
+
+@ fam|chronic_disease_primary|dyslipidemia_family|3|next_step
+V: Hombre de 60 años con antecedente de evento vascular cerebral isquémico, en tratamiento con rosuvastatina 40 mg durante 3 meses con buen apego. Colesterol LDL de 82 mg/dL, previamente de 165.
+P: ¿Cuál es la conducta más apropiada para alcanzar la meta?
++ Agregar ezetimiba a la estatina || No alcanza la meta de LDL menor de 55 con la dosis máxima de estatina.
+- anchoring | Mantener el mismo tratamiento porque el LDL bajó a menos de 100 || La meta en muy alto riesgo es menor de 55.
+- availability_heuristic | Cambiar a otra estatina de baja intensidad || Perdería eficacia.
+- representativeness_heuristic | Suspender la estatina y usar solo ezetimiba || La estatina es la base.
+- premature_closure | Agregar fibrato || No es el siguiente paso para LDL.
+- framing_effect | Aumentar la rosuvastatina a 80 mg || No está aprobada esa dosis.
+- complexity_bias | Aféresis de LDL || Se reserva para casos extremos.
+- base_rate_fallacy | Agregar niacina || No reduce eventos.
+- belief_bias | El LDL bajo es peligroso para el cerebro || No hay evidencia de daño.
+- omission_bias | No reforzar cambios en el estilo de vida || Son complementarios.
+E: En pacientes de muy alto riesgo cardiovascular la meta de colesterol LDL es menor de 55 mg/dL con reducción de al menos 50 por ciento respecto al basal. Cuando no se alcanza con la dosis máxima tolerada de una estatina de alta intensidad, el siguiente paso es agregar ezetimiba, que inhibe la absorción intestinal de colesterol y reduce el LDL un 20 a 25 por ciento adicional, con reducción de eventos demostrada en el estudio IMPROVE-IT. Si aún no se alcanza la meta, se considera un inhibidor de PCSK9. Los fibratos y la niacina no son útiles para este objetivo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en el adulto ;; Guía de la Sociedad Europea de Cardiología para dislipidemias
+
+@ fam|chronic_disease_primary|dyslipidemia_family|2|next_step
+V: Mujer de 34 años con colesterol LDL de 170 mg/dL en tratamiento con atorvastatina 20 mg. Acude porque tiene una prueba de embarazo positiva de 5 semanas.
+P: ¿Cuál es la conducta más apropiada respecto a la estatina?
++ Suspender la estatina durante el embarazo y la lactancia || Las estatinas tradicionalmente se contraindican en el embarazo por su posible efecto en el desarrollo fetal.
+- anchoring | Aumentar la dosis por los cambios lipídicos del embarazo || El aumento del colesterol en el embarazo es fisiológico.
+- availability_heuristic | Cambiar a otra estatina más potente || Todas se evitan en el embarazo.
+- representativeness_heuristic | Recomendar interrupción del embarazo por la exposición || No está justificado.
+- premature_closure | Mantener la estatina sin cambios || No se recomienda en el embarazo.
+- framing_effect | Agregar fibrato durante el embarazo || No es adecuado.
+- complexity_bias | Iniciar inhibidor de PCSK9 en el embarazo || No hay datos de seguridad.
+- base_rate_fallacy | El colesterol alto en el embarazo requiere tratamiento intensivo urgente || Es transitorio.
+- belief_bias | La exposición temprana a estatina causa malformaciones en todos los casos || El riesgo es bajo.
+- omission_bias | No reiniciar ni evaluar el riesgo después del embarazo y la lactancia || Debe reevaluarse.
+E: El colesterol es esencial para el desarrollo fetal, y las estatinas se han considerado contraindicadas en el embarazo y la lactancia por su posible efecto teratógeno, aunque la evidencia reciente sugiere que el riesgo es bajo. En la mayoría de las mujeres en prevención primaria se suspenden al confirmar el embarazo y se reinician al terminar la lactancia. Durante el embarazo el colesterol y los triglicéridos aumentan de forma fisiológica. Las mujeres en edad fértil que reciben estatinas deben usar un método anticonceptivo eficaz. En casos de muy alto riesgo, como hipercolesterolemia familiar homocigota, se individualiza con especialista.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en el adulto ;; Guía de Práctica Clínica de control prenatal con enfoque de riesgo
+
+@ fam|chronic_disease_primary|dyslipidemia_family|2|prevention_screening
+V: Hombre de 44 años con colesterol LDL de 145 mg/dL, triglicéridos de 210 mg/dL y HDL de 35 mg/dL. Índice de masa corporal de 30, sedentario. Riesgo cardiovascular calculado bajo a 10 años.
+P: ¿Cuál es la recomendación inicial más apropiada?
++ Cambios terapéuticos en el estilo de vida con dieta, ejercicio y pérdida de peso, con nueva evaluación en 3 a 6 meses || Con riesgo bajo, el primer paso es el estilo de vida.
+- anchoring | Estatina de alta intensidad de inmediato || No está indicada como primer paso con riesgo bajo.
+- availability_heuristic | Fibrato más estatina desde el inicio || Aumenta efectos adversos sin indicación clara.
+- representativeness_heuristic | No hacer nada porque el riesgo es bajo || Requiere intervención en el estilo de vida.
+- premature_closure | Niacina para subir el HDL || No reduce eventos.
+- framing_effect | Dieta cetogénica estricta como única opción || No es la recomendación estándar.
+- complexity_bias | Inhibidor de PCSK9 || No está indicado.
+- base_rate_fallacy | El HDL bajo no tiene relación con el estilo de vida || Mejora con ejercicio y pérdida de peso.
+- belief_bias | Suplementos de omega 3 en lugar de cambios en el estilo de vida || No sustituyen las medidas generales.
+- omission_bias | No recalcular el riesgo en el seguimiento || Debe reevaluarse.
+E: En personas con dislipidemia y riesgo cardiovascular bajo, el tratamiento inicial se basa en cambios en el estilo de vida: reducción de grasas saturadas y trans, aumento de fibra soluble, limitación de azúcares y alcohol, actividad física aeróbica de al menos 150 minutos por semana y pérdida de peso de 5 a 10 por ciento. Estas medidas reducen el LDL y los triglicéridos y aumentan el HDL. Se revalúa en 3 a 6 meses y, si no se alcanzan las metas o el riesgo aumenta, se considera una estatina. Los fármacos para elevar el HDL no han demostrado reducir eventos cardiovasculares.
+R: Norma Oficial Mexicana para la prevención, tratamiento y control de las dislipidemias ;; Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en el adulto
+
+@ fam|chronic_disease_primary|dyslipidemia_family|3|complication_prognosis
+V: Hombre de 55 años en tratamiento con simvastatina 40 mg que recibe claritromicina por una neumonía. A los 5 días presenta debilidad muscular intensa, dolor generalizado y orina de color oscuro. Creatina cinasa de 25,000 U/L.
+P: ¿Cuál es la complicación más probable?
++ Rabdomiólisis por interacción entre simvastatina y claritromicina || La claritromicina inhibe el CYP3A4 y aumenta las concentraciones de simvastatina.
+- anchoring | Miositis viral por la neumonía || La interacción farmacológica explica mejor el cuadro.
+- availability_heuristic | Mialgias leves por estatina || La creatina cinasa muy elevada indica rabdomiólisis.
+- representativeness_heuristic | Hepatitis por estatina || El cuadro es muscular.
+- premature_closure | Polimialgia reumática || No cursa con creatina cinasa elevada.
+- framing_effect | Síndrome de Guillain-Barré || No explica la orina oscura ni la creatina cinasa.
+- complexity_bias | Miopatía necrosante autoinmune || Es rara y no explica la relación temporal.
+- base_rate_fallacy | Hipotiroidismo agudo || No tiene este curso.
+- belief_bias | Las estatinas no interactúan con antibióticos || La interacción es conocida.
+- focusing_illusion | Deshidratación simple || No explica la creatina cinasa tan elevada.
+E: La rabdomiólisis es la complicación muscular más grave de las estatinas, con necrosis muscular, creatina cinasa mayor de 10 veces el límite superior, mioglobinuria y riesgo de lesión renal aguda. El riesgo aumenta con dosis altas y con interacciones que elevan las concentraciones de la estatina. La simvastatina, la lovastatina y la atorvastatina se metabolizan por el citocromo CYP3A4, que es inhibido por macrólidos como claritromicina, antifúngicos azólicos, inhibidores de proteasa y jugo de toronja. El gemfibrozil también aumenta el riesgo. El tratamiento es suspender la estatina e hidratar intensamente. La azitromicina tiene menos interacciones.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en el adulto ;; Guía de Práctica Clínica de diagnóstico y tratamiento de rabdomiólisis
+
+@ fam|chronic_disease_primary|dyslipidemia_family|2|next_step
+V: Hombre de 52 años que iniciará atorvastatina 20 mg por riesgo cardiovascular intermedio. No tiene enfermedad hepática conocida ni consume alcohol en exceso.
+P: ¿Cuál es la conducta más apropiada antes de iniciar el tratamiento?
++ Medir perfil de lípidos y transaminasas basales || Permiten evaluar la respuesta y detectar alteraciones hepáticas previas.
+- anchoring | Medir creatina cinasa cada mes de forma rutinaria || Solo se mide si hay síntomas.
+- availability_heuristic | Biopsia hepática basal || No está indicada.
+- representativeness_heuristic | Ultrasonido hepático obligatorio || No es necesario de rutina.
+- premature_closure | Iniciar sin ningún estudio basal || Se recomienda medir lípidos y transaminasas.
+- framing_effect | Electromiografía basal || No está indicada.
+- complexity_bias | Resonancia magnética muscular || No está indicada.
+- base_rate_fallacy | Las estatinas causan insuficiencia hepática frecuentemente || Es muy rara.
+- belief_bias | Medir transaminasas cada semana durante un año || No es necesario.
+- omission_bias | No explicar los posibles síntomas musculares || Es parte de la educación.
+E: Antes de iniciar una estatina se recomienda medir el perfil de lípidos y las transaminasas, especialmente la alanina aminotransferasa, y valorar la creatina cinasa solo si hay riesgo de miopatía o síntomas previos. La elevación de transaminasas menor de 3 veces el límite superior es frecuente, generalmente transitoria y no obliga a suspender. La hepatotoxicidad grave es muy rara. No se recomienda medir transaminasas ni creatina cinasa de forma rutinaria en el seguimiento sin síntomas. El perfil de lípidos se repite a las 4 a 12 semanas para evaluar respuesta y apego, y después anualmente.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en el adulto ;; Guía de la Sociedad Europea de Cardiología para dislipidemias

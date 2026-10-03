@@ -1,0 +1,223 @@
+@ urg|cardiovascular_emergencies|arrhythmia|2|treatment_of_choice
+V: Mujer de 30 años con palpitaciones súbitas de 30 minutos. Frecuencia cardiaca de 190, presión de 110/70 mmHg, sin datos de inestabilidad. El electrocardiograma muestra taquicardia regular de complejos estrechos sin ondas P visibles. Las maniobras vagales no fueron eficaces.
+P: ¿Cuál es el tratamiento de elección?
++ Adenosina 6 mg intravenosa en bolo rápido seguida de solución, con 12 mg si no responde || Es el fármaco de elección para la taquicardia supraventricular por reentrada estable.
+- anchoring | Cardioversión eléctrica sincronizada inmediata en paciente estable || Se reserva para inestabilidad o falla farmacológica.
+- availability_heuristic | Amiodarona como primera opción || No es la primera elección en reentrada nodal estable.
+- representativeness_heuristic | Digoxina intravenosa como primera línea || Tiene inicio lento.
+- premature_closure | Desfibrilación no sincronizada || Está indicada solo en ritmos de paro.
+- framing_effect | Atropina || Aumentaría la frecuencia.
+- complexity_bias | Ablación urgente en urgencias || Es un tratamiento electivo.
+- base_rate_fallacy | La adenosina se administra en infusión lenta || Se da en bolo rápido por su vida media corta.
+- belief_bias | La adenosina tiene efectos adversos prolongados || Sus efectos duran segundos.
+- omission_bias | No advertir a la paciente sobre la sensación transitoria de malestar || Es frecuente.
+E: La taquicardia supraventricular paroxística por reentrada, nodal o por vía accesoria ortodrómica, se presenta con palpitaciones súbitas y taquicardia regular de complejos estrechos. En pacientes estables, el primer paso son las maniobras vagales, como la maniobra de Valsalva modificada. Si fallan, el tratamiento de elección es la adenosina intravenosa en bolo rápido de 6 mg, seguido de 12 mg si no hay respuesta, administrada en una vena proximal con lavado inmediato. Causa una sensación transitoria de opresión y rubor. Si hay inestabilidad, se realiza cardioversión sincronizada. Los calcioantagonistas no dihidropiridínicos son una alternativa.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las taquiarritmias supraventriculares ;; Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón
+
+@ urg|cardiovascular_emergencies|arrhythmia|2|next_step
+V: Hombre de 65 años con palpitaciones, presión de 70/40 mmHg, confusión y dolor torácico. El monitor muestra taquicardia regular de complejos anchos a 180 por minuto con pulso palpable.
+P: ¿Cuál es el siguiente paso más apropiado?
++ Cardioversión eléctrica sincronizada inmediata con sedación si es posible || Es una taquicardia con pulso e inestabilidad.
+- anchoring | Amiodarona intravenosa en infusión lenta como primera medida || Con inestabilidad se requiere cardioversión inmediata.
+- availability_heuristic | Desfibrilación no sincronizada || Hay pulso, se usa la cardioversión sincronizada.
+- representativeness_heuristic | Adenosina para diferenciar el ritmo || Retrasa el tratamiento en un paciente inestable.
+- premature_closure | Verapamilo intravenoso || Está contraindicado en taquicardia de complejos anchos.
+- framing_effect | Esperar el ecocardiograma || Retrasa el tratamiento.
+- complexity_bias | Ablación urgente || No es el primer paso.
+- base_rate_fallacy | La hipotensión en taquicardia siempre se corrige con líquidos || Requiere control del ritmo.
+- belief_bias | La cardioversión sincronizada solo sirve en ritmos auriculares || También en taquicardia ventricular con pulso.
+- omission_bias | No buscar la causa como isquemia o alteraciones electrolíticas || Debe investigarse.
+E: Ante una taquicardia con pulso, lo primero es evaluar si hay inestabilidad: hipotensión, alteración del estado mental, signos de choque, dolor torácico isquémico o insuficiencia cardiaca aguda. Si la hay, se realiza cardioversión eléctrica sincronizada inmediata, con sedación si el tiempo lo permite. La sincronización evita que la descarga caiga en el periodo vulnerable de la onda T y desencadene una fibrilación ventricular. En la taquicardia de complejos anchos regular se asume taquicardia ventricular hasta demostrar lo contrario. El verapamilo está contraindicado en taquicardias de complejos anchos.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de diagnóstico y tratamiento de las arritmias ventriculares
+
+@ urg|cardiovascular_emergencies|arrhythmia|3|treatment_of_choice
+V: Hombre de 55 años con taquicardia regular de complejos anchos a 160 por minuto, presión de 125/80 mmHg, sin dolor torácico ni alteración mental. Antecedente de infarto previo.
+P: ¿Cuál es el tratamiento farmacológico de elección?
++ Amiodarona intravenosa 150 mg en 10 minutos || Es el antiarrítmico de elección en taquicardia ventricular estable con cardiopatía estructural.
+- anchoring | Verapamilo intravenoso || Puede causar colapso hemodinámico en taquicardia ventricular.
+- availability_heuristic | Digoxina || No está indicada.
+- representativeness_heuristic | Atropina || No está indicada.
+- premature_closure | Desfibrilación no sincronizada en paciente estable con pulso || No está indicada.
+- framing_effect | Solo observación porque está estable || Puede deteriorarse.
+- complexity_bias | Ablación urgente sin control inicial || No es el primer paso.
+- base_rate_fallacy | Toda taquicardia de complejos anchos es supraventricular con aberrancia || Con cardiopatía es casi siempre ventricular.
+- belief_bias | La estabilidad hemodinámica descarta taquicardia ventricular || Puede ser ventricular aunque sea estable.
+- omission_bias | No preparar cardioversión por si se deteriora || Debe estar disponible.
+E: En pacientes con taquicardia de complejos anchos, especialmente con antecedente de infarto o cardiopatía estructural, debe asumirse taquicardia ventricular. Si el paciente está estable, puede tratarse con antiarrítmicos intravenosos como amiodarona, 150 mg en 10 minutos seguida de infusión, o procainamida, mientras se prepara la cardioversión sincronizada por si se deteriora. La estabilidad hemodinámica no descarta el origen ventricular. Los calcioantagonistas como el verapamilo están contraindicados, porque pueden causar hipotensión grave y paro. Se buscan causas como isquemia, hipopotasemia e hipomagnesemia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las arritmias ventriculares ;; Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón
+
+@ urg|cardiovascular_emergencies|arrhythmia|3|treatment_of_choice
+V: Mujer de 50 años con hipopotasemia por diuréticos que presenta síncope. El monitor muestra una taquicardia ventricular polimórfica con complejos que giran alrededor de la línea de base. El electrocardiograma previo mostraba QT de 560 milisegundos.
+P: ¿Cuál es el tratamiento de elección?
++ Sulfato de magnesio intravenoso, con corrección del potasio y retiro de fármacos que prolongan el QT || Es una torsade de pointes.
+- anchoring | Amiodarona || Prolonga el QT y puede empeorar.
+- availability_heuristic | Procainamida || Prolonga el QT.
+- representativeness_heuristic | Sotalol || Prolonga el QT.
+- premature_closure | Solo observación porque cedió || Puede recurrir y degenerar en fibrilación ventricular.
+- framing_effect | Adenosina || No es eficaz.
+- complexity_bias | Ablación urgente || No es el tratamiento inicial.
+- base_rate_fallacy | La hipopotasemia no influye en el QT || Lo prolonga.
+- belief_bias | El magnesio solo sirve si está bajo || Es eficaz aunque el magnesio sea normal.
+- omission_bias | No revisar la lista de fármacos que prolongan el QT || Es fundamental.
+E: La torsade de pointes es una taquicardia ventricular polimórfica asociada a QT prolongado, en la que los complejos parecen girar alrededor de la línea de base. Las causas incluyen fármacos como antiarrítmicos de clase Ia y III, macrólidos, antipsicóticos, antieméticos y metadona, hipopotasemia, hipomagnesemia, bradicardia y síndromes congénitos de QT largo. El tratamiento es el sulfato de magnesio intravenoso, eficaz aunque el magnesio sérico sea normal, junto con la corrección del potasio y el retiro de los fármacos causales. En casos recurrentes se usa estimulación con marcapasos o isoproterenol. Si hay paro se desfibrila.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las arritmias ventriculares ;; Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón
+
+@ urg|cardiovascular_emergencies|arrhythmia|2|initial_treatment
+V: Hombre de 70 años con mareo y presión de 80/50 mmHg. Frecuencia cardiaca de 35 por minuto con bloqueo auriculoventricular de tercer grado. Está confuso.
+P: ¿Cuál es el tratamiento inicial de elección?
++ Atropina intravenosa y, si no responde, marcapasos transcutáneo o infusión de dopamina o adrenalina || Es una bradicardia sintomática con inestabilidad.
+- anchoring | Solo observación en espera de cardiología || La inestabilidad requiere tratamiento inmediato.
+- availability_heuristic | Adenosina || Empeoraría la bradicardia.
+- representativeness_heuristic | Betabloqueador intravenoso || Empeoraría la bradicardia.
+- premature_closure | Cardioversión sincronizada || No está indicada en bradicardia.
+- framing_effect | Amiodarona || Empeoraría la conducción.
+- complexity_bias | Marcapasos definitivo inmediato sin estabilización || Primero se estabiliza.
+- base_rate_fallacy | La atropina siempre es eficaz en el bloqueo completo || Con frecuencia no lo es, por eso se prepara el marcapasos.
+- belief_bias | La bradicardia nunca causa inestabilidad || Puede causar choque.
+- omission_bias | No revisar fármacos como betabloqueadores o digoxina ni el potasio || Pueden ser la causa.
+E: La bradicardia sintomática con inestabilidad, como hipotensión, alteración mental, signos de choque, dolor torácico o insuficiencia cardiaca, requiere tratamiento inmediato. La atropina intravenosa de 1 mg, repetible hasta 3 mg, es el primer fármaco. Si no hay respuesta, se usa marcapasos transcutáneo o infusiones de dopamina o adrenalina mientras se coloca un marcapasos transvenoso. En el bloqueo auriculoventricular de tercer grado y el Mobitz II, la atropina con frecuencia es ineficaz porque el bloqueo es infranodal. Se buscan causas reversibles como fármacos, hiperpotasemia, isquemia inferior e hipotiroidismo.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de diagnóstico y tratamiento de las bradiarritmias
+
+@ urg|cardiovascular_emergencies|arrhythmia|2|initial_treatment
+V: Hombre de 68 años con fibrilación auricular de inicio hace 4 días, frecuencia ventricular de 135, presión de 130/80 mmHg, sin datos de insuficiencia cardiaca. Fracción de expulsión normal.
+P: ¿Cuál es el tratamiento inicial más apropiado?
++ Control de la frecuencia con betabloqueador o calcioantagonista no dihidropiridínico y anticoagulación según el riesgo embólico || Con más de 48 horas no se cardiovierte sin anticoagulación previa o descartar trombos.
+- anchoring | Cardioversión eléctrica inmediata sin anticoagulación || Con más de 48 horas hay riesgo de embolia.
+- availability_heuristic | Adenosina para revertir la fibrilación || No revierte la fibrilación auricular.
+- representativeness_heuristic | Solo ácido acetilsalicílico como anticoagulante || No es eficaz para prevenir embolias.
+- premature_closure | Esperar sin tratamiento a que revierta sola || La frecuencia alta debe controlarse.
+- framing_effect | Digoxina como primera opción en paciente activo sin insuficiencia cardiaca || Es menos eficaz.
+- complexity_bias | Ablación urgente || No es el primer paso.
+- base_rate_fallacy | La fibrilación auricular no aumenta el riesgo de embolia cerebral || Lo aumenta cinco veces.
+- belief_bias | Todos los pacientes con fibrilación auricular deben cardiovertirse en urgencias || Depende de la duración y la estabilidad.
+- omission_bias | No calcular la escala CHA2DS2-VASc || Guía la anticoagulación.
+E: En la fibrilación auricular estable, el manejo inicial incluye el control de la frecuencia ventricular con betabloqueadores o calcioantagonistas no dihidropiridínicos, como diltiazem, en pacientes con fracción de expulsión conservada, o digoxina y amiodarona en insuficiencia cardiaca. Si la duración es mayor de 48 horas o desconocida, no se debe cardiovertir sin anticoagulación de al menos 3 semanas o sin descartar trombos con ecocardiograma transesofágico, por el riesgo de embolia. La anticoagulación a largo plazo se decide con la escala CHA2DS2-VASc, preferentemente con anticoagulantes orales directos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la fibrilación auricular ;; Guía de la Sociedad Europea de Cardiología para fibrilación auricular
+
+@ urg|cardiovascular_emergencies|arrhythmia|3|next_step
+V: Hombre de 25 años con palpitaciones. El electrocardiograma muestra una taquicardia irregular de complejos anchos y de morfología variable a 250 por minuto. Su electrocardiograma previo mostraba PR corto y onda delta. Presión de 110/70 mmHg.
+P: ¿Cuál es la conducta más apropiada?
++ Procainamida intravenosa o cardioversión eléctrica sincronizada, evitando bloqueadores del nodo auriculoventricular || Es una fibrilación auricular preexcitada por Wolff-Parkinson-White.
+- anchoring | Adenosina intravenosa || Puede favorecer la conducción por la vía accesoria y causar fibrilación ventricular.
+- availability_heuristic | Verapamilo intravenoso || Bloquea el nodo y favorece la conducción por la vía accesoria.
+- representativeness_heuristic | Digoxina intravenosa || Está contraindicada.
+- premature_closure | Betabloqueador intravenoso como primera opción || Bloquea el nodo y puede ser peligroso.
+- framing_effect | Solo observación porque está estable || Puede degenerar en fibrilación ventricular.
+- complexity_bias | Amiodarona como primera línea universal || Se prefiere procainamida o cardioversión.
+- base_rate_fallacy | Toda taquicardia irregular de complejos anchos es fibrilación ventricular || Tiene pulso y es preexcitada.
+- belief_bias | Los bloqueadores del nodo son seguros en cualquier fibrilación auricular || No en la preexcitada.
+- omission_bias | No referir para ablación de la vía accesoria || Es el tratamiento definitivo.
+E: En el síndrome de Wolff-Parkinson-White existe una vía accesoria que conduce de aurículas a ventrículos sin pasar por el nodo auriculoventricular, con PR corto y onda delta en el electrocardiograma basal. Si se presenta una fibrilación auricular, los impulsos pueden conducirse muy rápido por la vía accesoria, generando una taquicardia irregular de complejos anchos y morfología variable que puede degenerar en fibrilación ventricular. Están contraindicados los bloqueadores del nodo, como adenosina, verapamilo, diltiazem, digoxina y betabloqueadores. El tratamiento es la procainamida o la cardioversión sincronizada si hay inestabilidad. El tratamiento definitivo es la ablación.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las taquiarritmias supraventriculares ;; Guía de la Sociedad Europea de Cardiología para taquicardias supraventriculares
+
+@ urg|cardiovascular_emergencies|arrhythmia|2|data_interpretation
+V: Hombre de 72 años con mareo. El electrocardiograma muestra un PR constante de 0.18 segundos con ondas P que súbitamente no se siguen de QRS, sin prolongación progresiva del PR previo. QRS ancho.
+P: ¿Qué indica este hallazgo electrocardiográfico?
++ Bloqueo auriculoventricular de segundo grado Mobitz II, con indicación de marcapasos || Hay ondas P bloqueadas sin prolongación previa del PR.
+- anchoring | Bloqueo de segundo grado Mobitz I o Wenckebach || En este hay prolongación progresiva del PR.
+- availability_heuristic | Bloqueo de primer grado || Todas las P conducen con PR prolongado.
+- representativeness_heuristic | Bloqueo de tercer grado || Hay disociación completa entre P y QRS.
+- premature_closure | Ritmo sinusal normal || Hay ondas P no conducidas.
+- framing_effect | Extrasístoles auriculares bloqueadas sin importancia || El patrón es de bloqueo.
+- complexity_bias | Fibrilación auricular || Hay ondas P organizadas.
+- base_rate_fallacy | El Mobitz II es benigno como el Mobitz I || Tiene riesgo de progresar a bloqueo completo.
+- belief_bias | Responde siempre a la atropina || Suele ser infranodal y no responde.
+- focusing_illusion | Síndrome de Wolff-Parkinson-White || No hay preexcitación.
+E: Los bloqueos auriculoventriculares se clasifican en primer grado, con PR mayor de 0.20 segundos y todas las P conducidas; segundo grado Mobitz I o Wenckebach, con prolongación progresiva del PR hasta que una P no conduce, generalmente benigno y nodal; segundo grado Mobitz II, con PR constante y P bloqueadas súbitamente, generalmente infranodal, con QRS ancho y riesgo de progresar a bloqueo completo; y tercer grado, con disociación auriculoventricular completa. El Mobitz II y el bloqueo de tercer grado tienen indicación de marcapasos, aun sin síntomas graves, y la atropina suele ser ineficaz.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las bradiarritmias ;; Guía de la Sociedad Europea de Cardiología para estimulación cardiaca
+
+@ urg|cardiovascular_emergencies|arrhythmia|3|data_interpretation
+V: Hombre de 60 años con enfermedad renal crónica que no acudió a hemodiálisis. Presenta debilidad. El electrocardiograma muestra ondas T picudas y simétricas, PR prolongado, ondas P aplanadas y QRS ensanchado.
+P: ¿Qué indican estos hallazgos electrocardiográficos?
++ Hiperpotasemia grave, que requiere calcio intravenoso inmediato || El ensanchamiento del QRS indica riesgo inminente de arritmia.
+- anchoring | Hipopotasemia || Produce ondas U y aplanamiento de T.
+- availability_heuristic | Infarto agudo hiperagudo || El cuadro y los demás cambios sugieren hiperpotasemia.
+- representativeness_heuristic | Hipercalcemia || Acorta el QT.
+- premature_closure | Hallazgos normales para un paciente renal || Son patológicos.
+- framing_effect | Pericarditis || No produce estos cambios.
+- complexity_bias | Síndrome de Brugada || Tiene otro patrón.
+- base_rate_fallacy | La hiperpotasemia siempre produce síntomas antes de alterar el electrocardiograma || Puede ser silenciosa.
+- belief_bias | Basta con dar resina oral y esperar al día siguiente || Requiere tratamiento urgente.
+- omission_bias | No programar hemodiálisis urgente || Es el tratamiento definitivo.
+E: La hiperpotasemia produce cambios electrocardiográficos progresivos: ondas T picudas y simétricas, después prolongación del PR y aplanamiento de la onda P, ensanchamiento del QRS, patrón sinusoidal, fibrilación ventricular y asistolia. Los cambios no siempre se correlacionan con el nivel de potasio. Ante cambios electrocardiográficos se administra gluconato o cloruro de calcio intravenoso para estabilizar la membrana miocárdica, seguido de insulina con glucosa, agonistas beta 2 inhalados y bicarbonato si hay acidosis para desplazar el potasio al interior de la célula, y medidas para eliminarlo, como diuréticos, resinas y hemodiálisis, que es el tratamiento definitivo en insuficiencia renal.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperpotasemia ;; Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón
+
+@ urg|cardiovascular_emergencies|arrhythmia|3|next_step
+V: Mujer de 45 años con fibrilación auricular de inicio hace 6 horas, documentado. Frecuencia de 150, presión de 75/45 mmHg, confusa y con dolor torácico.
+P: ¿Cuál es la conducta más apropiada?
++ Cardioversión eléctrica sincronizada inmediata con anticoagulación con heparina || La inestabilidad hemodinámica requiere cardioversión urgente.
+- anchoring | Control de la frecuencia con diltiazem intravenoso en dosis altas || Puede empeorar la hipotensión.
+- availability_heuristic | Esperar 3 semanas de anticoagulación antes de cardiovertir || La inestabilidad no permite esperar.
+- representativeness_heuristic | Adenosina || No revierte la fibrilación auricular.
+- premature_closure | Desfibrilación no sincronizada || Hay pulso; se usa la sincronizada.
+- framing_effect | Digoxina oral || Actúa lentamente.
+- complexity_bias | Ecocardiograma transesofágico obligatorio antes de cardiovertir a una paciente inestable || No debe retrasar la cardioversión.
+- base_rate_fallacy | La fibrilación auricular nunca causa inestabilidad || Puede causarla.
+- belief_bias | La cardioversión eléctrica no requiere sedación || Se seda si es posible.
+- omission_bias | No decidir la anticoagulación a largo plazo || Se basa en el riesgo embólico.
+E: En la fibrilación auricular con inestabilidad hemodinámica, como hipotensión, alteración del estado mental, choque, dolor torácico isquémico o edema pulmonar, el tratamiento es la cardioversión eléctrica sincronizada inmediata, con sedación si es posible. Se inicia heparina lo antes posible sin retrasar el procedimiento. Las precauciones de anticoagulación previa se aplican en pacientes estables. Después de la cardioversión se decide la anticoagulación a largo plazo según la escala CHA2DS2-VASc, y se recomienda al menos 4 semanas tras la cardioversión. En pacientes estables con menos de 48 horas puede considerarse la cardioversión eléctrica o farmacológica.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la fibrilación auricular ;; Guía de la Sociedad Europea de Cardiología para fibrilación auricular
+
+@ urg|cardiovascular_emergencies|arrhythmia|2|data_interpretation
+V: Hombre de 66 años con palpitaciones. El electrocardiograma muestra ondas auriculares en dientes de sierra en DII, DIII y aVF a 300 por minuto, con respuesta ventricular regular a 150 por minuto.
+P: ¿Qué indica este hallazgo electrocardiográfico?
++ Flutter auricular típico con conducción 2 a 1 || Ondas F en dientes de sierra a 300 con respuesta ventricular a 150.
+- anchoring | Taquicardia sinusal || No hay ondas P sinusales normales.
+- availability_heuristic | Fibrilación auricular || La respuesta ventricular es regular y hay ondas F organizadas.
+- representativeness_heuristic | Taquicardia ventricular || Los complejos son estrechos.
+- premature_closure | Taquicardia supraventricular por reentrada nodal || Las ondas en dientes de sierra indican flutter.
+- framing_effect | Ritmo nodal acelerado || No corresponde.
+- complexity_bias | Taquicardia auricular multifocal || Tiene ondas P de varias morfologías e irregularidad.
+- base_rate_fallacy | El flutter no requiere anticoagulación || Requiere la misma estratificación que la fibrilación auricular.
+- belief_bias | Una frecuencia regular de 150 nunca es flutter || Es un indicio clásico de flutter 2 a 1.
+- focusing_illusion | Bloqueo auriculoventricular completo || No hay disociación.
+E: El flutter auricular típico se debe a un circuito de macrorreentrada en la aurícula derecha alrededor del istmo cavotricuspídeo. Produce ondas F en dientes de sierra, más visibles en las derivaciones inferiores, a una frecuencia de alrededor de 300 por minuto. La conducción auriculoventricular suele ser 2 a 1, con una frecuencia ventricular regular cercana a 150 por minuto, lo que debe hacer sospecharlo. El tratamiento incluye control de la frecuencia, cardioversión eléctrica, que es muy eficaz con baja energía, y anticoagulación con los mismos criterios que la fibrilación auricular. La ablación del istmo es el tratamiento definitivo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las taquiarritmias supraventriculares ;; Guía de la Sociedad Europea de Cardiología para taquicardias supraventriculares
+
+@ urg|cardiovascular_emergencies|arrhythmia|2|treatment_of_choice
+V: Hombre de 72 años con fibrilación auricular permanente, hipertensión y diabetes. Escala CHA2DS2-VASc de 4. Función renal normal. Sin antecedentes de sangrado.
+P: ¿Cuál es el tratamiento antitrombótico de elección en este paciente?
++ Anticoagulante oral directo, como apixabán o rivaroxabán || Con una escala de 2 o más en hombres se indica anticoagulación, y los directos son preferidos sobre la warfarina.
+- anchoring | Ácido acetilsalicílico como monoterapia || No es eficaz para prevenir el evento vascular en fibrilación auricular.
+- availability_heuristic | Ninguna anticoagulación por la edad || La edad aumenta el riesgo embólico.
+- representativeness_heuristic | Doble antiagregación como sustituto de anticoagulación || Es menos eficaz.
+- premature_closure | Heparina subcutánea de por vida || No es la opción práctica a largo plazo.
+- framing_effect | Clopidogrel solo || No es eficaz para esta indicación.
+- complexity_bias | Cierre de orejuela como primera opción en todos los casos || Se reserva para contraindicación a anticoagulantes.
+- base_rate_fallacy | La fibrilación auricular permanente no requiere anticoagulación || Tiene el mismo riesgo que la paroxística.
+- belief_bias | El riesgo de sangrado siempre supera el beneficio en adultos mayores || El beneficio suele ser mayor.
+- omission_bias | No evaluar el riesgo de sangrado con HAS-BLED || Ayuda a corregir factores modificables.
+E: La fibrilación auricular aumenta cinco veces el riesgo de evento vascular cerebral. La escala CHA2DS2-VASc estima el riesgo embólico: insuficiencia cardiaca, hipertensión, edad de 75 años o más con 2 puntos, diabetes, evento vascular o embolia previa con 2 puntos, enfermedad vascular, edad de 65 a 74 años y sexo femenino. Se recomienda anticoagulación oral con una puntuación de 2 o más en hombres y 3 o más en mujeres, y considerarla con 1 en hombres o 2 en mujeres. Los anticoagulantes orales directos se prefieren sobre la warfarina, salvo en estenosis mitral moderada a grave y válvulas mecánicas. El ácido acetilsalicílico no se recomienda para esta indicación.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la fibrilación auricular ;; Guía de la Sociedad Europea de Cardiología para fibrilación auricular
+
+@ urg|cardiovascular_emergencies|arrhythmia|3|next_step
+V: Hombre de 35 años con síncope durante el ejercicio. El electrocardiograma basal muestra elevación del ST en V1 y V2 de morfología en aleta de tiburón descendente con onda T negativa. Su hermano murió súbitamente a los 30 años.
+P: ¿Cuál es la conducta más apropiada?
++ Referir a electrofisiología para estratificación y valorar desfibrilador implantable por síndrome de Brugada con síncope || El síncope y el antecedente familiar indican alto riesgo de muerte súbita.
+- anchoring | Considerarlo una repolarización precoz benigna y dar de alta || El patrón y el antecedente sugieren Brugada.
+- availability_heuristic | Fibrinólisis por elevación del ST || No es un infarto.
+- representativeness_heuristic | Iniciar betabloqueador como único tratamiento || No previene la muerte súbita en Brugada.
+- premature_closure | Prueba de esfuerzo y alta si es normal || No descarta el riesgo.
+- framing_effect | Prescribir flecainida || Puede desenmascarar o empeorar el patrón.
+- complexity_bias | Cateterismo cardiaco urgente || No hay sospecha de isquemia.
+- base_rate_fallacy | El síncope en jóvenes siempre es vasovagal || El antecedente familiar obliga a descartar causas arrítmicas.
+- belief_bias | La fiebre no influye en este síndrome || La fiebre puede desencadenar arritmias.
+- omission_bias | No estudiar a los familiares de primer grado || Es una enfermedad hereditaria.
+E: El síndrome de Brugada es una canalopatía hereditaria, generalmente por mutaciones del canal de sodio SCN5A, que predispone a arritmias ventriculares y muerte súbita, sobre todo en varones jóvenes, frecuentemente durante el sueño o con fiebre. El patrón tipo 1 consiste en elevación del ST de 2 mm o más en V1 y V2 con morfología descendente en aleta de tiburón y onda T negativa. Los pacientes con síncope de origen arrítmico o muerte súbita recuperada tienen indicación de desfibrilador implantable. Se evitan los fármacos que bloquean el canal de sodio y se trata la fiebre de forma agresiva. Se estudia a los familiares.
+R: Guía de la Sociedad Europea de Cardiología para arritmias ventriculares y prevención de muerte súbita ;; Guía de Práctica Clínica de diagnóstico y tratamiento del síncope
+
+@ urg|cardiovascular_emergencies|arrhythmia|3|treatment_of_choice
+V: Mujer de 80 años con insuficiencia cardiaca con fracción de expulsión de 25 por ciento que presenta fibrilación auricular con frecuencia de 140 por minuto, presión de 110/70 mmHg y congestión pulmonar leve.
+P: ¿Cuál es el fármaco de elección para el control agudo de la frecuencia?
++ Amiodarona o digoxina intravenosa || Controlan la frecuencia sin deprimir de forma importante la contractilidad.
+- anchoring | Diltiazem intravenoso || Es inotrópico negativo y está contraindicado en fracción de expulsión reducida descompensada.
+- availability_heuristic | Verapamilo intravenoso || Es inotrópico negativo.
+- representativeness_heuristic | Betabloqueador intravenoso en dosis altas con congestión || Puede empeorar la insuficiencia descompensada.
+- premature_closure | Adenosina || No controla la frecuencia en la fibrilación auricular.
+- framing_effect | Atropina || Aumentaría la frecuencia.
+- complexity_bias | Ablación del nodo como primera medida en urgencias || No es el tratamiento agudo.
+- base_rate_fallacy | Todos los fármacos de control de frecuencia son igual de seguros en insuficiencia cardiaca || Difieren en su efecto inotrópico.
+- belief_bias | La digoxina no tiene utilidad actual || Es útil en insuficiencia cardiaca.
+- omission_bias | No tratar la congestión con diurético || Es parte del manejo.
+E: En la fibrilación auricular con insuficiencia cardiaca con fracción de expulsión reducida o descompensada, los calcioantagonistas no dihidropiridínicos, como diltiazem y verapamilo, están contraindicados por su efecto inotrópico negativo, y los betabloqueadores intravenosos en dosis altas deben usarse con precaución durante la descompensación. Para el control agudo de la frecuencia se prefieren la digoxina y la amiodarona intravenosas. A largo plazo, los betabloqueadores con evidencia en insuficiencia cardiaca son la base del tratamiento una vez compensado el paciente. Si hay inestabilidad, se realiza cardioversión eléctrica. Se trata la congestión y se decide la anticoagulación.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la fibrilación auricular ;; Guía de la Sociedad Europea de Cardiología para insuficiencia cardiaca

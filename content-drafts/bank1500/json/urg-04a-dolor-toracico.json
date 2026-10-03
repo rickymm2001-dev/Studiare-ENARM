@@ -1,0 +1,1335 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "urg-04a-dolor-toracico-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "chest_pain",
+      "vignette": "Hombre de 58 años con dolor torácico opresivo de 1 hora de evolución, irradiado al brazo izquierdo, con diaforesis. El electrocardiograma muestra elevación del ST de 3 mm en V1 a V4. El hospital cuenta con sala de hemodinamia disponible en 30 minutos.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cirugía de revascularización urgente como primera opción",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es la primera opción."
+        },
+        {
+          "key": "b",
+          "text": "Fibrinólisis aunque la angioplastia esté disponible a tiempo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La angioplastia es preferible si está disponible a tiempo."
+        },
+        {
+          "key": "c",
+          "text": "Oxígeno a todos los pacientes aunque tengan saturación normal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Solo si la saturación es menor de 90 por ciento."
+        },
+        {
+          "key": "d",
+          "text": "La reperfusión tiene el mismo beneficio a cualquier hora",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El beneficio disminuye con el tiempo."
+        },
+        {
+          "key": "e",
+          "text": "Prueba de esfuerzo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Está contraindicada en un infarto agudo."
+        },
+        {
+          "key": "f",
+          "text": "Solo nitratos y observación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Requiere reperfusión."
+        },
+        {
+          "key": "g",
+          "text": "Ácido acetilsalicílico, antiagregante adicional, anticoagulación y angioplastia primaria con tiempo puerta balón menor de 90 minutos",
+          "correct": true,
+          "rationale": "Es un infarto con elevación del ST con hemodinamia disponible."
+        },
+        {
+          "key": "h",
+          "text": "Ecocardiograma antes de cualquier decisión",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No debe retrasar la reperfusión."
+        },
+        {
+          "key": "i",
+          "text": "No realizar el electrocardiograma en los primeros 10 minutos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es la meta."
+        },
+        {
+          "key": "j",
+          "text": "Esperar el resultado de troponinas para decidir",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El electrocardiograma es diagnóstico; las troponinas no deben retrasar la reperfusión."
+        }
+      ],
+      "canonical": [
+        "b",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "En el infarto agudo de miocardio con elevación del ST, el objetivo es la reperfusión lo antes posible. El electrocardiograma debe realizarse en los primeros 10 minutos de la llegada. La angioplastia primaria es la estrategia preferida si puede realizarse con un tiempo desde el diagnóstico hasta la apertura de la arteria menor de 120 minutos, idealmente puerta balón menor de 90. Si no es posible, se administra fibrinólisis en los primeros 30 minutos. Se indican ácido acetilsalicílico, un inhibidor del P2Y12, anticoagulación y estatina de alta intensidad. El oxígeno solo se administra si la saturación es menor de 90 por ciento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del infarto agudo de miocardio con elevación del ST",
+        "Programa nacional Código Infarto del Instituto Mexicano del Seguro Social"
+      ]
+    },
+    {
+      "key": "urg-04a-dolor-toracico-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "chest_pain",
+      "vignette": "Mujer de 62 años con infarto con elevación del ST en cara inferior de 2 horas de evolución, en un hospital rural sin hemodinamia. El traslado a un centro con angioplastia tardaría 4 horas. Sin contraindicaciones.",
+      "prompt": "¿Cuál es el tratamiento de reperfusión de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Trasladar para angioplastia sin fibrinólisis aunque tarde 4 horas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El retraso reduce el beneficio."
+        },
+        {
+          "key": "b",
+          "text": "Heparina sola como reperfusión",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No reperfunde la arteria."
+        },
+        {
+          "key": "c",
+          "text": "Fibrinólisis solo si el dolor dura más de 24 horas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es al revés, mientras más temprano mejor."
+        },
+        {
+          "key": "d",
+          "text": "Después de la fibrinólisis no se requiere angiografía",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se recomienda en 2 a 24 horas."
+        },
+        {
+          "key": "e",
+          "text": "Esperar troponinas para decidir",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "f",
+          "text": "La fibrinólisis está contraindicada en mujeres mayores de 60 años",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es una contraindicación."
+        },
+        {
+          "key": "g",
+          "text": "Fibrinólisis en los primeros 30 minutos de la llegada, seguida de traslado para angiografía",
+          "correct": true,
+          "rationale": "La angioplastia no puede realizarse en menos de 120 minutos."
+        },
+        {
+          "key": "h",
+          "text": "No buscar infarto del ventrículo derecho con derivaciones derechas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Cambia el manejo."
+        },
+        {
+          "key": "i",
+          "text": "Solo antiagregantes sin reperfusión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Requiere reperfusión."
+        },
+        {
+          "key": "j",
+          "text": "Cirugía de revascularización urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está disponible ni indicada."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "Cuando la angioplastia primaria no puede realizarse en los primeros 120 minutos desde el diagnóstico, se recomienda la fibrinólisis en los primeros 30 minutos de la llegada, idealmente en las primeras 12 horas del inicio de los síntomas, si no hay contraindicaciones. Se usan fibrinolíticos específicos de fibrina, como tenecteplasa o alteplasa, junto con antiagregantes y anticoagulación. Después se traslada al paciente a un centro con hemodinamia: angioplastia de rescate si la fibrinólisis falla, o angiografía rutinaria en 2 a 24 horas si es exitosa. Las contraindicaciones absolutas incluyen sangrado activo, hemorragia intracraneal previa y evento isquémico reciente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del infarto agudo de miocardio con elevación del ST",
+        "Programa nacional Código Infarto del Instituto Mexicano del Seguro Social"
+      ]
+    },
+    {
+      "key": "urg-04a-dolor-toracico-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "chest_pain",
+      "vignette": "Hombre de 65 años con infarto inferior. Presenta hipotensión de 80/50 mmHg, ingurgitación yugular y campos pulmonares limpios. Las derivaciones derechas muestran elevación del ST en V4R.",
+      "prompt": "¿Cuál es la conducta más apropiada para la hipotensión?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Balón de contrapulsación como primera medida",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "b",
+          "text": "No buscar bloqueo auriculoventricular",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es frecuente en el infarto inferior."
+        },
+        {
+          "key": "c",
+          "text": "Furosemida por la ingurgitación yugular",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Reduce la precarga y empeora la hipotensión."
+        },
+        {
+          "key": "d",
+          "text": "Considerarlo un choque cardiogénico izquierdo y restringir líquidos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Los pulmones limpios orientan a ventrículo derecho."
+        },
+        {
+          "key": "e",
+          "text": "Betabloqueador intravenoso",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Empeora la hipotensión."
+        },
+        {
+          "key": "f",
+          "text": "El infarto inferior nunca afecta al ventrículo derecho",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede afectarlo con frecuencia."
+        },
+        {
+          "key": "g",
+          "text": "Administrar líquidos intravenosos y evitar nitratos y diuréticos",
+          "correct": true,
+          "rationale": "El infarto del ventrículo derecho depende de la precarga."
+        },
+        {
+          "key": "h",
+          "text": "La ingurgitación yugular siempre indica sobrecarga que requiere diurético",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "En el infarto derecho indica falla del ventrículo derecho."
+        },
+        {
+          "key": "i",
+          "text": "Morfina en dosis altas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Reduce la precarga."
+        },
+        {
+          "key": "j",
+          "text": "Nitroglicerina sublingual para el dolor",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede causar hipotensión grave."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El infarto del ventrículo derecho complica hasta un tercio de los infartos de cara inferior por oclusión proximal de la coronaria derecha. Se caracteriza por la tríada de hipotensión, ingurgitación yugular y campos pulmonares limpios. Se confirma con elevación del ST en derivaciones derechas, sobre todo V4R. El ventrículo derecho isquémico depende de la precarga, por lo que el tratamiento incluye líquidos intravenosos y se evitan los fármacos que reducen la precarga, como nitratos, diuréticos y morfina. Si persiste la hipotensión se usan inotrópicos. La reperfusión temprana es fundamental.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del infarto agudo de miocardio con elevación del ST",
+        "Guía de la Sociedad Europea de Cardiología para infarto agudo"
+      ]
+    },
+    {
+      "key": "urg-04a-dolor-toracico-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "chest_pain",
+      "vignette": "Hombre de 55 años hipertenso con dolor torácico súbito, desgarrante, irradiado a la espalda. Diferencia de presión arterial de 30 mmHg entre ambos brazos. Radiografía con mediastino ensanchado.",
+      "prompt": "¿Cuál es el estudio de elección para confirmar el diagnóstico?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ultrasonido abdominal como único estudio",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No evalúa la aorta torácica completa."
+        },
+        {
+          "key": "b",
+          "text": "Endoscopia digestiva alta",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No evalúa la aorta."
+        },
+        {
+          "key": "c",
+          "text": "Dímero D como prueba definitiva",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es sensible, pero no confirma."
+        },
+        {
+          "key": "d",
+          "text": "La radiografía normal descarta la disección",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No la descarta."
+        },
+        {
+          "key": "e",
+          "text": "Prueba de esfuerzo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Está contraindicada."
+        },
+        {
+          "key": "f",
+          "text": "Cateterismo coronario urgente",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede retrasar el diagnóstico y empeorar la disección."
+        },
+        {
+          "key": "g",
+          "text": "Electrocardiograma como estudio confirmatorio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede ser normal."
+        },
+        {
+          "key": "h",
+          "text": "Debe iniciarse trombólisis por el dolor torácico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Está contraindicada en disección."
+        },
+        {
+          "key": "i",
+          "text": "Angiotomografía de aorta",
+          "correct": true,
+          "rationale": "Confirma la disección aórtica y define su extensión."
+        },
+        {
+          "key": "j",
+          "text": "Gammagrama de perfusión miocárdica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "La disección aórtica aguda se manifiesta con dolor torácico súbito, intenso, desgarrante, irradiado a la espalda, con diferencia de pulsos o de presión entre brazos, déficit neurológico o soplo de insuficiencia aórtica. La hipertensión es el principal factor de riesgo. La angiotomografía de aorta es el estudio de elección en pacientes estables; el ecocardiograma transesofágico es útil en inestables. La clasificación de Stanford distingue el tipo A, que afecta la aorta ascendente y requiere cirugía urgente, del tipo B, que suele manejarse médicamente. El tratamiento inicial incluye control del dolor y reducción de la frecuencia y la presión con betabloqueadores intravenosos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la disección aórtica aguda",
+        "Guía de la Sociedad Europea de Cardiología para enfermedades de la aorta"
+      ]
+    },
+    {
+      "key": "urg-04a-dolor-toracico-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "chest_pain",
+      "vignette": "Mujer de 60 años con disección aórtica tipo B confirmada por angiotomografía. Presión de 180/100 mmHg y frecuencia cardiaca de 105. Sin datos de mala perfusión de órganos.",
+      "prompt": "¿Cuál es el tratamiento inicial de elección?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cirugía urgente en todos los tipos B sin complicaciones",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El tipo B no complicado se maneja médicamente."
+        },
+        {
+          "key": "b",
+          "text": "Trombólisis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Está contraindicada."
+        },
+        {
+          "key": "c",
+          "text": "Betabloqueador intravenoso, como esmolol o labetalol, con meta de frecuencia menor de 60 y sistólica de 100 a 120 mmHg, más analgesia",
+          "correct": true,
+          "rationale": "Reduce la fuerza de eyección y la progresión de la disección."
+        },
+        {
+          "key": "d",
+          "text": "Balón de contrapulsación intraaórtico",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Está contraindicado en disección."
+        },
+        {
+          "key": "e",
+          "text": "La presión no influye en la progresión de la disección",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es clave controlarla."
+        },
+        {
+          "key": "f",
+          "text": "Anticoagulación plena",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede extender la disección."
+        },
+        {
+          "key": "g",
+          "text": "Hidralazina como monoterapia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Causa taquicardia refleja."
+        },
+        {
+          "key": "h",
+          "text": "Los betabloqueadores están contraindicados en la disección",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Son el tratamiento de primera línea."
+        },
+        {
+          "key": "i",
+          "text": "No vigilar datos de mala perfusión renal, intestinal o de extremidades",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Indican tratamiento endovascular."
+        },
+        {
+          "key": "j",
+          "text": "Nitroprusiato sin betabloqueador previo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La taquicardia refleja aumenta el estrés de la pared."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "El tratamiento inicial de la disección aórtica busca reducir el estrés de la pared aórtica. Se usan betabloqueadores intravenosos, como esmolol, labetalol o metoprolol, con meta de frecuencia cardiaca menor de 60 y presión sistólica de 100 a 120 mmHg. Si se requiere más control de la presión, se agrega un vasodilatador como nitroprusiato, siempre después del betabloqueador para evitar la taquicardia refleja. Se administra analgesia con opioides. La disección tipo B no complicada se maneja médicamente; si hay mala perfusión de órganos, ruptura o dolor refractario se indica reparación endovascular. La tipo A requiere cirugía urgente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la disección aórtica aguda",
+        "Guía de la Sociedad Europea de Cardiología para enfermedades de la aorta"
+      ]
+    },
+    {
+      "key": "urg-04a-dolor-toracico-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "chest_pain",
+      "vignette": "Hombre de 28 años con dolor torácico punzante que mejora al inclinarse hacia adelante y empeora al acostarse, precedido de una infección respiratoria. Se ausculta frote. El electrocardiograma muestra elevación difusa del ST cóncava con depresión del PR.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Infarto agudo de miocardio con elevación del ST",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La elevación es difusa, cóncava y con depresión del PR."
+        },
+        {
+          "key": "b",
+          "text": "Tromboembolia pulmonar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el patrón electrocardiográfico ni el frote."
+        },
+        {
+          "key": "c",
+          "text": "Costocondritis",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el frote ni el electrocardiograma."
+        },
+        {
+          "key": "d",
+          "text": "Neumotórax espontáneo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el frote ni el electrocardiograma."
+        },
+        {
+          "key": "e",
+          "text": "Pericarditis aguda",
+          "correct": true,
+          "rationale": "Dolor posicional, frote y elevación difusa del ST con depresión del PR."
+        },
+        {
+          "key": "f",
+          "text": "Toda elevación del ST es un infarto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Hay otras causas."
+        },
+        {
+          "key": "g",
+          "text": "Disección aórtica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El dolor no es desgarrante."
+        },
+        {
+          "key": "h",
+          "text": "Requiere fibrinólisis urgente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Está contraindicada."
+        },
+        {
+          "key": "i",
+          "text": "Repolarización precoz benigna",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica el dolor ni el frote."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome de Brugada",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Tiene otro patrón electrocardiográfico."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "i"
+      ],
+      "explanation": "La pericarditis aguda se diagnostica con al menos dos de cuatro criterios: dolor torácico pericárdico, punzante, que mejora al inclinarse hacia adelante y empeora en decúbito; frote pericárdico; cambios electrocardiográficos con elevación difusa del ST cóncava y depresión del PR; y derrame pericárdico. La causa más frecuente es viral o idiopática. El tratamiento de primera línea son los antiinflamatorios no esteroideos o ácido acetilsalicílico en dosis altas junto con colchicina durante 3 meses, que reduce las recurrencias. Los esteroides se reservan para casos específicos. Se debe distinguir del infarto para no administrar fibrinólisis.",
+      "gpcRefs": [
+        "Guía de la Sociedad Europea de Cardiología para enfermedades del pericardio",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de pericarditis aguda"
+      ]
+    },
+    {
+      "key": "urg-04a-dolor-toracico-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "chest_pain",
+      "vignette": "Hombre de 45 años con cáncer de pulmón que presenta disnea, hipotensión de 80/60 mmHg, ingurgitación yugular, ruidos cardiacos apagados y pulso paradójico. El ecocardiograma muestra derrame pericárdico con colapso diastólico del ventrículo derecho.",
+      "prompt": "¿Cuál es el tratamiento de elección inmediato?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Quimioterapia urgente como primera medida",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No resuelve la compresión."
+        },
+        {
+          "key": "b",
+          "text": "Nitroglicerina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Reduce la precarga."
+        },
+        {
+          "key": "c",
+          "text": "No enviar el líquido a estudio citológico",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Ayuda a establecer la causa."
+        },
+        {
+          "key": "d",
+          "text": "El taponamiento requiere un derrame muy grande en todos los casos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Depende de la velocidad de acumulación."
+        },
+        {
+          "key": "e",
+          "text": "Pericardiocentesis urgente guiada por ultrasonido",
+          "correct": true,
+          "rationale": "Es un taponamiento cardiaco con compromiso hemodinámico."
+        },
+        {
+          "key": "f",
+          "text": "Antiinflamatorios como único tratamiento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No resuelven el taponamiento."
+        },
+        {
+          "key": "g",
+          "text": "Ventilación con presión positiva antes de drenar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede empeorar el colapso hemodinámico."
+        },
+        {
+          "key": "h",
+          "text": "Los líquidos están contraindicados en el taponamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Pueden ayudar transitoriamente."
+        },
+        {
+          "key": "i",
+          "text": "Solo observación y repetir ecocardiograma en 24 horas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El paciente está inestable."
+        },
+        {
+          "key": "j",
+          "text": "Furosemida por la ingurgitación yugular",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Reduce la precarga y empeora el choque."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "El taponamiento cardiaco ocurre cuando la acumulación de líquido en el pericardio aumenta la presión intrapericárdica e impide el llenado ventricular. Se manifiesta con la tríada de Beck, hipotensión, ingurgitación yugular y ruidos cardiacos apagados, además de taquicardia y pulso paradójico. El ecocardiograma muestra derrame con colapso diastólico de las cavidades derechas. El tratamiento es la pericardiocentesis urgente guiada por ultrasonido o el drenaje quirúrgico. Mientras tanto se pueden administrar líquidos para mantener la precarga. Se evitan los diuréticos, los vasodilatadores y, si es posible, la ventilación con presión positiva. Las causas incluyen cáncer, trauma, infecciones e insuficiencia renal.",
+      "gpcRefs": [
+        "Guía de la Sociedad Europea de Cardiología para enfermedades del pericardio",
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos"
+      ]
+    },
+    {
+      "key": "urg-04a-dolor-toracico-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "chest_pain",
+      "vignette": "Hombre de 60 años con dolor torácico de 3 horas que ya cedió. El electrocardiograma muestra depresión del ST en V5 y V6. Troponina de alta sensibilidad inicial elevada y a la hora con aumento significativo.",
+      "prompt": "¿Qué indican estos hallazgos?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Infarto con elevación del ST",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay elevación del ST."
+        },
+        {
+          "key": "b",
+          "text": "Pericarditis aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El electrocardiograma y el cuadro no son compatibles."
+        },
+        {
+          "key": "c",
+          "text": "Angina inestable",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "En la angina inestable la troponina no se eleva."
+        },
+        {
+          "key": "d",
+          "text": "Elevación crónica de troponina por insuficiencia renal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Hay cambio dinámico y cuadro isquémico."
+        },
+        {
+          "key": "e",
+          "text": "Infarto agudo de miocardio sin elevación del ST",
+          "correct": true,
+          "rationale": "Elevación y aumento de troponina con isquemia y sin elevación persistente del ST."
+        },
+        {
+          "key": "f",
+          "text": "La depresión del ST no tiene significado isquémico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Sugiere isquemia."
+        },
+        {
+          "key": "g",
+          "text": "Tromboembolia pulmonar como única explicación",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el patrón."
+        },
+        {
+          "key": "h",
+          "text": "Si el dolor cedió puede darse de alta sin más estudio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere manejo de síndrome coronario."
+        },
+        {
+          "key": "i",
+          "text": "Dolor torácico no cardiaco porque el dolor cedió",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La troponina indica daño miocárdico."
+        },
+        {
+          "key": "j",
+          "text": "Miocarditis viral como primera opción",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El cuadro sugiere infarto."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "e"
+      ],
+      "explanation": "El síndrome coronario agudo sin elevación del ST incluye la angina inestable y el infarto sin elevación del ST. Se distinguen por la troponina: en el infarto hay elevación por arriba del percentil 99 con un patrón dinámico de aumento o descenso, mientras que en la angina inestable la troponina es normal. El electrocardiograma puede mostrar depresión del ST, inversión de la onda T o ser normal. Los algoritmos con troponina de alta sensibilidad a la hora o a las 2 horas permiten descartar o confirmar el infarto. El tratamiento incluye antiagregación dual, anticoagulación, estatina y estratificación para la coronariografía según el riesgo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome coronario agudo sin elevación del ST",
+        "Cuarta definición universal del infarto de miocardio"
+      ]
+    },
+    {
+      "key": "urg-04a-dolor-toracico-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "chest_pain",
+      "vignette": "Hombre de 50 años con vómito intenso tras una comida abundante con alcohol, seguido de dolor torácico retroesternal intenso. Presenta crepitación subcutánea en cuello y la radiografía muestra neumomediastino y derrame pleural izquierdo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Reflujo gastroesofágico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la gravedad."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de Mallory-Weiss",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es un desgarro superficial con sangrado, sin perforación."
+        },
+        {
+          "key": "c",
+          "text": "Pancreatitis aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el neumomediastino."
+        },
+        {
+          "key": "d",
+          "text": "La perforación esofágica solo ocurre por endoscopia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "También puede ser espontánea."
+        },
+        {
+          "key": "e",
+          "text": "Perforación esofágica espontánea o síndrome de Boerhaave",
+          "correct": true,
+          "rationale": "Vómito intenso seguido de dolor torácico, enfisema subcutáneo y neumomediastino."
+        },
+        {
+          "key": "f",
+          "text": "Neumonía por aspiración simple",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el neumomediastino."
+        },
+        {
+          "key": "g",
+          "text": "Disección aórtica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No explica el enfisema subcutáneo."
+        },
+        {
+          "key": "h",
+          "text": "Puede manejarse con antiácidos y alta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una emergencia con alta mortalidad."
+        },
+        {
+          "key": "i",
+          "text": "Neumotórax espontáneo primario",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el neumomediastino tras vómito."
+        },
+        {
+          "key": "j",
+          "text": "Infarto agudo de miocardio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el enfisema subcutáneo ni el neumomediastino."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "El síndrome de Boerhaave es la perforación transmural espontánea del esófago, generalmente en la pared posterolateral izquierda del tercio distal, por un aumento súbito de la presión intraesofágica durante el vómito intenso, frecuentemente tras ingesta abundante de alimentos y alcohol. Se manifiesta con dolor torácico intenso, enfisema subcutáneo, que se describe con la tríada de Mackler, y neumomediastino o derrame pleural izquierdo. Se confirma con esofagograma con contraste hidrosoluble o tomografía. Es una emergencia con alta mortalidad por mediastinitis; requiere ayuno, antibióticos de amplio espectro y reparación quirúrgica o endoscópica temprana.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la perforación esofágica",
+        "Manual de urgencias médico quirúrgicas"
+      ]
+    },
+    {
+      "key": "urg-04a-dolor-toracico-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "chest_pain",
+      "vignette": "Hombre de 62 años con infarto con elevación del ST en camino a hemodinamia. Refiere uso de sildenafil hace 12 horas. Presión de 130/80 mmHg y dolor persistente.",
+      "prompt": "¿Cuál fármaco está contraindicado en este paciente?",
+      "polarity": "negative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Nitratos",
+          "correct": true,
+          "rationale": "Combinados con inhibidores de la fosfodiesterasa 5 causan hipotensión grave."
+        },
+        {
+          "key": "b",
+          "text": "Betabloqueador oral sin datos de insuficiencia cardiaca",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Puede usarse si no hay contraindicaciones."
+        },
+        {
+          "key": "c",
+          "text": "Heparina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Está indicada."
+        },
+        {
+          "key": "d",
+          "text": "Clopidogrel o ticagrelor",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Están indicados."
+        },
+        {
+          "key": "e",
+          "text": "Estatina de alta intensidad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Está indicada."
+        },
+        {
+          "key": "f",
+          "text": "Morfina en dosis bajas si el dolor persiste",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede usarse con precaución."
+        },
+        {
+          "key": "g",
+          "text": "Ácido acetilsalicílico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Está indicado."
+        },
+        {
+          "key": "h",
+          "text": "Los nitratos son seguros en cualquier circunstancia de dolor torácico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Tienen contraindicaciones."
+        },
+        {
+          "key": "i",
+          "text": "El sildenafil no interactúa con fármacos cardiovasculares",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Interactúa con nitratos."
+        },
+        {
+          "key": "j",
+          "text": "No preguntar por inhibidores de la fosfodiesterasa antes de dar nitratos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es indispensable."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "g"
+      ],
+      "explanation": "Los nitratos alivian el dolor isquémico por vasodilatación venosa y coronaria, pero no reducen la mortalidad en el infarto. Están contraindicados en pacientes que tomaron inhibidores de la fosfodiesterasa 5 en las 24 a 48 horas previas, como sildenafil o tadalafil, porque la combinación causa hipotensión grave. También se contraindican con presión sistólica menor de 90 mmHg, bradicardia o taquicardia importantes e infarto del ventrículo derecho. Antes de administrar nitratos siempre debe preguntarse por estos fármacos. Los antiagregantes, la anticoagulación y la reperfusión son los pilares del tratamiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del infarto agudo de miocardio con elevación del ST",
+        "Guía de la Sociedad Europea de Cardiología para infarto agudo"
+      ]
+    },
+    {
+      "key": "urg-04a-dolor-toracico-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "chest_pain",
+      "vignette": "Hombre de 55 años con dolor torácico típico de 1 hora. El electrocardiograma muestra depresión del ST de 2 mm en V1 a V3 con ondas R altas en V1 y V2. En las derivaciones posteriores V7 a V9 hay elevación del ST.",
+      "prompt": "¿Qué indica este patrón electrocardiográfico?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "La depresión del ST nunca requiere reperfusión urgente",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "En el infarto posterior sí."
+        },
+        {
+          "key": "b",
+          "text": "Variante normal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No con el cuadro clínico."
+        },
+        {
+          "key": "c",
+          "text": "Hipertrofia ventricular derecha sin isquemia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El cuadro clínico y las derivaciones posteriores indican infarto."
+        },
+        {
+          "key": "d",
+          "text": "Bloqueo de rama derecha sin isquemia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la elevación posterior."
+        },
+        {
+          "key": "e",
+          "text": "Tromboembolia pulmonar",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el patrón."
+        },
+        {
+          "key": "f",
+          "text": "Pericarditis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es difuso y hay elevación en derivaciones posteriores."
+        },
+        {
+          "key": "g",
+          "text": "Isquemia subendocárdica anterior sin indicación de reperfusión",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es un infarto posterior."
+        },
+        {
+          "key": "h",
+          "text": "El infarto posterior no se ve en el electrocardiograma",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se ve con derivaciones posteriores."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de Wellens",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Corresponde a cambios en la onda T anterior."
+        },
+        {
+          "key": "j",
+          "text": "Infarto de cara posterior con elevación del ST, equivalente de infarto con elevación que requiere reperfusión",
+          "correct": true,
+          "rationale": "La depresión del ST en V1 a V3 es la imagen especular de la elevación posterior."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "El infarto de cara posterior, generalmente por oclusión de la circunfleja o de la coronaria derecha, no produce elevación del ST en las derivaciones estándar. Se manifiesta con depresión del ST en V1 a V3, ondas R altas y ondas T positivas en esas derivaciones, que son la imagen en espejo de la elevación posterior. Las derivaciones posteriores V7 a V9 muestran elevación del ST de 0.5 mm o más. Es un equivalente de infarto con elevación del ST y requiere reperfusión urgente. Otros equivalentes son el bloqueo de rama izquierda nuevo con clínica de isquemia y la elevación del ST en aVR con depresión difusa.",
+      "gpcRefs": [
+        "Guía de la Sociedad Europea de Cardiología para infarto agudo",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del infarto agudo de miocardio con elevación del ST"
+      ]
+    },
+    {
+      "key": "urg-04a-dolor-toracico-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "chest_pain",
+      "vignette": "Hombre de 45 años con dolor torácico atípico de 2 horas. Electrocardiograma normal. Se calcula la escala HEART con resultado de 2 puntos y troponina de alta sensibilidad negativa en dos determinaciones.",
+      "prompt": "¿Qué indica este resultado en la estratificación del dolor torácico?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Que debe iniciarse fibrinólisis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay infarto."
+        },
+        {
+          "key": "b",
+          "text": "Que se descarta cualquier enfermedad cardiaca de por vida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Indica bajo riesgo a corto plazo."
+        },
+        {
+          "key": "c",
+          "text": "Que debe hospitalizarse en terapia intensiva",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "d",
+          "text": "Que requiere resonancia magnética cardiaca urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "e",
+          "text": "Riesgo bajo de eventos cardiacos adversos mayores, que permite el egreso con seguimiento ambulatorio",
+          "correct": true,
+          "rationale": "Una escala HEART de 0 a 3 con troponinas negativas indica bajo riesgo."
+        },
+        {
+          "key": "f",
+          "text": "Todo dolor torácico requiere hospitalización",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La estratificación permite egresar a pacientes de bajo riesgo."
+        },
+        {
+          "key": "g",
+          "text": "Riesgo alto que requiere cateterismo urgente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La puntuación es baja."
+        },
+        {
+          "key": "h",
+          "text": "Una troponina negativa siempre descarta un síndrome coronario aunque se mida al inicio de los síntomas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se requiere repetirla."
+        },
+        {
+          "key": "i",
+          "text": "No dar datos de alarma al egreso",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son parte del manejo."
+        },
+        {
+          "key": "j",
+          "text": "Riesgo intermedio que requiere observación de 72 horas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es bajo."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "g"
+      ],
+      "explanation": "La escala HEART estratifica el riesgo en pacientes con dolor torácico en urgencias considerando historia clínica, electrocardiograma, edad, factores de riesgo y troponina, con 0 a 2 puntos cada uno. Una puntuación de 0 a 3 indica bajo riesgo de eventos cardiacos adversos mayores a 6 semanas, menor de 2 por ciento, y combinada con troponinas negativas permite el egreso temprano con seguimiento ambulatorio. Una puntuación de 4 a 6 indica riesgo intermedio y de 7 a 10 riesgo alto, con indicación de manejo invasivo. Se dan datos de alarma al egreso.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome coronario agudo sin elevación del ST",
+        "Guía de la Sociedad Europea de Cardiología para síndrome coronario agudo"
+      ]
+    },
+    {
+      "key": "urg-04a-dolor-toracico-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "chest_pain",
+      "vignette": "Mujer de 68 años que tras la muerte súbita de su esposo presenta dolor torácico, elevación del ST en derivaciones anteriores y troponina elevada. La coronariografía no muestra lesiones obstructivas. La ventriculografía muestra abombamiento apical con hipercinesia basal.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Amiloidosis cardiaca",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No explica el cuadro agudo."
+        },
+        {
+          "key": "b",
+          "text": "Miocardiopatía dilatada crónica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es aguda y transitoria."
+        },
+        {
+          "key": "c",
+          "text": "El estrés emocional no puede causar daño cardiaco",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede causar miocardiopatía por estrés."
+        },
+        {
+          "key": "d",
+          "text": "Miocardiopatía hipertrófica obstructiva",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el patrón."
+        },
+        {
+          "key": "e",
+          "text": "Infarto anterior extenso por oclusión de la descendente anterior",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La coronariografía no muestra lesiones."
+        },
+        {
+          "key": "f",
+          "text": "Pericarditis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la alteración de la contractilidad."
+        },
+        {
+          "key": "g",
+          "text": "Tromboembolia pulmonar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el abombamiento apical."
+        },
+        {
+          "key": "h",
+          "text": "Siempre deja secuelas permanentes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Suele recuperarse en semanas."
+        },
+        {
+          "key": "i",
+          "text": "Disección aórtica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "j",
+          "text": "Miocardiopatía por estrés o síndrome de Takotsubo",
+          "correct": true,
+          "rationale": "Disfunción apical transitoria tras un estrés emocional sin lesiones coronarias."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "La miocardiopatía por estrés, o síndrome de Takotsubo, es una disfunción ventricular transitoria que se presenta como un síndrome coronario agudo, con dolor torácico, cambios en el ST y elevación de troponina, pero sin lesiones coronarias obstructivas. Es más frecuente en mujeres posmenopáusicas y suele desencadenarse por estrés emocional o físico intenso, por descarga de catecolaminas. El patrón típico es abombamiento apical con hipercinesia basal. El tratamiento es de soporte y de la insuficiencia cardiaca si se presenta. La función ventricular suele recuperarse en días a semanas, aunque puede haber complicaciones graves en la fase aguda.",
+      "gpcRefs": [
+        "Guía de la Sociedad Europea de Cardiología para síndrome coronario agudo",
+        "Consenso internacional sobre el síndrome de Takotsubo"
+      ]
+    },
+    {
+      "key": "urg-04a-dolor-toracico-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "cardiovascular_emergencies",
+      "subtopic": "chest_pain",
+      "vignette": "Hombre de 66 años con infarto anterior extenso hace 5 días, no reperfundido. Presenta disnea súbita, hipotensión y un soplo holosistólico nuevo en el borde esternal izquierdo con frémito.",
+      "prompt": "¿Cuál es la complicación mecánica más probable?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ruptura del septum interventricular",
+          "correct": true,
+          "rationale": "Soplo holosistólico nuevo con frémito y choque días después de un infarto."
+        },
+        {
+          "key": "b",
+          "text": "Pericarditis postinfarto",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No causa choque ni soplo holosistólico."
+        },
+        {
+          "key": "c",
+          "text": "Aneurisma ventricular crónico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el cuadro agudo."
+        },
+        {
+          "key": "d",
+          "text": "Las complicaciones mecánicas solo ocurren el primer día",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Son más frecuentes de 3 a 5 días."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome de Dressler",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Ocurre semanas después y causa pericarditis."
+        },
+        {
+          "key": "f",
+          "text": "Reinfarto sin complicación mecánica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el soplo nuevo con frémito."
+        },
+        {
+          "key": "g",
+          "text": "Tromboembolia pulmonar",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el soplo."
+        },
+        {
+          "key": "h",
+          "text": "Puede manejarse solo con diuréticos sin cirugía",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere reparación quirúrgica."
+        },
+        {
+          "key": "i",
+          "text": "Estenosis aórtica previa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El soplo es nuevo."
+        },
+        {
+          "key": "j",
+          "text": "Neumonía nosocomial",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el soplo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "i"
+      ],
+      "explanation": "Las complicaciones mecánicas del infarto ocurren con mayor frecuencia de 3 a 5 días después, sobre todo en infartos extensos no reperfundidos. Incluyen la ruptura del septum interventricular, con soplo holosistólico nuevo con frémito en el borde esternal izquierdo y choque; la ruptura del músculo papilar, con insuficiencia mitral aguda y edema pulmonar, sin frémito; y la ruptura de la pared libre, con taponamiento y muerte súbita. Se diagnostican con ecocardiograma. El tratamiento es la estabilización con soporte hemodinámico y la reparación quirúrgica urgente. La reperfusión temprana ha reducido su frecuencia.",
+      "gpcRefs": [
+        "Guía de la Sociedad Europea de Cardiología para infarto agudo",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del infarto agudo de miocardio con elevación del ST"
+      ]
+    }
+  ]
+}

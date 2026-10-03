@@ -1,0 +1,1430 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "fam-06a-ciclo-vital-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_life_cycle",
+      "vignette": "Pareja de 30 y 28 años que acude a consulta con su primer hijo de 6 meses. Se casaron hace 3 años. Refieren cansancio, menos tiempo para la pareja y discusiones por la distribución de tareas.",
+      "prompt": "¿Qué etapa del ciclo vital familiar de Geyman indica esta situación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Etapa de expansión",
+          "correct": true,
+          "rationale": "Inicia con el nacimiento del primer hijo e implica reorganizar roles."
+        },
+        {
+          "key": "b",
+          "text": "Familia reconstituida",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay uniones previas con hijos."
+        },
+        {
+          "key": "c",
+          "text": "Etapa de retiro y muerte",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Corresponde a la vejez."
+        },
+        {
+          "key": "d",
+          "text": "Crisis paranormativa por enfermedad",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es una transición esperada."
+        },
+        {
+          "key": "e",
+          "text": "Disfunción familiar grave",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Los ajustes son esperados en esta etapa."
+        },
+        {
+          "key": "f",
+          "text": "Etapa de independencia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Ocurre cuando los hijos se casan o se van del hogar."
+        },
+        {
+          "key": "g",
+          "text": "Etapa de dispersión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Inicia cuando los hijos entran a la escuela o adolescencia."
+        },
+        {
+          "key": "h",
+          "text": "Etapa de nido vacío",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ocurre cuando los hijos se van."
+        },
+        {
+          "key": "i",
+          "text": "Etapa de matrimonio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Termina con la llegada del primer hijo."
+        },
+        {
+          "key": "j",
+          "text": "Familia extensa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Solo vive la familia nuclear."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "El ciclo vital familiar describe las etapas por las que pasa una familia a lo largo del tiempo, cada una con tareas y crisis esperadas. Según Geyman, las etapas son matrimonio, desde la unión hasta el nacimiento del primer hijo; expansión, desde el nacimiento del primer hijo; dispersión, cuando los hijos inician la escuela o la adolescencia y aumenta su independencia; independencia, cuando los hijos forman sus propias familias; y retiro y muerte, con jubilación, enfermedad y viudez. La llegada del primer hijo exige redistribuir tareas, ajustar la relación de pareja e incorporar el rol de padres. Estas son crisis normativas.",
+      "gpcRefs": [
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social",
+        "Guía de Práctica Clínica de estudio de salud familiar en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-06a-ciclo-vital-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_life_cycle",
+      "vignette": "Mujer de 54 años que acude por tristeza y sensación de vacío desde que su hija menor se casó y se fue de casa hace 3 meses. Su esposo trabaja todo el día. Refiere que su vida giraba en torno a sus hijos.",
+      "prompt": "¿Qué indica esta situación en el contexto del ciclo vital familiar?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Una crisis paranormativa por pérdida inesperada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La salida de los hijos es esperada."
+        },
+        {
+          "key": "b",
+          "text": "Una reacción excepcional que pocas madres presentan",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es frecuente."
+        },
+        {
+          "key": "c",
+          "text": "Trastorno bipolar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay datos de manía."
+        },
+        {
+          "key": "d",
+          "text": "Etapa de dispersión inicial",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Los hijos ya se fueron."
+        },
+        {
+          "key": "e",
+          "text": "Etapa de matrimonio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Corresponde al inicio de la pareja."
+        },
+        {
+          "key": "f",
+          "text": "Psicosis involutiva",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay síntomas psicóticos."
+        },
+        {
+          "key": "g",
+          "text": "Una situación sin relación con la salud que no debe abordarse",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede afectar la salud mental."
+        },
+        {
+          "key": "h",
+          "text": "Disfunción familiar grave que requiere separación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay datos de disfunción grave."
+        },
+        {
+          "key": "i",
+          "text": "Etapa de expansión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Corresponde al nacimiento de los hijos."
+        },
+        {
+          "key": "j",
+          "text": "Una crisis normativa de la etapa de independencia, conocida como nido vacío",
+          "correct": true,
+          "rationale": "Es una transición esperada que exige reorganizar la vida de pareja."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "Las crisis familiares se clasifican en normativas, esperadas en el desarrollo de la familia, como el nacimiento de un hijo, la entrada a la escuela, la adolescencia, la salida de los hijos y la jubilación; y paranormativas o accidentales, no esperadas, como enfermedad grave, muerte prematura, desempleo, divorcio o migración. El síndrome del nido vacío es una crisis normativa de la etapa de independencia, cuando los hijos dejan el hogar. Es más intenso cuando la identidad de un miembro giraba en torno a la crianza. El médico familiar puede orientar a la pareja a redefinir su relación y proyectos, y debe estar atento a síntomas depresivos.",
+      "gpcRefs": [
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social",
+        "Guía de Práctica Clínica de estudio de salud familiar en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-06a-ciclo-vital-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_life_cycle",
+      "vignette": "En una consulta se construye la estructura familiar de un paciente. Vive con su esposa, sus dos hijos, su madre viuda y un hermano soltero.",
+      "prompt": "¿Qué tipo de familia según su composición indica esta situación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Familia extensa",
+          "correct": true,
+          "rationale": "Además de la familia nuclear incluye a otros parientes consanguíneos."
+        },
+        {
+          "key": "b",
+          "text": "Familia reconstituida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay uniones previas con hijos."
+        },
+        {
+          "key": "c",
+          "text": "Familia monoparental",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Hay ambos padres."
+        },
+        {
+          "key": "d",
+          "text": "Familia nuclear",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Solo incluiría a los padres y sus hijos."
+        },
+        {
+          "key": "e",
+          "text": "Familia binuclear",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se refiere a hijos que viven entre dos hogares tras un divorcio."
+        },
+        {
+          "key": "f",
+          "text": "Persona que vive sola",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Hay varios miembros."
+        },
+        {
+          "key": "g",
+          "text": "Familia compuesta",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Incluye a personas sin parentesco."
+        },
+        {
+          "key": "h",
+          "text": "Equivalente familiar",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se refiere a grupos sin lazos de parentesco que conviven."
+        },
+        {
+          "key": "i",
+          "text": "Familia de origen exclusivamente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El término se refiere a la familia donde se nace."
+        },
+        {
+          "key": "j",
+          "text": "Familia nuclear simple",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Hay otros parientes."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "g"
+      ],
+      "explanation": "Por su composición, la familia nuclear está formada por los padres y sus hijos; la familia extensa incluye además a otros parientes consanguíneos, como abuelos, tíos o hermanos de los padres; y la familia compuesta incluye a personas sin parentesco que conviven, como amigos o compadres. Otras tipologías incluyen la familia monoparental, con un solo padre, y la reconstituida, formada por una pareja en la que al menos uno tiene hijos de una unión previa. La familia extensa es frecuente en México y puede ser una fuente importante de apoyo para el cuidado de niños y adultos mayores.",
+      "gpcRefs": [
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar",
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social"
+      ]
+    },
+    {
+      "key": "fam-06a-ciclo-vital-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_life_cycle",
+      "vignette": "Mujer de 40 años, divorciada, con dos hijos de 10 y 12 años de su primer matrimonio, que se unió con un hombre viudo que tiene una hija de 8 años. Viven todos juntos.",
+      "prompt": "¿Qué tipo de familia indica esta composición?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Familia nuclear simple",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Hay hijos de uniones previas."
+        },
+        {
+          "key": "b",
+          "text": "Familia compuesta por amigos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Todos tienen relación familiar."
+        },
+        {
+          "key": "c",
+          "text": "Familia disfuncional por definición",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La estructura no determina la funcionalidad."
+        },
+        {
+          "key": "d",
+          "text": "Familia de origen",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se refiere a la familia donde se nace."
+        },
+        {
+          "key": "e",
+          "text": "Familia monoparental",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Hay dos adultos en pareja."
+        },
+        {
+          "key": "f",
+          "text": "Persona sola",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Hay varios miembros."
+        },
+        {
+          "key": "g",
+          "text": "Familia binuclear sin convivencia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Viven juntos."
+        },
+        {
+          "key": "h",
+          "text": "Familia extensa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No incluye a otros parientes."
+        },
+        {
+          "key": "i",
+          "text": "Familia tradicional rural",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se refiere a otra clasificación."
+        },
+        {
+          "key": "j",
+          "text": "Familia reconstituida",
+          "correct": true,
+          "rationale": "Uno o ambos miembros de la pareja aportan hijos de uniones previas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "La familia reconstituida, también llamada ensamblada, está formada por una pareja en la que uno o ambos miembros tienen hijos de relaciones anteriores. Es cada vez más frecuente. Sus retos incluyen definir los roles del padrastro o madrastra, la integración de hermanos de diferentes uniones, la relación con los padres biológicos que no conviven y las lealtades divididas. La estructura familiar no determina la funcionalidad: una familia reconstituida puede ser muy funcional si logra comunicación, reglas claras y respeto. El médico familiar puede orientar sobre estos procesos de adaptación.",
+      "gpcRefs": [
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar",
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social"
+      ]
+    },
+    {
+      "key": "fam-06a-ciclo-vital-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_life_cycle",
+      "vignette": "En la consulta de medicina familiar se elabora una representación gráfica de la familia con al menos tres generaciones, sus integrantes, fechas importantes, enfermedades y relaciones entre ellos.",
+      "prompt": "¿Qué herramienta de estudio familiar indica esta descripción?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "APGAR familiar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es un cuestionario de funcionalidad."
+        },
+        {
+          "key": "b",
+          "text": "Expediente clínico electrónico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es una herramienta de estudio familiar."
+        },
+        {
+          "key": "c",
+          "text": "Familiograma o genograma",
+          "correct": true,
+          "rationale": "Representa gráficamente la estructura, la historia médica y las relaciones de la familia."
+        },
+        {
+          "key": "d",
+          "text": "Círculo familiar de Thrower",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Representa la percepción subjetiva de cercanía."
+        },
+        {
+          "key": "e",
+          "text": "Historia clínica convencional",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es una representación gráfica."
+        },
+        {
+          "key": "f",
+          "text": "Escala de reajuste social de Holmes y Rahe",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Mide eventos estresantes."
+        },
+        {
+          "key": "g",
+          "text": "Árbol genealógico genético para pruebas moleculares",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Tiene fines de genética clínica."
+        },
+        {
+          "key": "h",
+          "text": "Escala FACES III",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Mide cohesión y adaptabilidad."
+        },
+        {
+          "key": "i",
+          "text": "Ecomapa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Representa las relaciones de la familia con su entorno."
+        },
+        {
+          "key": "j",
+          "text": "Cuestionario de Zarit",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Mide la sobrecarga del cuidador."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "El familiograma o genograma es la herramienta más utilizada en medicina familiar para estudiar a la familia. Representa con símbolos estandarizados al menos tres generaciones, con nombres, edades, fechas de nacimiento, matrimonio, divorcio y muerte, enfermedades, y las relaciones entre los miembros, como cercanía, conflicto o distancia. Permite identificar patrones de enfermedad hereditaria, factores de riesgo, crisis, roles y la etapa del ciclo vital. Los hombres se representan con cuadrados y las mujeres con círculos, y el paciente índice se señala. El ecomapa complementa al genograma al mostrar las relaciones con el entorno.",
+      "gpcRefs": [
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar",
+        "Guía de Práctica Clínica de estudio de salud familiar en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-06a-ciclo-vital-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_life_cycle",
+      "vignette": "Familia en la que el padre de 45 años pierde su empleo de forma inesperada y la madre es diagnosticada con cáncer de mama en el mismo mes. Tienen tres hijos en edad escolar.",
+      "prompt": "¿Qué tipo de crisis familiar indica esta situación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Crisis normativas del ciclo vital",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No son eventos esperados."
+        },
+        {
+          "key": "b",
+          "text": "Crisis por nido vacío",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Los hijos están en casa."
+        },
+        {
+          "key": "c",
+          "text": "Crisis de la etapa de expansión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No corresponde a la llegada de hijos."
+        },
+        {
+          "key": "d",
+          "text": "Crisis que solo afecta a los padres",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Afecta a todo el sistema familiar."
+        },
+        {
+          "key": "e",
+          "text": "Disfunción familiar crónica previa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Los eventos son recientes."
+        },
+        {
+          "key": "f",
+          "text": "Crisis por jubilación planeada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El desempleo es inesperado."
+        },
+        {
+          "key": "g",
+          "text": "Crisis de identidad adolescente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "h",
+          "text": "Crisis por desmoralización exclusivamente",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Hay pérdida económica y enfermedad."
+        },
+        {
+          "key": "i",
+          "text": "Eventos sin impacto en la salud familiar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Generan estrés importante."
+        },
+        {
+          "key": "j",
+          "text": "Crisis paranormativas o accidentales por desmembramiento y desorganización",
+          "correct": true,
+          "rationale": "Son eventos inesperados que no forman parte del desarrollo normal de la familia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "Las crisis paranormativas o accidentales son eventos inesperados que afectan a la familia. Se clasifican en crisis por desmembramiento, como muerte, hospitalización, separación o migración; por incremento, como adopción o llegada de un pariente; por desorganización, como enfermedad grave, desempleo o problemas económicos; y por desmoralización, como infidelidad, delincuencia o adicciones. La enfermedad grave de un miembro y la pérdida del empleo generan estrés económico, cambios de roles y reorganización. El médico familiar debe identificar los recursos de la familia, su red de apoyo y su funcionalidad para orientar la adaptación.",
+      "gpcRefs": [
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar",
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social"
+      ]
+    },
+    {
+      "key": "fam-06a-ciclo-vital-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_life_cycle",
+      "vignette": "Mujer de 58 años que cuida desde hace 3 años a su madre con demencia avanzada. Refiere agotamiento, insomnio, abandono de sus actividades, irritabilidad y que sus hermanos no le ayudan. Presión arterial descontrolada en los últimos meses.",
+      "prompt": "¿Cuál es la herramienta inicial más apropiada para evaluar su situación?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Escala de sobrecarga del cuidador de Zarit",
+          "correct": true,
+          "rationale": "Mide la carga percibida por el cuidador principal."
+        },
+        {
+          "key": "b",
+          "text": "Escala de Barthel aplicada a la cuidadora",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Evalúa dependencia en actividades básicas."
+        },
+        {
+          "key": "c",
+          "text": "Minimental aplicado a la cuidadora",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Evalúa deterioro cognitivo."
+        },
+        {
+          "key": "d",
+          "text": "Escala de Apgar neonatal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Evalúa recién nacidos."
+        },
+        {
+          "key": "e",
+          "text": "Escala de Glasgow",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Evalúa el estado de conciencia."
+        },
+        {
+          "key": "f",
+          "text": "No evaluar depresión en la cuidadora",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es frecuente."
+        },
+        {
+          "key": "g",
+          "text": "Resonancia magnética cerebral de la cuidadora",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "APGAR familiar como único instrumento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Evalúa funcionalidad global, no la carga del cuidador."
+        },
+        {
+          "key": "i",
+          "text": "La sobrecarga del cuidador no afecta la salud física",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se asocia con enfermedad y mortalidad."
+        },
+        {
+          "key": "j",
+          "text": "Índice de Katz de la cuidadora",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Mide funcionalidad física."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "El síndrome del cuidador se presenta en personas que cuidan por tiempo prolongado a un familiar dependiente y se caracteriza por agotamiento físico y emocional, alteraciones del sueño, aislamiento, ansiedad, depresión y descuido de su propia salud. La escala de sobrecarga del cuidador de Zarit, con 22 preguntas, mide la carga percibida y clasifica la sobrecarga en ausente, leve o intensa. El manejo incluye redistribuir las tareas entre los familiares, buscar apoyos institucionales y comunitarios, respiro del cuidador, atención a su salud mental y física y educación sobre la enfermedad del paciente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección y manejo del colapso del cuidador",
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social"
+      ]
+    },
+    {
+      "key": "fam-06a-ciclo-vital-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_life_cycle",
+      "vignette": "Familia en la que ambos padres trabajan fuera de casa con ingresos similares y comparten las tareas del hogar y la crianza de sus hijos.",
+      "prompt": "¿Qué tipo de familia según su desarrollo indica esta situación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Familia disfuncional por compartir roles",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Compartir roles no implica disfunción."
+        },
+        {
+          "key": "b",
+          "text": "Familia compuesta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La clasificación es por composición."
+        },
+        {
+          "key": "c",
+          "text": "Familia rural",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La clasificación es por demografía."
+        },
+        {
+          "key": "d",
+          "text": "Familia arcaica o primitiva",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se basa en la producción agrícola o artesanal en el hogar."
+        },
+        {
+          "key": "e",
+          "text": "Familia tradicional",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El padre es proveedor y la madre se dedica al hogar."
+        },
+        {
+          "key": "f",
+          "text": "Familia monoparental",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Hay ambos padres."
+        },
+        {
+          "key": "g",
+          "text": "Familia extensa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La clasificación es por composición."
+        },
+        {
+          "key": "h",
+          "text": "Familia reconstituida",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay datos de uniones previas."
+        },
+        {
+          "key": "i",
+          "text": "Familia campesina",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se refiere a la ocupación."
+        },
+        {
+          "key": "j",
+          "text": "Familia moderna",
+          "correct": true,
+          "rationale": "Ambos padres trabajan y comparten roles de forma equitativa."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "Las familias pueden clasificarse según distintos criterios. Por su desarrollo, la familia moderna es aquella en la que ambos padres trabajan y comparten roles, la tradicional tiene un padre proveedor y una madre dedicada al hogar, y la arcaica o primitiva es la familia campesina que vive de la producción de la tierra. Por su demografía se clasifican en urbanas, suburbanas y rurales; por la ocupación del jefe de familia, en obreras, campesinas, profesionales o empleadas. Estas clasificaciones ayudan a comprender los recursos, roles y posibles tensiones de la familia, y están descritas en el consenso académico mexicano.",
+      "gpcRefs": [
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar",
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social"
+      ]
+    },
+    {
+      "key": "fam-06a-ciclo-vital-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_life_cycle",
+      "vignette": "Hombre de 66 años que se jubiló hace 6 meses después de 40 años de trabajo. Su esposa refiere que está irritable, pasa el día en casa sin actividades, duerme mucho y han aumentado las discusiones. Sin ideación suicida.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Diagnosticar trastorno bipolar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay datos."
+        },
+        {
+          "key": "b",
+          "text": "No evaluar síntomas depresivos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son frecuentes en esta transición."
+        },
+        {
+          "key": "c",
+          "text": "Recomendar que regrese a trabajar como única solución",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es la única opción."
+        },
+        {
+          "key": "d",
+          "text": "Solicitar tomografía de cráneo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay datos neurológicos."
+        },
+        {
+          "key": "e",
+          "text": "Reconocer la crisis normativa de la jubilación, evaluar depresión y orientar sobre nuevos proyectos, actividades y redistribución de roles en la pareja",
+          "correct": true,
+          "rationale": "La jubilación exige reorganizar la vida personal y familiar."
+        },
+        {
+          "key": "f",
+          "text": "Es un problema exclusivo del paciente sin relación con la familia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Afecta a la dinámica de la pareja."
+        },
+        {
+          "key": "g",
+          "text": "Considerarlo un deterioro cognitivo sin evaluarlo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay datos cognitivos."
+        },
+        {
+          "key": "h",
+          "text": "La jubilación siempre mejora el bienestar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede generar crisis."
+        },
+        {
+          "key": "i",
+          "text": "Iniciar benzodiacepinas para la irritabilidad",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No abordan el problema y tienen riesgos."
+        },
+        {
+          "key": "j",
+          "text": "Recomendar separación de la pareja",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicado."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "La jubilación es una crisis normativa de la etapa de retiro del ciclo vital familiar. Implica pérdida del rol laboral, de la estructura del tiempo, de contactos sociales y a veces de ingresos, y aumenta la convivencia con la pareja, lo que puede generar conflictos. Algunos jubilados presentan síntomas depresivos, aislamiento y consumo de alcohol. El médico familiar debe evaluar la presencia de depresión, orientar sobre actividades significativas, como voluntariado, ejercicio, convivencia social y pasatiempos, y favorecer la renegociación de roles y espacios en la pareja. La preparación previa para la jubilación favorece una mejor adaptación.",
+      "gpcRefs": [
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social",
+        "Guía de Práctica Clínica de valoración geronto-geriátrica integral"
+      ]
+    },
+    {
+      "key": "fam-06a-ciclo-vital-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_life_cycle",
+      "vignette": "Mujer de 35 años, separada, que vive sola con sus dos hijos de 6 y 9 años. El padre no participa en la crianza ni aporta económicamente.",
+      "prompt": "¿Qué tipo de familia indica esta situación y cuál es su principal riesgo?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Familia extensa con apoyo de varios adultos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay otros adultos."
+        },
+        {
+          "key": "b",
+          "text": "Familia compuesta",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay personas sin parentesco."
+        },
+        {
+          "key": "c",
+          "text": "Familia monoparental, con riesgo de sobrecarga y vulnerabilidad económica de la madre",
+          "correct": true,
+          "rationale": "Un solo progenitor asume la crianza y el sustento."
+        },
+        {
+          "key": "d",
+          "text": "Las familias monoparentales son poco frecuentes en México",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Son frecuentes."
+        },
+        {
+          "key": "e",
+          "text": "Familia disfuncional por definición",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La estructura no determina la funcionalidad."
+        },
+        {
+          "key": "f",
+          "text": "Familia binuclear con custodia compartida",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El padre no participa."
+        },
+        {
+          "key": "g",
+          "text": "Familia reconstituida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay una nueva pareja."
+        },
+        {
+          "key": "h",
+          "text": "Familia nuclear completa sin riesgos especiales",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Falta uno de los padres."
+        },
+        {
+          "key": "i",
+          "text": "Los hijos de familias monoparentales siempre tienen problemas de conducta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es una regla."
+        },
+        {
+          "key": "j",
+          "text": "Persona que vive sola",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Vive con sus hijos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "La familia monoparental está formada por un solo progenitor con sus hijos, por separación, divorcio, viudez, abandono o decisión personal. En México la mayoría está encabezada por mujeres. Sus principales riesgos son la sobrecarga del progenitor, que asume solo la crianza, el trabajo y las tareas del hogar, la vulnerabilidad económica y el aislamiento social. La estructura no determina por sí sola la funcionalidad: muchas familias monoparentales son funcionales. El médico familiar puede identificar la red de apoyo, orientar sobre programas sociales y guarderías y vigilar la salud mental del progenitor.",
+      "gpcRefs": [
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar",
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social"
+      ]
+    },
+    {
+      "key": "fam-06a-ciclo-vital-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_life_cycle",
+      "vignette": "Familia con dos hijos de 14 y 16 años. Los padres refieren conflictos frecuentes por los permisos, la hora de llegada y el uso del celular. Sienten que han perdido autoridad.",
+      "prompt": "¿Qué indica esta situación según el ciclo vital familiar?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Una crisis paranormativa grave",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es una transición esperada."
+        },
+        {
+          "key": "b",
+          "text": "Etapa de retiro",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "c",
+          "text": "Disfunción familiar irreversible",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Los ajustes son posibles."
+        },
+        {
+          "key": "d",
+          "text": "La solución es imponer reglas más rígidas sin diálogo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La rigidez aumenta el conflicto."
+        },
+        {
+          "key": "e",
+          "text": "Indicación de internamiento de los hijos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "f",
+          "text": "Etapa de expansión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Corresponde a la llegada de los hijos."
+        },
+        {
+          "key": "g",
+          "text": "Etapa de independencia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Los hijos aún viven en casa y dependen de los padres."
+        },
+        {
+          "key": "h",
+          "text": "Una crisis normativa de la etapa de dispersión con hijos adolescentes que buscan autonomía",
+          "correct": true,
+          "rationale": "La familia debe flexibilizar límites manteniendo la supervisión."
+        },
+        {
+          "key": "i",
+          "text": "Los conflictos con adolescentes son raros",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Son frecuentes."
+        },
+        {
+          "key": "j",
+          "text": "Trastorno negativista desafiante en ambos hijos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Los conflictos son esperados en esta etapa."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "En la etapa de dispersión, con hijos en edad escolar y adolescentes, la familia enfrenta la tarea de equilibrar la necesidad de autonomía de los hijos con la supervisión y los límites. Los conflictos por permisos, horarios y uso de tecnología son esperados. Las familias funcionales logran flexibilizar las reglas, negociar acuerdos y mantener la comunicación, mientras que la rigidez excesiva o la falta de límites aumenta el riesgo de conductas de riesgo. El médico familiar puede orientar a los padres sobre comunicación asertiva, negociación de límites y señales de alarma en los adolescentes.",
+      "gpcRefs": [
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social",
+        "Guía de Práctica Clínica de atención integral del adolescente en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-06a-ciclo-vital-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_life_cycle",
+      "vignette": "Hombre de 72 años cuya esposa falleció hace 2 meses. Vive solo, sus hijos viven en otra ciudad. Ha dejado de cocinar, come poco y casi no sale de casa.",
+      "prompt": "¿Qué indica esta situación en el contexto del ciclo vital familiar y del riesgo del paciente?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Crisis de la etapa de retiro y muerte con riesgo de aislamiento, desnutrición y depresión",
+          "correct": true,
+          "rationale": "La viudez en el adulto mayor es un evento de alto riesgo."
+        },
+        {
+          "key": "b",
+          "text": "Crisis normativa de la adolescencia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "c",
+          "text": "Duelo normal sin necesidad de seguimiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La desnutrición y el aislamiento requieren intervención."
+        },
+        {
+          "key": "d",
+          "text": "Situación sin riesgo porque es independiente",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La viudez reciente con aislamiento es un riesgo."
+        },
+        {
+          "key": "e",
+          "text": "Etapa de expansión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "f",
+          "text": "La viudez no afecta la mortalidad del cónyuge sobreviviente",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La aumenta en los primeros meses."
+        },
+        {
+          "key": "g",
+          "text": "Los hombres se adaptan mejor a la viudez",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Suelen tener más riesgo."
+        },
+        {
+          "key": "h",
+          "text": "Demencia avanzada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay datos cognitivos."
+        },
+        {
+          "key": "i",
+          "text": "Indicación de institucionalización inmediata",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Primero se evalúan opciones."
+        },
+        {
+          "key": "j",
+          "text": "No activar la red de apoyo familiar y comunitaria",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte del manejo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "La etapa de retiro y muerte del ciclo vital incluye la jubilación, las enfermedades crónicas y la muerte del cónyuge. La viudez en el adulto mayor se asocia con mayor riesgo de depresión, aislamiento, desnutrición, deterioro funcional y mortalidad en los meses siguientes, especialmente en hombres que dependían de su pareja para tareas del hogar y relaciones sociales. El médico familiar debe evaluar el estado de ánimo, la nutrición y la funcionalidad, activar la red de apoyo familiar y comunitaria, como centros de día y grupos de adultos mayores, y dar seguimiento cercano.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de valoración geronto-geriátrica integral",
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social"
+      ]
+    },
+    {
+      "key": "fam-06a-ciclo-vital-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_life_cycle",
+      "vignette": "En el familiograma de un paciente, una línea con dos diagonales cruza la línea que une a sus padres, y una X dentro del cuadrado del abuelo paterno.",
+      "prompt": "¿Qué indican estos símbolos del familiograma?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Separación temporal y enfermedad del abuelo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Una diagonal indica separación."
+        },
+        {
+          "key": "b",
+          "text": "Divorcio y adopción del abuelo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La X indica muerte."
+        },
+        {
+          "key": "c",
+          "text": "Hijo fuera del matrimonio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se representa de otra forma."
+        },
+        {
+          "key": "d",
+          "text": "Embarazo actual",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se representa con un triángulo."
+        },
+        {
+          "key": "e",
+          "text": "Los símbolos no están estandarizados",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Existen símbolos estandarizados."
+        },
+        {
+          "key": "f",
+          "text": "Divorcio de los padres y fallecimiento del abuelo paterno",
+          "correct": true,
+          "rationale": "Las dos diagonales indican divorcio y la X indica muerte."
+        },
+        {
+          "key": "g",
+          "text": "Unión libre y aborto",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se representan con otros símbolos."
+        },
+        {
+          "key": "h",
+          "text": "Matrimonio y adopción",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No corresponden a esos símbolos."
+        },
+        {
+          "key": "i",
+          "text": "Gemelos y abuelo como paciente índice",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No corresponden."
+        },
+        {
+          "key": "j",
+          "text": "Conflicto y relación cercana",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se representan con líneas entre personas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "El familiograma usa símbolos estandarizados. Los hombres se representan con cuadrados y las mujeres con círculos; el paciente índice con doble línea; la muerte con una X dentro del símbolo; el matrimonio con una línea continua que une a la pareja; la unión libre con una línea discontinua; la separación con una diagonal sobre la línea de unión y el divorcio con dos diagonales. Los hijos se cuelgan de la línea de la pareja de mayor a menor de izquierda a derecha. El embarazo se representa con un triángulo y el aborto con un círculo o cuadrado pequeño relleno o con una X.",
+      "gpcRefs": [
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar",
+        "Guía de Práctica Clínica de estudio de salud familiar en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-06a-ciclo-vital-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_life_cycle",
+      "vignette": "Pareja de 32 y 30 años casada hace 1 año que acude porque discuten mucho por la intervención de la madre de él en sus decisiones y por cómo administrar el dinero. Desean seguir juntos.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Reconocer las tareas de la etapa de matrimonio, como establecer límites con las familias de origen y acordar normas, y orientar o referir a terapia de pareja si persiste",
+          "correct": true,
+          "rationale": "Son crisis esperadas en el inicio de la pareja."
+        },
+        {
+          "key": "b",
+          "text": "Iniciar antidepresivos a ambos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay datos de depresión."
+        },
+        {
+          "key": "c",
+          "text": "Las parejas jóvenes rara vez tienen conflictos con las familias de origen",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Son frecuentes."
+        },
+        {
+          "key": "d",
+          "text": "Indicar que la madre debe tomar las decisiones",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No favorece la autonomía de la pareja."
+        },
+        {
+          "key": "e",
+          "text": "Recomendar el divorcio por incompatibilidad",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Desean seguir juntos y los conflictos son abordables."
+        },
+        {
+          "key": "f",
+          "text": "Considerarlo una disfunción grave e irreversible",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es una crisis normativa."
+        },
+        {
+          "key": "g",
+          "text": "Hospitalización psiquiátrica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "Recomendar tener un hijo para unir a la pareja",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No resuelve los conflictos."
+        },
+        {
+          "key": "i",
+          "text": "Es un tema ajeno a la medicina familiar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es parte del estudio de la familia."
+        },
+        {
+          "key": "j",
+          "text": "No preguntar por violencia en la pareja",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Siempre debe explorarse."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "f"
+      ],
+      "explanation": "En la etapa de matrimonio del ciclo vital, la pareja tiene como tareas consolidar su identidad como unidad, establecer límites con las familias de origen, acordar normas sobre el manejo del dinero, las tareas del hogar y la vida social, y decidir sobre la llegada de los hijos. Los conflictos por la intervención de las familias de origen y por la economía son frecuentes. El médico familiar puede orientar a la pareja sobre comunicación y negociación, explorar la presencia de violencia y referir a terapia de pareja cuando los conflictos persisten o afectan su salud.",
+      "gpcRefs": [
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social",
+        "Guía de Práctica Clínica de estudio de salud familiar en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-06a-ciclo-vital-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_life_cycle",
+      "vignette": "Un médico familiar dibuja un esquema en el que la familia se encuentra en el centro y se representan con círculos y líneas sus relaciones con la escuela, el trabajo, la iglesia, los servicios de salud y los vecinos, indicando si son fuertes, débiles o conflictivas.",
+      "prompt": "¿Qué herramienta de estudio familiar indica esta descripción?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "APGAR familiar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es un cuestionario de funcionalidad."
+        },
+        {
+          "key": "b",
+          "text": "Escala FACES III",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Mide cohesión y adaptabilidad."
+        },
+        {
+          "key": "c",
+          "text": "Círculo familiar de Thrower",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Representa cercanía entre miembros, no con el entorno."
+        },
+        {
+          "key": "d",
+          "text": "Escala de Zarit",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Mide sobrecarga del cuidador."
+        },
+        {
+          "key": "e",
+          "text": "Familiograma",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Representa la estructura familiar intergeneracional."
+        },
+        {
+          "key": "f",
+          "text": "Ecomapa",
+          "correct": true,
+          "rationale": "Representa las relaciones de la familia con los sistemas de su entorno."
+        },
+        {
+          "key": "g",
+          "text": "Mapa epidemiológico comunitario",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Representa casos de enfermedad en una zona."
+        },
+        {
+          "key": "h",
+          "text": "Cuestionario de red de apoyo de Duke exclusivamente",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es un cuestionario, no un esquema."
+        },
+        {
+          "key": "i",
+          "text": "Croquis de la vivienda",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No representa relaciones."
+        },
+        {
+          "key": "j",
+          "text": "Línea de vida familiar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Representa eventos en el tiempo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "f"
+      ],
+      "explanation": "El ecomapa es una herramienta gráfica que representa a la familia en el centro y sus relaciones con los sistemas externos, como trabajo, escuela, servicios de salud, iglesia, amigos, vecinos, familia extensa e instituciones. La naturaleza de cada relación se indica con líneas: continuas para relaciones fuertes, discontinuas para débiles y con cortes para conflictivas, y flechas para la dirección del flujo de energía o recursos. Permite identificar redes de apoyo, fuentes de estrés y aislamiento social. Complementa al familiograma, que representa la estructura interna de la familia.",
+      "gpcRefs": [
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar",
+        "Guía de Práctica Clínica de estudio de salud familiar en el primer nivel"
+      ]
+    }
+  ]
+}

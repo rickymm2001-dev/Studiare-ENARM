@@ -1,0 +1,1525 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "fam-08-complemento-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "anxiety_primary",
+      "vignette": "Hombre de 25 años que desde hace 2 años tiene pensamientos intrusivos de que su casa se incendiará, por lo que revisa la estufa y las conexiones eléctricas hasta 30 veces antes de salir, lo que le hace llegar tarde al trabajo. Reconoce que es excesivo pero no puede evitarlo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esquizofrenia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Reconoce que sus pensamientos son excesivos."
+        },
+        {
+          "key": "b",
+          "text": "Trastorno obsesivo compulsivo",
+          "correct": true,
+          "rationale": "Obsesiones con compulsiones que consumen tiempo y causan deterioro, con introspección conservada."
+        },
+        {
+          "key": "c",
+          "text": "Trastorno de pánico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay crisis súbitas."
+        },
+        {
+          "key": "d",
+          "text": "Fobia específica al fuego",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Hay rituales de comprobación."
+        },
+        {
+          "key": "e",
+          "text": "Trastorno de ansiedad generalizada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No predominan preocupaciones múltiples sin rituales."
+        },
+        {
+          "key": "f",
+          "text": "Conducta precavida normal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Consume mucho tiempo y causa deterioro."
+        },
+        {
+          "key": "g",
+          "text": "Trastorno delirante",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay convicción delirante."
+        },
+        {
+          "key": "h",
+          "text": "Trastorno de estrés postraumático",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay trauma previo."
+        },
+        {
+          "key": "i",
+          "text": "Hipocondría",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La preocupación no es por enfermedad."
+        },
+        {
+          "key": "j",
+          "text": "Trastorno de personalidad obsesivo compulsivo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "En este no hay obsesiones ni compulsiones verdaderas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "j"
+      ],
+      "explanation": "El trastorno obsesivo compulsivo se caracteriza por obsesiones, pensamientos, imágenes o impulsos intrusivos y no deseados que causan ansiedad, y compulsiones, conductas o actos mentales repetitivos, como comprobar, lavar, contar u ordenar, que se realizan para reducir esa ansiedad. Consumen más de una hora al día o causan deterioro significativo. La mayoría de los pacientes reconoce que son excesivos. Se diferencia del trastorno de personalidad obsesivo compulsivo, que es un patrón de perfeccionismo y rigidez sin obsesiones verdaderas. El tratamiento es la terapia cognitivo conductual con exposición y prevención de respuesta, e inhibidores selectivos de la recaptura de serotonina a dosis altas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno obsesivo compulsivo",
+        "Manual diagnóstico y estadístico de los trastornos mentales"
+      ]
+    },
+    {
+      "key": "fam-08-complemento-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "anxiety_primary",
+      "vignette": "Mujer de 22 años, estudiante universitaria, que desde hace un año evita exponer en clase, comer frente a otros y asistir a fiestas por miedo intenso a ser juzgada o humillada. Cuando no puede evitarlo presenta rubor, temblor y sudoración. Ha bajado sus calificaciones.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Trastorno de personalidad esquizoide",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "En este no hay deseo de relacionarse."
+        },
+        {
+          "key": "b",
+          "text": "Trastorno de ansiedad generalizada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El miedo se limita a situaciones sociales."
+        },
+        {
+          "key": "c",
+          "text": "Trastorno de ansiedad social",
+          "correct": true,
+          "rationale": "Miedo intenso a situaciones sociales por temor a la evaluación negativa, con evitación y deterioro."
+        },
+        {
+          "key": "d",
+          "text": "Hipertiroidismo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Los síntomas son situacionales."
+        },
+        {
+          "key": "e",
+          "text": "Trastorno de pánico con agorafobia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El miedo es a la evaluación de los demás."
+        },
+        {
+          "key": "f",
+          "text": "Fobia específica a la comida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El miedo es social."
+        },
+        {
+          "key": "g",
+          "text": "Trastorno del espectro autista de inicio tardío",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay datos del desarrollo que lo apoyen."
+        },
+        {
+          "key": "h",
+          "text": "Timidez normal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Hay deterioro académico y evitación persistente."
+        },
+        {
+          "key": "i",
+          "text": "Trastorno dismórfico corporal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El temor no es por un defecto físico."
+        },
+        {
+          "key": "j",
+          "text": "Depresión mayor como diagnóstico principal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No predominan los síntomas depresivos."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "El trastorno de ansiedad social, o fobia social, se caracteriza por miedo o ansiedad intensa en situaciones sociales en las que la persona puede ser observada o evaluada por otros, como hablar en público, comer frente a otros o conocer gente, por temor a ser humillada o rechazada. Las situaciones se evitan o se soportan con mucho malestar, durante 6 meses o más, con deterioro funcional. Suele iniciar en la adolescencia y se asocia con depresión y consumo de alcohol. El tratamiento de elección es la terapia cognitivo conductual y los inhibidores selectivos de la recaptura de serotonina. El propranolol se usa en la ansiedad de desempeño ocasional.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto",
+        "Manual diagnóstico y estadístico de los trastornos mentales"
+      ]
+    },
+    {
+      "key": "fam-08-complemento-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "anxiety_primary",
+      "vignette": "Hombre de 45 años que hace 6 semanas fue despedido de su trabajo. Desde entonces está ansioso, con tristeza, insomnio y dificultad para concentrarse, sin cumplir criterios de depresión mayor ni de ansiedad generalizada. Sigue buscando empleo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El cuadro inició tras el estresor."
+        },
+        {
+          "key": "b",
+          "text": "Trastorno de personalidad dependiente",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay un patrón de larga evolución."
+        },
+        {
+          "key": "c",
+          "text": "Reacción normal sin repercusión",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Hay malestar significativo."
+        },
+        {
+          "key": "d",
+          "text": "Trastorno de pánico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay crisis súbitas."
+        },
+        {
+          "key": "e",
+          "text": "Trastorno de ansiedad generalizada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Requiere 6 meses de síntomas."
+        },
+        {
+          "key": "f",
+          "text": "Distimia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Requiere 2 años de síntomas."
+        },
+        {
+          "key": "g",
+          "text": "Trastorno bipolar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay episodios de manía."
+        },
+        {
+          "key": "h",
+          "text": "Trastorno de adaptación con ansiedad y ánimo deprimido",
+          "correct": true,
+          "rationale": "Síntomas emocionales en los 3 meses siguientes a un estresor identificable, sin cumplir criterios de otro trastorno."
+        },
+        {
+          "key": "i",
+          "text": "Episodio depresivo mayor",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No cumple los criterios."
+        },
+        {
+          "key": "j",
+          "text": "Trastorno de estrés postraumático",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El despido no es un trauma con amenaza a la vida."
+        }
+      ],
+      "canonical": [
+        "e",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "El trastorno de adaptación se caracteriza por síntomas emocionales o conductuales, como ansiedad, tristeza o alteraciones de conducta, que aparecen dentro de los 3 meses siguientes a un estresor identificable, como un despido, un divorcio o una enfermedad, y que son desproporcionados o causan deterioro, sin cumplir criterios de otro trastorno mental. Suele resolverse en los 6 meses siguientes a que termina el estresor o sus consecuencias. El tratamiento de primera línea es la psicoterapia de apoyo, la resolución de problemas y el fortalecimiento de la red de apoyo. Los fármacos se usan solo para síntomas específicos y por tiempo breve.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto",
+        "Manual diagnóstico y estadístico de los trastornos mentales"
+      ]
+    },
+    {
+      "key": "fam-08-complemento-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "anxiety_primary",
+      "vignette": "Mujer de 36 años con trastorno de pánico que inicia sertralina. Refiere crisis intensas que le impiden trabajar mientras espera el efecto del antidepresivo.",
+      "prompt": "¿Cuál es la conducta más apropiada para el control inicial de las crisis?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "La psicoterapia no ayuda en el trastorno de pánico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es de primera línea."
+        },
+        {
+          "key": "b",
+          "text": "Usar benzodiacepinas como tratamiento único indefinido",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Generan tolerancia y dependencia."
+        },
+        {
+          "key": "c",
+          "text": "Hospitalización psiquiátrica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "d",
+          "text": "Recomendar que evite salir de casa para prevenir crisis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La evitación empeora el trastorno."
+        },
+        {
+          "key": "e",
+          "text": "Agregar antipsicótico típico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "f",
+          "text": "Iniciar con dosis altas de sertralina desde el primer día",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede aumentar la ansiedad inicial."
+        },
+        {
+          "key": "g",
+          "text": "Suspender la sertralina porque no actúa de inmediato",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Su efecto tarda semanas."
+        },
+        {
+          "key": "h",
+          "text": "No referir a terapia cognitivo conductual",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es igual o más eficaz a largo plazo."
+        },
+        {
+          "key": "i",
+          "text": "Agregar una benzodiacepina por tiempo limitado de 2 a 4 semanas mientras actúa la sertralina, con plan de retiro",
+          "correct": true,
+          "rationale": "Alivia las crisis mientras inicia el efecto del antidepresivo."
+        },
+        {
+          "key": "j",
+          "text": "Las crisis de pánico son peligrosas para la vida",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No lo son, aunque generan miedo intenso."
+        }
+      ],
+      "canonical": [
+        "b",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "En el trastorno de pánico, los inhibidores selectivos de la recaptura de serotonina son el tratamiento farmacológico de elección, iniciando con dosis bajas porque al inicio pueden aumentar la ansiedad, y su efecto aparece en 2 a 6 semanas. En pacientes con crisis muy incapacitantes, puede agregarse una benzodiacepina de acción prolongada, como clonazepam, por tiempo limitado, habitualmente 2 a 4 semanas, con un plan de retiro gradual. Las benzodiacepinas no deben usarse como monoterapia a largo plazo. La terapia cognitivo conductual, con psicoeducación, reestructuración cognitiva y exposición interoceptiva, es igual de eficaz y reduce las recaídas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno de pánico",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto"
+      ]
+    },
+    {
+      "key": "fam-08-complemento-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "substance_use_family",
+      "vignette": "Adolescente de 15 años de una zona urbana marginada que inhala thinner desde hace un año. Su familia nota que tiene dificultad para caminar, olvidos y bajo rendimiento escolar.",
+      "prompt": "¿Cuál es la complicación más característica del consumo crónico de inhalables?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ninguna complicación a largo plazo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Producen daño neurológico grave."
+        },
+        {
+          "key": "b",
+          "text": "Daño neurológico con encefalopatía tóxica, ataxia cerebelosa y neuropatía periférica",
+          "correct": true,
+          "rationale": "Los solventes como el tolueno dañan la mielina."
+        },
+        {
+          "key": "c",
+          "text": "Hipertensión arterial aislada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es la complicación característica."
+        },
+        {
+          "key": "d",
+          "text": "Mejoría del rendimiento escolar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Ocurre lo contrario."
+        },
+        {
+          "key": "e",
+          "text": "Diabetes mellitus",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es la complicación característica."
+        },
+        {
+          "key": "f",
+          "text": "Los inhalables son menos dañinos que el alcohol",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Son muy neurotóxicos."
+        },
+        {
+          "key": "g",
+          "text": "Pancreatitis crónica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es la característica."
+        },
+        {
+          "key": "h",
+          "text": "Osteoporosis precoz",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es la característica."
+        },
+        {
+          "key": "i",
+          "text": "El daño neurológico siempre es reversible",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede ser permanente."
+        },
+        {
+          "key": "j",
+          "text": "Cirrosis hepática como complicación principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La principal es neurológica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "Los inhalables, como thinner, pegamentos, gasolina y aerosoles, son sustancias de inicio temprano, sobre todo en adolescentes de zonas marginadas o en situación de calle, por su bajo costo y fácil acceso. Contienen solventes como el tolueno, que son liposolubles y neurotóxicos. El consumo crónico produce encefalopatía tóxica con deterioro cognitivo, ataxia cerebelosa, neuropatía periférica, pérdida auditiva y visual, además de daño renal y hepático. El consumo agudo puede causar muerte súbita por arritmias, conocida como muerte súbita por inhalación. La prevención y la detección temprana en la escuela y la familia son fundamentales.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones",
+        "Guía de Práctica Clínica de prevención, detección e intervención de las adicciones en atención primaria"
+      ]
+    },
+    {
+      "key": "fam-08-complemento-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "substance_use_family",
+      "vignette": "Hombre de 26 años que fuma marihuana diariamente desde hace 5 años. Presenta episodios repetidos de náusea, vómito intenso y dolor abdominal que mejoran con duchas de agua caliente. Estudios de laboratorio e imagen normales.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Enfermedad por reflujo gastroesofágico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el vómito intenso cíclico."
+        },
+        {
+          "key": "b",
+          "text": "Apendicitis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El curso es recurrente y la imagen normal."
+        },
+        {
+          "key": "c",
+          "text": "Porfiria aguda intermitente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es mucho menos probable."
+        },
+        {
+          "key": "d",
+          "text": "Gastroenteritis viral recurrente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el patrón ni el alivio con agua caliente."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome de hiperémesis por cannabinoides",
+          "correct": true,
+          "rationale": "Vómito cíclico en consumidores crónicos que mejora con baños calientes."
+        },
+        {
+          "key": "f",
+          "text": "Gastroparesia diabética",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No tiene diabetes."
+        },
+        {
+          "key": "g",
+          "text": "Trastorno de conversión",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Tiene una causa identificable."
+        },
+        {
+          "key": "h",
+          "text": "Abstinencia de opioides",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No consume opioides."
+        },
+        {
+          "key": "i",
+          "text": "Pancreatitis aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Los estudios son normales."
+        },
+        {
+          "key": "j",
+          "text": "La marihuana solo tiene efecto antiemético",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El consumo crónico puede causar hiperémesis."
+        }
+      ],
+      "canonical": [
+        "b",
+        "d",
+        "e",
+        "i"
+      ],
+      "explanation": "El síndrome de hiperémesis por cannabinoides ocurre en consumidores crónicos y frecuentes de marihuana. Se caracteriza por episodios cíclicos de náusea, vómito intenso y dolor abdominal, con alivio característico mediante duchas o baños de agua caliente, y estudios normales. Paradójicamente, aunque los cannabinoides tienen efecto antiemético a dosis bajas, el consumo crónico altera la regulación del vómito. El tratamiento agudo incluye hidratación, antieméticos, haloperidol y capsaicina tópica, y el tratamiento definitivo es suspender el consumo. Su reconocimiento evita estudios innecesarios repetidos.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos por consumo de cannabis"
+      ]
+    },
+    {
+      "key": "fam-08-complemento-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "substance_use_family",
+      "vignette": "Mujer de 28 años con embarazo de 12 semanas que fuma 10 cigarros al día. Ha intentado dejarlo sola sin éxito y está motivada.",
+      "prompt": "¿Cuál es el tratamiento de elección para la cesación tabáquica en el embarazo?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Bupropión como primera línea obligada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La consejería es primero."
+        },
+        {
+          "key": "b",
+          "text": "No intervenir para no causar estrés",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Fumar daña al feto."
+        },
+        {
+          "key": "c",
+          "text": "Fumar en el embarazo solo afecta a la madre",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Causa restricción del crecimiento y parto pretérmino."
+        },
+        {
+          "key": "d",
+          "text": "Dejar de fumar en el embarazo causa abstinencia peligrosa para el feto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Dejar de fumar es beneficioso en cualquier momento."
+        },
+        {
+          "key": "e",
+          "text": "Intervención conductual intensiva, con terapia de reemplazo de nicotina si no logra dejarlo solo con consejería",
+          "correct": true,
+          "rationale": "La consejería es de primera línea en el embarazo."
+        },
+        {
+          "key": "f",
+          "text": "Hospitalización para cesación",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "g",
+          "text": "No abordar el tabaquismo de la pareja",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es un factor de recaída."
+        },
+        {
+          "key": "h",
+          "text": "Cambiar a cigarro electrónico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es un tratamiento recomendado."
+        },
+        {
+          "key": "i",
+          "text": "Vareniclina como primera opción",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No se recomienda por falta de datos de seguridad en el embarazo."
+        },
+        {
+          "key": "j",
+          "text": "Reducir a 5 cigarros como meta suficiente",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La meta es la abstinencia completa."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "El tabaquismo en el embarazo se asocia con restricción del crecimiento fetal, parto pretérmino, desprendimiento de placenta, placenta previa, muerte fetal y síndrome de muerte súbita del lactante. Dejar de fumar en cualquier momento del embarazo es beneficioso. El tratamiento de primera línea es la intervención conductual intensiva. Si no es suficiente, puede usarse terapia de reemplazo de nicotina, preferentemente de forma intermitente, como chicles o pastillas, considerando que su riesgo es menor que el del tabaco. La vareniclina y el bupropión tienen menos datos de seguridad. Se aborda también el tabaquismo de la pareja y el hogar.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del consumo de tabaco",
+        "Guía de Práctica Clínica de control prenatal con enfoque de riesgo"
+      ]
+    },
+    {
+      "key": "fam-08-complemento-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "dyslipidemia_family",
+      "vignette": "Hombre de 55 años con diabetes tipo 2 y enfermedad coronaria, en tratamiento con atorvastatina 80 mg, con colesterol LDL de 50 mg/dL. Triglicéridos persistentemente de 250 mg/dL a pesar de dieta y control glucémico.",
+      "prompt": "¿Cuál es el tratamiento de elección para reducir el riesgo cardiovascular residual?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Agregar gemfibrozil a la atorvastatina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Aumenta el riesgo de miopatía."
+        },
+        {
+          "key": "b",
+          "text": "Agregar niacina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No redujo eventos."
+        },
+        {
+          "key": "c",
+          "text": "Suspender la estatina y usar fibrato",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La estatina es la base de la prevención."
+        },
+        {
+          "key": "d",
+          "text": "Agregar resinas secuestradoras",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumentan los triglicéridos."
+        },
+        {
+          "key": "e",
+          "text": "Los triglicéridos no influyen en el riesgo cardiovascular",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Contribuyen al riesgo residual."
+        },
+        {
+          "key": "f",
+          "text": "Aféresis de lipoproteínas",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "g",
+          "text": "No revisar alcohol, peso y control de la glucosa",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son causas tratables."
+        },
+        {
+          "key": "h",
+          "text": "No hacer nada porque el LDL está en meta",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Persiste riesgo residual por triglicéridos."
+        },
+        {
+          "key": "i",
+          "text": "Agregar icosapento de etilo",
+          "correct": true,
+          "rationale": "Redujo eventos cardiovasculares en pacientes con triglicéridos elevados en tratamiento con estatina."
+        },
+        {
+          "key": "j",
+          "text": "Cualquier suplemento de omega 3 de venta libre tiene el mismo beneficio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El beneficio se demostró con dosis altas de icosapento de etilo."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "En pacientes con enfermedad cardiovascular o diabetes con factores de riesgo, tratados con estatina y con LDL controlado pero triglicéridos persistentemente entre 150 y 499 mg/dL, existe un riesgo cardiovascular residual. El estudio REDUCE-IT demostró que el icosapento de etilo, un derivado purificado del ácido eicosapentaenoico en dosis de 4 gramos al día, reduce los eventos cardiovasculares en este grupo. Los suplementos de omega 3 de venta libre no han mostrado el mismo beneficio. Antes se optimizan los cambios en el estilo de vida, el control glucémico, el peso y el consumo de alcohol. La estatina se mantiene como base.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en el adulto",
+        "Guía de la Sociedad Europea de Cardiología para dislipidemias"
+      ]
+    },
+    {
+      "key": "fam-08-complemento-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "dyslipidemia_family",
+      "vignette": "Niño de 9 años cuyo padre tiene hipercolesterolemia familiar diagnosticada y tuvo un infarto a los 40 años. El niño está sano y con peso normal.",
+      "prompt": "¿Cuál es la recomendación de tamizaje más adecuada para el niño?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Iniciar estatina sin medir lípidos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Primero debe confirmarse."
+        },
+        {
+          "key": "b",
+          "text": "Prueba de esfuerzo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es tamizaje de lípidos."
+        },
+        {
+          "key": "c",
+          "text": "Solo medir glucosa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No detecta la dislipidemia."
+        },
+        {
+          "key": "d",
+          "text": "La hipercolesterolemia familiar no se hereda a los hijos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es autosómica dominante."
+        },
+        {
+          "key": "e",
+          "text": "Esperar a la edad adulta para medir lípidos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El diagnóstico temprano permite prevenir."
+        },
+        {
+          "key": "f",
+          "text": "Angiotomografía coronaria",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "g",
+          "text": "Medir perfil de lípidos ahora como parte del tamizaje en cascada familiar",
+          "correct": true,
+          "rationale": "Los hijos de pacientes con hipercolesterolemia familiar tienen 50 por ciento de probabilidad de heredarla."
+        },
+        {
+          "key": "h",
+          "text": "No estudiar a los hermanos del niño",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El tamizaje en cascada incluye a todos."
+        },
+        {
+          "key": "i",
+          "text": "Las estatinas nunca se usan en niños",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se usan desde los 8 a 10 años en este trastorno."
+        },
+        {
+          "key": "j",
+          "text": "No es necesario porque tiene peso normal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La hipercolesterolemia familiar no depende del peso."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La hipercolesterolemia familiar heterocigota es autosómica dominante, por lo que cada hijo de un afectado tiene 50 por ciento de probabilidad de heredarla. Se recomienda el tamizaje en cascada de los familiares de primer grado, y en los niños se mide el perfil de lípidos a partir de los 2 años. Un colesterol LDL mayor de 160 mg/dL en un niño con antecedente familiar confirmado sugiere el diagnóstico. El tratamiento inicia con cambios en el estilo de vida y, a partir de los 8 a 10 años, con estatinas. El diagnóstico y tratamiento tempranos reducen el riesgo de enfermedad coronaria prematura.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de hipercolesterolemia familiar",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en la infancia"
+      ]
+    },
+    {
+      "key": "fam-08-complemento-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "dyslipidemia_family",
+      "vignette": "Mujer de 48 años con perfil de lípidos sin ayuno. Colesterol total de 240 mg/dL, HDL de 50 mg/dL y triglicéridos de 150 mg/dL.",
+      "prompt": "¿Qué indica el cálculo del colesterol LDL con la fórmula de Friedewald?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Un colesterol no HDL de 160 mg/dL",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El no HDL sería 190."
+        },
+        {
+          "key": "b",
+          "text": "El HDL alto anula el riesgo del LDL elevado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No lo anula."
+        },
+        {
+          "key": "c",
+          "text": "Un LDL de 140 mg/dL",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "d",
+          "text": "Un LDL de 210 mg/dL",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "e",
+          "text": "Un LDL de 190 mg/dL",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No resta los triglicéridos entre 5."
+        },
+        {
+          "key": "f",
+          "text": "Un LDL de 240 mg/dL",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es el colesterol total."
+        },
+        {
+          "key": "g",
+          "text": "No puede calcularse sin ayuno en ningún caso",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La fórmula es aceptable con triglicéridos menores de 400."
+        },
+        {
+          "key": "h",
+          "text": "Un LDL de 160 mg/dL",
+          "correct": true,
+          "rationale": "LDL es colesterol total menos HDL menos triglicéridos entre 5."
+        },
+        {
+          "key": "i",
+          "text": "Se requiere ultracentrifugación obligatoria",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Solo cuando la fórmula no es válida."
+        },
+        {
+          "key": "j",
+          "text": "Un LDL de 90 mg/dL",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Resta los triglicéridos completos."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "h"
+      ],
+      "explanation": "La fórmula de Friedewald estima el colesterol LDL como colesterol total menos colesterol HDL menos triglicéridos divididos entre 5, en mg/dL. En este caso: 240 menos 50 menos 30 da 160 mg/dL. La fórmula no es válida con triglicéridos mayores de 400 mg/dL, situación en la que se mide el LDL de forma directa o se usan otras fórmulas, como la de Martin-Hopkins. El colesterol no HDL, colesterol total menos HDL, aquí 190 mg/dL, es útil en pacientes con hipertrigliceridemia o sin ayuno. La medición sin ayuno es aceptable para la mayoría de las evaluaciones.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en el adulto",
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de las dislipidemias"
+      ]
+    },
+    {
+      "key": "fam-08-complemento-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "diabetes_primary_care",
+      "vignette": "Mujer de 50 años con diabetes tipo 2, índice de masa corporal de 38 y hemoglobina glucosilada de 8.4 por ciento a pesar de metformina a dosis máxima. Sin enfermedad cardiovascular ni renal. Desea perder peso.",
+      "prompt": "¿Cuál es el fármaco de elección para agregar a la metformina?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Pioglitazona",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aumenta el peso."
+        },
+        {
+          "key": "b",
+          "text": "Insulina basal como primera opción",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumenta el peso y no es la primera opción en esta paciente."
+        },
+        {
+          "key": "c",
+          "text": "Agonista del receptor de GLP-1, como semaglutida, o agonista dual GIP y GLP-1",
+          "correct": true,
+          "rationale": "Reducen la glucosa y producen una pérdida de peso importante."
+        },
+        {
+          "key": "d",
+          "text": "Suspender la metformina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se mantiene como base."
+        },
+        {
+          "key": "e",
+          "text": "Los agonistas de GLP-1 causan hipoglucemia frecuente en monoterapia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El riesgo es bajo."
+        },
+        {
+          "key": "f",
+          "text": "Insulina en bomba de infusión",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "g",
+          "text": "Sibutramina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Fue retirada por riesgo cardiovascular."
+        },
+        {
+          "key": "h",
+          "text": "Glibenclamida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta el peso y causa hipoglucemia."
+        },
+        {
+          "key": "i",
+          "text": "El peso no influye en la elección del antidiabético",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un criterio importante."
+        },
+        {
+          "key": "j",
+          "text": "No informar sobre los efectos gastrointestinales iniciales",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son frecuentes y afectan el apego."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "En pacientes con diabetes tipo 2 y obesidad, la elección del segundo fármaco debe considerar el efecto sobre el peso. Los agonistas del receptor de GLP-1, como semaglutida, liraglutida y dulaglutida, y el agonista dual de GIP y GLP-1 tirzepatida, reducen la hemoglobina glucosilada de forma importante, producen pérdida de peso significativa, tienen bajo riesgo de hipoglucemia y, en el caso de varios agonistas de GLP-1, beneficio cardiovascular demostrado. Sus efectos adversos más frecuentes son náusea, vómito y diarrea al inicio, por lo que la dosis se titula gradualmente. Los inhibidores del cotransportador de sodio y glucosa tipo 2 son otra opción que reduce el peso.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento farmacológico de la diabetes mellitus tipo 2 en el primer nivel",
+        "Estándares de atención en diabetes de la Asociación Americana de Diabetes"
+      ]
+    },
+    {
+      "key": "fam-08-complemento-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "diabetes_primary_care",
+      "vignette": "Hombre de 65 años con diabetes tipo 2 tratado con metformina 2 gramos al día durante 10 años. Refiere hormigueo en los pies y cansancio. Hemoglobina de 10.5 g/dL con volumen corpuscular medio de 108 fL.",
+      "prompt": "¿Cuál es la complicación del tratamiento que debe descartarse?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Neuropatía diabética como única explicación sin estudiar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La anemia macrocítica sugiere deficiencia de B12."
+        },
+        {
+          "key": "b",
+          "text": "Acidosis láctica crónica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la macrocitosis."
+        },
+        {
+          "key": "c",
+          "text": "La deficiencia de B12 solo ocurre en vegetarianos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "También por fármacos y malabsorción."
+        },
+        {
+          "key": "d",
+          "text": "La metformina no tiene efectos a largo plazo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede causar deficiencia de B12."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome mielodisplásico como primera sospecha",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se considera si se descartan causas frecuentes."
+        },
+        {
+          "key": "f",
+          "text": "Deficiencia de vitamina B12 por uso prolongado de metformina",
+          "correct": true,
+          "rationale": "La metformina reduce la absorción de vitamina B12 y causa anemia megaloblástica y neuropatía."
+        },
+        {
+          "key": "g",
+          "text": "Insuficiencia renal como causa de macrocitosis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Causa anemia normocítica."
+        },
+        {
+          "key": "h",
+          "text": "Anemia por deficiencia de hierro",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El volumen corpuscular es alto."
+        },
+        {
+          "key": "i",
+          "text": "No medir vitamina B12 periódicamente en usuarios de metformina",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Se recomienda vigilarla."
+        },
+        {
+          "key": "j",
+          "text": "Hipoglucemia crónica por metformina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La metformina sola rara vez causa hipoglucemia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "h"
+      ],
+      "explanation": "El uso prolongado de metformina se asocia con deficiencia de vitamina B12 por disminución de su absorción en el íleon terminal, de forma dependiente de la dosis y del tiempo de uso. Puede causar anemia megaloblástica con macrocitosis y neuropatía periférica, que puede confundirse o sumarse a la neuropatía diabética. Se recomienda medir la vitamina B12 periódicamente en pacientes con uso prolongado, especialmente si presentan neuropatía o anemia. El tratamiento es la suplementación con vitamina B12 oral en dosis altas o intramuscular, sin necesidad de suspender la metformina.",
+      "gpcRefs": [
+        "Estándares de atención en diabetes de la Asociación Americana de Diabetes",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la anemia por deficiencia de vitamina B12"
+      ]
+    },
+    {
+      "key": "fam-08-complemento-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_development",
+      "vignette": "Varón de 14 años con aumento del volumen testicular a 8 mL, vello púbico oscuro y rizado en la base del pene y alargamiento del pene. Ha crecido 9 centímetros en el último año.",
+      "prompt": "¿Qué indica esta exploración en el desarrollo puberal masculino?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Pubertad en estadio 3 de Tanner, con el estirón de crecimiento propio de la pubertad media",
+          "correct": true,
+          "rationale": "El estirón en varones ocurre de forma más tardía que en las niñas."
+        },
+        {
+          "key": "b",
+          "text": "Estadio 1 de Tanner prepuberal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ya hay cambios puberales."
+        },
+        {
+          "key": "c",
+          "text": "Hiperplasia suprarrenal congénita",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El desarrollo es normal para su edad."
+        },
+        {
+          "key": "d",
+          "text": "Tumor testicular bilateral",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El volumen es normal para la pubertad."
+        },
+        {
+          "key": "e",
+          "text": "Estadio 5 de Tanner adulto",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Aún no alcanza el desarrollo completo."
+        },
+        {
+          "key": "f",
+          "text": "El estirón en varones ocurre antes que en mujeres",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ocurre unos 2 años después."
+        },
+        {
+          "key": "g",
+          "text": "Pubertad precoz",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Inicia antes de los 9 años en varones."
+        },
+        {
+          "key": "h",
+          "text": "Retraso puberal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Está dentro del rango normal."
+        },
+        {
+          "key": "i",
+          "text": "Crecimiento anormal que requiere hormona del crecimiento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es normal en la pubertad."
+        },
+        {
+          "key": "j",
+          "text": "Ginecomastia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No se describe."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "h"
+      ],
+      "explanation": "En los varones, la pubertad inicia entre los 9 y los 14 años con el aumento del volumen testicular a 4 mL o más, correspondiente al estadio 2 de Tanner. Después aparece el vello púbico y aumenta el tamaño del pene. A diferencia de las niñas, en quienes el estirón ocurre al inicio de la pubertad, en los varones el pico de velocidad de crecimiento ocurre en la pubertad media a tardía, en los estadios 3 y 4, aproximadamente dos años después que en las niñas, y puede alcanzar 9 a 10 centímetros por año. La voz cambia y aparece el vello facial en estadios avanzados.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de control y seguimiento de la salud en la niña y el niño",
+        "Guía de Práctica Clínica de atención integral del adolescente en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-08-complemento-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "biostatistics",
+      "vignette": "En un ensayo clínico de un nuevo anticoagulante, la incidencia de sangrado mayor fue de 4 por ciento con el nuevo fármaco y de 2 por ciento con el tratamiento estándar.",
+      "prompt": "¿Qué indica el número necesario a dañar en este estudio?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "25 pacientes",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Usa el riesgo del fármaco nuevo."
+        },
+        {
+          "key": "b",
+          "text": "100 por ciento de aumento del riesgo absoluto",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es el aumento relativo."
+        },
+        {
+          "key": "c",
+          "text": "Un número necesario a dañar alto indica más peligro",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Un número alto indica menos daño."
+        },
+        {
+          "key": "d",
+          "text": "0.5 pacientes",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "e",
+          "text": "200 pacientes",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "f",
+          "text": "50 pacientes, es decir, por cada 50 tratados con el nuevo fármaco ocurre un sangrado mayor adicional",
+          "correct": true,
+          "rationale": "Es el inverso del aumento absoluto del riesgo de 2 por ciento."
+        },
+        {
+          "key": "g",
+          "text": "2 pacientes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Confunde el porcentaje con el número necesario."
+        },
+        {
+          "key": "h",
+          "text": "12 pacientes",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "i",
+          "text": "No puede calcularse sin la razón de momios",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se calcula con los riesgos absolutos."
+        },
+        {
+          "key": "j",
+          "text": "4 pacientes",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es un cálculo erróneo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "g"
+      ],
+      "explanation": "El aumento absoluto del riesgo es la diferencia entre el riesgo del efecto adverso en el grupo tratado y en el control: 4 menos 2 por ciento, es decir, 2 por ciento o 0.02. El número necesario a dañar es su inverso, 1 entre 0.02, es decir, 50: por cada 50 pacientes tratados con el nuevo anticoagulante ocurre un sangrado mayor adicional. Cuanto mayor es el número necesario a dañar, menor es el daño. Para decidir un tratamiento se compara con el número necesario a tratar para el beneficio. El aumento relativo del riesgo aquí es de 100 por ciento, cifra que puede exagerar la percepción del daño.",
+      "gpcRefs": [
+        "Manual de epidemiología clínica para el primer nivel de atención",
+        "Guía para la lectura crítica de ensayos clínicos"
+      ]
+    },
+    {
+      "key": "fam-08-complemento-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "preventive_medicine",
+      "subtopic": "adult_immunizations",
+      "vignette": "Hombre de 32 años que viajará por trabajo a una zona rural con malas condiciones de saneamiento. Nunca ha tenido hepatitis A ni ha sido vacunado. Pregunta qué vacuna le conviene.",
+      "prompt": "¿Cuál es la recomendación de vacunación más adecuada para prevenir la hepatitis transmitida por agua y alimentos?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Vacuna inactivada contra hepatitis A, idealmente antes del viaje, con una segunda dosis a los 6 a 12 meses",
+          "correct": true,
+          "rationale": "Protege contra la transmisión fecal oral."
+        },
+        {
+          "key": "b",
+          "text": "Vacuna contra fiebre amarilla como protección de hepatitis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Previene otra enfermedad."
+        },
+        {
+          "key": "c",
+          "text": "No es necesaria porque es adulto joven",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La infección en adultos suele ser más sintomática."
+        },
+        {
+          "key": "d",
+          "text": "Antiviral profiláctico",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "e",
+          "text": "La vacuna contra hepatitis A es de virus vivos contraindicada en adultos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es inactivada."
+        },
+        {
+          "key": "f",
+          "text": "Antibiótico profiláctico durante el viaje",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No previene una infección viral."
+        },
+        {
+          "key": "g",
+          "text": "Vacuna contra hepatitis B como protección para este riesgo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La hepatitis B se transmite por sangre y sexo."
+        },
+        {
+          "key": "h",
+          "text": "Inmunoglobulina mensual de por vida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La vacuna da protección duradera."
+        },
+        {
+          "key": "i",
+          "text": "La hepatitis A siempre es leve en adultos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede ser grave y prolongada."
+        },
+        {
+          "key": "j",
+          "text": "No dar recomendaciones sobre agua y alimentos seguros",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son parte de la prevención."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "g"
+      ],
+      "explanation": "La hepatitis A se transmite por vía fecal oral, a través de agua y alimentos contaminados, y es frecuente en zonas con saneamiento deficiente. En niños suele ser leve o asintomática, pero en adultos es más sintomática y puede ser grave. La vacuna inactivada contra hepatitis A es muy eficaz; una dosis brinda protección en 2 a 4 semanas y la segunda, a los 6 a 12 meses, da protección duradera. Se recomienda a viajeros a zonas endémicas, personas con hepatopatía crónica, hombres que tienen sexo con hombres y usuarios de drogas. También se dan recomendaciones de higiene, agua potable y alimentos cocidos.",
+      "gpcRefs": [
+        "Lineamientos de vacunación del Programa de Vacunación Universal",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hepatitis A"
+      ]
+    },
+    {
+      "key": "fam-08-complemento-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_functionality",
+      "vignette": "Familia que acude porque el hijo de 9 años presenta enuresis secundaria, bajo rendimiento escolar y tristeza desde que sus padres iniciaron un proceso de divorcio conflictivo hace 4 meses. Los padres discuten frente a él.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "El divorcio no afecta a los niños de esta edad",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede afectarlos significativamente."
+        },
+        {
+          "key": "b",
+          "text": "Recomendar que el niño elija con qué padre vivir",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No debe ponerse en esa posición."
+        },
+        {
+          "key": "c",
+          "text": "No evaluar si hay violencia en el hogar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe explorarse."
+        },
+        {
+          "key": "d",
+          "text": "Solicitar urocultivo y ultrasonido renal como prioridad",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La relación temporal con la crisis es clara, aunque se descarten causas orgánicas."
+        },
+        {
+          "key": "e",
+          "text": "Recomendar que los padres sigan juntos por el bien del niño",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La decisión es de los padres."
+        },
+        {
+          "key": "f",
+          "text": "Abordar el impacto del divorcio en el niño, orientar a los padres para no involucrarlo en el conflicto, mantener rutinas y referir a apoyo psicológico",
+          "correct": true,
+          "rationale": "Los síntomas del niño se relacionan con la crisis familiar."
+        },
+        {
+          "key": "g",
+          "text": "Iniciar desmopresina como única medida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No aborda la causa."
+        },
+        {
+          "key": "h",
+          "text": "Hospitalizar al niño para estudio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "i",
+          "text": "La enuresis secundaria siempre es orgánica",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede ser por estrés."
+        },
+        {
+          "key": "j",
+          "text": "Considerarlo un problema de conducta que requiere castigo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Empeora los síntomas."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "El divorcio es una crisis paranormativa que afecta a todos los miembros de la familia. En los niños puede manifestarse con regresión, como enuresis secundaria, alteraciones del sueño, tristeza, ansiedad, problemas de conducta y bajo rendimiento escolar. El impacto depende más del nivel de conflicto entre los padres que del divorcio en sí. El médico familiar debe descartar causas orgánicas cuando sea pertinente, orientar a los padres para no involucrar al niño en el conflicto ni hablar mal del otro padre, mantener rutinas y contacto con ambos padres, y referir a apoyo psicológico. También debe explorar la presencia de violencia.",
+      "gpcRefs": [
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enuresis en niños"
+      ]
+    }
+  ]
+}

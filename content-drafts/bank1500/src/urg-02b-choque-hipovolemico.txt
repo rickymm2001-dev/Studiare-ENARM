@@ -1,0 +1,207 @@
+@ urg|shock|hypovolemic_shock|2|data_interpretation
+V: Hombre de 30 años con herida por arma de fuego en el muslo con sangrado abundante. Frecuencia cardiaca de 130, presión arterial de 85/60 mmHg, frecuencia respiratoria de 32, ansioso y confuso, con diuresis escasa.
+P: ¿Qué indica esta presentación según la clasificación de choque hemorrágico?
++ Choque hemorrágico clase III, con pérdida estimada de 30 a 40 por ciento del volumen sanguíneo || Taquicardia mayor de 120, hipotensión, confusión y oliguria.
+- anchoring | Clase I con pérdida menor de 15 por ciento || En la clase I los signos vitales son casi normales.
+- availability_heuristic | Clase II con presión normal || En la clase II la presión sistólica se mantiene.
+- representativeness_heuristic | Clase IV con pérdida mayor de 40 por ciento || Se acompaña de letargo y presión muy baja.
+- premature_closure | Choque neurogénico || No hay lesión medular y hay sangrado evidente.
+- framing_effect | Choque séptico || No hay infección.
+- complexity_bias | Choque cardiogénico || La causa es la hemorragia.
+- base_rate_fallacy | La hipotensión aparece con pérdidas menores de 10 por ciento || Aparece en pérdidas mayores.
+- belief_bias | La confusión no tiene relación con la hemorragia || Refleja hipoperfusión cerebral.
+- focusing_illusion | Choque obstructivo || No hay datos de obstrucción.
+E: El Colegio Americano de Cirujanos clasifica el choque hemorrágico en cuatro clases según la pérdida de volumen. La clase I, con pérdida menor de 15 por ciento, tiene signos vitales casi normales. La clase II, de 15 a 30 por ciento, presenta taquicardia leve con presión sistólica conservada y presión de pulso disminuida. La clase III, de 31 a 40 por ciento, presenta taquicardia mayor de 120, hipotensión, ansiedad o confusión y oliguria. La clase IV, mayor de 40 por ciento, presenta taquicardia mayor de 140, hipotensión grave, letargo y anuria. Las clases III y IV requieren transfusión de hemoderivados y control del sangrado.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de manejo del choque hemorrágico en el paciente politraumatizado
+
+@ urg|shock|hypovolemic_shock|3|next_step
+V: Hombre de 28 años con trauma abdominal cerrado y choque hemorrágico. FAST positivo en el espacio hepatorrenal. Presión de 75/45 mmHg después de 1 litro de cristaloide. Se activa el protocolo de transfusión masiva.
+P: ¿Cuál es la estrategia de reanimación más apropiada?
++ Transfusión balanceada de concentrado eritrocitario, plasma y plaquetas en proporción cercana a 1 a 1 a 1, ácido tranexámico y control quirúrgico urgente del sangrado || Es la reanimación de control de daños.
+- anchoring | Seguir con cristaloides hasta 6 litros antes de transfundir || Empeora la coagulopatía y la acidosis.
+- availability_heuristic | Transfundir solo concentrados eritrocitarios sin plasma || Favorece la coagulopatía dilucional.
+- representativeness_heuristic | Iniciar norepinefrina como tratamiento principal || El choque hemorrágico se trata con volumen sanguíneo y control del sangrado.
+- premature_closure | Tomografía de abdomen antes de decidir la cirugía en un paciente inestable || El paciente inestable va a quirófano.
+- framing_effect | Mantener la presión sistólica en 140 mmHg con líquidos || Aumenta el sangrado.
+- complexity_bias | Esperar las pruebas de coagulación para iniciar plasma || Retrasa el tratamiento.
+- base_rate_fallacy | Los cristaloides en grandes volúmenes son inocuos en trauma || Causan coagulopatía e hipotermia.
+- belief_bias | El plasma solo se usa en hepatópatas || Es parte de la transfusión masiva.
+- omission_bias | No prevenir la hipotermia ni vigilar el calcio || Son parte de la reanimación.
+E: La reanimación de control de daños en el choque hemorrágico traumático busca evitar la tríada letal de hipotermia, acidosis y coagulopatía. Incluye limitar los cristaloides, transfundir de forma temprana concentrados eritrocitarios, plasma y plaquetas en proporción cercana a 1 a 1 a 1 mediante protocolos de transfusión masiva, hipotensión permisiva hasta controlar el sangrado, ácido tranexámico en las primeras 3 horas, prevención de la hipotermia, reposición de calcio y control quirúrgico o angiográfico del sangrado lo antes posible. Los vasopresores no sustituyen la reposición de volumen.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía europea para el manejo del sangrado mayor y la coagulopatía en trauma
+
+@ urg|shock|hypovolemic_shock|2|treatment_of_choice
+V: Mujer de 35 años con trauma por accidente automovilístico y choque hemorrágico. El accidente ocurrió hace 1 hora. Se prepara para cirugía.
+P: ¿Cuál es el fármaco de elección para reducir la mortalidad por hemorragia en este momento?
++ Ácido tranexámico 1 gramo intravenoso en 10 minutos seguido de 1 gramo en 8 horas || Reduce la mortalidad por sangrado si se da en las primeras 3 horas.
+- anchoring | Vitamina K intravenosa || No es útil en la coagulopatía traumática aguda.
+- availability_heuristic | Heparina profiláctica || Está contraindicada en sangrado activo.
+- representativeness_heuristic | Desmopresina de rutina || No tiene indicación rutinaria en trauma.
+- premature_closure | Ácido tranexámico después de 6 horas || Después de 3 horas puede aumentar la mortalidad.
+- framing_effect | Factor VII recombinante como primera opción || No se recomienda de rutina.
+- complexity_bias | Protamina || Revierte la heparina.
+- base_rate_fallacy | Los antifibrinolíticos aumentan la trombosis en todos los pacientes de trauma || El estudio CRASH-2 no lo mostró.
+- belief_bias | El ácido tranexámico solo es útil en hemorragia obstétrica || También en trauma.
+- omission_bias | No registrar la hora del trauma || Determina la indicación.
+E: El ácido tranexámico es un antifibrinolítico que inhibe la conversión de plasminógeno a plasmina. El estudio CRASH-2 demostró que su administración en pacientes con trauma y sangrado significativo, dentro de las primeras 3 horas, reduce la mortalidad por hemorragia, con mayor beneficio cuanto antes se administra. Después de 3 horas no tiene beneficio y puede aumentar la mortalidad. La dosis es de 1 gramo intravenoso en 10 minutos, seguido de 1 gramo en infusión durante 8 horas. También se usa en hemorragia obstétrica, según el estudio WOMAN, y en traumatismo craneoencefálico leve a moderado.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía europea para el manejo del sangrado mayor y la coagulopatía en trauma
+
+@ urg|shock|hypovolemic_shock|3|next_step
+V: Hombre de 40 años con herida penetrante de tórax y choque hemorrágico, sin traumatismo craneoencefálico. Se traslada a quirófano en 15 minutos.
+P: ¿Cuál es la meta de presión arterial más apropiada antes del control quirúrgico del sangrado?
++ Hipotensión permisiva con presión sistólica alrededor de 80 a 90 mmHg o pulsos palpables y estado mental conservado || Evita aumentar el sangrado antes de controlarlo.
+- anchoring | Presión sistólica mayor de 140 mmHg con líquidos abundantes || Aumenta el sangrado y la dilución.
+- availability_heuristic | No administrar ningún líquido ni sangre hasta el quirófano || Se debe mantener una perfusión mínima.
+- representativeness_heuristic | Presión media de 100 mmHg con vasopresores || No es la estrategia en hemorragia.
+- premature_closure | Presión sistólica de 50 mmHg indefinidamente || Causa hipoperfusión grave.
+- framing_effect | Hipotensión permisiva también en traumatismo craneoencefálico grave || En esos pacientes se requiere mayor presión.
+- complexity_bias | Monitoreo con catéter de arteria pulmonar antes de cirugía || Retrasa la cirugía.
+- base_rate_fallacy | La presión normal siempre es la meta en trauma || No antes de controlar el sangrado.
+- belief_bias | La hipotensión permisiva aumenta la mortalidad en todos los traumas || Es beneficiosa en trauma penetrante sin lesión cerebral.
+- omission_bias | No preparar hemoderivados para el quirófano || Es indispensable.
+E: La hipotensión permisiva consiste en mantener una presión arterial por debajo de lo normal, alrededor de 80 a 90 mmHg de sistólica o una presión media de 50 a 65 mmHg, con pulsos palpables y estado mental conservado, en el paciente con hemorragia activa hasta lograr el control quirúrgico del sangrado. Evita desprender coágulos, la dilución de factores de coagulación y la hipotermia asociadas a grandes volúmenes. Es especialmente útil en el trauma penetrante. Está contraindicada en el traumatismo craneoencefálico grave y la lesión medular, en los que se necesita una presión mayor para mantener la perfusión cerebral.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía europea para el manejo del sangrado mayor y la coagulopatía en trauma
+
+@ urg|shock|hypovolemic_shock|2|data_interpretation
+V: Hombre de 75 años con sangrado de tubo digestivo alto. Frecuencia cardiaca de 72 por minuto y presión de 92/60 mmHg. Toma metoprolol por cardiopatía isquémica. Está pálido y diaforético.
+P: ¿Qué indica la frecuencia cardiaca normal en este paciente?
++ Que el betabloqueador puede enmascarar la taquicardia compensatoria del choque || La ausencia de taquicardia no descarta hipovolemia en estos pacientes.
+- anchoring | Que no tiene pérdida significativa de volumen || El betabloqueador limita la respuesta.
+- availability_heuristic | Que el sangrado ya se detuvo || No puede concluirse.
+- representativeness_heuristic | Que el choque es cardiogénico y no hipovolémico || El sangrado explica el cuadro.
+- premature_closure | Que no requiere reanimación || Está hipotenso y con signos de hipoperfusión.
+- framing_effect | Que debe darse una dosis extra de metoprolol || Agravaría el choque.
+- complexity_bias | Que tiene un bloqueo auriculoventricular completo sin relación || No hay datos.
+- base_rate_fallacy | Todos los pacientes con choque hipovolémico tienen taquicardia || Los adultos mayores y quienes toman betabloqueadores pueden no tenerla.
+- belief_bias | La frecuencia cardiaca es el mejor indicador de pérdida de volumen en ancianos || Es poco confiable.
+- focusing_illusion | Hipotiroidismo como causa de la bradicardia relativa || El fármaco lo explica.
+E: La taquicardia es una respuesta compensatoria temprana a la pérdida de volumen, pero puede estar ausente en adultos mayores, en pacientes que toman betabloqueadores o calcioantagonistas, en deportistas y en quienes tienen marcapasos. En estos pacientes la ausencia de taquicardia no descarta un choque hipovolémico significativo. Otros signos de hipoperfusión, como hipotensión, palidez, diaforesis, llenado capilar prolongado, alteración del estado mental, oliguria y lactato elevado, deben guiar la evaluación. El índice de choque, frecuencia cardiaca entre sistólica, también puede estar falsamente bajo en estos casos.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia de tubo digestivo alto
+
+@ urg|shock|hypovolemic_shock|2|treatment_of_choice
+V: Hombre de 25 años con diarrea acuosa abundante en agua de arroz desde hace 12 horas durante un brote de cólera. Está somnoliento, con ojos hundidos, pulso débil, presión de 80/50 mmHg y signo del pliegue muy lento.
+P: ¿Cuál es el tratamiento de elección inicial?
++ Rehidratación intravenosa rápida con solución Hartmann, 100 mL por kilo en 3 horas || Tiene deshidratación grave con choque.
+- anchoring | Suero oral como único tratamiento || Con choque y somnolencia se requiere vía intravenosa.
+- availability_heuristic | Loperamida para detener la diarrea || No está indicada y no corrige el choque.
+- representativeness_heuristic | Solución glucosada al 5 por ciento || No repone sodio ni volumen de forma eficaz.
+- premature_closure | Antibiótico como única medida inicial || La rehidratación es prioritaria.
+- framing_effect | Restricción de líquidos para reducir la diarrea || Agrava el choque.
+- complexity_bias | Vasopresores antes de reponer volumen || El choque es por pérdida de volumen.
+- base_rate_fallacy | El cólera siempre es leve en adultos || Puede causar choque en horas.
+- belief_bias | La solución salina pura es superior a Hartmann en cólera || Hartmann aporta potasio y bicarbonato.
+- omission_bias | No notificar el caso de inmediato || El cólera es de notificación inmediata.
+E: El cólera, causado por Vibrio cholerae, produce diarrea secretora abundante en agua de arroz que puede llevar a deshidratación grave y choque en horas. La deshidratación grave con choque se trata con rehidratación intravenosa rápida con solución Hartmann o lactato de Ringer, 100 mL por kilo en 3 horas en mayores de un año, con la primera fracción de 30 mL por kilo en 30 minutos. En cuanto el paciente pueda beber, se agrega suero oral. Los antibióticos, como doxiciclina o azitromicina en dosis única, reducen la duración y la excreción. Es una enfermedad de notificación inmediata.
+R: Manual de procedimientos estandarizados para la vigilancia epidemiológica de cólera ;; Guía de Práctica Clínica de diagnóstico y tratamiento de enfermedad diarreica aguda en adultos
+
+@ urg|shock|hypovolemic_shock|3|next_step
+V: Hombre de 45 años con fractura de pelvis por caída de altura. Presión arterial de 80/50 mmHg y frecuencia cardiaca de 135 a pesar de 1 litro de cristaloide. FAST negativo. La pelvis es inestable a la palpación suave.
+P: ¿Cuál es la conducta inicial más apropiada para controlar el sangrado?
++ Colocar un cinturón o fajero pélvico para cerrar el anillo y preparar angioembolización o empaquetamiento preperitoneal || Reduce el volumen pélvico y el sangrado venoso.
+- anchoring | Laparotomía exploradora inmediata con FAST negativo || El sangrado probablemente es retroperitoneal pélvico.
+- availability_heuristic | Maniobras repetidas de compresión de la pelvis para confirmar la fractura || Aumentan el sangrado.
+- representativeness_heuristic | Tomografía antes de cualquier medida en un paciente inestable || Retrasa el control.
+- premature_closure | Solo más cristaloides sin otras medidas || No controla el sangrado.
+- framing_effect | Colocar sonda urinaria de inmediato sin evaluar lesión uretral || Puede dañar la uretra.
+- complexity_bias | Fijación interna definitiva urgente || No es el primer paso.
+- base_rate_fallacy | Las fracturas de pelvis rara vez causan choque || Pueden causar hemorragias masivas.
+- belief_bias | El fajero debe colocarse a nivel de la cintura || Se coloca a nivel de los trocánteres mayores.
+- omission_bias | No activar el protocolo de transfusión masiva || Es necesario.
+E: Las fracturas inestables de pelvis pueden causar hemorragias masivas retroperitoneales, principalmente de origen venoso y del hueso esponjoso, y en menor proporción arterial. En el paciente inestable se coloca un cinturón o fajero pélvico a nivel de los trocánteres mayores para cerrar el anillo pélvico y reducir el volumen. No deben repetirse las maniobras de compresión. Si persiste la inestabilidad con FAST negativo, se realiza angioembolización para el sangrado arterial, empaquetamiento preperitoneal o fijación externa. Antes de colocar una sonda urinaria se descarta lesión uretral, sospechada por sangre en el meato o hematoma perineal.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de manejo del paciente con fractura de pelvis
+
+@ urg|shock|hypovolemic_shock|2|data_interpretation
+V: Mujer de 30 años con trauma y sangrado. Recibe un bolo de 1 litro de cristaloide. La presión mejora de 85/50 a 110/70 mmHg, pero 20 minutos después vuelve a caer a 85/55 mmHg.
+P: ¿Qué indica este patrón de respuesta a la reanimación inicial?
++ Respuesta transitoria, que sugiere sangrado activo y necesidad de hemoderivados y control del sangrado || La mejoría temporal seguida de deterioro indica pérdida continua.
+- anchoring | Respuesta rápida que no requiere más intervención || El deterioro posterior indica sangrado activo.
+- availability_heuristic | Ausencia de respuesta || Hubo mejoría inicial.
+- representativeness_heuristic | Choque séptico || No hay infección.
+- premature_closure | Que el sangrado se detuvo || El deterioro indica lo contrario.
+- framing_effect | Que deben administrarse 5 litros más de cristaloides || Debe transfundirse y controlar el sangrado.
+- complexity_bias | Choque cardiogénico por contusión miocárdica como única causa || La respuesta a volumen sugiere hipovolemia.
+- base_rate_fallacy | La respuesta a líquidos no tiene valor pronóstico || Orienta la necesidad de cirugía.
+- belief_bias | Una sola mejoría transitoria garantiza la estabilidad || No la garantiza.
+- focusing_illusion | Choque neurogénico || No hay lesión medular.
+E: La respuesta a la reanimación inicial con un bolo de líquidos orienta la magnitud del sangrado. Los pacientes con respuesta rápida mejoran y se mantienen estables, lo que sugiere una pérdida menor de 15 a 20 por ciento sin sangrado activo. Los pacientes con respuesta transitoria mejoran temporalmente y luego se deterioran, lo que indica sangrado activo o reanimación insuficiente, y requieren hemoderivados y control quirúrgico. Los pacientes sin respuesta o con respuesta mínima tienen sangrado masivo o una causa no hemorrágica, como neumotórax a tensión o taponamiento, y requieren intervención inmediata.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de manejo del choque hemorrágico en el paciente politraumatizado
+
+@ urg|shock|hypovolemic_shock|3|complication_prognosis
+V: Hombre de 35 años con choque hemorrágico que recibió 12 unidades de concentrado eritrocitario y plasma en 3 horas. Presenta parestesias periorales, hipotensión persistente y prolongación del intervalo QT.
+P: ¿Cuál es la complicación más probable de la transfusión masiva?
++ Hipocalcemia por el citrato de los hemoderivados || El citrato quela el calcio ionizado.
+- anchoring | Hiperpotasemia como única alteración || No explica las parestesias ni el QT prolongado.
+- availability_heuristic | Reacción hemolítica aguda por incompatibilidad || No hay datos de hemólisis.
+- representativeness_heuristic | Hipercalcemia || El citrato reduce el calcio.
+- premature_closure | Hipomagnesemia aislada sin relación con la transfusión || La hipocalcemia es la más característica.
+- framing_effect | Sobrecarga de hierro aguda || No es una complicación aguda.
+- complexity_bias | Enfermedad injerto contra huésped aguda || Ocurre días después.
+- base_rate_fallacy | La transfusión masiva no altera los electrolitos || Causa hipocalcemia y alteraciones del potasio.
+- belief_bias | El calcio debe evitarse durante la transfusión || Debe reponerse.
+- focusing_illusion | Alcalosis metabólica inmediata como causa principal || La hipocalcemia explica el cuadro.
+E: La transfusión masiva, definida como 10 o más unidades de concentrado eritrocitario en 24 horas o más de 4 en una hora, tiene complicaciones metabólicas. El citrato usado como anticoagulante en los hemoderivados se une al calcio ionizado y causa hipocalcemia, especialmente cuando el metabolismo hepático del citrato está reducido por hipotermia o choque. Se manifiesta con parestesias, tetania, hipotensión, disminución de la contractilidad, coagulopatía y QT prolongado. Se recomienda medir el calcio ionizado y reponerlo con cloruro o gluconato de calcio. Otras complicaciones son hipotermia, hiperpotasemia, acidosis y coagulopatía dilucional.
+R: Guía europea para el manejo del sangrado mayor y la coagulopatía en trauma ;; Guía para el uso clínico de la sangre y sus componentes del Centro Nacional de la Transfusión Sanguínea
+
+@ urg|shock|hypovolemic_shock|2|next_step
+V: Mujer de 28 años con 7 semanas de amenorrea, dolor abdominal intenso súbito, presión de 80/50 mmHg y frecuencia cardiaca de 128. Prueba de embarazo positiva. El ultrasonido muestra líquido libre abundante en cavidad abdominal sin saco intrauterino.
+P: ¿Cuál es la conducta más apropiada?
++ Reanimación con hemoderivados y laparotomía o laparoscopia urgente por embarazo ectópico roto || La paciente está en choque hemorrágico por ruptura tubaria.
+- anchoring | Metotrexato intramuscular || Está contraindicado en ectópico roto con inestabilidad.
+- availability_heuristic | Repetir gonadotropina coriónica en 48 horas || Retrasa un tratamiento urgente.
+- representativeness_heuristic | Manejo expectante || Está contraindicado en choque.
+- premature_closure | Legrado uterino diagnóstico || No trata la hemorragia tubaria.
+- framing_effect | Solo cristaloides y observación || Requiere cirugía.
+- complexity_bias | Resonancia magnética pélvica antes de decidir || Retrasa la cirugía.
+- base_rate_fallacy | El embarazo ectópico solo causa sangrado leve || Puede causar choque.
+- belief_bias | La prueba de embarazo positiva descarta una causa hemorrágica || Al contrario, orienta a ectópico.
+- omission_bias | No determinar el grupo y Rh para inmunoglobulina anti-D si es Rh negativo || Debe hacerse.
+E: El embarazo ectópico roto es una causa de choque hemorrágico en mujeres en edad reproductiva y una causa importante de muerte materna en el primer trimestre. Se sospecha ante amenorrea, dolor abdominal, sangrado vaginal, prueba de embarazo positiva y ausencia de saco intrauterino con líquido libre en el ultrasonido. La paciente inestable requiere reanimación con hemoderivados y cirugía urgente, por laparotomía o laparoscopia según la estabilidad, generalmente con salpingectomía. El metotrexato y el manejo expectante solo se usan en pacientes estables sin ruptura. Las pacientes Rh negativas reciben inmunoglobulina anti-D.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del embarazo tubario ;; Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos
+
+@ urg|shock|hypovolemic_shock|2|data_interpretation
+V: Hombre de 50 años con trauma abdominal. Frecuencia cardiaca de 120 y presión sistólica de 100 mmHg.
+P: ¿Qué indica el índice de choque calculado en este paciente?
++ Un índice de 1.2, que sugiere hipoperfusión significativa y riesgo de transfusión masiva || Es la frecuencia cardiaca entre la presión sistólica.
+- anchoring | Un índice de 0.5, normal || Es un cálculo erróneo.
+- availability_heuristic | Un índice de 0.83 || Es el cociente invertido.
+- representativeness_heuristic | Que el paciente está estable porque la sistólica es de 100 || El índice muestra hipoperfusión.
+- premature_closure | Que el índice no tiene utilidad en trauma || Es útil para estratificar.
+- framing_effect | Un índice de 220 || Es la suma, no el cociente.
+- complexity_bias | Que requiere cateterismo cardiaco || No se deduce.
+- base_rate_fallacy | Un índice mayor de 0.9 es normal en trauma || Indica hipoperfusión.
+- belief_bias | Solo la presión sistólica importa en el choque || La frecuencia cardiaca aporta información temprana.
+- focusing_illusion | Un índice de 20 || Es la diferencia, no el cociente.
+E: El índice de choque es el cociente entre la frecuencia cardiaca y la presión arterial sistólica. Su valor normal es de 0.5 a 0.7. Un índice mayor de 0.9 o 1 sugiere hipoperfusión y se asocia con mayor necesidad de transfusión, de transfusión masiva y con mayor mortalidad, incluso cuando la presión sistólica aún no es muy baja. En este paciente es de 120 entre 100, es decir, 1.2. Es una herramienta sencilla y útil en el triaje del trauma, la hemorragia obstétrica y la sepsis. Puede ser engañoso en pacientes con betabloqueadores o adultos mayores.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de manejo del choque hemorrágico en el paciente politraumatizado
+
+@ urg|shock|hypovolemic_shock|3|next_step
+V: Hombre de 40 años con sangrado de tubo digestivo alto por várices esofágicas. Presión de 85/50 mmHg y frecuencia cardiaca de 125. Hemoglobina de 6.8 g/dL. Es cirrótico conocido.
+P: ¿Cuál es la conducta inicial más apropiada además de la reanimación?
++ Transfusión restrictiva con meta de hemoglobina de 7 a 8, terlipresina u octreótido, antibiótico profiláctico y endoscopia con ligadura en las primeras 12 horas || Es el manejo del sangrado variceal agudo.
+- anchoring | Transfundir hasta hemoglobina de 12 g/dL || La transfusión liberal aumenta la presión portal y el resangrado.
+- availability_heuristic | Omeprazol como único tratamiento || No trata la hipertensión portal.
+- representativeness_heuristic | Propranolol intravenoso en el choque || Está contraindicado en la fase aguda con hipotensión.
+- premature_closure | Esperar 72 horas para la endoscopia || Debe realizarse en las primeras 12 horas.
+- framing_effect | Solo vigilancia sin vasoactivos || Los vasoactivos reducen el sangrado.
+- complexity_bias | Trasplante hepático urgente como primer paso || No es el primer paso.
+- base_rate_fallacy | Los antibióticos no tienen papel en el sangrado variceal || Reducen infecciones y mortalidad.
+- belief_bias | Los cirróticos siempre requieren plasma antes de la endoscopia || No de rutina.
+- omission_bias | No proteger la vía aérea si hay hematemesis masiva o encefalopatía || Puede requerir intubación.
+E: El sangrado por várices esofágicas en el paciente con cirrosis tiene alta mortalidad. El manejo incluye reanimación cuidadosa con transfusión restrictiva, con meta de hemoglobina de 7 a 8 g/dL, porque la transfusión excesiva aumenta la presión portal y el resangrado; fármacos vasoactivos como terlipresina, octreótido o somatostatina desde la sospecha; antibiótico profiláctico, como ceftriaxona, que reduce infecciones, resangrado y mortalidad; y endoscopia en las primeras 12 horas con ligadura de las várices. Si el sangrado no se controla se usa sonda de balón como puente o derivación portosistémica intrahepática transyugular.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia variceal ;; Consenso de Baveno sobre hipertensión portal
+
+@ urg|shock|hypovolemic_shock|2|complication_prognosis
+V: Hombre de 32 años con politrauma y choque hemorrágico que recibe reanimación prolongada en una sala fría. Temperatura de 34 grados, pH de 7.18 y tiempo de protrombina prolongado con sangrado en capa de las heridas.
+P: ¿Cuál es la complicación que explica este cuadro?
++ La tríada letal de hipotermia, acidosis y coagulopatía || Cada elemento agrava a los otros y aumenta la mortalidad.
+- anchoring | Reacción alérgica a la transfusión || No explica el cuadro.
+- availability_heuristic | Coagulación intravascular diseminada por sepsis || No hay infección.
+- representativeness_heuristic | Hemofilia no diagnosticada || La coagulopatía es adquirida.
+- premature_closure | Efecto de un anticoagulante oral previo || No hay antecedente.
+- framing_effect | Hipertermia maligna || La temperatura es baja.
+- complexity_bias | Síndrome de Bernard-Soulier || Es un trastorno plaquetario congénito raro.
+- base_rate_fallacy | La hipotermia leve no afecta la coagulación || La reduce de forma importante.
+- belief_bias | El sangrado en capa se corrige solo con más cristaloides || Los cristaloides lo agravan.
+- focusing_illusion | Insuficiencia hepática crónica || No hay antecedente.
+E: La tríada letal del trauma está formada por la hipotermia, la acidosis y la coagulopatía. La hipotermia reduce la actividad de las enzimas de la coagulación y la función plaquetaria; la acidosis por hipoperfusión altera la formación del coágulo; y la coagulopatía aumenta el sangrado, lo que a su vez empeora el choque. Los grandes volúmenes de cristaloides fríos agravan los tres componentes. Su prevención es central en la reanimación de control de daños: calentar al paciente, los líquidos y los hemoderivados, limitar los cristaloides, transfundir de forma balanceada y controlar el sangrado con cirugía de control de daños.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía europea para el manejo del sangrado mayor y la coagulopatía en trauma

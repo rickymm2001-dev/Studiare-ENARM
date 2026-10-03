@@ -1,0 +1,223 @@
+@ urg|cardiovascular_emergencies|chest_pain|2|next_step
+V: Hombre de 58 años con dolor torácico opresivo de 1 hora de evolución, irradiado al brazo izquierdo, con diaforesis. El electrocardiograma muestra elevación del ST de 3 mm en V1 a V4. El hospital cuenta con sala de hemodinamia disponible en 30 minutos.
+P: ¿Cuál es la conducta más apropiada?
++ Ácido acetilsalicílico, antiagregante adicional, anticoagulación y angioplastia primaria con tiempo puerta balón menor de 90 minutos || Es un infarto con elevación del ST con hemodinamia disponible.
+- anchoring | Esperar el resultado de troponinas para decidir || El electrocardiograma es diagnóstico; las troponinas no deben retrasar la reperfusión.
+- availability_heuristic | Fibrinólisis aunque la angioplastia esté disponible a tiempo || La angioplastia es preferible si está disponible a tiempo.
+- representativeness_heuristic | Solo nitratos y observación || Requiere reperfusión.
+- premature_closure | Prueba de esfuerzo || Está contraindicada en un infarto agudo.
+- framing_effect | Ecocardiograma antes de cualquier decisión || No debe retrasar la reperfusión.
+- complexity_bias | Cirugía de revascularización urgente como primera opción || No es la primera opción.
+- base_rate_fallacy | Oxígeno a todos los pacientes aunque tengan saturación normal || Solo si la saturación es menor de 90 por ciento.
+- belief_bias | La reperfusión tiene el mismo beneficio a cualquier hora || El beneficio disminuye con el tiempo.
+- omission_bias | No realizar el electrocardiograma en los primeros 10 minutos || Es la meta.
+E: En el infarto agudo de miocardio con elevación del ST, el objetivo es la reperfusión lo antes posible. El electrocardiograma debe realizarse en los primeros 10 minutos de la llegada. La angioplastia primaria es la estrategia preferida si puede realizarse con un tiempo desde el diagnóstico hasta la apertura de la arteria menor de 120 minutos, idealmente puerta balón menor de 90. Si no es posible, se administra fibrinólisis en los primeros 30 minutos. Se indican ácido acetilsalicílico, un inhibidor del P2Y12, anticoagulación y estatina de alta intensidad. El oxígeno solo se administra si la saturación es menor de 90 por ciento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del infarto agudo de miocardio con elevación del ST ;; Programa nacional Código Infarto del Instituto Mexicano del Seguro Social
+
+@ urg|cardiovascular_emergencies|chest_pain|3|treatment_of_choice
+V: Mujer de 62 años con infarto con elevación del ST en cara inferior de 2 horas de evolución, en un hospital rural sin hemodinamia. El traslado a un centro con angioplastia tardaría 4 horas. Sin contraindicaciones.
+P: ¿Cuál es el tratamiento de reperfusión de elección?
++ Fibrinólisis en los primeros 30 minutos de la llegada, seguida de traslado para angiografía || La angioplastia no puede realizarse en menos de 120 minutos.
+- anchoring | Trasladar para angioplastia sin fibrinólisis aunque tarde 4 horas || El retraso reduce el beneficio.
+- availability_heuristic | Solo antiagregantes sin reperfusión || Requiere reperfusión.
+- representativeness_heuristic | Esperar troponinas para decidir || Retrasa el tratamiento.
+- premature_closure | Fibrinólisis solo si el dolor dura más de 24 horas || Es al revés, mientras más temprano mejor.
+- framing_effect | Heparina sola como reperfusión || No reperfunde la arteria.
+- complexity_bias | Cirugía de revascularización urgente || No está disponible ni indicada.
+- base_rate_fallacy | La fibrinólisis está contraindicada en mujeres mayores de 60 años || No es una contraindicación.
+- belief_bias | Después de la fibrinólisis no se requiere angiografía || Se recomienda en 2 a 24 horas.
+- omission_bias | No buscar infarto del ventrículo derecho con derivaciones derechas || Cambia el manejo.
+E: Cuando la angioplastia primaria no puede realizarse en los primeros 120 minutos desde el diagnóstico, se recomienda la fibrinólisis en los primeros 30 minutos de la llegada, idealmente en las primeras 12 horas del inicio de los síntomas, si no hay contraindicaciones. Se usan fibrinolíticos específicos de fibrina, como tenecteplasa o alteplasa, junto con antiagregantes y anticoagulación. Después se traslada al paciente a un centro con hemodinamia: angioplastia de rescate si la fibrinólisis falla, o angiografía rutinaria en 2 a 24 horas si es exitosa. Las contraindicaciones absolutas incluyen sangrado activo, hemorragia intracraneal previa y evento isquémico reciente.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del infarto agudo de miocardio con elevación del ST ;; Programa nacional Código Infarto del Instituto Mexicano del Seguro Social
+
+@ urg|cardiovascular_emergencies|chest_pain|3|next_step
+V: Hombre de 65 años con infarto inferior. Presenta hipotensión de 80/50 mmHg, ingurgitación yugular y campos pulmonares limpios. Las derivaciones derechas muestran elevación del ST en V4R.
+P: ¿Cuál es la conducta más apropiada para la hipotensión?
++ Administrar líquidos intravenosos y evitar nitratos y diuréticos || El infarto del ventrículo derecho depende de la precarga.
+- anchoring | Nitroglicerina sublingual para el dolor || Puede causar hipotensión grave.
+- availability_heuristic | Furosemida por la ingurgitación yugular || Reduce la precarga y empeora la hipotensión.
+- representativeness_heuristic | Morfina en dosis altas || Reduce la precarga.
+- premature_closure | Considerarlo un choque cardiogénico izquierdo y restringir líquidos || Los pulmones limpios orientan a ventrículo derecho.
+- framing_effect | Betabloqueador intravenoso || Empeora la hipotensión.
+- complexity_bias | Balón de contrapulsación como primera medida || No es el primer paso.
+- base_rate_fallacy | La ingurgitación yugular siempre indica sobrecarga que requiere diurético || En el infarto derecho indica falla del ventrículo derecho.
+- belief_bias | El infarto inferior nunca afecta al ventrículo derecho || Puede afectarlo con frecuencia.
+- omission_bias | No buscar bloqueo auriculoventricular || Es frecuente en el infarto inferior.
+E: El infarto del ventrículo derecho complica hasta un tercio de los infartos de cara inferior por oclusión proximal de la coronaria derecha. Se caracteriza por la tríada de hipotensión, ingurgitación yugular y campos pulmonares limpios. Se confirma con elevación del ST en derivaciones derechas, sobre todo V4R. El ventrículo derecho isquémico depende de la precarga, por lo que el tratamiento incluye líquidos intravenosos y se evitan los fármacos que reducen la precarga, como nitratos, diuréticos y morfina. Si persiste la hipotensión se usan inotrópicos. La reperfusión temprana es fundamental.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del infarto agudo de miocardio con elevación del ST ;; Guía de la Sociedad Europea de Cardiología para infarto agudo
+
+@ urg|cardiovascular_emergencies|chest_pain|3|confirmatory_study
+V: Hombre de 55 años hipertenso con dolor torácico súbito, desgarrante, irradiado a la espalda. Diferencia de presión arterial de 30 mmHg entre ambos brazos. Radiografía con mediastino ensanchado.
+P: ¿Cuál es el estudio de elección para confirmar el diagnóstico?
++ Angiotomografía de aorta || Confirma la disección aórtica y define su extensión.
+- anchoring | Prueba de esfuerzo || Está contraindicada.
+- availability_heuristic | Cateterismo coronario urgente || Puede retrasar el diagnóstico y empeorar la disección.
+- representativeness_heuristic | Dímero D como prueba definitiva || Es sensible, pero no confirma.
+- premature_closure | Electrocardiograma como estudio confirmatorio || Puede ser normal.
+- framing_effect | Endoscopia digestiva alta || No evalúa la aorta.
+- complexity_bias | Gammagrama de perfusión miocárdica || No está indicado.
+- base_rate_fallacy | La radiografía normal descarta la disección || No la descarta.
+- belief_bias | Debe iniciarse trombólisis por el dolor torácico || Está contraindicada en disección.
+- information_bias | Ultrasonido abdominal como único estudio || No evalúa la aorta torácica completa.
+E: La disección aórtica aguda se manifiesta con dolor torácico súbito, intenso, desgarrante, irradiado a la espalda, con diferencia de pulsos o de presión entre brazos, déficit neurológico o soplo de insuficiencia aórtica. La hipertensión es el principal factor de riesgo. La angiotomografía de aorta es el estudio de elección en pacientes estables; el ecocardiograma transesofágico es útil en inestables. La clasificación de Stanford distingue el tipo A, que afecta la aorta ascendente y requiere cirugía urgente, del tipo B, que suele manejarse médicamente. El tratamiento inicial incluye control del dolor y reducción de la frecuencia y la presión con betabloqueadores intravenosos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la disección aórtica aguda ;; Guía de la Sociedad Europea de Cardiología para enfermedades de la aorta
+
+@ urg|cardiovascular_emergencies|chest_pain|3|initial_treatment
+V: Mujer de 60 años con disección aórtica tipo B confirmada por angiotomografía. Presión de 180/100 mmHg y frecuencia cardiaca de 105. Sin datos de mala perfusión de órganos.
+P: ¿Cuál es el tratamiento inicial de elección?
++ Betabloqueador intravenoso, como esmolol o labetalol, con meta de frecuencia menor de 60 y sistólica de 100 a 120 mmHg, más analgesia || Reduce la fuerza de eyección y la progresión de la disección.
+- anchoring | Nitroprusiato sin betabloqueador previo || La taquicardia refleja aumenta el estrés de la pared.
+- availability_heuristic | Cirugía urgente en todos los tipos B sin complicaciones || El tipo B no complicado se maneja médicamente.
+- representativeness_heuristic | Trombólisis || Está contraindicada.
+- premature_closure | Hidralazina como monoterapia || Causa taquicardia refleja.
+- framing_effect | Anticoagulación plena || Puede extender la disección.
+- complexity_bias | Balón de contrapulsación intraaórtico || Está contraindicado en disección.
+- base_rate_fallacy | La presión no influye en la progresión de la disección || Es clave controlarla.
+- belief_bias | Los betabloqueadores están contraindicados en la disección || Son el tratamiento de primera línea.
+- omission_bias | No vigilar datos de mala perfusión renal, intestinal o de extremidades || Indican tratamiento endovascular.
+E: El tratamiento inicial de la disección aórtica busca reducir el estrés de la pared aórtica. Se usan betabloqueadores intravenosos, como esmolol, labetalol o metoprolol, con meta de frecuencia cardiaca menor de 60 y presión sistólica de 100 a 120 mmHg. Si se requiere más control de la presión, se agrega un vasodilatador como nitroprusiato, siempre después del betabloqueador para evitar la taquicardia refleja. Se administra analgesia con opioides. La disección tipo B no complicada se maneja médicamente; si hay mala perfusión de órganos, ruptura o dolor refractario se indica reparación endovascular. La tipo A requiere cirugía urgente.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la disección aórtica aguda ;; Guía de la Sociedad Europea de Cardiología para enfermedades de la aorta
+
+@ urg|cardiovascular_emergencies|chest_pain|2|diagnosis
+V: Hombre de 28 años con dolor torácico punzante que mejora al inclinarse hacia adelante y empeora al acostarse, precedido de una infección respiratoria. Se ausculta frote. El electrocardiograma muestra elevación difusa del ST cóncava con depresión del PR.
+P: ¿Cuál es el diagnóstico más probable?
++ Pericarditis aguda || Dolor posicional, frote y elevación difusa del ST con depresión del PR.
+- anchoring | Infarto agudo de miocardio con elevación del ST || La elevación es difusa, cóncava y con depresión del PR.
+- availability_heuristic | Repolarización precoz benigna || No explica el dolor ni el frote.
+- representativeness_heuristic | Tromboembolia pulmonar || No explica el patrón electrocardiográfico ni el frote.
+- premature_closure | Disección aórtica || El dolor no es desgarrante.
+- framing_effect | Neumotórax espontáneo || No explica el frote ni el electrocardiograma.
+- complexity_bias | Síndrome de Brugada || Tiene otro patrón electrocardiográfico.
+- base_rate_fallacy | Toda elevación del ST es un infarto || Hay otras causas.
+- belief_bias | Requiere fibrinólisis urgente || Está contraindicada.
+- focusing_illusion | Costocondritis || No explica el frote ni el electrocardiograma.
+E: La pericarditis aguda se diagnostica con al menos dos de cuatro criterios: dolor torácico pericárdico, punzante, que mejora al inclinarse hacia adelante y empeora en decúbito; frote pericárdico; cambios electrocardiográficos con elevación difusa del ST cóncava y depresión del PR; y derrame pericárdico. La causa más frecuente es viral o idiopática. El tratamiento de primera línea son los antiinflamatorios no esteroideos o ácido acetilsalicílico en dosis altas junto con colchicina durante 3 meses, que reduce las recurrencias. Los esteroides se reservan para casos específicos. Se debe distinguir del infarto para no administrar fibrinólisis.
+R: Guía de la Sociedad Europea de Cardiología para enfermedades del pericardio ;; Guía de Práctica Clínica de diagnóstico y tratamiento de pericarditis aguda
+
+@ urg|cardiovascular_emergencies|chest_pain|3|treatment_of_choice
+V: Hombre de 45 años con cáncer de pulmón que presenta disnea, hipotensión de 80/60 mmHg, ingurgitación yugular, ruidos cardiacos apagados y pulso paradójico. El ecocardiograma muestra derrame pericárdico con colapso diastólico del ventrículo derecho.
+P: ¿Cuál es el tratamiento de elección inmediato?
++ Pericardiocentesis urgente guiada por ultrasonido || Es un taponamiento cardiaco con compromiso hemodinámico.
+- anchoring | Furosemida por la ingurgitación yugular || Reduce la precarga y empeora el choque.
+- availability_heuristic | Nitroglicerina || Reduce la precarga.
+- representativeness_heuristic | Solo observación y repetir ecocardiograma en 24 horas || El paciente está inestable.
+- premature_closure | Ventilación con presión positiva antes de drenar || Puede empeorar el colapso hemodinámico.
+- framing_effect | Antiinflamatorios como único tratamiento || No resuelven el taponamiento.
+- complexity_bias | Quimioterapia urgente como primera medida || No resuelve la compresión.
+- base_rate_fallacy | El taponamiento requiere un derrame muy grande en todos los casos || Depende de la velocidad de acumulación.
+- belief_bias | Los líquidos están contraindicados en el taponamiento || Pueden ayudar transitoriamente.
+- omission_bias | No enviar el líquido a estudio citológico || Ayuda a establecer la causa.
+E: El taponamiento cardiaco ocurre cuando la acumulación de líquido en el pericardio aumenta la presión intrapericárdica e impide el llenado ventricular. Se manifiesta con la tríada de Beck, hipotensión, ingurgitación yugular y ruidos cardiacos apagados, además de taquicardia y pulso paradójico. El ecocardiograma muestra derrame con colapso diastólico de las cavidades derechas. El tratamiento es la pericardiocentesis urgente guiada por ultrasonido o el drenaje quirúrgico. Mientras tanto se pueden administrar líquidos para mantener la precarga. Se evitan los diuréticos, los vasodilatadores y, si es posible, la ventilación con presión positiva. Las causas incluyen cáncer, trauma, infecciones e insuficiencia renal.
+R: Guía de la Sociedad Europea de Cardiología para enfermedades del pericardio ;; Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos
+
+@ urg|cardiovascular_emergencies|chest_pain|3|data_interpretation
+V: Hombre de 60 años con dolor torácico de 3 horas que ya cedió. El electrocardiograma muestra depresión del ST en V5 y V6. Troponina de alta sensibilidad inicial elevada y a la hora con aumento significativo.
+P: ¿Qué indican estos hallazgos?
++ Infarto agudo de miocardio sin elevación del ST || Elevación y aumento de troponina con isquemia y sin elevación persistente del ST.
+- anchoring | Angina inestable || En la angina inestable la troponina no se eleva.
+- availability_heuristic | Infarto con elevación del ST || No hay elevación del ST.
+- representativeness_heuristic | Pericarditis aguda || El electrocardiograma y el cuadro no son compatibles.
+- premature_closure | Dolor torácico no cardiaco porque el dolor cedió || La troponina indica daño miocárdico.
+- framing_effect | Elevación crónica de troponina por insuficiencia renal || Hay cambio dinámico y cuadro isquémico.
+- complexity_bias | Miocarditis viral como primera opción || El cuadro sugiere infarto.
+- base_rate_fallacy | La depresión del ST no tiene significado isquémico || Sugiere isquemia.
+- belief_bias | Si el dolor cedió puede darse de alta sin más estudio || Requiere manejo de síndrome coronario.
+- focusing_illusion | Tromboembolia pulmonar como única explicación || No explica el patrón.
+E: El síndrome coronario agudo sin elevación del ST incluye la angina inestable y el infarto sin elevación del ST. Se distinguen por la troponina: en el infarto hay elevación por arriba del percentil 99 con un patrón dinámico de aumento o descenso, mientras que en la angina inestable la troponina es normal. El electrocardiograma puede mostrar depresión del ST, inversión de la onda T o ser normal. Los algoritmos con troponina de alta sensibilidad a la hora o a las 2 horas permiten descartar o confirmar el infarto. El tratamiento incluye antiagregación dual, anticoagulación, estatina y estratificación para la coronariografía según el riesgo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome coronario agudo sin elevación del ST ;; Cuarta definición universal del infarto de miocardio
+
+@ urg|cardiovascular_emergencies|chest_pain|3|diagnosis
+V: Hombre de 50 años con vómito intenso tras una comida abundante con alcohol, seguido de dolor torácico retroesternal intenso. Presenta crepitación subcutánea en cuello y la radiografía muestra neumomediastino y derrame pleural izquierdo.
+P: ¿Cuál es el diagnóstico más probable?
++ Perforación esofágica espontánea o síndrome de Boerhaave || Vómito intenso seguido de dolor torácico, enfisema subcutáneo y neumomediastino.
+- anchoring | Infarto agudo de miocardio || No explica el enfisema subcutáneo ni el neumomediastino.
+- availability_heuristic | Síndrome de Mallory-Weiss || Es un desgarro superficial con sangrado, sin perforación.
+- representativeness_heuristic | Pancreatitis aguda || No explica el neumomediastino.
+- premature_closure | Reflujo gastroesofágico || No explica la gravedad.
+- framing_effect | Neumotórax espontáneo primario || No explica el neumomediastino tras vómito.
+- complexity_bias | Disección aórtica || No explica el enfisema subcutáneo.
+- base_rate_fallacy | La perforación esofágica solo ocurre por endoscopia || También puede ser espontánea.
+- belief_bias | Puede manejarse con antiácidos y alta || Es una emergencia con alta mortalidad.
+- focusing_illusion | Neumonía por aspiración simple || No explica el neumomediastino.
+E: El síndrome de Boerhaave es la perforación transmural espontánea del esófago, generalmente en la pared posterolateral izquierda del tercio distal, por un aumento súbito de la presión intraesofágica durante el vómito intenso, frecuentemente tras ingesta abundante de alimentos y alcohol. Se manifiesta con dolor torácico intenso, enfisema subcutáneo, que se describe con la tríada de Mackler, y neumomediastino o derrame pleural izquierdo. Se confirma con esofagograma con contraste hidrosoluble o tomografía. Es una emergencia con alta mortalidad por mediastinitis; requiere ayuno, antibióticos de amplio espectro y reparación quirúrgica o endoscópica temprana.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la perforación esofágica ;; Manual de urgencias médico quirúrgicas
+
+@ urg|cardiovascular_emergencies|chest_pain|2|treatment_of_choice
+V: Hombre de 62 años con infarto con elevación del ST en camino a hemodinamia. Refiere uso de sildenafil hace 12 horas. Presión de 130/80 mmHg y dolor persistente.
+P: ¿Cuál fármaco está contraindicado en este paciente?
++ Nitratos || Combinados con inhibidores de la fosfodiesterasa 5 causan hipotensión grave.
+- anchoring | Ácido acetilsalicílico || Está indicado.
+- availability_heuristic | Heparina || Está indicada.
+- representativeness_heuristic | Clopidogrel o ticagrelor || Están indicados.
+- premature_closure | Estatina de alta intensidad || Está indicada.
+- framing_effect | Morfina en dosis bajas si el dolor persiste || Puede usarse con precaución.
+- complexity_bias | Betabloqueador oral sin datos de insuficiencia cardiaca || Puede usarse si no hay contraindicaciones.
+- base_rate_fallacy | El sildenafil no interactúa con fármacos cardiovasculares || Interactúa con nitratos.
+- belief_bias | Los nitratos son seguros en cualquier circunstancia de dolor torácico || Tienen contraindicaciones.
+- omission_bias | No preguntar por inhibidores de la fosfodiesterasa antes de dar nitratos || Es indispensable.
+E: Los nitratos alivian el dolor isquémico por vasodilatación venosa y coronaria, pero no reducen la mortalidad en el infarto. Están contraindicados en pacientes que tomaron inhibidores de la fosfodiesterasa 5 en las 24 a 48 horas previas, como sildenafil o tadalafil, porque la combinación causa hipotensión grave. También se contraindican con presión sistólica menor de 90 mmHg, bradicardia o taquicardia importantes e infarto del ventrículo derecho. Antes de administrar nitratos siempre debe preguntarse por estos fármacos. Los antiagregantes, la anticoagulación y la reperfusión son los pilares del tratamiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del infarto agudo de miocardio con elevación del ST ;; Guía de la Sociedad Europea de Cardiología para infarto agudo
+
+@ urg|cardiovascular_emergencies|chest_pain|3|data_interpretation
+V: Hombre de 55 años con dolor torácico típico de 1 hora. El electrocardiograma muestra depresión del ST de 2 mm en V1 a V3 con ondas R altas en V1 y V2. En las derivaciones posteriores V7 a V9 hay elevación del ST.
+P: ¿Qué indica este patrón electrocardiográfico?
++ Infarto de cara posterior con elevación del ST, equivalente de infarto con elevación que requiere reperfusión || La depresión del ST en V1 a V3 es la imagen especular de la elevación posterior.
+- anchoring | Isquemia subendocárdica anterior sin indicación de reperfusión || Es un infarto posterior.
+- availability_heuristic | Pericarditis aguda || No es difuso y hay elevación en derivaciones posteriores.
+- representativeness_heuristic | Hipertrofia ventricular derecha sin isquemia || El cuadro clínico y las derivaciones posteriores indican infarto.
+- premature_closure | Variante normal || No con el cuadro clínico.
+- framing_effect | Bloqueo de rama derecha sin isquemia || No explica la elevación posterior.
+- complexity_bias | Síndrome de Wellens || Corresponde a cambios en la onda T anterior.
+- base_rate_fallacy | La depresión del ST nunca requiere reperfusión urgente || En el infarto posterior sí.
+- belief_bias | El infarto posterior no se ve en el electrocardiograma || Se ve con derivaciones posteriores.
+- focusing_illusion | Tromboembolia pulmonar || No explica el patrón.
+E: El infarto de cara posterior, generalmente por oclusión de la circunfleja o de la coronaria derecha, no produce elevación del ST en las derivaciones estándar. Se manifiesta con depresión del ST en V1 a V3, ondas R altas y ondas T positivas en esas derivaciones, que son la imagen en espejo de la elevación posterior. Las derivaciones posteriores V7 a V9 muestran elevación del ST de 0.5 mm o más. Es un equivalente de infarto con elevación del ST y requiere reperfusión urgente. Otros equivalentes son el bloqueo de rama izquierda nuevo con clínica de isquemia y la elevación del ST en aVR con depresión difusa.
+R: Guía de la Sociedad Europea de Cardiología para infarto agudo ;; Guía de Práctica Clínica de diagnóstico y tratamiento del infarto agudo de miocardio con elevación del ST
+
+@ urg|cardiovascular_emergencies|chest_pain|2|data_interpretation
+V: Hombre de 45 años con dolor torácico atípico de 2 horas. Electrocardiograma normal. Se calcula la escala HEART con resultado de 2 puntos y troponina de alta sensibilidad negativa en dos determinaciones.
+P: ¿Qué indica este resultado en la estratificación del dolor torácico?
++ Riesgo bajo de eventos cardiacos adversos mayores, que permite el egreso con seguimiento ambulatorio || Una escala HEART de 0 a 3 con troponinas negativas indica bajo riesgo.
+- anchoring | Riesgo alto que requiere cateterismo urgente || La puntuación es baja.
+- availability_heuristic | Que debe hospitalizarse en terapia intensiva || No está indicado.
+- representativeness_heuristic | Que se descarta cualquier enfermedad cardiaca de por vida || Indica bajo riesgo a corto plazo.
+- premature_closure | Que debe iniciarse fibrinólisis || No hay infarto.
+- framing_effect | Riesgo intermedio que requiere observación de 72 horas || Es bajo.
+- complexity_bias | Que requiere resonancia magnética cardiaca urgente || No está indicada.
+- base_rate_fallacy | Todo dolor torácico requiere hospitalización || La estratificación permite egresar a pacientes de bajo riesgo.
+- belief_bias | Una troponina negativa siempre descarta un síndrome coronario aunque se mida al inicio de los síntomas || Se requiere repetirla.
+- omission_bias | No dar datos de alarma al egreso || Son parte del manejo.
+E: La escala HEART estratifica el riesgo en pacientes con dolor torácico en urgencias considerando historia clínica, electrocardiograma, edad, factores de riesgo y troponina, con 0 a 2 puntos cada uno. Una puntuación de 0 a 3 indica bajo riesgo de eventos cardiacos adversos mayores a 6 semanas, menor de 2 por ciento, y combinada con troponinas negativas permite el egreso temprano con seguimiento ambulatorio. Una puntuación de 4 a 6 indica riesgo intermedio y de 7 a 10 riesgo alto, con indicación de manejo invasivo. Se dan datos de alarma al egreso.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome coronario agudo sin elevación del ST ;; Guía de la Sociedad Europea de Cardiología para síndrome coronario agudo
+
+@ urg|cardiovascular_emergencies|chest_pain|3|diagnosis
+V: Mujer de 68 años que tras la muerte súbita de su esposo presenta dolor torácico, elevación del ST en derivaciones anteriores y troponina elevada. La coronariografía no muestra lesiones obstructivas. La ventriculografía muestra abombamiento apical con hipercinesia basal.
+P: ¿Cuál es el diagnóstico más probable?
++ Miocardiopatía por estrés o síndrome de Takotsubo || Disfunción apical transitoria tras un estrés emocional sin lesiones coronarias.
+- anchoring | Infarto anterior extenso por oclusión de la descendente anterior || La coronariografía no muestra lesiones.
+- availability_heuristic | Pericarditis aguda || No explica la alteración de la contractilidad.
+- representativeness_heuristic | Miocardiopatía dilatada crónica || Es aguda y transitoria.
+- premature_closure | Disección aórtica || No corresponde.
+- framing_effect | Tromboembolia pulmonar || No explica el abombamiento apical.
+- complexity_bias | Amiloidosis cardiaca || No explica el cuadro agudo.
+- base_rate_fallacy | El estrés emocional no puede causar daño cardiaco || Puede causar miocardiopatía por estrés.
+- belief_bias | Siempre deja secuelas permanentes || Suele recuperarse en semanas.
+- focusing_illusion | Miocardiopatía hipertrófica obstructiva || No explica el patrón.
+E: La miocardiopatía por estrés, o síndrome de Takotsubo, es una disfunción ventricular transitoria que se presenta como un síndrome coronario agudo, con dolor torácico, cambios en el ST y elevación de troponina, pero sin lesiones coronarias obstructivas. Es más frecuente en mujeres posmenopáusicas y suele desencadenarse por estrés emocional o físico intenso, por descarga de catecolaminas. El patrón típico es abombamiento apical con hipercinesia basal. El tratamiento es de soporte y de la insuficiencia cardiaca si se presenta. La función ventricular suele recuperarse en días a semanas, aunque puede haber complicaciones graves en la fase aguda.
+R: Guía de la Sociedad Europea de Cardiología para síndrome coronario agudo ;; Consenso internacional sobre el síndrome de Takotsubo
+
+@ urg|cardiovascular_emergencies|chest_pain|3|complication_prognosis
+V: Hombre de 66 años con infarto anterior extenso hace 5 días, no reperfundido. Presenta disnea súbita, hipotensión y un soplo holosistólico nuevo en el borde esternal izquierdo con frémito.
+P: ¿Cuál es la complicación mecánica más probable?
++ Ruptura del septum interventricular || Soplo holosistólico nuevo con frémito y choque días después de un infarto.
+- anchoring | Reinfarto sin complicación mecánica || No explica el soplo nuevo con frémito.
+- availability_heuristic | Pericarditis postinfarto || No causa choque ni soplo holosistólico.
+- representativeness_heuristic | Estenosis aórtica previa || El soplo es nuevo.
+- premature_closure | Aneurisma ventricular crónico || No explica el cuadro agudo.
+- framing_effect | Neumonía nosocomial || No explica el soplo.
+- complexity_bias | Síndrome de Dressler || Ocurre semanas después y causa pericarditis.
+- base_rate_fallacy | Las complicaciones mecánicas solo ocurren el primer día || Son más frecuentes de 3 a 5 días.
+- belief_bias | Puede manejarse solo con diuréticos sin cirugía || Requiere reparación quirúrgica.
+- focusing_illusion | Tromboembolia pulmonar || No explica el soplo.
+E: Las complicaciones mecánicas del infarto ocurren con mayor frecuencia de 3 a 5 días después, sobre todo en infartos extensos no reperfundidos. Incluyen la ruptura del septum interventricular, con soplo holosistólico nuevo con frémito en el borde esternal izquierdo y choque; la ruptura del músculo papilar, con insuficiencia mitral aguda y edema pulmonar, sin frémito; y la ruptura de la pared libre, con taponamiento y muerte súbita. Se diagnostican con ecocardiograma. El tratamiento es la estabilización con soporte hemodinámico y la reparación quirúrgica urgente. La reperfusión temprana ha reducido su frecuencia.
+R: Guía de la Sociedad Europea de Cardiología para infarto agudo ;; Guía de Práctica Clínica de diagnóstico y tratamiento del infarto agudo de miocardio con elevación del ST
