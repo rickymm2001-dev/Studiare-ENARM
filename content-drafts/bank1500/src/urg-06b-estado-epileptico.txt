@@ -1,0 +1,191 @@
+@ urg|neurologic_emergencies|status_epilepticus|2|initial_treatment
+V: Hombre de 35 años con epilepsia que presenta una crisis tónico clónica generalizada de 7 minutos de duración sin recuperar la conciencia. Glucosa capilar de 95 mg/dL. Se canalizó una vena periférica.
+P: ¿Cuál es el tratamiento inicial de primera línea?
++ Benzodiacepina intravenosa, como lorazepam o diazepam || Es el tratamiento de primera línea del estado epiléptico.
+- anchoring | Esperar a que la crisis ceda sola hasta los 30 minutos || El retraso aumenta la resistencia al tratamiento.
+- availability_heuristic | Fenitoína como primera línea antes de la benzodiacepina || Es de segunda línea.
+- representativeness_heuristic | Colocar objetos en la boca para evitar que se muerda la lengua || Es peligroso.
+- premature_closure | Haloperidol intravenoso || Disminuye el umbral convulsivo.
+- framing_effect | Propofol en infusión como primera opción || Se reserva para el estado refractario.
+- complexity_bias | Tomografía de cráneo antes de tratar || No debe retrasar el tratamiento.
+- base_rate_fallacy | El estado epiléptico se define a los 30 minutos para iniciar tratamiento || Se trata a partir de los 5 minutos.
+- belief_bias | Las benzodiacepinas siempre causan paro respiratorio || El riesgo es mayor con el estado no tratado.
+- omission_bias | No asegurar la vía aérea ni administrar oxígeno || Son medidas iniciales.
+E: El estado epiléptico se define operativamente como una crisis convulsiva que dura más de 5 minutos o crisis repetidas sin recuperación de la conciencia entre ellas. A los 30 minutos puede causar daño neuronal. El manejo inicial incluye vía aérea, oxígeno, monitoreo, acceso venoso y glucosa capilar. El tratamiento de primera línea son las benzodiacepinas: lorazepam o diazepam intravenosos, o midazolam intramuscular si no hay acceso venoso. Si la crisis persiste, se administra un fármaco de segunda línea, como levetiracetam, valproato o fosfenitoína. El tratamiento temprano es más eficaz, porque la resistencia aumenta con el tiempo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del estado epiléptico ;; Guía de la Sociedad Americana de Epilepsia para estado epiléptico convulsivo
+
+@ urg|neurologic_emergencies|status_epilepticus|2|treatment_of_choice
+V: Niña de 6 años con crisis convulsiva generalizada de 6 minutos en su casa. Los paramédicos llegan, no logran acceso venoso y la crisis continúa.
+P: ¿Cuál es el tratamiento de elección en este momento?
++ Midazolam intramuscular, intranasal o bucal || Es eficaz cuando no hay acceso venoso.
+- anchoring | Esperar al hospital para iniciar tratamiento || El retraso empeora el pronóstico.
+- availability_heuristic | Fenitoína intramuscular || Se absorbe de forma errática y causa necrosis.
+- representativeness_heuristic | Seguir intentando acceso venoso durante 20 minutos sin dar fármaco || Retrasa el tratamiento.
+- premature_closure | Paracetamol rectal como tratamiento de la crisis || No detiene la crisis.
+- framing_effect | Colocar a la niña en decúbito supino y sujetarla con fuerza || Puede causar lesiones.
+- complexity_bias | Intubación inmediata antes de cualquier fármaco || No es el primer paso.
+- base_rate_fallacy | Las benzodiacepinas solo funcionan por vía intravenosa || Hay vías alternativas eficaces.
+- belief_bias | Las crisis en niños siempre son febriles y benignas || Pueden ser estado epiléptico.
+- omission_bias | No medir la glucosa capilar || Debe medirse.
+E: Cuando no se dispone de acceso venoso, las benzodiacepinas por vías alternativas son eficaces para tratar el estado epiléptico. El midazolam intramuscular, con dosis según el peso, demostró ser al menos tan eficaz como el lorazepam intravenoso en el ámbito prehospitalario, porque se administra más rápido. Otras opciones son el midazolam intranasal o bucal y el diazepam rectal. Estas vías son especialmente útiles en niños y en la atención prehospitalaria. Los padres de niños con epilepsia pueden recibir capacitación para administrar midazolam bucal o intranasal en casa.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del estado epiléptico en pediatría ;; Guía de la Sociedad Americana de Epilepsia para estado epiléptico convulsivo
+
+@ urg|neurologic_emergencies|status_epilepticus|3|next_step
+V: Mujer de 40 años en estado epiléptico que recibió dos dosis de lorazepam intravenoso. Diez minutos después continúa con crisis tónico clónicas.
+P: ¿Cuál es el siguiente paso más apropiado?
++ Administrar un fármaco de segunda línea, como levetiracetam, valproato o fosfenitoína intravenosos || Es un estado epiléptico establecido resistente a benzodiacepinas.
+- anchoring | Una tercera y cuarta dosis de lorazepam || Aumenta el riesgo de depresión respiratoria sin mayor eficacia.
+- availability_heuristic | Esperar 30 minutos más || Retrasa el tratamiento.
+- representativeness_heuristic | Iniciar directamente anestesia general sin segunda línea || Primero se administra un fármaco de segunda línea.
+- premature_closure | Fenobarbital oral || La vía oral no es adecuada.
+- framing_effect | Carbamazepina por sonda || No es adecuada en el estado epiléptico.
+- complexity_bias | Craniectomía descompresiva || No está indicada.
+- base_rate_fallacy | Los fármacos de segunda línea tienen eficacias muy diferentes entre sí || El estudio ESETT mostró eficacia similar.
+- belief_bias | La fenitoína es segura en cualquier velocidad de infusión || Puede causar hipotensión y arritmias si se infunde rápido.
+- omission_bias | No buscar la causa del estado epiléptico || Es fundamental.
+E: Si el estado epiléptico persiste después de una o dos dosis adecuadas de benzodiacepinas, se considera establecido y se administra un fármaco de segunda línea intravenoso. El estudio ESETT mostró eficacia similar entre levetiracetam, valproato y fosfenitoína, con control en alrededor de la mitad de los pacientes. La elección depende del perfil del paciente: el valproato se evita en embarazadas y en hepatopatía, y la fenitoína puede causar hipotensión, arritmias y necrosis por extravasación. Si persiste, se considera estado epiléptico refractario y se requiere infusión de anestésicos con intubación. Se busca la causa de forma simultánea.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del estado epiléptico ;; Guía de la Sociedad Americana de Epilepsia para estado epiléptico convulsivo
+
+@ urg|neurologic_emergencies|status_epilepticus|3|treatment_of_choice
+V: Hombre de 50 años en estado epiléptico que no respondió a benzodiacepinas ni a levetiracetam intravenoso. Persiste con crisis 40 minutos después del inicio.
+P: ¿Cuál es el tratamiento de elección?
++ Intubación e infusión continua de midazolam, propofol o pentobarbital con monitoreo electroencefalográfico || Es un estado epiléptico refractario.
+- anchoring | Más dosis de levetiracetam por vía oral || No es adecuado.
+- availability_heuristic | Esperar a que el fármaco de segunda línea haga efecto en las siguientes horas || Retrasa el control.
+- representativeness_heuristic | Haloperidol intravenoso || Reduce el umbral convulsivo.
+- premature_closure | Suspender todos los fármacos y observar || Es peligroso.
+- framing_effect | Solo oxígeno por mascarilla || No controla las crisis.
+- complexity_bias | Cirugía de epilepsia urgente como primera medida || No es el primer paso.
+- base_rate_fallacy | El estado refractario es raro y no requiere terapia intensiva || Requiere manejo en terapia intensiva.
+- belief_bias | El cese de los movimientos garantiza el fin de las crisis || Puede persistir un estado no convulsivo.
+- omission_bias | No realizar electroencefalograma continuo || Es necesario para guiar el tratamiento.
+E: El estado epiléptico refractario es el que persiste a pesar de una benzodiacepina y un fármaco de segunda línea. Requiere ingreso a terapia intensiva, intubación y ventilación mecánica, e infusión continua de anestésicos, como midazolam, propofol o pentobarbital, titulados hasta suprimir las crisis o lograr un patrón de supresión en el electroencefalograma continuo. El monitoreo electroencefalográfico es necesario porque, tras la sedación y la relajación, las crisis pueden continuar sin manifestaciones motoras. Se busca y trata la causa, como infecciones, alteraciones metabólicas, tóxicos o lesiones estructurales. La ketamina es una opción en casos superrefractarios.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del estado epiléptico ;; Guía de la Sociedad Neurocrítica para estado epiléptico
+
+@ urg|neurologic_emergencies|status_epilepticus|2|treatment_of_choice
+V: Mujer de 25 años con embarazo de 36 semanas que presenta crisis convulsiva tónico clónica generalizada. Presión de 170/110 mmHg y proteinuria. Sin antecedentes de epilepsia.
+P: ¿Cuál es el tratamiento de elección para la crisis?
++ Sulfato de magnesio intravenoso || Es el tratamiento de elección de la eclampsia.
+- anchoring | Fenitoína como primera opción || Es menos eficaz que el magnesio en la eclampsia.
+- availability_heuristic | Diazepam como tratamiento de elección único || Es menos eficaz que el magnesio.
+- representativeness_heuristic | Esperar a que la crisis ceda y no dar tratamiento || Recurre y aumenta la mortalidad.
+- premature_closure | Solo antihipertensivos || No previenen las convulsiones.
+- framing_effect | Valproato intravenoso || Es teratógeno y no es de elección.
+- complexity_bias | Cesárea inmediata durante la crisis sin estabilizar || Primero se estabiliza a la paciente.
+- base_rate_fallacy | Las convulsiones en el embarazo siempre son epilepsia || La eclampsia es la causa más probable con hipertensión.
+- belief_bias | El magnesio no requiere vigilancia || Requiere vigilancia de reflejos, respiración y diuresis.
+- omission_bias | No controlar la presión arterial ni planear la interrupción del embarazo || Son parte del manejo.
+E: La eclampsia es la aparición de convulsiones en una paciente con preeclampsia, sin otra causa. El tratamiento de elección es el sulfato de magnesio intravenoso, con dosis de impregnación de 4 a 6 gramos seguida de infusión de 1 a 2 gramos por hora, que es superior a la fenitoína y al diazepam para tratar y prevenir las convulsiones. Se vigila la toxicidad por magnesio con los reflejos osteotendinosos, la frecuencia respiratoria y la diuresis; su antídoto es el gluconato de calcio. Además se controla la presión arterial con labetalol, hidralazina o nifedipino oral, y se planea la interrupción del embarazo una vez estabilizada.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en el segundo y tercer nivel ;; Guía de Práctica Clínica de diagnóstico y tratamiento del estado epiléptico
+
+@ urg|neurologic_emergencies|status_epilepticus|3|treatment_of_choice
+V: Mujer de 60 años que tomaba diuréticos y bebía mucha agua. Llega con confusión y una crisis convulsiva generalizada que no cede. Sodio sérico de 112 mEq/L.
+P: ¿Cuál es el tratamiento de elección?
++ Solución salina hipertónica al 3 por ciento en bolo para elevar el sodio 4 a 6 mEq/L || La hiponatremia grave sintomática requiere corrección urgente controlada.
+- anchoring | Solo benzodiacepinas sin corregir el sodio || La crisis persiste mientras no se corrija la causa.
+- availability_heuristic | Solución salina al 0.9 por ciento en infusión lenta como única medida || Es insuficiente en hiponatremia grave sintomática.
+- representativeness_heuristic | Corregir el sodio 20 mEq/L en 24 horas || Causa desmielinización osmótica.
+- premature_closure | Restricción de líquidos como única medida || Es lenta para una urgencia.
+- framing_effect | Solución glucosada al 5 por ciento || Empeora la hiponatremia.
+- complexity_bias | Hemodiálisis urgente || No es el primer paso.
+- base_rate_fallacy | La hiponatremia nunca causa convulsiones || Puede causarlas.
+- belief_bias | El sodio debe normalizarse por completo en las primeras horas || La corrección debe ser limitada.
+- omission_bias | No vigilar el sodio cada 2 a 4 horas || Es indispensable.
+E: La hiponatremia grave sintomática, con convulsiones, coma o dificultad respiratoria, es una urgencia por el edema cerebral. El tratamiento es la solución salina hipertónica al 3 por ciento en bolos de 100 a 150 mL, repetibles, con el objetivo de elevar el sodio 4 a 6 mEq/L en las primeras horas, lo que suele detener las crisis. La corrección total no debe superar 8 a 10 mEq/L en 24 horas, para evitar el síndrome de desmielinización osmótica, sobre todo en hiponatremias crónicas, alcohólicos y desnutridos. Se vigila el sodio cada 2 a 4 horas y se busca la causa.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hiponatremia ;; Guía europea para el diagnóstico y tratamiento de la hiponatremia
+
+@ urg|neurologic_emergencies|status_epilepticus|3|initial_study
+V: Hombre de 55 años en terapia intensiva por sepsis, que dejó de convulsionar tras recibir benzodiacepinas y levetiracetam, pero 2 horas después no recupera la conciencia. Presenta movimientos sutiles de los párpados.
+P: ¿Cuál es el estudio inicial más apropiado?
++ Electroencefalograma urgente || Se sospecha estado epiléptico no convulsivo.
+- anchoring | Esperar 24 horas a que despierte || Retrasa el diagnóstico.
+- availability_heuristic | Tomografía como único estudio || No detecta crisis eléctricas.
+- representativeness_heuristic | Atribuir la falta de respuesta al efecto sedante sin estudiar || Debe descartarse el estado no convulsivo.
+- premature_closure | Punción lumbar como primer estudio || El electroencefalograma es prioritario.
+- framing_effect | Electromiografía || No evalúa crisis cerebrales.
+- complexity_bias | Biopsia cerebral || No está indicada.
+- base_rate_fallacy | El estado epiléptico no convulsivo es muy raro en pacientes críticos || Es relativamente frecuente.
+- belief_bias | Si no hay movimientos no hay crisis || Las crisis pueden ser solo eléctricas.
+- omission_bias | No medir glucosa y electrolitos || Pueden contribuir.
+E: El estado epiléptico no convulsivo es la actividad epiléptica prolongada sin manifestaciones motoras evidentes, que se presenta con alteración del estado de conciencia, confusión o coma, a veces con movimientos sutiles como parpadeo, nistagmo o mioclonías faciales. Es frecuente en pacientes críticos y después de un estado convulsivo tratado, cuando el paciente no recupera la conciencia en el tiempo esperado. El diagnóstico requiere electroencefalograma, idealmente continuo. Su tratamiento es similar al del estado convulsivo. No diagnosticarlo se asocia con daño neurológico y mayor mortalidad.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del estado epiléptico ;; Guía de la Sociedad Neurocrítica para estado epiléptico
+
+@ urg|neurologic_emergencies|status_epilepticus|2|next_step
+V: Hombre de 45 años con alcoholismo crónico que presenta una crisis convulsiva generalizada breve 24 horas después de suspender el alcohol. Recupera la conciencia. Glucosa de 80 mg/dL. Sin focalización neurológica ni trauma.
+P: ¿Cuál es la conducta más apropiada?
++ Administrar benzodiacepina y tiamina, vigilar la abstinencia y evaluar otras causas || Las crisis por abstinencia se tratan con benzodiacepinas.
+- anchoring | Iniciar fenitoína de forma crónica || No previene las crisis por abstinencia alcohólica.
+- availability_heuristic | Dar alta inmediata sin tratamiento || Puede progresar a delirium tremens.
+- representativeness_heuristic | Administrar glucosa antes que tiamina || Puede precipitar encefalopatía de Wernicke.
+- premature_closure | Considerar epilepsia primaria y no considerar la abstinencia || El contexto sugiere abstinencia.
+- framing_effect | Haloperidol como tratamiento principal || Disminuye el umbral convulsivo.
+- complexity_bias | Intubación profiláctica || No está indicada.
+- base_rate_fallacy | Las crisis por abstinencia ocurren después de 7 días || Ocurren en las primeras 48 horas.
+- belief_bias | Dar alcohol previene nuevas crisis || No es un tratamiento aceptado.
+- omission_bias | No realizar tomografía si hay trauma, focalización o primera crisis atípica || Puede haber hematoma subdural.
+E: Las crisis convulsivas por abstinencia alcohólica suelen ser generalizadas, breves y ocurrir entre 6 y 48 horas después de suspender el alcohol. Pueden preceder al delirium tremens. El tratamiento son las benzodiacepinas, que tratan las crisis y previenen la progresión de la abstinencia; la fenitoína no es eficaz para prevenirlas. Se administra tiamina antes que la glucosa. Se deben descartar otras causas, como hipoglucemia, alteraciones electrolíticas, infecciones y hematoma subdural, por lo que se realiza tomografía si es la primera crisis, hay focalización, trauma o un patrón atípico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de abstinencia alcohólica ;; Guía de Práctica Clínica de diagnóstico y tratamiento del estado epiléptico
+
+@ urg|neurologic_emergencies|status_epilepticus|2|initial_study
+V: Mujer de 28 años con una primera crisis convulsiva generalizada no provocada, de 2 minutos, con recuperación completa. Exploración neurológica normal. Glucosa y electrolitos normales. Prueba de embarazo negativa.
+P: ¿Cuál es el estudio inicial más apropiado?
++ Electroencefalograma y estudio de imagen cerebral, preferentemente resonancia || Permiten evaluar el riesgo de recurrencia y buscar una causa estructural.
+- anchoring | Ningún estudio porque se recuperó || La primera crisis requiere estudio.
+- availability_heuristic | Punción lumbar de rutina sin fiebre ni datos meníngeos || No está indicada de rutina.
+- representativeness_heuristic | Iniciar dos antiepilépticos de inmediato || No se indica de rutina tras una primera crisis.
+- premature_closure | Angiografía cerebral || No es el estudio inicial.
+- framing_effect | Solo biometría hemática || Es insuficiente.
+- complexity_bias | Tomografía por emisión de positrones || No es el estudio inicial.
+- base_rate_fallacy | Toda primera crisis es epilepsia que requiere tratamiento de por vida || No todas recurren.
+- belief_bias | El electroencefalograma normal descarta epilepsia || No la descarta.
+- omission_bias | No dar recomendaciones sobre conducir y seguridad || Son parte de la atención.
+E: Ante una primera crisis convulsiva no provocada, se evalúan causas como hipoglucemia, alteraciones electrolíticas, tóxicos y embarazo. Se recomiendan electroencefalograma y estudio de imagen cerebral, preferentemente resonancia magnética, para identificar causas estructurales y estimar el riesgo de recurrencia. No se indica tratamiento antiepiléptico de rutina tras una primera crisis, salvo que haya alto riesgo de recurrencia, como alteraciones epileptiformes en el electroencefalograma, lesión estructural o crisis nocturna. Se dan recomendaciones de seguridad, como evitar conducir durante un tiempo y no nadar solo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la epilepsia en el adulto ;; Guía de la Academia Americana de Neurología para primera crisis no provocada
+
+@ urg|neurologic_emergencies|status_epilepticus|3|data_interpretation
+V: Mujer de 22 años con episodios de movimientos generalizados de 15 minutos, con movimientos asincrónicos de lado a lado de la cabeza, empuje pélvico, ojos cerrados con resistencia a la apertura y llanto. Sin cianosis ni mordedura lateral de lengua. Recupera la conciencia de inmediato.
+P: ¿Qué indican estas características del episodio?
++ Probable crisis psicógena no epiléptica, que requiere confirmación con video electroencefalograma || Las características sugieren un origen no epiléptico.
+- anchoring | Estado epiléptico convulsivo que requiere anestesia general || Las características no son típicas de crisis epilépticas.
+- availability_heuristic | Crisis del lóbulo frontal con certeza absoluta || Debe confirmarse con estudio.
+- representativeness_heuristic | Simulación consciente para obtener beneficio || No es lo mismo que un trastorno funcional.
+- premature_closure | Síncope convulsivo || Dura segundos.
+- framing_effect | Hipoglucemia || No explica el patrón.
+- complexity_bias | Encefalitis autoinmune como primera opción || No es la primera opción.
+- base_rate_fallacy | Las crisis psicógenas nunca coexisten con epilepsia || Pueden coexistir.
+- belief_bias | Los ojos cerrados durante una crisis son típicos de la epilepsia || Sugieren crisis psicógena.
+- focusing_illusion | Crisis de ausencia || Son breves y sin movimientos generalizados.
+E: Las crisis psicógenas no epilépticas son episodios que se parecen a las crisis epilépticas pero no se acompañan de descargas eléctricas anormales; son un trastorno funcional y no una simulación. Sugieren este diagnóstico la duración prolongada, los movimientos asincrónicos o de lado a lado de la cabeza, el empuje pélvico, los ojos cerrados con resistencia a la apertura, el llanto y la recuperación rápida sin confusión. Pueden coexistir con epilepsia. El estándar diagnóstico es el video electroencefalograma, que registra un episodio sin actividad epiléptica. El tratamiento es psicoterapia y evitar el uso innecesario de antiepilépticos e intubaciones.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la epilepsia en el adulto ;; Guía de la Liga Internacional contra la Epilepsia para crisis psicógenas no epilépticas
+
+@ urg|neurologic_emergencies|status_epilepticus|2|next_step
+V: Niño de 18 meses con fiebre de 39.5 grados por infección respiratoria que presentó una crisis tónico clónica generalizada de 2 minutos. Recupera la conciencia y el estado neurológico es normal. Sin datos meníngeos. Desarrollo normal.
+P: ¿Cuál es la conducta más apropiada?
++ Tranquilizar a los padres, tratar la fiebre y la infección, y dar datos de alarma sin estudios de rutina || Es una crisis febril simple.
+- anchoring | Punción lumbar de rutina en todos los casos || Solo si hay datos meníngeos o sospecha de infección del sistema nervioso.
+- availability_heuristic | Iniciar antiepiléptico crónico || No está indicado en crisis febriles simples.
+- representativeness_heuristic | Tomografía de cráneo de rutina || No está indicada.
+- premature_closure | Electroencefalograma urgente || No es necesario en crisis febril simple.
+- framing_effect | Hospitalización prolongada para observación || No es necesaria.
+- complexity_bias | Resonancia magnética cerebral de rutina || No está indicada.
+- base_rate_fallacy | Las crisis febriles simples causan daño cerebral || Tienen excelente pronóstico.
+- belief_bias | Los antipiréticos previenen la recurrencia de las crisis febriles || No las previenen.
+- omission_bias | No explicar a los padres qué hacer ante una nueva crisis || Es parte de la orientación.
+E: Las crisis febriles son las convulsiones más frecuentes en la infancia, entre los 6 meses y los 5 años, asociadas a fiebre sin infección del sistema nervioso central. La crisis febril simple es generalizada, dura menos de 15 minutos y no se repite en 24 horas. Tiene excelente pronóstico, sin daño neurológico. No requiere estudios de rutina ni tratamiento antiepiléptico crónico. La punción lumbar se indica si hay datos meníngeos, sospecha de meningitis, o en lactantes pequeños con vacunación incompleta. Los antipiréticos alivian la fiebre pero no previenen la recurrencia. Las crisis complejas requieren más estudio.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de crisis convulsivas febriles en pediatría ;; Guía de la Academia Americana de Pediatría para crisis febriles
+
+@ urg|neurologic_emergencies|status_epilepticus|3|complication_prognosis
+V: Hombre de 30 años que recibe fenitoína intravenosa a dosis de carga por estado epiléptico. Durante la infusión rápida presenta hipotensión de 70/40 mmHg y bradicardia con bloqueo auriculoventricular.
+P: ¿Cuál es la complicación más probable?
++ Toxicidad cardiovascular por infusión rápida de fenitoína || La fenitoína y su vehículo causan hipotensión y arritmias si se infunden rápido.
+- anchoring | Progresión del estado epiléptico || No explica el cuadro cardiovascular.
+- availability_heuristic | Reacción anafiláctica a la fenitoína como única explicación || La relación con la velocidad sugiere toxicidad.
+- representativeness_heuristic | Síndrome de Stevens Johnson agudo || Es tardío y cutáneo.
+- premature_closure | Hipoglucemia || No explica el cuadro.
+- framing_effect | Infarto agudo de miocardio || La relación temporal con la infusión es clara.
+- complexity_bias | Síndrome neuroléptico maligno || No corresponde.
+- base_rate_fallacy | La fenitoína puede infundirse a cualquier velocidad || Tiene una velocidad máxima.
+- belief_bias | La fosfenitoína tiene el mismo riesgo de necrosis por extravasación || La fosfenitoína tiene menos riesgo local.
+- omission_bias | No monitorear el electrocardiograma y la presión durante la infusión || Es indispensable.
+E: La fenitoína intravenosa puede causar hipotensión, bradicardia, bloqueos auriculoventriculares y arritmias, sobre todo si se infunde rápidamente, en adultos mayores o en cardiópatas, por el efecto del fármaco y de su vehículo, el propilenglicol. La velocidad máxima de infusión es de 50 mg por minuto en adultos, y requiere monitoreo electrocardiográfico y de presión. También causa el síndrome del guante púrpura por extravasación. La fosfenitoína es una prodroga que se puede infundir más rápido con menos efectos locales. Otras opciones de segunda línea, como levetiracetam y valproato, tienen menos efectos cardiovasculares.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del estado epiléptico ;; Guía de la Sociedad Americana de Epilepsia para estado epiléptico convulsivo
