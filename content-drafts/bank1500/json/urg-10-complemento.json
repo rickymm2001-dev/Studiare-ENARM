@@ -1,0 +1,1715 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "urg-10-complemento-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "drowning",
+      "vignette": "Adolescente de 15 años, buen nadador, que sufre un ahogamiento en una alberca tranquila sin causa aparente. Es reanimado con éxito. Su madre refiere que él ha tenido desmayos con el ejercicio y un tío murió súbitamente joven.",
+      "prompt": "¿Cuál es el estudio inicial más apropiado para buscar la causa?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Considerarlo un accidente sin investigar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Los antecedentes sugieren una causa cardiaca."
+        },
+        {
+          "key": "b",
+          "text": "Electroencefalograma como único estudio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Debe descartarse primero una arritmia."
+        },
+        {
+          "key": "c",
+          "text": "Electrocardiograma para buscar QT largo u otra canalopatía",
+          "correct": true,
+          "rationale": "Una arritmia puede causar el ahogamiento en un nadador experto."
+        },
+        {
+          "key": "d",
+          "text": "No estudiar a los familiares de primer grado",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El síndrome puede ser hereditario."
+        },
+        {
+          "key": "e",
+          "text": "Los desmayos con el ejercicio son normales en adolescentes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Son un dato de alarma cardiaco."
+        },
+        {
+          "key": "f",
+          "text": "Ningún estudio porque el ahogamiento se explica por sí solo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Un nadador experto sin causa obliga a buscar arritmias."
+        },
+        {
+          "key": "g",
+          "text": "Biopsia muscular",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "Tomografía de senos paranasales",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "i",
+          "text": "Prueba de embarazo como único estudio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "j",
+          "text": "Los nadadores expertos nunca se ahogan",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Pueden hacerlo por arritmias o convulsiones."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "El ahogamiento puede ser consecuencia de un evento previo que causa pérdida de la conciencia en el agua, como convulsiones, hipoglucemia, trauma, intoxicación o arritmias. El síndrome de QT largo congénito, sobre todo el tipo 1, se asocia con arritmias desencadenadas por el ejercicio y la natación, y puede causar ahogamientos inexplicables en nadadores competentes. El síncope con el ejercicio y la muerte súbita familiar son datos de alarma. Se realiza electrocardiograma para medir el QT corregido, y se completa con estudios genéticos, pruebas de esfuerzo y estudio de familiares.",
+      "gpcRefs": [
+        "Guía de la Sociedad Europea de Cardiología para arritmias ventriculares y prevención de muerte súbita",
+        "Guía de Práctica Clínica de atención del paciente pediátrico por ahogamiento"
+      ]
+    },
+    {
+      "key": "urg-10-complemento-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "drowning",
+      "vignette": "Hombre de 35 años rescatado tras un ahogamiento, consciente, con tos persistente, estertores bilaterales, frecuencia respiratoria de 28 y saturación de 88 por ciento con mascarilla con reservorio.",
+      "prompt": "¿Cuál es el tratamiento de soporte respiratorio de elección inicial?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "La hipoxemia tras el ahogamiento siempre se resuelve sola en minutos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede empeorar."
+        },
+        {
+          "key": "b",
+          "text": "Ventilación no invasiva con presión positiva o CPAP si coopera y protege la vía aérea",
+          "correct": true,
+          "rationale": "Recluta alvéolos y mejora la oxigenación."
+        },
+        {
+          "key": "c",
+          "text": "Diuréticos como tratamiento principal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El edema no es cardiogénico."
+        },
+        {
+          "key": "d",
+          "text": "No vigilar el deterioro que requiera intubación",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede ser necesaria."
+        },
+        {
+          "key": "e",
+          "text": "Solo oxígeno por cánula nasal a 2 litros",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es insuficiente."
+        },
+        {
+          "key": "f",
+          "text": "Dar de alta con saturación de 88 por ciento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Requiere soporte."
+        },
+        {
+          "key": "g",
+          "text": "La presión positiva está contraindicada tras un ahogamiento",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es útil."
+        },
+        {
+          "key": "h",
+          "text": "Oxigenación por membrana extracorpórea inmediata",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "i",
+          "text": "Maniobra de Heimlich para extraer el agua",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "j",
+          "text": "Antibiótico intravenoso profiláctico como tratamiento principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No mejora la oxigenación."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "Tras un ahogamiento, la hipoxemia se debe a la aspiración de agua, la pérdida del surfactante y las atelectasias. En pacientes conscientes, que cooperan y protegen la vía aérea, con hipoxemia que no mejora con oxígeno, se puede usar ventilación no invasiva con presión positiva o CPAP, que recluta alvéolos y mejora la oxigenación. Si hay deterioro del estado de conciencia, fatiga o hipoxemia refractaria, se realiza intubación y ventilación mecánica protectora con PEEP. Los diuréticos no son el tratamiento principal porque el edema no es cardiogénico. Los antibióticos se reservan para signos de infección.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención del paciente por ahogamiento",
+        "Guía del Consejo Europeo de Resucitación para circunstancias especiales"
+      ]
+    },
+    {
+      "key": "urg-10-complemento-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "heat_stroke",
+      "vignette": "Hombre de 28 años que juega fútbol bajo el sol y presenta contracciones musculares dolorosas en las pantorrillas. Temperatura normal, estado mental normal y signos vitales estables. Sudó mucho y solo bebió agua.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Los calambres se deben a falta de calcio exclusivamente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se deben sobre todo a pérdida de sodio."
+        },
+        {
+          "key": "b",
+          "text": "Relajantes musculares intravenosos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No son necesarios."
+        },
+        {
+          "key": "c",
+          "text": "Hospitalización en terapia intensiva",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "d",
+          "text": "Seguir jugando bebiendo solo agua",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede empeorar por la pérdida de sodio."
+        },
+        {
+          "key": "e",
+          "text": "Inmersión en agua helada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No tiene golpe de calor."
+        },
+        {
+          "key": "f",
+          "text": "Antipiréticos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No tiene fiebre."
+        },
+        {
+          "key": "g",
+          "text": "Dantroleno",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "h",
+          "text": "No recomendar hidratación con electrolitos durante el ejercicio",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es la prevención."
+        },
+        {
+          "key": "i",
+          "text": "Reposo en lugar fresco, estiramiento y rehidratación oral con solución con electrolitos",
+          "correct": true,
+          "rationale": "Son calambres por calor por pérdida de sodio."
+        },
+        {
+          "key": "j",
+          "text": "Los calambres por calor siempre progresan a golpe de calor",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No necesariamente."
+        }
+      ],
+      "canonical": [
+        "b",
+        "d",
+        "e",
+        "i"
+      ],
+      "explanation": "Los calambres por calor son contracciones musculares dolorosas e involuntarias, generalmente en pantorrillas, muslos y abdomen, que aparecen durante o después del ejercicio intenso en ambientes calurosos. Se asocian con pérdida de sodio por sudoración abundante, sobre todo cuando se repone solo con agua. La temperatura y el estado mental son normales. El tratamiento es reposo en un lugar fresco, estiramiento suave y rehidratación oral con soluciones que contengan electrolitos. La prevención incluye aclimatación, hidratación con electrolitos y pausas durante el ejercicio en calor.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del golpe de calor",
+        "Guía de la Sociedad de Medicina de Montaña para enfermedades por calor"
+      ]
+    },
+    {
+      "key": "urg-10-complemento-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "heat_stroke",
+      "vignette": "Hombre de 30 años que durante una cirugía con anestesia inhalada y succinilcolina presenta rigidez del masetero, taquicardia, aumento rápido del dióxido de carbono espirado y temperatura de 40 grados.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "La hipertermia maligna no es hereditaria",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es hereditaria autosómica dominante."
+        },
+        {
+          "key": "b",
+          "text": "Bromocriptina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se usa en síndrome neuroléptico maligno."
+        },
+        {
+          "key": "c",
+          "text": "No vigilar hiperpotasemia y rabdomiólisis",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son complicaciones graves."
+        },
+        {
+          "key": "d",
+          "text": "Solo enfriamiento externo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El dantroleno es el tratamiento específico."
+        },
+        {
+          "key": "e",
+          "text": "Antibióticos por fiebre posoperatoria",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es una infección."
+        },
+        {
+          "key": "f",
+          "text": "La hipertermia maligna es benigna y autolimitada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es mortal sin tratamiento."
+        },
+        {
+          "key": "g",
+          "text": "Repetir la succinilcolina para relajar el masetero",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Agrava el cuadro."
+        },
+        {
+          "key": "h",
+          "text": "Suspender el anestésico inhalado y administrar dantroleno intravenoso",
+          "correct": true,
+          "rationale": "Es una hipertermia maligna."
+        },
+        {
+          "key": "i",
+          "text": "Paracetamol intravenoso como tratamiento principal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No trata la hipertermia maligna."
+        },
+        {
+          "key": "j",
+          "text": "Aumentar la dosis del anestésico inhalado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Agrava el cuadro."
+        }
+      ],
+      "canonical": [
+        "g",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "La hipertermia maligna es un trastorno farmacogenético autosómico dominante, generalmente por mutaciones del receptor de rianodina RYR1, que causa liberación descontrolada de calcio en el músculo esquelético ante anestésicos inhalados halogenados y succinilcolina. Se manifiesta con aumento del dióxido de carbono espirado, rigidez muscular, incluida la del masetero, taquicardia, hipertermia, acidosis, hiperpotasemia y rabdomiólisis. El tratamiento es suspender los fármacos desencadenantes, hiperventilar con oxígeno al 100 por ciento, administrar dantroleno intravenoso, enfriar y tratar la hiperpotasemia. Se informa a la familia por el carácter hereditario.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la hipertermia maligna",
+        "Guía de la Asociación de Hipertermia Maligna"
+      ]
+    },
+    {
+      "key": "urg-10-complemento-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "hypothermia",
+      "vignette": "Hombre de 35 años con politrauma que llega en invierno. Temperatura de 35.2 grados. Se planea reanimación con hemoderivados y cirugía.",
+      "prompt": "¿Cuál es la medida preventiva más importante respecto a la temperatura?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Prevenir la hipotermia con líquidos y hemoderivados calientes, mantas térmicas y ambiente cálido",
+          "correct": true,
+          "rationale": "La hipotermia agrava la coagulopatía y aumenta la mortalidad en trauma."
+        },
+        {
+          "key": "b",
+          "text": "Circulación extracorpórea profiláctica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "c",
+          "text": "La hipotermia protege al paciente con hemorragia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Empeora la coagulopatía."
+        },
+        {
+          "key": "d",
+          "text": "Dar alcohol para calentar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Está contraindicado."
+        },
+        {
+          "key": "e",
+          "text": "Ignorar la temperatura porque es mayor de 35 grados",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La tendencia a enfriarse debe prevenirse."
+        },
+        {
+          "key": "f",
+          "text": "No medir la temperatura de forma seriada",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es indispensable."
+        },
+        {
+          "key": "g",
+          "text": "Inducir hipotermia terapéutica en el choque hemorrágico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Está contraindicada."
+        },
+        {
+          "key": "h",
+          "text": "Mantener al paciente descubierto para facilitar la exploración todo el tiempo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Favorece la pérdida de calor."
+        },
+        {
+          "key": "i",
+          "text": "Administrar líquidos fríos para reducir el metabolismo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Agrava la hipotermia y la coagulopatía."
+        },
+        {
+          "key": "j",
+          "text": "La hipotermia leve no afecta la coagulación",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La afecta de forma importante."
+        }
+      ],
+      "canonical": [
+        "a",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "La hipotermia es un componente de la tríada letal del trauma junto con la acidosis y la coagulopatía. Incluso una hipotermia leve reduce la actividad de las enzimas de la coagulación y la función plaquetaria, y aumenta el sangrado y la mortalidad. En el paciente politraumatizado se previene exponiéndolo solo lo necesario para la exploración, cubriéndolo con mantas térmicas, calentando la sala, administrando líquidos y hemoderivados calientes con calentadores rápidos y midiendo la temperatura de forma seriada. La hipotermia terapéutica está contraindicada en el choque hemorrágico.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía europea para el manejo del sangrado mayor y la coagulopatía en trauma"
+      ]
+    },
+    {
+      "key": "urg-10-complemento-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "environmental_emergencies",
+      "subtopic": "hypothermia",
+      "vignette": "Hombre de 30 años, migrante, que caminó varios días con los pies mojados a temperaturas frías pero sobre cero. Presenta pies pálidos, fríos, edematosos y entumecidos, que al recalentarse se tornan rojos, dolorosos y con ampollas.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Congelación profunda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Requiere temperaturas bajo cero con congelamiento del tejido."
+        },
+        {
+          "key": "b",
+          "text": "Pie de trinchera o pie de inmersión",
+          "correct": true,
+          "rationale": "Lesión por frío no congelante con exposición prolongada a humedad y frío."
+        },
+        {
+          "key": "c",
+          "text": "Gota bilateral",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "d",
+          "text": "Las lesiones por frío solo ocurren bajo cero",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El pie de trinchera ocurre sobre cero."
+        },
+        {
+          "key": "e",
+          "text": "Vasculitis sistémica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El antecedente explica el cuadro."
+        },
+        {
+          "key": "f",
+          "text": "Pie diabético",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay diabetes."
+        },
+        {
+          "key": "g",
+          "text": "Trombosis venosa profunda bilateral",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la evolución con el recalentamiento."
+        },
+        {
+          "key": "h",
+          "text": "No secar, elevar y proteger los pies",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es el manejo."
+        },
+        {
+          "key": "i",
+          "text": "Debe frotarse vigorosamente para recalentar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Daña los tejidos."
+        },
+        {
+          "key": "j",
+          "text": "Celulitis bilateral",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El antecedente de frío y humedad explica el cuadro."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "El pie de trinchera o pie de inmersión es una lesión por frío no congelante causada por la exposición prolongada de los pies a la humedad y al frío por arriba de cero grados, frecuente en militares, personas en situación de calle y migrantes. Inicialmente los pies están pálidos, fríos, entumecidos y edematosos; al recalentarse aparece hiperemia dolorosa, edema y ampollas, y puede haber necrosis e infección. El tratamiento consiste en secar, recalentar gradualmente, elevar y proteger los pies, analgesia y cuidado de las heridas. La prevención incluye calzado seco, cambiar calcetines y evitar la humedad prolongada.",
+      "gpcRefs": [
+        "Guía de la Sociedad de Medicina de Montaña para lesiones por frío",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipotermia accidental"
+      ]
+    },
+    {
+      "key": "urg-10-complemento-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "respiratory_emergencies",
+      "subtopic": "asthma_exacerbation",
+      "vignette": "Mujer de 24 años con crisis asmática grave refractaria que requiere intubación orotraqueal. Presión de 110/70 mmHg.",
+      "prompt": "¿Cuál es el inductor de elección para la intubación en esta paciente?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Morfina como inductor",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Libera histamina."
+        },
+        {
+          "key": "b",
+          "text": "Succinilcolina sin sedante",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El relajante no seda."
+        },
+        {
+          "key": "c",
+          "text": "La ketamina está contraindicada en asma",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es la preferida por su efecto broncodilatador."
+        },
+        {
+          "key": "d",
+          "text": "Diazepam como inductor único",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Tiene inicio lento."
+        },
+        {
+          "key": "e",
+          "text": "Anestesia inhalada con desflurano en urgencias",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es la técnica de secuencia rápida."
+        },
+        {
+          "key": "f",
+          "text": "Tiopental",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede liberar histamina y empeorar el broncoespasmo."
+        },
+        {
+          "key": "g",
+          "text": "No ajustar la ventilación para evitar el atrapamiento aéreo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es fundamental."
+        },
+        {
+          "key": "h",
+          "text": "Intubar sin inductor",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es inhumano y aumenta complicaciones."
+        },
+        {
+          "key": "i",
+          "text": "Ketamina",
+          "correct": true,
+          "rationale": "Tiene efecto broncodilatador y mantiene la estabilidad hemodinámica."
+        },
+        {
+          "key": "j",
+          "text": "Todos los inductores tienen el mismo efecto sobre los bronquios",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Difieren."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "h",
+        "i"
+      ],
+      "explanation": "La intubación en la crisis asmática grave es de alto riesgo por la hipoxemia, el atrapamiento aéreo y la inestabilidad hemodinámica. La ketamina es el inductor preferido porque tiene efecto broncodilatador por liberación de catecolaminas y mantiene la estabilidad hemodinámica. Se usa con un relajante neuromuscular de inicio rápido, como rocuronio o succinilcolina, y un tubo de diámetro grande. Después de la intubación se usa una estrategia ventilatoria con frecuencia baja, volumen corriente bajo, flujo inspiratorio alto y tiempo espiratorio prolongado, aceptando hipercapnia permisiva para evitar el atrapamiento aéreo.",
+      "gpcRefs": [
+        "Iniciativa global para el asma",
+        "Guía de Práctica Clínica de manejo de la vía aérea en urgencias"
+      ]
+    },
+    {
+      "key": "urg-10-complemento-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "respiratory_emergencies",
+      "subtopic": "asthma_exacerbation",
+      "vignette": "Mujer de 30 años con embarazo de 28 semanas y asma que presenta una exacerbación moderada con disnea, sibilancias y saturación de 93 por ciento.",
+      "prompt": "¿Cuál es el tratamiento inicial más apropiado?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Evitar todo medicamento por el embarazo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La hipoxemia materna daña al feto."
+        },
+        {
+          "key": "b",
+          "text": "El embarazo siempre mejora el asma",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede empeorarla."
+        },
+        {
+          "key": "c",
+          "text": "Teofilina como primera línea",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es la primera opción."
+        },
+        {
+          "key": "d",
+          "text": "Sedantes para disminuir la ansiedad",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Pueden causar depresión respiratoria."
+        },
+        {
+          "key": "e",
+          "text": "Solo salbutamol sin esteroide por miedo a efectos fetales",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Los esteroides están indicados."
+        },
+        {
+          "key": "f",
+          "text": "No vigilar el bienestar fetal",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte del manejo."
+        },
+        {
+          "key": "g",
+          "text": "Salbutamol inhalado, corticosteroide sistémico y oxígeno para mantener saturación mayor de 95 por ciento, igual que fuera del embarazo",
+          "correct": true,
+          "rationale": "El asma no controlada es más peligrosa para el feto que los fármacos."
+        },
+        {
+          "key": "h",
+          "text": "Interrumpir el embarazo para tratar el asma",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "i",
+          "text": "Intubación inmediata por el embarazo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada en una crisis moderada."
+        },
+        {
+          "key": "j",
+          "text": "Los broncodilatadores inhalados son teratógenos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Son seguros."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "g"
+      ],
+      "explanation": "El asma es la enfermedad respiratoria crónica más frecuente en el embarazo, y su control puede empeorar, mejorar o mantenerse. El asma no controlada y las exacerbaciones se asocian con preeclampsia, parto pretérmino, bajo peso y muerte perinatal, por lo que los riesgos de los fármacos son menores que los de la enfermedad. La exacerbación se trata igual que fuera del embarazo: agonistas beta 2 de acción corta, corticosteroides sistémicos, bromuro de ipratropio si es grave, y oxígeno para mantener la saturación mayor de 95 por ciento para proteger la oxigenación fetal. Se vigila el bienestar fetal.",
+      "gpcRefs": [
+        "Iniciativa global para el asma",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en el embarazo"
+      ]
+    },
+    {
+      "key": "urg-10-complemento-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "resuscitation",
+      "subtopic": "airway_management",
+      "vignette": "Hombre de 50 años en paro respiratorio en quien fallan dos intentos de intubación orotraqueal. Se logra ventilar con dificultad con bolsa válvula mascarilla y la saturación es de 88 por ciento.",
+      "prompt": "¿Cuál es el siguiente paso más apropiado?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Traqueostomía reglada en quirófano",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es lenta."
+        },
+        {
+          "key": "b",
+          "text": "Cricotiroidotomía inmediata cuando aún se puede oxigenar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se reserva para no poder oxigenar."
+        },
+        {
+          "key": "c",
+          "text": "La intubación es la única forma válida de oxigenar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La oxigenación es el objetivo."
+        },
+        {
+          "key": "d",
+          "text": "Intubación nasotraqueal a ciegas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es la siguiente opción recomendada."
+        },
+        {
+          "key": "e",
+          "text": "Un tercer, cuarto y quinto intento de laringoscopia sin cambios",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta el riesgo de traumatismo y edema."
+        },
+        {
+          "key": "f",
+          "text": "No pedir ayuda experta",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe solicitarse."
+        },
+        {
+          "key": "g",
+          "text": "Colocar un dispositivo supraglótico, como mascarilla laríngea, para oxigenar y ventilar",
+          "correct": true,
+          "rationale": "Es el dispositivo de rescate tras intubación fallida."
+        },
+        {
+          "key": "h",
+          "text": "Despertar al paciente en paro respiratorio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es una opción en paro."
+        },
+        {
+          "key": "i",
+          "text": "Los dispositivos supraglóticos no permiten ventilar de forma eficaz",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Permiten oxigenar y ventilar."
+        },
+        {
+          "key": "j",
+          "text": "Dejar de ventilar para preparar otro intento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La oxigenación es prioritaria."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "Los algoritmos de vía aérea difícil establecen que, tras un intento fallido de intubación, la prioridad es mantener la oxigenación. Se limita el número de intentos de laringoscopia, idealmente a tres, optimizando la técnica en cada uno, por ejemplo con videolaringoscopio o bujía. Si falla la intubación, se coloca un dispositivo supraglótico, como la mascarilla laríngea, que permite oxigenar y ventilar y puede servir como conducto para la intubación. Si no se logra oxigenar con mascarilla facial ni dispositivo supraglótico, se realiza una vía aérea quirúrgica de urgencia. Se solicita ayuda experta desde el inicio.",
+      "gpcRefs": [
+        "Guía de la Sociedad de Vía Aérea Difícil",
+        "Guía de Práctica Clínica de manejo de la vía aérea en urgencias"
+      ]
+    },
+    {
+      "key": "urg-10-complemento-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "resuscitation",
+      "subtopic": "airway_management",
+      "vignette": "Mujer de 60 años afroamericana en tratamiento con enalapril desde hace 2 años que presenta edema progresivo de labios y lengua, sin urticaria ni prurito. Presión de 140/85 mmHg y voz ronca.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de vena cava superior",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "b",
+          "text": "Responde bien a antihistamínicos y adrenalina como la anafilaxia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Responde poco."
+        },
+        {
+          "key": "c",
+          "text": "Angioedema hereditario como primera opción en una mujer de 60 años",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El fármaco explica mejor el cuadro."
+        },
+        {
+          "key": "d",
+          "text": "Celulitis facial",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay datos infecciosos."
+        },
+        {
+          "key": "e",
+          "text": "Reacción alérgica a alimentos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El enalapril es la causa más probable."
+        },
+        {
+          "key": "f",
+          "text": "No vigilar la vía aérea por la voz ronca",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede requerir intubación."
+        },
+        {
+          "key": "g",
+          "text": "Angioedema mediado por bradicinina por inhibidor de la enzima convertidora",
+          "correct": true,
+          "rationale": "Edema sin urticaria en una usuaria de enalapril."
+        },
+        {
+          "key": "h",
+          "text": "El angioedema por inhibidores siempre aparece en la primera semana",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede aparecer años después."
+        },
+        {
+          "key": "i",
+          "text": "Considerarlo imposible porque lleva 2 años con el fármaco",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede aparecer en cualquier momento."
+        },
+        {
+          "key": "j",
+          "text": "Anafilaxia mediada por histamina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay urticaria, prurito ni hipotensión."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "El angioedema por inhibidores de la enzima convertidora de angiotensina se debe a la acumulación de bradicinina, porque la enzima convertidora también la degrada. Se manifiesta con edema de labios, lengua, cara y vía aérea superior, sin urticaria ni prurito, y puede aparecer en cualquier momento del tratamiento, incluso años después. Es más frecuente en personas afrodescendientes. Responde poco a antihistamínicos, esteroides y adrenalina, porque no está mediado por histamina. El manejo es suspender el fármaco, vigilar y proteger la vía aérea, que puede requerir intubación con fibrobroncoscopio o vía quirúrgica, y en casos graves considerar icatibant o plasma fresco. El fármaco no debe reiniciarse.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del angioedema",
+        "Guía de Práctica Clínica de manejo de la vía aérea en urgencias"
+      ]
+    },
+    {
+      "key": "urg-10-complemento-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "toxicology",
+      "subtopic": "envenomations",
+      "vignette": "Hombre de 35 años en Guerrero picado por un alacrán en el pie hace 30 minutos. Presenta dolor y parestesias locales, sin sialorrea, sin nistagmo, sin dificultad respiratoria y con signos vitales normales.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Gluconato de calcio intravenoso",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "b",
+          "text": "Las picaduras en adultos siempre son graves",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "En adultos suelen ser leves."
+        },
+        {
+          "key": "c",
+          "text": "Faboterápico intravenoso de inmediato en todos los casos sin importar la gravedad",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "En adultos con cuadro leve se puede observar."
+        },
+        {
+          "key": "d",
+          "text": "Torniquete en la pierna",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Está contraindicado."
+        },
+        {
+          "key": "e",
+          "text": "Los niños con picadura leve pueden observarse igual que los adultos sin vigilancia estrecha",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Los niños tienen mayor riesgo y se tratan con más facilidad."
+        },
+        {
+          "key": "f",
+          "text": "Alta inmediata sin observación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede progresar."
+        },
+        {
+          "key": "g",
+          "text": "Analgesia, compresas frías locales y observación al menos 4 horas, con faboterápico si aparecen signos sistémicos",
+          "correct": true,
+          "rationale": "Es una intoxicación leve en un adulto."
+        },
+        {
+          "key": "h",
+          "text": "No explicar los datos de alarma",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son parte de la atención."
+        },
+        {
+          "key": "i",
+          "text": "Incisión y succión del sitio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Está contraindicada."
+        },
+        {
+          "key": "j",
+          "text": "Intubación profiláctica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "g",
+        "i"
+      ],
+      "explanation": "La intoxicación por picadura de alacrán se clasifica en leve, con dolor, parestesias y edema local; moderada, con manifestaciones sistémicas como sialorrea, sensación de cuerpo extraño en la faringe, nistagmo, inquietud y taquicardia; y grave, con dificultad respiratoria, arritmias, convulsiones o edema pulmonar. En adultos con intoxicación leve se indica analgesia, compresas frías y observación de al menos 4 horas, y se administra el faboterápico si aparecen signos sistémicos. En niños menores de 5 años y en adultos mayores se recomienda una conducta más activa por su mayor riesgo de cuadros graves.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención y control de la intoxicación por picadura de alacrán",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la intoxicación por picadura de alacrán"
+      ]
+    },
+    {
+      "key": "urg-10-complemento-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "toxicology",
+      "subtopic": "envenomations",
+      "vignette": "Niña de 5 años mordida en la mejilla por el perro de un vecino hace 2 horas. Herida lineal de 3 centímetros, limpia, sin pérdida de tejido. El perro está vacunado y puede observarse. Esquema de vacunación completo.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "La rabia ya no existe en perros de México por lo que no debe evaluarse",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Siempre se evalúa el riesgo."
+        },
+        {
+          "key": "b",
+          "text": "Iniciar vacuna e inmunoglobulina antirrábica de inmediato aunque el perro esté vacunado y observable",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se puede observar al perro."
+        },
+        {
+          "key": "c",
+          "text": "Solo antiséptico sin lavado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El lavado es fundamental."
+        },
+        {
+          "key": "d",
+          "text": "No notificar la agresión a la autoridad sanitaria",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe notificarse."
+        },
+        {
+          "key": "e",
+          "text": "Las mordeduras de perro en la cara rara vez se infectan",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El riesgo existe y se previene."
+        },
+        {
+          "key": "f",
+          "text": "No dar antibiótico por ser una herida pequeña",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "En la cara de un niño se recomienda profilaxis."
+        },
+        {
+          "key": "g",
+          "text": "Lavado abundante, cierre primario de la herida facial, amoxicilina con ácido clavulánico profiláctica y observación del perro durante 10 días",
+          "correct": true,
+          "rationale": "Las heridas faciales se cierran por razones estéticas y vascularidad."
+        },
+        {
+          "key": "h",
+          "text": "Sacrificar al perro de inmediato para estudiarlo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesario si puede observarse."
+        },
+        {
+          "key": "i",
+          "text": "Cirugía plástica diferida a 2 semanas sin cierre inicial",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "j",
+          "text": "Dejar la herida facial abierta para cierre por segunda intención",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Las heridas faciales limpias se cierran."
+        }
+      ],
+      "canonical": [
+        "b",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "Las mordeduras de perro son frecuentes en niños y suelen afectar la cara. El manejo incluye lavado abundante con agua y jabón, desbridamiento si es necesario y evaluación del riesgo de rabia. Las heridas faciales limpias de menos de 24 horas pueden cerrarse de forma primaria por su buena vascularidad y por razones estéticas, mientras que las heridas punzantes y de manos se dejan abiertas. Se recomienda profilaxis con amoxicilina y ácido clavulánico en heridas de cara, manos o profundas. Si el perro es doméstico, vacunado y puede observarse 10 días, se difiere la profilaxis antirrábica. Se verifica el esquema antitetánico y se notifica el caso.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las mordeduras por animales",
+        "Norma Oficial Mexicana para la prevención y control de la rabia humana"
+      ]
+    },
+    {
+      "key": "urg-10-complemento-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "toxicology",
+      "subtopic": "poisonings",
+      "vignette": "Hombre de 40 años que ingirió anticongelante con fines suicidas hace 6 horas. Presenta alteración del estado mental, acidosis metabólica con brecha aniónica elevada, brecha osmolar elevada y cristales de oxalato de calcio en la orina. Hipocalcemia.",
+      "prompt": "¿Cuál es el tratamiento específico de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Carbón activado como tratamiento principal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No adsorbe bien los alcoholes."
+        },
+        {
+          "key": "b",
+          "text": "N-acetilcisteína",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se usa en paracetamol."
+        },
+        {
+          "key": "c",
+          "text": "Solo hidratación sin antídoto",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El etilenglicol causa daño renal grave."
+        },
+        {
+          "key": "d",
+          "text": "La ausencia de cristales descarta la intoxicación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Su ausencia no la descarta."
+        },
+        {
+          "key": "e",
+          "text": "No corregir la hipocalcemia sintomática",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe tratarse si causa síntomas."
+        },
+        {
+          "key": "f",
+          "text": "Fomepizol, con hemodiálisis si hay acidosis grave o lesión renal",
+          "correct": true,
+          "rationale": "Es una intoxicación por etilenglicol."
+        },
+        {
+          "key": "g",
+          "text": "El etilenglicol no causa daño renal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Causa lesión renal por cristales de oxalato."
+        },
+        {
+          "key": "h",
+          "text": "Naloxona",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "i",
+          "text": "Atropina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "j",
+          "text": "Trasplante renal urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el primer paso."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "f"
+      ],
+      "explanation": "El etilenglicol, presente en anticongelantes, se metaboliza por la alcohol deshidrogenasa a ácido glicólico y ácido oxálico, que causan acidosis metabólica con brecha aniónica elevada y lesión renal aguda por depósito de cristales de oxalato de calcio, con hipocalcemia. Al inicio predomina una brecha osmolar elevada y síntomas similares a la embriaguez. El tratamiento es el fomepizol o, si no está disponible, el etanol, para bloquear la alcohol deshidrogenasa, junto con bicarbonato para la acidosis y hemodiálisis en casos con acidosis grave, lesión renal o concentraciones altas. Se administran tiamina y piridoxina como cofactores.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la intoxicación por alcoholes tóxicos",
+        "Manual de toxicología clínica de urgencias"
+      ]
+    },
+    {
+      "key": "urg-10-complemento-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "toxicology",
+      "subtopic": "poisonings",
+      "vignette": "Hombre de 30 años, jornalero, que ingirió un herbicida con fines suicidas. A las 24 horas presenta úlceras orales, lesión renal y hepatitis, y días después insuficiencia respiratoria progresiva con fibrosis pulmonar.",
+      "prompt": "¿Cuál es la complicación característica de este tóxico?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Neumonía por aspiración simple",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la fibrosis progresiva con falla multiorgánica."
+        },
+        {
+          "key": "b",
+          "text": "No restringir la venta de plaguicidas altamente tóxicos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es una medida preventiva de salud pública."
+        },
+        {
+          "key": "c",
+          "text": "Fibrosis pulmonar progresiva por paraquat, agravada por el oxígeno suplementario en exceso",
+          "correct": true,
+          "rationale": "El paraquat genera radicales libres en el pulmón."
+        },
+        {
+          "key": "d",
+          "text": "Intoxicación por monóxido de carbono",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica las úlceras ni la fibrosis."
+        },
+        {
+          "key": "e",
+          "text": "Sarcoidosis aguda",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "f",
+          "text": "El paraquat tiene buen pronóstico con oxígeno abundante",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El oxígeno en exceso empeora el daño."
+        },
+        {
+          "key": "g",
+          "text": "Existe un antídoto específico eficaz para el paraquat",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No existe."
+        },
+        {
+          "key": "h",
+          "text": "Edema pulmonar cardiogénico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "i",
+          "text": "Asma ocupacional",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el cuadro tras la ingesta."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome colinérgico por organofosforados",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los síntomas no son colinérgicos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "El paraquat es un herbicida muy tóxico cuya ingesta, frecuentemente con fines suicidas en zonas rurales, tiene una mortalidad muy elevada. Causa lesiones corrosivas orales y esofágicas, falla renal y hepática y, de forma característica, daño pulmonar progresivo por generación de radicales libres en los neumocitos, que evoluciona a fibrosis pulmonar en días o semanas. El oxígeno suplementario en exceso aumenta la generación de radicales y empeora el daño, por lo que se administra solo para mantener una saturación mínima aceptable. No existe un antídoto específico. La prevención mediante la restricción de plaguicidas altamente tóxicos reduce las muertes.",
+      "gpcRefs": [
+        "Manual de toxicología clínica de urgencias",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de intoxicación por plaguicidas"
+      ]
+    },
+    {
+      "key": "urg-10-complemento-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "metabolic_emergencies",
+      "subtopic": "diabetic_ketoacidosis",
+      "vignette": "Niña de 10 años con cetoacidosis diabética grave de debut, pH de 7.08, deshidratación moderada y estado mental normal. Peso de 30 kilos.",
+      "prompt": "¿Cuál es el tratamiento inicial de líquidos más apropiado?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Bolos repetidos de 20 mL por kilo hasta 80 mL por kilo en la primera hora",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La rehidratación excesiva rápida aumenta el riesgo de edema cerebral."
+        },
+        {
+          "key": "b",
+          "text": "El edema cerebral no tiene relación con el tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se asocia con factores del tratamiento."
+        },
+        {
+          "key": "c",
+          "text": "No vigilar el estado neurológico cada hora",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Permite detectar el edema cerebral."
+        },
+        {
+          "key": "d",
+          "text": "Los niños requieren la misma velocidad de líquidos que los adultos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se prefiere una reposición más gradual."
+        },
+        {
+          "key": "e",
+          "text": "Restricción absoluta de líquidos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La deshidratación debe corregirse."
+        },
+        {
+          "key": "f",
+          "text": "Bolo de solución salina de 10 a 20 mL por kilo en la primera hora y después reposición gradual del déficit en 24 a 48 horas",
+          "correct": true,
+          "rationale": "La reposición gradual reduce el riesgo de edema cerebral."
+        },
+        {
+          "key": "g",
+          "text": "Solución glucosada al 5 por ciento desde el inicio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se agrega cuando baja la glucosa."
+        },
+        {
+          "key": "h",
+          "text": "Iniciar insulina en bolo antes de los líquidos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se inicia después de la primera hora de líquidos."
+        },
+        {
+          "key": "i",
+          "text": "Bicarbonato de sodio de rutina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumenta el riesgo de edema cerebral."
+        },
+        {
+          "key": "j",
+          "text": "Hemodiálisis",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "h",
+        "i"
+      ],
+      "explanation": "En la cetoacidosis diabética pediátrica, la reposición de líquidos debe ser cuidadosa. Se recomienda un bolo inicial de 10 a 20 mL por kilo de solución salina al 0.9 por ciento en la primera hora, repetible si hay choque, y después la reposición del déficit de forma gradual durante 24 a 48 horas, junto con los requerimientos de mantenimiento. La insulina en infusión de 0.05 a 0.1 unidades por kilo por hora se inicia después de la primera hora de líquidos, sin bolo. Se evita el bicarbonato. Se vigila el estado neurológico de forma estrecha por el riesgo de edema cerebral.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cetoacidosis diabética en niños",
+        "Guía de la Sociedad Internacional de Diabetes Pediátrica y del Adolescente"
+      ]
+    },
+    {
+      "key": "urg-10-complemento-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "neurologic_emergencies",
+      "subtopic": "status_epilepticus",
+      "vignette": "Mujer de 26 años con eclampsia en tratamiento con sulfato de magnesio en infusión. A las 8 horas presenta somnolencia, reflejos rotulianos ausentes, frecuencia respiratoria de 8 y diuresis de 15 mL por hora.",
+      "prompt": "¿Cuál es el tratamiento de elección inmediato?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cesárea inmediata como tratamiento de la intoxicación",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No trata la intoxicación."
+        },
+        {
+          "key": "b",
+          "text": "Naloxona",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No revierte el magnesio."
+        },
+        {
+          "key": "c",
+          "text": "La pérdida de reflejos es un efecto terapéutico deseado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un signo de toxicidad."
+        },
+        {
+          "key": "d",
+          "text": "El magnesio no se acumula en la oliguria",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se acumula porque se elimina por riñón."
+        },
+        {
+          "key": "e",
+          "text": "Suspender el sulfato de magnesio y administrar gluconato de calcio intravenoso",
+          "correct": true,
+          "rationale": "Es una intoxicación por magnesio."
+        },
+        {
+          "key": "f",
+          "text": "Furosemida como único tratamiento sin suspender el magnesio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El primer paso es suspenderlo."
+        },
+        {
+          "key": "g",
+          "text": "Solo observación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La depresión respiratoria es grave."
+        },
+        {
+          "key": "h",
+          "text": "No apoyar la ventilación si es necesario",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede requerir soporte ventilatorio."
+        },
+        {
+          "key": "i",
+          "text": "Diazepam intravenoso",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Agrava la depresión respiratoria."
+        },
+        {
+          "key": "j",
+          "text": "Aumentar la infusión de magnesio por la somnolencia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Agrava la intoxicación."
+        }
+      ],
+      "canonical": [
+        "e",
+        "f",
+        "i",
+        "j"
+      ],
+      "explanation": "El sulfato de magnesio se elimina por vía renal, por lo que se acumula en pacientes con oliguria o insuficiencia renal. La toxicidad es progresiva: la pérdida de los reflejos osteotendinosos aparece con concentraciones de 8 a 10 mEq/L, la depresión respiratoria con 10 a 13 y el paro cardiaco con concentraciones mayores. Por ello se vigilan cada hora los reflejos, la frecuencia respiratoria y la diuresis. Ante signos de toxicidad se suspende la infusión y se administra gluconato de calcio intravenoso al 10 por ciento, 1 gramo en 10 minutos, como antídoto, con soporte ventilatorio si es necesario.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la preeclampsia en el segundo y tercer nivel",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del estado epiléptico"
+      ]
+    },
+    {
+      "key": "urg-10-complemento-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "neurologic_emergencies",
+      "subtopic": "stroke_emergency",
+      "vignette": "Hombre de 66 años que tuvo un evento vascular cerebral isquémico menor del hemisferio izquierdo con recuperación casi completa hace 5 días. El ultrasonido Doppler muestra estenosis de la carótida interna izquierda del 80 por ciento.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Anticoagulación plena como único tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es el tratamiento de la estenosis carotídea."
+        },
+        {
+          "key": "b",
+          "text": "Endarterectomía de la carótida derecha",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La estenosis sintomática es la izquierda."
+        },
+        {
+          "key": "c",
+          "text": "Esperar 6 meses para operar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El beneficio es mayor si se realiza pronto."
+        },
+        {
+          "key": "d",
+          "text": "La cirugía está contraindicada después de un evento vascular cerebral reciente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se recomienda en las primeras 2 semanas en eventos menores."
+        },
+        {
+          "key": "e",
+          "text": "No iniciar antiagregante y estatina de alta intensidad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son parte del tratamiento médico óptimo."
+        },
+        {
+          "key": "f",
+          "text": "La estenosis carotídea asintomática y sintomática tienen el mismo manejo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Difieren."
+        },
+        {
+          "key": "g",
+          "text": "Solo tratamiento médico sin revascularización",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La estenosis sintomática grave se beneficia de cirugía."
+        },
+        {
+          "key": "h",
+          "text": "Endarterectomía carotídea en las primeras 2 semanas, además de tratamiento médico óptimo",
+          "correct": true,
+          "rationale": "La estenosis sintomática de 70 a 99 por ciento se beneficia de la revascularización temprana."
+        },
+        {
+          "key": "i",
+          "text": "Trombólisis intravenosa tardía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "j",
+          "text": "Derivación extracraneal intracraneal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "La estenosis carotídea sintomática, es decir, ipsilateral a un evento vascular cerebral isquémico menor o un ataque isquémico transitorio reciente, de 70 a 99 por ciento, se beneficia de la endarterectomía carotídea, que reduce el riesgo de nuevo evento. El mayor beneficio se obtiene cuando se realiza en las primeras 2 semanas. En estenosis de 50 a 69 por ciento el beneficio es menor e individualizado. La angioplastia con stent es una alternativa en pacientes con alto riesgo quirúrgico. Además se indica tratamiento médico óptimo con antiagregantes, estatina de alta intensidad y control de factores de riesgo.",
+      "gpcRefs": [
+        "Guía de la Asociación Americana del Corazón para prevención secundaria de evento vascular cerebral",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad carotídea"
+      ]
+    },
+    {
+      "key": "urg-10-complemento-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "spinal_trauma",
+      "vignette": "Hombre de 40 años con lesión por hiperflexión cervical en un accidente. Presenta parálisis completa y pérdida de la sensibilidad al dolor y la temperatura por debajo de la lesión, con propiocepción y vibración conservadas.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome medular anterior",
+          "correct": true,
+          "rationale": "Afecta los tractos corticoespinal y espinotalámico con columnas posteriores conservadas."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de Brown-Séquard",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Causa déficit asimétrico."
+        },
+        {
+          "key": "c",
+          "text": "La propiocepción conservada indica una lesión leve",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay parálisis completa."
+        },
+        {
+          "key": "d",
+          "text": "Lesión medular completa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La propiocepción está conservada."
+        },
+        {
+          "key": "e",
+          "text": "Esclerosis múltiple",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El trauma explica el cuadro."
+        },
+        {
+          "key": "f",
+          "text": "Síndrome medular posterior",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Afectaría la propiocepción."
+        },
+        {
+          "key": "g",
+          "text": "Neuropatía periférica aguda",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El trauma y el patrón orientan a lesión medular."
+        },
+        {
+          "key": "h",
+          "text": "El síndrome medular anterior tiene el mejor pronóstico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tiene el peor pronóstico de las lesiones incompletas."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de cauda equina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Afecta raíces lumbosacras."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome medular central",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Afecta más los brazos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "j"
+      ],
+      "explanation": "El síndrome medular anterior se debe a la lesión de los dos tercios anteriores de la médula espinal, por hiperflexión, compresión por fragmentos de disco o hueso, o isquemia de la arteria espinal anterior. Afecta los tractos corticoespinales y espinotalámicos, causando parálisis y pérdida de la sensibilidad al dolor y la temperatura por debajo de la lesión, con conservación de las columnas posteriores, es decir, de la propiocepción, la vibración y el tacto fino. Tiene el peor pronóstico de las lesiones medulares incompletas. Requiere estudio de imagen y valoración neuroquirúrgica para descompresión si hay compresión.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de atención del paciente con lesión medular aguda"
+      ]
+    }
+  ]
+}

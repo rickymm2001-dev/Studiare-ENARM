@@ -49,12 +49,7 @@
 - Conócete en Progreso con el motor de autoconocimiento, 19 lecturas en tres áreas más un foco por cada trampa detectada con acción concreta (D-074). 346 pruebas pasan
 - Proyecto de Supabase creado por Ricardo. Cuenta en la nube con enlace al correo, rol desde el servidor y datos de cuenta sincronizados (D-075). 353 pruebas pasan
 - Auditoría completa de la página con corrección de tarjetas nuevas por día (D-076)
-- Banco grande de 1500 preguntas en curso, 250 por troncal con 10 opciones como el banco actual. Fuentes en content-drafts/bank1500/src, JSON en json, guía en content-drafts/bank1500/README.md
-  - Hechas y validadas. Medicina interna 250, Pediatría 250, Gineco-obstetricia 250, Cirugía 250, Medicina familiar 250
-  - Falta Urgencias 250 con prefijo urg. Lleva los archivos urg que existan en src
-  - Urgencias se reparte según la taxonomía en src/demo/content/topic-taxonomy.json
-  - Cierre. Revalidar todos los JSON, generar el Excel con node scripts/content/bank-excel.ts, anotar en el README los subtemas aproximados, registrar D-077, commit, PR a main y merge
-  - Convertir con node scripts/content/bank-convert.ts y validar con node scripts/content/check-draft.ts sobre cada archivo
+- Banco grande de 1500 preguntas terminado en borrador (D-077). 250 por troncal con 10 opciones, todas validadas. Excel en content-drafts/bank1500/Studiare-banco-1500-borrador.xlsx y guía en content-drafts/bank1500/README.md. Falta la revisión médica y subirlo a Supabase con la segunda parte de la nube
 - Siguiente. Ricardo prueba su cuenta y se hace dueño. Luego segunda parte de la nube con bitácora, usuarios y banco. Después Fase B del banco con trampas explícitas y luego Fase D con IA en modo simulado, como pidió Ricardo. Después bloque 5 de pagos
 
 ## Fase C. Pantallas del alumno (esqueleto funcionando)
