@@ -1,0 +1,223 @@
+@ mi|dermatology|dermatitis|2|diagnosis
+V: Niño de 6 años con placas eccematosas, pruriginosas y secas en pliegues de codos y rodillas, de evolución crónica con brotes. Tiene rinitis alérgica y su madre asma.
+P: ¿Cuál es el diagnóstico más probable?
++ Dermatitis atópica || Eccema pruriginoso crónico en flexuras con antecedente atópico personal y familiar.
+- representativeness_heuristic | Dermatitis por contacto alérgica || También es eccematosa, pero se limita al sitio de contacto con el alérgeno.
+- anchoring | Psoriasis || Se ancla en las placas, pero la psoriasis afecta superficies extensoras con escama plateada.
+- availability_heuristic | Escabiosis || Da prurito, pero con surcos y lesiones en espacios interdigitales.
+- premature_closure | Dermatitis seborreica || Afecta cuero cabelludo y zonas seborreicas.
+- base_rate_fallacy | Micosis fungoide || Es rara en niños.
+- framing_effect | Tiña corporal || Suena a placa, pero tiene borde activo anular.
+- inattentional_blindness | Urticaria crónica || No toma en cuenta el carácter eccematoso.
+- focusing_illusion | Xerosis simple || Se centra en la resequedad.
+- belief_bias | Alergia alimentaria como causa única || Cree que todo eccema infantil es por alimentos.
+E: La dermatitis atópica es una enfermedad inflamatoria crónica de la piel, con brotes, muy frecuente en niños. Se caracteriza por prurito intenso, piel seca y lesiones eccematosas cuya distribución varía con la edad, en mejillas y superficies extensoras en lactantes, y en pliegues de codos y rodillas en niños mayores y adultos. Se asocia a antecedentes personales o familiares de atopia, como asma y rinitis. Se debe a alteración de la barrera cutánea y desregulación inmune. El tratamiento incluye emolientes diarios, baños breves, evitar irritantes, corticosteroides tópicos en los brotes e inhibidores de calcineurina tópicos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la dermatitis atópica
+
+@ mi|dermatology|dermatitis|3|treatment_of_choice
+V: Mujer de 28 años con dermatitis atópica que presenta un brote de placas eccematosas en pliegues de codos. Usa emolientes de forma irregular.
+P: ¿Cuál es el tratamiento de elección del brote?
++ Corticosteroide tópico de potencia media por tiempo limitado más emolientes diarios || Es el tratamiento de primera línea del brote.
+- availability_heuristic | Antihistamínico oral como tratamiento principal || Ayuda poco al prurito y no controla la inflamación.
+- anchoring | Corticosteroide sistémico oral || Se ancla en el brote con efecto rebote y efectos adversos.
+- representativeness_heuristic | Antifúngico tópico || Es para tiñas.
+- framing_effect | Baños largos con agua caliente para relajar la piel || Suena relajante, pero reseca más la piel.
+- premature_closure | Dupilumab como primera línea || Se reserva para casos moderados a graves refractarios.
+- complexity_bias | Ciclosporina oral || Es para casos graves.
+- status_quo_bias | Solo jabón antibacteriano || Irrita la piel.
+- belief_bias | Eliminar todos los alimentos alergénicos sin estudio || Cree que la dieta controla el brote.
+- omission_bias | Evitar corticosteroides tópicos por miedo a adelgazar la piel || El riesgo es bajo con uso adecuado.
+E: El tratamiento de la dermatitis atópica se basa en la reparación de la barrera cutánea con emolientes aplicados diariamente, incluso sin brotes, baños cortos con agua tibia y jabones suaves, y evitar desencadenantes como irritantes y calor. Los brotes se tratan con corticosteroides tópicos de potencia adecuada a la zona, por periodos cortos, y como mantenimiento proactivo dos veces por semana en zonas recurrentes. Los inhibidores de calcineurina tópicos, como tacrolimus, son alternativas en cara y pliegues. En casos moderados a graves se usan fototerapia, inmunosupresores sistémicos o biológicos como dupilumab.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la dermatitis atópica
+
+@ mi|dermatology|dermatitis|2|risk_factor
+V: Mujer de 34 años con placas eccematosas, pruriginosas, en el lóbulo de ambas orejas y en la muñeca, donde usa aretes y reloj de bisutería.
+P: ¿Cuál es el factor desencadenante más probable?
++ Alergia por contacto al níquel || Dermatitis por contacto alérgica en sitios de contacto con metales.
+- availability_heuristic | Dermatitis atópica del adulto || Es eccematosa, pero no se limita a sitios de contacto con metal.
+- anchoring | Infección por hongos || Se ancla en el prurito sin explicar la distribución.
+- representativeness_heuristic | Psoriasis inversa || No se relaciona con objetos.
+- framing_effect | Sudoración excesiva || Suena a irritación, pero no explica el patrón.
+- premature_closure | Dermatitis seborreica || Afecta otras zonas.
+- base_rate_fallacy | Lupus cutáneo || Es menos probable.
+- inattentional_blindness | Picaduras de insecto || No toma en cuenta la relación con los objetos.
+- focusing_illusion | Estrés emocional || Se centra en un factor general.
+- belief_bias | Alergia a alimentos || Cree que toda alergia cutánea es alimentaria.
+E: La dermatitis por contacto alérgica es una reacción de hipersensibilidad tipo IV, mediada por linfocitos T, que aparece en el sitio de contacto con un alérgeno al que la persona está sensibilizada, entre 24 y 72 horas después de la exposición. El níquel es el alérgeno más frecuente, presente en bisutería, hebillas, botones y relojes. Otros alérgenos comunes son fragancias, conservadores, cromo, látex y tintes. El diagnóstico se confirma con pruebas de parche. El tratamiento es evitar el alérgeno y usar corticosteroides tópicos. La dermatitis por contacto irritativa, en cambio, no requiere sensibilización.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la dermatitis por contacto
+
+@ mi|dermatology|dermatitis|3|diagnosis
+V: Hombre de 40 años con escama amarillenta y grasosa sobre eritema en cuero cabelludo, cejas, surcos nasogenianos y región retroauricular, que empeora con el estrés y el frío.
+P: ¿Cuál es el diagnóstico más probable?
++ Dermatitis seborreica || Escama grasosa en zonas ricas en glándulas sebáceas.
+- representativeness_heuristic | Psoriasis del cuero cabelludo || También da escama, pero plateada y de bordes bien definidos.
+- anchoring | Dermatitis atópica || Se ancla en el eccema, con otra distribución.
+- availability_heuristic | Tiña de la cabeza || Es más frecuente en niños y causa alopecia.
+- premature_closure | Rosácea || Da eritema facial central y pápulas, sin escama grasosa.
+- base_rate_fallacy | Lupus discoide || Deja cicatrices y es menos frecuente.
+- framing_effect | Caspa simple sin inflamación || Suena benigno, pero hay eritema en varias zonas.
+- inattentional_blindness | Dermatitis por contacto al champú || No explica la distribución en cejas y surcos.
+- focusing_illusion | Acné || Se centra en la piel grasa.
+- belief_bias | Falta de higiene || Cree que es por suciedad.
+E: La dermatitis seborreica es una enfermedad inflamatoria crónica y recurrente que afecta zonas ricas en glándulas sebáceas, como cuero cabelludo, cejas, surcos nasogenianos, región retroauricular, conducto auditivo y región preesternal. Se manifiesta con eritema y escama amarillenta grasosa. Se relaciona con la levadura Malassezia y empeora con estrés, frío y algunas enfermedades neurológicas como Parkinson. Una dermatitis seborreica extensa y grave puede ser una manifestación de VIH. El tratamiento incluye champús con ketoconazol, piritiona de zinc o sulfuro de selenio, antifúngicos tópicos y corticosteroides tópicos de baja potencia por periodos cortos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la dermatitis seborreica
+
+@ mi|dermatology|dermatitis|3|complication_prognosis
+V: Niño de 4 años con dermatitis atópica que de forma súbita presenta vesículas agrupadas, umbilicadas y erosiones dolorosas sobre las placas de eccema en cara y cuello, con fiebre.
+P: ¿Cuál es la complicación que presenta?
++ Eccema herpético de Kaposi || Infección diseminada por virus del herpes simple sobre dermatitis atópica.
+- representativeness_heuristic | Impétigo por Staphylococcus aureus || También complica la dermatitis atópica, pero da costras melicéricas.
+- anchoring | Brote habitual de dermatitis atópica || Se ancla en la enfermedad de base e ignora las vesículas umbilicadas.
+- availability_heuristic | Varicela || Da vesículas, pero diseminadas en todo el cuerpo y no sobre el eccema.
+- premature_closure | Molusco contagioso || Da pápulas umbilicadas, pero no erosiones dolorosas con fiebre.
+- base_rate_fallacy | Penfigoide ampolloso || Es raro en niños.
+- framing_effect | Dermatitis por contacto con el emoliente || Suena a reacción, pero no explica las vesículas umbilicadas.
+- inattentional_blindness | Escabiosis costrosa || No toma en cuenta las vesículas.
+- focusing_illusion | Quemadura solar || Se centra en la cara.
+- belief_bias | Reacción a una vacuna || Cree que todo exantema agudo es por vacunas.
+E: El eccema herpético, o erupción variceliforme de Kaposi, es una infección cutánea diseminada por virus del herpes simple en pacientes con dermatitis atópica u otras dermatosis que alteran la barrera cutánea. Se presenta con vesículas umbilicadas agrupadas, pústulas y erosiones en sacabocado sobre las placas de eccema, con dolor, fiebre y malestar. Puede complicarse con sobreinfección bacteriana, afección ocular o diseminación sistémica. Es una urgencia dermatológica que requiere aciclovir oral o intravenoso de inmediato, sin esperar confirmación, y valoración oftalmológica si hay lesiones periorbitarias.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la dermatitis atópica
+
+@ mi|dermatology|dermatitis|2|next_step
+V: Mujer de 30 años que tras iniciar alopurinol hace 3 semanas presenta fiebre, ampollas extensas con desprendimiento de piel en más de 35% de la superficie corporal, erosiones en boca y ojos. Signo de Nikolsky positivo.
+P: ¿Cuál es la conducta a seguir?
++ Suspender el fármaco y hospitalizar en una unidad de quemados o terapia intensiva || Necrólisis epidérmica tóxica.
+- anchoring | Dar antihistamínico y egresar || Se ancla en una reacción alérgica leve.
+- availability_heuristic | Corticosteroide tópico en las lesiones como manejo principal || Insuficiente ante necrólisis extensa.
+- framing_effect | Continuar el alopurinol a menor dosis || Suena a ajuste, pero el fármaco debe suspenderse.
+- representativeness_heuristic | Antibiótico por impétigo ampolloso || No corresponde al cuadro.
+- premature_closure | Biopsia y esperar resultado antes de suspender el fármaco || Retrasa la medida más importante.
+- complexity_bias | Plasmaféresis como primera medida en todos || No es la medida inicial.
+- status_quo_bias | Manejo ambulatorio con curaciones diarias || Ignora la gravedad.
+- belief_bias | Aplicar remedios caseros en las ampollas || Aumenta el riesgo de infección.
+- omission_bias | Observar 24 horas antes de decidir || El retraso aumenta la mortalidad.
+E: El síndrome de Stevens Johnson y la necrólisis epidérmica tóxica son reacciones cutáneas graves, casi siempre causadas por fármacos, como alopurinol, anticonvulsivos aromáticos, sulfonamidas, lamotrigina y AINE, entre una y cuatro semanas después de iniciarlos. Se presentan con fiebre, lesiones en diana atípicas, ampollas, desprendimiento epidérmico con Nikolsky positivo y afección de mucosas. Se diferencian por la superficie desprendida, menos de 10% en Stevens Johnson y más de 30% en necrólisis. El tratamiento es suspender de inmediato el fármaco y manejar en unidad de quemados con líquidos, cuidado de heridas, nutrición, control del dolor y valoración oftalmológica.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de Stevens Johnson y necrólisis epidérmica tóxica
+
+@ mi|dermatology|skin_cancer|3|diagnosis
+V: Hombre de 68 años, agricultor, con una lesión en el ala nasal de 1 año de evolución. Es una pápula perlada con telangiectasias y una ulceración central con bordes enrollados. No ha crecido rápido.
+P: ¿Cuál es el diagnóstico más probable?
++ Carcinoma basocelular || Pápula perlada con telangiectasias y úlcera con bordes enrollados en zona fotoexpuesta.
+- representativeness_heuristic | Carcinoma epidermoide || También aparece en piel fotoexpuesta, pero es más queratósico y crece más rápido.
+- anchoring | Melanoma nodular || Se ancla en una lesión tumoral, pero suele ser pigmentado y de crecimiento rápido.
+- availability_heuristic | Queratosis actínica || Es premaligna y escamosa, sin aspecto perlado.
+- premature_closure | Queratoacantoma || Crece rápido en semanas con cráter central.
+- base_rate_fallacy | Carcinoma de células de Merkel || Es raro.
+- framing_effect | Verruga vulgar || Suena benigno, pero no tiene aspecto perlado.
+- inattentional_blindness | Acné rosácea || No toma en cuenta la úlcera crónica.
+- focusing_illusion | Herpes simple recurrente || Se centra en la úlcera.
+- belief_bias | Lunar benigno || Cree que toda lesión de años es benigna.
+E: El carcinoma basocelular es el cáncer de piel más frecuente. Se relaciona con la exposición solar acumulada y predomina en cara, sobre todo nariz, en personas de piel clara y mayores. Clásicamente es una pápula o nódulo perlado con telangiectasias, que puede ulcerarse en el centro con bordes enrollados. Crece lentamente, es localmente invasivo y rara vez da metástasis. El diagnóstico se confirma con biopsia. El tratamiento de elección es la extirpación quirúrgica con márgenes, o la cirugía micrográfica de Mohs en zonas de alto riesgo o recurrentes. La fotoprotección es la principal medida preventiva.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del carcinoma basocelular
+
+@ mi|dermatology|skin_cancer|3|data_interpretation
+V: Mujer de 45 años con un lunar en la espalda que ha cambiado en los últimos meses. Mide 9 mm, es asimétrico, de bordes irregulares y con tonos café, negro y azul.
+P: ¿Cuál es la interpretación correcta de esta lesión según la regla ABCDE?
++ Lesión sospechosa de melanoma que requiere biopsia excisional || Asimetría, bordes irregulares, varios colores, diámetro mayor de 6 mm y evolución.
+- anchoring | Nevo benigno por estar en la espalda || Se ancla en la localización.
+- availability_heuristic | Queratosis seborreica sin importancia || Es benigna, pero de aspecto verrugoso y pegado.
+- framing_effect | Lesión sospechosa, pero se recomienda biopsia por rasurado superficial || Suena práctico, pero impide medir el espesor.
+- representativeness_heuristic | Dermatofibroma || Es firme y con signo del hoyuelo.
+- premature_closure | Vigilar en un año sin biopsia || Retrasa un posible diagnóstico de melanoma.
+- base_rate_fallacy | Benigno porque la mayoría de los lunares lo son || Usa la frecuencia general ignorando los criterios.
+- inattentional_blindness | Hemangioma || No toma en cuenta la evolución.
+- belief_bias | Extirpar con láser sin estudio histológico || Cree que basta eliminarlo.
+- omission_bias | Evitar la biopsia para no causar cicatriz || Pierde un diagnóstico temprano.
+E: La regla ABCDE ayuda a identificar lesiones pigmentadas sospechosas de melanoma, A de asimetría, B de bordes irregulares, C de color variado, D de diámetro mayor de 6 mm y E de evolución en tamaño, forma o color. La evolución es el criterio más importante. Una lesión sospechosa requiere biopsia excisional completa con márgenes de 1 a 3 mm, que permite medir el espesor de Breslow, el principal factor pronóstico. No se recomienda la biopsia por rasurado. En México el melanoma acral, en palmas, plantas y uñas, es frecuente y suele diagnosticarse tarde.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del melanoma maligno cutáneo
+
+@ mi|dermatology|skin_cancer|3|risk_factor
+V: Hombre de 70 años con múltiples lesiones ásperas, eritematosas y escamosas en cara, dorso de manos y cuero cabelludo calvo. Trabajó muchos años al aire libre.
+P: ¿Cuál es el factor de riesgo principal de estas lesiones y de su progresión?
++ Exposición crónica a la radiación ultravioleta, por queratosis actínicas que pueden progresar a carcinoma epidermoide || Son lesiones premalignas por daño solar.
+- availability_heuristic | Infección por virus del papiloma humano || Se asocia a otros carcinomas.
+- anchoring | Tabaquismo como causa principal || Se ancla en otro factor de menor peso para la piel.
+- representativeness_heuristic | Dermatitis atópica previa || No es factor de estas lesiones.
+- framing_effect | Sequedad de la piel por la edad || Suena a envejecimiento, pero la causa es el sol.
+- premature_closure | Exposición a arsénico || Es un factor raro.
+- base_rate_fallacy | Inmunosupresión por trasplante || No aplica en este paciente.
+- inattentional_blindness | Consumo de alcohol || No es factor.
+- focusing_illusion | Herencia familiar como causa única || Se centra en la genética.
+- belief_bias | Uso de cremas faciales || Cree que los cosméticos las causan.
+E: Las queratosis actínicas son lesiones premalignas causadas por la exposición crónica a la radiación ultravioleta. Aparecen en zonas fotoexpuestas, como cara, cuero cabelludo calvo, orejas, antebrazos y dorso de manos, en personas mayores de piel clara y trabajadores al aire libre. Son pápulas o placas ásperas, eritematosas y escamosas. Un porcentaje progresa a carcinoma epidermoide invasor, sobre todo las lesiones múltiples, gruesas o en inmunosuprimidos. El tratamiento incluye crioterapia para lesiones aisladas y tratamientos de campo, como 5 fluorouracilo o imiquimod tópicos o terapia fotodinámica. La fotoprotección previene nuevas lesiones.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del carcinoma epidermoide cutáneo
+
+@ mi|dermatology|skin_cancer|4|complication_prognosis
+V: Mujer de 52 años con melanoma de 3.2 mm de espesor de Breslow con ulceración en la pierna, recién extirpado. Sin adenopatías palpables.
+P: ¿Cuál es el principal factor pronóstico de esta paciente y qué estudio sigue?
++ El espesor de Breslow, y se indica biopsia de ganglio centinela || Un melanoma mayor de 0.8 mm o con ulceración requiere estadificar los ganglios.
+- anchoring | El color de la lesión, y no se requieren más estudios || Se ancla en el aspecto clínico.
+- availability_heuristic | El nivel de Clark como único factor y vigilancia anual || El Clark ya no es el principal.
+- framing_effect | El diámetro de la lesión y tomografía de cuerpo entero inmediata || Suena exhaustivo, pero el diámetro no es el principal factor.
+- representativeness_heuristic | La edad, y radioterapia adyuvante de rutina || No es el principal factor ni el siguiente paso.
+- premature_closure | El espesor de Breslow, pero no requiere estudio ganglionar || Calcula bien y omite la estadificación.
+- base_rate_fallacy | Bajo riesgo porque no hay ganglios palpables || La ausencia de ganglios palpables no descarta metástasis microscópicas.
+- inattentional_blindness | La localización en la pierna como factor favorable sin otros estudios || Ignora el espesor y la ulceración.
+- belief_bias | La exposición solar previa como factor pronóstico principal || Cree que el antecedente solar define el pronóstico.
+- omission_bias | Evitar estudios para no preocupar a la paciente || Pierde información para el tratamiento.
+E: En el melanoma cutáneo, el espesor de Breslow, que es la profundidad en milímetros desde la capa granulosa, es el factor pronóstico más importante del tumor primario, junto con la ulceración. Ambos determinan la categoría T y los márgenes de resección. La biopsia de ganglio centinela se recomienda en melanomas de más de 0.8 mm o con ulceración, porque el estado ganglionar es un factor pronóstico fundamental y define la terapia adyuvante. En enfermedad de alto riesgo se considera inmunoterapia adyuvante con inhibidores de puntos de control o terapia dirigida si hay mutación de BRAF.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del melanoma maligno cutáneo
+
+@ mi|dermatology|psoriasis|2|diagnosis
+V: Hombre de 35 años con placas eritematosas bien delimitadas, cubiertas de escama plateada gruesa, en codos, rodillas y región sacra. Tiene uñas con pequeñas depresiones puntiformes. Al raspar la escama aparecen puntos de sangrado.
+P: ¿Cuál es el diagnóstico más probable?
++ Psoriasis en placas || Placas con escama plateada en superficies extensoras, piqueteado ungueal y signo de Auspitz.
+- representativeness_heuristic | Dermatitis atópica || También forma placas, pero en flexuras y con eccema.
+- anchoring | Tiña corporal || Se ancla en las placas, pero la tiña es anular con borde activo.
+- availability_heuristic | Dermatitis seborreica || Da escama grasosa en otras zonas.
+- premature_closure | Liquen plano || Da pápulas violáceas poligonales.
+- base_rate_fallacy | Pitiriasis rubra pilaris || Es rara.
+- framing_effect | Eccema numular || Suena a placa, pero es eccematoso y exudativo.
+- inattentional_blindness | Lupus cutáneo || No toma en cuenta la escama plateada y las uñas.
+- focusing_illusion | Onicomicosis || Se centra en las uñas.
+- belief_bias | Dermatitis por estrés sin otra causa || Cree que el estrés explica todo.
+E: La psoriasis es una enfermedad inflamatoria crónica, inmunomediada, que afecta la piel, las uñas y las articulaciones. La forma más frecuente es la psoriasis en placas, con placas eritematosas bien delimitadas cubiertas por escama plateada, en codos, rodillas, región lumbosacra y cuero cabelludo. El signo de Auspitz es el sangrado puntiforme al retirar la escama, y el fenómeno de Koebner es la aparición de lesiones en sitios de trauma. Las uñas muestran piqueteado, onicólisis y mancha en aceite. Se asocia a artritis psoriásica, síndrome metabólico y enfermedad cardiovascular. El diagnóstico es clínico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la psoriasis
+
+@ mi|dermatology|psoriasis|3|treatment_of_choice
+V: Mujer de 40 años con psoriasis en placas leve que afecta 4% de la superficie corporal, en codos y rodillas, sin artritis.
+P: ¿Cuál es el tratamiento de elección?
++ Corticosteroide tópico, solo o combinado con un análogo de vitamina D como calcipotriol || La psoriasis leve se trata con tópicos.
+- complexity_bias | Biológico anti TNF || Se reserva para psoriasis moderada a grave.
+- anchoring | Corticosteroide sistémico oral || Se ancla en la inflamación, pero puede desencadenar psoriasis pustulosa al suspenderlo.
+- availability_heuristic | Metotrexato oral como primera línea en todos || Es para formas moderadas a graves.
+- representativeness_heuristic | Antifúngico tópico || Es para tiñas.
+- framing_effect | Exposición solar intensa sin protección para curarla || Suena natural, pero causa quemaduras y cáncer.
+- premature_closure | Ciclosporina || Es para casos graves.
+- status_quo_bias | Sin tratamiento por ser leve || Deja síntomas y afecta la calidad de vida.
+- belief_bias | Dietas de eliminación como tratamiento principal || Cree que la dieta la cura.
+- omission_bias | Evitar los esteroides tópicos por miedo a efectos adversos || El riesgo es bajo con uso adecuado.
+E: La psoriasis leve, que afecta menos de 10% de la superficie corporal sin afección de zonas especiales ni gran impacto en la calidad de vida, se trata con medicamentos tópicos. Los corticosteroides tópicos son la base, y su combinación con análogos de vitamina D, como calcipotriol, es muy eficaz y reduce los efectos adversos del esteroide. Otras opciones son los inhibidores de calcineurina en cara y pliegues, el ácido salicílico para la escama y los emolientes. La psoriasis moderada a grave se trata con fototerapia, metotrexato, ciclosporina, acitretina o biológicos. Los corticosteroides sistémicos se evitan.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la psoriasis
+
+@ mi|dermatology|psoriasis|3|complication_prognosis
+V: Hombre de 42 años con psoriasis de 10 años. Refiere dolor e inflamación de las interfalángicas distales de varios dedos, un dedo en salchicha y dolor en el talón. Factor reumatoide negativo.
+P: ¿Cuál es la complicación que presenta?
++ Artritis psoriásica || Afección de interfalángicas distales, dactilitis y entesitis en paciente con psoriasis.
+- representativeness_heuristic | Artritis reumatoide || Es poliartritis, pero respeta las interfalángicas distales y suele tener factor reumatoide.
+- anchoring | Osteoartritis de manos || Se ancla en las distales, pero no explica la dactilitis ni la entesitis.
+- availability_heuristic | Gota || Puede dar dactilitis, pero es más monoarticular.
+- premature_closure | Fascitis plantar aislada || Explica el talón, no los dedos.
+- base_rate_fallacy | Artritis reactiva || Requiere infección previa.
+- framing_effect | Espondilitis anquilosante pura || Suena a espondiloartritis, pero predomina la columna.
+- inattentional_blindness | Lupus eritematoso || No toma en cuenta la psoriasis.
+- focusing_illusion | Tendinitis por esfuerzo || Se centra en el talón.
+- belief_bias | Efecto de las cremas de esteroide || Cree que el tratamiento causa artritis.
+E: La artritis psoriásica es una espondiloartritis que afecta a una parte de los pacientes con psoriasis, generalmente años después de la enfermedad cutánea. Tiene varios patrones, como afección de interfalángicas distales, oligoartritis asimétrica, poliartritis simétrica, espondilitis y artritis mutilante. Son característicos la dactilitis, o dedo en salchicha, la entesitis, como dolor en el talón por afección del tendón de Aquiles o la fascia plantar, y la afección ungueal. El factor reumatoide suele ser negativo. Se diagnostica con los criterios CASPAR. El tratamiento incluye AINE, metotrexato y biológicos para prevenir el daño articular.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la psoriasis
+
+@ mi|dermatology|psoriasis|3|risk_factor
+V: Mujer de 50 años con psoriasis en placas estable que tuvo un brote intenso y generalizado tras iniciar un medicamento para la hipertensión y otro para un trastorno del ánimo.
+P: ¿Cuál es la combinación de fármacos que más probablemente desencadenó el brote?
++ Betabloqueador y litio || Ambos son desencadenantes conocidos de brotes de psoriasis.
+- availability_heuristic | Paracetamol e ibuprofeno || No son desencadenantes habituales de psoriasis.
+- anchoring | Losartán y sertralina || Se ancla en fármacos comunes sin relación clara.
+- representativeness_heuristic | Amlodipino y fluoxetina || No son desencadenantes típicos.
+- framing_effect | Metformina y vitamina D || Suena inocuo y no desencadena brotes.
+- premature_closure | Hidroclorotiazida y clonazepam || No son los desencadenantes clásicos.
+- base_rate_fallacy | Omeprazol y loratadina || No se relacionan.
+- inattentional_blindness | Calcio y hierro || No se relacionan.
+- focusing_illusion | Atorvastatina y aspirina || Se centra en fármacos cardiovasculares sin relación.
+- belief_bias | Cualquier fármaco nuevo desencadena psoriasis por igual || Cree que todos tienen el mismo riesgo.
+E: La psoriasis puede desencadenarse o empeorar por diversos factores, como infecciones, sobre todo faringitis estreptocócica en la psoriasis en gotas, traumatismos por el fenómeno de Koebner, estrés, tabaquismo, alcohol, obesidad y fármacos. Los fármacos que más se asocian a brotes son los betabloqueadores, el litio, los antipalúdicos, los IECA, el interferón y la suspensión brusca de corticosteroides sistémicos, que puede provocar psoriasis pustulosa generalizada. Ante un brote se revisan los medicamentos recientes y se valora sustituirlos en conjunto con el médico tratante.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la psoriasis

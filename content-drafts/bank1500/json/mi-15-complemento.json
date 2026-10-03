@@ -1,0 +1,1040 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-15-complemento-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "nephrology",
+      "subtopic": "electrolyte_disorders",
+      "vignette": "Mujer de 45 años que toma furosemida por edema. Refiere debilidad muscular, calambres y palpitaciones. Potasio de 2.6 mEq/L. El electrocardiograma muestra ondas U prominentes y aplanamiento de la onda T.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hiperpotasemia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También altera el electrocardiograma, pero con ondas T picudas."
+        },
+        {
+          "key": "b",
+          "text": "Hipomagnesemia aislada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede coexistir, pero el potasio bajo explica el cuadro."
+        },
+        {
+          "key": "c",
+          "text": "Hipotiroidismo con miopatía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena muscular, pero no explica las ondas U."
+        },
+        {
+          "key": "d",
+          "text": "Parálisis periódica familiar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara y tiene episodios recurrentes."
+        },
+        {
+          "key": "e",
+          "text": "Miositis inflamatoria",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye una miopatía sin considerar el potasio."
+        },
+        {
+          "key": "f",
+          "text": "Deshidratación simple",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el diurético."
+        },
+        {
+          "key": "g",
+          "text": "Fatiga por la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la debilidad es normal."
+        },
+        {
+          "key": "h",
+          "text": "Hipopotasemia por diurético de asa",
+          "correct": true,
+          "rationale": "Debilidad, calambres, ondas U y potasio bajo con furosemida."
+        },
+        {
+          "key": "i",
+          "text": "Isquemia miocárdica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta el potasio."
+        },
+        {
+          "key": "j",
+          "text": "Hipocalcemia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en los calambres, pero da QT prolongado y tetania."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "h",
+        "j"
+      ],
+      "explanation": "La hipopotasemia, con potasio menor de 3.5 mEq/L, se debe a pérdidas renales, como diuréticos de asa o tiazídicos e hiperaldosteronismo, pérdidas digestivas, como vómito y diarrea, o redistribución por insulina o agonistas beta. Se manifiesta con debilidad muscular, calambres, íleo, rabdomiólisis en casos graves y arritmias. El electrocardiograma muestra aplanamiento de la onda T, depresión del ST, ondas U prominentes y prolongación del QU. El tratamiento es la reposición de potasio, oral si es leve y sin síntomas, e intravenosa a velocidad controlada si es grave, corrigiendo también la hipomagnesemia, que impide la corrección.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos del potasio"
+      ]
+    },
+    {
+      "key": "mi-15-complemento-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "nephrology",
+      "subtopic": "electrolyte_disorders",
+      "vignette": "Hombre de 58 años con enfermedad renal crónica que acude con debilidad. Potasio de 7.2 mEq/L. El electrocardiograma muestra ondas T picudas, ensanchamiento del QRS y aplanamiento de la onda P.",
+      "prompt": "¿Cuál es el tratamiento inicial más urgente?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Furosemida intravenosa sola",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ayuda a eliminar potasio, pero no protege el corazón de inmediato."
+        },
+        {
+          "key": "b",
+          "text": "Marcapasos transcutáneo como primer paso",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No corrige la causa."
+        },
+        {
+          "key": "c",
+          "text": "Gluconato de calcio intravenoso para estabilizar la membrana miocárdica",
+          "correct": true,
+          "rationale": "Hiperpotasemia con cambios electrocardiográficos."
+        },
+        {
+          "key": "d",
+          "text": "Bicarbonato como único tratamiento sin acidosis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Tiene efecto limitado."
+        },
+        {
+          "key": "e",
+          "text": "Continuar su manejo habitual",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Ignora una urgencia."
+        },
+        {
+          "key": "f",
+          "text": "Dar plátano para equilibrar el potasio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Aumenta el potasio."
+        },
+        {
+          "key": "g",
+          "text": "Esperar un segundo potasio para confirmar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retrasa una medida urgente con cambios en el electrocardiograma."
+        },
+        {
+          "key": "h",
+          "text": "Restricción dietética de potasio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena preventivo, pero no trata la urgencia."
+        },
+        {
+          "key": "i",
+          "text": "Evitar el calcio por miedo a calcificaciones",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El beneficio inmediato es mayor."
+        },
+        {
+          "key": "j",
+          "text": "Resina de intercambio oral como primera medida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en eliminar potasio con efecto tardío."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "La hiperpotasemia con cambios electrocardiográficos, como ondas T picudas, aplanamiento de la onda P, prolongación del PR y ensanchamiento del QRS, es una urgencia por riesgo de arritmias y paro. El tratamiento tiene tres pasos. Primero estabilizar la membrana con gluconato de calcio intravenoso, con efecto en minutos. Segundo redistribuir el potasio al interior de la célula con insulina rápida y glucosa, salbutamol nebulizado y bicarbonato si hay acidosis. Tercero eliminar el potasio con diuréticos de asa, quelantes intestinales o hemodiálisis en casos refractarios o con insuficiencia renal grave. Se suspenden los fármacos que lo elevan.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos del potasio"
+      ]
+    },
+    {
+      "key": "mi-15-complemento-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "hematology",
+      "subtopic": "anemia_adult",
+      "vignette": "Hombre de 62 años con artritis reumatoide activa. Hemoglobina de 10.2 g/dL, VCM de 84 fL, hierro sérico bajo, capacidad de fijación de hierro baja, saturación de transferrina de 14% y ferritina de 340 ng/mL.",
+      "prompt": "¿Cuál es la interpretación correcta de estos resultados?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Anemia por deficiencia de hierro",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También tiene hierro bajo, pero la capacidad de fijación estaría alta y la ferritina baja."
+        },
+        {
+          "key": "b",
+          "text": "Anemia normal por la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que es parte del envejecimiento."
+        },
+        {
+          "key": "c",
+          "text": "Anemia por metotrexato como única causa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el fármaco."
+        },
+        {
+          "key": "d",
+          "text": "Anemia hemolítica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay datos de hemólisis."
+        },
+        {
+          "key": "e",
+          "text": "Talasemia menor",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría microcitosis marcada con ferritina normal."
+        },
+        {
+          "key": "f",
+          "text": "Anemia megaloblástica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El VCM es normal."
+        },
+        {
+          "key": "g",
+          "text": "Hemocromatosis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Daría saturación de transferrina alta."
+        },
+        {
+          "key": "h",
+          "text": "Anemia sideroblástica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el hierro, pero la ferritina alta se explica por inflamación."
+        },
+        {
+          "key": "i",
+          "text": "Anemia de la inflamación o enfermedad crónica",
+          "correct": true,
+          "rationale": "Hierro bajo con capacidad de fijación baja y ferritina elevada."
+        },
+        {
+          "key": "j",
+          "text": "Anemia por pérdida aguda de sangre",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena común, pero no explica el perfil de hierro."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "h",
+        "i"
+      ],
+      "explanation": "La anemia de la inflamación o de enfermedad crónica se presenta en infecciones crónicas, enfermedades autoinmunes, cáncer y enfermedad renal crónica. La hepcidina, inducida por citocinas inflamatorias como la interleucina 6, bloquea la absorción intestinal de hierro y su liberación desde los macrófagos. Suele ser normocítica o levemente microcítica, con hierro sérico bajo, capacidad total de fijación baja o normal, saturación de transferrina baja y ferritina normal o elevada, porque la ferritina es reactante de fase aguda. El tratamiento principal es controlar la enfermedad de base. Puede coexistir con deficiencia de hierro cuando la ferritina es menor de 100.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la anemia en el adulto"
+      ]
+    },
+    {
+      "key": "mi-15-complemento-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "hematology",
+      "subtopic": "anticoagulation",
+      "vignette": "Mujer de 32 años con petequias en piernas y gingivorragia leve. Plaquetas de 12,000 sin otras alteraciones en la biometría ni el frotis. Sin fármacos nuevos, VIH y hepatitis C negativos. Sin sangrado grave.",
+      "prompt": "¿Cuál es el tratamiento de elección inicial?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Corticosteroide, como prednisona o dexametasona",
+          "correct": true,
+          "rationale": "Púrpura trombocitopénica inmune con plaquetas menores de 30,000 y sangrado."
+        },
+        {
+          "key": "b",
+          "text": "Observación sin tratamiento porque es autoinmune",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena prudente, pero con plaquetas de 12,000 y sangrado se trata."
+        },
+        {
+          "key": "c",
+          "text": "Heparina por riesgo de trombosis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Está contraindicada por el sangrado."
+        },
+        {
+          "key": "d",
+          "text": "Ácido acetilsalicílico para mejorar la circulación",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Aumenta el sangrado."
+        },
+        {
+          "key": "e",
+          "text": "Esplenectomía de inicio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el tratamiento definitivo, reservado para casos refractarios."
+        },
+        {
+          "key": "f",
+          "text": "Trasplante de médula ósea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "g",
+          "text": "Evitar esteroides por sus efectos adversos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El beneficio a corto plazo supera el riesgo."
+        },
+        {
+          "key": "h",
+          "text": "Rituximab como primera línea",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es segunda línea."
+        },
+        {
+          "key": "i",
+          "text": "Hierro para subir las plaquetas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el hierro trata la trombocitopenia."
+        },
+        {
+          "key": "j",
+          "text": "Transfusión de plaquetas como tratamiento principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se destruyen rápido y se reserva para sangrado grave."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "La púrpura trombocitopénica inmune es una trombocitopenia aislada por destrucción inmunológica de las plaquetas, con frotis normal y sin otra causa, después de descartar fármacos, VIH, hepatitis C y otras enfermedades. Se trata cuando las plaquetas son menores de 20,000 a 30,000 o hay sangrado. La primera línea son los corticosteroides, como prednisona o pulsos de dexametasona, y la inmunoglobulina intravenosa se usa cuando se necesita una respuesta rápida, como en sangrado importante o antes de una cirugía. La segunda línea incluye agonistas del receptor de trombopoyetina, rituximab y esplenectomía.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la púrpura trombocitopénica inmune"
+      ]
+    },
+    {
+      "key": "mi-15-complemento-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "neurology",
+      "subtopic": "stroke",
+      "vignette": "Hombre de 66 años que tuvo un evento vascular cerebral isquémico aterotrombótico hace 2 semanas. Sin fibrilación auricular. Ya recibe estatina de alta intensidad.",
+      "prompt": "¿Cuál es el tratamiento antitrombótico de elección a largo plazo para evitar un nuevo evento?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Evitar antiagregantes por miedo a sangrado cerebral",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El beneficio supera el riesgo."
+        },
+        {
+          "key": "b",
+          "text": "Rivaroxabán a dosis plena",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es para cardioembolismo."
+        },
+        {
+          "key": "c",
+          "text": "Warfarina con meta de INR de 2 a 3",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la anticoagulación, indicada en fibrilación auricular."
+        },
+        {
+          "key": "d",
+          "text": "Antiagregación plaquetaria con ácido acetilsalicílico o clopidogrel",
+          "correct": true,
+          "rationale": "En el evento isquémico no cardioembólico se indica antiagregante."
+        },
+        {
+          "key": "e",
+          "text": "Suplementos de omega 3 en lugar de antiagregante",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que los suplementos bastan."
+        },
+        {
+          "key": "f",
+          "text": "Solo control de la presión arterial",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Omite la antiagregación."
+        },
+        {
+          "key": "g",
+          "text": "Heparina de bajo peso molecular de por vida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es el tratamiento crónico."
+        },
+        {
+          "key": "h",
+          "text": "Sin antitrombótico si ya está asintomático",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a recuperación, pero el riesgo de recurrencia persiste."
+        },
+        {
+          "key": "i",
+          "text": "Doble antiagregación indefinida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aumenta el sangrado y solo se usa por tiempo corto en casos seleccionados."
+        },
+        {
+          "key": "j",
+          "text": "Antiagregante más anticoagulante combinados",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Aumenta el sangrado sin indicación."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "d",
+        "i"
+      ],
+      "explanation": "En la prevención secundaria del evento vascular cerebral isquémico no cardioembólico, se indica antiagregación plaquetaria a largo plazo con ácido acetilsalicílico, clopidogrel o la combinación de aspirina con dipiridamol de liberación prolongada. En eventos menores o ataques isquémicos de alto riesgo se usa doble antiagregación con aspirina y clopidogrel por 21 a 90 días y luego monoterapia. La anticoagulación se reserva para causas cardioembólicas, como la fibrilación auricular. Además se indica estatina de alta intensidad, control de la presión arterial, la glucosa, suspender el tabaco y tratar la estenosis carotídea significativa.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica"
+      ]
+    },
+    {
+      "key": "mi-15-complemento-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "neurology",
+      "subtopic": "headache",
+      "vignette": "Mujer de 38 años con cefalea bilateral, opresiva, como banda alrededor de la cabeza, de intensidad leve a moderada, que dura varias horas, sin náusea ni vómito y sin empeorar con la actividad. Empeora con el estrés laboral.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cefalea tensional",
+          "correct": true,
+          "rationale": "Cefalea bilateral opresiva leve a moderada sin síntomas asociados importantes."
+        },
+        {
+          "key": "b",
+          "text": "Tumor cerebral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye una causa grave sin datos de alarma."
+        },
+        {
+          "key": "c",
+          "text": "Cefalea por abuso de analgésicos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en una causa secundaria sin antecedente de consumo excesivo."
+        },
+        {
+          "key": "d",
+          "text": "Sinusitis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es un diagnóstico erróneo frecuente."
+        },
+        {
+          "key": "e",
+          "text": "Cefalea en racimos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a cefalea primaria, pero es orbitaria e intensa."
+        },
+        {
+          "key": "f",
+          "text": "Hipertensión intracraneal idiopática",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da papiledema y cefalea matutina."
+        },
+        {
+          "key": "g",
+          "text": "Trastorno de ansiedad como diagnóstico principal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el estrés."
+        },
+        {
+          "key": "h",
+          "text": "Arteritis temporal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Ocurre en mayores de 50."
+        },
+        {
+          "key": "i",
+          "text": "Problemas de la vista como causa única",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la vista explica todo."
+        },
+        {
+          "key": "j",
+          "text": "Migraña sin aura",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También es recurrente, pero es pulsátil, unilateral, con náusea y empeora con la actividad."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "j"
+      ],
+      "explanation": "La cefalea tensional es la cefalea primaria más frecuente. Se caracteriza por dolor bilateral, opresivo o como banda, de intensidad leve a moderada, que no empeora con la actividad física, sin náusea ni vómito, con a lo sumo fotofobia o fonofobia. Puede ser episódica o crónica. Se asocia a estrés, tensión muscular pericraneal, mala postura y falta de sueño. El diagnóstico es clínico. El tratamiento agudo es con paracetamol o AINE, evitando su uso excesivo para no causar cefalea por abuso de analgésicos. En la forma crónica la amitriptilina es el preventivo de elección, junto con manejo del estrés.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la cefalea en el primer nivel de atención"
+      ]
+    },
+    {
+      "key": "mi-15-complemento-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "psychiatry",
+      "subtopic": "anxiety_disorders",
+      "vignette": "Hombre de 24 años que se lava las manos más de 50 veces al día por miedo a contaminarse, revisa la estufa una y otra vez antes de salir y sabe que es excesivo, pero no puede evitarlo. Le ocupa más de 2 horas diarias.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fobia específica a los gérmenes",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica las revisiones."
+        },
+        {
+          "key": "b",
+          "text": "Dermatitis de manos",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en las manos."
+        },
+        {
+          "key": "c",
+          "text": "Trastorno de personalidad obsesivo compulsiva",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es perfeccionismo y rigidez sin obsesiones ni compulsiones egodistónicas."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome de Tourette",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da tics, no compulsiones de este tipo."
+        },
+        {
+          "key": "e",
+          "text": "Trastorno de pánico",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta los rituales."
+        },
+        {
+          "key": "f",
+          "text": "Esquizofrenia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en las ideas repetitivas, pero el paciente reconoce que son excesivas."
+        },
+        {
+          "key": "g",
+          "text": "Trastorno de ansiedad generalizada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También da preocupación, pero sin compulsiones ritualizadas."
+        },
+        {
+          "key": "h",
+          "text": "Higiene excesiva normal tras la pandemia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que es una conducta normal."
+        },
+        {
+          "key": "i",
+          "text": "Trastorno obsesivo compulsivo",
+          "correct": true,
+          "rationale": "Obsesiones de contaminación y compulsiones de lavado y revisión que consumen tiempo, con introspección conservada."
+        },
+        {
+          "key": "j",
+          "text": "Hipocondría",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a preocupación por enfermedad, sin rituales."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "El trastorno obsesivo compulsivo se caracteriza por obsesiones, que son pensamientos, imágenes o impulsos intrusivos y no deseados que causan ansiedad, y compulsiones, que son conductas o actos mentales repetitivos que la persona se siente obligada a realizar para reducir esa ansiedad. Los temas frecuentes son contaminación, duda, simetría y pensamientos agresivos o sexuales. Consumen más de una hora al día o causan malestar o deterioro, y la mayoría de los pacientes reconoce que son excesivos. El tratamiento de primera línea es la terapia cognitivo conductual con exposición y prevención de respuesta e inhibidores selectivos de la recaptura de serotonina a dosis altas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto"
+      ]
+    },
+    {
+      "key": "mi-15-complemento-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "psychiatry",
+      "subtopic": "depression",
+      "vignette": "Mujer de 78 años con depresión mayor moderada. Tiene glaucoma de ángulo cerrado, estreñimiento crónico y bloqueo de rama en el electrocardiograma.",
+      "prompt": "¿Cuál es el antidepresivo de elección en esta paciente?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Imipramina por ser eficaz",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la eficacia, con los mismos riesgos de los tricíclicos."
+        },
+        {
+          "key": "b",
+          "text": "Litio como primera línea",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el litio es el antidepresivo inicial."
+        },
+        {
+          "key": "c",
+          "text": "Combinación de tres antidepresivos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Aumenta riesgos sin beneficio."
+        },
+        {
+          "key": "d",
+          "text": "Solo vitaminas",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Insuficiente."
+        },
+        {
+          "key": "e",
+          "text": "Sertralina u otro inhibidor selectivo de la recaptura de serotonina a dosis inicial baja",
+          "correct": true,
+          "rationale": "Es más seguro en adultos mayores con estas comorbilidades."
+        },
+        {
+          "key": "f",
+          "text": "Sin tratamiento porque la depresión es normal en la vejez",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La depresión no es parte normal del envejecimiento."
+        },
+        {
+          "key": "g",
+          "text": "Dosis inicial alta para que actúe más rápido",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena eficiente, pero aumenta efectos adversos en ancianos."
+        },
+        {
+          "key": "h",
+          "text": "Evitar antidepresivos por miedo a la hiponatremia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo se vigila y no contraindica."
+        },
+        {
+          "key": "i",
+          "text": "Benzodiacepina como antidepresivo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No trata la depresión y aumenta caídas."
+        },
+        {
+          "key": "j",
+          "text": "Amitriptilina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tiene efectos anticolinérgicos que empeoran glaucoma y estreñimiento, y alteran la conducción."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "La depresión en adultos mayores es frecuente y no es una consecuencia normal del envejecimiento. Puede presentarse con quejas somáticas, deterioro cognitivo y apatía. Los inhibidores selectivos de la recaptura de serotonina, como sertralina o escitalopram, son de primera línea por su mejor perfil de seguridad, iniciando con dosis bajas y aumentando gradualmente. Se vigila la hiponatremia, el riesgo de sangrado y la prolongación del QT con citalopram. Los antidepresivos tricíclicos se evitan por sus efectos anticolinérgicos, hipotensión ortostática, alteraciones de la conducción cardiaca y toxicidad en sobredosis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto mayor"
+      ]
+    },
+    {
+      "key": "mi-15-complemento-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "endocrinology",
+      "subtopic": "thyroid_disease",
+      "vignette": "Mujer de 55 años asintomática con TSH de 7.2 mUI/L y T4 libre normal en dos mediciones con 3 meses de diferencia. Anticuerpos antiperoxidasa negativos. No está embarazada ni lo planea.",
+      "prompt": "¿Cuál es la conducta a seguir?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Evitar cualquier vigilancia por ser asintomática",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pierde la detección de progresión."
+        },
+        {
+          "key": "b",
+          "text": "Dar yodo para mejorar la tiroides",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena útil, pero puede empeorar la función."
+        },
+        {
+          "key": "c",
+          "text": "Diagnosticar hipotiroidismo franco",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La T4 libre es normal."
+        },
+        {
+          "key": "d",
+          "text": "Iniciar liotironina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "e",
+          "text": "Dar de alta sin seguimiento",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Puede progresar."
+        },
+        {
+          "key": "f",
+          "text": "Suplementos de selenio como tratamiento obligatorio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el suplemento es necesario."
+        },
+        {
+          "key": "g",
+          "text": "Iniciar levotiroxina a dosis plena de inmediato",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la TSH elevada sin indicación clara."
+        },
+        {
+          "key": "h",
+          "text": "Vigilar TSH y T4 libre periódicamente sin tratamiento por ahora",
+          "correct": true,
+          "rationale": "Hipotiroidismo subclínico con TSH menor de 10, asintomática y anticuerpos negativos."
+        },
+        {
+          "key": "i",
+          "text": "Tiroidectomía",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "j",
+          "text": "Gammagrafía tiroidea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "El hipotiroidismo subclínico se define por TSH elevada con T4 libre normal, confirmado en una segunda medición después de dos a tres meses. El tratamiento con levotiroxina se recomienda cuando la TSH es de 10 mUI/L o más, en el embarazo o la búsqueda de embarazo, y puede considerarse con TSH entre el límite superior y 10 si hay síntomas, anticuerpos positivos, bocio o riesgo cardiovascular, sobre todo en menores de 65 a 70 años. En pacientes asintomáticos con TSH menor de 10 y anticuerpos negativos se vigila la función tiroidea cada 6 a 12 meses.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo primario en adultos"
+      ]
+    },
+    {
+      "key": "mi-15-complemento-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "pulmonology",
+      "subtopic": "asthma_adult",
+      "vignette": "Mujer de 28 años con asma persistente moderada controlada con budesonida y formoterol. Tiene 10 semanas de embarazo y pregunta si debe suspender sus inhaladores.",
+      "prompt": "¿Cuál es el tratamiento de elección durante el embarazo?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Suspender todos los inhaladores durante el embarazo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el temor a los fármacos."
+        },
+        {
+          "key": "b",
+          "text": "Corticosteroide oral diario como reemplazo seguro",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Tiene más riesgos que el inhalado."
+        },
+        {
+          "key": "c",
+          "text": "Suspender y reiniciar después del parto",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Expone a crisis."
+        },
+        {
+          "key": "d",
+          "text": "Cambiar a teofilina oral",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es menos eficaz y tiene más efectos adversos."
+        },
+        {
+          "key": "e",
+          "text": "Usar solo salbutamol a demanda para reducir la exposición",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena prudente, pero deja el asma sin control."
+        },
+        {
+          "key": "f",
+          "text": "Continuar el corticosteroide inhalado con formoterol, de preferencia budesonida",
+          "correct": true,
+          "rationale": "El asma no controlada es más riesgosa para el feto que los fármacos."
+        },
+        {
+          "key": "g",
+          "text": "Montelukast como única opción segura",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es una opción, pero menos eficaz."
+        },
+        {
+          "key": "h",
+          "text": "Evitar tratar las crisis por miedo al feto",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La hipoxemia materna daña al feto."
+        },
+        {
+          "key": "i",
+          "text": "Remedios naturales en lugar de inhaladores",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que son más seguros."
+        },
+        {
+          "key": "j",
+          "text": "Biológico de inicio en el embarazo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "f"
+      ],
+      "explanation": "Durante el embarazo, el asma puede mejorar, empeorar o mantenerse igual. El asma mal controlada se asocia a preeclampsia, parto pretérmino, bajo peso al nacer y mortalidad perinatal, por lo que el control es la prioridad. Los corticosteroides inhalados, sobre todo la budesonida, tienen datos de seguridad favorables y deben continuarse. Los agonistas beta 2 de acción corta y larga también se consideran seguros. Las crisis se tratan igual que fuera del embarazo, incluidos corticosteroides sistémicos y oxígeno para mantener saturación de 95% o más. Suspender el tratamiento aumenta el riesgo de exacerbaciones.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en el embarazo"
+      ]
+    },
+    {
+      "key": "mi-15-complemento-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "infectious_diseases",
+      "subtopic": "hiv",
+      "vignette": "Mujer de 26 años con 14 semanas de embarazo y prueba de VIH positiva confirmada. Carga viral de 25,000 copias por mL.",
+      "prompt": "¿Cuál es la medida más eficaz para la prevención de la transmisión vertical?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Vitaminas prenatales como protección suficiente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que bastan."
+        },
+        {
+          "key": "b",
+          "text": "Lactancia materna exclusiva para proteger al recién nacido",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "En México se recomienda fórmula para evitar transmisión."
+        },
+        {
+          "key": "c",
+          "text": "Evitar antirretrovirales por miedo a malformaciones",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El beneficio supera ampliamente el riesgo."
+        },
+        {
+          "key": "d",
+          "text": "Esquema de cinco antirretrovirales",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Agrega toxicidad sin beneficio."
+        },
+        {
+          "key": "e",
+          "text": "Cesárea como única medida sin antirretrovirales",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ayuda en carga viral detectable, pero no sustituye el tratamiento."
+        },
+        {
+          "key": "f",
+          "text": "Zidovudina sola durante el parto",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a profilaxis clásica, pero es insuficiente."
+        },
+        {
+          "key": "g",
+          "text": "Interrumpir el embarazo como única opción",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es necesario con tratamiento eficaz."
+        },
+        {
+          "key": "h",
+          "text": "Vigilar carga viral cada trimestre sin tratamiento",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Deja alto riesgo de transmisión."
+        },
+        {
+          "key": "i",
+          "text": "Iniciar de inmediato tratamiento antirretroviral combinado para lograr carga viral indetectable antes del parto",
+          "correct": true,
+          "rationale": "Reduce la transmisión a menos de 1%."
+        },
+        {
+          "key": "j",
+          "text": "Esperar al tercer trimestre para iniciar antirretrovirales",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en criterios antiguos."
+        }
+      ],
+      "canonical": [
+        "e",
+        "f",
+        "i",
+        "j"
+      ],
+      "explanation": "La transmisión vertical del VIH puede ocurrir durante el embarazo, el parto y la lactancia. La medida más eficaz para prevenirla es el tratamiento antirretroviral combinado de la madre, iniciado lo antes posible, con meta de carga viral indetectable al final del embarazo. Con esto la transmisión es menor de 1%. Además se realiza cesárea programada si la carga viral cercana al parto es mayor de 1,000 copias, se da zidovudina intravenosa intraparto en ese caso, profilaxis antirretroviral al recién nacido y alimentación con fórmula en lugar de lactancia materna. Por eso el tamizaje de VIH es universal en el control prenatal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención de la transmisión perinatal del VIH",
+        "Norma Oficial Mexicana para la prevención y control de la infección por VIH"
+      ]
+    }
+  ]
+}

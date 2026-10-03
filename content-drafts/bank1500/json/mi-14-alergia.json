@@ -1,0 +1,1134 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-14-alergia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "allergy_immunology",
+      "subtopic": "anaphylaxis",
+      "vignette": "Hombre de 30 años que 10 minutos después de comer camarones presenta urticaria generalizada, edema de labios, disnea con sibilancias, mareo y presión arterial de 80/50 mmHg.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Anafilaxia",
+          "correct": true,
+          "rationale": "Reacción sistémica aguda con afección cutánea, respiratoria y cardiovascular tras un alérgeno."
+        },
+        {
+          "key": "b",
+          "text": "Intoxicación alimentaria",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye una causa digestiva sin explicar el cuadro."
+        },
+        {
+          "key": "c",
+          "text": "Mastocitosis sistémica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara."
+        },
+        {
+          "key": "d",
+          "text": "Intolerancia a mariscos sin riesgo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que es solo una molestia."
+        },
+        {
+          "key": "e",
+          "text": "Reacción vasovagal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a hipotensión, pero no da urticaria ni broncoespasmo."
+        },
+        {
+          "key": "f",
+          "text": "Angioedema hereditario",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da edema, pero sin urticaria ni relación con alimentos."
+        },
+        {
+          "key": "g",
+          "text": "Escombroidosis por pescado",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el alimento, pero el cuadro es de anafilaxia."
+        },
+        {
+          "key": "h",
+          "text": "Urticaria aguda aislada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También da ronchas, pero sin afección respiratoria ni hipotensión."
+        },
+        {
+          "key": "i",
+          "text": "Crisis asmática",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en las sibilancias, sin explicar la urticaria ni la hipotensión."
+        },
+        {
+          "key": "j",
+          "text": "Crisis de ansiedad",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta los signos objetivos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "h",
+        "i"
+      ],
+      "explanation": "La anafilaxia es una reacción de hipersensibilidad sistémica grave, de inicio rápido y potencialmente mortal. Se diagnostica cuando aparece de forma aguda afección de piel o mucosas, como urticaria o angioedema, con compromiso respiratorio o hipotensión, o cuando tras la exposición a un alérgeno probable aparecen dos o más sistemas afectados, o hipotensión tras un alérgeno conocido. Los desencadenantes más comunes son alimentos, como mariscos y cacahuates, fármacos, como betalactámicos y AINE, y picaduras de himenópteros. No toda anafilaxia tiene manifestaciones cutáneas. El tratamiento de primera línea es la adrenalina intramuscular.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la anafilaxia"
+      ]
+    },
+    {
+      "key": "mi-14-alergia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "allergy_immunology",
+      "subtopic": "anaphylaxis",
+      "vignette": "Mujer de 25 años con anafilaxia por picadura de abeja. Tiene urticaria, estridor y presión arterial de 82/48 mmHg.",
+      "prompt": "¿Cuál es el tratamiento inicial de elección?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aplicar hielo en la picadura como tratamiento principal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el manejo local basta."
+        },
+        {
+          "key": "b",
+          "text": "Adrenalina intramuscular en la cara anterolateral del muslo, 0.01 mg/kg hasta 0.5 mg, repetible cada 5 a 15 minutos",
+          "correct": true,
+          "rationale": "Es el fármaco de primera línea en anafilaxia."
+        },
+        {
+          "key": "c",
+          "text": "Antihistamínico intravenoso como primera medida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Alivia la urticaria, pero no revierte la hipotensión ni la obstrucción."
+        },
+        {
+          "key": "d",
+          "text": "Adrenalina intravenosa en bolo sin monitoreo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Tiene riesgo de arritmias y se reserva para paro o refractarios."
+        },
+        {
+          "key": "e",
+          "text": "Intubación inmediata antes de la adrenalina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La adrenalina puede revertir la obstrucción."
+        },
+        {
+          "key": "f",
+          "text": "Salbutamol nebulizado como única medida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Trata el broncoespasmo, pero no la hipotensión."
+        },
+        {
+          "key": "g",
+          "text": "Observar en urgencias sin fármacos",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Retrasa el tratamiento que salva la vida."
+        },
+        {
+          "key": "h",
+          "text": "Evitar la adrenalina por miedo a taquicardia en una joven",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pierde el tratamiento de elección."
+        },
+        {
+          "key": "i",
+          "text": "Adrenalina subcutánea por ser más segura",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena segura, pero se absorbe peor."
+        },
+        {
+          "key": "j",
+          "text": "Corticosteroide intravenoso como tratamiento principal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la inflamación, con efecto tardío."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "La adrenalina intramuscular es el tratamiento de primera línea de la anafilaxia y debe administrarse de inmediato. La dosis es de 0.01 mg/kg de la solución 1 mg/mL, máximo 0.5 mg en adultos y 0.3 mg en niños, en la cara anterolateral del muslo, y puede repetirse cada 5 a 15 minutos. Revierte la vasodilatación, el edema de la vía aérea y el broncoespasmo. Se acompaña de posición supina con piernas elevadas, oxígeno, líquidos intravenosos en hipotensión y broncodilatadores. Los antihistamínicos y corticosteroides son tratamientos de segunda línea. El retraso de la adrenalina se asocia a mayor mortalidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la anafilaxia"
+      ]
+    },
+    {
+      "key": "mi-14-alergia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "allergy_immunology",
+      "subtopic": "anaphylaxis",
+      "vignette": "Hombre de 40 años tratado por anafilaxia con adrenalina, con resolución completa en 1 hora. Se le dio de alta de inmediato. Seis horas después reaparecen urticaria, disnea e hipotensión sin nueva exposición.",
+      "prompt": "¿Cuál es la complicación que presentó?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Anafilaxia bifásica",
+          "correct": true,
+          "rationale": "Recurrencia de síntomas horas después sin nueva exposición."
+        },
+        {
+          "key": "b",
+          "text": "Reacción adversa a la adrenalina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la urticaria ni la hipotensión."
+        },
+        {
+          "key": "c",
+          "text": "Asma descontrolada",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la disnea."
+        },
+        {
+          "key": "d",
+          "text": "Efecto de rebote del antihistamínico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la recaída es por el fármaco."
+        },
+        {
+          "key": "e",
+          "text": "Urticaria crónica espontánea",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a urticaria, pero es aguda y sistémica."
+        },
+        {
+          "key": "f",
+          "text": "Nueva exposición inadvertida al alérgeno",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en una nueva exposición que no ocurrió."
+        },
+        {
+          "key": "g",
+          "text": "Mastocitosis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara."
+        },
+        {
+          "key": "h",
+          "text": "Anafilaxia prolongada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es persistente sin resolución, no recurrente."
+        },
+        {
+          "key": "i",
+          "text": "Crisis de ansiedad posterior",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye un origen emocional."
+        },
+        {
+          "key": "j",
+          "text": "Sepsis",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay datos de infección."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "h"
+      ],
+      "explanation": "La anafilaxia bifásica es la recurrencia de los síntomas tras su resolución, sin nueva exposición al desencadenante, generalmente entre 1 y 72 horas después, con mayor frecuencia en las primeras 12 horas. Es más probable en anafilaxias graves, que requirieron más de una dosis de adrenalina, o cuando la adrenalina se retrasó. Por ello se recomienda vigilancia en urgencias de al menos 4 a 6 horas, y más prolongada en casos graves. Al egreso se debe prescribir un autoinyector de adrenalina, entregar un plan de acción escrito, educar sobre la evitación del alérgeno y referir al alergólogo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la anafilaxia"
+      ]
+    },
+    {
+      "key": "mi-14-alergia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "allergy_immunology",
+      "subtopic": "anaphylaxis",
+      "vignette": "Hombre de 62 años con hipertensión tratado con metoprolol. Presenta anafilaxia por medio de contraste y no responde a dos dosis de adrenalina intramuscular.",
+      "prompt": "¿Cuál es el factor que explica la falta de respuesta y qué fármaco se agrega?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Mastocitosis oculta, y se agrega cromoglicato",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara y no es la respuesta inmediata."
+        },
+        {
+          "key": "b",
+          "text": "La hipertensión, y se agrega nitroglicerina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La nitroglicerina empeora la hipotensión."
+        },
+        {
+          "key": "c",
+          "text": "La ansiedad del paciente, y se da benzodiacepina",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la ansiedad impide la respuesta."
+        },
+        {
+          "key": "d",
+          "text": "El betabloqueador, y se agrega glucagón intravenoso",
+          "correct": true,
+          "rationale": "Los betabloqueadores reducen la respuesta a la adrenalina."
+        },
+        {
+          "key": "e",
+          "text": "El IECA, y se agrega furosemida",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en otro antihipertensivo."
+        },
+        {
+          "key": "f",
+          "text": "Deshidratación, sin otro fármaco",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Los líquidos ayudan, pero se omite el factor clave."
+        },
+        {
+          "key": "g",
+          "text": "Alergia a la adrenalina, y se suspende",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La alergia a la adrenalina no existe."
+        },
+        {
+          "key": "h",
+          "text": "El contraste es demasiado potente, y se espera a que se elimine",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena lógico, pero retrasa el tratamiento."
+        },
+        {
+          "key": "i",
+          "text": "La edad, y se agrega atropina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La edad no explica la resistencia y la atropina no es el antídoto."
+        },
+        {
+          "key": "j",
+          "text": "La dosis insuficiente de antihistamínico, y se duplica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el antihistamínico, que no revierte el choque."
+        }
+      ],
+      "canonical": [
+        "b",
+        "d",
+        "i",
+        "j"
+      ],
+      "explanation": "Los betabloqueadores pueden hacer la anafilaxia más grave y resistente a la adrenalina, porque bloquean los receptores beta adrenérgicos a través de los cuales actúa. Además pueden favorecer bradicardia y broncoespasmo. En estos pacientes, si no hay respuesta a la adrenalina y a los líquidos, se administra glucagón intravenoso, que aumenta la contractilidad y la frecuencia cardiaca por un mecanismo independiente de los receptores beta. Los IECA también se asocian a reacciones más graves. Otros factores de riesgo de anafilaxia grave son el asma mal controlada, la enfermedad cardiovascular y la mastocitosis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la anafilaxia"
+      ]
+    },
+    {
+      "key": "mi-14-alergia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "allergy_immunology",
+      "subtopic": "anaphylaxis",
+      "vignette": "Niña de 9 años con alergia confirmada al cacahuate que tuvo una anafilaxia hace un mes. Va a regresar a la escuela.",
+      "prompt": "¿Cuál es la medida de prevención más importante?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Vacuna contra alergias alimentarias",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No existe."
+        },
+        {
+          "key": "b",
+          "text": "Exponerla a pequeñas cantidades en casa para acostumbrarla",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a desensibilización, pero sin supervisión es peligroso."
+        },
+        {
+          "key": "c",
+          "text": "Que crecerá y se le quitará sin necesidad de precauciones",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La alergia al cacahuate suele persistir."
+        },
+        {
+          "key": "d",
+          "text": "Hospitalizar en cada comida escolar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Medida excesiva."
+        },
+        {
+          "key": "e",
+          "text": "Evitar el alérgeno, portar un autoinyector de adrenalina y tener un plan de acción escrito para la escuela",
+          "correct": true,
+          "rationale": "Previene y permite tratar una reacción a tiempo."
+        },
+        {
+          "key": "f",
+          "text": "Dar antihistamínico diario como prevención",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No previene la anafilaxia."
+        },
+        {
+          "key": "g",
+          "text": "No informar a la escuela para evitar estigma",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Deja a la niña sin protección."
+        },
+        {
+          "key": "h",
+          "text": "Solo evitar el cacahuate sin otras medidas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La exposición accidental es frecuente."
+        },
+        {
+          "key": "i",
+          "text": "Corticosteroide oral antes de cada comida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el control inflamatorio sin beneficio preventivo."
+        },
+        {
+          "key": "j",
+          "text": "Sin medidas porque ya pasó la reacción",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "El riesgo persiste."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "En pacientes con alergia alimentaria y antecedente de anafilaxia, las medidas preventivas incluyen la evitación estricta del alérgeno, leyendo etiquetas y vigilando la contaminación cruzada, portar siempre un autoinyector de adrenalina, idealmente dos, y contar con un plan de acción escrito para el hogar y la escuela. Los cuidadores, maestros y la paciente deben saber reconocer los síntomas y aplicar la adrenalina, y después acudir a urgencias. La alergia al cacahuate rara vez se resuelve. La inmunoterapia oral supervisada por especialistas puede ser una opción para aumentar el umbral de tolerancia en casos seleccionados.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la anafilaxia"
+      ]
+    },
+    {
+      "key": "mi-14-alergia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "allergy_immunology",
+      "subtopic": "anaphylaxis",
+      "vignette": "Mujer de 45 años con episodios recurrentes de angioedema de labios y lengua sin urticaria ni prurito, que no responden a antihistamínicos ni a corticosteroides. Inició enalapril hace 4 meses.",
+      "prompt": "¿Cuál es el tratamiento de elección a largo plazo?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Adrenalina diaria preventiva",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el tratamiento de la anafilaxia, ineficaz en este mecanismo."
+        },
+        {
+          "key": "b",
+          "text": "Evitar alimentos alergénicos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que es alérgico."
+        },
+        {
+          "key": "c",
+          "text": "Mantener el enalapril porque la presión está controlada",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Expone a un riesgo de obstrucción de vía aérea."
+        },
+        {
+          "key": "d",
+          "text": "Esperar a ver si deja de ocurrir solo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede presentarse un episodio grave."
+        },
+        {
+          "key": "e",
+          "text": "Suspender el enalapril de forma definitiva y no usar otros IECA",
+          "correct": true,
+          "rationale": "Angioedema por bradicinina inducido por IECA."
+        },
+        {
+          "key": "f",
+          "text": "Continuar el IECA con un antihistamínico como protección",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena preventivo, pero el riesgo persiste."
+        },
+        {
+          "key": "g",
+          "text": "Corticosteroides orales crónicos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No son eficaces."
+        },
+        {
+          "key": "h",
+          "text": "Inhibidor de C1 esterasa de mantenimiento de por vida",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es para angioedema hereditario."
+        },
+        {
+          "key": "i",
+          "text": "Cambiar a otro IECA de diferente marca",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El efecto es de clase."
+        },
+        {
+          "key": "j",
+          "text": "Antihistamínico a dosis altas de forma crónica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es eficaz en angioedema por bradicinina."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "El angioedema por IECA se debe a la acumulación de bradicinina, porque la enzima convertidora de angiotensina también la degrada. No se acompaña de urticaria ni prurito, afecta labios, lengua, cara y vía aérea superior, y no responde a antihistamínicos, corticosteroides ni adrenalina como en la anafilaxia. Puede aparecer incluso años después de iniciar el fármaco y es más frecuente en personas de ascendencia africana. El tratamiento es suspender el IECA de forma definitiva y evitar toda la clase. Los ARA II tienen bajo riesgo y pueden usarse con precaución. En crisis graves se protege la vía aérea y puede usarse icatibant.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del angioedema"
+      ]
+    },
+    {
+      "key": "mi-14-alergia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "allergy_immunology",
+      "subtopic": "anaphylaxis",
+      "vignette": "Hombre de 50 años con anafilaxia por cefalosporina. Recibió tres dosis de adrenalina intramuscular y 2 litros de cristaloide. Persiste con presión arterial de 70/40 mmHg.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Corticosteroide en bolo como medida principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tiene efecto tardío."
+        },
+        {
+          "key": "b",
+          "text": "Egresar con autoinyector",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Ignora la refractariedad."
+        },
+        {
+          "key": "c",
+          "text": "Infusión intravenosa de adrenalina titulada con monitoreo continuo, en área de cuidados críticos",
+          "correct": true,
+          "rationale": "Anafilaxia refractaria a dosis intramusculares."
+        },
+        {
+          "key": "d",
+          "text": "Suspender los líquidos para evitar sobrecarga",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena prudente, pero el paciente sigue hipotenso."
+        },
+        {
+          "key": "e",
+          "text": "Calcio intravenoso como antídoto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el calcio revierte la anafilaxia."
+        },
+        {
+          "key": "f",
+          "text": "Oxigenación extracorpórea como siguiente paso inmediato",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para casos extremos."
+        },
+        {
+          "key": "g",
+          "text": "Cuarta dosis de antihistamínico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en un fármaco que no revierte el choque."
+        },
+        {
+          "key": "h",
+          "text": "Esperar a que el fármaco se elimine solo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "i",
+          "text": "Dopamina como vasopresor de primera elección",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La adrenalina es la de elección en anafilaxia."
+        },
+        {
+          "key": "j",
+          "text": "Repetir adrenalina intramuscular cada hora sin cambios",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "No ha funcionado."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "g"
+      ],
+      "explanation": "La anafilaxia refractaria es aquella que persiste pese a dos o más dosis adecuadas de adrenalina intramuscular y reanimación con líquidos. Requiere manejo en un área de cuidados críticos con monitoreo continuo e infusión intravenosa de adrenalina titulada según la respuesta. Se continúa la reposición de líquidos, y pueden agregarse otros vasopresores, como norepinefrina o vasopresina, y glucagón si el paciente toma betabloqueadores. Se debe asegurar la vía aérea si hay obstrucción. Es importante suspender cualquier infusión del fármaco desencadenante. Después de estabilizar, se vigila por el riesgo de reacción bifásica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la anafilaxia"
+      ]
+    },
+    {
+      "key": "mi-14-alergia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "allergy_immunology",
+      "subtopic": "primary_immunodeficiency",
+      "vignette": "Niño de 3 años con otitis medias y neumonías recurrentes por bacterias encapsuladas desde los 6 meses. Ganglios y amígdalas casi ausentes. Inmunoglobulinas G, A y M muy bajas. Linfocitos B prácticamente ausentes.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Inmunodeficiencia combinada grave",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Afecta también linfocitos T con infecciones oportunistas tempranas."
+        },
+        {
+          "key": "b",
+          "text": "Hipogammaglobulinemia transitoria de la infancia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena benigno, pero hay linfocitos B y se resuelve."
+        },
+        {
+          "key": "c",
+          "text": "Alergias respiratorias",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que son alergias."
+        },
+        {
+          "key": "d",
+          "text": "VIH perinatal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta la ausencia de linfocitos B."
+        },
+        {
+          "key": "e",
+          "text": "Enfermedad granulomatosa crónica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Afecta neutrófilos con infecciones por catalasa positivos."
+        },
+        {
+          "key": "f",
+          "text": "Deficiencia selectiva de IgA",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la IgA, pero las tres inmunoglobulinas están bajas."
+        },
+        {
+          "key": "g",
+          "text": "Infecciones de la guardería normales",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Atribuye a la exposición un patrón grave."
+        },
+        {
+          "key": "h",
+          "text": "Agammaglobulinemia ligada al X de Bruton",
+          "correct": true,
+          "rationale": "Infecciones bacterianas recurrentes desde los 6 meses en varón con ausencia de linfocitos B e inmunoglobulinas."
+        },
+        {
+          "key": "i",
+          "text": "Inmunodeficiencia común variable",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También tiene inmunoglobulinas bajas, pero se presenta más tarde y hay linfocitos B."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome de DiGeorge",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la inmunodeficiencia, pero afecta linfocitos T."
+        }
+      ],
+      "canonical": [
+        "f",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "La agammaglobulinemia ligada al X, o de Bruton, se debe a mutaciones en el gen BTK, necesario para la maduración de los linfocitos B. Afecta a varones, que presentan infecciones bacterianas recurrentes por microorganismos encapsulados, como neumococo y Haemophilus, a partir de los seis meses, cuando disminuyen los anticuerpos maternos. Hay ausencia o disminución marcada de todas las inmunoglobulinas y de linfocitos B, con tejido linfoide hipoplásico. El tratamiento es la reposición de inmunoglobulina intravenosa o subcutánea de por vida y el tratamiento oportuno de las infecciones. Las vacunas vivas están contraindicadas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico de las inmunodeficiencias primarias"
+      ]
+    },
+    {
+      "key": "mi-14-alergia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "allergy_immunology",
+      "subtopic": "primary_immunodeficiency",
+      "vignette": "Niña de 5 años con infecciones respiratorias recurrentes. Tuvo 3 neumonías en el último año y 2 otitis complicadas. Peso y talla normales.",
+      "prompt": "¿Cuál es el estudio inicial más útil para evaluar una inmunodeficiencia primaria humoral?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Biometría hemática con diferencial y niveles de inmunoglobulinas G, A y M",
+          "correct": true,
+          "rationale": "Son los estudios de primera línea ante sospecha de inmunodeficiencia."
+        },
+        {
+          "key": "b",
+          "text": "Vitamina C como prueba terapéutica",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que mejorar la nutrición basta."
+        },
+        {
+          "key": "c",
+          "text": "Citometría de flujo de todas las subpoblaciones como primer paso",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es un estudio de segundo nivel."
+        },
+        {
+          "key": "d",
+          "text": "Pruebas de alergia cutáneas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a evaluación inmune, pero buscan alergias."
+        },
+        {
+          "key": "e",
+          "text": "Tomografía de tórax de alta resolución",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Evalúa daño, no la causa."
+        },
+        {
+          "key": "f",
+          "text": "Biopsia de ganglio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es inicial."
+        },
+        {
+          "key": "g",
+          "text": "Descartar inmunodeficiencia por crecer bien",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El crecimiento normal no la excluye."
+        },
+        {
+          "key": "h",
+          "text": "Estudio genético completo de entrada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en lo más específico sin pasos previos."
+        },
+        {
+          "key": "i",
+          "text": "Radiografía de senos paranasales",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Evalúa una complicación, no la inmunidad."
+        },
+        {
+          "key": "j",
+          "text": "Prueba del sudor",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es para fibrosis quística."
+        }
+      ],
+      "canonical": [
+        "a",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "Las señales de alarma de inmunodeficiencia primaria incluyen infecciones recurrentes o graves, como dos o más neumonías al año, infecciones por gérmenes oportunistas, necesidad de antibióticos intravenosos, falla de medro y antecedente familiar. El abordaje inicial incluye biometría hemática con diferencial, que detecta linfopenia o neutropenia, y niveles séricos de inmunoglobulinas G, A y M, junto con respuesta a vacunas. Según los resultados se realizan estudios de segundo nivel, como citometría de flujo de linfocitos, subclases de IgG, complemento y pruebas de función de neutrófilos, y finalmente estudios genéticos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico de las inmunodeficiencias primarias"
+      ]
+    },
+    {
+      "key": "mi-14-alergia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "allergy_immunology",
+      "subtopic": "primary_immunodeficiency",
+      "vignette": "Hombre de 25 años con deficiencia selectiva de IgA. Requiere una transfusión de sangre tras un accidente.",
+      "prompt": "¿Cuál es la complicación que debe prevenirse durante la transfusión?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Anafilaxia por anticuerpos anti IgA",
+          "correct": true,
+          "rationale": "Algunos pacientes tienen anticuerpos contra la IgA de los productos sanguíneos."
+        },
+        {
+          "key": "b",
+          "text": "Ninguna, porque la deficiencia es leve",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que no tiene implicaciones."
+        },
+        {
+          "key": "c",
+          "text": "Infección por bacterias encapsuladas inmediata",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la inmunodeficiencia, sin relación con la transfusión."
+        },
+        {
+          "key": "d",
+          "text": "Púrpura postransfusional",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en otra complicación rara."
+        },
+        {
+          "key": "e",
+          "text": "Lesión pulmonar aguda por transfusión",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No se relaciona con la deficiencia."
+        },
+        {
+          "key": "f",
+          "text": "Transmisión de VIH",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es muy rara con los controles actuales."
+        },
+        {
+          "key": "g",
+          "text": "Hipocalcemia por citrato",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta la deficiencia de IgA."
+        },
+        {
+          "key": "h",
+          "text": "Enfermedad injerto contra huésped",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Afecta a inmunodeficiencias de linfocitos T."
+        },
+        {
+          "key": "i",
+          "text": "Sobrecarga de volumen",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena transfusional, pero no se relaciona con la IgA."
+        },
+        {
+          "key": "j",
+          "text": "Hemólisis por incompatibilidad Rh",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es otra complicación transfusional sin relación con la deficiencia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "La deficiencia selectiva de IgA es la inmunodeficiencia primaria más frecuente. Muchos pacientes son asintomáticos, pero pueden presentar infecciones respiratorias y gastrointestinales recurrentes, enfermedad celíaca, enfermedades autoinmunes y alergias. Una complicación importante es que algunos pacientes desarrollan anticuerpos contra la IgA, y al recibir productos sanguíneos que la contienen pueden presentar anafilaxia. Por ello, cuando se requiere transfusión se usan productos lavados o de donadores deficientes de IgA. No se tratan con inmunoglobulina, que además contiene IgA. Es importante identificarla y advertir al paciente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico de las inmunodeficiencias primarias"
+      ]
+    },
+    {
+      "key": "mi-14-alergia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "allergy_immunology",
+      "subtopic": "primary_immunodeficiency",
+      "vignette": "Niño de 2 años con abscesos hepáticos y linfadenitis supurativa por Staphylococcus aureus y una neumonía por Aspergillus. Prueba de dihidrorrodamina anormal.",
+      "prompt": "¿Cuál es el defecto inmunológico responsable de su susceptibilidad?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Déficit de linfocitos T",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a inmunodeficiencia grave, pero da infecciones virales y oportunistas."
+        },
+        {
+          "key": "b",
+          "text": "Desnutrición proteica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye una causa secundaria sin explicar la prueba."
+        },
+        {
+          "key": "c",
+          "text": "Ausencia de linfocitos B",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría infecciones por bacterias encapsuladas."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome de hiper IgE",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Comparte abscesos por estafilococo, pero tiene eccema e IgE alta."
+        },
+        {
+          "key": "e",
+          "text": "Infecciones por mala higiene",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la higiene explica las infecciones."
+        },
+        {
+          "key": "f",
+          "text": "Falla del estallido respiratorio de los neutrófilos por defecto de la NADPH oxidasa, en la enfermedad granulomatosa crónica",
+          "correct": true,
+          "rationale": "Infecciones por catalasa positivos y hongos."
+        },
+        {
+          "key": "g",
+          "text": "Defecto de adhesión leucocitaria",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da infecciones sin pus y retraso en la caída del cordón."
+        },
+        {
+          "key": "h",
+          "text": "Deficiencia del complemento terminal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en otra inmunodeficiencia, que predispone a Neisseria."
+        },
+        {
+          "key": "i",
+          "text": "Deficiencia de IgA",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica las infecciones por catalasa positivos."
+        },
+        {
+          "key": "j",
+          "text": "Asplenia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Predispone a encapsulados."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "La enfermedad granulomatosa crónica es una inmunodeficiencia primaria de los fagocitos causada por defectos en la NADPH oxidasa, que impiden el estallido respiratorio necesario para destruir microorganismos fagocitados. Los pacientes presentan infecciones graves y recurrentes por microorganismos catalasa positivos, como Staphylococcus aureus, Serratia, Burkholderia, Nocardia y Aspergillus, con abscesos, linfadenitis supurativa, neumonías y formación de granulomas. El diagnóstico se establece con la prueba de dihidrorrodamina por citometría de flujo. El tratamiento incluye profilaxis con trimetoprim con sulfametoxazol e itraconazol, interferón gamma y trasplante de células hematopoyéticas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico de las inmunodeficiencias primarias"
+      ]
+    },
+    {
+      "key": "mi-14-alergia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "allergy_immunology",
+      "subtopic": "primary_immunodeficiency",
+      "vignette": "Niño de 4 años con agammaglobulinemia ligada al X en tratamiento con inmunoglobulina. Sus padres preguntan por el esquema de vacunación.",
+      "prompt": "¿Cuál es la recomendación correcta respecto a la prevención con vacunas en este paciente?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Evitar vacunas de virus vivos atenuados, como la triple viral y la oral contra polio",
+          "correct": true,
+          "rationale": "En inmunodeficiencias humorales graves las vacunas vivas pueden causar enfermedad."
+        },
+        {
+          "key": "b",
+          "text": "Aplicar solo vacunas vivas porque generan mejor respuesta",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la inmunogenicidad, con riesgo de infección."
+        },
+        {
+          "key": "c",
+          "text": "Ninguna vacuna porque no responde a ninguna",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Algunas vacunas inactivadas pueden darse y no causan daño."
+        },
+        {
+          "key": "d",
+          "text": "Seguir el esquema habitual como cualquier niño",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Ignora su inmunodeficiencia."
+        },
+        {
+          "key": "e",
+          "text": "Aplicar BCG de refuerzo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es una vacuna viva contraindicada."
+        },
+        {
+          "key": "f",
+          "text": "Las vacunas causan su inmunodeficiencia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree en una relación falsa."
+        },
+        {
+          "key": "g",
+          "text": "Suspender la inmunoglobulina para que las vacunas funcionen mejor",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena lógico, pero deja al niño desprotegido."
+        },
+        {
+          "key": "h",
+          "text": "No vacunar a los convivientes",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Los convivientes sí deben vacunarse con vacunas inactivadas y la mayoría de las vivas."
+        },
+        {
+          "key": "i",
+          "text": "Vacunar con dosis triples para compensar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Sin beneficio."
+        },
+        {
+          "key": "j",
+          "text": "Aplicar todas las vacunas del esquema sin excepciones",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Expone a riesgo con vacunas vivas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "En las inmunodeficiencias primarias graves de anticuerpos o de linfocitos T, las vacunas de virus vivos atenuados, como la triple viral, la varicela, la vacuna oral contra poliomielitis, la BCG y la de rotavirus, están contraindicadas porque pueden causar infección diseminada. Las vacunas inactivadas no causan enfermedad y pueden aplicarse, aunque su respuesta puede ser limitada, sobre todo en pacientes que reciben inmunoglobulina. La protección depende en gran medida de la reposición de inmunoglobulina. Los convivientes deben estar bien vacunados, con precauciones específicas para la vacuna oral contra polio, para proteger al paciente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico de las inmunodeficiencias primarias",
+        "Norma Oficial Mexicana para la prevención y control de enfermedades transmisibles por vacunación"
+      ]
+    }
+  ]
+}

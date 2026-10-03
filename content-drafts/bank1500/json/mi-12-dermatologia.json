@@ -1,0 +1,1321 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-12-dermatologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "dermatology",
+      "subtopic": "dermatitis",
+      "vignette": "Niño de 6 años con placas eccematosas, pruriginosas y secas en pliegues de codos y rodillas, de evolución crónica con brotes. Tiene rinitis alérgica y su madre asma.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dermatitis por contacto alérgica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También es eccematosa, pero se limita al sitio de contacto con el alérgeno."
+        },
+        {
+          "key": "b",
+          "text": "Escabiosis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da prurito, pero con surcos y lesiones en espacios interdigitales."
+        },
+        {
+          "key": "c",
+          "text": "Psoriasis",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en las placas, pero la psoriasis afecta superficies extensoras con escama plateada."
+        },
+        {
+          "key": "d",
+          "text": "Xerosis simple",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la resequedad."
+        },
+        {
+          "key": "e",
+          "text": "Urticaria crónica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta el carácter eccematoso."
+        },
+        {
+          "key": "f",
+          "text": "Alergia alimentaria como causa única",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo eccema infantil es por alimentos."
+        },
+        {
+          "key": "g",
+          "text": "Micosis fungoide",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara en niños."
+        },
+        {
+          "key": "h",
+          "text": "Dermatitis seborreica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Afecta cuero cabelludo y zonas seborreicas."
+        },
+        {
+          "key": "i",
+          "text": "Tiña corporal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a placa, pero tiene borde activo anular."
+        },
+        {
+          "key": "j",
+          "text": "Dermatitis atópica",
+          "correct": true,
+          "rationale": "Eccema pruriginoso crónico en flexuras con antecedente atópico personal y familiar."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "La dermatitis atópica es una enfermedad inflamatoria crónica de la piel, con brotes, muy frecuente en niños. Se caracteriza por prurito intenso, piel seca y lesiones eccematosas cuya distribución varía con la edad, en mejillas y superficies extensoras en lactantes, y en pliegues de codos y rodillas en niños mayores y adultos. Se asocia a antecedentes personales o familiares de atopia, como asma y rinitis. Se debe a alteración de la barrera cutánea y desregulación inmune. El tratamiento incluye emolientes diarios, baños breves, evitar irritantes, corticosteroides tópicos en los brotes e inhibidores de calcineurina tópicos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la dermatitis atópica"
+      ]
+    },
+    {
+      "key": "mi-12-dermatologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "dermatology",
+      "subtopic": "dermatitis",
+      "vignette": "Mujer de 28 años con dermatitis atópica que presenta un brote de placas eccematosas en pliegues de codos. Usa emolientes de forma irregular.",
+      "prompt": "¿Cuál es el tratamiento de elección del brote?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Corticosteroide sistémico oral",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el brote con efecto rebote y efectos adversos."
+        },
+        {
+          "key": "b",
+          "text": "Ciclosporina oral",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es para casos graves."
+        },
+        {
+          "key": "c",
+          "text": "Corticosteroide tópico de potencia media por tiempo limitado más emolientes diarios",
+          "correct": true,
+          "rationale": "Es el tratamiento de primera línea del brote."
+        },
+        {
+          "key": "d",
+          "text": "Baños largos con agua caliente para relajar la piel",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena relajante, pero reseca más la piel."
+        },
+        {
+          "key": "e",
+          "text": "Eliminar todos los alimentos alergénicos sin estudio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la dieta controla el brote."
+        },
+        {
+          "key": "f",
+          "text": "Antifúngico tópico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es para tiñas."
+        },
+        {
+          "key": "g",
+          "text": "Antihistamínico oral como tratamiento principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ayuda poco al prurito y no controla la inflamación."
+        },
+        {
+          "key": "h",
+          "text": "Solo jabón antibacteriano",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Irrita la piel."
+        },
+        {
+          "key": "i",
+          "text": "Dupilumab como primera línea",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se reserva para casos moderados a graves refractarios."
+        },
+        {
+          "key": "j",
+          "text": "Evitar corticosteroides tópicos por miedo a adelgazar la piel",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo es bajo con uso adecuado."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "g"
+      ],
+      "explanation": "El tratamiento de la dermatitis atópica se basa en la reparación de la barrera cutánea con emolientes aplicados diariamente, incluso sin brotes, baños cortos con agua tibia y jabones suaves, y evitar desencadenantes como irritantes y calor. Los brotes se tratan con corticosteroides tópicos de potencia adecuada a la zona, por periodos cortos, y como mantenimiento proactivo dos veces por semana en zonas recurrentes. Los inhibidores de calcineurina tópicos, como tacrolimus, son alternativas en cara y pliegues. En casos moderados a graves se usan fototerapia, inmunosupresores sistémicos o biológicos como dupilumab.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la dermatitis atópica"
+      ]
+    },
+    {
+      "key": "mi-12-dermatologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "dermatology",
+      "subtopic": "dermatitis",
+      "vignette": "Mujer de 34 años con placas eccematosas, pruriginosas, en el lóbulo de ambas orejas y en la muñeca, donde usa aretes y reloj de bisutería.",
+      "prompt": "¿Cuál es el factor desencadenante más probable?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Picaduras de insecto",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta la relación con los objetos."
+        },
+        {
+          "key": "b",
+          "text": "Estrés emocional",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en un factor general."
+        },
+        {
+          "key": "c",
+          "text": "Dermatitis seborreica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Afecta otras zonas."
+        },
+        {
+          "key": "d",
+          "text": "Infección por hongos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el prurito sin explicar la distribución."
+        },
+        {
+          "key": "e",
+          "text": "Psoriasis inversa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No se relaciona con objetos."
+        },
+        {
+          "key": "f",
+          "text": "Alergia por contacto al níquel",
+          "correct": true,
+          "rationale": "Dermatitis por contacto alérgica en sitios de contacto con metales."
+        },
+        {
+          "key": "g",
+          "text": "Dermatitis atópica del adulto",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es eccematosa, pero no se limita a sitios de contacto con metal."
+        },
+        {
+          "key": "h",
+          "text": "Lupus cutáneo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable."
+        },
+        {
+          "key": "i",
+          "text": "Alergia a alimentos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que toda alergia cutánea es alimentaria."
+        },
+        {
+          "key": "j",
+          "text": "Sudoración excesiva",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a irritación, pero no explica el patrón."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "La dermatitis por contacto alérgica es una reacción de hipersensibilidad tipo IV, mediada por linfocitos T, que aparece en el sitio de contacto con un alérgeno al que la persona está sensibilizada, entre 24 y 72 horas después de la exposición. El níquel es el alérgeno más frecuente, presente en bisutería, hebillas, botones y relojes. Otros alérgenos comunes son fragancias, conservadores, cromo, látex y tintes. El diagnóstico se confirma con pruebas de parche. El tratamiento es evitar el alérgeno y usar corticosteroides tópicos. La dermatitis por contacto irritativa, en cambio, no requiere sensibilización.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la dermatitis por contacto"
+      ]
+    },
+    {
+      "key": "mi-12-dermatologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "dermatology",
+      "subtopic": "dermatitis",
+      "vignette": "Hombre de 40 años con escama amarillenta y grasosa sobre eritema en cuero cabelludo, cejas, surcos nasogenianos y región retroauricular, que empeora con el estrés y el frío.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dermatitis seborreica",
+          "correct": true,
+          "rationale": "Escama grasosa en zonas ricas en glándulas sebáceas."
+        },
+        {
+          "key": "b",
+          "text": "Dermatitis atópica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el eccema, con otra distribución."
+        },
+        {
+          "key": "c",
+          "text": "Acné",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la piel grasa."
+        },
+        {
+          "key": "d",
+          "text": "Rosácea",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da eritema facial central y pápulas, sin escama grasosa."
+        },
+        {
+          "key": "e",
+          "text": "Dermatitis por contacto al champú",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la distribución en cejas y surcos."
+        },
+        {
+          "key": "f",
+          "text": "Caspa simple sin inflamación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena benigno, pero hay eritema en varias zonas."
+        },
+        {
+          "key": "g",
+          "text": "Falta de higiene",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que es por suciedad."
+        },
+        {
+          "key": "h",
+          "text": "Psoriasis del cuero cabelludo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También da escama, pero plateada y de bordes bien definidos."
+        },
+        {
+          "key": "i",
+          "text": "Tiña de la cabeza",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es más frecuente en niños y causa alopecia."
+        },
+        {
+          "key": "j",
+          "text": "Lupus discoide",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Deja cicatrices y es menos frecuente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "h",
+        "i"
+      ],
+      "explanation": "La dermatitis seborreica es una enfermedad inflamatoria crónica y recurrente que afecta zonas ricas en glándulas sebáceas, como cuero cabelludo, cejas, surcos nasogenianos, región retroauricular, conducto auditivo y región preesternal. Se manifiesta con eritema y escama amarillenta grasosa. Se relaciona con la levadura Malassezia y empeora con estrés, frío y algunas enfermedades neurológicas como Parkinson. Una dermatitis seborreica extensa y grave puede ser una manifestación de VIH. El tratamiento incluye champús con ketoconazol, piritiona de zinc o sulfuro de selenio, antifúngicos tópicos y corticosteroides tópicos de baja potencia por periodos cortos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la dermatitis seborreica"
+      ]
+    },
+    {
+      "key": "mi-12-dermatologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "dermatology",
+      "subtopic": "dermatitis",
+      "vignette": "Niño de 4 años con dermatitis atópica que de forma súbita presenta vesículas agrupadas, umbilicadas y erosiones dolorosas sobre las placas de eccema en cara y cuello, con fiebre.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dermatitis por contacto con el emoliente",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a reacción, pero no explica las vesículas umbilicadas."
+        },
+        {
+          "key": "b",
+          "text": "Varicela",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da vesículas, pero diseminadas en todo el cuerpo y no sobre el eccema."
+        },
+        {
+          "key": "c",
+          "text": "Molusco contagioso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da pápulas umbilicadas, pero no erosiones dolorosas con fiebre."
+        },
+        {
+          "key": "d",
+          "text": "Escabiosis costrosa",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta las vesículas."
+        },
+        {
+          "key": "e",
+          "text": "Impétigo por Staphylococcus aureus",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También complica la dermatitis atópica, pero da costras melicéricas."
+        },
+        {
+          "key": "f",
+          "text": "Quemadura solar",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la cara."
+        },
+        {
+          "key": "g",
+          "text": "Penfigoide ampolloso",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es raro en niños."
+        },
+        {
+          "key": "h",
+          "text": "Reacción a una vacuna",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todo exantema agudo es por vacunas."
+        },
+        {
+          "key": "i",
+          "text": "Brote habitual de dermatitis atópica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la enfermedad de base e ignora las vesículas umbilicadas."
+        },
+        {
+          "key": "j",
+          "text": "Eccema herpético de Kaposi",
+          "correct": true,
+          "rationale": "Infección diseminada por virus del herpes simple sobre dermatitis atópica."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "El eccema herpético, o erupción variceliforme de Kaposi, es una infección cutánea diseminada por virus del herpes simple en pacientes con dermatitis atópica u otras dermatosis que alteran la barrera cutánea. Se presenta con vesículas umbilicadas agrupadas, pústulas y erosiones en sacabocado sobre las placas de eccema, con dolor, fiebre y malestar. Puede complicarse con sobreinfección bacteriana, afección ocular o diseminación sistémica. Es una urgencia dermatológica que requiere aciclovir oral o intravenoso de inmediato, sin esperar confirmación, y valoración oftalmológica si hay lesiones periorbitarias.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la dermatitis atópica"
+      ]
+    },
+    {
+      "key": "mi-12-dermatologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "dermatology",
+      "subtopic": "dermatitis",
+      "vignette": "Mujer de 30 años que tras iniciar alopurinol hace 3 semanas presenta fiebre, ampollas extensas con desprendimiento de piel en más de 35% de la superficie corporal, erosiones en boca y ojos. Signo de Nikolsky positivo.",
+      "prompt": "¿Cuál es la conducta a seguir?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Antibiótico por impétigo ampolloso",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No corresponde al cuadro."
+        },
+        {
+          "key": "b",
+          "text": "Dar antihistamínico y egresar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en una reacción alérgica leve."
+        },
+        {
+          "key": "c",
+          "text": "Corticosteroide tópico en las lesiones como manejo principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Insuficiente ante necrólisis extensa."
+        },
+        {
+          "key": "d",
+          "text": "Plasmaféresis como primera medida en todos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es la medida inicial."
+        },
+        {
+          "key": "e",
+          "text": "Suspender el fármaco y hospitalizar en una unidad de quemados o terapia intensiva",
+          "correct": true,
+          "rationale": "Necrólisis epidérmica tóxica."
+        },
+        {
+          "key": "f",
+          "text": "Manejo ambulatorio con curaciones diarias",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Ignora la gravedad."
+        },
+        {
+          "key": "g",
+          "text": "Aplicar remedios caseros en las ampollas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Aumenta el riesgo de infección."
+        },
+        {
+          "key": "h",
+          "text": "Continuar el alopurinol a menor dosis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a ajuste, pero el fármaco debe suspenderse."
+        },
+        {
+          "key": "i",
+          "text": "Observar 24 horas antes de decidir",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El retraso aumenta la mortalidad."
+        },
+        {
+          "key": "j",
+          "text": "Biopsia y esperar resultado antes de suspender el fármaco",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retrasa la medida más importante."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "El síndrome de Stevens Johnson y la necrólisis epidérmica tóxica son reacciones cutáneas graves, casi siempre causadas por fármacos, como alopurinol, anticonvulsivos aromáticos, sulfonamidas, lamotrigina y AINE, entre una y cuatro semanas después de iniciarlos. Se presentan con fiebre, lesiones en diana atípicas, ampollas, desprendimiento epidérmico con Nikolsky positivo y afección de mucosas. Se diferencian por la superficie desprendida, menos de 10% en Stevens Johnson y más de 30% en necrólisis. El tratamiento es suspender de inmediato el fármaco y manejar en unidad de quemados con líquidos, cuidado de heridas, nutrición, control del dolor y valoración oftalmológica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de Stevens Johnson y necrólisis epidérmica tóxica"
+      ]
+    },
+    {
+      "key": "mi-12-dermatologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "dermatology",
+      "subtopic": "skin_cancer",
+      "vignette": "Hombre de 68 años, agricultor, con una lesión en el ala nasal de 1 año de evolución. Es una pápula perlada con telangiectasias y una ulceración central con bordes enrollados. No ha crecido rápido.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Queratosis actínica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es premaligna y escamosa, sin aspecto perlado."
+        },
+        {
+          "key": "b",
+          "text": "Herpes simple recurrente",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la úlcera."
+        },
+        {
+          "key": "c",
+          "text": "Carcinoma epidermoide",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También aparece en piel fotoexpuesta, pero es más queratósico y crece más rápido."
+        },
+        {
+          "key": "d",
+          "text": "Verruga vulgar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena benigno, pero no tiene aspecto perlado."
+        },
+        {
+          "key": "e",
+          "text": "Lunar benigno",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que toda lesión de años es benigna."
+        },
+        {
+          "key": "f",
+          "text": "Acné rosácea",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta la úlcera crónica."
+        },
+        {
+          "key": "g",
+          "text": "Carcinoma de células de Merkel",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es raro."
+        },
+        {
+          "key": "h",
+          "text": "Melanoma nodular",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en una lesión tumoral, pero suele ser pigmentado y de crecimiento rápido."
+        },
+        {
+          "key": "i",
+          "text": "Queratoacantoma",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Crece rápido en semanas con cráter central."
+        },
+        {
+          "key": "j",
+          "text": "Carcinoma basocelular",
+          "correct": true,
+          "rationale": "Pápula perlada con telangiectasias y úlcera con bordes enrollados en zona fotoexpuesta."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "El carcinoma basocelular es el cáncer de piel más frecuente. Se relaciona con la exposición solar acumulada y predomina en cara, sobre todo nariz, en personas de piel clara y mayores. Clásicamente es una pápula o nódulo perlado con telangiectasias, que puede ulcerarse en el centro con bordes enrollados. Crece lentamente, es localmente invasivo y rara vez da metástasis. El diagnóstico se confirma con biopsia. El tratamiento de elección es la extirpación quirúrgica con márgenes, o la cirugía micrográfica de Mohs en zonas de alto riesgo o recurrentes. La fotoprotección es la principal medida preventiva.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del carcinoma basocelular"
+      ]
+    },
+    {
+      "key": "mi-12-dermatologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "dermatology",
+      "subtopic": "skin_cancer",
+      "vignette": "Mujer de 45 años con un lunar en la espalda que ha cambiado en los últimos meses. Mide 9 mm, es asimétrico, de bordes irregulares y con tonos café, negro y azul.",
+      "prompt": "¿Cuál es la interpretación correcta de esta lesión según la regla ABCDE?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dermatofibroma",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es firme y con signo del hoyuelo."
+        },
+        {
+          "key": "b",
+          "text": "Lesión sospechosa, pero se recomienda biopsia por rasurado superficial",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena práctico, pero impide medir el espesor."
+        },
+        {
+          "key": "c",
+          "text": "Queratosis seborreica sin importancia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es benigna, pero de aspecto verrugoso y pegado."
+        },
+        {
+          "key": "d",
+          "text": "Extirpar con láser sin estudio histológico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que basta eliminarlo."
+        },
+        {
+          "key": "e",
+          "text": "Benigno porque la mayoría de los lunares lo son",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Usa la frecuencia general ignorando los criterios."
+        },
+        {
+          "key": "f",
+          "text": "Nevo benigno por estar en la espalda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la localización."
+        },
+        {
+          "key": "g",
+          "text": "Lesión sospechosa de melanoma que requiere biopsia excisional",
+          "correct": true,
+          "rationale": "Asimetría, bordes irregulares, varios colores, diámetro mayor de 6 mm y evolución."
+        },
+        {
+          "key": "h",
+          "text": "Vigilar en un año sin biopsia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retrasa un posible diagnóstico de melanoma."
+        },
+        {
+          "key": "i",
+          "text": "Hemangioma",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta la evolución."
+        },
+        {
+          "key": "j",
+          "text": "Evitar la biopsia para no causar cicatriz",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pierde un diagnóstico temprano."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "f",
+        "g"
+      ],
+      "explanation": "La regla ABCDE ayuda a identificar lesiones pigmentadas sospechosas de melanoma, A de asimetría, B de bordes irregulares, C de color variado, D de diámetro mayor de 6 mm y E de evolución en tamaño, forma o color. La evolución es el criterio más importante. Una lesión sospechosa requiere biopsia excisional completa con márgenes de 1 a 3 mm, que permite medir el espesor de Breslow, el principal factor pronóstico. No se recomienda la biopsia por rasurado. En México el melanoma acral, en palmas, plantas y uñas, es frecuente y suele diagnosticarse tarde.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del melanoma maligno cutáneo"
+      ]
+    },
+    {
+      "key": "mi-12-dermatologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "dermatology",
+      "subtopic": "skin_cancer",
+      "vignette": "Hombre de 70 años con múltiples lesiones ásperas, eritematosas y escamosas en cara, dorso de manos y cuero cabelludo calvo. Trabajó muchos años al aire libre.",
+      "prompt": "¿Cuál es el factor de riesgo principal de estas lesiones y de su progresión?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Infección por virus del papiloma humano",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se asocia a otros carcinomas."
+        },
+        {
+          "key": "b",
+          "text": "Dermatitis atópica previa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es factor de estas lesiones."
+        },
+        {
+          "key": "c",
+          "text": "Tabaquismo como causa principal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en otro factor de menor peso para la piel."
+        },
+        {
+          "key": "d",
+          "text": "Exposición a arsénico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es un factor raro."
+        },
+        {
+          "key": "e",
+          "text": "Exposición crónica a la radiación ultravioleta, por queratosis actínicas que pueden progresar a carcinoma epidermoide",
+          "correct": true,
+          "rationale": "Son lesiones premalignas por daño solar."
+        },
+        {
+          "key": "f",
+          "text": "Herencia familiar como causa única",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la genética."
+        },
+        {
+          "key": "g",
+          "text": "Consumo de alcohol",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es factor."
+        },
+        {
+          "key": "h",
+          "text": "Uso de cremas faciales",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que los cosméticos las causan."
+        },
+        {
+          "key": "i",
+          "text": "Inmunosupresión por trasplante",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No aplica en este paciente."
+        },
+        {
+          "key": "j",
+          "text": "Sequedad de la piel por la edad",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a envejecimiento, pero la causa es el sol."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "e"
+      ],
+      "explanation": "Las queratosis actínicas son lesiones premalignas causadas por la exposición crónica a la radiación ultravioleta. Aparecen en zonas fotoexpuestas, como cara, cuero cabelludo calvo, orejas, antebrazos y dorso de manos, en personas mayores de piel clara y trabajadores al aire libre. Son pápulas o placas ásperas, eritematosas y escamosas. Un porcentaje progresa a carcinoma epidermoide invasor, sobre todo las lesiones múltiples, gruesas o en inmunosuprimidos. El tratamiento incluye crioterapia para lesiones aisladas y tratamientos de campo, como 5 fluorouracilo o imiquimod tópicos o terapia fotodinámica. La fotoprotección previene nuevas lesiones.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del carcinoma epidermoide cutáneo"
+      ]
+    },
+    {
+      "key": "mi-12-dermatologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "dermatology",
+      "subtopic": "skin_cancer",
+      "vignette": "Mujer de 52 años con melanoma de 3.2 mm de espesor de Breslow con ulceración en la pierna, recién extirpado. Sin adenopatías palpables.",
+      "prompt": "¿Cuál es el principal factor pronóstico de esta paciente y qué estudio sigue?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "El diámetro de la lesión y tomografía de cuerpo entero inmediata",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena exhaustivo, pero el diámetro no es el principal factor."
+        },
+        {
+          "key": "b",
+          "text": "El espesor de Breslow, pero no requiere estudio ganglionar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Calcula bien y omite la estadificación."
+        },
+        {
+          "key": "c",
+          "text": "El color de la lesión, y no se requieren más estudios",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el aspecto clínico."
+        },
+        {
+          "key": "d",
+          "text": "La localización en la pierna como factor favorable sin otros estudios",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Ignora el espesor y la ulceración."
+        },
+        {
+          "key": "e",
+          "text": "Evitar estudios para no preocupar a la paciente",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pierde información para el tratamiento."
+        },
+        {
+          "key": "f",
+          "text": "La exposición solar previa como factor pronóstico principal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el antecedente solar define el pronóstico."
+        },
+        {
+          "key": "g",
+          "text": "La edad, y radioterapia adyuvante de rutina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es el principal factor ni el siguiente paso."
+        },
+        {
+          "key": "h",
+          "text": "El nivel de Clark como único factor y vigilancia anual",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El Clark ya no es el principal."
+        },
+        {
+          "key": "i",
+          "text": "El espesor de Breslow, y se indica biopsia de ganglio centinela",
+          "correct": true,
+          "rationale": "Un melanoma mayor de 0.8 mm o con ulceración requiere estadificar los ganglios."
+        },
+        {
+          "key": "j",
+          "text": "Bajo riesgo porque no hay ganglios palpables",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La ausencia de ganglios palpables no descarta metástasis microscópicas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "En el melanoma cutáneo, el espesor de Breslow, que es la profundidad en milímetros desde la capa granulosa, es el factor pronóstico más importante del tumor primario, junto con la ulceración. Ambos determinan la categoría T y los márgenes de resección. La biopsia de ganglio centinela se recomienda en melanomas de más de 0.8 mm o con ulceración, porque el estado ganglionar es un factor pronóstico fundamental y define la terapia adyuvante. En enfermedad de alto riesgo se considera inmunoterapia adyuvante con inhibidores de puntos de control o terapia dirigida si hay mutación de BRAF.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del melanoma maligno cutáneo"
+      ]
+    },
+    {
+      "key": "mi-12-dermatologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "dermatology",
+      "subtopic": "psoriasis",
+      "vignette": "Hombre de 35 años con placas eritematosas bien delimitadas, cubiertas de escama plateada gruesa, en codos, rodillas y región sacra. Tiene uñas con pequeñas depresiones puntiformes. Al raspar la escama aparecen puntos de sangrado.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Eccema numular",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a placa, pero es eccematoso y exudativo."
+        },
+        {
+          "key": "b",
+          "text": "Onicomicosis",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en las uñas."
+        },
+        {
+          "key": "c",
+          "text": "Tiña corporal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en las placas, pero la tiña es anular con borde activo."
+        },
+        {
+          "key": "d",
+          "text": "Liquen plano",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da pápulas violáceas poligonales."
+        },
+        {
+          "key": "e",
+          "text": "Pitiriasis rubra pilaris",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara."
+        },
+        {
+          "key": "f",
+          "text": "Lupus cutáneo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta la escama plateada y las uñas."
+        },
+        {
+          "key": "g",
+          "text": "Psoriasis en placas",
+          "correct": true,
+          "rationale": "Placas con escama plateada en superficies extensoras, piqueteado ungueal y signo de Auspitz."
+        },
+        {
+          "key": "h",
+          "text": "Dermatitis seborreica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da escama grasosa en otras zonas."
+        },
+        {
+          "key": "i",
+          "text": "Dermatitis por estrés sin otra causa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el estrés explica todo."
+        },
+        {
+          "key": "j",
+          "text": "Dermatitis atópica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También forma placas, pero en flexuras y con eccema."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "h",
+        "j"
+      ],
+      "explanation": "La psoriasis es una enfermedad inflamatoria crónica, inmunomediada, que afecta la piel, las uñas y las articulaciones. La forma más frecuente es la psoriasis en placas, con placas eritematosas bien delimitadas cubiertas por escama plateada, en codos, rodillas, región lumbosacra y cuero cabelludo. El signo de Auspitz es el sangrado puntiforme al retirar la escama, y el fenómeno de Koebner es la aparición de lesiones en sitios de trauma. Las uñas muestran piqueteado, onicólisis y mancha en aceite. Se asocia a artritis psoriásica, síndrome metabólico y enfermedad cardiovascular. El diagnóstico es clínico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la psoriasis"
+      ]
+    },
+    {
+      "key": "mi-12-dermatologia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "dermatology",
+      "subtopic": "psoriasis",
+      "vignette": "Mujer de 40 años con psoriasis en placas leve que afecta 4% de la superficie corporal, en codos y rodillas, sin artritis.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dietas de eliminación como tratamiento principal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la dieta la cura."
+        },
+        {
+          "key": "b",
+          "text": "Metotrexato oral como primera línea en todos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es para formas moderadas a graves."
+        },
+        {
+          "key": "c",
+          "text": "Biológico anti TNF",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para psoriasis moderada a grave."
+        },
+        {
+          "key": "d",
+          "text": "Evitar los esteroides tópicos por miedo a efectos adversos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo es bajo con uso adecuado."
+        },
+        {
+          "key": "e",
+          "text": "Exposición solar intensa sin protección para curarla",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena natural, pero causa quemaduras y cáncer."
+        },
+        {
+          "key": "f",
+          "text": "Sin tratamiento por ser leve",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Deja síntomas y afecta la calidad de vida."
+        },
+        {
+          "key": "g",
+          "text": "Antifúngico tópico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es para tiñas."
+        },
+        {
+          "key": "h",
+          "text": "Corticosteroide tópico, solo o combinado con un análogo de vitamina D como calcipotriol",
+          "correct": true,
+          "rationale": "La psoriasis leve se trata con tópicos."
+        },
+        {
+          "key": "i",
+          "text": "Corticosteroide sistémico oral",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la inflamación, pero puede desencadenar psoriasis pustulosa al suspenderlo."
+        },
+        {
+          "key": "j",
+          "text": "Ciclosporina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es para casos graves."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "La psoriasis leve, que afecta menos de 10% de la superficie corporal sin afección de zonas especiales ni gran impacto en la calidad de vida, se trata con medicamentos tópicos. Los corticosteroides tópicos son la base, y su combinación con análogos de vitamina D, como calcipotriol, es muy eficaz y reduce los efectos adversos del esteroide. Otras opciones son los inhibidores de calcineurina en cara y pliegues, el ácido salicílico para la escama y los emolientes. La psoriasis moderada a grave se trata con fototerapia, metotrexato, ciclosporina, acitretina o biológicos. Los corticosteroides sistémicos se evitan.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la psoriasis"
+      ]
+    },
+    {
+      "key": "mi-12-dermatologia-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "dermatology",
+      "subtopic": "psoriasis",
+      "vignette": "Hombre de 42 años con psoriasis de 10 años. Refiere dolor e inflamación de las interfalángicas distales de varios dedos, un dedo en salchicha y dolor en el talón. Factor reumatoide negativo.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Artritis psoriásica",
+          "correct": true,
+          "rationale": "Afección de interfalángicas distales, dactilitis y entesitis en paciente con psoriasis."
+        },
+        {
+          "key": "b",
+          "text": "Osteoartritis de manos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en las distales, pero no explica la dactilitis ni la entesitis."
+        },
+        {
+          "key": "c",
+          "text": "Artritis reactiva",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Requiere infección previa."
+        },
+        {
+          "key": "d",
+          "text": "Lupus eritematoso",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta la psoriasis."
+        },
+        {
+          "key": "e",
+          "text": "Espondilitis anquilosante pura",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a espondiloartritis, pero predomina la columna."
+        },
+        {
+          "key": "f",
+          "text": "Gota",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede dar dactilitis, pero es más monoarticular."
+        },
+        {
+          "key": "g",
+          "text": "Fascitis plantar aislada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Explica el talón, no los dedos."
+        },
+        {
+          "key": "h",
+          "text": "Efecto de las cremas de esteroide",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el tratamiento causa artritis."
+        },
+        {
+          "key": "i",
+          "text": "Tendinitis por esfuerzo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el talón."
+        },
+        {
+          "key": "j",
+          "text": "Artritis reumatoide",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es poliartritis, pero respeta las interfalángicas distales y suele tener factor reumatoide."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "j"
+      ],
+      "explanation": "La artritis psoriásica es una espondiloartritis que afecta a una parte de los pacientes con psoriasis, generalmente años después de la enfermedad cutánea. Tiene varios patrones, como afección de interfalángicas distales, oligoartritis asimétrica, poliartritis simétrica, espondilitis y artritis mutilante. Son característicos la dactilitis, o dedo en salchicha, la entesitis, como dolor en el talón por afección del tendón de Aquiles o la fascia plantar, y la afección ungueal. El factor reumatoide suele ser negativo. Se diagnostica con los criterios CASPAR. El tratamiento incluye AINE, metotrexato y biológicos para prevenir el daño articular.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la psoriasis"
+      ]
+    },
+    {
+      "key": "mi-12-dermatologia-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "dermatology",
+      "subtopic": "psoriasis",
+      "vignette": "Mujer de 50 años con psoriasis en placas estable que tuvo un brote intenso y generalizado tras iniciar un medicamento para la hipertensión y otro para un trastorno del ánimo.",
+      "prompt": "¿Cuál es la combinación de fármacos que más probablemente desencadenó el brote?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Paracetamol e ibuprofeno",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No son desencadenantes habituales de psoriasis."
+        },
+        {
+          "key": "b",
+          "text": "Amlodipino y fluoxetina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No son desencadenantes típicos."
+        },
+        {
+          "key": "c",
+          "text": "Calcio y hierro",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No se relacionan."
+        },
+        {
+          "key": "d",
+          "text": "Hidroclorotiazida y clonazepam",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No son los desencadenantes clásicos."
+        },
+        {
+          "key": "e",
+          "text": "Losartán y sertralina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en fármacos comunes sin relación clara."
+        },
+        {
+          "key": "f",
+          "text": "Metformina y vitamina D",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena inocuo y no desencadena brotes."
+        },
+        {
+          "key": "g",
+          "text": "Atorvastatina y aspirina",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en fármacos cardiovasculares sin relación."
+        },
+        {
+          "key": "h",
+          "text": "Cualquier fármaco nuevo desencadena psoriasis por igual",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que todos tienen el mismo riesgo."
+        },
+        {
+          "key": "i",
+          "text": "Betabloqueador y litio",
+          "correct": true,
+          "rationale": "Ambos son desencadenantes conocidos de brotes de psoriasis."
+        },
+        {
+          "key": "j",
+          "text": "Omeprazol y loratadina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No se relacionan."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "i"
+      ],
+      "explanation": "La psoriasis puede desencadenarse o empeorar por diversos factores, como infecciones, sobre todo faringitis estreptocócica en la psoriasis en gotas, traumatismos por el fenómeno de Koebner, estrés, tabaquismo, alcohol, obesidad y fármacos. Los fármacos que más se asocian a brotes son los betabloqueadores, el litio, los antipalúdicos, los IECA, el interferón y la suspensión brusca de corticosteroides sistémicos, que puede provocar psoriasis pustulosa generalizada. Ante un brote se revisan los medicamentos recientes y se valora sustituirlos en conjunto con el médico tratante.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la psoriasis"
+      ]
+    }
+  ]
+}

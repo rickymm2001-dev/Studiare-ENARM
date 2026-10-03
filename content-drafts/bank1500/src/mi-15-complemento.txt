@@ -1,0 +1,175 @@
+@ mi|nephrology|electrolyte_disorders|3|diagnosis
+V: Mujer de 45 años que toma furosemida por edema. Refiere debilidad muscular, calambres y palpitaciones. Potasio de 2.6 mEq/L. El electrocardiograma muestra ondas U prominentes y aplanamiento de la onda T.
+P: ¿Cuál es el diagnóstico más probable?
++ Hipopotasemia por diurético de asa || Debilidad, calambres, ondas U y potasio bajo con furosemida.
+- representativeness_heuristic | Hiperpotasemia || También altera el electrocardiograma, pero con ondas T picudas.
+- anchoring | Hipocalcemia || Se ancla en los calambres, pero da QT prolongado y tetania.
+- availability_heuristic | Hipomagnesemia aislada || Puede coexistir, pero el potasio bajo explica el cuadro.
+- premature_closure | Miositis inflamatoria || Concluye una miopatía sin considerar el potasio.
+- base_rate_fallacy | Parálisis periódica familiar || Es rara y tiene episodios recurrentes.
+- framing_effect | Hipotiroidismo con miopatía || Suena muscular, pero no explica las ondas U.
+- inattentional_blindness | Isquemia miocárdica || No toma en cuenta el potasio.
+- focusing_illusion | Deshidratación simple || Se centra en el diurético.
+- belief_bias | Fatiga por la edad || Cree que la debilidad es normal.
+E: La hipopotasemia, con potasio menor de 3.5 mEq/L, se debe a pérdidas renales, como diuréticos de asa o tiazídicos e hiperaldosteronismo, pérdidas digestivas, como vómito y diarrea, o redistribución por insulina o agonistas beta. Se manifiesta con debilidad muscular, calambres, íleo, rabdomiólisis en casos graves y arritmias. El electrocardiograma muestra aplanamiento de la onda T, depresión del ST, ondas U prominentes y prolongación del QU. El tratamiento es la reposición de potasio, oral si es leve y sin síntomas, e intravenosa a velocidad controlada si es grave, corrigiendo también la hipomagnesemia, que impide la corrección.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos del potasio
+
+@ mi|nephrology|electrolyte_disorders|4|initial_treatment
+V: Hombre de 58 años con enfermedad renal crónica que acude con debilidad. Potasio de 7.2 mEq/L. El electrocardiograma muestra ondas T picudas, ensanchamiento del QRS y aplanamiento de la onda P.
+P: ¿Cuál es el tratamiento inicial más urgente?
++ Gluconato de calcio intravenoso para estabilizar la membrana miocárdica || Hiperpotasemia con cambios electrocardiográficos.
+- anchoring | Resina de intercambio oral como primera medida || Se ancla en eliminar potasio con efecto tardío.
+- availability_heuristic | Furosemida intravenosa sola || Ayuda a eliminar potasio, pero no protege el corazón de inmediato.
+- framing_effect | Restricción dietética de potasio || Suena preventivo, pero no trata la urgencia.
+- representativeness_heuristic | Bicarbonato como único tratamiento sin acidosis || Tiene efecto limitado.
+- premature_closure | Esperar un segundo potasio para confirmar || Retrasa una medida urgente con cambios en el electrocardiograma.
+- complexity_bias | Marcapasos transcutáneo como primer paso || No corrige la causa.
+- status_quo_bias | Continuar su manejo habitual || Ignora una urgencia.
+- belief_bias | Dar plátano para equilibrar el potasio || Aumenta el potasio.
+- omission_bias | Evitar el calcio por miedo a calcificaciones || El beneficio inmediato es mayor.
+E: La hiperpotasemia con cambios electrocardiográficos, como ondas T picudas, aplanamiento de la onda P, prolongación del PR y ensanchamiento del QRS, es una urgencia por riesgo de arritmias y paro. El tratamiento tiene tres pasos. Primero estabilizar la membrana con gluconato de calcio intravenoso, con efecto en minutos. Segundo redistribuir el potasio al interior de la célula con insulina rápida y glucosa, salbutamol nebulizado y bicarbonato si hay acidosis. Tercero eliminar el potasio con diuréticos de asa, quelantes intestinales o hemodiálisis en casos refractarios o con insuficiencia renal grave. Se suspenden los fármacos que lo elevan.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos del potasio
+
+@ mi|hematology|anemia_adult|3|data_interpretation
+V: Hombre de 62 años con artritis reumatoide activa. Hemoglobina de 10.2 g/dL, VCM de 84 fL, hierro sérico bajo, capacidad de fijación de hierro baja, saturación de transferrina de 14% y ferritina de 340 ng/mL.
+P: ¿Cuál es la interpretación correcta de estos resultados?
++ Anemia de la inflamación o enfermedad crónica || Hierro bajo con capacidad de fijación baja y ferritina elevada.
+- representativeness_heuristic | Anemia por deficiencia de hierro || También tiene hierro bajo, pero la capacidad de fijación estaría alta y la ferritina baja.
+- anchoring | Anemia sideroblástica || Se ancla en el hierro, pero la ferritina alta se explica por inflamación.
+- availability_heuristic | Talasemia menor || Daría microcitosis marcada con ferritina normal.
+- premature_closure | Anemia megaloblástica || El VCM es normal.
+- base_rate_fallacy | Hemocromatosis || Daría saturación de transferrina alta.
+- framing_effect | Anemia por pérdida aguda de sangre || Suena común, pero no explica el perfil de hierro.
+- inattentional_blindness | Anemia hemolítica || No hay datos de hemólisis.
+- focusing_illusion | Anemia por metotrexato como única causa || Se centra en el fármaco.
+- belief_bias | Anemia normal por la edad || Cree que es parte del envejecimiento.
+E: La anemia de la inflamación o de enfermedad crónica se presenta en infecciones crónicas, enfermedades autoinmunes, cáncer y enfermedad renal crónica. La hepcidina, inducida por citocinas inflamatorias como la interleucina 6, bloquea la absorción intestinal de hierro y su liberación desde los macrófagos. Suele ser normocítica o levemente microcítica, con hierro sérico bajo, capacidad total de fijación baja o normal, saturación de transferrina baja y ferritina normal o elevada, porque la ferritina es reactante de fase aguda. El tratamiento principal es controlar la enfermedad de base. Puede coexistir con deficiencia de hierro cuando la ferritina es menor de 100.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la anemia en el adulto
+
+@ mi|hematology|anticoagulation|3|treatment_of_choice
+V: Mujer de 32 años con petequias en piernas y gingivorragia leve. Plaquetas de 12,000 sin otras alteraciones en la biometría ni el frotis. Sin fármacos nuevos, VIH y hepatitis C negativos. Sin sangrado grave.
+P: ¿Cuál es el tratamiento de elección inicial?
++ Corticosteroide, como prednisona o dexametasona || Púrpura trombocitopénica inmune con plaquetas menores de 30,000 y sangrado.
+- availability_heuristic | Transfusión de plaquetas como tratamiento principal || Se destruyen rápido y se reserva para sangrado grave.
+- anchoring | Esplenectomía de inicio || Se ancla en el tratamiento definitivo, reservado para casos refractarios.
+- representativeness_heuristic | Heparina por riesgo de trombosis || Está contraindicada por el sangrado.
+- framing_effect | Observación sin tratamiento porque es autoinmune || Suena prudente, pero con plaquetas de 12,000 y sangrado se trata.
+- premature_closure | Rituximab como primera línea || Es segunda línea.
+- complexity_bias | Trasplante de médula ósea || No está indicado.
+- status_quo_bias | Ácido acetilsalicílico para mejorar la circulación || Aumenta el sangrado.
+- belief_bias | Hierro para subir las plaquetas || Cree que el hierro trata la trombocitopenia.
+- omission_bias | Evitar esteroides por sus efectos adversos || El beneficio a corto plazo supera el riesgo.
+E: La púrpura trombocitopénica inmune es una trombocitopenia aislada por destrucción inmunológica de las plaquetas, con frotis normal y sin otra causa, después de descartar fármacos, VIH, hepatitis C y otras enfermedades. Se trata cuando las plaquetas son menores de 20,000 a 30,000 o hay sangrado. La primera línea son los corticosteroides, como prednisona o pulsos de dexametasona, y la inmunoglobulina intravenosa se usa cuando se necesita una respuesta rápida, como en sangrado importante o antes de una cirugía. La segunda línea incluye agonistas del receptor de trombopoyetina, rituximab y esplenectomía.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la púrpura trombocitopénica inmune
+
+@ mi|neurology|stroke|2|treatment_of_choice
+V: Hombre de 66 años que tuvo un evento vascular cerebral isquémico aterotrombótico hace 2 semanas. Sin fibrilación auricular. Ya recibe estatina de alta intensidad.
+P: ¿Cuál es el tratamiento antitrombótico de elección a largo plazo para evitar un nuevo evento?
++ Antiagregación plaquetaria con ácido acetilsalicílico o clopidogrel || En el evento isquémico no cardioembólico se indica antiagregante.
+- anchoring | Warfarina con meta de INR de 2 a 3 || Se ancla en la anticoagulación, indicada en fibrilación auricular.
+- availability_heuristic | Doble antiagregación indefinida || Aumenta el sangrado y solo se usa por tiempo corto en casos seleccionados.
+- representativeness_heuristic | Rivaroxabán a dosis plena || Es para cardioembolismo.
+- framing_effect | Sin antitrombótico si ya está asintomático || Suena a recuperación, pero el riesgo de recurrencia persiste.
+- premature_closure | Heparina de bajo peso molecular de por vida || No es el tratamiento crónico.
+- complexity_bias | Antiagregante más anticoagulante combinados || Aumenta el sangrado sin indicación.
+- status_quo_bias | Solo control de la presión arterial || Omite la antiagregación.
+- belief_bias | Suplementos de omega 3 en lugar de antiagregante || Cree que los suplementos bastan.
+- omission_bias | Evitar antiagregantes por miedo a sangrado cerebral || El beneficio supera el riesgo.
+E: En la prevención secundaria del evento vascular cerebral isquémico no cardioembólico, se indica antiagregación plaquetaria a largo plazo con ácido acetilsalicílico, clopidogrel o la combinación de aspirina con dipiridamol de liberación prolongada. En eventos menores o ataques isquémicos de alto riesgo se usa doble antiagregación con aspirina y clopidogrel por 21 a 90 días y luego monoterapia. La anticoagulación se reserva para causas cardioembólicas, como la fibrilación auricular. Además se indica estatina de alta intensidad, control de la presión arterial, la glucosa, suspender el tabaco y tratar la estenosis carotídea significativa.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento temprano de la enfermedad vascular cerebral isquémica
+
+@ mi|neurology|headache|2|diagnosis
+V: Mujer de 38 años con cefalea bilateral, opresiva, como banda alrededor de la cabeza, de intensidad leve a moderada, que dura varias horas, sin náusea ni vómito y sin empeorar con la actividad. Empeora con el estrés laboral.
+P: ¿Cuál es el diagnóstico más probable?
++ Cefalea tensional || Cefalea bilateral opresiva leve a moderada sin síntomas asociados importantes.
+- representativeness_heuristic | Migraña sin aura || También es recurrente, pero es pulsátil, unilateral, con náusea y empeora con la actividad.
+- anchoring | Cefalea por abuso de analgésicos || Se ancla en una causa secundaria sin antecedente de consumo excesivo.
+- availability_heuristic | Sinusitis || Es un diagnóstico erróneo frecuente.
+- premature_closure | Tumor cerebral || Concluye una causa grave sin datos de alarma.
+- base_rate_fallacy | Hipertensión intracraneal idiopática || Da papiledema y cefalea matutina.
+- framing_effect | Cefalea en racimos || Suena a cefalea primaria, pero es orbitaria e intensa.
+- inattentional_blindness | Arteritis temporal || Ocurre en mayores de 50.
+- focusing_illusion | Trastorno de ansiedad como diagnóstico principal || Se centra en el estrés.
+- belief_bias | Problemas de la vista como causa única || Cree que la vista explica todo.
+E: La cefalea tensional es la cefalea primaria más frecuente. Se caracteriza por dolor bilateral, opresivo o como banda, de intensidad leve a moderada, que no empeora con la actividad física, sin náusea ni vómito, con a lo sumo fotofobia o fonofobia. Puede ser episódica o crónica. Se asocia a estrés, tensión muscular pericraneal, mala postura y falta de sueño. El diagnóstico es clínico. El tratamiento agudo es con paracetamol o AINE, evitando su uso excesivo para no causar cefalea por abuso de analgésicos. En la forma crónica la amitriptilina es el preventivo de elección, junto con manejo del estrés.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la cefalea en el primer nivel de atención
+
+@ mi|psychiatry|anxiety_disorders|3|diagnosis
+V: Hombre de 24 años que se lava las manos más de 50 veces al día por miedo a contaminarse, revisa la estufa una y otra vez antes de salir y sabe que es excesivo, pero no puede evitarlo. Le ocupa más de 2 horas diarias.
+P: ¿Cuál es el diagnóstico más probable?
++ Trastorno obsesivo compulsivo || Obsesiones de contaminación y compulsiones de lavado y revisión que consumen tiempo, con introspección conservada.
+- representativeness_heuristic | Trastorno de ansiedad generalizada || También da preocupación, pero sin compulsiones ritualizadas.
+- anchoring | Esquizofrenia || Se ancla en las ideas repetitivas, pero el paciente reconoce que son excesivas.
+- availability_heuristic | Trastorno de personalidad obsesivo compulsiva || Es perfeccionismo y rigidez sin obsesiones ni compulsiones egodistónicas.
+- premature_closure | Fobia específica a los gérmenes || No explica las revisiones.
+- base_rate_fallacy | Síndrome de Tourette || Da tics, no compulsiones de este tipo.
+- framing_effect | Hipocondría || Suena a preocupación por enfermedad, sin rituales.
+- inattentional_blindness | Trastorno de pánico || No toma en cuenta los rituales.
+- focusing_illusion | Dermatitis de manos || Se centra en las manos.
+- belief_bias | Higiene excesiva normal tras la pandemia || Cree que es una conducta normal.
+E: El trastorno obsesivo compulsivo se caracteriza por obsesiones, que son pensamientos, imágenes o impulsos intrusivos y no deseados que causan ansiedad, y compulsiones, que son conductas o actos mentales repetitivos que la persona se siente obligada a realizar para reducir esa ansiedad. Los temas frecuentes son contaminación, duda, simetría y pensamientos agresivos o sexuales. Consumen más de una hora al día o causan malestar o deterioro, y la mayoría de los pacientes reconoce que son excesivos. El tratamiento de primera línea es la terapia cognitivo conductual con exposición y prevención de respuesta e inhibidores selectivos de la recaptura de serotonina a dosis altas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto
+
+@ mi|psychiatry|depression|3|treatment_of_choice
+V: Mujer de 78 años con depresión mayor moderada. Tiene glaucoma de ángulo cerrado, estreñimiento crónico y bloqueo de rama en el electrocardiograma.
+P: ¿Cuál es el antidepresivo de elección en esta paciente?
++ Sertralina u otro inhibidor selectivo de la recaptura de serotonina a dosis inicial baja || Es más seguro en adultos mayores con estas comorbilidades.
+- availability_heuristic | Amitriptilina || Tiene efectos anticolinérgicos que empeoran glaucoma y estreñimiento, y alteran la conducción.
+- anchoring | Imipramina por ser eficaz || Se ancla en la eficacia, con los mismos riesgos de los tricíclicos.
+- representativeness_heuristic | Benzodiacepina como antidepresivo || No trata la depresión y aumenta caídas.
+- framing_effect | Dosis inicial alta para que actúe más rápido || Suena eficiente, pero aumenta efectos adversos en ancianos.
+- premature_closure | Sin tratamiento porque la depresión es normal en la vejez || La depresión no es parte normal del envejecimiento.
+- complexity_bias | Combinación de tres antidepresivos || Aumenta riesgos sin beneficio.
+- status_quo_bias | Solo vitaminas || Insuficiente.
+- belief_bias | Litio como primera línea || Cree que el litio es el antidepresivo inicial.
+- omission_bias | Evitar antidepresivos por miedo a la hiponatremia || El riesgo se vigila y no contraindica.
+E: La depresión en adultos mayores es frecuente y no es una consecuencia normal del envejecimiento. Puede presentarse con quejas somáticas, deterioro cognitivo y apatía. Los inhibidores selectivos de la recaptura de serotonina, como sertralina o escitalopram, son de primera línea por su mejor perfil de seguridad, iniciando con dosis bajas y aumentando gradualmente. Se vigila la hiponatremia, el riesgo de sangrado y la prolongación del QT con citalopram. Los antidepresivos tricíclicos se evitan por sus efectos anticolinérgicos, hipotensión ortostática, alteraciones de la conducción cardiaca y toxicidad en sobredosis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto mayor
+
+@ mi|endocrinology|thyroid_disease|3|next_step
+V: Mujer de 55 años asintomática con TSH de 7.2 mUI/L y T4 libre normal en dos mediciones con 3 meses de diferencia. Anticuerpos antiperoxidasa negativos. No está embarazada ni lo planea.
+P: ¿Cuál es la conducta a seguir?
++ Vigilar TSH y T4 libre periódicamente sin tratamiento por ahora || Hipotiroidismo subclínico con TSH menor de 10, asintomática y anticuerpos negativos.
+- anchoring | Iniciar levotiroxina a dosis plena de inmediato || Se ancla en la TSH elevada sin indicación clara.
+- availability_heuristic | Tiroidectomía || No está indicada.
+- framing_effect | Dar yodo para mejorar la tiroides || Suena útil, pero puede empeorar la función.
+- representativeness_heuristic | Iniciar liotironina || No está indicada.
+- premature_closure | Diagnosticar hipotiroidismo franco || La T4 libre es normal.
+- complexity_bias | Gammagrafía tiroidea || No es necesaria.
+- status_quo_bias | Dar de alta sin seguimiento || Puede progresar.
+- belief_bias | Suplementos de selenio como tratamiento obligatorio || Cree que el suplemento es necesario.
+- omission_bias | Evitar cualquier vigilancia por ser asintomática || Pierde la detección de progresión.
+E: El hipotiroidismo subclínico se define por TSH elevada con T4 libre normal, confirmado en una segunda medición después de dos a tres meses. El tratamiento con levotiroxina se recomienda cuando la TSH es de 10 mUI/L o más, en el embarazo o la búsqueda de embarazo, y puede considerarse con TSH entre el límite superior y 10 si hay síntomas, anticuerpos positivos, bocio o riesgo cardiovascular, sobre todo en menores de 65 a 70 años. En pacientes asintomáticos con TSH menor de 10 y anticuerpos negativos se vigila la función tiroidea cada 6 a 12 meses.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo primario en adultos
+
+@ mi|pulmonology|asthma_adult|3|treatment_of_choice
+V: Mujer de 28 años con asma persistente moderada controlada con budesonida y formoterol. Tiene 10 semanas de embarazo y pregunta si debe suspender sus inhaladores.
+P: ¿Cuál es el tratamiento de elección durante el embarazo?
++ Continuar el corticosteroide inhalado con formoterol, de preferencia budesonida || El asma no controlada es más riesgosa para el feto que los fármacos.
+- anchoring | Suspender todos los inhaladores durante el embarazo || Se ancla en el temor a los fármacos.
+- availability_heuristic | Cambiar a teofilina oral || Es menos eficaz y tiene más efectos adversos.
+- framing_effect | Usar solo salbutamol a demanda para reducir la exposición || Suena prudente, pero deja el asma sin control.
+- representativeness_heuristic | Corticosteroide oral diario como reemplazo seguro || Tiene más riesgos que el inhalado.
+- premature_closure | Montelukast como única opción segura || Es una opción, pero menos eficaz.
+- complexity_bias | Biológico de inicio en el embarazo || No es necesario.
+- status_quo_bias | Suspender y reiniciar después del parto || Expone a crisis.
+- belief_bias | Remedios naturales en lugar de inhaladores || Cree que son más seguros.
+- omission_bias | Evitar tratar las crisis por miedo al feto || La hipoxemia materna daña al feto.
+E: Durante el embarazo, el asma puede mejorar, empeorar o mantenerse igual. El asma mal controlada se asocia a preeclampsia, parto pretérmino, bajo peso al nacer y mortalidad perinatal, por lo que el control es la prioridad. Los corticosteroides inhalados, sobre todo la budesonida, tienen datos de seguridad favorables y deben continuarse. Los agonistas beta 2 de acción corta y larga también se consideran seguros. Las crisis se tratan igual que fuera del embarazo, incluidos corticosteroides sistémicos y oxígeno para mantener saturación de 95% o más. Suspender el tratamiento aumenta el riesgo de exacerbaciones.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del asma en el embarazo
+
+@ mi|infectious_diseases|hiv|3|prevention_screening
+V: Mujer de 26 años con 14 semanas de embarazo y prueba de VIH positiva confirmada. Carga viral de 25,000 copias por mL.
+P: ¿Cuál es la medida más eficaz para la prevención de la transmisión vertical?
++ Iniciar de inmediato tratamiento antirretroviral combinado para lograr carga viral indetectable antes del parto || Reduce la transmisión a menos de 1%.
+- anchoring | Esperar al tercer trimestre para iniciar antirretrovirales || Se ancla en criterios antiguos.
+- availability_heuristic | Cesárea como única medida sin antirretrovirales || Ayuda en carga viral detectable, pero no sustituye el tratamiento.
+- framing_effect | Zidovudina sola durante el parto || Suena a profilaxis clásica, pero es insuficiente.
+- representativeness_heuristic | Lactancia materna exclusiva para proteger al recién nacido || En México se recomienda fórmula para evitar transmisión.
+- premature_closure | Interrumpir el embarazo como única opción || No es necesario con tratamiento eficaz.
+- complexity_bias | Esquema de cinco antirretrovirales || Agrega toxicidad sin beneficio.
+- status_quo_bias | Vigilar carga viral cada trimestre sin tratamiento || Deja alto riesgo de transmisión.
+- belief_bias | Vitaminas prenatales como protección suficiente || Cree que bastan.
+- omission_bias | Evitar antirretrovirales por miedo a malformaciones || El beneficio supera ampliamente el riesgo.
+E: La transmisión vertical del VIH puede ocurrir durante el embarazo, el parto y la lactancia. La medida más eficaz para prevenirla es el tratamiento antirretroviral combinado de la madre, iniciado lo antes posible, con meta de carga viral indetectable al final del embarazo. Con esto la transmisión es menor de 1%. Además se realiza cesárea programada si la carga viral cercana al parto es mayor de 1,000 copias, se da zidovudina intravenosa intraparto en ese caso, profilaxis antirretroviral al recién nacido y alimentación con fórmula en lugar de lactancia materna. Por eso el tamizaje de VIH es universal en el control prenatal.
+R: Guía de Práctica Clínica de prevención de la transmisión perinatal del VIH ;; Norma Oficial Mexicana para la prevención y control de la infección por VIH

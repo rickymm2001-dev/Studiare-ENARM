@@ -1,0 +1,223 @@
+@ mi|geriatrics|geriatric_syndromes|2|diagnosis
+V: Mujer de 81 años que en el último año perdió 5 kg sin intención, refiere agotamiento, camina muy lento, tiene poca fuerza de prensión en la mano y casi no realiza actividad física.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome de fragilidad || Cumple los cinco criterios de Fried.
+- representativeness_heuristic | Sarcopenia aislada || Comparte la baja fuerza, pero no explica todos los criterios.
+- anchoring | Depresión mayor || Se ancla en el agotamiento, sin ánimo deprimido descrito.
+- availability_heuristic | Envejecimiento normal || Atribuye a la edad un síndrome clínico.
+- premature_closure | Cáncer oculto || Debe descartarse, pero el cuadro define fragilidad.
+- base_rate_fallacy | Hipertiroidismo apático || Es menos probable.
+- framing_effect | Desnutrición por mala dieta como único problema || Suena a causa, pero el síndrome es más amplio.
+- inattentional_blindness | Demencia || No hay alteración cognitiva descrita.
+- focusing_illusion | Insuficiencia cardiaca || Se centra en el agotamiento.
+- belief_bias | Pereza propia de la vejez || Cree que es falta de voluntad.
+E: La fragilidad es un síndrome geriátrico de disminución de la reserva fisiológica y de la resistencia al estrés, que aumenta el riesgo de caídas, discapacidad, hospitalización, institucionalización y muerte. El fenotipo de Fried la define con tres o más de cinco criterios, que son pérdida de peso no intencionada, agotamiento, debilidad medida por fuerza de prensión, velocidad de marcha lenta y baja actividad física. Con uno o dos criterios se considera prefragilidad. Es potencialmente reversible con ejercicio de resistencia y equilibrio, optimización nutricional con proteínas y vitamina D, revisión de fármacos y tratamiento de comorbilidades.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de fragilidad en el adulto mayor
+
+@ mi|geriatrics|geriatric_syndromes|3|next_step
+V: Hombre de 78 años que toma 11 medicamentos distintos indicados por varios especialistas, incluidos diazepam, amitriptilina y difenhidramina para dormir. Tiene mareo, estreñimiento y somnolencia diurna.
+P: ¿Cuál es el siguiente paso?
++ Revisión integral de la medicación con criterios como Beers o STOPP START y deprescribir fármacos inapropiados || Polifarmacia con medicamentos potencialmente inapropiados.
+- anchoring | Agregar un laxante y un estimulante para la somnolencia || Se ancla en tratar síntomas con más fármacos.
+- availability_heuristic | Suspender todos los medicamentos de golpe || Puede causar abstinencia y descompensación.
+- framing_effect | Mantener todos porque fueron indicados por especialistas || Suena respetuoso, pero perpetúa el daño.
+- representativeness_heuristic | Iniciar un antipsicótico para la somnolencia || Agrega otro fármaco inapropiado.
+- premature_closure | Solicitar resonancia de cráneo por el mareo || Busca otra causa sin revisar los fármacos.
+- complexity_bias | Hospitalizar para estudio completo || La causa probable es farmacológica.
+- status_quo_bias | Sin cambios y revisión en un año || Ignora riesgos actuales.
+- belief_bias | Agregar vitaminas para contrarrestar los efectos || Cree que las vitaminas corrigen los efectos adversos.
+- omission_bias | Evitar modificar fármacos para no molestar a los especialistas || Pierde una intervención segura.
+E: La polifarmacia, generalmente definida como el uso de cinco o más medicamentos, es frecuente en adultos mayores y se asocia a interacciones, efectos adversos, caídas, deterioro cognitivo, hospitalizaciones y mortalidad. Algunos fármacos son potencialmente inapropiados en esta población, como benzodiacepinas, antihistamínicos de primera generación, antidepresivos tricíclicos y otros con efecto anticolinérgico. Las herramientas como los criterios de Beers y STOPP START ayudan a identificar medicamentos a suspender o a iniciar. La deprescripción debe ser gradual, priorizada y consensuada con el paciente, sobre todo para benzodiacepinas.
+R: Guía de Práctica Clínica de prescripción farmacológica razonada para el adulto mayor
+
+@ mi|geriatrics|geriatric_syndromes|2|diagnosis
+V: Mujer de 79 años con pérdidas involuntarias de orina al toser, reír o levantar objetos. No tiene urgencia ni dificultad para orinar. Tuvo 4 partos vaginales.
+P: ¿Cuál es el tipo de incontinencia más probable?
++ Incontinencia urinaria de esfuerzo || Pérdida con aumento de presión abdominal por debilidad del piso pélvico.
+- representativeness_heuristic | Incontinencia de urgencia || Se presenta con deseo súbito e intenso de orinar.
+- anchoring | Incontinencia por rebosamiento || Se ancla en la edad, pero se asocia a obstrucción o vejiga hipoactiva.
+- availability_heuristic | Incontinencia funcional || Se debe a limitaciones físicas o cognitivas para llegar al baño.
+- premature_closure | Infección urinaria || Concluye sin síntomas urinarios irritativos.
+- base_rate_fallacy | Fístula vesicovaginal || Da pérdida continua y es rara.
+- framing_effect | Incontinencia mixta || Suena completa, pero no hay urgencia.
+- inattentional_blindness | Vejiga neurógena || No hay datos neurológicos.
+- focusing_illusion | Prolapso uterino como causa única || Se centra en la anatomía.
+- belief_bias | Parte normal del envejecimiento sin tratamiento || Cree que no tiene solución.
+E: La incontinencia urinaria es un síndrome geriátrico frecuente y subdiagnosticado. La incontinencia de esfuerzo consiste en pérdida de orina con maniobras que aumentan la presión abdominal, como toser, reír o levantar objetos, y se debe a debilidad del piso pélvico y del esfínter, relacionada con partos vaginales, menopausia y obesidad. La de urgencia se debe a hiperactividad del detrusor. La de rebosamiento se asocia a obstrucción o vejiga hipoactiva con residuo alto. El tratamiento inicial de la de esfuerzo son los ejercicios de Kegel, control de peso y, en casos refractarios, cirugía con cabestrillo suburetral.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la incontinencia urinaria en el adulto mayor
+
+@ mi|geriatrics|geriatric_syndromes|3|prevention_screening
+V: Hombre de 84 años hospitalizado por neumonía, en cama desde hace 5 días. Tiene desnutrición, incontinencia y poca movilidad. En el sacro aparece un área de eritema que no palidece a la presión, con piel íntegra.
+P: ¿Cuál es la medida de prevención más importante para evitar que progrese?
++ Cambios de posición frecuentes, superficie de redistribución de presión, manejo de la humedad y nutrición adecuada || Es una úlcera por presión grado 1.
+- availability_heuristic | Masaje vigoroso de la zona enrojecida || Daña más el tejido.
+- anchoring | Antibiótico tópico en el eritema || Se ancla en la infección sin indicación.
+- framing_effect | Mantener al paciente sentado todo el día para que no esté acostado || Suena a movilizar, pero concentra la presión en el sacro.
+- representativeness_heuristic | Desbridamiento quirúrgico || Es para úlceras con tejido necrótico.
+- premature_closure | Colocar flotador o dona bajo el sacro || Aumenta la presión alrededor.
+- complexity_bias | Injerto de piel || Es para úlceras profundas.
+- status_quo_bias | Continuar igual porque la piel está íntegra || Permite que progrese.
+- belief_bias | Aplicar alcohol para endurecer la piel || Reseca y daña la piel.
+- omission_bias | Evitar moverlo para no causarle dolor || Aumenta el riesgo.
+E: Las úlceras por presión se producen por presión sostenida sobre prominencias óseas, sobre todo en sacro y talones, en pacientes inmóviles, desnutridos e incontinentes. El grado 1 es eritema que no palidece con piel íntegra, el grado 2 pérdida parcial de la piel, el grado 3 pérdida total sin exposición de hueso y el grado 4 con exposición de hueso, tendón o músculo. El riesgo se valora con la escala de Braden. La prevención incluye cambios de posición cada dos horas, superficies de redistribución de presión, protección de talones, manejo de la humedad con limpieza y barreras, y nutrición con proteínas suficientes.
+R: Guía de Práctica Clínica de prevención y tratamiento de úlceras por presión
+
+@ mi|geriatrics|geriatric_syndromes|3|initial_study
+V: Mujer de 80 años cuya hija nota que en el último año olvida conversaciones recientes, repite preguntas, se pierde en lugares conocidos y ya no puede manejar su dinero. Es independiente para bañarse y vestirse.
+P: ¿Cuál es el estudio inicial más adecuado para evaluar su deterioro cognitivo?
++ Prueba de tamizaje cognitivo como MoCA o Minimental, más laboratorio para causas reversibles e imagen cerebral || Inicia el abordaje del probable síndrome demencial.
+- anchoring | Atribuirlo a la edad sin estudios || Se ancla en el envejecimiento normal.
+- availability_heuristic | Electroencefalograma como estudio principal || No es el estudio inicial del deterioro cognitivo.
+- representativeness_heuristic | Punción lumbar en todos los casos || Se reserva para casos atípicos o rápidamente progresivos.
+- framing_effect | Iniciar donepezilo sin evaluación || Suena a tratar pronto, pero omite causas reversibles.
+- premature_closure | Tomografía por emisión de positrones con amiloide en todos || Es especializada y no inicial.
+- complexity_bias | Estudio genético de apolipoproteína E || No se recomienda de rutina.
+- information_bias | Biopsia cerebral || Es invasiva e injustificada.
+- belief_bias | Suplementos de ginkgo como prueba terapéutica || Cree en un tratamiento sin evidencia.
+- base_rate_fallacy | Descartar demencia por su independencia en el baño || El deterioro en actividades instrumentales ya es significativo.
+E: El deterioro cognitivo con afección de las actividades instrumentales de la vida diaria, como manejar dinero o medicamentos, sugiere un síndrome demencial. La evaluación inicial incluye historia clínica con un informante, pruebas de tamizaje como MoCA o Minimental, evaluación funcional y búsqueda de causas reversibles con biometría hemática, glucosa, electrolitos, calcio, función renal y hepática, TSH, vitamina B12 y, según el contexto, serología de sífilis y VIH. Se recomienda una neuroimagen, tomografía o resonancia, para descartar lesiones estructurales. También se descarta depresión y delirium. La causa más frecuente es la enfermedad de Alzheimer.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la demencia tipo Alzheimer
+
+@ mi|geriatrics|geriatric_syndromes|3|treatment_of_choice
+V: Hombre de 77 años con demencia tipo Alzheimer leve a moderada confirmada. Sin bradicardia ni trastornos de conducción en el electrocardiograma.
+P: ¿Cuál es el tratamiento farmacológico de elección para los síntomas cognitivos?
++ Un inhibidor de la acetilcolinesterasa, como donepezilo, rivastigmina o galantamina || Mejoran discretamente la cognición y la funcionalidad.
+- availability_heuristic | Benzodiacepina para mejorar el sueño y la memoria || Empeora la cognición y aumenta caídas.
+- anchoring | Antipsicótico atípico como tratamiento cognitivo || Se ancla en los síntomas conductuales con riesgo aumentado de muerte.
+- representativeness_heuristic | Vitamina E en dosis altas como tratamiento principal || Su beneficio es incierto.
+- framing_effect | Memantina sola como primera opción en demencia leve || Suena a tratamiento de demencia, pero se usa en moderada a grave.
+- premature_closure | Antidepresivo tricíclico || Tiene efecto anticolinérgico que empeora la cognición.
+- complexity_bias | Combinación de cinco fármacos nootrópicos || Sin evidencia.
+- status_quo_bias | Sin tratamiento farmacológico por ser incurable || Pierde un beneficio sintomático.
+- belief_bias | Ginkgo biloba como tratamiento de elección || Cree en un suplemento sin eficacia demostrada.
+- omission_bias | Evitar fármacos por miedo a efectos digestivos || Son manejables con titulación.
+E: El tratamiento de la enfermedad de Alzheimer combina intervenciones no farmacológicas, como estimulación cognitiva, actividad física, apoyo al cuidador y adaptación del entorno, con fármacos que mejoran discretamente los síntomas. Los inhibidores de la acetilcolinesterasa, donepezilo, rivastigmina y galantamina, están indicados en demencia leve a moderada. Sus efectos adversos incluyen náusea, diarrea, bradicardia y síncope, por lo que se valora el electrocardiograma. La memantina, un antagonista del receptor NMDA, se indica en demencia moderada a grave, sola o combinada. Se deben evitar fármacos anticolinérgicos y sedantes.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la demencia tipo Alzheimer
+
+@ mi|geriatrics|delirium|2|diagnosis
+V: Mujer de 85 años hospitalizada por fractura de cadera. Al segundo día de la cirugía presenta de forma aguda desorientación, inatención, habla incoherente y somnolencia que alterna con agitación en la noche. Antes era independiente y sin problemas de memoria.
+P: ¿Cuál es el diagnóstico más probable?
++ Delirium || Alteración aguda y fluctuante de la atención y la conciencia.
+- representativeness_heuristic | Demencia de inicio reciente || También altera la cognición, pero es de inicio insidioso y sin fluctuación.
+- anchoring | Psicosis aguda || Se ancla en la agitación y el habla incoherente.
+- availability_heuristic | Depresión posoperatoria || Da apatía, pero no alteración aguda de la atención.
+- premature_closure | Evento vascular cerebral || Debe descartarse si hay déficit focal, pero el cuadro es de delirium.
+- base_rate_fallacy | Encefalitis herpética || Es poco probable.
+- framing_effect | Reacción normal a la anestesia que no requiere evaluación || Suena benigno, pero requiere buscar causas.
+- inattentional_blindness | Trastorno de ansiedad || No toma en cuenta la inatención y la fluctuación.
+- focusing_illusion | Insomnio por el hospital || Se centra en el sueño.
+- belief_bias | Simple confusión de la vejez || Cree que es normal en ancianos.
+E: El delirium es un síndrome agudo y fluctuante de alteración de la atención, la conciencia y la cognición, causado por una condición médica, fármacos o abstinencia. Es muy frecuente en adultos mayores hospitalizados, sobre todo tras cirugía de cadera. Puede ser hiperactivo, hipoactivo, el más subdiagnosticado, o mixto. Se identifica con herramientas como CAM, que requiere inicio agudo y curso fluctuante, inatención, y pensamiento desorganizado o alteración del nivel de conciencia. Se asocia a mayor mortalidad, estancia y deterioro funcional. Siempre se buscan causas como infección, dolor, retención urinaria, fármacos, alteraciones metabólicas e hipoxemia.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del delirium en el adulto mayor hospitalizado
+
+@ mi|geriatrics|delirium|3|initial_treatment
+V: Hombre de 82 años con delirium hiperactivo por infección urinaria. Está inquieto e intenta levantarse, pero no se ha lesionado ni pone en riesgo a otros.
+P: ¿Cuál es el tratamiento inicial?
++ Tratar la infección y aplicar medidas no farmacológicas, como reorientación, presencia familiar, lentes y auxiliares auditivos, movilización y sueño ordenado || El manejo inicial es la causa y las medidas no farmacológicas.
+- anchoring | Sujeción mecánica para evitar caídas || Se ancla en la seguridad, pero aumenta la agitación y lesiones.
+- availability_heuristic | Benzodiacepina para tranquilizarlo || Empeora el delirium, salvo abstinencia alcohólica.
+- framing_effect | Haloperidol de rutina a dosis altas || Suena eficaz, pero se reserva para agitación grave con riesgo.
+- representativeness_heuristic | Sonda vesical permanente para evitar que se moje || Aumenta infecciones y agitación.
+- premature_closure | Tomografía de cráneo urgente en todos || Se indica si hay déficit focal o trauma.
+- complexity_bias | Sedación profunda en terapia intensiva || Medida excesiva.
+- status_quo_bias | Mantener la luz encendida toda la noche para vigilarlo || Altera el ciclo de sueño.
+- belief_bias | Aislarlo en un cuarto sin visitas para que descanse || Empeora la desorientación.
+- omission_bias | Esperar a que se le pase solo sin tratar la infección || Deja la causa sin tratar.
+E: El tratamiento del delirium se basa en identificar y corregir la causa desencadenante, como infecciones, dolor, retención urinaria, estreñimiento, fármacos, deshidratación o alteraciones metabólicas, y en medidas no farmacológicas. Estas incluyen reorientación frecuente, presencia de familiares, uso de lentes y auxiliares auditivos, movilización temprana, hidratación, higiene del sueño con luz natural de día y oscuridad de noche, y evitar sujeciones y sondas innecesarias. Los antipsicóticos como haloperidol a dosis bajas se reservan para agitación grave con riesgo para el paciente u otros. Las benzodiacepinas se evitan salvo en abstinencia alcohólica.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del delirium en el adulto mayor hospitalizado
+
+@ mi|geriatrics|delirium|3|risk_factor
+V: Mujer de 88 años con demencia leve, déficit visual y auditivo, que será hospitalizada para una cirugía. Toma oxibutinina y difenhidramina.
+P: ¿Cuál es el factor de riesgo predisponente más importante de delirium en esta paciente?
++ La demencia previa || El deterioro cognitivo previo es el principal factor predisponente.
+- availability_heuristic | El sexo femenino || No es un factor determinante.
+- anchoring | La cirugía como único factor || Se ancla en el desencadenante, que es precipitante, no predisponente.
+- representativeness_heuristic | La hipertensión arterial || No es un factor importante.
+- framing_effect | El horario de la cirugía || Suena logístico, sin relevancia.
+- premature_closure | La dieta del hospital || No es un factor principal.
+- base_rate_fallacy | El tipo de anestesia como único factor || Tiene un papel menor.
+- inattentional_blindness | La estatura || No se relaciona.
+- focusing_illusion | El color de la habitación || Se centra en un detalle irrelevante.
+- belief_bias | La personalidad de la paciente || Cree que el carácter predispone.
+E: El delirium resulta de la interacción entre factores predisponentes, que aumentan la vulnerabilidad, y factores precipitantes, que lo desencadenan. Entre los predisponentes, el deterioro cognitivo o la demencia previa es el más importante, seguido de la edad avanzada, el déficit visual y auditivo, la fragilidad, la dependencia funcional, la comorbilidad y el antecedente de delirium. Entre los precipitantes están la cirugía, las infecciones, los fármacos anticolinérgicos y sedantes, el dolor, la deshidratación, las sondas y la privación de sueño. La prevención multicomponente, como el programa HELP, reduce su incidencia en pacientes de riesgo.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del delirium en el adulto mayor hospitalizado
+
+@ mi|geriatrics|delirium|3|data_interpretation
+V: Hombre de 80 años hospitalizado. La enfermera lo describe somnoliento, poco reactivo y con respuestas lentas desde ayer. Antes conversaba con normalidad. Al pedirle que diga los meses del año al revés se detiene y se distrae.
+P: ¿Cuál es la interpretación correcta de este cuadro?
++ Delirium hipoactivo || Alteración aguda con inatención y disminución del nivel de alerta.
+- anchoring | Depresión || Se ancla en la apatía, sin el inicio agudo y la inatención.
+- availability_heuristic | Cansancio normal por la hospitalización || Atribuye a la estancia un cuadro clínico.
+- representativeness_heuristic | Demencia avanzada || Es crónica y sin cambio agudo.
+- framing_effect | Paciente tranquilo y cooperador sin problema || Suena favorable, pero es un delirium subdiagnosticado.
+- premature_closure | Sedación por fármacos sin importancia clínica || Puede ser causa, pero requiere evaluación.
+- base_rate_fallacy | Catatonia || Es menos frecuente.
+- inattentional_blindness | Hipoacusia || No toma en cuenta la inatención.
+- focusing_illusion | Insomnio nocturno compensatorio || Se centra en el sueño.
+- belief_bias | Simple vejez || Cree que es parte de la edad.
+E: El delirium hipoactivo se caracteriza por somnolencia, disminución de la actividad motora, lentitud, apatía y escasa interacción, junto con inatención y alteración aguda del estado mental. Es el subtipo más frecuente en adultos mayores y el que con más frecuencia pasa desapercibido, porque el paciente parece tranquilo, y tiene peor pronóstico que el hiperactivo. La inatención se evalúa con tareas como recitar los meses del año al revés. Se confirma con herramientas como CAM. Requiere el mismo abordaje que cualquier delirium, con búsqueda activa de la causa, como infección, hipoxemia, fármacos o alteraciones metabólicas.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del delirium en el adulto mayor hospitalizado
+
+@ mi|geriatrics|falls|2|risk_factor
+V: Mujer de 79 años que se ha caído dos veces en los últimos 6 meses. Toma lorazepam para dormir, tiene cataratas, usa tapetes sueltos en casa y camina con dificultad.
+P: ¿Cuál es el factor de riesgo modificable más importante relacionado con fármacos?
++ El uso de benzodiacepinas || Aumentan el riesgo de caídas por sedación y alteración del equilibrio.
+- availability_heuristic | Su edad avanzada || Es un factor de riesgo, pero no modificable.
+- anchoring | El sexo femenino || No es modificable ni farmacológico.
+- representativeness_heuristic | El uso de estatinas || No es un factor importante de caídas.
+- framing_effect | Que vive sola || Suena relevante, pero no es farmacológico.
+- premature_closure | Las cataratas como único factor || Son un factor ambiental y visual, no farmacológico.
+- base_rate_fallacy | La hipertensión controlada || Su papel es menor.
+- inattentional_blindness | Los tapetes sueltos como factor farmacológico || Confunde un factor ambiental con uno farmacológico.
+- focusing_illusion | El calzado || Se centra en otro factor.
+- belief_bias | La falta de calcio en la dieta || Cree que la dieta causa caídas.
+E: Las caídas en adultos mayores son multifactoriales y se asocian a fracturas, miedo a caer, pérdida de independencia y muerte. Los factores de riesgo incluyen caídas previas, alteración de la marcha y el equilibrio, debilidad muscular, déficit visual, deterioro cognitivo, hipotensión ortostática, incontinencia, peligros en el hogar y fármacos. Entre los fármacos, las benzodiacepinas, los hipnóticos, los antidepresivos, los antipsicóticos, los antihipertensivos y los opioides aumentan el riesgo. La intervención multifactorial incluye ejercicio de fuerza y equilibrio, retirar fármacos de riesgo, corregir la visión, adaptar el hogar y tratar la hipotensión ortostática.
+R: Guía de Práctica Clínica de prevención de caídas en el adulto mayor
+
+@ mi|geriatrics|falls|3|initial_study
+V: Hombre de 82 años con dos caídas en 3 meses. Refiere mareo al levantarse de la cama. Toma tamsulosina y enalapril.
+P: ¿Cuál es el estudio inicial más útil para evaluar la causa de sus caídas?
++ Medir la presión arterial acostado y de pie para buscar hipotensión ortostática, junto con evaluar marcha y equilibrio || El mareo postural y sus fármacos sugieren hipotensión ortostática.
+- anchoring | Resonancia magnética de cráneo como primer estudio || Se ancla en el mareo con un estudio no inicial.
+- availability_heuristic | Electroencefalograma || No es útil en este contexto.
+- representativeness_heuristic | Densitometría ósea como estudio de la causa || Evalúa el riesgo de fractura, no la causa de la caída.
+- framing_effect | Holter de 7 días en todos los casos || Suena exhaustivo, pero no es el primer paso.
+- premature_closure | Atribuirlas a la edad sin estudio || Pierde una causa tratable.
+- complexity_bias | Estudio de conducción nerviosa || No es inicial.
+- information_bias | Tomografía de columna completa || No aporta a la causa.
+- belief_bias | Audiometría como estudio definitivo || Cree que el oído explica todo.
+- base_rate_fallacy | Descartar hipotensión por tener hipertensión || La hipertensión no excluye la hipotensión ortostática.
+E: Ante un adulto mayor con caídas recurrentes se realiza una evaluación multifactorial. Incluye la historia de la caída, revisión de fármacos, medición de la presión arterial acostado y de pie, evaluación de la marcha y el equilibrio con pruebas como levántate y anda cronometrada, fuerza, visión, cognición, pies y calzado y el entorno del hogar. La hipotensión ortostática se define por una caída de la presión sistólica de 20 mmHg o más o de la diastólica de 10 mmHg o más al ponerse de pie, y se asocia a alfabloqueadores como tamsulosina, antihipertensivos, diuréticos y deshidratación.
+R: Guía de Práctica Clínica de prevención de caídas en el adulto mayor
+
+@ mi|geriatrics|falls|3|prevention_screening
+V: Mujer de 76 años con antecedente de una caída sin fractura. Vive sola y es independiente. Densitometría con osteoporosis.
+P: ¿Cuál es la intervención con mayor evidencia para la prevención de nuevas caídas?
++ Programa de ejercicio de fuerza y equilibrio, como tai chi o fisioterapia, junto con revisión del hogar y fármacos || El ejercicio de equilibrio es la intervención más eficaz.
+- availability_heuristic | Suplementos de vitamina D en dosis altas como única medida || No reducen caídas en personas sin deficiencia.
+- anchoring | Reposo para evitar riesgos || Se ancla en evitar la actividad, lo que aumenta la debilidad.
+- framing_effect | Usar andadera siempre aunque camine bien || Suena seguro, pero no es necesario en todos.
+- representativeness_heuristic | Bifosfonato como medida para no caerse || Previene fracturas, no caídas.
+- premature_closure | Contratar a un cuidador las 24 horas como única medida || No mejora la fuerza ni el equilibrio.
+- complexity_bias | Cirugía de cadera profiláctica || Medida inexistente.
+- status_quo_bias | No hacer nada porque solo fue una caída || Una caída previa es el principal predictor de otra.
+- belief_bias | Calzado de tacón para mejorar la postura || Aumenta el riesgo.
+- omission_bias | Evitar el ejercicio por miedo a caer durante él || Pierde el beneficio principal.
+E: La prevención de caídas en adultos mayores se basa en intervenciones individualizadas y multifactoriales. El ejercicio que incluye entrenamiento de equilibrio y fuerza, como programas de fisioterapia o tai chi, es la intervención con mayor evidencia para reducir el número de caídas. Se complementa con revisión y deprescripción de fármacos de riesgo, corrección de la visión, como la cirugía de cataratas, adaptación del hogar con iluminación, barras y retiro de tapetes, calzado adecuado y manejo de la hipotensión ortostática. En pacientes con osteoporosis se trata además el hueso para reducir el riesgo de fractura si se cae.
+R: Guía de Práctica Clínica de prevención de caídas en el adulto mayor
+
+@ mi|geriatrics|falls|4|complication_prognosis
+V: Hombre de 84 años que toma warfarina. Hace 3 semanas se cayó y se golpeó la cabeza. Ahora presenta cefalea, somnolencia progresiva, confusión y leve debilidad del lado izquierdo.
+P: ¿Cuál es la complicación más probable?
++ Hematoma subdural crónico || Deterioro neurológico semanas después de un trauma leve en anciano anticoagulado.
+- representativeness_heuristic | Hematoma epidural || También es traumático, pero agudo con intervalo lúcido de horas.
+- anchoring | Evento vascular cerebral isquémico || Se ancla en la debilidad sin considerar el antecedente de caída.
+- availability_heuristic | Demencia de rápida progresión || No explica la relación con el trauma.
+- premature_closure | Delirium por infección || Concluye sin buscar lesión estructural.
+- base_rate_fallacy | Tumor cerebral primario || Es menos probable con el antecedente.
+- framing_effect | Conmoción cerebral simple || Suena benigno, pero los síntomas progresan semanas después.
+- inattentional_blindness | Hipoglucemia || No toma en cuenta la anticoagulación y el trauma.
+- focusing_illusion | Migraña tardía || Se centra en la cefalea.
+- belief_bias | Efecto de la edad || Cree que el deterioro es normal.
+E: El hematoma subdural crónico es frecuente en adultos mayores, sobre todo con atrofia cerebral, consumo de alcohol y uso de anticoagulantes o antiagregantes. Se produce por ruptura de venas puente tras un traumatismo craneal, a veces leve o no recordado. Los síntomas aparecen días a semanas después, con cefalea, deterioro cognitivo, alteración del estado de alerta, cambios de conducta, hemiparesia o caídas, y puede confundirse con demencia o delirium. La tomografía muestra una colección en forma de semiluna, hipodensa o isodensa. El tratamiento incluye revertir la anticoagulación y drenaje quirúrgico si hay síntomas o efecto de masa.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del traumatismo craneoencefálico en el adulto mayor

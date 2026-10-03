@@ -1,0 +1,191 @@
+@ mi|allergy_immunology|anaphylaxis|2|diagnosis
+V: Hombre de 30 años que 10 minutos después de comer camarones presenta urticaria generalizada, edema de labios, disnea con sibilancias, mareo y presión arterial de 80/50 mmHg.
+P: ¿Cuál es el diagnóstico más probable?
++ Anafilaxia || Reacción sistémica aguda con afección cutánea, respiratoria y cardiovascular tras un alérgeno.
+- representativeness_heuristic | Urticaria aguda aislada || También da ronchas, pero sin afección respiratoria ni hipotensión.
+- anchoring | Crisis asmática || Se ancla en las sibilancias, sin explicar la urticaria ni la hipotensión.
+- availability_heuristic | Angioedema hereditario || Da edema, pero sin urticaria ni relación con alimentos.
+- premature_closure | Intoxicación alimentaria || Concluye una causa digestiva sin explicar el cuadro.
+- base_rate_fallacy | Mastocitosis sistémica || Es rara.
+- framing_effect | Reacción vasovagal || Suena a hipotensión, pero no da urticaria ni broncoespasmo.
+- inattentional_blindness | Crisis de ansiedad || No toma en cuenta los signos objetivos.
+- focusing_illusion | Escombroidosis por pescado || Se centra en el alimento, pero el cuadro es de anafilaxia.
+- belief_bias | Intolerancia a mariscos sin riesgo || Cree que es solo una molestia.
+E: La anafilaxia es una reacción de hipersensibilidad sistémica grave, de inicio rápido y potencialmente mortal. Se diagnostica cuando aparece de forma aguda afección de piel o mucosas, como urticaria o angioedema, con compromiso respiratorio o hipotensión, o cuando tras la exposición a un alérgeno probable aparecen dos o más sistemas afectados, o hipotensión tras un alérgeno conocido. Los desencadenantes más comunes son alimentos, como mariscos y cacahuates, fármacos, como betalactámicos y AINE, y picaduras de himenópteros. No toda anafilaxia tiene manifestaciones cutáneas. El tratamiento de primera línea es la adrenalina intramuscular.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la anafilaxia
+
+@ mi|allergy_immunology|anaphylaxis|2|initial_treatment
+V: Mujer de 25 años con anafilaxia por picadura de abeja. Tiene urticaria, estridor y presión arterial de 82/48 mmHg.
+P: ¿Cuál es el tratamiento inicial de elección?
++ Adrenalina intramuscular en la cara anterolateral del muslo, 0.01 mg/kg hasta 0.5 mg, repetible cada 5 a 15 minutos || Es el fármaco de primera línea en anafilaxia.
+- availability_heuristic | Antihistamínico intravenoso como primera medida || Alivia la urticaria, pero no revierte la hipotensión ni la obstrucción.
+- anchoring | Corticosteroide intravenoso como tratamiento principal || Se ancla en la inflamación, con efecto tardío.
+- framing_effect | Adrenalina subcutánea por ser más segura || Suena segura, pero se absorbe peor.
+- representativeness_heuristic | Salbutamol nebulizado como única medida || Trata el broncoespasmo, pero no la hipotensión.
+- premature_closure | Adrenalina intravenosa en bolo sin monitoreo || Tiene riesgo de arritmias y se reserva para paro o refractarios.
+- complexity_bias | Intubación inmediata antes de la adrenalina || La adrenalina puede revertir la obstrucción.
+- status_quo_bias | Observar en urgencias sin fármacos || Retrasa el tratamiento que salva la vida.
+- belief_bias | Aplicar hielo en la picadura como tratamiento principal || Cree que el manejo local basta.
+- omission_bias | Evitar la adrenalina por miedo a taquicardia en una joven || Pierde el tratamiento de elección.
+E: La adrenalina intramuscular es el tratamiento de primera línea de la anafilaxia y debe administrarse de inmediato. La dosis es de 0.01 mg/kg de la solución 1 mg/mL, máximo 0.5 mg en adultos y 0.3 mg en niños, en la cara anterolateral del muslo, y puede repetirse cada 5 a 15 minutos. Revierte la vasodilatación, el edema de la vía aérea y el broncoespasmo. Se acompaña de posición supina con piernas elevadas, oxígeno, líquidos intravenosos en hipotensión y broncodilatadores. Los antihistamínicos y corticosteroides son tratamientos de segunda línea. El retraso de la adrenalina se asocia a mayor mortalidad.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la anafilaxia
+
+@ mi|allergy_immunology|anaphylaxis|3|complication_prognosis
+V: Hombre de 40 años tratado por anafilaxia con adrenalina, con resolución completa en 1 hora. Se le dio de alta de inmediato. Seis horas después reaparecen urticaria, disnea e hipotensión sin nueva exposición.
+P: ¿Cuál es la complicación que presentó?
++ Anafilaxia bifásica || Recurrencia de síntomas horas después sin nueva exposición.
+- anchoring | Nueva exposición inadvertida al alérgeno || Se ancla en una nueva exposición que no ocurrió.
+- availability_heuristic | Reacción adversa a la adrenalina || No explica la urticaria ni la hipotensión.
+- representativeness_heuristic | Anafilaxia prolongada || Es persistente sin resolución, no recurrente.
+- premature_closure | Crisis de ansiedad posterior || Concluye un origen emocional.
+- base_rate_fallacy | Mastocitosis || Es rara.
+- framing_effect | Urticaria crónica espontánea || Suena a urticaria, pero es aguda y sistémica.
+- inattentional_blindness | Sepsis || No hay datos de infección.
+- focusing_illusion | Asma descontrolada || Se centra en la disnea.
+- belief_bias | Efecto de rebote del antihistamínico || Cree que la recaída es por el fármaco.
+E: La anafilaxia bifásica es la recurrencia de los síntomas tras su resolución, sin nueva exposición al desencadenante, generalmente entre 1 y 72 horas después, con mayor frecuencia en las primeras 12 horas. Es más probable en anafilaxias graves, que requirieron más de una dosis de adrenalina, o cuando la adrenalina se retrasó. Por ello se recomienda vigilancia en urgencias de al menos 4 a 6 horas, y más prolongada en casos graves. Al egreso se debe prescribir un autoinyector de adrenalina, entregar un plan de acción escrito, educar sobre la evitación del alérgeno y referir al alergólogo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la anafilaxia
+
+@ mi|allergy_immunology|anaphylaxis|3|risk_factor
+V: Hombre de 62 años con hipertensión tratado con metoprolol. Presenta anafilaxia por medio de contraste y no responde a dos dosis de adrenalina intramuscular.
+P: ¿Cuál es el factor que explica la falta de respuesta y qué fármaco se agrega?
++ El betabloqueador, y se agrega glucagón intravenoso || Los betabloqueadores reducen la respuesta a la adrenalina.
+- availability_heuristic | La edad, y se agrega atropina || La edad no explica la resistencia y la atropina no es el antídoto.
+- anchoring | La dosis insuficiente de antihistamínico, y se duplica || Se ancla en el antihistamínico, que no revierte el choque.
+- representativeness_heuristic | La hipertensión, y se agrega nitroglicerina || La nitroglicerina empeora la hipotensión.
+- framing_effect | El contraste es demasiado potente, y se espera a que se elimine || Suena lógico, pero retrasa el tratamiento.
+- premature_closure | Alergia a la adrenalina, y se suspende || La alergia a la adrenalina no existe.
+- base_rate_fallacy | Mastocitosis oculta, y se agrega cromoglicato || Es rara y no es la respuesta inmediata.
+- inattentional_blindness | Deshidratación, sin otro fármaco || Los líquidos ayudan, pero se omite el factor clave.
+- focusing_illusion | El IECA, y se agrega furosemida || Se centra en otro antihipertensivo.
+- belief_bias | La ansiedad del paciente, y se da benzodiacepina || Cree que la ansiedad impide la respuesta.
+E: Los betabloqueadores pueden hacer la anafilaxia más grave y resistente a la adrenalina, porque bloquean los receptores beta adrenérgicos a través de los cuales actúa. Además pueden favorecer bradicardia y broncoespasmo. En estos pacientes, si no hay respuesta a la adrenalina y a los líquidos, se administra glucagón intravenoso, que aumenta la contractilidad y la frecuencia cardiaca por un mecanismo independiente de los receptores beta. Los IECA también se asocian a reacciones más graves. Otros factores de riesgo de anafilaxia grave son el asma mal controlada, la enfermedad cardiovascular y la mastocitosis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la anafilaxia
+
+@ mi|allergy_immunology|anaphylaxis|2|prevention_screening
+V: Niña de 9 años con alergia confirmada al cacahuate que tuvo una anafilaxia hace un mes. Va a regresar a la escuela.
+P: ¿Cuál es la medida de prevención más importante?
++ Evitar el alérgeno, portar un autoinyector de adrenalina y tener un plan de acción escrito para la escuela || Previene y permite tratar una reacción a tiempo.
+- availability_heuristic | Dar antihistamínico diario como prevención || No previene la anafilaxia.
+- anchoring | Corticosteroide oral antes de cada comida || Se ancla en el control inflamatorio sin beneficio preventivo.
+- framing_effect | Exponerla a pequeñas cantidades en casa para acostumbrarla || Suena a desensibilización, pero sin supervisión es peligroso.
+- representativeness_heuristic | Vacuna contra alergias alimentarias || No existe.
+- premature_closure | Solo evitar el cacahuate sin otras medidas || La exposición accidental es frecuente.
+- complexity_bias | Hospitalizar en cada comida escolar || Medida excesiva.
+- status_quo_bias | Sin medidas porque ya pasó la reacción || El riesgo persiste.
+- belief_bias | Que crecerá y se le quitará sin necesidad de precauciones || La alergia al cacahuate suele persistir.
+- omission_bias | No informar a la escuela para evitar estigma || Deja a la niña sin protección.
+E: En pacientes con alergia alimentaria y antecedente de anafilaxia, las medidas preventivas incluyen la evitación estricta del alérgeno, leyendo etiquetas y vigilando la contaminación cruzada, portar siempre un autoinyector de adrenalina, idealmente dos, y contar con un plan de acción escrito para el hogar y la escuela. Los cuidadores, maestros y la paciente deben saber reconocer los síntomas y aplicar la adrenalina, y después acudir a urgencias. La alergia al cacahuate rara vez se resuelve. La inmunoterapia oral supervisada por especialistas puede ser una opción para aumentar el umbral de tolerancia en casos seleccionados.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la anafilaxia
+
+@ mi|allergy_immunology|anaphylaxis|3|treatment_of_choice
+V: Mujer de 45 años con episodios recurrentes de angioedema de labios y lengua sin urticaria ni prurito, que no responden a antihistamínicos ni a corticosteroides. Inició enalapril hace 4 meses.
+P: ¿Cuál es el tratamiento de elección a largo plazo?
++ Suspender el enalapril de forma definitiva y no usar otros IECA || Angioedema por bradicinina inducido por IECA.
+- anchoring | Adrenalina diaria preventiva || Se ancla en el tratamiento de la anafilaxia, ineficaz en este mecanismo.
+- availability_heuristic | Antihistamínico a dosis altas de forma crónica || No es eficaz en angioedema por bradicinina.
+- representativeness_heuristic | Cambiar a otro IECA de diferente marca || El efecto es de clase.
+- framing_effect | Continuar el IECA con un antihistamínico como protección || Suena preventivo, pero el riesgo persiste.
+- premature_closure | Corticosteroides orales crónicos || No son eficaces.
+- complexity_bias | Inhibidor de C1 esterasa de mantenimiento de por vida || Es para angioedema hereditario.
+- status_quo_bias | Mantener el enalapril porque la presión está controlada || Expone a un riesgo de obstrucción de vía aérea.
+- belief_bias | Evitar alimentos alergénicos || Cree que es alérgico.
+- omission_bias | Esperar a ver si deja de ocurrir solo || Puede presentarse un episodio grave.
+E: El angioedema por IECA se debe a la acumulación de bradicinina, porque la enzima convertidora de angiotensina también la degrada. No se acompaña de urticaria ni prurito, afecta labios, lengua, cara y vía aérea superior, y no responde a antihistamínicos, corticosteroides ni adrenalina como en la anafilaxia. Puede aparecer incluso años después de iniciar el fármaco y es más frecuente en personas de ascendencia africana. El tratamiento es suspender el IECA de forma definitiva y evitar toda la clase. Los ARA II tienen bajo riesgo y pueden usarse con precaución. En crisis graves se protege la vía aérea y puede usarse icatibant.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del angioedema
+
+@ mi|allergy_immunology|anaphylaxis|4|next_step
+V: Hombre de 50 años con anafilaxia por cefalosporina. Recibió tres dosis de adrenalina intramuscular y 2 litros de cristaloide. Persiste con presión arterial de 70/40 mmHg.
+P: ¿Cuál es el siguiente paso?
++ Infusión intravenosa de adrenalina titulada con monitoreo continuo, en área de cuidados críticos || Anafilaxia refractaria a dosis intramusculares.
+- anchoring | Cuarta dosis de antihistamínico || Se ancla en un fármaco que no revierte el choque.
+- availability_heuristic | Corticosteroide en bolo como medida principal || Tiene efecto tardío.
+- framing_effect | Suspender los líquidos para evitar sobrecarga || Suena prudente, pero el paciente sigue hipotenso.
+- representativeness_heuristic | Dopamina como vasopresor de primera elección || La adrenalina es la de elección en anafilaxia.
+- premature_closure | Egresar con autoinyector || Ignora la refractariedad.
+- complexity_bias | Oxigenación extracorpórea como siguiente paso inmediato || Se reserva para casos extremos.
+- status_quo_bias | Repetir adrenalina intramuscular cada hora sin cambios || No ha funcionado.
+- belief_bias | Calcio intravenoso como antídoto || Cree que el calcio revierte la anafilaxia.
+- omission_bias | Esperar a que el fármaco se elimine solo || Retrasa el tratamiento.
+E: La anafilaxia refractaria es aquella que persiste pese a dos o más dosis adecuadas de adrenalina intramuscular y reanimación con líquidos. Requiere manejo en un área de cuidados críticos con monitoreo continuo e infusión intravenosa de adrenalina titulada según la respuesta. Se continúa la reposición de líquidos, y pueden agregarse otros vasopresores, como norepinefrina o vasopresina, y glucagón si el paciente toma betabloqueadores. Se debe asegurar la vía aérea si hay obstrucción. Es importante suspender cualquier infusión del fármaco desencadenante. Después de estabilizar, se vigila por el riesgo de reacción bifásica.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la anafilaxia
+
+@ mi|allergy_immunology|primary_immunodeficiency|3|diagnosis
+V: Niño de 3 años con otitis medias y neumonías recurrentes por bacterias encapsuladas desde los 6 meses. Ganglios y amígdalas casi ausentes. Inmunoglobulinas G, A y M muy bajas. Linfocitos B prácticamente ausentes.
+P: ¿Cuál es el diagnóstico más probable?
++ Agammaglobulinemia ligada al X de Bruton || Infecciones bacterianas recurrentes desde los 6 meses en varón con ausencia de linfocitos B e inmunoglobulinas.
+- representativeness_heuristic | Inmunodeficiencia común variable || También tiene inmunoglobulinas bajas, pero se presenta más tarde y hay linfocitos B.
+- anchoring | Deficiencia selectiva de IgA || Se ancla en la IgA, pero las tres inmunoglobulinas están bajas.
+- availability_heuristic | Infecciones de la guardería normales || Atribuye a la exposición un patrón grave.
+- premature_closure | Inmunodeficiencia combinada grave || Afecta también linfocitos T con infecciones oportunistas tempranas.
+- base_rate_fallacy | Enfermedad granulomatosa crónica || Afecta neutrófilos con infecciones por catalasa positivos.
+- framing_effect | Hipogammaglobulinemia transitoria de la infancia || Suena benigno, pero hay linfocitos B y se resuelve.
+- inattentional_blindness | VIH perinatal || No toma en cuenta la ausencia de linfocitos B.
+- focusing_illusion | Síndrome de DiGeorge || Se centra en la inmunodeficiencia, pero afecta linfocitos T.
+- belief_bias | Alergias respiratorias || Cree que son alergias.
+E: La agammaglobulinemia ligada al X, o de Bruton, se debe a mutaciones en el gen BTK, necesario para la maduración de los linfocitos B. Afecta a varones, que presentan infecciones bacterianas recurrentes por microorganismos encapsulados, como neumococo y Haemophilus, a partir de los seis meses, cuando disminuyen los anticuerpos maternos. Hay ausencia o disminución marcada de todas las inmunoglobulinas y de linfocitos B, con tejido linfoide hipoplásico. El tratamiento es la reposición de inmunoglobulina intravenosa o subcutánea de por vida y el tratamiento oportuno de las infecciones. Las vacunas vivas están contraindicadas.
+R: Guía de Práctica Clínica de diagnóstico de las inmunodeficiencias primarias
+
+@ mi|allergy_immunology|primary_immunodeficiency|3|initial_study
+V: Niña de 5 años con infecciones respiratorias recurrentes. Tuvo 3 neumonías en el último año y 2 otitis complicadas. Peso y talla normales.
+P: ¿Cuál es el estudio inicial más útil para evaluar una inmunodeficiencia primaria humoral?
++ Biometría hemática con diferencial y niveles de inmunoglobulinas G, A y M || Son los estudios de primera línea ante sospecha de inmunodeficiencia.
+- anchoring | Estudio genético completo de entrada || Se ancla en lo más específico sin pasos previos.
+- availability_heuristic | Radiografía de senos paranasales || Evalúa una complicación, no la inmunidad.
+- representativeness_heuristic | Prueba del sudor || Es para fibrosis quística.
+- framing_effect | Pruebas de alergia cutáneas || Suena a evaluación inmune, pero buscan alergias.
+- premature_closure | Biopsia de ganglio || No es inicial.
+- complexity_bias | Citometría de flujo de todas las subpoblaciones como primer paso || Es un estudio de segundo nivel.
+- information_bias | Tomografía de tórax de alta resolución || Evalúa daño, no la causa.
+- belief_bias | Vitamina C como prueba terapéutica || Cree que mejorar la nutrición basta.
+- base_rate_fallacy | Descartar inmunodeficiencia por crecer bien || El crecimiento normal no la excluye.
+E: Las señales de alarma de inmunodeficiencia primaria incluyen infecciones recurrentes o graves, como dos o más neumonías al año, infecciones por gérmenes oportunistas, necesidad de antibióticos intravenosos, falla de medro y antecedente familiar. El abordaje inicial incluye biometría hemática con diferencial, que detecta linfopenia o neutropenia, y niveles séricos de inmunoglobulinas G, A y M, junto con respuesta a vacunas. Según los resultados se realizan estudios de segundo nivel, como citometría de flujo de linfocitos, subclases de IgG, complemento y pruebas de función de neutrófilos, y finalmente estudios genéticos.
+R: Guía de Práctica Clínica de diagnóstico de las inmunodeficiencias primarias
+
+@ mi|allergy_immunology|primary_immunodeficiency|3|complication_prognosis
+V: Hombre de 25 años con deficiencia selectiva de IgA. Requiere una transfusión de sangre tras un accidente.
+P: ¿Cuál es la complicación que debe prevenirse durante la transfusión?
++ Anafilaxia por anticuerpos anti IgA || Algunos pacientes tienen anticuerpos contra la IgA de los productos sanguíneos.
+- availability_heuristic | Hemólisis por incompatibilidad Rh || Es otra complicación transfusional sin relación con la deficiencia.
+- anchoring | Infección por bacterias encapsuladas inmediata || Se ancla en la inmunodeficiencia, sin relación con la transfusión.
+- representativeness_heuristic | Enfermedad injerto contra huésped || Afecta a inmunodeficiencias de linfocitos T.
+- framing_effect | Sobrecarga de volumen || Suena transfusional, pero no se relaciona con la IgA.
+- premature_closure | Lesión pulmonar aguda por transfusión || No se relaciona con la deficiencia.
+- base_rate_fallacy | Transmisión de VIH || Es muy rara con los controles actuales.
+- inattentional_blindness | Hipocalcemia por citrato || No toma en cuenta la deficiencia de IgA.
+- focusing_illusion | Púrpura postransfusional || Se centra en otra complicación rara.
+- belief_bias | Ninguna, porque la deficiencia es leve || Cree que no tiene implicaciones.
+E: La deficiencia selectiva de IgA es la inmunodeficiencia primaria más frecuente. Muchos pacientes son asintomáticos, pero pueden presentar infecciones respiratorias y gastrointestinales recurrentes, enfermedad celíaca, enfermedades autoinmunes y alergias. Una complicación importante es que algunos pacientes desarrollan anticuerpos contra la IgA, y al recibir productos sanguíneos que la contienen pueden presentar anafilaxia. Por ello, cuando se requiere transfusión se usan productos lavados o de donadores deficientes de IgA. No se tratan con inmunoglobulina, que además contiene IgA. Es importante identificarla y advertir al paciente.
+R: Guía de Práctica Clínica de diagnóstico de las inmunodeficiencias primarias
+
+@ mi|allergy_immunology|primary_immunodeficiency|4|risk_factor
+V: Niño de 2 años con abscesos hepáticos y linfadenitis supurativa por Staphylococcus aureus y una neumonía por Aspergillus. Prueba de dihidrorrodamina anormal.
+P: ¿Cuál es el defecto inmunológico responsable de su susceptibilidad?
++ Falla del estallido respiratorio de los neutrófilos por defecto de la NADPH oxidasa, en la enfermedad granulomatosa crónica || Infecciones por catalasa positivos y hongos.
+- availability_heuristic | Ausencia de linfocitos B || Daría infecciones por bacterias encapsuladas.
+- anchoring | Deficiencia del complemento terminal || Se ancla en otra inmunodeficiencia, que predispone a Neisseria.
+- representativeness_heuristic | Defecto de adhesión leucocitaria || Da infecciones sin pus y retraso en la caída del cordón.
+- framing_effect | Déficit de linfocitos T || Suena a inmunodeficiencia grave, pero da infecciones virales y oportunistas.
+- premature_closure | Desnutrición proteica || Concluye una causa secundaria sin explicar la prueba.
+- base_rate_fallacy | Asplenia || Predispone a encapsulados.
+- inattentional_blindness | Deficiencia de IgA || No explica las infecciones por catalasa positivos.
+- focusing_illusion | Síndrome de hiper IgE || Comparte abscesos por estafilococo, pero tiene eccema e IgE alta.
+- belief_bias | Infecciones por mala higiene || Cree que la higiene explica las infecciones.
+E: La enfermedad granulomatosa crónica es una inmunodeficiencia primaria de los fagocitos causada por defectos en la NADPH oxidasa, que impiden el estallido respiratorio necesario para destruir microorganismos fagocitados. Los pacientes presentan infecciones graves y recurrentes por microorganismos catalasa positivos, como Staphylococcus aureus, Serratia, Burkholderia, Nocardia y Aspergillus, con abscesos, linfadenitis supurativa, neumonías y formación de granulomas. El diagnóstico se establece con la prueba de dihidrorrodamina por citometría de flujo. El tratamiento incluye profilaxis con trimetoprim con sulfametoxazol e itraconazol, interferón gamma y trasplante de células hematopoyéticas.
+R: Guía de Práctica Clínica de diagnóstico de las inmunodeficiencias primarias
+
+@ mi|allergy_immunology|primary_immunodeficiency|3|prevention_screening
+V: Niño de 4 años con agammaglobulinemia ligada al X en tratamiento con inmunoglobulina. Sus padres preguntan por el esquema de vacunación.
+P: ¿Cuál es la recomendación correcta respecto a la prevención con vacunas en este paciente?
++ Evitar vacunas de virus vivos atenuados, como la triple viral y la oral contra polio || En inmunodeficiencias humorales graves las vacunas vivas pueden causar enfermedad.
+- availability_heuristic | Aplicar todas las vacunas del esquema sin excepciones || Expone a riesgo con vacunas vivas.
+- anchoring | Aplicar solo vacunas vivas porque generan mejor respuesta || Se ancla en la inmunogenicidad, con riesgo de infección.
+- framing_effect | Suspender la inmunoglobulina para que las vacunas funcionen mejor || Suena lógico, pero deja al niño desprotegido.
+- representativeness_heuristic | Aplicar BCG de refuerzo || Es una vacuna viva contraindicada.
+- premature_closure | Ninguna vacuna porque no responde a ninguna || Algunas vacunas inactivadas pueden darse y no causan daño.
+- complexity_bias | Vacunar con dosis triples para compensar || Sin beneficio.
+- status_quo_bias | Seguir el esquema habitual como cualquier niño || Ignora su inmunodeficiencia.
+- belief_bias | Las vacunas causan su inmunodeficiencia || Cree en una relación falsa.
+- omission_bias | No vacunar a los convivientes || Los convivientes sí deben vacunarse con vacunas inactivadas y la mayoría de las vivas.
+E: En las inmunodeficiencias primarias graves de anticuerpos o de linfocitos T, las vacunas de virus vivos atenuados, como la triple viral, la varicela, la vacuna oral contra poliomielitis, la BCG y la de rotavirus, están contraindicadas porque pueden causar infección diseminada. Las vacunas inactivadas no causan enfermedad y pueden aplicarse, aunque su respuesta puede ser limitada, sobre todo en pacientes que reciben inmunoglobulina. La protección depende en gran medida de la reposición de inmunoglobulina. Los convivientes deben estar bien vacunados, con precauciones específicas para la vacuna oral contra polio, para proteger al paciente.
+R: Guía de Práctica Clínica de diagnóstico de las inmunodeficiencias primarias ;; Norma Oficial Mexicana para la prevención y control de enfermedades transmisibles por vacunación
