@@ -1,0 +1,1416 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "ped-07-neurologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_neurology",
+      "subtopic": "febrile_seizures",
+      "vignette": "Niño de 18 meses con fiebre de 39.5 °C por infección respiratoria que presenta una crisis tónico clónica generalizada de 2 minutos. Después queda somnoliento 15 minutos y luego recupera su estado habitual. Exploración neurológica normal. Desarrollo normal.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Crisis febril compleja",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Sería focal, mayor de 15 minutos o repetida en 24 horas."
+        },
+        {
+          "key": "b",
+          "text": "Espasmo del sollozo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se desencadena por llanto sin fiebre."
+        },
+        {
+          "key": "c",
+          "text": "Encefalitis herpética",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay alteración persistente del estado mental."
+        },
+        {
+          "key": "d",
+          "text": "Meningitis bacteriana",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se recupera por completo y no hay signos meníngeos."
+        },
+        {
+          "key": "e",
+          "text": "Daño cerebral por la fiebre alta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Las crisis febriles simples no dañan el cerebro."
+        },
+        {
+          "key": "f",
+          "text": "Estado epiléptico febril",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Dura más de 30 minutos."
+        },
+        {
+          "key": "g",
+          "text": "Epilepsia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se diagnostica con crisis no provocadas."
+        },
+        {
+          "key": "h",
+          "text": "Síncope febril",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Hubo movimientos tónico clónicos con estado postictal."
+        },
+        {
+          "key": "i",
+          "text": "Hipoglucemia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay datos de ella."
+        },
+        {
+          "key": "j",
+          "text": "Crisis febril simple",
+          "correct": true,
+          "rationale": "Crisis generalizada menor de 15 minutos, única en 24 horas, con fiebre, entre 6 meses y 5 años y recuperación completa."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "g",
+        "j"
+      ],
+      "explanation": "Las crisis febriles son las crisis más frecuentes en la infancia y ocurren entre los 6 meses y los 5 años con fiebre, sin infección del sistema nervioso ni alteraciones metabólicas. Las simples son generalizadas, duran menos de 15 minutos y no se repiten en 24 horas. Las complejas son focales, duran más de 15 minutos o se repiten en 24 horas. Las simples tienen excelente pronóstico, no causan daño neurológico y el riesgo de epilepsia es apenas mayor que en la población general. No requieren electroencefalograma ni neuroimagen de rutina en niños con recuperación completa.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de crisis febriles en niños"
+      ]
+    },
+    {
+      "key": "ped-07-neurologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_neurology",
+      "subtopic": "febrile_seizures",
+      "vignette": "Niña de 2 años que tuvo una crisis febril simple en casa y llega a urgencias ya recuperada, activa, sin signos meníngeos y con fiebre por otitis media. Esquema de vacunación completo.",
+      "prompt": "¿Cuál es la conducta a seguir?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Punción lumbar en todos los casos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Solo si hay signos de infección del sistema nervioso."
+        },
+        {
+          "key": "b",
+          "text": "Bañarla con agua fría y alcohol para evitar otra crisis",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es peligroso y no previene crisis."
+        },
+        {
+          "key": "c",
+          "text": "Tomografía de cráneo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "d",
+          "text": "Dar fenobarbital diario porque siempre se hacía",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Sus efectos adversos superan el beneficio."
+        },
+        {
+          "key": "e",
+          "text": "Tratar la causa de la fiebre, educar a la familia y egresar sin estudios neurológicos de rutina",
+          "correct": true,
+          "rationale": "Las crisis febriles simples con recuperación completa no requieren estudios."
+        },
+        {
+          "key": "f",
+          "text": "Electroencefalograma urgente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No está indicado en crisis febriles simples."
+        },
+        {
+          "key": "g",
+          "text": "Iniciar valproato como profilaxis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No se recomienda."
+        },
+        {
+          "key": "h",
+          "text": "No explicar qué hacer si se repite",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La familia debe saber actuar."
+        },
+        {
+          "key": "i",
+          "text": "Resonancia magnética y estudio metabólico",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "j",
+          "text": "Hospitalizar 72 horas para vigilancia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesario."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "En una crisis febril simple con recuperación completa el manejo consiste en identificar y tratar la causa de la fiebre, que suele ser una infección viral, otitis o exantema súbito, y educar a la familia. No se requieren electroencefalograma, neuroimagen ni estudios de laboratorio de rutina. La punción lumbar se realiza si hay signos meníngeos, alteración persistente del estado mental, uso previo de antibióticos que pueda enmascarar meningitis o vacunación incompleta en lactantes. Los antipiréticos mejoran el confort pero no previenen las recurrencias. No se recomienda profilaxis con antiepilépticos continuos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de crisis febriles en niños"
+      ]
+    },
+    {
+      "key": "ped-07-neurologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_neurology",
+      "subtopic": "febrile_seizures",
+      "vignette": "Niño de 3 años con fiebre que inicia una crisis tónico clónica generalizada en urgencias. A los 5 minutos persiste convulsionando. No tiene acceso venoso todavía. Glucosa capilar de 95 mg/dL.",
+      "prompt": "¿Cuál es el tratamiento inicial?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solución glucosada en bolo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La glucosa es normal."
+        },
+        {
+          "key": "b",
+          "text": "Tomografía antes de tratar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "c",
+          "text": "Fenitoína oral",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es útil durante la crisis."
+        },
+        {
+          "key": "d",
+          "text": "Sumergirlo en agua fría",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es peligroso y no detiene la crisis."
+        },
+        {
+          "key": "e",
+          "text": "Esperar a que ceda sola por ser febril",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Más de 5 minutos aumenta el riesgo de estado epiléptico."
+        },
+        {
+          "key": "f",
+          "text": "No dar fármacos por miedo a depresión respiratoria",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo de la crisis prolongada es mayor."
+        },
+        {
+          "key": "g",
+          "text": "Paracetamol rectal como tratamiento de la crisis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No detiene la crisis."
+        },
+        {
+          "key": "h",
+          "text": "Intubación inmediata antes de dar fármacos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Primero se administra benzodiacepina."
+        },
+        {
+          "key": "i",
+          "text": "Introducir un objeto en la boca para evitar que se muerda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es peligroso."
+        },
+        {
+          "key": "j",
+          "text": "Benzodiacepina, midazolam bucal, intranasal o intramuscular, o diazepam rectal, mientras se asegura vía aérea y oxígeno",
+          "correct": true,
+          "rationale": "Una crisis de más de 5 minutos requiere tratamiento."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "Toda crisis que dura más de 5 minutos debe tratarse porque es poco probable que ceda sola y aumenta el riesgo de estado epiléptico. La primera línea son las benzodiacepinas. Sin acceso venoso se usan midazolam bucal, intranasal o intramuscular, o diazepam rectal, y con acceso venoso lorazepam, diazepam o midazolam intravenosos. Puede repetirse una dosis a los 5 a 10 minutos. Si persiste se pasa a segunda línea con levetiracetam, fenitoína o valproato intravenosos. Se mantiene la vía aérea, se da oxígeno, se mide la glucosa y se coloca al niño de lado. Nunca se introduce un objeto en la boca.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del estado epiléptico en niños",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de crisis febriles en niños"
+      ]
+    },
+    {
+      "key": "ped-07-neurologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_neurology",
+      "subtopic": "febrile_seizures",
+      "vignette": "Niña de 14 meses que tuvo su primera crisis febril simple con una temperatura de 38.2 °C, una hora después de iniciar la fiebre. Su madre tuvo crisis febriles en la infancia. Los padres preguntan si volverá a pasar.",
+      "prompt": "¿Cuál es el factor de riesgo de recurrencia presente?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Edad menor de 18 meses, fiebre baja al momento de la crisis, corta duración de la fiebre e historia familiar",
+          "correct": true,
+          "rationale": "Son los principales predictores de recurrencia."
+        },
+        {
+          "key": "b",
+          "text": "Infección viral como causa de la fiebre",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es la causa habitual."
+        },
+        {
+          "key": "c",
+          "text": "Vacunación completa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No aumenta el riesgo."
+        },
+        {
+          "key": "d",
+          "text": "Haber dormido poco la noche anterior",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es un predictor establecido."
+        },
+        {
+          "key": "e",
+          "text": "Sexo femenino",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es un predictor importante."
+        },
+        {
+          "key": "f",
+          "text": "Asistencia a guardería",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un predictor directo."
+        },
+        {
+          "key": "g",
+          "text": "Uso de paracetamol",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No influye."
+        },
+        {
+          "key": "h",
+          "text": "Lactancia materna previa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No aumenta el riesgo."
+        },
+        {
+          "key": "i",
+          "text": "Que la crisis fuera generalizada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es lo típico de la crisis simple."
+        },
+        {
+          "key": "j",
+          "text": "Peso adecuado",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No influye."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "Alrededor de un tercio de los niños con una crisis febril presenta recurrencias. Los factores de riesgo de recurrencia son edad menor de 18 meses en la primera crisis, historia familiar de crisis febriles, crisis con temperatura relativamente baja y corto tiempo entre el inicio de la fiebre y la crisis. Con todos los factores el riesgo supera 70%. Los factores de riesgo de epilepsia posterior son diferentes, como crisis febriles complejas, alteraciones del neurodesarrollo e historia familiar de epilepsia. La profilaxis continua no se recomienda, pero puede indicarse una benzodiacepina de rescate a la familia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de crisis febriles en niños"
+      ]
+    },
+    {
+      "key": "ped-07-neurologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_neurology",
+      "subtopic": "febrile_seizures",
+      "vignette": "Lactante de 9 meses con fiebre de 2 días que presenta una crisis convulsiva focal de 20 minutos. Después persiste somnoliento e irritable. Tiene esquema de vacunación incompleto y recibió amoxicilina desde ayer.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Biopsia cerebral",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "b",
+          "text": "Electroencefalograma como único estudio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No descarta infección."
+        },
+        {
+          "key": "c",
+          "text": "Egresar con diagnóstico de crisis febril simple",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es una crisis compleja con alteración persistente."
+        },
+        {
+          "key": "d",
+          "text": "Suspender la amoxicilina y observar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No descarta meningitis parcialmente tratada."
+        },
+        {
+          "key": "e",
+          "text": "Mantener la amoxicilina oral sin estudios",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Enmascara una posible meningitis."
+        },
+        {
+          "key": "f",
+          "text": "Evitar la punción por miedo a complicaciones",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo de no diagnosticar meningitis es mayor."
+        },
+        {
+          "key": "g",
+          "text": "La somnolencia es normal tras cualquier crisis y no requiere estudio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La somnolencia prolongada requiere evaluación."
+        },
+        {
+          "key": "h",
+          "text": "Solo antipiréticos y vigilancia en casa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede tener meningitis."
+        },
+        {
+          "key": "i",
+          "text": "Iniciar valproato a largo plazo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es el paso inmediato."
+        },
+        {
+          "key": "j",
+          "text": "Realizar punción lumbar tras estabilizar y descartar hipertensión intracraneal, para descartar meningitis",
+          "correct": true,
+          "rationale": "Crisis compleja, alteración persistente, vacunas incompletas y antibiótico previo."
+        }
+      ],
+      "canonical": [
+        "c",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "La punción lumbar está indicada en niños con crisis y fiebre cuando hay signos meníngeos, alteración persistente del estado de conciencia, crisis compleja con sospecha de infección, lactantes de 6 a 12 meses con vacunación incompleta contra Haemophilus o neumococo, o tratamiento antibiótico previo que puede enmascarar una meningitis. Antes se descartan datos de hipertensión intracraneal, alteraciones de coagulación o inestabilidad. En las crisis febriles complejas puede requerirse neuroimagen o electroencefalograma según la evolución. Si se sospecha meningitis no se retrasa el antibiótico empírico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de crisis febriles en niños"
+      ]
+    },
+    {
+      "key": "ped-07-neurologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_neurology",
+      "subtopic": "febrile_seizures",
+      "vignette": "Padres de un niño de 2 años que tuvo su primera crisis febril simple. Están muy angustiados y preguntan si su hijo tendrá epilepsia o daño cerebral.",
+      "prompt": "¿Cuál es el pronóstico de las crisis febriles simples?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Necesidad de tratamiento de por vida",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No requieren tratamiento continuo."
+        },
+        {
+          "key": "b",
+          "text": "Daño cerebral permanente",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No causan daño cerebral."
+        },
+        {
+          "key": "c",
+          "text": "Siempre se repiten hasta la adolescencia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Desaparecen después de los 5 a 6 años."
+        },
+        {
+          "key": "d",
+          "text": "Riesgo alto de parálisis cerebral",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No se asocian."
+        },
+        {
+          "key": "e",
+          "text": "La fiebre alta fríe el cerebro",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un mito."
+        },
+        {
+          "key": "f",
+          "text": "Retraso del desarrollo en la mayoría",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El desarrollo es normal."
+        },
+        {
+          "key": "g",
+          "text": "Excelente, sin daño neurológico y con un riesgo de epilepsia apenas mayor que el de la población general",
+          "correct": true,
+          "rationale": "Las crisis febriles simples son benignas."
+        },
+        {
+          "key": "h",
+          "text": "Alto riesgo de epilepsia en la mayoría",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El riesgo es bajo."
+        },
+        {
+          "key": "i",
+          "text": "Disminución del coeficiente intelectual",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No afectan la inteligencia."
+        },
+        {
+          "key": "j",
+          "text": "Riesgo elevado de muerte súbita",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No aumenta de forma relevante."
+        }
+      ],
+      "canonical": [
+        "b",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "Las crisis febriles simples tienen un pronóstico excelente. No causan daño cerebral, no afectan la inteligencia, el rendimiento escolar ni el desarrollo y desaparecen con la edad, generalmente después de los 5 a 6 años. El riesgo de epilepsia posterior es de 1 a 2%, poco mayor que el de la población general. Las recurrencias ocurren en alrededor de un tercio. La educación a los padres es fundamental para reducir la ansiedad, enseñarles a colocar al niño de lado, no introducir objetos en la boca, cronometrar la crisis y buscar atención si dura más de 5 minutos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de crisis febriles en niños"
+      ]
+    },
+    {
+      "key": "ped-07-neurologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_neurology",
+      "subtopic": "febrile_seizures",
+      "vignette": "Niño de 6 años con episodios breves varias veces al día en que se queda con la mirada fija, deja de hablar, parpadea rápidamente y luego continúa lo que hacía sin recordar el episodio. Los episodios se desencadenan al pedirle que respire rápido. Bajo rendimiento escolar reciente.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Crisis febriles",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ocurren con fiebre en menores de 5 años."
+        },
+        {
+          "key": "b",
+          "text": "Ensoñación diurna",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se interrumpe con estímulos y no se provoca con hiperventilación."
+        },
+        {
+          "key": "c",
+          "text": "Trastorno por déficit de atención",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica las desconexiones con parpadeo e hiperventilación."
+        },
+        {
+          "key": "d",
+          "text": "Discapacidad intelectual",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El rendimiento bajó por las crisis."
+        },
+        {
+          "key": "e",
+          "text": "Crisis focales con alteración de la conciencia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Duran más y tienen estado postictal."
+        },
+        {
+          "key": "f",
+          "text": "Hipoglucemia recurrente",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se desencadena con hiperventilación."
+        },
+        {
+          "key": "g",
+          "text": "Tics motores",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El niño no pierde el contacto."
+        },
+        {
+          "key": "h",
+          "text": "Niño distraído o flojo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Tiene crisis epilépticas."
+        },
+        {
+          "key": "i",
+          "text": "Síncope vasovagal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da pérdida del tono con pródromo."
+        },
+        {
+          "key": "j",
+          "text": "Epilepsia de ausencia infantil",
+          "correct": true,
+          "rationale": "Episodios breves de desconexión múltiples al día desencadenados por hiperventilación."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "La epilepsia de ausencia infantil inicia entre los 4 y 10 años, es más frecuente en niñas y se caracteriza por episodios breves de 5 a 15 segundos de desconexión, mirada fija y automatismos leves como parpadeo, que ocurren decenas de veces al día sin estado postictal. La hiperventilación los desencadena. El electroencefalograma muestra descargas de punta onda generalizada a 3 Hz. Puede confundirse con déficit de atención y afectar el rendimiento escolar. El tratamiento de elección es etosuximida, y como alternativas valproato o lamotrigina. La carbamazepina y la fenitoína pueden empeorarlas. El pronóstico suele ser bueno.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la epilepsia en niños"
+      ]
+    },
+    {
+      "key": "ped-07-neurologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_neurology",
+      "subtopic": "febrile_seizures",
+      "vignette": "Lactante de 15 meses que al regañarlo llora intensamente, contiene la respiración en espiración, se pone cianótico y pierde el tono por unos segundos, con breves sacudidas al final. Se recupera de inmediato. Exploración normal y desarrollo adecuado.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Crisis febril",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay fiebre."
+        },
+        {
+          "key": "b",
+          "text": "Epilepsia generalizada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los episodios son provocados por el llanto y sin estado postictal."
+        },
+        {
+          "key": "c",
+          "text": "Asfixia por cuerpo extraño",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay atragantamiento."
+        },
+        {
+          "key": "d",
+          "text": "Manipulación consciente del niño",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un reflejo involuntario."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome de West",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da espasmos en flexión en lactantes menores."
+        },
+        {
+          "key": "f",
+          "text": "Cardiopatía cianógena",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La cianosis es solo durante el episodio."
+        },
+        {
+          "key": "g",
+          "text": "Espasmo del sollozo cianótico",
+          "correct": true,
+          "rationale": "Llanto con apnea espiratoria, cianosis y pérdida breve del tono provocados por frustración."
+        },
+        {
+          "key": "h",
+          "text": "Hipoglucemia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el desencadenante."
+        },
+        {
+          "key": "i",
+          "text": "Crisis de ausencia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay desencadenante emocional."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome de QT largo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay datos de arritmia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "g"
+      ],
+      "explanation": "El espasmo del sollozo es un fenómeno paroxístico no epiléptico frecuente entre los 6 meses y los 5 años. En la forma cianótica, la más común, el niño llora por frustración, enojo o dolor, detiene la respiración en espiración, se pone cianótico y puede perder la conciencia y el tono, con algunas sacudidas breves, y se recupera rápidamente. La forma pálida ocurre tras un golpe o susto por respuesta vagal. Es benigno y desaparece con la edad. Se asocia a anemia ferropénica, cuya corrección reduce los episodios. Se tranquiliza a los padres y se evita reforzar la conducta.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la epilepsia en niños"
+      ]
+    },
+    {
+      "key": "ped-07-neurologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_neurology",
+      "subtopic": "bacterial_meningitis_child",
+      "vignette": "Niña de 2 años con fiebre de 39.8 °C, vómito, irritabilidad y somnolencia de 24 horas. Tiene rigidez de nuca, signo de Brudzinski positivo y petequias escasas en tronco. Esquema de vacunación incompleto.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Gastroenteritis con deshidratación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la rigidez de nuca."
+        },
+        {
+          "key": "b",
+          "text": "Absceso retrofaríngeo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da rigidez por dolor cervical sin alteración del estado mental."
+        },
+        {
+          "key": "c",
+          "text": "Púrpura trombocitopénica inmune",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No da fiebre ni signos meníngeos."
+        },
+        {
+          "key": "d",
+          "text": "Tumor cerebral",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica la fiebre aguda."
+        },
+        {
+          "key": "e",
+          "text": "Encefalitis viral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Predominan alteraciones de conducta y crisis focales."
+        },
+        {
+          "key": "f",
+          "text": "Crisis febril",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica los signos meníngeos."
+        },
+        {
+          "key": "g",
+          "text": "Niña cansada por la fiebre",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La somnolencia con rigidez de nuca es alarmante."
+        },
+        {
+          "key": "h",
+          "text": "Dengue con signos de alarma",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica los signos meníngeos."
+        },
+        {
+          "key": "i",
+          "text": "Meningitis viral sin otra consideración",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Debe asumirse bacteriana hasta demostrar lo contrario."
+        },
+        {
+          "key": "j",
+          "text": "Meningitis bacteriana",
+          "correct": true,
+          "rationale": "Fiebre, alteración del estado de alerta y signos meníngeos en una niña no vacunada."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "i",
+        "j"
+      ],
+      "explanation": "La meningitis bacteriana es una urgencia médica. En niños se manifiesta con fiebre, cefalea, vómito, irritabilidad, somnolencia, fotofobia, crisis convulsivas y signos meníngeos como rigidez de nuca, Kernig y Brudzinski. En lactantes los signos son inespecíficos, con fontanela abombada, rechazo al alimento e irritabilidad paradójica. Las petequias o púrpura sugieren meningococo. Después del periodo neonatal los agentes principales son Streptococcus pneumoniae, Neisseria meningitidis y Haemophilus influenzae tipo b en no vacunados. Se toman hemocultivos, se realiza punción lumbar si no hay contraindicación y se inicia antibiótico sin retraso.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de meningitis bacteriana aguda en niños"
+      ]
+    },
+    {
+      "key": "ped-07-neurologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_neurology",
+      "subtopic": "bacterial_meningitis_child",
+      "vignette": "Niño de 4 años con fiebre, cefalea y rigidez de nuca. El líquido cefalorraquídeo es turbio, con 2 500 leucocitos por mm3 con 90% de neutrófilos, glucosa de 20 mg/dL con glucosa sérica de 100 mg/dL y proteínas de 180 mg/dL.",
+      "prompt": "¿Qué indica el análisis del líquido cefalorraquídeo?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de Guillain Barré",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da disociación albuminocitológica sin células."
+        },
+        {
+          "key": "b",
+          "text": "Líquido normal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Los valores son claramente anormales."
+        },
+        {
+          "key": "c",
+          "text": "Encefalitis herpética",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da linfocitos y eritrocitos con glucosa normal."
+        },
+        {
+          "key": "d",
+          "text": "Meningitis bacteriana",
+          "correct": true,
+          "rationale": "Pleocitosis neutrofílica, glucosa baja y proteínas elevadas."
+        },
+        {
+          "key": "e",
+          "text": "Meningitis por hongos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara en niños sanos."
+        },
+        {
+          "key": "f",
+          "text": "Punción traumática",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la glucosa baja."
+        },
+        {
+          "key": "g",
+          "text": "Infección leve que no requiere tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una meningitis bacteriana grave."
+        },
+        {
+          "key": "h",
+          "text": "Hemorragia subaracnoidea",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Daría eritrocitos y xantocromía."
+        },
+        {
+          "key": "i",
+          "text": "Meningitis viral",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Daría predominio linfocitario con glucosa normal."
+        },
+        {
+          "key": "j",
+          "text": "Meningitis tuberculosa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da linfocitos con glucosa baja y proteínas muy altas de evolución subaguda."
+        }
+      ],
+      "canonical": [
+        "b",
+        "d",
+        "i",
+        "j"
+      ],
+      "explanation": "El análisis del líquido cefalorraquídeo orienta la causa de la meningitis. En la bacteriana el líquido es turbio, con pleocitosis generalmente mayor de 1 000 células con predominio de neutrófilos, glucosa baja con relación líquido sangre menor de 0.4 y proteínas elevadas. En la viral hay pleocitosis moderada linfocitaria, glucosa normal y proteínas normales o poco elevadas. En la tuberculosa hay linfocitos, glucosa baja y proteínas muy elevadas con evolución subaguda. La tinción de Gram, el cultivo y las pruebas moleculares identifican el agente. El tratamiento antibiótico previo puede modificar estos hallazgos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de meningitis bacteriana aguda en niños"
+      ]
+    },
+    {
+      "key": "ped-07-neurologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_neurology",
+      "subtopic": "bacterial_meningitis_child",
+      "vignette": "Niño de 3 años con meningitis bacteriana confirmada por líquido cefalorraquídeo. La tinción de Gram muestra diplococos grampositivos. No tiene alergias.",
+      "prompt": "¿Cuál es el tratamiento empírico de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ceftriaxona o cefotaxima más vancomicina intravenosas, con dexametasona antes o junto con la primera dosis",
+          "correct": true,
+          "rationale": "Cubren neumococo incluso resistente y la dexametasona reduce secuelas."
+        },
+        {
+          "key": "b",
+          "text": "Amoxicilina oral",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No alcanza niveles adecuados en el sistema nervioso."
+        },
+        {
+          "key": "c",
+          "text": "Esperar el cultivo para elegir el antibiótico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El retraso aumenta la mortalidad."
+        },
+        {
+          "key": "d",
+          "text": "Meropenem con colistina como primera opción",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el esquema empírico inicial."
+        },
+        {
+          "key": "e",
+          "text": "Penicilina benzatínica intramuscular",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es adecuada."
+        },
+        {
+          "key": "f",
+          "text": "Ampicilina con gentamicina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es el esquema neonatal."
+        },
+        {
+          "key": "g",
+          "text": "Evitar la dexametasona por miedo a ocultar la fiebre",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Reduce la hipoacusia y secuelas."
+        },
+        {
+          "key": "h",
+          "text": "Aciclovir solo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es para encefalitis herpética."
+        },
+        {
+          "key": "i",
+          "text": "Ceftriaxona sola sin considerar resistencia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El neumococo puede ser resistente a cefalosporinas."
+        },
+        {
+          "key": "j",
+          "text": "Metronidazol",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No cubre neumococo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "i"
+      ],
+      "explanation": "El tratamiento empírico de la meningitis bacteriana en niños mayores de un mes es una cefalosporina de tercera generación, ceftriaxona o cefotaxima, más vancomicina para cubrir neumococo resistente. Se ajusta al resultado del cultivo y antibiograma. La dexametasona, administrada antes o junto con la primera dosis del antibiótico, reduce la hipoacusia y las secuelas neurológicas, sobre todo en meningitis por Haemophilus influenzae tipo b y neumococo. La duración es de 7 días para meningococo, de 10 a 14 días para neumococo y de 7 a 10 para Haemophilus. Se vigilan complicaciones como hipertensión intracraneal, crisis y secreción inapropiada de hormona antidiurética.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de meningitis bacteriana aguda en niños"
+      ]
+    },
+    {
+      "key": "ped-07-neurologia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_neurology",
+      "subtopic": "bacterial_meningitis_child",
+      "vignette": "Niña de 5 años que se recupera de una meningitis por neumococo tratada hace 3 semanas. Su madre nota que no responde cuando la llaman por la espalda y sube mucho el volumen de la televisión.",
+      "prompt": "¿Cuál es la secuela más frecuente de la meningitis bacteriana en niños?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ceguera cortical",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es mucho menos frecuente."
+        },
+        {
+          "key": "b",
+          "text": "Hipoacusia neurosensorial",
+          "correct": true,
+          "rationale": "Es la secuela más común, sobre todo tras meningitis neumocócica."
+        },
+        {
+          "key": "c",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es una secuela."
+        },
+        {
+          "key": "d",
+          "text": "Tapón de cerumen sin relación con la meningitis",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el contexto."
+        },
+        {
+          "key": "e",
+          "text": "Ataxia cerebelosa crónica",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es menos frecuente."
+        },
+        {
+          "key": "f",
+          "text": "Niña desobediente que no quiere escuchar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede tener hipoacusia."
+        },
+        {
+          "key": "g",
+          "text": "Diabetes insípida permanente",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara."
+        },
+        {
+          "key": "h",
+          "text": "Hiperactividad por la fiebre",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la hipoacusia."
+        },
+        {
+          "key": "i",
+          "text": "Parálisis cerebral en todos los casos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es lo más frecuente."
+        },
+        {
+          "key": "j",
+          "text": "Otitis media con derrame transitoria",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la hipoacusia tras meningitis."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "La hipoacusia neurosensorial es la secuela más frecuente de la meningitis bacteriana y es más común tras infección por neumococo. Se produce por daño a la cóclea por inflamación y puede ser bilateral y permanente. Por ello todos los niños deben tener evaluación auditiva antes del egreso o en las primeras semanas, ya que la osificación coclear puede limitar el implante coclear si se retrasa. Otras secuelas son epilepsia, hidrocefalia, déficit cognitivo, alteraciones motoras y de conducta. La dexametasona temprana reduce el riesgo de hipoacusia, y la vacunación contra neumococo, meningococo y Haemophilus previene la enfermedad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de meningitis bacteriana aguda en niños"
+      ]
+    },
+    {
+      "key": "ped-07-neurologia-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_neurology",
+      "subtopic": "bacterial_meningitis_child",
+      "vignette": "Niño de 6 años con meningitis meningocócica confirmada que asiste a primaria. Sus padres, su hermana de 3 años y sus compañeros de banca pasaron tiempo con él en los 7 días previos.",
+      "prompt": "¿Cuál es la medida de prevención indicada para los contactos cercanos?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cerrar la escuela por un mes",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "b",
+          "text": "Vacunar solo al paciente al egreso",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No protege a los contactos de inmediato."
+        },
+        {
+          "key": "c",
+          "text": "Quimioprofilaxis con rifampicina, ceftriaxona o ciprofloxacino a los contactos cercanos",
+          "correct": true,
+          "rationale": "Elimina la colonización y previene casos secundarios."
+        },
+        {
+          "key": "d",
+          "text": "Lavar la ropa del niño con cloro elimina el riesgo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La transmisión es por gotas respiratorias."
+        },
+        {
+          "key": "e",
+          "text": "Dar amoxicilina por 10 días a toda la escuela",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No erradica la colonización y no está indicada a todos."
+        },
+        {
+          "key": "f",
+          "text": "Cultivo faríngeo a todos los contactos antes de decidir",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa la profilaxis."
+        },
+        {
+          "key": "g",
+          "text": "Profilaxis a todo el personal del hospital",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Solo a quienes tuvieron exposición directa a secreciones."
+        },
+        {
+          "key": "h",
+          "text": "No dar profilaxis para evitar resistencia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo de enfermedad grave lo justifica."
+        },
+        {
+          "key": "i",
+          "text": "Solo vigilancia sin medicamentos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Hay riesgo de casos secundarios."
+        },
+        {
+          "key": "j",
+          "text": "Inmunoglobulina intravenosa a los contactos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es la medida indicada."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "e"
+      ],
+      "explanation": "La enfermedad meningocócica se transmite por gotas respiratorias y los contactos cercanos tienen un riesgo mucho mayor de enfermar. Se consideran contactos cercanos los convivientes del hogar, los niños y personal de guardería y quienes tuvieron contacto directo con secreciones orales en los 7 días previos, así como el personal de salud que realizó intubación o aspiración sin protección. La quimioprofilaxis debe iniciarse lo antes posible con rifampicina por 2 días, ceftriaxona intramuscular en dosis única, preferida en embarazadas, o ciprofloxacino en adultos. El paciente también recibe profilaxis si fue tratado con un antibiótico que no erradica la colonización.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de meningitis bacteriana aguda en niños"
+      ]
+    },
+    {
+      "key": "ped-07-neurologia-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_neurology",
+      "subtopic": "bacterial_meningitis_child",
+      "vignette": "Adolescente de 14 años con fiebre de 12 horas que desarrolla púrpura extensa que no desaparece a la presión, hipotensión, taquicardia y llenado capilar de 5 segundos. Plaquetas de 40 000 y tiempos de coagulación prolongados.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de Waterhouse Friderichsen aislado sin infección",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es consecuencia de la meningococcemia."
+        },
+        {
+          "key": "b",
+          "text": "Leucemia aguda",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica la evolución en horas con choque."
+        },
+        {
+          "key": "c",
+          "text": "Púrpura de Henoch Schönlein",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Las plaquetas son normales y no hay choque."
+        },
+        {
+          "key": "d",
+          "text": "Escarlatina grave",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No da púrpura ni coagulopatía."
+        },
+        {
+          "key": "e",
+          "text": "Moretones por golpes en deportes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica la fiebre y el choque."
+        },
+        {
+          "key": "f",
+          "text": "Reacción alérgica a medicamento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la coagulopatía."
+        },
+        {
+          "key": "g",
+          "text": "Vasculitis por lupus",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el cuadro fulminante."
+        },
+        {
+          "key": "h",
+          "text": "Meningococcemia fulminante con choque séptico y coagulación intravascular diseminada",
+          "correct": true,
+          "rationale": "Púrpura extensa con choque y coagulopatía de evolución rápida."
+        },
+        {
+          "key": "i",
+          "text": "Púrpura trombocitopénica inmune",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No da fiebre, choque ni coagulopatía."
+        },
+        {
+          "key": "j",
+          "text": "Dengue grave",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No suele dar púrpura fulminante en horas."
+        }
+      ],
+      "canonical": [
+        "c",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "La meningococcemia fulminante es una de las infecciones más rápidamente mortales. Inicia con fiebre y malestar y en pocas horas aparecen petequias que progresan a púrpura extensa, choque séptico, coagulación intravascular diseminada y falla orgánica múltiple. Puede haber hemorragia suprarrenal con insuficiencia suprarrenal aguda, el síndrome de Waterhouse Friderichsen. El tratamiento inmediato incluye ceftriaxona intravenosa sin esperar estudios, reanimación con líquidos, vasopresores y manejo en terapia intensiva. Ante fiebre con petequias que no desaparecen a la presión debe sospecharse meningococo. Los contactos reciben quimioprofilaxis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de meningitis bacteriana aguda en niños"
+      ]
+    },
+    {
+      "key": "ped-07-neurologia-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_neurology",
+      "subtopic": "bacterial_meningitis_child",
+      "vignette": "Niño de 3 años con sospecha de meningitis bacteriana que presenta somnolencia profunda, papiledema y una crisis focal reciente. Está hemodinámicamente estable.",
+      "prompt": "¿Cuál es la conducta más apropiada antes de la punción lumbar?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tomar hemocultivos, iniciar antibióticos y dexametasona de inmediato y realizar tomografía antes de la punción",
+          "correct": true,
+          "rationale": "Hay datos de hipertensión intracraneal y focalización."
+        },
+        {
+          "key": "b",
+          "text": "Resonancia magnética con espectroscopia antes de cualquier tratamiento",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa el manejo."
+        },
+        {
+          "key": "c",
+          "text": "Dar solo anticonvulsivos y observar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No trata la infección."
+        },
+        {
+          "key": "d",
+          "text": "Diferir la punción indefinidamente sin tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe iniciarse el antibiótico."
+        },
+        {
+          "key": "e",
+          "text": "Dar aciclovir solo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No cubre bacterias."
+        },
+        {
+          "key": "f",
+          "text": "No iniciar antibióticos sin confirmar el agente",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La meningitis requiere tratamiento empírico inmediato."
+        },
+        {
+          "key": "g",
+          "text": "Bajar la fiebre resuelve la somnolencia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La somnolencia indica afección cerebral."
+        },
+        {
+          "key": "h",
+          "text": "Realizar punción lumbar inmediata sin estudios",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede precipitar herniación."
+        },
+        {
+          "key": "i",
+          "text": "Esperar la tomografía para iniciar antibióticos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El retraso aumenta la mortalidad."
+        },
+        {
+          "key": "j",
+          "text": "Mantener líquidos de mantenimiento sin otras medidas",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "No trata la causa."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "Antes de realizar la punción lumbar en sospecha de meningitis se evalúan contraindicaciones, como datos de hipertensión intracraneal, papiledema, alteración grave del estado de conciencia, crisis recientes o déficit focal, inestabilidad hemodinámica, coagulopatía o infección en el sitio de punción. En estos casos se realiza tomografía antes de la punción. Nunca debe retrasarse el tratamiento, por lo que se toman hemocultivos y se inician antibióticos empíricos y dexametasona de inmediato. La punción puede realizarse después cuando sea segura, ya que las pruebas moleculares y el análisis citoquímico siguen siendo útiles.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de meningitis bacteriana aguda en niños"
+      ]
+    }
+  ]
+}

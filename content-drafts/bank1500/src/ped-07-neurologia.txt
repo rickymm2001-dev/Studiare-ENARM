@@ -1,0 +1,239 @@
+@ ped|pediatric_neurology|febrile_seizures|2|diagnosis
+V: Niño de 18 meses con fiebre de 39.5 °C por infección respiratoria que presenta una crisis tónico clónica generalizada de 2 minutos. Después queda somnoliento 15 minutos y luego recupera su estado habitual. Exploración neurológica normal. Desarrollo normal.
+P: ¿Cuál es el diagnóstico más probable?
++ Crisis febril simple || Crisis generalizada menor de 15 minutos, única en 24 horas, con fiebre, entre 6 meses y 5 años y recuperación completa.
+- anchoring | Crisis febril compleja || Sería focal, mayor de 15 minutos o repetida en 24 horas.
+- availability_heuristic | Meningitis bacteriana || Se recupera por completo y no hay signos meníngeos.
+- representativeness_heuristic | Epilepsia || Se diagnostica con crisis no provocadas.
+- premature_closure | Estado epiléptico febril || Dura más de 30 minutos.
+- base_rate_fallacy | Encefalitis herpética || No hay alteración persistente del estado mental.
+- framing_effect | Síncope febril || Hubo movimientos tónico clónicos con estado postictal.
+- inattentional_blindness | Hipoglucemia || No hay datos de ella.
+- focusing_illusion | Espasmo del sollozo || Se desencadena por llanto sin fiebre.
+- belief_bias | Daño cerebral por la fiebre alta || Las crisis febriles simples no dañan el cerebro.
+E: Las crisis febriles son las crisis más frecuentes en la infancia y ocurren entre los 6 meses y los 5 años con fiebre, sin infección del sistema nervioso ni alteraciones metabólicas. Las simples son generalizadas, duran menos de 15 minutos y no se repiten en 24 horas. Las complejas son focales, duran más de 15 minutos o se repiten en 24 horas. Las simples tienen excelente pronóstico, no causan daño neurológico y el riesgo de epilepsia es apenas mayor que en la población general. No requieren electroencefalograma ni neuroimagen de rutina en niños con recuperación completa.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de crisis febriles en niños
+
+@ ped|pediatric_neurology|febrile_seizures|3|next_step
+V: Niña de 2 años que tuvo una crisis febril simple en casa y llega a urgencias ya recuperada, activa, sin signos meníngeos y con fiebre por otitis media. Esquema de vacunación completo.
+P: ¿Cuál es la conducta a seguir?
++ Tratar la causa de la fiebre, educar a la familia y egresar sin estudios neurológicos de rutina || Las crisis febriles simples con recuperación completa no requieren estudios.
+- anchoring | Electroencefalograma urgente || No está indicado en crisis febriles simples.
+- availability_heuristic | Tomografía de cráneo || No está indicada.
+- representativeness_heuristic | Iniciar valproato como profilaxis || No se recomienda.
+- premature_closure | Punción lumbar en todos los casos || Solo si hay signos de infección del sistema nervioso.
+- framing_effect | Hospitalizar 72 horas para vigilancia || No es necesario.
+- complexity_bias | Resonancia magnética y estudio metabólico || No está indicado.
+- status_quo_bias | Dar fenobarbital diario porque siempre se hacía || Sus efectos adversos superan el beneficio.
+- belief_bias | Bañarla con agua fría y alcohol para evitar otra crisis || Es peligroso y no previene crisis.
+- omission_bias | No explicar qué hacer si se repite || La familia debe saber actuar.
+E: En una crisis febril simple con recuperación completa el manejo consiste en identificar y tratar la causa de la fiebre, que suele ser una infección viral, otitis o exantema súbito, y educar a la familia. No se requieren electroencefalograma, neuroimagen ni estudios de laboratorio de rutina. La punción lumbar se realiza si hay signos meníngeos, alteración persistente del estado mental, uso previo de antibióticos que pueda enmascarar meningitis o vacunación incompleta en lactantes. Los antipiréticos mejoran el confort pero no previenen las recurrencias. No se recomienda profilaxis con antiepilépticos continuos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de crisis febriles en niños
+
+@ ped|pediatric_neurology|febrile_seizures|3|initial_treatment
+V: Niño de 3 años con fiebre que inicia una crisis tónico clónica generalizada en urgencias. A los 5 minutos persiste convulsionando. No tiene acceso venoso todavía. Glucosa capilar de 95 mg/dL.
+P: ¿Cuál es el tratamiento inicial?
++ Benzodiacepina, midazolam bucal, intranasal o intramuscular, o diazepam rectal, mientras se asegura vía aérea y oxígeno || Una crisis de más de 5 minutos requiere tratamiento.
+- anchoring | Esperar a que ceda sola por ser febril || Más de 5 minutos aumenta el riesgo de estado epiléptico.
+- availability_heuristic | Fenitoína oral || No es útil durante la crisis.
+- representativeness_heuristic | Paracetamol rectal como tratamiento de la crisis || No detiene la crisis.
+- premature_closure | Intubación inmediata antes de dar fármacos || Primero se administra benzodiacepina.
+- framing_effect | Introducir un objeto en la boca para evitar que se muerda || Es peligroso.
+- complexity_bias | Tomografía antes de tratar || Retrasa el tratamiento.
+- base_rate_fallacy | Solución glucosada en bolo || La glucosa es normal.
+- belief_bias | Sumergirlo en agua fría || Es peligroso y no detiene la crisis.
+- omission_bias | No dar fármacos por miedo a depresión respiratoria || El riesgo de la crisis prolongada es mayor.
+E: Toda crisis que dura más de 5 minutos debe tratarse porque es poco probable que ceda sola y aumenta el riesgo de estado epiléptico. La primera línea son las benzodiacepinas. Sin acceso venoso se usan midazolam bucal, intranasal o intramuscular, o diazepam rectal, y con acceso venoso lorazepam, diazepam o midazolam intravenosos. Puede repetirse una dosis a los 5 a 10 minutos. Si persiste se pasa a segunda línea con levetiracetam, fenitoína o valproato intravenosos. Se mantiene la vía aérea, se da oxígeno, se mide la glucosa y se coloca al niño de lado. Nunca se introduce un objeto en la boca.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del estado epiléptico en niños ;; Guía de Práctica Clínica de diagnóstico y tratamiento de crisis febriles en niños
+
+@ ped|pediatric_neurology|febrile_seizures|3|risk_factor
+V: Niña de 14 meses que tuvo su primera crisis febril simple con una temperatura de 38.2 °C, una hora después de iniciar la fiebre. Su madre tuvo crisis febriles en la infancia. Los padres preguntan si volverá a pasar.
+P: ¿Cuál es el factor de riesgo de recurrencia presente?
++ Edad menor de 18 meses, fiebre baja al momento de la crisis, corta duración de la fiebre e historia familiar || Son los principales predictores de recurrencia.
+- anchoring | Sexo femenino || No es un predictor importante.
+- availability_heuristic | Vacunación completa || No aumenta el riesgo.
+- representativeness_heuristic | Lactancia materna previa || No aumenta el riesgo.
+- premature_closure | Que la crisis fuera generalizada || Es lo típico de la crisis simple.
+- base_rate_fallacy | Peso adecuado || No influye.
+- framing_effect | Asistencia a guardería || No es un predictor directo.
+- inattentional_blindness | Uso de paracetamol || No influye.
+- focusing_illusion | Infección viral como causa de la fiebre || Es la causa habitual.
+- belief_bias | Haber dormido poco la noche anterior || No es un predictor establecido.
+E: Alrededor de un tercio de los niños con una crisis febril presenta recurrencias. Los factores de riesgo de recurrencia son edad menor de 18 meses en la primera crisis, historia familiar de crisis febriles, crisis con temperatura relativamente baja y corto tiempo entre el inicio de la fiebre y la crisis. Con todos los factores el riesgo supera 70%. Los factores de riesgo de epilepsia posterior son diferentes, como crisis febriles complejas, alteraciones del neurodesarrollo e historia familiar de epilepsia. La profilaxis continua no se recomienda, pero puede indicarse una benzodiacepina de rescate a la familia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de crisis febriles en niños
+
+@ ped|pediatric_neurology|febrile_seizures|4|next_step
+V: Lactante de 9 meses con fiebre de 2 días que presenta una crisis convulsiva focal de 20 minutos. Después persiste somnoliento e irritable. Tiene esquema de vacunación incompleto y recibió amoxicilina desde ayer.
+P: ¿Cuál es el siguiente paso?
++ Realizar punción lumbar tras estabilizar y descartar hipertensión intracraneal, para descartar meningitis || Crisis compleja, alteración persistente, vacunas incompletas y antibiótico previo.
+- anchoring | Egresar con diagnóstico de crisis febril simple || Es una crisis compleja con alteración persistente.
+- availability_heuristic | Solo antipiréticos y vigilancia en casa || Puede tener meningitis.
+- representativeness_heuristic | Iniciar valproato a largo plazo || No es el paso inmediato.
+- premature_closure | Suspender la amoxicilina y observar || No descarta meningitis parcialmente tratada.
+- framing_effect | Electroencefalograma como único estudio || No descarta infección.
+- complexity_bias | Biopsia cerebral || No está indicada.
+- status_quo_bias | Mantener la amoxicilina oral sin estudios || Enmascara una posible meningitis.
+- belief_bias | La somnolencia es normal tras cualquier crisis y no requiere estudio || La somnolencia prolongada requiere evaluación.
+- omission_bias | Evitar la punción por miedo a complicaciones || El riesgo de no diagnosticar meningitis es mayor.
+E: La punción lumbar está indicada en niños con crisis y fiebre cuando hay signos meníngeos, alteración persistente del estado de conciencia, crisis compleja con sospecha de infección, lactantes de 6 a 12 meses con vacunación incompleta contra Haemophilus o neumococo, o tratamiento antibiótico previo que puede enmascarar una meningitis. Antes se descartan datos de hipertensión intracraneal, alteraciones de coagulación o inestabilidad. En las crisis febriles complejas puede requerirse neuroimagen o electroencefalograma según la evolución. Si se sospecha meningitis no se retrasa el antibiótico empírico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de crisis febriles en niños
+
+@ ped|pediatric_neurology|febrile_seizures|3|complication_prognosis
+V: Padres de un niño de 2 años que tuvo su primera crisis febril simple. Están muy angustiados y preguntan si su hijo tendrá epilepsia o daño cerebral.
+P: ¿Cuál es el pronóstico de las crisis febriles simples?
++ Excelente, sin daño neurológico y con un riesgo de epilepsia apenas mayor que el de la población general || Las crisis febriles simples son benignas.
+- anchoring | Alto riesgo de epilepsia en la mayoría || El riesgo es bajo.
+- availability_heuristic | Daño cerebral permanente || No causan daño cerebral.
+- representativeness_heuristic | Retraso del desarrollo en la mayoría || El desarrollo es normal.
+- premature_closure | Siempre se repiten hasta la adolescencia || Desaparecen después de los 5 a 6 años.
+- base_rate_fallacy | Riesgo elevado de muerte súbita || No aumenta de forma relevante.
+- framing_effect | Disminución del coeficiente intelectual || No afectan la inteligencia.
+- inattentional_blindness | Riesgo alto de parálisis cerebral || No se asocian.
+- focusing_illusion | Necesidad de tratamiento de por vida || No requieren tratamiento continuo.
+- belief_bias | La fiebre alta fríe el cerebro || Es un mito.
+E: Las crisis febriles simples tienen un pronóstico excelente. No causan daño cerebral, no afectan la inteligencia, el rendimiento escolar ni el desarrollo y desaparecen con la edad, generalmente después de los 5 a 6 años. El riesgo de epilepsia posterior es de 1 a 2%, poco mayor que el de la población general. Las recurrencias ocurren en alrededor de un tercio. La educación a los padres es fundamental para reducir la ansiedad, enseñarles a colocar al niño de lado, no introducir objetos en la boca, cronometrar la crisis y buscar atención si dura más de 5 minutos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de crisis febriles en niños
+
+@ ped|pediatric_neurology|febrile_seizures|3|diagnosis
+V: Niño de 6 años con episodios breves varias veces al día en que se queda con la mirada fija, deja de hablar, parpadea rápidamente y luego continúa lo que hacía sin recordar el episodio. Los episodios se desencadenan al pedirle que respire rápido. Bajo rendimiento escolar reciente.
+P: ¿Cuál es el diagnóstico más probable?
++ Epilepsia de ausencia infantil || Episodios breves de desconexión múltiples al día desencadenados por hiperventilación.
+- anchoring | Trastorno por déficit de atención || No explica las desconexiones con parpadeo e hiperventilación.
+- availability_heuristic | Crisis febriles || Ocurren con fiebre en menores de 5 años.
+- representativeness_heuristic | Crisis focales con alteración de la conciencia || Duran más y tienen estado postictal.
+- premature_closure | Ensoñación diurna || Se interrumpe con estímulos y no se provoca con hiperventilación.
+- base_rate_fallacy | Síncope vasovagal || Da pérdida del tono con pródromo.
+- framing_effect | Hipoglucemia recurrente || No se desencadena con hiperventilación.
+- inattentional_blindness | Tics motores || El niño no pierde el contacto.
+- focusing_illusion | Discapacidad intelectual || El rendimiento bajó por las crisis.
+- belief_bias | Niño distraído o flojo || Tiene crisis epilépticas.
+E: La epilepsia de ausencia infantil inicia entre los 4 y 10 años, es más frecuente en niñas y se caracteriza por episodios breves de 5 a 15 segundos de desconexión, mirada fija y automatismos leves como parpadeo, que ocurren decenas de veces al día sin estado postictal. La hiperventilación los desencadena. El electroencefalograma muestra descargas de punta onda generalizada a 3 Hz. Puede confundirse con déficit de atención y afectar el rendimiento escolar. El tratamiento de elección es etosuximida, y como alternativas valproato o lamotrigina. La carbamazepina y la fenitoína pueden empeorarlas. El pronóstico suele ser bueno.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la epilepsia en niños
+
+@ ped|pediatric_neurology|febrile_seizures|3|diagnosis
+V: Lactante de 15 meses que al regañarlo llora intensamente, contiene la respiración en espiración, se pone cianótico y pierde el tono por unos segundos, con breves sacudidas al final. Se recupera de inmediato. Exploración normal y desarrollo adecuado.
+P: ¿Cuál es el diagnóstico más probable?
++ Espasmo del sollozo cianótico || Llanto con apnea espiratoria, cianosis y pérdida breve del tono provocados por frustración.
+- anchoring | Epilepsia generalizada || Los episodios son provocados por el llanto y sin estado postictal.
+- availability_heuristic | Crisis febril || No hay fiebre.
+- representativeness_heuristic | Cardiopatía cianógena || La cianosis es solo durante el episodio.
+- premature_closure | Crisis de ausencia || No hay desencadenante emocional.
+- base_rate_fallacy | Síndrome de QT largo || No hay datos de arritmia.
+- framing_effect | Asfixia por cuerpo extraño || No hay atragantamiento.
+- inattentional_blindness | Hipoglucemia || No explica el desencadenante.
+- focusing_illusion | Síndrome de West || Da espasmos en flexión en lactantes menores.
+- belief_bias | Manipulación consciente del niño || Es un reflejo involuntario.
+E: El espasmo del sollozo es un fenómeno paroxístico no epiléptico frecuente entre los 6 meses y los 5 años. En la forma cianótica, la más común, el niño llora por frustración, enojo o dolor, detiene la respiración en espiración, se pone cianótico y puede perder la conciencia y el tono, con algunas sacudidas breves, y se recupera rápidamente. La forma pálida ocurre tras un golpe o susto por respuesta vagal. Es benigno y desaparece con la edad. Se asocia a anemia ferropénica, cuya corrección reduce los episodios. Se tranquiliza a los padres y se evita reforzar la conducta.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la epilepsia en niños
+
+@ ped|pediatric_neurology|bacterial_meningitis_child|3|diagnosis
+V: Niña de 2 años con fiebre de 39.8 °C, vómito, irritabilidad y somnolencia de 24 horas. Tiene rigidez de nuca, signo de Brudzinski positivo y petequias escasas en tronco. Esquema de vacunación incompleto.
+P: ¿Cuál es el diagnóstico más probable?
++ Meningitis bacteriana || Fiebre, alteración del estado de alerta y signos meníngeos en una niña no vacunada.
+- anchoring | Gastroenteritis con deshidratación || No explica la rigidez de nuca.
+- availability_heuristic | Crisis febril || No explica los signos meníngeos.
+- representativeness_heuristic | Meningitis viral sin otra consideración || Debe asumirse bacteriana hasta demostrar lo contrario.
+- premature_closure | Encefalitis viral || Predominan alteraciones de conducta y crisis focales.
+- base_rate_fallacy | Tumor cerebral || No explica la fiebre aguda.
+- framing_effect | Dengue con signos de alarma || No explica los signos meníngeos.
+- inattentional_blindness | Púrpura trombocitopénica inmune || No da fiebre ni signos meníngeos.
+- focusing_illusion | Absceso retrofaríngeo || Da rigidez por dolor cervical sin alteración del estado mental.
+- belief_bias | Niña cansada por la fiebre || La somnolencia con rigidez de nuca es alarmante.
+E: La meningitis bacteriana es una urgencia médica. En niños se manifiesta con fiebre, cefalea, vómito, irritabilidad, somnolencia, fotofobia, crisis convulsivas y signos meníngeos como rigidez de nuca, Kernig y Brudzinski. En lactantes los signos son inespecíficos, con fontanela abombada, rechazo al alimento e irritabilidad paradójica. Las petequias o púrpura sugieren meningococo. Después del periodo neonatal los agentes principales son Streptococcus pneumoniae, Neisseria meningitidis y Haemophilus influenzae tipo b en no vacunados. Se toman hemocultivos, se realiza punción lumbar si no hay contraindicación y se inicia antibiótico sin retraso.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de meningitis bacteriana aguda en niños
+
+@ ped|pediatric_neurology|bacterial_meningitis_child|3|data_interpretation
+V: Niño de 4 años con fiebre, cefalea y rigidez de nuca. El líquido cefalorraquídeo es turbio, con 2 500 leucocitos por mm3 con 90% de neutrófilos, glucosa de 20 mg/dL con glucosa sérica de 100 mg/dL y proteínas de 180 mg/dL.
+P: ¿Qué indica el análisis del líquido cefalorraquídeo?
++ Meningitis bacteriana || Pleocitosis neutrofílica, glucosa baja y proteínas elevadas.
+- anchoring | Meningitis viral || Daría predominio linfocitario con glucosa normal.
+- availability_heuristic | Meningitis tuberculosa || Da linfocitos con glucosa baja y proteínas muy altas de evolución subaguda.
+- representativeness_heuristic | Líquido normal || Los valores son claramente anormales.
+- premature_closure | Hemorragia subaracnoidea || Daría eritrocitos y xantocromía.
+- base_rate_fallacy | Meningitis por hongos || Es rara en niños sanos.
+- framing_effect | Encefalitis herpética || Da linfocitos y eritrocitos con glucosa normal.
+- inattentional_blindness | Punción traumática || No explica la glucosa baja.
+- focusing_illusion | Síndrome de Guillain Barré || Da disociación albuminocitológica sin células.
+- belief_bias | Infección leve que no requiere tratamiento || Es una meningitis bacteriana grave.
+E: El análisis del líquido cefalorraquídeo orienta la causa de la meningitis. En la bacteriana el líquido es turbio, con pleocitosis generalmente mayor de 1 000 células con predominio de neutrófilos, glucosa baja con relación líquido sangre menor de 0.4 y proteínas elevadas. En la viral hay pleocitosis moderada linfocitaria, glucosa normal y proteínas normales o poco elevadas. En la tuberculosa hay linfocitos, glucosa baja y proteínas muy elevadas con evolución subaguda. La tinción de Gram, el cultivo y las pruebas moleculares identifican el agente. El tratamiento antibiótico previo puede modificar estos hallazgos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de meningitis bacteriana aguda en niños
+
+@ ped|pediatric_neurology|bacterial_meningitis_child|3|treatment_of_choice
+V: Niño de 3 años con meningitis bacteriana confirmada por líquido cefalorraquídeo. La tinción de Gram muestra diplococos grampositivos. No tiene alergias.
+P: ¿Cuál es el tratamiento empírico de elección?
++ Ceftriaxona o cefotaxima más vancomicina intravenosas, con dexametasona antes o junto con la primera dosis || Cubren neumococo incluso resistente y la dexametasona reduce secuelas.
+- anchoring | Ampicilina con gentamicina || Es el esquema neonatal.
+- availability_heuristic | Ceftriaxona sola sin considerar resistencia || El neumococo puede ser resistente a cefalosporinas.
+- representativeness_heuristic | Amoxicilina oral || No alcanza niveles adecuados en el sistema nervioso.
+- premature_closure | Penicilina benzatínica intramuscular || No es adecuada.
+- framing_effect | Aciclovir solo || Es para encefalitis herpética.
+- complexity_bias | Meropenem con colistina como primera opción || No es el esquema empírico inicial.
+- base_rate_fallacy | Metronidazol || No cubre neumococo.
+- belief_bias | Esperar el cultivo para elegir el antibiótico || El retraso aumenta la mortalidad.
+- omission_bias | Evitar la dexametasona por miedo a ocultar la fiebre || Reduce la hipoacusia y secuelas.
+E: El tratamiento empírico de la meningitis bacteriana en niños mayores de un mes es una cefalosporina de tercera generación, ceftriaxona o cefotaxima, más vancomicina para cubrir neumococo resistente. Se ajusta al resultado del cultivo y antibiograma. La dexametasona, administrada antes o junto con la primera dosis del antibiótico, reduce la hipoacusia y las secuelas neurológicas, sobre todo en meningitis por Haemophilus influenzae tipo b y neumococo. La duración es de 7 días para meningococo, de 10 a 14 días para neumococo y de 7 a 10 para Haemophilus. Se vigilan complicaciones como hipertensión intracraneal, crisis y secreción inapropiada de hormona antidiurética.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de meningitis bacteriana aguda en niños
+
+@ ped|pediatric_neurology|bacterial_meningitis_child|3|complication_prognosis
+V: Niña de 5 años que se recupera de una meningitis por neumococo tratada hace 3 semanas. Su madre nota que no responde cuando la llaman por la espalda y sube mucho el volumen de la televisión.
+P: ¿Cuál es la secuela más frecuente de la meningitis bacteriana en niños?
++ Hipoacusia neurosensorial || Es la secuela más común, sobre todo tras meningitis neumocócica.
+- anchoring | Ceguera cortical || Es mucho menos frecuente.
+- availability_heuristic | Otitis media con derrame transitoria || No explica la hipoacusia tras meningitis.
+- representativeness_heuristic | Parálisis cerebral en todos los casos || No es lo más frecuente.
+- premature_closure | Hipotiroidismo || No es una secuela.
+- base_rate_fallacy | Diabetes insípida permanente || Es rara.
+- framing_effect | Hiperactividad por la fiebre || No explica la hipoacusia.
+- inattentional_blindness | Tapón de cerumen sin relación con la meningitis || No explica el contexto.
+- focusing_illusion | Ataxia cerebelosa crónica || Es menos frecuente.
+- belief_bias | Niña desobediente que no quiere escuchar || Puede tener hipoacusia.
+E: La hipoacusia neurosensorial es la secuela más frecuente de la meningitis bacteriana y es más común tras infección por neumococo. Se produce por daño a la cóclea por inflamación y puede ser bilateral y permanente. Por ello todos los niños deben tener evaluación auditiva antes del egreso o en las primeras semanas, ya que la osificación coclear puede limitar el implante coclear si se retrasa. Otras secuelas son epilepsia, hidrocefalia, déficit cognitivo, alteraciones motoras y de conducta. La dexametasona temprana reduce el riesgo de hipoacusia, y la vacunación contra neumococo, meningococo y Haemophilus previene la enfermedad.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de meningitis bacteriana aguda en niños
+
+@ ped|pediatric_neurology|bacterial_meningitis_child|3|prevention_screening
+V: Niño de 6 años con meningitis meningocócica confirmada que asiste a primaria. Sus padres, su hermana de 3 años y sus compañeros de banca pasaron tiempo con él en los 7 días previos.
+P: ¿Cuál es la medida de prevención indicada para los contactos cercanos?
++ Quimioprofilaxis con rifampicina, ceftriaxona o ciprofloxacino a los contactos cercanos || Elimina la colonización y previene casos secundarios.
+- anchoring | Vacunar solo al paciente al egreso || No protege a los contactos de inmediato.
+- availability_heuristic | Cerrar la escuela por un mes || No está indicado.
+- representativeness_heuristic | Dar amoxicilina por 10 días a toda la escuela || No erradica la colonización y no está indicada a todos.
+- premature_closure | Solo vigilancia sin medicamentos || Hay riesgo de casos secundarios.
+- framing_effect | Profilaxis a todo el personal del hospital || Solo a quienes tuvieron exposición directa a secreciones.
+- complexity_bias | Cultivo faríngeo a todos los contactos antes de decidir || Retrasa la profilaxis.
+- base_rate_fallacy | Inmunoglobulina intravenosa a los contactos || No es la medida indicada.
+- belief_bias | Lavar la ropa del niño con cloro elimina el riesgo || La transmisión es por gotas respiratorias.
+- omission_bias | No dar profilaxis para evitar resistencia || El riesgo de enfermedad grave lo justifica.
+E: La enfermedad meningocócica se transmite por gotas respiratorias y los contactos cercanos tienen un riesgo mucho mayor de enfermar. Se consideran contactos cercanos los convivientes del hogar, los niños y personal de guardería y quienes tuvieron contacto directo con secreciones orales en los 7 días previos, así como el personal de salud que realizó intubación o aspiración sin protección. La quimioprofilaxis debe iniciarse lo antes posible con rifampicina por 2 días, ceftriaxona intramuscular en dosis única, preferida en embarazadas, o ciprofloxacino en adultos. El paciente también recibe profilaxis si fue tratado con un antibiótico que no erradica la colonización.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de meningitis bacteriana aguda en niños
+
+@ ped|pediatric_neurology|bacterial_meningitis_child|4|complication_prognosis
+V: Adolescente de 14 años con fiebre de 12 horas que desarrolla púrpura extensa que no desaparece a la presión, hipotensión, taquicardia y llenado capilar de 5 segundos. Plaquetas de 40 000 y tiempos de coagulación prolongados.
+P: ¿Cuál es la complicación que presenta?
++ Meningococcemia fulminante con choque séptico y coagulación intravascular diseminada || Púrpura extensa con choque y coagulopatía de evolución rápida.
+- anchoring | Púrpura trombocitopénica inmune || No da fiebre, choque ni coagulopatía.
+- availability_heuristic | Dengue grave || No suele dar púrpura fulminante en horas.
+- representativeness_heuristic | Púrpura de Henoch Schönlein || Las plaquetas son normales y no hay choque.
+- premature_closure | Reacción alérgica a medicamento || No explica la coagulopatía.
+- base_rate_fallacy | Leucemia aguda || No explica la evolución en horas con choque.
+- framing_effect | Vasculitis por lupus || No explica el cuadro fulminante.
+- inattentional_blindness | Escarlatina grave || No da púrpura ni coagulopatía.
+- focusing_illusion | Síndrome de Waterhouse Friderichsen aislado sin infección || Es consecuencia de la meningococcemia.
+- belief_bias | Moretones por golpes en deportes || No explica la fiebre y el choque.
+E: La meningococcemia fulminante es una de las infecciones más rápidamente mortales. Inicia con fiebre y malestar y en pocas horas aparecen petequias que progresan a púrpura extensa, choque séptico, coagulación intravascular diseminada y falla orgánica múltiple. Puede haber hemorragia suprarrenal con insuficiencia suprarrenal aguda, el síndrome de Waterhouse Friderichsen. El tratamiento inmediato incluye ceftriaxona intravenosa sin esperar estudios, reanimación con líquidos, vasopresores y manejo en terapia intensiva. Ante fiebre con petequias que no desaparecen a la presión debe sospecharse meningococo. Los contactos reciben quimioprofilaxis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de meningitis bacteriana aguda en niños
+
+@ ped|pediatric_neurology|bacterial_meningitis_child|3|next_step
+V: Niño de 3 años con sospecha de meningitis bacteriana que presenta somnolencia profunda, papiledema y una crisis focal reciente. Está hemodinámicamente estable.
+P: ¿Cuál es la conducta más apropiada antes de la punción lumbar?
++ Tomar hemocultivos, iniciar antibióticos y dexametasona de inmediato y realizar tomografía antes de la punción || Hay datos de hipertensión intracraneal y focalización.
+- anchoring | Realizar punción lumbar inmediata sin estudios || Puede precipitar herniación.
+- availability_heuristic | Esperar la tomografía para iniciar antibióticos || El retraso aumenta la mortalidad.
+- representativeness_heuristic | Dar solo anticonvulsivos y observar || No trata la infección.
+- premature_closure | Diferir la punción indefinidamente sin tratamiento || Debe iniciarse el antibiótico.
+- framing_effect | Dar aciclovir solo || No cubre bacterias.
+- complexity_bias | Resonancia magnética con espectroscopia antes de cualquier tratamiento || Retrasa el manejo.
+- status_quo_bias | Mantener líquidos de mantenimiento sin otras medidas || No trata la causa.
+- belief_bias | Bajar la fiebre resuelve la somnolencia || La somnolencia indica afección cerebral.
+- omission_bias | No iniciar antibióticos sin confirmar el agente || La meningitis requiere tratamiento empírico inmediato.
+E: Antes de realizar la punción lumbar en sospecha de meningitis se evalúan contraindicaciones, como datos de hipertensión intracraneal, papiledema, alteración grave del estado de conciencia, crisis recientes o déficit focal, inestabilidad hemodinámica, coagulopatía o infección en el sitio de punción. En estos casos se realiza tomografía antes de la punción. Nunca debe retrasarse el tratamiento, por lo que se toman hemocultivos y se inician antibióticos empíricos y dexametasona de inmediato. La punción puede realizarse después cuando sea segura, ya que las pruebas moleculares y el análisis citoquímico siguen siendo útiles.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de meningitis bacteriana aguda en niños
