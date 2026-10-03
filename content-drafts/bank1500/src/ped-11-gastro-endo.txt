@@ -1,0 +1,287 @@
+@ ped|pediatric_gastroenterology|pediatric_gerd|2|diagnosis
+V: Lactante de 3 meses que regurgita pequeñas cantidades de leche después de casi todas las tomas sin esfuerzo. Está contento, come bien y gana peso adecuadamente. No tiene llanto excesivo ni problemas respiratorios.
+P: ¿Cuál es el diagnóstico más probable?
++ Reflujo gastroesofágico fisiológico || Regurgitaciones en un lactante feliz que crece bien.
+- anchoring | Enfermedad por reflujo gastroesofágico || Requiere complicaciones o síntomas molestos.
+- availability_heuristic | Estenosis hipertrófica del píloro || Da vómito en proyectil con pérdida de peso.
+- representativeness_heuristic | Alergia a la proteína de la leche de vaca || Suele tener otros síntomas como sangre en heces o dermatitis.
+- premature_closure | Malrotación intestinal || Da vómito biliar.
+- base_rate_fallacy | Acalasia || Es rara en lactantes.
+- framing_effect | Infección urinaria || No hay fiebre ni pérdida de peso.
+- inattentional_blindness | Hipertensión intracraneal || No hay otros datos neurológicos.
+- focusing_illusion | Intolerancia a la lactosa || Da diarrea y distensión.
+- belief_bias | La leche materna es de mala calidad || El reflujo es fisiológico.
+E: El reflujo gastroesofágico fisiológico es muy común en lactantes por la inmadurez del esfínter esofágico inferior, la dieta líquida y la posición acostada. Se manifiesta con regurgitaciones sin esfuerzo en un lactante que está contento y gana peso. Alcanza su máximo hacia los 4 meses y se resuelve en la mayoría al año de edad. No requiere estudios ni medicamentos. El manejo consiste en tranquilizar a los padres, evitar sobrealimentar, sacar el aire y, en lactantes con fórmula, considerar espesarla. Los inhibidores de bomba de protones no son eficaces en el reflujo fisiológico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del reflujo gastroesofágico en pediatría
+
+@ ped|pediatric_gastroenterology|pediatric_gerd|3|next_step
+V: Lactante de 5 meses con regurgitaciones frecuentes, irritabilidad durante las tomas, arqueo de la espalda y estancamiento del peso en los últimos 2 meses. Se alimenta con fórmula. No hay vómito biliar ni fiebre.
+P: ¿Cuál es la conducta más apropiada?
++ Optimizar la alimentación y probar una fórmula extensamente hidrolizada por 2 a 4 semanas antes de considerar fármacos || La alergia a la proteína de leche puede simular enfermedad por reflujo.
+- anchoring | Iniciar omeprazol de inmediato de forma indefinida || No es el primer paso en lactantes.
+- availability_heuristic | Cirugía antirreflujo || Se reserva para casos graves refractarios.
+- representativeness_heuristic | Endoscopia como primer paso || No es necesaria inicialmente.
+- premature_closure | Tranquilizar sin cambios porque es fisiológico || Hay falla de medro.
+- framing_effect | Posición prona para dormir || Aumenta el riesgo de muerte súbita.
+- complexity_bias | pH impedanciometría a todos los lactantes || Se reserva para casos seleccionados.
+- base_rate_fallacy | Metoclopramida de rutina || Tiene efectos adversos importantes.
+- belief_bias | Dar té de manzanilla después de cada toma || No es eficaz.
+- omission_bias | No hacer nada hasta el año || Hay falla de medro.
+E: La enfermedad por reflujo gastroesofágico se diagnostica cuando el reflujo causa síntomas molestos o complicaciones, como falla de medro, esofagitis, rechazo al alimento o problemas respiratorios. En lactantes el primer paso es optimizar la alimentación, evitar sobrealimentar, espesar las tomas y probar una fórmula extensamente hidrolizada o eliminar la leche de vaca de la dieta materna durante 2 a 4 semanas, ya que la alergia a la proteína de la leche de vaca puede tener síntomas similares. Los inhibidores de bomba de protones se reservan para esofagitis comprobada o síntomas persistentes. La posición prona no se recomienda.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del reflujo gastroesofágico en pediatría
+
+@ ped|pediatric_gastroenterology|pediatric_gerd|3|diagnosis
+V: Lactante de 2 meses alimentado con fórmula, con evacuaciones con moco y estrías de sangre, irritabilidad y dermatitis atópica. Está activo y gana peso. Fisura anal ausente y sin fiebre.
+P: ¿Cuál es el diagnóstico más probable?
++ Proctocolitis alérgica por proteína de la leche de vaca || Sangre y moco en heces en un lactante sano con dermatitis atópica.
+- anchoring | Gastroenteritis bacteriana || No hay fiebre ni afección general.
+- availability_heuristic | Invaginación intestinal || Da dolor cólico intenso y mal estado.
+- representativeness_heuristic | Enterocolitis necrosante || Es propia de prematuros enfermos.
+- premature_closure | Fisura anal || No se encuentra en la exploración.
+- base_rate_fallacy | Enfermedad inflamatoria intestinal || Es rara a esta edad.
+- framing_effect | Intolerancia a la lactosa || No da sangre en heces.
+- inattentional_blindness | Divertículo de Meckel || Da sangrado abundante.
+- focusing_illusion | Deficiencia de vitamina K || Daría sangrado en otros sitios.
+- belief_bias | Sangre por cambio de fórmula a una más cara || La alergia es la causa.
+E: La alergia a la proteína de la leche de vaca es la alergia alimentaria más frecuente en lactantes. Puede ser mediada por IgE, con urticaria, vómito o anafilaxia, o no mediada por IgE, como la proctocolitis alérgica. Esta se presenta en lactantes sanos de pocas semanas con evacuaciones con moco y estrías de sangre, sin afección del crecimiento. Otras manifestaciones son reflujo, cólico, diarrea, dermatitis y falla de medro. El diagnóstico se confirma con la mejoría tras eliminar la proteína y la reaparición con la reintroducción. Se trata con fórmula extensamente hidrolizada o dieta materna sin lácteos. La mayoría tolera la leche hacia el año.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de alergia a la proteína de la leche de vaca
+
+@ ped|pediatric_gastroenterology|pediatric_gerd|3|treatment_of_choice
+V: Lactante de 4 meses con alergia a la proteína de la leche de vaca no mediada por IgE confirmada, alimentado con fórmula. Persisten las evacuaciones con sangre con la fórmula de inicio habitual.
+P: ¿Cuál es el tratamiento de elección?
++ Fórmula extensamente hidrolizada de proteínas de leche de vaca || Es eficaz en la mayoría de los lactantes con alergia.
+- anchoring | Fórmula de soya en menores de 6 meses como primera opción || No se recomienda en menores de 6 meses por reactividad cruzada.
+- availability_heuristic | Fórmula deslactosada || Contiene proteína de leche de vaca.
+- representativeness_heuristic | Leche de cabra || Tiene reactividad cruzada.
+- premature_closure | Fórmula parcialmente hidrolizada || No es adecuada para tratar alergia.
+- framing_effect | Antihistamínicos orales de rutina || No tratan la alergia no mediada por IgE.
+- complexity_bias | Fórmula de aminoácidos para todos de primera línea || Se reserva para casos graves o falla.
+- base_rate_fallacy | Corticosteroides orales || No están indicados.
+- belief_bias | Atole de arroz en lugar de fórmula || No es nutricionalmente adecuado.
+- omission_bias | Continuar la misma fórmula hasta que tolere || Mantiene el daño intestinal.
+E: El tratamiento de la alergia a la proteína de la leche de vaca es la eliminación estricta de la proteína. En lactantes con seno materno se mantiene la lactancia y la madre elimina los lácteos de su dieta con suplemento de calcio. En lactantes con fórmula se usa fórmula extensamente hidrolizada como primera opción. La fórmula de aminoácidos se indica en casos graves, anafilaxia o falla a la hidrolizada. Las fórmulas deslactosadas, parcialmente hidrolizadas, de leche de cabra y de oveja no son adecuadas. La soya puede usarse después de los 6 meses en casos seleccionados. Se reintroduce bajo supervisión a los 9 a 12 meses.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de alergia a la proteína de la leche de vaca
+
+@ ped|pediatric_gastroenterology|pediatric_diarrhea|3|diagnosis
+V: Niño de 2 años con diarrea crónica voluminosa y fétida, distensión abdominal, irritabilidad y caída en las curvas de peso desde que inició el consumo de pan y galletas a los 8 meses. Glúteos aplanados. Anemia ferropénica que no responde al hierro oral.
+P: ¿Cuál es el diagnóstico más probable?
++ Enfermedad celiaca || Diarrea crónica, distensión y falla de medro tras introducir gluten, con anemia refractaria al hierro.
+- anchoring | Giardiasis || Puede dar malabsorción, pero no explica la relación con el gluten.
+- availability_heuristic | Intolerancia a la lactosa || No explica la falla de medro grave ni la anemia refractaria.
+- representativeness_heuristic | Fibrosis quística || Da infecciones respiratorias y esteatorrea desde el nacimiento.
+- premature_closure | Diarrea funcional del niño pequeño || No afecta el crecimiento.
+- base_rate_fallacy | Enfermedad de Crohn || Es rara a esta edad.
+- framing_effect | Alergia a la proteína de la leche de vaca || Inicia antes con la leche.
+- inattentional_blindness | Desnutrición por falta de alimentos || La familia aporta alimentos suficientes.
+- focusing_illusion | Hipotiroidismo || Da estreñimiento.
+- belief_bias | Diarrea por comer muchos dulces || No explica la falla de medro.
+E: La enfermedad celiaca es una enteropatía autoinmune desencadenada por el gluten del trigo, cebada y centeno en personas genéticamente predispuestas con HLA DQ2 o DQ8. La forma clásica en niños pequeños aparece meses después de introducir el gluten con diarrea crónica, distensión abdominal, irritabilidad, atrofia de glúteos y falla de medro. Otras manifestaciones son anemia ferropénica refractaria, talla baja, retraso puberal, dermatitis herpetiforme y alteraciones del esmalte dental. Es más frecuente en diabetes tipo 1, síndrome de Down y déficit de IgA. Se tamiza con anticuerpos antitransglutaminasa IgA con IgA total.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad celiaca
+
+@ ped|pediatric_gastroenterology|pediatric_diarrhea|3|confirmatory_study
+V: Niña de 6 años con talla baja y anemia ferropénica que no responde al hierro. Los anticuerpos antitransglutaminasa IgA son 15 veces el valor normal con IgA total normal. Consume gluten de forma habitual.
+P: ¿Cuál es el estudio de elección para confirmar el diagnóstico?
++ Biopsia duodenal por endoscopia mientras consume gluten, o anticuerpos antiendomisio en otra muestra si cumple criterios para omitir la biopsia || La biopsia muestra atrofia de vellosidades e infiltrado linfocitario.
+- anchoring | Repetir los anticuerpos antitransglutaminasa sin otro estudio en cualquier caso || Se requiere confirmación con criterios establecidos.
+- availability_heuristic | Prueba de aliento con hidrógeno || Evalúa intolerancia a la lactosa.
+- representativeness_heuristic | Coproparasitoscópico seriado || No confirma enfermedad celiaca.
+- premature_closure | Iniciar dieta sin gluten antes de los estudios || Altera los resultados.
+- base_rate_fallacy | Prueba de sudor || Es para fibrosis quística.
+- framing_effect | Colonoscopia con biopsia de colon || La lesión está en el duodeno.
+- complexity_bias | Cápsula endoscópica como primer estudio || No es el estudio de elección.
+- information_bias | Estudio genético HLA como confirmación || Solo sirve para descartar.
+- belief_bias | Diagnóstico por mejoría con dieta casera sin estudios || Requiere confirmación.
+E: El diagnóstico de enfermedad celiaca se basa en serología y biopsia duodenal, siempre mientras el paciente consume gluten. La biopsia muestra atrofia de vellosidades, hiperplasia de criptas y aumento de linfocitos intraepiteliales, clasificados según Marsh. En niños con anticuerpos antitransglutaminasa IgA mayores de 10 veces el valor normal y antiendomisio positivos en una segunda muestra, las guías europeas permiten omitir la biopsia. El estudio HLA DQ2 y DQ8 tiene alto valor predictivo negativo. No debe iniciarse la dieta sin gluten antes de completar el diagnóstico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad celiaca
+
+@ ped|pediatric_gastroenterology|pediatric_diarrhea|3|diagnosis
+V: Niño de 8 años con distensión, cólico y diarrea acuosa con flatulencia 1 a 2 horas después de tomar leche o comer helado. No tiene sangre en heces ni pérdida de peso. Mejora al evitar los lácteos.
+P: ¿Cuál es el diagnóstico más probable?
++ Intolerancia a la lactosa por deficiencia de lactasa de tipo adulto || Síntomas digestivos tras lácteos que mejoran al evitarlos, sin afección del crecimiento.
+- anchoring | Alergia a la proteína de la leche de vaca mediada por IgE || Daría urticaria, angioedema o anafilaxia en minutos.
+- availability_heuristic | Enfermedad celiaca || Se relaciona con el gluten y afecta el crecimiento.
+- representativeness_heuristic | Síndrome de intestino irritable || Los síntomas se relacionan claramente con la lactosa.
+- premature_closure | Giardiasis || No explica la relación con los lácteos.
+- base_rate_fallacy | Galactosemia || Se presenta en recién nacidos con ictericia y daño hepático.
+- framing_effect | Enfermedad inflamatoria intestinal || Daría sangre y pérdida de peso.
+- inattentional_blindness | Gastroenteritis viral recurrente || No explica la relación con los lácteos.
+- focusing_illusion | Apendicitis crónica || No existe como causa de este cuadro.
+- belief_bias | Leche en mal estado cada vez || El patrón repetido indica intolerancia.
+E: La intolerancia a la lactosa se debe a deficiencia de lactasa en el borde en cepillo intestinal. La forma primaria de tipo adulto aparece después de los 5 años y es muy frecuente en población mexicana. La secundaria ocurre tras gastroenteritis o enfermedad celiaca. La lactosa no absorbida es fermentada por bacterias del colon y produce distensión, flatulencia, cólico y diarrea osmótica. No hay sangre ni afección del crecimiento. El diagnóstico se apoya en la prueba de aliento con hidrógeno o en la mejoría al retirar la lactosa. El tratamiento es reducir la lactosa, usar productos deslactosados o lactasa, y asegurar el calcio.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la intolerancia a la lactosa
+
+@ ped|pediatric_gastroenterology|pediatric_diarrhea|3|diagnosis
+V: Niña de 5 años de una comunidad rural con diarrea de 3 semanas, evacuaciones grasosas y fétidas que flotan, distensión, flatulencia y pérdida de peso. Sin sangre en heces. Asiste a una guardería con agua de pozo.
+P: ¿Cuál es el diagnóstico más probable?
++ Giardiasis || Diarrea crónica con esteatorrea y malabsorción por agua contaminada.
+- anchoring | Amebiasis intestinal || Da diarrea con moco y sangre.
+- availability_heuristic | Shigelosis || Da disentería aguda con fiebre.
+- representativeness_heuristic | Enfermedad celiaca || Debe considerarse, pero la exposición al agua de pozo orienta a giardiasis.
+- premature_closure | Diarrea viral aguda || Duraría pocos días.
+- base_rate_fallacy | Fibrosis quística || Da afección respiratoria desde la infancia temprana.
+- framing_effect | Ascariasis || Da dolor y obstrucción, no esteatorrea.
+- inattentional_blindness | Oxiuriasis || Da prurito anal nocturno.
+- focusing_illusion | Intolerancia a la lactosa primaria || No explica la exposición y la evolución.
+- belief_bias | Diarrea por comer comida grasosa || No explica la duración ni la malabsorción.
+E: Giardia lamblia es un protozoario que se transmite por agua o alimentos contaminados con quistes y es frecuente en guarderías. Se adhiere al epitelio del duodeno y yeyuno y produce malabsorción, con diarrea acuosa o esteatorrea fétida, distensión, flatulencia, dolor abdominal y pérdida de peso. Puede causar intolerancia secundaria a la lactosa. No invade la mucosa, por lo que no hay sangre. El diagnóstico se hace con coproparasitoscópico seriado o detección de antígenos en heces. El tratamiento es metronidazol, tinidazol o nitazoxanida. La prevención incluye agua potable e higiene de manos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de parasitosis intestinal en niños
+
+@ ped|pediatric_gastroenterology|pediatric_diarrhea|2|diagnosis
+V: Niño de 2 años con 3 a 5 evacuaciones blandas al día con restos de alimentos sin digerir desde hace 4 meses, que empeoran cuando toma mucho jugo. Crece bien, come bien y no tiene sangre en heces ni otros síntomas.
+P: ¿Cuál es el diagnóstico más probable?
++ Diarrea funcional del niño pequeño || Evacuaciones blandas con restos de alimento en un niño que crece bien.
+- anchoring | Enfermedad celiaca || Afecta el crecimiento.
+- availability_heuristic | Giardiasis || Suele dar malabsorción y pérdida de peso.
+- representativeness_heuristic | Fibrosis quística || Afecta el crecimiento y la respiración.
+- premature_closure | Enfermedad inflamatoria intestinal || Daría sangre y afección general.
+- base_rate_fallacy | Insuficiencia pancreática congénita || Es rara y afecta el crecimiento.
+- framing_effect | Alergia a la proteína de la leche de vaca || Es más común en lactantes con otros síntomas.
+- inattentional_blindness | Hipertiroidismo || Es raro y daría otros datos.
+- focusing_illusion | Síndrome de intestino corto || Requiere cirugía previa.
+- belief_bias | Niño que mastica mal y debe hacer dieta astringente || No requiere restricción.
+E: La diarrea funcional del niño pequeño es la causa más común de diarrea crónica en niños de 6 meses a 5 años. Se caracteriza por tres o más evacuaciones blandas y sin dolor al día durante más de 4 semanas, a menudo con restos de alimentos visibles, en un niño que crece normalmente. Se relaciona con tránsito intestinal rápido y consumo excesivo de jugos con fructosa y sorbitol, así como dietas bajas en grasa. El manejo consiste en tranquilizar a los padres, reducir jugos y bebidas azucaradas, normalizar la grasa y la fibra de la dieta y evitar dietas restrictivas innecesarias.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de diarrea crónica en niños
+
+@ ped|pediatric_endocrinology|congenital_hypothyroidism|2|prevention_screening
+V: Recién nacido sano de término de 3 días de vida que será dado de alta. Los padres preguntan qué estudio se le hará en el talón y para qué sirve.
+P: ¿Cuál es el propósito principal del tamiz metabólico neonatal en la prevención?
++ Detectar de forma temprana enfermedades como el hipotiroidismo congénito para tratarlas antes de que causen daño irreversible || Permite iniciar tratamiento antes de los síntomas.
+- anchoring | Diagnosticar infecciones del recién nacido || No detecta infecciones.
+- availability_heuristic | Determinar el grupo sanguíneo || No es su propósito.
+- representativeness_heuristic | Medir la glucosa para descartar diabetes tipo 1 || No es su propósito.
+- premature_closure | Detectar cardiopatías congénitas || Se tamizan con oximetría.
+- base_rate_fallacy | Medir la bilirrubina || No es su propósito.
+- framing_effect | Detectar hipoacusia || Se tamiza con emisiones otoacústicas.
+- complexity_bias | Secuenciar el genoma completo || No es el tamiz estándar.
+- belief_bias | Es un estudio opcional que no cambia nada || Previene discapacidad intelectual.
+- omission_bias | Diferirlo hasta el mes de vida || Se toma idealmente entre el día 3 y 5.
+E: El tamiz metabólico neonatal se toma idealmente entre el tercer y quinto día de vida con una muestra de sangre del talón en papel filtro. En México detecta enfermedades como hipotiroidismo congénito, fenilcetonuria, hiperplasia suprarrenal congénita, galactosemia, fibrosis quística y deficiencia de glucosa 6 fosfato deshidrogenasa, según la versión del tamiz. Estas enfermedades no dan síntomas al nacer, pero sin tratamiento oportuno causan discapacidad intelectual, crisis o muerte. Un resultado sospechoso requiere estudios confirmatorios inmediatos. El hipotiroidismo congénito es la enfermedad más frecuente detectada por el tamiz.
+R: Norma Oficial Mexicana para la prevención y control de los defectos al nacimiento ;; Lineamiento técnico de tamiz neonatal
+
+@ ped|pediatric_endocrinology|congenital_hypothyroidism|3|diagnosis
+V: Lactante de 2 meses que no tuvo tamiz neonatal. Presenta ictericia prolongada, estreñimiento, llanto ronco, macroglosia, hernia umbilical, piel seca y fontanela posterior amplia. Duerme mucho y come poco.
+P: ¿Cuál es el diagnóstico más probable?
++ Hipotiroidismo congénito || Ictericia prolongada, macroglosia, hernia umbilical, estreñimiento y fontanela posterior amplia.
+- anchoring | Síndrome de Down || Comparte algunos rasgos, pero no explica la ictericia prolongada y el estreñimiento.
+- availability_heuristic | Ictericia por leche materna || No explica los demás hallazgos.
+- representativeness_heuristic | Enfermedad de Hirschsprung || Da estreñimiento, pero no macroglosia ni llanto ronco.
+- premature_closure | Atresia biliar || Daría acolia y bilirrubina directa.
+- base_rate_fallacy | Mucopolisacaridosis || Se manifiesta más tarde.
+- framing_effect | Desnutrición || No explica la macroglosia.
+- inattentional_blindness | Sepsis neonatal tardía || No explica la evolución crónica.
+- focusing_illusion | Síndrome de Beckwith Wiedemann || Da macroglosia con macrosomía e hipoglucemia.
+- belief_bias | Bebé tranquilo que duerme mucho || La somnolencia y los demás datos son patológicos.
+E: El hipotiroidismo congénito es la causa prevenible más frecuente de discapacidad intelectual. La causa más común es la disgenesia tiroidea. Al nacer la mayoría no tiene síntomas por el paso de hormona materna, de ahí la importancia del tamiz. Sin tratamiento, en las primeras semanas aparecen ictericia prolongada, hipotonía, letargo, dificultad para alimentarse, estreñimiento, llanto ronco, macroglosia, hernia umbilical, piel seca y fría y fontanela posterior amplia. Se confirma con TSH elevada y T4 libre baja en suero. El tratamiento con levotiroxina debe iniciarse en las primeras 2 semanas de vida.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo congénito ;; Lineamiento técnico de tamiz neonatal
+
+@ ped|pediatric_endocrinology|congenital_hypothyroidism|3|next_step
+V: Recién nacido de 6 días con tamiz neonatal que reporta TSH elevada. Está asintomático y con exploración normal.
+P: ¿Cuál es el siguiente paso?
++ Medir TSH y T4 libre en suero de inmediato e iniciar levotiroxina sin esperar si la confirmación se retrasa o es compatible || El tratamiento temprano previene el daño neurológico.
+- anchoring | Repetir el tamiz en 3 meses || El retraso causa daño irreversible.
+- availability_heuristic | Esperar a que aparezcan síntomas para tratar || El daño ocurre antes de los síntomas.
+- representativeness_heuristic | Realizar gammagrama tiroideo antes de cualquier tratamiento || No debe retrasar el tratamiento.
+- premature_closure | Tranquilizar porque el bebé se ve sano || La ausencia de síntomas es lo esperado.
+- framing_effect | Dar yodo a la madre que amamanta || No trata el hipotiroidismo del bebé.
+- complexity_bias | Resonancia magnética de hipófisis || No es el paso inicial.
+- status_quo_bias | Revalorar en la consulta del mes || Retrasa el diagnóstico.
+- belief_bias | Dar té de hierbas para estimular la tiroides || No es eficaz.
+- omission_bias | No iniciar levotiroxina por miedo a efectos adversos || El beneficio es enorme.
+E: Ante un tamiz neonatal con TSH elevada se debe localizar al recién nacido de inmediato y realizar TSH y T4 libre en suero. Si se confirma hipotiroidismo, con TSH alta y T4 libre baja, se inicia levotiroxina a 10 a 15 mcg/kg/día. Si la confirmación se retrasa o la TSH es muy alta, se inicia el tratamiento tras tomar la muestra. El objetivo es normalizar la T4 libre en 2 semanas y la TSH en un mes. La levotiroxina se administra triturada en poca agua o leche, sin mezclarla con soya, hierro o calcio. El gammagrama o ultrasonido no deben retrasar el tratamiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo congénito
+
+@ ped|pediatric_endocrinology|congenital_hypothyroidism|3|complication_prognosis
+V: Niño de 4 años con hipotiroidismo congénito diagnosticado a los 9 meses por síntomas, ya que no se realizó tamiz neonatal. Recibe levotiroxina desde entonces.
+P: ¿Cuál es el pronóstico neurológico esperado por el diagnóstico tardío?
++ Discapacidad intelectual y alteraciones del neurodesarrollo que no se revierten por completo con el tratamiento || La hormona tiroidea es indispensable para el desarrollo cerebral en los primeros meses.
+- anchoring | Desarrollo normal porque ya recibe tratamiento || El daño de los primeros meses es irreversible.
+- availability_heuristic | Solo talla baja sin afección cognitiva || La afección cognitiva es la secuela principal.
+- representativeness_heuristic | Epilepsia refractaria en todos los casos || No es la secuela característica.
+- premature_closure | Ceguera cortical || No es característica.
+- base_rate_fallacy | Parálisis cerebral espástica obligada || No es la secuela típica.
+- framing_effect | Hipertiroidismo por el tratamiento || El tratamiento se ajusta con estudios.
+- inattentional_blindness | Diabetes tipo 1 secundaria || No se relaciona.
+- focusing_illusion | Hipoacusia aislada sin otras secuelas || Puede haber, pero la secuela principal es cognitiva.
+- belief_bias | Recuperará todo con dosis más altas de hormona || El daño es irreversible.
+E: La hormona tiroidea es esencial para la maduración del sistema nervioso central durante los primeros 2 a 3 años de vida. Si el hipotiroidismo congénito no se trata en las primeras semanas, se produce daño neurológico irreversible, con pérdida de varios puntos de coeficiente intelectual por cada mes de retraso. Las secuelas incluyen discapacidad intelectual, alteraciones motoras, de lenguaje, de atención y talla baja. Cuando el tratamiento inicia en las primeras 2 semanas el desarrollo es prácticamente normal. Por ello el tamiz neonatal universal es una de las intervenciones de salud pública más costo efectivas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del hipotiroidismo congénito
+
+@ ped|pediatric_endocrinology|pediatric_diabetes|2|diagnosis
+V: Niña de 9 años con poliuria, polidipsia, enuresis nocturna reciente y pérdida de 4 kg en un mes a pesar de comer más. Glucosa capilar al azar de 320 mg/dL. Sin vómito ni dificultad respiratoria.
+P: ¿Cuál es el diagnóstico más probable?
++ Diabetes tipo 1 de reciente inicio || Poliuria, polidipsia, pérdida de peso y glucosa al azar mayor de 200 con síntomas.
+- anchoring | Infección urinaria con enuresis || No explica la hiperglucemia.
+- availability_heuristic | Diabetes insípida || Da poliuria sin hiperglucemia.
+- representativeness_heuristic | Diabetes tipo 2 || Es menos probable en una niña delgada que pierde peso.
+- premature_closure | Potomanía psicógena || No explica la hiperglucemia.
+- base_rate_fallacy | Diabetes tipo MODY || Es menos frecuente y tiene herencia dominante.
+- framing_effect | Hipertiroidismo || No explica la glucosa alta.
+- inattentional_blindness | Enuresis primaria || Era continente antes.
+- focusing_illusion | Estrés escolar || No explica la hiperglucemia.
+- belief_bias | Exceso de dulces que se corrige con dieta || Es una enfermedad autoinmune.
+E: La diabetes tipo 1 es la forma más frecuente en niños y se debe a destrucción autoinmune de las células beta del páncreas. Se presenta con poliuria, polidipsia, polifagia, pérdida de peso y enuresis secundaria. El diagnóstico se establece con glucosa al azar de 200 mg/dL o más con síntomas, glucosa en ayuno de 126 o más, glucosa de 200 o más a las 2 horas de una carga o hemoglobina glucosilada de 6.5% o más. Los autoanticuerpos, como anti GAD, anti insulina y anti IA2, confirman el origen autoinmune. Requiere insulina desde el diagnóstico. Hasta un tercio debuta con cetoacidosis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de diabetes tipo 1 en niños y adolescentes
+
+@ ped|pediatric_endocrinology|pediatric_diabetes|3|initial_treatment
+V: Niño de 8 años con diabetes tipo 1 que llega con vómito, dolor abdominal, respiración profunda y rápida y deshidratación moderada. Glucosa de 480 mg/dL, pH de 7.12, bicarbonato de 8 mEq/L y cetonas positivas. Peso de 25 kg.
+P: ¿Cuál es el tratamiento inicial?
++ Solución salina al 0.9% de 10 a 20 mL/kg en la primera hora y después insulina intravenosa en infusión a 0.05 a 0.1 U/kg/h || Corrige la deshidratación antes de iniciar la insulina.
+- anchoring | Bolo de insulina intravenosa a dosis alta de inmediato || Aumenta el riesgo de hipoglucemia, hipopotasemia y edema cerebral.
+- availability_heuristic | Bicarbonato de sodio de rutina || Aumenta el riesgo de edema cerebral.
+- representativeness_heuristic | Solución glucosada al 5% desde el inicio || La glucosa se agrega cuando baja de 250 a 300.
+- premature_closure | Insulina subcutánea y egreso || Es una cetoacidosis moderada a grave.
+- framing_effect | Bolos repetidos de 40 mL/kg de solución || Aumentan el riesgo de edema cerebral.
+- complexity_bias | Tomografía de cráneo antes de iniciar el tratamiento || No debe retrasarlo.
+- base_rate_fallacy | Antibióticos de amplio espectro como primera medida || Solo si hay infección.
+- belief_bias | Dar refresco para corregir la deshidratación || Empeora la hiperglucemia.
+- omission_bias | No dar potasio por miedo a hiperpotasemia || El potasio corporal total está bajo.
+E: La cetoacidosis diabética se define por glucosa mayor de 200 mg/dL, pH menor de 7.3 o bicarbonato menor de 15 y cetonemia o cetonuria. El tratamiento inicia con expansión con solución salina de 10 a 20 mL/kg en la primera hora, seguida de reposición del déficit en 24 a 48 horas. La insulina intravenosa en infusión a 0.05 a 0.1 U/kg/h se inicia una o dos horas después de los líquidos, sin bolo. Se agrega potasio a los líquidos una vez que se confirma la diuresis y el potasio es menor de 5.5. Se agrega glucosa cuando la glucemia baja de 250 a 300. El bicarbonato no se recomienda de rutina.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de cetoacidosis diabética en niños y adolescentes
+
+@ ped|pediatric_endocrinology|pediatric_diabetes|4|complication_prognosis
+V: Niña de 7 años en tratamiento por cetoacidosis diabética grave. A las 6 horas de iniciar líquidos e insulina presenta cefalea, vómito, confusión, bradicardia e hipertensión. La glucosa ha bajado de forma adecuada.
+P: ¿Cuál es la complicación que presenta?
++ Edema cerebral || Cefalea, alteración del estado mental, bradicardia e hipertensión durante el tratamiento de la cetoacidosis.
+- anchoring | Hipoglucemia por insulina || La glucosa bajó de forma adecuada y no explica la bradicardia con hipertensión.
+- availability_heuristic | Empeoramiento de la acidosis || No explica los datos neurológicos con bradicardia.
+- representativeness_heuristic | Meningitis bacteriana || No hay fiebre y el contexto es la cetoacidosis.
+- premature_closure | Hipopotasemia || No explica la tríada de Cushing.
+- base_rate_fallacy | Trombosis de seno venoso sola || Es menos frecuente.
+- framing_effect | Crisis de ansiedad || Los datos neurológicos son graves.
+- inattentional_blindness | Pancreatitis aguda || No explica la alteración neurológica.
+- focusing_illusion | Migraña || No explica la bradicardia e hipertensión.
+- belief_bias | Cansancio normal por el tratamiento || Es una urgencia neurológica.
+E: El edema cerebral es la principal causa de muerte en niños con cetoacidosis diabética. Suele aparecer entre 4 y 12 horas después de iniciar el tratamiento. Los factores de riesgo son menor edad, debut de diabetes, acidosis grave, nitrógeno ureico elevado, pCO2 baja, bolos de insulina, bicarbonato y administración rápida de líquidos. Se manifiesta con cefalea, vómito, alteración del estado mental, irritabilidad, bradicardia, hipertensión, incontinencia o alteraciones pupilares. El tratamiento debe iniciarse de inmediato con manitol o solución salina hipertónica, reducción de los líquidos y elevación de la cabecera, sin esperar la tomografía.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de cetoacidosis diabética en niños y adolescentes
+
+@ ped|pediatric_endocrinology|pediatric_diabetes|3|risk_factor
+V: Adolescente de 13 años con obesidad, acantosis nigricans en cuello y axilas, madre y abuela con diabetes y sedentarismo. Glucosa en ayuno de 135 mg/dL en dos ocasiones. Autoanticuerpos pancreáticos negativos.
+P: ¿Cuál es el factor de riesgo más importante para su tipo de diabetes?
++ Obesidad con resistencia a la insulina, manifestada por acantosis nigricans || La diabetes tipo 2 en adolescentes se asocia sobre todo a obesidad.
+- anchoring | Autoinmunidad pancreática || Los anticuerpos son negativos.
+- availability_heuristic | Infección viral reciente || Se asocia a diabetes tipo 1.
+- representativeness_heuristic | Consumo de leche de vaca en la lactancia || No es un factor establecido.
+- premature_closure | Pubertad tardía || La pubertad aumenta la resistencia a la insulina, no la retrasa.
+- base_rate_fallacy | Mutación del gen HNF1A || Corresponde a MODY.
+- framing_effect | Exceso de horas de sueño || No es el factor principal.
+- inattentional_blindness | Uso de corticosteroides inhalados || No es lo más relevante.
+- focusing_illusion | Fibrosis quística || No hay antecedente.
+- belief_bias | Comer dulces una vez a la semana || El factor clave es la obesidad y el sedentarismo.
+E: La diabetes tipo 2 en niños y adolescentes ha aumentado con la epidemia de obesidad, y México tiene una de las prevalencias más altas. Los factores de riesgo incluyen obesidad, antecedente familiar de diabetes tipo 2, origen étnico de alto riesgo, signos de resistencia a la insulina como acantosis nigricans, síndrome de ovario poliquístico, hipertensión, dislipidemia y antecedente de diabetes gestacional materna o bajo peso al nacer. La pubertad aumenta la resistencia a la insulina. Se recomienda tamizar a partir de los 10 años o del inicio de la pubertad a niños con sobrepeso y factores de riesgo. El tratamiento incluye cambios de estilo de vida y metformina.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de diabetes tipo 2 en niños y adolescentes
+
+@ ped|pediatric_endocrinology|pediatric_diabetes|3|next_step
+V: Niño de 10 años con diabetes tipo 1 que recibe insulina basal y rápida. Una hora después de jugar futbol presenta sudoración, temblor, palidez, irritabilidad y confusión. Glucosa capilar de 52 mg/dL. Puede tragar.
+P: ¿Cuál es el manejo inmediato de este cuadro?
++ Hipoglucemia que se trata con 10 a 15 g de carbohidratos de absorción rápida por vía oral y nueva medición a los 15 minutos || El ejercicio aumenta la sensibilidad a la insulina.
+- anchoring | Glucosa normal para un niño diabético || Menos de 70 es hipoglucemia.
+- availability_heuristic | Indica cetoacidosis y requiere más insulina || La glucosa está baja.
+- representativeness_heuristic | Indica crisis de ansiedad || La glucosa confirma hipoglucemia.
+- premature_closure | Requiere glucagón intramuscular aunque pueda tragar || El glucagón se usa si no puede tragar.
+- framing_effect | Dar chocolate como mejor opción || La grasa retrasa la absorción.
+- complexity_bias | Trasladar al hospital antes de dar nada || Debe corregirse de inmediato.
+- base_rate_fallacy | Aplicar una dosis extra de insulina rápida || Empeora la hipoglucemia.
+- belief_bias | Dejarlo dormir para que se recupere || Puede progresar a convulsiones.
+- omission_bias | No dar azúcar por miedo a subir la glucosa || La hipoglucemia es más peligrosa.
+E: La hipoglucemia es la complicación aguda más frecuente del tratamiento con insulina. Se define como glucosa menor de 70 mg/dL, y es grave si requiere ayuda de otra persona. Se desencadena por ejercicio, omisión de comidas o exceso de insulina. Los síntomas incluyen sudoración, temblor, palidez, hambre, irritabilidad, confusión y crisis. Si el paciente puede tragar se dan 10 a 15 g de carbohidratos de absorción rápida, como jugo o tabletas de glucosa, y se repite la medición a los 15 minutos. Si está inconsciente se administra glucagón intramuscular o intranasal. Se ajustan la insulina y los carbohidratos antes del ejercicio.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de diabetes tipo 1 en niños y adolescentes
