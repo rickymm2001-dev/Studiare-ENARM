@@ -347,7 +347,7 @@ P: ¿Cuál es la conducta más apropiada respecto al sitio de atención?
 - base_rate_fallacy | Tratar las áreas especiales igual que el resto || Requieren manejo especializado.
 - belief_bias | Las quemaduras de segundo grado sanan solas siempre || Las áreas especiales tienen riesgo de secuelas.
 - omission_bias | No referir para no saturar la unidad || Cumple criterios.
-E: Los criterios de referencia a una unidad de quemados incluyen quemaduras de espesor parcial mayores de 10 a 20% de la superficie corporal, quemaduras de espesor total, quemaduras en cara, manos, pies, genitales, periné o articulaciones mayores, quemaduras circunferenciales, eléctricas incluidas las por rayo, químicas, lesión por inhalación, pacientes con comorbilidades, traumatismo asociado y niños en hospitales sin capacidad pediátrica. Estas quemaduras tienen riesgo de secuelas funcionales y estéticas y requieren manejo multidisciplinario.
+E: Los criterios de referencia a una unidad de quemados incluyen quemaduras de espesor parcial mayores de 10 a 20% de la superficie corporal, quemaduras de espesor total, quemaduras en cara, manos, pies, genitales, periné o articulaciones mayores, quemaduras circunferenciales, eléctricas incluidas las por rayo, químicas, lesión por inhalación, pacientes con comorbilidades, traumatismo asociado y niños en hospitales sin capacidad pediátrica. Estas quemaduras tienen riesgo de secuelas funcionales y estéticas y requieren manejo multidisciplinario con cirugía plástica, terapia intensiva, rehabilitación y apoyo psicológico.
 R: Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado
 
 @ cir|burns|burn_resuscitation|3|complication_prognosis
