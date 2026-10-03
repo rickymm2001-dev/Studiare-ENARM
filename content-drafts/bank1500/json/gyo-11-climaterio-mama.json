@@ -1,0 +1,2261 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "gyo-11-climaterio-mama-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "climacteric",
+      "subtopic": "menopause_obstetrics",
+      "vignette": "Mujer de 56 años que usa terapia hormonal combinada desde hace 4 años por síntomas vasomotores intensos. Está bien controlada y pregunta si debe suspenderla.",
+      "prompt": "¿Qué indica la evidencia sobre la duración de la terapia hormonal?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Debe suspenderse obligatoriamente a los 5 años en todas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No existe un límite fijo."
+        },
+        {
+          "key": "b",
+          "text": "Debe mantenerse de por vida en todas para prevenir enfermedades",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se indica para prevención primaria cardiovascular."
+        },
+        {
+          "key": "c",
+          "text": "Debe suspenderse si los síntomas están controlados sin valorar recurrencia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Los síntomas pueden regresar."
+        },
+        {
+          "key": "d",
+          "text": "Debe aumentarse la dosis con la edad",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se busca la dosis mínima eficaz."
+        },
+        {
+          "key": "e",
+          "text": "Las hormonas naturales bioidénticas son siempre más seguras",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No hay evidencia de mayor seguridad."
+        },
+        {
+          "key": "f",
+          "text": "No hay una duración máxima fija; se reevalúa cada año el balance de beneficios y riesgos y se usa la dosis mínima eficaz",
+          "correct": true,
+          "rationale": "La decisión es individualizada."
+        },
+        {
+          "key": "g",
+          "text": "Debe suspenderse de inmediato por riesgo de cáncer seguro",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El riesgo absoluto es bajo en esta ventana."
+        },
+        {
+          "key": "h",
+          "text": "Requiere mastografía mensual",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La mastografía sigue el esquema habitual."
+        },
+        {
+          "key": "i",
+          "text": "Debe cambiarse a estrógeno solo aunque tenga útero",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Requiere progestágeno."
+        },
+        {
+          "key": "j",
+          "text": "La terapia hormonal causa demencia en todas las usuarias",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es así en la ventana de oportunidad."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "g"
+      ],
+      "explanation": "La terapia hormonal de la menopausia se indica principalmente para los síntomas vasomotores y genitourinarios y para prevenir osteoporosis en mujeres con alto riesgo. Su balance es más favorable en mujeres menores de 60 años o con menos de 10 años de menopausia, la llamada ventana de oportunidad. No existe una duración máxima obligatoria, y la decisión de continuarla se individualiza y reevalúa cada año, usando la dosis mínima eficaz. Con el uso combinado prolongado aumenta ligeramente el riesgo de cáncer de mama. No se recomienda para prevención primaria de enfermedad cardiovascular ni demencia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "climacteric",
+      "subtopic": "menopause_obstetrics",
+      "vignette": "Mujer de 57 años, posmenopáusica desde hace 6 años, que presenta un episodio de sangrado vaginal. No usa terapia hormonal.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ultrasonido transvaginal para medir el grosor endometrial y biopsia según el resultado",
+          "correct": true,
+          "rationale": "Todo sangrado posmenopáusico debe estudiarse para descartar cáncer de endometrio."
+        },
+        {
+          "key": "b",
+          "text": "Iniciar terapia hormonal para regular el sangrado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicado sin diagnóstico."
+        },
+        {
+          "key": "c",
+          "text": "Citología cervical como único estudio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No evalúa el endometrio."
+        },
+        {
+          "key": "d",
+          "text": "Tomografía de abdomen como primer estudio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "e",
+          "text": "Es una última menstruación tardía",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No ocurre 6 años después."
+        },
+        {
+          "key": "f",
+          "text": "Histerectomía inmediata sin estudio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Primero se diagnostica la causa."
+        },
+        {
+          "key": "g",
+          "text": "Esperar a ver si se repite",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Retrasa el diagnóstico."
+        },
+        {
+          "key": "h",
+          "text": "Marcador CA 125",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No es útil para el endometrio."
+        },
+        {
+          "key": "i",
+          "text": "Tomografía por emisión de positrones",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "j",
+          "text": "Tranquilizar porque fue un solo episodio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Incluso un episodio requiere estudio."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "j"
+      ],
+      "explanation": "El sangrado posmenopáusico es cualquier sangrado uterino que ocurre 12 meses o más después de la menopausia. Aunque la causa más frecuente es la atrofia endometrial, alrededor de 10% se debe a cáncer de endometrio, por lo que siempre debe estudiarse. El primer paso es el ultrasonido transvaginal. Un endometrio de 4 mm o menos tiene muy bajo riesgo de cáncer, mientras que uno mayor, heterogéneo o con sangrado persistente requiere biopsia endometrial o histeroscopia. Otras causas son pólipos, hiperplasia, terapia hormonal, lesiones cervicales y vaginales.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de endometrio"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "climacteric",
+      "subtopic": "menopause_obstetrics",
+      "vignette": "Mujer de 50 años con antecedente de trombosis venosa profunda hace 3 años y bochornos intensos. Desea terapia hormonal.",
+      "prompt": "¿Qué indica su antecedente para el uso de terapia hormonal?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo está contraindicada si fuma",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La trombosis previa es contraindicación por sí misma."
+        },
+        {
+          "key": "b",
+          "text": "Puede usar tibolona sin riesgo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "También tiene precauciones."
+        },
+        {
+          "key": "c",
+          "text": "Puede usar estrógenos orales sin restricción",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El riesgo de trombosis es alto."
+        },
+        {
+          "key": "d",
+          "text": "Requiere estrógenos a dosis más altas para controlar los síntomas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Aumenta el riesgo."
+        },
+        {
+          "key": "e",
+          "text": "La terapia hormonal previene la trombosis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La aumenta."
+        },
+        {
+          "key": "f",
+          "text": "Contraindicación para la terapia hormonal sistémica oral; se prefieren opciones no hormonales",
+          "correct": true,
+          "rationale": "El antecedente de trombosis aumenta el riesgo de recurrencia con estrógenos."
+        },
+        {
+          "key": "g",
+          "text": "Debe suspender la anticoagulación para usar hormonas",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es adecuado."
+        },
+        {
+          "key": "h",
+          "text": "Indica cáncer de mama",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No tiene relación directa."
+        },
+        {
+          "key": "i",
+          "text": "Las hormonas de la menopausia son naturales y no dan trombosis",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Sí aumentan el riesgo."
+        },
+        {
+          "key": "j",
+          "text": "Debe aceptar los bochornos sin tratamiento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Hay opciones no hormonales."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "f"
+      ],
+      "explanation": "Las contraindicaciones de la terapia hormonal sistémica incluyen antecedente de trombosis venosa o tromboembolia pulmonar, cáncer de mama o de endometrio, sangrado vaginal no diagnosticado, enfermedad hepática activa, enfermedad coronaria o evento vascular cerebral previo y porfiria. Los estrógenos orales aumentan el riesgo de trombosis por su efecto de primer paso hepático, mientras que la vía transdérmica tiene menor riesgo, aunque en mujeres con trombosis previa se prefiere evitar la terapia sistémica. Se usan tratamientos no hormonales para los síntomas vasomotores. Los estrógenos vaginales a dosis bajas pueden considerarse para síntomas genitourinarios.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "climacteric",
+      "subtopic": "menopause_obstetrics",
+      "vignette": "Mujer de 52 años, posmenopáusica, sana. Acude a consulta preventiva y pregunta qué medidas generales le ayudan en esta etapa.",
+      "prompt": "¿Cuál es la medida de prevención más recomendada en la posmenopausia?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Actividad física regular con ejercicio de fuerza, dieta con calcio y vitamina D suficientes, y evitar tabaco y alcohol",
+          "correct": true,
+          "rationale": "Previenen osteoporosis y enfermedad cardiovascular."
+        },
+        {
+          "key": "b",
+          "text": "Dieta sin lácteos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Reduce la ingesta de calcio."
+        },
+        {
+          "key": "c",
+          "text": "Suplementos de calcio en dosis muy altas sin valorar la dieta",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El exceso puede tener riesgos."
+        },
+        {
+          "key": "d",
+          "text": "Bisfosfonatos en todas al iniciar la menopausia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se indican según el riesgo."
+        },
+        {
+          "key": "e",
+          "text": "Ninguna medida porque es una etapa natural",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Hay medidas preventivas útiles."
+        },
+        {
+          "key": "f",
+          "text": "La menopausia es una enfermedad que siempre requiere fármacos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una etapa fisiológica."
+        },
+        {
+          "key": "g",
+          "text": "Reposo para evitar fracturas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El sedentarismo empeora la masa ósea."
+        },
+        {
+          "key": "h",
+          "text": "No hablar de salud cardiovascular porque es mujer",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es su principal causa de muerte."
+        },
+        {
+          "key": "i",
+          "text": "Densitometría mensual",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "j",
+          "text": "Terapia hormonal en todas las mujeres para prevenir enfermedades",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No se indica para prevención en todas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "Tras la menopausia aumenta el riesgo de osteoporosis y enfermedad cardiovascular, que es la principal causa de muerte en mujeres. Las medidas preventivas incluyen actividad física regular con ejercicio aeróbico, de fuerza y de equilibrio, dieta saludable con ingesta adecuada de calcio, de 1 000 a 1 200 mg al día preferentemente de la dieta, y vitamina D, mantener un peso saludable, no fumar y limitar el alcohol. También se recomienda vigilar la presión arterial, la glucosa y los lípidos, el tamizaje de cáncer de mama y cervicouterino y evaluar el riesgo de fractura.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "climacteric",
+      "subtopic": "menopause_obstetrics",
+      "vignette": "Mujer de 48 años con histerectomía total por miomatosis hace 2 años, con ovarios conservados, que ahora presenta bochornos intensos y alteraciones del sueño. Sin contraindicaciones.",
+      "prompt": "¿Cuál es la terapia hormonal de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Estrógeno más progestágeno",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El progestágeno es innecesario sin útero."
+        },
+        {
+          "key": "b",
+          "text": "Testosterona sola",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No trata los bochornos."
+        },
+        {
+          "key": "c",
+          "text": "Ninguna terapia porque se le quitó el útero",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede usar terapia hormonal."
+        },
+        {
+          "key": "d",
+          "text": "Tés de hierbas como tratamiento más eficaz",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Su eficacia es limitada."
+        },
+        {
+          "key": "e",
+          "text": "Ooforectomía para inducir menopausia completa",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "f",
+          "text": "No tratar por miedo al cáncer",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El estrógeno solo tiene buen perfil en histerectomizadas."
+        },
+        {
+          "key": "g",
+          "text": "Tamoxifeno",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede empeorar los bochornos."
+        },
+        {
+          "key": "h",
+          "text": "Estrógeno solo sin progestágeno",
+          "correct": true,
+          "rationale": "Sin útero no se requiere protección endometrial."
+        },
+        {
+          "key": "i",
+          "text": "Anticonceptivos orales combinados con dosis altas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No son la opción adecuada."
+        },
+        {
+          "key": "j",
+          "text": "Progestágeno solo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es menos eficaz para los bochornos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "h",
+        "j"
+      ],
+      "explanation": "En mujeres histerectomizadas la terapia hormonal se realiza con estrógeno solo, ya que el progestágeno se agrega únicamente para proteger el endometrio de la hiperplasia y el cáncer. El estrógeno solo tiene un perfil de riesgo favorable, sin aumento del riesgo de cáncer de mama en los estudios principales. Las mujeres que conservan el útero requieren estrógeno más progestágeno. La terapia se inicia preferentemente antes de los 60 años o en los primeros 10 años de la menopausia. La vía transdérmica reduce el riesgo de trombosis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "climacteric",
+      "subtopic": "menopause_obstetrics",
+      "vignette": "Mujer de 62 años con incontinencia urinaria que ocurre al toser, estornudar y reír, sin urgencia previa. Tiene 4 partos vaginales. Examen general de orina normal.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Infección urinaria",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El examen de orina es normal."
+        },
+        {
+          "key": "b",
+          "text": "Algo normal de la edad que no se trata",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es tratable."
+        },
+        {
+          "key": "c",
+          "text": "Incontinencia urinaria de esfuerzo",
+          "correct": true,
+          "rationale": "Pérdida de orina con el aumento de la presión abdominal en una multípara."
+        },
+        {
+          "key": "d",
+          "text": "Fístula vesicovaginal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da pérdida continua de orina."
+        },
+        {
+          "key": "e",
+          "text": "Incontinencia funcional",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se debe a limitaciones físicas o cognitivas."
+        },
+        {
+          "key": "f",
+          "text": "Vejiga neurogénica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay antecedente neurológico."
+        },
+        {
+          "key": "g",
+          "text": "Cáncer de vejiga",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el patrón."
+        },
+        {
+          "key": "h",
+          "text": "Diabetes insípida",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Causa poliuria, no incontinencia de esfuerzo."
+        },
+        {
+          "key": "i",
+          "text": "Incontinencia por rebosamiento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se asocia a retención con goteo continuo."
+        },
+        {
+          "key": "j",
+          "text": "Incontinencia de urgencia por vejiga hiperactiva",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se precede de urgencia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "La incontinencia urinaria de esfuerzo es la pérdida involuntaria de orina con actividades que aumentan la presión abdominal, como toser, reír o hacer ejercicio. Se debe a la debilidad del piso pélvico y a la hipermovilidad uretral o deficiencia del esfínter. Sus factores de riesgo son partos vaginales, obesidad, menopausia, edad y estreñimiento crónico. El tratamiento inicial incluye ejercicios de Kegel con entrenamiento del piso pélvico, pérdida de peso y estrógenos vaginales en posmenopáusicas. Si no mejora se considera cirugía con cinta suburetral libre de tensión. La incontinencia de urgencia se trata con anticolinérgicos o mirabegrón.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la incontinencia urinaria en la mujer"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "climacteric",
+      "subtopic": "osteoporosis_postmenopausal",
+      "vignette": "Mujer de 64 años con densitometría ósea que reporta puntuación T de menos 2.8 en columna lumbar y menos 2.3 en cuello femoral. No ha tenido fracturas.",
+      "prompt": "¿Qué indica este resultado?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Osteopenia en todos los sitios",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La columna está en rango de osteoporosis."
+        },
+        {
+          "key": "b",
+          "text": "Osteoporosis por puntuación T de menos 2.5 o menor en columna lumbar",
+          "correct": true,
+          "rationale": "La clasificación se basa en el sitio con el valor más bajo."
+        },
+        {
+          "key": "c",
+          "text": "Es normal perder hueso y no requiere atención",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere tratamiento."
+        },
+        {
+          "key": "d",
+          "text": "Indica metástasis óseas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un diagnóstico de densitometría."
+        },
+        {
+          "key": "e",
+          "text": "Osteomalacia confirmada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La densitometría no la diagnostica."
+        },
+        {
+          "key": "f",
+          "text": "Enfermedad de Paget",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No se diagnostica así."
+        },
+        {
+          "key": "g",
+          "text": "Osteoporosis grave establecida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Requiere fractura por fragilidad."
+        },
+        {
+          "key": "h",
+          "text": "Resultado no válido por la diferencia entre sitios",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es común que difieran."
+        },
+        {
+          "key": "i",
+          "text": "Densidad mineral normal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Está claramente disminuida."
+        },
+        {
+          "key": "j",
+          "text": "Puntuación Z anormal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se usa la puntuación T en posmenopáusicas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "i"
+      ],
+      "explanation": "La densitometría ósea por absorciometría dual de rayos X en columna lumbar y cadera es el estándar para diagnosticar osteoporosis. En mujeres posmenopáusicas se usa la puntuación T, que compara con adultos jóvenes. Una puntuación T de menos 1 o mayor es normal, entre menos 1 y menos 2.5 es osteopenia, de menos 2.5 o menor es osteoporosis, y osteoporosis grave si además hay fractura por fragilidad. El diagnóstico se basa en el sitio con el valor más bajo. La puntuación Z se usa en premenopáusicas y hombres jóvenes. Una fractura por fragilidad establece el diagnóstico aunque la densitometría no sea diagnóstica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis en la mujer posmenopáusica"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "climacteric",
+      "subtopic": "osteoporosis_postmenopausal",
+      "vignette": "Mujer de 66 años con osteoporosis por densitometría y antecedente de fractura vertebral por compresión. Función renal normal, sin problemas para tragar ni reflujo.",
+      "prompt": "¿Cuál es el tratamiento farmacológico de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Teriparatida como primera línea en todas",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para alto riesgo o falla."
+        },
+        {
+          "key": "b",
+          "text": "Fluoruro de sodio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es eficaz para reducir fracturas."
+        },
+        {
+          "key": "c",
+          "text": "Bisfosfonato oral, como alendronato semanal, con calcio y vitamina D",
+          "correct": true,
+          "rationale": "Reduce las fracturas vertebrales y de cadera."
+        },
+        {
+          "key": "d",
+          "text": "Reposo absoluto por la fractura",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Empeora la masa ósea."
+        },
+        {
+          "key": "e",
+          "text": "Calcitonina como primera opción",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es menos eficaz."
+        },
+        {
+          "key": "f",
+          "text": "No tratar porque ya tuvo la fractura",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo de nuevas fracturas es alto."
+        },
+        {
+          "key": "g",
+          "text": "Terapia hormonal como primera línea a los 66 años",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se inicia como primera línea a esta edad para osteoporosis."
+        },
+        {
+          "key": "h",
+          "text": "Tomar más leche como único tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es suficiente."
+        },
+        {
+          "key": "i",
+          "text": "Vitamina A a dosis altas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede aumentar las fracturas."
+        },
+        {
+          "key": "j",
+          "text": "Solo calcio y vitamina D",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No son suficientes con osteoporosis establecida y fractura."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "Los bisfosfonatos orales, como alendronato y risedronato, son el tratamiento de primera línea de la osteoporosis posmenopáusica. Inhiben la resorción ósea por los osteoclastos y reducen las fracturas vertebrales, de cadera y no vertebrales. Se toman en ayunas con un vaso de agua, permaneciendo erguida 30 minutos. Están contraindicados en insuficiencia renal grave y alteraciones esofágicas. El ácido zoledrónico intravenoso anual es una alternativa. El denosumab, la teriparatida y el romosozumab se usan en alto riesgo o intolerancia. Siempre se asegura calcio y vitamina D adecuados. Tras 3 a 5 años se valora un periodo de descanso.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis en la mujer posmenopáusica"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "climacteric",
+      "subtopic": "osteoporosis_postmenopausal",
+      "vignette": "Mujer de 70 años con osteoporosis que recibe alendronato desde hace 8 años. Presenta dolor en el muslo derecho de varias semanas y la radiografía muestra engrosamiento cortical lateral en la diáfisis femoral.",
+      "prompt": "¿Cuál es la complicación que debe sospecharse?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fractura de cadera típica por osteoporosis",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La localización y el patrón son diferentes."
+        },
+        {
+          "key": "b",
+          "text": "Efecto de la edad sin relación con el medicamento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se asocia al uso prolongado."
+        },
+        {
+          "key": "c",
+          "text": "Osteomielitis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay datos de infección."
+        },
+        {
+          "key": "d",
+          "text": "Fractura atípica de fémur asociada al uso prolongado de bisfosfonatos",
+          "correct": true,
+          "rationale": "El dolor en el muslo con engrosamiento cortical es característico."
+        },
+        {
+          "key": "e",
+          "text": "Metástasis ósea de cáncer de mama",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay antecedente."
+        },
+        {
+          "key": "f",
+          "text": "Trombosis venosa profunda",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el hallazgo óseo."
+        },
+        {
+          "key": "g",
+          "text": "Osteonecrosis de cadera",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Afecta la cabeza femoral."
+        },
+        {
+          "key": "h",
+          "text": "Dolor muscular por ejercicio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La radiografía muestra alteración ósea."
+        },
+        {
+          "key": "i",
+          "text": "Ciática",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la alteración cortical."
+        },
+        {
+          "key": "j",
+          "text": "Enfermedad de Paget",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el contexto."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "g"
+      ],
+      "explanation": "El uso prolongado de bisfosfonatos, generalmente más de 5 años, se asocia a dos complicaciones raras. La fractura atípica de fémur ocurre en la región subtrocantérica o diafisaria con trauma mínimo, se precede de dolor en el muslo o la ingle y muestra engrosamiento cortical lateral en la radiografía, y puede ser bilateral. La osteonecrosis de la mandíbula se asocia más a dosis altas en cáncer y a procedimientos dentales. Ante sospecha de fractura atípica se suspende el bisfosfonato, se estudia el fémur contralateral y se considera fijación profiláctica. Por ello se valoran periodos de descanso del fármaco.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis en la mujer posmenopáusica"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "climacteric",
+      "subtopic": "osteoporosis_postmenopausal",
+      "vignette": "Mujer de 66 años sana, sin fracturas previas, que nunca se ha realizado estudios de densidad ósea.",
+      "prompt": "¿Cuál es el estudio de tamizaje de osteoporosis recomendado?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Radiografía simple de columna como tamizaje",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Detecta pérdida ósea solo cuando es avanzada."
+        },
+        {
+          "key": "b",
+          "text": "Densitometría solo en mujeres delgadas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se recomienda a todas a esta edad."
+        },
+        {
+          "key": "c",
+          "text": "Ningún estudio si no ha tenido fracturas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El tamizaje busca prevenir la primera fractura."
+        },
+        {
+          "key": "d",
+          "text": "Tomografía de columna",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es el estudio de tamizaje estándar."
+        },
+        {
+          "key": "e",
+          "text": "Ultrasonido de calcáneo como diagnóstico definitivo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No sustituye a la densitometría."
+        },
+        {
+          "key": "f",
+          "text": "Densitometría ósea de columna y cadera a partir de los 65 años",
+          "correct": true,
+          "rationale": "Se recomienda en todas las mujeres de 65 años o más."
+        },
+        {
+          "key": "g",
+          "text": "Biopsia ósea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "Los huesos débiles se notan solos sin estudios",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La osteoporosis es silenciosa."
+        },
+        {
+          "key": "i",
+          "text": "Medir calcio sérico como tamizaje",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No detecta osteoporosis."
+        },
+        {
+          "key": "j",
+          "text": "Fosfatasa alcalina como único estudio",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No diagnostica osteoporosis."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "La osteoporosis es una enfermedad silenciosa hasta que ocurre una fractura. Se recomienda densitometría ósea a todas las mujeres de 65 años o más, y en mujeres posmenopáusicas más jóvenes con factores de riesgo, como bajo peso, fractura previa por fragilidad, uso de corticosteroides, tabaquismo, alcoholismo, artritis reumatoide, menopausia temprana o antecedente familiar de fractura de cadera. La herramienta FRAX estima la probabilidad de fractura a 10 años y ayuda a decidir el tratamiento. La frecuencia del seguimiento depende del resultado inicial.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis en la mujer posmenopáusica"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "climacteric",
+      "subtopic": "osteoporosis_postmenopausal",
+      "vignette": "Mujer de 60 años con artritis reumatoide que recibe prednisona 10 mg al día desde hace 2 años. Es delgada, fuma y tuvo menopausia a los 44 años.",
+      "prompt": "¿Cuál es el factor de riesgo de osteoporosis más importante y modificable relacionado con medicamentos?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ejercicio moderado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es protector."
+        },
+        {
+          "key": "b",
+          "text": "Menopausia temprana",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es un factor importante pero no modificable."
+        },
+        {
+          "key": "c",
+          "text": "Uso prolongado de glucocorticoides",
+          "correct": true,
+          "rationale": "Es la causa más frecuente de osteoporosis secundaria."
+        },
+        {
+          "key": "d",
+          "text": "Uso de estatinas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No aumentan el riesgo."
+        },
+        {
+          "key": "e",
+          "text": "Exposición solar moderada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Favorece la vitamina D."
+        },
+        {
+          "key": "f",
+          "text": "Uso de metformina",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es un factor importante."
+        },
+        {
+          "key": "g",
+          "text": "Consumo de café moderado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Su efecto es menor."
+        },
+        {
+          "key": "h",
+          "text": "Dormir muchas horas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es un factor relevante."
+        },
+        {
+          "key": "i",
+          "text": "Vacunación contra influenza",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es un factor."
+        },
+        {
+          "key": "j",
+          "text": "Uso de paracetamol",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un factor."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "Los glucocorticoides son la causa más frecuente de osteoporosis secundaria. Reducen la formación ósea al inhibir a los osteoblastos, aumentan la resorción, disminuyen la absorción intestinal de calcio y aumentan su pérdida renal. La pérdida ósea es más rápida en los primeros meses y el riesgo de fractura aumenta con dosis de 2.5 a 7.5 mg de prednisona al día por más de 3 meses. Se recomienda usar la dosis mínima eficaz, asegurar calcio y vitamina D, evaluar la densidad ósea y considerar bisfosfonatos en pacientes de riesgo. Otros fármacos de riesgo son anticonvulsivos, inhibidores de aromatasa y exceso de levotiroxina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis en la mujer posmenopáusica"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "climacteric",
+      "subtopic": "osteoporosis_postmenopausal",
+      "vignette": "Mujer de 55 años que inicia tratamiento con denosumab por osteoporosis. Pregunta cómo funciona y si puede suspenderlo cuando quiera.",
+      "prompt": "¿Cuál es el mecanismo de acción del denosumab?",
+      "polarity": "affirmative",
+      "task": "mechanism",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Estimula a los osteoblastos como la teriparatida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es antirresortivo."
+        },
+        {
+          "key": "b",
+          "text": "Aumenta la absorción intestinal de calcio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es su mecanismo."
+        },
+        {
+          "key": "c",
+          "text": "Bloquea la hormona paratiroidea",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es su mecanismo."
+        },
+        {
+          "key": "d",
+          "text": "Inhibe la esclerostina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ese es el romosozumab."
+        },
+        {
+          "key": "e",
+          "text": "Actúa como estrógeno en el hueso",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un modulador estrogénico."
+        },
+        {
+          "key": "f",
+          "text": "Actúa como vitamina D activa",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es su mecanismo."
+        },
+        {
+          "key": "g",
+          "text": "Se une a la hidroxiapatita como los bisfosfonatos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es su mecanismo."
+        },
+        {
+          "key": "h",
+          "text": "Puede suspenderse sin consecuencias en cualquier momento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La suspensión causa pérdida ósea rápida."
+        },
+        {
+          "key": "i",
+          "text": "Anticuerpo monoclonal contra RANKL que inhibe la formación y activación de los osteoclastos",
+          "correct": true,
+          "rationale": "Reduce la resorción ósea de forma reversible."
+        },
+        {
+          "key": "j",
+          "text": "Inhibe la calcitonina",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es su mecanismo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "El denosumab es un anticuerpo monoclonal que se une al ligando del receptor activador del factor nuclear kappa B, RANKL, e impide la formación, función y supervivencia de los osteoclastos, lo que reduce la resorción ósea. Se aplica por vía subcutánea cada 6 meses y reduce las fracturas vertebrales, de cadera y no vertebrales. Puede usarse en insuficiencia renal. Su efecto es reversible, y al suspenderlo hay una pérdida ósea rápida con riesgo de fracturas vertebrales múltiples, por lo que debe seguirse de un bisfosfonato. Puede causar hipocalcemia, por lo que se corrige la vitamina D antes de iniciarlo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis en la mujer posmenopáusica"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "breast",
+      "subtopic": "benign_breast",
+      "vignette": "Mujer de 22 años con un nódulo en la mama izquierda de 2 cm, redondo, de bordes lisos, de consistencia ahulada, muy móvil e indoloro. El ultrasonido muestra una lesión sólida ovalada, circunscrita, paralela a la piel.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fibroadenoma",
+          "correct": true,
+          "rationale": "Nódulo sólido móvil, liso e indoloro en una mujer joven."
+        },
+        {
+          "key": "b",
+          "text": "Mastitis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay datos de inflamación."
+        },
+        {
+          "key": "c",
+          "text": "Galactocele",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se asocia a lactancia."
+        },
+        {
+          "key": "d",
+          "text": "Necrosis grasa",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Se asocia a traumatismo."
+        },
+        {
+          "key": "e",
+          "text": "Lipoma mamario",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es blando y en mujeres mayores."
+        },
+        {
+          "key": "f",
+          "text": "Bolita que siempre es cáncer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La mayoría de los nódulos en jóvenes son benignos."
+        },
+        {
+          "key": "g",
+          "text": "Quiste mamario simple",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El ultrasonido muestra lesión sólida."
+        },
+        {
+          "key": "h",
+          "text": "Papiloma intraductal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da secreción por el pezón."
+        },
+        {
+          "key": "i",
+          "text": "Cáncer de mama",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es raro a esta edad y suele ser irregular y fijo."
+        },
+        {
+          "key": "j",
+          "text": "Tumor filoides",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Crece rápido y suele ser más grande."
+        }
+      ],
+      "canonical": [
+        "a",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El fibroadenoma es el tumor benigno de mama más frecuente en mujeres jóvenes, entre los 15 y 35 años. Es un tumor fibroepitelial que se palpa como un nódulo redondo u ovalado, liso, de consistencia ahulada, muy móvil e indoloro. El ultrasonido muestra una lesión sólida ovalada, circunscrita, paralela a la piel y homogénea. Con hallazgos típicos en mujeres jóvenes puede vigilarse con ultrasonido. Se realiza biopsia si hay crecimiento rápido, hallazgos atípicos o edad mayor. La escisión se indica en lesiones grandes, sintomáticas o que crecen. No aumenta de forma importante el riesgo de cáncer.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la patología mamaria benigna"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "breast",
+      "subtopic": "benign_breast",
+      "vignette": "Mujer de 38 años con un nódulo palpable en la mama derecha que aumenta antes de la menstruación. El ultrasonido muestra una lesión anecoica, de paredes delgadas, bordes lisos y con reforzamiento acústico posterior, sin componente sólido.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Quimioterapia preventiva",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "b",
+          "text": "Antibióticos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay infección."
+        },
+        {
+          "key": "c",
+          "text": "Biopsia con aguja de corte obligatoria",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es necesaria en quistes simples."
+        },
+        {
+          "key": "d",
+          "text": "Ignorar el hallazgo sin explicar los signos de alarma",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe explicarse cuándo consultar."
+        },
+        {
+          "key": "e",
+          "text": "Vigilancia clínica, con aspiración solo si es sintomático",
+          "correct": true,
+          "rationale": "El quiste simple es benigno y no requiere biopsia."
+        },
+        {
+          "key": "f",
+          "text": "Resonancia magnética de rutina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "g",
+          "text": "Escisión quirúrgica en todos los casos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "h",
+          "text": "Tomografía de tórax",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "i",
+          "text": "Mastectomía",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "j",
+          "text": "Todo nódulo debe operarse",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Los quistes simples son benignos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "i"
+      ],
+      "explanation": "Los quistes mamarios son frecuentes en mujeres de 35 a 50 años y pueden aumentar con el ciclo menstrual. El quiste simple se ve en el ultrasonido anecoico, con paredes delgadas, bordes lisos y reforzamiento acústico posterior, y es benigno, categoría BI RADS 2. No requiere biopsia y puede vigilarse o aspirarse si causa dolor. Los quistes complicados con ecos internos se vigilan o aspiran, y los complejos con componente sólido requieren biopsia. Si al aspirar el líquido es sanguinolento o la masa persiste, se realiza estudio adicional.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la patología mamaria benigna"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "breast",
+      "subtopic": "benign_breast",
+      "vignette": "Mujer de 42 años con secreción espontánea, unilateral, sanguinolenta, por un solo conducto del pezón derecho. No se palpa masa. La mastografía es normal y el ultrasonido muestra una pequeña lesión intraductal retroareolar.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Mastitis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay inflamación."
+        },
+        {
+          "key": "b",
+          "text": "Galactorrea por prolactinoma",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es bilateral, lechosa y de múltiples conductos."
+        },
+        {
+          "key": "c",
+          "text": "Fibroadenoma",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No da secreción."
+        },
+        {
+          "key": "d",
+          "text": "Quiste simple",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No da secreción sanguinolenta."
+        },
+        {
+          "key": "e",
+          "text": "Papiloma intraductal",
+          "correct": true,
+          "rationale": "Causa más frecuente de secreción sanguinolenta unilateral por un solo conducto."
+        },
+        {
+          "key": "f",
+          "text": "Ectasia ductal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da secreción multicolor espesa y bilateral."
+        },
+        {
+          "key": "g",
+          "text": "Enfermedad de Paget",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da lesión eczematosa del pezón."
+        },
+        {
+          "key": "h",
+          "text": "Secreción fisiológica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "La fisiológica es bilateral y provocada."
+        },
+        {
+          "key": "i",
+          "text": "Lesión por el roce del sostén",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una lesión intraductal."
+        },
+        {
+          "key": "j",
+          "text": "Cáncer ductal invasor",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Debe descartarse, pero el papiloma es más frecuente."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "La secreción por el pezón se considera patológica si es espontánea, unilateral, de un solo conducto, sanguinolenta o serosa, o se asocia a masa. La causa más frecuente de secreción sanguinolenta de un solo conducto es el papiloma intraductal, tumor benigno de los conductos retroareolares. Debe descartarse cáncer, sobre todo en mujeres mayores. Se estudia con mastografía y ultrasonido, y el tratamiento es la escisión del conducto afectado para diagnóstico histológico. La secreción bilateral, lechosa y de múltiples conductos sugiere galactorrea, y la verdosa y espesa ectasia ductal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la patología mamaria benigna"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "breast",
+      "subtopic": "benign_breast",
+      "vignette": "Mujer de 30 años con dolor mamario bilateral, difuso, que inicia una semana antes de la menstruación y desaparece al iniciar el sangrado. Exploración con nodularidad difusa bilateral sin masas dominantes.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Enfermedad de Mondor",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da un cordón palpable."
+        },
+        {
+          "key": "b",
+          "text": "Tumor filoides",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es una masa de crecimiento rápido."
+        },
+        {
+          "key": "c",
+          "text": "Fibroadenoma múltiple",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay masas definidas."
+        },
+        {
+          "key": "d",
+          "text": "El dolor mamario siempre es cáncer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El dolor cíclico es benigno."
+        },
+        {
+          "key": "e",
+          "text": "Cáncer de mama",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Rara vez causa dolor cíclico bilateral."
+        },
+        {
+          "key": "f",
+          "text": "Angina de pecho",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No se relaciona con el ciclo."
+        },
+        {
+          "key": "g",
+          "text": "Mastitis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay inflamación ni fiebre."
+        },
+        {
+          "key": "h",
+          "text": "Costocondritis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No se relaciona con el ciclo."
+        },
+        {
+          "key": "i",
+          "text": "Mastalgia cíclica con cambios fibroquísticos",
+          "correct": true,
+          "rationale": "Dolor bilateral relacionado con el ciclo sin masas dominantes."
+        },
+        {
+          "key": "j",
+          "text": "Quiste infectado",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay inflamación."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "La mastalgia cíclica es la causa más frecuente de consulta mamaria. Se relaciona con los cambios hormonales del ciclo, aparece en la fase lútea, es bilateral y difusa y cede con la menstruación. Suele acompañarse de cambios fibroquísticos, con nodularidad difusa. Es benigna y rara vez se asocia a cáncer. El manejo incluye tranquilizar a la paciente, usar un sostén adecuado, analgésicos y antiinflamatorios tópicos. En casos graves pueden considerarse tamoxifeno o danazol por periodos cortos. La mastalgia no cíclica y focal requiere evaluación para descartar otras causas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la patología mamaria benigna"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "breast",
+      "subtopic": "benign_breast",
+      "vignette": "Mujer de 45 años con un nódulo mamario que creció de 3 a 8 cm en 4 meses. Es firme, lobulado, móvil y distiende la piel con venas visibles. No hay adenopatías.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Quiste simple gigante",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es firme ni lobulado."
+        },
+        {
+          "key": "b",
+          "text": "Crecimiento normal de la mama con la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El crecimiento rápido es anormal."
+        },
+        {
+          "key": "c",
+          "text": "Tumor filoides",
+          "correct": true,
+          "rationale": "Masa fibroepitelial de crecimiento rápido y gran tamaño."
+        },
+        {
+          "key": "d",
+          "text": "Lipoma",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es blando y de crecimiento lento."
+        },
+        {
+          "key": "e",
+          "text": "Absceso mamario",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Daría inflamación y fiebre."
+        },
+        {
+          "key": "f",
+          "text": "Linfoma mamario",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es raro."
+        },
+        {
+          "key": "g",
+          "text": "Ginecomastia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Ocurre en varones."
+        },
+        {
+          "key": "h",
+          "text": "Hamartoma mamario",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es raro y de crecimiento lento."
+        },
+        {
+          "key": "i",
+          "text": "Fibroadenoma simple",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Crece lentamente y suele ser pequeño."
+        },
+        {
+          "key": "j",
+          "text": "Carcinoma inflamatorio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da piel de naranja y eritema."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "El tumor filoides es un tumor fibroepitelial raro que suele presentarse entre los 40 y 50 años como una masa firme, lobulada, móvil, de crecimiento rápido y que puede alcanzar gran tamaño, distendiendo la piel. Puede ser benigno, limítrofe o maligno, y se distingue del fibroadenoma por su celularidad estromal. La biopsia con aguja de corte orienta el diagnóstico. El tratamiento es la escisión amplia con márgenes de al menos 1 cm, porque tiende a recurrir localmente. No requiere disección axilar porque rara vez da metástasis ganglionares, y las formas malignas pueden dar metástasis hematógenas a pulmón.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la patología mamaria benigna"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "breast",
+      "subtopic": "benign_breast",
+      "vignette": "Mujer de 50 años con un nódulo duro e irregular en la mama izquierda que apareció 2 meses después de un golpe con el cinturón de seguridad en un accidente. Tiene retracción leve de la piel. La mastografía muestra una lesión con calcificaciones en cáscara de huevo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Absceso mamario",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay inflamación."
+        },
+        {
+          "key": "b",
+          "text": "Necrosis grasa",
+          "correct": true,
+          "rationale": "Masa tras traumatismo con calcificaciones en cáscara de huevo."
+        },
+        {
+          "key": "c",
+          "text": "Quiste simple",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es duro ni irregular."
+        },
+        {
+          "key": "d",
+          "text": "Tumor filoides",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Crece rápido sin antecedente traumático."
+        },
+        {
+          "key": "e",
+          "text": "Hematoma agudo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Ya pasaron 2 meses."
+        },
+        {
+          "key": "f",
+          "text": "Papiloma intraductal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da secreción."
+        },
+        {
+          "key": "g",
+          "text": "Cáncer de mama invasor",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede simularlo, por lo que a veces requiere biopsia, pero el contexto orienta a necrosis grasa."
+        },
+        {
+          "key": "h",
+          "text": "El golpe causó cáncer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Los golpes no causan cáncer."
+        },
+        {
+          "key": "i",
+          "text": "Fibroadenoma",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es liso y móvil sin antecedente."
+        },
+        {
+          "key": "j",
+          "text": "Mastitis granulomatosa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es inflamatoria."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "La necrosis grasa es una lesión benigna por daño del tejido adiposo mamario tras traumatismo, cirugía, radioterapia o biopsia. Puede presentarse como una masa dura, irregular, a veces con retracción de la piel, que simula cáncer. En la mastografía puede mostrar quistes oleosos, calcificaciones en cáscara de huevo o lesiones espiculadas. El antecedente de trauma orienta el diagnóstico, pero si los hallazgos son sospechosos se realiza biopsia. No requiere tratamiento y suele resolverse. Los traumatismos no causan cáncer de mama.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la patología mamaria benigna"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q19",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "breast",
+      "subtopic": "benign_breast",
+      "vignette": "Mujer de 25 años con un nódulo mamario palpable de reciente aparición. Está preocupada por cáncer.",
+      "prompt": "¿Cuál es el estudio de imagen inicial de elección a esta edad?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ningún estudio porque es joven",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Todo nódulo debe evaluarse."
+        },
+        {
+          "key": "b",
+          "text": "Termografía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un método validado."
+        },
+        {
+          "key": "c",
+          "text": "Ultrasonido mamario",
+          "correct": true,
+          "rationale": "En menores de 30 a 35 años el tejido es denso y el ultrasonido es más útil."
+        },
+        {
+          "key": "d",
+          "text": "Tomografía por emisión de positrones",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "e",
+          "text": "Resonancia magnética como primer estudio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "f",
+          "text": "Gammagrama óseo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "g",
+          "text": "Mastografía como primer estudio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es menos sensible en mamas densas jóvenes."
+        },
+        {
+          "key": "h",
+          "text": "Marcadores tumorales",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No sirven para el diagnóstico."
+        },
+        {
+          "key": "i",
+          "text": "Biopsia quirúrgica sin imagen previa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Primero se realiza imagen."
+        },
+        {
+          "key": "j",
+          "text": "Tomografía de tórax",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No evalúa adecuadamente la mama."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "En mujeres menores de 30 a 35 años con un nódulo mamario palpable el estudio de imagen inicial es el ultrasonido, porque el tejido mamario denso disminuye la sensibilidad de la mastografía y el ultrasonido distingue entre lesiones sólidas y quísticas sin radiación. En mujeres mayores se realiza mastografía diagnóstica con ultrasonido complementario. Los hallazgos se clasifican con BI RADS para decidir vigilancia o biopsia. La evaluación triple con exploración, imagen y biopsia cuando está indicada tiene alta precisión diagnóstica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la patología mamaria benigna"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q20",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "breast",
+      "subtopic": "breast_cancer_obstetrics",
+      "vignette": "Mujer de 33 años con embarazo de 20 semanas que palpa un nódulo duro, irregular y fijo de 2 cm en la mama derecha que no estaba antes del embarazo. Persiste desde hace 4 semanas.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tomografía por emisión de positrones en el embarazo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es adecuada."
+        },
+        {
+          "key": "b",
+          "text": "Atribuirla a cambios del embarazo sin estudios",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La masa persistente requiere evaluación."
+        },
+        {
+          "key": "c",
+          "text": "Mastografía contraindicada siempre y por eso no estudiar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El ultrasonido y la biopsia son seguros."
+        },
+        {
+          "key": "d",
+          "text": "Antibióticos por posible mastitis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay datos de infección."
+        },
+        {
+          "key": "e",
+          "text": "Esperar al final del embarazo para estudiarla",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Retrasa el diagnóstico de cáncer."
+        },
+        {
+          "key": "f",
+          "text": "El embarazo protege contra el cáncer de mama",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede ocurrir durante el embarazo."
+        },
+        {
+          "key": "g",
+          "text": "Ultrasonido mamario y biopsia con aguja de corte del nódulo",
+          "correct": true,
+          "rationale": "Una masa persistente en el embarazo debe estudiarse sin demora."
+        },
+        {
+          "key": "h",
+          "text": "Interrumpir el embarazo antes de cualquier estudio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "i",
+          "text": "Gammagrama óseo como primer estudio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "j",
+          "text": "No biopsiar para no dañar al bebé",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La biopsia es segura."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "El cáncer de mama asociado al embarazo es el que se diagnostica durante el embarazo o el primer año posparto. Suele diagnosticarse tarde porque los cambios de la mama dificultan la exploración. Toda masa mamaria que persiste más de 2 a 4 semanas durante el embarazo o la lactancia debe estudiarse con ultrasonido y biopsia con aguja de corte, que son seguros. La mastografía con protección abdominal puede realizarse si es necesaria. El tratamiento depende de la etapa y el trimestre, con cirugía posible en cualquier trimestre y quimioterapia a partir del segundo. El tamoxifeno, el trastuzumab y la radioterapia se difieren hasta después del parto.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de mama"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q21",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "breast",
+      "subtopic": "breast_cancer_obstetrics",
+      "vignette": "Mujer de 31 años con cáncer de mama ductal invasor diagnosticado a las 22 semanas de embarazo, etapa II, receptores positivos, HER2 negativo. Desea continuar el embarazo.",
+      "prompt": "¿Cuál es el tratamiento de elección durante el embarazo?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tamoxifeno durante el embarazo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es teratógeno."
+        },
+        {
+          "key": "b",
+          "text": "Interrupción obligatoria del embarazo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No mejora el pronóstico materno."
+        },
+        {
+          "key": "c",
+          "text": "Trastuzumab",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Causa oligohidramnios y el tumor es HER2 negativo."
+        },
+        {
+          "key": "d",
+          "text": "Tratamientos naturales hasta que nazca el bebé",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El cáncer requiere tratamiento."
+        },
+        {
+          "key": "e",
+          "text": "Inhibidores de aromatasa",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No se usan en el embarazo."
+        },
+        {
+          "key": "f",
+          "text": "Cirugía y quimioterapia a partir del segundo trimestre, difiriendo la radioterapia y el tamoxifeno hasta después del parto",
+          "correct": true,
+          "rationale": "Permite tratar el cáncer protegiendo al feto."
+        },
+        {
+          "key": "g",
+          "text": "Evitar la cirugía por miedo al feto",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La cirugía es segura en el embarazo."
+        },
+        {
+          "key": "h",
+          "text": "Radioterapia de inmediato",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se difiere hasta después del parto."
+        },
+        {
+          "key": "i",
+          "text": "Quimioterapia en el primer trimestre",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es cuando hay más riesgo de malformaciones."
+        },
+        {
+          "key": "j",
+          "text": "Esperar al parto para iniciar cualquier tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El retraso empeora el pronóstico."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "h"
+      ],
+      "explanation": "El cáncer de mama en el embarazo puede tratarse con buenos resultados maternos y fetales. La cirugía, mastectomía o conservadora, puede realizarse en cualquier trimestre. La quimioterapia con antraciclinas y taxanos puede administrarse a partir del segundo trimestre, ya que en el primero aumenta el riesgo de malformaciones, y se suspende unas 3 semanas antes del parto. La radioterapia, el tamoxifeno y el trastuzumab se difieren hasta después del parto por su toxicidad fetal. La interrupción del embarazo no mejora el pronóstico materno. Se recomienda un equipo multidisciplinario.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de mama"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q22",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "breast",
+      "subtopic": "breast_cancer_obstetrics",
+      "vignette": "Mujer de 36 años que terminó tratamiento por cáncer de mama con receptores positivos hace 3 años y desea embarazarse. Pregunta si el embarazo aumenta el riesgo de recurrencia.",
+      "prompt": "¿Qué indica la evidencia sobre el embarazo después del cáncer de mama?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo puede embarazarse por fertilización in vitro",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "b",
+          "text": "El riesgo depende del sexo del bebé",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No tiene relación."
+        },
+        {
+          "key": "c",
+          "text": "El embarazo después del tratamiento no empeora el pronóstico y puede considerarse tras un periodo de vigilancia individualizado",
+          "correct": true,
+          "rationale": "No aumenta la recurrencia."
+        },
+        {
+          "key": "d",
+          "text": "El embarazo cura el cáncer",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es así."
+        },
+        {
+          "key": "e",
+          "text": "El embarazo provoca recurrencia en todas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay evidencia."
+        },
+        {
+          "key": "f",
+          "text": "Debe esperar al menos 15 años",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El intervalo es individualizado."
+        },
+        {
+          "key": "g",
+          "text": "La lactancia está prohibida en ambas mamas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede amamantar con la mama sana."
+        },
+        {
+          "key": "h",
+          "text": "El embarazo está contraindicado de por vida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es así."
+        },
+        {
+          "key": "i",
+          "text": "Debe tomar tamoxifeno durante el embarazo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es teratógeno."
+        },
+        {
+          "key": "j",
+          "text": "Las hormonas del embarazo siempre reactivan el cáncer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No hay evidencia de mayor recurrencia."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "h"
+      ],
+      "explanation": "Los estudios muestran que el embarazo después del tratamiento del cáncer de mama no empeora el pronóstico ni aumenta la recurrencia, incluso en tumores con receptores hormonales positivos. Se recomienda esperar un periodo individualizado, generalmente de 2 años tras el diagnóstico para pasar el periodo de mayor riesgo de recurrencia. En tumores hormonosensibles puede pausarse la terapia endocrina tras 18 a 30 meses para intentar el embarazo y reanudarla después. Antes del tratamiento oncológico se ofrece preservación de la fertilidad. La lactancia es posible con la mama no tratada.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de mama"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q23",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "breast",
+      "subtopic": "breast_cancer_obstetrics",
+      "vignette": "Mujer de 30 años portadora de mutación BRCA1 que desea tener hijos en los próximos años. Pregunta por su vigilancia de cáncer de mama.",
+      "prompt": "¿Cuál es la estrategia de vigilancia recomendada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Mastografía cada 2 años desde los 40 años como en la población general",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es insuficiente para portadoras."
+        },
+        {
+          "key": "b",
+          "text": "Ninguna vigilancia hasta los 50 años",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El riesgo empieza joven."
+        },
+        {
+          "key": "c",
+          "text": "Mastectomía obligatoria inmediata antes de tener hijos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es una opción, no una obligación."
+        },
+        {
+          "key": "d",
+          "text": "Marcadores tumorales cada mes",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No sirven para tamizaje."
+        },
+        {
+          "key": "e",
+          "text": "Solo autoexploración mensual",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es insuficiente."
+        },
+        {
+          "key": "f",
+          "text": "Tomografía por emisión de positrones anual",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es la vigilancia indicada."
+        },
+        {
+          "key": "g",
+          "text": "El embarazo elimina el riesgo genético",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No lo elimina."
+        },
+        {
+          "key": "h",
+          "text": "Resonancia magnética mamaria anual desde los 25 años y mastografía anual desde los 30 años, con opción de cirugía reductora de riesgo tras completar su paridad",
+          "correct": true,
+          "rationale": "Las portadoras de BRCA tienen alto riesgo."
+        },
+        {
+          "key": "i",
+          "text": "No hablar de opciones reductoras de riesgo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte del asesoramiento."
+        },
+        {
+          "key": "j",
+          "text": "Ultrasonido anual como único estudio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La resonancia es el estudio más sensible."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "h"
+      ],
+      "explanation": "Las portadoras de mutaciones en BRCA1 y BRCA2 tienen un riesgo de cáncer de mama a lo largo de la vida de 45 a 70% y de cáncer de ovario de 15 a 40%. Se recomienda resonancia magnética mamaria anual desde los 25 años y mastografía anual desde los 30, alternadas cada 6 meses. Pueden considerar mastectomía bilateral reductora de riesgo y salpingooforectomía bilateral entre los 35 y 40 años tras completar su paridad, que reduce el riesgo de cáncer de ovario y de mama. La quimioprevención con tamoxifeno es una opción. Se ofrece asesoramiento genético a familiares.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de tamizaje y diagnóstico de cáncer de mama"
+      ]
+    },
+    {
+      "key": "gyo-11-climaterio-mama-q24",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "breast",
+      "subtopic": "breast_cancer_obstetrics",
+      "vignette": "Mujer de 45 años que pregunta qué factores reproductivos influyen en su riesgo de cáncer de mama. Tuvo la menarca a los 10 años, su primer embarazo a los 36 y no amamantó.",
+      "prompt": "¿Cuál es el factor reproductivo que aumenta el riesgo de cáncer de mama?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Menarca temprana, primer embarazo tardío y no amamantar, por mayor exposición estrogénica",
+          "correct": true,
+          "rationale": "Prolongan la exposición del tejido mamario a estrógenos."
+        },
+        {
+          "key": "b",
+          "text": "Cesáreas previas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No influyen."
+        },
+        {
+          "key": "c",
+          "text": "Lactancia prolongada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es protectora."
+        },
+        {
+          "key": "d",
+          "text": "Aborto espontáneo previo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No aumenta el riesgo."
+        },
+        {
+          "key": "e",
+          "text": "Uso de dispositivo de cobre",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No influye."
+        },
+        {
+          "key": "f",
+          "text": "Multiparidad temprana",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es protectora."
+        },
+        {
+          "key": "g",
+          "text": "Menopausia temprana",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es protectora."
+        },
+        {
+          "key": "h",
+          "text": "Embarazo antes de los 20 años",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es protector."
+        },
+        {
+          "key": "i",
+          "text": "Ooforectomía temprana",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es protectora."
+        },
+        {
+          "key": "j",
+          "text": "Tener mamas pequeñas aumenta el riesgo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El tamaño no influye."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "g"
+      ],
+      "explanation": "Los factores reproductivos que aumentan el riesgo de cáncer de mama se relacionan con mayor exposición a estrógenos endógenos. Incluyen menarca temprana, menopausia tardía, nuliparidad, primer embarazo después de los 30 años y no amamantar. La multiparidad, el primer embarazo a edad temprana y la lactancia prolongada son protectores. Otros factores de riesgo son edad, antecedente familiar, mutaciones genéticas, densidad mamaria alta, obesidad posmenopáusica, alcohol, sedentarismo, radiación torácica y terapia hormonal combinada prolongada. La lactancia es una medida protectora que se puede promover.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de tamizaje y diagnóstico de cáncer de mama"
+      ]
+    }
+  ]
+}

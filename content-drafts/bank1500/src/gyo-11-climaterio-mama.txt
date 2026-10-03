@@ -1,0 +1,383 @@
+@ gyo|climacteric|menopause_obstetrics|3|data_interpretation
+V: Mujer de 56 años que usa terapia hormonal combinada desde hace 4 años por síntomas vasomotores intensos. Está bien controlada y pregunta si debe suspenderla.
+P: ¿Qué indica la evidencia sobre la duración de la terapia hormonal?
++ No hay una duración máxima fija; se reevalúa cada año el balance de beneficios y riesgos y se usa la dosis mínima eficaz || La decisión es individualizada.
+- anchoring | Debe suspenderse obligatoriamente a los 5 años en todas || No existe un límite fijo.
+- availability_heuristic | Debe mantenerse de por vida en todas para prevenir enfermedades || No se indica para prevención primaria cardiovascular.
+- representativeness_heuristic | Debe suspenderse de inmediato por riesgo de cáncer seguro || El riesgo absoluto es bajo en esta ventana.
+- premature_closure | Debe cambiarse a estrógeno solo aunque tenga útero || Requiere progestágeno.
+- base_rate_fallacy | Debe aumentarse la dosis con la edad || Se busca la dosis mínima eficaz.
+- framing_effect | La terapia hormonal causa demencia en todas las usuarias || No es así en la ventana de oportunidad.
+- inattentional_blindness | Debe suspenderse si los síntomas están controlados sin valorar recurrencia || Los síntomas pueden regresar.
+- focusing_illusion | Requiere mastografía mensual || La mastografía sigue el esquema habitual.
+- belief_bias | Las hormonas naturales bioidénticas son siempre más seguras || No hay evidencia de mayor seguridad.
+E: La terapia hormonal de la menopausia se indica principalmente para los síntomas vasomotores y genitourinarios y para prevenir osteoporosis en mujeres con alto riesgo. Su balance es más favorable en mujeres menores de 60 años o con menos de 10 años de menopausia, la llamada ventana de oportunidad. No existe una duración máxima obligatoria, y la decisión de continuarla se individualiza y reevalúa cada año, usando la dosis mínima eficaz. Con el uso combinado prolongado aumenta ligeramente el riesgo de cáncer de mama. No se recomienda para prevención primaria de enfermedad cardiovascular ni demencia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia
+
+@ gyo|climacteric|menopause_obstetrics|3|next_step
+V: Mujer de 57 años, posmenopáusica desde hace 6 años, que presenta un episodio de sangrado vaginal. No usa terapia hormonal.
+P: ¿Cuál es el siguiente paso?
++ Ultrasonido transvaginal para medir el grosor endometrial y biopsia según el resultado || Todo sangrado posmenopáusico debe estudiarse para descartar cáncer de endometrio.
+- anchoring | Tranquilizar porque fue un solo episodio || Incluso un episodio requiere estudio.
+- availability_heuristic | Iniciar terapia hormonal para regular el sangrado || No está indicado sin diagnóstico.
+- representativeness_heuristic | Histerectomía inmediata sin estudio || Primero se diagnostica la causa.
+- premature_closure | Citología cervical como único estudio || No evalúa el endometrio.
+- base_rate_fallacy | Tomografía de abdomen como primer estudio || No es el estudio inicial.
+- framing_effect | Esperar a ver si se repite || Retrasa el diagnóstico.
+- complexity_bias | Tomografía por emisión de positrones || No es el estudio inicial.
+- information_bias | Marcador CA 125 || No es útil para el endometrio.
+- belief_bias | Es una última menstruación tardía || No ocurre 6 años después.
+E: El sangrado posmenopáusico es cualquier sangrado uterino que ocurre 12 meses o más después de la menopausia. Aunque la causa más frecuente es la atrofia endometrial, alrededor de 10% se debe a cáncer de endometrio, por lo que siempre debe estudiarse. El primer paso es el ultrasonido transvaginal. Un endometrio de 4 mm o menos tiene muy bajo riesgo de cáncer, mientras que uno mayor, heterogéneo o con sangrado persistente requiere biopsia endometrial o histeroscopia. Otras causas son pólipos, hiperplasia, terapia hormonal, lesiones cervicales y vaginales.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de endometrio
+
+@ gyo|climacteric|menopause_obstetrics|3|data_interpretation
+V: Mujer de 50 años con antecedente de trombosis venosa profunda hace 3 años y bochornos intensos. Desea terapia hormonal.
+P: ¿Qué indica su antecedente para el uso de terapia hormonal?
++ Contraindicación para la terapia hormonal sistémica oral; se prefieren opciones no hormonales || El antecedente de trombosis aumenta el riesgo de recurrencia con estrógenos.
+- anchoring | Puede usar estrógenos orales sin restricción || El riesgo de trombosis es alto.
+- availability_heuristic | La terapia hormonal previene la trombosis || La aumenta.
+- representativeness_heuristic | Solo está contraindicada si fuma || La trombosis previa es contraindicación por sí misma.
+- premature_closure | Requiere estrógenos a dosis más altas para controlar los síntomas || Aumenta el riesgo.
+- base_rate_fallacy | Puede usar tibolona sin riesgo || También tiene precauciones.
+- framing_effect | Debe aceptar los bochornos sin tratamiento || Hay opciones no hormonales.
+- inattentional_blindness | Debe suspender la anticoagulación para usar hormonas || No es adecuado.
+- focusing_illusion | Indica cáncer de mama || No tiene relación directa.
+- belief_bias | Las hormonas de la menopausia son naturales y no dan trombosis || Sí aumentan el riesgo.
+E: Las contraindicaciones de la terapia hormonal sistémica incluyen antecedente de trombosis venosa o tromboembolia pulmonar, cáncer de mama o de endometrio, sangrado vaginal no diagnosticado, enfermedad hepática activa, enfermedad coronaria o evento vascular cerebral previo y porfiria. Los estrógenos orales aumentan el riesgo de trombosis por su efecto de primer paso hepático, mientras que la vía transdérmica tiene menor riesgo, aunque en mujeres con trombosis previa se prefiere evitar la terapia sistémica. Se usan tratamientos no hormonales para los síntomas vasomotores. Los estrógenos vaginales a dosis bajas pueden considerarse para síntomas genitourinarios.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia
+
+@ gyo|climacteric|menopause_obstetrics|2|prevention_screening
+V: Mujer de 52 años, posmenopáusica, sana. Acude a consulta preventiva y pregunta qué medidas generales le ayudan en esta etapa.
+P: ¿Cuál es la medida de prevención más recomendada en la posmenopausia?
++ Actividad física regular con ejercicio de fuerza, dieta con calcio y vitamina D suficientes, y evitar tabaco y alcohol || Previenen osteoporosis y enfermedad cardiovascular.
+- anchoring | Terapia hormonal en todas las mujeres para prevenir enfermedades || No se indica para prevención en todas.
+- availability_heuristic | Suplementos de calcio en dosis muy altas sin valorar la dieta || El exceso puede tener riesgos.
+- representativeness_heuristic | Reposo para evitar fracturas || El sedentarismo empeora la masa ósea.
+- premature_closure | Ninguna medida porque es una etapa natural || Hay medidas preventivas útiles.
+- base_rate_fallacy | Densitometría mensual || No es necesaria.
+- framing_effect | Dieta sin lácteos || Reduce la ingesta de calcio.
+- complexity_bias | Bisfosfonatos en todas al iniciar la menopausia || Se indican según el riesgo.
+- belief_bias | La menopausia es una enfermedad que siempre requiere fármacos || Es una etapa fisiológica.
+- omission_bias | No hablar de salud cardiovascular porque es mujer || Es su principal causa de muerte.
+E: Tras la menopausia aumenta el riesgo de osteoporosis y enfermedad cardiovascular, que es la principal causa de muerte en mujeres. Las medidas preventivas incluyen actividad física regular con ejercicio aeróbico, de fuerza y de equilibrio, dieta saludable con ingesta adecuada de calcio, de 1 000 a 1 200 mg al día preferentemente de la dieta, y vitamina D, mantener un peso saludable, no fumar y limitar el alcohol. También se recomienda vigilar la presión arterial, la glucosa y los lípidos, el tamizaje de cáncer de mama y cervicouterino y evaluar el riesgo de fractura.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia
+
+@ gyo|climacteric|menopause_obstetrics|3|treatment_of_choice
+V: Mujer de 48 años con histerectomía total por miomatosis hace 2 años, con ovarios conservados, que ahora presenta bochornos intensos y alteraciones del sueño. Sin contraindicaciones.
+P: ¿Cuál es la terapia hormonal de elección?
++ Estrógeno solo sin progestágeno || Sin útero no se requiere protección endometrial.
+- anchoring | Estrógeno más progestágeno || El progestágeno es innecesario sin útero.
+- availability_heuristic | Progestágeno solo || Es menos eficaz para los bochornos.
+- representativeness_heuristic | Testosterona sola || No trata los bochornos.
+- premature_closure | Anticonceptivos orales combinados con dosis altas || No son la opción adecuada.
+- framing_effect | Ninguna terapia porque se le quitó el útero || Puede usar terapia hormonal.
+- complexity_bias | Ooforectomía para inducir menopausia completa || No está indicada.
+- base_rate_fallacy | Tamoxifeno || Puede empeorar los bochornos.
+- belief_bias | Tés de hierbas como tratamiento más eficaz || Su eficacia es limitada.
+- omission_bias | No tratar por miedo al cáncer || El estrógeno solo tiene buen perfil en histerectomizadas.
+E: En mujeres histerectomizadas la terapia hormonal se realiza con estrógeno solo, ya que el progestágeno se agrega únicamente para proteger el endometrio de la hiperplasia y el cáncer. El estrógeno solo tiene un perfil de riesgo favorable, sin aumento del riesgo de cáncer de mama en los estudios principales. Las mujeres que conservan el útero requieren estrógeno más progestágeno. La terapia se inicia preferentemente antes de los 60 años o en los primeros 10 años de la menopausia. La vía transdérmica reduce el riesgo de trombosis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia
+
+@ gyo|climacteric|menopause_obstetrics|3|diagnosis
+V: Mujer de 62 años con incontinencia urinaria que ocurre al toser, estornudar y reír, sin urgencia previa. Tiene 4 partos vaginales. Examen general de orina normal.
+P: ¿Cuál es el diagnóstico más probable?
++ Incontinencia urinaria de esfuerzo || Pérdida de orina con el aumento de la presión abdominal en una multípara.
+- anchoring | Incontinencia de urgencia por vejiga hiperactiva || Se precede de urgencia.
+- availability_heuristic | Infección urinaria || El examen de orina es normal.
+- representativeness_heuristic | Incontinencia por rebosamiento || Se asocia a retención con goteo continuo.
+- premature_closure | Fístula vesicovaginal || Da pérdida continua de orina.
+- base_rate_fallacy | Vejiga neurogénica || No hay antecedente neurológico.
+- framing_effect | Incontinencia funcional || Se debe a limitaciones físicas o cognitivas.
+- inattentional_blindness | Cáncer de vejiga || No explica el patrón.
+- focusing_illusion | Diabetes insípida || Causa poliuria, no incontinencia de esfuerzo.
+- belief_bias | Algo normal de la edad que no se trata || Es tratable.
+E: La incontinencia urinaria de esfuerzo es la pérdida involuntaria de orina con actividades que aumentan la presión abdominal, como toser, reír o hacer ejercicio. Se debe a la debilidad del piso pélvico y a la hipermovilidad uretral o deficiencia del esfínter. Sus factores de riesgo son partos vaginales, obesidad, menopausia, edad y estreñimiento crónico. El tratamiento inicial incluye ejercicios de Kegel con entrenamiento del piso pélvico, pérdida de peso y estrógenos vaginales en posmenopáusicas. Si no mejora se considera cirugía con cinta suburetral libre de tensión. La incontinencia de urgencia se trata con anticolinérgicos o mirabegrón.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la incontinencia urinaria en la mujer
+
+@ gyo|climacteric|osteoporosis_postmenopausal|2|data_interpretation
+V: Mujer de 64 años con densitometría ósea que reporta puntuación T de menos 2.8 en columna lumbar y menos 2.3 en cuello femoral. No ha tenido fracturas.
+P: ¿Qué indica este resultado?
++ Osteoporosis por puntuación T de menos 2.5 o menor en columna lumbar || La clasificación se basa en el sitio con el valor más bajo.
+- anchoring | Osteopenia en todos los sitios || La columna está en rango de osteoporosis.
+- availability_heuristic | Densidad mineral normal || Está claramente disminuida.
+- representativeness_heuristic | Osteoporosis grave establecida || Requiere fractura por fragilidad.
+- premature_closure | Osteomalacia confirmada || La densitometría no la diagnostica.
+- base_rate_fallacy | Indica metástasis óseas || No es un diagnóstico de densitometría.
+- framing_effect | Puntuación Z anormal || Se usa la puntuación T en posmenopáusicas.
+- inattentional_blindness | Enfermedad de Paget || No se diagnostica así.
+- focusing_illusion | Resultado no válido por la diferencia entre sitios || Es común que difieran.
+- belief_bias | Es normal perder hueso y no requiere atención || Requiere tratamiento.
+E: La densitometría ósea por absorciometría dual de rayos X en columna lumbar y cadera es el estándar para diagnosticar osteoporosis. En mujeres posmenopáusicas se usa la puntuación T, que compara con adultos jóvenes. Una puntuación T de menos 1 o mayor es normal, entre menos 1 y menos 2.5 es osteopenia, de menos 2.5 o menor es osteoporosis, y osteoporosis grave si además hay fractura por fragilidad. El diagnóstico se basa en el sitio con el valor más bajo. La puntuación Z se usa en premenopáusicas y hombres jóvenes. Una fractura por fragilidad establece el diagnóstico aunque la densitometría no sea diagnóstica.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis en la mujer posmenopáusica
+
+@ gyo|climacteric|osteoporosis_postmenopausal|3|treatment_of_choice
+V: Mujer de 66 años con osteoporosis por densitometría y antecedente de fractura vertebral por compresión. Función renal normal, sin problemas para tragar ni reflujo.
+P: ¿Cuál es el tratamiento farmacológico de elección?
++ Bisfosfonato oral, como alendronato semanal, con calcio y vitamina D || Reduce las fracturas vertebrales y de cadera.
+- anchoring | Solo calcio y vitamina D || No son suficientes con osteoporosis establecida y fractura.
+- availability_heuristic | Terapia hormonal como primera línea a los 66 años || No se inicia como primera línea a esta edad para osteoporosis.
+- representativeness_heuristic | Calcitonina como primera opción || Es menos eficaz.
+- premature_closure | Fluoruro de sodio || No es eficaz para reducir fracturas.
+- framing_effect | Vitamina A a dosis altas || Puede aumentar las fracturas.
+- complexity_bias | Teriparatida como primera línea en todas || Se reserva para alto riesgo o falla.
+- base_rate_fallacy | Reposo absoluto por la fractura || Empeora la masa ósea.
+- belief_bias | Tomar más leche como único tratamiento || No es suficiente.
+- omission_bias | No tratar porque ya tuvo la fractura || El riesgo de nuevas fracturas es alto.
+E: Los bisfosfonatos orales, como alendronato y risedronato, son el tratamiento de primera línea de la osteoporosis posmenopáusica. Inhiben la resorción ósea por los osteoclastos y reducen las fracturas vertebrales, de cadera y no vertebrales. Se toman en ayunas con un vaso de agua, permaneciendo erguida 30 minutos. Están contraindicados en insuficiencia renal grave y alteraciones esofágicas. El ácido zoledrónico intravenoso anual es una alternativa. El denosumab, la teriparatida y el romosozumab se usan en alto riesgo o intolerancia. Siempre se asegura calcio y vitamina D adecuados. Tras 3 a 5 años se valora un periodo de descanso.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis en la mujer posmenopáusica
+
+@ gyo|climacteric|osteoporosis_postmenopausal|3|complication_prognosis
+V: Mujer de 70 años con osteoporosis que recibe alendronato desde hace 8 años. Presenta dolor en el muslo derecho de varias semanas y la radiografía muestra engrosamiento cortical lateral en la diáfisis femoral.
+P: ¿Cuál es la complicación que debe sospecharse?
++ Fractura atípica de fémur asociada al uso prolongado de bisfosfonatos || El dolor en el muslo con engrosamiento cortical es característico.
+- anchoring | Fractura de cadera típica por osteoporosis || La localización y el patrón son diferentes.
+- availability_heuristic | Osteonecrosis de cadera || Afecta la cabeza femoral.
+- representativeness_heuristic | Metástasis ósea de cáncer de mama || No hay antecedente.
+- premature_closure | Dolor muscular por ejercicio || La radiografía muestra alteración ósea.
+- base_rate_fallacy | Osteomielitis || No hay datos de infección.
+- framing_effect | Enfermedad de Paget || No explica el contexto.
+- inattentional_blindness | Trombosis venosa profunda || No explica el hallazgo óseo.
+- focusing_illusion | Ciática || No explica la alteración cortical.
+- belief_bias | Efecto de la edad sin relación con el medicamento || Se asocia al uso prolongado.
+E: El uso prolongado de bisfosfonatos, generalmente más de 5 años, se asocia a dos complicaciones raras. La fractura atípica de fémur ocurre en la región subtrocantérica o diafisaria con trauma mínimo, se precede de dolor en el muslo o la ingle y muestra engrosamiento cortical lateral en la radiografía, y puede ser bilateral. La osteonecrosis de la mandíbula se asocia más a dosis altas en cáncer y a procedimientos dentales. Ante sospecha de fractura atípica se suspende el bisfosfonato, se estudia el fémur contralateral y se considera fijación profiláctica. Por ello se valoran periodos de descanso del fármaco.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis en la mujer posmenopáusica
+
+@ gyo|climacteric|osteoporosis_postmenopausal|2|prevention_screening
+V: Mujer de 66 años sana, sin fracturas previas, que nunca se ha realizado estudios de densidad ósea.
+P: ¿Cuál es el estudio de tamizaje de osteoporosis recomendado?
++ Densitometría ósea de columna y cadera a partir de los 65 años || Se recomienda en todas las mujeres de 65 años o más.
+- anchoring | Radiografía simple de columna como tamizaje || Detecta pérdida ósea solo cuando es avanzada.
+- availability_heuristic | Medir calcio sérico como tamizaje || No detecta osteoporosis.
+- representativeness_heuristic | Ningún estudio si no ha tenido fracturas || El tamizaje busca prevenir la primera fractura.
+- premature_closure | Tomografía de columna || No es el estudio de tamizaje estándar.
+- base_rate_fallacy | Densitometría solo en mujeres delgadas || Se recomienda a todas a esta edad.
+- framing_effect | Ultrasonido de calcáneo como diagnóstico definitivo || No sustituye a la densitometría.
+- complexity_bias | Biopsia ósea || No está indicada.
+- information_bias | Fosfatasa alcalina como único estudio || No diagnostica osteoporosis.
+- belief_bias | Los huesos débiles se notan solos sin estudios || La osteoporosis es silenciosa.
+E: La osteoporosis es una enfermedad silenciosa hasta que ocurre una fractura. Se recomienda densitometría ósea a todas las mujeres de 65 años o más, y en mujeres posmenopáusicas más jóvenes con factores de riesgo, como bajo peso, fractura previa por fragilidad, uso de corticosteroides, tabaquismo, alcoholismo, artritis reumatoide, menopausia temprana o antecedente familiar de fractura de cadera. La herramienta FRAX estima la probabilidad de fractura a 10 años y ayuda a decidir el tratamiento. La frecuencia del seguimiento depende del resultado inicial.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis en la mujer posmenopáusica
+
+@ gyo|climacteric|osteoporosis_postmenopausal|3|risk_factor
+V: Mujer de 60 años con artritis reumatoide que recibe prednisona 10 mg al día desde hace 2 años. Es delgada, fuma y tuvo menopausia a los 44 años.
+P: ¿Cuál es el factor de riesgo de osteoporosis más importante y modificable relacionado con medicamentos?
++ Uso prolongado de glucocorticoides || Es la causa más frecuente de osteoporosis secundaria.
+- anchoring | Menopausia temprana || Es un factor importante pero no modificable.
+- availability_heuristic | Consumo de café moderado || Su efecto es menor.
+- representativeness_heuristic | Uso de paracetamol || No es un factor.
+- premature_closure | Ejercicio moderado || Es protector.
+- base_rate_fallacy | Uso de estatinas || No aumentan el riesgo.
+- framing_effect | Exposición solar moderada || Favorece la vitamina D.
+- inattentional_blindness | Uso de metformina || No es un factor importante.
+- focusing_illusion | Vacunación contra influenza || No es un factor.
+- belief_bias | Dormir muchas horas || No es un factor relevante.
+E: Los glucocorticoides son la causa más frecuente de osteoporosis secundaria. Reducen la formación ósea al inhibir a los osteoblastos, aumentan la resorción, disminuyen la absorción intestinal de calcio y aumentan su pérdida renal. La pérdida ósea es más rápida en los primeros meses y el riesgo de fractura aumenta con dosis de 2.5 a 7.5 mg de prednisona al día por más de 3 meses. Se recomienda usar la dosis mínima eficaz, asegurar calcio y vitamina D, evaluar la densidad ósea y considerar bisfosfonatos en pacientes de riesgo. Otros fármacos de riesgo son anticonvulsivos, inhibidores de aromatasa y exceso de levotiroxina.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis en la mujer posmenopáusica
+
+@ gyo|climacteric|osteoporosis_postmenopausal|3|mechanism
+V: Mujer de 55 años que inicia tratamiento con denosumab por osteoporosis. Pregunta cómo funciona y si puede suspenderlo cuando quiera.
+P: ¿Cuál es el mecanismo de acción del denosumab?
++ Anticuerpo monoclonal contra RANKL que inhibe la formación y activación de los osteoclastos || Reduce la resorción ósea de forma reversible.
+- anchoring | Estimula a los osteoblastos como la teriparatida || Es antirresortivo.
+- availability_heuristic | Se une a la hidroxiapatita como los bisfosfonatos || No es su mecanismo.
+- representativeness_heuristic | Actúa como estrógeno en el hueso || No es un modulador estrogénico.
+- premature_closure | Aumenta la absorción intestinal de calcio || No es su mecanismo.
+- base_rate_fallacy | Inhibe la esclerostina || Ese es el romosozumab.
+- framing_effect | Bloquea la hormona paratiroidea || No es su mecanismo.
+- inattentional_blindness | Actúa como vitamina D activa || No es su mecanismo.
+- focusing_illusion | Inhibe la calcitonina || No es su mecanismo.
+- belief_bias | Puede suspenderse sin consecuencias en cualquier momento || La suspensión causa pérdida ósea rápida.
+E: El denosumab es un anticuerpo monoclonal que se une al ligando del receptor activador del factor nuclear kappa B, RANKL, e impide la formación, función y supervivencia de los osteoclastos, lo que reduce la resorción ósea. Se aplica por vía subcutánea cada 6 meses y reduce las fracturas vertebrales, de cadera y no vertebrales. Puede usarse en insuficiencia renal. Su efecto es reversible, y al suspenderlo hay una pérdida ósea rápida con riesgo de fracturas vertebrales múltiples, por lo que debe seguirse de un bisfosfonato. Puede causar hipocalcemia, por lo que se corrige la vitamina D antes de iniciarlo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis en la mujer posmenopáusica
+
+@ gyo|breast|benign_breast|2|diagnosis
+V: Mujer de 22 años con un nódulo en la mama izquierda de 2 cm, redondo, de bordes lisos, de consistencia ahulada, muy móvil e indoloro. El ultrasonido muestra una lesión sólida ovalada, circunscrita, paralela a la piel.
+P: ¿Cuál es el diagnóstico más probable?
++ Fibroadenoma || Nódulo sólido móvil, liso e indoloro en una mujer joven.
+- anchoring | Cáncer de mama || Es raro a esta edad y suele ser irregular y fijo.
+- availability_heuristic | Quiste mamario simple || El ultrasonido muestra lesión sólida.
+- representativeness_heuristic | Tumor filoides || Crece rápido y suele ser más grande.
+- premature_closure | Mastitis || No hay datos de inflamación.
+- base_rate_fallacy | Lipoma mamario || Es blando y en mujeres mayores.
+- framing_effect | Galactocele || Se asocia a lactancia.
+- inattentional_blindness | Necrosis grasa || Se asocia a traumatismo.
+- focusing_illusion | Papiloma intraductal || Da secreción por el pezón.
+- belief_bias | Bolita que siempre es cáncer || La mayoría de los nódulos en jóvenes son benignos.
+E: El fibroadenoma es el tumor benigno de mama más frecuente en mujeres jóvenes, entre los 15 y 35 años. Es un tumor fibroepitelial que se palpa como un nódulo redondo u ovalado, liso, de consistencia ahulada, muy móvil e indoloro. El ultrasonido muestra una lesión sólida ovalada, circunscrita, paralela a la piel y homogénea. Con hallazgos típicos en mujeres jóvenes puede vigilarse con ultrasonido. Se realiza biopsia si hay crecimiento rápido, hallazgos atípicos o edad mayor. La escisión se indica en lesiones grandes, sintomáticas o que crecen. No aumenta de forma importante el riesgo de cáncer.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la patología mamaria benigna
+
+@ gyo|breast|benign_breast|3|next_step
+V: Mujer de 38 años con un nódulo palpable en la mama derecha que aumenta antes de la menstruación. El ultrasonido muestra una lesión anecoica, de paredes delgadas, bordes lisos y con reforzamiento acústico posterior, sin componente sólido.
+P: ¿Cuál es la conducta más apropiada?
++ Vigilancia clínica, con aspiración solo si es sintomático || El quiste simple es benigno y no requiere biopsia.
+- anchoring | Biopsia con aguja de corte obligatoria || No es necesaria en quistes simples.
+- availability_heuristic | Mastectomía || Es excesiva.
+- representativeness_heuristic | Quimioterapia preventiva || No está indicada.
+- premature_closure | Resonancia magnética de rutina || No es necesaria.
+- framing_effect | Escisión quirúrgica en todos los casos || No es necesaria.
+- complexity_bias | Tomografía de tórax || No está indicada.
+- base_rate_fallacy | Antibióticos || No hay infección.
+- belief_bias | Todo nódulo debe operarse || Los quistes simples son benignos.
+- omission_bias | Ignorar el hallazgo sin explicar los signos de alarma || Debe explicarse cuándo consultar.
+E: Los quistes mamarios son frecuentes en mujeres de 35 a 50 años y pueden aumentar con el ciclo menstrual. El quiste simple se ve en el ultrasonido anecoico, con paredes delgadas, bordes lisos y reforzamiento acústico posterior, y es benigno, categoría BI RADS 2. No requiere biopsia y puede vigilarse o aspirarse si causa dolor. Los quistes complicados con ecos internos se vigilan o aspiran, y los complejos con componente sólido requieren biopsia. Si al aspirar el líquido es sanguinolento o la masa persiste, se realiza estudio adicional.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la patología mamaria benigna
+
+@ gyo|breast|benign_breast|3|diagnosis
+V: Mujer de 42 años con secreción espontánea, unilateral, sanguinolenta, por un solo conducto del pezón derecho. No se palpa masa. La mastografía es normal y el ultrasonido muestra una pequeña lesión intraductal retroareolar.
+P: ¿Cuál es el diagnóstico más probable?
++ Papiloma intraductal || Causa más frecuente de secreción sanguinolenta unilateral por un solo conducto.
+- anchoring | Ectasia ductal || Da secreción multicolor espesa y bilateral.
+- availability_heuristic | Galactorrea por prolactinoma || Es bilateral, lechosa y de múltiples conductos.
+- representativeness_heuristic | Cáncer ductal invasor || Debe descartarse, pero el papiloma es más frecuente.
+- premature_closure | Mastitis || No hay inflamación.
+- base_rate_fallacy | Enfermedad de Paget || Da lesión eczematosa del pezón.
+- framing_effect | Fibroadenoma || No da secreción.
+- inattentional_blindness | Secreción fisiológica || La fisiológica es bilateral y provocada.
+- focusing_illusion | Quiste simple || No da secreción sanguinolenta.
+- belief_bias | Lesión por el roce del sostén || Hay una lesión intraductal.
+E: La secreción por el pezón se considera patológica si es espontánea, unilateral, de un solo conducto, sanguinolenta o serosa, o se asocia a masa. La causa más frecuente de secreción sanguinolenta de un solo conducto es el papiloma intraductal, tumor benigno de los conductos retroareolares. Debe descartarse cáncer, sobre todo en mujeres mayores. Se estudia con mastografía y ultrasonido, y el tratamiento es la escisión del conducto afectado para diagnóstico histológico. La secreción bilateral, lechosa y de múltiples conductos sugiere galactorrea, y la verdosa y espesa ectasia ductal.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la patología mamaria benigna
+
+@ gyo|breast|benign_breast|2|diagnosis
+V: Mujer de 30 años con dolor mamario bilateral, difuso, que inicia una semana antes de la menstruación y desaparece al iniciar el sangrado. Exploración con nodularidad difusa bilateral sin masas dominantes.
+P: ¿Cuál es el diagnóstico más probable?
++ Mastalgia cíclica con cambios fibroquísticos || Dolor bilateral relacionado con el ciclo sin masas dominantes.
+- anchoring | Cáncer de mama || Rara vez causa dolor cíclico bilateral.
+- availability_heuristic | Mastitis || No hay inflamación ni fiebre.
+- representativeness_heuristic | Fibroadenoma múltiple || No hay masas definidas.
+- premature_closure | Costocondritis || No se relaciona con el ciclo.
+- base_rate_fallacy | Enfermedad de Mondor || Da un cordón palpable.
+- framing_effect | Tumor filoides || Es una masa de crecimiento rápido.
+- inattentional_blindness | Angina de pecho || No se relaciona con el ciclo.
+- focusing_illusion | Quiste infectado || No hay inflamación.
+- belief_bias | El dolor mamario siempre es cáncer || El dolor cíclico es benigno.
+E: La mastalgia cíclica es la causa más frecuente de consulta mamaria. Se relaciona con los cambios hormonales del ciclo, aparece en la fase lútea, es bilateral y difusa y cede con la menstruación. Suele acompañarse de cambios fibroquísticos, con nodularidad difusa. Es benigna y rara vez se asocia a cáncer. El manejo incluye tranquilizar a la paciente, usar un sostén adecuado, analgésicos y antiinflamatorios tópicos. En casos graves pueden considerarse tamoxifeno o danazol por periodos cortos. La mastalgia no cíclica y focal requiere evaluación para descartar otras causas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la patología mamaria benigna
+
+@ gyo|breast|benign_breast|3|diagnosis
+V: Mujer de 45 años con un nódulo mamario que creció de 3 a 8 cm en 4 meses. Es firme, lobulado, móvil y distiende la piel con venas visibles. No hay adenopatías.
+P: ¿Cuál es el diagnóstico más probable?
++ Tumor filoides || Masa fibroepitelial de crecimiento rápido y gran tamaño.
+- anchoring | Fibroadenoma simple || Crece lentamente y suele ser pequeño.
+- availability_heuristic | Quiste simple gigante || No es firme ni lobulado.
+- representativeness_heuristic | Carcinoma inflamatorio || Da piel de naranja y eritema.
+- premature_closure | Lipoma || Es blando y de crecimiento lento.
+- base_rate_fallacy | Hamartoma mamario || Es raro y de crecimiento lento.
+- framing_effect | Absceso mamario || Daría inflamación y fiebre.
+- inattentional_blindness | Ginecomastia || Ocurre en varones.
+- focusing_illusion | Linfoma mamario || Es raro.
+- belief_bias | Crecimiento normal de la mama con la edad || El crecimiento rápido es anormal.
+E: El tumor filoides es un tumor fibroepitelial raro que suele presentarse entre los 40 y 50 años como una masa firme, lobulada, móvil, de crecimiento rápido y que puede alcanzar gran tamaño, distendiendo la piel. Puede ser benigno, limítrofe o maligno, y se distingue del fibroadenoma por su celularidad estromal. La biopsia con aguja de corte orienta el diagnóstico. El tratamiento es la escisión amplia con márgenes de al menos 1 cm, porque tiende a recurrir localmente. No requiere disección axilar porque rara vez da metástasis ganglionares, y las formas malignas pueden dar metástasis hematógenas a pulmón.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la patología mamaria benigna
+
+@ gyo|breast|benign_breast|3|diagnosis
+V: Mujer de 50 años con un nódulo duro e irregular en la mama izquierda que apareció 2 meses después de un golpe con el cinturón de seguridad en un accidente. Tiene retracción leve de la piel. La mastografía muestra una lesión con calcificaciones en cáscara de huevo.
+P: ¿Cuál es el diagnóstico más probable?
++ Necrosis grasa || Masa tras traumatismo con calcificaciones en cáscara de huevo.
+- anchoring | Cáncer de mama invasor || Puede simularlo, por lo que a veces requiere biopsia, pero el contexto orienta a necrosis grasa.
+- availability_heuristic | Fibroadenoma || Es liso y móvil sin antecedente.
+- representativeness_heuristic | Hematoma agudo || Ya pasaron 2 meses.
+- premature_closure | Quiste simple || No es duro ni irregular.
+- base_rate_fallacy | Tumor filoides || Crece rápido sin antecedente traumático.
+- framing_effect | Absceso mamario || No hay inflamación.
+- inattentional_blindness | Papiloma intraductal || Da secreción.
+- focusing_illusion | Mastitis granulomatosa || Es inflamatoria.
+- belief_bias | El golpe causó cáncer || Los golpes no causan cáncer.
+E: La necrosis grasa es una lesión benigna por daño del tejido adiposo mamario tras traumatismo, cirugía, radioterapia o biopsia. Puede presentarse como una masa dura, irregular, a veces con retracción de la piel, que simula cáncer. En la mastografía puede mostrar quistes oleosos, calcificaciones en cáscara de huevo o lesiones espiculadas. El antecedente de trauma orienta el diagnóstico, pero si los hallazgos son sospechosos se realiza biopsia. No requiere tratamiento y suele resolverse. Los traumatismos no causan cáncer de mama.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la patología mamaria benigna
+
+@ gyo|breast|benign_breast|2|initial_study
+V: Mujer de 25 años con un nódulo mamario palpable de reciente aparición. Está preocupada por cáncer.
+P: ¿Cuál es el estudio de imagen inicial de elección a esta edad?
++ Ultrasonido mamario || En menores de 30 a 35 años el tejido es denso y el ultrasonido es más útil.
+- anchoring | Mastografía como primer estudio || Es menos sensible en mamas densas jóvenes.
+- availability_heuristic | Resonancia magnética como primer estudio || No es el estudio inicial.
+- representativeness_heuristic | Tomografía de tórax || No evalúa adecuadamente la mama.
+- premature_closure | Ningún estudio porque es joven || Todo nódulo debe evaluarse.
+- base_rate_fallacy | Gammagrama óseo || No está indicado.
+- framing_effect | Termografía || No es un método validado.
+- complexity_bias | Tomografía por emisión de positrones || No está indicada.
+- information_bias | Marcadores tumorales || No sirven para el diagnóstico.
+- belief_bias | Biopsia quirúrgica sin imagen previa || Primero se realiza imagen.
+E: En mujeres menores de 30 a 35 años con un nódulo mamario palpable el estudio de imagen inicial es el ultrasonido, porque el tejido mamario denso disminuye la sensibilidad de la mastografía y el ultrasonido distingue entre lesiones sólidas y quísticas sin radiación. En mujeres mayores se realiza mastografía diagnóstica con ultrasonido complementario. Los hallazgos se clasifican con BI RADS para decidir vigilancia o biopsia. La evaluación triple con exploración, imagen y biopsia cuando está indicada tiene alta precisión diagnóstica.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la patología mamaria benigna
+
+@ gyo|breast|breast_cancer_obstetrics|3|next_step
+V: Mujer de 33 años con embarazo de 20 semanas que palpa un nódulo duro, irregular y fijo de 2 cm en la mama derecha que no estaba antes del embarazo. Persiste desde hace 4 semanas.
+P: ¿Cuál es el siguiente paso?
++ Ultrasonido mamario y biopsia con aguja de corte del nódulo || Una masa persistente en el embarazo debe estudiarse sin demora.
+- anchoring | Esperar al final del embarazo para estudiarla || Retrasa el diagnóstico de cáncer.
+- availability_heuristic | Atribuirla a cambios del embarazo sin estudios || La masa persistente requiere evaluación.
+- representativeness_heuristic | Interrumpir el embarazo antes de cualquier estudio || No es necesario.
+- premature_closure | Mastografía contraindicada siempre y por eso no estudiar || El ultrasonido y la biopsia son seguros.
+- framing_effect | Antibióticos por posible mastitis || No hay datos de infección.
+- complexity_bias | Tomografía por emisión de positrones en el embarazo || No es adecuada.
+- base_rate_fallacy | Gammagrama óseo como primer estudio || No es el primer paso.
+- belief_bias | El embarazo protege contra el cáncer de mama || Puede ocurrir durante el embarazo.
+- omission_bias | No biopsiar para no dañar al bebé || La biopsia es segura.
+E: El cáncer de mama asociado al embarazo es el que se diagnostica durante el embarazo o el primer año posparto. Suele diagnosticarse tarde porque los cambios de la mama dificultan la exploración. Toda masa mamaria que persiste más de 2 a 4 semanas durante el embarazo o la lactancia debe estudiarse con ultrasonido y biopsia con aguja de corte, que son seguros. La mastografía con protección abdominal puede realizarse si es necesaria. El tratamiento depende de la etapa y el trimestre, con cirugía posible en cualquier trimestre y quimioterapia a partir del segundo. El tamoxifeno, el trastuzumab y la radioterapia se difieren hasta después del parto.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de mama
+
+@ gyo|breast|breast_cancer_obstetrics|3|treatment_of_choice
+V: Mujer de 31 años con cáncer de mama ductal invasor diagnosticado a las 22 semanas de embarazo, etapa II, receptores positivos, HER2 negativo. Desea continuar el embarazo.
+P: ¿Cuál es el tratamiento de elección durante el embarazo?
++ Cirugía y quimioterapia a partir del segundo trimestre, difiriendo la radioterapia y el tamoxifeno hasta después del parto || Permite tratar el cáncer protegiendo al feto.
+- anchoring | Tamoxifeno durante el embarazo || Es teratógeno.
+- availability_heuristic | Radioterapia de inmediato || Se difiere hasta después del parto.
+- representativeness_heuristic | Interrupción obligatoria del embarazo || No mejora el pronóstico materno.
+- premature_closure | Esperar al parto para iniciar cualquier tratamiento || El retraso empeora el pronóstico.
+- framing_effect | Trastuzumab || Causa oligohidramnios y el tumor es HER2 negativo.
+- complexity_bias | Quimioterapia en el primer trimestre || Es cuando hay más riesgo de malformaciones.
+- base_rate_fallacy | Inhibidores de aromatasa || No se usan en el embarazo.
+- belief_bias | Tratamientos naturales hasta que nazca el bebé || El cáncer requiere tratamiento.
+- omission_bias | Evitar la cirugía por miedo al feto || La cirugía es segura en el embarazo.
+E: El cáncer de mama en el embarazo puede tratarse con buenos resultados maternos y fetales. La cirugía, mastectomía o conservadora, puede realizarse en cualquier trimestre. La quimioterapia con antraciclinas y taxanos puede administrarse a partir del segundo trimestre, ya que en el primero aumenta el riesgo de malformaciones, y se suspende unas 3 semanas antes del parto. La radioterapia, el tamoxifeno y el trastuzumab se difieren hasta después del parto por su toxicidad fetal. La interrupción del embarazo no mejora el pronóstico materno. Se recomienda un equipo multidisciplinario.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de mama
+
+@ gyo|breast|breast_cancer_obstetrics|3|data_interpretation
+V: Mujer de 36 años que terminó tratamiento por cáncer de mama con receptores positivos hace 3 años y desea embarazarse. Pregunta si el embarazo aumenta el riesgo de recurrencia.
+P: ¿Qué indica la evidencia sobre el embarazo después del cáncer de mama?
++ El embarazo después del tratamiento no empeora el pronóstico y puede considerarse tras un periodo de vigilancia individualizado || No aumenta la recurrencia.
+- anchoring | El embarazo está contraindicado de por vida || No es así.
+- availability_heuristic | El embarazo provoca recurrencia en todas || No hay evidencia.
+- representativeness_heuristic | Debe esperar al menos 15 años || El intervalo es individualizado.
+- premature_closure | La lactancia está prohibida en ambas mamas || Puede amamantar con la mama sana.
+- base_rate_fallacy | Debe tomar tamoxifeno durante el embarazo || Es teratógeno.
+- framing_effect | Solo puede embarazarse por fertilización in vitro || No es necesario.
+- inattentional_blindness | El embarazo cura el cáncer || No es así.
+- focusing_illusion | El riesgo depende del sexo del bebé || No tiene relación.
+- belief_bias | Las hormonas del embarazo siempre reactivan el cáncer || No hay evidencia de mayor recurrencia.
+E: Los estudios muestran que el embarazo después del tratamiento del cáncer de mama no empeora el pronóstico ni aumenta la recurrencia, incluso en tumores con receptores hormonales positivos. Se recomienda esperar un periodo individualizado, generalmente de 2 años tras el diagnóstico para pasar el periodo de mayor riesgo de recurrencia. En tumores hormonosensibles puede pausarse la terapia endocrina tras 18 a 30 meses para intentar el embarazo y reanudarla después. Antes del tratamiento oncológico se ofrece preservación de la fertilidad. La lactancia es posible con la mama no tratada.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de mama
+
+@ gyo|breast|breast_cancer_obstetrics|3|prevention_screening
+V: Mujer de 30 años portadora de mutación BRCA1 que desea tener hijos en los próximos años. Pregunta por su vigilancia de cáncer de mama.
+P: ¿Cuál es la estrategia de vigilancia recomendada?
++ Resonancia magnética mamaria anual desde los 25 años y mastografía anual desde los 30 años, con opción de cirugía reductora de riesgo tras completar su paridad || Las portadoras de BRCA tienen alto riesgo.
+- anchoring | Mastografía cada 2 años desde los 40 años como en la población general || Es insuficiente para portadoras.
+- availability_heuristic | Ninguna vigilancia hasta los 50 años || El riesgo empieza joven.
+- representativeness_heuristic | Solo autoexploración mensual || Es insuficiente.
+- premature_closure | Ultrasonido anual como único estudio || La resonancia es el estudio más sensible.
+- base_rate_fallacy | Marcadores tumorales cada mes || No sirven para tamizaje.
+- framing_effect | Mastectomía obligatoria inmediata antes de tener hijos || Es una opción, no una obligación.
+- complexity_bias | Tomografía por emisión de positrones anual || No es la vigilancia indicada.
+- belief_bias | El embarazo elimina el riesgo genético || No lo elimina.
+- omission_bias | No hablar de opciones reductoras de riesgo || Es parte del asesoramiento.
+E: Las portadoras de mutaciones en BRCA1 y BRCA2 tienen un riesgo de cáncer de mama a lo largo de la vida de 45 a 70% y de cáncer de ovario de 15 a 40%. Se recomienda resonancia magnética mamaria anual desde los 25 años y mastografía anual desde los 30, alternadas cada 6 meses. Pueden considerar mastectomía bilateral reductora de riesgo y salpingooforectomía bilateral entre los 35 y 40 años tras completar su paridad, que reduce el riesgo de cáncer de ovario y de mama. La quimioprevención con tamoxifeno es una opción. Se ofrece asesoramiento genético a familiares.
+R: Guía de Práctica Clínica de tamizaje y diagnóstico de cáncer de mama
+
+@ gyo|breast|breast_cancer_obstetrics|3|risk_factor
+V: Mujer de 45 años que pregunta qué factores reproductivos influyen en su riesgo de cáncer de mama. Tuvo la menarca a los 10 años, su primer embarazo a los 36 y no amamantó.
+P: ¿Cuál es el factor reproductivo que aumenta el riesgo de cáncer de mama?
++ Menarca temprana, primer embarazo tardío y no amamantar, por mayor exposición estrogénica || Prolongan la exposición del tejido mamario a estrógenos.
+- anchoring | Multiparidad temprana || Es protectora.
+- availability_heuristic | Lactancia prolongada || Es protectora.
+- representativeness_heuristic | Menopausia temprana || Es protectora.
+- premature_closure | Uso de dispositivo de cobre || No influye.
+- base_rate_fallacy | Cesáreas previas || No influyen.
+- framing_effect | Aborto espontáneo previo || No aumenta el riesgo.
+- inattentional_blindness | Ooforectomía temprana || Es protectora.
+- focusing_illusion | Embarazo antes de los 20 años || Es protector.
+- belief_bias | Tener mamas pequeñas aumenta el riesgo || El tamaño no influye.
+E: Los factores reproductivos que aumentan el riesgo de cáncer de mama se relacionan con mayor exposición a estrógenos endógenos. Incluyen menarca temprana, menopausia tardía, nuliparidad, primer embarazo después de los 30 años y no amamantar. La multiparidad, el primer embarazo a edad temprana y la lactancia prolongada son protectores. Otros factores de riesgo son edad, antecedente familiar, mutaciones genéticas, densidad mamaria alta, obesidad posmenopáusica, alcohol, sedentarismo, radiación torácica y terapia hormonal combinada prolongada. La lactancia es una medida protectora que se puede promover.
+R: Guía de Práctica Clínica de tamizaje y diagnóstico de cáncer de mama
