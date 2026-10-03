@@ -1,0 +1,1335 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "fam-06b-funcionalidad-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_functionality",
+      "vignette": "Mujer de 42 años con diabetes descontrolada a pesar de buen tratamiento. Refiere problemas en casa y siente que su familia no la apoya. El médico desea una evaluación rápida de la percepción de la funcionalidad familiar.",
+      "prompt": "¿Cuál es el instrumento inicial más apropiado?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Familiograma como medida de funcionalidad",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Describe la estructura, no mide funcionalidad."
+        },
+        {
+          "key": "b",
+          "text": "APGAR familiar de Smilkstein",
+          "correct": true,
+          "rationale": "Es un cuestionario breve de cinco preguntas que evalúa la percepción de la funcionalidad familiar."
+        },
+        {
+          "key": "c",
+          "text": "Escala de depresión de Beck",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Evalúa depresión, no funcionalidad familiar."
+        },
+        {
+          "key": "d",
+          "text": "Escala de Barthel",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Mide dependencia funcional."
+        },
+        {
+          "key": "e",
+          "text": "Índice de Katz",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "Evalúa actividades básicas."
+        },
+        {
+          "key": "f",
+          "text": "Minimental",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Evalúa deterioro cognitivo."
+        },
+        {
+          "key": "g",
+          "text": "La familia no influye en el control de la diabetes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Influye en el apego y el autocuidado."
+        },
+        {
+          "key": "h",
+          "text": "Entrevista psiquiátrica estructurada completa a toda la familia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es una evaluación rápida inicial."
+        },
+        {
+          "key": "i",
+          "text": "Escala de Glasgow",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Evalúa estado de conciencia."
+        },
+        {
+          "key": "j",
+          "text": "Escala de Zarit",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Mide sobrecarga del cuidador."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "El APGAR familiar, diseñado por Smilkstein, es un cuestionario de cinco preguntas que evalúa la percepción de un miembro sobre la funcionalidad de su familia en cinco áreas: adaptación, participación, crecimiento, afecto y recursos. Cada pregunta se puntúa de 0 a 2 en la versión original, o de 0 a 4 en la versión ampliada. En la versión de 0 a 10, una puntuación de 7 a 10 indica familia funcional, de 4 a 6 disfunción moderada y de 0 a 3 disfunción grave. Es breve y útil en el primer nivel, sobre todo en pacientes con enfermedades crónicas y mal control.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de estudio de salud familiar en el primer nivel",
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar"
+      ]
+    },
+    {
+      "key": "fam-06b-funcionalidad-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_functionality",
+      "vignette": "En el APGAR familiar de Smilkstein, una de las preguntas explora si el paciente está satisfecho con la ayuda que recibe de su familia cuando tiene un problema.",
+      "prompt": "¿Qué componente del APGAR familiar indica esta pregunta?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Adaptación",
+          "correct": true,
+          "rationale": "Evalúa la utilización de los recursos familiares para resolver problemas en crisis."
+        },
+        {
+          "key": "b",
+          "text": "Autoridad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es componente del APGAR."
+        },
+        {
+          "key": "c",
+          "text": "Afecto",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Evalúa la expresión de emociones y cariño."
+        },
+        {
+          "key": "d",
+          "text": "Jerarquía",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es componente del APGAR."
+        },
+        {
+          "key": "e",
+          "text": "Adaptabilidad de FACES III",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Pertenece a otro instrumento."
+        },
+        {
+          "key": "f",
+          "text": "Participación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Evalúa cómo se comparten las decisiones y responsabilidades."
+        },
+        {
+          "key": "g",
+          "text": "Crecimiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Evalúa el apoyo para el desarrollo personal."
+        },
+        {
+          "key": "h",
+          "text": "Cohesión de FACES III",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Pertenece a otro instrumento."
+        },
+        {
+          "key": "i",
+          "text": "Recursos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Evalúa el compromiso de dedicar tiempo y espacio."
+        },
+        {
+          "key": "j",
+          "text": "Comunicación del modelo McMaster",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Pertenece a otro modelo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "g"
+      ],
+      "explanation": "Los cinco componentes del APGAR familiar son: adaptación, la satisfacción con la ayuda recibida de la familia ante un problema; participación, la satisfacción con la forma en que la familia comparte las decisiones; crecimiento, el apoyo para emprender nuevas actividades y el desarrollo personal; afecto, la satisfacción con la forma en que la familia expresa cariño y responde a las emociones; y resolución o recursos, la satisfacción con el tiempo, el espacio y el dinero que comparten. El acrónimo en inglés corresponde a adaptation, partnership, growth, affection y resolve.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de estudio de salud familiar en el primer nivel",
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar"
+      ]
+    },
+    {
+      "key": "fam-06b-funcionalidad-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_functionality",
+      "vignette": "En la escala FACES III aplicada a una familia, el resultado muestra una cohesión muy alta, en la que los miembros no tienen espacio individual y todas las decisiones dependen del grupo, y una adaptabilidad muy baja con reglas inflexibles.",
+      "prompt": "¿Qué tipo de familia indica este resultado según el modelo circumplejo de Olson?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Familia reconstituida",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es una clasificación estructural."
+        },
+        {
+          "key": "b",
+          "text": "Familia monoparental",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es una clasificación estructural."
+        },
+        {
+          "key": "c",
+          "text": "Familia balanceada flexible y conectada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Corresponde a niveles intermedios."
+        },
+        {
+          "key": "d",
+          "text": "Familia aglutinada y rígida, del tipo extremo",
+          "correct": true,
+          "rationale": "Los extremos de cohesión y adaptabilidad se asocian con disfunción."
+        },
+        {
+          "key": "e",
+          "text": "Familia separada y estructurada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Son niveles intermedios."
+        },
+        {
+          "key": "f",
+          "text": "Las reglas rígidas siempre protegen a la familia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Impiden adaptarse a los cambios."
+        },
+        {
+          "key": "g",
+          "text": "Familia extensa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es una clasificación por composición."
+        },
+        {
+          "key": "h",
+          "text": "Familia funcional porque es muy unida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La cohesión extrema limita la autonomía."
+        },
+        {
+          "key": "i",
+          "text": "Familia moderna",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es una clasificación por desarrollo."
+        },
+        {
+          "key": "j",
+          "text": "Familia desligada y caótica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Corresponde a cohesión baja y adaptabilidad muy alta."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "e",
+        "j"
+      ],
+      "explanation": "La escala FACES III, basada en el modelo circumplejo de Olson, evalúa dos dimensiones de la funcionalidad familiar. La cohesión es el vínculo emocional entre los miembros y se clasifica en desligada, separada, conectada y aglutinada. La adaptabilidad es la capacidad de cambiar reglas, roles y estructura de poder ante las situaciones, y se clasifica en rígida, estructurada, flexible y caótica. Los niveles intermedios se consideran balanceados y funcionales, mientras que los extremos, como aglutinada o desligada y rígida o caótica, se asocian con disfunción. Combinando ambas dimensiones se obtienen 16 tipos de familia.",
+      "gpcRefs": [
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar",
+        "Guía de Práctica Clínica de estudio de salud familiar en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-06b-funcionalidad-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_functionality",
+      "vignette": "En una familia, cuando los padres discuten, ambos buscan a su hija de 12 años para que tome partido. La niña presenta dolor abdominal recurrente cada vez que hay conflicto entre ellos.",
+      "prompt": "¿Qué patrón de relación familiar indica esta situación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Es normal que los hijos medien en los conflictos de los padres",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un patrón disfuncional."
+        },
+        {
+          "key": "b",
+          "text": "Familia desligada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Hay sobreinvolucramiento."
+        },
+        {
+          "key": "c",
+          "text": "Triangulación",
+          "correct": true,
+          "rationale": "Un tercer miembro es involucrado en el conflicto de una díada para reducir la tensión."
+        },
+        {
+          "key": "d",
+          "text": "Enfermedad orgánica gastrointestinal como única explicación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La relación con el conflicto es evidente."
+        },
+        {
+          "key": "e",
+          "text": "Jerarquía adecuada",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La hija ocupa un lugar que no le corresponde."
+        },
+        {
+          "key": "f",
+          "text": "Alianza saludable entre madre e hija",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es saludable involucrar a la hija en el conflicto."
+        },
+        {
+          "key": "g",
+          "text": "Coalición adecuada de los padres",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Los padres no forman un subsistema unido."
+        },
+        {
+          "key": "h",
+          "text": "Límites claros entre subsistemas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Los límites están alterados."
+        },
+        {
+          "key": "i",
+          "text": "Trastorno de conversión grave",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No explica el patrón relacional."
+        },
+        {
+          "key": "j",
+          "text": "Comunicación directa y clara",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La comunicación es indirecta."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "La triangulación es un patrón relacional disfuncional en el que dos miembros en conflicto, habitualmente la pareja, involucran a un tercero, frecuentemente un hijo, para desviar o reducir la tensión. El hijo triangulado puede presentar síntomas físicos o conductuales, como dolor abdominal recurrente, cefalea o problemas de conducta, que funcionan como regulador del conflicto. Según la teoría estructural de Minuchin, también altera los límites entre el subsistema conyugal y el filial. El abordaje incluye identificar el patrón, fortalecer el subsistema conyugal para que resuelva sus conflictos y referir a terapia familiar cuando sea necesario.",
+      "gpcRefs": [
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar",
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social"
+      ]
+    },
+    {
+      "key": "fam-06b-funcionalidad-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_functionality",
+      "vignette": "En una familia, la madre conoce todos los detalles de la vida de sus hijos adolescentes, revisa sus mensajes, decide por ellos y no tolera que tengan opiniones diferentes. Los hijos no pueden tomar decisiones propias.",
+      "prompt": "¿Qué tipo de límites familiares indica esta situación según Minuchin?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Límites claros",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Permiten autonomía con apoyo."
+        },
+        {
+          "key": "b",
+          "text": "Familia balanceada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Los límites están alterados."
+        },
+        {
+          "key": "c",
+          "text": "Límites difusos con aglutinamiento",
+          "correct": true,
+          "rationale": "La diferenciación entre los miembros es escasa y se pierde la autonomía."
+        },
+        {
+          "key": "d",
+          "text": "Trastorno de personalidad de la madre confirmado",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No se puede concluir con estos datos."
+        },
+        {
+          "key": "e",
+          "text": "Mayor control siempre previene conductas de riesgo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El control excesivo puede ser contraproducente."
+        },
+        {
+          "key": "f",
+          "text": "Supervisión normal de adolescentes",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es excesiva e impide la autonomía."
+        },
+        {
+          "key": "g",
+          "text": "Los límites no influyen en el desarrollo de los hijos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Influyen en su autonomía."
+        },
+        {
+          "key": "h",
+          "text": "Jerarquía invertida",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La madre mantiene el control."
+        },
+        {
+          "key": "i",
+          "text": "Familia caótica por falta de reglas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Hay control excesivo."
+        },
+        {
+          "key": "j",
+          "text": "Límites rígidos con desligamiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Producen distancia emocional y poco apoyo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "Según la teoría estructural de Minuchin, los límites son las reglas que definen quién participa y cómo en cada subsistema familiar. Los límites claros permiten la autonomía de los miembros con apoyo y comunicación, y caracterizan a las familias funcionales. Los límites difusos se asocian con aglutinamiento: hay sobreinvolucramiento, poca privacidad y dificultad para la autonomía y la diferenciación individual. Los límites rígidos se asocian con desligamiento: hay distancia emocional, poca comunicación y escaso apoyo. En la adolescencia, los límites difusos dificultan la formación de la identidad y la toma de decisiones propias.",
+      "gpcRefs": [
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar",
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social"
+      ]
+    },
+    {
+      "key": "fam-06b-funcionalidad-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_functionality",
+      "vignette": "Una familia obtiene en el APGAR familiar de Smilkstein, versión de 0 a 10 puntos, una puntuación de 3 puntos según la madre.",
+      "prompt": "¿Qué indica esta puntuación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "La familia debe separarse",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es una indicación del instrumento."
+        },
+        {
+          "key": "b",
+          "text": "Familia aglutinada y rígida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es una clasificación de FACES III."
+        },
+        {
+          "key": "c",
+          "text": "Sobrecarga del cuidador",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se mide con la escala de Zarit."
+        },
+        {
+          "key": "d",
+          "text": "Riesgo cardiovascular alto",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es lo que mide."
+        },
+        {
+          "key": "e",
+          "text": "Disfunción familiar grave según la percepción de la madre",
+          "correct": true,
+          "rationale": "Una puntuación de 0 a 3 indica disfunción grave."
+        },
+        {
+          "key": "f",
+          "text": "Disfunción leve",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es una categoría de esta versión."
+        },
+        {
+          "key": "g",
+          "text": "Disfunción moderada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Corresponde a 4 a 6 puntos."
+        },
+        {
+          "key": "h",
+          "text": "Familia funcional",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Corresponde a 7 a 10 puntos."
+        },
+        {
+          "key": "i",
+          "text": "Que todos los miembros perciben lo mismo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es la percepción de un solo miembro."
+        },
+        {
+          "key": "j",
+          "text": "Depresión mayor confirmada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No diagnostica depresión."
+        }
+      ],
+      "canonical": [
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "El APGAR familiar en su versión de 0 a 2 puntos por pregunta permite una puntuación total de 0 a 10. Una puntuación de 7 a 10 indica familia funcional, de 4 a 6 disfunción moderada y de 0 a 3 disfunción grave. Es importante recordar que mide la percepción de un solo miembro, por lo que puede aplicarse a varios integrantes para comparar. Un resultado bajo no establece un diagnóstico por sí solo, sino que orienta a profundizar en el estudio de la familia con entrevista, familiograma y otros instrumentos, e identificar áreas de intervención.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de estudio de salud familiar en el primer nivel",
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar"
+      ]
+    },
+    {
+      "key": "fam-06b-funcionalidad-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_functionality",
+      "vignette": "Una familia es evaluada con un modelo que analiza seis dimensiones del funcionamiento: resolución de problemas, comunicación, roles, respuesta afectiva, involucramiento afectivo y control de la conducta.",
+      "prompt": "¿Qué modelo de funcionamiento familiar indica esta descripción?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Modelo circumplejo de Olson",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Evalúa cohesión y adaptabilidad."
+        },
+        {
+          "key": "b",
+          "text": "Modelo transteórico de cambio",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Describe etapas de cambio de conducta."
+        },
+        {
+          "key": "c",
+          "text": "APGAR familiar de Smilkstein",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Evalúa cinco áreas de percepción."
+        },
+        {
+          "key": "d",
+          "text": "Ciclo vital de Geyman",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Describe etapas, no funcionamiento."
+        },
+        {
+          "key": "e",
+          "text": "Modelo de historia natural de Leavell y Clark",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Describe la historia de la enfermedad."
+        },
+        {
+          "key": "f",
+          "text": "Escala de Holmes y Rahe",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Mide eventos estresantes."
+        },
+        {
+          "key": "g",
+          "text": "Modelo biomédico tradicional",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No evalúa la familia."
+        },
+        {
+          "key": "h",
+          "text": "Modelo McMaster de funcionamiento familiar",
+          "correct": true,
+          "rationale": "Evalúa esas seis dimensiones."
+        },
+        {
+          "key": "i",
+          "text": "Modelo estructural de Minuchin",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se centra en límites, jerarquías y subsistemas."
+        },
+        {
+          "key": "j",
+          "text": "Modelo de creencias en salud",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Explica conductas de salud individuales."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "El modelo McMaster de funcionamiento familiar evalúa seis dimensiones: resolución de problemas, la capacidad de resolver problemas instrumentales y afectivos; comunicación, si es clara y directa; roles, la distribución de funciones como provisión de recursos, crianza y apoyo; respuesta afectiva, la capacidad de responder con emociones adecuadas; involucramiento afectivo, el interés de los miembros entre sí; y control de la conducta, las normas para manejar el comportamiento. Su instrumento es el Family Assessment Device. Complementa otros modelos como el circumplejo de Olson y el estructural de Minuchin.",
+      "gpcRefs": [
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar",
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social"
+      ]
+    },
+    {
+      "key": "fam-06b-funcionalidad-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_functionality",
+      "vignette": "Niño de 8 años con asma de difícil control a pesar de un tratamiento adecuado. Los padres están separados, discuten frente al niño y cada uno administra los medicamentos de forma diferente. El niño falta mucho a la escuela.",
+      "prompt": "¿Cuál es la conducta más apropiada para mejorar el control?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Estudiar la dinámica familiar, acordar un plan de tratamiento único con ambos padres y considerar terapia familiar",
+          "correct": true,
+          "rationale": "La disfunción familiar afecta el apego y el control de la enfermedad crónica."
+        },
+        {
+          "key": "b",
+          "text": "Cambiar todo el tratamiento a una opción más potente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Primero debe asegurarse el apego."
+        },
+        {
+          "key": "c",
+          "text": "Hospitalizar al niño hasta que se controle",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No resuelve el problema de fondo."
+        },
+        {
+          "key": "d",
+          "text": "Indicar que solo uno de los padres puede verlo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es una decisión médica."
+        },
+        {
+          "key": "e",
+          "text": "Aumentar la dosis de esteroides sin evaluar la familia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No aborda la causa del mal control."
+        },
+        {
+          "key": "f",
+          "text": "No revisar la técnica de inhalación",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte de la evaluación del mal control."
+        },
+        {
+          "key": "g",
+          "text": "El estrés emocional no afecta al asma",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede desencadenar exacerbaciones."
+        },
+        {
+          "key": "h",
+          "text": "La familia no influye en el control del asma",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Influye en el apego y la exposición a desencadenantes."
+        },
+        {
+          "key": "i",
+          "text": "Solicitar tomografía de tórax de alta resolución",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "j",
+          "text": "Considerar que el problema es solo farmacológico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Hay un componente familiar evidente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "Las enfermedades crónicas en niños dependen en gran medida de la familia para el apego al tratamiento, la identificación de síntomas y el control de desencadenantes. La disfunción familiar, como el conflicto entre los padres, la triangulación del hijo o la falta de acuerdos, se asocia con mal control del asma, la diabetes y otras enfermedades. Ante un mal control con tratamiento adecuado se deben evaluar la técnica de inhalación, el apego, la exposición a desencadenantes y la dinámica familiar. El médico familiar puede establecer un plan único con ambos padres, involucrar a la escuela y referir a terapia familiar.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del asma en menores de 18 años",
+        "Guía de Práctica Clínica de estudio de salud familiar en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-06b-funcionalidad-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_functionality",
+      "vignette": "En una familia, el padre trabaja todo el día y no participa en las decisiones del hogar. La hija mayor de 15 años cuida a sus hermanos menores, cocina y administra el dinero porque la madre está deprimida y no sale de la cama.",
+      "prompt": "¿Qué alteración de la estructura familiar indica esta situación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Familia balanceada según Olson",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Hay disfunción."
+        },
+        {
+          "key": "b",
+          "text": "Familia desligada sin más alteraciones",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Hay inversión de roles."
+        },
+        {
+          "key": "c",
+          "text": "Familia extensa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La clasificación es estructural."
+        },
+        {
+          "key": "d",
+          "text": "Límites claros entre subsistemas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Los límites están alterados."
+        },
+        {
+          "key": "e",
+          "text": "Organización familiar funcional porque las tareas se cumplen",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La hija asume un rol inadecuado para su edad."
+        },
+        {
+          "key": "f",
+          "text": "Parentalización de la hija, con inversión de jerarquías",
+          "correct": true,
+          "rationale": "La hija asume funciones que corresponden a los padres."
+        },
+        {
+          "key": "g",
+          "text": "Es esperado que los hijos mayores asuman el rol de los padres",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Afecta su desarrollo."
+        },
+        {
+          "key": "h",
+          "text": "Trastorno de conducta de la hija",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay datos de trastorno de conducta."
+        },
+        {
+          "key": "i",
+          "text": "Alianza saludable entre hermanos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El problema es la inversión de roles."
+        },
+        {
+          "key": "j",
+          "text": "La depresión de la madre no afecta a la familia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Afecta toda la dinámica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "f"
+      ],
+      "explanation": "La parentalización ocurre cuando un hijo asume funciones y responsabilidades que corresponden a los padres, como el cuidado de hermanos, las tareas del hogar, la administración económica o el apoyo emocional a uno de los padres. Implica una inversión de las jerarquías familiares. Es frecuente cuando un padre está ausente, enfermo, deprimido o con adicciones. Aunque puede desarrollar responsabilidad, suele afectar la educación, la socialización y la salud mental del hijo. El médico familiar debe identificar la causa, como la depresión de la madre, tratarla, redistribuir roles y apoyar al adolescente.",
+      "gpcRefs": [
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar",
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social"
+      ]
+    },
+    {
+      "key": "fam-06b-funcionalidad-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_functionality",
+      "vignette": "Mujer de 38 años que acude por cefalea y dolor muscular crónico. En la entrevista refiere que su esposo controla su dinero, le prohíbe ver a sus amigas y la insulta. Niega agresión física. Tiene miedo de que él se entere de lo que dice.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sin golpes no hay violencia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La violencia psicológica y económica también lo es."
+        },
+        {
+          "key": "b",
+          "text": "Hablar con el esposo para que cambie su conducta",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede aumentar el riesgo."
+        },
+        {
+          "key": "c",
+          "text": "La violencia familiar es un asunto privado que no compete al médico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La norma obliga a detectar y atender."
+        },
+        {
+          "key": "d",
+          "text": "Escuchar sin juzgar, reconocer la violencia psicológica y económica, evaluar el riesgo, elaborar un plan de seguridad y orientar sobre servicios especializados, registrando conforme a la norma",
+          "correct": true,
+          "rationale": "Es violencia familiar aunque no haya agresión física."
+        },
+        {
+          "key": "e",
+          "text": "Solicitar resonancia magnética por la cefalea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay datos de alarma."
+        },
+        {
+          "key": "f",
+          "text": "Citar a ambos para terapia de pareja de inmediato",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede aumentar el riesgo de la paciente."
+        },
+        {
+          "key": "g",
+          "text": "Tratar solo la cefalea con analgésicos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se pierde la oportunidad de intervenir."
+        },
+        {
+          "key": "h",
+          "text": "No preguntar por hijos expuestos a la violencia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son también víctimas."
+        },
+        {
+          "key": "i",
+          "text": "Considerarlo un conflicto de pareja normal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El control y los insultos son violencia."
+        },
+        {
+          "key": "j",
+          "text": "Indicar que denuncie de inmediato como única opción",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe respetarse su decisión y evaluar el riesgo."
+        }
+      ],
+      "canonical": [
+        "d",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "La violencia familiar incluye la violencia física, psicológica, sexual, económica y patrimonial. La violencia psicológica, como insultos, humillaciones, control y aislamiento, y la económica, como el control del dinero, son frecuentes y suelen manifestarse con síntomas somáticos como cefalea, dolor crónico, ansiedad y depresión. La norma mexicana sobre violencia familiar, sexual y contra las mujeres obliga al personal de salud a detectar, atender, registrar y notificar estos casos, respetando la autonomía de la paciente. Se recomienda entrevistar en privado, evaluar el riesgo, elaborar un plan de seguridad y referir a servicios especializados.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana sobre violencia familiar, sexual y contra las mujeres",
+        "Guía de Práctica Clínica de detección y atención de la violencia de pareja"
+      ]
+    },
+    {
+      "key": "fam-06b-funcionalidad-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_functionality",
+      "vignette": "En la consulta, un médico familiar explica que las familias cumplen funciones básicas para sus miembros, como la socialización de los hijos, el cuidado, el afecto, el estatus y la reproducción.",
+      "prompt": "¿Qué función familiar indica la transmisión de valores, normas y costumbres a los hijos?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Socialización",
+          "correct": true,
+          "rationale": "Es la función mediante la cual la familia transmite cultura, normas y valores."
+        },
+        {
+          "key": "b",
+          "text": "Afecto",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se refiere a dar y recibir cariño."
+        },
+        {
+          "key": "c",
+          "text": "Reproducción",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se refiere a la procreación."
+        },
+        {
+          "key": "d",
+          "text": "Cohesión",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es una dimensión de FACES III."
+        },
+        {
+          "key": "e",
+          "text": "Cuidado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se refiere a cubrir necesidades físicas y de salud."
+        },
+        {
+          "key": "f",
+          "text": "Recursos económicos exclusivamente",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es parte del cuidado."
+        },
+        {
+          "key": "g",
+          "text": "La escuela es la única responsable de transmitir valores",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La familia es el primer agente."
+        },
+        {
+          "key": "h",
+          "text": "Adaptabilidad",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es una dimensión de FACES III."
+        },
+        {
+          "key": "i",
+          "text": "Estatus",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se refiere a la posición social de la familia."
+        },
+        {
+          "key": "j",
+          "text": "Participación del APGAR",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es un componente del instrumento."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "e"
+      ],
+      "explanation": "Las funciones básicas de la familia, descritas en el consenso académico de medicina familiar, son: socialización, la transmisión de cultura, valores, normas y costumbres para la integración de los hijos a la sociedad; cuidado, la satisfacción de necesidades físicas, de alimentación, vivienda y salud; afecto, la expresión de cariño, amor y apoyo emocional; reproducción, la procreación y la sexualidad dentro de la pareja; y estatus o nivel socioeconómico, la posición social que la familia transmite. Cuando la familia no cumple sus funciones se habla de disfunción, que puede afectar la salud de sus miembros.",
+      "gpcRefs": [
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar",
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social"
+      ]
+    },
+    {
+      "key": "fam-06b-funcionalidad-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_functionality",
+      "vignette": "Familia que acude con su hijo de 10 años con diabetes tipo 1. Desde el diagnóstico la madre dejó de trabajar, duerme con el niño, no permite que vaya a fiestas ni de campamento y el padre y los hermanos se sienten desplazados.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hospitalizar al niño para educación de la madre",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "b",
+          "text": "La sobreprotección no afecta a los hermanos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Los hermanos pueden sentirse desplazados."
+        },
+        {
+          "key": "c",
+          "text": "Los niños con diabetes no deben participar en campamentos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Existen campamentos especializados."
+        },
+        {
+          "key": "d",
+          "text": "Recomendar que el padre asuma todo el cuidado en lugar de la madre",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El objetivo es compartir, no sustituir."
+        },
+        {
+          "key": "e",
+          "text": "Orientar sobre la sobreprotección, promover la autonomía progresiva del niño en su autocuidado y la participación de toda la familia en el plan de manejo",
+          "correct": true,
+          "rationale": "La enfermedad crónica puede generar sobreprotección y disfunción."
+        },
+        {
+          "key": "f",
+          "text": "Indicar que el niño no puede participar en actividades sociales por su enfermedad",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede hacerlo con planeación."
+        },
+        {
+          "key": "g",
+          "text": "No evaluar el estado emocional de la madre",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede tener sobrecarga o ansiedad."
+        },
+        {
+          "key": "h",
+          "text": "Iniciar ansiolítico a la madre sin evaluación",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "i",
+          "text": "Reforzar la conducta de la madre porque protege al niño",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Limita su desarrollo y afecta a la familia."
+        },
+        {
+          "key": "j",
+          "text": "Considerar que solo importa el control glucémico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La dinámica familiar influye en el control."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "El diagnóstico de una enfermedad crónica en un hijo genera una crisis familiar que exige reorganizar roles y rutinas. Una respuesta frecuente es la sobreprotección, con un cuidador principal sobreinvolucrado, aglutinamiento con el niño enfermo y desplazamiento de la pareja y los hermanos. Esto limita la autonomía del niño, su desarrollo social y el aprendizaje del autocuidado, y genera sobrecarga del cuidador. El médico familiar debe promover la participación de todos los miembros, la autonomía progresiva del niño según su edad, la participación en actividades sociales con planeación y la atención del estado emocional de los padres y hermanos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la diabetes tipo 1 en niños y adolescentes",
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social"
+      ]
+    },
+    {
+      "key": "fam-06b-funcionalidad-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_functionality",
+      "vignette": "En una familia, el padre y el hijo mayor se alían de forma permanente contra la madre, descalificando sus decisiones y excluyéndola de la toma de decisiones.",
+      "prompt": "¿Qué patrón relacional indica esta situación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Trastorno psicótico compartido",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay síntomas psicóticos."
+        },
+        {
+          "key": "b",
+          "text": "Las coaliciones fortalecen a la familia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La dañan."
+        },
+        {
+          "key": "c",
+          "text": "Alianza saludable padre e hijo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Una alianza no se dirige contra otro miembro."
+        },
+        {
+          "key": "d",
+          "text": "Triangulación por conflicto conyugal entre padre e hijo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El patrón descrito es una unión estable contra un tercero."
+        },
+        {
+          "key": "e",
+          "text": "Coalición, una unión de dos miembros contra un tercero",
+          "correct": true,
+          "rationale": "Es un patrón disfuncional que altera las jerarquías."
+        },
+        {
+          "key": "f",
+          "text": "Parentalización del hijo menor",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El patrón no corresponde."
+        },
+        {
+          "key": "g",
+          "text": "Familia balanceada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Hay disfunción."
+        },
+        {
+          "key": "h",
+          "text": "Es esperado que los hijos se alíen con un padre",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La coalición contra otro es disfuncional."
+        },
+        {
+          "key": "i",
+          "text": "Límites claros entre subsistemas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Los subsistemas están alterados."
+        },
+        {
+          "key": "j",
+          "text": "Familia desligada sin alteración de jerarquías",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La jerarquía está alterada."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "e",
+        "i"
+      ],
+      "explanation": "En la terapia familiar estructural se distinguen las alianzas, uniones de dos miembros por intereses comunes que no van dirigidas contra un tercero y pueden ser funcionales, de las coaliciones, uniones de dos miembros contra un tercero, que son disfuncionales. Las coaliciones transgeneracionales, entre un padre y un hijo contra el otro padre, alteran la jerarquía familiar y debilitan el subsistema conyugal. Se asocian con conflicto, problemas de conducta en los hijos y síntomas en el miembro excluido. Su identificación permite orientar la intervención y la referencia a terapia familiar.",
+      "gpcRefs": [
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar",
+        "Manual de medicina familiar del Instituto Mexicano del Seguro Social"
+      ]
+    },
+    {
+      "key": "fam-06b-funcionalidad-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "family_health",
+      "subtopic": "family_functionality",
+      "vignette": "Hombre de 70 años con enfermedad pulmonar obstructiva crónica que vive solo. El médico desea conocer la cantidad y calidad del apoyo social con el que cuenta.",
+      "prompt": "¿Cuál es el instrumento inicial más apropiado?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Espirometría",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Evalúa la función pulmonar."
+        },
+        {
+          "key": "b",
+          "text": "El apoyo social no influye en la salud de los adultos mayores",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Influye en el pronóstico."
+        },
+        {
+          "key": "c",
+          "text": "Escala de Zarit",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Mide sobrecarga del cuidador."
+        },
+        {
+          "key": "d",
+          "text": "Escala FACES III",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Mide cohesión y adaptabilidad familiar."
+        },
+        {
+          "key": "e",
+          "text": "Escala de Glasgow",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Mide estado de conciencia."
+        },
+        {
+          "key": "f",
+          "text": "No evaluar el apoyo social en pacientes que viven solos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es un factor de riesgo importante."
+        },
+        {
+          "key": "g",
+          "text": "APGAR familiar como único instrumento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Mide funcionalidad familiar, no el apoyo social amplio."
+        },
+        {
+          "key": "h",
+          "text": "Cuestionario de apoyo social funcional de Duke-UNC",
+          "correct": true,
+          "rationale": "Mide el apoyo social percibido confidencial y afectivo."
+        },
+        {
+          "key": "i",
+          "text": "Minimental",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Evalúa deterioro cognitivo."
+        },
+        {
+          "key": "j",
+          "text": "Escala de Barthel",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Mide dependencia funcional."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "El apoyo social es un determinante importante de la salud, especialmente en adultos mayores y personas con enfermedades crónicas. El cuestionario de apoyo social funcional de Duke-UNC evalúa la percepción del apoyo confidencial, es decir, tener con quién hablar de problemas, y del apoyo afectivo, como recibir cariño y empatía. Un bajo apoyo social se asocia con peor apego al tratamiento, más hospitalizaciones, depresión y mayor mortalidad. Junto con el ecomapa permite identificar redes de apoyo familiares, comunitarias e institucionales, y orientar intervenciones como grupos de autoayuda o visitas domiciliarias.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de valoración geronto-geriátrica integral",
+        "Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar"
+      ]
+    }
+  ]
+}

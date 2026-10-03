@@ -1,0 +1,239 @@
+@ fam|family_health|family_life_cycle|2|data_interpretation
+V: Pareja de 30 y 28 años que acude a consulta con su primer hijo de 6 meses. Se casaron hace 3 años. Refieren cansancio, menos tiempo para la pareja y discusiones por la distribución de tareas.
+P: ¿Qué etapa del ciclo vital familiar de Geyman indica esta situación?
++ Etapa de expansión || Inicia con el nacimiento del primer hijo e implica reorganizar roles.
+- anchoring | Etapa de matrimonio || Termina con la llegada del primer hijo.
+- availability_heuristic | Etapa de dispersión || Inicia cuando los hijos entran a la escuela o adolescencia.
+- representativeness_heuristic | Etapa de independencia || Ocurre cuando los hijos se casan o se van del hogar.
+- premature_closure | Etapa de retiro y muerte || Corresponde a la vejez.
+- framing_effect | Crisis paranormativa por enfermedad || Es una transición esperada.
+- complexity_bias | Familia reconstituida || No hay uniones previas con hijos.
+- base_rate_fallacy | Etapa de nido vacío || Ocurre cuando los hijos se van.
+- belief_bias | Disfunción familiar grave || Los ajustes son esperados en esta etapa.
+- focusing_illusion | Familia extensa || Solo vive la familia nuclear.
+E: El ciclo vital familiar describe las etapas por las que pasa una familia a lo largo del tiempo, cada una con tareas y crisis esperadas. Según Geyman, las etapas son matrimonio, desde la unión hasta el nacimiento del primer hijo; expansión, desde el nacimiento del primer hijo; dispersión, cuando los hijos inician la escuela o la adolescencia y aumenta su independencia; independencia, cuando los hijos forman sus propias familias; y retiro y muerte, con jubilación, enfermedad y viudez. La llegada del primer hijo exige redistribuir tareas, ajustar la relación de pareja e incorporar el rol de padres. Estas son crisis normativas.
+R: Manual de medicina familiar del Instituto Mexicano del Seguro Social ;; Guía de Práctica Clínica de estudio de salud familiar en el primer nivel
+
+@ fam|family_health|family_life_cycle|2|data_interpretation
+V: Mujer de 54 años que acude por tristeza y sensación de vacío desde que su hija menor se casó y se fue de casa hace 3 meses. Su esposo trabaja todo el día. Refiere que su vida giraba en torno a sus hijos.
+P: ¿Qué indica esta situación en el contexto del ciclo vital familiar?
++ Una crisis normativa de la etapa de independencia, conocida como nido vacío || Es una transición esperada que exige reorganizar la vida de pareja.
+- anchoring | Una crisis paranormativa por pérdida inesperada || La salida de los hijos es esperada.
+- availability_heuristic | Etapa de expansión || Corresponde al nacimiento de los hijos.
+- representativeness_heuristic | Trastorno bipolar || No hay datos de manía.
+- premature_closure | Disfunción familiar grave que requiere separación || No hay datos de disfunción grave.
+- framing_effect | Etapa de matrimonio || Corresponde al inicio de la pareja.
+- complexity_bias | Psicosis involutiva || No hay síntomas psicóticos.
+- base_rate_fallacy | Una reacción excepcional que pocas madres presentan || Es frecuente.
+- belief_bias | Una situación sin relación con la salud que no debe abordarse || Puede afectar la salud mental.
+- focusing_illusion | Etapa de dispersión inicial || Los hijos ya se fueron.
+E: Las crisis familiares se clasifican en normativas, esperadas en el desarrollo de la familia, como el nacimiento de un hijo, la entrada a la escuela, la adolescencia, la salida de los hijos y la jubilación; y paranormativas o accidentales, no esperadas, como enfermedad grave, muerte prematura, desempleo, divorcio o migración. El síndrome del nido vacío es una crisis normativa de la etapa de independencia, cuando los hijos dejan el hogar. Es más intenso cuando la identidad de un miembro giraba en torno a la crianza. El médico familiar puede orientar a la pareja a redefinir su relación y proyectos, y debe estar atento a síntomas depresivos.
+R: Manual de medicina familiar del Instituto Mexicano del Seguro Social ;; Guía de Práctica Clínica de estudio de salud familiar en el primer nivel
+
+@ fam|family_health|family_life_cycle|2|data_interpretation
+V: En una consulta se construye la estructura familiar de un paciente. Vive con su esposa, sus dos hijos, su madre viuda y un hermano soltero.
+P: ¿Qué tipo de familia según su composición indica esta situación?
++ Familia extensa || Además de la familia nuclear incluye a otros parientes consanguíneos.
+- anchoring | Familia nuclear || Solo incluiría a los padres y sus hijos.
+- availability_heuristic | Familia compuesta || Incluye a personas sin parentesco.
+- representativeness_heuristic | Familia monoparental || Hay ambos padres.
+- premature_closure | Familia reconstituida || No hay uniones previas con hijos.
+- framing_effect | Familia nuclear simple || Hay otros parientes.
+- complexity_bias | Familia binuclear || Se refiere a hijos que viven entre dos hogares tras un divorcio.
+- base_rate_fallacy | Persona que vive sola || Hay varios miembros.
+- belief_bias | Familia de origen exclusivamente || El término se refiere a la familia donde se nace.
+- focusing_illusion | Equivalente familiar || Se refiere a grupos sin lazos de parentesco que conviven.
+E: Por su composición, la familia nuclear está formada por los padres y sus hijos; la familia extensa incluye además a otros parientes consanguíneos, como abuelos, tíos o hermanos de los padres; y la familia compuesta incluye a personas sin parentesco que conviven, como amigos o compadres. Otras tipologías incluyen la familia monoparental, con un solo padre, y la reconstituida, formada por una pareja en la que al menos uno tiene hijos de una unión previa. La familia extensa es frecuente en México y puede ser una fuente importante de apoyo para el cuidado de niños y adultos mayores.
+R: Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar ;; Manual de medicina familiar del Instituto Mexicano del Seguro Social
+
+@ fam|family_health|family_life_cycle|3|data_interpretation
+V: Mujer de 40 años, divorciada, con dos hijos de 10 y 12 años de su primer matrimonio, que se unió con un hombre viudo que tiene una hija de 8 años. Viven todos juntos.
+P: ¿Qué tipo de familia indica esta composición?
++ Familia reconstituida || Uno o ambos miembros de la pareja aportan hijos de uniones previas.
+- anchoring | Familia nuclear simple || Hay hijos de uniones previas.
+- availability_heuristic | Familia extensa || No incluye a otros parientes.
+- representativeness_heuristic | Familia monoparental || Hay dos adultos en pareja.
+- premature_closure | Familia compuesta por amigos || Todos tienen relación familiar.
+- framing_effect | Familia de origen || Se refiere a la familia donde se nace.
+- complexity_bias | Familia binuclear sin convivencia || Viven juntos.
+- base_rate_fallacy | Persona sola || Hay varios miembros.
+- belief_bias | Familia disfuncional por definición || La estructura no determina la funcionalidad.
+- focusing_illusion | Familia tradicional rural || Se refiere a otra clasificación.
+E: La familia reconstituida, también llamada ensamblada, está formada por una pareja en la que uno o ambos miembros tienen hijos de relaciones anteriores. Es cada vez más frecuente. Sus retos incluyen definir los roles del padrastro o madrastra, la integración de hermanos de diferentes uniones, la relación con los padres biológicos que no conviven y las lealtades divididas. La estructura familiar no determina la funcionalidad: una familia reconstituida puede ser muy funcional si logra comunicación, reglas claras y respeto. El médico familiar puede orientar sobre estos procesos de adaptación.
+R: Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar ;; Manual de medicina familiar del Instituto Mexicano del Seguro Social
+
+@ fam|family_health|family_life_cycle|2|data_interpretation
+V: En la consulta de medicina familiar se elabora una representación gráfica de la familia con al menos tres generaciones, sus integrantes, fechas importantes, enfermedades y relaciones entre ellos.
+P: ¿Qué herramienta de estudio familiar indica esta descripción?
++ Familiograma o genograma || Representa gráficamente la estructura, la historia médica y las relaciones de la familia.
+- anchoring | Ecomapa || Representa las relaciones de la familia con su entorno.
+- availability_heuristic | APGAR familiar || Es un cuestionario de funcionalidad.
+- representativeness_heuristic | Escala FACES III || Mide cohesión y adaptabilidad.
+- premature_closure | Círculo familiar de Thrower || Representa la percepción subjetiva de cercanía.
+- framing_effect | Cuestionario de Zarit || Mide la sobrecarga del cuidador.
+- complexity_bias | Árbol genealógico genético para pruebas moleculares || Tiene fines de genética clínica.
+- base_rate_fallacy | Historia clínica convencional || No es una representación gráfica.
+- belief_bias | Expediente clínico electrónico || No es una herramienta de estudio familiar.
+- focusing_illusion | Escala de reajuste social de Holmes y Rahe || Mide eventos estresantes.
+E: El familiograma o genograma es la herramienta más utilizada en medicina familiar para estudiar a la familia. Representa con símbolos estandarizados al menos tres generaciones, con nombres, edades, fechas de nacimiento, matrimonio, divorcio y muerte, enfermedades, y las relaciones entre los miembros, como cercanía, conflicto o distancia. Permite identificar patrones de enfermedad hereditaria, factores de riesgo, crisis, roles y la etapa del ciclo vital. Los hombres se representan con cuadrados y las mujeres con círculos, y el paciente índice se señala. El ecomapa complementa al genograma al mostrar las relaciones con el entorno.
+R: Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar ;; Guía de Práctica Clínica de estudio de salud familiar en el primer nivel
+
+@ fam|family_health|family_life_cycle|3|data_interpretation
+V: Familia en la que el padre de 45 años pierde su empleo de forma inesperada y la madre es diagnosticada con cáncer de mama en el mismo mes. Tienen tres hijos en edad escolar.
+P: ¿Qué tipo de crisis familiar indica esta situación?
++ Crisis paranormativas o accidentales por desmembramiento y desorganización || Son eventos inesperados que no forman parte del desarrollo normal de la familia.
+- anchoring | Crisis normativas del ciclo vital || No son eventos esperados.
+- availability_heuristic | Crisis de la etapa de expansión || No corresponde a la llegada de hijos.
+- representativeness_heuristic | Crisis por nido vacío || Los hijos están en casa.
+- premature_closure | Crisis por jubilación planeada || El desempleo es inesperado.
+- framing_effect | Disfunción familiar crónica previa || Los eventos son recientes.
+- complexity_bias | Crisis de identidad adolescente || No corresponde.
+- base_rate_fallacy | Eventos sin impacto en la salud familiar || Generan estrés importante.
+- belief_bias | Crisis que solo afecta a los padres || Afecta a todo el sistema familiar.
+- focusing_illusion | Crisis por desmoralización exclusivamente || Hay pérdida económica y enfermedad.
+E: Las crisis paranormativas o accidentales son eventos inesperados que afectan a la familia. Se clasifican en crisis por desmembramiento, como muerte, hospitalización, separación o migración; por incremento, como adopción o llegada de un pariente; por desorganización, como enfermedad grave, desempleo o problemas económicos; y por desmoralización, como infidelidad, delincuencia o adicciones. La enfermedad grave de un miembro y la pérdida del empleo generan estrés económico, cambios de roles y reorganización. El médico familiar debe identificar los recursos de la familia, su red de apoyo y su funcionalidad para orientar la adaptación.
+R: Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar ;; Manual de medicina familiar del Instituto Mexicano del Seguro Social
+
+@ fam|family_health|family_life_cycle|3|initial_study
+V: Mujer de 58 años que cuida desde hace 3 años a su madre con demencia avanzada. Refiere agotamiento, insomnio, abandono de sus actividades, irritabilidad y que sus hermanos no le ayudan. Presión arterial descontrolada en los últimos meses.
+P: ¿Cuál es la herramienta inicial más apropiada para evaluar su situación?
++ Escala de sobrecarga del cuidador de Zarit || Mide la carga percibida por el cuidador principal.
+- anchoring | APGAR familiar como único instrumento || Evalúa funcionalidad global, no la carga del cuidador.
+- availability_heuristic | Minimental aplicado a la cuidadora || Evalúa deterioro cognitivo.
+- representativeness_heuristic | Escala de Barthel aplicada a la cuidadora || Evalúa dependencia en actividades básicas.
+- premature_closure | Escala de Glasgow || Evalúa el estado de conciencia.
+- framing_effect | Índice de Katz de la cuidadora || Mide funcionalidad física.
+- complexity_bias | Resonancia magnética cerebral de la cuidadora || No está indicada.
+- base_rate_fallacy | Escala de Apgar neonatal || Evalúa recién nacidos.
+- belief_bias | La sobrecarga del cuidador no afecta la salud física || Se asocia con enfermedad y mortalidad.
+- omission_bias | No evaluar depresión en la cuidadora || Es frecuente.
+E: El síndrome del cuidador se presenta en personas que cuidan por tiempo prolongado a un familiar dependiente y se caracteriza por agotamiento físico y emocional, alteraciones del sueño, aislamiento, ansiedad, depresión y descuido de su propia salud. La escala de sobrecarga del cuidador de Zarit, con 22 preguntas, mide la carga percibida y clasifica la sobrecarga en ausente, leve o intensa. El manejo incluye redistribuir las tareas entre los familiares, buscar apoyos institucionales y comunitarios, respiro del cuidador, atención a su salud mental y física y educación sobre la enfermedad del paciente.
+R: Guía de Práctica Clínica de detección y manejo del colapso del cuidador ;; Manual de medicina familiar del Instituto Mexicano del Seguro Social
+
+@ fam|family_health|family_life_cycle|2|data_interpretation
+V: Familia en la que ambos padres trabajan fuera de casa con ingresos similares y comparten las tareas del hogar y la crianza de sus hijos.
+P: ¿Qué tipo de familia según su desarrollo indica esta situación?
++ Familia moderna || Ambos padres trabajan y comparten roles de forma equitativa.
+- anchoring | Familia tradicional || El padre es proveedor y la madre se dedica al hogar.
+- availability_heuristic | Familia arcaica o primitiva || Se basa en la producción agrícola o artesanal en el hogar.
+- representativeness_heuristic | Familia extensa || La clasificación es por composición.
+- premature_closure | Familia monoparental || Hay ambos padres.
+- framing_effect | Familia rural || La clasificación es por demografía.
+- complexity_bias | Familia reconstituida || No hay datos de uniones previas.
+- base_rate_fallacy | Familia disfuncional por compartir roles || Compartir roles no implica disfunción.
+- belief_bias | Familia compuesta || La clasificación es por composición.
+- focusing_illusion | Familia campesina || Se refiere a la ocupación.
+E: Las familias pueden clasificarse según distintos criterios. Por su desarrollo, la familia moderna es aquella en la que ambos padres trabajan y comparten roles, la tradicional tiene un padre proveedor y una madre dedicada al hogar, y la arcaica o primitiva es la familia campesina que vive de la producción de la tierra. Por su demografía se clasifican en urbanas, suburbanas y rurales; por la ocupación del jefe de familia, en obreras, campesinas, profesionales o empleadas. Estas clasificaciones ayudan a comprender los recursos, roles y posibles tensiones de la familia, y están descritas en el consenso académico mexicano.
+R: Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar ;; Manual de medicina familiar del Instituto Mexicano del Seguro Social
+
+@ fam|family_health|family_life_cycle|3|next_step
+V: Hombre de 66 años que se jubiló hace 6 meses después de 40 años de trabajo. Su esposa refiere que está irritable, pasa el día en casa sin actividades, duerme mucho y han aumentado las discusiones. Sin ideación suicida.
+P: ¿Cuál es la conducta más apropiada?
++ Reconocer la crisis normativa de la jubilación, evaluar depresión y orientar sobre nuevos proyectos, actividades y redistribución de roles en la pareja || La jubilación exige reorganizar la vida personal y familiar.
+- anchoring | Iniciar benzodiacepinas para la irritabilidad || No abordan el problema y tienen riesgos.
+- availability_heuristic | Recomendar que regrese a trabajar como única solución || No es la única opción.
+- representativeness_heuristic | Considerarlo un deterioro cognitivo sin evaluarlo || No hay datos cognitivos.
+- premature_closure | Diagnosticar trastorno bipolar || No hay datos.
+- framing_effect | Recomendar separación de la pareja || No está indicado.
+- complexity_bias | Solicitar tomografía de cráneo || No hay datos neurológicos.
+- base_rate_fallacy | La jubilación siempre mejora el bienestar || Puede generar crisis.
+- belief_bias | Es un problema exclusivo del paciente sin relación con la familia || Afecta a la dinámica de la pareja.
+- omission_bias | No evaluar síntomas depresivos || Son frecuentes en esta transición.
+E: La jubilación es una crisis normativa de la etapa de retiro del ciclo vital familiar. Implica pérdida del rol laboral, de la estructura del tiempo, de contactos sociales y a veces de ingresos, y aumenta la convivencia con la pareja, lo que puede generar conflictos. Algunos jubilados presentan síntomas depresivos, aislamiento y consumo de alcohol. El médico familiar debe evaluar la presencia de depresión, orientar sobre actividades significativas, como voluntariado, ejercicio, convivencia social y pasatiempos, y favorecer la renegociación de roles y espacios en la pareja. La preparación previa para la jubilación favorece una mejor adaptación.
+R: Manual de medicina familiar del Instituto Mexicano del Seguro Social ;; Guía de Práctica Clínica de valoración geronto-geriátrica integral
+
+@ fam|family_health|family_life_cycle|2|data_interpretation
+V: Mujer de 35 años, separada, que vive sola con sus dos hijos de 6 y 9 años. El padre no participa en la crianza ni aporta económicamente.
+P: ¿Qué tipo de familia indica esta situación y cuál es su principal riesgo?
++ Familia monoparental, con riesgo de sobrecarga y vulnerabilidad económica de la madre || Un solo progenitor asume la crianza y el sustento.
+- anchoring | Familia nuclear completa sin riesgos especiales || Falta uno de los padres.
+- availability_heuristic | Familia extensa con apoyo de varios adultos || No hay otros adultos.
+- representativeness_heuristic | Familia reconstituida || No hay una nueva pareja.
+- premature_closure | Familia compuesta || No hay personas sin parentesco.
+- framing_effect | Familia disfuncional por definición || La estructura no determina la funcionalidad.
+- complexity_bias | Familia binuclear con custodia compartida || El padre no participa.
+- base_rate_fallacy | Las familias monoparentales son poco frecuentes en México || Son frecuentes.
+- belief_bias | Los hijos de familias monoparentales siempre tienen problemas de conducta || No es una regla.
+- focusing_illusion | Persona que vive sola || Vive con sus hijos.
+E: La familia monoparental está formada por un solo progenitor con sus hijos, por separación, divorcio, viudez, abandono o decisión personal. En México la mayoría está encabezada por mujeres. Sus principales riesgos son la sobrecarga del progenitor, que asume solo la crianza, el trabajo y las tareas del hogar, la vulnerabilidad económica y el aislamiento social. La estructura no determina por sí sola la funcionalidad: muchas familias monoparentales son funcionales. El médico familiar puede identificar la red de apoyo, orientar sobre programas sociales y guarderías y vigilar la salud mental del progenitor.
+R: Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar ;; Manual de medicina familiar del Instituto Mexicano del Seguro Social
+
+@ fam|family_health|family_life_cycle|3|data_interpretation
+V: Familia con dos hijos de 14 y 16 años. Los padres refieren conflictos frecuentes por los permisos, la hora de llegada y el uso del celular. Sienten que han perdido autoridad.
+P: ¿Qué indica esta situación según el ciclo vital familiar?
++ Una crisis normativa de la etapa de dispersión con hijos adolescentes que buscan autonomía || La familia debe flexibilizar límites manteniendo la supervisión.
+- anchoring | Una crisis paranormativa grave || Es una transición esperada.
+- availability_heuristic | Etapa de expansión || Corresponde a la llegada de los hijos.
+- representativeness_heuristic | Etapa de independencia || Los hijos aún viven en casa y dependen de los padres.
+- premature_closure | Trastorno negativista desafiante en ambos hijos || Los conflictos son esperados en esta etapa.
+- framing_effect | Disfunción familiar irreversible || Los ajustes son posibles.
+- complexity_bias | Indicación de internamiento de los hijos || No está indicado.
+- base_rate_fallacy | Los conflictos con adolescentes son raros || Son frecuentes.
+- belief_bias | La solución es imponer reglas más rígidas sin diálogo || La rigidez aumenta el conflicto.
+- focusing_illusion | Etapa de retiro || No corresponde.
+E: En la etapa de dispersión, con hijos en edad escolar y adolescentes, la familia enfrenta la tarea de equilibrar la necesidad de autonomía de los hijos con la supervisión y los límites. Los conflictos por permisos, horarios y uso de tecnología son esperados. Las familias funcionales logran flexibilizar las reglas, negociar acuerdos y mantener la comunicación, mientras que la rigidez excesiva o la falta de límites aumenta el riesgo de conductas de riesgo. El médico familiar puede orientar a los padres sobre comunicación asertiva, negociación de límites y señales de alarma en los adolescentes.
+R: Manual de medicina familiar del Instituto Mexicano del Seguro Social ;; Guía de Práctica Clínica de atención integral del adolescente en el primer nivel
+
+@ fam|family_health|family_life_cycle|3|data_interpretation
+V: Hombre de 72 años cuya esposa falleció hace 2 meses. Vive solo, sus hijos viven en otra ciudad. Ha dejado de cocinar, come poco y casi no sale de casa.
+P: ¿Qué indica esta situación en el contexto del ciclo vital familiar y del riesgo del paciente?
++ Crisis de la etapa de retiro y muerte con riesgo de aislamiento, desnutrición y depresión || La viudez en el adulto mayor es un evento de alto riesgo.
+- anchoring | Duelo normal sin necesidad de seguimiento || La desnutrición y el aislamiento requieren intervención.
+- availability_heuristic | Etapa de expansión || No corresponde.
+- representativeness_heuristic | Demencia avanzada || No hay datos cognitivos.
+- premature_closure | Crisis normativa de la adolescencia || No corresponde.
+- framing_effect | Situación sin riesgo porque es independiente || La viudez reciente con aislamiento es un riesgo.
+- complexity_bias | Indicación de institucionalización inmediata || Primero se evalúan opciones.
+- base_rate_fallacy | La viudez no afecta la mortalidad del cónyuge sobreviviente || La aumenta en los primeros meses.
+- belief_bias | Los hombres se adaptan mejor a la viudez || Suelen tener más riesgo.
+- omission_bias | No activar la red de apoyo familiar y comunitaria || Es parte del manejo.
+E: La etapa de retiro y muerte del ciclo vital incluye la jubilación, las enfermedades crónicas y la muerte del cónyuge. La viudez en el adulto mayor se asocia con mayor riesgo de depresión, aislamiento, desnutrición, deterioro funcional y mortalidad en los meses siguientes, especialmente en hombres que dependían de su pareja para tareas del hogar y relaciones sociales. El médico familiar debe evaluar el estado de ánimo, la nutrición y la funcionalidad, activar la red de apoyo familiar y comunitaria, como centros de día y grupos de adultos mayores, y dar seguimiento cercano.
+R: Guía de Práctica Clínica de valoración geronto-geriátrica integral ;; Manual de medicina familiar del Instituto Mexicano del Seguro Social
+
+@ fam|family_health|family_life_cycle|2|data_interpretation
+V: En el familiograma de un paciente, una línea con dos diagonales cruza la línea que une a sus padres, y una X dentro del cuadrado del abuelo paterno.
+P: ¿Qué indican estos símbolos del familiograma?
++ Divorcio de los padres y fallecimiento del abuelo paterno || Las dos diagonales indican divorcio y la X indica muerte.
+- anchoring | Separación temporal y enfermedad del abuelo || Una diagonal indica separación.
+- availability_heuristic | Matrimonio y adopción || No corresponden a esos símbolos.
+- representativeness_heuristic | Unión libre y aborto || Se representan con otros símbolos.
+- premature_closure | Conflicto y relación cercana || Se representan con líneas entre personas.
+- framing_effect | Gemelos y abuelo como paciente índice || No corresponden.
+- complexity_bias | Divorcio y adopción del abuelo || La X indica muerte.
+- base_rate_fallacy | Los símbolos no están estandarizados || Existen símbolos estandarizados.
+- belief_bias | Hijo fuera del matrimonio || Se representa de otra forma.
+- focusing_illusion | Embarazo actual || Se representa con un triángulo.
+E: El familiograma usa símbolos estandarizados. Los hombres se representan con cuadrados y las mujeres con círculos; el paciente índice con doble línea; la muerte con una X dentro del símbolo; el matrimonio con una línea continua que une a la pareja; la unión libre con una línea discontinua; la separación con una diagonal sobre la línea de unión y el divorcio con dos diagonales. Los hijos se cuelgan de la línea de la pareja de mayor a menor de izquierda a derecha. El embarazo se representa con un triángulo y el aborto con un círculo o cuadrado pequeño relleno o con una X.
+R: Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar ;; Guía de Práctica Clínica de estudio de salud familiar en el primer nivel
+
+@ fam|family_health|family_life_cycle|3|next_step
+V: Pareja de 32 y 30 años casada hace 1 año que acude porque discuten mucho por la intervención de la madre de él en sus decisiones y por cómo administrar el dinero. Desean seguir juntos.
+P: ¿Cuál es la conducta más apropiada?
++ Reconocer las tareas de la etapa de matrimonio, como establecer límites con las familias de origen y acordar normas, y orientar o referir a terapia de pareja si persiste || Son crisis esperadas en el inicio de la pareja.
+- anchoring | Recomendar el divorcio por incompatibilidad || Desean seguir juntos y los conflictos son abordables.
+- availability_heuristic | Iniciar antidepresivos a ambos || No hay datos de depresión.
+- representativeness_heuristic | Considerarlo una disfunción grave e irreversible || Es una crisis normativa.
+- premature_closure | Indicar que la madre debe tomar las decisiones || No favorece la autonomía de la pareja.
+- framing_effect | Recomendar tener un hijo para unir a la pareja || No resuelve los conflictos.
+- complexity_bias | Hospitalización psiquiátrica || No está indicada.
+- base_rate_fallacy | Las parejas jóvenes rara vez tienen conflictos con las familias de origen || Son frecuentes.
+- belief_bias | Es un tema ajeno a la medicina familiar || Es parte del estudio de la familia.
+- omission_bias | No preguntar por violencia en la pareja || Siempre debe explorarse.
+E: En la etapa de matrimonio del ciclo vital, la pareja tiene como tareas consolidar su identidad como unidad, establecer límites con las familias de origen, acordar normas sobre el manejo del dinero, las tareas del hogar y la vida social, y decidir sobre la llegada de los hijos. Los conflictos por la intervención de las familias de origen y por la economía son frecuentes. El médico familiar puede orientar a la pareja sobre comunicación y negociación, explorar la presencia de violencia y referir a terapia de pareja cuando los conflictos persisten o afectan su salud.
+R: Manual de medicina familiar del Instituto Mexicano del Seguro Social ;; Guía de Práctica Clínica de estudio de salud familiar en el primer nivel
+
+@ fam|family_health|family_life_cycle|3|data_interpretation
+V: Un médico familiar dibuja un esquema en el que la familia se encuentra en el centro y se representan con círculos y líneas sus relaciones con la escuela, el trabajo, la iglesia, los servicios de salud y los vecinos, indicando si son fuertes, débiles o conflictivas.
+P: ¿Qué herramienta de estudio familiar indica esta descripción?
++ Ecomapa || Representa las relaciones de la familia con los sistemas de su entorno.
+- anchoring | Familiograma || Representa la estructura familiar intergeneracional.
+- availability_heuristic | APGAR familiar || Es un cuestionario de funcionalidad.
+- representativeness_heuristic | Escala FACES III || Mide cohesión y adaptabilidad.
+- premature_closure | Línea de vida familiar || Representa eventos en el tiempo.
+- framing_effect | Escala de Zarit || Mide sobrecarga del cuidador.
+- complexity_bias | Mapa epidemiológico comunitario || Representa casos de enfermedad en una zona.
+- base_rate_fallacy | Croquis de la vivienda || No representa relaciones.
+- belief_bias | Círculo familiar de Thrower || Representa cercanía entre miembros, no con el entorno.
+- focusing_illusion | Cuestionario de red de apoyo de Duke exclusivamente || Es un cuestionario, no un esquema.
+E: El ecomapa es una herramienta gráfica que representa a la familia en el centro y sus relaciones con los sistemas externos, como trabajo, escuela, servicios de salud, iglesia, amigos, vecinos, familia extensa e instituciones. La naturaleza de cada relación se indica con líneas: continuas para relaciones fuertes, discontinuas para débiles y con cortes para conflictivas, y flechas para la dirección del flujo de energía o recursos. Permite identificar redes de apoyo, fuentes de estrés y aislamiento social. Complementa al familiograma, que representa la estructura interna de la familia.
+R: Conceptos básicos para el estudio de las familias del Consenso Académico en Medicina Familiar ;; Guía de Práctica Clínica de estudio de salud familiar en el primer nivel
