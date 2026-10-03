@@ -1,0 +1,399 @@
+@ cir|ophthalmology|red_eye|2|diagnosis
+V: Mujer de 25 años con ojo rojo bilateral de 2 días, secreción acuosa, sensación de arena, adenopatía preauricular y antecedente de infección respiratoria reciente. Agudeza visual normal y sin dolor intenso.
+P: ¿Cuál es el diagnóstico más probable?
++ Conjuntivitis viral por adenovirus || Ojo rojo con secreción acuosa, adenopatía preauricular y antecedente de infección respiratoria.
+- anchoring | Conjuntivitis bacteriana || Da secreción purulenta abundante sin adenopatía preauricular.
+- availability_heuristic | Conjuntivitis alérgica || El síntoma principal sería prurito intenso.
+- representativeness_heuristic | Glaucoma agudo de ángulo cerrado || Da dolor intenso y visión borrosa.
+- premature_closure | Uveítis anterior || Da dolor, fotofobia y miosis.
+- base_rate_fallacy | Queratitis herpética || Da úlcera dendrítica unilateral.
+- framing_effect | Escleritis || Da dolor intenso profundo.
+- inattentional_blindness | Hemorragia subconjuntival || Es una mancha roja sin secreción.
+- focusing_illusion | Cuerpo extraño corneal || Es unilateral con antecedente.
+- belief_bias | Ojo irritado por desvelo || Es una infección contagiosa.
+E: La conjuntivitis viral, generalmente por adenovirus, es la causa más frecuente de ojo rojo infeccioso en adultos. Se manifiesta con hiperemia conjuntival, secreción acuosa, sensación de cuerpo extraño, folículos conjuntivales y adenopatía preauricular, a menudo tras una infección respiratoria, y suele iniciar en un ojo y pasar al otro. Es muy contagiosa. El tratamiento es sintomático con compresas frías y lágrimas artificiales, con medidas de higiene para evitar el contagio. Los antibióticos no son útiles. La agudeza visual normal y la ausencia de dolor intenso distinguen el ojo rojo benigno del grave.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la conjuntivitis
+
+@ cir|ophthalmology|red_eye|3|diagnosis
+V: Mujer de 62 años hipermétrope que tras entrar a un cine oscuro presenta dolor ocular intenso en el ojo derecho, cefalea, náusea, vómito, visión borrosa con halos alrededor de las luces, ojo rojo con inyección ciliar, córnea turbia y pupila en midriasis media arreactiva. El ojo está duro a la palpación.
+P: ¿Cuál es el diagnóstico más probable?
++ Glaucoma agudo de ángulo cerrado || Dolor intenso, halos, córnea edematosa, pupila en midriasis media y ojo duro tras la oscuridad.
+- anchoring | Migraña con aura || No explica el ojo rojo, la córnea turbia ni el ojo duro.
+- availability_heuristic | Conjuntivitis bacteriana || No da dolor intenso ni pérdida visual.
+- representativeness_heuristic | Uveítis anterior aguda || Da miosis, no midriasis.
+- premature_closure | Gastroenteritis por el vómito || El cuadro ocular es la causa.
+- base_rate_fallacy | Arteritis de células gigantes || No da ojo rojo ni córnea turbia.
+- framing_effect | Queratitis bacteriana || Da úlcera corneal visible.
+- inattentional_blindness | Desprendimiento de retina || Es indoloro sin ojo rojo.
+- focusing_illusion | Hemorragia subconjuntival || Es indolora sin pérdida visual.
+- belief_bias | Dolor de cabeza por la película || Es una urgencia que puede causar ceguera.
+E: El glaucoma agudo de ángulo cerrado ocurre cuando el iris bloquea el ángulo de drenaje del humor acuoso, con elevación súbita de la presión intraocular. Es más frecuente en mujeres mayores, hipermétropes y de origen asiático, y se desencadena con la midriasis en la oscuridad o por fármacos anticolinérgicos o simpaticomiméticos. Se manifiesta con dolor ocular intenso, cefalea, náusea y vómito, visión borrosa con halos, ojo rojo con inyección ciliar, córnea edematosa y pupila en midriasis media arreactiva. Es una urgencia que puede causar ceguera en horas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del glaucoma agudo de ángulo cerrado
+
+@ cir|ophthalmology|red_eye|3|initial_treatment
+V: Mujer de 65 años con glaucoma agudo de ángulo cerrado del ojo izquierdo, presión intraocular de 58 mmHg, dolor intenso y vómito.
+P: ¿Cuál es el tratamiento inicial?
++ Reducir la presión con acetazolamida, betabloqueador tópico, alfa agonista y pilocarpina, con agentes hiperosmóticos si es necesario, seguido de iridotomía con láser || Baja la presión y abre el ángulo.
+- anchoring | Atropina en gotas para dilatar la pupila || Empeora el cierre del ángulo.
+- availability_heuristic | Analgésicos y valoración oftalmológica en una semana || Es una urgencia.
+- representativeness_heuristic | Antibióticos tópicos || No es una infección.
+- premature_closure | Corticosteroides tópicos como tratamiento principal || No bajan la presión.
+- framing_effect | Lágrimas artificiales || No bajan la presión.
+- complexity_bias | Trasplante de córnea || No está indicado.
+- base_rate_fallacy | Antihistamínicos orales || Pueden empeorar el cierre angular.
+- belief_bias | Compresas calientes para aliviar el dolor como único manejo || No bajan la presión.
+- omission_bias | No tratar el ojo contralateral || Tiene riesgo y requiere iridotomía profiláctica.
+E: El tratamiento del glaucoma agudo de ángulo cerrado busca reducir de inmediato la presión intraocular y abrir el ángulo. Se usan inhibidores de la anhidrasa carbónica como acetazolamida oral o intravenosa, betabloqueadores tópicos como timolol, alfa agonistas, agentes hiperosmóticos como manitol y pilocarpina, que contrae la pupila y separa el iris del ángulo una vez que la presión baja. El tratamiento definitivo es la iridotomía periférica con láser, que crea una comunicación entre las cámaras. Se realiza iridotomía profiláctica en el ojo contralateral. Los midriáticos están contraindicados.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del glaucoma agudo de ángulo cerrado
+
+@ cir|ophthalmology|red_eye|3|diagnosis
+V: Hombre de 30 años con espondilitis anquilosante que presenta dolor ocular derecho, fotofobia intensa, lagrimeo, visión borrosa e inyección ciliar alrededor de la córnea. La pupila derecha está en miosis y es irregular.
+P: ¿Cuál es el diagnóstico más probable?
++ Uveítis anterior aguda || Dolor, fotofobia, inyección ciliar y miosis en un paciente con espondiloartritis.
+- anchoring | Conjuntivitis viral || No da fotofobia intensa, inyección ciliar ni miosis.
+- availability_heuristic | Glaucoma agudo de ángulo cerrado || Da midriasis media, no miosis.
+- representativeness_heuristic | Queratitis herpética || Da úlcera dendrítica.
+- premature_closure | Hemorragia subconjuntival || Es indolora.
+- base_rate_fallacy | Endoftalmitis || Ocurre tras cirugía o trauma.
+- framing_effect | Epiescleritis || Es leve sin miosis ni fotofobia intensa.
+- inattentional_blindness | Desprendimiento de retina || Es indoloro.
+- focusing_illusion | Ojo seco || No da miosis ni inyección ciliar.
+- belief_bias | Ojo irritado por la luz solar || Es una inflamación intraocular.
+E: La uveítis anterior aguda o iritis es la inflamación del iris y el cuerpo ciliar. Se asocia a HLA B27 y a espondiloartritis, como espondilitis anquilosante, artritis reactiva, enfermedad inflamatoria intestinal y psoriasis, así como a sarcoidosis, infecciones y enfermedad de Behçet. Se manifiesta con dolor ocular, fotofobia, visión borrosa, inyección ciliar o perilímbica, miosis y, en la lámpara de hendidura, células y flare en la cámara anterior y precipitados queráticos. El tratamiento es con corticosteroides tópicos y midriáticos ciclopléjicos para aliviar el dolor y evitar sinequias.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la uveítis anterior
+
+@ cir|ophthalmology|red_eye|3|diagnosis
+V: Hombre de 28 años que usa lentes de contacto, incluso para dormir, y presenta dolor ocular intenso, fotofobia, ojo rojo y visión borrosa en el ojo izquierdo. En la exploración hay una opacidad blanquecina en la córnea con defecto epitelial que tiñe con fluoresceína.
+P: ¿Cuál es el diagnóstico más probable?
++ Queratitis bacteriana o úlcera corneal || Usuario de lentes de contacto con opacidad corneal y defecto epitelial.
+- anchoring | Conjuntivitis bacteriana simple || No da opacidad corneal ni dolor intenso.
+- availability_heuristic | Glaucoma agudo || No explica la úlcera corneal.
+- representativeness_heuristic | Uveítis anterior || No da úlcera corneal.
+- premature_closure | Ojo seco por los lentes || No explica la opacidad con defecto epitelial.
+- base_rate_fallacy | Catarata || No es aguda ni dolorosa.
+- framing_effect | Pterigión || Es una lesión crónica conjuntival.
+- inattentional_blindness | Hemorragia subconjuntival || No afecta la córnea.
+- focusing_illusion | Chalazión || Es una lesión del párpado.
+- belief_bias | Irritación que se quita durmiendo con los lentes || Dormir con lentes es un factor de riesgo.
+E: La queratitis bacteriana es una infección de la córnea que puede causar pérdida visual permanente. El principal factor de riesgo es el uso de lentes de contacto, sobre todo si se duerme con ellos o se usan con mala higiene, y Pseudomonas aeruginosa es un agente frecuente. Otros factores son traumatismos corneales, ojo seco y cirugía ocular. Se manifiesta con dolor intenso, fotofobia, ojo rojo, visión borrosa y opacidad corneal con defecto epitelial que tiñe con fluoresceína. Es una urgencia que requiere raspado para cultivo y antibióticos tópicos de amplio espectro intensivos. Se suspende el uso de lentes.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la queratitis infecciosa
+
+@ cir|ophthalmology|glaucoma|2|diagnosis
+V: Hombre de 65 años con antecedente familiar de glaucoma, asintomático, en revisión de rutina. Presión intraocular de 26 mmHg en ambos ojos, ángulo abierto en la gonioscopia, excavación papilar de 0.7 y defecto arqueado en el campo visual.
+P: ¿Cuál es el diagnóstico más probable?
++ Glaucoma primario de ángulo abierto || Presión elevada, ángulo abierto, excavación papilar aumentada y defecto del campo visual.
+- anchoring | Hipertensión ocular sin daño || Ya hay daño del nervio y del campo visual.
+- availability_heuristic | Glaucoma agudo de ángulo cerrado || El ángulo está abierto y es asintomático.
+- representativeness_heuristic | Catarata || No explica la excavación papilar.
+- premature_closure | Degeneración macular || Afecta la visión central sin excavación papilar.
+- base_rate_fallacy | Neuritis óptica || Da pérdida visual aguda dolorosa.
+- framing_effect | Retinopatía diabética || No explica la excavación papilar.
+- inattentional_blindness | Papiledema || Da edema de la papila, no excavación.
+- focusing_illusion | Desprendimiento de retina || Da pérdida visual aguda.
+- belief_bias | Visión normal porque no tiene síntomas || El glaucoma es silencioso.
+E: El glaucoma primario de ángulo abierto es una neuropatía óptica crónica progresiva y la principal causa de ceguera irreversible en el mundo. Es asintomático hasta etapas avanzadas, ya que primero afecta la visión periférica. Los factores de riesgo son presión intraocular elevada, edad, antecedente familiar, ascendencia africana, miopía y diabetes. El diagnóstico se basa en la excavación papilar aumentada, los defectos del campo visual y la presión intraocular, aunque puede haber glaucoma con presión normal. Se recomienda revisión oftalmológica periódica después de los 40 años, sobre todo con factores de riesgo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del glaucoma primario de ángulo abierto
+
+@ cir|ophthalmology|glaucoma|3|treatment_of_choice
+V: Mujer de 60 años con glaucoma primario de ángulo abierto recién diagnosticado, presión intraocular de 25 mmHg y defectos iniciales del campo visual. Sin asma ni otras comorbilidades.
+P: ¿Cuál es el tratamiento de elección?
++ Análogo de prostaglandinas tópico como latanoprost o trabeculoplastia con láser || Reducen la presión intraocular y frenan el daño del nervio.
+- anchoring | Acetazolamida oral como tratamiento crónico de primera línea || Tiene muchos efectos adversos.
+- availability_heuristic | Observación sin tratamiento || Ya hay daño del nervio.
+- representativeness_heuristic | Atropina tópica || No baja la presión.
+- premature_closure | Iridotomía con láser como tratamiento de elección || Es para el ángulo cerrado.
+- framing_effect | Corticosteroides tópicos || Elevan la presión intraocular.
+- complexity_bias | Trasplante de nervio óptico || No existe.
+- base_rate_fallacy | Lentes de mayor graduación || No tratan el glaucoma.
+- belief_bias | Vitaminas para el nervio óptico como único tratamiento || No bajan la presión.
+- omission_bias | Suspender las gotas cuando no hay síntomas || El tratamiento debe ser continuo.
+E: El único tratamiento demostrado del glaucoma es la reducción de la presión intraocular, que frena la progresión del daño. Los análogos de prostaglandinas, como latanoprost, son la primera línea por su eficacia, aplicación una vez al día y pocos efectos sistémicos, aunque pueden oscurecer el iris y alargar las pestañas. Otras opciones son los betabloqueadores tópicos, contraindicados en asma y bradicardia, los inhibidores de la anhidrasa carbónica tópicos y los alfa agonistas. La trabeculoplastia selectiva con láser es una alternativa de primera línea. La cirugía filtrante se reserva para la falla del tratamiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del glaucoma primario de ángulo abierto
+
+@ cir|ophthalmology|glaucoma|2|prevention_screening
+V: Hombre de 50 años con padre ciego por glaucoma, sin síntomas visuales. Pregunta qué debe hacer para prevenir la ceguera.
+P: ¿Cuál es la medida de prevención recomendada?
++ Revisión oftalmológica completa con medición de la presión intraocular, valoración del nervio óptico y campo visual de forma periódica || La detección temprana del glaucoma previene la ceguera.
+- anchoring | Esperar a tener síntomas visuales para consultar || El glaucoma es asintomático hasta etapas avanzadas.
+- availability_heuristic | Usar lentes oscuros todo el día || No previene el glaucoma.
+- representativeness_heuristic | Gotas lubricantes diarias || No previenen el glaucoma.
+- premature_closure | Revisión con optometrista solo para graduación || No evalúa el nervio óptico.
+- base_rate_fallacy | Tomar vitamina A a dosis altas || No previene el glaucoma.
+- framing_effect | Cirugía preventiva de glaucoma || No está indicada sin enfermedad.
+- complexity_bias | Resonancia magnética de cráneo anual || No es el tamizaje.
+- belief_bias | Comer zanahorias evita el glaucoma || No es una medida eficaz.
+- omission_bias | No hacer revisiones porque el padre ya está ciego || El riesgo familiar justifica la vigilancia.
+E: El glaucoma es asintomático hasta etapas avanzadas y el daño es irreversible, por lo que la detección temprana es fundamental. Se recomienda una evaluación oftalmológica completa con medición de la presión intraocular, valoración del nervio óptico por fondo de ojo y campo visual a partir de los 40 años, con mayor frecuencia en personas con factores de riesgo como antecedente familiar en primer grado, ascendencia africana, miopía alta, diabetes y uso de corticosteroides. Los familiares de pacientes con glaucoma tienen un riesgo varias veces mayor.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del glaucoma primario de ángulo abierto
+
+@ cir|ophthalmology|glaucoma|3|complication_prognosis
+V: Hombre de 70 años con glaucoma de ángulo abierto que abandonó el tratamiento hace años. Refiere que choca con objetos a los lados y tropieza con frecuencia, aunque lee bien de cerca.
+P: ¿Cuál es la consecuencia que presenta?
++ Pérdida del campo visual periférico con visión en túnel por daño glaucomatoso avanzado || El glaucoma afecta primero la periferia y conserva la visión central hasta etapas tardías.
+- anchoring | Catarata densa || Causa visión borrosa global.
+- availability_heuristic | Degeneración macular || Afecta la visión central, no la periférica.
+- representativeness_heuristic | Retinopatía diabética || No hay diabetes.
+- premature_closure | Presbicia || Afecta la visión de cerca.
+- base_rate_fallacy | Evento vascular cerebral occipital como causa más probable || El antecedente orienta a glaucoma.
+- framing_effect | Desprendimiento de retina || Es agudo.
+- inattentional_blindness | Neuritis óptica || Es aguda y dolorosa.
+- focusing_illusion | Torpeza por la edad || Hay una causa ocular.
+- belief_bias | Si lee bien no puede tener daño ocular grave || La visión central se conserva hasta tarde.
+E: El glaucoma no tratado produce una pérdida progresiva del campo visual, que inicia en la periferia con escotomas arqueados y avanza hasta la visión en túnel, mientras la agudeza visual central se conserva hasta etapas muy avanzadas. Por ello los pacientes no notan el daño hasta que es grave, y suelen tener caídas y accidentes. El daño es irreversible, y el tratamiento solo detiene la progresión. La adherencia al tratamiento es fundamental, y muchas veces se requiere educación al paciente sobre la naturaleza silenciosa de la enfermedad.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del glaucoma primario de ángulo abierto
+
+@ cir|ophthalmology|cataract|2|diagnosis
+V: Hombre de 72 años con disminución progresiva e indolora de la visión en ambos ojos de 2 años, deslumbramiento con las luces al manejar de noche y visión de colores apagados. El reflejo rojo está disminuido y se observa opacidad del cristalino.
+P: ¿Cuál es el diagnóstico más probable?
++ Catarata senil || Pérdida visual progresiva indolora con deslumbramiento y opacidad del cristalino.
+- anchoring | Glaucoma de ángulo abierto || Afecta el campo periférico sin opacidad del cristalino.
+- availability_heuristic | Degeneración macular || Afecta la visión central sin opacidad del cristalino.
+- representativeness_heuristic | Retinopatía diabética || No hay diabetes.
+- premature_closure | Desprendimiento de retina || Es agudo.
+- base_rate_fallacy | Presbicia || Afecta solo la visión de cerca.
+- framing_effect | Ojo seco || No da opacidad del cristalino.
+- inattentional_blindness | Uveítis crónica || Daría ojo rojo y dolor.
+- focusing_illusion | Neuropatía óptica isquémica || Es aguda.
+- belief_bias | Pérdida de visión normal por la edad sin tratamiento || Es tratable con cirugía.
+E: La catarata es la opacificación del cristalino y la principal causa de ceguera reversible en el mundo. La más frecuente es la senil. Otros factores de riesgo son diabetes, tabaquismo, exposición a radiación ultravioleta, corticosteroides, traumatismos y uveítis. Se manifiesta con disminución progresiva e indolora de la visión, deslumbramiento, colores apagados y miopización. La exploración muestra disminución del reflejo rojo y opacidad en la lámpara de hendidura. El tratamiento es quirúrgico cuando la catarata afecta las actividades diarias, con facoemulsificación e implante de lente intraocular.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la catarata
+
+@ cir|ophthalmology|cataract|2|treatment_of_choice
+V: Mujer de 70 años con catarata bilateral que le impide leer, ver televisión y salir sola. Agudeza visual de 20/200 en ambos ojos. Sin otras enfermedades oculares.
+P: ¿Cuál es el tratamiento de elección?
++ Facoemulsificación con implante de lente intraocular || Es el único tratamiento eficaz para la catarata que afecta la función visual.
+- anchoring | Gotas para disolver la catarata || No existen gotas eficaces.
+- availability_heuristic | Lentes de mayor graduación como tratamiento definitivo || No corrigen la opacidad.
+- representativeness_heuristic | Esperar a que la catarata madure por completo || No es necesario esperar.
+- premature_closure | Vitaminas antioxidantes || No revierten la catarata.
+- framing_effect | Trabeculoplastia con láser || Es para glaucoma.
+- complexity_bias | Trasplante de córnea || No está indicado.
+- base_rate_fallacy | Vitrectomía || No es el tratamiento de la catarata.
+- belief_bias | Gotas de miel o limón para limpiar la vista || Son peligrosas.
+- omission_bias | No operar por la edad || La cirugía es segura y mejora la calidad de vida.
+E: El tratamiento de la catarata es quirúrgico, y se indica cuando la pérdida visual afecta las actividades diarias del paciente, sin necesidad de esperar a que madure. La técnica de elección es la facoemulsificación, que fragmenta el cristalino con ultrasonido a través de una incisión pequeña, con implante de una lente intraocular plegable. Es una cirugía ambulatoria, rápida y con alta tasa de éxito. Las complicaciones incluyen opacificación de la cápsula posterior, tratable con láser YAG, endoftalmitis, edema macular y desprendimiento de retina. No existen tratamientos médicos eficaces.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la catarata
+
+@ cir|ophthalmology|cataract|3|complication_prognosis
+V: Hombre de 74 años operado de catarata del ojo derecho hace 3 días que presenta dolor ocular intenso, disminución importante de la visión, ojo muy rojo, edema palpebral e hipopión.
+P: ¿Cuál es la complicación que presenta?
++ Endoftalmitis posoperatoria || Dolor, pérdida visual, ojo rojo e hipopión en los primeros días tras cirugía intraocular.
+- anchoring | Inflamación esperada tras la cirugía || La pérdida visual con hipopión es una complicación grave.
+- availability_heuristic | Conjuntivitis bacteriana || No da hipopión ni pérdida visual importante.
+- representativeness_heuristic | Opacificación de la cápsula posterior || Es tardía e indolora.
+- premature_closure | Desprendimiento de retina || Es indoloro sin hipopión.
+- base_rate_fallacy | Glaucoma de ángulo abierto || No es agudo.
+- framing_effect | Uveítis por alergia a las gotas || No explica la gravedad.
+- inattentional_blindness | Hemorragia subconjuntival || Es indolora.
+- focusing_illusion | Queratitis seca || No explica el hipopión.
+- belief_bias | Dolor normal que pasa en una semana || Es una urgencia que amenaza la visión.
+E: La endoftalmitis es una infección intraocular grave, y la forma aguda posoperatoria aparece en la primera semana tras la cirugía de catarata u otras cirugías intraoculares. Los agentes más frecuentes son estafilococos coagulasa negativos y Staphylococcus aureus de la flora del paciente. Se manifiesta con dolor, disminución importante de la visión, ojo rojo, edema palpebral e hipopión. Es una urgencia que requiere toma de muestras del vítreo e inyección intravítrea de antibióticos como vancomicina y ceftazidima, y vitrectomía en casos graves. La povidona yodada preoperatoria reduce su incidencia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la catarata
+
+@ cir|ophthalmology|cataract|3|diagnosis
+V: Hombre de 58 años miope que refiere la aparición súbita de muchas manchas flotantes y destellos de luz en el ojo izquierdo, seguidos de una sombra como cortina que avanza desde la periferia. No tiene dolor.
+P: ¿Cuál es el diagnóstico más probable?
++ Desprendimiento de retina regmatógeno || Miodesopsias y fotopsias seguidas de una sombra en cortina indolora en un miope.
+- anchoring | Desprendimiento de vítreo posterior simple || No explica la sombra en cortina.
+- availability_heuristic | Migraña con aura || El aura es binocular y transitoria.
+- representativeness_heuristic | Catarata || Es progresiva sin destellos ni cortina.
+- premature_closure | Oclusión de la arteria central de la retina || Da pérdida visual súbita total sin destellos.
+- base_rate_fallacy | Glaucoma agudo || Es doloroso con ojo rojo.
+- framing_effect | Hemorragia vítrea por diabetes || No hay diabetes.
+- inattentional_blindness | Degeneración macular || Afecta la visión central.
+- focusing_illusion | Neuritis óptica || Es dolorosa con los movimientos oculares.
+- belief_bias | Cansancio visual por usar el celular || Es una urgencia.
+E: El desprendimiento de retina regmatógeno es la separación de la retina neurosensorial del epitelio pigmentario por un desgarro que permite el paso del vítreo. Es más frecuente en miopes, tras cirugía de catarata y traumatismos. Suele precederse de un desprendimiento de vítreo posterior con miodesopsias, manchas flotantes, y fotopsias, destellos de luz. Después aparece una sombra o cortina en el campo visual que avanza. Es indoloro. El fondo de ojo con pupila dilatada confirma el diagnóstico. Es una urgencia, sobre todo si la mácula está aplicada, y se trata con cirugía.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del desprendimiento de retina
+
+@ cir|neurosurgery|head_trauma_general|3|diagnosis
+V: Hombre de 25 años con traumatismo craneoencefálico grave por accidente de motocicleta, con Glasgow de 5 desde el momento del accidente. La tomografía inicial muestra pocas alteraciones, con pequeñas hemorragias puntiformes en la unión de la sustancia gris y blanca y en el cuerpo calloso.
+P: ¿Cuál es el diagnóstico más probable?
++ Lesión axonal difusa || Coma desde el inicio con tomografía casi normal y hemorragias puntiformes en el cuerpo calloso.
+- anchoring | Hematoma epidural || Daría una lesión biconvexa con efecto de masa.
+- availability_heuristic | Conmoción cerebral leve || El Glasgow es muy bajo.
+- representativeness_heuristic | Hematoma subdural agudo || Daría una colección en semiluna.
+- premature_closure | Intoxicación por alcohol como causa del coma || No explica las hemorragias.
+- base_rate_fallacy | Evento vascular cerebral isquémico || No explica el contexto traumático.
+- framing_effect | Hemorragia subaracnoidea aneurismática || El contexto es traumático.
+- inattentional_blindness | Contusión cerebral frontal aislada || No explica el patrón difuso.
+- focusing_illusion | Encefalopatía hipóxica pura || No explica las hemorragias en el cuerpo calloso.
+- belief_bias | Como la tomografía casi es normal, despertará pronto || El pronóstico suele ser grave.
+E: La lesión axonal difusa se produce por fuerzas de aceleración y desaceleración rotacional que cizallan los axones, típicamente en accidentes de tráfico a alta velocidad. Se caracteriza por coma desde el momento del traumatismo, desproporcionado a los hallazgos de la tomografía, que puede ser normal o mostrar pequeñas hemorragias petequiales en la unión corticosubcortical, el cuerpo calloso y el tronco cerebral. La resonancia magnética es más sensible. El tratamiento es de soporte y control de la presión intracraneal. El pronóstico suele ser malo, con alta frecuencia de estado vegetativo o discapacidad grave.
+R: Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico
+
+@ cir|neurosurgery|head_trauma_general|3|next_step
+V: Hombre de 30 años con traumatismo craneoencefálico y herida en el cuero cabelludo. La tomografía muestra una fractura deprimida del hueso parietal con hundimiento mayor que el grosor del cráneo y la herida está abierta sobre la fractura.
+P: ¿Cuál es la conducta más apropiada?
++ Antibióticos, profilaxis antitetánica y cirugía para levantar la fractura y desbridar || La fractura deprimida abierta con hundimiento mayor que el grosor del cráneo es quirúrgica.
+- anchoring | Sutura de la herida y egreso || Es una fractura abierta deprimida.
+- availability_heuristic | Observación sin cirugía en todos los casos || La fractura abierta deprimida requiere cirugía.
+- representativeness_heuristic | Craneotomía amplia sin antibióticos || Los antibióticos son necesarios.
+- premature_closure | Solo analgésicos || No es adecuado.
+- framing_effect | Vendaje compresivo sobre la fractura || Puede empujar los fragmentos.
+- complexity_bias | Angiografía cerebral antes de cualquier tratamiento en todos || No es necesaria de rutina.
+- base_rate_fallacy | Anticonvulsivos como único manejo || No resuelven la fractura.
+- belief_bias | El cráneo se alinea solo con el tiempo || La fractura deprimida no se corrige sola.
+- omission_bias | No dar profilaxis antitetánica || Está indicada.
+E: Las fracturas craneales deprimidas son aquellas en las que un fragmento se hunde hacia el interior. Se indica cirugía cuando el hundimiento es mayor que el grosor de la tabla ósea o mayor de 1 cm, cuando la fractura es abierta con contaminación, hay laceración de la duramadre, hematoma subyacente, afección de senos frontales o defecto estético. Las fracturas abiertas requieren antibióticos, profilaxis antitetánica y desbridamiento con elevación de los fragmentos. Tienen riesgo de infección, crisis convulsivas y lesión del parénquima. Se evita la compresión directa sobre la fractura.
+R: Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico
+
+@ cir|neurosurgery|head_trauma_general|3|prevention_screening
+V: Hombre de 32 años con traumatismo craneoencefálico grave con contusiones corticales y Glasgow de 8, ingresado a terapia intensiva.
+P: ¿Cuál es la medida de prevención indicada para las crisis convulsivas tempranas?
++ Profilaxis anticonvulsiva con levetiracetam o fenitoína durante 7 días || Reduce las crisis postraumáticas tempranas en traumatismo grave.
+- anchoring | Anticonvulsivos de por vida en todos || No previenen la epilepsia tardía.
+- availability_heuristic | Ninguna profilaxis en traumatismo grave || Está indicada en los primeros 7 días.
+- representativeness_heuristic | Corticosteroides en dosis altas || Aumentan la mortalidad.
+- premature_closure | Benzodiacepinas en infusión continua para todos || No es la profilaxis estándar.
+- framing_effect | Profilaxis solo si ya convulsionó || La profilaxis temprana se da sin crisis previas.
+- complexity_bias | Electroencefalograma continuo en todos como única medida || No sustituye la profilaxis.
+- base_rate_fallacy | Magnesio intravenoso || No es la profilaxis estándar en trauma.
+- belief_bias | Las convulsiones no afectan el pronóstico || Aumentan la lesión secundaria.
+- omission_bias | Evitar los anticonvulsivos por efectos adversos || El beneficio en la primera semana es claro.
+E: Las crisis convulsivas postraumáticas se clasifican en inmediatas, tempranas en los primeros 7 días y tardías después de una semana. En el traumatismo craneoencefálico grave se recomienda profilaxis anticonvulsiva con fenitoína o levetiracetam durante los primeros 7 días, ya que reduce las crisis tempranas, que aumentan la presión intracraneal y la lesión secundaria. La profilaxis no previene la epilepsia postraumática tardía, por lo que no se continúa después de la primera semana si no hubo crisis. Los factores de riesgo incluyen contusiones, hematomas, fracturas deprimidas y heridas penetrantes.
+R: Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico
+
+@ cir|neurosurgery|head_trauma_general|3|complication_prognosis
+V: Hombre de 40 años con traumatismo craneoencefálico grave hace 5 días que presenta poliuria de 6 litros al día, sodio sérico de 156 mEq/L y orina diluida con osmolaridad de 120 mOsm/kg.
+P: ¿Cuál es la complicación que presenta?
++ Diabetes insípida central postraumática || Poliuria con orina diluida e hipernatremia por deficiencia de hormona antidiurética.
+- anchoring | Secreción inapropiada de hormona antidiurética || Da hiponatremia con orina concentrada.
+- availability_heuristic | Síndrome de pérdida cerebral de sal || Da hiponatremia con hipovolemia.
+- representativeness_heuristic | Diabetes mellitus descompensada || La orina estaría concentrada por glucosa.
+- premature_closure | Diuresis por manitol como única causa sin estudios || La osmolaridad urinaria baja persistente sugiere diabetes insípida.
+- base_rate_fallacy | Insuficiencia renal aguda poliúrica || No explica la orina tan diluida con hipernatremia.
+- framing_effect | Exceso de líquidos intravenosos || No explica la hipernatremia.
+- inattentional_blindness | Hipercalcemia || No es la causa más probable.
+- focusing_illusion | Diabetes insípida nefrogénica || El contexto es traumático central.
+- belief_bias | Orina mucho porque toma mucha agua || Hay hipernatremia.
+E: El traumatismo craneoencefálico puede afectar el hipotálamo y la hipófisis, causando alteraciones del sodio. La diabetes insípida central se debe a la deficiencia de hormona antidiurética y se manifiesta con poliuria, orina diluida con osmolaridad baja e hipernatremia. Se trata con reposición de agua y desmopresina. La secreción inapropiada de hormona antidiurética produce hiponatremia euvolémica con orina concentrada y se trata con restricción de líquidos. El síndrome de pérdida cerebral de sal produce hiponatremia hipovolémica y se trata con sodio y volumen. Estas alteraciones requieren vigilancia estrecha de los electrolitos.
+R: Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico
+
+@ cir|neurosurgery|head_trauma_general|3|data_interpretation
+V: Hombre de 35 años con traumatismo craneoencefálico grave con monitor de presión intracraneal. Presión arterial media de 75 mmHg y presión intracraneal de 30 mmHg.
+P: ¿Qué indica el cálculo de la presión de perfusión cerebral?
++ Presión de perfusión cerebral de 45 mmHg, baja, con riesgo de isquemia || Se calcula restando la presión intracraneal a la presión arterial media.
+- anchoring | Presión de perfusión de 105 mmHg adecuada || Se resta, no se suma.
+- availability_heuristic | Presión de perfusión normal mayor de 60 || El cálculo da 45.
+- representativeness_heuristic | Presión intracraneal normal || La normal es menor de 20 a 22.
+- premature_closure | Indica que debe bajarse la presión arterial || Bajaría más la perfusión.
+- base_rate_fallacy | Indica muerte cerebral || No es un criterio.
+- framing_effect | Presión de perfusión de 2.5 mmHg || Es un cálculo incorrecto.
+- inattentional_blindness | Indica que el monitor está mal calibrado || Los valores son plausibles.
+- focusing_illusion | Indica que solo importa la presión arterial || La presión intracraneal reduce la perfusión.
+- belief_bias | La presión del cerebro no afecta su riego || Lo reduce de forma directa.
+E: La presión de perfusión cerebral es igual a la presión arterial media menos la presión intracraneal. En el traumatismo craneoencefálico grave se busca mantener una presión intracraneal menor de 22 mmHg y una presión de perfusión entre 60 y 70 mmHg. Una perfusión baja causa isquemia y lesión secundaria. Para mejorarla se reduce la presión intracraneal con elevación de la cabecera, sedación, terapia hiperosmolar, drenaje de líquido cefalorraquídeo y cirugía, y se mantiene la presión arterial con líquidos y vasopresores. La hipotensión y la hipoxia empeoran el pronóstico.
+R: Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico
+
+@ cir|neurosurgery|head_trauma_general|3|complication_prognosis
+V: Mujer de 50 años con traumatismo craneoencefálico grave que desarrolla durante la hospitalización midriasis izquierda, hemiparesia derecha y deterioro del estado de conciencia. La tomografía muestra un hematoma temporal izquierdo con desplazamiento del uncus.
+P: ¿Cuál es la complicación que presenta?
++ Herniación transtentorial uncal || Midriasis ipsilateral por compresión del tercer par y hemiparesia contralateral.
+- anchoring | Crisis convulsiva focal || No explica la midriasis fija con deterioro.
+- availability_heuristic | Herniación amigdalina || Da alteraciones respiratorias y cardiovasculares por compresión del bulbo.
+- representativeness_heuristic | Herniación subfalcina aislada || Da debilidad de la pierna contralateral por compresión de la cerebral anterior.
+- premature_closure | Efecto de sedantes en la pupila || No explica la midriasis unilateral con hemiparesia.
+- base_rate_fallacy | Parálisis del sexto par || Afecta la abducción ocular.
+- framing_effect | Lesión del nervio óptico || No explica el cuadro.
+- inattentional_blindness | Hipoglucemia || No explica los hallazgos focales.
+- focusing_illusion | Infarto en el territorio de la cerebral media por embolia || El contexto es el hematoma con desplazamiento.
+- belief_bias | Pupila grande por colirio || Es una herniación.
+E: La herniación uncal ocurre cuando una masa temporal, como un hematoma, empuja el uncus del lóbulo temporal a través de la tienda del cerebelo. Comprime el tercer par craneal, causando midriasis ipsilateral fija, y el pedúnculo cerebral, causando hemiparesia contralateral, además de deterioro del estado de conciencia. A veces la hemiparesia es ipsilateral por compresión del pedúnculo contralateral contra la tienda, el fenómeno de Kernohan. Es una urgencia neuroquirúrgica que requiere medidas para bajar la presión intracraneal y evacuación quirúrgica del hematoma.
+R: Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico
+
+@ cir|neurosurgery|intracranial_hemorrhage|3|diagnosis
+V: Mujer de 48 años con cefalea súbita, la peor de su vida, que inició mientras levantaba un objeto pesado, con vómito, rigidez de nuca y somnolencia breve. La tomografía muestra sangre en las cisternas basales y los surcos.
+P: ¿Cuál es el diagnóstico más probable?
++ Hemorragia subaracnoidea por rotura de aneurisma || Cefalea en trueno con rigidez de nuca y sangre en el espacio subaracnoideo.
+- anchoring | Migraña grave || No explica la sangre en la tomografía.
+- availability_heuristic | Meningitis bacteriana || No explica el inicio súbito ni la sangre.
+- representativeness_heuristic | Hematoma epidural || No hay traumatismo y la sangre es subaracnoidea.
+- premature_closure | Cefalea tensional || No explica la gravedad ni la sangre.
+- base_rate_fallacy | Hemorragia intraparenquimatosa hipertensiva || La sangre está en el espacio subaracnoideo.
+- framing_effect | Sinusitis aguda || No explica el cuadro.
+- inattentional_blindness | Trombosis de senos venosos || Suele tener evolución más gradual.
+- focusing_illusion | Crisis hipertensiva sin sangrado || Hay sangre en la tomografía.
+- belief_bias | Cefalea por estrés del trabajo || Es una urgencia neuroquirúrgica.
+E: La hemorragia subaracnoidea no traumática se debe en 80% a la rotura de un aneurisma sacular, generalmente en el polígono de Willis. Los factores de riesgo son hipertensión, tabaquismo, alcohol, antecedente familiar y enfermedades como el riñón poliquístico. Se manifiesta con cefalea súbita e intensa, en trueno, la peor de la vida, con náusea, vómito, rigidez de nuca, alteración del estado de conciencia y fotofobia. La tomografía simple es el estudio inicial, y si es negativa con sospecha alta se realiza punción lumbar. La angiotomografía o angiografía identifica el aneurisma.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia subaracnoidea aneurismática
+
+@ cir|neurosurgery|intracranial_hemorrhage|3|next_step
+V: Hombre de 50 años con cefalea súbita intensa de 10 horas de evolución y rigidez de nuca. La tomografía simple de cráneo es normal.
+P: ¿Cuál es el siguiente paso?
++ Realizar punción lumbar en busca de eritrocitos y xantocromía || La tomografía puede ser normal en algunas hemorragias subaracnoideas.
+- anchoring | Egresar con diagnóstico de migraña porque la tomografía es normal || La tomografía no descarta la hemorragia por completo.
+- availability_heuristic | Iniciar antibióticos empíricos como único manejo || La sospecha principal es hemorragia.
+- representativeness_heuristic | Resonancia de columna || No evalúa la hemorragia subaracnoidea.
+- premature_closure | Analgésicos opioides y observación en casa || Puede ser una hemorragia grave.
+- framing_effect | Electroencefalograma || No es útil.
+- complexity_bias | Craneotomía exploradora || No está indicada sin diagnóstico.
+- base_rate_fallacy | Repetir la tomografía en una semana || Retrasa el diagnóstico.
+- belief_bias | Si la tomografía es normal no hay sangrado || La sensibilidad disminuye con el tiempo.
+- omission_bias | No estudiar más para evitar la punción || El riesgo de omitir una hemorragia es alto.
+E: La sensibilidad de la tomografía simple para detectar hemorragia subaracnoidea es cercana a 100% en las primeras 6 horas, pero disminuye con el tiempo. Si la sospecha clínica es alta y la tomografía es normal, se realiza punción lumbar, preferentemente 12 horas después del inicio, en busca de eritrocitos que no disminuyen entre los tubos y xantocromía por degradación de la hemoglobina. La angiotomografía es una alternativa en algunos centros. Una vez confirmada, se identifica el aneurisma con angiotomografía o angiografía para tratarlo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia subaracnoidea aneurismática
+
+@ cir|neurosurgery|intracranial_hemorrhage|3|treatment_of_choice
+V: Mujer de 52 años con hemorragia subaracnoidea por aneurisma de la arteria comunicante anterior confirmado por angiotomografía. Está consciente y estable.
+P: ¿Cuál es el tratamiento de elección para prevenir el resangrado?
++ Exclusión temprana del aneurisma con embolización endovascular con coils o clipaje quirúrgico en las primeras 24 a 72 horas || El resangrado es más frecuente en los primeros días.
+- anchoring | Diferir el tratamiento del aneurisma varias semanas || Aumenta el riesgo de resangrado.
+- availability_heuristic | Solo control de la presión arterial sin tratar el aneurisma || No previene el resangrado.
+- representativeness_heuristic | Anticoagulación para prevenir vasoespasmo || Aumenta el sangrado.
+- premature_closure | Trombólisis intravenosa || Está contraindicada.
+- framing_effect | Corticosteroides en dosis altas || No previenen el resangrado.
+- complexity_bias | Radiocirugía como tratamiento urgente || No es útil en la fase aguda.
+- base_rate_fallacy | Reposo absoluto como tratamiento definitivo || No previene el resangrado.
+- belief_bias | El aneurisma se cerrará solo tras sangrar || Tiene alto riesgo de resangrado.
+- omission_bias | No tratar por miedo a la cirugía || El resangrado es frecuentemente mortal.
+E: El resangrado es la complicación más temida de la hemorragia subaracnoidea, con mayor riesgo en las primeras 24 horas y alta mortalidad. Para prevenirlo se excluye el aneurisma de forma temprana, idealmente en las primeras 24 a 72 horas, con embolización endovascular con coils o con clipaje quirúrgico según la localización y las características del aneurisma. Mientras tanto se controla la presión arterial, se da analgesia y reposo. Se administra nimodipino oral para prevenir la isquemia cerebral tardía por vasoespasmo y se vigilan la hidrocefalia y la hiponatremia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia subaracnoidea aneurismática
+
+@ cir|neurosurgery|intracranial_hemorrhage|3|complication_prognosis
+V: Mujer de 55 años con hemorragia subaracnoidea aneurismática tratada con embolización. Al séptimo día presenta confusión y nueva hemiparesia derecha. La tomografía no muestra resangrado ni hidrocefalia.
+P: ¿Cuál es la complicación más probable?
++ Isquemia cerebral tardía por vasoespasmo || Déficit neurológico nuevo entre los días 4 y 14 sin resangrado ni hidrocefalia.
+- anchoring | Resangrado del aneurisma || La tomografía no lo muestra y el aneurisma fue tratado.
+- availability_heuristic | Hidrocefalia aguda || No se observa en la tomografía.
+- representativeness_heuristic | Meningitis bacteriana || No explica el déficit focal.
+- premature_closure | Crisis convulsiva con parálisis de Todd || Es transitoria y debe haber crisis previa.
+- base_rate_fallacy | Tumor cerebral || No explica el cuadro agudo.
+- framing_effect | Hipoglucemia || No explica el contexto.
+- inattentional_blindness | Hiponatremia como única causa del déficit focal || Puede coexistir, pero el déficit focal sugiere vasoespasmo.
+- focusing_illusion | Migraña hemipléjica || No corresponde.
+- belief_bias | Cansancio por la hospitalización || Es un déficit neurológico nuevo.
+E: La isquemia cerebral tardía es una causa importante de morbilidad en la hemorragia subaracnoidea. Se asocia al vasoespasmo de las arterias cerebrales, que ocurre entre los días 4 y 14, con máximo hacia el séptimo día. Se manifiesta con deterioro del estado de conciencia o déficit focal nuevo no explicado por otras causas. El Doppler transcraneal ayuda a detectar el vasoespasmo. La prevención es con nimodipino oral y mantenimiento de la euvolemia. El tratamiento incluye elevar la presión arterial y, si no responde, angioplastia o vasodilatadores intraarteriales.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia subaracnoidea aneurismática
+
+@ cir|neurosurgery|intracranial_hemorrhage|3|diagnosis
+V: Hombre de 68 años con hipertensión mal controlada que presenta de forma súbita hemiparesia izquierda, disartria y somnolencia. Presión de 210/120 mmHg. La tomografía muestra una lesión hiperdensa en el putamen derecho.
+P: ¿Cuál es el diagnóstico más probable?
++ Hemorragia intraparenquimatosa hipertensiva || Hemorragia en el putamen en un hipertenso con déficit súbito.
+- anchoring | Infarto isquémico de la cerebral media || La tomografía muestra sangre, no isquemia.
+- availability_heuristic | Hemorragia subaracnoidea aneurismática || La sangre está en el parénquima.
+- representativeness_heuristic | Tumor cerebral con sangrado || El contexto y la localización son típicos de hemorragia hipertensiva.
+- premature_closure | Hematoma subdural || Es extraaxial.
+- base_rate_fallacy | Angiopatía amiloide || Suele dar hemorragias lobares en ancianos.
+- framing_effect | Malformación arteriovenosa || Es más común en jóvenes.
+- inattentional_blindness | Encefalopatía hipertensiva sin sangrado || Hay una hemorragia.
+- focusing_illusion | Absceso cerebral || No explica el cuadro súbito.
+- belief_bias | Mareo por la presión alta sin lesión cerebral || Hay una hemorragia.
+E: La hemorragia intraparenquimatosa hipertensiva se debe a la rotura de pequeñas arterias penetrantes dañadas por la hipertensión crónica. Sus localizaciones típicas son el putamen, el tálamo, la protuberancia y el cerebelo. Se manifiesta con déficit neurológico súbito, cefalea, vómito y alteración del estado de conciencia. La tomografía simple confirma el diagnóstico. El tratamiento incluye control de la presión arterial, con meta sistólica de alrededor de 140 mmHg, revertir anticoagulantes y manejo de la presión intracraneal. La cirugía se considera en hemorragias cerebelosas mayores de 3 cm o con hidrocefalia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia intracerebral
+
+@ cir|neurosurgery|intracranial_hemorrhage|4|next_step
+V: Hombre de 70 años con hemorragia cerebelosa de 4 cm diagnosticada hace 4 horas que presenta deterioro del estado de conciencia y la tomografía muestra compresión del cuarto ventrículo con hidrocefalia.
+P: ¿Cuál es la conducta más apropiada?
++ Evacuación quirúrgica urgente del hematoma cerebeloso || Las hemorragias cerebelosas mayores de 3 cm con deterioro o hidrocefalia requieren cirugía.
+- anchoring | Manejo médico exclusivo con control de la presión || El deterioro con compresión del tronco requiere cirugía.
+- availability_heuristic | Solo drenaje ventricular sin evacuar el hematoma || Puede causar herniación ascendente.
+- representativeness_heuristic | Trombólisis intravenosa || Está contraindicada.
+- premature_closure | Esperar 48 horas para ver la evolución || Puede causar la muerte por compresión del tronco.
+- framing_effect | Corticosteroides en dosis altas || No son útiles.
+- complexity_bias | Angiografía antes de cualquier tratamiento || Retrasa la cirugía urgente.
+- base_rate_fallacy | Anticoagulación || Está contraindicada.
+- belief_bias | Las hemorragias cerebelosas siempre se reabsorben solas || Pueden ser mortales.
+- omission_bias | No operar por la edad || La cirugía puede salvarle la vida.
+E: La hemorragia cerebelosa es una urgencia neuroquirúrgica porque la fosa posterior es un espacio pequeño. Puede comprimir el tronco encefálico y obstruir el cuarto ventrículo, causando hidrocefalia, deterioro rápido y muerte. Se indica evacuación quirúrgica urgente en hemorragias cerebelosas mayores de 3 cm, con deterioro neurológico, compresión del tronco o hidrocefalia. La ventriculostomía sola no se recomienda como tratamiento inicial porque puede causar herniación ascendente. La evacuación oportuna mejora el pronóstico, y muchos pacientes recuperan una buena función neurológica si se operan antes del deterioro grave.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hemorragia intracerebral
