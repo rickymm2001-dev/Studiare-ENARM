@@ -1,0 +1,1335 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "urg-09a-atls-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "atls",
+      "vignette": "Hombre de 30 años atropellado que llega con hemorragia arterial abundante y pulsátil en el muslo, sin respuesta verbal clara, con respiración ruidosa.",
+      "prompt": "¿Cuál es la primera acción más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Controlar la hemorragia exanguinante con compresión directa o torniquete y luego asegurar la vía aérea",
+          "correct": true,
+          "rationale": "La hemorragia catastrófica tiene prioridad en la secuencia XABCDE."
+        },
+        {
+          "key": "b",
+          "text": "Llevar a quirófano sin control temporal del sangrado",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El torniquete debe colocarse de inmediato."
+        },
+        {
+          "key": "c",
+          "text": "Tomografía de cuerpo completo inmediata",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Retrasa el control de la hemorragia."
+        },
+        {
+          "key": "d",
+          "text": "Iniciar 3 litros de cristaloide antes de controlar el sangrado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Primero se controla la fuente."
+        },
+        {
+          "key": "e",
+          "text": "El orden de la evaluación primaria nunca varía",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La hemorragia catastrófica se trata primero."
+        },
+        {
+          "key": "f",
+          "text": "Los torniquetes siempre causan amputación",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Usados correctamente son seguros."
+        },
+        {
+          "key": "g",
+          "text": "Radiografía de fémur antes de cualquier medida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "h",
+          "text": "No anotar la hora de colocación del torniquete",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es indispensable."
+        },
+        {
+          "key": "i",
+          "text": "Evaluar la escala de Glasgow como primera acción",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La hemorragia es prioritaria."
+        },
+        {
+          "key": "j",
+          "text": "Intubar antes de controlar la hemorragia arterial masiva",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La exanguinación mata en minutos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "La evaluación primaria del paciente traumatizado sigue la secuencia ABCDE: vía aérea con protección de la columna cervical, ventilación, circulación con control de hemorragias, déficit neurológico y exposición con control de la temperatura. En presencia de hemorragia externa exanguinante, como en extremidades, su control tiene prioridad, por lo que se habla de XABCDE. Se usa compresión directa, vendaje compresivo o torniquete, que es seguro si se usa correctamente, anotando la hora de colocación. Las lesiones que ponen en riesgo la vida se tratan conforme se identifican, antes de pasar al siguiente paso.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de atención inicial del paciente politraumatizado"
+      ]
+    },
+    {
+      "key": "urg-09a-atls-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "atls",
+      "vignette": "Hombre de 25 años con herida por arma blanca en el hemitórax derecho. Presenta dificultad respiratoria grave, desviación traqueal a la izquierda, ingurgitación yugular, ausencia de ruidos respiratorios derechos e hipotensión de 70/40 mmHg.",
+      "prompt": "¿Cuál es el tratamiento de elección inmediato?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tomografía de tórax urgente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "b",
+          "text": "Descompresión inmediata con aguja o toracostomía con dedo, seguida de sonda pleural",
+          "correct": true,
+          "rationale": "Es un neumotórax a tensión, un diagnóstico clínico."
+        },
+        {
+          "key": "c",
+          "text": "No colocar sonda pleural después de la descompresión",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es el tratamiento definitivo."
+        },
+        {
+          "key": "d",
+          "text": "Solo oxígeno por mascarilla",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No resuelve la tensión."
+        },
+        {
+          "key": "e",
+          "text": "Radiografía de tórax antes de cualquier intervención",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Retrasa un tratamiento que salva la vida."
+        },
+        {
+          "key": "f",
+          "text": "El neumotórax a tensión se confirma por imagen antes de tratar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un diagnóstico clínico."
+        },
+        {
+          "key": "g",
+          "text": "Intubación sin descomprimir el tórax",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La presión positiva empeora el neumotórax a tensión."
+        },
+        {
+          "key": "h",
+          "text": "La aguja se coloca siempre en el séptimo espacio intercostal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se usa el quinto espacio en la línea axilar o el segundo en la línea media clavicular."
+        },
+        {
+          "key": "i",
+          "text": "Pericardiocentesis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La desviación traqueal y la ausencia de ruidos orientan a neumotórax."
+        },
+        {
+          "key": "j",
+          "text": "Toracotomía en quirófano como primera medida",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La descompresión es inmediata."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "El neumotórax a tensión ocurre cuando el aire entra a la cavidad pleural sin poder salir, colapsando el pulmón y desplazando el mediastino, lo que reduce el retorno venoso y causa choque obstructivo. Se manifiesta con dificultad respiratoria, taquicardia, hipotensión, desviación traqueal contralateral, ingurgitación yugular, ausencia de ruidos respiratorios e hiperresonancia. Es un diagnóstico clínico que no debe esperar a la radiografía. El tratamiento inmediato es la descompresión con aguja en el quinto espacio intercostal en la línea axilar anterior o media en adultos, o en el segundo espacio en la línea media clavicular, o la toracostomía con dedo, seguida de sonda pleural.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de atención inicial del paciente politraumatizado"
+      ]
+    },
+    {
+      "key": "urg-09a-atls-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "atls",
+      "vignette": "Hombre de 35 años con trauma torácico penetrante izquierdo. Se coloca sonda pleural que drena inmediatamente 1,800 mL de sangre. Persiste hipotenso a pesar de transfusión.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tomografía de tórax antes de decidir en un paciente inestable",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retrasa la cirugía."
+        },
+        {
+          "key": "b",
+          "text": "No activar el protocolo de transfusión masiva",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es necesario."
+        },
+        {
+          "key": "c",
+          "text": "Pinzar la sonda pleural para detener el sangrado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede causar hemotórax a tensión."
+        },
+        {
+          "key": "d",
+          "text": "Toracoscopia diagnóstica en paciente inestable",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es adecuada en inestabilidad."
+        },
+        {
+          "key": "e",
+          "text": "Toracotomía urgente en quirófano",
+          "correct": true,
+          "rationale": "Un drenaje inicial mayor de 1,500 mL indica hemotórax masivo."
+        },
+        {
+          "key": "f",
+          "text": "Trombolíticos intrapleurales",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No están indicados."
+        },
+        {
+          "key": "g",
+          "text": "El hemotórax siempre se resuelve solo con la sonda pleural",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El masivo requiere cirugía."
+        },
+        {
+          "key": "h",
+          "text": "La cantidad drenada no orienta la conducta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un criterio quirúrgico."
+        },
+        {
+          "key": "i",
+          "text": "Colocar una segunda sonda pleural como único tratamiento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No controla el sangrado."
+        },
+        {
+          "key": "j",
+          "text": "Observar el drenaje durante 24 horas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El hemotórax masivo con inestabilidad requiere cirugía."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "El hemotórax masivo se define por la acumulación rápida de más de 1,500 mL de sangre en la cavidad pleural, o un tercio o más del volumen sanguíneo, generalmente por trauma penetrante con lesión de vasos sistémicos o hiliares. Se manifiesta con choque y ausencia de ruidos respiratorios con matidez. El tratamiento inicial es la reposición de volumen con hemoderivados y la colocación de sonda pleural. Las indicaciones de toracotomía son un drenaje inicial mayor de 1,500 mL, un drenaje continuo de 200 mL por hora durante 2 a 4 horas o la necesidad persistente de transfusión con inestabilidad.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de manejo del trauma de tórax"
+      ]
+    },
+    {
+      "key": "urg-09a-atls-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "atls",
+      "vignette": "Mujer de 40 años con trauma abdominal cerrado por accidente automovilístico. Presión de 75/45 mmHg y frecuencia cardiaca de 135 a pesar de 1 litro de cristaloide y 2 unidades de sangre. El FAST muestra líquido libre en el espacio hepatorrenal y esplenorrenal.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tomografía de abdomen antes de decidir",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "En un paciente inestable retrasa la cirugía."
+        },
+        {
+          "key": "b",
+          "text": "Angiografía como primera opción en inestable con FAST positivo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La laparotomía es la opción."
+        },
+        {
+          "key": "c",
+          "text": "No activar el protocolo de transfusión masiva",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es necesario."
+        },
+        {
+          "key": "d",
+          "text": "Todos los pacientes con FAST positivo se operan aunque estén estables",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Los estables pueden estudiarse con tomografía."
+        },
+        {
+          "key": "e",
+          "text": "Laparotomía exploradora urgente",
+          "correct": true,
+          "rationale": "Un paciente inestable con FAST positivo requiere cirugía inmediata."
+        },
+        {
+          "key": "f",
+          "text": "Manejo no quirúrgico con observación",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Solo en pacientes estables."
+        },
+        {
+          "key": "g",
+          "text": "Lavado peritoneal diagnóstico antes de la cirugía",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El FAST ya mostró líquido libre."
+        },
+        {
+          "key": "h",
+          "text": "El FAST negativo descarta lesión intraabdominal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No la descarta."
+        },
+        {
+          "key": "i",
+          "text": "Solo más cristaloides en espera de mejoría",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El sangrado requiere control quirúrgico."
+        },
+        {
+          "key": "j",
+          "text": "Resonancia magnética abdominal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "La evaluación ecográfica enfocada en trauma, FAST, busca líquido libre en el espacio hepatorrenal, esplenorrenal, pélvico y pericárdico. En el paciente con trauma abdominal hemodinámicamente inestable, un FAST positivo indica laparotomía exploradora urgente. En el paciente estable, un FAST positivo o la sospecha de lesión se estudian con tomografía contrastada, lo que permite el manejo no quirúrgico de muchas lesiones de órganos sólidos. Un FAST negativo no descarta lesión, especialmente retroperitoneal o de víscera hueca. La versión ampliada incluye la búsqueda de neumotórax.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de manejo del trauma abdominal"
+      ]
+    },
+    {
+      "key": "urg-09a-atls-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "atls",
+      "vignette": "Hombre de 28 años tras un accidente en motocicleta. Abre los ojos solo al dolor, emite palabras inapropiadas y retira la extremidad ante el estímulo doloroso.",
+      "prompt": "¿Qué indica la puntuación de la escala de Glasgow de este paciente?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Glasgow de 12, leve",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "b",
+          "text": "Glasgow de 15, normal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Tiene alteraciones."
+        },
+        {
+          "key": "c",
+          "text": "Glasgow de 9, traumatismo craneoencefálico moderado",
+          "correct": true,
+          "rationale": "Ojos 2, verbal 3, motor 4."
+        },
+        {
+          "key": "d",
+          "text": "Glasgow de 10 con respuesta motora de flexión anormal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La retirada no es flexión anormal."
+        },
+        {
+          "key": "e",
+          "text": "Glasgow de 3, coma profundo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "f",
+          "text": "La escala de Glasgow solo se usa en trauma craneal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se usa en diversas alteraciones de la conciencia."
+        },
+        {
+          "key": "g",
+          "text": "Glasgow de 11, leve",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "h",
+          "text": "La retirada al dolor equivale a localizar el dolor",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Localizar vale 5 y retirar vale 4."
+        },
+        {
+          "key": "i",
+          "text": "Glasgow de 8 con indicación inmediata de intubación por la escala",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La puntuación es 9."
+        },
+        {
+          "key": "j",
+          "text": "Glasgow de 6, traumatismo grave",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es un cálculo erróneo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "La escala de coma de Glasgow evalúa la apertura ocular, de 1 a 4; la respuesta verbal, de 1 a 5; y la respuesta motora, de 1 a 6, con un total de 3 a 15. La apertura ocular al dolor vale 2; las palabras inapropiadas, 3; y la retirada al dolor, 4, para un total de 9. El traumatismo craneoencefálico se clasifica en leve, de 13 a 15; moderado, de 9 a 12; y grave, de 3 a 8. Un Glasgow de 8 o menos indica necesidad de asegurar la vía aérea. La respuesta motora es el componente con mejor valor pronóstico. Se registra la mejor respuesta.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de manejo inicial del traumatismo craneoencefálico"
+      ]
+    },
+    {
+      "key": "urg-09a-atls-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "atls",
+      "vignette": "Hombre de 22 años golpeado en la región temporal con un bate. Perdió la conciencia brevemente, luego estuvo lúcido y conversando durante 2 horas, y después presentó deterioro rápido con Glasgow de 7 y midriasis derecha. La tomografía muestra una lesión biconvexa hiperdensa.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hematoma subdural agudo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene forma de semiluna, cóncava."
+        },
+        {
+          "key": "b",
+          "text": "Contusión cerebral aislada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la lesión biconvexa."
+        },
+        {
+          "key": "c",
+          "text": "Hematoma epidural por lesión de la arteria meníngea media",
+          "correct": true,
+          "rationale": "Intervalo lúcido con lesión biconvexa tras trauma temporal."
+        },
+        {
+          "key": "d",
+          "text": "Lesión axonal difusa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La tomografía suele ser normal o con microhemorragias."
+        },
+        {
+          "key": "e",
+          "text": "Conmoción cerebral simple",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el deterioro ni la imagen."
+        },
+        {
+          "key": "f",
+          "text": "Hemorragia subaracnoidea traumática",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No produce una lesión biconvexa."
+        },
+        {
+          "key": "g",
+          "text": "El hematoma epidural siempre es venoso",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Suele ser arterial."
+        },
+        {
+          "key": "h",
+          "text": "El intervalo lúcido descarta lesión grave",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es característico del epidural."
+        },
+        {
+          "key": "i",
+          "text": "Absceso cerebral",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No corresponde al contexto."
+        },
+        {
+          "key": "j",
+          "text": "Hematoma subdural crónico",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es de evolución lenta en adultos mayores."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "f"
+      ],
+      "explanation": "El hematoma epidural se localiza entre el cráneo y la duramadre, generalmente por lesión de la arteria meníngea media asociada a fractura del hueso temporal. Clásicamente se presenta con pérdida transitoria de la conciencia, un intervalo lúcido y después deterioro rápido con signos de herniación, como midriasis ipsilateral y hemiparesia contralateral. En la tomografía aparece como una lesión hiperdensa biconvexa o lenticular que no cruza las suturas. Es una urgencia neuroquirúrgica que requiere craniotomía y evacuación; con tratamiento oportuno el pronóstico es bueno. El hematoma subdural tiene forma de semiluna.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de manejo inicial del traumatismo craneoencefálico"
+      ]
+    },
+    {
+      "key": "urg-09a-atls-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "atls",
+      "vignette": "Hombre de 30 años con herida penetrante en el tórax por arma de fuego que deja una herida abierta de 4 centímetros que succiona aire con cada respiración. Presenta dificultad respiratoria.",
+      "prompt": "¿Cuál es el tratamiento inicial de elección?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Apósito oclusivo fijado en tres lados o con válvula, seguido de sonda pleural lejos de la herida",
+          "correct": true,
+          "rationale": "Es un neumotórax abierto."
+        },
+        {
+          "key": "b",
+          "text": "Suturar la herida de inmediato en urgencias como medida definitiva",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede causar tensión sin sonda."
+        },
+        {
+          "key": "c",
+          "text": "No vigilar datos de neumotórax a tensión tras el apósito",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede ocurrir."
+        },
+        {
+          "key": "d",
+          "text": "Colocar la sonda pleural a través de la herida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe colocarse en otro sitio."
+        },
+        {
+          "key": "e",
+          "text": "Un apósito oclusivo completo es siempre lo más seguro",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede causar tensión."
+        },
+        {
+          "key": "f",
+          "text": "Solo oxígeno por mascarilla",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No corrige el defecto."
+        },
+        {
+          "key": "g",
+          "text": "Toracotomía de reanimación inmediata en paciente con pulso",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada de inicio."
+        },
+        {
+          "key": "h",
+          "text": "Las heridas torácicas pequeñas no causan problemas ventilatorios",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Si superan dos tercios del diámetro traqueal, el aire entra por la herida."
+        },
+        {
+          "key": "i",
+          "text": "Dejar la herida abierta sin cubrir",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Persiste el intercambio de aire por la herida."
+        },
+        {
+          "key": "j",
+          "text": "Cerrar la herida con un apósito oclusivo en los cuatro lados sin sonda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede convertirse en neumotórax a tensión."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "El neumotórax abierto ocurre cuando una herida en la pared torácica es lo suficientemente grande, mayor de dos tercios del diámetro de la tráquea, para que el aire entre preferentemente por la herida durante la inspiración, lo que colapsa el pulmón y altera la ventilación. El tratamiento inicial es un apósito oclusivo fijado en tres lados, que actúa como válvula unidireccional, o un sello torácico con válvula, seguido de la colocación de una sonda pleural en un sitio alejado de la herida y el cierre quirúrgico definitivo. Si se cierra en los cuatro lados sin sonda, puede causar un neumotórax a tensión.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de manejo del trauma de tórax"
+      ]
+    },
+    {
+      "key": "urg-09a-atls-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "atls",
+      "vignette": "Hombre de 45 años con trauma torácico por impacto contra el volante. Un segmento de la pared torácica se mueve hacia dentro en la inspiración y hacia fuera en la espiración. Presenta dolor intenso e hipoxemia.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Neumotórax a tensión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica el movimiento paradójico."
+        },
+        {
+          "key": "b",
+          "text": "Taponamiento cardiaco",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica los hallazgos de la pared."
+        },
+        {
+          "key": "c",
+          "text": "Neumomediastino aislado",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el hallazgo."
+        },
+        {
+          "key": "d",
+          "text": "Ruptura diafragmática",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No produce movimiento paradójico de la pared."
+        },
+        {
+          "key": "e",
+          "text": "Fractura costal única simple",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No produce movimiento paradójico."
+        },
+        {
+          "key": "f",
+          "text": "La hipoxemia se debe principalmente al movimiento de la pared",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se debe sobre todo a la contusión pulmonar."
+        },
+        {
+          "key": "g",
+          "text": "Contusión muscular simple",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el movimiento paradójico."
+        },
+        {
+          "key": "h",
+          "text": "Debe fijarse quirúrgicamente siempre de inmediato",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El manejo inicial es analgesia y soporte."
+        },
+        {
+          "key": "i",
+          "text": "Tórax inestable con contusión pulmonar subyacente",
+          "correct": true,
+          "rationale": "Movimiento paradójico por fracturas de varias costillas en dos o más sitios."
+        },
+        {
+          "key": "j",
+          "text": "Ruptura traqueobronquial",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No explica el hallazgo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "i"
+      ],
+      "explanation": "El tórax inestable ocurre cuando dos o más costillas consecutivas se fracturan en dos o más sitios, creando un segmento de pared que se mueve de forma paradójica, hacia dentro en la inspiración y hacia fuera en la espiración. La hipoxemia se debe principalmente a la contusión pulmonar subyacente, más que al movimiento de la pared. El tratamiento incluye oxígeno, analgesia adecuada, incluido el bloqueo regional o epidural, fisioterapia respiratoria, líquidos con cautela para no agravar la contusión y ventilación mecánica si hay insuficiencia respiratoria. La fijación quirúrgica de las costillas se considera en casos seleccionados.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de manejo del trauma de tórax"
+      ]
+    },
+    {
+      "key": "urg-09a-atls-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "atls",
+      "vignette": "Mujer de 82 años en tratamiento con apixabán por fibrilación auricular que cayó en su casa y se golpeó la cabeza. Está alerta, con Glasgow de 15, sin focalización neurológica.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tomografía de cráneo simple a pesar del Glasgow normal",
+          "correct": true,
+          "rationale": "Los pacientes anticoagulados tienen alto riesgo de hemorragia intracraneal."
+        },
+        {
+          "key": "b",
+          "text": "Suspender la anticoagulación de por vida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicado sin hemorragia."
+        },
+        {
+          "key": "c",
+          "text": "Revertir la anticoagulación de forma rutinaria sin imagen",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se decide según la imagen."
+        },
+        {
+          "key": "d",
+          "text": "Angiografía cerebral",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "e",
+          "text": "Los adultos mayores con Glasgow normal no tienen hemorragias",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Pueden tenerlas."
+        },
+        {
+          "key": "f",
+          "text": "Radiografía de cráneo como estudio suficiente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No detecta hemorragias intracraneales."
+        },
+        {
+          "key": "g",
+          "text": "Resonancia magnética como primer estudio urgente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La tomografía es más rápida y adecuada."
+        },
+        {
+          "key": "h",
+          "text": "Los anticoagulantes directos no aumentan el riesgo de hemorragia tras un trauma",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Lo aumentan."
+        },
+        {
+          "key": "i",
+          "text": "No evaluar la causa de la caída",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte de la valoración geriátrica."
+        },
+        {
+          "key": "j",
+          "text": "Dar de alta sin estudios por el Glasgow de 15",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La anticoagulación aumenta el riesgo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "El traumatismo craneoencefálico en adultos mayores y en pacientes anticoagulados o antiagregados tiene mayor riesgo de hemorragia intracraneal, incluso con Glasgow de 15 y sin síntomas. Por ello, la anticoagulación es una indicación de tomografía de cráneo tras un trauma craneal, según reglas como la canadiense de tomografía de cráneo. Si hay hemorragia, se revierte la anticoagulación. En algunos casos se recomienda observación o tomografía de control. Además se evalúan la causa de la caída, como síncope, arritmias o fármacos, y el riesgo de nuevas caídas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de manejo inicial del traumatismo craneoencefálico",
+        "Regla canadiense de tomografía de cráneo"
+      ]
+    },
+    {
+      "key": "urg-09a-atls-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "atls",
+      "vignette": "Mujer de 28 años con embarazo de 32 semanas que sufrió un accidente automovilístico. Está consciente, con presión de 90/60 mmHg en decúbito supino, que mejora al lateralizarla. Dolor abdominal leve.",
+      "prompt": "¿Cuál es la conducta más apropiada en la atención inicial?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Evitar estudios de imagen por el embarazo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Los estudios necesarios no deben omitirse."
+        },
+        {
+          "key": "b",
+          "text": "Dar de alta porque el dolor es leve",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede haber desprendimiento de placenta."
+        },
+        {
+          "key": "c",
+          "text": "Amniocentesis diagnóstica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "d",
+          "text": "El trauma menor nunca causa desprendimiento placentario",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede causarlo."
+        },
+        {
+          "key": "e",
+          "text": "Mantenerla en decúbito supino estricto",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Comprime la vena cava y reduce el retorno venoso."
+        },
+        {
+          "key": "f",
+          "text": "No administrar inmunoglobulina anti-D si es Rh negativo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe considerarse."
+        },
+        {
+          "key": "g",
+          "text": "Evaluación ABCDE con desplazamiento uterino a la izquierda, monitoreo fetal continuo y valoración obstétrica",
+          "correct": true,
+          "rationale": "La reanimación materna es la prioridad y protege al feto."
+        },
+        {
+          "key": "h",
+          "text": "Cesárea inmediata en todos los traumas en embarazadas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se decide según el estado materno y fetal."
+        },
+        {
+          "key": "i",
+          "text": "La hipotensión en decúbito supino siempre indica hemorragia grave",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede deberse a compresión aortocava."
+        },
+        {
+          "key": "j",
+          "text": "Priorizar el ultrasonido fetal antes de la evaluación materna",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La madre es la prioridad."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "En la embarazada traumatizada, la prioridad es la reanimación materna, porque el bienestar fetal depende de la madre. Después de las 20 semanas, el útero comprime la vena cava en decúbito supino, por lo que se desplaza manualmente a la izquierda o se lateraliza a la paciente. Los cambios fisiológicos del embarazo, como el aumento del volumen sanguíneo, pueden enmascarar la hipovolemia. Se realiza monitoreo fetal continuo durante al menos 4 a 6 horas por el riesgo de desprendimiento de placenta. Los estudios de imagen necesarios no se omiten. En pacientes Rh negativas se administra inmunoglobulina anti-D.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de atención de la embarazada con trauma"
+      ]
+    },
+    {
+      "key": "urg-09a-atls-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "atls",
+      "vignette": "Hombre de 40 años con trauma múltiple ya estabilizado tras la evaluación primaria. Se procede a la evaluación secundaria.",
+      "prompt": "¿Cuál es la conducta más apropiada en la evaluación secundaria?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Omitir la evaluación secundaria porque ya está estable",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Pueden pasar desapercibidas lesiones."
+        },
+        {
+          "key": "b",
+          "text": "Explorar solo la región del dolor principal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Pueden existir otras lesiones."
+        },
+        {
+          "key": "c",
+          "text": "Resonancia de cuerpo completo de rutina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "d",
+          "text": "Dar de alta tras la evaluación primaria normal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se requiere evaluación completa."
+        },
+        {
+          "key": "e",
+          "text": "Solo tomografía sin exploración física",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La exploración es fundamental."
+        },
+        {
+          "key": "f",
+          "text": "Las lesiones de la espalda siempre son evidentes",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Deben buscarse."
+        },
+        {
+          "key": "g",
+          "text": "No reevaluar al paciente periódicamente",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede deteriorarse."
+        },
+        {
+          "key": "h",
+          "text": "La historia clínica no tiene importancia en trauma",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El mecanismo y los antecedentes orientan."
+        },
+        {
+          "key": "i",
+          "text": "Realizar la evaluación secundaria antes de la primaria",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La primaria es prioritaria."
+        },
+        {
+          "key": "j",
+          "text": "Historia AMPLE y exploración completa de cabeza a pies, incluidos espalda y extremidades, con estudios complementarios",
+          "correct": true,
+          "rationale": "Busca todas las lesiones tras estabilizar al paciente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "La evaluación secundaria se realiza una vez completada la evaluación primaria y estabilizado el paciente. Incluye la historia AMPLE: alergias, medicamentos, antecedentes personales y embarazo, última comida y eventos o entorno relacionados con la lesión, incluido el mecanismo. Se realiza una exploración completa de cabeza a pies, incluidos espalda, periné y extremidades, con movilización en bloque, y se solicitan estudios complementarios. El paciente debe reevaluarse de forma continua, porque su estado puede cambiar. Si se deteriora, se regresa a la evaluación primaria.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de atención inicial del paciente politraumatizado"
+      ]
+    },
+    {
+      "key": "urg-09a-atls-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "atls",
+      "vignette": "Hombre de 30 años con herida por arma blanca en el precordio. Presenta hipotensión de 75/50 mmHg, ingurgitación yugular, ruidos cardiacos apagados y campos pulmonares con ruidos normales y simétricos. El FAST muestra líquido en el pericardio.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Disección aórtica traumática",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No explica el derrame pericárdico."
+        },
+        {
+          "key": "b",
+          "text": "Contusión miocárdica sin derrame",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El FAST muestra líquido pericárdico."
+        },
+        {
+          "key": "c",
+          "text": "Hemotórax masivo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Los ruidos respiratorios son normales."
+        },
+        {
+          "key": "d",
+          "text": "Choque neurogénico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay lesión medular."
+        },
+        {
+          "key": "e",
+          "text": "Choque hipovolémico puro",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la ingurgitación yugular."
+        },
+        {
+          "key": "f",
+          "text": "El taponamiento requiere un derrame muy grande",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "En el trauma, volúmenes pequeños causan taponamiento."
+        },
+        {
+          "key": "g",
+          "text": "Taponamiento cardiaco traumático",
+          "correct": true,
+          "rationale": "Tríada de Beck con líquido pericárdico tras herida precordial."
+        },
+        {
+          "key": "h",
+          "text": "La pericardiocentesis es el tratamiento definitivo en el trauma",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El tratamiento definitivo es quirúrgico."
+        },
+        {
+          "key": "i",
+          "text": "Embolia gaseosa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "j",
+          "text": "Neumotórax a tensión",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los ruidos respiratorios son normales y simétricos."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "El taponamiento cardiaco traumático se debe con mayor frecuencia a heridas penetrantes en la zona precordial. Como el pericardio no se distiende de forma aguda, volúmenes pequeños de sangre pueden causar taponamiento. Se manifiesta con la tríada de Beck, hipotensión, ingurgitación yugular y ruidos cardiacos apagados, aunque no siempre está completa, además de actividad eléctrica sin pulso. El FAST identifica el líquido pericárdico. El tratamiento definitivo es quirúrgico, por toracotomía o esternotomía; la pericardiocentesis es solo una medida temporal si no hay cirujano disponible. En el paro puede requerirse toracotomía de reanimación.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de manejo del trauma de tórax"
+      ]
+    },
+    {
+      "key": "urg-09a-atls-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "atls",
+      "vignette": "Niño de 6 años atropellado por un auto. Está consciente, con frecuencia cardiaca de 150, presión de 92/60 mmHg, llenado capilar de 4 segundos y extremidades frías.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Considerarlo estable porque la presión es normal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La taquicardia y el llenado capilar indican choque."
+        },
+        {
+          "key": "b",
+          "text": "Usar líquidos fríos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Favorecen la hipotermia."
+        },
+        {
+          "key": "c",
+          "text": "Esperar a que baje la presión para iniciar líquidos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La hipotensión en niños es un signo tardío."
+        },
+        {
+          "key": "d",
+          "text": "No buscar lesiones de órganos sólidos abdominales",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son frecuentes en niños."
+        },
+        {
+          "key": "e",
+          "text": "Administrar 3 litros de cristaloide de inicio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La dosis se calcula por peso."
+        },
+        {
+          "key": "f",
+          "text": "Dar de alta tras observar una hora",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Tiene datos de choque."
+        },
+        {
+          "key": "g",
+          "text": "Los niños descompensan igual que los adultos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Compensan mejor y colapsan bruscamente."
+        },
+        {
+          "key": "h",
+          "text": "La frecuencia de 150 es normal a esta edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es taquicardia para su edad."
+        },
+        {
+          "key": "i",
+          "text": "Reconocer choque compensado y administrar un bolo de 20 mL por kilo de cristaloide tibio, con preparación de hemoderivados",
+          "correct": true,
+          "rationale": "Los niños mantienen la presión hasta perder gran volumen."
+        },
+        {
+          "key": "j",
+          "text": "Vasopresores como primera medida",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El choque es hipovolémico."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "i"
+      ],
+      "explanation": "Los niños tienen una gran reserva fisiológica y pueden mantener la presión arterial normal hasta perder 30 a 40 por ciento de su volumen sanguíneo, por lo que la hipotensión es un signo tardío de choque. Los signos tempranos son taquicardia, llenado capilar prolongado, extremidades frías, pulsos débiles y alteración del estado mental. El manejo incluye bolos de 20 mL por kilo de cristaloide tibio y, si no hay respuesta, hemoderivados en dosis por peso. Los niños tienen mayor riesgo de hipotermia por su superficie corporal. Las lesiones de órganos sólidos abdominales son frecuentes y muchas se manejan sin cirugía si el niño está estable.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía de Práctica Clínica de atención del niño politraumatizado"
+      ]
+    },
+    {
+      "key": "urg-09a-atls-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "polytrauma",
+      "subtopic": "atls",
+      "vignette": "Hombre de 25 años con herida por arma blanca en el tórax que pierde el pulso a su llegada a urgencias. Hace 5 minutos tenía signos de vida en la ambulancia. El cirujano está disponible.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Toracotomía de reanimación en urgencias",
+          "correct": true,
+          "rationale": "Está indicada en trauma penetrante torácico con paro presenciado reciente."
+        },
+        {
+          "key": "b",
+          "text": "Solo reanimación cardiopulmonar estándar con compresiones",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "En el trauma penetrante las compresiones son poco eficaces."
+        },
+        {
+          "key": "c",
+          "text": "Declarar la muerte de inmediato",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tiene indicación de toracotomía."
+        },
+        {
+          "key": "d",
+          "text": "Oxigenación por membrana extracorpórea como primera opción",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es la primera opción."
+        },
+        {
+          "key": "e",
+          "text": "Solo adrenalina y desfibrilación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No resuelve la causa."
+        },
+        {
+          "key": "f",
+          "text": "No tratar simultáneamente las causas reversibles",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es fundamental."
+        },
+        {
+          "key": "g",
+          "text": "El paro traumático siempre es irreversible",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "En trauma penetrante puede revertirse."
+        },
+        {
+          "key": "h",
+          "text": "La toracotomía de reanimación tiene igual éxito en trauma cerrado",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Su éxito es mucho menor en trauma cerrado."
+        },
+        {
+          "key": "i",
+          "text": "Tomografía de tórax antes de decidir",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Retrasa una intervención inmediata."
+        },
+        {
+          "key": "j",
+          "text": "Trasladar a quirófano sin intervenir en urgencias",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El tiempo es crítico."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "i"
+      ],
+      "explanation": "El paro cardiaco traumático tiene causas reversibles específicas: hipoxia, hipovolemia, neumotórax a tensión y taponamiento cardiaco. Las compresiones torácicas son poco eficaces en el paro por hipovolemia o taponamiento. La toracotomía de reanimación en urgencias permite liberar un taponamiento, controlar una hemorragia torácica, realizar masaje cardiaco directo y pinzar la aorta. Tiene mejores resultados en el trauma penetrante torácico con signos de vida recientes, sobre todo heridas por arma blanca. En el trauma cerrado los resultados son muy pobres y su indicación es más limitada.",
+      "gpcRefs": [
+        "Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos",
+        "Guía del Consejo Europeo de Resucitación para paro cardiaco traumático"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,223 @@
+@ urg|polytrauma|atls|2|next_step
+V: Hombre de 30 años atropellado que llega con hemorragia arterial abundante y pulsátil en el muslo, sin respuesta verbal clara, con respiración ruidosa.
+P: ¿Cuál es la primera acción más apropiada?
++ Controlar la hemorragia exanguinante con compresión directa o torniquete y luego asegurar la vía aérea || La hemorragia catastrófica tiene prioridad en la secuencia XABCDE.
+- anchoring | Intubar antes de controlar la hemorragia arterial masiva || La exanguinación mata en minutos.
+- availability_heuristic | Tomografía de cuerpo completo inmediata || Retrasa el control de la hemorragia.
+- representativeness_heuristic | Radiografía de fémur antes de cualquier medida || Retrasa el tratamiento.
+- premature_closure | Iniciar 3 litros de cristaloide antes de controlar el sangrado || Primero se controla la fuente.
+- framing_effect | Evaluar la escala de Glasgow como primera acción || La hemorragia es prioritaria.
+- complexity_bias | Llevar a quirófano sin control temporal del sangrado || El torniquete debe colocarse de inmediato.
+- base_rate_fallacy | Los torniquetes siempre causan amputación || Usados correctamente son seguros.
+- belief_bias | El orden de la evaluación primaria nunca varía || La hemorragia catastrófica se trata primero.
+- omission_bias | No anotar la hora de colocación del torniquete || Es indispensable.
+E: La evaluación primaria del paciente traumatizado sigue la secuencia ABCDE: vía aérea con protección de la columna cervical, ventilación, circulación con control de hemorragias, déficit neurológico y exposición con control de la temperatura. En presencia de hemorragia externa exanguinante, como en extremidades, su control tiene prioridad, por lo que se habla de XABCDE. Se usa compresión directa, vendaje compresivo o torniquete, que es seguro si se usa correctamente, anotando la hora de colocación. Las lesiones que ponen en riesgo la vida se tratan conforme se identifican, antes de pasar al siguiente paso.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de atención inicial del paciente politraumatizado
+
+@ urg|polytrauma|atls|2|treatment_of_choice
+V: Hombre de 25 años con herida por arma blanca en el hemitórax derecho. Presenta dificultad respiratoria grave, desviación traqueal a la izquierda, ingurgitación yugular, ausencia de ruidos respiratorios derechos e hipotensión de 70/40 mmHg.
+P: ¿Cuál es el tratamiento de elección inmediato?
++ Descompresión inmediata con aguja o toracostomía con dedo, seguida de sonda pleural || Es un neumotórax a tensión, un diagnóstico clínico.
+- anchoring | Radiografía de tórax antes de cualquier intervención || Retrasa un tratamiento que salva la vida.
+- availability_heuristic | Pericardiocentesis || La desviación traqueal y la ausencia de ruidos orientan a neumotórax.
+- representativeness_heuristic | Intubación sin descomprimir el tórax || La presión positiva empeora el neumotórax a tensión.
+- premature_closure | Tomografía de tórax urgente || Retrasa el tratamiento.
+- framing_effect | Solo oxígeno por mascarilla || No resuelve la tensión.
+- complexity_bias | Toracotomía en quirófano como primera medida || La descompresión es inmediata.
+- base_rate_fallacy | El neumotórax a tensión se confirma por imagen antes de tratar || Es un diagnóstico clínico.
+- belief_bias | La aguja se coloca siempre en el séptimo espacio intercostal || Se usa el quinto espacio en la línea axilar o el segundo en la línea media clavicular.
+- omission_bias | No colocar sonda pleural después de la descompresión || Es el tratamiento definitivo.
+E: El neumotórax a tensión ocurre cuando el aire entra a la cavidad pleural sin poder salir, colapsando el pulmón y desplazando el mediastino, lo que reduce el retorno venoso y causa choque obstructivo. Se manifiesta con dificultad respiratoria, taquicardia, hipotensión, desviación traqueal contralateral, ingurgitación yugular, ausencia de ruidos respiratorios e hiperresonancia. Es un diagnóstico clínico que no debe esperar a la radiografía. El tratamiento inmediato es la descompresión con aguja en el quinto espacio intercostal en la línea axilar anterior o media en adultos, o en el segundo espacio en la línea media clavicular, o la toracostomía con dedo, seguida de sonda pleural.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de atención inicial del paciente politraumatizado
+
+@ urg|polytrauma|atls|3|next_step
+V: Hombre de 35 años con trauma torácico penetrante izquierdo. Se coloca sonda pleural que drena inmediatamente 1,800 mL de sangre. Persiste hipotenso a pesar de transfusión.
+P: ¿Cuál es la conducta más apropiada?
++ Toracotomía urgente en quirófano || Un drenaje inicial mayor de 1,500 mL indica hemotórax masivo.
+- anchoring | Observar el drenaje durante 24 horas || El hemotórax masivo con inestabilidad requiere cirugía.
+- availability_heuristic | Pinzar la sonda pleural para detener el sangrado || Puede causar hemotórax a tensión.
+- representativeness_heuristic | Colocar una segunda sonda pleural como único tratamiento || No controla el sangrado.
+- premature_closure | Tomografía de tórax antes de decidir en un paciente inestable || Retrasa la cirugía.
+- framing_effect | Trombolíticos intrapleurales || No están indicados.
+- complexity_bias | Toracoscopia diagnóstica en paciente inestable || No es adecuada en inestabilidad.
+- base_rate_fallacy | El hemotórax siempre se resuelve solo con la sonda pleural || El masivo requiere cirugía.
+- belief_bias | La cantidad drenada no orienta la conducta || Es un criterio quirúrgico.
+- omission_bias | No activar el protocolo de transfusión masiva || Es necesario.
+E: El hemotórax masivo se define por la acumulación rápida de más de 1,500 mL de sangre en la cavidad pleural, o un tercio o más del volumen sanguíneo, generalmente por trauma penetrante con lesión de vasos sistémicos o hiliares. Se manifiesta con choque y ausencia de ruidos respiratorios con matidez. El tratamiento inicial es la reposición de volumen con hemoderivados y la colocación de sonda pleural. Las indicaciones de toracotomía son un drenaje inicial mayor de 1,500 mL, un drenaje continuo de 200 mL por hora durante 2 a 4 horas o la necesidad persistente de transfusión con inestabilidad.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de manejo del trauma de tórax
+
+@ urg|polytrauma|atls|2|next_step
+V: Mujer de 40 años con trauma abdominal cerrado por accidente automovilístico. Presión de 75/45 mmHg y frecuencia cardiaca de 135 a pesar de 1 litro de cristaloide y 2 unidades de sangre. El FAST muestra líquido libre en el espacio hepatorrenal y esplenorrenal.
+P: ¿Cuál es la conducta más apropiada?
++ Laparotomía exploradora urgente || Un paciente inestable con FAST positivo requiere cirugía inmediata.
+- anchoring | Tomografía de abdomen antes de decidir || En un paciente inestable retrasa la cirugía.
+- availability_heuristic | Manejo no quirúrgico con observación || Solo en pacientes estables.
+- representativeness_heuristic | Lavado peritoneal diagnóstico antes de la cirugía || El FAST ya mostró líquido libre.
+- premature_closure | Solo más cristaloides en espera de mejoría || El sangrado requiere control quirúrgico.
+- framing_effect | Angiografía como primera opción en inestable con FAST positivo || La laparotomía es la opción.
+- complexity_bias | Resonancia magnética abdominal || No está indicada.
+- base_rate_fallacy | Todos los pacientes con FAST positivo se operan aunque estén estables || Los estables pueden estudiarse con tomografía.
+- belief_bias | El FAST negativo descarta lesión intraabdominal || No la descarta.
+- omission_bias | No activar el protocolo de transfusión masiva || Es necesario.
+E: La evaluación ecográfica enfocada en trauma, FAST, busca líquido libre en el espacio hepatorrenal, esplenorrenal, pélvico y pericárdico. En el paciente con trauma abdominal hemodinámicamente inestable, un FAST positivo indica laparotomía exploradora urgente. En el paciente estable, un FAST positivo o la sospecha de lesión se estudian con tomografía contrastada, lo que permite el manejo no quirúrgico de muchas lesiones de órganos sólidos. Un FAST negativo no descarta lesión, especialmente retroperitoneal o de víscera hueca. La versión ampliada incluye la búsqueda de neumotórax.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de manejo del trauma abdominal
+
+@ urg|polytrauma|atls|2|data_interpretation
+V: Hombre de 28 años tras un accidente en motocicleta. Abre los ojos solo al dolor, emite palabras inapropiadas y retira la extremidad ante el estímulo doloroso.
+P: ¿Qué indica la puntuación de la escala de Glasgow de este paciente?
++ Glasgow de 9, traumatismo craneoencefálico moderado || Ojos 2, verbal 3, motor 4.
+- anchoring | Glasgow de 6, traumatismo grave || Es un cálculo erróneo.
+- availability_heuristic | Glasgow de 12, leve || Es un cálculo erróneo.
+- representativeness_heuristic | Glasgow de 15, normal || Tiene alteraciones.
+- premature_closure | Glasgow de 3, coma profundo || Es un cálculo erróneo.
+- framing_effect | Glasgow de 8 con indicación inmediata de intubación por la escala || La puntuación es 9.
+- complexity_bias | Glasgow de 11, leve || Es un cálculo erróneo.
+- base_rate_fallacy | La escala de Glasgow solo se usa en trauma craneal || Se usa en diversas alteraciones de la conciencia.
+- belief_bias | La retirada al dolor equivale a localizar el dolor || Localizar vale 5 y retirar vale 4.
+- focusing_illusion | Glasgow de 10 con respuesta motora de flexión anormal || La retirada no es flexión anormal.
+E: La escala de coma de Glasgow evalúa la apertura ocular, de 1 a 4; la respuesta verbal, de 1 a 5; y la respuesta motora, de 1 a 6, con un total de 3 a 15. La apertura ocular al dolor vale 2; las palabras inapropiadas, 3; y la retirada al dolor, 4, para un total de 9. El traumatismo craneoencefálico se clasifica en leve, de 13 a 15; moderado, de 9 a 12; y grave, de 3 a 8. Un Glasgow de 8 o menos indica necesidad de asegurar la vía aérea. La respuesta motora es el componente con mejor valor pronóstico. Se registra la mejor respuesta.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de manejo inicial del traumatismo craneoencefálico
+
+@ urg|polytrauma|atls|3|diagnosis
+V: Hombre de 22 años golpeado en la región temporal con un bate. Perdió la conciencia brevemente, luego estuvo lúcido y conversando durante 2 horas, y después presentó deterioro rápido con Glasgow de 7 y midriasis derecha. La tomografía muestra una lesión biconvexa hiperdensa.
+P: ¿Cuál es el diagnóstico más probable?
++ Hematoma epidural por lesión de la arteria meníngea media || Intervalo lúcido con lesión biconvexa tras trauma temporal.
+- anchoring | Hematoma subdural agudo || Tiene forma de semiluna, cóncava.
+- availability_heuristic | Hemorragia subaracnoidea traumática || No produce una lesión biconvexa.
+- representativeness_heuristic | Contusión cerebral aislada || No explica la lesión biconvexa.
+- premature_closure | Conmoción cerebral simple || No explica el deterioro ni la imagen.
+- framing_effect | Lesión axonal difusa || La tomografía suele ser normal o con microhemorragias.
+- complexity_bias | Hematoma subdural crónico || Es de evolución lenta en adultos mayores.
+- base_rate_fallacy | El hematoma epidural siempre es venoso || Suele ser arterial.
+- belief_bias | El intervalo lúcido descarta lesión grave || Es característico del epidural.
+- focusing_illusion | Absceso cerebral || No corresponde al contexto.
+E: El hematoma epidural se localiza entre el cráneo y la duramadre, generalmente por lesión de la arteria meníngea media asociada a fractura del hueso temporal. Clásicamente se presenta con pérdida transitoria de la conciencia, un intervalo lúcido y después deterioro rápido con signos de herniación, como midriasis ipsilateral y hemiparesia contralateral. En la tomografía aparece como una lesión hiperdensa biconvexa o lenticular que no cruza las suturas. Es una urgencia neuroquirúrgica que requiere craniotomía y evacuación; con tratamiento oportuno el pronóstico es bueno. El hematoma subdural tiene forma de semiluna.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de manejo inicial del traumatismo craneoencefálico
+
+@ urg|polytrauma|atls|2|initial_treatment
+V: Hombre de 30 años con herida penetrante en el tórax por arma de fuego que deja una herida abierta de 4 centímetros que succiona aire con cada respiración. Presenta dificultad respiratoria.
+P: ¿Cuál es el tratamiento inicial de elección?
++ Apósito oclusivo fijado en tres lados o con válvula, seguido de sonda pleural lejos de la herida || Es un neumotórax abierto.
+- anchoring | Cerrar la herida con un apósito oclusivo en los cuatro lados sin sonda || Puede convertirse en neumotórax a tensión.
+- availability_heuristic | Suturar la herida de inmediato en urgencias como medida definitiva || Puede causar tensión sin sonda.
+- representativeness_heuristic | Dejar la herida abierta sin cubrir || Persiste el intercambio de aire por la herida.
+- premature_closure | Colocar la sonda pleural a través de la herida || Debe colocarse en otro sitio.
+- framing_effect | Solo oxígeno por mascarilla || No corrige el defecto.
+- complexity_bias | Toracotomía de reanimación inmediata en paciente con pulso || No está indicada de inicio.
+- base_rate_fallacy | Las heridas torácicas pequeñas no causan problemas ventilatorios || Si superan dos tercios del diámetro traqueal, el aire entra por la herida.
+- belief_bias | Un apósito oclusivo completo es siempre lo más seguro || Puede causar tensión.
+- omission_bias | No vigilar datos de neumotórax a tensión tras el apósito || Puede ocurrir.
+E: El neumotórax abierto ocurre cuando una herida en la pared torácica es lo suficientemente grande, mayor de dos tercios del diámetro de la tráquea, para que el aire entre preferentemente por la herida durante la inspiración, lo que colapsa el pulmón y altera la ventilación. El tratamiento inicial es un apósito oclusivo fijado en tres lados, que actúa como válvula unidireccional, o un sello torácico con válvula, seguido de la colocación de una sonda pleural en un sitio alejado de la herida y el cierre quirúrgico definitivo. Si se cierra en los cuatro lados sin sonda, puede causar un neumotórax a tensión.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de manejo del trauma de tórax
+
+@ urg|polytrauma|atls|3|diagnosis
+V: Hombre de 45 años con trauma torácico por impacto contra el volante. Un segmento de la pared torácica se mueve hacia dentro en la inspiración y hacia fuera en la espiración. Presenta dolor intenso e hipoxemia.
+P: ¿Cuál es el diagnóstico más probable?
++ Tórax inestable con contusión pulmonar subyacente || Movimiento paradójico por fracturas de varias costillas en dos o más sitios.
+- anchoring | Fractura costal única simple || No produce movimiento paradójico.
+- availability_heuristic | Neumotórax a tensión || No explica el movimiento paradójico.
+- representativeness_heuristic | Taponamiento cardiaco || No explica los hallazgos de la pared.
+- premature_closure | Contusión muscular simple || No explica el movimiento paradójico.
+- framing_effect | Ruptura diafragmática || No produce movimiento paradójico de la pared.
+- complexity_bias | Ruptura traqueobronquial || No explica el hallazgo.
+- base_rate_fallacy | La hipoxemia se debe principalmente al movimiento de la pared || Se debe sobre todo a la contusión pulmonar.
+- belief_bias | Debe fijarse quirúrgicamente siempre de inmediato || El manejo inicial es analgesia y soporte.
+- focusing_illusion | Neumomediastino aislado || No explica el hallazgo.
+E: El tórax inestable ocurre cuando dos o más costillas consecutivas se fracturan en dos o más sitios, creando un segmento de pared que se mueve de forma paradójica, hacia dentro en la inspiración y hacia fuera en la espiración. La hipoxemia se debe principalmente a la contusión pulmonar subyacente, más que al movimiento de la pared. El tratamiento incluye oxígeno, analgesia adecuada, incluido el bloqueo regional o epidural, fisioterapia respiratoria, líquidos con cautela para no agravar la contusión y ventilación mecánica si hay insuficiencia respiratoria. La fijación quirúrgica de las costillas se considera en casos seleccionados.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de manejo del trauma de tórax
+
+@ urg|polytrauma|atls|3|next_step
+V: Mujer de 82 años en tratamiento con apixabán por fibrilación auricular que cayó en su casa y se golpeó la cabeza. Está alerta, con Glasgow de 15, sin focalización neurológica.
+P: ¿Cuál es la conducta más apropiada?
++ Tomografía de cráneo simple a pesar del Glasgow normal || Los pacientes anticoagulados tienen alto riesgo de hemorragia intracraneal.
+- anchoring | Dar de alta sin estudios por el Glasgow de 15 || La anticoagulación aumenta el riesgo.
+- availability_heuristic | Revertir la anticoagulación de forma rutinaria sin imagen || Se decide según la imagen.
+- representativeness_heuristic | Radiografía de cráneo como estudio suficiente || No detecta hemorragias intracraneales.
+- premature_closure | Resonancia magnética como primer estudio urgente || La tomografía es más rápida y adecuada.
+- framing_effect | Suspender la anticoagulación de por vida || No está indicado sin hemorragia.
+- complexity_bias | Angiografía cerebral || No está indicada.
+- base_rate_fallacy | Los adultos mayores con Glasgow normal no tienen hemorragias || Pueden tenerlas.
+- belief_bias | Los anticoagulantes directos no aumentan el riesgo de hemorragia tras un trauma || Lo aumentan.
+- omission_bias | No evaluar la causa de la caída || Es parte de la valoración geriátrica.
+E: El traumatismo craneoencefálico en adultos mayores y en pacientes anticoagulados o antiagregados tiene mayor riesgo de hemorragia intracraneal, incluso con Glasgow de 15 y sin síntomas. Por ello, la anticoagulación es una indicación de tomografía de cráneo tras un trauma craneal, según reglas como la canadiense de tomografía de cráneo. Si hay hemorragia, se revierte la anticoagulación. En algunos casos se recomienda observación o tomografía de control. Además se evalúan la causa de la caída, como síncope, arritmias o fármacos, y el riesgo de nuevas caídas.
+R: Guía de Práctica Clínica de manejo inicial del traumatismo craneoencefálico ;; Regla canadiense de tomografía de cráneo
+
+@ urg|polytrauma|atls|3|next_step
+V: Mujer de 28 años con embarazo de 32 semanas que sufrió un accidente automovilístico. Está consciente, con presión de 90/60 mmHg en decúbito supino, que mejora al lateralizarla. Dolor abdominal leve.
+P: ¿Cuál es la conducta más apropiada en la atención inicial?
++ Evaluación ABCDE con desplazamiento uterino a la izquierda, monitoreo fetal continuo y valoración obstétrica || La reanimación materna es la prioridad y protege al feto.
+- anchoring | Mantenerla en decúbito supino estricto || Comprime la vena cava y reduce el retorno venoso.
+- availability_heuristic | Evitar estudios de imagen por el embarazo || Los estudios necesarios no deben omitirse.
+- representativeness_heuristic | Cesárea inmediata en todos los traumas en embarazadas || Se decide según el estado materno y fetal.
+- premature_closure | Dar de alta porque el dolor es leve || Puede haber desprendimiento de placenta.
+- framing_effect | Priorizar el ultrasonido fetal antes de la evaluación materna || La madre es la prioridad.
+- complexity_bias | Amniocentesis diagnóstica || No está indicada.
+- base_rate_fallacy | El trauma menor nunca causa desprendimiento placentario || Puede causarlo.
+- belief_bias | La hipotensión en decúbito supino siempre indica hemorragia grave || Puede deberse a compresión aortocava.
+- omission_bias | No administrar inmunoglobulina anti-D si es Rh negativo || Debe considerarse.
+E: En la embarazada traumatizada, la prioridad es la reanimación materna, porque el bienestar fetal depende de la madre. Después de las 20 semanas, el útero comprime la vena cava en decúbito supino, por lo que se desplaza manualmente a la izquierda o se lateraliza a la paciente. Los cambios fisiológicos del embarazo, como el aumento del volumen sanguíneo, pueden enmascarar la hipovolemia. Se realiza monitoreo fetal continuo durante al menos 4 a 6 horas por el riesgo de desprendimiento de placenta. Los estudios de imagen necesarios no se omiten. En pacientes Rh negativas se administra inmunoglobulina anti-D.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de atención de la embarazada con trauma
+
+@ urg|polytrauma|atls|2|next_step
+V: Hombre de 40 años con trauma múltiple ya estabilizado tras la evaluación primaria. Se procede a la evaluación secundaria.
+P: ¿Cuál es la conducta más apropiada en la evaluación secundaria?
++ Historia AMPLE y exploración completa de cabeza a pies, incluidos espalda y extremidades, con estudios complementarios || Busca todas las lesiones tras estabilizar al paciente.
+- anchoring | Omitir la evaluación secundaria porque ya está estable || Pueden pasar desapercibidas lesiones.
+- availability_heuristic | Realizar la evaluación secundaria antes de la primaria || La primaria es prioritaria.
+- representativeness_heuristic | Explorar solo la región del dolor principal || Pueden existir otras lesiones.
+- premature_closure | Dar de alta tras la evaluación primaria normal || Se requiere evaluación completa.
+- framing_effect | Solo tomografía sin exploración física || La exploración es fundamental.
+- complexity_bias | Resonancia de cuerpo completo de rutina || No está indicada.
+- base_rate_fallacy | Las lesiones de la espalda siempre son evidentes || Deben buscarse.
+- belief_bias | La historia clínica no tiene importancia en trauma || El mecanismo y los antecedentes orientan.
+- omission_bias | No reevaluar al paciente periódicamente || Puede deteriorarse.
+E: La evaluación secundaria se realiza una vez completada la evaluación primaria y estabilizado el paciente. Incluye la historia AMPLE: alergias, medicamentos, antecedentes personales y embarazo, última comida y eventos o entorno relacionados con la lesión, incluido el mecanismo. Se realiza una exploración completa de cabeza a pies, incluidos espalda, periné y extremidades, con movilización en bloque, y se solicitan estudios complementarios. El paciente debe reevaluarse de forma continua, porque su estado puede cambiar. Si se deteriora, se regresa a la evaluación primaria.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de atención inicial del paciente politraumatizado
+
+@ urg|polytrauma|atls|3|diagnosis
+V: Hombre de 30 años con herida por arma blanca en el precordio. Presenta hipotensión de 75/50 mmHg, ingurgitación yugular, ruidos cardiacos apagados y campos pulmonares con ruidos normales y simétricos. El FAST muestra líquido en el pericardio.
+P: ¿Cuál es el diagnóstico más probable?
++ Taponamiento cardiaco traumático || Tríada de Beck con líquido pericárdico tras herida precordial.
+- anchoring | Neumotórax a tensión || Los ruidos respiratorios son normales y simétricos.
+- availability_heuristic | Choque hipovolémico puro || No explica la ingurgitación yugular.
+- representativeness_heuristic | Contusión miocárdica sin derrame || El FAST muestra líquido pericárdico.
+- premature_closure | Hemotórax masivo || Los ruidos respiratorios son normales.
+- framing_effect | Choque neurogénico || No hay lesión medular.
+- complexity_bias | Disección aórtica traumática || No explica el derrame pericárdico.
+- base_rate_fallacy | El taponamiento requiere un derrame muy grande || En el trauma, volúmenes pequeños causan taponamiento.
+- belief_bias | La pericardiocentesis es el tratamiento definitivo en el trauma || El tratamiento definitivo es quirúrgico.
+- focusing_illusion | Embolia gaseosa || No corresponde.
+E: El taponamiento cardiaco traumático se debe con mayor frecuencia a heridas penetrantes en la zona precordial. Como el pericardio no se distiende de forma aguda, volúmenes pequeños de sangre pueden causar taponamiento. Se manifiesta con la tríada de Beck, hipotensión, ingurgitación yugular y ruidos cardiacos apagados, aunque no siempre está completa, además de actividad eléctrica sin pulso. El FAST identifica el líquido pericárdico. El tratamiento definitivo es quirúrgico, por toracotomía o esternotomía; la pericardiocentesis es solo una medida temporal si no hay cirujano disponible. En el paro puede requerirse toracotomía de reanimación.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de manejo del trauma de tórax
+
+@ urg|polytrauma|atls|2|next_step
+V: Niño de 6 años atropellado por un auto. Está consciente, con frecuencia cardiaca de 150, presión de 92/60 mmHg, llenado capilar de 4 segundos y extremidades frías.
+P: ¿Cuál es la conducta más apropiada?
++ Reconocer choque compensado y administrar un bolo de 20 mL por kilo de cristaloide tibio, con preparación de hemoderivados || Los niños mantienen la presión hasta perder gran volumen.
+- anchoring | Considerarlo estable porque la presión es normal || La taquicardia y el llenado capilar indican choque.
+- availability_heuristic | Esperar a que baje la presión para iniciar líquidos || La hipotensión en niños es un signo tardío.
+- representativeness_heuristic | Administrar 3 litros de cristaloide de inicio || La dosis se calcula por peso.
+- premature_closure | Dar de alta tras observar una hora || Tiene datos de choque.
+- framing_effect | Usar líquidos fríos || Favorecen la hipotermia.
+- complexity_bias | Vasopresores como primera medida || El choque es hipovolémico.
+- base_rate_fallacy | Los niños descompensan igual que los adultos || Compensan mejor y colapsan bruscamente.
+- belief_bias | La frecuencia de 150 es normal a esta edad || Es taquicardia para su edad.
+- omission_bias | No buscar lesiones de órganos sólidos abdominales || Son frecuentes en niños.
+E: Los niños tienen una gran reserva fisiológica y pueden mantener la presión arterial normal hasta perder 30 a 40 por ciento de su volumen sanguíneo, por lo que la hipotensión es un signo tardío de choque. Los signos tempranos son taquicardia, llenado capilar prolongado, extremidades frías, pulsos débiles y alteración del estado mental. El manejo incluye bolos de 20 mL por kilo de cristaloide tibio y, si no hay respuesta, hemoderivados en dosis por peso. Los niños tienen mayor riesgo de hipotermia por su superficie corporal. Las lesiones de órganos sólidos abdominales son frecuentes y muchas se manejan sin cirugía si el niño está estable.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de atención del niño politraumatizado
+
+@ urg|polytrauma|atls|3|next_step
+V: Hombre de 25 años con herida por arma blanca en el tórax que pierde el pulso a su llegada a urgencias. Hace 5 minutos tenía signos de vida en la ambulancia. El cirujano está disponible.
+P: ¿Cuál es la conducta más apropiada?
++ Toracotomía de reanimación en urgencias || Está indicada en trauma penetrante torácico con paro presenciado reciente.
+- anchoring | Solo reanimación cardiopulmonar estándar con compresiones || En el trauma penetrante las compresiones son poco eficaces.
+- availability_heuristic | Declarar la muerte de inmediato || Tiene indicación de toracotomía.
+- representativeness_heuristic | Tomografía de tórax antes de decidir || Retrasa una intervención inmediata.
+- premature_closure | Solo adrenalina y desfibrilación || No resuelve la causa.
+- framing_effect | Trasladar a quirófano sin intervenir en urgencias || El tiempo es crítico.
+- complexity_bias | Oxigenación por membrana extracorpórea como primera opción || No es la primera opción.
+- base_rate_fallacy | La toracotomía de reanimación tiene igual éxito en trauma cerrado || Su éxito es mucho menor en trauma cerrado.
+- belief_bias | El paro traumático siempre es irreversible || En trauma penetrante puede revertirse.
+- omission_bias | No tratar simultáneamente las causas reversibles || Es fundamental.
+E: El paro cardiaco traumático tiene causas reversibles específicas: hipoxia, hipovolemia, neumotórax a tensión y taponamiento cardiaco. Las compresiones torácicas son poco eficaces en el paro por hipovolemia o taponamiento. La toracotomía de reanimación en urgencias permite liberar un taponamiento, controlar una hemorragia torácica, realizar masaje cardiaco directo y pinzar la aorta. Tiene mejores resultados en el trauma penetrante torácico con signos de vida recientes, sobre todo heridas por arma blanca. En el trauma cerrado los resultados son muy pobres y su indicación es más limitada.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía del Consejo Europeo de Resucitación para paro cardiaco traumático
