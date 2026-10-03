@@ -1,0 +1,287 @@
+@ gyo|reproductive_endocrinology|amenorrhea|2|initial_study
+V: Mujer de 24 años sexualmente activa con amenorrea de 3 meses. Antes tenía ciclos regulares. No usa anticonceptivos.
+P: ¿Cuál es el estudio inicial en toda mujer con amenorrea secundaria?
++ Prueba de embarazo con fracción beta de gonadotropina coriónica || El embarazo es la causa más frecuente de amenorrea secundaria.
+- anchoring | Resonancia magnética de hipófisis || No es el estudio inicial.
+- availability_heuristic | Perfil hormonal completo antes de descartar embarazo || Primero se descarta el embarazo.
+- representativeness_heuristic | Prueba de progesterona sin descartar embarazo || Primero se descarta embarazo.
+- premature_closure | Ultrasonido pélvico como único estudio || La prueba de embarazo es más simple y prioritaria.
+- base_rate_fallacy | Cariotipo || Se usa en amenorrea primaria con datos específicos.
+- framing_effect | Histeroscopia diagnóstica || No es el estudio inicial.
+- complexity_bias | Tomografía de abdomen || No está indicada.
+- information_bias | Densitometría ósea || No es el estudio inicial.
+- belief_bias | Esperar 6 meses a que regrese sola || Retrasa el diagnóstico.
+E: La amenorrea secundaria es la ausencia de menstruación por 3 meses en mujeres con ciclos regulares o por 6 meses en mujeres con ciclos irregulares. El primer paso siempre es descartar embarazo con una prueba de hCG. Después se miden TSH y prolactina, y FSH y estradiol para distinguir causas hipotalámicas, hipofisarias, ováricas o uterinas. Las causas más frecuentes, además del embarazo, son síndrome de ovario poliquístico, amenorrea hipotalámica funcional, hiperprolactinemia, insuficiencia ovárica prematura y síndrome de Asherman. La historia clínica sobre peso, ejercicio, estrés, fármacos y síntomas orienta el estudio.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la amenorrea
+
+@ gyo|reproductive_endocrinology|amenorrhea|3|diagnosis
+V: Mujer de 19 años, corredora de fondo, con índice de masa corporal de 17 y dieta muy restrictiva. Amenorrea de 8 meses. Prueba de embarazo negativa. FSH y LH bajas, estradiol bajo, prolactina y TSH normales.
+P: ¿Cuál es el diagnóstico más probable?
++ Amenorrea hipotalámica funcional || Gonadotropinas bajas con estradiol bajo por bajo peso, ejercicio y restricción.
+- anchoring | Síndrome de ovario poliquístico || Daría LH normal o alta con hiperandrogenismo.
+- availability_heuristic | Insuficiencia ovárica prematura || Daría FSH elevada.
+- representativeness_heuristic | Prolactinoma || La prolactina es normal.
+- premature_closure | Síndrome de Asherman || Daría estradiol normal con antecedente de legrado.
+- base_rate_fallacy | Síndrome de Sheehan || Requiere hemorragia posparto.
+- framing_effect | Hipotiroidismo || La TSH es normal.
+- inattentional_blindness | Síndrome de Turner || Daría amenorrea primaria con FSH alta.
+- focusing_illusion | Tumor productor de andrógenos || No hay virilización.
+- belief_bias | Amenorrea saludable por buena condición física || Indica deficiencia energética.
+E: La amenorrea hipotalámica funcional se debe a la supresión de la secreción pulsátil de la hormona liberadora de gonadotropinas por deficiencia energética, ejercicio intenso, bajo peso o estrés. Las gonadotropinas y el estradiol están bajos. Forma parte de la deficiencia energética relativa en el deporte, antes llamada tríada de la atleta, que incluye baja disponibilidad energética, alteraciones menstruales y baja densidad mineral ósea. El tratamiento consiste en aumentar la ingesta calórica, reducir el ejercicio y manejar el estrés. Se evalúa la densidad ósea y se descartan trastornos de la conducta alimentaria.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la amenorrea
+
+@ gyo|reproductive_endocrinology|amenorrhea|3|diagnosis
+V: Mujer de 32 años con amenorrea de 6 meses y galactorrea bilateral espontánea. Prueba de embarazo negativa, TSH normal y prolactina de 180 ng/mL. No toma medicamentos. Refiere cefalea ocasional.
+P: ¿Cuál es el diagnóstico más probable?
++ Prolactinoma || Hiperprolactinemia marcada con amenorrea y galactorrea sin otra causa.
+- anchoring | Hipotiroidismo primario || La TSH es normal.
+- availability_heuristic | Hiperprolactinemia por fármacos || No toma medicamentos.
+- representativeness_heuristic | Síndrome de ovario poliquístico || No explica la galactorrea ni la prolactina tan alta.
+- premature_closure | Embarazo || La prueba es negativa.
+- base_rate_fallacy | Acromegalia || No hay datos clínicos.
+- framing_effect | Estimulación mamaria frecuente || No explica un valor tan alto.
+- inattentional_blindness | Insuficiencia renal crónica || No hay datos.
+- focusing_illusion | Craneofaringioma || Es más común en niños.
+- belief_bias | Galactorrea normal tras un susto || Hay un trastorno hormonal.
+E: La hiperprolactinemia inhibe la secreción pulsátil de la hormona liberadora de gonadotropinas y causa amenorrea, anovulación, infertilidad y galactorrea. Sus causas incluyen embarazo, fármacos como antipsicóticos, metoclopramida y antidepresivos, hipotiroidismo primario, insuficiencia renal, estimulación mamaria y prolactinomas. Valores mayores de 100 a 200 ng/mL sugieren prolactinoma. Tras descartar embarazo, fármacos e hipotiroidismo se realiza resonancia magnética de la hipófisis. Los microprolactinomas miden menos de 1 cm y los macroprolactinomas más, y estos pueden comprimir el quiasma óptico. El tratamiento de elección es la cabergolina.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperprolactinemia
+
+@ gyo|reproductive_endocrinology|amenorrhea|3|treatment_of_choice
+V: Mujer de 28 años con macroprolactinoma de 1.5 cm, amenorrea, galactorrea y prolactina de 350 ng/mL. Campos visuales normales. Desea embarazarse en el futuro.
+P: ¿Cuál es el tratamiento de elección?
++ Agonista dopaminérgico, preferentemente cabergolina || Normaliza la prolactina y reduce el tamaño del tumor.
+- anchoring | Cirugía transesfenoidal como primera opción || Se reserva para intolerancia, resistencia o compromiso visual agudo.
+- availability_heuristic | Radioterapia hipofisaria || Es de tercera línea.
+- representativeness_heuristic | Anticonceptivos orales solos || No tratan el tumor.
+- premature_closure | Vigilancia sin tratamiento || El macroadenoma con síntomas requiere tratamiento.
+- framing_effect | Metoclopramida || Aumenta la prolactina.
+- complexity_bias | Craneotomía abierta || No es el abordaje estándar.
+- base_rate_fallacy | Levotiroxina || La tiroides es normal.
+- belief_bias | Suspender la lactancia que no tiene para curar la galactorrea || La galactorrea es por el tumor.
+- omission_bias | No tratar para no afectar la fertilidad futura || El tratamiento restaura la fertilidad.
+E: El tratamiento de elección de los prolactinomas, incluidos los macroprolactinomas, es médico con agonistas dopaminérgicos. La cabergolina es preferida por su mayor eficacia y mejor tolerancia, con administración una o dos veces por semana. Normaliza la prolactina, restaura la ovulación y reduce el tamaño del tumor en la mayoría. La bromocriptina es una alternativa, sobre todo si se busca embarazo. La cirugía transesfenoidal se reserva para intolerancia o resistencia a los fármacos, apoplejía o compromiso visual que no mejora. En el embarazo se vigilan los síntomas visuales por el crecimiento del tumor.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperprolactinemia
+
+@ gyo|reproductive_endocrinology|amenorrhea|3|diagnosis
+V: Mujer de 34 años con amenorrea de 5 meses tras un legrado por aborto incompleto complicado con endometritis. Prueba de embarazo negativa. FSH, estradiol, TSH y prolactina normales. No presenta sangrado tras estrógenos y progesterona.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome de Asherman por sinequias intrauterinas || Amenorrea tras legrado con hormonas normales y falta de sangrado con estrógenos y progesterona.
+- anchoring | Amenorrea hipotalámica funcional || El estradiol es normal y no sangra con el estímulo.
+- availability_heuristic | Insuficiencia ovárica prematura || La FSH es normal.
+- representativeness_heuristic | Síndrome de ovario poliquístico || Sangraría con progesterona.
+- premature_closure | Hiperprolactinemia || La prolactina es normal.
+- base_rate_fallacy | Síndrome de Sheehan || No hubo hemorragia posparto con choque.
+- framing_effect | Embarazo no detectado || La prueba es negativa.
+- inattentional_blindness | Hipotiroidismo || La TSH es normal.
+- focusing_illusion | Tuberculosis genital sin antecedente || El legrado explica mejor el cuadro.
+- belief_bias | Amenorrea por el duelo del aborto || Hay causa anatómica.
+E: El síndrome de Asherman es la formación de adherencias o sinequias intrauterinas por daño de la capa basal del endometrio, generalmente tras legrados, sobre todo posparto o posaborto con infección, cirugías uterinas o tuberculosis genital. Causa amenorrea o hipomenorrea, infertilidad y pérdidas gestacionales. Las hormonas son normales y no hay sangrado tras la prueba con estrógenos y progesterona, lo que indica una causa uterina. El diagnóstico se confirma con histeroscopia, que también permite el tratamiento con resección de las adherencias, seguido de estrógenos para regenerar el endometrio.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la amenorrea
+
+@ gyo|reproductive_endocrinology|amenorrhea|3|diagnosis
+V: Mujer de 35 años con amenorrea de 8 meses, bochornos, sudoración nocturna y sequedad vaginal. Prueba de embarazo negativa. FSH de 65 mUI/mL en dos mediciones separadas por 4 semanas y estradiol bajo.
+P: ¿Cuál es el diagnóstico más probable?
++ Insuficiencia ovárica prematura || Amenorrea con FSH elevada y estradiol bajo antes de los 40 años.
+- anchoring | Menopausia fisiológica normal || Ocurre en promedio a los 49 a 51 años.
+- availability_heuristic | Amenorrea hipotalámica || Daría FSH baja.
+- representativeness_heuristic | Síndrome de ovario poliquístico || No da FSH tan alta ni bochornos.
+- premature_closure | Hiperprolactinemia || No explica la FSH elevada.
+- base_rate_fallacy | Tumor hipofisario productor de FSH || Es muy raro.
+- framing_effect | Hipertiroidismo || Puede dar sudoración, pero no FSH elevada.
+- inattentional_blindness | Síndrome de Asherman || Las hormonas serían normales.
+- focusing_illusion | Ansiedad con sudoración || No explica la FSH elevada.
+- belief_bias | Agotamiento de los óvulos por usar anticonceptivos || No es una causa.
+E: La insuficiencia ovárica prematura es la pérdida de la función ovárica antes de los 40 años. Se diagnostica con amenorrea u oligomenorrea de al menos 4 meses y FSH elevada, mayor de 25 mUI/mL, en dos ocasiones con 4 semanas de diferencia. Sus causas incluyen alteraciones genéticas como síndrome de Turner y premutación del gen FMR1, autoinmunidad, quimioterapia, radioterapia y cirugía, aunque muchas son idiopáticas. Se recomienda cariotipo, estudio de FMR1 y anticuerpos. El tratamiento es terapia hormonal hasta la edad de la menopausia natural para prevenir osteoporosis y enfermedad cardiovascular.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la insuficiencia ovárica prematura
+
+@ gyo|reproductive_endocrinology|amenorrhea|4|diagnosis
+V: Mujer de 17 años con amenorrea primaria. Tiene desarrollo mamario completo y vello púbico y axilar normal. En la exploración la vagina es corta y ciega y el ultrasonido no muestra útero, con ovarios presentes. Cariotipo 46,XX.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome de Mayer Rokitansky Kuster Hauser o agenesia mülleriana || Amenorrea primaria con caracteres sexuales normales, ausencia de útero y cariotipo femenino.
+- anchoring | Síndrome de insensibilidad completa a los andrógenos || Tendría cariotipo 46,XY y vello escaso.
+- availability_heuristic | Himen imperforado || Daría hematocolpos con útero presente.
+- representativeness_heuristic | Síndrome de Turner || Daría talla baja y falta de desarrollo mamario.
+- premature_closure | Retraso constitucional de la pubertad || El desarrollo puberal ya está completo.
+- base_rate_fallacy | Hiperplasia suprarrenal congénita || Daría virilización.
+- framing_effect | Tabique vaginal transverso || El útero estaría presente.
+- inattentional_blindness | Amenorrea hipotalámica || El útero estaría presente.
+- focusing_illusion | Síndrome de Kallmann || Daría falta de desarrollo puberal y anosmia.
+- belief_bias | Desarrollo tardío que se corregirá solo || Hay una alteración anatómica.
+E: El síndrome de Mayer Rokitansky Kuster Hauser es la agenesia de los conductos de Müller, con ausencia de útero y de los dos tercios superiores de la vagina, en mujeres con cariotipo 46,XX y ovarios funcionales. Es la segunda causa de amenorrea primaria tras la disgenesia gonadal. Las pacientes tienen desarrollo mamario y vello normales. Se asocia a malformaciones renales y esqueléticas. Se diferencia de la insensibilidad completa a los andrógenos, con cariotipo 46,XY, testículos y vello escaso. El tratamiento incluye dilatación vaginal o neovaginoplastia, y la maternidad es posible con gestación subrogada o trasplante uterino.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la amenorrea
+
+@ gyo|reproductive_endocrinology|polycystic_ovary|2|diagnosis
+V: Mujer de 23 años con ciclos menstruales cada 45 a 60 días desde la menarca, acné, hirsutismo en mentón y abdomen y obesidad. El ultrasonido muestra más de 20 folículos en cada ovario. Prolactina, TSH y 17 hidroxiprogesterona normales.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome de ovario poliquístico || Oligoovulación, hiperandrogenismo clínico y ovarios poliquísticos tras descartar otras causas.
+- anchoring | Hiperplasia suprarrenal congénita no clásica || La 17 hidroxiprogesterona es normal.
+- availability_heuristic | Síndrome de Cushing || No hay datos de estrías ni hipertensión mencionados y es menos frecuente.
+- representativeness_heuristic | Tumor ovárico productor de andrógenos || Daría virilización rápida.
+- premature_closure | Hipotiroidismo || La TSH es normal.
+- base_rate_fallacy | Hiperprolactinemia || La prolactina es normal.
+- framing_effect | Acné vulgar aislado || No explica la oligomenorrea.
+- inattentional_blindness | Hirsutismo idiopático || Tiene ciclos irregulares.
+- focusing_illusion | Acromegalia || No hay datos.
+- belief_bias | Exceso de vello por herencia sin importancia || Hay un trastorno endocrino.
+E: El síndrome de ovario poliquístico es el trastorno endocrino más frecuente en mujeres en edad reproductiva. Según los criterios de Rotterdam se diagnostica con dos de tres criterios, oligoovulación o anovulación, hiperandrogenismo clínico o bioquímico, y ovarios poliquísticos por ultrasonido, tras excluir otras causas como hiperplasia suprarrenal no clásica, hiperprolactinemia, alteraciones tiroideas, síndrome de Cushing y tumores productores de andrógenos. Se asocia a resistencia a la insulina, obesidad, diabetes tipo 2, dislipidemia, hígado graso, apnea del sueño, depresión e hiperplasia endometrial.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de ovarios poliquísticos
+
+@ gyo|reproductive_endocrinology|polycystic_ovary|3|treatment_of_choice
+V: Mujer de 25 años con síndrome de ovario poliquístico, ciclos irregulares, hirsutismo y acné. Índice de masa corporal de 31. No desea embarazarse por ahora.
+P: ¿Cuál es el tratamiento farmacológico de elección para regular los ciclos y el hiperandrogenismo?
++ Anticonceptivos orales combinados junto con cambios de estilo de vida || Regulan el ciclo, reducen andrógenos y protegen el endometrio.
+- anchoring | Clomifeno || Se usa para inducir ovulación cuando se busca embarazo.
+- availability_heuristic | Progesterona sola cada mes sin otras medidas || No trata el hiperandrogenismo.
+- representativeness_heuristic | Espironolactona como monoterapia sin anticoncepción || Es teratógena y se combina con anticoncepción.
+- premature_closure | Corticosteroides orales || No son el tratamiento de elección.
+- framing_effect | Estrógenos solos || Aumentan el riesgo de hiperplasia endometrial.
+- complexity_bias | Perforación ovárica laparoscópica || Se reserva para casos seleccionados de infertilidad.
+- base_rate_fallacy | Levotiroxina || La tiroides es normal.
+- belief_bias | Esperar a que se regule con la edad || Hay riesgos metabólicos y endometriales.
+- omission_bias | No tratar porque no busca embarazo || Requiere manejo por los riesgos.
+E: El tratamiento del síndrome de ovario poliquístico depende de los objetivos de la paciente. Los cambios en el estilo de vida con pérdida de peso de 5 a 10% mejoran la ovulación y el perfil metabólico. En mujeres que no buscan embarazo los anticonceptivos orales combinados son la primera línea para regular los ciclos, reducir el hiperandrogenismo y proteger el endometrio. Puede agregarse espironolactona para el hirsutismo con anticoncepción segura. La metformina mejora la resistencia a la insulina y es útil con alteraciones metabólicas. Para la infertilidad el letrozol es el inductor de ovulación de primera línea.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de ovarios poliquísticos
+
+@ gyo|reproductive_endocrinology|polycystic_ovary|3|treatment_of_choice
+V: Mujer de 29 años con síndrome de ovario poliquístico y anovulación que busca embarazo desde hace 18 meses. Su pareja tiene espermatobioscopia normal y la histerosalpingografía muestra trompas permeables. Ya bajó 7% de peso.
+P: ¿Cuál es el tratamiento de elección para inducir la ovulación?
++ Letrozol || Es el inductor de ovulación de primera línea en el síndrome de ovario poliquístico.
+- anchoring | Anticonceptivos orales combinados || Impiden el embarazo.
+- availability_heuristic | Fertilización in vitro como primera opción || Se reserva para fallas de la inducción.
+- representativeness_heuristic | Metformina como inductor de primera línea || Es menos eficaz que el letrozol.
+- premature_closure | Gonadotropinas como primera opción || Tienen más riesgo de embarazo múltiple e hiperestimulación.
+- framing_effect | Espironolactona || Es teratógena.
+- complexity_bias | Perforación ovárica como primer paso || Es de segunda línea.
+- base_rate_fallacy | Progesterona en la fase lútea sola || No induce ovulación.
+- belief_bias | Tés de hierbas para la fertilidad || No son eficaces.
+- omission_bias | Esperar más tiempo sin tratamiento || Ya cumple criterios de infertilidad con causa conocida.
+E: La anovulación del síndrome de ovario poliquístico es una causa frecuente de infertilidad. Tras optimizar el peso, el letrozol, inhibidor de aromatasa, es el inductor de ovulación de primera línea porque logra más ovulaciones y nacimientos vivos que el clomifeno, con menor riesgo de embarazo múltiple. El clomifeno es una alternativa. Las gonadotropinas o la perforación ovárica laparoscópica son de segunda línea, y la fertilización in vitro de tercera. La metformina puede agregarse en mujeres con intolerancia a la glucosa. Se vigila la respuesta con ultrasonido.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de ovarios poliquísticos
+
+@ gyo|reproductive_endocrinology|polycystic_ovary|3|complication_prognosis
+V: Mujer de 36 años con síndrome de ovario poliquístico no tratado desde la adolescencia, con amenorrea de largos periodos y obesidad. Presenta sangrado abundante e irregular. El ultrasonido muestra endometrio engrosado.
+P: ¿Cuál es la complicación a largo plazo que debe descartarse?
++ Hiperplasia o cáncer de endometrio por estímulo estrogénico sin oposición || La anovulación crónica deja el endometrio expuesto a estrógenos sin progesterona.
+- anchoring | Cáncer de ovario como complicación principal || El riesgo principal es endometrial.
+- availability_heuristic | Insuficiencia ovárica prematura || No es una complicación característica.
+- representativeness_heuristic | Cáncer cervicouterino || No se relaciona con la anovulación.
+- premature_closure | Mioma uterino como única explicación sin biopsia || Debe descartarse patología endometrial.
+- base_rate_fallacy | Endometriosis || No es una complicación.
+- framing_effect | Osteoporosis temprana || No es característica porque hay estrógenos.
+- inattentional_blindness | Síndrome de Asherman || No se relaciona.
+- focusing_illusion | Cáncer de mama como única preocupación || El riesgo endometrial es más directo.
+- belief_bias | Sangrado normal tras meses sin regla || Requiere estudio.
+E: Las mujeres con síndrome de ovario poliquístico tienen mayor riesgo de hiperplasia y cáncer de endometrio por la anovulación crónica, que expone el endometrio a estrógenos sin la oposición de la progesterona, sumado a la obesidad y la resistencia a la insulina. Se recomienda inducir al menos 4 sangrados al año con progestágenos o anticonceptivos para proteger el endometrio. El sangrado anormal con endometrio engrosado requiere biopsia. Otras complicaciones a largo plazo son diabetes tipo 2, enfermedad cardiovascular, hígado graso, apnea del sueño y trastornos del ánimo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de ovarios poliquísticos
+
+@ gyo|reproductive_endocrinology|polycystic_ovary|3|prevention_screening
+V: Mujer de 27 años con síndrome de ovario poliquístico recién diagnosticado e índice de masa corporal de 33. Pregunta qué estudios necesita además del tratamiento hormonal.
+P: ¿Cuál es el tamizaje metabólico recomendado?
++ Curva de tolerancia oral a la glucosa o glucosa en ayuno con hemoglobina glucosilada, perfil de lípidos y presión arterial || Tiene alto riesgo de diabetes y enfermedad cardiovascular.
+- anchoring | Ningún estudio metabólico porque es joven || El riesgo metabólico está presente desde joven.
+- availability_heuristic | Solo medir la testosterona periódicamente || No evalúa el riesgo metabólico.
+- representativeness_heuristic | Densitometría ósea anual || No es el tamizaje prioritario.
+- premature_closure | Marcador CA 125 || No es útil.
+- base_rate_fallacy | Tomografía de suprarrenales || No es el tamizaje.
+- framing_effect | Biopsia endometrial anual sin síntomas || No se recomienda de rutina.
+- information_bias | Insulina basal como único estudio diagnóstico || No es el estudio recomendado para el tamizaje.
+- belief_bias | Los problemas de azúcar solo aparecen en la vejez || La resistencia a la insulina es temprana.
+- omission_bias | No hacer estudios para no alarmarla || La detección temprana previene complicaciones.
+E: Las mujeres con síndrome de ovario poliquístico tienen mayor riesgo de intolerancia a la glucosa, diabetes tipo 2 y dislipidemia, independientemente del peso, aunque es mayor con obesidad. Se recomienda evaluar el estado glucémico al diagnóstico con curva de tolerancia oral a la glucosa, glucosa en ayuno o hemoglobina glucosilada, y repetirlo cada 1 a 3 años según el riesgo. También se miden lípidos, presión arterial, peso y circunferencia de cintura, y se tamiza ansiedad, depresión y apnea del sueño. Los cambios en el estilo de vida son la base de la prevención.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de ovarios poliquísticos
+
+@ gyo|reproductive_endocrinology|polycystic_ovary|4|diagnosis
+V: Mujer de 26 años con hirsutismo progresivo de inicio rápido en 6 meses, voz grave, aumento de la masa muscular, clitoromegalia y amenorrea. Testosterona total de 250 ng/dL.
+P: ¿Cuál es el diagnóstico más probable?
++ Tumor productor de andrógenos de ovario o suprarrenal || Virilización rápida con testosterona muy elevada.
+- anchoring | Síndrome de ovario poliquístico || Da hiperandrogenismo leve de evolución lenta sin virilización.
+- availability_heuristic | Hirsutismo idiopático || No explica la virilización ni la testosterona tan alta.
+- representativeness_heuristic | Hiperplasia suprarrenal congénita no clásica || Suele ser de inicio en la pubertad y más leve.
+- premature_closure | Hipotiroidismo || No explica la virilización.
+- base_rate_fallacy | Hiperprolactinemia || No causa virilización.
+- framing_effect | Uso de anticonceptivos || No causa virilización.
+- inattentional_blindness | Acné grave aislado || No explica la virilización.
+- focusing_illusion | Síndrome metabólico || No explica la testosterona tan alta.
+- belief_bias | Cambios por hacer ejercicio con pesas || No explica la clitoromegalia.
+E: La virilización de inicio rápido, con voz grave, clitoromegalia, aumento de la masa muscular y calvicie de patrón masculino, sugiere un tumor productor de andrógenos de ovario, como el tumor de células de Sertoli Leydig, o de suprarrenal. Una testosterona total mayor de 150 a 200 ng/dL apoya un origen tumoral ovárico y un sulfato de dehidroepiandrosterona muy elevado sugiere origen suprarrenal. Se estudia con ultrasonido transvaginal, tomografía o resonancia de suprarrenales. El tratamiento es la resección quirúrgica. El síndrome de ovario poliquístico causa hiperandrogenismo leve de evolución lenta.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del hirsutismo
+
+@ gyo|reproductive_endocrinology|menopause|2|diagnosis
+V: Mujer de 51 años con ausencia de menstruación desde hace 13 meses, bochornos varias veces al día, sudoración nocturna, insomnio e irritabilidad. No toma medicamentos.
+P: ¿Cuál es el diagnóstico más probable?
++ Menopausia con síndrome vasomotor || Amenorrea de 12 meses a la edad esperada con síntomas vasomotores.
+- anchoring | Hipertiroidismo || Puede causar sudoración, pero la amenorrea a esta edad orienta a menopausia.
+- availability_heuristic | Insuficiencia ovárica prematura || Ocurre antes de los 40 años.
+- representativeness_heuristic | Embarazo || Es poco probable y no explica los bochornos.
+- premature_closure | Trastorno de ansiedad generalizada || No explica la amenorrea.
+- base_rate_fallacy | Feocromocitoma || Es raro.
+- framing_effect | Síndrome carcinoide || Es raro.
+- inattentional_blindness | Hiperprolactinemia || Daría galactorrea.
+- focusing_illusion | Depresión mayor || No explica la amenorrea.
+- belief_bias | Problemas de nervios por la edad sin causa hormonal || Hay una causa hormonal.
+E: La menopausia es el cese permanente de la menstruación por pérdida de la función folicular ovárica, y se diagnostica de forma retrospectiva tras 12 meses de amenorrea sin otra causa, en promedio a los 49 a 51 años. La perimenopausia o transición menopáusica incluye los años previos con ciclos irregulares y síntomas. El diagnóstico en mujeres mayores de 45 años con síntomas típicos es clínico y no requiere medir FSH. Los síntomas incluyen bochornos, sudoración nocturna, alteraciones del sueño y del ánimo, síndrome genitourinario y, a largo plazo, osteoporosis y mayor riesgo cardiovascular.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia
+
+@ gyo|reproductive_endocrinology|menopause|3|treatment_of_choice
+V: Mujer de 52 años con menopausia hace 1 año y bochornos intensos que afectan su sueño y trabajo. Tiene útero, sin antecedentes de cáncer de mama, trombosis ni enfermedad cardiovascular. Presión normal.
+P: ¿Cuál es el tratamiento de elección para sus síntomas vasomotores?
++ Terapia hormonal con estrógeno más progestágeno a la dosis mínima eficaz || Es el tratamiento más eficaz y, con útero, requiere progestágeno.
+- anchoring | Estrógeno solo sin progestágeno || Con útero aumenta el riesgo de cáncer de endometrio.
+- availability_heuristic | Fitoestrógenos como tratamiento más eficaz || Su eficacia es limitada.
+- representativeness_heuristic | Benzodiacepinas || No tratan los bochornos.
+- premature_closure | Ningún tratamiento porque es natural || Los síntomas afectan su calidad de vida.
+- framing_effect | Tibolona en mujeres con cáncer de mama || Está contraindicada en cáncer de mama.
+- complexity_bias | Histerectomía para usar estrógeno solo || No está indicada.
+- base_rate_fallacy | Testosterona como primera línea || No trata los bochornos.
+- belief_bias | La terapia hormonal siempre causa cáncer || En mujeres adecuadas los beneficios superan los riesgos.
+- omission_bias | Evitar la terapia hormonal en todas por miedo || Es segura en candidatas adecuadas.
+E: La terapia hormonal es el tratamiento más eficaz para los síntomas vasomotores y el síndrome genitourinario. En mujeres menores de 60 años o con menos de 10 años de menopausia y sin contraindicaciones, los beneficios superan los riesgos. Las mujeres con útero deben recibir estrógeno más progestágeno para proteger el endometrio, y las histerectomizadas estrógeno solo. Se usa la dosis mínima eficaz y se reevalúa periódicamente. Las contraindicaciones incluyen cáncer de mama o de endometrio, sangrado no diagnosticado, trombosis, enfermedad hepática activa y enfermedad cardiovascular. La vía transdérmica tiene menor riesgo de trombosis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia
+
+@ gyo|reproductive_endocrinology|menopause|3|treatment_of_choice
+V: Mujer de 54 años con antecedente de cáncer de mama con receptores hormonales positivos tratado hace 3 años. Presenta bochornos intensos que afectan su sueño.
+P: ¿Cuál es el tratamiento de elección para sus síntomas vasomotores?
++ Tratamiento no hormonal como inhibidores de la recaptura de serotonina o noradrenalina, gabapentina o fezolinetant || La terapia hormonal está contraindicada tras cáncer de mama.
+- anchoring | Terapia hormonal combinada || Está contraindicada por el cáncer de mama.
+- availability_heuristic | Tibolona || Aumenta la recurrencia del cáncer de mama.
+- representativeness_heuristic | Estrógenos conjugados solos || Están contraindicados.
+- premature_closure | Paroxetina con tamoxifeno || La paroxetina inhibe el metabolismo del tamoxifeno.
+- framing_effect | Ningún tratamiento porque nada funciona || Hay opciones no hormonales eficaces.
+- complexity_bias | Ooforectomía || No trata los bochornos de la menopausia.
+- base_rate_fallacy | Testosterona en gel || No es el tratamiento.
+- belief_bias | Fitoestrógenos de soya en dosis altas como opción segura comprobada || Su seguridad en cáncer hormonosensible es incierta.
+- omission_bias | No tratar sus síntomas por su cáncer previo || Hay alternativas seguras.
+E: En mujeres con contraindicación para la terapia hormonal, como antecedente de cáncer de mama, se usan tratamientos no hormonales para los síntomas vasomotores. Los inhibidores de la recaptura de serotonina y noradrenalina, como venlafaxina o desvenlafaxina, los inhibidores selectivos de la recaptura de serotonina como escitalopram, la gabapentina, la clonidina y los antagonistas del receptor de neuroquinina 3 como fezolinetant son opciones eficaces. En pacientes que toman tamoxifeno se evitan la paroxetina y la fluoxetina por inhibir el CYP2D6. La terapia cognitivo conductual y la hipnosis clínica también ayudan.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia
+
+@ gyo|reproductive_endocrinology|menopause|3|data_interpretation
+V: Mujer de 47 años con ciclos irregulares desde hace un año, con intervalos de 40 a 70 días y bochornos ocasionales. Pregunta si ya está en la menopausia y si debe seguir usando anticoncepción.
+P: ¿Qué indica su situación clínica?
++ Transición menopáusica o perimenopausia, con posibilidad de ovulación y necesidad de anticoncepción || Aún no cumple 12 meses de amenorrea.
+- anchoring | Menopausia confirmada sin necesidad de anticoncepción || No cumple 12 meses de amenorrea.
+- availability_heuristic | Insuficiencia ovárica prematura || Tiene más de 40 años.
+- representativeness_heuristic | Síndrome de ovario poliquístico de nueva aparición || El contexto orienta a perimenopausia.
+- premature_closure | Embarazo || No hay datos.
+- base_rate_fallacy | Hipotiroidismo como única causa || Puede descartarse, pero el cuadro es típico.
+- framing_effect | Indicación de histerectomía || No está indicada.
+- inattentional_blindness | Cáncer de endometrio confirmado || No hay datos.
+- focusing_illusion | Hiperprolactinemia || No hay galactorrea.
+- belief_bias | Ya no puede embarazarse por los bochornos || Aún puede ovular.
+E: La transición menopáusica comienza con ciclos de duración variable y avanza a intervalos de amenorrea de 60 días o más, con fluctuaciones hormonales y síntomas vasomotores. Durante este periodo la ovulación puede ocurrir de forma esporádica, por lo que se recomienda continuar la anticoncepción hasta 12 meses de amenorrea en mayores de 50 años o 24 meses en menores de 50. La FSH es variable en la perimenopausia y no es útil para el diagnóstico. Los anticonceptivos de dosis baja o el dispositivo con levonorgestrel pueden controlar los síntomas y el sangrado.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia
+
+@ gyo|reproductive_endocrinology|menopause|3|complication_prognosis
+V: Mujer de 58 años con menopausia a los 45 años sin terapia hormonal, delgada, fumadora y con madre con fractura de cadera. Sufrió una fractura de muñeca al caer de su propia altura.
+P: ¿Cuál es la complicación de la deficiencia estrogénica que explica la fractura?
++ Osteoporosis posmenopáusica con fractura por fragilidad || La pérdida de estrógenos acelera la resorción ósea.
+- anchoring | Osteomalacia por falta de sol únicamente || No explica el contexto posmenopáusico.
+- availability_heuristic | Mieloma múltiple || Es menos probable.
+- representativeness_heuristic | Metástasis óseas de cáncer de mama || No hay antecedente.
+- premature_closure | Fractura traumática normal || Una caída de su altura no debería fracturar hueso sano.
+- base_rate_fallacy | Enfermedad de Paget ósea || Es menos frecuente.
+- framing_effect | Hiperparatiroidismo primario como causa principal || Debe descartarse, pero la causa más probable es posmenopáusica.
+- inattentional_blindness | Osteogénesis imperfecta || Es congénita.
+- focusing_illusion | Artritis reumatoide || No causa la fractura directamente.
+- belief_bias | Huesos débiles por tomar poca leche como única causa || El mecanismo principal es hormonal.
+E: La deficiencia de estrógenos tras la menopausia aumenta la resorción ósea por los osteoclastos, con pérdida rápida de masa ósea en los primeros años. La osteoporosis se define por una densidad mineral ósea con puntuación T de menos 2.5 o menor, o por una fractura por fragilidad, como la de muñeca, vértebra o cadera tras una caída de la propia altura. Los factores de riesgo incluyen menopausia temprana, bajo peso, tabaquismo, alcohol, corticosteroides, antecedente familiar de fractura de cadera y sedentarismo. La herramienta FRAX estima el riesgo de fractura. El tratamiento incluye calcio, vitamina D, ejercicio y bisfosfonatos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis en la mujer posmenopáusica

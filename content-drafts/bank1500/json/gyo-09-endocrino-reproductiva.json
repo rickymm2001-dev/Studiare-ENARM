@@ -1,0 +1,1697 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "gyo-09-endocrino-reproductiva-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "amenorrhea",
+      "vignette": "Mujer de 24 años sexualmente activa con amenorrea de 3 meses. Antes tenía ciclos regulares. No usa anticonceptivos.",
+      "prompt": "¿Cuál es el estudio inicial en toda mujer con amenorrea secundaria?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Prueba de embarazo con fracción beta de gonadotropina coriónica",
+          "correct": true,
+          "rationale": "El embarazo es la causa más frecuente de amenorrea secundaria."
+        },
+        {
+          "key": "b",
+          "text": "Histeroscopia diagnóstica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "c",
+          "text": "Perfil hormonal completo antes de descartar embarazo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Primero se descarta el embarazo."
+        },
+        {
+          "key": "d",
+          "text": "Densitometría ósea",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "e",
+          "text": "Prueba de progesterona sin descartar embarazo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Primero se descarta embarazo."
+        },
+        {
+          "key": "f",
+          "text": "Esperar 6 meses a que regrese sola",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Retrasa el diagnóstico."
+        },
+        {
+          "key": "g",
+          "text": "Ultrasonido pélvico como único estudio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La prueba de embarazo es más simple y prioritaria."
+        },
+        {
+          "key": "h",
+          "text": "Resonancia magnética de hipófisis",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "i",
+          "text": "Tomografía de abdomen",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "j",
+          "text": "Cariotipo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se usa en amenorrea primaria con datos específicos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "La amenorrea secundaria es la ausencia de menstruación por 3 meses en mujeres con ciclos regulares o por 6 meses en mujeres con ciclos irregulares. El primer paso siempre es descartar embarazo con una prueba de hCG. Después se miden TSH y prolactina, y FSH y estradiol para distinguir causas hipotalámicas, hipofisarias, ováricas o uterinas. Las causas más frecuentes, además del embarazo, son síndrome de ovario poliquístico, amenorrea hipotalámica funcional, hiperprolactinemia, insuficiencia ovárica prematura y síndrome de Asherman. La historia clínica sobre peso, ejercicio, estrés, fármacos y síntomas orienta el estudio.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la amenorrea"
+      ]
+    },
+    {
+      "key": "gyo-09-endocrino-reproductiva-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "amenorrhea",
+      "vignette": "Mujer de 19 años, corredora de fondo, con índice de masa corporal de 17 y dieta muy restrictiva. Amenorrea de 8 meses. Prueba de embarazo negativa. FSH y LH bajas, estradiol bajo, prolactina y TSH normales.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de ovario poliquístico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Daría LH normal o alta con hiperandrogenismo."
+        },
+        {
+          "key": "b",
+          "text": "Prolactinoma",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La prolactina es normal."
+        },
+        {
+          "key": "c",
+          "text": "Amenorrea saludable por buena condición física",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Indica deficiencia energética."
+        },
+        {
+          "key": "d",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La TSH es normal."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome de Sheehan",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Requiere hemorragia posparto."
+        },
+        {
+          "key": "f",
+          "text": "Síndrome de Turner",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Daría amenorrea primaria con FSH alta."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome de Asherman",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Daría estradiol normal con antecedente de legrado."
+        },
+        {
+          "key": "h",
+          "text": "Insuficiencia ovárica prematura",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría FSH elevada."
+        },
+        {
+          "key": "i",
+          "text": "Tumor productor de andrógenos",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay virilización."
+        },
+        {
+          "key": "j",
+          "text": "Amenorrea hipotalámica funcional",
+          "correct": true,
+          "rationale": "Gonadotropinas bajas con estradiol bajo por bajo peso, ejercicio y restricción."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "h",
+        "j"
+      ],
+      "explanation": "La amenorrea hipotalámica funcional se debe a la supresión de la secreción pulsátil de la hormona liberadora de gonadotropinas por deficiencia energética, ejercicio intenso, bajo peso o estrés. Las gonadotropinas y el estradiol están bajos. Forma parte de la deficiencia energética relativa en el deporte, antes llamada tríada de la atleta, que incluye baja disponibilidad energética, alteraciones menstruales y baja densidad mineral ósea. El tratamiento consiste en aumentar la ingesta calórica, reducir el ejercicio y manejar el estrés. Se evalúa la densidad ósea y se descartan trastornos de la conducta alimentaria.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la amenorrea"
+      ]
+    },
+    {
+      "key": "gyo-09-endocrino-reproductiva-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "amenorrhea",
+      "vignette": "Mujer de 32 años con amenorrea de 6 meses y galactorrea bilateral espontánea. Prueba de embarazo negativa, TSH normal y prolactina de 180 ng/mL. No toma medicamentos. Refiere cefalea ocasional.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Estimulación mamaria frecuente",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica un valor tan alto."
+        },
+        {
+          "key": "b",
+          "text": "Hipotiroidismo primario",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La TSH es normal."
+        },
+        {
+          "key": "c",
+          "text": "Craneofaringioma",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es más común en niños."
+        },
+        {
+          "key": "d",
+          "text": "Insuficiencia renal crónica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay datos."
+        },
+        {
+          "key": "e",
+          "text": "Hiperprolactinemia por fármacos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No toma medicamentos."
+        },
+        {
+          "key": "f",
+          "text": "Galactorrea normal tras un susto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay un trastorno hormonal."
+        },
+        {
+          "key": "g",
+          "text": "Embarazo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La prueba es negativa."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome de ovario poliquístico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la galactorrea ni la prolactina tan alta."
+        },
+        {
+          "key": "i",
+          "text": "Prolactinoma",
+          "correct": true,
+          "rationale": "Hiperprolactinemia marcada con amenorrea y galactorrea sin otra causa."
+        },
+        {
+          "key": "j",
+          "text": "Acromegalia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay datos clínicos."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "h",
+        "i"
+      ],
+      "explanation": "La hiperprolactinemia inhibe la secreción pulsátil de la hormona liberadora de gonadotropinas y causa amenorrea, anovulación, infertilidad y galactorrea. Sus causas incluyen embarazo, fármacos como antipsicóticos, metoclopramida y antidepresivos, hipotiroidismo primario, insuficiencia renal, estimulación mamaria y prolactinomas. Valores mayores de 100 a 200 ng/mL sugieren prolactinoma. Tras descartar embarazo, fármacos e hipotiroidismo se realiza resonancia magnética de la hipófisis. Los microprolactinomas miden menos de 1 cm y los macroprolactinomas más, y estos pueden comprimir el quiasma óptico. El tratamiento de elección es la cabergolina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperprolactinemia"
+      ]
+    },
+    {
+      "key": "gyo-09-endocrino-reproductiva-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "amenorrhea",
+      "vignette": "Mujer de 28 años con macroprolactinoma de 1.5 cm, amenorrea, galactorrea y prolactina de 350 ng/mL. Campos visuales normales. Desea embarazarse en el futuro.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Metoclopramida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumenta la prolactina."
+        },
+        {
+          "key": "b",
+          "text": "Anticonceptivos orales solos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No tratan el tumor."
+        },
+        {
+          "key": "c",
+          "text": "Craneotomía abierta",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el abordaje estándar."
+        },
+        {
+          "key": "d",
+          "text": "No tratar para no afectar la fertilidad futura",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El tratamiento restaura la fertilidad."
+        },
+        {
+          "key": "e",
+          "text": "Suspender la lactancia que no tiene para curar la galactorrea",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La galactorrea es por el tumor."
+        },
+        {
+          "key": "f",
+          "text": "Radioterapia hipofisaria",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es de tercera línea."
+        },
+        {
+          "key": "g",
+          "text": "Levotiroxina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La tiroides es normal."
+        },
+        {
+          "key": "h",
+          "text": "Vigilancia sin tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El macroadenoma con síntomas requiere tratamiento."
+        },
+        {
+          "key": "i",
+          "text": "Cirugía transesfenoidal como primera opción",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para intolerancia, resistencia o compromiso visual agudo."
+        },
+        {
+          "key": "j",
+          "text": "Agonista dopaminérgico, preferentemente cabergolina",
+          "correct": true,
+          "rationale": "Normaliza la prolactina y reduce el tamaño del tumor."
+        }
+      ],
+      "canonical": [
+        "b",
+        "f",
+        "i",
+        "j"
+      ],
+      "explanation": "El tratamiento de elección de los prolactinomas, incluidos los macroprolactinomas, es médico con agonistas dopaminérgicos. La cabergolina es preferida por su mayor eficacia y mejor tolerancia, con administración una o dos veces por semana. Normaliza la prolactina, restaura la ovulación y reduce el tamaño del tumor en la mayoría. La bromocriptina es una alternativa, sobre todo si se busca embarazo. La cirugía transesfenoidal se reserva para intolerancia o resistencia a los fármacos, apoplejía o compromiso visual que no mejora. En el embarazo se vigilan los síntomas visuales por el crecimiento del tumor.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperprolactinemia"
+      ]
+    },
+    {
+      "key": "gyo-09-endocrino-reproductiva-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "amenorrhea",
+      "vignette": "Mujer de 34 años con amenorrea de 5 meses tras un legrado por aborto incompleto complicado con endometritis. Prueba de embarazo negativa. FSH, estradiol, TSH y prolactina normales. No presenta sangrado tras estrógenos y progesterona.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de Asherman por sinequias intrauterinas",
+          "correct": true,
+          "rationale": "Amenorrea tras legrado con hormonas normales y falta de sangrado con estrógenos y progesterona."
+        },
+        {
+          "key": "b",
+          "text": "Tuberculosis genital sin antecedente",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El legrado explica mejor el cuadro."
+        },
+        {
+          "key": "c",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "La TSH es normal."
+        },
+        {
+          "key": "d",
+          "text": "Embarazo no detectado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La prueba es negativa."
+        },
+        {
+          "key": "e",
+          "text": "Amenorrea hipotalámica funcional",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El estradiol es normal y no sangra con el estímulo."
+        },
+        {
+          "key": "f",
+          "text": "Síndrome de ovario poliquístico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Sangraría con progesterona."
+        },
+        {
+          "key": "g",
+          "text": "Hiperprolactinemia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La prolactina es normal."
+        },
+        {
+          "key": "h",
+          "text": "Amenorrea por el duelo del aborto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay causa anatómica."
+        },
+        {
+          "key": "i",
+          "text": "Insuficiencia ovárica prematura",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La FSH es normal."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome de Sheehan",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hubo hemorragia posparto con choque."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "El síndrome de Asherman es la formación de adherencias o sinequias intrauterinas por daño de la capa basal del endometrio, generalmente tras legrados, sobre todo posparto o posaborto con infección, cirugías uterinas o tuberculosis genital. Causa amenorrea o hipomenorrea, infertilidad y pérdidas gestacionales. Las hormonas son normales y no hay sangrado tras la prueba con estrógenos y progesterona, lo que indica una causa uterina. El diagnóstico se confirma con histeroscopia, que también permite el tratamiento con resección de las adherencias, seguido de estrógenos para regenerar el endometrio.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la amenorrea"
+      ]
+    },
+    {
+      "key": "gyo-09-endocrino-reproductiva-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "amenorrhea",
+      "vignette": "Mujer de 35 años con amenorrea de 8 meses, bochornos, sudoración nocturna y sequedad vaginal. Prueba de embarazo negativa. FSH de 65 mUI/mL en dos mediciones separadas por 4 semanas y estradiol bajo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de ovario poliquístico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No da FSH tan alta ni bochornos."
+        },
+        {
+          "key": "b",
+          "text": "Hiperprolactinemia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la FSH elevada."
+        },
+        {
+          "key": "c",
+          "text": "Menopausia fisiológica normal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ocurre en promedio a los 49 a 51 años."
+        },
+        {
+          "key": "d",
+          "text": "Amenorrea hipotalámica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría FSH baja."
+        },
+        {
+          "key": "e",
+          "text": "Tumor hipofisario productor de FSH",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es muy raro."
+        },
+        {
+          "key": "f",
+          "text": "Síndrome de Asherman",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Las hormonas serían normales."
+        },
+        {
+          "key": "g",
+          "text": "Agotamiento de los óvulos por usar anticonceptivos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es una causa."
+        },
+        {
+          "key": "h",
+          "text": "Hipertiroidismo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede dar sudoración, pero no FSH elevada."
+        },
+        {
+          "key": "i",
+          "text": "Ansiedad con sudoración",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la FSH elevada."
+        },
+        {
+          "key": "j",
+          "text": "Insuficiencia ovárica prematura",
+          "correct": true,
+          "rationale": "Amenorrea con FSH elevada y estradiol bajo antes de los 40 años."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "j"
+      ],
+      "explanation": "La insuficiencia ovárica prematura es la pérdida de la función ovárica antes de los 40 años. Se diagnostica con amenorrea u oligomenorrea de al menos 4 meses y FSH elevada, mayor de 25 mUI/mL, en dos ocasiones con 4 semanas de diferencia. Sus causas incluyen alteraciones genéticas como síndrome de Turner y premutación del gen FMR1, autoinmunidad, quimioterapia, radioterapia y cirugía, aunque muchas son idiopáticas. Se recomienda cariotipo, estudio de FMR1 y anticuerpos. El tratamiento es terapia hormonal hasta la edad de la menopausia natural para prevenir osteoporosis y enfermedad cardiovascular.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la insuficiencia ovárica prematura"
+      ]
+    },
+    {
+      "key": "gyo-09-endocrino-reproductiva-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "amenorrhea",
+      "vignette": "Mujer de 17 años con amenorrea primaria. Tiene desarrollo mamario completo y vello púbico y axilar normal. En la exploración la vagina es corta y ciega y el ultrasonido no muestra útero, con ovarios presentes. Cariotipo 46,XX.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Retraso constitucional de la pubertad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El desarrollo puberal ya está completo."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de insensibilidad completa a los andrógenos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tendría cariotipo 46,XY y vello escaso."
+        },
+        {
+          "key": "c",
+          "text": "Himen imperforado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría hematocolpos con útero presente."
+        },
+        {
+          "key": "d",
+          "text": "Desarrollo tardío que se corregirá solo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una alteración anatómica."
+        },
+        {
+          "key": "e",
+          "text": "Tabique vaginal transverso",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El útero estaría presente."
+        },
+        {
+          "key": "f",
+          "text": "Síndrome de Turner",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Daría talla baja y falta de desarrollo mamario."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome de Kallmann",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Daría falta de desarrollo puberal y anosmia."
+        },
+        {
+          "key": "h",
+          "text": "Amenorrea hipotalámica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El útero estaría presente."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de Mayer Rokitansky Kuster Hauser o agenesia mülleriana",
+          "correct": true,
+          "rationale": "Amenorrea primaria con caracteres sexuales normales, ausencia de útero y cariotipo femenino."
+        },
+        {
+          "key": "j",
+          "text": "Hiperplasia suprarrenal congénita",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Daría virilización."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "El síndrome de Mayer Rokitansky Kuster Hauser es la agenesia de los conductos de Müller, con ausencia de útero y de los dos tercios superiores de la vagina, en mujeres con cariotipo 46,XX y ovarios funcionales. Es la segunda causa de amenorrea primaria tras la disgenesia gonadal. Las pacientes tienen desarrollo mamario y vello normales. Se asocia a malformaciones renales y esqueléticas. Se diferencia de la insensibilidad completa a los andrógenos, con cariotipo 46,XY, testículos y vello escaso. El tratamiento incluye dilatación vaginal o neovaginoplastia, y la maternidad es posible con gestación subrogada o trasplante uterino.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la amenorrea"
+      ]
+    },
+    {
+      "key": "gyo-09-endocrino-reproductiva-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "polycystic_ovary",
+      "vignette": "Mujer de 23 años con ciclos menstruales cada 45 a 60 días desde la menarca, acné, hirsutismo en mentón y abdomen y obesidad. El ultrasonido muestra más de 20 folículos en cada ovario. Prolactina, TSH y 17 hidroxiprogesterona normales.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Acromegalia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay datos."
+        },
+        {
+          "key": "b",
+          "text": "Tumor ovárico productor de andrógenos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Daría virilización rápida."
+        },
+        {
+          "key": "c",
+          "text": "Síndrome de Cushing",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay datos de estrías ni hipertensión mencionados y es menos frecuente."
+        },
+        {
+          "key": "d",
+          "text": "Hiperprolactinemia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La prolactina es normal."
+        },
+        {
+          "key": "e",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La TSH es normal."
+        },
+        {
+          "key": "f",
+          "text": "Acné vulgar aislado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la oligomenorrea."
+        },
+        {
+          "key": "g",
+          "text": "Hirsutismo idiopático",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Tiene ciclos irregulares."
+        },
+        {
+          "key": "h",
+          "text": "Exceso de vello por herencia sin importancia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay un trastorno endocrino."
+        },
+        {
+          "key": "i",
+          "text": "Hiperplasia suprarrenal congénita no clásica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La 17 hidroxiprogesterona es normal."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome de ovario poliquístico",
+          "correct": true,
+          "rationale": "Oligoovulación, hiperandrogenismo clínico y ovarios poliquísticos tras descartar otras causas."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "El síndrome de ovario poliquístico es el trastorno endocrino más frecuente en mujeres en edad reproductiva. Según los criterios de Rotterdam se diagnostica con dos de tres criterios, oligoovulación o anovulación, hiperandrogenismo clínico o bioquímico, y ovarios poliquísticos por ultrasonido, tras excluir otras causas como hiperplasia suprarrenal no clásica, hiperprolactinemia, alteraciones tiroideas, síndrome de Cushing y tumores productores de andrógenos. Se asocia a resistencia a la insulina, obesidad, diabetes tipo 2, dislipidemia, hígado graso, apnea del sueño, depresión e hiperplasia endometrial.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de ovarios poliquísticos"
+      ]
+    },
+    {
+      "key": "gyo-09-endocrino-reproductiva-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "polycystic_ovary",
+      "vignette": "Mujer de 25 años con síndrome de ovario poliquístico, ciclos irregulares, hirsutismo y acné. Índice de masa corporal de 31. No desea embarazarse por ahora.",
+      "prompt": "¿Cuál es el tratamiento farmacológico de elección para regular los ciclos y el hiperandrogenismo?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Perforación ovárica laparoscópica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para casos seleccionados de infertilidad."
+        },
+        {
+          "key": "b",
+          "text": "No tratar porque no busca embarazo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Requiere manejo por los riesgos."
+        },
+        {
+          "key": "c",
+          "text": "Esperar a que se regule con la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay riesgos metabólicos y endometriales."
+        },
+        {
+          "key": "d",
+          "text": "Levotiroxina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La tiroides es normal."
+        },
+        {
+          "key": "e",
+          "text": "Corticosteroides orales",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No son el tratamiento de elección."
+        },
+        {
+          "key": "f",
+          "text": "Espironolactona como monoterapia sin anticoncepción",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es teratógena y se combina con anticoncepción."
+        },
+        {
+          "key": "g",
+          "text": "Anticonceptivos orales combinados junto con cambios de estilo de vida",
+          "correct": true,
+          "rationale": "Regulan el ciclo, reducen andrógenos y protegen el endometrio."
+        },
+        {
+          "key": "h",
+          "text": "Clomifeno",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se usa para inducir ovulación cuando se busca embarazo."
+        },
+        {
+          "key": "i",
+          "text": "Progesterona sola cada mes sin otras medidas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No trata el hiperandrogenismo."
+        },
+        {
+          "key": "j",
+          "text": "Estrógenos solos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumentan el riesgo de hiperplasia endometrial."
+        }
+      ],
+      "canonical": [
+        "f",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "El tratamiento del síndrome de ovario poliquístico depende de los objetivos de la paciente. Los cambios en el estilo de vida con pérdida de peso de 5 a 10% mejoran la ovulación y el perfil metabólico. En mujeres que no buscan embarazo los anticonceptivos orales combinados son la primera línea para regular los ciclos, reducir el hiperandrogenismo y proteger el endometrio. Puede agregarse espironolactona para el hirsutismo con anticoncepción segura. La metformina mejora la resistencia a la insulina y es útil con alteraciones metabólicas. Para la infertilidad el letrozol es el inductor de ovulación de primera línea.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de ovarios poliquísticos"
+      ]
+    },
+    {
+      "key": "gyo-09-endocrino-reproductiva-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "polycystic_ovary",
+      "vignette": "Mujer de 29 años con síndrome de ovario poliquístico y anovulación que busca embarazo desde hace 18 meses. Su pareja tiene espermatobioscopia normal y la histerosalpingografía muestra trompas permeables. Ya bajó 7% de peso.",
+      "prompt": "¿Cuál es el tratamiento de elección para inducir la ovulación?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fertilización in vitro como primera opción",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se reserva para fallas de la inducción."
+        },
+        {
+          "key": "b",
+          "text": "Perforación ovárica como primer paso",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es de segunda línea."
+        },
+        {
+          "key": "c",
+          "text": "Letrozol",
+          "correct": true,
+          "rationale": "Es el inductor de ovulación de primera línea en el síndrome de ovario poliquístico."
+        },
+        {
+          "key": "d",
+          "text": "Tés de hierbas para la fertilidad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No son eficaces."
+        },
+        {
+          "key": "e",
+          "text": "Progesterona en la fase lútea sola",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No induce ovulación."
+        },
+        {
+          "key": "f",
+          "text": "Anticonceptivos orales combinados",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Impiden el embarazo."
+        },
+        {
+          "key": "g",
+          "text": "Espironolactona",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es teratógena."
+        },
+        {
+          "key": "h",
+          "text": "Esperar más tiempo sin tratamiento",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Ya cumple criterios de infertilidad con causa conocida."
+        },
+        {
+          "key": "i",
+          "text": "Gonadotropinas como primera opción",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Tienen más riesgo de embarazo múltiple e hiperestimulación."
+        },
+        {
+          "key": "j",
+          "text": "Metformina como inductor de primera línea",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es menos eficaz que el letrozol."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "La anovulación del síndrome de ovario poliquístico es una causa frecuente de infertilidad. Tras optimizar el peso, el letrozol, inhibidor de aromatasa, es el inductor de ovulación de primera línea porque logra más ovulaciones y nacimientos vivos que el clomifeno, con menor riesgo de embarazo múltiple. El clomifeno es una alternativa. Las gonadotropinas o la perforación ovárica laparoscópica son de segunda línea, y la fertilización in vitro de tercera. La metformina puede agregarse en mujeres con intolerancia a la glucosa. Se vigila la respuesta con ultrasonido.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de ovarios poliquísticos"
+      ]
+    },
+    {
+      "key": "gyo-09-endocrino-reproductiva-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "polycystic_ovary",
+      "vignette": "Mujer de 36 años con síndrome de ovario poliquístico no tratado desde la adolescencia, con amenorrea de largos periodos y obesidad. Presenta sangrado abundante e irregular. El ultrasonido muestra endometrio engrosado.",
+      "prompt": "¿Cuál es la complicación a largo plazo que debe descartarse?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cáncer de ovario como complicación principal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El riesgo principal es endometrial."
+        },
+        {
+          "key": "b",
+          "text": "Sangrado normal tras meses sin regla",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere estudio."
+        },
+        {
+          "key": "c",
+          "text": "Hiperplasia o cáncer de endometrio por estímulo estrogénico sin oposición",
+          "correct": true,
+          "rationale": "La anovulación crónica deja el endometrio expuesto a estrógenos sin progesterona."
+        },
+        {
+          "key": "d",
+          "text": "Osteoporosis temprana",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es característica porque hay estrógenos."
+        },
+        {
+          "key": "e",
+          "text": "Endometriosis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es una complicación."
+        },
+        {
+          "key": "f",
+          "text": "Mioma uterino como única explicación sin biopsia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe descartarse patología endometrial."
+        },
+        {
+          "key": "g",
+          "text": "Síndrome de Asherman",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No se relaciona."
+        },
+        {
+          "key": "h",
+          "text": "Insuficiencia ovárica prematura",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es una complicación característica."
+        },
+        {
+          "key": "i",
+          "text": "Cáncer cervicouterino",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No se relaciona con la anovulación."
+        },
+        {
+          "key": "j",
+          "text": "Cáncer de mama como única preocupación",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El riesgo endometrial es más directo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "Las mujeres con síndrome de ovario poliquístico tienen mayor riesgo de hiperplasia y cáncer de endometrio por la anovulación crónica, que expone el endometrio a estrógenos sin la oposición de la progesterona, sumado a la obesidad y la resistencia a la insulina. Se recomienda inducir al menos 4 sangrados al año con progestágenos o anticonceptivos para proteger el endometrio. El sangrado anormal con endometrio engrosado requiere biopsia. Otras complicaciones a largo plazo son diabetes tipo 2, enfermedad cardiovascular, hígado graso, apnea del sueño y trastornos del ánimo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de ovarios poliquísticos"
+      ]
+    },
+    {
+      "key": "gyo-09-endocrino-reproductiva-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "polycystic_ovary",
+      "vignette": "Mujer de 27 años con síndrome de ovario poliquístico recién diagnosticado e índice de masa corporal de 33. Pregunta qué estudios necesita además del tratamiento hormonal.",
+      "prompt": "¿Cuál es el tamizaje metabólico recomendado?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Biopsia endometrial anual sin síntomas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se recomienda de rutina."
+        },
+        {
+          "key": "b",
+          "text": "No hacer estudios para no alarmarla",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La detección temprana previene complicaciones."
+        },
+        {
+          "key": "c",
+          "text": "Curva de tolerancia oral a la glucosa o glucosa en ayuno con hemoglobina glucosilada, perfil de lípidos y presión arterial",
+          "correct": true,
+          "rationale": "Tiene alto riesgo de diabetes y enfermedad cardiovascular."
+        },
+        {
+          "key": "d",
+          "text": "Tomografía de suprarrenales",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es el tamizaje."
+        },
+        {
+          "key": "e",
+          "text": "Marcador CA 125",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es útil."
+        },
+        {
+          "key": "f",
+          "text": "Insulina basal como único estudio diagnóstico",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No es el estudio recomendado para el tamizaje."
+        },
+        {
+          "key": "g",
+          "text": "Los problemas de azúcar solo aparecen en la vejez",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La resistencia a la insulina es temprana."
+        },
+        {
+          "key": "h",
+          "text": "Ningún estudio metabólico porque es joven",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El riesgo metabólico está presente desde joven."
+        },
+        {
+          "key": "i",
+          "text": "Solo medir la testosterona periódicamente",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No evalúa el riesgo metabólico."
+        },
+        {
+          "key": "j",
+          "text": "Densitometría ósea anual",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es el tamizaje prioritario."
+        }
+      ],
+      "canonical": [
+        "c",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "Las mujeres con síndrome de ovario poliquístico tienen mayor riesgo de intolerancia a la glucosa, diabetes tipo 2 y dislipidemia, independientemente del peso, aunque es mayor con obesidad. Se recomienda evaluar el estado glucémico al diagnóstico con curva de tolerancia oral a la glucosa, glucosa en ayuno o hemoglobina glucosilada, y repetirlo cada 1 a 3 años según el riesgo. También se miden lípidos, presión arterial, peso y circunferencia de cintura, y se tamiza ansiedad, depresión y apnea del sueño. Los cambios en el estilo de vida son la base de la prevención.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de ovarios poliquísticos"
+      ]
+    },
+    {
+      "key": "gyo-09-endocrino-reproductiva-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "polycystic_ovary",
+      "vignette": "Mujer de 26 años con hirsutismo progresivo de inicio rápido en 6 meses, voz grave, aumento de la masa muscular, clitoromegalia y amenorrea. Testosterona total de 250 ng/dL.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cambios por hacer ejercicio con pesas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica la clitoromegalia."
+        },
+        {
+          "key": "b",
+          "text": "Hiperplasia suprarrenal congénita no clásica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Suele ser de inicio en la pubertad y más leve."
+        },
+        {
+          "key": "c",
+          "text": "Uso de anticonceptivos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No causa virilización."
+        },
+        {
+          "key": "d",
+          "text": "Hiperprolactinemia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No causa virilización."
+        },
+        {
+          "key": "e",
+          "text": "Acné grave aislado",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la virilización."
+        },
+        {
+          "key": "f",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la virilización."
+        },
+        {
+          "key": "g",
+          "text": "Hirsutismo idiopático",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la virilización ni la testosterona tan alta."
+        },
+        {
+          "key": "h",
+          "text": "Tumor productor de andrógenos de ovario o suprarrenal",
+          "correct": true,
+          "rationale": "Virilización rápida con testosterona muy elevada."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de ovario poliquístico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da hiperandrogenismo leve de evolución lenta sin virilización."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome metabólico",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la testosterona tan alta."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "La virilización de inicio rápido, con voz grave, clitoromegalia, aumento de la masa muscular y calvicie de patrón masculino, sugiere un tumor productor de andrógenos de ovario, como el tumor de células de Sertoli Leydig, o de suprarrenal. Una testosterona total mayor de 150 a 200 ng/dL apoya un origen tumoral ovárico y un sulfato de dehidroepiandrosterona muy elevado sugiere origen suprarrenal. Se estudia con ultrasonido transvaginal, tomografía o resonancia de suprarrenales. El tratamiento es la resección quirúrgica. El síndrome de ovario poliquístico causa hiperandrogenismo leve de evolución lenta.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del hirsutismo"
+      ]
+    },
+    {
+      "key": "gyo-09-endocrino-reproductiva-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "menopause",
+      "vignette": "Mujer de 51 años con ausencia de menstruación desde hace 13 meses, bochornos varias veces al día, sudoración nocturna, insomnio e irritabilidad. No toma medicamentos.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Menopausia con síndrome vasomotor",
+          "correct": true,
+          "rationale": "Amenorrea de 12 meses a la edad esperada con síntomas vasomotores."
+        },
+        {
+          "key": "b",
+          "text": "Depresión mayor",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la amenorrea."
+        },
+        {
+          "key": "c",
+          "text": "Insuficiencia ovárica prematura",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ocurre antes de los 40 años."
+        },
+        {
+          "key": "d",
+          "text": "Problemas de nervios por la edad sin causa hormonal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una causa hormonal."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome carcinoide",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es raro."
+        },
+        {
+          "key": "f",
+          "text": "Feocromocitoma",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es raro."
+        },
+        {
+          "key": "g",
+          "text": "Hipertiroidismo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede causar sudoración, pero la amenorrea a esta edad orienta a menopausia."
+        },
+        {
+          "key": "h",
+          "text": "Hiperprolactinemia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Daría galactorrea."
+        },
+        {
+          "key": "i",
+          "text": "Trastorno de ansiedad generalizada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la amenorrea."
+        },
+        {
+          "key": "j",
+          "text": "Embarazo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es poco probable y no explica los bochornos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "La menopausia es el cese permanente de la menstruación por pérdida de la función folicular ovárica, y se diagnostica de forma retrospectiva tras 12 meses de amenorrea sin otra causa, en promedio a los 49 a 51 años. La perimenopausia o transición menopáusica incluye los años previos con ciclos irregulares y síntomas. El diagnóstico en mujeres mayores de 45 años con síntomas típicos es clínico y no requiere medir FSH. Los síntomas incluyen bochornos, sudoración nocturna, alteraciones del sueño y del ánimo, síndrome genitourinario y, a largo plazo, osteoporosis y mayor riesgo cardiovascular.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia"
+      ]
+    },
+    {
+      "key": "gyo-09-endocrino-reproductiva-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "menopause",
+      "vignette": "Mujer de 52 años con menopausia hace 1 año y bochornos intensos que afectan su sueño y trabajo. Tiene útero, sin antecedentes de cáncer de mama, trombosis ni enfermedad cardiovascular. Presión normal.",
+      "prompt": "¿Cuál es el tratamiento de elección para sus síntomas vasomotores?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Evitar la terapia hormonal en todas por miedo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es segura en candidatas adecuadas."
+        },
+        {
+          "key": "b",
+          "text": "Terapia hormonal con estrógeno más progestágeno a la dosis mínima eficaz",
+          "correct": true,
+          "rationale": "Es el tratamiento más eficaz y, con útero, requiere progestágeno."
+        },
+        {
+          "key": "c",
+          "text": "Estrógeno solo sin progestágeno",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Con útero aumenta el riesgo de cáncer de endometrio."
+        },
+        {
+          "key": "d",
+          "text": "Ningún tratamiento porque es natural",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Los síntomas afectan su calidad de vida."
+        },
+        {
+          "key": "e",
+          "text": "Testosterona como primera línea",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No trata los bochornos."
+        },
+        {
+          "key": "f",
+          "text": "Fitoestrógenos como tratamiento más eficaz",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Su eficacia es limitada."
+        },
+        {
+          "key": "g",
+          "text": "Tibolona en mujeres con cáncer de mama",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Está contraindicada en cáncer de mama."
+        },
+        {
+          "key": "h",
+          "text": "Histerectomía para usar estrógeno solo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "i",
+          "text": "Benzodiacepinas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No tratan los bochornos."
+        },
+        {
+          "key": "j",
+          "text": "La terapia hormonal siempre causa cáncer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "En mujeres adecuadas los beneficios superan los riesgos."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "La terapia hormonal es el tratamiento más eficaz para los síntomas vasomotores y el síndrome genitourinario. En mujeres menores de 60 años o con menos de 10 años de menopausia y sin contraindicaciones, los beneficios superan los riesgos. Las mujeres con útero deben recibir estrógeno más progestágeno para proteger el endometrio, y las histerectomizadas estrógeno solo. Se usa la dosis mínima eficaz y se reevalúa periódicamente. Las contraindicaciones incluyen cáncer de mama o de endometrio, sangrado no diagnosticado, trombosis, enfermedad hepática activa y enfermedad cardiovascular. La vía transdérmica tiene menor riesgo de trombosis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia"
+      ]
+    },
+    {
+      "key": "gyo-09-endocrino-reproductiva-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "menopause",
+      "vignette": "Mujer de 54 años con antecedente de cáncer de mama con receptores hormonales positivos tratado hace 3 años. Presenta bochornos intensos que afectan su sueño.",
+      "prompt": "¿Cuál es el tratamiento de elección para sus síntomas vasomotores?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tratamiento no hormonal como inhibidores de la recaptura de serotonina o noradrenalina, gabapentina o fezolinetant",
+          "correct": true,
+          "rationale": "La terapia hormonal está contraindicada tras cáncer de mama."
+        },
+        {
+          "key": "b",
+          "text": "Paroxetina con tamoxifeno",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La paroxetina inhibe el metabolismo del tamoxifeno."
+        },
+        {
+          "key": "c",
+          "text": "No tratar sus síntomas por su cáncer previo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Hay alternativas seguras."
+        },
+        {
+          "key": "d",
+          "text": "Terapia hormonal combinada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Está contraindicada por el cáncer de mama."
+        },
+        {
+          "key": "e",
+          "text": "Fitoestrógenos de soya en dosis altas como opción segura comprobada",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Su seguridad en cáncer hormonosensible es incierta."
+        },
+        {
+          "key": "f",
+          "text": "Ooforectomía",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No trata los bochornos de la menopausia."
+        },
+        {
+          "key": "g",
+          "text": "Testosterona en gel",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es el tratamiento."
+        },
+        {
+          "key": "h",
+          "text": "Ningún tratamiento porque nada funciona",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Hay opciones no hormonales eficaces."
+        },
+        {
+          "key": "i",
+          "text": "Tibolona",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aumenta la recurrencia del cáncer de mama."
+        },
+        {
+          "key": "j",
+          "text": "Estrógenos conjugados solos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Están contraindicados."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "i",
+        "j"
+      ],
+      "explanation": "En mujeres con contraindicación para la terapia hormonal, como antecedente de cáncer de mama, se usan tratamientos no hormonales para los síntomas vasomotores. Los inhibidores de la recaptura de serotonina y noradrenalina, como venlafaxina o desvenlafaxina, los inhibidores selectivos de la recaptura de serotonina como escitalopram, la gabapentina, la clonidina y los antagonistas del receptor de neuroquinina 3 como fezolinetant son opciones eficaces. En pacientes que toman tamoxifeno se evitan la paroxetina y la fluoxetina por inhibir el CYP2D6. La terapia cognitivo conductual y la hipnosis clínica también ayudan.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia"
+      ]
+    },
+    {
+      "key": "gyo-09-endocrino-reproductiva-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "menopause",
+      "vignette": "Mujer de 47 años con ciclos irregulares desde hace un año, con intervalos de 40 a 70 días y bochornos ocasionales. Pregunta si ya está en la menopausia y si debe seguir usando anticoncepción.",
+      "prompt": "¿Qué indica su situación clínica?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Indicación de histerectomía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "b",
+          "text": "Cáncer de endometrio confirmado",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay datos."
+        },
+        {
+          "key": "c",
+          "text": "Menopausia confirmada sin necesidad de anticoncepción",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No cumple 12 meses de amenorrea."
+        },
+        {
+          "key": "d",
+          "text": "Transición menopáusica o perimenopausia, con posibilidad de ovulación y necesidad de anticoncepción",
+          "correct": true,
+          "rationale": "Aún no cumple 12 meses de amenorrea."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome de ovario poliquístico de nueva aparición",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El contexto orienta a perimenopausia."
+        },
+        {
+          "key": "f",
+          "text": "Insuficiencia ovárica prematura",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tiene más de 40 años."
+        },
+        {
+          "key": "g",
+          "text": "Ya no puede embarazarse por los bochornos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Aún puede ovular."
+        },
+        {
+          "key": "h",
+          "text": "Embarazo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay datos."
+        },
+        {
+          "key": "i",
+          "text": "Hipotiroidismo como única causa",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede descartarse, pero el cuadro es típico."
+        },
+        {
+          "key": "j",
+          "text": "Hiperprolactinemia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay galactorrea."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "e",
+        "f"
+      ],
+      "explanation": "La transición menopáusica comienza con ciclos de duración variable y avanza a intervalos de amenorrea de 60 días o más, con fluctuaciones hormonales y síntomas vasomotores. Durante este periodo la ovulación puede ocurrir de forma esporádica, por lo que se recomienda continuar la anticoncepción hasta 12 meses de amenorrea en mayores de 50 años o 24 meses en menores de 50. La FSH es variable en la perimenopausia y no es útil para el diagnóstico. Los anticonceptivos de dosis baja o el dispositivo con levonorgestrel pueden controlar los síntomas y el sangrado.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome climatérico y menopausia"
+      ]
+    },
+    {
+      "key": "gyo-09-endocrino-reproductiva-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "reproductive_endocrinology",
+      "subtopic": "menopause",
+      "vignette": "Mujer de 58 años con menopausia a los 45 años sin terapia hormonal, delgada, fumadora y con madre con fractura de cadera. Sufrió una fractura de muñeca al caer de su propia altura.",
+      "prompt": "¿Cuál es la complicación de la deficiencia estrogénica que explica la fractura?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Mieloma múltiple",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es menos probable."
+        },
+        {
+          "key": "b",
+          "text": "Osteomalacia por falta de sol únicamente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el contexto posmenopáusico."
+        },
+        {
+          "key": "c",
+          "text": "Osteoporosis posmenopáusica con fractura por fragilidad",
+          "correct": true,
+          "rationale": "La pérdida de estrógenos acelera la resorción ósea."
+        },
+        {
+          "key": "d",
+          "text": "Enfermedad de Paget ósea",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente."
+        },
+        {
+          "key": "e",
+          "text": "Hiperparatiroidismo primario como causa principal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Debe descartarse, pero la causa más probable es posmenopáusica."
+        },
+        {
+          "key": "f",
+          "text": "Osteogénesis imperfecta",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es congénita."
+        },
+        {
+          "key": "g",
+          "text": "Artritis reumatoide",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No causa la fractura directamente."
+        },
+        {
+          "key": "h",
+          "text": "Huesos débiles por tomar poca leche como única causa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El mecanismo principal es hormonal."
+        },
+        {
+          "key": "i",
+          "text": "Fractura traumática normal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Una caída de su altura no debería fracturar hueso sano."
+        },
+        {
+          "key": "j",
+          "text": "Metástasis óseas de cáncer de mama",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay antecedente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "La deficiencia de estrógenos tras la menopausia aumenta la resorción ósea por los osteoclastos, con pérdida rápida de masa ósea en los primeros años. La osteoporosis se define por una densidad mineral ósea con puntuación T de menos 2.5 o menor, o por una fractura por fragilidad, como la de muñeca, vértebra o cadera tras una caída de la propia altura. Los factores de riesgo incluyen menopausia temprana, bajo peso, tabaquismo, alcohol, corticosteroides, antecedente familiar de fractura de cadera y sedentarismo. La herramienta FRAX estima el riesgo de fractura. El tratamiento incluye calcio, vitamina D, ejercicio y bisfosfonatos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis en la mujer posmenopáusica"
+      ]
+    }
+  ]
+}
