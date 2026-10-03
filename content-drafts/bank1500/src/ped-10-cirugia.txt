@@ -1,0 +1,239 @@
+@ ped|pediatric_surgery|intussusception|2|diagnosis
+V: Lactante de 9 meses con episodios súbitos de llanto intenso, flexión de piernas y palidez cada 15 a 20 minutos, con periodos de calma entre ellos. Ha vomitado y hace una hora tuvo una evacuación con moco y sangre como jalea de grosella. Se palpa una masa en forma de salchicha en hipocondrio derecho.
+P: ¿Cuál es el diagnóstico más probable?
++ Invaginación intestinal || Dolor cólico intermitente, masa en salchicha y evacuaciones en jalea de grosella en un lactante.
+- anchoring | Gastroenteritis aguda con disentería || No explica la masa ni los episodios de dolor con calma.
+- availability_heuristic | Cólico del lactante || Ocurre en menores de 4 meses sin sangre ni masa.
+- representativeness_heuristic | Apendicitis aguda || Es rara a esta edad y no da jalea de grosella.
+- premature_closure | Divertículo de Meckel sangrante || Da sangrado indoloro.
+- base_rate_fallacy | Vólvulo de intestino medio || Da vómito biliar en recién nacidos.
+- framing_effect | Púrpura de Henoch Schönlein || Tiene púrpura y es más común en escolares.
+- inattentional_blindness | Estreñimiento con fisura anal || No explica la masa ni el dolor cólico intenso.
+- focusing_illusion | Infección urinaria || No explica la masa ni la sangre en heces.
+- belief_bias | Berrinches por dentición || No explica la sangre ni la masa.
+E: La invaginación intestinal es la causa más frecuente de obstrucción intestinal entre los 6 y 36 meses. La forma más común es ileocólica, generalmente idiopática por hiperplasia linfoide tras infecciones virales. Se manifiesta con dolor abdominal cólico súbito e intermitente con llanto y flexión de piernas, vómito, letargo entre episodios, masa en salchicha y evacuaciones en jalea de grosella como dato tardío. La tríada clásica solo aparece en una minoría. El ultrasonido es el estudio de elección y muestra la imagen en diana o en pseudorriñón. En niños mayores debe buscarse un punto guía, como divertículo de Meckel o linfoma.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de invaginación intestinal en niños
+
+@ ped|pediatric_surgery|intussusception|3|treatment_of_choice
+V: Lactante de 11 meses con invaginación ileocólica confirmada por ultrasonido de 12 horas de evolución. Está hemodinámicamente estable, sin datos de peritonitis ni perforación.
+P: ¿Cuál es el tratamiento de elección?
++ Reducción con enema hidrostático o neumático guiado por imagen || Es eficaz en la mayoría de los casos sin peritonitis.
+- anchoring | Laparotomía de urgencia en todos los casos || Se reserva para falla de la reducción o peritonitis.
+- availability_heuristic | Observación y antibióticos || La invaginación no se resuelve sola de forma confiable.
+- representativeness_heuristic | Enema de bario a ciegas en casa || Debe hacerse guiado por imagen y por personal capacitado.
+- premature_closure | Sonda nasogástrica como único tratamiento || No reduce la invaginación.
+- framing_effect | Laxantes orales || Están contraindicados.
+- complexity_bias | Resección intestinal laparoscópica inmediata || No es necesaria si se reduce.
+- base_rate_fallacy | Analgésicos y egreso || La invaginación puede necrosarse.
+- belief_bias | Masaje abdominal para deshacerla || Es ineficaz y peligroso.
+- omission_bias | Esperar 48 horas para ver si se resuelve || Aumenta el riesgo de necrosis.
+E: El tratamiento de elección de la invaginación sin datos de peritonitis, perforación ni choque es la reducción no quirúrgica con enema hidrostático con solución o neumático con aire, guiado por ultrasonido o fluoroscopia. Tiene éxito en 80 a 90% de los casos. Se realiza con presencia del cirujano por el riesgo de perforación. La cirugía se indica si hay peritonitis, perforación, inestabilidad, falla de la reducción o un punto guía. La recurrencia ocurre en alrededor de 10%, generalmente en las primeras 24 a 72 horas, y puede volver a tratarse con enema.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de invaginación intestinal en niños
+
+@ ped|pediatric_surgery|intussusception|3|initial_study
+V: Niño de 14 meses con dolor abdominal intermitente intenso, vómito y letargo. No tiene evacuaciones con sangre. Se sospecha invaginación intestinal.
+P: ¿Cuál es el estudio inicial de elección?
++ Ultrasonido abdominal || Tiene alta sensibilidad y especificidad y no emite radiación.
+- anchoring | Radiografía simple de abdomen como estudio definitivo || Tiene baja sensibilidad.
+- availability_heuristic | Tomografía abdominal de rutina || Emite radiación y no es necesaria.
+- representativeness_heuristic | Colonoscopia || No está indicada.
+- premature_closure | Biometría hemática || No confirma el diagnóstico.
+- base_rate_fallacy | Gammagrama con tecnecio || Es para divertículo de Meckel.
+- framing_effect | Serie esofagogastroduodenal || Valora el tracto superior.
+- complexity_bias | Resonancia magnética abdominal || Requiere sedación y no es necesaria.
+- information_bias | Coprocultivo || No confirma invaginación.
+- belief_bias | Esperar a que aparezca sangre para estudiar || La sangre es un dato tardío.
+E: El ultrasonido abdominal es el estudio de elección para diagnosticar la invaginación intestinal, con sensibilidad y especificidad cercanas a 100% en manos expertas. En el corte transversal muestra la imagen en diana o en dona, y en el longitudinal la imagen en pseudorriñón. También permite valorar líquido libre, flujo de la pared y puntos guía. La radiografía simple puede mostrar ausencia de gas en el cuadrante inferior derecho, signo de la diana o datos de obstrucción y perforación, pero no descarta el diagnóstico. No debe esperarse a las evacuaciones en jalea de grosella, que indican isquemia de la mucosa.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de invaginación intestinal en niños
+
+@ ped|pediatric_surgery|pyloric_stenosis|2|diagnosis
+V: Lactante masculino primogénito de 4 semanas con vómito no biliar en proyectil después de cada toma desde hace una semana. Queda con hambre después de vomitar. Ha perdido peso. Se observan ondas peristálticas de izquierda a derecha y se palpa una masa en forma de oliva en epigastrio.
+P: ¿Cuál es el diagnóstico más probable?
++ Estenosis hipertrófica del píloro || Vómito no biliar en proyectil con hambre, oliva pilórica y ondas peristálticas en un varón de 2 a 8 semanas.
+- anchoring | Reflujo gastroesofágico fisiológico || No es en proyectil ni causa pérdida de peso.
+- availability_heuristic | Alergia a la proteína de la leche de vaca || No explica la oliva pilórica.
+- representativeness_heuristic | Malrotación intestinal con vólvulo || Da vómito biliar.
+- premature_closure | Atresia duodenal || Inicia en las primeras horas con vómito biliar.
+- base_rate_fallacy | Hiperplasia suprarrenal congénita perdedora de sal || Da hiperpotasemia y acidosis.
+- framing_effect | Gastroenteritis viral || No explica la oliva ni las ondas peristálticas.
+- inattentional_blindness | Meningitis || No explica la oliva pilórica.
+- focusing_illusion | Infección urinaria || No explica los hallazgos abdominales.
+- belief_bias | Bebé que come demasiado rápido || Hay una obstrucción anatómica.
+E: La estenosis hipertrófica del píloro es la causa quirúrgica más frecuente de vómito en lactantes. Es más común en varones primogénitos entre las 2 y 8 semanas, y se asocia a eritromicina en las primeras semanas. La hipertrofia del músculo pilórico obstruye el vaciamiento gástrico y produce vómito no biliar en proyectil después de las tomas, con hambre persistente, deshidratación y pérdida de peso. A la exploración pueden verse ondas peristálticas y palparse la oliva pilórica. El ultrasonido confirma el diagnóstico con grosor del músculo mayor de 3 a 4 mm y longitud del canal mayor de 15 a 17 mm.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de estenosis hipertrófica del píloro
+
+@ ped|pediatric_surgery|pyloric_stenosis|3|data_interpretation
+V: Lactante de 5 semanas con estenosis hipertrófica del píloro y vómito de 10 días. Gasometría con pH de 7.52 y bicarbonato de 34 mEq/L. Sodio de 132, cloro de 85 y potasio de 2.9 mEq/L.
+P: ¿Qué indica este trastorno ácido base?
++ Alcalosis metabólica hipoclorémica e hipopotasémica por pérdida de ácido gástrico || Es el trastorno característico de la estenosis pilórica.
+- anchoring | Acidosis metabólica por deshidratación || Las pérdidas gástricas producen alcalosis.
+- availability_heuristic | Alcalosis respiratoria por llanto || El bicarbonato elevado indica causa metabólica.
+- representativeness_heuristic | Acidosis respiratoria || El pH es alcalino.
+- premature_closure | Valores normales para la edad || Están claramente alterados.
+- base_rate_fallacy | Acidosis tubular renal || Da acidosis.
+- framing_effect | Síndrome de Bartter como causa primaria || El contexto explica la alcalosis.
+- inattentional_blindness | Hiperplasia suprarrenal congénita || Da hiperpotasemia y acidosis.
+- focusing_illusion | Error de laboratorio || Los valores son congruentes con el cuadro.
+- belief_bias | Exceso de sal en la fórmula || No explica el trastorno.
+E: El vómito persistente en la estenosis pilórica produce pérdida de ácido clorhídrico, lo que causa alcalosis metabólica hipoclorémica. La deshidratación activa la aldosterona, que retiene sodio a cambio de potasio e hidrogeniones en el riñón, lo que produce hipopotasemia y aciduria paradójica. Antes de la cirugía se debe corregir la deshidratación y los electrolitos con solución salina y potasio, ya que la alcalosis aumenta el riesgo de apnea posoperatoria por la anestesia. La cirugía no es una urgencia inmediata, sino que se realiza cuando el paciente está estabilizado.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de estenosis hipertrófica del píloro
+
+@ ped|pediatric_surgery|pyloric_stenosis|3|treatment_of_choice
+V: Lactante de 6 semanas con estenosis hipertrófica del píloro confirmada por ultrasonido. Ya se corrigieron la deshidratación y la alcalosis metabólica.
+P: ¿Cuál es el tratamiento de elección?
++ Piloromiotomía extramucosa de Ramstedt, abierta o laparoscópica || Corrige de forma definitiva la obstrucción.
+- anchoring | Fórmula espesada y posición semisentada || No corrige la obstrucción.
+- availability_heuristic | Inhibidor de bomba de protones || No trata la hipertrofia.
+- representativeness_heuristic | Gastrectomía parcial || Es excesiva.
+- premature_closure | Dilatación endoscópica con balón como primera opción || No es el estándar.
+- framing_effect | Gastroyeyunostomía || No está indicada.
+- complexity_bias | Nutrición parenteral prolongada sin cirugía || No resuelve la obstrucción.
+- base_rate_fallacy | Procinéticos como domperidona || No tratan la obstrucción.
+- belief_bias | Cambiar de fórmula hasta encontrar una que tolere || No resuelve la causa.
+- omission_bias | Esperar a que el píloro crezca normalmente || La obstrucción persiste.
+E: El tratamiento definitivo de la estenosis hipertrófica del píloro es la piloromiotomía extramucosa de Ramstedt, que consiste en cortar longitudinalmente el músculo hipertrófico hasta la submucosa sin abrir la mucosa. Puede realizarse por vía abierta o laparoscópica con resultados similares. La alimentación se reinicia en pocas horas. Las complicaciones más frecuentes son vómito posoperatorio transitorio, perforación de la mucosa e infección de la herida. El pronóstico es excelente. La atropina es una alternativa médica en lugares sin acceso a cirugía, pero es menos eficaz.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de estenosis hipertrófica del píloro
+
+@ ped|pediatric_surgery|pyloric_stenosis|4|diagnosis
+V: Recién nacido de 3 días con vómito verde desde ayer, distensión abdominal leve e irritabilidad. Previamente toleraba la vía oral y evacuó meconio. La radiografía muestra poco gas distal y la serie gastroduodenal muestra el duodeno sin cruzar la línea media con imagen en sacacorchos.
+P: ¿Cuál es el diagnóstico más probable?
++ Malrotación intestinal con vólvulo de intestino medio || Vómito biliar en un recién nacido con duodeno en sacacorchos.
+- anchoring | Estenosis hipertrófica del píloro || Da vómito no biliar a las 2 a 8 semanas.
+- availability_heuristic | Reflujo gastroesofágico || No es biliar.
+- representativeness_heuristic | Enfermedad de Hirschsprung || Da retraso del meconio y distensión.
+- premature_closure | Íleo meconial || Se asocia a fibrosis quística sin evacuación de meconio.
+- base_rate_fallacy | Atresia esofágica || Da salivación y no permite el paso de la sonda.
+- framing_effect | Enterocolitis necrosante || Es más común en prematuros con neumatosis.
+- inattentional_blindness | Sepsis con íleo || No explica la imagen en sacacorchos.
+- focusing_illusion | Atresia duodenal || Da doble burbuja desde las primeras horas.
+- belief_bias | Vómito por tragar líquido amniótico || El vómito biliar siempre es alarmante.
+E: El vómito biliar en un recién nacido es una urgencia quirúrgica hasta descartar malrotación con vólvulo. En la malrotación el intestino no completa su rotación y fijación, con un mesenterio de base estrecha que puede torcerse sobre la arteria mesentérica superior. El vólvulo causa obstrucción e isquemia del intestino medio, que puede necrosarse en horas. La serie esofagogastroduodenal es el estudio de elección y muestra la unión duodenoyeyunal a la derecha y la imagen en sacacorchos. El tratamiento es cirugía urgente con el procedimiento de Ladd, que destuerce el intestino, corta las bandas y amplía la base del mesenterio.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de malrotación intestinal
+
+@ ped|pediatric_surgery|pyloric_stenosis|3|diagnosis
+V: Recién nacido de término de 4 días que no ha evacuado meconio en las primeras 48 horas, con distensión abdominal progresiva y vómito. Al tacto rectal sale una evacuación explosiva de gases y heces. El colon por enema muestra una zona de transición con recto estrecho y colon proximal dilatado.
+P: ¿Cuál es el diagnóstico más probable?
++ Enfermedad de Hirschsprung || Retraso en la evacuación de meconio, salida explosiva al tacto y zona de transición.
+- anchoring | Estreñimiento funcional || No explica la ausencia de meconio ni la zona de transición.
+- availability_heuristic | Íleo meconial || Se asocia a fibrosis quística con microcolon.
+- representativeness_heuristic | Estenosis hipertrófica del píloro || Da vómito sin alteraciones en la evacuación.
+- premature_closure | Hipotiroidismo congénito || Da estreñimiento, pero no zona de transición.
+- base_rate_fallacy | Malformación anorrectal || Se ve en la exploración perineal.
+- framing_effect | Síndrome del tapón de meconio || Se resuelve con el enema sin zona de transición persistente.
+- inattentional_blindness | Malrotación con vólvulo || Da vómito biliar con imagen en sacacorchos.
+- focusing_illusion | Sepsis neonatal con íleo || No explica la zona de transición.
+- belief_bias | Bebé que todavía no ha comido suficiente || El meconio debe salir en 48 horas.
+E: La enfermedad de Hirschsprung se debe a la ausencia de células ganglionares en los plexos del colon distal por falla en la migración de las células de la cresta neural. El segmento aganglionar no se relaja y produce obstrucción funcional. Se sospecha en recién nacidos que no evacuan meconio en las primeras 48 horas, con distensión, vómito y salida explosiva de heces al tacto rectal. Es más frecuente en varones y en síndrome de Down. El colon por enema muestra la zona de transición, y el diagnóstico se confirma con biopsia rectal que demuestra ausencia de células ganglionares. La complicación más grave es la enterocolitis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad de Hirschsprung
+
+@ ped|pediatric_surgery|cryptorchidism|2|diagnosis
+V: Lactante de 6 meses a quien en su consulta de niño sano no se le palpa el testículo derecho en la bolsa escrotal. Se palpa una masa móvil en el conducto inguinal derecho que no desciende al escroto con maniobras. El testículo izquierdo es normal.
+P: ¿Cuál es el diagnóstico más probable?
++ Criptorquidia derecha con testículo inguinal || Testículo palpable en el conducto que no puede bajarse al escroto.
+- anchoring | Testículo retráctil || Se baja al escroto con maniobras y permanece ahí.
+- availability_heuristic | Hernia inguinal || Es reductible al abdomen, no corresponde a la gónada.
+- representativeness_heuristic | Anorquia || El testículo está presente en el conducto.
+- premature_closure | Hidrocele || Transilumina y el testículo está en el escroto.
+- base_rate_fallacy | Trastorno del desarrollo sexual en todos los casos || Se considera si es bilateral o con hipospadias.
+- framing_effect | Testículo ectópico perineal || Se encuentra en el periné.
+- inattentional_blindness | Torsión testicular || Da dolor agudo.
+- focusing_illusion | Quiste de cordón espermático || No corresponde al testículo.
+- belief_bias | El testículo bajará solo en la adolescencia || Después de los 6 meses es poco probable.
+E: La criptorquidia es la ausencia del testículo en la bolsa escrotal por falla en su descenso. Es más frecuente en prematuros. Muchos testículos descienden espontáneamente en los primeros 6 meses, pero después es poco probable. Se clasifica en palpable, como inguinal, y no palpable, que puede ser abdominal o ausente. Debe distinguirse del testículo retráctil, que se baja al escroto con maniobras y permanece ahí, y no requiere cirugía. La criptorquidia bilateral no palpable o asociada a hipospadias obliga a descartar trastornos del desarrollo sexual, como hiperplasia suprarrenal congénita.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de criptorquidia
+
+@ ped|pediatric_surgery|cryptorchidism|3|treatment_of_choice
+V: Niño de 9 meses con criptorquidia izquierda palpable en el conducto inguinal, confirmada en varias revisiones desde el nacimiento.
+P: ¿Cuál es el tratamiento de elección?
++ Orquidopexia entre los 6 y 18 meses de edad || La cirugía temprana preserva la fertilidad y facilita la vigilancia de cáncer.
+- anchoring | Esperar a la pubertad para que descienda solo || Aumenta el daño testicular.
+- availability_heuristic | Gonadotropina coriónica humana como tratamiento de elección || Tiene baja eficacia y no se recomienda de rutina.
+- representativeness_heuristic | Orquiectomía en todos los casos || Se reserva para testículos atróficos o en pospúberes.
+- premature_closure | Solo vigilancia anual hasta los 10 años || Retrasa la cirugía.
+- framing_effect | Testosterona tópica || No es eficaz.
+- complexity_bias | Resonancia magnética antes de decidir en un testículo palpable || No es necesaria.
+- base_rate_fallacy | Cirugía después de los 5 años para que crezca más || Aumenta el daño.
+- belief_bias | Masajes para bajar el testículo || No son eficaces.
+- omission_bias | No operar para evitar riesgos de anestesia || El riesgo de no operar es mayor.
+E: El tratamiento de la criptorquidia es quirúrgico con orquidopexia, idealmente entre los 6 y 18 meses de edad. La cirugía temprana reduce el daño del epitelio germinal por la temperatura, mejora el potencial de fertilidad, corrige hernias asociadas, previene la torsión y permite la autoexploración para detectar cáncer. El tratamiento hormonal tiene baja eficacia y no se recomienda de rutina. En testículos no palpables se realiza laparoscopia diagnóstica y terapéutica, ya que la ecografía no es confiable para localizarlos. En adolescentes con testículo intraabdominal se considera orquiectomía por el riesgo de cáncer.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de criptorquidia
+
+@ ped|pediatric_surgery|cryptorchidism|3|complication_prognosis
+V: Hombre de 28 años con antecedente de criptorquidia derecha operada a los 8 años. Consulta por infertilidad y por un aumento de volumen indoloro del testículo derecho.
+P: ¿Cuál es la complicación a largo plazo que debe sospecharse?
++ Cáncer testicular de células germinales, con mayor riesgo en el testículo criptorquídico || La criptorquidia aumenta el riesgo de cáncer y de infertilidad.
+- anchoring | Varicocele || Suele ser izquierdo y doloroso.
+- availability_heuristic | Epididimitis aguda || Da dolor y fiebre.
+- representativeness_heuristic | Hidrocele simple sin importancia || Debe descartarse tumor.
+- premature_closure | Torsión testicular || Da dolor agudo intenso.
+- base_rate_fallacy | Orquitis por parotiditis || Es dolorosa y aguda.
+- framing_effect | Hernia inguinal recurrente || No explica la masa testicular.
+- inattentional_blindness | Espermatocele || Es una lesión quística del epidídimo.
+- focusing_illusion | Atrofia testicular por la cirugía || No explica el aumento de volumen.
+- belief_bias | La cirugía elimina por completo el riesgo de cáncer || El riesgo disminuye pero persiste.
+E: La criptorquidia se asocia a infertilidad y a mayor riesgo de cáncer testicular, sobre todo seminoma, en el testículo afectado y en menor medida en el contralateral. La orquidopexia antes de la pubertad reduce el riesgo de cáncer, pero no lo elimina, y facilita la exploración. La infertilidad es más frecuente en la criptorquidia bilateral y cuando la cirugía se retrasa. Por ello se recomienda la autoexploración testicular periódica en la adolescencia y la edad adulta. Toda masa testicular indolora en un adulto joven debe estudiarse con ultrasonido y marcadores tumorales.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de criptorquidia
+
+@ ped|pediatric_surgery|cryptorchidism|3|diagnosis
+V: Lactante masculino de 3 meses con aumento de volumen inguinoescrotal derecho que aparece al llorar y desaparece al dormir. Se reduce fácilmente con presión suave y no transilumina. Ambos testículos están en el escroto.
+P: ¿Cuál es el diagnóstico más probable?
++ Hernia inguinal indirecta || Masa reductible que aumenta con el llanto por persistencia del conducto peritoneovaginal.
+- anchoring | Hidrocele comunicante || Transilumina y cambia de tamaño a lo largo del día.
+- availability_heuristic | Criptorquidia || Los testículos están en el escroto.
+- representativeness_heuristic | Torsión testicular || Da dolor agudo y no se reduce.
+- premature_closure | Hernia inguinal directa || Es rara en niños.
+- base_rate_fallacy | Linfadenopatía inguinal || No aumenta con el llanto ni se reduce.
+- framing_effect | Varicocele || Es raro a esta edad y se describe como bolsa de gusanos.
+- inattentional_blindness | Hernia femoral || Es rara en lactantes y está debajo del ligamento inguinal.
+- focusing_illusion | Quiste de cordón || No se reduce al abdomen.
+- belief_bias | Se cierra sola con fajero || No se cierra y el fajero no es útil.
+E: La hernia inguinal en niños es casi siempre indirecta, por persistencia del conducto peritoneovaginal. Es más frecuente en varones, en el lado derecho y en prematuros. Se presenta como masa inguinal o inguinoescrotal que aumenta con el llanto o el esfuerzo y se reduce. A diferencia del hidrocele, no transilumina en general. A diferencia de los hidroceles no comunicantes, la hernia no se resuelve sola y tiene riesgo de incarceración, sobre todo en el primer año. Por ello se recomienda herniorrafia electiva temprana. Una hernia incarcerada que no se reduce requiere cirugía urgente.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de hernia inguinal en niños
+
+@ ped|pediatric_surgery|cryptorchidism|4|next_step
+V: Recién nacido con genitales ambiguos, falo de 2 cm con hipospadias perineal y gónadas no palpables. Al tercer día presenta vómito, deshidratación, sodio de 126 mEq/L y potasio de 7 mEq/L.
+P: ¿Cuál es la conducta más apropiada?
++ Tratar la crisis suprarrenal con solución salina, hidrocortisona y corrección de la hiperpotasemia y estudiar hiperplasia suprarrenal congénita || Gónadas no palpables con genitales ambiguos y crisis perdedora de sal.
+- anchoring | Programar orquidopexia bilateral || No se trata de una criptorquidia simple.
+- availability_heuristic | Asignar sexo masculino de inmediato por el falo || La asignación requiere estudio.
+- representativeness_heuristic | Dar solo líquidos orales y egresar || Es una urgencia vital.
+- premature_closure | Diagnosticar estenosis pilórica || No explica los genitales ni los electrolitos.
+- framing_effect | Iniciar testosterona || No trata la crisis.
+- complexity_bias | Laparoscopia exploradora urgente || No es la prioridad.
+- base_rate_fallacy | Furosemida para la hiperpotasemia como única medida || No corrige la deficiencia hormonal.
+- belief_bias | Esperar a la pubertad para definir el sexo || Hay una urgencia médica inmediata.
+- omission_bias | No tratar hasta tener el cariotipo || La crisis puede ser mortal.
+E: Un recién nacido con genitales ambiguos y gónadas no palpables debe considerarse una niña con hiperplasia suprarrenal congénita virilizada hasta demostrar lo contrario. La forma más común es la deficiencia de 21 hidroxilasa, que produce exceso de andrógenos y, en la forma perdedora de sal, deficiencia de cortisol y aldosterona con hiponatremia, hiperpotasemia, deshidratación y choque entre la primera y tercera semana. Se trata con solución salina, hidrocortisona y corrección de la hiperpotasemia. Se mide 17 hidroxiprogesterona y se realiza cariotipo. El tamiz neonatal permite detectarla antes de la crisis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de hiperplasia suprarrenal congénita
+
+@ ped|pediatric_surgery|intussusception|3|diagnosis
+V: Niño de 2 años con evacuaciones con sangre rojo oscuro abundante e indolora en las últimas horas. Está pálido, con taquicardia y hemoglobina de 8 g/dL. No tiene dolor abdominal ni vómito.
+P: ¿Cuál es el diagnóstico más probable?
++ Divertículo de Meckel sangrante || Sangrado rectal abundante e indoloro en un niño de 2 años.
+- anchoring | Invaginación intestinal || Se acompaña de dolor cólico intenso.
+- availability_heuristic | Fisura anal || Da sangrado escaso rojo brillante con dolor al evacuar.
+- representativeness_heuristic | Pólipo juvenil || Da sangrado escaso y recurrente.
+- premature_closure | Gastroenteritis bacteriana || Da diarrea, fiebre y cólico.
+- base_rate_fallacy | Enfermedad inflamatoria intestinal || Es rara a esta edad.
+- framing_effect | Hemorroides || Son raras en niños.
+- inattentional_blindness | Púrpura de Henoch Schönlein || Da púrpura y dolor.
+- focusing_illusion | Úlcera péptica || Daría melena con dolor epigástrico.
+- belief_bias | Sangre por comer betabel || La anemia y la taquicardia confirman el sangrado.
+E: El divertículo de Meckel es la anomalía congénita más frecuente del tubo digestivo y es un remanente del conducto onfalomesentérico en el íleon. Se resume con la regla de los dos, 2% de la población, a 2 pies de la válvula ileocecal, 2 pulgadas de largo, con síntomas antes de los 2 años y dos tipos de mucosa ectópica, gástrica y pancreática. La mucosa gástrica secreta ácido y ulcera el íleon adyacente, lo que causa sangrado rectal abundante e indoloro. El gammagrama con tecnecio 99m pertecnetato detecta la mucosa gástrica ectópica. El tratamiento es la resección quirúrgica.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del divertículo de Meckel
+
+@ ped|pediatric_surgery|intussusception|4|diagnosis
+V: Recién nacido prematuro de 29 semanas, alimentado con fórmula, que a los 10 días presenta distensión abdominal, residuo gástrico biliar, evacuaciones con sangre e inestabilidad térmica. La radiografía muestra gas en la pared intestinal y gas en la vena porta.
+P: ¿Cuál es el diagnóstico más probable?
++ Enterocolitis necrosante || Prematuro con distensión, sangre en heces, neumatosis intestinal y gas portal.
+- anchoring | Sepsis neonatal sin afección intestinal || No explica la neumatosis.
+- availability_heuristic | Alergia a la proteína de la leche de vaca || No da neumatosis ni gas portal.
+- representativeness_heuristic | Enfermedad de Hirschsprung || No da neumatosis intestinal.
+- premature_closure | Malrotación con vólvulo || Da vómito biliar sin neumatosis.
+- base_rate_fallacy | Invaginación intestinal || Es rara en prematuros.
+- framing_effect | Íleo por hipopotasemia || No explica la sangre ni la neumatosis.
+- inattentional_blindness | Fisura anal || No explica la distensión ni la neumatosis.
+- focusing_illusion | Gastroenteritis viral || No da neumatosis.
+- belief_bias | Intolerancia transitoria a la fórmula || La neumatosis indica enfermedad grave.
+E: La enterocolitis necrosante es la urgencia gastrointestinal más frecuente en recién nacidos, sobre todo prematuros. Se relaciona con inmadurez intestinal, alimentación con fórmula, disbiosis e isquemia. Se manifiesta con intolerancia alimentaria, distensión abdominal, residuo biliar, sangre en heces, apneas, inestabilidad térmica y choque. La neumatosis intestinal en la radiografía es característica, y el gas portal o neumoperitoneo indican mayor gravedad. El tratamiento incluye ayuno, descompresión gástrica, antibióticos de amplio espectro y soporte. La perforación o el deterioro requieren cirugía. La leche materna es la principal medida preventiva.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de enterocolitis necrosante

@@ -1,0 +1,1321 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "ped-09-hematooncologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_hematology_oncology",
+      "subtopic": "iron_deficiency_child",
+      "vignette": "Niño de 15 meses alimentado con leche de vaca entera, más de un litro al día, y poca carne. Está pálido e irritable y come tierra. Hemoglobina de 8.5 g/dL, volumen corpuscular medio de 62 fL, ancho de distribución eritrocitaria elevado y ferritina de 5 ng/mL.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Talasemia menor",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da microcitosis con ferritina normal y ancho de distribución normal."
+        },
+        {
+          "key": "b",
+          "text": "Palidez por falta de sol",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica la anemia microcítica."
+        },
+        {
+          "key": "c",
+          "text": "Anemia megaloblástica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es macrocítica."
+        },
+        {
+          "key": "d",
+          "text": "Anemia sideroblástica congénita",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara."
+        },
+        {
+          "key": "e",
+          "text": "Intoxicación por plomo como única causa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede coexistir, pero la ferritina baja indica deficiencia de hierro."
+        },
+        {
+          "key": "f",
+          "text": "Esferocitosis hereditaria",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da hemólisis con volumen normal."
+        },
+        {
+          "key": "g",
+          "text": "Anemia de la enfermedad crónica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La ferritina sería normal o alta."
+        },
+        {
+          "key": "h",
+          "text": "Anemia fisiológica del lactante",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Ocurre entre los 2 y 3 meses."
+        },
+        {
+          "key": "i",
+          "text": "Leucemia aguda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la microcitosis con ferritina baja."
+        },
+        {
+          "key": "j",
+          "text": "Anemia por deficiencia de hierro",
+          "correct": true,
+          "rationale": "Anemia microcítica con ferritina baja en un niño con consumo excesivo de leche de vaca."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La anemia por deficiencia de hierro es la causa más frecuente de anemia en niños. Los periodos de mayor riesgo son entre los 6 y 24 meses y la adolescencia. El consumo excesivo de leche de vaca, más de 500 a 700 mL al día, desplaza alimentos ricos en hierro, tiene poco hierro de baja absorción y puede causar microsangrado intestinal. Se presenta con palidez, irritabilidad, fatiga, pica y alteraciones del neurodesarrollo. Los estudios muestran anemia microcítica e hipocrómica, ancho de distribución eritrocitaria elevado, ferritina baja, hierro sérico bajo y transferrina elevada.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la anemia por deficiencia de hierro en niños"
+      ]
+    },
+    {
+      "key": "ped-09-hematooncologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_hematology_oncology",
+      "subtopic": "iron_deficiency_child",
+      "vignette": "Niña de 2 años con anemia ferropénica, hemoglobina de 9 g/dL, sin sangrado activo. Tolera la vía oral.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sulfato ferroso oral a 3 a 6 mg/kg/día de hierro elemental y corregir la dieta, continuando 2 a 3 meses tras normalizar la hemoglobina",
+          "correct": true,
+          "rationale": "Repone las reservas de hierro."
+        },
+        {
+          "key": "b",
+          "text": "Aspirado de médula ósea antes de tratar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "c",
+          "text": "Vitamina B12 intramuscular",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No trata la deficiencia de hierro."
+        },
+        {
+          "key": "d",
+          "text": "Transfusión de concentrado eritrocitario",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No está indicada en anemia crónica estable."
+        },
+        {
+          "key": "e",
+          "text": "Suspender el hierro al normalizar la hemoglobina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe continuarse para llenar reservas."
+        },
+        {
+          "key": "f",
+          "text": "Ácido fólico como único tratamiento",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No corrige la deficiencia de hierro."
+        },
+        {
+          "key": "g",
+          "text": "Hierro intravenoso como primera elección",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se reserva para intolerancia o malabsorción."
+        },
+        {
+          "key": "h",
+          "text": "Dar más leche para fortalecer la sangre",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El exceso de leche empeora la anemia."
+        },
+        {
+          "key": "i",
+          "text": "No tratar porque mejorará al crecer",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La deficiencia afecta el desarrollo."
+        },
+        {
+          "key": "j",
+          "text": "Dar el hierro con leche para evitar molestias",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La leche reduce su absorción."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "g"
+      ],
+      "explanation": "El tratamiento de la anemia por deficiencia de hierro es hierro oral, como sulfato ferroso, a 3 a 6 mg/kg/día de hierro elemental en una o dos tomas, de preferencia lejos de las comidas y con jugo de frutas con vitamina C, y no con leche, té o antiácidos. Se espera aumento de reticulocitos en 5 a 10 días y de hemoglobina de al menos 1 g/dL en 4 semanas. Si no responde se revisa la adherencia, pérdidas o malabsorción. Se continúa 2 a 3 meses tras normalizar la hemoglobina. Se corrige la dieta limitando la leche a menos de 500 mL al día.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la anemia por deficiencia de hierro en niños"
+      ]
+    },
+    {
+      "key": "ped-09-hematooncologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_hematology_oncology",
+      "subtopic": "iron_deficiency_child",
+      "vignette": "Recién nacido prematuro de 33 semanas, alimentado con leche materna, que será dado de alta. La madre pregunta qué cuidados necesita para evitar la anemia.",
+      "prompt": "¿Cuál es la medida de prevención indicada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dar leche de vaca desde los 3 meses",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se recomienda antes del año."
+        },
+        {
+          "key": "b",
+          "text": "Suspender la leche materna por tener poco hierro",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La leche materna debe mantenerse."
+        },
+        {
+          "key": "c",
+          "text": "Suplementar hierro solo a partir del año",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Las reservas se agotan antes."
+        },
+        {
+          "key": "d",
+          "text": "No suplementar para evitar estreñimiento",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El beneficio supera el riesgo."
+        },
+        {
+          "key": "e",
+          "text": "Vitamina B12 intramuscular mensual",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No previene la ferropenia."
+        },
+        {
+          "key": "f",
+          "text": "Eritropoyetina de rutina en casa",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es una medida habitual."
+        },
+        {
+          "key": "g",
+          "text": "Transfusión profiláctica antes del egreso",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "Dar caldos de frijol en lugar de leche materna",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No sustituyen la leche."
+        },
+        {
+          "key": "i",
+          "text": "No requiere ninguna medida si la hemoglobina es normal al egreso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Las reservas son bajas."
+        },
+        {
+          "key": "j",
+          "text": "Suplementar hierro oral de 2 mg/kg/día desde el primer mes hasta el año",
+          "correct": true,
+          "rationale": "Los prematuros tienen reservas de hierro bajas."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "Los prematuros y los recién nacidos de bajo peso tienen menores reservas de hierro porque la mayor parte se transfiere en el tercer trimestre, además de crecer rápido y haber tenido extracciones de sangre. Se recomienda suplementar hierro de 2 a 4 mg/kg/día a partir del primer mes y hasta los 12 meses. En recién nacidos de término alimentados con seno materno se suplementa hierro a partir de los 4 a 6 meses según las recomendaciones locales. El pinzamiento tardío del cordón, de 1 a 3 minutos, aumenta las reservas de hierro. A partir de los 6 meses se introducen alimentos ricos en hierro.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la anemia por deficiencia de hierro en niños"
+      ]
+    },
+    {
+      "key": "ped-09-hematooncologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_hematology_oncology",
+      "subtopic": "iron_deficiency_child",
+      "vignette": "Niño de 3 años con anemia ferropénica en tratamiento con sulfato ferroso desde hace 7 días. Los padres preguntan cómo saber si el hierro está funcionando.",
+      "prompt": "¿Qué indica una respuesta adecuada al tratamiento en la primera semana?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Heces de color negro",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es un efecto del hierro, no un marcador de respuesta."
+        },
+        {
+          "key": "b",
+          "text": "Aumento de la bilirrubina indirecta",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un marcador de respuesta."
+        },
+        {
+          "key": "c",
+          "text": "Normalización completa de la hemoglobina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tarda semanas."
+        },
+        {
+          "key": "d",
+          "text": "Disminución de los leucocitos",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No indica respuesta."
+        },
+        {
+          "key": "e",
+          "text": "Aumento de los reticulocitos entre los días 5 y 10",
+          "correct": true,
+          "rationale": "Es el primer marcador de respuesta medular."
+        },
+        {
+          "key": "f",
+          "text": "Que el niño engorde rápido",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No indica respuesta hematológica."
+        },
+        {
+          "key": "g",
+          "text": "Normalización de la ferritina en una semana",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Las reservas tardan meses en llenarse."
+        },
+        {
+          "key": "h",
+          "text": "Aumento del hierro sérico sin cambios clínicos",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es el mejor indicador."
+        },
+        {
+          "key": "i",
+          "text": "Aumento del volumen corpuscular medio a lo normal en 3 días",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Tarda más."
+        },
+        {
+          "key": "j",
+          "text": "Disminución de las plaquetas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No indica respuesta."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "La respuesta al hierro oral sigue una secuencia. En 12 a 24 horas mejora la irritabilidad y el apetito. Entre los días 5 y 10 aumentan los reticulocitos, que es el primer marcador de laboratorio de respuesta. En 4 semanas la hemoglobina debe aumentar al menos 1 a 2 g/dL. La ferritina tarda meses en normalizarse, por lo que el tratamiento se continúa 2 a 3 meses tras corregir la hemoglobina. Si no hay respuesta se revisa la adherencia, la dosis, el diagnóstico, la presencia de pérdidas sanguíneas, malabsorción como enfermedad celiaca o infección por Helicobacter pylori.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la anemia por deficiencia de hierro en niños"
+      ]
+    },
+    {
+      "key": "ped-09-hematooncologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_hematology_oncology",
+      "subtopic": "iron_deficiency_child",
+      "vignette": "Niño de 4 años con anemia microcítica leve, hemoglobina de 10.5 g/dL, volumen corpuscular medio de 64 fL, eritrocitos de 5.8 millones y ancho de distribución normal. Ferritina normal. Su padre tiene una anemia similar de por vida sin síntomas.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Anemia ferropénica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La ferritina y el ancho de distribución son normales."
+        },
+        {
+          "key": "b",
+          "text": "Intoxicación por plomo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay exposición."
+        },
+        {
+          "key": "c",
+          "text": "Esferocitosis hereditaria",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No da microcitosis marcada."
+        },
+        {
+          "key": "d",
+          "text": "Talasemia mayor",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Daría anemia grave desde el primer año."
+        },
+        {
+          "key": "e",
+          "text": "Anemia por mala alimentación que se corrige con hierro",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Dar hierro sin deficiencia es inútil y dañino."
+        },
+        {
+          "key": "f",
+          "text": "Anemia por pérdidas crónicas",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "La ferritina estaría baja."
+        },
+        {
+          "key": "g",
+          "text": "Anemia sideroblástica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es rara."
+        },
+        {
+          "key": "h",
+          "text": "Deficiencia de vitamina B12",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es macrocítica."
+        },
+        {
+          "key": "i",
+          "text": "Anemia de la enfermedad crónica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay enfermedad crónica."
+        },
+        {
+          "key": "j",
+          "text": "Rasgo talasémico beta",
+          "correct": true,
+          "rationale": "Microcitosis con eritrocitos elevados, ancho normal, ferritina normal y antecedente familiar."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "El rasgo talasémico beta, o talasemia menor, se debe a una mutación heterocigota en el gen de la cadena beta de la hemoglobina. Produce anemia microcítica leve o ausente, con número de eritrocitos normal o elevado, ancho de distribución normal y ferritina normal. El índice de Mentzer, volumen corpuscular medio entre eritrocitos, menor de 13 sugiere talasemia, y mayor de 13 deficiencia de hierro. La electroforesis de hemoglobina muestra aumento de hemoglobina A2. No requiere tratamiento, y se debe evitar el hierro si no hay deficiencia. Se ofrece consejo genético.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico de talasemias"
+      ]
+    },
+    {
+      "key": "ped-09-hematooncologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_hematology_oncology",
+      "subtopic": "iron_deficiency_child",
+      "vignette": "Lactante de 18 meses con anemia ferropénica moderada no tratada durante su primer año. Los padres preguntan si hay consecuencias a largo plazo.",
+      "prompt": "¿Cuál es la consecuencia más importante de la deficiencia de hierro en los primeros 2 años?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Leucemia aguda",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se relaciona."
+        },
+        {
+          "key": "b",
+          "text": "Talla alta",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No se relaciona."
+        },
+        {
+          "key": "c",
+          "text": "Alteraciones del neurodesarrollo cognitivo y motor que pueden ser persistentes",
+          "correct": true,
+          "rationale": "El hierro es esencial para el desarrollo cerebral."
+        },
+        {
+          "key": "d",
+          "text": "Ninguna si se corrige después",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Las alteraciones pueden persistir."
+        },
+        {
+          "key": "e",
+          "text": "Sordera neurosensorial",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es característica."
+        },
+        {
+          "key": "f",
+          "text": "Hipotiroidismo congénito",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No se relaciona."
+        },
+        {
+          "key": "g",
+          "text": "Obesidad infantil",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es la consecuencia principal."
+        },
+        {
+          "key": "h",
+          "text": "Insuficiencia cardiaca en todos los casos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Solo en anemias muy graves."
+        },
+        {
+          "key": "i",
+          "text": "Solo cansancio transitorio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El efecto en el desarrollo es importante."
+        },
+        {
+          "key": "j",
+          "text": "Diabetes tipo 1",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No se relaciona."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "La deficiencia de hierro en los primeros 2 años, incluso antes de que aparezca la anemia, afecta la mielinización, la síntesis de neurotransmisores y el metabolismo energético cerebral. Se asocia a retraso en el desarrollo motor y cognitivo, menor atención y alteraciones de conducta que pueden persistir aunque se corrija la anemia. Otras consecuencias son mayor susceptibilidad a infecciones, absorción aumentada de plomo, pica y espasmos del sollozo. Por ello la prevención con lactancia, alimentación complementaria rica en hierro, suplementos en grupos de riesgo y evitar el exceso de leche de vaca es prioritaria.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la anemia por deficiencia de hierro en niños"
+      ]
+    },
+    {
+      "key": "ped-09-hematooncologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_hematology_oncology",
+      "subtopic": "acute_lymphoblastic_leukemia",
+      "vignette": "Niño de 4 años con palidez, fatiga, fiebre intermitente y dolor óseo en piernas de 3 semanas. Tiene petequias, adenopatías generalizadas y hepatoesplenomegalia. Hemoglobina de 7 g/dL, plaquetas de 25 000 y leucocitos de 45 000 con blastos en sangre periférica.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Leucemia mieloide crónica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara en niños."
+        },
+        {
+          "key": "b",
+          "text": "Púrpura trombocitopénica inmune",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Solo afecta plaquetas sin anemia ni visceromegalias."
+        },
+        {
+          "key": "c",
+          "text": "Artritis idiopática juvenil",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica los blastos."
+        },
+        {
+          "key": "d",
+          "text": "Neuroblastoma",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Puede infiltrar médula, pero los blastos y adenopatías orientan a leucemia."
+        },
+        {
+          "key": "e",
+          "text": "Mononucleosis infecciosa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da linfocitos atípicos, no blastos ni anemia grave."
+        },
+        {
+          "key": "f",
+          "text": "Infección viral con reacción leucemoide",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los blastos con citopenias."
+        },
+        {
+          "key": "g",
+          "text": "Dolores de crecimiento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explican las citopenias."
+        },
+        {
+          "key": "h",
+          "text": "Anemia por mala alimentación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica los blastos."
+        },
+        {
+          "key": "i",
+          "text": "Anemia aplásica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No da visceromegalias ni blastos."
+        },
+        {
+          "key": "j",
+          "text": "Leucemia linfoblástica aguda",
+          "correct": true,
+          "rationale": "Pancitopenia funcional con blastos, dolor óseo, adenopatías y visceromegalias en un preescolar."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "La leucemia linfoblástica aguda es el cáncer más frecuente en la infancia, con pico entre los 2 y 5 años. Se debe a la proliferación de precursores linfoides que desplazan a la médula normal. Se manifiesta con anemia, fiebre o infecciones por neutropenia, sangrados por trombocitopenia, dolor óseo, adenopatías y hepatoesplenomegalia. Los leucocitos pueden estar altos, normales o bajos. El diagnóstico se confirma con aspirado de médula ósea con más de 20 a 25% de blastos, inmunofenotipo y estudios genéticos. Los factores de buen pronóstico incluyen edad de 1 a 10 años y leucocitos menores de 50 000.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de leucemia linfoblástica aguda en niños"
+      ]
+    },
+    {
+      "key": "ped-09-hematooncologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_hematology_oncology",
+      "subtopic": "acute_lymphoblastic_leukemia",
+      "vignette": "Niña de 5 años con palidez, petequias y blastos en el frotis de sangre periférica. Se sospecha leucemia aguda.",
+      "prompt": "¿Cuál es el estudio de elección para confirmar el diagnóstico?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aspirado de médula ósea con morfología, inmunofenotipo por citometría de flujo y estudios genéticos",
+          "correct": true,
+          "rationale": "Confirma la leucemia y define el tipo y el riesgo."
+        },
+        {
+          "key": "b",
+          "text": "Diagnóstico solo por la clínica",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere confirmación medular."
+        },
+        {
+          "key": "c",
+          "text": "Biopsia de ganglio linfático",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es el estudio de elección."
+        },
+        {
+          "key": "d",
+          "text": "Serología para virus de Epstein Barr",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No confirma leucemia."
+        },
+        {
+          "key": "e",
+          "text": "Frotis de sangre periférica como único estudio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es suficiente para el diagnóstico definitivo."
+        },
+        {
+          "key": "f",
+          "text": "Biometría hemática repetida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No confirma ni clasifica."
+        },
+        {
+          "key": "g",
+          "text": "Punción lumbar como estudio diagnóstico principal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Valora infiltración, no confirma."
+        },
+        {
+          "key": "h",
+          "text": "Tomografía por emisión de positrones",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el estudio inicial."
+        },
+        {
+          "key": "i",
+          "text": "Tomografía de tórax y abdomen",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Valora masas, no confirma leucemia."
+        },
+        {
+          "key": "j",
+          "text": "Deshidrogenasa láctica elevada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es inespecífica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "El diagnóstico de leucemia aguda se confirma con aspirado de médula ósea. La morfología muestra más de 20 a 25% de blastos. La citometría de flujo define el linaje, B o T, y los estudios citogenéticos y moleculares identifican alteraciones con valor pronóstico, como la hiperdiploidía y la translocación ETV6 RUNX1 de buen pronóstico, o el cromosoma Filadelfia y los rearreglos de KMT2A de mal pronóstico. También se realiza punción lumbar para buscar infiltración del sistema nervioso central y radiografía de tórax para descartar masa mediastinal. Esta información guía el tratamiento por grupos de riesgo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de leucemia linfoblástica aguda en niños"
+      ]
+    },
+    {
+      "key": "ped-09-hematooncologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_hematology_oncology",
+      "subtopic": "acute_lymphoblastic_leukemia",
+      "vignette": "Niño de 6 años con leucemia linfoblástica aguda y leucocitos de 150 000 que a las 24 horas de iniciar quimioterapia presenta oliguria. Potasio de 6.8 mEq/L, fósforo de 9 mg/dL, calcio de 6.5 mg/dL, ácido úrico de 14 mg/dL y creatinina elevada.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Deshidratación por vómito",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el patrón de electrolitos."
+        },
+        {
+          "key": "b",
+          "text": "Efecto esperado sin importancia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia metabólica."
+        },
+        {
+          "key": "c",
+          "text": "Nefrotoxicidad por aminoglucósidos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el patrón metabólico."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome urémico hemolítico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No se relaciona con la quimioterapia."
+        },
+        {
+          "key": "e",
+          "text": "Cetoacidosis diabética",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay hiperglucemia."
+        },
+        {
+          "key": "f",
+          "text": "Hipoparatiroidismo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la hiperpotasemia ni la hiperuricemia."
+        },
+        {
+          "key": "g",
+          "text": "Rabdomiólisis por ejercicio",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay antecedente."
+        },
+        {
+          "key": "h",
+          "text": "Infiltración renal leucémica sola",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el patrón tras quimioterapia."
+        },
+        {
+          "key": "i",
+          "text": "Sepsis con falla renal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la hiperfosfatemia e hiperuricemia."
+        },
+        {
+          "key": "j",
+          "text": "Síndrome de lisis tumoral",
+          "correct": true,
+          "rationale": "Hiperpotasemia, hiperfosfatemia, hipocalcemia e hiperuricemia con lesión renal tras quimioterapia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "El síndrome de lisis tumoral ocurre por la destrucción masiva de células tumorales, espontánea o tras iniciar quimioterapia, en tumores con alta carga y rápida proliferación, como leucemias con hiperleucocitosis y linfoma de Burkitt. La liberación del contenido celular produce hiperpotasemia, hiperfosfatemia, hipocalcemia secundaria e hiperuricemia, con lesión renal aguda por precipitación de ácido úrico y fosfato de calcio, arritmias y crisis. Se previene con hiperhidratación, alopurinol o rasburicasa y vigilancia estrecha de electrolitos. El tratamiento incluye corregir la hiperpotasemia, rasburicasa y diálisis si es necesario.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de leucemia linfoblástica aguda en niños"
+      ]
+    },
+    {
+      "key": "ped-09-hematooncologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_hematology_oncology",
+      "subtopic": "acute_lymphoblastic_leukemia",
+      "vignette": "Niña de 7 años con leucemia linfoblástica aguda en quimioterapia que presenta fiebre de 38.6 °C. Neutrófilos absolutos de 200 por mm3. Está estable hemodinámicamente.",
+      "prompt": "¿Cuál es el tratamiento inicial?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Paracetamol y observación en casa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La neutropenia febril puede progresar a sepsis rápidamente."
+        },
+        {
+          "key": "b",
+          "text": "Suspender la quimioterapia sin dar antibióticos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La infección requiere antibióticos."
+        },
+        {
+          "key": "c",
+          "text": "Factor estimulante de colonias como único tratamiento",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No sustituye al antibiótico."
+        },
+        {
+          "key": "d",
+          "text": "Tomar cultivos e iniciar de inmediato antibiótico intravenoso de amplio espectro con cobertura antipseudomonas",
+          "correct": true,
+          "rationale": "Fiebre con neutropenia grave es una urgencia."
+        },
+        {
+          "key": "e",
+          "text": "Amoxicilina oral ambulatoria",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No cubre gramnegativos resistentes de forma adecuada en alto riesgo."
+        },
+        {
+          "key": "f",
+          "text": "Esperar el resultado de cultivos para iniciar antibióticos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El retraso aumenta la mortalidad."
+        },
+        {
+          "key": "g",
+          "text": "Transfusión de granulocitos de rutina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "Iniciar antifúngicos como primera medida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se agregan si la fiebre persiste."
+        },
+        {
+          "key": "i",
+          "text": "Tacto rectal para buscar foco",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Está contraindicado en neutropenia."
+        },
+        {
+          "key": "j",
+          "text": "Tomografía de cuerpo entero antes de tratar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa el antibiótico."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "f"
+      ],
+      "explanation": "La neutropenia febril se define por fiebre en un paciente con neutrófilos menores de 500 o que se espera que bajen de ese valor. Es una urgencia oncológica porque la infección puede progresar a choque séptico en horas. Se toman hemocultivos de catéter y periféricos y se inicia en la primera hora un antibiótico intravenoso de amplio espectro con cobertura antipseudomonas, como cefepima o piperacilina con tazobactam. Se agrega vancomicina si hay inestabilidad, infección de catéter o de piel, y antifúngicos si la fiebre persiste de 4 a 7 días. Se evitan el tacto rectal y la temperatura rectal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de manejo de neutropenia febril en niños con cáncer"
+      ]
+    },
+    {
+      "key": "ped-09-hematooncologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_hematology_oncology",
+      "subtopic": "acute_lymphoblastic_leukemia",
+      "vignette": "Niño de 3 años con aumento del perímetro abdominal notado por su madre al bañarlo. Tiene una masa en flanco derecho, lisa, que no cruza la línea media, y presión arterial elevada. Está en buen estado general. Orina con hematuria microscópica.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Teratoma sacrococcígeo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se localiza en la región sacra."
+        },
+        {
+          "key": "b",
+          "text": "Hidronefrosis congénita",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No da masa sólida con hipertensión."
+        },
+        {
+          "key": "c",
+          "text": "Linfoma de Burkitt abdominal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Crece muy rápido con síntomas."
+        },
+        {
+          "key": "d",
+          "text": "Barriga por comer mucho",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una masa palpable."
+        },
+        {
+          "key": "e",
+          "text": "Hepatoblastoma",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se origina en el hígado."
+        },
+        {
+          "key": "f",
+          "text": "Impactación fecal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la hipertensión ni la hematuria."
+        },
+        {
+          "key": "g",
+          "text": "Riñón poliquístico",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Suele ser bilateral."
+        },
+        {
+          "key": "h",
+          "text": "Quiste de colédoco",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da ictericia y dolor."
+        },
+        {
+          "key": "i",
+          "text": "Tumor de Wilms",
+          "correct": true,
+          "rationale": "Masa abdominal lisa en flanco que no cruza la línea media en un niño en buen estado."
+        },
+        {
+          "key": "j",
+          "text": "Neuroblastoma",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Suele cruzar la línea media, ser irregular y el niño se ve enfermo."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "El tumor de Wilms o nefroblastoma es el tumor renal más frecuente en niños, con pico entre los 2 y 5 años. Se presenta como masa abdominal asintomática, lisa, firme, que no suele cruzar la línea media, descubierta por los padres. Puede haber hipertensión, hematuria y dolor. Se asocia a síndromes como WAGR, Denys Drash y Beckwith Wiedemann, así como a aniridia y hemihipertrofia. El ultrasonido y la tomografía confirman la masa renal y valoran la vena cava y metástasis pulmonares. No debe palparse en exceso por riesgo de ruptura. El tratamiento combina cirugía y quimioterapia, con supervivencia alta.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del tumor de Wilms"
+      ]
+    },
+    {
+      "key": "ped-09-hematooncologia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_hematology_oncology",
+      "subtopic": "acute_lymphoblastic_leukemia",
+      "vignette": "Lactante de 18 meses con irritabilidad, pérdida de peso, equimosis periorbitarias en anteojos y una masa abdominal irregular que cruza la línea media. La tomografía muestra masa suprarrenal con calcificaciones. Catecolaminas urinarias elevadas.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Feocromocitoma",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es raro en lactantes y no da equimosis orbitarias."
+        },
+        {
+          "key": "b",
+          "text": "Neuroblastoma",
+          "correct": true,
+          "rationale": "Masa suprarrenal calcificada que cruza la línea media, metástasis orbitarias y catecolaminas elevadas."
+        },
+        {
+          "key": "c",
+          "text": "Tumor de Wilms",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No suele cruzar la línea media ni elevar catecolaminas."
+        },
+        {
+          "key": "d",
+          "text": "Linfoma abdominal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No eleva catecolaminas."
+        },
+        {
+          "key": "e",
+          "text": "Hemorragia suprarrenal neonatal",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Ocurre en recién nacidos."
+        },
+        {
+          "key": "f",
+          "text": "Maltrato infantil por las equimosis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Las equimosis periorbitarias son metástasis."
+        },
+        {
+          "key": "g",
+          "text": "Hepatoblastoma",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se origina en el hígado."
+        },
+        {
+          "key": "h",
+          "text": "Rabdomiosarcoma orbitario",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la masa suprarrenal."
+        },
+        {
+          "key": "i",
+          "text": "Ojeras por desvelo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Son metástasis orbitarias."
+        },
+        {
+          "key": "j",
+          "text": "Leucemia aguda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la masa suprarrenal calcificada."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "f"
+      ],
+      "explanation": "El neuroblastoma es el tumor sólido extracraneal más frecuente en lactantes. Se origina en la cresta neural, sobre todo en la médula suprarrenal. Se presenta como masa abdominal irregular que cruza la línea media, con calcificaciones en la imagen. Las metástasis a órbitas producen equimosis periorbitarias en anteojos y proptosis, y a médula ósea dolor y citopenias. Puede causar síndrome de opsoclono mioclono y diarrea secretora. Las catecolaminas urinarias, ácido vanililmandélico y homovanílico, están elevadas. La amplificación de MYCN indica mal pronóstico, mientras que los menores de 18 meses suelen tener mejor evolución.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del neuroblastoma"
+      ]
+    },
+    {
+      "key": "ped-09-hematooncologia-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_hematology_oncology",
+      "subtopic": "acute_lymphoblastic_leukemia",
+      "vignette": "Niña de 3 años con síndrome de Down que presenta palidez, petequias y fiebre. Se confirma leucemia aguda. Los padres preguntan si su condición genética influye.",
+      "prompt": "¿Cuál es el factor de riesgo de leucemia en esta paciente?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "La trisomía 21 aumenta varias veces el riesgo de leucemia aguda",
+          "correct": true,
+          "rationale": "El síndrome de Down es un factor genético establecido."
+        },
+        {
+          "key": "b",
+          "text": "El uso de teléfonos celulares en casa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay evidencia."
+        },
+        {
+          "key": "c",
+          "text": "Vivir en zona urbana como causa directa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un factor establecido."
+        },
+        {
+          "key": "d",
+          "text": "La dieta rica en azúcar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un factor de riesgo."
+        },
+        {
+          "key": "e",
+          "text": "Haber tenido infecciones respiratorias frecuentes",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es una causa establecida."
+        },
+        {
+          "key": "f",
+          "text": "La lactancia materna",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es protectora."
+        },
+        {
+          "key": "g",
+          "text": "Un susto o enojo durante el embarazo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No causa leucemia."
+        },
+        {
+          "key": "h",
+          "text": "La cardiopatía congénita del síndrome",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No causa la leucemia."
+        },
+        {
+          "key": "i",
+          "text": "El sexo femenino",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es un factor relevante."
+        },
+        {
+          "key": "j",
+          "text": "Haber recibido todas las vacunas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No aumenta el riesgo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "j"
+      ],
+      "explanation": "Los factores de riesgo establecidos de leucemia aguda en niños incluyen síndromes genéticos como síndrome de Down, neurofibromatosis tipo 1, anemia de Fanconi, síndrome de Bloom y ataxia telangiectasia, exposición a radiación ionizante, quimioterapia previa y algunas inmunodeficiencias. Los niños con síndrome de Down tienen un riesgo de 10 a 20 veces mayor de leucemia linfoblástica y mieloide, y en recién nacidos pueden presentar un trastorno mieloproliferativo transitorio. La mayoría de los casos no tienen un factor identificable. Las vacunas, la dieta y los factores emocionales no son causas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de leucemia linfoblástica aguda en niños"
+      ]
+    },
+    {
+      "key": "ped-09-hematooncologia-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_hematology_oncology",
+      "subtopic": "acute_lymphoblastic_leukemia",
+      "vignette": "Niño de 7 años con cefalea matutina de 2 meses que mejora tras vomitar, marcha inestable con base amplia y caídas frecuentes. Tiene papiledema bilateral y nistagmo. Sin fiebre.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esclerosis múltiple",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara en niños."
+        },
+        {
+          "key": "b",
+          "text": "Gastroenteritis recurrente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica los datos neurológicos."
+        },
+        {
+          "key": "c",
+          "text": "Niño torpe que se cae por jugar mucho",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Los datos neurológicos son graves."
+        },
+        {
+          "key": "d",
+          "text": "Cefalea tensional por estrés escolar",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el papiledema."
+        },
+        {
+          "key": "e",
+          "text": "Migraña infantil",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No da papiledema ni ataxia."
+        },
+        {
+          "key": "f",
+          "text": "Problema de visión que requiere lentes",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el papiledema."
+        },
+        {
+          "key": "g",
+          "text": "Sinusitis crónica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la ataxia ni el papiledema."
+        },
+        {
+          "key": "h",
+          "text": "Tumor de fosa posterior con hidrocefalia, como meduloblastoma",
+          "correct": true,
+          "rationale": "Cefalea matutina con vómito, ataxia y papiledema en un escolar."
+        },
+        {
+          "key": "i",
+          "text": "Intoxicación por medicamentos",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la evolución de 2 meses con papiledema."
+        },
+        {
+          "key": "j",
+          "text": "Ataxia cerebelosa aguda postinfecciosa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es aguda y sin hipertensión intracraneal."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "Los tumores del sistema nervioso central son los tumores sólidos más frecuentes en niños y la mayoría se localizan en la fosa posterior. El meduloblastoma es el tumor maligno más común, y otros son astrocitoma pilocítico y ependimoma. Obstruyen el flujo del líquido cefalorraquídeo y causan hidrocefalia con cefalea matutina, vómito que alivia la cefalea y papiledema, además de ataxia, nistagmo y alteraciones de pares craneales. La resonancia magnética es el estudio de elección. Las cefaleas con banderas rojas, como despertar nocturno, vómito, cambios de conducta o datos neurológicos, requieren neuroimagen.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico de tumores del sistema nervioso central en niños"
+      ]
+    }
+  ]
+}
