@@ -1,0 +1,1415 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "mi-09-reumatologia-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "rheumatology",
+      "subtopic": "rheumatoid_arthritis",
+      "vignette": "Mujer de 42 años con dolor e inflamación simétrica de articulaciones metacarpofalángicas e interfalángicas proximales de ambas manos y de muñecas por 4 meses. Rigidez matutina de 90 minutos. Factor reumatoide y anticuerpos anti CCP positivos.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Artritis reumatoide",
+          "correct": true,
+          "rationale": "Poliartritis simétrica de pequeñas articulaciones con rigidez prolongada y anti CCP positivo."
+        },
+        {
+          "key": "b",
+          "text": "Fiebre reumática",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que toda artritis con factor reumatoide es reumática."
+        },
+        {
+          "key": "c",
+          "text": "Lupus eritematoso sistémico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en una mujer joven con artritis, pero los anti CCP orientan a artritis reumatoide."
+        },
+        {
+          "key": "d",
+          "text": "Artritis psoriásica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a artritis inflamatoria, pero no hay psoriasis."
+        },
+        {
+          "key": "e",
+          "text": "Gota poliarticular",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es más frecuente en hombres y no simétrica de inicio."
+        },
+        {
+          "key": "f",
+          "text": "Osteoartritis de manos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Afecta interfalángicas distales y proximales con rigidez breve."
+        },
+        {
+          "key": "g",
+          "text": "Artritis viral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es autolimitada en semanas, no de 4 meses."
+        },
+        {
+          "key": "h",
+          "text": "Fibromialgia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta la sinovitis y los anticuerpos."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome del túnel del carpo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en las muñecas."
+        },
+        {
+          "key": "j",
+          "text": "Hemocromatosis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente y afecta segunda y tercera metacarpofalángicas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "f"
+      ],
+      "explanation": "La artritis reumatoide es una enfermedad autoinmune crónica que produce sinovitis inflamatoria, típicamente poliarticular, simétrica y de pequeñas articulaciones de manos y pies, con rigidez matutina mayor de una hora. Sin tratamiento causa erosiones y deformidades. Los criterios de clasificación consideran el número y tipo de articulaciones afectadas, la serología con factor reumatoide y anticuerpos anti péptido citrulinado cíclico, los reactantes de fase aguda y la duración mayor de seis semanas. Los anti CCP son muy específicos y predicen enfermedad erosiva. El diagnóstico temprano permite iniciar tratamiento en la ventana de oportunidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la artritis reumatoide del adulto"
+      ]
+    },
+    {
+      "key": "mi-09-reumatologia-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "rheumatology",
+      "subtopic": "rheumatoid_arthritis",
+      "vignette": "Mujer de 45 años con artritis reumatoide recién diagnosticada, actividad moderada. Función hepática y renal normales. Sin planes de embarazo y usa anticoncepción.",
+      "prompt": "¿Cuál es el tratamiento de elección inicial?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "AINE como tratamiento único a largo plazo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Alivian síntomas, pero no frenan el daño articular."
+        },
+        {
+          "key": "b",
+          "text": "Corticosteroide en dosis altas como tratamiento de mantenimiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el control rápido con efectos adversos graves."
+        },
+        {
+          "key": "c",
+          "text": "Biológico anti TNF como primera línea en todos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para falla a modificadores convencionales."
+        },
+        {
+          "key": "d",
+          "text": "Evitar metotrexato por miedo a toxicidad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Sobreestima riesgos manejables con vigilancia."
+        },
+        {
+          "key": "e",
+          "text": "Dieta sin gluten como tratamiento principal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la dieta controla la artritis."
+        },
+        {
+          "key": "f",
+          "text": "Hidroxicloroquina sola en actividad moderada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es menos eficaz como monoterapia en actividad moderada."
+        },
+        {
+          "key": "g",
+          "text": "Solo fisioterapia",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Omite el tratamiento que frena la enfermedad."
+        },
+        {
+          "key": "h",
+          "text": "Colchicina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es para gota."
+        },
+        {
+          "key": "i",
+          "text": "Esperar a que aparezcan erosiones para iniciar modificador",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena prudente, pero el daño ya sería irreversible."
+        },
+        {
+          "key": "j",
+          "text": "Metotrexato, con dosis baja de corticosteroide como puente y ácido fólico",
+          "correct": true,
+          "rationale": "Es el fármaco modificador de la enfermedad de primera línea."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "El tratamiento de la artritis reumatoide debe iniciarse lo antes posible con fármacos modificadores de la enfermedad, para alcanzar la remisión o baja actividad. El metotrexato es el fármaco de primera línea, a dosis semanal, acompañado de ácido fólico para reducir efectos adversos. Puede usarse un corticosteroide a dosis baja como puente durante pocos meses. Se vigilan biometría hemática, función hepática y renal. Si no se alcanza la meta en tres a seis meses, se agrega otro modificador convencional o un biológico, como un anti TNF, o un inhibidor de JAK. El metotrexato es teratogénico y requiere anticoncepción.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la artritis reumatoide del adulto"
+      ]
+    },
+    {
+      "key": "mi-09-reumatologia-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "rheumatology",
+      "subtopic": "rheumatoid_arthritis",
+      "vignette": "Mujer de 58 años con artritis reumatoide de 15 años de evolución. Refiere dolor cervical y parestesias en manos que empeoran al flexionar el cuello. Será operada de rodilla con anestesia general.",
+      "prompt": "¿Cuál es la complicación que debe descartarse antes de la intubación?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Inestabilidad atlantoaxoidea",
+          "correct": true,
+          "rationale": "La artritis reumatoide puede causar subluxación C1 C2 con riesgo de lesión medular al intubar."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome del túnel del carpo como única causa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Explica las parestesias, pero no el empeoramiento con la flexión cervical."
+        },
+        {
+          "key": "c",
+          "text": "Espondilitis anquilosante",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Afecta la columna, pero es otra enfermedad."
+        },
+        {
+          "key": "d",
+          "text": "Neuropatía periférica por fármacos",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No relaciona los síntomas con la flexión del cuello."
+        },
+        {
+          "key": "e",
+          "text": "Tendinitis de hombro",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en otra articulación."
+        },
+        {
+          "key": "f",
+          "text": "Hernia de disco lumbar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en otra zona de la columna."
+        },
+        {
+          "key": "g",
+          "text": "Osteoartritis cervical sin importancia anestésica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Subestima el riesgo."
+        },
+        {
+          "key": "h",
+          "text": "Artritis de la articulación temporomandibular como único riesgo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que solo afecta la apertura bucal."
+        },
+        {
+          "key": "i",
+          "text": "Fractura vertebral osteoporótica lumbar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena relacionada con el esteroide, pero no explica los síntomas cervicales."
+        },
+        {
+          "key": "j",
+          "text": "Mielopatía por esclerosis múltiple",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es poco probable en este contexto."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "f"
+      ],
+      "explanation": "La artritis reumatoide de larga evolución puede afectar la columna cervical, sobre todo la articulación atlantoaxoidea, por erosión del ligamento transverso y de la apófisis odontoides. La subluxación atlantoaxoidea puede ser asintomática o causar dolor cervical, parestesias y mielopatía, y la flexión forzada del cuello durante la intubación puede comprimir la médula. Antes de una cirugía con anestesia general en estos pacientes se recomienda radiografía cervical con proyecciones en flexión y extensión para evaluar la estabilidad. Si hay inestabilidad, se planea intubación con manipulación mínima, como la intubación con fibroscopio.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la artritis reumatoide del adulto"
+      ]
+    },
+    {
+      "key": "mi-09-reumatologia-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "rheumatology",
+      "subtopic": "rheumatoid_arthritis",
+      "vignette": "Mujer de 50 años con artritis reumatoide que iniciará prednisona 10 mg diarios por varios meses, además de metotrexato. Es posmenopáusica.",
+      "prompt": "¿Cuál es la medida de prevención indicada por el uso prolongado de corticosteroides?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Estrógenos en dosis altas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Tienen riesgos y no son la primera opción."
+        },
+        {
+          "key": "b",
+          "text": "Leche abundante como única medida",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la leche basta."
+        },
+        {
+          "key": "c",
+          "text": "Ninguna medida hasta que tenga una fractura",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Espera el daño."
+        },
+        {
+          "key": "d",
+          "text": "Teriparatida como primera línea en todos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para riesgo muy alto."
+        },
+        {
+          "key": "e",
+          "text": "Densitometría solo después de 5 años de tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La pérdida ósea ocurre desde los primeros meses."
+        },
+        {
+          "key": "f",
+          "text": "Evitar el esteroide por completo aunque sea necesario",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pierde el control de la enfermedad."
+        },
+        {
+          "key": "g",
+          "text": "Inhibidor de bomba de protones como única medida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No previene la pérdida ósea."
+        },
+        {
+          "key": "h",
+          "text": "Suspender el metotrexato para evitar la osteoporosis",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en otro fármaco."
+        },
+        {
+          "key": "i",
+          "text": "Usar el esteroide solo en días alternos sin otras medidas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena preventivo, pero no protege el hueso."
+        },
+        {
+          "key": "j",
+          "text": "Calcio, vitamina D, densitometría y valorar un bifosfonato",
+          "correct": true,
+          "rationale": "Previene la osteoporosis inducida por corticosteroides."
+        }
+      ],
+      "canonical": [
+        "g",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "Los corticosteroides son la causa más frecuente de osteoporosis secundaria. La pérdida ósea es más rápida en los primeros meses y aumenta el riesgo de fracturas vertebrales y de cadera, incluso con dosis bajas de 2.5 a 7.5 mg de prednisona. En todo paciente que recibirá corticosteroides por tres meses o más se recomienda calcio y vitamina D, ejercicio, evitar tabaco y alcohol, y evaluar el riesgo de fractura con densitometría y herramientas como FRAX. En riesgo moderado o alto, como en mujeres posmenopáusicas, se indica un bifosfonato. Siempre se usa la menor dosis de corticosteroide por el menor tiempo posible.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la osteoporosis inducida por glucocorticoides"
+      ]
+    },
+    {
+      "key": "mi-09-reumatologia-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "rheumatology",
+      "subtopic": "rheumatoid_arthritis",
+      "vignette": "Hombre de 55 años con artritis reumatoide controlada con metotrexato. Presenta tos seca y disnea progresiva desde hace 3 semanas, fiebre de 38 grados e infiltrados intersticiales bilaterales. Inició metotrexato hace 2 meses.",
+      "prompt": "¿Cuál es el factor más probable de su cuadro pulmonar?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Enfermedad pulmonar intersticial por la artritis sin relación con el fármaco",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la enfermedad de base e ignora el fármaco nuevo."
+        },
+        {
+          "key": "b",
+          "text": "Alergia al ácido fólico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el suplemento causa neumonitis."
+        },
+        {
+          "key": "c",
+          "text": "Asma de inicio tardío",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena respiratorio, pero no hay sibilancias."
+        },
+        {
+          "key": "d",
+          "text": "Tromboembolia pulmonar",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta los infiltrados y la fiebre."
+        },
+        {
+          "key": "e",
+          "text": "Neumonitis por hipersensibilidad al metotrexato",
+          "correct": true,
+          "rationale": "Neumonitis subaguda con fiebre e infiltrados en los primeros meses de tratamiento."
+        },
+        {
+          "key": "f",
+          "text": "Neumonía adquirida en la comunidad típica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es frecuente, pero el patrón intersticial bilateral y el contexto sugieren toxicidad."
+        },
+        {
+          "key": "g",
+          "text": "Nódulos reumatoides pulmonares",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la artritis."
+        },
+        {
+          "key": "h",
+          "text": "Tuberculosis pulmonar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Debe descartarse, pero no es la causa más probable en este contexto."
+        },
+        {
+          "key": "i",
+          "text": "Insuficiencia cardiaca",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye sin datos de congestión."
+        },
+        {
+          "key": "j",
+          "text": "Sarcoidosis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es poco probable."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "h"
+      ],
+      "explanation": "El metotrexato puede causar neumonitis por hipersensibilidad, una complicación poco frecuente pero potencialmente grave, generalmente en el primer año de tratamiento. Se presenta con tos seca, disnea, fiebre e infiltrados intersticiales o en vidrio despulido bilaterales. Se deben descartar infecciones, incluidas oportunistas, y la enfermedad pulmonar intersticial propia de la artritis reumatoide. El tratamiento es suspender el metotrexato de forma definitiva y dar corticosteroides. Otros efectos adversos del metotrexato son hepatotoxicidad, citopenias, mucositis y teratogenicidad, por lo que se vigilan biometría y pruebas hepáticas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la artritis reumatoide del adulto"
+      ]
+    },
+    {
+      "key": "mi-09-reumatologia-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "rheumatology",
+      "subtopic": "lupus",
+      "vignette": "Mujer de 26 años con eritema en alas de mariposa que empeora con el sol, úlceras orales, artritis de manos y fatiga. Tiene proteinuria de 800 mg en 24 horas. Anticuerpos antinucleares positivos 1:640 y anti ADN de doble cadena positivos. Complemento C3 bajo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Lupus cutáneo discoide aislado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a lupus, pero hay afección sistémica."
+        },
+        {
+          "key": "b",
+          "text": "Rosácea",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da eritema facial, pero sin afección sistémica."
+        },
+        {
+          "key": "c",
+          "text": "Lupus inducido por fármacos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye sin fármaco desencadenante y con anti ADN positivo."
+        },
+        {
+          "key": "d",
+          "text": "Síndrome de Sjögren",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en la autoinmunidad."
+        },
+        {
+          "key": "e",
+          "text": "Dermatomiositis",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el exantema, pero no hay debilidad muscular."
+        },
+        {
+          "key": "f",
+          "text": "Glomerulonefritis posestreptocócica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta la afección multisistémica."
+        },
+        {
+          "key": "g",
+          "text": "Artritis reumatoide",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Comparte artritis en mujer joven, pero no explica la afección cutánea ni renal ni el anti ADN."
+        },
+        {
+          "key": "h",
+          "text": "Fotosensibilidad por cosméticos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el eritema es cosmético."
+        },
+        {
+          "key": "i",
+          "text": "Esclerosis sistémica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos frecuente y no explica el cuadro."
+        },
+        {
+          "key": "j",
+          "text": "Lupus eritematoso sistémico",
+          "correct": true,
+          "rationale": "Afección cutánea, mucosa, articular y renal con anti ADN de doble cadena positivo."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "El lupus eritematoso sistémico es una enfermedad autoinmune multisistémica, mucho más frecuente en mujeres en edad reproductiva. Puede afectar piel, con eritema malar y fotosensibilidad, mucosas, articulaciones, serosas, riñón, sangre y sistema nervioso. Los anticuerpos antinucleares son muy sensibles y constituyen el criterio de entrada de la clasificación actual. Los anti ADN de doble cadena y los anti Smith son específicos, y los anti ADN y el complemento bajo se relacionan con actividad, sobre todo renal. La proteinuria significativa sugiere nefritis lúpica, que requiere biopsia renal para clasificarla y definir el tratamiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del lupus eritematoso sistémico"
+      ]
+    },
+    {
+      "key": "mi-09-reumatologia-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "rheumatology",
+      "subtopic": "lupus",
+      "vignette": "Mujer de 30 años con lupus eritematoso sistémico con afección articular y cutánea leve. Sin afección renal ni hematológica. No está embarazada.",
+      "prompt": "¿Cuál es el tratamiento de base de elección para todos los pacientes con lupus?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hidroxicloroquina",
+          "correct": true,
+          "rationale": "Reduce brotes, daño orgánico y mortalidad, y se indica en todos sin contraindicación."
+        },
+        {
+          "key": "b",
+          "text": "Evitar la hidroxicloroquina por miedo a la toxicidad retiniana",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo es bajo con dosis y vigilancia adecuadas."
+        },
+        {
+          "key": "c",
+          "text": "Ciclofosfamida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el lupus grave, reservada para nefritis o afección grave."
+        },
+        {
+          "key": "d",
+          "text": "Metotrexato como fármaco base obligatorio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es útil en la afección articular, pero no es la base para todos."
+        },
+        {
+          "key": "e",
+          "text": "Suplementos inmunoestimulantes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que estimular la inmunidad ayuda."
+        },
+        {
+          "key": "f",
+          "text": "Rituximab como primera línea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es para casos refractarios."
+        },
+        {
+          "key": "g",
+          "text": "Sin tratamiento por ser leve",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Pierde un fármaco que reduce brotes."
+        },
+        {
+          "key": "h",
+          "text": "Prednisona en dosis altas a largo plazo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Controla brotes, pero causa daño acumulado."
+        },
+        {
+          "key": "i",
+          "text": "Micofenolato en todos los pacientes",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se usa en nefritis lúpica."
+        },
+        {
+          "key": "j",
+          "text": "Solo protector solar como tratamiento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena preventivo, pero es insuficiente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "h"
+      ],
+      "explanation": "La hidroxicloroquina es el tratamiento de base del lupus eritematoso sistémico y se recomienda en todos los pacientes sin contraindicación, independientemente de la gravedad. Reduce los brotes, el daño orgánico, la trombosis y la mortalidad, y es segura en el embarazo. Se usa a dosis máxima de 5 mg por kilogramo de peso real al día y requiere evaluación oftalmológica basal y periódica por el riesgo de retinopatía. Los corticosteroides se usan a la menor dosis y por el menor tiempo posible. En afección grave se agregan inmunosupresores, como micofenolato, azatioprina, ciclofosfamida o biológicos como belimumab.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del lupus eritematoso sistémico"
+      ]
+    },
+    {
+      "key": "mi-09-reumatologia-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "rheumatology",
+      "subtopic": "lupus",
+      "vignette": "Mujer de 24 años con lupus que presenta edema, hipertensión, proteinuria de 3.2 g en 24 horas, sedimento con cilindros eritrocitarios y creatinina de 1.4 mg/dL.",
+      "prompt": "¿Cuál es el estudio de elección para confirmar el tipo de afección renal y guiar el tratamiento?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Proteinuria de 24 horas repetida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Cuantifica, pero no clasifica."
+        },
+        {
+          "key": "b",
+          "text": "Tomografía abdominal",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No clasifica la nefritis."
+        },
+        {
+          "key": "c",
+          "text": "Ultrasonido renal como estudio definitivo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la imagen, que no clasifica la nefritis."
+        },
+        {
+          "key": "d",
+          "text": "Anti ADN de doble cadena como prueba confirmatoria del tipo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Indica actividad, pero no el tipo histológico."
+        },
+        {
+          "key": "e",
+          "text": "Complemento sérico como estudio definitivo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el complemento define el tipo."
+        },
+        {
+          "key": "f",
+          "text": "Asumir nefritis leve por su edad",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La edad no predice la gravedad."
+        },
+        {
+          "key": "g",
+          "text": "Iniciar tratamiento sin biopsia en todos los casos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Pierde información que cambia el manejo."
+        },
+        {
+          "key": "h",
+          "text": "Angiografía renal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No aporta al diagnóstico."
+        },
+        {
+          "key": "i",
+          "text": "Gammagrama renal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Evalúa función, no histología."
+        },
+        {
+          "key": "j",
+          "text": "Biopsia renal",
+          "correct": true,
+          "rationale": "Clasifica la nefritis lúpica, que define el tratamiento."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "i",
+        "j"
+      ],
+      "explanation": "La nefritis lúpica es una de las manifestaciones más graves del lupus y un determinante del pronóstico. Se sospecha con proteinuria de 500 mg o más en 24 horas, sedimento activo con cilindros eritrocitarios o hematuria, o deterioro de la función renal. La biopsia renal es indispensable para clasificarla según la clasificación de la Sociedad Internacional de Nefrología, de clase I a VI, y para evaluar actividad y cronicidad. Las clases III y IV, proliferativas, son las más graves y requieren inducción con micofenolato o ciclofosfamida más corticosteroides, seguidas de mantenimiento, además de hidroxicloroquina y bloqueo del sistema renina angiotensina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la nefritis lúpica"
+      ]
+    },
+    {
+      "key": "mi-09-reumatologia-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "rheumatology",
+      "subtopic": "lupus",
+      "vignette": "Mujer de 28 años con lupus y síndrome antifosfolípido. Tuvo tres abortos espontáneos antes de la semana 10 y una muerte fetal a las 24 semanas.",
+      "prompt": "¿Cuál es la complicación obstétrica asociada que explica sus pérdidas?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome antifosfolípido obstétrico",
+          "correct": true,
+          "rationale": "Pérdidas recurrentes tempranas y muerte fetal con anticuerpos antifosfolípido."
+        },
+        {
+          "key": "b",
+          "text": "Lupus neonatal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena obstétrico, pero afecta al recién nacido."
+        },
+        {
+          "key": "c",
+          "text": "Hipotiroidismo materno",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en otra causa."
+        },
+        {
+          "key": "d",
+          "text": "Estrés emocional",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el estrés causa abortos recurrentes."
+        },
+        {
+          "key": "e",
+          "text": "Nefritis lúpica como causa directa de los abortos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el lupus e ignora los anticuerpos."
+        },
+        {
+          "key": "f",
+          "text": "Alteraciones cromosómicas fetales",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Explican abortos esporádicos, pero no este patrón con anticuerpos."
+        },
+        {
+          "key": "g",
+          "text": "Incompetencia ístmico cervical",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Causa pérdidas del segundo trimestre sin dolor, pero no explica las tempranas."
+        },
+        {
+          "key": "h",
+          "text": "Útero septado",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es posible, pero no explica el síndrome descrito."
+        },
+        {
+          "key": "i",
+          "text": "Diabetes gestacional",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye otra causa sin datos."
+        },
+        {
+          "key": "j",
+          "text": "Toxoplasmosis congénita recurrente",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No causa pérdidas recurrentes así."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "El síndrome antifosfolípido obstétrico se define por la presencia persistente de anticuerpos antifosfolípido y morbilidad obstétrica, como tres o más abortos consecutivos antes de la semana 10, una o más muertes fetales de morfología normal después de la semana 10, o parto pretérmino antes de la semana 34 por preeclampsia grave o insuficiencia placentaria. Se asocia frecuentemente al lupus. El tratamiento en el embarazo es ácido acetilsalicílico a dosis baja más heparina de bajo peso molecular, que mejora de forma importante la tasa de nacidos vivos. La warfarina está contraindicada por su teratogenia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome antifosfolípido"
+      ]
+    },
+    {
+      "key": "mi-09-reumatologia-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "rheumatology",
+      "subtopic": "lupus",
+      "vignette": "Hombre de 60 años con artralgias, fiebre y serositis pleural. Anticuerpos antinucleares positivos y anticuerpos antihistona positivos. Anti ADN de doble cadena negativo. Sin afección renal.",
+      "prompt": "¿Cuál es el factor desencadenante más probable a investigar?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fármacos como hidralazina, procainamida o isoniazida, por lupus inducido por fármacos",
+          "correct": true,
+          "rationale": "Antihistona positivo con anti ADN negativo en un hombre mayor."
+        },
+        {
+          "key": "b",
+          "text": "Infección viral reciente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la fiebre sin considerar fármacos."
+        },
+        {
+          "key": "c",
+          "text": "Herencia familiar de lupus",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es un factor de riesgo, pero el perfil sugiere causa farmacológica."
+        },
+        {
+          "key": "d",
+          "text": "Embarazo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No aplica en un hombre."
+        },
+        {
+          "key": "e",
+          "text": "Estrés emocional",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena desencadenante, sin relación clara."
+        },
+        {
+          "key": "f",
+          "text": "Consumo de lácteos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la dieta desencadena lupus."
+        },
+        {
+          "key": "g",
+          "text": "Neoplasia oculta",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye una causa grave sin datos."
+        },
+        {
+          "key": "h",
+          "text": "Exposición solar intensa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Exacerba el lupus, pero no explica el perfil de anticuerpos."
+        },
+        {
+          "key": "i",
+          "text": "Vacunación reciente",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta los antihistona."
+        },
+        {
+          "key": "j",
+          "text": "Tabaquismo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica este perfil."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "El lupus inducido por fármacos se presenta tras meses o años de exposición a ciertos medicamentos, como hidralazina, procainamida, isoniazida, minociclina, quinidina y anti TNF. Es más frecuente en personas mayores y afecta por igual a hombres y mujeres. Se manifiesta con artralgias, fiebre, serositis y exantema, y rara vez con afección renal o neurológica. Los anticuerpos antinucleares y antihistona son positivos, mientras que los anti ADN de doble cadena suelen ser negativos, salvo con anti TNF. El tratamiento es suspender el fármaco, y los síntomas suelen resolver en semanas a meses.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del lupus eritematoso sistémico"
+      ]
+    },
+    {
+      "key": "mi-09-reumatologia-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "rheumatology",
+      "subtopic": "gout",
+      "vignette": "Hombre de 50 años con dolor intenso, enrojecimiento y aumento de volumen de la primera articulación metatarsofalángica derecha de inicio nocturno, tras una cena abundante con alcohol.",
+      "prompt": "¿Cuál es el estudio de elección para confirmar el diagnóstico?",
+      "polarity": "affirmative",
+      "task": "confirmatory_study",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ultrasonido como único estudio definitivo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es útil, pero el estándar es el cristal."
+        },
+        {
+          "key": "b",
+          "text": "Diagnóstico solo por la respuesta a colchicina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es apoyo, no confirmación."
+        },
+        {
+          "key": "c",
+          "text": "Factor reumatoide",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es para artritis reumatoide."
+        },
+        {
+          "key": "d",
+          "text": "Velocidad de sedimentación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena a inflamación, pero es inespecífica."
+        },
+        {
+          "key": "e",
+          "text": "Gammagrama óseo",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No confirma gota."
+        },
+        {
+          "key": "f",
+          "text": "Radiografía del pie",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "En la crisis inicial suele ser normal."
+        },
+        {
+          "key": "g",
+          "text": "Ácido úrico sérico elevado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el ácido úrico, que puede ser normal en la crisis."
+        },
+        {
+          "key": "h",
+          "text": "Cultivo de sangre en todos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se toma si se sospecha artritis séptica."
+        },
+        {
+          "key": "i",
+          "text": "Resonancia magnética del pie",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "j",
+          "text": "Artrocentesis con identificación de cristales de urato monosódico en forma de aguja con birrefringencia negativa",
+          "correct": true,
+          "rationale": "Confirma gota."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "La gota es una artritis inflamatoria causada por el depósito de cristales de urato monosódico. Su forma típica es la monoartritis aguda de la primera articulación metatarsofalángica, llamada podagra, de inicio nocturno, con dolor intenso, eritema y edema, desencadenada por alcohol, comidas ricas en purinas, diuréticos o deshidratación. El diagnóstico de certeza es la identificación de cristales en forma de aguja con birrefringencia negativa en el líquido sinovial. El ácido úrico sérico puede ser normal durante la crisis y no confirma ni descarta. La artrocentesis también descarta artritis séptica, sobre todo con fiebre.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la gota"
+      ]
+    },
+    {
+      "key": "mi-09-reumatologia-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "rheumatology",
+      "subtopic": "gout",
+      "vignette": "Hombre de 56 años con crisis aguda de gota en la rodilla de 12 horas de evolución. Tiene enfermedad renal crónica con filtración de 35 mL/min y úlcera péptica previa.",
+      "prompt": "¿Cuál es el tratamiento inicial más adecuado para la crisis?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Corticosteroide oral o intraarticular",
+          "correct": true,
+          "rationale": "Es seguro con enfermedad renal y antecedente de úlcera."
+        },
+        {
+          "key": "b",
+          "text": "Alopurinol de inicio durante la crisis para bajar el ácido úrico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el ácido úrico, pero no trata la crisis."
+        },
+        {
+          "key": "c",
+          "text": "Indometacina a dosis altas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Los AINE están contraindicados por la función renal y la úlcera."
+        },
+        {
+          "key": "d",
+          "text": "Biológico anti interleucina 1 como primera opción",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para contraindicación de todo lo demás."
+        },
+        {
+          "key": "e",
+          "text": "Dieta sin carne como tratamiento de la crisis",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que la dieta resuelve la crisis."
+        },
+        {
+          "key": "f",
+          "text": "Solo reposo y hielo",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Insuficiente para el dolor."
+        },
+        {
+          "key": "g",
+          "text": "Probenecid",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es uricosúrico, ineficaz con filtración baja y no trata la crisis."
+        },
+        {
+          "key": "h",
+          "text": "Colchicina a dosis altas cada hora hasta tener diarrea",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena al esquema antiguo, con mucha toxicidad, y requiere ajuste renal."
+        },
+        {
+          "key": "i",
+          "text": "Esperar a que ceda sola en una semana",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Deja dolor intenso sin tratar."
+        },
+        {
+          "key": "j",
+          "text": "Antibiótico intravenoso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Trata una infección no demostrada."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "El tratamiento de la crisis aguda de gota debe iniciarse lo antes posible, idealmente en las primeras 24 horas. Las opciones son colchicina a dosis bajas, AINE o corticosteroides, elegidos según las comorbilidades. En pacientes con enfermedad renal crónica, úlcera péptica, insuficiencia cardiaca o anticoagulación, los corticosteroides orales, intraarticulares o intramusculares son la opción más segura. La colchicina requiere ajuste de dosis con filtración baja y tiene interacciones. Los fármacos hipouricemiantes, como el alopurinol, no tratan la crisis, pero si el paciente ya los toma no se suspenden.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la gota"
+      ]
+    },
+    {
+      "key": "mi-09-reumatologia-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "rheumatology",
+      "subtopic": "gout",
+      "vignette": "Hombre de 52 años con 3 crisis de gota en el último año y tofos en el pabellón auricular. Ácido úrico de 9.4 mg/dL. Filtración glomerular normal. Sin crisis activa.",
+      "prompt": "¿Cuál es el tratamiento de elección a largo plazo?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tratar solo cada crisis cuando aparezca",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena práctico, pero deja progresar los tofos."
+        },
+        {
+          "key": "b",
+          "text": "Evitar el alopurinol por miedo a reacciones cutáneas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo se reduce con dosis inicial baja."
+        },
+        {
+          "key": "c",
+          "text": "Colchicina sola de forma indefinida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Previene crisis, pero no reduce el ácido úrico."
+        },
+        {
+          "key": "d",
+          "text": "Cirugía de los tofos como tratamiento principal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No trata la hiperuricemia."
+        },
+        {
+          "key": "e",
+          "text": "Pegloticasa como primera línea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para gota refractaria."
+        },
+        {
+          "key": "f",
+          "text": "Solo dieta baja en purinas",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Insuficiente con tofos."
+        },
+        {
+          "key": "g",
+          "text": "Suspender el alopurinol cuando el ácido úrico se normalice",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que se cura, cuando debe continuar."
+        },
+        {
+          "key": "h",
+          "text": "Alopurinol a dosis máxima desde el primer día",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en el ácido úrico alto y aumenta las crisis y reacciones."
+        },
+        {
+          "key": "i",
+          "text": "Prednisona diaria a largo plazo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Tiene efectos adversos y no reduce el ácido úrico."
+        },
+        {
+          "key": "j",
+          "text": "Alopurinol iniciado a dosis baja y titulado hasta ácido úrico menor de 6 mg/dL, con profilaxis de crisis con colchicina",
+          "correct": true,
+          "rationale": "Gota con crisis frecuentes y tofos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "El tratamiento hipouricemiante está indicado en pacientes con dos o más crisis al año, tofos, artropatía gotosa con daño radiográfico o litiasis por ácido úrico. El alopurinol es el fármaco de primera línea. Se inicia a dosis baja, de 100 mg al día o menor en enfermedad renal, y se aumenta gradualmente hasta lograr ácido úrico menor de 6 mg/dL, o menor de 5 si hay tofos. Al iniciar el tratamiento se da profilaxis con colchicina a dosis baja o AINE durante tres a seis meses, porque la movilización de cristales desencadena crisis. El tratamiento es indefinido. El febuxostat es una alternativa.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la gota"
+      ]
+    },
+    {
+      "key": "mi-09-reumatologia-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "rheumatology",
+      "subtopic": "gout",
+      "vignette": "Hombre de 63 años con hipertensión que inició tratamiento con hidroclorotiazida hace 2 meses. Presenta su primera crisis de gota en el tobillo.",
+      "prompt": "¿Cuál es el factor de riesgo farmacológico más probable de su crisis?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Una enfermedad hematológica oculta",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable."
+        },
+        {
+          "key": "b",
+          "text": "El consumo de lácteos bajos en grasa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se asocian a menor riesgo."
+        },
+        {
+          "key": "c",
+          "text": "Los suplementos de vitamina C",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena posible, pero reducen el ácido úrico."
+        },
+        {
+          "key": "d",
+          "text": "El consumo de café",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El café se asocia a menor riesgo de gota."
+        },
+        {
+          "key": "e",
+          "text": "La hipertensión por sí sola sin relación con el fármaco",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la enfermedad e ignora el fármaco nuevo."
+        },
+        {
+          "key": "f",
+          "text": "El losartán",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es uricosúrico y reduce el ácido úrico."
+        },
+        {
+          "key": "g",
+          "text": "La hidroclorotiazida, que disminuye la excreción renal de ácido úrico",
+          "correct": true,
+          "rationale": "Los diuréticos tiazídicos y de asa elevan el ácido úrico."
+        },
+        {
+          "key": "h",
+          "text": "El frío ambiental",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que el clima causa la crisis."
+        },
+        {
+          "key": "i",
+          "text": "La edad avanzada como causa única",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No relaciona el inicio con el fármaco."
+        },
+        {
+          "key": "j",
+          "text": "Un traumatismo menor no recordado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye sin datos."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "Los factores de riesgo de gota incluyen el sexo masculino, la edad, la obesidad, el síndrome metabólico, la enfermedad renal crónica, el consumo de alcohol, sobre todo cerveza, las bebidas azucaradas con fructosa, las carnes rojas y mariscos, y fármacos que elevan el ácido úrico, como diuréticos tiazídicos y de asa, ácido acetilsalicílico a dosis bajas, ciclosporina, tacrolimus, pirazinamida y etambutol. Cuando un antihipertensivo desencadena gota, puede cambiarse por losartán o un calcioantagonista, que tienen efecto uricosúrico leve. Los lácteos bajos en grasa, el café y la vitamina C se asocian a menor riesgo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la gota"
+      ]
+    },
+    {
+      "key": "mi-09-reumatologia-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "internal_medicine",
+      "topic": "rheumatology",
+      "subtopic": "gout",
+      "vignette": "Mujer de 74 años con dolor e inflamación aguda de la rodilla derecha. La radiografía muestra calcificación lineal del cartílago articular. El líquido sinovial tiene cristales romboidales con birrefringencia positiva débil.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Gota",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "También es por cristales, pero en la gota son en aguja con birrefringencia negativa."
+        },
+        {
+          "key": "b",
+          "text": "Condromalacia rotuliana",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se centra en el cartílago."
+        },
+        {
+          "key": "c",
+          "text": "Osteoartritis de rodilla sin otra causa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la edad e ignora los cristales."
+        },
+        {
+          "key": "d",
+          "text": "Hemartrosis por anticoagulación",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No se describe sangre ni anticoagulantes."
+        },
+        {
+          "key": "e",
+          "text": "Artritis séptica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Debe descartarse, pero los cristales explican el cuadro."
+        },
+        {
+          "key": "f",
+          "text": "Gota femenina atípica",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Cree que en mujeres la gota cambia el tipo de cristal."
+        },
+        {
+          "key": "g",
+          "text": "Bursitis prerrotuliana",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No toma en cuenta el líquido articular."
+        },
+        {
+          "key": "h",
+          "text": "Artritis reumatoide de inicio tardío",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Concluye sin considerar los cristales."
+        },
+        {
+          "key": "i",
+          "text": "Artritis por hidroxiapatita",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Suena similar, pero esos cristales no se ven al microscopio de luz polarizada."
+        },
+        {
+          "key": "j",
+          "text": "Enfermedad por depósito de pirofosfato de calcio, antes llamada seudogota",
+          "correct": true,
+          "rationale": "Cristales romboidales con birrefringencia positiva y condrocalcinosis."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "La enfermedad por depósito de pirofosfato de calcio afecta sobre todo a personas mayores. La forma aguda, antes llamada seudogota, se manifiesta como monoartritis, más frecuente en rodilla y muñeca. En la radiografía puede verse condrocalcinosis, que es la calcificación lineal del cartílago. El diagnóstico se confirma con cristales romboidales con birrefringencia positiva débil en el líquido sinovial. Se asocia a hiperparatiroidismo, hemocromatosis, hipomagnesemia e hipofosfatasia, que deben descartarse en pacientes jóvenes o con afección extensa. El tratamiento de la crisis es similar al de la gota, con AINE, colchicina o corticosteroides intraarticulares.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la gota"
+      ]
+    }
+  ]
+}
