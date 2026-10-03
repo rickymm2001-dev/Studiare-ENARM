@@ -1,0 +1,255 @@
+@ urg|resuscitation|cardiac_arrest|2|next_step
+V: Hombre de 58 años que se desploma en un centro comercial. No responde, no respira normalmente y no tiene pulso palpable. Un testigo inicia compresiones torácicas y llega un desfibrilador externo automático.
+P: ¿Cuál es el siguiente paso más apropiado?
++ Encender el desfibrilador, colocar los parches y seguir sus indicaciones con mínima interrupción de las compresiones || La desfibrilación temprana es el principal determinante de supervivencia en ritmos desfibrilables.
+- anchoring | Continuar solo compresiones hasta que llegue la ambulancia sin usar el desfibrilador || Retrasa la desfibrilación.
+- availability_heuristic | Buscar pulso carotídeo durante un minuto completo || Retrasa la reanimación.
+- representativeness_heuristic | Dar respiraciones de rescate durante 5 minutos antes de las compresiones || Las compresiones tienen prioridad.
+- premature_closure | Colocarlo en posición lateral de seguridad || Es para pacientes que respiran.
+- framing_effect | Administrar agua por la boca || Es peligroso.
+- complexity_bias | Esperar a tener un electrocardiograma de 12 derivaciones || Retrasa la desfibrilación.
+- base_rate_fallacy | El desfibrilador solo debe usarlo personal médico || Está diseñado para el público.
+- belief_bias | El desfibrilador puede dar descargas a personas con pulso normal || Solo descarga en ritmos desfibrilables.
+- omission_bias | No activar el sistema de emergencias || Es el primer eslabón.
+E: La cadena de supervivencia en el paro cardiaco extrahospitalario incluye reconocimiento y activación del sistema de emergencias, reanimación cardiopulmonar de alta calidad inmediata, desfibrilación rápida, soporte vital avanzado, cuidados posparo y recuperación. La fibrilación ventricular es un ritmo frecuente en el paro súbito del adulto, y cada minuto sin desfibrilación reduce la supervivencia entre 7 y 10 por ciento. El desfibrilador externo automático analiza el ritmo y aconseja la descarga solo si es desfibrilable. Las compresiones deben interrumpirse lo menos posible, solo para el análisis y la descarga.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de reanimación cardiopulmonar básica y avanzada en el adulto
+
+@ urg|resuscitation|cardiac_arrest|2|data_interpretation
+V: Durante una reanimación cardiopulmonar en urgencias, el líder del equipo supervisa la calidad de las compresiones torácicas en un adulto.
+P: ¿Qué características indican compresiones de alta calidad?
++ Frecuencia de 100 a 120 por minuto, profundidad de 5 a 6 centímetros, permitir la reexpansión completa y minimizar interrupciones || Son los parámetros de calidad recomendados.
+- anchoring | Frecuencia de 60 por minuto con profundidad de 2 centímetros || Es insuficiente.
+- availability_heuristic | Frecuencia de 150 por minuto sin importar la profundidad || Reduce el llenado cardiaco.
+- representativeness_heuristic | Apoyarse sobre el tórax entre compresiones || Impide la reexpansión.
+- premature_closure | Pausas de 30 segundos cada minuto para revisar pulso || Las interrupciones reducen la perfusión.
+- framing_effect | Compresiones en el abdomen superior || Deben ser en la mitad inferior del esternón.
+- complexity_bias | Ventilaciones de alto volumen cada 2 segundos || La hiperventilación es dañina.
+- base_rate_fallacy | La profundidad no influye en el pronóstico || Influye en la perfusión.
+- belief_bias | Romper costillas indica mala técnica y debe detenerse la reanimación || Las fracturas pueden ocurrir con buena técnica.
+- omission_bias | No rotar al compresor cada 2 minutos || La fatiga reduce la calidad.
+E: La reanimación cardiopulmonar de alta calidad en adultos incluye compresiones a una frecuencia de 100 a 120 por minuto, con profundidad de 5 a 6 centímetros, permitiendo la reexpansión completa del tórax, minimizando las interrupciones para lograr una fracción de compresión mayor de 80 por ciento, y evitando la ventilación excesiva. La relación es de 30 compresiones por 2 ventilaciones sin vía aérea avanzada, y con vía aérea avanzada se dan compresiones continuas con una ventilación cada 6 segundos. Se recomienda rotar al reanimador que comprime cada 2 minutos. La capnografía ayuda a vigilar la calidad.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de reanimación cardiopulmonar básica y avanzada en el adulto
+
+@ urg|resuscitation|cardiac_arrest|3|treatment_of_choice
+V: Mujer de 65 años en paro cardiaco en urgencias. El monitor muestra fibrilación ventricular persistente después de 3 descargas, con reanimación de alta calidad y una dosis de adrenalina ya administrada.
+P: ¿Cuál es el antiarrítmico de elección en este momento?
++ Amiodarona 300 mg intravenosa en bolo || Es el antiarrítmico recomendado en fibrilación ventricular refractaria a descargas.
+- anchoring | Atropina 1 mg || No está indicada en el paro.
+- availability_heuristic | Adenosina 6 mg || Se usa en taquicardia supraventricular.
+- representativeness_heuristic | Verapamilo intravenoso || Está contraindicado en ritmos ventriculares.
+- premature_closure | Suspender la reanimación por falta de respuesta || Aún hay opciones terapéuticas.
+- framing_effect | Digoxina intravenosa || No está indicada.
+- complexity_bias | Trombólisis rutinaria en todos los paros || Solo ante sospecha de tromboembolia pulmonar.
+- base_rate_fallacy | Bicarbonato de sodio de rutina || No se recomienda de rutina.
+- belief_bias | Propranolol intravenoso en bolo || No es el antiarrítmico de elección.
+- omission_bias | No buscar causas reversibles || Deben buscarse durante la reanimación.
+E: En la fibrilación ventricular o taquicardia ventricular sin pulso, el tratamiento se basa en desfibrilación, reanimación de alta calidad y adrenalina 1 mg intravenosa cada 3 a 5 minutos después de la segunda descarga. Si el ritmo persiste después de la tercera descarga, se administra amiodarona 300 mg en bolo, y una segunda dosis de 150 mg si continúa. La lidocaína es una alternativa. Durante todo el proceso se buscan causas reversibles, las H y las T: hipoxia, hipovolemia, hidrogeniones, hipo o hiperpotasemia, hipotermia, neumotórax a tensión, taponamiento, tóxicos y trombosis coronaria o pulmonar.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de reanimación cardiopulmonar básica y avanzada en el adulto
+
+@ urg|resuscitation|cardiac_arrest|2|next_step
+V: Hombre de 72 años en paro cardiaco en urgencias. El monitor muestra asistolia confirmada en dos derivaciones. Se están realizando compresiones de alta calidad y se canalizó una vía intravenosa.
+P: ¿Cuál es el siguiente paso más apropiado?
++ Administrar adrenalina 1 mg intravenosa lo antes posible y continuar la reanimación || En ritmos no desfibrilables la adrenalina temprana mejora el retorno de la circulación.
+- anchoring | Desfibrilar con 200 joules || La asistolia no es un ritmo desfibrilable.
+- availability_heuristic | Administrar atropina 3 mg || Ya no se recomienda en asistolia.
+- representativeness_heuristic | Cardioversión sincronizada || No aplica en asistolia.
+- premature_closure | Suspender la reanimación de inmediato || Se deben buscar causas reversibles.
+- framing_effect | Colocar marcapasos transcutáneo como primera medida || No es eficaz en asistolia.
+- complexity_bias | Amiodarona en bolo || Se usa en ritmos desfibrilables.
+- base_rate_fallacy | La asistolia siempre tiene buena respuesta a descargas || No es desfibrilable.
+- belief_bias | Esperar 10 minutos para la primera dosis de adrenalina || Debe darse lo antes posible.
+- omission_bias | No buscar causas reversibles || Son clave en ritmos no desfibrilables.
+E: En los ritmos no desfibrilables, asistolia y actividad eléctrica sin pulso, el tratamiento es reanimación de alta calidad y adrenalina 1 mg intravenosa o intraósea lo antes posible, repetida cada 3 a 5 minutos. No se desfibrila, porque no hay actividad eléctrica organizada que revertir. La atropina ya no se recomienda en el paro y el marcapasos transcutáneo no es eficaz en la asistolia. La asistolia debe confirmarse revisando las conexiones, aumentando la ganancia y en dos derivaciones, para no confundirla con una fibrilación ventricular fina. Se buscan causas reversibles, las H y las T.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de reanimación cardiopulmonar básica y avanzada en el adulto
+
+@ urg|resuscitation|cardiac_arrest|3|treatment_of_choice
+V: Hombre de 60 años con enfermedad renal crónica en hemodiálisis que no acudió a 2 sesiones. Llega en paro cardiaco con actividad eléctrica sin pulso y complejos anchos. Potasio previo de 7.8 mEq/L.
+P: ¿Cuál es el tratamiento específico de elección además de la reanimación?
++ Gluconato o cloruro de calcio intravenoso, junto con insulina con glucosa y bicarbonato || Estabiliza la membrana miocárdica en la hiperpotasemia grave.
+- anchoring | Amiodarona como primera medida || No corrige la causa.
+- availability_heuristic | Desfibrilar repetidamente || La actividad eléctrica sin pulso no es desfibrilable.
+- representativeness_heuristic | Cloruro de potasio intravenoso || Agravaría la hiperpotasemia.
+- premature_closure | Solo adrenalina sin tratar la causa || La causa reversible debe tratarse.
+- framing_effect | Atropina intravenosa || No está indicada.
+- complexity_bias | Trombólisis sistémica || No hay sospecha de trombosis.
+- base_rate_fallacy | La hiperpotasemia no causa paro cardiaco || Es una causa reconocida.
+- belief_bias | El calcio está contraindicado en todo paro cardiaco || Está indicado en hiperpotasemia.
+- omission_bias | No planear hemodiálisis urgente tras el retorno de circulación || Es el tratamiento definitivo.
+E: La hiperpotasemia es una causa reversible de paro cardiaco, especialmente en pacientes con insuficiencia renal o en hemodiálisis que omiten sesiones. Produce ensanchamiento del QRS, ondas sinusoidales, bradicardia, actividad eléctrica sin pulso o fibrilación ventricular. En el paro se administra calcio intravenoso, cloruro de calcio al 10 por ciento o gluconato de calcio, para estabilizar la membrana miocárdica, junto con insulina y glucosa y bicarbonato de sodio para desplazar el potasio al interior de la célula. El tratamiento definitivo es la hemodiálisis. Se mantiene la reanimación mientras se corrige la causa.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperpotasemia
+
+@ urg|resuscitation|cardiac_arrest|3|next_step
+V: Mujer de 30 años con embarazo de 34 semanas que presenta paro cardiaco en urgencias. Se inicia reanimación de alta calidad. El útero está a nivel del ombligo y por arriba.
+P: ¿Cuál es la conducta más apropiada además de la reanimación estándar?
++ Desplazamiento manual del útero hacia la izquierda y preparar cesárea perimortem si no hay retorno de circulación en 4 minutos || Mejora el retorno venoso y la supervivencia materna y fetal.
+- anchoring | Colocarla en decúbito supino sin otras medidas || La compresión aortocava reduce el retorno venoso.
+- availability_heuristic | Evitar la desfibrilación por el embarazo || Está indicada si el ritmo es desfibrilable.
+- representativeness_heuristic | Evitar la adrenalina por el embarazo || Se administra igual que en no embarazadas.
+- premature_closure | Esperar a que llegue el ginecólogo para decidir la cesárea || Se debe preparar de inmediato.
+- framing_effect | Suspender la reanimación para realizar un ultrasonido fetal || Retrasa la reanimación materna.
+- complexity_bias | Trasladarla a quirófano antes de reanimar || La cesárea se realiza en el lugar del paro.
+- base_rate_fallacy | La cesárea perimortem solo beneficia al feto || También mejora la reanimación materna.
+- belief_bias | Las compresiones dañan al feto y deben evitarse || La reanimación materna es prioritaria.
+- omission_bias | No buscar causas específicas del embarazo como hemorragia o sulfato de magnesio || Deben considerarse.
+E: En el paro cardiaco en embarazadas con útero a nivel del ombligo o por arriba, alrededor de las 20 semanas o más, el útero comprime la vena cava y la aorta en decúbito supino, lo que reduce el retorno venoso y la eficacia de la reanimación. Se realiza desplazamiento manual del útero hacia la izquierda durante las compresiones. Si no hay retorno de la circulación en 4 minutos, se realiza cesárea perimortem en el lugar, idealmente con extracción del feto en 5 minutos, lo que mejora la reanimación materna y la supervivencia fetal. La desfibrilación y los fármacos se usan igual que en no embarazadas.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de reanimación cardiopulmonar en la paciente embarazada
+
+@ urg|resuscitation|cardiac_arrest|3|next_step
+V: Hombre de 55 años que recupera la circulación espontánea después de 15 minutos de reanimación por fibrilación ventricular. Permanece comatoso, con presión arterial de 80/50 mmHg. El electrocardiograma muestra elevación del ST en derivaciones anteriores.
+P: ¿Cuál es la conducta más apropiada en los cuidados posparo?
++ Mantener presión arterial media de al menos 65 mmHg, oxigenación con saturación de 92 a 98 por ciento, control de temperatura y angiografía coronaria urgente || La elevación del ST indica oclusión coronaria tratable.
+- anchoring | Esperar a que despierte antes de la angiografía || La angiografía urgente está indicada aunque esté en coma.
+- availability_heuristic | Oxígeno al 100 por ciento de forma indefinida || La hiperoxia es dañina.
+- representativeness_heuristic | Permitir hipotensión para proteger el corazón || La hipotensión empeora el daño cerebral.
+- premature_closure | Hiperventilar para bajar el dióxido de carbono a 20 mmHg || Causa vasoconstricción cerebral.
+- framing_effect | Permitir fiebre de 39 grados || La fiebre empeora el pronóstico neurológico.
+- complexity_bias | Decidir el pronóstico neurológico en la primera hora || Se evalúa después de 72 horas.
+- base_rate_fallacy | Los pacientes en coma posparo nunca se recuperan || Muchos se recuperan.
+- belief_bias | Suspender toda medida porque ya recuperó el pulso || Los cuidados posparo son esenciales.
+- omission_bias | No vigilar glucosa ni convulsiones || Son parte de los cuidados.
+E: Los cuidados posparo buscan optimizar la perfusión y prevenir el daño secundario. Se recomienda mantener la presión arterial media de al menos 65 mmHg o sistólica mayor de 90 con líquidos y vasopresores, oxigenación con saturación de 92 a 98 por ciento evitando la hiperoxia, normocapnia, control de temperatura evitando la fiebre en pacientes comatosos, control de glucosa y tratamiento de convulsiones. En pacientes con elevación del ST se realiza angiografía coronaria urgente con intervención, aunque estén en coma. El pronóstico neurológico se evalúa con estrategia multimodal a partir de las 72 horas.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de cuidados posparo cardiaco
+
+@ urg|resuscitation|cardiac_arrest|3|data_interpretation
+V: Durante la reanimación de un paciente intubado en paro cardiaco, la capnografía muestra un dióxido de carbono al final de la espiración de 8 mmHg después de 20 minutos. Súbitamente aumenta a 42 mmHg.
+P: ¿Qué indica el aumento súbito del dióxido de carbono espirado?
++ Probable retorno de la circulación espontánea || Un aumento brusco a valores normales sugiere recuperación del gasto cardiaco.
+- anchoring | Que la intubación es esofágica || En la intubación esofágica el valor es cercano a cero.
+- availability_heuristic | Que las compresiones son de mala calidad || La mala calidad produce valores bajos.
+- representativeness_heuristic | Hiperventilación excesiva || Reduciría el dióxido de carbono.
+- premature_closure | Que debe suspenderse la reanimación por falla irreversible || Indica lo contrario.
+- framing_effect | Neumotórax a tensión || No produce este aumento.
+- complexity_bias | Error del equipo sin significado clínico || Es un signo clínico relevante.
+- base_rate_fallacy | El dióxido de carbono espirado no tiene utilidad en el paro || Es muy útil.
+- belief_bias | Un valor de 8 mmHg indica excelente calidad de compresiones || Un valor menor de 10 sugiere baja calidad o mal pronóstico.
+- focusing_illusion | Acidosis metabólica grave como única explicación || No explica el aumento brusco.
+E: La capnografía cuantitativa durante la reanimación permite confirmar la posición del tubo endotraqueal, vigilar la calidad de las compresiones y detectar el retorno de la circulación espontánea. Un dióxido de carbono al final de la espiración menor de 10 mmHg sugiere compresiones inadecuadas o bajo gasto, y si persiste después de 20 minutos de reanimación avanzada se asocia con mal pronóstico. Un aumento súbito y sostenido a valores de 35 a 40 mmHg o más indica probable retorno de la circulación, por lo que se revisa el pulso y el ritmo. Una lectura cercana a cero sugiere intubación esofágica.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de reanimación cardiopulmonar básica y avanzada en el adulto
+
+@ urg|resuscitation|cardiac_arrest|2|next_step
+V: Niño de 4 años que es sacado de una alberca sin respuesta, sin respiración y sin pulso. Hay dos reanimadores capacitados en el lugar.
+P: ¿Cuál es la relación compresión ventilación más apropiada?
++ 15 compresiones por 2 ventilaciones || Es la relación recomendada en niños con dos reanimadores.
+- anchoring | 30 compresiones por 2 ventilaciones con dos reanimadores || Es para un reanimador o adultos.
+- availability_heuristic | Solo compresiones sin ventilaciones || En niños y ahogamiento la ventilación es fundamental.
+- representativeness_heuristic | 5 compresiones por 1 ventilación || Es una recomendación antigua.
+- premature_closure | Solo ventilaciones sin compresiones || No hay pulso.
+- framing_effect | 50 compresiones por 2 ventilaciones || No es la recomendación.
+- complexity_bias | Esperar a tener una vía aérea avanzada para iniciar || Retrasa la reanimación.
+- base_rate_fallacy | Los niños requieren la misma relación que los adultos con dos reanimadores || La relación pediátrica es diferente.
+- belief_bias | Deben realizarse maniobras para sacar el agua de los pulmones antes de reanimar || No se recomiendan.
+- omission_bias | No activar el sistema de emergencias || Es parte de la reanimación.
+E: En la reanimación pediátrica, la causa más frecuente del paro es la hipoxia, por lo que las ventilaciones son fundamentales. La relación es de 30 compresiones por 2 ventilaciones con un solo reanimador y de 15 por 2 con dos reanimadores. La profundidad es de al menos un tercio del diámetro anteroposterior del tórax, alrededor de 5 centímetros en niños y 4 centímetros en lactantes, con frecuencia de 100 a 120 por minuto. En el ahogamiento se inicia con 5 ventilaciones de rescate. No se recomiendan maniobras para expulsar el agua de los pulmones.
+R: Guías de reanimación cardiopulmonar pediátrica de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de reanimación cardiopulmonar pediátrica
+
+@ urg|resuscitation|cardiac_arrest|3|data_interpretation
+V: Hombre de 45 años en paro cardiaco. El monitor muestra un ritmo organizado con complejos QRS estrechos a 70 por minuto, pero no se palpa pulso carotídeo ni femoral.
+P: ¿Qué indica este hallazgo?
++ Actividad eléctrica sin pulso, un ritmo no desfibrilable || Hay actividad eléctrica organizada sin gasto cardiaco efectivo.
+- anchoring | Ritmo sinusal normal sin necesidad de reanimación || No hay pulso.
+- availability_heuristic | Fibrilación ventricular || El ritmo es organizado.
+- representativeness_heuristic | Taquicardia ventricular sin pulso || Los complejos son estrechos y la frecuencia normal.
+- premature_closure | Asistolia || Hay actividad eléctrica.
+- framing_effect | Error del monitor que obliga a suspender la reanimación || Debe tratarse como paro.
+- complexity_bias | Bloqueo auriculoventricular completo con buen gasto || No hay pulso.
+- base_rate_fallacy | Un ritmo organizado siempre genera pulso || No en la actividad eléctrica sin pulso.
+- belief_bias | Debe desfibrilarse de inmediato || No es desfibrilable.
+- focusing_illusion | Fibrilación auricular rápida || El ritmo es regular y sin pulso.
+E: La actividad eléctrica sin pulso es la presencia de actividad eléctrica organizada en el monitor sin pulso palpable ni gasto cardiaco efectivo. Es un ritmo no desfibrilable que se trata con reanimación de alta calidad y adrenalina lo antes posible. Su pronóstico depende de identificar y tratar la causa reversible, como hipovolemia, hipoxia, neumotórax a tensión, taponamiento cardiaco, tromboembolia pulmonar, alteraciones del potasio, acidosis, tóxicos o hipotermia. Los complejos estrechos sugieren causas mecánicas, como taponamiento o neumotórax, y los anchos, causas metabólicas o isquémicas. El ultrasonido en el punto de atención ayuda a identificar la causa.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de reanimación cardiopulmonar básica y avanzada en el adulto
+
+@ urg|resuscitation|cardiac_arrest|2|treatment_of_choice
+V: Hombre de 30 años encontrado en paro cardiaco en un baño público con una jeringa a un lado. Testigos refieren que lo vieron inyectarse heroína.
+P: ¿Cuál es el tratamiento de elección además de la reanimación cardiopulmonar estándar?
++ Naloxona, sin retrasar las compresiones ni la desfibrilación || Puede revertir la depresión respiratoria por opioides, aunque la reanimación es la prioridad.
+- anchoring | Solo naloxona sin compresiones || En paro la reanimación es la prioridad.
+- availability_heuristic | Flumazenil || Revierte benzodiacepinas.
+- representativeness_heuristic | Atropina || No está indicada.
+- premature_closure | Esperar a que llegue la naloxona para iniciar la reanimación || Retrasa la reanimación.
+- framing_effect | Bicarbonato de sodio de rutina || No está indicado de rutina.
+- complexity_bias | Lavado gástrico || No es útil en una vía intravenosa.
+- base_rate_fallacy | La naloxona es eficaz por sí sola en todo paro por opioides || En el paro establecido la reanimación es lo principal.
+- belief_bias | Los usuarios de drogas no deben ser reanimados || Todos tienen derecho a la reanimación.
+- omission_bias | No ventilar al paciente || La hipoxia es el mecanismo principal.
+E: En el paro cardiaco asociado a opioides, el mecanismo principal es la hipoxia por depresión respiratoria. La prioridad es la reanimación cardiopulmonar de alta calidad con ventilaciones y la desfibrilación si está indicada. La naloxona puede administrarse, por vía intramuscular, intranasal o intravenosa, sin retrasar las demás intervenciones, ya que puede ser útil si el paciente tiene pulso y no respira, aunque su beneficio en el paro establecido es incierto. Los programas comunitarios de distribución de naloxona a familiares y usuarios han reducido muertes por sobredosis.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de diagnóstico y tratamiento de las intoxicaciones por opioides
+
+@ urg|resuscitation|cardiac_arrest|3|data_interpretation
+V: Mujer de 50 años en paro cardiaco en urgencias. Durante la reanimación, el ultrasonido en el punto de atención muestra un ventrículo derecho muy dilatado con ventrículo izquierdo pequeño. Tenía antecedente de inmovilización prolongada por fractura de cadera.
+P: ¿Qué indica este hallazgo y qué tratamiento debe considerarse?
++ Probable tromboembolia pulmonar masiva, por lo que se considera trombólisis durante la reanimación || La dilatación del ventrículo derecho con factores de riesgo sugiere esta causa.
+- anchoring | Taponamiento cardiaco que requiere pericardiocentesis || Se vería derrame pericárdico.
+- availability_heuristic | Hipovolemia grave || El ventrículo derecho estaría colapsado.
+- representativeness_heuristic | Infarto del ventrículo izquierdo || El hallazgo principal es en el ventrículo derecho.
+- premature_closure | Neumotórax a tensión || No se diagnostica por el tamaño ventricular.
+- framing_effect | Hallazgo normal durante la reanimación sin implicación terapéutica || Sugiere una causa tratable.
+- complexity_bias | Cirugía de revascularización coronaria urgente || No corresponde.
+- base_rate_fallacy | La trombólisis está contraindicada durante la reanimación || Puede usarse en sospecha de tromboembolia.
+- belief_bias | La fractura de cadera no se relaciona con trombosis || Es un factor de riesgo importante.
+- focusing_illusion | Miocardiopatía hipertrófica || No corresponde al hallazgo.
+E: La tromboembolia pulmonar masiva es una causa reversible de paro cardiaco, generalmente con actividad eléctrica sin pulso. El ultrasonido durante la reanimación puede mostrar dilatación del ventrículo derecho con ventrículo izquierdo pequeño, lo que en un paciente con factores de riesgo, como inmovilización, cirugía reciente o fractura, sugiere el diagnóstico. En el paro con sospecha o confirmación de tromboembolia se considera la trombólisis sistémica, y si se administra, se recomienda continuar la reanimación por 60 a 90 minutos para permitir su efecto. Otras opciones son la trombectomía o la oxigenación por membrana extracorpórea.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa
+
+@ urg|resuscitation|cardiac_arrest|2|data_interpretation
+V: Durante la desfibrilación de un adulto con fibrilación ventricular, el equipo utiliza un desfibrilador bifásico.
+P: ¿Qué energía indica la recomendación para la primera descarga con un desfibrilador bifásico?
++ La recomendada por el fabricante, habitualmente de 120 a 200 joules, o la máxima si se desconoce || Es la energía inicial recomendada.
+- anchoring | 50 joules || Es insuficiente.
+- availability_heuristic | 360 joules siempre en bifásico || Es la recomendación para monofásicos.
+- representativeness_heuristic | 10 joules por kilo || No es la dosis en adultos.
+- premature_closure | Descarga sincronizada de 50 joules || La sincronización no se usa en fibrilación ventricular.
+- framing_effect | 2 joules por kilo como en niños || Es la dosis pediátrica inicial.
+- complexity_bias | Tres descargas seguidas sin compresiones || Se recomienda una descarga seguida de compresiones.
+- base_rate_fallacy | La energía no influye en la eficacia || Influye.
+- belief_bias | Debe usarse siempre la menor energía posible para no dañar el corazón || La energía debe ser eficaz.
+- focusing_illusion | 100 joules monofásicos || No corresponde.
+E: En la fibrilación ventricular y la taquicardia ventricular sin pulso en adultos se recomienda una descarga no sincronizada con la energía recomendada por el fabricante para desfibriladores bifásicos, habitualmente entre 120 y 200 joules, o la máxima disponible si se desconoce. Con desfibriladores monofásicos se usan 360 joules. Después de cada descarga se reanudan inmediatamente las compresiones durante 2 minutos antes de revisar el ritmo, en lugar de descargas en serie. En niños la dosis inicial es de 2 joules por kilo, luego 4 joules por kilo, hasta un máximo de 10 joules por kilo o la dosis de adulto.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de reanimación cardiopulmonar básica y avanzada en el adulto
+
+@ urg|resuscitation|cardiac_arrest|2|next_step
+V: Una persona sin entrenamiento en reanimación presencia el colapso súbito de un adulto en la calle. El operador del número de emergencias le da instrucciones por teléfono.
+P: ¿Cuál es la instrucción más apropiada para este testigo sin entrenamiento?
++ Realizar compresiones torácicas continuas sin ventilaciones hasta que llegue ayuda || La reanimación solo con las manos es eficaz en el paro súbito del adulto.
+- anchoring | No hacer nada hasta que llegue la ambulancia || Disminuye mucho la supervivencia.
+- availability_heuristic | Dar solo ventilaciones boca a boca || Las compresiones son prioritarias.
+- representativeness_heuristic | Buscar el pulso durante varios minutos antes de comprimir || Retrasa la reanimación.
+- premature_closure | Levantar las piernas del paciente como única medida || No reanima.
+- framing_effect | Sacudir al paciente hasta que despierte || No es una medida eficaz.
+- complexity_bias | Realizar una relación de 30 por 2 obligatoria aunque no sepa ventilar || Las compresiones continuas son aceptables.
+- base_rate_fallacy | Solo los profesionales pueden reanimar || Los testigos pueden salvar vidas.
+- belief_bias | Las compresiones pueden dañar más al paciente en paro || El beneficio supera el riesgo.
+- omission_bias | No buscar un desfibrilador cercano || Debe buscarse.
+E: En el paro cardiaco súbito del adulto fuera del hospital, la reanimación por testigos duplica o triplica la supervivencia. Para los testigos sin entrenamiento, se recomienda la reanimación solo con las manos, con compresiones torácicas continuas fuertes y rápidas en el centro del pecho, guiadas por el operador de emergencias, hasta que llegue un desfibrilador o el personal médico. En los primeros minutos del paro súbito hay oxígeno suficiente en la sangre, por lo que las compresiones son lo más importante. En niños y en paros por asfixia, como el ahogamiento, las ventilaciones son más importantes.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de reanimación cardiopulmonar básica y avanzada en el adulto
+
+@ urg|resuscitation|cardiac_arrest|3|next_step
+V: Hombre de 80 años con cáncer metastásico y orden documentada de no reanimar, que presenta paro cardiaco en hospitalización. Su familia está presente.
+P: ¿Cuál es la conducta más apropiada?
++ Respetar la orden de no reanimar, brindar acompañamiento a la familia y certificar la defunción || La voluntad documentada del paciente debe respetarse.
+- anchoring | Iniciar reanimación completa porque es un paro cardiaco || Viola la decisión documentada del paciente.
+- availability_heuristic | Realizar solo una descarga eléctrica de prueba || Viola la orden de no reanimar.
+- representativeness_heuristic | Pedir a la familia que decida en ese momento si se reanima ignorando la orden || La decisión ya fue tomada por el paciente.
+- premature_closure | Intubar sin compresiones || Viola la orden.
+- framing_effect | Trasladar a terapia intensiva || No corresponde.
+- complexity_bias | Solicitar autorización judicial para no reanimar || No es necesaria.
+- base_rate_fallacy | Las órdenes de no reanimar no tienen validez en México || Son válidas en el marco de la ley.
+- belief_bias | No reanimar es una forma de eutanasia || Es la adecuación del esfuerzo terapéutico.
+- omission_bias | No documentar el evento en el expediente || Debe documentarse.
+E: La orden de no reanimar es una decisión médica, consensuada con el paciente o su representante y documentada en el expediente, de no iniciar maniobras de reanimación cardiopulmonar en caso de paro cardiaco, generalmente en pacientes con enfermedades terminales en las que la reanimación no ofrece beneficio. No implica suspender otros cuidados, como el control del dolor y el confort. Debe respetarse, y el equipo debe acompañar a la familia, certificar la defunción y documentar el evento. No es eutanasia, sino una forma de adecuación del esfuerzo terapéutico y de respeto a la autonomía.
+R: Ley General de Salud en materia de cuidados paliativos ;; Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón
+
+@ urg|resuscitation|cardiac_arrest|3|next_step
+V: Mujer de 35 años en paro cardiaco por fibrilación ventricular en urgencias. No se ha podido canalizar una vena periférica después de dos intentos rápidos.
+P: ¿Cuál es la conducta más apropiada para la administración de fármacos?
++ Colocar un acceso intraóseo || Es rápido y permite administrar fármacos y líquidos con eficacia similar.
+- anchoring | Seguir intentando vena periférica durante 10 minutos || Retrasa el tratamiento.
+- availability_heuristic | Colocar un catéter venoso central suspendiendo las compresiones || Interrumpe la reanimación.
+- representativeness_heuristic | Administrar los fármacos por vía oral || No es una vía válida en el paro.
+- premature_closure | Administrar adrenalina intramuscular en el paro || No es la vía recomendada en el paro.
+- framing_effect | Suspender la reanimación por falta de acceso || No está justificado.
+- complexity_bias | Venodisección como primera opción || Es más lenta.
+- base_rate_fallacy | La vía intraósea solo se usa en niños || También en adultos.
+- belief_bias | La vía endotraqueal es la de elección en adultos || Es menos eficaz.
+- omission_bias | Retrasar la desfibrilación hasta tener un acceso venoso || La desfibrilación no depende del acceso.
+E: Durante la reanimación, la vía preferida para administrar fármacos es la intravenosa periférica. Si no se logra rápidamente, la vía intraósea es la alternativa recomendada en adultos y niños, porque es rápida, segura y permite administrar cualquier fármaco o líquido con efectos comparables. Se coloca en la tibia proximal, el húmero proximal o la tibia distal. La vía endotraqueal es menos confiable y solo se usa si no hay otra opción. La colocación de un catéter central no debe interrumpir las compresiones. La desfibrilación no debe retrasarse por la falta de acceso vascular.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de reanimación cardiopulmonar básica y avanzada en el adulto

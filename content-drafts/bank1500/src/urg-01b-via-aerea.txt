@@ -1,0 +1,175 @@
+@ urg|resuscitation|airway_management|2|next_step
+V: Hombre de 40 años con traumatismo craneoencefálico grave tras un accidente en motocicleta. Escala de Glasgow de 7, respiración irregular y saturación de 88 por ciento con mascarilla. Se sospecha lesión cervical.
+P: ¿Cuál es la conducta más apropiada para el manejo de la vía aérea?
++ Intubación orotraqueal con secuencia rápida manteniendo la restricción del movimiento cervical || Un Glasgow de 8 o menos indica necesidad de asegurar la vía aérea.
+- anchoring | Mantener mascarilla y observar || No protege la vía aérea con Glasgow de 7.
+- availability_heuristic | Intubación nasotraqueal a ciegas || Está contraindicada si se sospecha fractura de base de cráneo.
+- representativeness_heuristic | Hiperextender el cuello para intubar || Puede agravar una lesión cervical.
+- premature_closure | Esperar la radiografía de columna cervical antes de intubar || Retrasa una intervención vital.
+- framing_effect | Colocar cánula nasal de bajo flujo || Es insuficiente.
+- complexity_bias | Traqueostomía quirúrgica electiva inmediata || No es el primer paso.
+- base_rate_fallacy | La sospecha de lesión cervical contraindica la intubación || Se intuba con estabilización manual.
+- belief_bias | Un paciente que respira no requiere intubación || La protección de la vía aérea es indispensable.
+- omission_bias | No confirmar la posición del tubo con capnografía || Es indispensable.
+E: Las indicaciones de una vía aérea definitiva incluyen la incapacidad para proteger la vía aérea, como un Glasgow de 8 o menos, la falla de oxigenación o ventilación, la obstrucción inminente por quemaduras de vía aérea o hematomas, y la evolución clínica esperada. En el trauma se realiza intubación orotraqueal con secuencia rápida, manteniendo la restricción del movimiento de la columna cervical con estabilización manual en línea, retirando temporalmente la parte anterior del collarín. La intubación nasotraqueal está contraindicada si se sospecha fractura de base de cráneo. La posición se confirma con capnografía.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de manejo inicial del traumatismo craneoencefálico
+
+@ urg|resuscitation|airway_management|3|treatment_of_choice
+V: Hombre de 35 años con quemaduras del 40 por ciento de superficie corporal ocurridas hace 5 días, que requiere intubación por neumonía. Potasio sérico de 5.8 mEq/L.
+P: ¿Cuál es el relajante neuromuscular de elección para la intubación?
++ Rocuronio || La succinilcolina está contraindicada en quemados después de 24 horas por riesgo de hiperpotasemia grave.
+- anchoring | Succinilcolina || Puede causar hiperpotasemia letal en quemados después de 24 a 48 horas.
+- availability_heuristic | Intubar sin relajante como norma || Aumenta la dificultad y las complicaciones.
+- representativeness_heuristic | Vecuronio en infusión prolongada antes de intubar || No es la opción de secuencia rápida.
+- premature_closure | Pancuronio || Tiene inicio lento.
+- framing_effect | Diazepam como relajante muscular || No es un bloqueador neuromuscular.
+- complexity_bias | Dantroleno como inductor || Se usa en hipertermia maligna.
+- base_rate_fallacy | La succinilcolina es segura en todos los pacientes || Tiene contraindicaciones importantes.
+- belief_bias | El potasio alto no influye en la elección del relajante || Es determinante.
+- omission_bias | No tener disponible sugammadex o plan de vía aérea difícil || Es parte de la preparación.
+E: La succinilcolina es un relajante despolarizante de inicio rápido y duración corta, pero produce liberación de potasio que es mayor en pacientes con proliferación de receptores de acetilcolina extrasinápticos. Está contraindicada en quemaduras extensas o lesiones por aplastamiento después de las 24 a 72 horas, en lesión medular o enfermedad neuromuscular con desnervación, en inmovilización prolongada, en hiperpotasemia, en antecedente de hipertermia maligna y en distrofias musculares. El rocuronio a dosis de 1 a 1.2 mg por kilo es la alternativa para la secuencia rápida, con inicio rápido, y su efecto puede revertirse con sugammadex.
+R: Guía de Práctica Clínica de manejo de la vía aérea en urgencias ;; Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos
+
+@ urg|resuscitation|airway_management|3|treatment_of_choice
+V: Mujer de 45 años con choque séptico, presión arterial de 78/45 mmHg a pesar de líquidos, que requiere intubación por insuficiencia respiratoria.
+P: ¿Cuál es el inductor de elección para la secuencia rápida en esta paciente?
++ Ketamina o etomidato en dosis ajustada || Tienen menor efecto hipotensor que el propofol.
+- anchoring | Propofol a dosis completa || Causa hipotensión importante.
+- availability_heuristic | Tiopental || Causa hipotensión importante.
+- representativeness_heuristic | Midazolam en dosis alta como inductor único || Causa hipotensión y tiene inicio lento.
+- premature_closure | Intubar sin inductor en paciente consciente || Es inhumano y aumenta complicaciones.
+- framing_effect | Morfina como inductor || No es un inductor adecuado.
+- complexity_bias | Anestesia inhalatoria con sevoflurano en urgencias || No es la técnica de secuencia rápida.
+- base_rate_fallacy | Todos los inductores tienen el mismo efecto hemodinámico || Difieren mucho.
+- belief_bias | La ketamina está contraindicada en choque || Es útil por su efecto simpaticomimético.
+- omission_bias | No preparar vasopresores antes de la intubación || La hipotensión posintubación es frecuente.
+E: La secuencia rápida de intubación incluye preparación, preoxigenación, optimización hemodinámica, inducción con un sedante seguido inmediatamente de un relajante neuromuscular, colocación del tubo y confirmación. En pacientes hemodinámicamente inestables, como en choque séptico, se prefieren inductores con menor efecto hipotensor, como ketamina, que tiene efecto simpaticomimético, o etomidato, que tiene estabilidad cardiovascular aunque puede suprimir transitoriamente la función suprarrenal. El propofol y el tiopental causan hipotensión importante. Se recomienda tener vasopresores preparados por el riesgo de hipotensión posintubación. Las dosis se reducen en pacientes inestables.
+R: Guía de Práctica Clínica de manejo de la vía aérea en urgencias ;; Campaña para sobrevivir a la sepsis
+
+@ urg|resuscitation|airway_management|2|confirmatory_study
+V: Después de intubar a un paciente en urgencias, se escuchan ruidos respiratorios bilaterales y se observa empañamiento del tubo.
+P: ¿Cuál es el estudio de elección para confirmar la colocación correcta del tubo endotraqueal?
++ Capnografía con onda continua de dióxido de carbono espirado || Es el método más confiable para confirmar la posición en la tráquea.
+- anchoring | Auscultación como único método || Puede ser engañosa.
+- availability_heuristic | Empañamiento del tubo como prueba definitiva || Puede ocurrir en intubación esofágica.
+- representativeness_heuristic | Radiografía de tórax como prueba inicial de intubación traqueal || Evalúa la profundidad, no descarta la intubación esofágica.
+- premature_closure | Saturación de oxígeno inmediata || Su caída es tardía.
+- framing_effect | Observar la expansión torácica únicamente || Es poco confiable.
+- complexity_bias | Tomografía de tórax || No es práctica ni necesaria.
+- base_rate_fallacy | La intubación esofágica es imposible si se visualizaron las cuerdas || Puede desplazarse el tubo.
+- belief_bias | La gasometría inmediata confirma la posición || No es el método de confirmación.
+- information_bias | Broncoscopia de rutina en todas las intubaciones || No es práctica en urgencias.
+E: La capnografía cuantitativa con onda continua es el método más confiable para confirmar y vigilar la posición del tubo endotraqueal en la tráquea, porque detecta el dióxido de carbono espirado de forma sostenida en varias respiraciones. Los signos clínicos, como la auscultación, el empañamiento del tubo y la expansión torácica, pueden ser engañosos. La caída de la saturación es un signo tardío de intubación esofágica. La radiografía de tórax se usa para verificar la profundidad del tubo, idealmente de 3 a 5 centímetros por arriba de la carina, pero no para descartar una intubación esofágica.
+R: Guía de Práctica Clínica de manejo de la vía aérea en urgencias ;; Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón
+
+@ urg|resuscitation|airway_management|3|next_step
+V: Durante la intubación de un paciente con trauma facial grave, fallan tres intentos de laringoscopia y no se logra ventilar con bolsa válvula mascarilla ni con dispositivo supraglótico. La saturación cae a 70 por ciento.
+P: ¿Cuál es el siguiente paso más apropiado?
++ Cricotiroidotomía quirúrgica de urgencia || Es la situación de no poder intubar ni oxigenar.
+- anchoring | Un cuarto y quinto intento de laringoscopia || Aumenta el riesgo de hipoxia y paro.
+- availability_heuristic | Esperar a que llegue un anestesiólogo || La hipoxia es inminente.
+- representativeness_heuristic | Traqueostomía reglada en quirófano || Es más lenta.
+- premature_closure | Intubación nasotraqueal a ciegas con trauma facial grave || Está contraindicada.
+- framing_effect | Despertar al paciente como primera opción en trauma grave || No es factible con el trauma y la hipoxia.
+- complexity_bias | Fibrobroncoscopia con hipoxia grave y sangrado || No es práctica en esta situación.
+- base_rate_fallacy | La vía aérea quirúrgica solo la realiza un cirujano de cabeza y cuello || El médico de urgencias debe saber hacerla.
+- belief_bias | Siempre se puede intubar si se intenta suficientes veces || Los intentos repetidos causan daño.
+- omission_bias | No pedir ayuda ni declarar la situación de emergencia || Debe hacerse.
+E: La situación de no poder intubar ni oxigenar es una emergencia que requiere una vía aérea quirúrgica inmediata. Los algoritmos de vía aérea difícil recomiendan limitar los intentos de laringoscopia, usar dispositivos supraglóticos como rescate y, si no se logra oxigenar, realizar una cricotiroidotomía, idealmente con técnica de bisturí, dilatador o bujía y tubo. En niños menores de 10 a 12 años se prefiere la cricotiroidotomía con aguja. Se debe anticipar la vía aérea difícil con la evaluación LEMON y tener preparado el equipo de rescate. El trauma facial grave contraindica la vía nasal.
+R: Guía de Práctica Clínica de manejo de la vía aérea en urgencias ;; Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos
+
+@ urg|resuscitation|airway_management|2|next_step
+V: Hombre de 50 años que en un restaurante se lleva las manos al cuello, no puede hablar ni toser y presenta cianosis. Está consciente.
+P: ¿Cuál es la conducta más apropiada?
++ Compresiones abdominales, maniobra de Heimlich, hasta expulsar el cuerpo extraño o que pierda la conciencia || Es una obstrucción grave de la vía aérea por cuerpo extraño.
+- anchoring | Animarlo a toser sin intervenir || No puede toser, la obstrucción es grave.
+- availability_heuristic | Darle agua para que pase el alimento || Puede empeorar la obstrucción.
+- representativeness_heuristic | Barrido digital a ciegas de la boca || Puede empujar el cuerpo extraño.
+- premature_closure | Esperar a que llegue la ambulancia sin intervenir || El tiempo es crítico.
+- framing_effect | Colocarlo en decúbito supino y dar ventilaciones de rescate mientras está consciente || No es la maniobra adecuada.
+- complexity_bias | Realizar cricotiroidotomía en el restaurante como primera medida || Primero se intentan las maniobras.
+- base_rate_fallacy | Las compresiones abdominales están indicadas en lactantes || En lactantes se usan golpes en la espalda y compresiones torácicas.
+- belief_bias | Golpear la espalda con el paciente de pie es la única maniobra útil || Las compresiones abdominales son eficaces.
+- omission_bias | No iniciar reanimación si pierde la conciencia || Debe iniciarse.
+E: La obstrucción de la vía aérea por cuerpo extraño puede ser leve, cuando la persona puede toser y hablar, en cuyo caso se le anima a toser, o grave, cuando no puede hablar, toser ni respirar, con el signo universal de llevarse las manos al cuello. En la obstrucción grave en adultos y niños mayores de un año se realizan compresiones abdominales, o maniobra de Heimlich, hasta expulsar el objeto. En embarazadas y personas con obesidad se usan compresiones torácicas. En lactantes se alternan 5 golpes en la espalda y 5 compresiones torácicas. Si la persona pierde la conciencia, se inicia reanimación cardiopulmonar y se revisa la boca antes de ventilar.
+R: Guías de reanimación cardiopulmonar de la Asociación Americana del Corazón ;; Guía de Práctica Clínica de reanimación cardiopulmonar básica y avanzada en el adulto
+
+@ urg|resuscitation|airway_management|3|initial_study
+V: Hombre de 55 años con obesidad, cuello corto, apertura oral limitada y antecedente de radioterapia en cuello. Requiere intubación programada en urgencias por insuficiencia respiratoria progresiva.
+P: ¿Cuál es la evaluación inicial más apropiada antes de la intubación?
++ Evaluación de vía aérea difícil con criterios como LEMON y planear dispositivos de rescate || Anticipar la dificultad reduce complicaciones.
+- anchoring | Intubar de inmediato sin evaluación || Aumenta el riesgo de fracaso.
+- availability_heuristic | Solicitar tomografía de cuello antes de cualquier decisión urgente || Retrasa una intervención necesaria.
+- representativeness_heuristic | Evaluar solo la saturación de oxígeno || No predice la dificultad de intubación.
+- premature_closure | Asumir que la obesidad no influye en la intubación || Es un factor de dificultad.
+- framing_effect | Usar solo un tubo de un tamaño sin alternativas || Se requiere preparación.
+- complexity_bias | Solicitar espirometría completa || No está indicada.
+- base_rate_fallacy | La vía aérea difícil siempre es evidente durante la laringoscopia || Debe anticiparse antes.
+- belief_bias | La radioterapia de cuello no afecta la intubación || Causa rigidez y fibrosis.
+- omission_bias | No preoxigenar adecuadamente || Es fundamental.
+E: Antes de una intubación se debe evaluar la probabilidad de vía aérea difícil. El acrónimo LEMON incluye mirar externamente rasgos de dificultad, evaluar la regla 3-3-2 de apertura oral y distancias, la escala de Mallampati, la obstrucción de la vía aérea y la movilidad del cuello. Otros factores son la obesidad, el cuello corto, la radioterapia previa, el trauma y la barba. Ante una vía aérea difícil prevista se preparan dispositivos de rescate, como videolaringoscopio, bujía, dispositivos supraglóticos y equipo de cricotiroidotomía, se preoxigena adecuadamente y se considera la intubación con el paciente despierto.
+R: Guía de Práctica Clínica de manejo de la vía aérea en urgencias ;; Guía de la Sociedad de Vía Aérea Difícil
+
+@ urg|resuscitation|airway_management|2|treatment_of_choice
+V: Hombre de 68 años con enfermedad pulmonar obstructiva crónica que llega con exacerbación. Está alerta, con frecuencia respiratoria de 30, uso de músculos accesorios y gasometría con pH de 7.29 y dióxido de carbono de 62 mmHg.
+P: ¿Cuál es el tratamiento ventilatorio de elección?
++ Ventilación mecánica no invasiva con presión positiva de dos niveles || Reduce la intubación y la mortalidad en acidosis respiratoria por exacerbación.
+- anchoring | Intubación orotraqueal inmediata || La ventilación no invasiva es primera línea si está alerta.
+- availability_heuristic | Oxígeno al 100 por ciento con mascarilla con reservorio || Puede empeorar la hipercapnia.
+- representativeness_heuristic | Solo broncodilatadores sin soporte ventilatorio || Tiene acidosis respiratoria.
+- premature_closure | Cánula nasal de alto flujo como primera opción obligada || La ventilación no invasiva tiene mejor evidencia en esta situación.
+- framing_effect | Sedación profunda para disminuir el trabajo respiratorio || Empeora la hipoventilación.
+- complexity_bias | Oxigenación por membrana extracorpórea || No es la primera opción.
+- base_rate_fallacy | La ventilación no invasiva está contraindicada en hipercapnia || Es su principal indicación.
+- belief_bias | Los pacientes con enfermedad pulmonar crónica no deben recibir oxígeno nunca || Se titula a una saturación de 88 a 92 por ciento.
+- omission_bias | No reevaluar la gasometría en 1 a 2 horas || Determina la respuesta.
+E: La ventilación mecánica no invasiva con presión positiva de dos niveles es el tratamiento de elección en la exacerbación de la enfermedad pulmonar obstructiva crónica con acidosis respiratoria, pH menor de 7.35 y dióxido de carbono mayor de 45 mmHg, en pacientes alertas y cooperadores. Reduce la necesidad de intubación, las complicaciones y la mortalidad. Sus contraindicaciones incluyen paro respiratorio, alteración grave de la conciencia, inestabilidad hemodinámica, incapacidad para proteger la vía aérea y trauma facial. Se reevalúa la gasometría en 1 a 2 horas. El oxígeno se titula a una saturación de 88 a 92 por ciento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad pulmonar obstructiva crónica ;; Iniciativa global para la enfermedad pulmonar obstructiva crónica
+
+@ urg|resuscitation|airway_management|2|next_step
+V: Hombre de 25 años con intoxicación alcohólica, somnoliento, que ronca con respiración ruidosa. Responde al dolor y tiene reflejo nauseoso presente. No hay sospecha de trauma.
+P: ¿Cuál es la conducta inicial más apropiada para mantener la vía aérea permeable?
++ Maniobra de inclinación de la cabeza y elevación del mentón y considerar una cánula nasofaríngea || Abre la vía aérea y la nasofaríngea se tolera con reflejo nauseoso.
+- anchoring | Cánula orofaríngea con reflejo nauseoso presente || Puede provocar vómito y aspiración.
+- availability_heuristic | Intubación orotraqueal inmediata || No está indicada si mantiene su vía aérea con maniobras simples.
+- representativeness_heuristic | Dejarlo en decúbito supino sin vigilancia || Puede obstruirse o broncoaspirar.
+- premature_closure | Cricotiroidotomía || No está indicada.
+- framing_effect | Darle café para despertarlo || Puede broncoaspirar.
+- complexity_bias | Fibrobroncoscopia diagnóstica || No está indicada.
+- base_rate_fallacy | Los ronquidos en intoxicados son normales y no requieren intervención || Indican obstrucción parcial.
+- belief_bias | La cánula nasofaríngea está contraindicada en todos los pacientes intoxicados || Es útil con reflejo nauseoso.
+- omission_bias | No medir glucosa capilar || La hipoglucemia es frecuente en intoxicados.
+E: Los ronquidos y la respiración ruidosa en un paciente con disminución del estado de conciencia indican obstrucción parcial de la vía aérea por la lengua. Las maniobras iniciales son la inclinación de la cabeza con elevación del mentón o, si se sospecha trauma cervical, la tracción mandibular. La cánula orofaríngea se usa solo en pacientes sin reflejo nauseoso, porque puede provocar vómito y aspiración; la cánula nasofaríngea es mejor tolerada en pacientes con reflejo presente, aunque se evita si se sospecha fractura de base de cráneo. Se coloca en posición lateral si no se sospecha trauma y se mide glucosa.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de manejo de la vía aérea en urgencias
+
+@ urg|resuscitation|airway_management|3|complication_prognosis
+V: Hombre de 60 años intubado hace 10 minutos en urgencias por neumonía grave. Bruscamente la saturación cae a 80 por ciento, la presión arterial a 70/40 mmHg y aumentan las presiones de la vía aérea. Hay ausencia de ruidos respiratorios en el hemitórax derecho.
+P: ¿Cuál es la complicación más probable?
++ Neumotórax a tensión || Hipoxemia, hipotensión, presiones altas y ausencia de ruidos unilateral tras ventilación con presión positiva.
+- anchoring | Intubación selectiva del bronquio derecho || Causaría hipoventilación del lado izquierdo, no del derecho.
+- availability_heuristic | Obstrucción del tubo por secreciones || No explica la asimetría de ruidos con hipotensión.
+- representativeness_heuristic | Broncoespasmo grave || Produce sibilancias bilaterales.
+- premature_closure | Desplazamiento del tubo al esófago || No explica la asimetría.
+- framing_effect | Falla del ventilador sin problema del paciente || Hay signos clínicos del paciente.
+- complexity_bias | Tromboembolia pulmonar masiva || No explica la ausencia de ruidos unilateral.
+- base_rate_fallacy | El neumotórax no ocurre tras la intubación || La ventilación con presión positiva puede causarlo.
+- belief_bias | La hipotensión posintubación siempre se debe a los fármacos || Debe descartarse el neumotórax.
+- focusing_illusion | Edema pulmonar agudo || Produce estertores bilaterales.
+E: Ante un deterioro súbito en un paciente intubado se usa la regla DOPE: desplazamiento del tubo, obstrucción, neumotórax y falla del equipo. El neumotórax a tensión puede aparecer al iniciar la ventilación con presión positiva y se manifiesta con hipoxemia, hipotensión, aumento de las presiones de la vía aérea, ausencia de ruidos respiratorios y desviación traqueal. Es un diagnóstico clínico que se trata con descompresión inmediata con aguja en el segundo espacio intercostal en la línea media clavicular o en el quinto espacio en la línea axilar anterior, seguida de sonda pleural. El ultrasonido muestra ausencia de deslizamiento pleural.
+R: Manual de soporte vital avanzado en trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de manejo de la vía aérea en urgencias
+
+@ urg|resuscitation|airway_management|2|next_step
+V: Antes de una intubación de secuencia rápida en un paciente con insuficiencia respiratoria, el equipo prepara al paciente durante 3 minutos.
+P: ¿Cuál es la conducta más apropiada para la preoxigenación?
++ Oxígeno al 100 por ciento con mascarilla con reservorio o ventilación no invasiva durante 3 minutos, más oxigenación apneica con cánula nasal || Aumenta la reserva de oxígeno y el tiempo seguro de apnea.
+- anchoring | No preoxigenar para ahorrar tiempo || Aumenta el riesgo de hipoxemia.
+- availability_heuristic | Cánula nasal a 2 litros por minuto como única medida || Es insuficiente.
+- representativeness_heuristic | Ventilar enérgicamente con bolsa a frecuencias altas en todos los casos || Aumenta la distensión gástrica.
+- premature_closure | Preoxigenar con aire ambiente || No aumenta la reserva de oxígeno.
+- framing_effect | Colocar al paciente en Trendelenburg para preoxigenar || Reduce la capacidad residual funcional.
+- complexity_bias | Esperar 30 minutos de preoxigenación || Es innecesario.
+- base_rate_fallacy | La preoxigenación no influye en la desaturación durante la intubación || Prolonga el tiempo seguro.
+- belief_bias | La cabecera elevada empeora la preoxigenación || La mejora, sobre todo en obesos.
+- omission_bias | No vigilar la saturación durante el procedimiento || Es indispensable.
+E: La preoxigenación consiste en sustituir el nitrógeno de los pulmones por oxígeno para aumentar la reserva y prolongar el tiempo de apnea segura durante la intubación. Se realiza con oxígeno al 100 por ciento con mascarilla con reservorio a flujo alto o ventilación no invasiva durante 3 minutos, o con 8 respiraciones de capacidad vital. La cabecera elevada a 20 a 30 grados mejora la preoxigenación, sobre todo en obesos. La oxigenación apneica con cánula nasal a 15 litros por minuto durante la laringoscopia prolonga el tiempo sin desaturación. En la secuencia rápida se evita ventilar con bolsa salvo hipoxemia.
+R: Guía de Práctica Clínica de manejo de la vía aérea en urgencias ;; Guía de la Sociedad de Vía Aérea Difícil
