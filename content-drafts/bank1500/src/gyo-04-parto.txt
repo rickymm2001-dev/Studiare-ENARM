@@ -1,0 +1,351 @@
+@ gyo|labor_delivery|normal_labor|2|data_interpretation
+V: Primigesta de 25 años con embarazo de 39 semanas que ingresa con contracciones regulares cada 3 minutos de 45 segundos de duración. Cérvix con 6 cm de dilatación y 80% de borramiento. Membranas íntegras y frecuencia cardiaca fetal normal.
+P: ¿Qué indica esta exploración sobre la fase del trabajo de parto?
++ Fase activa del primer periodo del trabajo de parto || La fase activa inicia alrededor de los 5 a 6 cm con contracciones regulares.
+- anchoring | Fase latente del primer periodo || La fase latente es antes de los 5 a 6 cm.
+- availability_heuristic | Segundo periodo del trabajo de parto || Inicia con la dilatación completa.
+- representativeness_heuristic | Falso trabajo de parto || Hay cambios cervicales progresivos.
+- premature_closure | Tercer periodo || Corresponde al alumbramiento.
+- base_rate_fallacy | Trabajo de parto pretérmino || El embarazo es de término.
+- framing_effect | Fase de desaceleración patológica || No hay datos de detención.
+- inattentional_blindness | Prodromos de trabajo de parto || Ya hay dilatación avanzada.
+- focusing_illusion | Periodo expulsivo prolongado || No ha llegado a dilatación completa.
+- belief_bias | El trabajo de parto inicia solo cuando se rompe la fuente || Puede iniciar con membranas íntegras.
+E: El trabajo de parto se divide en tres periodos. El primero, de dilatación, tiene una fase latente con contracciones irregulares y cambios cervicales lentos hasta los 5 a 6 cm, y una fase activa con contracciones regulares y dilatación más rápida hasta los 10 cm. El segundo periodo, expulsivo, va de la dilatación completa al nacimiento. El tercero, el alumbramiento, va del nacimiento a la expulsión de la placenta. Según las recomendaciones actuales, la fase activa inicia alrededor de los 5 a 6 cm, lo que evita intervenciones innecesarias en la fase latente prolongada.
+R: Guía de Práctica Clínica de vigilancia y manejo del trabajo de parto ;; Organización Mundial de la Salud. Recomendaciones para los cuidados durante el parto
+
+@ gyo|labor_delivery|normal_labor|3|data_interpretation
+V: Mujer de 28 años en trabajo de parto activo. El registro cardiotocográfico muestra frecuencia basal de 140 latidos por minuto, variabilidad de 5 a 25 latidos, aceleraciones presentes y desaceleraciones que inician con la contracción, son simétricas y regresan a la basal al terminar la contracción.
+P: ¿Qué indica este registro?
++ Registro normal con desaceleraciones tempranas por compresión cefálica || Las desaceleraciones tempranas son benignas.
+- anchoring | Sufrimiento fetal con desaceleraciones tardías || Las tardías inician después del pico de la contracción.
+- availability_heuristic | Desaceleraciones variables por compresión del cordón || Son abruptas y de forma variable.
+- representativeness_heuristic | Patrón sinusoidal || Es ondulante sin variabilidad normal.
+- premature_closure | Bradicardia fetal || La basal es normal.
+- base_rate_fallacy | Taquicardia fetal por fiebre materna || La basal es normal.
+- framing_effect | Variabilidad ausente || La variabilidad es normal.
+- inattentional_blindness | Indicación de cesárea urgente || El registro es tranquilizador.
+- focusing_illusion | Hipoxia fetal grave || No hay datos.
+- belief_bias | Toda desaceleración indica peligro || Las tempranas son fisiológicas.
+E: El registro cardiotocográfico evalúa la frecuencia basal, normal de 110 a 160, la variabilidad, normal de 5 a 25 latidos, las aceleraciones y las desaceleraciones. Las desaceleraciones tempranas coinciden con la contracción, son simétricas y se deben a compresión de la cabeza fetal con respuesta vagal, por lo que son benignas. Las tardías inician después del pico de la contracción y regresan después de que termina, y sugieren insuficiencia uteroplacentaria. Las variables son abruptas y de forma y duración variables por compresión del cordón. Un registro con basal normal, buena variabilidad y aceleraciones es tranquilizador.
+R: Guía de Práctica Clínica de vigilancia y manejo del trabajo de parto
+
+@ gyo|labor_delivery|normal_labor|3|next_step
+V: Mujer de 30 años en trabajo de parto a las 40 semanas con 7 cm de dilatación. El registro muestra desaceleraciones tardías recurrentes con variabilidad mínima. Recibe oxitocina y tiene contracciones cada minuto y medio.
+P: ¿Cuál es la conducta inicial más apropiada?
++ Suspender la oxitocina, colocar a la madre en decúbito lateral, administrar líquidos y valorar el nacimiento si no mejora || Son medidas de reanimación intrauterina ante un registro anormal con taquisistolia.
+- anchoring | Aumentar la oxitocina para acelerar el parto || Empeora la hipoxia.
+- availability_heuristic | Continuar igual porque son desaceleraciones esperadas || Las tardías recurrentes son anormales.
+- representativeness_heuristic | Amniotomía como única medida || No corrige la taquisistolia.
+- premature_closure | Dar oxígeno a la madre como única medida y esperar 2 horas || No resuelve la causa.
+- framing_effect | Colocar a la madre en decúbito supino || Comprime la vena cava.
+- complexity_bias | Ultrasonido Doppler completo antes de actuar || Retrasa las medidas.
+- status_quo_bias | Mantener la vigilancia sin cambios || El registro es anormal.
+- belief_bias | Pedir a la madre que puje para acelerar || No está en expulsivo.
+- omission_bias | No intervenir para no alarmar a la madre || El feto puede estar en hipoxia.
+E: Las desaceleraciones tardías recurrentes con variabilidad mínima indican posible hipoxia fetal por insuficiencia uteroplacentaria. Se aplican medidas de reanimación intrauterina, como suspender la oxitocina, corregir la taquisistolia, que son más de 5 contracciones en 10 minutos, colocar a la madre en decúbito lateral, administrar líquidos intravenosos y corregir la hipotensión. Puede usarse un tocolítico de acción rápida. Si el patrón persiste se valora la resolución rápida del embarazo, por la vía más rápida y segura según la dilatación y la estación fetal.
+R: Guía de Práctica Clínica de vigilancia y manejo del trabajo de parto
+
+@ gyo|labor_delivery|normal_labor|3|data_interpretation
+V: Mujer de 26 años con embarazo de 41 semanas. Se valora la posibilidad de inducción. Cérvix con 3 cm de dilatación, 70% de borramiento, consistencia blanda, posición central y la presentación en plano 0.
+P: ¿Qué indica la puntuación de Bishop de esta paciente?
++ Puntuación de 10, cérvix favorable para la inducción con oxitocina || Una puntuación de 8 o más predice éxito de la inducción.
+- anchoring | Puntuación de 4, cérvix desfavorable que requiere maduración || La suma real es mayor.
+- availability_heuristic | Contraindicación para la inducción || No hay contraindicación.
+- representativeness_heuristic | Indicación de cesárea electiva || No está indicada.
+- premature_closure | Requiere maduración con prostaglandinas || El cérvix ya es favorable.
+- base_rate_fallacy | Trabajo de parto activo establecido || Se valora para inducción.
+- framing_effect | Puntuación de 6 dudosa || La suma es mayor.
+- inattentional_blindness | Riesgo alto de falla de la inducción || El cérvix es favorable.
+- focusing_illusion | Indica desproporción cefalopélvica || No evalúa la pelvis.
+- belief_bias | La inducción siempre termina en cesárea || Con cérvix favorable el éxito es alto.
+E: La puntuación de Bishop valora la dilatación, el borramiento, la consistencia, la posición del cérvix y la estación de la presentación, cada una de 0 a 3 puntos, salvo consistencia y posición de 0 a 2. En este caso son 2 por 3 cm, 2 por 70%, 2 por consistencia blanda, 2 por posición central y 2 por plano 0, total 10. Una puntuación de 8 o más indica cérvix favorable y alta probabilidad de parto vaginal con inducción con oxitocina. Con puntuación de 6 o menos se recomienda maduración cervical con prostaglandinas o métodos mecánicos.
+R: Guía de Práctica Clínica de inducción del trabajo de parto
+
+@ gyo|labor_delivery|normal_labor|3|next_step
+V: Mujer de 27 años con embarazo de 41 semanas y 3 días, sin complicaciones, con feto en buenas condiciones. No ha iniciado trabajo de parto. Cérvix con puntuación de Bishop de 4.
+P: ¿Cuál es la conducta más apropiada?
++ Ofrecer inducción del trabajo de parto con maduración cervical previa || A partir de las 41 semanas la inducción reduce la mortalidad perinatal.
+- anchoring | Esperar hasta las 43 semanas || Aumenta el riesgo de muerte fetal.
+- availability_heuristic | Cesárea electiva por embarazo prolongado || No está indicada por sí misma.
+- representativeness_heuristic | Inducción con oxitocina sin maduración cervical || Con cérvix desfavorable se madura primero.
+- premature_closure | Egresar sin vigilancia hasta que inicie el parto || Requiere vigilancia e inducción.
+- framing_effect | Amniotomía con cérvix cerrado || No es posible ni adecuada.
+- complexity_bias | Amniocentesis para madurez pulmonar || No es necesaria a término.
+- status_quo_bias | Esperar al inicio espontáneo sin importar las semanas || El riesgo aumenta con el tiempo.
+- belief_bias | Caminar mucho y comer piña para provocar el parto como única medida || No es una estrategia eficaz.
+- omission_bias | No inducir por miedo a la cesárea || La inducción no aumenta las cesáreas.
+E: El embarazo prolongado o de postérmino se asocia a mayor riesgo de muerte fetal, macrosomía, aspiración de meconio y oligohidramnios. Se recomienda ofrecer inducción del trabajo de parto a partir de las 41 semanas, ya que reduce la mortalidad perinatal sin aumentar las cesáreas. Con cérvix desfavorable, Bishop de 6 o menos, se realiza maduración cervical con misoprostol, dinoprostona o sonda de Foley, y después oxitocina. Entre las 40 y 41 semanas se vigila el bienestar fetal. El despegamiento de membranas también puede favorecer el inicio del trabajo de parto.
+R: Guía de Práctica Clínica de inducción del trabajo de parto
+
+@ gyo|labor_delivery|normal_labor|2|mechanism
+V: Estudiante de medicina que observa un parto en presentación cefálica occipitoanterior y debe describir el orden de los movimientos que realiza el feto al atravesar la pelvis.
+P: ¿Cuál es la secuencia del mecanismo del trabajo de parto?
++ Encajamiento, descenso, flexión, rotación interna, extensión, rotación externa y expulsión || Son los movimientos cardinales del parto.
+- anchoring | Extensión, flexión, descenso y rotación interna || El orden es incorrecto.
+- availability_heuristic | Rotación externa antes de la rotación interna || La rotación interna ocurre antes de la extensión.
+- representativeness_heuristic | Expulsión antes de la extensión de la cabeza || La cabeza se extiende al salir.
+- premature_closure | Solo descenso y expulsión || Omite los movimientos clave.
+- base_rate_fallacy | Flexión después de la extensión || La flexión ocurre durante el descenso.
+- framing_effect | Encajamiento al final del proceso || Es el primer movimiento.
+- inattentional_blindness | Rotación interna después del nacimiento de los hombros || Ocurre antes de la extensión.
+- focusing_illusion | Restitución antes del encajamiento || La restitución ocurre al final.
+- belief_bias | El bebé no realiza movimientos, solo es empujado || Hay movimientos cardinales.
+E: Los movimientos cardinales del trabajo de parto en presentación de vértice son encajamiento, cuando el diámetro biparietal pasa el estrecho superior, descenso, flexión de la cabeza para presentar el diámetro suboccipitobregmático más pequeño, rotación interna para llevar el occipucio hacia el pubis, extensión al salir por la vulva, restitución y rotación externa para alinear la cabeza con los hombros, y expulsión de hombros y cuerpo. Conocer el mecanismo permite reconocer alteraciones como las variedades posteriores persistentes o la distocia de hombros.
+R: Guía de Práctica Clínica de vigilancia y manejo del trabajo de parto
+
+@ gyo|labor_delivery|normal_labor|4|initial_treatment
+V: Mujer de 32 años con diabetes gestacional y feto estimado en 4 300 g. Tras la salida de la cabeza, esta se retrae contra el periné y los hombros no salen con la tracción suave habitual.
+P: ¿Cuál es la maniobra inicial más apropiada?
++ Pedir ayuda, flexionar los muslos de la madre sobre el abdomen con la maniobra de McRoberts y presión suprapúbica || Resuelven la mayoría de las distocias de hombros.
+- anchoring | Tracción fuerte de la cabeza fetal hacia abajo || Causa lesión del plexo braquial.
+- availability_heuristic | Presión fúndica intensa || Empeora el impacto del hombro.
+- representativeness_heuristic | Cesárea de inmediato con la cabeza fuera || Es la última opción tras otras maniobras.
+- premature_closure | Esperar la siguiente contracción sin maniobras || Aumenta la hipoxia.
+- framing_effect | Episiotomía como única medida || No libera el hombro por sí sola.
+- complexity_bias | Fractura intencional de la clavícula como primera maniobra || Es de último recurso.
+- base_rate_fallacy | Rotar la cabeza 180 grados con fuerza || Puede lesionar al feto.
+- belief_bias | Pedir a la madre que puje más fuerte como única medida || No resuelve el impacto.
+- omission_bias | No hacer nada para evitar lesiones legales || El retraso aumenta el daño.
+E: La distocia de hombros ocurre cuando el hombro anterior queda atrapado detrás de la sínfisis del pubis tras la salida de la cabeza, que se retrae contra el periné en el signo de la tortuga. Sus factores de riesgo son macrosomía, diabetes, obesidad y parto instrumentado, aunque muchas son impredecibles. El manejo inicial es pedir ayuda, evitar la tracción excesiva y la presión fúndica, realizar la maniobra de McRoberts y presión suprapúbica. Si no resuelve se realizan maniobras internas de rotación, como Rubin y Woods, y la extracción del brazo posterior. Las complicaciones incluyen lesión del plexo braquial, fractura de clavícula e hipoxia.
+R: Guía de Práctica Clínica de vigilancia y manejo del trabajo de parto
+
+@ gyo|labor_delivery|normal_labor|3|treatment_of_choice
+V: Primigesta de 24 años con embarazo de 39 semanas en trabajo de parto activo con 5 cm de dilatación. Solicita alivio del dolor. No tiene contraindicaciones.
+P: ¿Cuál es el método de analgesia de elección?
++ Analgesia epidural || Es el método más eficaz para el dolor del trabajo de parto.
+- anchoring | Esperar a la dilatación completa para dar analgesia || Puede darse en cualquier momento a solicitud de la mujer.
+- availability_heuristic | Morfina intramuscular repetida || Es menos eficaz y causa depresión neonatal.
+- representativeness_heuristic | Anestesia general || No está indicada para analgesia del parto.
+- premature_closure | Negar la analgesia porque prolonga mucho el parto || Su efecto en la duración es pequeño.
+- framing_effect | Diazepam intravenoso || No es un analgésico y causa depresión neonatal.
+- complexity_bias | Bloqueo de nervios periféricos múltiples || No es el método estándar.
+- base_rate_fallacy | Ketorolaco intravenoso como método principal || No es suficiente.
+- belief_bias | El dolor del parto debe soportarse sin ayuda || La analgesia es un derecho.
+- omission_bias | No ofrecer analgesia para no aumentar cesáreas || No aumenta las cesáreas.
+E: La analgesia epidural es el método más eficaz para el alivio del dolor durante el trabajo de parto. Puede iniciarse a solicitud de la mujer en cualquier fase, sin necesidad de esperar una dilatación específica. No aumenta el riesgo de cesárea, aunque puede prolongar ligeramente el segundo periodo y aumentar el parto instrumentado. Sus efectos adversos incluyen hipotensión, fiebre, prurito y cefalea pospunción. Las contraindicaciones son coagulopatía, infección en el sitio de punción, hipovolemia no corregida y rechazo de la paciente. Las medidas no farmacológicas, como el acompañamiento y la libertad de movimiento, también ayudan.
+R: Guía de Práctica Clínica de vigilancia y manejo del trabajo de parto ;; Organización Mundial de la Salud. Recomendaciones para los cuidados durante el parto
+
+@ gyo|labor_delivery|preterm_labor|2|diagnosis
+V: Mujer de 26 años con embarazo de 31 semanas que presenta contracciones dolorosas regulares cada 5 minutos durante 2 horas. En el tacto el cérvix tiene 3 cm de dilatación y 60% de borramiento. Membranas íntegras.
+P: ¿Cuál es el diagnóstico más probable?
++ Trabajo de parto pretérmino || Contracciones regulares con cambios cervicales entre las 20 y 36.6 semanas.
+- anchoring | Amenaza de parto pretérmino sin cambios cervicales || Ya hay dilatación y borramiento.
+- availability_heuristic | Contracciones de Braxton Hicks || No producen cambios cervicales.
+- representativeness_heuristic | Insuficiencia cervical || Es una dilatación indolora sin contracciones.
+- premature_closure | Desprendimiento de placenta || No hay sangrado ni hipertonía.
+- base_rate_fallacy | Infección urinaria con dolor || No explica los cambios cervicales.
+- framing_effect | Trabajo de parto de término || El embarazo es de 31 semanas.
+- inattentional_blindness | Ruptura prematura de membranas || Las membranas están íntegras.
+- focusing_illusion | Apendicitis aguda || No explica los cambios cervicales.
+- belief_bias | Contracciones normales que pasarán solas || Hay cambios cervicales.
+E: El trabajo de parto pretérmino es la presencia de contracciones uterinas regulares con cambios cervicales progresivos, dilatación de 2 cm o más o borramiento importante, entre las 20 y 36.6 semanas. Es la principal causa de morbimortalidad neonatal. Los factores de riesgo incluyen parto pretérmino previo, cérvix corto, infecciones urinarias y vaginales, embarazo múltiple, polihidramnios, tabaquismo, periodo intergenésico corto y malformaciones uterinas. La medición de la longitud cervical por ultrasonido transvaginal y la fibronectina fetal ayudan a predecir el riesgo en casos dudosos.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino
+
+@ gyo|labor_delivery|preterm_labor|3|treatment_of_choice
+V: Mujer de 28 años en trabajo de parto pretérmino a las 30 semanas, con 3 cm de dilatación y membranas íntegras. Sin datos de infección ni sufrimiento fetal.
+P: ¿Cuál es el tratamiento de elección para mejorar el pronóstico neonatal?
++ Corticosteroides prenatales con betametasona o dexametasona y sulfato de magnesio para neuroprotección, con tocolisis breve para permitir su efecto || Reducen la morbimortalidad neonatal.
+- anchoring | Tocolisis prolongada por semanas como medida principal || No mejora el pronóstico y tiene efectos adversos.
+- availability_heuristic | Antibióticos de rutina con membranas íntegras || No se recomiendan sin infección.
+- representativeness_heuristic | Cesárea inmediata || No está indicada sin indicación obstétrica.
+- premature_closure | Solo reposo absoluto en cama || No es eficaz.
+- framing_effect | Progesterona en el trabajo de parto activo || Se usa para prevención, no en el trabajo de parto.
+- complexity_bias | Cerclaje de urgencia con 3 cm y contracciones || Está contraindicado con trabajo de parto activo.
+- base_rate_fallacy | Hidratación intravenosa abundante como tocolítico || No es eficaz.
+- belief_bias | Que el bebé nazca rápido para que se desarrolle afuera || La prematurez tiene riesgos.
+- omission_bias | No dar corticosteroides por miedo a efectos en el bebé || Su beneficio está comprobado.
+E: El manejo del trabajo de parto pretérmino busca mejorar el pronóstico neonatal. Entre las 24 y 34 semanas se administran corticosteroides prenatales, betametasona 12 mg intramuscular cada 24 horas por dos dosis o dexametasona 6 mg cada 12 horas por cuatro dosis, que reducen el síndrome de dificultad respiratoria, la hemorragia intraventricular y la mortalidad. Antes de las 32 semanas se administra sulfato de magnesio para neuroprotección, que reduce la parálisis cerebral. La tocolisis con nifedipino o atosiban se usa por 48 horas para permitir el efecto de los esteroides o el traslado. La profilaxis para estreptococo del grupo B se indica si el estado es desconocido.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino
+
+@ gyo|labor_delivery|preterm_labor|3|prevention_screening
+V: Mujer de 29 años con embarazo único de 22 semanas, sin síntomas. El ultrasonido transvaginal de rutina muestra longitud cervical de 15 mm. Sin antecedente de parto pretérmino.
+P: ¿Cuál es la medida de prevención indicada?
++ Progesterona vaginal diaria hasta las 36 semanas || Reduce el parto pretérmino en mujeres con cérvix corto.
+- anchoring | Reposo absoluto en cama || No es eficaz.
+- availability_heuristic | Tocolíticos orales profilácticos || No previenen el parto pretérmino.
+- representativeness_heuristic | Antibióticos profilácticos || No están indicados.
+- premature_closure | Ninguna medida porque está asintomática || El cérvix corto aumenta el riesgo.
+- framing_effect | Corticosteroides a las 22 semanas de inmediato || Se administran ante riesgo inminente de nacimiento.
+- complexity_bias | Cesárea programada a las 34 semanas || No está indicada.
+- base_rate_fallacy | Suspender toda actividad laboral como única medida || No es eficaz por sí sola.
+- belief_bias | Evitar subir escaleras durante el resto del embarazo || No previene el parto pretérmino.
+- omission_bias | Esperar a que aparezcan contracciones para actuar || La prevención es más eficaz antes.
+E: La longitud cervical por ultrasonido transvaginal entre las 18 y 24 semanas predice el riesgo de parto pretérmino. En embarazos únicos con cérvix de 25 mm o menos, la progesterona vaginal diaria hasta las 36 semanas reduce el parto pretérmino y la morbilidad neonatal. En mujeres con antecedente de parto pretérmino y cérvix corto se considera cerclaje cervical. El pesario es una opción en algunos casos. El reposo en cama, los tocolíticos profilácticos y los antibióticos sin infección no previenen el parto pretérmino. Se recomienda tratar la bacteriuria asintomática y suspender el tabaquismo.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino
+
+@ gyo|labor_delivery|preterm_labor|3|treatment_of_choice
+V: Mujer de 27 años en trabajo de parto pretérmino a las 29 semanas. Se decide tocolisis para completar el esquema de corticosteroides. Tiene asma controlada y frecuencia cardiaca de 88.
+P: ¿Cuál es el tocolítico de elección?
++ Nifedipino oral o atosiban intravenoso || Son eficaces y con menos efectos adversos que los betamiméticos.
+- anchoring | Terbutalina intravenosa como primera opción || Tiene efectos cardiovasculares importantes.
+- availability_heuristic | Indometacina después de las 32 semanas || Puede cerrar el conducto arterioso.
+- representativeness_heuristic | Sulfato de magnesio como tocolítico de primera línea || Su eficacia como tocolítico es limitada.
+- premature_closure | Progesterona intramuscular como tocolítico agudo || No detiene el trabajo de parto activo.
+- framing_effect | Hidratación intravenosa y sedación || No son tocolíticos eficaces.
+- complexity_bias | Combinar tres tocolíticos de inicio || Aumenta los efectos adversos.
+- base_rate_fallacy | Oxitocina a dosis bajas || Estimula las contracciones.
+- belief_bias | Reposo absoluto como tocolítico || No es eficaz.
+- omission_bias | No usar tocolisis aunque falten esteroides || La tocolisis breve permite completar el esquema.
+E: La tocolisis busca retrasar el nacimiento 48 horas para completar los corticosteroides o trasladar a la paciente. Los tocolíticos de primera línea son nifedipino, bloqueador de canales de calcio por vía oral, y atosiban, antagonista de receptores de oxitocina con menos efectos adversos. La indometacina puede usarse antes de las 32 semanas por periodos cortos, ya que después puede causar cierre prematuro del conducto arterioso y oligohidramnios. Los betamiméticos causan taquicardia, hiperglucemia, hipopotasemia y edema pulmonar. La tocolisis está contraindicada en corioamnionitis, desprendimiento de placenta, preeclampsia grave, muerte fetal y compromiso fetal.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino
+
+@ gyo|labor_delivery|preterm_labor|4|next_step
+V: Mujer de 25 años con embarazo de 30 semanas en trabajo de parto pretérmino que presenta fiebre de 38.6 °C, taquicardia materna, útero doloroso y líquido amniótico fétido al tacto. Frecuencia cardiaca fetal de 175 por minuto.
+P: ¿Cuál es la conducta más apropiada?
++ Iniciar antibióticos de amplio espectro y resolver el embarazo sin tocolisis || La infección intraamniótica contraindica la tocolisis.
+- anchoring | Tocolisis con nifedipino para prolongar el embarazo || Está contraindicada en infección intraamniótica.
+- availability_heuristic | Solo antipiréticos y vigilancia || La infección requiere antibióticos y nacimiento.
+- representativeness_heuristic | Cesárea obligatoria por la infección || La vía se decide por criterios obstétricos.
+- premature_closure | Esperar a completar 48 horas de corticosteroides antes de resolver || No se retrasa el nacimiento por la infección.
+- framing_effect | Cerclaje de urgencia || Está contraindicado.
+- complexity_bias | Amniocentesis antes de cualquier tratamiento || El diagnóstico clínico es claro.
+- status_quo_bias | Mantener el manejo expectante || Aumenta la sepsis materna y neonatal.
+- belief_bias | La fiebre se debe al esfuerzo del trabajo de parto || Hay infección.
+- omission_bias | No dar antibióticos para no afectar al bebé || La infección no tratada es más dañina.
+E: La infección intraamniótica o corioamnionitis se sospecha con fiebre materna más taquicardia fetal, leucocitosis materna, líquido purulento o fétido o dolor uterino. Es causa y consecuencia del parto pretérmino y de la ruptura de membranas. El tratamiento es antibiótico intravenoso de amplio espectro, como ampicilina con gentamicina, agregando clindamicina o metronidazol si hay cesárea, y la resolución del embarazo. La tocolisis está contraindicada. La infección intraamniótica no es indicación de cesárea por sí misma. Las complicaciones incluyen sepsis materna, hemorragia posparto por atonía y sepsis neonatal.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino
+
+@ gyo|labor_delivery|preterm_labor|3|risk_factor
+V: Mujer de 32 años con embarazo de 18 semanas. Tuvo un parto pretérmino espontáneo a las 32 semanas hace 2 años. Ahora está asintomática.
+P: ¿Cuál es el factor de riesgo más importante de parto pretérmino en esta paciente?
++ Antecedente de parto pretérmino espontáneo || Es el factor de riesgo más fuerte de recurrencia.
+- anchoring | Edad mayor de 30 años || No es un factor importante.
+- availability_heuristic | Embarazo de feto masculino || Su efecto es mínimo.
+- representativeness_heuristic | Primiparidad || Ya tiene un parto previo.
+- premature_closure | Consumo moderado de café || No es un factor relevante.
+- base_rate_fallacy | Grupo sanguíneo Rh negativo || No es un factor.
+- framing_effect | Ejercicio moderado || No es un factor de riesgo.
+- inattentional_blindness | Vacunación contra influenza || No aumenta el riesgo.
+- focusing_illusion | Relaciones sexuales en el embarazo || No es un factor establecido.
+- belief_bias | Cargar objetos ligeros en casa || No es un factor relevante.
+E: El antecedente de parto pretérmino espontáneo es el factor de riesgo más importante de un nuevo parto pretérmino, con riesgo de recurrencia de 15 a 30% o mayor según el número y la edad gestacional de los previos. Otros factores son cérvix corto, embarazo múltiple, infecciones genitourinarias, sangrado en el embarazo, polihidramnios, malformaciones uterinas, cirugía cervical previa, tabaquismo, bajo índice de masa corporal y periodo intergenésico corto. En mujeres con parto pretérmino previo se mide el cérvix de forma seriada y se considera progesterona o cerclaje.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino
+
+@ gyo|labor_delivery|preterm_labor|3|treatment_of_choice
+V: Mujer de 30 años con embarazo de 20 semanas y antecedente de dos pérdidas en el segundo trimestre con dilatación cervical indolora sin contracciones. Ahora el cérvix mide 18 mm por ultrasonido. Sin contracciones ni infección.
+P: ¿Cuál es el tratamiento de elección?
++ Cerclaje cervical || Antecedente de pérdidas indoloras en el segundo trimestre con cérvix corto sugiere insuficiencia cervical.
+- anchoring | Tocolíticos orales continuos || No tratan la insuficiencia cervical.
+- availability_heuristic | Reposo absoluto como único tratamiento || No es eficaz.
+- representativeness_heuristic | Antibióticos profilácticos continuos || No tratan la causa.
+- premature_closure | Esperar a que aparezcan contracciones || La insuficiencia cervical es indolora.
+- framing_effect | Corticosteroides a las 20 semanas || No son útiles antes de la viabilidad.
+- complexity_bias | Histerectomía || No está indicada.
+- base_rate_fallacy | Ácido fólico a dosis altas || No trata la insuficiencia cervical.
+- belief_bias | Evitar caminar el resto del embarazo || No es eficaz.
+- omission_bias | No intervenir para no causar contracciones || El cerclaje reduce la pérdida.
+E: La insuficiencia cervical es la incapacidad del cérvix para mantener el embarazo en ausencia de contracciones, con dilatación indolora en el segundo trimestre. Se asocia a conización, dilataciones cervicales repetidas, malformaciones y alteraciones del tejido conectivo. El cerclaje cervical se indica por antecedente de una o más pérdidas en el segundo trimestre atribuibles a insuficiencia cervical, por cérvix corto menor de 25 mm antes de las 24 semanas con antecedente de parto pretérmino, o de rescate ante dilatación indolora sin contracciones. Se retira a las 36 a 37 semanas o si inicia el trabajo de parto.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del parto pretérmino
+
+@ gyo|labor_delivery|premature_rupture_membranes|2|diagnosis
+V: Mujer de 27 años con embarazo de 38 semanas que refiere salida abundante de líquido claro por vagina hace 2 horas. En la especuloscopia se observa salida de líquido por el orificio cervical que aumenta con la maniobra de Valsalva. Prueba de nitrazina positiva y cristalografía en helecho.
+P: ¿Cuál es el diagnóstico más probable?
++ Ruptura de membranas a término || Salida de líquido por el cérvix con nitrazina positiva y patrón en helecho.
+- anchoring | Incontinencia urinaria del embarazo || La orina no da patrón en helecho.
+- availability_heuristic | Leucorrea fisiológica || No sale por el orificio cervical en cantidad.
+- representativeness_heuristic | Vaginosis bacteriana || Da flujo grisáceo maloliente.
+- premature_closure | Expulsión del tapón mucoso || Es moco escaso sanguinolento.
+- base_rate_fallacy | Fístula vesicovaginal || Es rara en este contexto.
+- framing_effect | Trabajo de parto activo con membranas íntegras || Hay salida de líquido amniótico.
+- inattentional_blindness | Candidiasis vaginal || Da flujo blanco espeso.
+- focusing_illusion | Semen tras relaciones sexuales || No explica el volumen ni el patrón.
+- belief_bias | Sudoración vaginal normal del embarazo || Se confirmó líquido amniótico.
+E: La ruptura de membranas es la pérdida de la integridad del saco amniótico antes del inicio del trabajo de parto. Se diagnostica por la salida de líquido por el orificio cervical en la especuloscopia, a veces con Valsalva, y se confirma con pruebas como nitrazina, que vira por el pH alcalino del líquido, cristalografía en helecho o marcadores como la proteína placentaria alfa microglobulina 1. Se evita el tacto vaginal hasta decidir el manejo para no aumentar el riesgo de infección. El ultrasonido muestra oligohidramnios en muchos casos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la ruptura prematura de membranas
+
+@ gyo|labor_delivery|premature_rupture_membranes|3|next_step
+V: Mujer de 26 años con embarazo de 39 semanas y ruptura de membranas confirmada hace 3 horas. No tiene contracciones. Afebril, feto en buenas condiciones, presentación cefálica. Cultivo de estreptococo del grupo B negativo.
+P: ¿Cuál es la conducta más apropiada?
++ Inducción del trabajo de parto con oxitocina || A término la inducción temprana reduce la infección materna y neonatal.
+- anchoring | Manejo expectante por 72 horas en casa || Aumenta el riesgo de infección.
+- availability_heuristic | Cesárea inmediata || No está indicada.
+- representativeness_heuristic | Tocolisis || No está indicada a término.
+- premature_closure | Corticosteroides para madurez pulmonar || No están indicados a término.
+- framing_effect | Antibióticos profilácticos sin inducir || La inducción es el manejo recomendado.
+- complexity_bias | Amniocentesis para descartar infección || No es necesaria.
+- status_quo_bias | Esperar el inicio espontáneo sin límite de tiempo || Aumenta la infección.
+- belief_bias | Tactos vaginales cada hora para vigilar || Aumentan el riesgo de infección.
+- omission_bias | No inducir para evitar intervenciones || El riesgo de infección aumenta con el tiempo.
+E: En la ruptura de membranas a término, la mayoría de las mujeres inicia trabajo de parto en las siguientes 24 horas. La inducción temprana con oxitocina reduce la corioamnionitis, la endometritis y la infección neonatal en comparación con el manejo expectante prolongado. Se minimizan los tactos vaginales. Si el estreptococo del grupo B es positivo o desconocido con factores de riesgo, se administra profilaxis intraparto. Las indicaciones de cesárea son las obstétricas habituales. Puede ofrecerse un periodo breve de espera de algunas horas si la mujer lo prefiere y no hay complicaciones.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la ruptura prematura de membranas
+
+@ gyo|labor_delivery|premature_rupture_membranes|3|treatment_of_choice
+V: Mujer de 28 años con embarazo de 30 semanas y ruptura prematura de membranas confirmada hace 6 horas. Sin contracciones, afebril, feto en buenas condiciones y sin datos de infección.
+P: ¿Cuál es el manejo de elección?
++ Manejo expectante hospitalario con corticosteroides, antibióticos de latencia y sulfato de magnesio para neuroprotección, hasta las 34 semanas o hasta que haya indicación de nacimiento || Mejora el pronóstico neonatal.
+- anchoring | Inducción inmediata del trabajo de parto || Aumenta las complicaciones de la prematurez sin beneficio.
+- availability_heuristic | Egreso con reposo en casa || Requiere hospitalización.
+- representativeness_heuristic | Tocolisis prolongada || No mejora el pronóstico en la ruptura de membranas.
+- premature_closure | Cesárea de urgencia || No hay indicación.
+- framing_effect | Tactos vaginales diarios para vigilar el cérvix || Aumentan la infección.
+- complexity_bias | Amnioinfusión de rutina || No está indicada.
+- base_rate_fallacy | Antibióticos solo si aparece fiebre || Los antibióticos de latencia prolongan el embarazo.
+- belief_bias | El líquido se repone solo y no requiere manejo || Hay riesgo de infección y prematurez.
+- omission_bias | No administrar corticosteroides por la ruptura || Están indicados.
+E: En la ruptura prematura de membranas pretérmino entre las 24 y 34 semanas, sin infección ni otras indicaciones de nacimiento, se recomienda manejo expectante hospitalario. Incluye corticosteroides para madurez pulmonar, antibióticos de latencia como ampicilina y eritromicina o azitromicina, que prolongan el embarazo y reducen la infección, sulfato de magnesio para neuroprotección antes de las 32 semanas, vigilancia de datos de infección y bienestar fetal y evitar los tactos vaginales. Se resuelve a las 34 semanas o antes si hay corioamnionitis, desprendimiento, compromiso fetal o trabajo de parto.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la ruptura prematura de membranas
+
+@ gyo|labor_delivery|premature_rupture_membranes|3|prevention_screening
+V: Mujer de 26 años con embarazo de 36 semanas en consulta prenatal. Pregunta por el cultivo que le van a hacer en vagina y recto.
+P: ¿Cuál es el propósito de este tamizaje?
++ Detectar colonización por estreptococo del grupo B para dar profilaxis intraparto y prevenir sepsis neonatal temprana || El tamizaje universal se hace entre las 36 y 37.6 semanas.
+- anchoring | Detectar vaginosis bacteriana para tratarla en todas || No es su propósito.
+- availability_heuristic | Detectar virus del papiloma humano || No es su propósito.
+- representativeness_heuristic | Tratar con antibióticos orales a la madre colonizada antes del parto || No erradica la colonización y no se recomienda.
+- premature_closure | Decidir la vía de nacimiento || La colonización no indica cesárea.
+- base_rate_fallacy | Detectar candidiasis || No es su propósito.
+- framing_effect | Diagnosticar ruptura de membranas || No es su propósito.
+- complexity_bias | Medir la flora completa para probióticos || No es su propósito.
+- belief_bias | Comprobar la higiene de la paciente || La colonización es frecuente y no indica mala higiene.
+- omission_bias | Omitir el cultivo para evitar molestias || Previene infecciones graves en el recién nacido.
+E: Streptococcus agalactiae o estreptococo del grupo B coloniza el tracto genital y gastrointestinal de 10 a 30% de las embarazadas y es una causa principal de sepsis neonatal temprana. Se recomienda cultivo vaginal y rectal entre las 36 y 37.6 semanas. Las mujeres colonizadas reciben profilaxis intraparto con penicilina o ampicilina intravenosa iniciada al menos 4 horas antes del nacimiento. También reciben profilaxis las mujeres con bacteriuria por este agente en el embarazo o un hijo previo con enfermedad invasiva. La colonización no indica cesárea y los antibióticos orales antes del parto no son útiles.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la ruptura prematura de membranas ;; Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de sepsis y choque séptico del recién nacido
+
+@ gyo|labor_delivery|premature_rupture_membranes|4|complication_prognosis
+V: Mujer de 30 años con ruptura prematura de membranas a las 21 semanas, con anhidramnios persistente. Pregunta por el riesgo para el bebé si continúa el embarazo.
+P: ¿Cuál es la complicación fetal más grave asociada?
++ Hipoplasia pulmonar || La falta de líquido amniótico en etapas tempranas impide el desarrollo pulmonar.
+- anchoring | Macrosomía fetal || No se relaciona.
+- availability_heuristic | Polihidramnios secundario || Hay anhidramnios.
+- representativeness_heuristic | Hidrocefalia || No es la complicación característica.
+- premature_closure | Cardiopatía congénita || No se produce por la ruptura.
+- base_rate_fallacy | Gastrosquisis || Es una malformación de la pared abdominal.
+- framing_effect | Labio y paladar hendido || No se relaciona.
+- inattentional_blindness | Anemia fetal grave || No es la complicación característica.
+- focusing_illusion | Restricción del crecimiento como única consecuencia || La hipoplasia pulmonar es la más grave.
+- belief_bias | Ninguna, el bebé crece igual sin líquido || El líquido es esencial para el desarrollo.
+E: La ruptura de membranas antes de la viabilidad, generalmente antes de las 23 a 24 semanas, tiene mal pronóstico. El oligohidramnios grave o anhidramnios durante el periodo canalicular del desarrollo pulmonar causa hipoplasia pulmonar, principal causa de muerte neonatal en estos casos. También produce deformidades por compresión, como pie equino, contracturas y facies de Potter, además de infección intraamniótica y desprendimiento de placenta. Se ofrece asesoría sobre las opciones de manejo expectante o interrupción del embarazo, considerando los deseos de la paciente y el pronóstico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la ruptura prematura de membranas
+
+@ gyo|labor_delivery|premature_rupture_membranes|3|risk_factor
+V: Mujer de 24 años con embarazo de 32 semanas y ruptura prematura de membranas. Fuma, tuvo una ruptura prematura en su embarazo anterior y presenta vaginosis bacteriana sin tratar.
+P: ¿Cuál es el factor de riesgo más importante para su ruptura prematura de membranas?
++ Antecedente de ruptura prematura de membranas en un embarazo previo || Es el factor de riesgo más fuerte de recurrencia.
+- anchoring | Edad menor de 25 años || No es un factor importante.
+- availability_heuristic | Uso de ropa ajustada || No es un factor.
+- representativeness_heuristic | Nuliparidad || No es nulípara.
+- premature_closure | Consumo de ácido fólico || No es un factor de riesgo.
+- base_rate_fallacy | Grupo sanguíneo materno || No es un factor.
+- framing_effect | Haber tenido relaciones sexuales la semana previa || No es un factor establecido.
+- inattentional_blindness | Ejercicio moderado || No es un factor de riesgo.
+- focusing_illusion | Vacuna de influenza en el embarazo || No aumenta el riesgo.
+- belief_bias | Un susto fuerte rompe la fuente || No es una causa.
+E: Los factores de riesgo de ruptura prematura de membranas incluyen ruptura prematura o parto pretérmino previo, infecciones del tracto genital como vaginosis bacteriana, tricomoniasis y gonorrea, infección intraamniótica, tabaquismo, sangrado en el embarazo, sobredistensión uterina por polihidramnios o embarazo múltiple, cérvix corto, procedimientos invasivos como amniocentesis o cerclaje y deficiencias nutricionales. La infección y la inflamación debilitan las membranas por la acción de proteasas. El antecedente de ruptura prematura es el predictor más fuerte de recurrencia, por lo que estas mujeres requieren vigilancia estrecha en embarazos futuros.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la ruptura prematura de membranas
+
+@ gyo|labor_delivery|premature_rupture_membranes|3|next_step
+V: Mujer de 29 años con embarazo de 35 semanas y ruptura prematura de membranas hace 2 horas. Sin contracciones, afebril, feto en buenas condiciones. Estado de estreptococo del grupo B desconocido.
+P: ¿Cuál es la conducta más apropiada?
++ Iniciar profilaxis para estreptococo del grupo B y proceder a la inducción del trabajo de parto || A partir de las 34 semanas se recomienda la resolución.
+- anchoring | Manejo expectante hasta las 37 semanas con antibióticos de latencia || A partir de las 34 semanas se recomienda resolver.
+- availability_heuristic | Corticosteroides y esperar 48 horas en todas || A esta edad no se recomiendan de rutina.
+- representativeness_heuristic | Cesárea inmediata || No hay indicación.
+- premature_closure | Tocolisis para prolongar el embarazo || No está indicada.
+- framing_effect | Egresar y esperar el trabajo de parto en casa || Aumenta el riesgo de infección.
+- complexity_bias | Amniocentesis para madurez pulmonar || No es necesaria.
+- status_quo_bias | Observar sin profilaxis porque el cultivo no se hizo || El estado desconocido indica profilaxis.
+- belief_bias | Esperar a que aparezca fiebre para tratar || La infección neonatal puede ser grave.
+- omission_bias | No inducir por ser pretérmino tardío || El balance favorece la resolución.
+E: En la ruptura prematura de membranas a partir de las 34 semanas se recomienda la resolución del embarazo, generalmente mediante inducción, porque el riesgo de infección supera el de la prematurez tardía. Si el estado del estreptococo del grupo B es desconocido en un embarazo pretérmino se administra profilaxis intraparto con penicilina o ampicilina. Los corticosteroides entre las 34 y 36.6 semanas pueden considerarse en casos seleccionados según la guía local. Entre las 24 y 33.6 semanas se prefiere el manejo expectante con corticosteroides y antibióticos de latencia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la ruptura prematura de membranas
