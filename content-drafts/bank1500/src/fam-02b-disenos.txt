@@ -1,0 +1,239 @@
+@ fam|public_health|study_design|2|data_interpretation
+V: Un grupo de investigadores identifica a 200 pacientes con un tumor raro de hígado y a 400 personas sin el tumor, de la misma edad y sexo. Les preguntan sobre su exposición previa a un herbicida durante los últimos 20 años.
+P: ¿Qué diseño de estudio describe esta investigación?
++ Estudio de casos y controles || Parte de la enfermedad y busca hacia atrás la exposición.
+- anchoring | Estudio de cohorte prospectivo || Parte de la exposición y sigue hacia la enfermedad.
+- availability_heuristic | Ensayo clínico aleatorizado || El investigador no asigna la exposición.
+- representativeness_heuristic | Estudio transversal || Mide exposición y enfermedad al mismo tiempo.
+- premature_closure | Estudio ecológico || Usa datos de poblaciones, no de individuos.
+- framing_effect | Serie de casos || No tiene grupo de comparación.
+- complexity_bias | Metaanálisis || Combina resultados de varios estudios.
+- base_rate_fallacy | Estudio de cohorte histórica || Parte de la exposición documentada.
+- belief_bias | Ensayo cruzado || Es experimental.
+- focusing_illusion | Estudio de prueba diagnóstica || No evalúa una prueba.
+E: El estudio de casos y controles es un diseño observacional analítico que selecciona a los participantes según la presencia de la enfermedad, casos, o su ausencia, controles, y compara la frecuencia de exposición previa entre ambos grupos. Es ideal para enfermedades raras o con periodos de latencia largos, porque es rápido y económico. Su medida de asociación es la razón de momios, ya que no permite calcular incidencias. Sus principales limitaciones son el sesgo de memoria, porque los casos recuerdan más sus exposiciones, y el sesgo de selección de los controles. El pareamiento por edad y sexo controla esas variables.
+R: Manual de epidemiología clínica para el primer nivel de atención ;; Manual de metodología de la investigación en salud
+
+@ fam|public_health|study_design|2|data_interpretation
+V: Se recluta a 5,000 enfermeras sanas, se registra si fuman o no y se les sigue durante 20 años para comparar la aparición de enfermedad coronaria en ambos grupos.
+P: ¿Qué diseño de estudio corresponde a esta investigación?
++ Estudio de cohorte prospectivo || Parte de la exposición y sigue a los participantes en el tiempo hasta el desenlace.
+- anchoring | Estudio de casos y controles || Parte de la enfermedad.
+- availability_heuristic | Ensayo clínico controlado || No se asigna el tabaquismo.
+- representativeness_heuristic | Estudio transversal || No hay seguimiento.
+- premature_closure | Estudio ecológico || Usa datos individuales.
+- framing_effect | Serie de casos || Tiene grupo de comparación.
+- complexity_bias | Revisión sistemática || No combina estudios.
+- base_rate_fallacy | Estudio de casos y controles anidado || Requiere seleccionar casos dentro de la cohorte.
+- belief_bias | Ensayo comunitario || No hay intervención.
+- focusing_illusion | Estudio cualitativo || Mide desenlaces cuantitativos.
+E: El estudio de cohorte es un diseño observacional analítico que selecciona a personas sin el desenlace, las clasifica según su exposición y las sigue en el tiempo para medir la incidencia en cada grupo. Permite calcular la incidencia, el riesgo relativo y el riesgo atribuible, establece la secuencia temporal entre exposición y desenlace y permite estudiar varios desenlaces de una misma exposición. Sus desventajas son el costo, el tiempo y las pérdidas de seguimiento, y no es eficiente para enfermedades raras. La cohorte histórica o retrospectiva usa registros previos de exposición.
+R: Manual de epidemiología clínica para el primer nivel de atención ;; Manual de metodología de la investigación en salud
+
+@ fam|public_health|study_design|2|data_interpretation
+V: Un centro de salud aplica una encuesta en un solo día a 1,000 adultos de la comunidad para medir cuántos tienen hipertensión arterial y cuántos tienen obesidad.
+P: ¿Qué diseño de estudio corresponde y qué medida permite obtener?
++ Estudio transversal que estima la prevalencia || Mide exposición y enfermedad en un solo momento.
+- anchoring | Estudio de cohorte que estima incidencia || No hay seguimiento.
+- availability_heuristic | Casos y controles que estima razón de momios como medida principal || No se seleccionan por enfermedad.
+- representativeness_heuristic | Ensayo clínico que estima eficacia || No hay intervención.
+- premature_closure | Estudio ecológico que estima correlación || Usa datos individuales.
+- framing_effect | Estudio de cohorte que establece causalidad || No hay temporalidad.
+- complexity_bias | Metaanálisis que estima efecto combinado || Es un estudio primario.
+- base_rate_fallacy | Transversal que estima incidencia || No mide casos nuevos.
+- belief_bias | Serie de casos que estima letalidad || Incluye sanos y enfermos.
+- focusing_illusion | Estudio cuasiexperimental || No hay intervención.
+E: El estudio transversal mide simultáneamente la exposición y el desenlace en una población en un momento determinado, como una fotografía. Su medida principal es la prevalencia, y permite comparar prevalencias entre grupos mediante la razón de prevalencias. Es útil para planear servicios, conocer la carga de enfermedad y generar hipótesis. Su principal limitación es que no establece la secuencia temporal entre exposición y efecto, por lo que no permite inferir causalidad. Las encuestas nacionales de salud y nutrición son ejemplos de estudios transversales.
+R: Manual de metodología de la investigación en salud ;; Manual de epidemiología para la vigilancia en salud pública
+
+@ fam|public_health|study_design|3|data_interpretation
+V: Un estudio compara el consumo promedio de sal per cápita de 30 países con su tasa de mortalidad por enfermedad cerebrovascular y encuentra una correlación positiva fuerte. Un autor concluye que cada persona que consume más sal tendrá un evento vascular.
+P: ¿Qué error de interpretación comete el autor?
++ Falacia ecológica || Atribuye a los individuos una asociación observada a nivel de grupos.
+- anchoring | Sesgo de memoria || No se interrogó a individuos.
+- availability_heuristic | Sesgo de adelanto en el diagnóstico || Se relaciona con tamizaje.
+- representativeness_heuristic | Error tipo I || Es un error aleatorio de rechazar la hipótesis nula.
+- premature_closure | Sesgo de pérdida de seguimiento || No hay seguimiento.
+- framing_effect | Efecto Hawthorne || Ocurre cuando los participantes saben que son observados.
+- complexity_bias | Sesgo de Berkson || Ocurre en estudios hospitalarios.
+- base_rate_fallacy | Sesgo de duración || Se relaciona con tamizaje.
+- belief_bias | Sesgo del entrevistador || No hubo entrevistas.
+- focusing_illusion | Regresión a la media || Se refiere a mediciones extremas repetidas.
+E: El estudio ecológico usa como unidad de análisis a grupos o poblaciones, como países o municipios, en lugar de individuos. Es económico y útil para generar hipótesis con datos disponibles. Su principal limitación es la falacia ecológica, que consiste en inferir que una asociación observada entre grupos se cumple en los individuos. En el ejemplo, no se sabe si las personas que murieron de enfermedad cerebrovascular fueron las que consumieron más sal. Además, estos estudios no controlan bien los factores de confusión. Para confirmar la hipótesis se requieren estudios con datos individuales.
+R: Manual de metodología de la investigación en salud ;; Manual de epidemiología clínica para el primer nivel de atención
+
+@ fam|public_health|study_design|3|mechanism
+V: En un ensayo clínico sobre un nuevo antihipertensivo, los pacientes se asignan a fármaco o placebo mediante una secuencia generada por computadora y oculta para los investigadores.
+P: ¿Cuál es el mecanismo por el que la aleatorización fortalece la validez del estudio?
++ Distribuye por igual los factores de confusión conocidos y desconocidos entre los grupos || Así las diferencias se atribuyen a la intervención.
+- anchoring | Elimina el efecto placebo || Para eso sirve el cegamiento y el grupo placebo.
+- availability_heuristic | Aumenta el tamaño de la muestra || No cambia la muestra.
+- representativeness_heuristic | Garantiza que los resultados se apliquen a toda la población || Eso es validez externa.
+- premature_closure | Evita las pérdidas de seguimiento || No las previene.
+- framing_effect | Elimina el sesgo de medición del desenlace || Para eso sirve el cegamiento.
+- complexity_bias | Reduce los costos del estudio || No es su objetivo.
+- base_rate_fallacy | Asegura que el fármaco sea eficaz || No predetermina el resultado.
+- belief_bias | Permite escoger a los pacientes más graves para el fármaco || Eso introduciría sesgo.
+- focusing_illusion | Sustituye el consentimiento informado || El consentimiento es obligatorio.
+E: La aleatorización asigna a los participantes a los grupos por azar, de modo que cada uno tiene la misma probabilidad de recibir la intervención o el control. Su principal ventaja es que distribuye de forma equilibrada los factores pronósticos y de confusión, conocidos y desconocidos, entre los grupos, lo que permite atribuir las diferencias en el desenlace a la intervención. La ocultación de la secuencia evita que los investigadores influyan en la asignación. El cegamiento, por su parte, previene sesgos de desempeño y de medición. Por eso el ensayo clínico aleatorizado es el diseño de mayor validez para evaluar intervenciones.
+R: Manual de metodología de la investigación en salud ;; Manual de epidemiología clínica para el primer nivel de atención
+
+@ fam|public_health|study_design|3|data_interpretation
+V: En un ensayo clínico, 15 por ciento de los pacientes asignados al nuevo fármaco lo abandonan por efectos adversos. Los investigadores analizan los resultados incluyendo a todos los pacientes en el grupo al que fueron asignados originalmente.
+P: ¿Qué tipo de análisis realizan los investigadores?
++ Análisis por intención de tratar || Analiza a todos según su asignación original para preservar la aleatorización.
+- anchoring | Análisis por protocolo || Solo incluiría a quienes completaron el tratamiento.
+- availability_heuristic | Análisis de subgrupos || Evalúa grupos específicos.
+- representativeness_heuristic | Análisis interino || Se realiza antes de terminar el estudio.
+- premature_closure | Análisis de sensibilidad || Prueba la robustez ante supuestos.
+- framing_effect | Análisis por tratamiento recibido || Clasifica según lo que realmente recibieron.
+- complexity_bias | Metaanálisis en red || Combina estudios múltiples.
+- base_rate_fallacy | Análisis de casos completos || Excluye a quienes abandonaron.
+- belief_bias | Análisis de costo efectividad || Evalúa costos.
+- focusing_illusion | Análisis de supervivencia exclusivo || Es una técnica, no un enfoque de población.
+E: El análisis por intención de tratar incluye a todos los participantes en el grupo al que fueron asignados al azar, independientemente de si recibieron, completaron o abandonaron el tratamiento. Preserva los beneficios de la aleatorización, evita sesgos por abandono diferencial y refleja mejor la efectividad en condiciones reales, aunque tiende a subestimar el efecto. El análisis por protocolo solo incluye a quienes cumplieron el tratamiento y puede sobrestimar el efecto. En los estudios de no inferioridad suelen presentarse ambos análisis.
+R: Manual de metodología de la investigación en salud ;; Guía para la lectura crítica de ensayos clínicos
+
+@ fam|public_health|study_design|3|data_interpretation
+V: En un estudio de casos y controles sobre malformaciones congénitas, las madres de niños con malformaciones recuerdan con mayor detalle los medicamentos que tomaron durante el embarazo que las madres de niños sanos.
+P: ¿Qué sesgo indica esta situación?
++ Sesgo de memoria o recuerdo || Los casos recuerdan sus exposiciones de manera diferente a los controles.
+- anchoring | Sesgo de selección || Se relaciona con cómo se eligen los participantes.
+- availability_heuristic | Sesgo de confusión || Implica una tercera variable.
+- representativeness_heuristic | Sesgo de publicación || Afecta a la literatura publicada.
+- premature_closure | Sesgo de pérdida de seguimiento || Ocurre en cohortes.
+- framing_effect | Efecto Hawthorne || Ocurre por saberse observado.
+- complexity_bias | Sesgo de adelanto en el diagnóstico || Se relaciona con tamizaje.
+- base_rate_fallacy | Error tipo II || Es un error aleatorio.
+- belief_bias | Sesgo de Berkson || Se relaciona con pacientes hospitalizados.
+- focusing_illusion | Sesgo del voluntario sano || Ocurre en la selección.
+E: El sesgo de memoria o recuerdo es un sesgo de información frecuente en estudios de casos y controles. Las personas con la enfermedad o sus familiares tienden a buscar explicaciones y recuerdan sus exposiciones con más detalle que los controles, lo que puede generar asociaciones falsas o exagerar las reales. Se reduce usando registros objetivos de la exposición, como expedientes clínicos o recetas, cuestionarios estandarizados y entrevistadores cegados al estado del participante. También ayuda elegir controles con otra enfermedad, que tengan motivación similar para recordar.
+R: Manual de metodología de la investigación en salud ;; Manual de epidemiología clínica para el primer nivel de atención
+
+@ fam|public_health|study_design|3|data_interpretation
+V: Un estudio encuentra que las personas que toman café tienen más cáncer de pulmón. Al analizar los datos se observa que los bebedores de café fuman con más frecuencia, y al ajustar por tabaquismo la asociación desaparece.
+P: ¿Qué indica este hallazgo sobre la asociación inicial?
++ El tabaquismo actuaba como factor de confusión || Se asocia con la exposición y con el desenlace sin estar en la vía causal.
+- anchoring | El café causa cáncer de pulmón || La asociación desaparece al ajustar.
+- availability_heuristic | Sesgo de memoria || No se menciona un recuerdo diferencial.
+- representativeness_heuristic | Interacción o modificación del efecto || En ese caso el efecto variaría según los estratos.
+- premature_closure | Error tipo I por azar || La explicación es sistemática.
+- framing_effect | Sesgo de selección de los controles || No hay datos sobre la selección.
+- complexity_bias | Falacia ecológica || Los datos son individuales.
+- base_rate_fallacy | El tabaquismo es una variable intermedia en la vía causal || El café no causa tabaquismo.
+- belief_bias | Sesgo de publicación || No aplica a un estudio individual.
+- focusing_illusion | Efecto placebo || No hay intervención.
+E: Un factor de confusión es una variable que se asocia tanto con la exposición como con el desenlace, y que no es un paso intermedio en la vía causal. Puede crear una asociación falsa, ocultar una real o cambiar su magnitud. En el ejemplo, el tabaquismo se asocia con el consumo de café y causa cáncer de pulmón, por lo que explica la asociación aparente. La confusión se controla en el diseño con aleatorización, restricción o pareamiento, y en el análisis con estratificación o modelos multivariados. La modificación del efecto ocurre cuando la asociación cambia según los niveles de una tercera variable.
+R: Manual de metodología de la investigación en salud ;; Manual de epidemiología clínica para el primer nivel de atención
+
+@ fam|public_health|study_design|2|data_interpretation
+V: Una compañía farmacéutica tiene un nuevo fármaco que ya demostró seguridad en voluntarios sanos y eficacia preliminar en 200 pacientes. Ahora planea un estudio multicéntrico con 3,000 pacientes comparándolo con el tratamiento estándar antes de solicitar su registro.
+P: ¿Qué fase de investigación clínica corresponde al estudio planeado?
++ Fase III || Confirma eficacia y seguridad en muestras grandes frente al tratamiento estándar.
+- anchoring | Fase I || Evalúa seguridad y farmacocinética en pocos voluntarios.
+- availability_heuristic | Fase II || Evalúa eficacia preliminar y dosis.
+- representativeness_heuristic | Fase IV || Se realiza después de la comercialización.
+- premature_closure | Fase preclínica || Se realiza en laboratorio y animales.
+- framing_effect | Fase 0 de microdosis || Es exploratoria.
+- complexity_bias | Farmacovigilancia exclusiva || Corresponde a fase IV.
+- base_rate_fallacy | Estudio de cohorte observacional || No es un ensayo clínico.
+- belief_bias | Fase II porque aún no está registrado || La fase II es de menor tamaño.
+- focusing_illusion | Estudio ecológico de ventas || No evalúa eficacia.
+E: Los ensayos clínicos de nuevos fármacos se dividen en fases. La fase I evalúa seguridad, tolerabilidad y farmacocinética en un número pequeño de voluntarios, habitualmente sanos. La fase II explora eficacia preliminar y dosis en cientos de pacientes con la enfermedad. La fase III confirma eficacia y seguridad en miles de pacientes, comparando con placebo o con el tratamiento estándar, y es la base para solicitar el registro sanitario. La fase IV, posterior a la comercialización, detecta efectos adversos raros o a largo plazo mediante farmacovigilancia. En México el registro lo otorga la Comisión Federal para la Protección contra Riesgos Sanitarios.
+R: Manual de metodología de la investigación en salud ;; Reglamento de la Ley General de Salud en materia de investigación para la salud
+
+@ fam|public_health|study_design|3|data_interpretation
+V: Un estudio de casos y controles se realiza solo con pacientes hospitalizados. Encuentra una asociación entre dos enfermedades que no se observa en la población general, porque tener ambas aumenta la probabilidad de ser hospitalizado.
+P: ¿Qué sesgo indica esta situación?
++ Sesgo de Berkson || Es un sesgo de selección por usar pacientes hospitalizados.
+- anchoring | Sesgo de memoria || No depende del recuerdo.
+- availability_heuristic | Sesgo de confusión por edad || No se menciona la edad.
+- representativeness_heuristic | Sesgo del entrevistador || No hay entrevistas diferenciales.
+- premature_closure | Sesgo de publicación || Afecta a la literatura.
+- framing_effect | Sesgo de duración || Se relaciona con tamizaje.
+- complexity_bias | Sesgo de no respuesta || Ocurre cuando no contestan.
+- base_rate_fallacy | Error tipo II || Es aleatorio.
+- belief_bias | Efecto Hawthorne || Se relaciona con la observación.
+- focusing_illusion | Falacia ecológica || Usa datos individuales.
+E: El sesgo de Berkson es un sesgo de selección que ocurre en estudios realizados con pacientes hospitalizados. Las personas con dos o más enfermedades tienen mayor probabilidad de ser hospitalizadas, lo que puede generar asociaciones que no existen en la población general. Es un ejemplo de cómo la forma de seleccionar a los participantes afecta la validez interna. Para reducirlo se recomienda usar controles poblacionales o de varias fuentes. Otros sesgos de selección incluyen el del voluntario sano, el de no respuesta y el de pérdidas de seguimiento en cohortes.
+R: Manual de metodología de la investigación en salud ;; Manual de epidemiología clínica para el primer nivel de atención
+
+@ fam|public_health|study_design|2|data_interpretation
+V: Un médico revisa la literatura para decidir el mejor tratamiento para la diabetes en adultos mayores. Encuentra un estudio que combina estadísticamente los resultados de 15 ensayos clínicos aleatorizados de buena calidad.
+P: ¿Qué tipo de estudio describe esta publicación?
++ Revisión sistemática con metaanálisis || Combina estadísticamente los resultados de varios estudios primarios.
+- anchoring | Ensayo clínico multicéntrico || Es un solo estudio primario.
+- availability_heuristic | Revisión narrativa || No usa métodos sistemáticos ni combina datos.
+- representativeness_heuristic | Estudio de cohorte || Es primario y observacional.
+- premature_closure | Guía de práctica clínica || Hace recomendaciones, no combina datos primarios.
+- framing_effect | Serie de casos || Es descriptiva.
+- complexity_bias | Opinión de expertos || Es el menor nivel de evidencia.
+- base_rate_fallacy | Estudio ecológico || Usa datos de poblaciones.
+- belief_bias | Estudio transversal analítico || Es primario.
+- focusing_illusion | Casos y controles anidado || Es primario.
+E: La revisión sistemática es un estudio secundario que busca, selecciona y evalúa críticamente todos los estudios relevantes sobre una pregunta con métodos explícitos y reproducibles. Cuando los resultados se combinan estadísticamente para obtener una estimación conjunta del efecto, se llama metaanálisis, y suele representarse con un gráfico de bosque. Una revisión sistemática con metaanálisis de ensayos clínicos aleatorizados de buena calidad se considera el nivel más alto de evidencia. Sus limitaciones incluyen la heterogeneidad entre estudios y el sesgo de publicación, que se evalúa con el gráfico de embudo.
+R: Manual de metodología de la investigación en salud ;; Metodología para la elaboración de guías de práctica clínica del Centro Nacional de Excelencia Tecnológica en Salud
+
+@ fam|public_health|study_design|3|data_interpretation
+V: En un ensayo clínico de un analgésico para migraña, cada paciente recibe el fármaco durante 4 semanas, luego un periodo sin tratamiento de 2 semanas y después placebo durante 4 semanas, en orden aleatorio.
+P: ¿Qué diseño de estudio corresponde a esta investigación?
++ Ensayo clínico cruzado || Cada paciente actúa como su propio control con un periodo de lavado entre tratamientos.
+- anchoring | Ensayo clínico de grupos paralelos || Cada grupo recibe un solo tratamiento.
+- availability_heuristic | Estudio de cohorte || No hay asignación del investigador.
+- representativeness_heuristic | Ensayo factorial || Evalúa dos o más intervenciones combinadas.
+- premature_closure | Estudio antes y después sin control || Aquí hay placebo y aleatorización.
+- framing_effect | Ensayo por conglomerados || Aleatoriza grupos, no individuos.
+- complexity_bias | Estudio de casos y controles || Es observacional.
+- base_rate_fallacy | Serie de casos con placebo || No es un diseño reconocido.
+- belief_bias | Ensayo de no inferioridad abierto || No describe la estructura.
+- focusing_illusion | Estudio ecológico || Usa poblaciones.
+E: En el ensayo clínico cruzado cada participante recibe todas las intervenciones en secuencia aleatoria, separadas por un periodo de lavado para eliminar el efecto residual del tratamiento previo. Cada paciente es su propio control, lo que reduce la variabilidad y el tamaño de muestra necesario. Es adecuado para enfermedades crónicas y estables, con tratamientos de efecto rápido y reversible, como la migraña o la hipertensión. No sirve para enfermedades agudas que se curan ni para desenlaces irreversibles. Su principal riesgo es el efecto de arrastre cuando el lavado es insuficiente.
+R: Manual de metodología de la investigación en salud ;; Guía para la lectura crítica de ensayos clínicos
+
+@ fam|public_health|study_design|2|data_interpretation
+V: Un médico familiar publica la descripción detallada de 8 pacientes atendidos en su clínica con una reacción cutánea inusual después de usar un nuevo antiinflamatorio. No incluye grupo de comparación.
+P: ¿Qué diseño de estudio corresponde a esta publicación?
++ Serie de casos || Describe un grupo de pacientes con una característica común sin grupo control.
+- anchoring | Estudio de cohorte || Requiere comparar expuestos y no expuestos.
+- availability_heuristic | Casos y controles || Requiere controles.
+- representativeness_heuristic | Ensayo clínico || No hay asignación.
+- premature_closure | Estudio transversal analítico || No se mide en una población definida.
+- framing_effect | Metaanálisis || No combina estudios.
+- complexity_bias | Estudio ecológico || Los datos son individuales.
+- base_rate_fallacy | Ensayo cruzado || Es experimental.
+- belief_bias | Estudio de prueba diagnóstica || No evalúa una prueba.
+- focusing_illusion | Revisión sistemática || No es secundario.
+E: La serie de casos es un estudio descriptivo que presenta las características de un grupo de pacientes con una enfermedad, exposición o evento en común, sin grupo de comparación. Es útil para describir enfermedades nuevas, efectos adversos inesperados o presentaciones inusuales, y para generar hipótesis. El reporte de caso describe a un solo paciente. Al no tener grupo control no permite establecer asociaciones ni causalidad. Muchas alertas de farmacovigilancia y el reconocimiento inicial de enfermedades como el sida surgieron de series de casos.
+R: Manual de metodología de la investigación en salud ;; Manual de farmacovigilancia de la Comisión Federal para la Protección contra Riesgos Sanitarios
+
+@ fam|public_health|study_design|3|data_interpretation
+V: En un estudio sobre lavado de manos, el personal de un hospital mejora notablemente su apego cuando sabe que está siendo observado por los investigadores, y vuelve a su conducta habitual al terminar la observación.
+P: ¿Qué fenómeno indica esta situación?
++ Efecto Hawthorne || Las personas modifican su conducta cuando saben que son observadas.
+- anchoring | Efecto placebo || Se refiere a una respuesta a una intervención inerte.
+- availability_heuristic | Regresión a la media || Se refiere a mediciones extremas.
+- representativeness_heuristic | Sesgo de memoria || No depende del recuerdo.
+- premature_closure | Efecto nocebo || Se refiere a efectos adversos por expectativa negativa.
+- framing_effect | Sesgo de publicación || No aplica.
+- complexity_bias | Sesgo de Berkson || Se relaciona con hospitalizados y enfermedades.
+- base_rate_fallacy | Confusión por turno laboral || No se menciona.
+- belief_bias | Error tipo I || Es aleatorio.
+- focusing_illusion | Sesgo de adelanto || Se relaciona con tamizaje.
+E: El efecto Hawthorne es la modificación de la conducta de los participantes de un estudio por el hecho de saberse observados, y puede sobrestimar el efecto de una intervención. Recibe su nombre de estudios realizados en una fábrica en Estados Unidos. Es especialmente relevante en estudios de apego a prácticas, como el lavado de manos. Se reduce con observación encubierta cuando es ética, periodos prolongados de observación o grupos control que también sean observados. Es distinto del efecto placebo, que es una respuesta a una intervención inerte por la expectativa de beneficio.
+R: Manual de metodología de la investigación en salud ;; Programa de higiene de manos de la Secretaría de Salud
+
+@ fam|public_health|study_design|3|data_interpretation
+V: Un ensayo clínico compara un antibiótico oral de 5 días contra el estándar de 10 días para neumonía. El objetivo es demostrar que el esquema corto no es peor que el estándar por más de un margen de 10 por ciento en curación clínica.
+P: ¿Qué tipo de ensayo clínico describe esta investigación?
++ Ensayo de no inferioridad || Busca demostrar que la nueva intervención no es peor que la estándar por más de un margen predefinido.
+- anchoring | Ensayo de superioridad || Busca demostrar que una intervención es mejor.
+- availability_heuristic | Ensayo de equivalencia estricta || Busca demostrar que no es ni mejor ni peor dentro de un margen.
+- representativeness_heuristic | Ensayo controlado con placebo || Se compara con un tratamiento activo.
+- premature_closure | Estudio de cohorte || Es experimental.
+- framing_effect | Ensayo de fase I || Evalúa seguridad inicial.
+- complexity_bias | Ensayo factorial || Combina intervenciones.
+- base_rate_fallacy | Ensayo de búsqueda de dosis || Corresponde a fase II.
+- belief_bias | Estudio de bioequivalencia farmacocinética || Compara concentraciones sanguíneas.
+- focusing_illusion | Ensayo cruzado || La neumonía es aguda.
+E: Los ensayos de no inferioridad buscan demostrar que una nueva intervención no es inaceptablemente peor que la estándar, dentro de un margen definido de antemano. Se justifican cuando la nueva opción tiene ventajas, como menor duración, menor costo, mejor tolerancia o administración más sencilla. El margen de no inferioridad debe basarse en criterios clínicos y estadísticos. Se recomienda presentar tanto el análisis por intención de tratar como el análisis por protocolo. Los esquemas cortos de antibiótico reducen efectos adversos y resistencia bacteriana.
+R: Guía para la lectura crítica de ensayos clínicos ;; Manual de metodología de la investigación en salud

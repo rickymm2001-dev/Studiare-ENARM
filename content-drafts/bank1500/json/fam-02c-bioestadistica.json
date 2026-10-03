@@ -1,0 +1,1335 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "fam-02c-bioestadistica-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "biostatistics",
+      "vignette": "En un ensayo clínico, la mortalidad a un año fue de 20 por ciento en el grupo con placebo y de 15 por ciento en el grupo con un nuevo fármaco para insuficiencia cardiaca.",
+      "prompt": "¿Cuál es el número necesario a tratar para evitar una muerte?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "5 pacientes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Confunde la reducción absoluta con el número necesario."
+        },
+        {
+          "key": "b",
+          "text": "4 pacientes",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "c",
+          "text": "50 pacientes",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "d",
+          "text": "20 pacientes",
+          "correct": true,
+          "rationale": "Es el inverso de la reducción absoluta del riesgo de 5 por ciento."
+        },
+        {
+          "key": "e",
+          "text": "100 pacientes",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "f",
+          "text": "1.33 pacientes",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es el cociente de riesgos invertido."
+        },
+        {
+          "key": "g",
+          "text": "75 pacientes",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "h",
+          "text": "15 pacientes",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Usa la mortalidad del grupo tratado."
+        },
+        {
+          "key": "i",
+          "text": "No se puede calcular sin la razón de momios",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se calcula con riesgos absolutos."
+        },
+        {
+          "key": "j",
+          "text": "25 pacientes",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Corresponde a la reducción relativa expresada como porcentaje."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "j"
+      ],
+      "explanation": "La reducción absoluta del riesgo es la diferencia entre el riesgo en el grupo control y el grupo tratado: 20 menos 15 por ciento, es decir, 5 por ciento o 0.05. El número necesario a tratar es el inverso de la reducción absoluta, 1 entre 0.05, es decir, 20; significa que hay que tratar a 20 pacientes durante un año para evitar una muerte. La reducción relativa del riesgo es la reducción absoluta dividida entre el riesgo del control, 0.05 entre 0.20, es decir, 25 por ciento. El riesgo relativo es 0.15 entre 0.20, es decir, 0.75. Las cifras absolutas son más útiles para decidir en la práctica clínica.",
+      "gpcRefs": [
+        "Manual de epidemiología clínica para el primer nivel de atención",
+        "Guía para la lectura crítica de ensayos clínicos"
+      ]
+    },
+    {
+      "key": "fam-02c-bioestadistica-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "biostatistics",
+      "vignette": "Una prueba rápida para estreptococo tiene sensibilidad de 90 por ciento y especificidad de 90 por ciento. Se aplica en una población de 1,000 niños con faringitis en la que la prevalencia de estreptococo es de 10 por ciento.",
+      "prompt": "¿Cuál es el valor predictivo positivo de la prueba en esta población?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "81 por ciento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es el producto de sensibilidad y especificidad."
+        },
+        {
+          "key": "b",
+          "text": "18 por ciento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es la proporción de positivos totales."
+        },
+        {
+          "key": "c",
+          "text": "No depende de la prevalencia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El valor predictivo sí depende de ella."
+        },
+        {
+          "key": "d",
+          "text": "10 por ciento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es la prevalencia."
+        },
+        {
+          "key": "e",
+          "text": "99 por ciento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Corresponde aproximadamente al valor predictivo negativo."
+        },
+        {
+          "key": "f",
+          "text": "90 por ciento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Confunde el valor predictivo con la sensibilidad."
+        },
+        {
+          "key": "g",
+          "text": "50 por ciento",
+          "correct": true,
+          "rationale": "Hay 90 verdaderos positivos y 90 falsos positivos."
+        },
+        {
+          "key": "h",
+          "text": "9 por ciento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "i",
+          "text": "75 por ciento",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "j",
+          "text": "95 por ciento",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Ignora la baja prevalencia."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "Con prevalencia de 10 por ciento hay 100 enfermos y 900 sanos. Con sensibilidad de 90 por ciento, 90 enfermos resultan positivos; con especificidad de 90 por ciento, 810 sanos resultan negativos y 90 son falsos positivos. El valor predictivo positivo es verdaderos positivos entre todos los positivos: 90 entre 180, es decir, 50 por ciento. El valor predictivo negativo es 810 entre 820, cerca de 99 por ciento. Los valores predictivos dependen de la prevalencia: cuando la prevalencia baja, disminuye el valor predictivo positivo y aumenta el negativo. La sensibilidad y la especificidad son propias de la prueba.",
+      "gpcRefs": [
+        "Manual de epidemiología clínica para el primer nivel de atención",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de faringoamigdalitis aguda"
+      ]
+    },
+    {
+      "key": "fam-02c-bioestadistica-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "biostatistics",
+      "vignette": "Un estudio de casos y controles sobre el uso de anticonceptivos orales y trombosis venosa reporta una razón de momios de 3.2 con intervalo de confianza de 95 por ciento de 1.8 a 5.6.",
+      "prompt": "¿Qué indica este resultado?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Que no hay asociación porque el intervalo es amplio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Lo relevante es que no incluye el 1."
+        },
+        {
+          "key": "b",
+          "text": "Que el resultado no es significativo por ser menor de 5",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La significancia depende del intervalo."
+        },
+        {
+          "key": "c",
+          "text": "Que la trombosis es frecuente en todas las mujeres",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La enfermedad sigue siendo rara."
+        },
+        {
+          "key": "d",
+          "text": "Que la sensibilidad del estudio es de 95 por ciento",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El 95 corresponde al nivel de confianza."
+        },
+        {
+          "key": "e",
+          "text": "Que el 32 por ciento de las usuarias tendrá trombosis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La razón de momios no es una incidencia."
+        },
+        {
+          "key": "f",
+          "text": "Que se demostró causalidad definitiva",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Un estudio observacional no la demuestra por sí solo."
+        },
+        {
+          "key": "g",
+          "text": "Una asociación positiva estadísticamente significativa entre anticonceptivos y trombosis",
+          "correct": true,
+          "rationale": "El intervalo no incluye el 1."
+        },
+        {
+          "key": "h",
+          "text": "Que el resultado es un error tipo II",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El resultado es significativo."
+        },
+        {
+          "key": "i",
+          "text": "Que el número necesario a dañar es 3.2",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No se calcula así."
+        },
+        {
+          "key": "j",
+          "text": "Que los anticonceptivos protegen contra la trombosis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Un valor mayor de 1 indica mayor riesgo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La razón de momios compara las probabilidades de exposición entre casos y controles. Un valor de 1 indica ausencia de asociación, mayor de 1 asociación positiva y menor de 1 asociación negativa o protectora. El intervalo de confianza de 95 por ciento indica el rango de valores compatibles con los datos; si no incluye el valor nulo de 1, la asociación es estadísticamente significativa con p menor de 0.05. Un intervalo amplio refleja menor precisión, habitualmente por muestras pequeñas. En enfermedades raras la razón de momios se aproxima al riesgo relativo. La significancia estadística no demuestra causalidad.",
+      "gpcRefs": [
+        "Manual de epidemiología clínica para el primer nivel de atención",
+        "Manual de metodología de la investigación en salud"
+      ]
+    },
+    {
+      "key": "fam-02c-bioestadistica-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "biostatistics",
+      "vignette": "Un ensayo clínico pequeño con 40 pacientes no encuentra diferencia significativa entre un nuevo fármaco y placebo para reducir el dolor, con p de 0.30. Los autores concluyen que el fármaco no es eficaz. El cálculo de poder estadístico no fue reportado.",
+      "prompt": "¿Qué error puede explicar la ausencia de diferencia significativa?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sesgo de Berkson",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es de estudios hospitalarios observacionales."
+        },
+        {
+          "key": "b",
+          "text": "Sesgo de memoria",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No aplica a un ensayo clínico de este tipo."
+        },
+        {
+          "key": "c",
+          "text": "Que el valor de p demuestra equivalencia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No la demuestra."
+        },
+        {
+          "key": "d",
+          "text": "Sesgo de publicación",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Afecta a la literatura, no explica este resultado."
+        },
+        {
+          "key": "e",
+          "text": "Error tipo II por bajo poder estadístico",
+          "correct": true,
+          "rationale": "Una muestra pequeña puede no detectar una diferencia real."
+        },
+        {
+          "key": "f",
+          "text": "Falacia ecológica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Los datos son individuales."
+        },
+        {
+          "key": "g",
+          "text": "Que el fármaco definitivamente no funciona",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La ausencia de evidencia no es evidencia de ausencia."
+        },
+        {
+          "key": "h",
+          "text": "Error tipo I",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Consiste en encontrar una diferencia que no existe."
+        },
+        {
+          "key": "i",
+          "text": "Efecto Hawthorne",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el resultado."
+        },
+        {
+          "key": "j",
+          "text": "Sesgo de adelanto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se relaciona con tamizaje."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "f",
+        "h"
+      ],
+      "explanation": "El error tipo I, o alfa, consiste en rechazar la hipótesis nula cuando es verdadera, es decir, encontrar una diferencia que no existe; se fija habitualmente en 5 por ciento. El error tipo II, o beta, consiste en no rechazar la hipótesis nula cuando es falsa, es decir, no detectar una diferencia real. El poder estadístico es uno menos beta, idealmente 80 por ciento o más, y aumenta con el tamaño de muestra, la magnitud del efecto y la menor variabilidad. Un estudio pequeño sin cálculo de poder puede no detectar un efecto real, por lo que un resultado no significativo no demuestra ausencia de efecto.",
+      "gpcRefs": [
+        "Manual de metodología de la investigación en salud",
+        "Guía para la lectura crítica de ensayos clínicos"
+      ]
+    },
+    {
+      "key": "fam-02c-bioestadistica-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "biostatistics",
+      "vignette": "En una encuesta de ingresos mensuales de una comunidad, la mayoría de las familias gana entre 5,000 y 10,000 pesos, pero tres familias ganan más de 500,000 pesos. El investigador quiere reportar el valor típico.",
+      "prompt": "¿Cuál es la medida de tendencia central más adecuada para describir estos datos?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Valor máximo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No representa a la mayoría."
+        },
+        {
+          "key": "b",
+          "text": "Rango",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es una medida de dispersión muy sensible a extremos."
+        },
+        {
+          "key": "c",
+          "text": "Error estándar de la media",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Mide precisión de la media."
+        },
+        {
+          "key": "d",
+          "text": "Media geométrica de todos los valores sin análisis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es la opción estándar."
+        },
+        {
+          "key": "e",
+          "text": "Coeficiente de correlación",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Mide asociación entre variables."
+        },
+        {
+          "key": "f",
+          "text": "Moda como única medida obligatoria",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es útil en datos categóricos."
+        },
+        {
+          "key": "g",
+          "text": "Media aritmética",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se desplaza hacia los valores extremos."
+        },
+        {
+          "key": "h",
+          "text": "Mediana",
+          "correct": true,
+          "rationale": "No se afecta por valores extremos en distribuciones sesgadas."
+        },
+        {
+          "key": "i",
+          "text": "Varianza",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es una medida de dispersión."
+        },
+        {
+          "key": "j",
+          "text": "Desviación estándar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es una medida de dispersión."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "h",
+        "j"
+      ],
+      "explanation": "Las medidas de tendencia central son la media, la mediana y la moda. La media es el promedio aritmético y es adecuada en distribuciones simétricas, como la normal, pero se afecta mucho por valores extremos. La mediana es el valor que divide la distribución ordenada en dos mitades iguales y es robusta ante valores extremos, por lo que se prefiere en distribuciones sesgadas, como los ingresos o la estancia hospitalaria. La moda es el valor más frecuente y es útil en variables categóricas. En una distribución sesgada a la derecha, la media es mayor que la mediana.",
+      "gpcRefs": [
+        "Manual de bioestadística para ciencias de la salud",
+        "Manual de metodología de la investigación en salud"
+      ]
+    },
+    {
+      "key": "fam-02c-bioestadistica-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "biostatistics",
+      "vignette": "En una población de adultos sanos, la glucosa en ayuno tiene distribución normal con media de 90 mg/dL y desviación estándar de 5 mg/dL.",
+      "prompt": "¿Qué intervalo incluye aproximadamente al 95 por ciento de la población?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "De 80 a 100 mg/dL",
+          "correct": true,
+          "rationale": "Es la media más o menos dos desviaciones estándar."
+        },
+        {
+          "key": "b",
+          "text": "De 88 a 92 mg/dL",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es demasiado estrecho."
+        },
+        {
+          "key": "c",
+          "text": "De 75 a 105 mg/dL",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Corresponde a tres desviaciones, cerca del 99.7 por ciento."
+        },
+        {
+          "key": "d",
+          "text": "De 80 a 90 mg/dL",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Solo incluye la mitad inferior."
+        },
+        {
+          "key": "e",
+          "text": "No puede calcularse sin la mediana",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "En la normal media y mediana coinciden."
+        },
+        {
+          "key": "f",
+          "text": "De 85 a 95 mg/dL",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Corresponde a una desviación estándar, cerca del 68 por ciento."
+        },
+        {
+          "key": "g",
+          "text": "De 70 a 110 mg/dL",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es demasiado amplio."
+        },
+        {
+          "key": "h",
+          "text": "De 90 a 100 mg/dL",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Solo incluye la mitad superior."
+        },
+        {
+          "key": "i",
+          "text": "De 0 a 90 mg/dL",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No tiene sentido biológico."
+        },
+        {
+          "key": "j",
+          "text": "De 95 a 105 mg/dL",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No está centrado en la media."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "h"
+      ],
+      "explanation": "En una distribución normal, aproximadamente el 68 por ciento de los valores se ubica dentro de una desviación estándar de la media, el 95 por ciento dentro de dos desviaciones estándar, más precisamente 1.96, y el 99.7 por ciento dentro de tres. Con media de 90 y desviación de 5, el 95 por ciento se encuentra entre 80 y 100 mg/dL. Este principio se usa para definir los intervalos de referencia de laboratorio, por lo que el 5 por ciento de las personas sanas tiene valores fuera del rango normal. En la distribución normal la media, la mediana y la moda coinciden.",
+      "gpcRefs": [
+        "Manual de bioestadística para ciencias de la salud",
+        "Manual de metodología de la investigación en salud"
+      ]
+    },
+    {
+      "key": "fam-02c-bioestadistica-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "biostatistics",
+      "vignette": "Un investigador quiere comparar la proporción de pacientes curados con dos antibióticos diferentes: curación sí o no, en dos grupos independientes de 150 pacientes cada uno.",
+      "prompt": "¿Cuál es la prueba estadística más adecuada para este análisis?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Coeficiente de correlación de Pearson",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Evalúa relación lineal entre variables cuantitativas."
+        },
+        {
+          "key": "b",
+          "text": "Prueba de McNemar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se usa en proporciones pareadas."
+        },
+        {
+          "key": "c",
+          "text": "Prueba t de Student para muestras independientes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Compara medias de variables cuantitativas."
+        },
+        {
+          "key": "d",
+          "text": "Prueba de Wilcoxon para datos pareados",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es no paramétrica pareada."
+        },
+        {
+          "key": "e",
+          "text": "Regresión lineal simple",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Predice una variable cuantitativa."
+        },
+        {
+          "key": "f",
+          "text": "Prueba de chi cuadrada",
+          "correct": true,
+          "rationale": "Compara proporciones de variables categóricas entre grupos independientes."
+        },
+        {
+          "key": "g",
+          "text": "Prueba t pareada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se usa en mediciones repetidas del mismo sujeto."
+        },
+        {
+          "key": "h",
+          "text": "Coeficiente kappa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Mide concordancia entre observadores."
+        },
+        {
+          "key": "i",
+          "text": "Análisis de supervivencia de Kaplan Meier",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se usa para tiempo hasta un evento."
+        },
+        {
+          "key": "j",
+          "text": "Análisis de varianza",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Compara medias de tres o más grupos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "La elección de la prueba estadística depende del tipo de variable y del diseño. Para comparar proporciones de variables categóricas entre grupos independientes se usa chi cuadrada, o la prueba exacta de Fisher si las frecuencias esperadas son pequeñas. Para comparar medias de una variable cuantitativa con distribución normal entre dos grupos independientes se usa la t de Student, y entre tres o más grupos el análisis de varianza. Si los datos no son normales se usan pruebas no paramétricas como U de Mann Whitney o Kruskal Wallis. Para datos pareados se usan la t pareada o McNemar.",
+      "gpcRefs": [
+        "Manual de bioestadística para ciencias de la salud",
+        "Manual de metodología de la investigación en salud"
+      ]
+    },
+    {
+      "key": "fam-02c-bioestadistica-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "biostatistics",
+      "vignette": "Una prueba para trombosis venosa profunda tiene sensibilidad de 95 por ciento y especificidad de 50 por ciento.",
+      "prompt": "¿Qué indica una prueba con estas características cuando el resultado es negativo?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Que sirve para confirmar con un positivo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Ese papel corresponde a pruebas específicas."
+        },
+        {
+          "key": "b",
+          "text": "Que debe sustituirse por biopsia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No aplica."
+        },
+        {
+          "key": "c",
+          "text": "Que no aporta información",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El negativo es muy informativo."
+        },
+        {
+          "key": "d",
+          "text": "Que tiene una razón de verosimilitud negativa alta",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es baja, cerca de 0.1."
+        },
+        {
+          "key": "e",
+          "text": "Que debe repetirse siempre",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es necesario si la probabilidad previa es baja."
+        },
+        {
+          "key": "f",
+          "text": "Que su utilidad no depende de la probabilidad previa",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Sí depende."
+        },
+        {
+          "key": "g",
+          "text": "Que tiene muchos falsos negativos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La alta sensibilidad implica pocos falsos negativos."
+        },
+        {
+          "key": "h",
+          "text": "Que el valor predictivo positivo es alto",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La baja especificidad genera falsos positivos."
+        },
+        {
+          "key": "i",
+          "text": "Que es muy útil para descartar la enfermedad",
+          "correct": true,
+          "rationale": "Una prueba muy sensible con resultado negativo descarta."
+        },
+        {
+          "key": "j",
+          "text": "Que confirma la enfermedad",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La baja especificidad impide confirmar con un positivo."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "Una prueba muy sensible tiene pocos falsos negativos, por lo que un resultado negativo descarta la enfermedad con confianza, lo que se resume en la regla SnNout. Una prueba muy específica tiene pocos falsos positivos, por lo que un resultado positivo confirma la enfermedad, regla SpPin. El dímero D en la trombosis venosa profunda es un ejemplo clásico de prueba sensible pero poco específica: un resultado negativo en un paciente con baja probabilidad clínica descarta la trombosis, mientras que un positivo requiere ultrasonido. La razón de verosimilitud negativa aquí es 0.05 entre 0.5, es decir, 0.1.",
+      "gpcRefs": [
+        "Manual de epidemiología clínica para el primer nivel de atención",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad tromboembólica venosa"
+      ]
+    },
+    {
+      "key": "fam-02c-bioestadistica-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "biostatistics",
+      "vignette": "Un estudio reporta un coeficiente de correlación de Pearson de menos 0.85 entre las horas semanales de actividad física y el índice de masa corporal en adultos.",
+      "prompt": "¿Qué indica este coeficiente de correlación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Una correlación débil por ser negativa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El signo no indica fuerza."
+        },
+        {
+          "key": "b",
+          "text": "Una razón de momios de 0.85",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es otra medida."
+        },
+        {
+          "key": "c",
+          "text": "Una correlación positiva fuerte",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El signo es negativo."
+        },
+        {
+          "key": "d",
+          "text": "Que el resultado es significativo sin importar el tamaño de muestra",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La significancia depende de la muestra."
+        },
+        {
+          "key": "e",
+          "text": "Una correlación negativa fuerte, a más actividad física menor índice de masa corporal",
+          "correct": true,
+          "rationale": "El signo indica la dirección y el valor cercano a 1 la fuerza."
+        },
+        {
+          "key": "f",
+          "text": "Que la actividad física causa pérdida de peso con certeza",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La correlación no demuestra causalidad."
+        },
+        {
+          "key": "g",
+          "text": "Que el 85 por ciento de las personas activas es delgado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es una proporción."
+        },
+        {
+          "key": "h",
+          "text": "Que no hay relación entre las variables",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Hay una relación fuerte."
+        },
+        {
+          "key": "i",
+          "text": "Que el coeficiente de determinación es 0.85",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Sería 0.72, el cuadrado del coeficiente."
+        },
+        {
+          "key": "j",
+          "text": "Que la relación es exponencial",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Pearson mide relación lineal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "El coeficiente de correlación de Pearson mide la fuerza y dirección de la relación lineal entre dos variables cuantitativas. Su valor va de menos 1 a 1: el signo indica la dirección, positiva si ambas aumentan juntas y negativa si una aumenta cuando la otra disminuye, y el valor absoluto indica la fuerza, de modo que valores mayores de 0.7 se consideran fuertes. El coeficiente de determinación, r al cuadrado, indica la proporción de variabilidad explicada, aquí cerca de 72 por ciento. La correlación no implica causalidad. Para datos no normales se usa el coeficiente de Spearman.",
+      "gpcRefs": [
+        "Manual de bioestadística para ciencias de la salud",
+        "Manual de metodología de la investigación en salud"
+      ]
+    },
+    {
+      "key": "fam-02c-bioestadistica-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "biostatistics",
+      "vignette": "Una nueva prueba para insuficiencia cardiaca tiene una razón de verosimilitud positiva de 10. Un paciente tiene una probabilidad previa estimada de 50 por ciento, es decir, momios previos de 1, y su resultado es positivo.",
+      "prompt": "¿Cuál es la probabilidad posterior aproximada de insuficiencia cardiaca?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "500 por ciento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es posible."
+        },
+        {
+          "key": "b",
+          "text": "Alrededor de 91 por ciento",
+          "correct": true,
+          "rationale": "Los momios posteriores son 10, que equivalen a 10 entre 11."
+        },
+        {
+          "key": "c",
+          "text": "50 por ciento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ignora el resultado de la prueba."
+        },
+        {
+          "key": "d",
+          "text": "75 por ciento",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "e",
+          "text": "No puede calcularse sin la sensibilidad exacta",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La razón de verosimilitud basta."
+        },
+        {
+          "key": "f",
+          "text": "60 por ciento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Suma en lugar de multiplicar."
+        },
+        {
+          "key": "g",
+          "text": "10 por ciento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Confunde la razón con una probabilidad."
+        },
+        {
+          "key": "h",
+          "text": "99 por ciento",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Sobrestima el resultado."
+        },
+        {
+          "key": "i",
+          "text": "100 por ciento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ninguna prueba da certeza absoluta."
+        },
+        {
+          "key": "j",
+          "text": "9 por ciento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un cálculo erróneo."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "La razón de verosimilitud positiva es la sensibilidad dividida entre uno menos la especificidad, e indica cuánto aumentan los momios de enfermedad con un resultado positivo. Los momios posteriores se calculan multiplicando los momios previos por la razón de verosimilitud. Con una probabilidad previa de 50 por ciento, los momios previos son 1; multiplicados por 10, los momios posteriores son 10. La probabilidad se obtiene como momios entre uno más momios, 10 entre 11, cerca de 91 por ciento. Razones mayores de 10 o menores de 0.1 producen cambios grandes y concluyentes en la probabilidad.",
+      "gpcRefs": [
+        "Manual de epidemiología clínica para el primer nivel de atención",
+        "Manual de bioestadística para ciencias de la salud"
+      ]
+    },
+    {
+      "key": "fam-02c-bioestadistica-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "biostatistics",
+      "vignette": "Dos radiólogos interpretan de forma independiente las mismas 200 radiografías de tórax para neumonía. Coinciden en 85 por ciento de los casos, pero se espera que coincidan en 50 por ciento solo por azar.",
+      "prompt": "¿Qué indica el coeficiente kappa calculado en este caso?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Un kappa de 0.70 que indica concordancia buena más allá del azar",
+          "correct": true,
+          "rationale": "Se calcula como 0.85 menos 0.50 entre 1 menos 0.50."
+        },
+        {
+          "key": "b",
+          "text": "Un kappa de 0.85",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No resta la concordancia esperada por azar."
+        },
+        {
+          "key": "c",
+          "text": "La sensibilidad de la radiografía",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay estándar de referencia."
+        },
+        {
+          "key": "d",
+          "text": "Un kappa de 0.35",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "e",
+          "text": "El valor predictivo positivo del radiólogo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Requiere estándar de referencia."
+        },
+        {
+          "key": "f",
+          "text": "La correlación de Pearson entre radiólogos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Kappa es para variables categóricas."
+        },
+        {
+          "key": "g",
+          "text": "Un kappa de 0.50",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Corresponde a la concordancia por azar."
+        },
+        {
+          "key": "h",
+          "text": "Que ambos radiólogos tienen razón en 85 por ciento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Concordar no significa acertar."
+        },
+        {
+          "key": "i",
+          "text": "La exactitud diagnóstica de la prueba",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Kappa mide reproducibilidad."
+        },
+        {
+          "key": "j",
+          "text": "Concordancia nula",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es mayor que la esperada por azar."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "El coeficiente kappa de Cohen mide la concordancia entre dos observadores para variables categóricas, corrigiendo la concordancia esperada por azar. Se calcula como la concordancia observada menos la esperada, dividida entre uno menos la esperada: 0.85 menos 0.50, entre 0.50, es decir, 0.70. Valores de 0.61 a 0.80 indican concordancia buena o sustancial, y mayores de 0.80 casi perfecta. Kappa evalúa reproducibilidad o confiabilidad, no validez: dos observadores pueden coincidir y estar equivocados. Para variables cuantitativas se usa el coeficiente de correlación intraclase.",
+      "gpcRefs": [
+        "Manual de epidemiología clínica para el primer nivel de atención",
+        "Manual de bioestadística para ciencias de la salud"
+      ]
+    },
+    {
+      "key": "fam-02c-bioestadistica-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "biostatistics",
+      "vignette": "Para una prueba de péptido natriurético se construye una gráfica que muestra la sensibilidad contra uno menos la especificidad en distintos puntos de corte. El área bajo la curva es de 0.92.",
+      "prompt": "¿Qué indica el área bajo la curva de 0.92?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Que la sensibilidad es de 92 por ciento en todos los puntos de corte",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El área resume todos los puntos."
+        },
+        {
+          "key": "b",
+          "text": "Que el kappa es 0.92",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es otra medida."
+        },
+        {
+          "key": "c",
+          "text": "Que la prueba es inútil",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Un área de 0.5 indicaría discriminación nula."
+        },
+        {
+          "key": "d",
+          "text": "Que la prueba no requiere punto de corte",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La curva ayuda a elegirlo."
+        },
+        {
+          "key": "e",
+          "text": "Que la especificidad es de 8 por ciento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se deduce así."
+        },
+        {
+          "key": "f",
+          "text": "Que la correlación entre pruebas es 0.92",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es una correlación."
+        },
+        {
+          "key": "g",
+          "text": "Que la prevalencia es de 92 por ciento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No mide prevalencia."
+        },
+        {
+          "key": "h",
+          "text": "Excelente capacidad discriminativa de la prueba",
+          "correct": true,
+          "rationale": "Un área cercana a 1 indica que distingue bien entre enfermos y sanos."
+        },
+        {
+          "key": "i",
+          "text": "Que el valor predictivo positivo es de 92 por ciento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Depende de la prevalencia."
+        },
+        {
+          "key": "j",
+          "text": "Que el 92 por ciento de los pacientes se cura",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No mide desenlaces terapéuticos."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "La curva ROC, característica operativa del receptor, grafica la sensibilidad contra uno menos la especificidad para distintos puntos de corte de una prueba cuantitativa. Permite elegir el punto de corte óptimo, habitualmente el más cercano a la esquina superior izquierda, y comparar pruebas. El área bajo la curva resume la capacidad discriminativa: 0.5 equivale al azar, de 0.7 a 0.8 es aceptable, de 0.8 a 0.9 buena y mayor de 0.9 excelente. Representa la probabilidad de que la prueba clasifique correctamente a un par elegido al azar de enfermo y sano.",
+      "gpcRefs": [
+        "Manual de epidemiología clínica para el primer nivel de atención",
+        "Manual de bioestadística para ciencias de la salud"
+      ]
+    },
+    {
+      "key": "fam-02c-bioestadistica-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "biostatistics",
+      "vignette": "Un ensayo clínico reporta que un fármaco reduce el riesgo de fractura de cadera en 50 por ciento. Al revisar los datos, la incidencia pasó de 2 por ciento con placebo a 1 por ciento con el fármaco en 3 años.",
+      "prompt": "¿Qué indica la reducción absoluta del riesgo en este estudio?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "1 por ciento, con un número necesario a tratar de 100 pacientes por 3 años",
+          "correct": true,
+          "rationale": "La diferencia absoluta entre 2 y 1 por ciento es pequeña."
+        },
+        {
+          "key": "b",
+          "text": "2 por ciento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es el riesgo del control."
+        },
+        {
+          "key": "c",
+          "text": "No puede calcularse sin la razón de momios",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se calcula con los riesgos."
+        },
+        {
+          "key": "d",
+          "text": "0.5 por ciento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "e",
+          "text": "Que todos los pacientes deben recibir el fármaco por su gran efecto",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El beneficio absoluto es pequeño."
+        },
+        {
+          "key": "f",
+          "text": "25 por ciento",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "g",
+          "text": "Que la reducción relativa es de 1 por ciento",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se invierten los conceptos."
+        },
+        {
+          "key": "h",
+          "text": "Número necesario a tratar de 50 pacientes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un cálculo erróneo."
+        },
+        {
+          "key": "i",
+          "text": "50 por ciento, que equivale a la reducción absoluta",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Esa es la reducción relativa."
+        },
+        {
+          "key": "j",
+          "text": "Número necesario a tratar de 2 pacientes",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se calcula con el riesgo absoluto."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "i",
+        "j"
+      ],
+      "explanation": "La reducción relativa del riesgo expresa la disminución proporcional del riesgo respecto al control y suele parecer impresionante: aquí de 2 a 1 por ciento es una reducción de 50 por ciento. La reducción absoluta del riesgo es la diferencia simple, 1 por ciento, y el número necesario a tratar es su inverso, 100 pacientes durante 3 años para evitar una fractura. Presentar solo la reducción relativa es un ejemplo de efecto de encuadre que puede sobrestimar el beneficio. Para decidir un tratamiento se deben considerar los valores absolutos, los efectos adversos y el costo.",
+      "gpcRefs": [
+        "Guía para la lectura crítica de ensayos clínicos",
+        "Manual de epidemiología clínica para el primer nivel de atención"
+      ]
+    },
+    {
+      "key": "fam-02c-bioestadistica-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "public_health",
+      "subtopic": "biostatistics",
+      "vignette": "Un estudio comparativo de dos fármacos para bajar la presión arterial reporta una diferencia de 1 mmHg en la presión sistólica a favor del fármaco nuevo, con p de 0.001, en una muestra de 20,000 pacientes.",
+      "prompt": "¿Qué indica este resultado?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Que todos deben cambiar al fármaco nuevo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La relevancia clínica es baja."
+        },
+        {
+          "key": "b",
+          "text": "Que el resultado es un error tipo II",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La diferencia fue significativa."
+        },
+        {
+          "key": "c",
+          "text": "Una diferencia estadísticamente significativa pero de poca relevancia clínica",
+          "correct": true,
+          "rationale": "Las muestras muy grandes detectan diferencias mínimas."
+        },
+        {
+          "key": "d",
+          "text": "Que el resultado no es significativo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "p menor de 0.05 es significativo."
+        },
+        {
+          "key": "e",
+          "text": "Que el fármaco nuevo es clínicamente muy superior",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Una diferencia de 1 mmHg es mínima."
+        },
+        {
+          "key": "f",
+          "text": "Que el fármaco cura la hipertensión",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No se deduce."
+        },
+        {
+          "key": "g",
+          "text": "Que la diferencia es de 1 por ciento de mortalidad",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es presión arterial."
+        },
+        {
+          "key": "h",
+          "text": "Que el estudio carece de poder",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Tiene poder muy alto."
+        },
+        {
+          "key": "i",
+          "text": "Que hay 0.1 por ciento de probabilidad de que el fármaco funcione",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El valor de p no significa eso."
+        },
+        {
+          "key": "j",
+          "text": "Que p de 0.001 garantiza que no hay sesgo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El valor de p no evalúa sesgos."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "i"
+      ],
+      "explanation": "El valor de p es la probabilidad de obtener un resultado igual o más extremo que el observado si la hipótesis nula fuera cierta. Un valor menor de 0.05 se considera estadísticamente significativo, pero no indica la magnitud ni la importancia clínica del efecto. En muestras muy grandes, diferencias mínimas pueden ser significativas. La relevancia clínica se juzga por la magnitud del efecto y su intervalo de confianza en relación con lo que importa al paciente. Una diferencia de 1 mmHg en la presión sistólica tiene poco impacto clínico individual, aunque puede considerarse junto con costo y efectos adversos.",
+      "gpcRefs": [
+        "Guía para la lectura crítica de ensayos clínicos",
+        "Manual de bioestadística para ciencias de la salud"
+      ]
+    }
+  ]
+}

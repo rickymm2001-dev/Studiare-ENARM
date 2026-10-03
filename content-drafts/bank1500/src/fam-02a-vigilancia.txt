@@ -1,0 +1,239 @@
+@ fam|public_health|epidemiologic_surveillance|2|next_step
+V: Niño de 3 años que acude a un centro de salud rural con fiebre de 39 grados, exantema maculopapular generalizado que inició en la cara, tos, coriza y conjuntivitis. No tiene registro de vacunación.
+P: ¿Cuál es la conducta de vigilancia epidemiológica más apropiada?
++ Notificar como caso probable de sarampión en las primeras 24 horas y tomar muestras || El sarampión es de notificación inmediata.
+- anchoring | Notificar en el informe semanal de casos nuevos || Es de notificación inmediata.
+- availability_heuristic | Esperar la confirmación por laboratorio para notificar || La notificación es ante la sospecha.
+- representativeness_heuristic | Tratar como exantema viral inespecífico sin notificar || Cumple la definición de caso probable.
+- premature_closure | Notificar solo si hay otro caso en la comunidad || Un solo caso basta.
+- framing_effect | Notificar al mes en el informe mensual || Es tardío.
+- complexity_bias | Referir a tercer nivel sin notificar || La notificación corresponde al primer contacto.
+- base_rate_fallacy | El sarampión está eliminado en México por lo que no es necesario || Hay casos importados y brotes.
+- belief_bias | Solo notificar si hay defunción || Se notifica todo caso probable.
+- omission_bias | No buscar contactos susceptibles || El estudio de contactos es parte de la respuesta.
+E: El sarampión es una enfermedad sujeta a vigilancia especial y de notificación inmediata, dentro de las primeras 24 horas de su conocimiento. Se considera caso probable a toda persona con fiebre y exantema maculopapular acompañado de tos, coriza o conjuntivitis. Ante un caso probable se notifica a la jurisdicción, se llena el estudio epidemiológico, se toman muestras de suero y exudado faríngeo u orina para confirmación, y se inicia el cerco epidemiológico con búsqueda activa de casos y vacunación de contactos susceptibles. No se espera la confirmación del laboratorio para actuar.
+R: Norma Oficial Mexicana para la vigilancia epidemiológica ;; Manual de procedimientos estandarizados para la vigilancia epidemiológica de enfermedad febril exantemática
+
+@ fam|public_health|epidemiologic_surveillance|2|data_interpretation
+V: En un municipio de 10,000 habitantes, durante el año se registraron 50 casos nuevos de tuberculosis. Al 1 de julio había 120 personas viviendo con tuberculosis activa.
+P: ¿Qué indica la cifra de 50 casos nuevos en el año sobre 10,000 habitantes?
++ La incidencia anual, de 5 por 1,000 habitantes || La incidencia mide casos nuevos en un periodo.
+- anchoring | La prevalencia puntual || La prevalencia incluye casos nuevos y existentes en un momento.
+- availability_heuristic | La tasa de letalidad || Requiere el número de muertes entre los casos.
+- representativeness_heuristic | La tasa de mortalidad general || Requiere muertes por todas las causas.
+- premature_closure | La tasa de ataque secundario || Se usa entre contactos durante un brote.
+- framing_effect | La razón de momios || Es una medida de asociación.
+- complexity_bias | El riesgo atribuible poblacional || Requiere comparar expuestos y no expuestos.
+- base_rate_fallacy | La prevalencia de 12 por 1,000 || Esa cifra corresponde a los 120 casos existentes.
+- belief_bias | La esperanza de vida ajustada || No se calcula con estos datos.
+- focusing_illusion | La sensibilidad del programa de detección || No es lo que se mide.
+E: La incidencia es la medida de frecuencia de casos nuevos de una enfermedad en una población en riesgo durante un periodo determinado. En este municipio es de 50 casos entre 10,000 habitantes en un año, es decir, 5 por 1,000 habitantes al año. La prevalencia es la proporción de personas que tienen la enfermedad en un momento dado, e incluye los casos nuevos y los ya existentes; aquí la prevalencia puntual sería de 120 entre 10,000, es decir, 12 por 1,000. La prevalencia depende de la incidencia y de la duración de la enfermedad. La incidencia mide riesgo; la prevalencia, carga.
+R: Manual de epidemiología para la vigilancia en salud pública ;; Norma Oficial Mexicana para la vigilancia epidemiológica
+
+@ fam|public_health|epidemiologic_surveillance|3|data_interpretation
+V: Durante un brote de cólera en una localidad se registraron 200 casos, de los cuales fallecieron 4. La población total de la localidad es de 20,000 habitantes.
+P: ¿Qué indica la proporción de 4 defunciones entre 200 casos?
++ La tasa de letalidad, de 2 por ciento || Mide la proporción de enfermos que mueren por la enfermedad.
+- anchoring | La tasa de mortalidad específica || Se calcula sobre la población total.
+- availability_heuristic | La tasa de ataque || Es casos entre población expuesta.
+- representativeness_heuristic | La incidencia acumulada de cólera || Corresponde a 200 entre 20,000.
+- premature_closure | La prevalencia de cólera || No mide muertes.
+- framing_effect | La tasa de mortalidad general || Incluye todas las causas.
+- complexity_bias | La razón de mortalidad estandarizada || Compara mortalidad observada y esperada.
+- base_rate_fallacy | La mortalidad de 0.02 por ciento || Esa sería la mortalidad poblacional.
+- belief_bias | La virulencia del agente medida en laboratorio || No es un indicador poblacional.
+- focusing_illusion | Los años de vida potencial perdidos || Requieren las edades de muerte.
+E: La tasa de letalidad es la proporción de personas con una enfermedad que mueren por ella en un periodo determinado, y refleja la gravedad de la enfermedad y la calidad de la atención. Se calcula como defunciones por la enfermedad entre el total de casos, multiplicado por 100; aquí es de 4 entre 200, es decir, 2 por ciento. La tasa de mortalidad específica, en cambio, usa como denominador a toda la población, y en este caso sería de 4 entre 20,000, es decir, 0.02 por ciento. En el cólera, una letalidad superior al 1 por ciento sugiere deficiencias en el manejo de la rehidratación.
+R: Manual de epidemiología para la vigilancia en salud pública ;; Manual de procedimientos estandarizados para la vigilancia epidemiológica de cólera
+
+@ fam|public_health|epidemiologic_surveillance|2|diagnosis
+V: En una comunidad donde se registran habitualmente 2 o 3 casos de hepatitis A al mes, se reportan 25 casos en dos semanas, todos relacionados con una misma escuela.
+P: ¿Cuál es el diagnóstico epidemiológico de esta situación?
++ Brote || Hay un aumento de casos relacionados en tiempo y lugar por encima de lo esperado.
+- anchoring | Endemia || La endemia es la presencia habitual de casos.
+- availability_heuristic | Pandemia || Implica diseminación en varios continentes.
+- representativeness_heuristic | Caso esporádico || Hay muchos casos relacionados.
+- premature_closure | Variación estacional normal || Supera ampliamente lo esperado.
+- framing_effect | Hiperendemia nacional || No hay datos nacionales.
+- complexity_bias | Zoonosis emergente || La hepatitis A no es una zoonosis.
+- base_rate_fallacy | Epidemia global || El evento es local.
+- belief_bias | Infección nosocomial || Ocurre en una escuela.
+- information_bias | Caso importado aislado || Son múltiples casos locales.
+E: La endemia es la presencia constante de una enfermedad en un área geográfica con una frecuencia esperada. La epidemia es el aumento de casos por encima de lo esperado en una población, lugar y tiempo determinados. El brote es una epidemia localizada, con dos o más casos relacionados epidemiológicamente, o un solo caso de una enfermedad ausente en el área. La pandemia es una epidemia que se extiende a varios países o continentes. Ante un brote se notifica de inmediato, se investiga la fuente común, en la hepatitis A habitualmente agua o alimentos contaminados, y se aplican medidas de control.
+R: Norma Oficial Mexicana para la vigilancia epidemiológica ;; Manual para la investigación de brotes de la Dirección General de Epidemiología
+
+@ fam|public_health|epidemiologic_surveillance|2|prevention_screening
+V: Hombre de 55 años con diabetes tipo 2 de 10 años de evolución, que ya presenta neuropatía periférica. En consulta se le enseña a revisar sus pies diariamente y se le indica calzado adecuado para evitar úlceras y amputaciones.
+P: ¿Qué nivel de prevención representa esta intervención?
++ Prevención terciaria || Busca limitar el daño y la discapacidad en una enfermedad ya establecida con complicaciones.
+- anchoring | Prevención primaria || Esta se aplica antes de que aparezca la enfermedad.
+- availability_heuristic | Prevención secundaria || Se refiere a detección temprana y tratamiento oportuno.
+- representativeness_heuristic | Prevención primordial || Busca evitar los factores de riesgo en la población.
+- premature_closure | Promoción de la salud únicamente || Es más específica que la promoción general.
+- framing_effect | Prevención cuaternaria || Evita el sobretratamiento y la iatrogenia.
+- complexity_bias | Rehabilitación hospitalaria exclusiva || Se realiza en consulta.
+- base_rate_fallacy | Protección específica con vacunas || Es una forma de prevención primaria.
+- belief_bias | Tamizaje poblacional || Es prevención secundaria.
+- focusing_illusion | Prevención secundaria porque la neuropatía es temprana || Ya hay complicación establecida.
+E: Según el modelo de historia natural de la enfermedad de Leavell y Clark, la prevención primaria actúa en el periodo prepatogénico mediante promoción de la salud y protección específica, como vacunas. La prevención secundaria actúa en el periodo patogénico temprano mediante diagnóstico precoz y tratamiento oportuno, como el tamizaje. La prevención terciaria busca limitar el daño, las secuelas y la discapacidad, e incluye la rehabilitación. El cuidado de los pies en un paciente con neuropatía diabética para evitar úlceras y amputaciones es prevención terciaria. La prevención cuaternaria evita intervenciones innecesarias.
+R: Manual de medicina preventiva para el primer nivel de atención ;; Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del pie diabético
+
+@ fam|public_health|epidemiologic_surveillance|3|data_interpretation
+V: En el canal endémico de dengue de una jurisdicción, los casos semanales de las últimas cuatro semanas se ubican por encima del percentil 75 o tercer cuartil de los últimos 5 años.
+P: ¿Qué indica esta posición de los casos en el canal endémico?
++ Zona epidémica, que obliga a intensificar las acciones de control || Superar el límite superior del canal indica epidemia.
+- anchoring | Zona de éxito, sin acciones adicionales || Corresponde a casos bajo lo esperado.
+- availability_heuristic | Zona de seguridad || Se ubica entre el primer cuartil y la mediana.
+- representativeness_heuristic | Zona de alerta habitual || Está entre la mediana y el tercer cuartil.
+- premature_closure | Un error de registro sin importancia || Son cuatro semanas consecutivas.
+- framing_effect | Disminución de la transmisión || Los casos aumentan.
+- complexity_bias | Necesidad de un ensayo clínico || No es una respuesta epidemiológica.
+- base_rate_fallacy | Comportamiento esperado de la enfermedad || Supera lo esperado.
+- belief_bias | Que el dengue se volvió endémico por primera vez || Ya era endémico.
+- information_bias | Que deben dejar de registrarse casos leves || Se mantiene la vigilancia.
+E: El canal endémico es una herramienta gráfica que muestra el comportamiento esperado de una enfermedad a lo largo del año, construida con los casos de los últimos 5 a 7 años. Se divide en zonas por los cuartiles. Por debajo del primer cuartil está la zona de éxito, entre el primer cuartil y la mediana la zona de seguridad, entre la mediana y el tercer cuartil la zona de alerta, y por encima del tercer cuartil la zona epidémica. Cuando los casos se ubican en la zona epidémica se intensifican las acciones, como control larvario y nebulización en el caso del dengue.
+R: Manual de epidemiología para la vigilancia en salud pública ;; Manual de procedimientos estandarizados para la vigilancia epidemiológica de enfermedades transmitidas por vector
+
+@ fam|public_health|epidemiologic_surveillance|2|prevention_screening
+V: Un paciente con tuberculosis pulmonar bacilífera es hospitalizado en un cuarto individual con presión negativa, y el personal usa respirador N95. A sus contactos sanos expuestos en una aeronave se les pide permanecer en casa y vigilar síntomas.
+P: ¿Cuál es la medida de prevención que corresponde a separar a los contactos sanos expuestos?
++ Cuarentena || Restringe la actividad de personas sanas expuestas durante el periodo de incubación.
+- anchoring | Aislamiento || Se aplica a personas enfermas.
+- availability_heuristic | Cerco sanitario || Restringe la movilidad de toda una zona.
+- representativeness_heuristic | Inmunización pasiva || No implica separación.
+- premature_closure | Quimioprofilaxis masiva || Es una medida farmacológica.
+- framing_effect | Vigilancia activa de laboratorio || No restringe la actividad.
+- complexity_bias | Desinfección terminal || Se aplica a objetos y espacios.
+- base_rate_fallacy | Notificación semanal || Es un proceso administrativo.
+- belief_bias | Aislamiento de contacto con bata y guantes || Se usa para microorganismos de contacto.
+- information_bias | Tamizaje universal de la población || No corresponde a contactos.
+E: El aislamiento es la separación de las personas infectadas durante el periodo de transmisibilidad para evitar el contagio a otras. La cuarentena es la restricción de actividades de personas sanas que estuvieron expuestas a un agente infeccioso, durante un tiempo equivalente al periodo de incubación máximo, para evitar que transmitan la infección si la desarrollan. En la tuberculosis pulmonar el aislamiento es por vía aérea, con cuarto individual, presión negativa y respiradores N95 para el personal. El cerco sanitario es la restricción de movilidad de una zona geográfica.
+R: Norma Oficial Mexicana para la prevención y control de la tuberculosis ;; Norma Oficial Mexicana para la vigilancia epidemiológica, prevención y control de las infecciones asociadas a la atención de la salud
+
+@ fam|public_health|epidemiologic_surveillance|3|mechanism
+V: En una comunidad, el 95 por ciento de los niños está vacunado contra sarampión. Un niño con inmunodeficiencia que no puede ser vacunado no se ha contagiado durante años, a pesar de casos importados ocasionales.
+P: ¿Cuál es el mecanismo que explica la protección de este niño?
++ Inmunidad de rebaño || Una alta cobertura interrumpe la cadena de transmisión y protege a los no vacunados.
+- anchoring | Inmunidad activa natural || No ha tenido la enfermedad.
+- availability_heuristic | Inmunidad pasiva materna || Se pierde en los primeros meses de vida.
+- representativeness_heuristic | Resistencia genética al virus || No existe resistencia conocida.
+- premature_closure | Inmunidad cruzada con otras vacunas || No protege contra sarampión.
+- framing_effect | Inmunidad celular adquirida por la inmunodeficiencia || La inmunodeficiencia reduce la inmunidad.
+- complexity_bias | Efecto placebo poblacional || No es un mecanismo biológico.
+- base_rate_fallacy | El sarampión es poco contagioso || Es de los más contagiosos.
+- belief_bias | Inmunidad adquirida por vitamina A || No previene el contagio.
+- information_bias | Inmunización pasiva con gammaglobulina mensual || No se menciona.
+E: La inmunidad de rebaño o colectiva es la protección indirecta que reciben las personas susceptibles cuando una proporción suficiente de la población es inmune, porque el agente no encuentra suficientes huéspedes para mantener la transmisión. El umbral necesario depende del número reproductivo básico de la enfermedad. El sarampión, con un número reproductivo de 12 a 18, requiere coberturas de alrededor del 95 por ciento. Esta protección es esencial para quienes no pueden vacunarse, como lactantes pequeños, inmunodeprimidos y embarazadas. Cuando la cobertura baja, reaparecen brotes.
+R: Manual de vacunación de la Secretaría de Salud ;; Manual de epidemiología para la vigilancia en salud pública
+
+@ fam|public_health|epidemiologic_surveillance|2|next_step
+V: Niño de 4 años que presenta debilidad progresiva de ambas piernas en 3 días, con reflejos disminuidos y sin trastornos de la sensibilidad. Su esquema de vacunación está incompleto.
+P: ¿Cuál es la conducta de vigilancia epidemiológica más apropiada?
++ Notificar de inmediato como caso de parálisis flácida aguda y tomar muestra de heces || Todo caso en menor de 15 años se notifica para la vigilancia de poliomielitis.
+- anchoring | Notificar solo si se confirma poliomielitis || Se notifica el síndrome, no el diagnóstico confirmado.
+- availability_heuristic | Esperar a ver si mejora en una semana || La muestra de heces debe tomarse en los primeros 14 días.
+- representativeness_heuristic | Diagnosticarlo como Guillain-Barré y no notificarlo || También se notifica.
+- premature_closure | Notificar en el informe mensual || Es de notificación inmediata.
+- framing_effect | Solo referir a neurología pediátrica || Además debe notificarse.
+- complexity_bias | Solicitar resonancia de médula antes de notificar || No se retrasa la notificación.
+- base_rate_fallacy | La polio está erradicada por lo que no es necesario vigilarla || La vigilancia mantiene la certificación.
+- belief_bias | Solo notificar casos con fiebre || La fiebre no es requisito.
+- omission_bias | No revisar el esquema de vacunación de los contactos || Es parte de la respuesta.
+E: La parálisis flácida aguda en menores de 15 años es un evento de notificación inmediata en la vigilancia de la poliomielitis, aunque la causa más frecuente sea el síndrome de Guillain-Barré. Se define como un cuadro de inicio súbito con debilidad o parálisis flácida, sin otra causa evidente. Se toma una muestra de heces dentro de los primeros 14 días para aislamiento viral y se da seguimiento a los 60 días para evaluar parálisis residual. Esta vigilancia permite demostrar la ausencia de circulación de poliovirus salvaje y detectar poliovirus derivados de la vacuna.
+R: Manual de procedimientos estandarizados para la vigilancia epidemiológica de parálisis flácida aguda ;; Norma Oficial Mexicana para la vigilancia epidemiológica
+
+@ fam|public_health|epidemiologic_surveillance|3|data_interpretation
+V: En una boda con 150 asistentes, 60 presentaron diarrea y vómito en las 6 horas posteriores a la cena. De los 100 que comieron ensalada de pollo, 55 enfermaron; de los 50 que no la comieron, 5 enfermaron.
+P: ¿Qué indica la comparación de las tasas de ataque entre quienes comieron y no comieron ensalada?
++ La ensalada de pollo es el probable alimento fuente, con un riesgo relativo de 5.5 || La tasa de ataque fue 55 por ciento contra 10 por ciento.
+- anchoring | Que el brote no tiene relación con alimentos || La diferencia es muy marcada.
+- availability_heuristic | Que el riesgo relativo es de 0.18 || Ese valor invierte la comparación.
+- representativeness_heuristic | Que todos los alimentos fueron igualmente responsables || La ensalada tiene una diferencia clara.
+- premature_closure | Que la tasa de ataque global es de 55 por ciento || La global es 60 entre 150, es decir, 40 por ciento.
+- framing_effect | Que el agente es viral por el periodo de incubación || El periodo corto sugiere toxina preformada.
+- complexity_bias | Que se requiere un ensayo clínico aleatorizado || No es el diseño adecuado.
+- base_rate_fallacy | Que quienes no comieron ensalada no enfermaron || Cinco enfermaron.
+- belief_bias | Que el agua es la fuente más probable || Los datos señalan la ensalada.
+- focusing_illusion | Que se trata de una enfermedad de transmisión sexual || No es compatible.
+E: La tasa de ataque es una incidencia acumulada que se usa en brotes y se calcula como enfermos entre expuestos. Entre quienes comieron ensalada de pollo fue de 55 entre 100, es decir, 55 por ciento, y entre quienes no la comieron fue de 5 entre 50, es decir, 10 por ciento. El riesgo relativo es el cociente de ambas, 5.5, lo que indica que la ensalada se asocia fuertemente con la enfermedad. Un periodo de incubación de 1 a 6 horas con vómito predominante sugiere una toxina preformada, como la de Staphylococcus aureus. Se debe notificar el brote y tomar muestras de alimentos y casos.
+R: Manual para la investigación de brotes de la Dirección General de Epidemiología ;; Manual de epidemiología para la vigilancia en salud pública
+
+@ fam|public_health|epidemiologic_surveillance|2|mechanism
+V: Durante una plática comunitaria se explica la transmisión del dengue. Se menciona que el virus se mantiene en el ser humano y que la hembra del mosquito Aedes aegypti lo transmite al picar a otra persona.
+P: ¿Qué eslabón de la cadena epidemiológica representa el mosquito?
++ Mecanismo de transmisión indirecta por vector biológico || El virus se multiplica en el mosquito antes de transmitirse.
+- anchoring | Reservorio principal || El reservorio es el ser humano.
+- availability_heuristic | Huésped susceptible || Es quien recibe la infección.
+- representativeness_heuristic | Agente causal || El agente es el virus del dengue.
+- premature_closure | Puerta de salida || Corresponde a la vía por la que el agente sale del reservorio.
+- framing_effect | Vector mecánico || En el vector mecánico el agente no se multiplica.
+- complexity_bias | Fómite || Es un objeto inanimado.
+- base_rate_fallacy | Puerta de entrada respiratoria || La entrada es por la piel.
+- belief_bias | Portador asintomático humano || Es un tipo de reservorio humano.
+- information_bias | Ambiente físico || No es un eslabón de la cadena.
+E: La cadena epidemiológica describe los eslabones necesarios para que ocurra una infección: agente causal, reservorio, puerta de salida, mecanismo de transmisión, puerta de entrada y huésped susceptible. La transmisión puede ser directa, por contacto o gotas, o indirecta, por vehículos, fómites o vectores. Un vector biológico es un artrópodo en el que el agente se multiplica o completa parte de su ciclo antes de transmitirse, como Aedes aegypti con el dengue. Las acciones de control buscan romper algún eslabón; en el dengue se enfocan en eliminar criaderos del vector.
+R: Manual de epidemiología para la vigilancia en salud pública ;; Norma Oficial Mexicana para la vigilancia epidemiológica, prevención y control de enfermedades transmitidas por vector
+
+@ fam|public_health|epidemiologic_surveillance|3|prevention_screening
+V: La Secretaría de Salud selecciona algunas unidades hospitalarias distribuidas en el país para obtener información detallada y muestras de laboratorio de pacientes con enfermedad tipo influenza e infección respiratoria aguda grave.
+P: ¿Qué tipo de vigilancia epidemiológica describe este modelo?
++ Vigilancia centinela || Usa unidades seleccionadas que reportan información de alta calidad para estimar tendencias.
+- anchoring | Vigilancia universal pasiva || Todas las unidades reportan todos los casos.
+- availability_heuristic | Vigilancia activa por búsqueda casa por casa || Se realiza en brotes.
+- representativeness_heuristic | Vigilancia por rumores en medios || Es una fuente complementaria.
+- premature_closure | Censo de población || No es vigilancia de enfermedades.
+- framing_effect | Encuesta nacional única || No es continua.
+- complexity_bias | Vigilancia genómica exclusiva de animales || No corresponde.
+- base_rate_fallacy | Registro de defunciones únicamente || No es el modelo descrito.
+- belief_bias | Vigilancia sindromática escolar || Usa escuelas, no unidades hospitalarias.
+- information_bias | Estudio de cohorte prospectivo || Es un diseño de investigación.
+E: La vigilancia centinela utiliza un número limitado de unidades seleccionadas, como hospitales o consultorios, que recopilan información detallada y muestras de laboratorio de un evento específico. Permite conocer tendencias, circulación de agentes y características clínicas con menor costo que la vigilancia universal. En México, la vigilancia de influenza se basa en unidades monitoras de enfermedad tipo influenza e infección respiratoria aguda grave. La vigilancia pasiva espera a que los casos lleguen a los servicios y se notifiquen, mientras que la activa busca casos de manera dirigida.
+R: Lineamientos para la vigilancia epidemiológica de influenza ;; Norma Oficial Mexicana para la vigilancia epidemiológica
+
+@ fam|public_health|epidemiologic_surveillance|2|data_interpretation
+V: En una localidad la tasa de mortalidad infantil fue de 18 por 1,000 nacidos vivos. El director del centro de salud quiere entender el indicador para presentarlo en el comité municipal.
+P: ¿Qué indica la cifra de 18 por 1,000 nacidos vivos?
++ Defunciones de menores de 1 año por cada 1,000 nacidos vivos en el mismo año || Es el indicador clásico de condiciones de salud y desarrollo.
+- anchoring | Defunciones de menores de 5 años por cada 1,000 habitantes || Ese es otro indicador.
+- availability_heuristic | Defunciones de recién nacidos en los primeros 7 días || Corresponde a mortalidad neonatal temprana.
+- representativeness_heuristic | Defunciones maternas por cada 100,000 nacidos vivos || Es la razón de mortalidad materna.
+- premature_closure | Mortinatos por cada 1,000 embarazos || Es mortalidad fetal.
+- framing_effect | Defunciones de menores de 28 días || Es la mortalidad neonatal.
+- complexity_bias | Años de vida perdidos por cada 1,000 niños || No es la definición.
+- base_rate_fallacy | Defunciones infantiles entre la población total || El denominador son los nacidos vivos.
+- belief_bias | Niños hospitalizados por cada 1,000 nacidos vivos || No mide muertes.
+- focusing_illusion | La letalidad de las infecciones infantiles || Es otro indicador.
+E: La tasa de mortalidad infantil es el número de defunciones de menores de un año ocurridas en un año, dividido entre los nacidos vivos del mismo año, multiplicado por 1,000. Es uno de los indicadores más sensibles de las condiciones de salud, nutrición, saneamiento y acceso a servicios de una población. Se divide en mortalidad neonatal, de 0 a 27 días, relacionada con causas perinatales, y posneonatal, de 28 días a 11 meses, relacionada con infecciones y factores ambientales. La razón de mortalidad materna usa como denominador 100,000 nacidos vivos.
+R: Manual de epidemiología para la vigilancia en salud pública ;; Indicadores de salud de la Dirección General de Información en Salud
+
+@ fam|public_health|epidemiologic_surveillance|3|next_step
+V: Mujer de 25 años, puérpera de 10 días, que fallece en su domicilio por una hemorragia. La familia acude al centro de salud para solicitar el certificado de defunción.
+P: ¿Cuál es la conducta de vigilancia epidemiológica más apropiada?
++ Notificar de inmediato la defunción materna y realizar el estudio de la muerte materna || Toda muerte materna es de notificación inmediata y requiere dictamen.
+- anchoring | Expedir el certificado y archivarlo sin más acciones || Omite la notificación obligatoria.
+- availability_heuristic | Notificar solo si ocurrió en un hospital || Se notifica sin importar el lugar.
+- representativeness_heuristic | No es muerte materna porque ocurrió después del parto || Se incluyen hasta 42 días posparto.
+- premature_closure | Notificar en el informe anual || Es inmediata.
+- framing_effect | Clasificarla como muerte accidental || Es una causa obstétrica directa.
+- complexity_bias | Solicitar autopsia antes de notificar || La notificación no se retrasa.
+- base_rate_fallacy | Las muertes maternas en domicilio no se registran || Deben registrarse.
+- belief_bias | Notificar solo muertes de menores de 18 años || La edad no es criterio.
+- omission_bias | No revisar la atención prenatal y del parto || El estudio busca causas evitables.
+E: La muerte materna se define como la defunción de una mujer durante el embarazo, el parto o dentro de los 42 días siguientes a la terminación del embarazo, por cualquier causa relacionada con el embarazo o agravada por él, excluyendo causas accidentales. En México es de notificación inmediata, dentro de las primeras 24 horas, y requiere un estudio epidemiológico y un dictamen por el comité de mortalidad materna para identificar factores evitables. Las causas directas más frecuentes son la hemorragia obstétrica, los trastornos hipertensivos y la sepsis. La razón de mortalidad materna se expresa por 100,000 nacidos vivos.
+R: Norma Oficial Mexicana para la vigilancia epidemiológica ;; Lineamiento técnico para la vigilancia epidemiológica de la mortalidad materna
+
+@ fam|public_health|epidemiologic_surveillance|2|data_interpretation
+V: En un estudio de seguimiento por 5 años, 400 trabajadores expuestos a sílice desarrollaron 40 casos de enfermedad pulmonar, y 400 trabajadores no expuestos desarrollaron 10 casos.
+P: ¿Qué indica el riesgo atribuible en los expuestos?
++ 7.5 por ciento de incidencia adicional atribuible a la exposición a sílice || Es la diferencia entre 10 por ciento y 2.5 por ciento.
+- anchoring | Riesgo relativo de 4 || Es el cociente, no la diferencia.
+- availability_heuristic | Razón de momios de 0.25 || No corresponde a este cálculo.
+- representativeness_heuristic | Incidencia en expuestos de 2.5 por ciento || Esa es la de no expuestos.
+- premature_closure | Que la sílice no tiene relación con la enfermedad || Hay un exceso claro.
+- framing_effect | Número necesario a dañar de 4 || El número necesario a dañar sería el inverso de 0.075, cerca de 13.
+- complexity_bias | Prevalencia de 50 casos entre 800 || No es el indicador solicitado.
+- base_rate_fallacy | Riesgo atribuible de 30 por ciento || Es un cálculo erróneo.
+- belief_bias | Sensibilidad de la exposición || No aplica.
+- focusing_illusion | Tasa de letalidad de la silicosis || No se dan muertes.
+E: El riesgo atribuible en los expuestos es la diferencia absoluta entre la incidencia en expuestos y en no expuestos, e indica cuánto de la enfermedad en los expuestos se debe al factor. Aquí la incidencia en expuestos es 40 entre 400, 10 por ciento, y en no expuestos 10 entre 400, 2.5 por ciento; el riesgo atribuible es de 7.5 por ciento. El riesgo relativo, cociente de ambas incidencias, es de 4. El inverso del riesgo atribuible, aproximadamente 13, es el número necesario a dañar, es decir, cuántos deben exponerse para que ocurra un caso adicional.
+R: Manual de epidemiología para la vigilancia en salud pública ;; Manual de epidemiología clínica para el primer nivel de atención
