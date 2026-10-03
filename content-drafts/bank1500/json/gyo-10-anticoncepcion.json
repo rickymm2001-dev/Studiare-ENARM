@@ -1,0 +1,1798 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "gyo-10-anticoncepcion-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "hormonal_contraception",
+      "vignette": "Mujer de 22 años que inicia anticonceptivos orales combinados. Pregunta cómo evitan el embarazo.",
+      "prompt": "¿Cuál es el mecanismo de acción principal de los anticonceptivos orales combinados?",
+      "polarity": "affirmative",
+      "task": "mechanism",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo adelgazan el endometrio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es un efecto secundario, no el principal."
+        },
+        {
+          "key": "b",
+          "text": "Causan infertilidad permanente para evitar embarazos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La fertilidad regresa al suspenderlos."
+        },
+        {
+          "key": "c",
+          "text": "Bloquean de forma mecánica las trompas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No tienen efecto mecánico."
+        },
+        {
+          "key": "d",
+          "text": "Liberan cobre que es tóxico para los espermatozoides",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es el mecanismo del dispositivo de cobre."
+        },
+        {
+          "key": "e",
+          "text": "Destruyen los espermatozoides en la vagina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ese es el mecanismo de los espermicidas."
+        },
+        {
+          "key": "f",
+          "text": "Bloquean los receptores de andrógenos en el ovario",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es el mecanismo principal."
+        },
+        {
+          "key": "g",
+          "text": "Inhiben la producción de prolactina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es su mecanismo."
+        },
+        {
+          "key": "h",
+          "text": "Aumentan la temperatura vaginal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un mecanismo."
+        },
+        {
+          "key": "i",
+          "text": "Provocan abortos tempranos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No son abortivos."
+        },
+        {
+          "key": "j",
+          "text": "Inhiben la ovulación al suprimir la secreción de FSH y LH, además de espesar el moco cervical",
+          "correct": true,
+          "rationale": "El efecto principal es la inhibición del pico de LH."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "Los anticonceptivos hormonales combinados contienen un estrógeno, generalmente etinilestradiol, y un progestágeno. Su mecanismo principal es la inhibición de la ovulación mediante la supresión de la secreción de gonadotropinas y del pico de LH. El progestágeno también espesa el moco cervical, dificultando el paso de los espermatozoides, y modifica el endometrio. No son abortivos. Usados de forma perfecta tienen una tasa de falla menor de 1% al año, y con uso típico de alrededor de 7 a 9%. La fertilidad regresa pronto al suspenderlos. Están disponibles como píldora, parche y anillo vaginal.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana de los servicios de planificación familiar",
+        "Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos"
+      ]
+    },
+    {
+      "key": "gyo-10-anticoncepcion-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "hormonal_contraception",
+      "vignette": "Mujer de 36 años, fumadora de 20 cigarros al día, que solicita anticonceptivos orales combinados. Tiene presión arterial normal y sin otros antecedentes.",
+      "prompt": "¿Qué indica su perfil según los criterios médicos de elegibilidad?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Categoría 4, contraindicación para anticonceptivos combinados por ser mayor de 35 años y fumar 15 o más cigarros al día",
+          "correct": true,
+          "rationale": "El riesgo cardiovascular es inaceptable."
+        },
+        {
+          "key": "b",
+          "text": "Contraindicación del dispositivo intrauterino",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El dispositivo es una opción segura."
+        },
+        {
+          "key": "c",
+          "text": "Contraindicación de todos los métodos hormonales",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede usar métodos con solo progestágeno."
+        },
+        {
+          "key": "d",
+          "text": "Categoría 3 para cualquier fumadora joven",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "A menor edad el riesgo es menor."
+        },
+        {
+          "key": "e",
+          "text": "Categoría 2 con beneficios superiores a los riesgos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El riesgo es mayor por el número de cigarros."
+        },
+        {
+          "key": "f",
+          "text": "Puede usar el parche porque no es pastilla",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El parche también es combinado."
+        },
+        {
+          "key": "g",
+          "text": "Solo contraindicado si tiene hipertensión",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El tabaquismo después de los 35 años basta."
+        },
+        {
+          "key": "h",
+          "text": "Las pastillas protegen el corazón de las fumadoras",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Aumentan el riesgo de infarto."
+        },
+        {
+          "key": "i",
+          "text": "Categoría 1 sin restricciones",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El tabaquismo después de los 35 años es una contraindicación."
+        },
+        {
+          "key": "j",
+          "text": "Indicación de anticonceptivos con dosis altas de estrógenos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Aumentan el riesgo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "i"
+      ],
+      "explanation": "Los criterios médicos de elegibilidad de la Organización Mundial de la Salud clasifican el uso de anticonceptivos en cuatro categorías, la 1 sin restricción, la 2 con beneficios mayores que los riesgos, la 3 con riesgos mayores que los beneficios y la 4 con riesgo inaceptable. Los anticonceptivos combinados son categoría 4 en mujeres de 35 años o más que fuman 15 o más cigarros al día, por el riesgo de infarto y evento vascular cerebral. Otras contraindicaciones son hipertensión no controlada, migraña con aura, trombosis previa, trombofilias, cáncer de mama y lactancia menor de 6 semanas. Los métodos con solo progestágeno o el dispositivo son alternativas.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos",
+        "Norma Oficial Mexicana de los servicios de planificación familiar"
+      ]
+    },
+    {
+      "key": "gyo-10-anticoncepcion-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "hormonal_contraception",
+      "vignette": "Mujer de 28 años con migraña con aura visual que solicita un método anticonceptivo hormonal altamente eficaz.",
+      "prompt": "¿Cuál es el método hormonal de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Coito interrumpido como método eficaz",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tiene alta tasa de falla."
+        },
+        {
+          "key": "b",
+          "text": "Anillo vaginal combinado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Contiene estrógeno y está contraindicado."
+        },
+        {
+          "key": "c",
+          "text": "Anticonceptivos orales combinados",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Están contraindicados en migraña con aura."
+        },
+        {
+          "key": "d",
+          "text": "Los anticonceptivos curan la migraña",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Los combinados pueden empeorarla."
+        },
+        {
+          "key": "e",
+          "text": "Ningún método hormonal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Los de solo progestágeno son seguros."
+        },
+        {
+          "key": "f",
+          "text": "Oclusión tubaria obligatoria",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria si desea métodos reversibles."
+        },
+        {
+          "key": "g",
+          "text": "Parche anticonceptivo combinado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Contiene estrógeno y está contraindicado."
+        },
+        {
+          "key": "h",
+          "text": "Inyectable mensual combinado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Contiene estrógeno."
+        },
+        {
+          "key": "i",
+          "text": "No ofrecer anticoncepción por su migraña",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Hay opciones seguras."
+        },
+        {
+          "key": "j",
+          "text": "Implante subdérmico de etonogestrel o dispositivo con levonorgestrel",
+          "correct": true,
+          "rationale": "Los métodos con solo progestágeno no aumentan el riesgo de evento vascular cerebral."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "La migraña con aura aumenta el riesgo de evento vascular cerebral isquémico, y los estrógenos lo incrementan aún más, por lo que los anticonceptivos combinados en píldora, parche, anillo o inyectable mensual son categoría 4 en estas mujeres. Los métodos con solo progestágeno, como el implante subdérmico, el dispositivo con levonorgestrel, la píldora de solo progestágeno y el inyectable de medroxiprogesterona, son seguros. El implante y el dispositivo intrauterino son métodos reversibles de acción prolongada con eficacia superior a 99%. El dispositivo de cobre también es una opción no hormonal.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos"
+      ]
+    },
+    {
+      "key": "gyo-10-anticoncepcion-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "hormonal_contraception",
+      "vignette": "Mujer de 26 años que usa anticonceptivos orales combinados desde hace 4 meses y presenta dolor y edema unilateral de la pantorrilla izquierda con signo de Homans positivo. Dímero D elevado.",
+      "prompt": "¿Cuál es la complicación más probable?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Trombosis venosa profunda asociada al componente estrogénico",
+          "correct": true,
+          "rationale": "Los estrógenos aumentan los factores de coagulación."
+        },
+        {
+          "key": "b",
+          "text": "Efecto normal de retención de líquidos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es unilateral y doloroso."
+        },
+        {
+          "key": "c",
+          "text": "Desgarro muscular por ejercicio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el dímero D elevado."
+        },
+        {
+          "key": "d",
+          "text": "Insuficiencia venosa crónica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es de evolución crónica bilateral."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome compartimental",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Requiere traumatismo."
+        },
+        {
+          "key": "f",
+          "text": "Calambres por falta de potasio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explican el cuadro."
+        },
+        {
+          "key": "g",
+          "text": "Celulitis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría eritema y fiebre."
+        },
+        {
+          "key": "h",
+          "text": "Quiste de Baker roto",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es menos probable en este contexto."
+        },
+        {
+          "key": "i",
+          "text": "Tromboflebitis superficial solamente",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Los datos sugieren trombosis profunda."
+        },
+        {
+          "key": "j",
+          "text": "Linfedema primario",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es crónico."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "Los anticonceptivos combinados aumentan el riesgo de trombosis venosa de 3 a 5 veces, sobre todo en el primer año de uso, por el efecto de los estrógenos sobre la síntesis hepática de factores de coagulación. El riesgo es mayor con algunos progestágenos de tercera y cuarta generación, en obesas, con trombofilias, inmovilización, cirugía o tabaquismo. Aun así, el riesgo absoluto es bajo y menor que en el embarazo y el puerperio. Ante trombosis se suspende el anticonceptivo combinado y se inicia anticoagulación. En adelante se usan métodos sin estrógeno, como el dispositivo intrauterino.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos"
+      ]
+    },
+    {
+      "key": "gyo-10-anticoncepcion-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "hormonal_contraception",
+      "vignette": "Mujer de 25 años con 4 semanas de puerperio que amamanta de forma exclusiva y solicita un método anticonceptivo hormonal.",
+      "prompt": "¿Cuál es el método hormonal de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Anticonceptivos orales combinados",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Están contraindicados en las primeras 6 semanas de lactancia."
+        },
+        {
+          "key": "b",
+          "text": "Inyectable mensual combinado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Contiene estrógeno."
+        },
+        {
+          "key": "c",
+          "text": "Esperar a que termine la lactancia para planificar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede embarazarse antes."
+        },
+        {
+          "key": "d",
+          "text": "Anillo vaginal combinado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Contiene estrógeno."
+        },
+        {
+          "key": "e",
+          "text": "Ninguno porque la lactancia protege siempre",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La protección solo aplica con criterios estrictos."
+        },
+        {
+          "key": "f",
+          "text": "Esterilización obligatoria",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "g",
+          "text": "Coito interrumpido",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tiene alta tasa de falla."
+        },
+        {
+          "key": "h",
+          "text": "Los métodos hormonales secan la leche siempre",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Los de solo progestágeno no la afectan."
+        },
+        {
+          "key": "i",
+          "text": "Parche combinado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Contiene estrógeno."
+        },
+        {
+          "key": "j",
+          "text": "Método con solo progestágeno, como implante, píldora de solo progestágeno o dispositivo con levonorgestrel",
+          "correct": true,
+          "rationale": "No afectan la lactancia ni aumentan el riesgo de trombosis posparto."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "En el puerperio el riesgo de trombosis es alto y los estrógenos pueden reducir la producción de leche. Por ello los anticonceptivos combinados son categoría 4 en las primeras 6 semanas posparto en mujeres que amamantan y categoría 3 entre las 6 semanas y 6 meses. Los métodos con solo progestágeno, como el implante, la píldora, el inyectable trimestral y el dispositivo con levonorgestrel, pueden iniciarse desde el posparto inmediato o a las 6 semanas según el método. El dispositivo de cobre puede colocarse en las primeras 48 horas o después de 4 semanas. La lactancia exclusiva con amenorrea protege los primeros 6 meses.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos",
+        "Norma Oficial Mexicana de los servicios de planificación familiar"
+      ]
+    },
+    {
+      "key": "gyo-10-anticoncepcion-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "hormonal_contraception",
+      "vignette": "Mujer de 23 años que usa anticonceptivos orales combinados y olvidó tomar una pastilla activa ayer. Hoy en la mañana se dio cuenta. Está en la segunda semana del paquete.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Realizar prueba de embarazo inmediata",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es útil tan pronto."
+        },
+        {
+          "key": "b",
+          "text": "Descartar la pastilla olvidada y continuar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Debe tomarla en cuanto lo recuerde."
+        },
+        {
+          "key": "c",
+          "text": "Tomar la pastilla olvidada de inmediato aunque tome dos el mismo día y continuar el paquete normalmente",
+          "correct": true,
+          "rationale": "Una pastilla olvidada no reduce la eficacia de forma importante."
+        },
+        {
+          "key": "d",
+          "text": "Cambiar a otro método de inmediato",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "e",
+          "text": "Usar condón por 3 meses",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "f",
+          "text": "No hacer nada y esperar la siguiente toma programada",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe tomar la olvidada."
+        },
+        {
+          "key": "g",
+          "text": "Tomar anticoncepción de emergencia siempre",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es necesaria con una sola pastilla olvidada en la segunda semana."
+        },
+        {
+          "key": "h",
+          "text": "Una pastilla olvidada siempre causa embarazo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El riesgo es bajo."
+        },
+        {
+          "key": "i",
+          "text": "Suspender el paquete e iniciar uno nuevo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "j",
+          "text": "Tomar tres pastillas juntas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesario."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "Ante el olvido de una pastilla activa, o retraso menor de 48 horas, se toma la pastilla olvidada en cuanto se recuerde, aunque implique tomar dos en un día, y se continúa el resto del paquete. No se requiere protección adicional. Si se olvidan dos o más pastillas, o el retraso es de 48 horas o más, se toma la última olvidada, se continúa el paquete y se usa condón o abstinencia por 7 días. Si el olvido ocurre en la tercera semana se omite el periodo de descanso. Si hubo relaciones sin protección en la primera semana se considera anticoncepción de emergencia.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana de los servicios de planificación familiar",
+        "Organización Mundial de la Salud. Recomendaciones sobre prácticas seleccionadas para el uso de anticonceptivos"
+      ]
+    },
+    {
+      "key": "gyo-10-anticoncepcion-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "hormonal_contraception",
+      "vignette": "Mujer de 31 años que usa medroxiprogesterona inyectable trimestral desde hace 4 años. Pregunta por los efectos de su uso prolongado.",
+      "prompt": "¿Cuál es el efecto adverso a largo plazo característico de este método?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aumento del riesgo de cáncer de endometrio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Lo reduce."
+        },
+        {
+          "key": "b",
+          "text": "Hipertiroidismo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un efecto."
+        },
+        {
+          "key": "c",
+          "text": "Aumento importante del riesgo de trombosis como los combinados",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Su efecto trombótico es menor."
+        },
+        {
+          "key": "d",
+          "text": "Galactorrea",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es característica."
+        },
+        {
+          "key": "e",
+          "text": "Cáncer de ovario",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Reduce el riesgo."
+        },
+        {
+          "key": "f",
+          "text": "Menstruaciones más abundantes",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Suele causar amenorrea o sangrado irregular."
+        },
+        {
+          "key": "g",
+          "text": "Infertilidad permanente",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La fertilidad regresa, aunque con retraso."
+        },
+        {
+          "key": "h",
+          "text": "Insuficiencia renal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es un efecto."
+        },
+        {
+          "key": "i",
+          "text": "Acumulación de sangre en el cuerpo por no menstruar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La amenorrea no causa acumulación."
+        },
+        {
+          "key": "j",
+          "text": "Disminución reversible de la densidad mineral ósea y retraso en el regreso de la fertilidad",
+          "correct": true,
+          "rationale": "El hipoestrogenismo relativo reduce la masa ósea."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "j"
+      ],
+      "explanation": "La medroxiprogesterona de depósito trimestral inhibe la ovulación y es muy eficaz. Sus efectos adversos incluyen alteraciones del sangrado, con amenorrea frecuente tras un año, aumento de peso y retraso del regreso de la fertilidad de 6 a 10 meses tras suspenderla. Su uso prolongado causa disminución de la densidad mineral ósea por hipoestrogenismo relativo, que es reversible al suspenderla. No se recomienda limitar su duración, pero se valora el riesgo en adolescentes y mujeres con riesgo de osteoporosis. Se recomienda calcio, vitamina D y ejercicio. La amenorrea no implica acumulación de sangre.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos"
+      ]
+    },
+    {
+      "key": "gyo-10-anticoncepcion-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "intrauterine_device",
+      "vignette": "Mujer de 30 años que considera colocarse un dispositivo intrauterino de cobre. Pregunta si actúa como abortivo.",
+      "prompt": "¿Cuál es el mecanismo de acción del dispositivo intrauterino de cobre?",
+      "polarity": "affirmative",
+      "task": "mechanism",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Los iones de cobre generan una reacción inflamatoria espermicida que impide la fecundación",
+          "correct": true,
+          "rationale": "Actúa antes de la fecundación."
+        },
+        {
+          "key": "b",
+          "text": "Aumenta la temperatura del útero",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es su mecanismo."
+        },
+        {
+          "key": "c",
+          "text": "Inhibe la ovulación como los anticonceptivos orales",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No inhibe la ovulación."
+        },
+        {
+          "key": "d",
+          "text": "Funciona solo en los días fértiles",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Actúa de forma continua."
+        },
+        {
+          "key": "e",
+          "text": "Causa infertilidad permanente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La fertilidad regresa al retirarlo."
+        },
+        {
+          "key": "f",
+          "text": "Provoca abortos al impedir la implantación de embriones de semanas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es abortivo."
+        },
+        {
+          "key": "g",
+          "text": "Bloquea mecánicamente las trompas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No obstruye las trompas."
+        },
+        {
+          "key": "h",
+          "text": "Destruye el endometrio de forma permanente",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No causa daño permanente."
+        },
+        {
+          "key": "i",
+          "text": "Libera hormonas que espesan el moco cervical",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Ese es el dispositivo con levonorgestrel."
+        },
+        {
+          "key": "j",
+          "text": "Produce atrofia ovárica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No afecta los ovarios."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "El dispositivo intrauterino de cobre actúa principalmente antes de la fecundación. Los iones de cobre y la reacción inflamatoria estéril que produce en el endometrio son tóxicos para los espermatozoides y los óvulos, alteran su movilidad y viabilidad e impiden la fecundación. No inhibe la ovulación ni es abortivo. Es eficaz por 10 a 12 años con tasa de falla menor de 1%. No contiene hormonas, por lo que es útil en mujeres con contraindicación para estrógenos. Sus efectos adversos son aumento del sangrado y de los cólicos menstruales. La fertilidad regresa de inmediato al retirarlo.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana de los servicios de planificación familiar",
+        "Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos"
+      ]
+    },
+    {
+      "key": "gyo-10-anticoncepcion-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "intrauterine_device",
+      "vignette": "Mujer de 38 años con miomatosis pequeña sin distorsión de la cavidad, sangrado menstrual abundante que le causa anemia y deseo de anticoncepción por varios años.",
+      "prompt": "¿Cuál es el método anticonceptivo de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dispositivo intrauterino de cobre",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta el sangrado menstrual."
+        },
+        {
+          "key": "b",
+          "text": "No ofrecer dispositivo por los miomas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Si no distorsionan la cavidad puede usarse."
+        },
+        {
+          "key": "c",
+          "text": "Histerectomía de inmediato",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Hay opciones menos invasivas."
+        },
+        {
+          "key": "d",
+          "text": "Espermicidas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No reducen el sangrado."
+        },
+        {
+          "key": "e",
+          "text": "El dispositivo con hormona causa cáncer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Reduce el riesgo de cáncer de endometrio."
+        },
+        {
+          "key": "f",
+          "text": "Coito interrumpido",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tiene alta falla."
+        },
+        {
+          "key": "g",
+          "text": "Métodos naturales",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No reducen el sangrado y tienen alta falla."
+        },
+        {
+          "key": "h",
+          "text": "Embolización de arterias uterinas como anticonceptivo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es un método anticonceptivo."
+        },
+        {
+          "key": "i",
+          "text": "Preservativo como único método",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No reduce el sangrado."
+        },
+        {
+          "key": "j",
+          "text": "Dispositivo intrauterino con levonorgestrel",
+          "correct": true,
+          "rationale": "Reduce el sangrado menstrual y es muy eficaz."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "El dispositivo intrauterino con levonorgestrel libera el progestágeno localmente, lo que adelgaza el endometrio y espesa el moco cervical. Es muy eficaz, con duración de 5 a 8 años según el producto, y reduce de forma importante el sangrado menstrual, por lo que es el tratamiento médico de elección del sangrado uterino abundante. También protege el endometrio en la terapia hormonal y reduce la dismenorrea. Puede causar sangrado irregular en los primeros meses y amenorrea con el tiempo. Está contraindicado si los miomas distorsionan la cavidad uterina.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos"
+      ]
+    },
+    {
+      "key": "gyo-10-anticoncepcion-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "intrauterine_device",
+      "vignette": "Mujer de 27 años con dispositivo intrauterino de cobre que tiene retraso menstrual de 2 semanas. La prueba de embarazo es positiva y el ultrasonido muestra un embarazo intrauterino de 6 semanas con los hilos del dispositivo visibles en el cérvix. Desea continuar el embarazo.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "No retirarlo por miedo a provocar aborto",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo es mayor si se deja."
+        },
+        {
+          "key": "b",
+          "text": "Retirar el dispositivo por histeroscopia si los hilos son visibles",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se retira por tracción simple."
+        },
+        {
+          "key": "c",
+          "text": "Cesárea programada a las 32 semanas",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "d",
+          "text": "El bebé nacerá con el dispositivo en la mano",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un mito."
+        },
+        {
+          "key": "e",
+          "text": "Dejar el dispositivo en su lugar hasta el parto",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta el riesgo de complicaciones."
+        },
+        {
+          "key": "f",
+          "text": "Descartar embarazo ectópico y retirar el dispositivo traccionando suavemente los hilos",
+          "correct": true,
+          "rationale": "Retirarlo reduce el riesgo de aborto, infección y parto pretérmino."
+        },
+        {
+          "key": "g",
+          "text": "Asumir que el dispositivo causará malformaciones",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es teratógeno."
+        },
+        {
+          "key": "h",
+          "text": "Iniciar antibióticos profilácticos y no retirar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es el manejo."
+        },
+        {
+          "key": "i",
+          "text": "Dar metotrexato",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El embarazo es intrauterino."
+        },
+        {
+          "key": "j",
+          "text": "Interrumpir el embarazo de forma obligatoria",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es necesario."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "El embarazo con dispositivo intrauterino es poco frecuente, pero cuando ocurre aumenta la proporción de embarazos ectópicos, por lo que primero debe descartarse. En un embarazo intrauterino con los hilos visibles se recomienda retirar el dispositivo, ya que dejarlo aumenta el riesgo de aborto espontáneo, aborto séptico, ruptura prematura de membranas y parto pretérmino. El retiro conlleva un pequeño riesgo de aborto. Si los hilos no son visibles el dispositivo se deja y se vigila el embarazo como de alto riesgo. El cobre no es teratógeno.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana de los servicios de planificación familiar"
+      ]
+    },
+    {
+      "key": "gyo-10-anticoncepcion-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "intrauterine_device",
+      "vignette": "Mujer de 29 años con dispositivo intrauterino de cobre colocado hace 2 años que acude a revisión. En la especuloscopia no se ven los hilos. Está asintomática y la prueba de embarazo es negativa.",
+      "prompt": "¿Cuál es el siguiente paso ante la ausencia de hilos visibles?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Indicación de tomografía como primer estudio",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El ultrasonido es el primer paso."
+        },
+        {
+          "key": "b",
+          "text": "Perforación segura que requiere laparotomía inmediata",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Primero se localiza."
+        },
+        {
+          "key": "c",
+          "text": "Hallazgo normal sin seguimiento",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Debe localizarse."
+        },
+        {
+          "key": "d",
+          "text": "El dispositivo se disolvió con el tiempo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No se disuelve."
+        },
+        {
+          "key": "e",
+          "text": "Puede deberse a hilos retraídos, expulsión o perforación, por lo que se realiza ultrasonido para localizar el dispositivo",
+          "correct": true,
+          "rationale": "La ubicación debe confirmarse."
+        },
+        {
+          "key": "f",
+          "text": "Embarazo confirmado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La prueba es negativa."
+        },
+        {
+          "key": "g",
+          "text": "Colocar otro dispositivo sin estudiar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede haber dos dispositivos."
+        },
+        {
+          "key": "h",
+          "text": "Infección pélvica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay síntomas."
+        },
+        {
+          "key": "i",
+          "text": "Indicación de histerectomía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "j",
+          "text": "Expulsión segura sin necesidad de estudios",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede estar en el útero o perforado."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "Cuando no se ven los hilos del dispositivo intrauterino, las posibilidades son que los hilos estén retraídos dentro del canal o la cavidad, que el dispositivo se haya expulsado sin que la mujer lo notara o que haya perforado el útero. Primero se descarta embarazo y se indica un método de respaldo. El ultrasonido transvaginal es el estudio inicial para localizarlo. Si no se encuentra en el útero se realiza radiografía de abdomen y, si está en la cavidad abdominal, se retira por laparoscopia. Si está en el útero puede dejarse o retirarse con pinzas o histeroscopia.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana de los servicios de planificación familiar"
+      ]
+    },
+    {
+      "key": "gyo-10-anticoncepcion-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "intrauterine_device",
+      "vignette": "Mujer de 19 años nulípara que solicita un método anticonceptivo de larga duración. Le dijeron que el dispositivo intrauterino no es para mujeres que no han tenido hijos.",
+      "prompt": "¿Qué indica la nuliparidad para el uso del dispositivo intrauterino?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Contraindicación absoluta, categoría 4",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es un mito."
+        },
+        {
+          "key": "b",
+          "text": "Requiere permiso de los padres para cualquier método",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La anticoncepción es un derecho de la adolescente."
+        },
+        {
+          "key": "c",
+          "text": "Solo puede usarse tras el primer parto",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "d",
+          "text": "Riesgo alto de infertilidad posterior",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No causa infertilidad."
+        },
+        {
+          "key": "e",
+          "text": "Mayor riesgo de cáncer cervicouterino",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No aumenta el riesgo."
+        },
+        {
+          "key": "f",
+          "text": "No es contraindicación, ya que los dispositivos son categoría 2 en nulíparas y adolescentes",
+          "correct": true,
+          "rationale": "Los beneficios superan los riesgos."
+        },
+        {
+          "key": "g",
+          "text": "Requiere dilatación cervical bajo anestesia general siempre",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La inserción suele ser ambulatoria."
+        },
+        {
+          "key": "h",
+          "text": "El dispositivo causa enfermedad pélvica inflamatoria por sí mismo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El riesgo se relaciona con infecciones de transmisión sexual."
+        },
+        {
+          "key": "i",
+          "text": "Riesgo de perforación muy alto que lo prohíbe",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "La perforación es rara."
+        },
+        {
+          "key": "j",
+          "text": "Solo puede usar anticonceptivos orales",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Hay más opciones."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "f"
+      ],
+      "explanation": "Los métodos reversibles de acción prolongada, como el dispositivo intrauterino y el implante, son los más eficaces y se recomiendan como primera línea en adolescentes y nulíparas. Según los criterios de elegibilidad de la Organización Mundial de la Salud, el dispositivo intrauterino es categoría 2 en menores de 20 años y en nulíparas, es decir, los beneficios superan los riesgos. Puede haber más expulsiones y dolor en la inserción, pero no causa infertilidad. Se recomienda tamizar infecciones de transmisión sexual en mujeres de riesgo y promover el condón para la protección contra estas infecciones.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos"
+      ]
+    },
+    {
+      "key": "gyo-10-anticoncepcion-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "intrauterine_device",
+      "vignette": "Mujer de 32 años con dispositivo intrauterino colocado hace 2 semanas que presenta dolor pélvico, fiebre de 38.5 °C y flujo purulento. Dolor a la movilización del cérvix.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Enfermedad pélvica inflamatoria asociada a la inserción",
+          "correct": true,
+          "rationale": "El riesgo de infección aumenta en las primeras 3 semanas tras la colocación."
+        },
+        {
+          "key": "b",
+          "text": "Rechazo natural del cuerpo al dispositivo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay infección."
+        },
+        {
+          "key": "c",
+          "text": "Embarazo ectópico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la fiebre."
+        },
+        {
+          "key": "d",
+          "text": "Actinomicosis pélvica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se asocia a uso prolongado."
+        },
+        {
+          "key": "e",
+          "text": "Alergia al cobre",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es rara y no da este cuadro."
+        },
+        {
+          "key": "f",
+          "text": "Cólico normal por el dispositivo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La fiebre indica infección."
+        },
+        {
+          "key": "g",
+          "text": "Perforación uterina sin infección",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la fiebre."
+        },
+        {
+          "key": "h",
+          "text": "Infección urinaria baja",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el dolor a la movilización cervical."
+        },
+        {
+          "key": "i",
+          "text": "Endometriosis",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la fiebre aguda."
+        },
+        {
+          "key": "j",
+          "text": "Expulsión del dispositivo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la fiebre ni el flujo purulento."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "El riesgo de enfermedad pélvica inflamatoria con el dispositivo intrauterino aumenta solo en las primeras 3 semanas tras la inserción, por introducción de bacterias o infección cervical previa, y después es similar al de las mujeres sin dispositivo. Se trata con los antibióticos habituales de la enfermedad pélvica inflamatoria, y no es necesario retirar el dispositivo si la paciente mejora en 48 a 72 horas. Si no mejora se retira. Para prevenirla se tamizan infecciones de transmisión sexual en mujeres de riesgo antes de la inserción. El uso prolongado se asocia rara vez a actinomicosis.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Criterios médicos de elegibilidad para el uso de anticonceptivos"
+      ]
+    },
+    {
+      "key": "gyo-10-anticoncepcion-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "intrauterine_device",
+      "vignette": "Mujer de 34 años con dispositivo de cobre colocado hace 6 meses que refiere menstruaciones más abundantes y con más cólico que antes. No hay datos de infección ni embarazo. El dispositivo está bien colocado.",
+      "prompt": "¿Cuál es el pronóstico de estos síntomas?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Indican infección grave",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay datos de infección."
+        },
+        {
+          "key": "b",
+          "text": "Indican embarazo ectópico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay embarazo."
+        },
+        {
+          "key": "c",
+          "text": "Indican que el dispositivo es defectuoso",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es un efecto esperado."
+        },
+        {
+          "key": "d",
+          "text": "Indican trastorno de la coagulación",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es un efecto conocido del cobre."
+        },
+        {
+          "key": "e",
+          "text": "Obligan a retirar el dispositivo de inmediato",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Pueden manejarse."
+        },
+        {
+          "key": "f",
+          "text": "Indican que el cuerpo está expulsando toxinas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es la explicación."
+        },
+        {
+          "key": "g",
+          "text": "Indican perforación uterina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El dispositivo está bien colocado."
+        },
+        {
+          "key": "h",
+          "text": "Son efectos adversos frecuentes que suelen mejorar con el tiempo y responden a antiinflamatorios no esteroideos",
+          "correct": true,
+          "rationale": "El cobre aumenta el sangrado y el dolor menstrual."
+        },
+        {
+          "key": "i",
+          "text": "Indican infertilidad futura",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No la causa."
+        },
+        {
+          "key": "j",
+          "text": "Indican cáncer de endometrio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay datos."
+        }
+      ],
+      "canonical": [
+        "e",
+        "g",
+        "h",
+        "j"
+      ],
+      "explanation": "Los efectos adversos más frecuentes del dispositivo intrauterino de cobre son el aumento del volumen del sangrado menstrual y la dismenorrea, que son causa común de retiro. Suelen disminuir en los primeros 3 a 6 meses. Los antiinflamatorios no esteroideos, como ibuprofeno o ácido mefenámico durante la menstruación, reducen el sangrado y el dolor. Si el sangrado es intenso, causa anemia o persiste, se descartan otras causas y puede cambiarse por el dispositivo con levonorgestrel, que reduce el sangrado. Se vigila la hemoglobina.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana de los servicios de planificación familiar"
+      ]
+    },
+    {
+      "key": "gyo-10-anticoncepcion-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "emergency_contraception",
+      "vignette": "Mujer de 22 años que tuvo una relación sexual sin protección hace 36 horas por ruptura del condón. No desea embarazarse. No tiene contraindicaciones.",
+      "prompt": "¿Cuál es el método de anticoncepción de emergencia más accesible?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Prueba de embarazo inmediata antes de decidir",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es útil tan pronto."
+        },
+        {
+          "key": "b",
+          "text": "Duchas vaginales con vinagre",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No previenen el embarazo."
+        },
+        {
+          "key": "c",
+          "text": "Levonorgestrel 1.5 mg en dosis única lo antes posible",
+          "correct": true,
+          "rationale": "Es eficaz hasta 72 horas y más cuanto antes se tome."
+        },
+        {
+          "key": "d",
+          "text": "La anticoncepción de emergencia es abortiva",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Actúa antes de la implantación, principalmente retrasando la ovulación."
+        },
+        {
+          "key": "e",
+          "text": "Misoprostol",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es un anticonceptivo de emergencia."
+        },
+        {
+          "key": "f",
+          "text": "Metotrexato",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es anticoncepción de emergencia."
+        },
+        {
+          "key": "g",
+          "text": "Negar el medicamento por ser joven",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es un derecho y no requiere receta."
+        },
+        {
+          "key": "h",
+          "text": "Esperar a ver si se retrasa la menstruación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Pierde la oportunidad de prevenir el embarazo."
+        },
+        {
+          "key": "i",
+          "text": "Legrado uterino",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "j",
+          "text": "Dosis alta de ácido fólico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No previene el embarazo."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "La anticoncepción de emergencia previene el embarazo tras una relación sin protección o con falla del método. El levonorgestrel 1.5 mg en dosis única es eficaz hasta 72 horas y su eficacia disminuye conforme pasa el tiempo. Actúa principalmente inhibiendo o retrasando la ovulación y no interrumpe un embarazo ya implantado. El acetato de ulipristal es eficaz hasta 120 horas y más eficaz que el levonorgestrel. El dispositivo intrauterino de cobre insertado hasta 5 días después es el método más eficaz. En México no requiere receta y no tiene contraindicaciones médicas absolutas salvo embarazo confirmado.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana de los servicios de planificación familiar",
+        "Organización Mundial de la Salud. Anticoncepción de emergencia"
+      ]
+    },
+    {
+      "key": "gyo-10-anticoncepcion-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "emergency_contraception",
+      "vignette": "Mujer de 28 años que tuvo una relación sin protección hace 4 días. Desea además un método anticonceptivo de largo plazo. No tiene infecciones ni contraindicaciones.",
+      "prompt": "¿Cuál es el método de emergencia más eficaz en este caso?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Legrado preventivo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "b",
+          "text": "Anticonceptivos orales combinados como método de Yuzpe de elección",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Son menos eficaces y causan más náusea."
+        },
+        {
+          "key": "c",
+          "text": "Implante subdérmico solo como emergencia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un método de emergencia por sí solo."
+        },
+        {
+          "key": "d",
+          "text": "Esperar la menstruación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Pierde la oportunidad."
+        },
+        {
+          "key": "e",
+          "text": "El dispositivo de emergencia provoca aborto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Previene la fecundación y la implantación."
+        },
+        {
+          "key": "f",
+          "text": "Inserción de dispositivo intrauterino de cobre",
+          "correct": true,
+          "rationale": "Es el método de emergencia más eficaz hasta 5 días y sirve como anticoncepción continua."
+        },
+        {
+          "key": "g",
+          "text": "Levonorgestrel oral",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Su eficacia es baja después de 72 horas."
+        },
+        {
+          "key": "h",
+          "text": "No ofrecer el dispositivo por complejidad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es el más eficaz."
+        },
+        {
+          "key": "i",
+          "text": "Inyectable trimestral como emergencia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es un método de emergencia."
+        },
+        {
+          "key": "j",
+          "text": "Ninguno porque ya pasaron más de 72 horas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El dispositivo y el ulipristal funcionan hasta 120 horas."
+        }
+      ],
+      "canonical": [
+        "b",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "El dispositivo intrauterino de cobre insertado en los primeros 5 días tras la relación sin protección es el método de anticoncepción de emergencia más eficaz, con tasa de falla menor de 0.1%. Además proporciona anticoncepción de larga duración. El acetato de ulipristal es eficaz hasta 120 horas y es la opción oral más eficaz después de 72 horas. El levonorgestrel tiene menor eficacia después de 72 horas y en mujeres con obesidad. El método de Yuzpe con anticonceptivos combinados es menos eficaz. Tras la anticoncepción oral de emergencia se recomienda iniciar un método regular.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Anticoncepción de emergencia",
+        "Norma Oficial Mexicana de los servicios de planificación familiar"
+      ]
+    },
+    {
+      "key": "gyo-10-anticoncepcion-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "emergency_contraception",
+      "vignette": "Mujer de 25 años que tomó levonorgestrel de emergencia hace 3 semanas. Su menstruación no ha llegado y tiene 5 días de retraso.",
+      "prompt": "¿Qué indica este retraso menstrual?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Requiere prueba de embarazo, ya que el método puede fallar y también puede alterar la fecha de la siguiente menstruación",
+          "correct": true,
+          "rationale": "Un retraso mayor de 7 días obliga a descartar embarazo."
+        },
+        {
+          "key": "b",
+          "text": "Efecto esperado que nunca requiere estudios",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Debe descartarse embarazo."
+        },
+        {
+          "key": "c",
+          "text": "Indicación de tomar otra dosis de emergencia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es útil ahora."
+        },
+        {
+          "key": "d",
+          "text": "Embarazo ectópico confirmado",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No puede afirmarse sin estudios."
+        },
+        {
+          "key": "e",
+          "text": "Embarazo seguro por falla del método",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede ser solo un cambio en el ciclo."
+        },
+        {
+          "key": "f",
+          "text": "El medicamento abortó un embarazo y por eso no baja la regla",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es abortivo."
+        },
+        {
+          "key": "g",
+          "text": "Daño ovárico permanente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No causa daño."
+        },
+        {
+          "key": "h",
+          "text": "Infertilidad causada por el levonorgestrel",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No causa infertilidad."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de ovario poliquístico de nueva aparición",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay datos."
+        },
+        {
+          "key": "j",
+          "text": "Menopausia precoz",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No corresponde."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "h"
+      ],
+      "explanation": "Tras la anticoncepción oral de emergencia la siguiente menstruación suele presentarse en la fecha esperada, aunque puede adelantarse o retrasarse algunos días. Si la menstruación se retrasa más de 7 días, es inusualmente escasa o hay dolor abdominal se debe realizar una prueba de embarazo. Si la mujer está embarazada, el levonorgestrel no daña al embrión ni aumenta las malformaciones. El uso repetido de la anticoncepción de emergencia es seguro, pero es menos eficaz que los métodos regulares, por lo que se recomienda iniciar un método anticonceptivo continuo.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Anticoncepción de emergencia"
+      ]
+    },
+    {
+      "key": "gyo-10-anticoncepcion-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "emergency_contraception",
+      "vignette": "Adolescente de 16 años que acude a urgencias 12 horas después de una agresión sexual. Está estable y sin lesiones graves. No usa anticonceptivos.",
+      "prompt": "¿Cuál es la conducta más apropiada respecto a la prevención del embarazo y las infecciones?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Pedir autorización de los padres antes de cualquier atención urgente",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La atención urgente no se retrasa."
+        },
+        {
+          "key": "b",
+          "text": "Diferir la atención para no revictimizar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La atención oportuna es prioritaria."
+        },
+        {
+          "key": "c",
+          "text": "Solo dar anticoncepción de emergencia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La profilaxis de infecciones también es urgente."
+        },
+        {
+          "key": "d",
+          "text": "Bañarse elimina el riesgo de embarazo e infecciones",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No los elimina."
+        },
+        {
+          "key": "e",
+          "text": "Esperar a la denuncia para dar tratamiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La atención médica no se condiciona a la denuncia."
+        },
+        {
+          "key": "f",
+          "text": "Dar antibióticos solo si hay síntomas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La profilaxis se da sin síntomas."
+        },
+        {
+          "key": "g",
+          "text": "Esperar a la menstruación para decidir",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Pierde la ventana de prevención."
+        },
+        {
+          "key": "h",
+          "text": "Solo pruebas de embarazo y de virus sin profilaxis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La profilaxis es tiempo dependiente."
+        },
+        {
+          "key": "i",
+          "text": "Ofrecer anticoncepción de emergencia, profilaxis contra virus de la inmunodeficiencia humana y otras infecciones de transmisión sexual, vacunación contra hepatitis B y apoyo psicológico",
+          "correct": true,
+          "rationale": "La atención integral a la violencia sexual incluye estas medidas."
+        },
+        {
+          "key": "j",
+          "text": "Legrado uterino preventivo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "La atención a víctimas de violencia sexual es una urgencia médica. Según la normatividad mexicana se debe ofrecer anticoncepción de emergencia lo antes posible, hasta 120 horas, profilaxis postexposición contra virus de la inmunodeficiencia humana idealmente en las primeras 72 horas, profilaxis contra gonorrea, clamidia, tricomoniasis y sífilis, vacunación contra hepatitis B y virus del papiloma humano según el esquema, atención de lesiones, apoyo psicológico y orientación legal. La atención médica no está condicionada a una denuncia. Si resulta un embarazo, la mujer tiene derecho a la interrupción legal.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana sobre violencia familiar, sexual y contra las mujeres. Criterios para la prevención y atención"
+      ]
+    },
+    {
+      "key": "gyo-10-anticoncepcion-q19",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "obstetrics_gynecology",
+      "topic": "contraception",
+      "subtopic": "emergency_contraception",
+      "vignette": "Mujer de 30 años que pregunta si puede usar la anticoncepción de emergencia como su método habitual porque tiene relaciones esporádicas.",
+      "prompt": "¿Qué indica la evidencia sobre el uso repetido de la anticoncepción de emergencia?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Es seguro, pero menos eficaz que un método regular, por lo que se recomienda un método continuo",
+          "correct": true,
+          "rationale": "El uso repetido no tiene riesgos graves."
+        },
+        {
+          "key": "b",
+          "text": "Está prohibido usarla más de una vez al año",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay límite de uso."
+        },
+        {
+          "key": "c",
+          "text": "Es abortiva si se usa con frecuencia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es abortiva."
+        },
+        {
+          "key": "d",
+          "text": "Es igual de eficaz que los métodos de larga duración",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es menos eficaz."
+        },
+        {
+          "key": "e",
+          "text": "Protege contra infecciones de transmisión sexual",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No protege."
+        },
+        {
+          "key": "f",
+          "text": "Debe acompañarse de una prueba de embarazo antes de cada toma",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "g",
+          "text": "Aumenta el riesgo de cáncer de mama",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay evidencia."
+        },
+        {
+          "key": "h",
+          "text": "Causa trombosis como los anticonceptivos combinados",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El levonorgestrel solo no la aumenta."
+        },
+        {
+          "key": "i",
+          "text": "Su uso frecuente daña los ovarios",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No los daña."
+        },
+        {
+          "key": "j",
+          "text": "Causa infertilidad si se usa más de una vez",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No causa infertilidad."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "La anticoncepción de emergencia puede usarse cuantas veces sea necesario y su uso repetido es seguro, sin riesgos graves para la salud ni efectos sobre la fertilidad. Sin embargo, es menos eficaz que los métodos anticonceptivos regulares y puede causar alteraciones del ciclo. Por ello se recomienda orientar a la mujer hacia un método continuo adecuado a sus necesidades, como implante, dispositivo intrauterino o anticonceptivos hormonales. No protege contra infecciones de transmisión sexual, por lo que se recomienda el uso del condón en relaciones con parejas ocasionales.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Anticoncepción de emergencia"
+      ]
+    }
+  ]
+}
