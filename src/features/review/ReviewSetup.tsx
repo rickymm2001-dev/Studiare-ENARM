@@ -1,13 +1,14 @@
-// Qué quieres repasar (D-072). Antes de empezar, el alumno elige el modo, los mazos y las ramas o
-// subespecialidades. Muestra cuántas tarjetas tocan con esa selección. La última selección se
-// recuerda en este dispositivo.
+// Qué quieres repasar (D-072, D-078). Arriba el modo y el botón de empezar con cuántas tarjetas
+// tocan. Mazos, ramas y límites quedan plegados con un resumen, porque se cambian poco. La última
+// selección se recuerda en este dispositivo.
 import { Play } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { Card as CardEntity } from '@/data/schemas/decks';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
+import { Card, CardHeader, CardTitle } from '@/ui/components/card';
+import { Disclosure } from '@/ui/components/disclosure';
 import { CheckboxField, TextField } from '@/ui/components/field';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { ALL_TOPICS } from '../shared/topics';
@@ -50,13 +51,12 @@ export function ReviewSetup({
 
   return (
     <Card aria-labelledby="que-repasar">
-      <CardHeader>
+      <CardHeader className="mb-3">
         <CardTitle id="que-repasar">{text.title}</CardTitle>
-        <CardDescription>{text.hint}</CardDescription>
       </CardHeader>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
         <fieldset>
-          <legend className="mb-2 font-semibold">{text.mode}</legend>
+          <legend className="sr-only">{text.mode}</legend>
           <div className="flex flex-wrap gap-2">
             {(['today', 'due', 'new'] as const).map((mode: ReviewMode) => (
               <button
@@ -67,7 +67,7 @@ export function ReviewSetup({
                   setSelection({ ...selection, mode });
                 }}
                 className={cn(
-                  'min-h-touch rounded-full border-2 px-4 text-sm font-semibold transition-all',
+                  'min-h-9 rounded-full border-2 px-3 text-sm font-semibold transition-all sm:min-h-touch sm:px-4',
                   selection.mode === mode
                     ? 'border-primary bg-primary-soft text-primary'
                     : 'border-line bg-surface hover:border-line-strong',
@@ -79,45 +79,7 @@ export function ReviewSetup({
           </div>
         </fieldset>
 
-        <fieldset>
-          <legend className="mb-2 font-semibold">{text.decks}</legend>
-          <div className="grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
-            {deckIds.map((deckId) => (
-              <CheckboxField
-                key={deckId}
-                label={deckNames.get(deckId) ?? deckId}
-                checked={selection.decks.has(deckId)}
-                onChange={(event) => {
-                  const decks = new Set(selection.decks);
-                  if (event.target.checked) decks.add(deckId);
-                  else decks.delete(deckId);
-                  setSelection({ ...selection, decks });
-                }}
-              />
-            ))}
-          </div>
-        </fieldset>
-
-        <BranchTopicPicker
-          selected={selection.topics}
-          counts={counts}
-          countLabel={text.cards}
-          onChange={(topics) => {
-            setSelection({ ...selection, topics });
-          }}
-        />
-        <CheckboxField
-          label={text.untagged}
-          hint={text.untaggedHint}
-          checked={selection.includeUntagged}
-          onChange={(event) => {
-            setSelection({ ...selection, includeUntagged: event.target.checked });
-          }}
-        />
-
-        <DailyLimits limits={limits} onSave={onSaveLimits} />
-
-        <div className="sticky bottom-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+0.5rem)] flex flex-wrap items-center gap-3 rounded-xl border border-line bg-surface/95 p-3 shadow-raised backdrop-blur lg:bottom-4">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           <Button
             size="lg"
             className="w-full sm:w-auto"
@@ -132,6 +94,59 @@ export function ReviewSetup({
           </Button>
           {total === 0 ? <p className="text-sm text-fg-muted">{text.nothing}</p> : null}
         </div>
+
+        <Disclosure
+          title={text.filters}
+          summary={text.filtersSummary(
+            selection.decks.size,
+            selection.topics.size,
+            ALL_TOPICS.length,
+          )}
+          defaultOpen={total === 0}
+        >
+          <fieldset>
+            <legend className="mb-1 text-sm font-semibold">{text.decks}</legend>
+            <div className="grid gap-x-3 gap-y-1.5 sm:grid-cols-2 lg:grid-cols-3">
+              {deckIds.map((deckId) => (
+                <CheckboxField
+                  key={deckId}
+                  label={deckNames.get(deckId) ?? deckId}
+                  checked={selection.decks.has(deckId)}
+                  onChange={(event) => {
+                    const decks = new Set(selection.decks);
+                    if (event.target.checked) decks.add(deckId);
+                    else decks.delete(deckId);
+                    setSelection({ ...selection, decks });
+                  }}
+                />
+              ))}
+            </div>
+          </fieldset>
+          <BranchTopicPicker
+            selected={selection.topics}
+            counts={counts}
+            countLabel={text.cards}
+            showCount={false}
+            onChange={(topics) => {
+              setSelection({ ...selection, topics });
+            }}
+          />
+          <CheckboxField
+            label={text.untagged}
+            hint={text.untaggedHint}
+            checked={selection.includeUntagged}
+            onChange={(event) => {
+              setSelection({ ...selection, includeUntagged: event.target.checked });
+            }}
+          />
+        </Disclosure>
+
+        <Disclosure
+          title={text.limits}
+          summary={text.limitsSummary(limits.newCardsPerDay, limits.reviewsPerDay)}
+        >
+          <DailyLimits limits={limits} onSave={onSaveLimits} />
+        </Disclosure>
       </div>
     </Card>
   );
@@ -154,8 +169,8 @@ function DailyLimits({
   const dirty =
     next.newCardsPerDay !== limits.newCardsPerDay || next.reviewsPerDay !== limits.reviewsPerDay;
   return (
-    <fieldset className="rounded-lg border border-line p-3">
-      <legend className="px-1 font-semibold">{t.reviewSetup.limits}</legend>
+    <fieldset>
+      <legend className="sr-only">{t.reviewSetup.limits}</legend>
       <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
         <TextField
           label={t.settings.newCardsPerDay}

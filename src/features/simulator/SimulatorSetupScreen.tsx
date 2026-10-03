@@ -1,5 +1,6 @@
 // Configurar simulador (pantalla 7). Práctica por rama, dificultad y estructura, con el límite
-// diario del plan Gratis como bandera de acceso. El examen completo llega en el siguiente bloque.
+// diario del plan Gratis como bandera de acceso. Los filtros y el botón de empezar van arriba y las
+// ramas quedan plegadas con un resumen (D-078). El examen completo llega en el siguiente bloque.
 import { Play } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
@@ -17,6 +18,7 @@ import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SelectField } from '@/ui/components/field';
+import { Disclosure } from '@/ui/components/disclosure';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
@@ -138,16 +140,15 @@ function Setup({ session }: { session: ReadySession }) {
     <>
       {header}
       <Card aria-labelledby="practica-titulo">
-        <CardHeader>
+        <CardHeader className="mb-3">
           <div className="flex flex-wrap items-center gap-2">
             <CardTitle id="practica-titulo">{t.simulator.setupTitle}</CardTitle>
             <DemoContentLabel />
           </div>
           <CardDescription>{t.simulator.bankNote(questions.length)}</CardDescription>
         </CardHeader>
-        <div className="flex flex-col gap-4">
-          <BranchTopicPicker selected={topics} onChange={setTopics} counts={countsByTopic} />
-          <div className="grid gap-3 sm:grid-cols-3">
+        <div className="flex flex-col gap-3">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             <SelectField
               label={t.simulator.difficulty}
               value={difficulty}
@@ -160,6 +161,15 @@ function Setup({ session }: { session: ReadySession }) {
               }}
             />
             <SelectField
+              label={t.simulator.count}
+              value={count}
+              options={[5, 10, 20, 40].map((n) => ({ value: String(n), label: String(n) }))}
+              onChange={(event) => {
+                setCount(event.target.value);
+              }}
+            />
+            <SelectField
+              className="col-span-2 sm:col-span-1"
               label={t.simulator.structure}
               value={structure}
               options={(['all', 'negative', 'affirmative'] as Structure[]).map((value) => ({
@@ -170,47 +180,58 @@ function Setup({ session }: { session: ReadySession }) {
                 setStructure(event.target.value as Structure);
               }}
             />
-            <SelectField
-              label={t.simulator.count}
-              value={count}
-              options={[5, 10, 20, 40].map((n) => ({ value: String(n), label: String(n) }))}
-              onChange={(event) => {
-                setCount(event.target.value);
-              }}
-            />
           </div>
-          <p className="text-sm text-fg-muted">{t.simulator.available(filtered.length)}</p>
-          {left !== null ? (
-            <p className="text-sm">
-              {left > 0 ? t.simulator.limit(left) : t.simulator.limitReached}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            {left === 0 ? (
+              <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
+                <Link to={screenPath('subscription')}>{t.simulator.seePlans}</Link>
+              </Button>
+            ) : (
+              <Button
+                size="lg"
+                className="w-full sm:w-auto"
+                disabled={wanted === 0}
+                onClick={() => {
+                  void start();
+                }}
+              >
+                <Play aria-hidden />
+                {t.simulator.start}
+              </Button>
+            )}
+            <p className="text-sm text-fg-muted">
+              {t.simulator.available(filtered.length)}
+              {left !== null ? (
+                <>
+                  {' · '}
+                  <span className={left === 0 ? 'font-semibold text-fg' : undefined}>
+                    {left > 0 ? t.simulator.limit(left) : t.simulator.limitReached}
+                  </span>
+                </>
+              ) : null}
             </p>
-          ) : null}
-          {left === 0 ? (
-            <Button asChild variant="secondary" className="self-start">
-              <Link to={screenPath('subscription')}>{t.simulator.seePlans}</Link>
-            </Button>
-          ) : (
-            <Button
-              className="self-start"
-              disabled={wanted === 0}
-              onClick={() => {
-                void start();
-              }}
-            >
-              <Play aria-hidden />
-              {t.simulator.start}
-            </Button>
-          )}
+          </div>
           {filtered.length === 0 ? (
             <p className="text-sm text-danger">{t.simulator.noQuestions}</p>
           ) : null}
+          <Disclosure
+            title={t.topicPicker.title}
+            summary={t.topicPicker.selected(topics.size, ALL_TOPICS.length)}
+          >
+            <BranchTopicPicker
+              selected={topics}
+              onChange={setTopics}
+              counts={countsByTopic}
+              showCount={false}
+            />
+          </Disclosure>
         </div>
       </Card>
-      <Card aria-labelledby="examen-titulo">
-        <CardHeader>
-          <CardTitle id="examen-titulo">{t.simulator.exam}</CardTitle>
-          <CardDescription>{t.simulator.examSoon}</CardDescription>
-        </CardHeader>
+      <Card aria-labelledby="examen-titulo" className="flex flex-col gap-0.5 py-3">
+        <h2 id="examen-titulo" className="font-semibold text-fg">
+          {t.simulator.exam}
+        </h2>
+        <p className="text-sm text-fg-muted">{t.simulator.examSoon}</p>
       </Card>
     </>
   );

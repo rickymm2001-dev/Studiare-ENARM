@@ -347,8 +347,7 @@ export const featureText = {
   },
   simulator: {
     setupTitle: 'Configura tu práctica',
-    bankNote: (n: number) =>
-      `Banco de demostración con ${plural(n, 'pregunta', 'preguntas')}, no validado por médicos.`,
+    bankNote: (n: number) => `Banco de demostración con ${plural(n, 'pregunta', 'preguntas')}.`,
     branches: 'Ramas',
     difficulty: 'Dificultad',
     difficulties: {
@@ -363,7 +362,7 @@ export const featureText = {
       negative: 'Solo negativas o de excepción',
       affirmative: 'Solo afirmativas',
     },
-    count: 'Número de preguntas',
+    count: 'Preguntas',
     available: (n: number) =>
       `${plural(n, 'pregunta disponible', 'preguntas disponibles')} con estos filtros`,
     limit: (left: number) =>
@@ -644,6 +643,10 @@ export const featureText = {
     selected: (n: number, of: number) => `${n} de ${of} subespecialidades`,
     questions: (n: number) => `${n.toLocaleString('es-MX')} preguntas`,
     noQuestions: 'Sin preguntas todavía',
+    of: (n: number, of: number) => `${n} de ${of}`,
+    toggle: (branch: string, n: number, of: number) =>
+      `Ver las subespecialidades de ${branch}, ${n} de ${of} marcadas`,
+    title: 'Ramas y subespecialidades',
   },
   reviewSetup: {
     title: 'Qué quieres repasar',
@@ -652,7 +655,11 @@ export const featureText = {
     modes: { today: 'Lo que toca hoy', due: 'Solo vencidas', new: 'Solo nuevas' },
     decks: 'Mazos',
     cards: (n: number) => `${n.toLocaleString('es-MX')} en total`,
+    filters: 'Mazos y temas',
+    filtersSummary: (decks: number, topics: number, of: number) =>
+      `${plural(decks, 'mazo', 'mazos')} · ${topics} de ${of} temas`,
     limits: 'Límites de hoy',
+    limitsSummary: (newCards: number, reviews: number) => `${newCards} nuevas · ${reviews} repasos`,
     limitsHint:
       'Las tarjetas nuevas y los repasos que entran cada día. Se guardan para los próximos días.',
     limitsSaved: 'Guardado. El número de tarjetas de abajo ya usa tus nuevos límites.',

@@ -50,6 +50,13 @@
 - Proyecto de Supabase creado por Ricardo. Cuenta en la nube con enlace al correo, rol desde el servidor y datos de cuenta sincronizados (D-075). 353 pruebas pasan
 - Auditoría completa de la página con corrección de tarjetas nuevas por día (D-076)
 - Banco grande de 1500 preguntas terminado en borrador (D-077). 250 por troncal con 10 opciones, todas validadas. Excel en content-drafts/bank1500/Studiare-banco-1500-borrador.xlsx y guía en content-drafts/bank1500/README.md. Falta la revisión médica y subirlo a Supabase con la segunda parte de la nube
+- Compactación de pantallas en curso (D-078), en 6 bloques con capturas de antes y después
+  - [x] 1. Modo enfoque en pregunta, tarjeta y retroalimentación. Encabezado delgado y barra fija de acciones en el teléfono, dos columnas en computadora
+  - [x] 2. Repasar y Simular con el botón de empezar arriba, ramas en acordeón y mazos, temas y límites plegados con resumen. En el teléfono Repasar pasó de 4613 a 844 px de alto y Simular de 4256 a 934
+  - [ ] 3. Progreso en una sola página
+  - [ ] 4. Marco de pantallas
+  - [ ] 5. Configuración por secciones
+  - [ ] 6. Inicio y Mazos
 - Siguiente. Ricardo prueba su cuenta y se hace dueño. Luego segunda parte de la nube con bitácora, usuarios y banco. Después Fase B del banco con trampas explícitas y luego Fase D con IA en modo simulado, como pidió Ricardo. Después bloque 5 de pagos
 
 ## Fase C. Pantallas del alumno (esqueleto funcionando)
