@@ -1,0 +1,351 @@
+@ cir|hernias|inguinal_hernia|2|diagnosis
+V: Hombre de 35 años que trabaja cargando bultos con un aumento de volumen en la región inguinal derecha que aparece al toser y al estar de pie y desaparece al acostarse. A la exploración con el dedo en el anillo inguinal profundo, el saco golpea la punta del dedo al pujar y desciende hacia el escroto.
+P: ¿Cuál es el diagnóstico más probable?
++ Hernia inguinal indirecta || El saco sale por el anillo profundo, lateral a los vasos epigástricos, y desciende al escroto.
+- anchoring | Hernia inguinal directa || Sale por el triángulo de Hesselbach y golpea la cara del dedo, rara vez llega al escroto.
+- availability_heuristic | Hernia femoral || Se localiza por debajo del ligamento inguinal.
+- representativeness_heuristic | Hidrocele || Transilumina y no se reduce.
+- premature_closure | Lipoma del cordón || No se reduce ni aumenta con el pujo de esta forma.
+- base_rate_fallacy | Varicocele || Da bolsa de gusanos en el escroto.
+- framing_effect | Adenopatía inguinal || No se reduce ni cambia con el pujo.
+- inattentional_blindness | Hernia de Spiegel || Se localiza en la línea semilunar.
+- focusing_illusion | Torsión testicular || Da dolor agudo intenso.
+- belief_bias | Músculo desgarrado por cargar peso || Es un defecto de la pared.
+E: La hernia inguinal es la hernia más frecuente de la pared abdominal y es mucho más común en hombres. La indirecta es la más frecuente en ambos sexos y en niños, se debe a la persistencia del conducto peritoneovaginal, sale por el anillo inguinal profundo lateral a los vasos epigástricos inferiores y puede descender al escroto. La directa sale por el triángulo de Hesselbach, medial a los vasos epigástricos, por debilidad de la fascia transversalis, y es más común en hombres mayores. El diagnóstico es clínico, y el ultrasonido ayuda en casos dudosos. El tratamiento es la hernioplastia con malla.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hernia inguinal
+
+@ cir|hernias|inguinal_hernia|3|treatment_of_choice
+V: Hombre de 50 años con hernia inguinal derecha sintomática, reductible, que le causa molestias al trabajar. Sin comorbilidades importantes.
+P: ¿Cuál es el tratamiento de elección?
++ Hernioplastia con malla sin tensión, abierta tipo Lichtenstein o laparoscópica || Tiene la menor tasa de recurrencia.
+- anchoring | Uso de braguero de forma indefinida || No corrige el defecto.
+- availability_heuristic | Herniorrafia con tensión sin malla en todos || Tiene mayor recurrencia.
+- representativeness_heuristic | Observación en todos los pacientes sintomáticos || Los sintomáticos se benefician de la cirugía.
+- premature_closure | Inyección de esclerosantes || No es un tratamiento aceptado.
+- framing_effect | Orquiectomía con cierre del conducto || Es excesiva.
+- complexity_bias | Laparotomía media para reparar la hernia || No es necesaria.
+- base_rate_fallacy | Fajas abdominales como tratamiento definitivo || No corrigen el defecto.
+- belief_bias | Reposo absoluto para que la hernia se cierre sola || En adultos no se cierra sola.
+- omission_bias | Esperar a que se encarcele para operar || Aumenta la morbilidad.
+E: El tratamiento de la hernia inguinal sintomática es quirúrgico. La técnica de elección es la hernioplastia sin tensión con malla, que reduce la recurrencia a menos de 5%. La técnica abierta de Lichtenstein es la más utilizada, y las técnicas laparoscópicas TEP y TAPP tienen menos dolor crónico y regreso más rápido a las actividades, especialmente útiles en hernias bilaterales o recurrentes. En hombres con hernias asintomáticas o mínimamente sintomáticas puede considerarse la vigilancia, aunque muchos terminan operándose. Las hernias femorales se operan siempre por su alto riesgo de estrangulación.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hernia inguinal
+
+@ cir|hernias|inguinal_hernia|3|next_step
+V: Hombre de 68 años con hernia inguinal izquierda conocida que hoy no logra reducir. Tiene dolor intenso en la hernia de 8 horas, vómito, distensión abdominal, piel eritematosa sobre la hernia y fiebre de 38.3 °C.
+P: ¿Cuál es la conducta más apropiada?
++ Reanimación y cirugía urgente por hernia estrangulada || Hay datos de compromiso vascular del contenido.
+- anchoring | Intentar reducción manual forzada repetida || Está contraindicada con datos de estrangulación.
+- availability_heuristic | Analgésicos y cirugía electiva en semanas || Es una urgencia.
+- representativeness_heuristic | Braguero y observación || No resuelve la estrangulación.
+- premature_closure | Antibióticos orales y egreso || Requiere cirugía.
+- framing_effect | Compresas calientes para reducirla || No es adecuado.
+- complexity_bias | Esperar el resultado de una resonancia magnética || Retrasa la cirugía.
+- base_rate_fallacy | Laxantes para resolver la obstrucción || Están contraindicados.
+- belief_bias | Que la hernia regresará sola al acostarse || Está estrangulada.
+- omission_bias | Diferir la cirugía por la edad || El retraso aumenta la mortalidad.
+E: Una hernia encarcelada es la que no puede reducirse, y una estrangulada es aquella en la que se compromete la irrigación del contenido, con riesgo de necrosis y perforación. Los datos de estrangulación son dolor intenso y continuo, hernia tensa y dolorosa, cambios de coloración de la piel, fiebre, taquicardia, signos de oclusión intestinal y leucocitosis. La estrangulación es una urgencia quirúrgica, y no debe intentarse la reducción manual por el riesgo de reducir intestino necrótico. Se realiza cirugía con valoración de la viabilidad intestinal y resección si es necesario.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hernia inguinal
+
+@ cir|hernias|inguinal_hernia|3|diagnosis
+V: Mujer de 70 años con aumento de volumen doloroso de 3 días por debajo del ligamento inguinal derecho, medial a los vasos femorales, que no se reduce. Presenta vómito y distensión abdominal.
+P: ¿Cuál es el diagnóstico más probable?
++ Hernia femoral encarcelada || Masa debajo del ligamento inguinal medial a los vasos femorales en una mujer mayor.
+- anchoring | Hernia inguinal indirecta || Se localiza por encima del ligamento inguinal.
+- availability_heuristic | Adenopatía inguinal || No explica la oclusión intestinal.
+- representativeness_heuristic | Lipoma subcutáneo || No da oclusión.
+- premature_closure | Aneurisma de la arteria femoral || Sería pulsátil.
+- base_rate_fallacy | Hernia obturatriz || Se manifiesta con dolor en la cara interna del muslo.
+- framing_effect | Absceso del psoas || Da fiebre y dolor a la flexión de la cadera.
+- inattentional_blindness | Varice de la safena || Es blanda y desaparece al acostarse.
+- focusing_illusion | Hernia umbilical || Está en otra localización.
+- belief_bias | Ganglio inflamado por una infección del pie || No explica la oclusión.
+E: La hernia femoral protruye por el anillo femoral, por debajo del ligamento inguinal y medial a la vena femoral. Es más frecuente en mujeres, sobre todo mayores y multíparas, aunque en mujeres la hernia inguinal indirecta sigue siendo más común. Tiene el mayor riesgo de encarcelamiento y estrangulación de todas las hernias de la ingle por su cuello estrecho y rígido, y con frecuencia debuta como urgencia. Por ello todas las hernias femorales deben repararse, aun asintomáticas. La cirugía urgente se realiza si hay encarcelamiento o estrangulación.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hernia inguinal
+
+@ cir|hernias|inguinal_hernia|3|complication_prognosis
+V: Hombre de 45 años operado de hernioplastia inguinal con malla hace 6 meses que presenta dolor ardoroso en la ingle irradiado al escroto y a la cara interna del muslo, que aumenta al caminar. No hay recurrencia de la hernia.
+P: ¿Cuál es la complicación que presenta?
++ Dolor inguinal crónico posoperatorio por neuralgia de los nervios ilioinguinal o genitofemoral || Es una complicación frecuente tras la hernioplastia.
+- anchoring | Recurrencia de la hernia || No hay recurrencia.
+- availability_heuristic | Infección de la malla || No hay datos de infección.
+- representativeness_heuristic | Orquitis isquémica || Daría inflamación testicular.
+- premature_closure | Hematoma posoperatorio || Es una complicación temprana.
+- base_rate_fallacy | Cáncer testicular || No explica el dolor neuropático tras la cirugía.
+- framing_effect | Seroma || Es una colección temprana.
+- inattentional_blindness | Lesión del conducto deferente || Causaría infertilidad, no este dolor.
+- focusing_illusion | Hernia femoral nueva || No hay masa.
+- belief_bias | Dolor psicológico sin causa orgánica || Hay una lesión nerviosa.
+E: El dolor inguinal crónico es la complicación más frecuente a largo plazo de la reparación de la hernia inguinal y se define como dolor que persiste más de 3 meses. Puede deberse a lesión o atrapamiento de los nervios ilioinguinal, iliohipogástrico o rama genital del genitofemoral, o a reacción a la malla. Se manifiesta como dolor ardoroso o punzante irradiado al escroto o a la cara interna del muslo. El tratamiento incluye analgésicos, neuromoduladores como gabapentina, bloqueos nerviosos y, en casos refractarios, neurectomía. La identificación cuidadosa de los nervios durante la cirugía reduce su frecuencia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hernia inguinal
+
+@ cir|hernias|inguinal_hernia|2|risk_factor
+V: Hombre de 65 años con hernia inguinal bilateral de aparición reciente. Tiene enfermedad pulmonar obstructiva crónica con tos crónica, estreñimiento y crecimiento prostático con esfuerzo para orinar.
+P: ¿Cuál es el factor de riesgo común de sus hernias?
++ Aumento crónico de la presión intraabdominal por tos, estreñimiento y esfuerzo miccional || Favorecen la aparición y recurrencia de hernias.
+- anchoring | Consumo de café || No es un factor.
+- availability_heuristic | Sedentarismo como único factor || No es el factor principal.
+- representativeness_heuristic | Dieta rica en fibra || Es protectora del estreñimiento.
+- premature_closure | Hipertensión arterial || No es un factor directo.
+- base_rate_fallacy | Uso de estatinas || No es un factor.
+- framing_effect | Grupo sanguíneo || No es un factor.
+- inattentional_blindness | Diabetes tipo 2 como causa principal || No es el factor principal.
+- focusing_illusion | Vacunación contra influenza || No es un factor.
+- belief_bias | Cargar a los nietos ocasionalmente como única causa || El factor es el aumento crónico de presión.
+E: Los factores de riesgo de hernia inguinal incluyen sexo masculino, edad avanzada, antecedente familiar, tabaquismo, enfermedades del colágeno, cirugía previa de próstata y condiciones que aumentan de forma crónica la presión intraabdominal, como tos crónica por enfermedad pulmonar obstructiva, estreñimiento, prostatismo, ascitis, obesidad y esfuerzo físico intenso. La aparición de una hernia en un hombre mayor debe hacer buscar estas condiciones, ya que su tratamiento reduce la recurrencia tras la reparación. La hernia de reciente aparición también puede ser manifestación de un tumor de colon o próstata.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hernia inguinal
+
+@ cir|hernias|ventral_hernia|2|diagnosis
+V: Mujer de 55 años con obesidad, operada de laparotomía media por histerectomía hace 3 años, que presenta un aumento de volumen reductible sobre la cicatriz que aumenta al pujar y le causa molestias.
+P: ¿Cuál es el diagnóstico más probable?
++ Hernia incisional o eventración || Protrusión a través de la cicatriz de una laparotomía previa.
+- anchoring | Hernia umbilical primaria || No se relaciona con la cicatriz.
+- availability_heuristic | Diástasis de los rectos || No es un defecto aponeurótico verdadero.
+- representativeness_heuristic | Lipoma de la pared || No se reduce ni aumenta con el pujo.
+- premature_closure | Seroma crónico || No se reduce al abdomen.
+- base_rate_fallacy | Hernia de Spiegel || Se localiza en la línea semilunar.
+- framing_effect | Endometrioma de la cicatriz || Da dolor cíclico con la menstruación.
+- inattentional_blindness | Absceso de pared || Daría inflamación.
+- focusing_illusion | Tumor desmoide || Es sólido y no se reduce.
+- belief_bias | Grasa acumulada en la cicatriz || Es un defecto de la pared.
+E: La hernia incisional o eventración es la protrusión del contenido abdominal a través de un defecto en la cicatriz de una cirugía previa. Ocurre en 10 a 20% de las laparotomías. Sus factores de riesgo son infección de la herida, obesidad, tabaquismo, diabetes, desnutrición, corticosteroides, tos o distensión posoperatoria y técnica de cierre inadecuada. El diagnóstico es clínico y la tomografía ayuda en defectos grandes. El tratamiento es la reparación con malla, abierta o laparoscópica. La pérdida de peso y el abandono del tabaco antes de la cirugía reducen la recurrencia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hernia ventral e incisional
+
+@ cir|hernias|ventral_hernia|2|diagnosis
+V: Lactante de 6 meses con un aumento de volumen en el ombligo cubierto de piel que protruye al llorar y se reduce fácilmente. El anillo mide 1 cm. Está asintomático.
+P: ¿Cuál es el diagnóstico más probable?
++ Hernia umbilical congénita || Defecto del anillo umbilical frecuente en lactantes que suele cerrar solo.
+- anchoring | Onfalocele || Es un defecto mayor cubierto por membrana desde el nacimiento.
+- availability_heuristic | Gastrosquisis || Las asas están expuestas sin cubierta.
+- representativeness_heuristic | Granuloma umbilical || Es una lesión rosada húmeda sin protrusión.
+- premature_closure | Persistencia del uraco || Da salida de orina por el ombligo.
+- base_rate_fallacy | Hernia epigástrica || Está por arriba del ombligo.
+- framing_effect | Diástasis de rectos || Es una separación de los músculos en la línea media.
+- inattentional_blindness | Divertículo de Meckel || No se manifiesta así.
+- focusing_illusion | Hernia inguinal || Está en la ingle.
+- belief_bias | Hay que fajar el ombligo con una moneda || No es eficaz y puede lesionar la piel.
+E: La hernia umbilical congénita es muy frecuente en lactantes, sobre todo prematuros y afrodescendientes, por cierre incompleto del anillo umbilical. Se manifiesta como una protrusión cubierta de piel que aumenta con el llanto y se reduce fácilmente. La mayoría se cierra espontáneamente antes de los 4 a 5 años, y la encarcelación es rara. Se indica cirugía si persiste después de los 4 a 5 años, si el anillo es mayor de 1.5 a 2 cm, si crece o si hay encarcelación. Fajar el ombligo con monedas o vendas no es eficaz y puede causar lesiones.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de hernia umbilical en niños
+
+@ cir|hernias|ventral_hernia|3|risk_factor
+V: Hombre de 60 años con obesidad, diabetes y tabaquismo que tuvo infección de la herida tras una laparotomía de urgencia hace 1 año. Ahora tiene una hernia incisional grande.
+P: ¿Cuál es el factor de riesgo más importante para la aparición de su hernia incisional?
++ Infección de la herida quirúrgica || Es el factor de riesgo más fuerte de eventración.
+- anchoring | Edad de 60 años como factor principal || Es un factor menor.
+- availability_heuristic | Uso de suturas absorbibles en la piel || No es el factor principal.
+- representativeness_heuristic | Consumo de café || No es un factor.
+- premature_closure | Vacunación contra influenza || No es un factor.
+- base_rate_fallacy | Grupo sanguíneo || No es un factor.
+- framing_effect | Dieta vegetariana || No es un factor.
+- inattentional_blindness | Hipertensión arterial || No es un factor principal.
+- focusing_illusion | Haber caminado al día siguiente de la cirugía || La movilización temprana es recomendable.
+- belief_bias | Haber levantado algo ligero al mes de la cirugía || El factor principal fue la infección.
+E: La infección de la herida quirúrgica es el factor de riesgo más importante de hernia incisional, ya que impide la cicatrización adecuada de la aponeurosis. Otros factores son la obesidad, el tabaquismo, la diabetes, la desnutrición, la anemia, el uso de corticosteroides, la cirugía de urgencia, la laparotomía media y la técnica de cierre. El cierre de la aponeurosis con puntos pequeños y cercanos, con relación sutura herida de 4 a 1, y la malla profiláctica en pacientes de alto riesgo reducen la incidencia de eventración.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hernia ventral e incisional
+
+@ cir|hernias|ventral_hernia|3|treatment_of_choice
+V: Mujer de 45 años con hernia umbilical primaria de 3 cm, sintomática y reductible. Índice de masa corporal de 28 y sin comorbilidades.
+P: ¿Cuál es el tratamiento de elección?
++ Reparación con malla || En defectos mayores de 1 a 2 cm la malla reduce la recurrencia.
+- anchoring | Cierre primario con sutura en todos los tamaños || Tiene mayor recurrencia en defectos grandes.
+- availability_heuristic | Faja abdominal como tratamiento definitivo || No corrige el defecto.
+- representativeness_heuristic | Observación en hernias sintomáticas || Se benefician de la cirugía.
+- premature_closure | Abdominoplastia estética sin reparar la hernia || No resuelve el defecto.
+- framing_effect | Inyección de esclerosantes || No es un tratamiento aceptado.
+- complexity_bias | Separación de componentes para un defecto pequeño || Se reserva para defectos grandes.
+- base_rate_fallacy | Moneda sobre el ombligo || No es eficaz.
+- belief_bias | En adultos se cierra sola con dieta || No se cierra sola.
+- omission_bias | Esperar a que se encarcele || Aumenta la morbilidad.
+E: Las hernias umbilicales en adultos son adquiridas y se asocian a obesidad, embarazo, ascitis y aumento de la presión abdominal. A diferencia de los niños, no se cierran solas. Se reparan si son sintomáticas o tienen riesgo de complicaciones. En defectos mayores de 1 a 2 cm, el uso de malla reduce de forma importante la recurrencia comparado con la sutura simple. La malla puede colocarse en posición preperitoneal, retromuscular o intraperitoneal por vía abierta o laparoscópica. En pacientes con cirrosis y ascitis se controla la ascitis antes de la cirugía.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hernia ventral e incisional
+
+@ cir|hernias|ventral_hernia|3|diagnosis
+V: Hombre de 50 años con dolor y una pequeña masa en la pared abdominal lateral, en el borde externo del recto abdominal derecho, por debajo del ombligo, que aparece al hacer esfuerzo. La tomografía muestra un defecto en la aponeurosis de Spiegel con contenido intestinal por debajo del oblicuo mayor.
+P: ¿Cuál es el diagnóstico más probable?
++ Hernia de Spiegel || Defecto en la línea semilunar por debajo de la aponeurosis del oblicuo mayor.
+- anchoring | Hernia inguinal directa || Está en la región inguinal.
+- availability_heuristic | Hernia umbilical || Está en el ombligo.
+- representativeness_heuristic | Hernia lumbar || Está en la región lumbar.
+- premature_closure | Hematoma de la vaina del recto || No contiene intestino.
+- base_rate_fallacy | Lipoma de pared || No contiene intestino.
+- framing_effect | Hernia epigástrica || Está en la línea media por arriba del ombligo.
+- inattentional_blindness | Desgarro muscular || No explica el defecto con intestino.
+- focusing_illusion | Diástasis de rectos || Es en la línea media.
+- belief_bias | Gases atrapados en el músculo || Hay un defecto herniario.
+E: La hernia de Spiegel es rara y ocurre a través de la aponeurosis de Spiegel, a lo largo de la línea semilunar en el borde lateral del recto abdominal, generalmente por debajo de la línea arcuata. Es una hernia interparietal, ya que queda cubierta por la aponeurosis del oblicuo mayor, por lo que puede ser difícil de palpar. Tiene un cuello estrecho con riesgo alto de encarcelación. El ultrasonido o la tomografía confirman el diagnóstico. El tratamiento es siempre quirúrgico, con reparación abierta o laparoscópica con malla.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hernia ventral e incisional
+
+@ cir|trauma|primary_survey|2|initial_treatment
+V: Hombre de 28 años que llega a urgencias tras un choque de motocicleta. Está inconsciente, con ronquido, sangre en la boca y fractura evidente del fémur derecho. Saturación de 85%.
+P: ¿Cuál es la prioridad inicial en la atención?
++ Asegurar la vía aérea con protección de la columna cervical || La revisión primaria inicia con la vía aérea según el ABCDE.
+- anchoring | Inmovilizar la fractura del fémur primero || Es una prioridad posterior.
+- availability_heuristic | Tomografía de cráneo inmediata || Primero se estabiliza al paciente.
+- representativeness_heuristic | Radiografía de fémur || No es la prioridad.
+- premature_closure | Canalizar dos vías antes de revisar la vía aérea || La vía aérea va primero.
+- framing_effect | Retirar el collarín para explorar el cuello a detalle || Debe mantenerse la protección cervical.
+- complexity_bias | Ultrasonido FAST antes de asegurar la vía aérea || La vía aérea es prioritaria.
+- base_rate_fallacy | Administrar analgésicos para el dolor del fémur || No es la prioridad.
+- belief_bias | Esperar a que despierte para valorar la vía aérea || Puede morir por obstrucción.
+- omission_bias | Evitar intubar por miedo a lesionar el cuello || Se intuba con estabilización en línea.
+E: La atención inicial del paciente politraumatizado sigue el protocolo ATLS con la revisión primaria ABCDE, que trata las lesiones que amenazan la vida en orden de prioridad. A es vía aérea con protección de la columna cervical, B es respiración y ventilación, C es circulación con control de hemorragias, D es déficit neurológico y E es exposición con control de la temperatura. Una escala de Glasgow de 8 o menos, la obstrucción o la incapacidad de proteger la vía aérea son indicaciones de vía aérea definitiva, intubación orotraqueal con estabilización cervical en línea.
+R: Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos ;; Guía de Práctica Clínica de atención inicial del paciente politraumatizado
+
+@ cir|trauma|primary_survey|3|data_interpretation
+V: Hombre de 35 años tras un accidente automovilístico. Abre los ojos al estímulo doloroso, emite palabras inapropiadas y localiza el dolor.
+P: ¿Qué indica su puntuación en la escala de coma de Glasgow?
++ Glasgow de 10, traumatismo craneoencefálico moderado || Apertura ocular 2, verbal 3 y motor 5.
+- anchoring | Glasgow de 8 que indica intubación inmediata || El cálculo es incorrecto.
+- availability_heuristic | Glasgow de 13, traumatismo leve || El cálculo es incorrecto.
+- representativeness_heuristic | Glasgow de 15 normal || No es normal.
+- premature_closure | Glasgow de 6, traumatismo grave || El cálculo es incorrecto.
+- base_rate_fallacy | Glasgow de 12 || El cálculo es incorrecto.
+- framing_effect | Indica muerte cerebral || No corresponde.
+- inattentional_blindness | Indica solo intoxicación alcohólica || No se puede asumir.
+- focusing_illusion | Glasgow de 4 || El cálculo es incorrecto.
+- belief_bias | La escala no sirve en urgencias || Es fundamental en trauma.
+E: La escala de coma de Glasgow evalúa la apertura ocular de 1 a 4, la respuesta verbal de 1 a 5 y la respuesta motora de 1 a 6, con un total de 3 a 15. Abrir los ojos al dolor vale 2, decir palabras inapropiadas vale 3 y localizar el dolor vale 5. El traumatismo craneoencefálico se clasifica en leve con 13 a 15, moderado con 9 a 12 y grave con 3 a 8. Un Glasgow de 8 o menos es indicación de intubación. La mejor respuesta motora es el componente con mayor valor pronóstico. Se reevalúa de forma seriada.
+R: Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos
+
+@ cir|trauma|primary_survey|3|data_interpretation
+V: Hombre de 40 años con herida por arma blanca en el muslo. Frecuencia cardiaca de 125, presión de 90/60 mmHg, frecuencia respiratoria de 28, ansioso y confuso, diuresis escasa.
+P: ¿Qué indica su estado hemodinámico según la clasificación del choque hemorrágico?
++ Choque hemorrágico clase III, con pérdida estimada de 30 a 40% del volumen sanguíneo || Taquicardia mayor de 120, hipotensión y confusión.
+- anchoring | Choque clase I con pérdida menor de 15% || No habría hipotensión ni taquicardia importante.
+- availability_heuristic | Choque clase II sin hipotensión || Ya tiene hipotensión.
+- representativeness_heuristic | Choque clase IV con pérdida mayor de 40% || Tendría letargo y presión muy baja.
+- premature_closure | Choque neurogénico || Daría bradicardia con hipotensión.
+- base_rate_fallacy | Choque séptico || No hay foco infeccioso.
+- framing_effect | Crisis de ansiedad || Hay datos de hipoperfusión.
+- inattentional_blindness | Choque cardiogénico || La causa es hemorrágica.
+- focusing_illusion | Estado normal por el dolor || La hipotensión indica pérdida importante.
+- belief_bias | Los jóvenes no entran en choque || Compensan hasta pérdidas importantes.
+E: El choque hemorrágico se clasifica según la pérdida sanguínea estimada. En la clase I la pérdida es menor de 15% con signos casi normales. En la clase II es de 15 a 30% con taquicardia y presión diferencial reducida. En la clase III es de 30 a 40% con taquicardia mayor de 120, hipotensión, taquipnea, confusión y oliguria. En la clase IV es mayor de 40% con hipotensión grave y letargo. Las clases III y IV requieren transfusión de hemoderivados y control de la hemorragia. El déficit de base y el lactato ayudan a valorar la perfusión.
+R: Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos
+
+@ cir|trauma|primary_survey|3|initial_treatment
+V: Mujer de 30 años con herida por proyectil de arma de fuego en el abdomen, presión de 70/40 mmHg y frecuencia cardiaca de 140. Ya se canalizaron dos vías periféricas.
+P: ¿Cuál es el tratamiento inicial de la reanimación?
++ Transfusión temprana de concentrados eritrocitarios, plasma y plaquetas en proporción equilibrada, ácido tranexámico y control quirúrgico de la hemorragia || La reanimación hemostática reduce la mortalidad.
+- anchoring | Infundir 4 litros de cristaloides antes de transfundir || El exceso de cristaloides empeora la coagulopatía.
+- availability_heuristic | Vasopresores como primera medida || No sustituyen el volumen ni el control de la hemorragia.
+- representativeness_heuristic | Tomografía abdominal antes de cualquier tratamiento || La paciente está inestable.
+- premature_closure | Solo albúmina intravenosa || No corrige la pérdida de sangre.
+- framing_effect | Esperar las pruebas cruzadas completas para transfundir || Se usa sangre O negativa o tipo específica.
+- complexity_bias | Angiografía diagnóstica antes de la cirugía || Retrasa el control de la hemorragia.
+- base_rate_fallacy | Bicarbonato de rutina || No corrige la causa.
+- belief_bias | Elevar las piernas como único tratamiento || No controla la hemorragia.
+- omission_bias | Evitar transfundir por riesgo de reacciones || El riesgo de muerte es mayor.
+E: En el choque hemorrágico grave la prioridad es detener la hemorragia y reponer sangre. La reanimación hemostática incluye transfusión temprana de concentrados eritrocitarios, plasma fresco y plaquetas en proporción cercana a 1 a 1 a 1, limitar los cristaloides a un litro inicial, ácido tranexámico en las primeras 3 horas, prevenir la hipotermia y la acidosis y la hipotensión permisiva hasta el control quirúrgico en ausencia de traumatismo craneoencefálico. El protocolo de transfusión masiva se activa de forma temprana. El control de la fuente con cirugía o angioembolización no debe retrasarse.
+R: Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos
+
+@ cir|trauma|primary_survey|3|data_interpretation
+V: Hombre de 45 años tras caída de 6 metros. Presión de 80/50 mmHg pese a 1 litro de cristaloides. Tórax sin hallazgos y radiografía de pelvis normal. El ultrasonido FAST muestra líquido libre en el espacio hepatorrenal.
+P: ¿Qué indica este resultado del FAST en un paciente inestable?
++ Hemoperitoneo que indica laparotomía urgente || FAST positivo con inestabilidad hemodinámica es indicación de cirugía.
+- anchoring | Hallazgo normal sin importancia || El líquido libre en trauma es sangre hasta demostrar lo contrario.
+- availability_heuristic | Indicación de tomografía antes de decidir || El paciente inestable no debe ir a tomografía.
+- representativeness_heuristic | Ascitis crónica previa || No hay antecedente.
+- premature_closure | Indicación de manejo conservador con observación || Está inestable.
+- base_rate_fallacy | Derrame pleural || El líquido está en el espacio hepatorrenal.
+- framing_effect | Lesión renal aislada sin cirugía || El hemoperitoneo con inestabilidad requiere cirugía.
+- inattentional_blindness | Taponamiento cardiaco || La ventana pericárdica es la que lo evalúa.
+- focusing_illusion | Indicación de lavado peritoneal diagnóstico repetido || Ya hay hallazgo positivo.
+- belief_bias | El ultrasonido no es confiable en trauma || Es rápido y útil.
+E: El ultrasonido FAST evalúa el espacio hepatorrenal o de Morison, el esplenorrenal, la pelvis y el pericardio para detectar líquido libre en el trauma. En el paciente inestable, un FAST positivo para líquido intraperitoneal indica hemorragia abdominal y es indicación de laparotomía urgente sin pasar a tomografía. En el paciente estable con FAST positivo se realiza tomografía para caracterizar las lesiones. El FAST extendido incluye la búsqueda de neumotórax. Un FAST negativo no descarta lesiones de víscera hueca ni retroperitoneales.
+R: Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos
+
+@ cir|trauma|primary_survey|3|next_step
+V: Hombre de 50 años tras un accidente automovilístico, estable hemodinámicamente, con dolor en el cuello y Glasgow de 15. No está intoxicado y no tiene déficit neurológico, pero refiere dolor a la palpación en la línea media cervical.
+P: ¿Cuál es el siguiente paso respecto a la columna cervical?
++ Mantener la inmovilización y realizar tomografía de columna cervical || El dolor en la línea media impide el retiro clínico del collarín.
+- anchoring | Retirar el collarín porque está consciente || El dolor en la línea media requiere imagen.
+- availability_heuristic | Radiografía simple como estudio definitivo en todos || La tomografía es más sensible.
+- representativeness_heuristic | Resonancia magnética como primer estudio en todos || La tomografía es el estudio inicial.
+- premature_closure | Movilizar el cuello para valorar el dolor || Puede agravar una lesión.
+- framing_effect | Dar analgésico y egresar || Puede tener fractura.
+- complexity_bias | Angiografía de vasos del cuello en todos || Solo con indicación específica.
+- base_rate_fallacy | Mielografía || No es el estudio inicial.
+- belief_bias | Si mueve las extremidades no tiene lesión cervical || Puede haber fractura sin déficit.
+- omission_bias | No estudiar para evitar radiación || El riesgo de lesión es mayor.
+E: Los criterios NEXUS y la regla canadiense de la columna cervical permiten retirar clínicamente la inmovilización sin estudios en pacientes de bajo riesgo. Según NEXUS se requiere ausencia de dolor en la línea media, de déficit neurológico focal, de alteración del estado de conciencia, de intoxicación y de lesiones distractoras. Si alguno está presente se mantiene la inmovilización y se realiza tomografía de columna cervical, que es el estudio de elección por su alta sensibilidad. La resonancia se usa ante déficit neurológico o sospecha de lesión ligamentaria.
+R: Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos
+
+@ cir|trauma|abdominal_trauma|3|next_step
+V: Hombre de 25 años con herida por arma blanca en el epigastrio con evisceración de epiplón. Está estable hemodinámicamente.
+P: ¿Cuál es la conducta más apropiada?
++ Laparotomía exploradora || La evisceración es indicación de cirugía en heridas penetrantes.
+- anchoring | Sutura de la herida en urgencias y egreso || La evisceración indica lesión peritoneal.
+- availability_heuristic | Reintroducir el epiplón y observar || Requiere cirugía.
+- representativeness_heuristic | Tomografía y manejo conservador obligado || La evisceración es indicación quirúrgica.
+- premature_closure | Exploración local de la herida con el dedo como único manejo || Ya hay penetración peritoneal.
+- framing_effect | Antibióticos orales y control en 48 horas || Es inadecuado.
+- complexity_bias | Lavado peritoneal diagnóstico antes de decidir || Ya hay indicación clara.
+- base_rate_fallacy | Laparoscopia diagnóstica obligatoria en todos los pacientes con evisceración || La laparotomía es el estándar.
+- belief_bias | El epiplón protege y no hay que operar || Puede haber lesiones de vísceras.
+- omission_bias | Esperar a que aparezca peritonitis || Aumenta la morbilidad.
+E: En el trauma abdominal penetrante las indicaciones de laparotomía inmediata incluyen inestabilidad hemodinámica, peritonitis, evisceración, sangrado por sonda nasogástrica o recto y heridas por proyectil de arma de fuego que penetran la cavidad. En heridas por arma blanca en pacientes estables sin estas indicaciones se puede realizar exploración local de la herida, exploración física seriada, tomografía o laparoscopia diagnóstica para decidir el manejo. La evisceración de epiplón o intestino indica penetración peritoneal y se asocia a lesiones intraabdominales, por lo que el contenido eviscerado se cubre con gasas húmedas estériles y no se reintroduce.
+R: Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos
+
+@ cir|trauma|abdominal_trauma|3|treatment_of_choice
+V: Hombre de 22 años con traumatismo abdominal cerrado por caída de bicicleta. Está estable. La tomografía muestra laceración esplénica grado II sin extravasación de contraste ni otras lesiones.
+P: ¿Cuál es el tratamiento de elección?
++ Manejo no operatorio con vigilancia estrecha en un centro con capacidad quirúrgica || Los pacientes estables con lesiones esplénicas de bajo grado se manejan sin cirugía.
+- anchoring | Esplenectomía de urgencia en todos los casos || La mayoría de las lesiones en estables no la requiere.
+- availability_heuristic | Egreso inmediato sin vigilancia || Puede sangrar de forma tardía.
+- representativeness_heuristic | Laparotomía exploradora de rutina || No está indicada en estables.
+- premature_closure | Transfusión profiláctica || No es necesaria sin anemia.
+- framing_effect | Actividad física inmediata para fortalecer || Aumenta el riesgo de rotura.
+- complexity_bias | Esplenectomía parcial laparoscópica electiva || No es necesaria.
+- base_rate_fallacy | Anticoagulación profiláctica inmediata || Aumenta el riesgo de sangrado.
+- belief_bias | El bazo no es necesario y siempre debe quitarse || Tiene función inmunológica importante.
+- omission_bias | No vigilar la hemoglobina || Debe vigilarse.
+E: El bazo es el órgano más lesionado en el trauma abdominal cerrado. En pacientes hemodinámicamente estables, el manejo no operatorio es el estándar, con vigilancia de signos vitales, exploración abdominal seriada y hemoglobina, en un centro con capacidad de cirugía y angiografía. La angioembolización se usa en pacientes estables con extravasación de contraste. La esplenectomía se indica en inestabilidad o falla del manejo no operatorio. Preservar el bazo evita el riesgo de sepsis fulminante postesplenectomía. Tras la esplenectomía se vacuna contra neumococo, meningococo y Haemophilus.
+R: Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos
+
+@ cir|trauma|abdominal_trauma|3|diagnosis
+V: Hombre de 30 años tras un choque frontal con cinturón de seguridad de dos puntos. Presenta equimosis abdominal transversal en el sitio del cinturón y dolor abdominal. La tomografía muestra fractura transversal del cuerpo vertebral de L2 y líquido libre sin lesión de órganos sólidos.
+P: ¿Cuál es la lesión asociada que debe sospecharse?
++ Lesión de víscera hueca, como perforación intestinal o del mesenterio || El signo del cinturón con fractura de Chance se asocia a lesión intestinal.
+- anchoring | Lesión esplénica aislada || No hay lesión de órganos sólidos.
+- availability_heuristic | Contusión abdominal simple sin lesiones internas || El líquido libre sin lesión sólida sugiere víscera hueca.
+- representativeness_heuristic | Lesión renal || No explica el patrón.
+- premature_closure | Hematoma de pared sin importancia || No explica el líquido libre.
+- base_rate_fallacy | Lesión aórtica torácica || El patrón sugiere lesión intestinal.
+- framing_effect | Pancreatitis traumática aislada || No es lo más probable.
+- inattentional_blindness | Lesión hepática no visible || La tomografía no la muestra.
+- focusing_illusion | Neumotórax || No explica los hallazgos abdominales.
+- belief_bias | El cinturón protege de cualquier lesión interna || Puede causar lesiones específicas.
+E: El signo del cinturón de seguridad, una equimosis en la pared abdominal, se asocia a lesiones de víscera hueca y del mesenterio, así como a la fractura de Chance, una fractura por flexión distracción de la columna lumbar. Las lesiones de víscera hueca son difíciles de detectar en la tomografía inicial. La presencia de líquido libre sin lesión de órganos sólidos, el engrosamiento de la pared intestinal o el aire libre deben hacer sospecharla. Se requiere exploración seriada y, ante duda, laparoscopia o laparotomía. El retraso en el diagnóstico aumenta la morbilidad.
+R: Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos
+
+@ cir|trauma|abdominal_trauma|4|complication_prognosis
+V: Hombre de 40 años en terapia intensiva tras laparotomía por trauma con transfusión masiva. Presenta distensión abdominal a tensión, oliguria, presión pico de la vía aérea en aumento e hipotensión. Presión intravesical de 28 mmHg.
+P: ¿Cuál es la complicación que presenta?
++ Síndrome compartimental abdominal || Presión intraabdominal mayor de 20 mmHg con disfunción orgánica nueva.
+- anchoring | Íleo paralítico sin importancia || No explica la disfunción orgánica.
+- availability_heuristic | Insuficiencia renal por contraste || No explica la presión intraabdominal elevada.
+- representativeness_heuristic | Neumotórax a tensión || No explica la presión intravesical.
+- premature_closure | Sepsis abdominal sin hipertensión intraabdominal || La presión está muy elevada.
+- base_rate_fallacy | Choque cardiogénico primario || El contexto es abdominal.
+- framing_effect | Sobrecarga de líquidos sin otra complicación || La hipertensión abdominal explica el cuadro.
+- inattentional_blindness | Obstrucción de la sonda urinaria || No explica la presión ni la hipotensión.
+- focusing_illusion | Tromboembolia pulmonar || No explica la presión abdominal.
+- belief_bias | Hinchazón normal tras la cirugía || Hay disfunción orgánica.
+E: El síndrome compartimental abdominal es la presión intraabdominal sostenida mayor de 20 mmHg con disfunción orgánica nueva. Ocurre en pacientes con trauma, reanimación masiva con líquidos, cirugía abdominal, pancreatitis o quemaduras. La presión elevada reduce el retorno venoso, el gasto cardiaco y la perfusión renal y dificulta la ventilación. La presión se mide a través de la vejiga. El tratamiento incluye descompresión con sonda, sedación, balance de líquidos y, si no mejora, laparotomía descompresiva con cierre temporal del abdomen. La cirugía de control de daños con abdomen abierto lo previene.
+R: Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos
+
+@ cir|trauma|abdominal_trauma|3|confirmatory_study
+V: Mujer de 35 años con traumatismo abdominal cerrado por accidente automovilístico. Está estable, con dolor abdominal difuso. FAST con mínima cantidad de líquido.
+P: ¿Cuál es el estudio de elección para evaluar las lesiones intraabdominales?
++ Tomografía de abdomen y pelvis con contraste intravenoso || Caracteriza las lesiones de órganos sólidos en pacientes estables.
+- anchoring | Laparotomía exploradora inmediata || La paciente está estable.
+- availability_heuristic | Radiografía simple de abdomen || Tiene poca utilidad en trauma.
+- representativeness_heuristic | Resonancia magnética de abdomen || No es práctica en trauma agudo.
+- premature_closure | Repetir el FAST en 24 horas como único estudio || No caracteriza las lesiones.
+- base_rate_fallacy | Endoscopia superior || No evalúa los órganos sólidos.
+- framing_effect | Colonoscopia || No está indicada.
+- complexity_bias | Angiografía como primer estudio en todos || Se usa para embolización según hallazgos.
+- information_bias | Amilasa sérica como estudio de imagen || No es un estudio de imagen.
+- belief_bias | La exploración física basta en trauma cerrado || Las lesiones pueden pasar inadvertidas.
+E: En el paciente con trauma abdominal cerrado hemodinámicamente estable, la tomografía de abdomen y pelvis con contraste intravenoso es el estudio de elección. Detecta y gradúa las lesiones de órganos sólidos como hígado, bazo y riñón, identifica sangrado activo por extravasación de contraste, lesiones retroperitoneales y fracturas pélvicas y vertebrales. Permite decidir el manejo no operatorio o la angioembolización. En el paciente inestable no debe realizarse tomografía, y el FAST positivo indica laparotomía. Las lesiones de víscera hueca pueden ser difíciles de identificar.
+R: Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos
