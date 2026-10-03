@@ -1,0 +1,559 @@
+@ cir|perioperative|preoperative_assessment|2|data_interpretation
+V: Hombre de 45 años sano, sin síntomas, que será sometido a colecistectomía laparoscópica electiva. Su capacidad funcional es buena, sube dos pisos sin disnea. Exploración normal.
+P: ¿Qué estudios preoperatorios están indicados en este paciente?
++ No se requieren estudios de rutina más allá de los indicados por su historia clínica || En pacientes sanos de bajo riesgo los estudios rutinarios no cambian el manejo.
+- anchoring | Electrocardiograma, radiografía de tórax, ecocardiograma y prueba de esfuerzo en todos || No están indicados en pacientes sanos jóvenes.
+- availability_heuristic | Pruebas de función pulmonar completas || No están indicadas.
+- representativeness_heuristic | Coronariografía preoperatoria || Es excesiva.
+- premature_closure | Tomografía de tórax de rutina || No está indicada.
+- base_rate_fallacy | Prueba de esfuerzo obligatoria en todos los mayores de 40 años || Depende del riesgo y la capacidad funcional.
+- framing_effect | Gasometría arterial de rutina || No está indicada.
+- complexity_bias | Holter de 24 horas || No está indicado.
+- belief_bias | Entre más estudios, más segura la cirugía || Los estudios innecesarios generan retrasos y falsos positivos.
+- omission_bias | No hacer historia clínica porque es sano || La historia y exploración son la base de la valoración.
+E: La valoración preoperatoria se basa en la historia clínica, la exploración física, la capacidad funcional y el riesgo de la cirugía. En pacientes sanos, ASA I, con buena capacidad funcional, mayor de 4 METs, que se someterán a cirugía de bajo o intermedio riesgo, no se recomiendan estudios de rutina, ya que no mejoran los resultados y generan costos y retrasos. Los estudios se solicitan de forma selectiva según las comorbilidades, los fármacos y el tipo de cirugía, como biometría en cirugías con sangrado esperado o electrocardiograma en cardiópatas o mayores con factores de riesgo.
+R: Guía de Práctica Clínica de valoración perioperatoria en cirugía no cardiaca en el adulto
+
+@ cir|perioperative|preoperative_assessment|3|next_step
+V: Hombre de 68 años con fibrilación auricular que toma warfarina, programado para colectomía electiva por cáncer de colon en 10 días. Escala CHA2DS2 VASc de 3 sin antecedente de evento vascular cerebral reciente ni válvula mecánica.
+P: ¿Cuál es la conducta más apropiada respecto a la anticoagulación?
++ Suspender la warfarina 5 días antes de la cirugía sin terapia puente y reiniciarla tras asegurar la hemostasia || En pacientes de riesgo trombótico bajo a moderado no se requiere puente con heparina.
+- anchoring | Continuar la warfarina sin cambios durante la cirugía || Aumenta el riesgo de sangrado.
+- availability_heuristic | Suspender la warfarina el día de la cirugía || No da tiempo a normalizar el INR.
+- representativeness_heuristic | Terapia puente con heparina en todos los pacientes con fibrilación auricular || Aumenta el sangrado sin reducir las trombosis en riesgo moderado.
+- premature_closure | Cancelar la cirugía oncológica de forma indefinida || No es necesario.
+- framing_effect | Administrar vitamina K intravenosa de rutina días antes || Solo si se requiere revertir de urgencia.
+- complexity_bias | Colocar un filtro de vena cava || No está indicado.
+- base_rate_fallacy | Suspender la warfarina un mes antes || Es innecesariamente prolongado.
+- belief_bias | La warfarina no afecta el sangrado quirúrgico || Lo aumenta.
+- omission_bias | No reiniciar la anticoagulación tras la cirugía || Aumenta el riesgo de trombosis.
+E: El manejo perioperatorio de los anticoagulantes depende del riesgo de sangrado de la cirugía y del riesgo trombótico del paciente. La warfarina se suspende 5 días antes para que el INR sea menor de 1.5. La terapia puente con heparina de bajo peso molecular solo se recomienda en pacientes de alto riesgo trombótico, como válvulas mecánicas, evento vascular cerebral reciente o trombosis venosa reciente. Los anticoagulantes orales directos se suspenden de 24 a 72 horas antes según la función renal y el riesgo de sangrado, sin puente. Se reinicia la anticoagulación al asegurar la hemostasia.
+R: Guía de Práctica Clínica de valoración perioperatoria en cirugía no cardiaca en el adulto
+
+@ cir|perioperative|preoperative_assessment|3|data_interpretation
+V: Mujer de 72 años con diabetes en tratamiento con insulina, cardiopatía isquémica con infarto previo y creatinina de 2.3 mg/dL, programada para cirugía de aneurisma de aorta abdominal abierta.
+P: ¿Qué indica su perfil según el índice de riesgo cardiaco revisado de Lee?
++ Riesgo cardiaco elevado por cuatro predictores, que obliga a optimizar y valorar estudios cardiológicos según la capacidad funcional || Cirugía de alto riesgo, cardiopatía isquémica, diabetes con insulina y creatinina mayor de 2.
+- anchoring | Riesgo bajo sin necesidad de ninguna valoración || Tiene múltiples predictores.
+- availability_heuristic | Contraindicación absoluta para cualquier cirugía || Se puede optimizar.
+- representativeness_heuristic | Riesgo determinado solo por la edad || La edad no es un predictor del índice.
+- premature_closure | Riesgo bajo porque la cirugía es abdominal || La cirugía vascular suprainguinal es de alto riesgo.
+- base_rate_fallacy | Indica revascularización coronaria profiláctica en todos || No se recomienda de rutina.
+- framing_effect | Indica que solo importa la diabetes || Se suman todos los predictores.
+- inattentional_blindness | Indica cirugía urgente sin valoración || La cirugía es electiva.
+- focusing_illusion | Indica suspender todos sus medicamentos cardiacos || Deben continuarse.
+- belief_bias | El riesgo cardiaco no influye en la cirugía no cardiaca || Es la principal causa de complicaciones.
+E: El índice de riesgo cardiaco revisado de Lee estima el riesgo de complicaciones cardiacas mayores en cirugía no cardiaca. Incluye seis predictores, cirugía de alto riesgo intraperitoneal, intratorácica o vascular suprainguinal, cardiopatía isquémica, insuficiencia cardiaca, enfermedad cerebrovascular, diabetes en tratamiento con insulina y creatinina mayor de 2 mg/dL. Con 0 predictores el riesgo es bajo y aumenta con cada uno. En pacientes de alto riesgo con mala capacidad funcional se considera una prueba de estrés si cambiaría el manejo. La revascularización profiláctica no se recomienda de rutina.
+R: Guía de Práctica Clínica de valoración perioperatoria en cirugía no cardiaca en el adulto
+
+@ cir|perioperative|preoperative_assessment|3|next_step
+V: Hombre de 55 años con hipertensión controlada con metoprolol y enalapril, programado para hernioplastia inguinal. Pregunta qué medicamentos debe tomar el día de la cirugía.
+P: ¿Cuál es la indicación más apropiada sobre sus fármacos?
++ Continuar el betabloqueador el día de la cirugía y considerar omitir el inhibidor de la enzima convertidora esa mañana || Suspender el betabloqueador causa taquicardia de rebote, y los inhibidores pueden causar hipotensión con la anestesia.
+- anchoring | Suspender todos los antihipertensivos una semana antes || Causa descontrol de la presión y rebote.
+- availability_heuristic | Iniciar un betabloqueador a dosis altas el día de la cirugía || Aumenta el riesgo de evento vascular y muerte.
+- representativeness_heuristic | Duplicar la dosis de todos los fármacos || Es peligroso.
+- premature_closure | Suspender el metoprolol 3 días antes || Causa rebote adrenérgico.
+- framing_effect | Cambiar a diuréticos el día de la cirugía || No es adecuado.
+- complexity_bias | Hospitalizar 3 días antes para ajustar fármacos || No es necesario con buen control.
+- base_rate_fallacy | Cancelar la cirugía por la hipertensión controlada || No está indicado.
+- belief_bias | Los medicamentos siempre deben suspenderse antes de operarse || Muchos deben continuarse.
+- omission_bias | No revisar los fármacos antes de la cirugía || Es parte de la valoración.
+E: Los betabloqueadores que el paciente ya toma deben continuarse en el perioperatorio, porque su suspensión causa taquicardia, hipertensión e isquemia por rebote. No se recomienda iniciarlos de forma aguda a dosis altas antes de la cirugía. Los inhibidores de la enzima convertidora y los antagonistas del receptor de angiotensina pueden causar hipotensión durante la anestesia, por lo que con frecuencia se omiten la mañana de la cirugía. Las estatinas se continúan. Los antiagregantes, anticoagulantes, hipoglucemiantes e insulina requieren ajustes específicos.
+R: Guía de Práctica Clínica de valoración perioperatoria en cirugía no cardiaca en el adulto
+
+@ cir|perioperative|preoperative_assessment|3|prevention_screening
+V: Hombre de 65 años con obesidad que será sometido a colectomía por cáncer, con estancia prevista de 5 días. No tiene contraindicaciones para la anticoagulación.
+P: ¿Cuál es la medida de prevención de enfermedad tromboembólica indicada?
++ Heparina de bajo peso molecular profiláctica más medidas mecánicas y movilización temprana, extendida hasta 4 semanas por cirugía oncológica abdominal || El riesgo de trombosis es alto.
+- anchoring | Solo deambulación temprana sin fármacos || El riesgo es alto en cirugía oncológica.
+- availability_heuristic | Ácido acetilsalicílico como único método || No es la profilaxis de elección en cirugía general.
+- representativeness_heuristic | Anticoagulación a dosis terapéutica en todos || Aumenta el sangrado.
+- premature_closure | Filtro de vena cava profiláctico || No está indicado.
+- framing_effect | Medias de compresión como único método en alto riesgo || Son insuficientes solas.
+- complexity_bias | Ultrasonido Doppler diario de vigilancia || No es la medida preventiva.
+- base_rate_fallacy | Profilaxis solo durante la hospitalización en todos || En cirugía oncológica se extiende.
+- belief_bias | La trombosis solo ocurre en ortopedia || Es frecuente en cirugía oncológica.
+- omission_bias | Evitar la heparina por miedo a sangrado || El beneficio supera el riesgo.
+E: La enfermedad tromboembólica venosa es una causa importante de morbilidad y mortalidad posoperatoria. El riesgo se estima con la escala de Caprini, que considera la edad, el tipo de cirugía, el cáncer, la obesidad, la inmovilidad y los antecedentes de trombosis. En pacientes de riesgo moderado o alto se usa heparina de bajo peso molecular o heparina no fraccionada, combinada con métodos mecánicos como compresión neumática intermitente y movilización temprana. En la cirugía oncológica abdominal y pélvica se recomienda extender la profilaxis hasta 4 semanas.
+R: Guía de Práctica Clínica de prevención de enfermedad tromboembólica venosa en pacientes quirúrgicos
+
+@ cir|perioperative|surgical_site_infection|2|diagnosis
+V: Hombre de 50 años con hemicolectomía hace 5 días que presenta fiebre de 38.4 °C, eritema, induración, calor y secreción purulenta en la herida quirúrgica. La aponeurosis está íntegra.
+P: ¿Cuál es el diagnóstico más probable?
++ Infección del sitio quirúrgico incisional superficial || Afecta piel y tejido subcutáneo con secreción purulenta.
+- anchoring | Seroma no infectado || No explica la fiebre ni el pus.
+- availability_heuristic | Dehiscencia aponeurótica || La aponeurosis está íntegra.
+- representativeness_heuristic | Fuga de anastomosis || Daría peritonitis o salida de contenido intestinal.
+- premature_closure | Atelectasia como causa de la fiebre || Hay datos locales de infección de herida.
+- base_rate_fallacy | Fascitis necrosante || Daría necrosis y toxicidad sistémica grave.
+- framing_effect | Reacción alérgica a la sutura || No explica el pus.
+- inattentional_blindness | Trombosis venosa profunda || No explica los hallazgos de la herida.
+- focusing_illusion | Absceso intraabdominal || La infección es superficial.
+- belief_bias | Cicatrización normal con algo de pus || El pus indica infección.
+E: La infección del sitio quirúrgico se clasifica en incisional superficial, que afecta piel y tejido subcutáneo, incisional profunda, que afecta fascia y músculo, y de órgano o espacio, como abscesos intraabdominales. Suele aparecer entre el quinto y el décimo día. Se manifiesta con eritema, induración, dolor, calor y secreción purulenta. El tratamiento de la infección superficial es abrir y drenar la herida, con curaciones, y antibióticos solo si hay celulitis extensa o datos sistémicos. La fiebre en las primeras 48 horas rara vez se debe a infección de herida.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de infección de sitio quirúrgico
+
+@ cir|perioperative|surgical_site_infection|2|prevention_screening
+V: Mujer de 55 años que será sometida a colecistectomía laparoscópica electiva. No es alérgica.
+P: ¿Cuál es la medida de prevención antibiótica correcta?
++ Cefazolina intravenosa en los 60 minutos previos a la incisión, en dosis única || La profilaxis es más eficaz administrada antes de la incisión.
+- anchoring | Antibiótico durante 7 días después de la cirugía || La profilaxis prolongada no aporta beneficio y aumenta la resistencia.
+- availability_heuristic | Antibiótico oral el día anterior en casa || No es la vía ni el momento adecuado.
+- representativeness_heuristic | Vancomicina en todos los pacientes || Se reserva para colonización por estafilococo resistente.
+- premature_closure | Antibiótico después de cerrar la herida || Es tarde para prevenir.
+- framing_effect | Antibiótico de amplio espectro como carbapenémico || Es innecesario.
+- complexity_bias | Antibióticos y antifúngicos combinados || Es excesivo.
+- base_rate_fallacy | Ningún antibiótico en ninguna cirugía limpia contaminada || Está indicado en limpias contaminadas.
+- belief_bias | Entre más días de antibiótico, menos infecciones || No es así.
+- omission_bias | Omitir la profilaxis por ser laparoscopia || Está indicada en cirugía biliar.
+E: La profilaxis antibiótica quirúrgica busca alcanzar concentraciones adecuadas en los tejidos al momento de la incisión. Se administra por vía intravenosa en los 60 minutos previos a la incisión, o 120 minutos para vancomicina y quinolonas. La cefazolina es el fármaco de elección en la mayoría de las cirugías limpias y limpias contaminadas. Se repite la dosis si la cirugía dura más de dos vidas medias del fármaco o hay sangrado importante. No debe prolongarse más de 24 horas tras la cirugía. En la cirugía colorrectal se agrega cobertura contra anaerobios.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de infección de sitio quirúrgico
+
+@ cir|perioperative|surgical_site_infection|3|risk_factor
+V: Hombre de 60 años con diabetes descontrolada, obesidad y tabaquismo activo, operado de urgencia por apendicitis perforada con peritonitis. La cirugía duró 3 horas.
+P: ¿Cuál es el factor más importante que aumenta su riesgo de infección del sitio quirúrgico?
++ La clase de herida sucia por perforación con peritonitis, sumada a sus factores del huésped || La contaminación de la herida es el principal determinante.
+- anchoring | El uso de suturas absorbibles || No es el factor principal.
+- availability_heuristic | La edad de 60 años como único factor || Es un factor menor.
+- representativeness_heuristic | El tipo de anestesia general || No es un factor principal.
+- premature_closure | La temperatura del quirófano normal || No es un factor de riesgo.
+- base_rate_fallacy | El grupo sanguíneo || No es un factor.
+- framing_effect | La vacunación previa || No es un factor.
+- inattentional_blindness | El uso de antibióticos profilácticos || Reduce el riesgo.
+- focusing_illusion | El cierre de la piel con grapas || No es el factor principal.
+- belief_bias | La mala suerte como causa principal || Hay factores identificables.
+E: Las heridas quirúrgicas se clasifican según su contaminación en limpias, limpias contaminadas, contaminadas y sucias, con riesgo de infección creciente. La herida sucia, como una víscera perforada con peritonitis, tiene el mayor riesgo. Los factores del paciente incluyen diabetes descontrolada, obesidad, tabaquismo, desnutrición, inmunosupresión y edad avanzada. Los factores del procedimiento incluyen duración prolongada, cirugía de urgencia, hipotermia, transfusión y técnica. En heridas sucias puede dejarse la piel abierta para cierre diferido. El control de la glucosa y el cese del tabaco reducen el riesgo.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de infección de sitio quirúrgico
+
+@ cir|perioperative|surgical_site_infection|4|diagnosis
+V: Hombre de 58 años con diabetes operado de hernioplastia que al tercer día presenta dolor intenso desproporcionado en la herida, edema que se extiende, piel violácea con ampollas, crepitación y fiebre con hipotensión.
+P: ¿Cuál es el diagnóstico más probable?
++ Fascitis necrosante || Dolor desproporcionado, ampollas, crepitación y toxicidad sistémica.
+- anchoring | Celulitis simple || No explica la crepitación ni la toxicidad.
+- availability_heuristic | Infección superficial de la herida || No explica la gravedad.
+- representativeness_heuristic | Seroma infectado || No explica las ampollas ni la crepitación.
+- premature_closure | Hematoma de pared || No explica la fiebre y la toxicidad.
+- base_rate_fallacy | Erisipela || Es superficial con bordes bien definidos.
+- framing_effect | Reacción alérgica a la malla || No explica la crepitación.
+- inattentional_blindness | Trombosis venosa || No explica los hallazgos.
+- focusing_illusion | Absceso simple || No explica la extensión rápida.
+- belief_bias | Dolor normal tras la cirugía || Es desproporcionado y grave.
+E: La fascitis necrosante es una infección grave y rápidamente progresiva de la fascia y el tejido subcutáneo, polimicrobiana o por Streptococcus pyogenes o Clostridium. Los factores de riesgo incluyen diabetes, inmunosupresión, obesidad y cirugía. Se manifiesta con dolor desproporcionado a los hallazgos iniciales, edema que rebasa el eritema, piel violácea, ampollas, crepitación, anestesia cutánea y toxicidad sistémica. La escala LRINEC ayuda en el diagnóstico. El tratamiento es desbridamiento quirúrgico urgente y amplio, antibióticos de amplio espectro con clindamicina y soporte. El retraso aumenta la mortalidad.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de infección de sitio quirúrgico
+
+@ cir|perioperative|surgical_site_infection|3|diagnosis
+V: Hombre de 62 años con laparotomía hace 7 días que tras un acceso de tos presenta salida abundante de líquido serosanguinolento por la herida. Al explorar se observan asas intestinales en el fondo de la herida bajo la piel separada.
+P: ¿Cuál es el diagnóstico más probable?
++ Dehiscencia de la aponeurosis con evisceración contenida || Salida de líquido serosanguinolento tras un esfuerzo con asas visibles.
+- anchoring | Infección superficial de la herida || No explica la visualización de asas.
+- availability_heuristic | Seroma simple || No explica la separación de la aponeurosis.
+- representativeness_heuristic | Fístula enterocutánea || Daría salida de contenido intestinal.
+- premature_closure | Hernia incisional tardía || Es una complicación de meses o años.
+- base_rate_fallacy | Hematoma de pared || No explica la visualización de asas.
+- framing_effect | Reacción a las suturas || No explica el cuadro.
+- inattentional_blindness | Absceso de pared || No explica las asas visibles.
+- focusing_illusion | Fuga de anastomosis || No explica la herida abierta con asas.
+- belief_bias | Herida que solo necesita una gasa más gruesa || Es una urgencia quirúrgica.
+E: La dehiscencia aponeurótica es la separación de los bordes de la aponeurosis, generalmente entre el quinto y el décimo día posoperatorio. El signo de alarma típico es la salida de líquido serosanguinolento abundante por la herida, y puede progresar a evisceración. Los factores de riesgo incluyen edad avanzada, desnutrición, obesidad, infección de la herida, tos, distensión, corticosteroides, cirugía de urgencia y técnica de cierre. Se cubren las asas con gasas húmedas estériles, se coloca una faja y se reinterviene para cerrar la pared, a veces con malla o cierre temporal.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de infección de sitio quirúrgico
+
+@ cir|perioperative|surgical_site_infection|3|data_interpretation
+V: Mujer de 45 años con colecistectomía abierta. Tiene fiebre de 38 °C en las primeras 24 horas del posoperatorio, sin otros síntomas. Herida limpia y sin dolor abdominal anormal.
+P: ¿Qué indica esta fiebre en el primer día posoperatorio?
++ Probablemente respuesta inflamatoria al trauma quirúrgico o atelectasia, sin infección de herida || La fiebre de las primeras 48 horas rara vez es infecciosa.
+- anchoring | Infección de la herida quirúrgica || Suele aparecer después del quinto día.
+- availability_heuristic | Fuga biliar que requiere reintervención inmediata || No hay datos.
+- representativeness_heuristic | Trombosis venosa profunda como causa más probable || Suele aparecer más tarde.
+- premature_closure | Sepsis que requiere carbapenémicos || No hay datos de sepsis.
+- base_rate_fallacy | Infección urinaria por sonda como causa más probable el primer día || Suele aparecer después de 3 días.
+- framing_effect | Endocarditis || No hay datos.
+- inattentional_blindness | Hipertermia maligna || Ocurre en el quirófano con rigidez y gran elevación de temperatura.
+- focusing_illusion | Absceso intraabdominal || Aparece días después.
+- belief_bias | Toda fiebre después de operar es infección || La mayoría de la fiebre temprana no lo es.
+E: La causa de la fiebre posoperatoria se orienta por el tiempo de aparición. En las primeras 48 horas suele deberse a la respuesta inflamatoria al trauma quirúrgico, y la atelectasia es un hallazgo frecuente, aunque su relación causal con la fiebre es discutida. Entre los días 3 y 5 se consideran infección urinaria, neumonía y flebitis por catéter. Entre los días 5 y 7, infección de la herida, trombosis venosa y fuga de anastomosis. Después de una semana, abscesos intraabdominales. La fiebre muy alta en el quirófano sugiere hipertermia maligna o reacción transfusional.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de infección de sitio quirúrgico
+
+@ cir|perioperative|postoperative_fluids|2|treatment_of_choice
+V: Hombre de 70 kg en ayuno posoperatorio tras cirugía abdominal, sin pérdidas anormales, con función renal normal.
+P: ¿Cuál es el aporte de mantenimiento de líquidos y electrolitos más adecuado?
++ Alrededor de 25 a 30 mL/kg/día de agua con 1 mmol/kg/día de sodio y potasio y glucosa para evitar la cetosis || Cubre las necesidades basales.
+- anchoring | Solución glucosada al 5% sola a 4 litros por día || Causa hiponatremia.
+- availability_heuristic | Solución salina al 0.9% a 6 litros por día || Causa sobrecarga y acidosis hiperclorémica.
+- representativeness_heuristic | Ningún líquido intravenoso si está en ayuno || Requiere aporte de mantenimiento.
+- premature_closure | Solo albúmina intravenosa || No cubre las necesidades.
+- framing_effect | Agua destilada intravenosa || Causa hemólisis.
+- complexity_bias | Nutrición parenteral total desde el primer día en todos || No es necesaria en ayunos cortos.
+- base_rate_fallacy | Potasio en bolo rápido intravenoso || Es peligroso.
+- belief_bias | Entre más líquidos, mejor recuperación || El exceso causa complicaciones.
+- omission_bias | No incluir potasio en el mantenimiento || Se requiere para las necesidades basales.
+E: Las necesidades de mantenimiento en adultos son de 25 a 30 mL/kg/día de agua, 1 mmol/kg/día de sodio, potasio y cloro, y 50 a 100 g de glucosa al día para limitar la cetosis. El aporte se ajusta a las pérdidas anormales, como sonda nasogástrica, drenajes o fístulas, y a las condiciones del paciente, como insuficiencia cardiaca o renal. La sobrecarga de líquidos y sodio se asocia a íleo, edema, complicaciones pulmonares y fugas anastomóticas. La glucosada sola favorece la hiponatremia. Se prefiere reiniciar la vía oral lo antes posible.
+R: Guía de Práctica Clínica de manejo de líquidos y electrolitos en el paciente quirúrgico
+
+@ cir|perioperative|postoperative_fluids|3|data_interpretation
+V: Mujer de 60 años con colectomía hace 2 días que recibe solución glucosada al 5% como único líquido intravenoso. Presenta náusea, cefalea y confusión. Sodio sérico de 122 mEq/L.
+P: ¿Qué indica este hallazgo?
++ Hiponatremia posoperatoria por aporte de líquidos hipotónicos y secreción de hormona antidiurética || La glucosada sola favorece la hiponatremia en el posoperatorio.
+- anchoring | Valor normal en el posoperatorio || Es una hiponatremia sintomática.
+- availability_heuristic | Hipernatremia por deshidratación || El sodio está bajo.
+- representativeness_heuristic | Hipoglucemia como única explicación || El sodio explica los síntomas.
+- premature_closure | Delirium por opioides sin relación con el sodio || La hiponatremia es significativa.
+- base_rate_fallacy | Insuficiencia suprarrenal primaria como causa principal || El contexto orienta a líquidos hipotónicos.
+- framing_effect | Error de laboratorio sin importancia || Los síntomas son compatibles.
+- inattentional_blindness | Hiperpotasemia || No explica los síntomas neurológicos.
+- focusing_illusion | Evento vascular cerebral || La hiponatremia explica el cuadro.
+- belief_bias | Confusión normal tras la anestesia || Hay un trastorno metabólico.
+E: La hiponatremia es frecuente en el posoperatorio por la secreción de hormona antidiurética estimulada por el dolor, la náusea, los opioides y el estrés quirúrgico, combinada con la administración de líquidos hipotónicos como la glucosada. Los síntomas incluyen náusea, cefalea, confusión, convulsiones y coma. La hiponatremia sintomática grave se trata con solución salina hipertónica al 3%, sin corregir más de 8 a 10 mEq/L en 24 horas para evitar la desmielinización osmótica. Se previene usando líquidos isotónicos balanceados para el mantenimiento y vigilando el sodio.
+R: Guía de Práctica Clínica de manejo de líquidos y electrolitos en el paciente quirúrgico
+
+@ cir|perioperative|postoperative_fluids|3|next_step
+V: Hombre de 55 años con oclusión intestinal que tiene sonda nasogástrica con gasto de 2 litros al día durante 3 días. Presenta debilidad y su gasometría muestra pH de 7.50 con bicarbonato de 34 mEq/L. Potasio de 2.8 mEq/L y cloro de 88 mEq/L.
+P: ¿Cuál es el siguiente paso para corregir el trastorno?
++ Reponer las pérdidas con solución salina al 0.9% con cloruro de potasio || La alcalosis metabólica hipoclorémica e hipopotasémica responde a cloro y potasio.
+- anchoring | Administrar bicarbonato de sodio || Empeora la alcalosis.
+- availability_heuristic | Solución glucosada al 5% sola || No repone cloro ni potasio.
+- representativeness_heuristic | Restringir los líquidos || Empeora el déficit.
+- premature_closure | Retirar la sonda sin reponer || Las pérdidas ya ocurrieron.
+- framing_effect | Administrar acetazolamida como primera medida || No es la primera elección.
+- complexity_bias | Hemodiálisis urgente || No está indicada.
+- base_rate_fallacy | Potasio en bolo rápido sin dilución || Es peligroso.
+- belief_bias | La alcalosis se corrige sola sin reponer || Requiere reposición.
+- omission_bias | No cuantificar las pérdidas por la sonda || Deben reponerse.
+E: Las pérdidas gástricas por vómito o sonda nasogástrica contienen ácido clorhídrico, sodio y potasio, por lo que producen alcalosis metabólica hipoclorémica e hipopotasémica. La hipovolemia activa la aldosterona, que retiene sodio y elimina potasio e hidrógeno, perpetuando la alcalosis. El tratamiento es reponer el volumen y el cloro con solución salina al 0.9% y el potasio con cloruro de potasio, a una velocidad segura, generalmente no mayor de 10 a 20 mEq por hora por vena periférica. Las pérdidas de la sonda se reponen mililitro a mililitro.
+R: Guía de Práctica Clínica de manejo de líquidos y electrolitos en el paciente quirúrgico
+
+@ cir|perioperative|postoperative_fluids|3|data_interpretation
+V: Hombre de 68 años con sepsis abdominal tras cirugía que recibe solución salina al 0.9% abundante durante 3 días. Gasometría con pH de 7.29, bicarbonato de 17 mEq/L, cloro de 118 mEq/L, sodio de 140 mEq/L y anión gap de 5.
+P: ¿Qué indica este trastorno ácido base?
++ Acidosis metabólica hiperclorémica con anión gap normal por exceso de solución salina || El aporte excesivo de cloro reduce el bicarbonato.
+- anchoring | Acidosis láctica por sepsis con anión gap elevado || El anión gap es normal.
+- availability_heuristic | Cetoacidosis diabética || Tendría anión gap elevado.
+- representativeness_heuristic | Alcalosis metabólica || El pH está bajo.
+- premature_closure | Acidosis respiratoria || El bicarbonato bajo indica causa metabólica.
+- base_rate_fallacy | Intoxicación por metanol || Tendría anión gap elevado.
+- framing_effect | Insuficiencia renal crónica con anión gap elevado || El anión gap es normal.
+- inattentional_blindness | Valores normales || El pH está bajo.
+- focusing_illusion | Acidosis por pérdidas pancreáticas exclusivamente || El contexto es el exceso de salina.
+- belief_bias | La solución salina es completamente fisiológica || Tiene más cloro que el plasma.
+E: La solución salina al 0.9% contiene 154 mEq/L de sodio y cloro, más cloro que el plasma. Su administración en grandes volúmenes produce acidosis metabólica hiperclorémica con anión gap normal, que puede asociarse a lesión renal. Las soluciones balanceadas como Ringer lactato o Hartmann tienen una composición más parecida al plasma y se prefieren en la reanimación de grandes volúmenes en pacientes quirúrgicos y sépticos. El anión gap normal ayuda a distinguir esta acidosis de las causadas por lactato, cetonas o tóxicos, que tienen anión gap elevado.
+R: Guía de Práctica Clínica de manejo de líquidos y electrolitos en el paciente quirúrgico
+
+@ cir|urology|urolithiasis|2|diagnosis
+V: Hombre de 35 años con dolor lumbar izquierdo súbito, intenso, tipo cólico, irradiado a la ingle y al testículo, con náusea y vómito. Está inquieto y no encuentra una posición cómoda. Examen general de orina con hematuria microscópica.
+P: ¿Cuál es el diagnóstico más probable?
++ Cólico renoureteral por litiasis || Dolor lumbar cólico irradiado a genitales con hematuria y paciente inquieto.
+- anchoring | Lumbalgia mecánica || No explica la hematuria ni la irradiación.
+- availability_heuristic | Pielonefritis aguda || Daría fiebre y piuria.
+- representativeness_heuristic | Apendicitis aguda || El dolor es lumbar irradiado a genitales.
+- premature_closure | Torsión testicular || El testículo no es la fuente primaria.
+- base_rate_fallacy | Aneurisma aórtico roto || Es poco probable a esta edad sin choque.
+- framing_effect | Diverticulitis || El dolor es lumbar cólico.
+- inattentional_blindness | Herpes zóster preeruptivo || No explica la hematuria.
+- focusing_illusion | Infarto renal || Es raro.
+- belief_bias | Dolor por cargar algo pesado || Hay hematuria y dolor cólico.
+E: La litiasis urinaria es frecuente y más común en hombres de 30 a 50 años. El cólico renoureteral se debe a la obstrucción del uréter por un cálculo, con distensión de la vía urinaria. Se manifiesta con dolor súbito e intenso en la fosa renal, tipo cólico, irradiado a la ingle, los genitales o la cara interna del muslo, con náusea, vómito e inquietud. Hay hematuria en la mayoría. Los cálculos más frecuentes son de oxalato de calcio. La tomografía simple de abdomen es el estudio más sensible, y el ultrasonido es útil en embarazadas y niños.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la litiasis urinaria
+
+@ cir|urology|urolithiasis|2|initial_treatment
+V: Mujer de 40 años con cólico renoureteral derecho por un cálculo de 4 mm en el uréter distal confirmado por tomografía. Sin fiebre, función renal normal y dolor intenso.
+P: ¿Cuál es el tratamiento inicial?
++ Antiinflamatorio no esteroideo para el dolor y tratamiento expulsivo con tamsulosina || Los cálculos menores de 5 a 10 mm suelen expulsarse solos.
+- anchoring | Ureteroscopia urgente en todos || Los cálculos pequeños sin complicaciones pueden expulsarse.
+- availability_heuristic | Líquidos intravenosos forzados en grandes volúmenes || No aceleran la expulsión.
+- representativeness_heuristic | Antibióticos de rutina || No hay infección.
+- premature_closure | Nefrectomía || Es excesiva.
+- framing_effect | Litotricia de urgencia en todos los cálculos pequeños || No es necesaria.
+- complexity_bias | Nefrolitotomía percutánea || Se usa en cálculos renales grandes.
+- base_rate_fallacy | Butilhioscina como único analgésico eficaz || Es menos eficaz que los antiinflamatorios.
+- belief_bias | Tomar cerveza para expulsar la piedra || No es eficaz.
+- omission_bias | Evitar la analgesia para no ocultar síntomas || El dolor debe tratarse.
+E: El tratamiento inicial del cólico renoureteral es la analgesia, y los antiinflamatorios no esteroideos como el diclofenaco o el ketorolaco son de primera línea porque reducen la presión en la vía urinaria. Los opioides se usan si no hay respuesta. Los cálculos menores de 5 mm se expulsan de forma espontánea en la mayoría, y entre 5 y 10 mm la expulsión puede facilitarse con alfabloqueadores como tamsulosina. No se recomienda la hidratación forzada. Se indica intervención urgente si hay infección con obstrucción, riñón único obstruido, insuficiencia renal o dolor refractario.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la litiasis urinaria
+
+@ cir|urology|urolithiasis|4|next_step
+V: Hombre de 50 años con cálculo ureteral izquierdo obstructivo de 8 mm que presenta fiebre de 39 °C, escalofríos, hipotensión y leucocitosis. Hidronefrosis izquierda en el ultrasonido.
+P: ¿Cuál es la conducta más apropiada?
++ Antibióticos de amplio espectro y descompresión urgente de la vía urinaria con catéter ureteral doble J o nefrostomía percutánea || La infección con obstrucción es una urgencia urológica.
+- anchoring | Tratamiento expulsivo con tamsulosina y esperar || Está contraindicado con infección y obstrucción.
+- availability_heuristic | Ureteroscopia con litotricia inmediata para extraer el cálculo || En sepsis se prioriza la descompresión y se difiere el tratamiento definitivo.
+- representativeness_heuristic | Solo antibióticos orales y egreso || Es una urgencia.
+- premature_closure | Litotricia extracorpórea urgente || Está contraindicada con infección activa.
+- framing_effect | Analgésicos y observación || No resuelve la obstrucción infectada.
+- complexity_bias | Nefrectomía urgente || Es excesiva.
+- base_rate_fallacy | Esperar el urocultivo para iniciar antibióticos || El retraso aumenta la mortalidad.
+- belief_bias | La piedra saldrá sola con la fiebre || La obstrucción infectada puede ser mortal.
+- omission_bias | No descomprimir por miedo al procedimiento || Es esencial.
+E: La obstrucción de la vía urinaria por un cálculo con infección, pielonefritis obstructiva o urosepsis, es una urgencia urológica con alto riesgo de mortalidad. El tratamiento es la reanimación, los antibióticos de amplio espectro tras tomar cultivos y la descompresión urgente de la vía urinaria, con catéter ureteral doble J o nefrostomía percutánea, que tienen eficacia similar. El tratamiento definitivo del cálculo se difiere hasta resolver la infección, ya que manipularlo en presencia de infección puede empeorar la sepsis. Otras indicaciones de intervención urgente son riñón único obstruido e insuficiencia renal.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la litiasis urinaria
+
+@ cir|urology|urolithiasis|3|prevention_screening
+V: Hombre de 42 años con su tercer episodio de litiasis por cálculos de oxalato de calcio. Bebe poca agua, consume mucha sal y carne roja y tiene obesidad.
+P: ¿Cuál es la medida de prevención de recurrencias más importante?
++ Aumentar la ingesta de líquidos para lograr una diuresis mayor de 2 a 2.5 litros al día y reducir la sal y la proteína animal || Reduce la sobresaturación urinaria.
+- anchoring | Eliminar todo el calcio de la dieta || Aumenta la absorción de oxalato y el riesgo de cálculos.
+- availability_heuristic | Tomar refrescos de cola en abundancia || Aumentan el riesgo.
+- representativeness_heuristic | Suplementos de vitamina C a dosis altas || Aumentan el oxalato urinario.
+- premature_closure | Ninguna medida tras expulsar el cálculo || La recurrencia es alta.
+- framing_effect | Antibióticos profilácticos || No previenen la litiasis por oxalato.
+- complexity_bias | Nefrectomía preventiva || Es absurda.
+- base_rate_fallacy | Reducir los líquidos para no forzar los riñones || Aumenta el riesgo.
+- belief_bias | Beber cerveza a diario como prevención || No es una medida recomendada.
+- omission_bias | No estudiar el metabolismo en recurrentes || Se recomienda estudio metabólico.
+E: La litiasis urinaria tiene una recurrencia de hasta 50% a 5 años. La medida preventiva más eficaz es aumentar la ingesta de líquidos para lograr una diuresis de más de 2 a 2.5 litros al día. Se recomienda reducir el sodio y la proteína animal, mantener una ingesta normal de calcio de la dieta, que se une al oxalato en el intestino, limitar los alimentos ricos en oxalato y controlar el peso. En pacientes recurrentes se realiza estudio metabólico con orina de 24 horas y se usan tiazidas para la hipercalciuria o citrato de potasio para la hipocitraturia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la litiasis urinaria
+
+@ cir|urology|urolithiasis|3|treatment_of_choice
+V: Mujer de 45 años con un cálculo de 15 mm en la pelvis renal derecha, sintomático, sin infección, con densidad menor de 1 000 unidades Hounsfield.
+P: ¿Cuál es el tratamiento de elección?
++ Litotricia extracorpórea por ondas de choque o ureteroscopia flexible con láser || Son opciones de primera línea para cálculos renales de 10 a 20 mm.
+- anchoring | Tratamiento expulsivo con tamsulosina || Los cálculos de 15 mm rara vez se expulsan solos.
+- availability_heuristic | Nefrectomía || Es excesiva.
+- representativeness_heuristic | Cirugía abierta como primera opción || Las técnicas mínimamente invasivas son preferidas.
+- premature_closure | Observación indefinida en un cálculo sintomático || Requiere tratamiento.
+- framing_effect | Citrato de potasio para disolver un cálculo de oxalato de 15 mm || No disuelve el oxalato de calcio.
+- complexity_bias | Trasplante renal || No está indicado.
+- base_rate_fallacy | Antibióticos como tratamiento principal || No hay infección.
+- belief_bias | Remedios caseros para disolver el cálculo || No son eficaces.
+- omission_bias | No tratar por miedo al procedimiento || El cálculo sintomático requiere tratamiento.
+E: El tratamiento de los cálculos renales depende del tamaño, la localización, la composición y la anatomía. Los cálculos menores de 10 mm pueden tratarse con litotricia extracorpórea o ureteroscopia flexible. Los de 10 a 20 mm con litotricia, ureteroscopia o nefrolitotomía percutánea, según la densidad y la localización. Los mayores de 20 mm y los coraliformes se tratan con nefrolitotomía percutánea. Los cálculos de ácido úrico pueden disolverse con alcalinización de la orina. La cirugía abierta se reserva para casos excepcionales.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la litiasis urinaria
+
+@ cir|urology|benign_prostatic_hyperplasia|2|diagnosis
+V: Hombre de 68 años con chorro urinario débil, dificultad para iniciar la micción, goteo terminal, sensación de vaciamiento incompleto y nicturia de 3 veces por noche. Tacto rectal con próstata aumentada de tamaño, lisa, elástica y no dolorosa.
+P: ¿Cuál es el diagnóstico más probable?
++ Hiperplasia prostática benigna || Síntomas urinarios bajos obstructivos con próstata aumentada, lisa y elástica.
+- anchoring | Cáncer de próstata || Daría próstata dura, irregular o nodular.
+- availability_heuristic | Prostatitis aguda || Daría fiebre y próstata muy dolorosa.
+- representativeness_heuristic | Infección urinaria baja || No explica la próstata aumentada ni la evolución crónica.
+- premature_closure | Estenosis de uretra || La próstata no estaría aumentada.
+- base_rate_fallacy | Vejiga neurogénica || No hay antecedente neurológico.
+- framing_effect | Diabetes insípida || Causa poliuria, no obstrucción.
+- inattentional_blindness | Cálculo vesical || No explica la próstata aumentada.
+- focusing_illusion | Cáncer de vejiga || Daría hematuria.
+- belief_bias | Algo normal de la edad que no tiene tratamiento || Es tratable.
+E: La hiperplasia prostática benigna es el crecimiento no maligno de la zona de transición de la próstata, muy frecuente con la edad. Causa síntomas del tracto urinario inferior de vaciamiento, como chorro débil, dificultad para iniciar, goteo y vaciamiento incompleto, y de llenado, como frecuencia, urgencia y nicturia. Su gravedad se valora con la escala internacional de síntomas prostáticos. El tacto rectal muestra una próstata aumentada, lisa y elástica. Se realizan examen de orina, creatinina y antígeno prostático específico según la expectativa de vida, y ultrasonido con medición del residuo posmiccional.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperplasia prostática benigna
+
+@ cir|urology|benign_prostatic_hyperplasia|2|treatment_of_choice
+V: Hombre de 65 años con hiperplasia prostática benigna y síntomas urinarios moderados que afectan su calidad de vida. Próstata de 35 g. Sin retención ni complicaciones.
+P: ¿Cuál es el tratamiento farmacológico de elección para el alivio rápido de los síntomas?
++ Alfabloqueador como tamsulosina || Relaja el músculo liso prostático y mejora los síntomas en días.
+- anchoring | Resección transuretral de próstata inmediata || Se reserva para complicaciones o falla del tratamiento médico.
+- availability_heuristic | Antibióticos prolongados || No hay infección.
+- representativeness_heuristic | Testosterona || Puede empeorar el crecimiento prostático.
+- premature_closure | Inhibidor de 5 alfa reductasa como alivio rápido || Su efecto tarda meses y es más útil en próstatas grandes.
+- framing_effect | Anticolinérgicos como monoterapia en síntomas obstructivos importantes || Pueden causar retención.
+- complexity_bias | Prostatectomía radical || Es para cáncer.
+- base_rate_fallacy | Sonda permanente || No está indicada sin retención.
+- belief_bias | Semillas de calabaza como tratamiento comprobado || Su eficacia no está demostrada.
+- omission_bias | No tratar porque es benigna || Los síntomas afectan su calidad de vida.
+E: El tratamiento de la hiperplasia prostática benigna depende de los síntomas y las complicaciones. Los síntomas leves se manejan con vigilancia y cambios en el estilo de vida, como reducir los líquidos nocturnos, la cafeína y el alcohol. Los alfabloqueadores como tamsulosina, alfuzosina o doxazosina son de primera línea y mejoran los síntomas en días. Los inhibidores de 5 alfa reductasa, como finasterida y dutasterida, reducen el tamaño de la próstata en meses y son útiles en próstatas mayores de 30 a 40 g. La combinación se usa en próstatas grandes. Los inhibidores de fosfodiesterasa 5 también mejoran los síntomas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperplasia prostática benigna
+
+@ cir|urology|benign_prostatic_hyperplasia|3|next_step
+V: Hombre de 72 años con hiperplasia prostática benigna que tras tomar un antigripal con descongestionante presenta imposibilidad para orinar de 10 horas, dolor suprapúbico intenso y globo vesical palpable.
+P: ¿Cuál es el siguiente paso?
++ Colocar sonda vesical para drenar la vejiga || Retención urinaria aguda que requiere descompresión inmediata.
+- anchoring | Dar un diurético para que orine || Empeora la distensión vesical.
+- availability_heuristic | Analgésicos y esperar a que orine solo || El dolor y la distensión requieren drenaje.
+- representativeness_heuristic | Resección transuretral de urgencia || Primero se drena la vejiga.
+- premature_closure | Antibióticos y egreso || No resuelve la retención.
+- framing_effect | Ultrasonido renal antes de drenar || Retrasa el alivio.
+- complexity_bias | Cistoscopia diagnóstica urgente || No es el primer paso.
+- base_rate_fallacy | Iniciar finasterida y esperar el efecto || Tarda meses.
+- belief_bias | Abrir la llave del agua para estimular la micción como único manejo || No resuelve la retención.
+- omission_bias | Evitar la sonda por miedo a infección || La retención debe resolverse.
+E: La retención urinaria aguda es una complicación de la hiperplasia prostática benigna, desencadenada con frecuencia por fármacos con efecto anticolinérgico o simpaticomimético, como antigripales, antihistamínicos y antidepresivos, por alcohol, frío, estreñimiento o anestesia. Se manifiesta con imposibilidad para orinar, dolor suprapúbico y globo vesical. El tratamiento es el drenaje inmediato con sonda vesical o, si no es posible, cistostomía suprapúbica. Se inicia un alfabloqueador antes de retirar la sonda para aumentar el éxito de la micción espontánea. La retención recurrente es indicación de cirugía.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperplasia prostática benigna
+
+@ cir|urology|benign_prostatic_hyperplasia|3|treatment_of_choice
+V: Hombre de 70 años con hiperplasia prostática benigna de 60 g, con retención urinaria recurrente pese a alfabloqueador e inhibidor de 5 alfa reductasa, y litiasis vesical secundaria.
+P: ¿Cuál es el tratamiento de elección?
++ Tratamiento quirúrgico con resección transuretral de próstata u otra técnica endoscópica || La retención recurrente y los cálculos vesicales son indicaciones quirúrgicas.
+- anchoring | Aumentar la dosis del alfabloqueador indefinidamente || Ya falló el tratamiento médico.
+- availability_heuristic | Sonda permanente como tratamiento definitivo en un paciente operable || La cirugía es preferible.
+- representativeness_heuristic | Prostatectomía radical || Es para cáncer.
+- premature_closure | Antibióticos profilácticos como único tratamiento || No resuelven la obstrucción.
+- framing_effect | Testosterona para mejorar la vejiga || Puede empeorar la próstata.
+- complexity_bias | Cistectomía || Es excesiva.
+- base_rate_fallacy | Litotricia del cálculo sin tratar la próstata || El cálculo recurrirá.
+- belief_bias | Remedios herbolarios para reducir la próstata || No son eficaces.
+- omission_bias | No operar por la edad sin valorar su estado || Puede beneficiarse.
+E: Las indicaciones de tratamiento quirúrgico en la hiperplasia prostática benigna incluyen retención urinaria recurrente o refractaria, insuficiencia renal por obstrucción, infecciones urinarias recurrentes, hematuria recurrente de origen prostático, litiasis vesical, divertículos vesicales y falla del tratamiento médico. La resección transuretral de próstata es el estándar para próstatas de 30 a 80 g. Otras técnicas son la enucleación con láser de holmio, la vaporización con láser y la prostatectomía simple abierta o robótica en próstatas muy grandes. Las complicaciones incluyen eyaculación retrógrada.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperplasia prostática benigna
+
+@ cir|urology|benign_prostatic_hyperplasia|3|complication_prognosis
+V: Hombre de 74 años con hiperplasia prostática benigna no tratada durante años que presenta debilidad, náusea, edema y creatinina de 4.2 mg/dL. El ultrasonido muestra hidronefrosis bilateral y vejiga distendida con residuo de 900 mL.
+P: ¿Cuál es la complicación que presenta?
++ Insuficiencia renal posrenal por obstrucción crónica de la salida vesical || La retención crónica transmite presión a los riñones.
+- anchoring | Nefropatía diabética || No explica la hidronefrosis bilateral con vejiga distendida.
+- availability_heuristic | Glomerulonefritis aguda || No explica la obstrucción.
+- representativeness_heuristic | Insuficiencia prerrenal por deshidratación || No explica la hidronefrosis.
+- premature_closure | Cáncer de vejiga obstructivo como primera causa || La próstata explica el cuadro.
+- base_rate_fallacy | Riñón poliquístico || No explica la vejiga distendida.
+- framing_effect | Nefritis intersticial por fármacos || No explica la obstrucción.
+- inattentional_blindness | Litiasis ureteral bilateral || La vejiga distendida orienta a obstrucción baja.
+- focusing_illusion | Insuficiencia cardiaca || No explica la hidronefrosis.
+- belief_bias | Insuficiencia renal normal por la edad || Es una causa obstructiva tratable.
+E: La obstrucción crónica de la salida vesical por hiperplasia prostática benigna puede causar retención urinaria crónica con residuo elevado, hidronefrosis bilateral e insuficiencia renal posrenal. A veces se manifiesta con incontinencia por rebosamiento. El tratamiento inicial es la descompresión con sonda vesical, tras la cual puede presentarse diuresis posobstructiva importante que requiere vigilar los líquidos y los electrolitos. La función renal suele mejorar si la obstrucción se corrige a tiempo. Después se indica tratamiento quirúrgico de la obstrucción prostática para evitar el daño renal permanente.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hiperplasia prostática benigna
+
+@ cir|urology|prostate_cancer|3|diagnosis
+V: Hombre de 67 años con tacto rectal que muestra un nódulo duro, pétreo e irregular en el lóbulo derecho de la próstata. Antígeno prostático específico de 15 ng/mL. Asintomático.
+P: ¿Cuál es el diagnóstico más probable?
++ Cáncer de próstata || Nódulo duro e irregular con antígeno prostático elevado.
+- anchoring | Hiperplasia prostática benigna || La próstata sería lisa y elástica.
+- availability_heuristic | Prostatitis crónica || No da nódulo pétreo.
+- representativeness_heuristic | Litiasis prostática como única explicación || No explica el antígeno elevado con nódulo.
+- premature_closure | Infección urinaria || No explica el nódulo.
+- base_rate_fallacy | Tuberculosis prostática || Es rara.
+- framing_effect | Cáncer de recto || El nódulo es prostático.
+- inattentional_blindness | Absceso prostático || Daría fiebre y dolor.
+- focusing_illusion | Quiste prostático || No es duro ni irregular.
+- belief_bias | Antígeno alto normal por la edad || El nódulo es sospechoso.
+E: El cáncer de próstata es el cáncer más frecuente en hombres mexicanos y una de las principales causas de muerte por cáncer. Suele originarse en la zona periférica, accesible al tacto rectal, y es asintomático en etapas tempranas. Se sospecha con un tacto rectal anormal, con nódulo duro o irregular, o con antígeno prostático específico elevado. El diagnóstico se confirma con biopsia de próstata guiada por ultrasonido transrectal o por fusión con resonancia magnética multiparamétrica. La agresividad se gradúa con la escala de Gleason y los grupos de grado ISUP.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de próstata
+
+@ cir|urology|prostate_cancer|3|confirmatory_study
+V: Hombre de 62 años con antígeno prostático específico de 8.5 ng/mL confirmado en dos mediciones y tacto rectal normal. Sin infección urinaria.
+P: ¿Cuál es el estudio de elección para confirmar el diagnóstico?
++ Biopsia de próstata, idealmente guiada por resonancia magnética multiparamétrica previa || Solo el estudio histológico confirma el cáncer.
+- anchoring | Repetir el antígeno cada año sin otro estudio || Retrasa el diagnóstico.
+- availability_heuristic | Gammagrama óseo como estudio diagnóstico || Evalúa metástasis, no confirma el cáncer.
+- representativeness_heuristic | Tomografía de abdomen como diagnóstico || No confirma el cáncer.
+- premature_closure | Diagnóstico por el antígeno sin biopsia || El antígeno no es específico.
+- base_rate_fallacy | Ultrasonido renal || No evalúa la próstata.
+- framing_effect | Cistoscopia || No confirma el cáncer de próstata.
+- complexity_bias | Tomografía por emisión de positrones con PSMA como diagnóstico primario en todos || Se usa en estadificación de casos seleccionados.
+- information_bias | Fosfatasa ácida || Ya no se usa.
+- belief_bias | Iniciar tratamiento hormonal sin biopsia || Requiere confirmación.
+E: El antígeno prostático específico es una proteína producida por la próstata que se eleva en el cáncer, pero también en la hiperplasia, la prostatitis, tras el tacto rectal, la eyaculación o la instrumentación. Un valor elevado confirmado requiere evaluación. La resonancia magnética multiparamétrica previa a la biopsia identifica lesiones sospechosas, mejora la detección de cánceres clínicamente significativos y puede evitar biopsias innecesarias. El diagnóstico se confirma con biopsia dirigida y sistemática. El gammagrama óseo y la tomografía se usan para estadificar en riesgo intermedio o alto.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de próstata
+
+@ cir|urology|prostate_cancer|3|treatment_of_choice
+V: Hombre de 58 años con cáncer de próstata localizado, Gleason 7, antígeno de 9 ng/mL, sin metástasis. Buen estado de salud con expectativa de vida mayor de 10 años.
+P: ¿Cuál es el tratamiento de elección con intención curativa?
++ Prostatectomía radical o radioterapia con terapia hormonal de corta duración || Son opciones curativas en enfermedad localizada de riesgo intermedio.
+- anchoring | Vigilancia activa en todos los riesgos || Se reserva para bajo riesgo.
+- availability_heuristic | Resección transuretral de próstata || Es para hiperplasia.
+- representativeness_heuristic | Quimioterapia como primera línea || Se usa en enfermedad avanzada.
+- premature_closure | Terapia hormonal sola como tratamiento curativo || No es curativa sola en enfermedad localizada.
+- framing_effect | Orquiectomía bilateral como única medida || No es curativa.
+- complexity_bias | Cistoprostatectomía || Es excesiva.
+- base_rate_fallacy | Finasterida como tratamiento del cáncer || No trata el cáncer.
+- belief_bias | Tratamiento herbolario || No es eficaz.
+- omission_bias | No tratar por miedo a la impotencia || Hay opciones curativas.
+E: El tratamiento del cáncer de próstata localizado depende del riesgo, la expectativa de vida y las preferencias. En bajo riesgo se prefiere la vigilancia activa con antígeno, tacto, resonancia y biopsias periódicas. En riesgo intermedio o alto con expectativa de vida mayor de 10 años, las opciones curativas son la prostatectomía radical y la radioterapia externa o braquiterapia, combinada con terapia de privación androgénica en riesgo intermedio desfavorable y alto. Las complicaciones incluyen incontinencia urinaria y disfunción eréctil. La enfermedad metastásica se trata con privación androgénica y otros fármacos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de próstata
+
+@ cir|urology|prostate_cancer|3|complication_prognosis
+V: Hombre de 75 años con cáncer de próstata metastásico conocido que presenta dolor lumbar intenso de 2 semanas que empeora al acostarse, y ahora debilidad en ambas piernas, dificultad para caminar y retención urinaria.
+P: ¿Cuál es la complicación que presenta?
++ Compresión medular por metástasis vertebrales || Dolor lumbar con déficit motor y disfunción vesical en cáncer metastásico.
+- anchoring | Lumbalgia mecánica || No explica el déficit neurológico.
+- availability_heuristic | Hernia de disco simple || El contexto oncológico orienta a metástasis.
+- representativeness_heuristic | Hiperplasia prostática con retención aislada || No explica la debilidad.
+- premature_closure | Neuropatía periférica por quimioterapia || No explica la retención ni el dolor.
+- base_rate_fallacy | Síndrome de Guillain Barré || No explica el contexto.
+- framing_effect | Evento vascular cerebral || El déficit es en ambas piernas con nivel medular.
+- inattentional_blindness | Hipercalcemia aislada || No explica el déficit focal.
+- focusing_illusion | Infección urinaria con delirium || No explica la debilidad bilateral.
+- belief_bias | Debilidad por la edad || Es una urgencia oncológica.
+E: La compresión medular maligna es una urgencia oncológica frecuente en cánceres que metastatizan al hueso, como próstata, mama y pulmón. El dolor de espalda que empeora al acostarse es el síntoma inicial más común, seguido de debilidad, alteraciones sensitivas con nivel y disfunción vesical o intestinal. El pronóstico funcional depende del estado neurológico al iniciar el tratamiento. Se realiza resonancia magnética de toda la columna de urgencia y se inicia dexametasona. El tratamiento definitivo es radioterapia o cirugía descompresiva. En cáncer de próstata se agrega privación androgénica.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de próstata
+
+@ cir|urology|prostate_cancer|2|prevention_screening
+V: Hombre de 55 años sin síntomas urinarios ni antecedentes familiares que pregunta si debe hacerse el estudio de antígeno prostático.
+P: ¿Cuál es la recomendación sobre el tamizaje de cáncer de próstata?
++ Decisión compartida explicando beneficios y riesgos del antígeno prostático específico entre los 50 y 69 años || El tamizaje reduce ligeramente la mortalidad pero conlleva sobrediagnóstico.
+- anchoring | Antígeno obligatorio cada 6 meses desde los 30 años || No se recomienda.
+- availability_heuristic | Biopsia de próstata de rutina a todos los mayores de 50 || Es invasiva y sin indicación.
+- representativeness_heuristic | Ningún hombre debe hacerse nunca el estudio || Puede beneficiar a algunos tras informarse.
+- premature_closure | Tomografía abdominal anual || No es un método de tamizaje.
+- base_rate_fallacy | Tamizaje obligatorio a los 85 años || No se recomienda a esa edad.
+- framing_effect | Resonancia magnética anual en todos || No es el tamizaje inicial.
+- complexity_bias | Gammagrama óseo de rutina || No es un tamizaje.
+- belief_bias | Si orina bien no puede tener cáncer || El cáncer temprano es asintomático.
+- omission_bias | No informar sobre las opciones || Debe tomar una decisión informada.
+E: El tamizaje de cáncer de próstata con antígeno prostático específico reduce ligeramente la mortalidad por cáncer de próstata, pero conlleva falsos positivos, biopsias innecesarias, sobrediagnóstico de cánceres que nunca causarían síntomas y sobretratamiento con efectos adversos. Por ello se recomienda una decisión compartida e informada en hombres de 50 a 69 años, y desde los 40 a 45 años en hombres de alto riesgo, como afrodescendientes o con antecedente familiar o mutaciones BRCA. No se recomienda en mayores de 70 años o con expectativa de vida menor de 10 años.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de próstata
+
+@ cir|urology|testicular_torsion|3|diagnosis
+V: Adolescente de 14 años que despertó con dolor súbito e intenso en el testículo derecho, náusea y vómito. El testículo está elevado, en posición horizontal, muy doloroso, con reflejo cremastérico ausente. El dolor no mejora al elevarlo.
+P: ¿Cuál es el diagnóstico más probable?
++ Torsión testicular || Dolor súbito con testículo elevado y horizontal, reflejo cremastérico ausente y signo de Prehn negativo.
+- anchoring | Epididimitis aguda || Suele ser gradual, con fiebre, síntomas urinarios y alivio al elevar el testículo.
+- availability_heuristic | Torsión del apéndice testicular || Da dolor localizado con punto azul y reflejo conservado.
+- representativeness_heuristic | Orquitis por parotiditis || Se acompaña de parotiditis.
+- premature_closure | Hernia inguinal incarcerada || Daría masa inguinal.
+- base_rate_fallacy | Tumor testicular || Suele ser indoloro.
+- framing_effect | Traumatismo testicular || No hay antecedente.
+- inattentional_blindness | Varicocele || Es indoloro o con molestia leve.
+- focusing_illusion | Cólico renal || El testículo no estaría elevado ni horizontal.
+- belief_bias | Dolor por dormir en mala posición || Es una urgencia.
+E: La torsión testicular es la rotación del cordón espermático que compromete el flujo sanguíneo, más frecuente en adolescentes y recién nacidos. Se asocia a la deformidad en badajo de campana. Se manifiesta con dolor testicular súbito e intenso, náusea y vómito, testículo elevado y horizontal, ausencia del reflejo cremastérico y signo de Prehn negativo, es decir, el dolor no mejora al elevar el testículo. La escala TWIST estima la probabilidad. El ultrasonido Doppler muestra ausencia de flujo, pero no debe retrasar la cirugía cuando la sospecha es alta.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de torsión testicular
+
+@ cir|urology|testicular_torsion|3|diagnosis
+V: Hombre de 25 años sexualmente activo con dolor testicular izquierdo progresivo de 3 días, fiebre de 38 °C y disuria. El epidídimo está engrosado y doloroso, el reflejo cremastérico está presente y el dolor mejora al elevar el testículo. Doppler con aumento del flujo.
+P: ¿Cuál es el diagnóstico más probable?
++ Epididimitis aguda probablemente por Chlamydia trachomatis o Neisseria gonorrhoeae || Dolor progresivo con fiebre, disuria, reflejo conservado y aumento del flujo.
+- anchoring | Torsión testicular || El dolor es gradual, el reflejo está presente y el flujo aumentado.
+- availability_heuristic | Hernia inguinal || No explica la fiebre ni el epidídimo engrosado.
+- representativeness_heuristic | Tumor testicular || No da fiebre ni disuria.
+- premature_closure | Varicocele || No da fiebre.
+- base_rate_fallacy | Orquitis tuberculosa || Es crónica.
+- framing_effect | Cólico renal || No explica el epidídimo inflamado.
+- inattentional_blindness | Hidrocele || Es indoloro y transilumina.
+- focusing_illusion | Torsión del apéndice testicular || Es más común en niños.
+- belief_bias | Dolor por la ropa ajustada || Hay una infección.
+E: La epididimitis aguda es la inflamación del epidídimo, generalmente infecciosa. En hombres menores de 35 años sexualmente activos suele deberse a Chlamydia trachomatis y Neisseria gonorrhoeae, y en mayores o con instrumentación urinaria a bacterias entéricas como Escherichia coli. Se manifiesta con dolor testicular de inicio gradual, fiebre, síntomas urinarios, epidídimo engrosado, signo de Prehn positivo con alivio al elevar y reflejo cremastérico presente. El Doppler muestra aumento del flujo. Se trata con ceftriaxona más doxiciclina en jóvenes y con quinolonas en mayores, y se tratan las parejas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de epididimitis y orquitis
+
+@ cir|urology|testicular_torsion|3|complication_prognosis
+V: Adolescente de 15 años con torsión testicular que llega al hospital 18 horas después del inicio del dolor. La exploración quirúrgica muestra un testículo negro que no recupera la coloración tras la detorsión.
+P: ¿Cuál es el pronóstico y la conducta ante este hallazgo?
++ Testículo no viable que requiere orquiectomía y fijación del testículo contralateral || Tras más de 12 a 24 horas la viabilidad es muy baja.
+- anchoring | Fijar el testículo afectado y esperar recuperación || Un testículo necrótico debe retirarse.
+- availability_heuristic | Dejar el testículo sin fijar el contralateral || El contralateral tiene riesgo de torsión.
+- representativeness_heuristic | Prótesis inmediata sin retirar el testículo || El tejido necrótico debe retirarse.
+- premature_closure | Solo antibióticos || No resuelven la necrosis.
+- framing_effect | Castración bilateral || Es innecesaria.
+- complexity_bias | Biopsia y esperar el resultado || Retrasa el manejo.
+- base_rate_fallacy | El testículo recuperará la función con el tiempo || La necrosis es irreversible.
+- belief_bias | Perderá la fertilidad por completo de forma segura || El otro testículo mantiene la fertilidad.
+- omission_bias | No explicar la importancia de la fijación contralateral || Es fundamental.
+E: La viabilidad del testículo torcido depende del tiempo de isquemia. Si se corrige en menos de 6 horas, la tasa de salvamento es mayor de 90%, y disminuye a menos de 10% después de 24 horas. En la exploración se destuerce el cordón y se observa la recuperación de la coloración. Un testículo necrótico se retira con orquiectomía, ya que puede generar anticuerpos que afecten al otro testículo. Siempre se fija el testículo contralateral por el riesgo de torsión por la misma deformidad. La fertilidad suele conservarse con un testículo sano.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de torsión testicular
+
+@ cir|urology|testicular_torsion|3|diagnosis
+V: Hombre de 28 años que nota un aumento de volumen indoloro y duro en el testículo izquierdo de 2 meses. No tiene fiebre ni antecedente de traumatismo. La masa no transilumina y el ultrasonido muestra una lesión sólida intratesticular.
+P: ¿Cuál es el diagnóstico más probable?
++ Tumor testicular de células germinales || Masa sólida intratesticular indolora en un hombre joven.
+- anchoring | Hidrocele || Transilumina y es quístico.
+- availability_heuristic | Epididimitis crónica || Afecta el epidídimo y suele ser dolorosa.
+- representativeness_heuristic | Espermatocele || Es quístico en el epidídimo.
+- premature_closure | Varicocele || Da bolsa de gusanos en el cordón.
+- base_rate_fallacy | Orquitis por parotiditis || Es dolorosa y aguda.
+- framing_effect | Hernia inguinoescrotal || Es reductible.
+- inattentional_blindness | Hematoma testicular || No hay traumatismo.
+- focusing_illusion | Quiste de epidídimo || Es extratesticular.
+- belief_bias | Inflamación benigna que desaparecerá sola || La masa sólida requiere estudio.
+E: El cáncer testicular es el tumor sólido más frecuente en hombres de 15 a 35 años. Más de 90% son tumores de células germinales, seminomas y no seminomas. El principal factor de riesgo es la criptorquidia. Se manifiesta como una masa testicular dura e indolora. El ultrasonido muestra una lesión sólida intratesticular. Se miden marcadores como alfafetoproteína, fracción beta de gonadotropina coriónica y deshidrogenasa láctica. El tratamiento inicial es la orquiectomía radical por vía inguinal, nunca por vía escrotal. Tiene excelente pronóstico, incluso con metástasis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de testículo
+
+@ cir|urology|testicular_torsion|2|diagnosis
+V: Adolescente de 16 años con una masa en el escroto izquierdo que se palpa como una bolsa de gusanos, aumenta de tamaño de pie y con la maniobra de Valsalva y disminuye al acostarse. Refiere pesadez escrotal.
+P: ¿Cuál es el diagnóstico más probable?
++ Varicocele || Dilatación del plexo pampiniforme que se palpa como bolsa de gusanos y aumenta de pie.
+- anchoring | Hidrocele || Es liso y transilumina.
+- availability_heuristic | Hernia inguinal || Contiene asas y es reductible al abdomen.
+- representativeness_heuristic | Tumor testicular || Es una masa sólida intratesticular.
+- premature_closure | Espermatocele || Es un quiste del epidídimo.
+- base_rate_fallacy | Torsión testicular || Da dolor agudo intenso.
+- framing_effect | Epididimitis || Es dolorosa con fiebre.
+- inattentional_blindness | Linfadenopatía inguinal || No está en el escroto.
+- focusing_illusion | Quiste sebáceo escrotal || Es superficial en la piel.
+- belief_bias | Venas normales del escroto || La dilatación es anormal.
+E: El varicocele es la dilatación de las venas del plexo pampiniforme. Es más frecuente del lado izquierdo, porque la vena espermática izquierda drena en ángulo recto en la vena renal izquierda. Se palpa como una bolsa de gusanos que aumenta de pie y con Valsalva y disminuye al acostarse. Puede causar pesadez, atrofia testicular e infertilidad. Un varicocele derecho aislado o que no disminuye al acostarse obliga a descartar una masa retroperitoneal o renal. El tratamiento quirúrgico o la embolización se indican por dolor, atrofia testicular o infertilidad.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del varicocele
