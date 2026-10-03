@@ -1,0 +1,2449 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "cir-04-trauma-quemaduras-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "trauma",
+      "subtopic": "thoracic_trauma",
+      "vignette": "Hombre de 30 años con herida por arma blanca en el hemitórax derecho. Presenta disnea grave, desviación de la tráquea a la izquierda, ingurgitación yugular, ausencia de ruidos respiratorios e hiperresonancia en el hemitórax derecho. Presión de 75/40 mmHg.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Choque hipovolémico sin lesión torácica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la ingurgitación yugular."
+        },
+        {
+          "key": "b",
+          "text": "Neumotórax simple",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No causa hipotensión ni desviación traqueal."
+        },
+        {
+          "key": "c",
+          "text": "Contusión pulmonar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No da hiperresonancia ni desviación."
+        },
+        {
+          "key": "d",
+          "text": "Lesión de la aorta",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los hallazgos."
+        },
+        {
+          "key": "e",
+          "text": "Tórax inestable",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da movimiento paradójico."
+        },
+        {
+          "key": "f",
+          "text": "Neumotórax a tensión",
+          "correct": true,
+          "rationale": "Hipotensión con desviación traqueal contralateral, ingurgitación yugular e hiperresonancia."
+        },
+        {
+          "key": "g",
+          "text": "Hemotórax masivo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Daría matidez, no hiperresonancia."
+        },
+        {
+          "key": "h",
+          "text": "Crisis de ansiedad por la herida",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay datos de compromiso grave."
+        },
+        {
+          "key": "i",
+          "text": "Rotura diafragmática",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Daría ruidos intestinales en el tórax."
+        },
+        {
+          "key": "j",
+          "text": "Taponamiento cardiaco",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la desviación traqueal ni la hiperresonancia."
+        }
+      ],
+      "canonical": [
+        "b",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "El neumotórax a tensión ocurre cuando el aire entra al espacio pleural sin poder salir, lo que colapsa el pulmón, desplaza el mediastino al lado contrario y reduce el retorno venoso, causando choque obstructivo. Se manifiesta con disnea grave, hipotensión, taquicardia, desviación traqueal contralateral, ingurgitación yugular, ausencia de ruidos respiratorios e hiperresonancia del lado afectado. El diagnóstico es clínico y no debe retrasarse por estudios de imagen. El tratamiento es la descompresión inmediata con aguja o toracostomía digital, seguida de colocación de sonda pleural.",
+      "gpcRefs": [
+        "Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "trauma",
+      "subtopic": "thoracic_trauma",
+      "vignette": "Hombre de 25 años con neumotórax a tensión clínico tras un accidente de motocicleta. Presión de 70/40 mmHg y saturación de 80%.",
+      "prompt": "¿Cuál es el tratamiento inicial inmediato?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Intubación y ventilación con presión positiva sin descompresión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Empeora el neumotórax a tensión."
+        },
+        {
+          "key": "b",
+          "text": "Vasopresores como primera medida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No corrigen la causa."
+        },
+        {
+          "key": "c",
+          "text": "Descompresión con aguja en el quinto espacio intercostal en la línea axilar media o toracostomía digital, seguida de sonda pleural",
+          "correct": true,
+          "rationale": "Revierte el choque obstructivo de inmediato."
+        },
+        {
+          "key": "d",
+          "text": "Oxígeno por mascarilla y observación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No resuelve la tensión."
+        },
+        {
+          "key": "e",
+          "text": "Esperar a que el pulmón se reexpanda solo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia vital."
+        },
+        {
+          "key": "f",
+          "text": "No puncionar por miedo a equivocarse",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El beneficio supera el riesgo."
+        },
+        {
+          "key": "g",
+          "text": "Tomografía de tórax urgente",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "h",
+          "text": "Radiografía de tórax antes de cualquier procedimiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Retrasa un tratamiento que salva la vida."
+        },
+        {
+          "key": "i",
+          "text": "Toracotomía de urgencia como primer paso",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La descompresión es más rápida."
+        },
+        {
+          "key": "j",
+          "text": "Pericardiocentesis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es para taponamiento cardiaco."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "El neumotórax a tensión es una causa de muerte prevenible en el trauma. Su tratamiento es la descompresión inmediata sin esperar estudios de imagen. En adultos se recomienda puncionar con un catéter de calibre grueso en el cuarto o quinto espacio intercostal en la línea axilar media o anterior, por la menor tasa de falla que el segundo espacio en la línea medioclavicular por el grosor de la pared torácica. La toracostomía digital es una alternativa eficaz. Después se coloca una sonda pleural en el quinto espacio intercostal, en el triángulo de seguridad.",
+      "gpcRefs": [
+        "Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "trauma",
+      "subtopic": "thoracic_trauma",
+      "vignette": "Hombre de 35 años con herida por proyectil de arma de fuego en el hemitórax izquierdo. Presenta hipotensión, ausencia de ruidos respiratorios y matidez en el hemitórax izquierdo. Al colocar la sonda pleural drenan de inmediato 1 600 mL de sangre.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Derrame pleural paraneumónico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El contexto es traumático."
+        },
+        {
+          "key": "b",
+          "text": "Taponamiento cardiaco",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la matidez con drenaje de sangre pleural."
+        },
+        {
+          "key": "c",
+          "text": "Hemotórax simple",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El volumen indica hemotórax masivo."
+        },
+        {
+          "key": "d",
+          "text": "Contusión pulmonar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el drenaje de sangre."
+        },
+        {
+          "key": "e",
+          "text": "Neumotórax a tensión",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Daría hiperresonancia, no matidez."
+        },
+        {
+          "key": "f",
+          "text": "Rotura diafragmática con estómago en el tórax",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Drenaría contenido gástrico."
+        },
+        {
+          "key": "g",
+          "text": "Sangrado normal que siempre se detiene solo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El volumen indica lesión grave."
+        },
+        {
+          "key": "h",
+          "text": "Hemotórax masivo",
+          "correct": true,
+          "rationale": "Drenaje inmediato de más de 1 500 mL de sangre por la sonda pleural."
+        },
+        {
+          "key": "i",
+          "text": "Quilotórax",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El líquido es sangre."
+        },
+        {
+          "key": "j",
+          "text": "Neumonía traumática",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el drenaje."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "El hemotórax masivo es la acumulación rápida de más de 1 500 mL de sangre o más de un tercio del volumen sanguíneo en la cavidad pleural, generalmente por lesión penetrante de vasos sistémicos o hiliares. Se manifiesta con choque, ausencia de ruidos respiratorios y matidez del lado afectado. Se trata con reposición de volumen y transfusión y colocación de sonda pleural de calibre grueso. La toracotomía se indica si drenan más de 1 500 mL de inmediato, más de 200 mL por hora durante 2 a 4 horas o si se requieren transfusiones continuas.",
+      "gpcRefs": [
+        "Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "trauma",
+      "subtopic": "thoracic_trauma",
+      "vignette": "Hombre de 28 años con herida por arma blanca paraesternal izquierda. Presenta hipotensión, ingurgitación yugular, ruidos cardiacos apagados y pulso paradójico. Campos pulmonares con ruidos respiratorios normales y tráquea central.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Taponamiento cardiaco",
+          "correct": true,
+          "rationale": "Tríada de Beck con hipotensión, ingurgitación yugular y ruidos cardiacos apagados."
+        },
+        {
+          "key": "b",
+          "text": "Infarto agudo de miocardio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El contexto es traumático."
+        },
+        {
+          "key": "c",
+          "text": "Embolia gaseosa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es menos probable."
+        },
+        {
+          "key": "d",
+          "text": "Contusión miocárdica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el pulso paradójico con ruidos apagados."
+        },
+        {
+          "key": "e",
+          "text": "Hemotórax masivo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Los ruidos respiratorios son normales."
+        },
+        {
+          "key": "f",
+          "text": "Neumotórax a tensión",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Daría desviación traqueal y ausencia de ruidos respiratorios."
+        },
+        {
+          "key": "g",
+          "text": "Choque hipovolémico simple",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la ingurgitación yugular."
+        },
+        {
+          "key": "h",
+          "text": "Herida superficial sin importancia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La localización es de alto riesgo."
+        },
+        {
+          "key": "i",
+          "text": "Neumomediastino simple",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No causa choque obstructivo."
+        },
+        {
+          "key": "j",
+          "text": "Tórax inestable",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da movimiento paradójico de la pared."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "f"
+      ],
+      "explanation": "El taponamiento cardiaco en el trauma se produce por acumulación de sangre en el saco pericárdico, generalmente por heridas penetrantes en la zona precordial. Incluso volúmenes pequeños comprimen el corazón y reducen el llenado, causando choque obstructivo. Se manifiesta con la tríada de Beck, hipotensión, ingurgitación yugular y ruidos cardiacos apagados, además de pulso paradójico y signo de Kussmaul. El FAST pericárdico confirma el líquido. El tratamiento definitivo es la toracotomía o esternotomía con reparación de la lesión, y la pericardiocentesis puede servir como medida temporal.",
+      "gpcRefs": [
+        "Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "trauma",
+      "subtopic": "thoracic_trauma",
+      "vignette": "Hombre de 50 años atropellado que presenta dolor torácico intenso y dificultad respiratoria. Un segmento de la pared torácica derecha se mueve hacia dentro durante la inspiración y hacia fuera en la espiración. La radiografía muestra fracturas de 4 costillas consecutivas en dos sitios cada una.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fractura de esternón aislada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica el patrón."
+        },
+        {
+          "key": "b",
+          "text": "Tórax inestable con contusión pulmonar subyacente",
+          "correct": true,
+          "rationale": "Fracturas de tres o más costillas consecutivas en dos sitios con movimiento paradójico."
+        },
+        {
+          "key": "c",
+          "text": "Fractura costal simple",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No da movimiento paradójico."
+        },
+        {
+          "key": "d",
+          "text": "Respiración rara por el dolor sin lesión",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay un segmento inestable."
+        },
+        {
+          "key": "e",
+          "text": "Hemotórax masivo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el movimiento paradójico."
+        },
+        {
+          "key": "f",
+          "text": "Costocondritis",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay fracturas."
+        },
+        {
+          "key": "g",
+          "text": "Contusión de la pared sin fracturas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Hay fracturas múltiples."
+        },
+        {
+          "key": "h",
+          "text": "Rotura diafragmática",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el segmento móvil."
+        },
+        {
+          "key": "i",
+          "text": "Taponamiento cardiaco",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el movimiento paradójico."
+        },
+        {
+          "key": "j",
+          "text": "Neumotórax a tensión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica el movimiento paradójico."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "El tórax inestable ocurre cuando tres o más costillas consecutivas se fracturan en dos o más sitios, creando un segmento de la pared que se mueve de forma paradójica con la respiración. Su mayor gravedad se debe a la contusión pulmonar subyacente, que causa hipoxemia. El tratamiento incluye analgesia eficaz, incluidos bloqueos regionales o epidural, oxígeno, fisioterapia respiratoria y manejo cuidadoso de líquidos para no empeorar la contusión. Puede requerir ventilación no invasiva o mecánica. La fijación quirúrgica de las costillas se considera en casos seleccionados.",
+      "gpcRefs": [
+        "Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "trauma",
+      "subtopic": "thoracic_trauma",
+      "vignette": "Hombre de 45 años tras un choque frontal a alta velocidad. Estable. La radiografía de tórax muestra ensanchamiento del mediastino mayor de 8 cm, pérdida del contorno del botón aórtico y desviación de la sonda nasogástrica a la derecha.",
+      "prompt": "¿Cuál es el estudio indicado ante esta sospecha?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Angiotomografía de tórax",
+          "correct": true,
+          "rationale": "Confirma la lesión traumática de la aorta torácica."
+        },
+        {
+          "key": "b",
+          "text": "Ecocardiograma transtorácico como estudio definitivo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tiene baja sensibilidad para la aorta descendente."
+        },
+        {
+          "key": "c",
+          "text": "El mediastino ancho es normal en adultos robustos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un signo de alarma."
+        },
+        {
+          "key": "d",
+          "text": "Troponinas como estudio de la aorta",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No evalúan la aorta."
+        },
+        {
+          "key": "e",
+          "text": "Esofagograma con bario",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No evalúa la aorta."
+        },
+        {
+          "key": "f",
+          "text": "Broncoscopia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No evalúa la aorta."
+        },
+        {
+          "key": "g",
+          "text": "Ultrasonido FAST",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No evalúa la aorta torácica."
+        },
+        {
+          "key": "h",
+          "text": "Resonancia magnética urgente",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es lenta y poco práctica en trauma."
+        },
+        {
+          "key": "i",
+          "text": "Repetir la radiografía en 24 horas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Retrasa el diagnóstico de una lesión mortal."
+        },
+        {
+          "key": "j",
+          "text": "Toracotomía exploradora sin imagen en paciente estable",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Primero se confirma."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "i"
+      ],
+      "explanation": "La lesión traumática de la aorta torácica ocurre en traumatismos por desaceleración brusca, como choques a alta velocidad y caídas de altura, generalmente en el istmo aórtico distal a la subclavia izquierda. La mayoría de los pacientes muere en el sitio, y los que llegan tienen un hematoma contenido. La radiografía puede mostrar mediastino ensanchado, pérdida del botón aórtico, desviación de la tráquea o la sonda a la derecha y casquete apical. La angiotomografía es el estudio de elección. El tratamiento incluye control de la presión y la frecuencia cardiaca y reparación endovascular.",
+      "gpcRefs": [
+        "Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "trauma",
+      "subtopic": "head_trauma",
+      "vignette": "Hombre de 22 años golpeado en la región temporal con un bate. Perdió el conocimiento brevemente, luego habló normal durante una hora y después presentó cefalea intensa, vómito, somnolencia progresiva y midriasis derecha. La tomografía muestra una lesión biconvexa hiperdensa temporal derecha.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ya se recuperó porque habló normal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El intervalo lúcido es engañoso."
+        },
+        {
+          "key": "b",
+          "text": "Hemorragia subaracnoidea traumática",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da sangre en surcos y cisternas."
+        },
+        {
+          "key": "c",
+          "text": "Intoxicación alcohólica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la lesión."
+        },
+        {
+          "key": "d",
+          "text": "Lesión axonal difusa",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da coma desde el inicio con tomografía casi normal."
+        },
+        {
+          "key": "e",
+          "text": "Hematoma subdural crónico",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Ocurre en ancianos semanas después."
+        },
+        {
+          "key": "f",
+          "text": "Migraña postraumática",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la midriasis ni la lesión."
+        },
+        {
+          "key": "g",
+          "text": "Hematoma subdural agudo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene forma de semiluna y suele no tener intervalo lúcido."
+        },
+        {
+          "key": "h",
+          "text": "Contusión cerebral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la lesión biconvexa."
+        },
+        {
+          "key": "i",
+          "text": "Hematoma epidural",
+          "correct": true,
+          "rationale": "Intervalo lúcido con lesión biconvexa por lesión de la arteria meníngea media."
+        },
+        {
+          "key": "j",
+          "text": "Conmoción cerebral simple",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la lesión en la tomografía."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El hematoma epidural es la acumulación de sangre entre el cráneo y la duramadre, generalmente por lesión de la arteria meníngea media asociada a fractura del hueso temporal. Su presentación clásica es pérdida del conocimiento breve, seguida de un intervalo lúcido y después deterioro neurológico rápido con cefalea, vómito, somnolencia, midriasis ipsilateral y hemiparesia contralateral por herniación uncal. La tomografía muestra una lesión hiperdensa biconvexa o en lente que no cruza las suturas. El tratamiento es la craneotomía urgente con evacuación, con buen pronóstico si es oportuna.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "trauma",
+      "subtopic": "head_trauma",
+      "vignette": "Hombre de 78 años que toma warfarina, con caídas frecuentes. Hace 3 semanas se golpeó la cabeza levemente. Ahora presenta confusión progresiva, cefalea y debilidad del lado izquierdo. La tomografía muestra una colección hipodensa en forma de semiluna sobre el hemisferio derecho.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Demencia de Alzheimer",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la colección ni la evolución."
+        },
+        {
+          "key": "b",
+          "text": "Hidrocefalia normotensa",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da dilatación ventricular sin colección."
+        },
+        {
+          "key": "c",
+          "text": "Tumor cerebral primario",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la colección en semiluna."
+        },
+        {
+          "key": "d",
+          "text": "Confusión normal de la edad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una lesión tratable."
+        },
+        {
+          "key": "e",
+          "text": "Delirium por infección urinaria",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la colección."
+        },
+        {
+          "key": "f",
+          "text": "Evento vascular cerebral isquémico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La tomografía muestra una colección extraaxial."
+        },
+        {
+          "key": "g",
+          "text": "Hematoma subdural crónico",
+          "correct": true,
+          "rationale": "Colección hipodensa en semiluna semanas después de un traumatismo leve en un anciano anticoagulado."
+        },
+        {
+          "key": "h",
+          "text": "Hematoma epidural",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es biconvexo, agudo e hiperdenso."
+        },
+        {
+          "key": "i",
+          "text": "Absceso cerebral",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la forma ni el contexto."
+        },
+        {
+          "key": "j",
+          "text": "Hemorragia subaracnoidea",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da sangre en surcos y cisternas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "El hematoma subdural es la acumulación de sangre entre la duramadre y la aracnoides por rotura de las venas puente. El crónico es más frecuente en adultos mayores, alcohólicos y anticoagulados por la atrofia cerebral que estira las venas, y puede seguir a traumatismos leves que el paciente no recuerda. Se manifiesta semanas después con cefalea, confusión, alteraciones cognitivas y déficit focal. La tomografía muestra una colección en semiluna que cruza las suturas, hipodensa en la fase crónica. El tratamiento es revertir la anticoagulación y el drenaje quirúrgico por trépanos si es sintomático.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "trauma",
+      "subtopic": "head_trauma",
+      "vignette": "Mujer de 40 años con traumatismo craneoencefálico por caída. Glasgow de 15, sin pérdida del conocimiento, sin vómito, sin anticoagulantes y sin otros datos de alarma. Tiene un pequeño hematoma en la frente.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Despertarla cada hora durante 3 días en el hospital",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "b",
+          "text": "Resonancia magnética urgente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "c",
+          "text": "Punción lumbar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "d",
+          "text": "Iniciar anticonvulsivos profilácticos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No están indicados."
+        },
+        {
+          "key": "e",
+          "text": "Tomografía de cráneo en todos los traumatismos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Expone a radiación sin beneficio en bajo riesgo."
+        },
+        {
+          "key": "f",
+          "text": "Radiografía simple de cráneo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Tiene poca utilidad."
+        },
+        {
+          "key": "g",
+          "text": "Egreso con vigilancia por un adulto y signos de alarma por escrito, sin tomografía",
+          "correct": true,
+          "rationale": "Cumple criterios de bajo riesgo según las reglas de decisión."
+        },
+        {
+          "key": "h",
+          "text": "Todo golpe en la cabeza es grave",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La mayoría son leves."
+        },
+        {
+          "key": "i",
+          "text": "Egresar sin explicar los signos de alarma",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe saber cuándo regresar."
+        },
+        {
+          "key": "j",
+          "text": "Hospitalización 72 horas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es necesaria."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La mayoría de los traumatismos craneoencefálicos son leves. Las reglas de decisión como la regla canadiense de tomografía de cráneo o los criterios de Nueva Orleans identifican a los pacientes que requieren tomografía. Los factores de riesgo incluyen Glasgow menor de 15 a las 2 horas, sospecha de fractura abierta o deprimida, signos de fractura de base de cráneo, vómito repetido, edad mayor de 65 años, anticoagulación, amnesia o mecanismo peligroso. Los pacientes sin factores de riesgo pueden egresar con vigilancia y signos de alarma como cefalea progresiva, vómito, somnolencia, confusión o debilidad.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "trauma",
+      "subtopic": "head_trauma",
+      "vignette": "Hombre de 30 años con traumatismo craneoencefálico que presenta equimosis periorbitaria bilateral, equimosis retroauricular y salida de líquido claro por la nariz que aumenta al inclinarse hacia adelante.",
+      "prompt": "¿Qué indican estos hallazgos?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Rinitis alérgica postraumática",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica las equimosis."
+        },
+        {
+          "key": "b",
+          "text": "Fractura de la órbita aislada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el signo de Battle."
+        },
+        {
+          "key": "c",
+          "text": "Hematoma subdural agudo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica estos signos externos."
+        },
+        {
+          "key": "d",
+          "text": "Contusión facial sin fractura",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la rinorraquia."
+        },
+        {
+          "key": "e",
+          "text": "Sinusitis aguda",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica las equimosis."
+        },
+        {
+          "key": "f",
+          "text": "Fractura mandibular",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la rinorraquia."
+        },
+        {
+          "key": "g",
+          "text": "Fractura de huesos nasales simple",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la equimosis retroauricular ni la rinorraquia."
+        },
+        {
+          "key": "h",
+          "text": "Moretones normales por el golpe",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Indican una fractura grave."
+        },
+        {
+          "key": "i",
+          "text": "Fractura de la base del cráneo con fístula de líquido cefalorraquídeo",
+          "correct": true,
+          "rationale": "Ojos de mapache, signo de Battle y rinorraquia."
+        },
+        {
+          "key": "j",
+          "text": "Epistaxis anterior",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El líquido es claro."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "i"
+      ],
+      "explanation": "Los signos de fractura de la base del cráneo incluyen equimosis periorbitaria bilateral u ojos de mapache, equimosis retroauricular o signo de Battle, hemotímpano, otorraquia o rinorraquia por fístula de líquido cefalorraquídeo y lesión de pares craneales como el facial o el vestibulococlear. La tomografía con ventana ósea confirma la fractura. En la sospecha de fractura de la base no debe colocarse sonda nasogástrica, sino orogástrica, por el riesgo de introducirla al cráneo. La mayoría de las fístulas se cierran solas, y el riesgo de meningitis es la principal complicación.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "trauma",
+      "subtopic": "head_trauma",
+      "vignette": "Hombre de 35 años con traumatismo craneoencefálico grave, Glasgow de 6, ya intubado. Presenta anisocoria con midriasis izquierda arreactiva, hipertensión y bradicardia. Saturación de 99%.",
+      "prompt": "¿Cuál es el tratamiento inicial ante esta herniación inminente?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Atropina para la bradicardia sin tratar la presión intracraneal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No trata la causa."
+        },
+        {
+          "key": "b",
+          "text": "Antihipertensivos para bajar la presión arterial a valores bajos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Reducen la perfusión cerebral."
+        },
+        {
+          "key": "c",
+          "text": "Soluciones hipotónicas en bolo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Empeoran el edema cerebral."
+        },
+        {
+          "key": "d",
+          "text": "Craniectomía sin imagen en todos los casos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se valora con la tomografía."
+        },
+        {
+          "key": "e",
+          "text": "Elevar la cabecera a 30 grados, terapia hiperosmolar con solución salina hipertónica o manitol, hiperventilación breve y tomografía con valoración neuroquirúrgica urgente",
+          "correct": true,
+          "rationale": "Son medidas para reducir la presión intracraneal."
+        },
+        {
+          "key": "f",
+          "text": "No tratar por el mal pronóstico",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El tratamiento oportuno puede salvarlo."
+        },
+        {
+          "key": "g",
+          "text": "Punción lumbar para bajar la presión",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede precipitar la herniación."
+        },
+        {
+          "key": "h",
+          "text": "Esperar a que despierte solo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una urgencia."
+        },
+        {
+          "key": "i",
+          "text": "Hiperventilación prolongada como único tratamiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Causa isquemia cerebral."
+        },
+        {
+          "key": "j",
+          "text": "Corticosteroides en dosis altas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumentan la mortalidad en trauma craneal."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "La tríada de Cushing, hipertensión, bradicardia y respiración irregular, junto con la midriasis unilateral, indica hipertensión intracraneal con herniación inminente. El tratamiento incluye elevar la cabecera a 30 grados con el cuello en posición neutra, sedación y analgesia, terapia hiperosmolar con solución salina hipertónica o manitol, mantener la presión arterial y la oxigenación para preservar la perfusión cerebral, y hiperventilación breve como puente. La tomografía urgente identifica lesiones quirúrgicas como hematomas. Los corticosteroides no se recomiendan en el traumatismo craneoencefálico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "trauma",
+      "subtopic": "head_trauma",
+      "vignette": "Hombre de 72 años que toma rivaroxabán por fibrilación auricular y sufre una caída con golpe en la cabeza. Glasgow de 15 y sin síntomas.",
+      "prompt": "¿Cuál es el factor de riesgo que obliga a realizar tomografía de cráneo pese a estar asintomático?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sexo masculino",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es un criterio."
+        },
+        {
+          "key": "b",
+          "text": "Uso de lentes",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es relevante."
+        },
+        {
+          "key": "c",
+          "text": "Diabetes tipo 2",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un criterio."
+        },
+        {
+          "key": "d",
+          "text": "Vacunación al día",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es relevante."
+        },
+        {
+          "key": "e",
+          "text": "Antecedente de cataratas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es relevante."
+        },
+        {
+          "key": "f",
+          "text": "Anticoagulación junto con edad mayor de 65 años",
+          "correct": true,
+          "rationale": "Aumentan el riesgo de hemorragia intracraneal incluso sin síntomas."
+        },
+        {
+          "key": "g",
+          "text": "Haber caminado tras la caída",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es un factor de riesgo."
+        },
+        {
+          "key": "h",
+          "text": "Si está asintomático no necesita estudios",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La anticoagulación cambia el riesgo."
+        },
+        {
+          "key": "i",
+          "text": "Hipertensión arterial controlada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es un criterio de tomografía."
+        },
+        {
+          "key": "j",
+          "text": "El horario de la caída",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es relevante."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "Los adultos mayores y los pacientes anticoagulados o antiagregados tienen mayor riesgo de hemorragia intracraneal tras un traumatismo craneoencefálico, incluso leve y con Glasgow de 15, y pueden deteriorarse de forma tardía. Por ello se recomienda tomografía de cráneo en todos los pacientes anticoagulados con traumatismo craneal y en mayores de 65 años según las reglas de decisión. Si hay hemorragia se revierte la anticoagulación con el antídoto específico o concentrado de complejo protrombínico. Algunos protocolos recomiendan observación y repetir la tomografía.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención inicial del traumatismo craneoencefálico"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "burns",
+      "subtopic": "burn_classification",
+      "vignette": "Hombre de 30 años con quemadura por escaldadura en el antebrazo. La piel está roja, con ampollas, húmeda, muy dolorosa y blanquea a la presión con llenado capilar rápido.",
+      "prompt": "¿Qué indica la profundidad de esta quemadura?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Quemadura de tercer grado",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Sería indolora, seca, acartonada y no blanquearía."
+        },
+        {
+          "key": "b",
+          "text": "Quemadura de primer grado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No tiene ampollas."
+        },
+        {
+          "key": "c",
+          "text": "Quemadura de segundo grado superficial o espesor parcial superficial",
+          "correct": true,
+          "rationale": "Ampollas, piel húmeda, dolor intenso y blanqueamiento a la presión."
+        },
+        {
+          "key": "d",
+          "text": "Dermatitis de contacto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El contexto es una escaldadura."
+        },
+        {
+          "key": "e",
+          "text": "Celulitis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "f",
+          "text": "Necrólisis epidérmica tóxica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El contexto es térmico localizado."
+        },
+        {
+          "key": "g",
+          "text": "Quemadura de cuarto grado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Afecta músculo o hueso."
+        },
+        {
+          "key": "h",
+          "text": "Quemadura química",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El agente es líquido caliente."
+        },
+        {
+          "key": "i",
+          "text": "Las ampollas indican quemadura muy profunda",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Indican espesor parcial."
+        },
+        {
+          "key": "j",
+          "text": "Quemadura de segundo grado profundo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Sería menos dolorosa y no blanquearía bien."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "Las quemaduras se clasifican por su profundidad. Las de primer grado o epidérmicas son rojas, secas, dolorosas y sin ampollas, como la quemadura solar. Las de segundo grado superficial afectan la dermis papilar, tienen ampollas, son húmedas, muy dolorosas y blanquean a la presión, y curan en 2 a 3 semanas sin cicatriz importante. Las de segundo grado profundo afectan la dermis reticular, son pálidas, menos dolorosas y tardan más en sanar. Las de tercer grado o espesor total son blancas o acartonadas, secas e indoloras y requieren injerto. Las de cuarto grado afectan tejidos profundos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "burns",
+      "subtopic": "burn_classification",
+      "vignette": "Hombre adulto de 70 kg con quemaduras de segundo y tercer grado en todo el miembro superior derecho, la cara anterior del tronco completa y todo el miembro inferior derecho.",
+      "prompt": "¿Qué porcentaje de superficie corporal quemada indica la regla de los nueves?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "27%",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No suma correctamente las regiones."
+        },
+        {
+          "key": "b",
+          "text": "36%",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No suma correctamente las regiones."
+        },
+        {
+          "key": "c",
+          "text": "9%",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Solo cuenta el brazo."
+        },
+        {
+          "key": "d",
+          "text": "63%",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Sobreestima la superficie."
+        },
+        {
+          "key": "e",
+          "text": "54%",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Sobreestima la superficie."
+        },
+        {
+          "key": "f",
+          "text": "No se puede calcular sin una báscula especial",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La regla es clínica y rápida."
+        },
+        {
+          "key": "g",
+          "text": "40%",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No corresponde a la regla."
+        },
+        {
+          "key": "h",
+          "text": "18%",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Solo considera una región."
+        },
+        {
+          "key": "i",
+          "text": "45% de superficie corporal quemada",
+          "correct": true,
+          "rationale": "Miembro superior 9%, tronco anterior 18% y miembro inferior 18%."
+        },
+        {
+          "key": "j",
+          "text": "72%",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Sobreestima la superficie."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "i"
+      ],
+      "explanation": "La regla de los nueves de Wallace estima la superficie corporal quemada en adultos. La cabeza y el cuello equivalen a 9%, cada miembro superior a 9%, la cara anterior del tronco a 18%, la cara posterior del tronco a 18%, cada miembro inferior a 18% y el periné a 1%. En niños la cabeza representa una proporción mayor, por lo que se usa la tabla de Lund y Browder. Para quemaduras pequeñas o irregulares se usa la palma de la mano del paciente, que equivale a alrededor de 1%. Solo se cuentan las quemaduras de segundo y tercer grado.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "burns",
+      "subtopic": "burn_classification",
+      "vignette": "Hombre de 40 años rescatado de un incendio en un espacio cerrado. Tiene quemaduras faciales, vello nasal chamuscado, esputo carbonáceo, voz ronca y estridor leve. Saturación de 94%.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esperar a que la saturación baje de 90% para intubar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La intubación será más difícil después."
+        },
+        {
+          "key": "b",
+          "text": "Broncoscopia antes de asegurar la vía aérea en todos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La vía aérea va primero."
+        },
+        {
+          "key": "c",
+          "text": "Intubación orotraqueal temprana por sospecha de lesión por inhalación con riesgo de obstrucción de la vía aérea",
+          "correct": true,
+          "rationale": "El edema de la vía aérea progresa rápidamente."
+        },
+        {
+          "key": "d",
+          "text": "La ronquera es por gritar durante el incendio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Indica lesión de la vía aérea."
+        },
+        {
+          "key": "e",
+          "text": "Radiografía de tórax como estudio que descarta la lesión",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Suele ser normal al inicio."
+        },
+        {
+          "key": "f",
+          "text": "Evitar intubar por miedo a complicaciones",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La obstrucción es mortal."
+        },
+        {
+          "key": "g",
+          "text": "Traqueostomía electiva en semanas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El riesgo es inmediato."
+        },
+        {
+          "key": "h",
+          "text": "Corticosteroides como medida principal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No previenen el edema por inhalación."
+        },
+        {
+          "key": "i",
+          "text": "Oxígeno por puntas nasales y observación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El edema puede obstruir la vía aérea en horas."
+        },
+        {
+          "key": "j",
+          "text": "Nebulizaciones con salbutamol como único tratamiento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No previenen la obstrucción."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "La lesión por inhalación es una causa importante de muerte en los quemados. Se sospecha en incendios en espacios cerrados con quemaduras faciales, vello nasal o cejas chamuscadas, esputo carbonáceo, hollín en la orofaringe, disfonía, estridor o dificultad respiratoria. El edema de la vía aérea superior progresa en las primeras 24 horas y puede causar obstrucción, por lo que se recomienda intubación temprana ante datos de lesión. También debe sospecharse intoxicación por monóxido de carbono y cianuro, y se administra oxígeno al 100%. La broncoscopia confirma la lesión.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "burns",
+      "subtopic": "burn_classification",
+      "vignette": "Mujer de 35 años rescatada de un incendio en su casa que presenta cefalea, náusea, confusión y piel de color rojo cereza. La oximetría de pulso marca 99%.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Golpe de calor",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el contexto."
+        },
+        {
+          "key": "b",
+          "text": "Metahemoglobinemia por fármacos",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay exposición a oxidantes."
+        },
+        {
+          "key": "c",
+          "text": "Ansiedad por el incendio",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la confusión."
+        },
+        {
+          "key": "d",
+          "text": "Hipoglucemia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica el contexto."
+        },
+        {
+          "key": "e",
+          "text": "Piel rosada que indica buena oxigenación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un signo de intoxicación."
+        },
+        {
+          "key": "f",
+          "text": "Traumatismo craneoencefálico leve",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay antecedente de golpe."
+        },
+        {
+          "key": "g",
+          "text": "Intoxicación por monóxido de carbono",
+          "correct": true,
+          "rationale": "Cefalea, confusión y oximetría falsamente normal tras exposición al humo."
+        },
+        {
+          "key": "h",
+          "text": "Migraña",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el contexto ni la confusión."
+        },
+        {
+          "key": "i",
+          "text": "Hipoxemia descartada por la oximetría normal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La oximetría no distingue la carboxihemoglobina."
+        },
+        {
+          "key": "j",
+          "text": "Deshidratación",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la confusión aguda."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "El monóxido de carbono tiene una afinidad por la hemoglobina más de 200 veces mayor que el oxígeno, forma carboxihemoglobina y reduce el transporte y la liberación de oxígeno a los tejidos. Se manifiesta con cefalea, náusea, mareo, confusión, convulsiones y coma. La oximetría de pulso convencional muestra valores falsamente normales porque no distingue la carboxihemoglobina. El diagnóstico se confirma con gasometría con cooximetría. El tratamiento es oxígeno al 100% con mascarilla con reservorio, que reduce la vida media de la carboxihemoglobina, y oxígeno hiperbárico en casos graves.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "burns",
+      "subtopic": "burn_classification",
+      "vignette": "Hombre de 28 años con quemadura de tercer grado circunferencial en todo el antebrazo derecho. A las 6 horas presenta dolor intenso, mano fría y pálida, llenado capilar lento y pulso radial disminuido.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Angiografía antes de actuar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "b",
+          "text": "Injerto de piel urgente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No resuelve la compresión."
+        },
+        {
+          "key": "c",
+          "text": "Analgésicos y observación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No resuelven la isquemia."
+        },
+        {
+          "key": "d",
+          "text": "Aplicar hielo para disminuir la inflamación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Empeora la lesión."
+        },
+        {
+          "key": "e",
+          "text": "Vendaje compresivo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Empeora la compresión."
+        },
+        {
+          "key": "f",
+          "text": "Elevar la extremidad y esperar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El compromiso vascular requiere liberación."
+        },
+        {
+          "key": "g",
+          "text": "Escarotomía de urgencia",
+          "correct": true,
+          "rationale": "La escara circunferencial produce síndrome compartimental que compromete la circulación."
+        },
+        {
+          "key": "h",
+          "text": "Anticoagulación como único manejo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No resuelve la compresión."
+        },
+        {
+          "key": "i",
+          "text": "Diferir el procedimiento por temor a sangrado",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La isquemia puede ser irreversible."
+        },
+        {
+          "key": "j",
+          "text": "Amputación inmediata",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es prematura."
+        }
+      ],
+      "canonical": [
+        "e",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "Las quemaduras de espesor total circunferenciales en las extremidades forman una escara inelástica que, con el edema de la reanimación, aumenta la presión en los tejidos y compromete la circulación, causando un síndrome compartimental. Se manifiesta con dolor, palidez, frialdad, parestesias, llenado capilar lento y disminución de pulsos. El tratamiento es la escarotomía, incisión longitudinal de la escara en las caras medial y lateral. En el tórax las quemaduras circunferenciales pueden restringir la ventilación y también requieren escarotomía. Si persiste el compromiso puede requerirse fasciotomía.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "burns",
+      "subtopic": "burn_classification",
+      "vignette": "Niño de 4 años con quemaduras por escaldadura de segundo grado en ambos glúteos y la cara posterior de ambos muslos con patrón en calcetín bien delimitado. La madre refiere que se metió solo a la tina.",
+      "prompt": "¿Cuál es la conducta más apropiada además del tratamiento de las quemaduras?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aceptar la explicación de la madre sin más estudio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El patrón no es congruente con un accidente."
+        },
+        {
+          "key": "b",
+          "text": "Culpar a la madre frente al niño",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es adecuado."
+        },
+        {
+          "key": "c",
+          "text": "Pedir a la madre que firme que no fue intencional",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No protege al niño."
+        },
+        {
+          "key": "d",
+          "text": "Biopsia de piel para confirmar el maltrato",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "e",
+          "text": "Egresar con curaciones en casa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El patrón sugiere maltrato."
+        },
+        {
+          "key": "f",
+          "text": "No notificar para evitar problemas legales",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La notificación es obligatoria."
+        },
+        {
+          "key": "g",
+          "text": "Tratar solo con antibióticos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No aborda la sospecha."
+        },
+        {
+          "key": "h",
+          "text": "Sospechar maltrato infantil, hospitalizar y notificar a trabajo social y a las autoridades correspondientes",
+          "correct": true,
+          "rationale": "El patrón de inmersión simétrico y bien delimitado sugiere quemadura intencional."
+        },
+        {
+          "key": "i",
+          "text": "Atenderlo solo como accidente doméstico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe descartarse maltrato."
+        },
+        {
+          "key": "j",
+          "text": "Los niños se queman solos con frecuencia en la tina de esta forma",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El patrón es típico de inmersión forzada."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "h"
+      ],
+      "explanation": "Las quemaduras representan una proporción importante del maltrato infantil. Los datos de alarma son patrones de inmersión con bordes bien delimitados en guante o calcetín, quemaduras simétricas en glúteos y periné, ausencia de salpicaduras, quemaduras con forma de objetos como cigarros o planchas, retraso en la búsqueda de atención, explicaciones incongruentes con la lesión o el desarrollo del niño y otras lesiones en diferentes etapas. Ante la sospecha se hospitaliza, se documenta con fotografías, se buscan otras lesiones y se notifica a trabajo social y a las autoridades.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección y atención del maltrato infantil"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q19",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "burns",
+      "subtopic": "burn_classification",
+      "vignette": "Mujer de 25 años que hace 5 minutos se quemó el dorso de la mano con aceite caliente. Tiene una quemadura de segundo grado superficial de 2% de superficie corporal.",
+      "prompt": "¿Cuál es el tratamiento inicial inmediato?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Injerto de piel urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "b",
+          "text": "No enfriar para no causar hipotermia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "En quemaduras pequeñas el riesgo es mínimo."
+        },
+        {
+          "key": "c",
+          "text": "Aplicar pasta dental o mantequilla",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aumentan el riesgo de infección."
+        },
+        {
+          "key": "d",
+          "text": "Antibióticos orales profilácticos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No están indicados."
+        },
+        {
+          "key": "e",
+          "text": "Cubrir con algodón directamente",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se adhiere a la herida."
+        },
+        {
+          "key": "f",
+          "text": "Aplicar alcohol para desinfectar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Duele y daña el tejido."
+        },
+        {
+          "key": "g",
+          "text": "Enfriar la quemadura con agua corriente fresca de 15 a 25 °C durante 20 minutos",
+          "correct": true,
+          "rationale": "Reduce la profundidad de la lesión y el dolor."
+        },
+        {
+          "key": "h",
+          "text": "Aplicar clara de huevo o remedios caseros",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Aumentan la infección."
+        },
+        {
+          "key": "i",
+          "text": "Aplicar hielo directamente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Causa vasoconstricción y empeora la lesión."
+        },
+        {
+          "key": "j",
+          "text": "Reventar todas las ampollas de inmediato",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumenta el riesgo de infección."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El primer auxilio de una quemadura térmica es detener el proceso de quemado y enfriar la lesión con agua corriente fresca, idealmente de 15 a 25 °C, durante unos 20 minutos, en las primeras 3 horas. Esto reduce la profundidad, el edema y el dolor. No se debe usar hielo, que causa vasoconstricción y daño adicional, ni remedios caseros como pasta dental, mantequilla, aceite o clara de huevo. Se retiran anillos y ropa no adherida. Después se cubre con un apósito limpio no adherente y se administra analgesia. En quemaduras extensas se vigila la hipotermia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q20",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "burns",
+      "subtopic": "burn_resuscitation",
+      "vignette": "Hombre de 80 kg con quemaduras de segundo y tercer grado en 40% de superficie corporal, sin lesión por inhalación. Llega a urgencias una hora después de la quemadura.",
+      "prompt": "¿Cuál es la reanimación hídrica de elección en las primeras 24 horas?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Albúmina como líquido principal desde el inicio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es la primera elección en las primeras horas."
+        },
+        {
+          "key": "b",
+          "text": "Restringir los líquidos para evitar edema",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Causa choque por quemadura."
+        },
+        {
+          "key": "c",
+          "text": "Plasma fresco como líquido principal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el líquido de elección."
+        },
+        {
+          "key": "d",
+          "text": "Solución glucosada al 5%",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No repone sodio y causa hiponatremia."
+        },
+        {
+          "key": "e",
+          "text": "Calcular las 8 horas desde la llegada al hospital",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se cuentan desde la quemadura."
+        },
+        {
+          "key": "f",
+          "text": "Solución salina hipertónica en todos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es el estándar."
+        },
+        {
+          "key": "g",
+          "text": "Ringer lactato a 4 mL por kg por porcentaje quemado, la mitad en las primeras 8 horas desde la quemadura, ajustado a la diuresis",
+          "correct": true,
+          "rationale": "Es la fórmula de Parkland."
+        },
+        {
+          "key": "h",
+          "text": "Dar solo líquidos orales",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "En quemaduras extensas se requiere vía intravenosa."
+        },
+        {
+          "key": "i",
+          "text": "Transfusión de concentrados eritrocitarios",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicada al inicio."
+        },
+        {
+          "key": "j",
+          "text": "No ajustar los líquidos a la diuresis",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La diuresis guía la reanimación."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "g"
+      ],
+      "explanation": "Las quemaduras extensas, mayores de 20% de superficie corporal en adultos, producen un aumento de la permeabilidad capilar con pérdida de líquido al intersticio y choque por quemadura. La reanimación se calcula con la fórmula de Parkland, 4 mL por kg de peso por porcentaje de superficie quemada de Ringer lactato en 24 horas, la mitad en las primeras 8 horas desde el momento de la quemadura y el resto en las 16 horas siguientes. Algunas guías recomiendan iniciar con 2 mL. El objetivo es una diuresis de 0.5 mL/kg/h en adultos y 1 mL/kg/h en niños, ajustando el ritmo para evitar la sobrecarga.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q21",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "burns",
+      "subtopic": "burn_resuscitation",
+      "vignette": "Hombre de 70 kg con 50% de superficie corporal quemada en reanimación con Ringer lactato. A las 4 horas tiene diuresis de 15 mL por hora, frecuencia cardiaca de 125 y presión de 95/60 mmHg.",
+      "prompt": "¿Qué indica esta diuresis y cuál es el ajuste?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Diuresis adecuada que no requiere cambios",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Está por debajo de la meta."
+        },
+        {
+          "key": "b",
+          "text": "Indica insuficiencia renal establecida que requiere diálisis inmediata",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Primero se optimiza el volumen."
+        },
+        {
+          "key": "c",
+          "text": "Indica obstrucción de la sonda sin más acciones",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Debe verificarse, pero la clínica sugiere hipovolemia."
+        },
+        {
+          "key": "d",
+          "text": "Indica que debe iniciarse glucosa al 50%",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No corrige la hipovolemia."
+        },
+        {
+          "key": "e",
+          "text": "Indica sepsis temprana que requiere solo antibióticos",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El contexto es la reanimación."
+        },
+        {
+          "key": "f",
+          "text": "Indica sobrecarga y debe darse furosemida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La diuresis baja indica hipovolemia."
+        },
+        {
+          "key": "g",
+          "text": "Reanimación insuficiente que requiere aumentar el ritmo de infusión",
+          "correct": true,
+          "rationale": "La meta es una diuresis de al menos 35 mL por hora en este paciente."
+        },
+        {
+          "key": "h",
+          "text": "Indica que debe restringirse el sodio",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Requiere más volumen."
+        },
+        {
+          "key": "i",
+          "text": "Los quemados orinan poco de forma normal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La oliguria indica hipoperfusión."
+        },
+        {
+          "key": "j",
+          "text": "Indica que debe suspenderse la reanimación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Agravaría el choque."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "g"
+      ],
+      "explanation": "La diuresis es el mejor indicador de la adecuación de la reanimación en el paciente quemado. La meta en adultos es de 0.5 mL/kg/h, alrededor de 30 a 50 mL por hora, y en niños de 1 mL/kg/h. Una diuresis menor indica reanimación insuficiente y requiere aumentar la infusión en 20 a 30%. Una diuresis mayor de la meta indica exceso y se reduce el ritmo para evitar edema, síndrome compartimental abdominal y de extremidades. Los diuréticos no se usan para aumentar la diuresis. En quemaduras eléctricas con mioglobinuria la meta es mayor, de 1 a 2 mL/kg/h, para proteger la función renal. La reanimación se reevalúa cada hora con signos vitales y estado mental.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q22",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "burns",
+      "subtopic": "burn_resuscitation",
+      "vignette": "Hombre de 35 años con quemadura de segundo grado en 25% de superficie corporal que incluye la cara, ambas manos y el periné.",
+      "prompt": "¿Cuál es la conducta más apropiada respecto al sitio de atención?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hospitalizar en piso general sin especialistas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Requiere atención especializada."
+        },
+        {
+          "key": "b",
+          "text": "Manejo ambulatorio con curaciones en casa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene criterios de gravedad."
+        },
+        {
+          "key": "c",
+          "text": "Referir a una unidad especializada de quemados",
+          "correct": true,
+          "rationale": "Las quemaduras en cara, manos, periné o mayores de 20% cumplen criterios de referencia."
+        },
+        {
+          "key": "d",
+          "text": "Esperar a ver si se infecta para referir",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Retrasa la atención."
+        },
+        {
+          "key": "e",
+          "text": "Injertos inmediatos en urgencias generales",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Requiere centro especializado."
+        },
+        {
+          "key": "f",
+          "text": "Trasladar solo si presenta choque",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Cumple criterios sin choque."
+        },
+        {
+          "key": "g",
+          "text": "Las quemaduras de segundo grado sanan solas siempre",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Las áreas especiales tienen riesgo de secuelas."
+        },
+        {
+          "key": "h",
+          "text": "Tratar las áreas especiales igual que el resto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Requieren manejo especializado."
+        },
+        {
+          "key": "i",
+          "text": "Egresar con antibióticos orales",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es adecuado."
+        },
+        {
+          "key": "j",
+          "text": "No referir para no saturar la unidad",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Cumple criterios."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "i"
+      ],
+      "explanation": "Los criterios de referencia a una unidad de quemados incluyen quemaduras de espesor parcial mayores de 10 a 20% de la superficie corporal, quemaduras de espesor total, quemaduras en cara, manos, pies, genitales, periné o articulaciones mayores, quemaduras circunferenciales, eléctricas incluidas las por rayo, químicas, lesión por inhalación, pacientes con comorbilidades, traumatismo asociado y niños en hospitales sin capacidad pediátrica. Estas quemaduras tienen riesgo de secuelas funcionales y estéticas y requieren manejo multidisciplinario.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q23",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "burns",
+      "subtopic": "burn_resuscitation",
+      "vignette": "Hombre de 30 años con quemadura eléctrica de alto voltaje con lesión de entrada en la mano y salida en el pie. Las lesiones cutáneas son pequeñas. A las 12 horas presenta orina color café oscuro y creatina cinasa de 40 000 U/L.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hematuria por infección urinaria",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La creatina cinasa elevada orienta a rabdomiólisis."
+        },
+        {
+          "key": "b",
+          "text": "La quemadura es pequeña y no puede haber daño interno",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El daño eléctrico es profundo."
+        },
+        {
+          "key": "c",
+          "text": "Glomerulonefritis aguda",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica la creatina cinasa."
+        },
+        {
+          "key": "d",
+          "text": "Deshidratación simple",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la creatina cinasa."
+        },
+        {
+          "key": "e",
+          "text": "Hemólisis por transfusión",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hubo transfusión."
+        },
+        {
+          "key": "f",
+          "text": "Porfiria aguda",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el contexto."
+        },
+        {
+          "key": "g",
+          "text": "Rabdomiólisis con riesgo de lesión renal aguda por mioglobinuria",
+          "correct": true,
+          "rationale": "La corriente daña los músculos profundos aunque la piel parezca poco afectada."
+        },
+        {
+          "key": "h",
+          "text": "Litiasis renal",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la creatina cinasa."
+        },
+        {
+          "key": "i",
+          "text": "Hepatitis por estrés",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la orina oscura con creatina cinasa alta."
+        },
+        {
+          "key": "j",
+          "text": "Quemadura leve sin complicaciones",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La lesión profunda es extensa."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "g"
+      ],
+      "explanation": "Las quemaduras eléctricas de alto voltaje causan lesiones profundas de músculos, nervios y vasos a lo largo del trayecto de la corriente, con lesiones cutáneas que subestiman el daño. Las complicaciones incluyen arritmias, rabdomiólisis con mioglobinuria y lesión renal aguda, síndrome compartimental, fracturas, lesiones neurológicas y cataratas tardías. Se realiza electrocardiograma y monitoreo. La rabdomiólisis se trata con reanimación intensa para lograr una diuresis de 1 a 2 mL/kg/h hasta que la orina se aclare. La fasciotomía se indica si hay síndrome compartimental.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q24",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "burns",
+      "subtopic": "burn_resuscitation",
+      "vignette": "Mujer de 40 años con quemadura de tercer grado de 8% en el muslo, estable, en el quinto día. La herida está limpia, con escara blanca, seca e indolora.",
+      "prompt": "¿Cuál es el tratamiento de elección para esta quemadura?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Escisión temprana de la escara e injerto de piel autólogo",
+          "correct": true,
+          "rationale": "Las quemaduras de espesor total no epitelizan y la escisión temprana reduce la infección."
+        },
+        {
+          "key": "b",
+          "text": "Antibióticos sistémicos profilácticos prolongados",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No están indicados de rutina."
+        },
+        {
+          "key": "c",
+          "text": "Dejar la escara hasta que se desprenda sola en semanas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumenta la infección y la cicatriz."
+        },
+        {
+          "key": "d",
+          "text": "Colgajo libre microvascular en todos los casos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "e",
+          "text": "Oxígeno hiperbárico como tratamiento principal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No sustituye la cirugía."
+        },
+        {
+          "key": "f",
+          "text": "Remedios caseros para regenerar la piel",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No son eficaces."
+        },
+        {
+          "key": "g",
+          "text": "Amputación de la extremidad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es excesiva."
+        },
+        {
+          "key": "h",
+          "text": "Curaciones con pomadas hasta que cierre sola",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El espesor total no cierra sin injerto o lo hace con mala cicatriz."
+        },
+        {
+          "key": "i",
+          "text": "Vendaje compresivo como tratamiento definitivo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No cierra la herida."
+        },
+        {
+          "key": "j",
+          "text": "Diferir la cirugía por miedo al sangrado",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La escisión temprana mejora los resultados."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "Las quemaduras de espesor total destruyen la dermis y sus anexos, por lo que no pueden epitelizar salvo desde los bordes en lesiones muy pequeñas. El tratamiento de elección es la escisión temprana de la escara, en los primeros 3 a 5 días, seguida de cobertura con autoinjerto de piel de espesor parcial. Esto reduce la infección, la estancia hospitalaria, la respuesta hipermetabólica y las cicatrices hipertróficas. Si no hay suficiente piel donadora se usan sustitutos cutáneos temporales. Las quemaduras de segundo grado superficial se manejan con curaciones y apósitos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q25",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "burns",
+      "subtopic": "burn_resuscitation",
+      "vignette": "Paciente de 82 años con quemaduras de segundo y tercer grado en 30% de la superficie corporal y lesión por inhalación. La familia pregunta por el pronóstico.",
+      "prompt": "¿Cuál es el principal determinante del pronóstico de mortalidad?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "El grupo sanguíneo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No influye."
+        },
+        {
+          "key": "b",
+          "text": "El sexo del paciente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es un factor principal."
+        },
+        {
+          "key": "c",
+          "text": "El tipo de ropa que usaba",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No influye."
+        },
+        {
+          "key": "d",
+          "text": "La hora del día del accidente",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No influye."
+        },
+        {
+          "key": "e",
+          "text": "El agente que causó la quemadura como único factor",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es el principal."
+        },
+        {
+          "key": "f",
+          "text": "El color de la piel quemada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es un factor pronóstico."
+        },
+        {
+          "key": "g",
+          "text": "La temperatura del cuarto de hospital",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es el factor principal."
+        },
+        {
+          "key": "h",
+          "text": "La combinación de edad avanzada, porcentaje de superficie quemada y lesión por inhalación",
+          "correct": true,
+          "rationale": "Son los factores del índice de Baux revisado."
+        },
+        {
+          "key": "i",
+          "text": "El tamaño de las ampollas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es un factor pronóstico."
+        },
+        {
+          "key": "j",
+          "text": "El dolor que refiere el paciente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es un factor pronóstico."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "f",
+        "h"
+      ],
+      "explanation": "El pronóstico del paciente quemado depende principalmente de la edad, la extensión de la superficie corporal quemada y la presencia de lesión por inhalación. El índice de Baux suma la edad y el porcentaje de superficie quemada, y la versión revisada agrega 17 puntos si hay lesión por inhalación. Valores mayores de 140 se asocian a mortalidad muy alta. Otros factores son las comorbilidades, la profundidad de las quemaduras y las complicaciones como sepsis y falla orgánica. Los adultos mayores tienen menor reserva fisiológica y piel más delgada, con quemaduras más profundas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado"
+      ]
+    },
+    {
+      "key": "cir-04-trauma-quemaduras-q26",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "general_surgery",
+      "topic": "burns",
+      "subtopic": "burn_resuscitation",
+      "vignette": "Hombre de 45 años con quemaduras en 45% de superficie corporal en su décimo día de hospitalización que presenta fiebre de 39 °C, hipotensión, confusión y una herida que cambió de color a negro con secreción purulenta y olor fétido.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Reacción a la sulfadiazina de plata",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la sepsis."
+        },
+        {
+          "key": "b",
+          "text": "Respuesta inflamatoria esperada de la quemadura",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La hipotensión y el cambio de la herida indican infección."
+        },
+        {
+          "key": "c",
+          "text": "Fiebre por transfusión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica los cambios en la herida."
+        },
+        {
+          "key": "d",
+          "text": "Delirium por opioides",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la fiebre y la herida."
+        },
+        {
+          "key": "e",
+          "text": "Deshidratación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la secreción fétida."
+        },
+        {
+          "key": "f",
+          "text": "Neumonía como única causa",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La herida muestra infección."
+        },
+        {
+          "key": "g",
+          "text": "Infección invasiva de la herida por quemadura con sepsis",
+          "correct": true,
+          "rationale": "Cambio de color de la herida con secreción y datos de sepsis."
+        },
+        {
+          "key": "h",
+          "text": "Úlcera de Curling",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da sangrado digestivo."
+        },
+        {
+          "key": "i",
+          "text": "Trombosis venosa profunda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica los cambios en la herida."
+        },
+        {
+          "key": "j",
+          "text": "El color negro es parte normal de la cicatrización",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Indica necrosis infectada."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "La infección es la principal causa de muerte en los quemados que sobreviven a la fase inicial. La pérdida de la barrera cutánea, la inmunosupresión y los dispositivos invasivos favorecen las infecciones por Pseudomonas aeruginosa, Staphylococcus aureus incluido el resistente a meticilina, Acinetobacter y hongos. Los datos de infección de la herida incluyen cambio de color a negro o violáceo, conversión a espesor total, separación rápida de la escara, secreción purulenta y celulitis en los bordes. Se toman cultivos y biopsia de la herida y se inician antibióticos y desbridamiento quirúrgico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento inicial del paciente quemado"
+      ]
+    }
+  ]
+}
