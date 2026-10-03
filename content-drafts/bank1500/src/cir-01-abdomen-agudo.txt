@@ -1,0 +1,303 @@
+@ cir|acute_abdomen|appendicitis|2|diagnosis
+V: Hombre de 22 años con dolor periumbilical de 18 horas que migró a la fosa iliaca derecha, anorexia, náusea y fiebre de 38 °C. Dolor a la descompresión en el punto de McBurney y signo de Rovsing positivo. Leucocitos de 15 000 con neutrofilia.
+P: ¿Cuál es el diagnóstico más probable?
++ Apendicitis aguda || Dolor migratorio a fosa iliaca derecha con anorexia, fiebre, signos peritoneales y leucocitosis.
+- anchoring | Gastroenteritis aguda || No explica la migración del dolor ni los signos peritoneales.
+- availability_heuristic | Cólico renoureteral derecho || Da dolor tipo cólico irradiado a genitales sin signos peritoneales.
+- representativeness_heuristic | Adenitis mesentérica || Es más común en niños tras infección viral.
+- premature_closure | Diverticulitis derecha || Es rara a esta edad.
+- base_rate_fallacy | Enfermedad de Crohn ileal || Tiene evolución crónica.
+- framing_effect | Colecistitis aguda || El dolor estaría en hipocondrio derecho.
+- inattentional_blindness | Torsión testicular || Daría dolor escrotal.
+- focusing_illusion | Infección urinaria || No explica los signos peritoneales.
+- belief_bias | Dolor por gases que se quita con un té || Hay datos de peritonitis localizada.
+E: La apendicitis aguda es la causa quirúrgica más frecuente de abdomen agudo. Se debe a la obstrucción de la luz apendicular, generalmente por fecalito o hiperplasia linfoide, con proliferación bacteriana, isquemia y perforación. La secuencia clásica de Murphy es dolor periumbilical o epigástrico que migra a la fosa iliaca derecha, anorexia, náusea o vómito, fiebre y leucocitosis. Los signos de McBurney, Rovsing, psoas, obturador y Blumberg apoyan el diagnóstico. La escala de Alvarado estima la probabilidad. El tratamiento es la apendicectomía, preferentemente laparoscópica, con antibiótico profiláctico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de apendicitis aguda
+
+@ cir|acute_abdomen|appendicitis|3|initial_study
+V: Mujer de 26 años con dolor en fosa iliaca derecha de 12 horas, náusea y febrícula. Escala de Alvarado de 6. Prueba de embarazo negativa. Exploración ginecológica sin hallazgos claros.
+P: ¿Cuál es el estudio de imagen inicial más adecuado?
++ Ultrasonido abdominal y pélvico || Evalúa el apéndice y descarta causas ginecológicas sin radiación.
+- anchoring | Radiografía simple de abdomen || Tiene baja sensibilidad para apendicitis.
+- availability_heuristic | Laparotomía exploradora inmediata || La escala es intermedia y la imagen ayuda.
+- representativeness_heuristic | Colonoscopia || No está indicada.
+- premature_closure | Ningún estudio y alta con analgésico || El riesgo es intermedio.
+- base_rate_fallacy | Serie esofagogastroduodenal || No es útil.
+- framing_effect | Resonancia magnética como primer estudio en todas || Se reserva para embarazadas con ultrasonido no concluyente.
+- complexity_bias | Gammagrama con leucocitos marcados || No es necesario.
+- information_bias | Examen general de orina como prueba definitiva || No confirma apendicitis.
+- belief_bias | Esperar a que el dolor sea más intenso para estudiarla || Aumenta el riesgo de perforación.
+E: En pacientes con sospecha de apendicitis y probabilidad intermedia la imagen mejora la precisión diagnóstica. En mujeres jóvenes y niños el ultrasonido es el estudio inicial por no emitir radiación y permitir evaluar causas ginecológicas como quistes, torsión ovárica o embarazo ectópico. La tomografía con contraste tiene mayor sensibilidad y especificidad y se usa en adultos cuando el ultrasonido no es concluyente o como estudio inicial en adultos mayores. En embarazadas, si el ultrasonido no es concluyente se usa resonancia magnética. Con alta probabilidad clínica en hombres jóvenes puede procederse directamente a cirugía.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de apendicitis aguda
+
+@ cir|acute_abdomen|appendicitis|3|treatment_of_choice
+V: Hombre de 30 años con apendicitis aguda no complicada confirmada por tomografía, sin perforación ni absceso. Estable y sin comorbilidades.
+P: ¿Cuál es el tratamiento de elección?
++ Apendicectomía laparoscópica con antibiótico profiláctico || Es el tratamiento estándar con menor dolor y recuperación más rápida.
+- anchoring | Antibióticos solos como tratamiento definitivo en todos || Es una alternativa en casos seleccionados con riesgo de recurrencia.
+- availability_heuristic | Analgésicos y observación en casa || No trata la infección.
+- representativeness_heuristic | Drenaje percutáneo || Se usa en abscesos.
+- premature_closure | Colectomía derecha || Es excesiva.
+- framing_effect | Laxantes para limpiar el intestino || Están contraindicados.
+- complexity_bias | Laparotomía media amplia || No es necesaria.
+- base_rate_fallacy | Cirugía diferida 8 semanas en todos || Se reserva para plastrón o absceso.
+- belief_bias | Enemas evacuantes || Están contraindicados.
+- omission_bias | Retrasar la cirugía hasta que aparezca peritonitis || Aumenta las complicaciones.
+E: El tratamiento estándar de la apendicitis aguda es la apendicectomía, que puede ser abierta o laparoscópica. La vía laparoscópica se asocia a menos dolor, menor infección de herida, estancia más corta y regreso más rápido a las actividades, y permite explorar la cavidad, útil en mujeres con duda diagnóstica. Se administra antibiótico profiláctico antes de la cirugía y se continúa solo si hay perforación. El tratamiento con antibióticos sin cirugía es una opción en apendicitis no complicada seleccionada, aunque con riesgo de recurrencia de 25 a 40%.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de apendicitis aguda
+
+@ cir|acute_abdomen|appendicitis|4|next_step
+V: Hombre de 35 años con dolor en fosa iliaca derecha de 6 días, fiebre persistente y una masa palpable dolorosa en la fosa iliaca derecha. La tomografía muestra un absceso periapendicular de 5 cm bien delimitado. Hemodinámicamente estable.
+P: ¿Cuál es la conducta más apropiada para esta complicación?
++ Antibióticos intravenosos y drenaje percutáneo del absceso, con apendicectomía de intervalo opcional || El absceso bien delimitado se maneja inicialmente sin cirugía.
+- anchoring | Apendicectomía de urgencia inmediata || Tiene mayor morbilidad con el proceso inflamatorio avanzado.
+- availability_heuristic | Egreso con antibióticos orales sin drenaje || El absceso de 5 cm requiere drenaje.
+- representativeness_heuristic | Colectomía derecha de urgencia || Es excesiva.
+- premature_closure | Solo analgésicos y observación || No trata la infección.
+- framing_effect | Colonoscopia diagnóstica inmediata || Está contraindicada en fase aguda.
+- complexity_bias | Hemicolectomía con ileostomía || Es excesiva.
+- base_rate_fallacy | Antifúngicos || No es una infección por hongos.
+- belief_bias | Compresas calientes para desinflamar || No tratan el absceso.
+- omission_bias | No dar seguimiento tras resolverse || Se recomienda colonoscopia en mayores por el riesgo de tumor.
+E: La apendicitis complicada incluye perforación con peritonitis, plastrón y absceso. Los pacientes con absceso periapendicular bien delimitado y estables se manejan con antibióticos intravenosos y drenaje percutáneo guiado por imagen si mide más de 3 a 4 cm, ya que la cirugía temprana en un proceso inflamatorio extenso tiene más complicaciones. La apendicectomía de intervalo, de 6 a 8 semanas después, es opcional. En mayores de 40 años se recomienda colonoscopia para descartar cáncer de colon o tumor apendicular. La peritonitis generalizada requiere cirugía urgente.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de apendicitis aguda
+
+@ cir|acute_abdomen|appendicitis|3|data_interpretation
+V: Hombre de 20 años con dolor abdominal. La escala de Alvarado suma dolor migratorio 1, anorexia 1, náusea 1, dolor en fosa iliaca derecha 2, rebote 1, fiebre 1, leucocitosis 2 y neutrofilia 1.
+P: ¿Qué indica esta puntuación de Alvarado?
++ Puntuación de 10, probabilidad muy alta de apendicitis que justifica valoración quirúrgica || Una puntuación de 7 o más indica alta probabilidad.
+- anchoring | Puntuación de 4 con baja probabilidad || El cálculo es incorrecto.
+- availability_heuristic | Indica alta y seguimiento ambulatorio || La probabilidad es alta.
+- representativeness_heuristic | Indica gastroenteritis || La escala no evalúa gastroenteritis.
+- premature_closure | Requiere tomografía obligatoria antes de cualquier decisión en hombres jóvenes || Con puntuación alta puede operarse.
+- base_rate_fallacy | Indica cáncer de colon || No evalúa cáncer.
+- framing_effect | Puntuación de 6 dudosa || El cálculo es incorrecto.
+- inattentional_blindness | Indica pancreatitis || No evalúa pancreatitis.
+- focusing_illusion | Indica cólico renal || No evalúa cólico renal.
+- belief_bias | Las escalas no sirven en urgencias || Ayudan a estratificar el riesgo.
+E: La escala de Alvarado asigna puntos a dolor migratorio, anorexia, náusea o vómito, dolor en fosa iliaca derecha que vale 2, rebote, fiebre mayor de 37.3, leucocitosis mayor de 10 000 que vale 2 y desviación a la izquierda. El máximo es 10. Una puntuación de 1 a 4 indica baja probabilidad, de 5 a 6 probabilidad intermedia que se beneficia de imagen, y de 7 a 10 alta probabilidad. Las escalas como Alvarado, AIR o la pediátrica ayudan a reducir laparotomías negativas y el uso innecesario de tomografía.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de apendicitis aguda
+
+@ cir|acute_abdomen|appendicitis|3|diagnosis
+V: Mujer de 28 años con embarazo de 26 semanas que presenta dolor en el flanco derecho, a nivel del ombligo, de 24 horas con náusea, anorexia y febrícula. Leucocitos de 16 000. El útero no es doloroso y no hay sangrado ni contracciones.
+P: ¿Cuál es el diagnóstico más probable?
++ Apendicitis aguda con apéndice desplazado por el útero || El útero desplaza el apéndice hacia arriba y lateral en el embarazo.
+- anchoring | Trabajo de parto pretérmino || No hay contracciones ni dolor uterino.
+- availability_heuristic | Pielonefritis || Debe considerarse, pero no hay síntomas urinarios ni fiebre alta.
+- representativeness_heuristic | Desprendimiento de placenta || No hay sangrado ni útero doloroso.
+- premature_closure | Leucocitosis normal del embarazo sin patología || El cuadro clínico sugiere apendicitis.
+- base_rate_fallacy | Colecistitis aguda || Es posible, pero la anorexia y el cuadro orientan a apendicitis.
+- framing_effect | Dolor de ligamento redondo || No da fiebre ni anorexia.
+- inattentional_blindness | Degeneración roja de mioma || El útero no es doloroso.
+- focusing_illusion | Gastroenteritis || No explica el dolor localizado persistente.
+- belief_bias | Molestias normales del embarazo || Hay datos de abdomen agudo.
+E: La apendicitis es la causa no obstétrica más frecuente de cirugía abdominal en el embarazo. El útero desplaza el apéndice hacia arriba y lateral, por lo que el dolor puede localizarse en el flanco o el hipocondrio derecho en el segundo y tercer trimestre. La leucocitosis fisiológica del embarazo dificulta la interpretación. El ultrasonido es el estudio inicial y la resonancia magnética sin gadolinio es útil si no es concluyente. El retraso en el diagnóstico aumenta la perforación, que eleva de forma importante la pérdida fetal. El tratamiento es apendicectomía, laparoscópica o abierta, en cualquier trimestre.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de apendicitis aguda
+
+@ cir|acute_abdomen|appendicitis|3|diagnosis
+V: Hombre de 78 años con diabetes que presenta dolor abdominal difuso leve de 4 días, hiporexia y confusión. Temperatura de 37.4 °C. Abdomen con dolor leve en fosa iliaca derecha y defensa mínima. Leucocitos de 11 000.
+P: ¿Cuál es el diagnóstico que debe considerarse a pesar de la presentación atípica?
++ Apendicitis aguda, posiblemente complicada || En adultos mayores la apendicitis se presenta de forma atípica y se perfora con frecuencia.
+- anchoring | Infección urinaria con delirium || Debe considerarse, pero el dolor en fosa iliaca derecha orienta a apendicitis.
+- availability_heuristic | Estreñimiento || No explica la defensa ni la evolución.
+- representativeness_heuristic | Demencia de inicio reciente || El delirium sugiere una enfermedad aguda.
+- premature_closure | Gastroenteritis viral || No explica el dolor localizado.
+- base_rate_fallacy | Cáncer de colon sin complicación aguda || Puede coexistir, pero no explica el cuadro agudo.
+- framing_effect | Neumonía || No hay datos respiratorios.
+- inattentional_blindness | Hipoglucemia || No explica el dolor abdominal.
+- focusing_illusion | Hernia hiatal || No explica el cuadro.
+- belief_bias | Los ancianos no tienen apendicitis || Ocurre y es más grave.
+E: En adultos mayores la apendicitis suele presentarse de forma atípica, con dolor leve o difuso, fiebre baja o ausente, leucocitosis discreta y alteraciones del estado mental. Por ello el diagnóstico se retrasa y la tasa de perforación es mucho mayor, hasta 50 a 70%, con mayor mortalidad. En este grupo la tomografía es el estudio de elección por su alta precisión y porque permite descartar diagnósticos alternativos como diverticulitis o cáncer de colon. Ante una apendicitis en mayores de 40 años se recomienda colonoscopia posterior. El umbral de sospecha debe ser bajo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de apendicitis aguda
+
+@ cir|acute_abdomen|bowel_obstruction|2|diagnosis
+V: Mujer de 60 años con antecedente de histerectomía abierta hace 10 años que presenta dolor abdominal tipo cólico, distensión, vómito y ausencia de evacuaciones y canalización de gases de 2 días. La radiografía muestra asas de intestino delgado dilatadas con niveles hidroaéreos en escalera.
+P: ¿Cuál es el diagnóstico más probable?
++ Oclusión intestinal de intestino delgado por bridas || Cirugía abdominal previa con dolor cólico, distensión, vómito y niveles hidroaéreos.
+- anchoring | Íleo paralítico || No hay cirugía reciente ni causa metabólica y el dolor es cólico.
+- availability_heuristic | Gastroenteritis aguda || No explica la ausencia de gases ni los niveles en escalera.
+- representativeness_heuristic | Vólvulo de sigmoides || Da imagen de grano de café con colon dilatado.
+- premature_closure | Pancreatitis aguda || No explica los niveles hidroaéreos en escalera.
+- base_rate_fallacy | Cáncer de ovario recurrente || Es menos probable que las bridas.
+- framing_effect | Estreñimiento crónico || No explica el vómito ni los niveles.
+- inattentional_blindness | Isquemia mesentérica sin oclusión || Da dolor desproporcionado.
+- focusing_illusion | Pseudoobstrucción colónica || Afecta el colon.
+- belief_bias | Inflamación por comer mucho || Hay una obstrucción mecánica.
+E: La oclusión intestinal de intestino delgado se debe con mayor frecuencia a adherencias o bridas posoperatorias, seguidas de hernias y tumores. Se manifiesta con dolor abdominal tipo cólico, distensión, vómito, que es más precoz en las obstrucciones altas, y ausencia de evacuaciones y gases. A la exploración hay distensión y ruidos de lucha. La radiografía muestra asas de delgado dilatadas con niveles hidroaéreos en escalera. La tomografía confirma el diagnóstico, localiza el sitio de transición y detecta signos de estrangulación, que requieren cirugía urgente.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de oclusión intestinal
+
+@ cir|acute_abdomen|bowel_obstruction|3|initial_treatment
+V: Hombre de 55 años con oclusión intestinal parcial por bridas de 24 horas. Está estable, sin fiebre, sin signos peritoneales ni datos de estrangulación en la tomografía. Lactato normal.
+P: ¿Cuál es el tratamiento inicial?
++ Ayuno, sonda nasogástrica a derivación, líquidos intravenosos con corrección de electrolitos y vigilancia, con contraste hidrosoluble || La mayoría de las oclusiones por bridas sin estrangulación se resuelven sin cirugía.
+- anchoring | Laparotomía de urgencia en todos los casos || No hay datos de estrangulación.
+- availability_heuristic | Laxantes orales para destapar el intestino || Están contraindicados.
+- representativeness_heuristic | Alimentación oral para estimular el intestino || Empeora la distensión.
+- premature_closure | Egreso con analgésicos || Requiere hospitalización.
+- framing_effect | Enema de bario || Puede ser peligroso.
+- complexity_bias | Colonoscopia descompresiva || Es para obstrucción colónica.
+- base_rate_fallacy | Antibióticos como tratamiento principal || No resuelven la obstrucción.
+- belief_bias | Masaje abdominal para mover el intestino || No es eficaz.
+- omission_bias | No vigilar los signos de estrangulación || Pueden aparecer en la evolución.
+E: El manejo inicial de la oclusión intestinal por bridas sin datos de estrangulación es conservador. Incluye ayuno, descompresión con sonda nasogástrica, líquidos intravenosos, corrección de electrolitos, analgesia y vigilancia clínica estrecha. La administración de contraste hidrosoluble oral tiene valor diagnóstico y terapéutico, ya que si llega al colon en 24 horas predice la resolución. La mayoría se resuelve en 48 a 72 horas. Se indica cirugía si aparecen fiebre, taquicardia, dolor continuo, signos peritoneales, leucocitosis, lactato elevado o datos de isquemia en la tomografía, o si no se resuelve.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de oclusión intestinal
+
+@ cir|acute_abdomen|bowel_obstruction|3|diagnosis
+V: Hombre de 75 años con estreñimiento crónico que presenta distensión abdominal masiva, dolor y ausencia de evacuaciones de 3 días. La radiografía muestra una asa colónica muy dilatada en forma de grano de café que se dirige del cuadrante inferior izquierdo hacia arriba.
+P: ¿Cuál es el diagnóstico más probable?
++ Vólvulo de sigmoides || Distensión masiva con imagen en grano de café en un adulto mayor con estreñimiento.
+- anchoring | Oclusión por bridas de intestino delgado || Da niveles en escalera de delgado.
+- availability_heuristic | Cáncer de colon obstructivo sin vólvulo || Es posible, pero la imagen es típica de vólvulo.
+- representativeness_heuristic | Vólvulo de ciego || La asa se dirige hacia el cuadrante superior izquierdo desde la derecha.
+- premature_closure | Íleo paralítico || No explica la imagen en grano de café.
+- base_rate_fallacy | Megacolon tóxico por colitis || Se asocia a colitis grave con fiebre.
+- framing_effect | Pseudoobstrucción colónica aguda || No da la imagen en grano de café.
+- inattentional_blindness | Impactación fecal simple || No explica la imagen.
+- focusing_illusion | Diverticulitis aguda || No explica la distensión masiva con esta imagen.
+- belief_bias | Gases acumulados sin importancia || Es una urgencia.
+E: El vólvulo de sigmoides es la torsión del colon sigmoides sobre su mesenterio, más frecuente en adultos mayores con estreñimiento crónico, sigmoides redundante, enfermedades neurológicas y en zonas con dietas ricas en fibra. Causa obstrucción en asa cerrada con distensión masiva. La radiografía muestra el signo del grano de café o de la U invertida, y la tomografía el signo del remolino. Sin necrosis ni perforación, el tratamiento inicial es la devolvulación endoscópica con sigmoidoscopia y sonda rectal, seguida de sigmoidectomía electiva por la alta recurrencia. Con necrosis o perforación se realiza cirugía urgente.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de oclusión intestinal
+
+@ cir|acute_abdomen|bowel_obstruction|4|complication_prognosis
+V: Hombre de 62 años con oclusión intestinal por bridas en manejo conservador desde hace 12 horas. Ahora presenta dolor continuo intenso, fiebre de 38.6 °C, taquicardia de 120, rebote y lactato de 4.5 mmol/L.
+P: ¿Cuál es la complicación que presenta?
++ Estrangulación con isquemia intestinal || Dolor continuo, fiebre, taquicardia, signos peritoneales y lactato elevado indican compromiso vascular.
+- anchoring | Evolución esperada del manejo conservador || Los datos indican complicación.
+- availability_heuristic | Gastroenteritis agregada || No explica el cuadro.
+- representativeness_heuristic | Íleo paralítico por medicamentos || No explica los signos peritoneales.
+- premature_closure | Infección urinaria por la sonda || No explica el abdomen agudo.
+- base_rate_fallacy | Pancreatitis aguda || No corresponde.
+- framing_effect | Deshidratación como única causa de la taquicardia || Hay signos peritoneales.
+- inattentional_blindness | Neumonía por aspiración || No explica los signos abdominales.
+- focusing_illusion | Ansiedad por la hospitalización || Hay datos objetivos de isquemia.
+- belief_bias | El dolor aumenta antes de que se destape el intestino || Es una señal de alarma.
+E: La estrangulación es la complicación más grave de la oclusión intestinal y ocurre cuando se compromete la irrigación del asa, con isquemia, necrosis y perforación. Es más frecuente en hernias, obstrucciones en asa cerrada y vólvulos. Se sospecha con dolor continuo e intenso, fiebre, taquicardia, signos peritoneales, leucocitosis, acidosis metabólica y lactato elevado. La tomografía puede mostrar engrosamiento de la pared, falta de realce y líquido libre. Requiere cirugía urgente para liberar la obstrucción y resecar el intestino no viable. El retraso aumenta la mortalidad de forma importante.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de oclusión intestinal
+
+@ cir|acute_abdomen|bowel_obstruction|3|diagnosis
+V: Mujer de 72 años con cambios del hábito intestinal y pérdida de peso de 4 meses que presenta distensión progresiva, dolor cólico y ausencia de evacuaciones de 3 días. La tomografía muestra colon dilatado hasta un engrosamiento circunferencial en el sigmoides con válvula ileocecal competente y ciego de 11 cm.
+P: ¿Cuál es el diagnóstico más probable?
++ Oclusión de colon por cáncer colorrectal con riesgo de perforación cecal || Masa sigmoidea obstructiva con válvula competente y ciego muy dilatado.
+- anchoring | Oclusión de intestino delgado por bridas || El colon está dilatado hasta la masa.
+- availability_heuristic | Vólvulo de sigmoides || No hay torsión, sino una masa.
+- representativeness_heuristic | Estreñimiento crónico simple || No explica la masa ni la dilatación.
+- premature_closure | Diverticulitis no complicada || No explica la obstrucción con pérdida de peso.
+- base_rate_fallacy | Pseudoobstrucción colónica || Hay una causa mecánica.
+- framing_effect | Íleo paralítico || Hay un punto de obstrucción.
+- inattentional_blindness | Colitis isquémica || No explica la masa circunferencial.
+- focusing_illusion | Síndrome de colon irritable || No explica la obstrucción.
+- belief_bias | Inflamación por la edad || Hay una masa.
+E: El cáncer colorrectal es la causa más frecuente de oclusión del colon en adultos, seguido del vólvulo y la diverticulitis. Se sospecha con cambios del hábito intestinal, pérdida de peso, anemia y distensión progresiva. Cuando la válvula ileocecal es competente se forma una obstrucción en asa cerrada, con distensión progresiva del ciego. Un ciego mayor de 10 a 12 cm tiene riesgo alto de perforación. El manejo incluye reanimación y descompresión urgente con cirugía, como resección con colostomía, o con colocación de endoprótesis como puente a la cirugía electiva.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de oclusión intestinal
+
+@ cir|acute_abdomen|bowel_obstruction|3|diagnosis
+V: Mujer de 68 años con dolor abdominal cólico intermitente, vómito y distensión. La radiografía muestra oclusión de intestino delgado, aire en la vía biliar y una imagen cálcica en la fosa iliaca derecha. Tiene antecedente de colecistitis de repetición no operada.
+P: ¿Cuál es el diagnóstico más probable?
++ Íleo biliar || Tríada de Rigler con oclusión intestinal, neumobilia y cálculo ectópico.
+- anchoring | Oclusión por bridas || No tiene cirugías previas y hay neumobilia.
+- availability_heuristic | Colangitis aguda || No explica la oclusión intestinal.
+- representativeness_heuristic | Vólvulo de sigmoides || No explica la neumobilia.
+- premature_closure | Apendicitis con fecalito || No explica la neumobilia.
+- base_rate_fallacy | Cáncer de vesícula obstructivo || No explica el cálculo ectópico.
+- framing_effect | Pancreatitis biliar || No explica la oclusión con neumobilia.
+- inattentional_blindness | Invaginación intestinal del adulto || No explica la neumobilia.
+- focusing_illusion | Litiasis renal derecha || No explica la neumobilia.
+- belief_bias | Gases en la vesícula sin importancia || Indican fístula bilioentérica.
+E: El íleo biliar es una causa poco frecuente de oclusión intestinal, más común en mujeres de edad avanzada con colelitiasis de larga evolución. Un cálculo grande pasa al intestino a través de una fístula colecistoduodenal y se impacta, generalmente en el íleon terminal. La tríada de Rigler en la radiografía o tomografía incluye oclusión de intestino delgado, neumobilia y cálculo ectópico. El tratamiento es la enterolitotomía para extraer el cálculo, y la reparación de la fístula con colecistectomía se valora según el estado del paciente, generalmente de forma diferida.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de oclusión intestinal
+
+@ cir|acute_abdomen|hollow_viscus_perforation|2|diagnosis
+V: Hombre de 50 años con antecedente de consumo crónico de antiinflamatorios por artrosis que presenta dolor epigástrico súbito, intenso y en puñalada que se generalizó a todo el abdomen. Abdomen en tabla con rebote. La radiografía de tórax de pie muestra aire libre bajo los hemidiafragmas.
+P: ¿Cuál es el diagnóstico más probable?
++ Úlcera péptica perforada || Dolor súbito con abdomen en tabla y neumoperitoneo en un consumidor de antiinflamatorios.
+- anchoring | Pancreatitis aguda || No da neumoperitoneo.
+- availability_heuristic | Infarto agudo de miocardio inferior || No explica el neumoperitoneo.
+- representativeness_heuristic | Colecistitis aguda || No da neumoperitoneo ni abdomen en tabla generalizado.
+- premature_closure | Apendicitis aguda no complicada || No explica el neumoperitoneo.
+- base_rate_fallacy | Aneurisma aórtico roto || No da neumoperitoneo.
+- framing_effect | Gastritis aguda || No explica el abdomen en tabla.
+- inattentional_blindness | Isquemia mesentérica sin perforación || No explica el aire libre.
+- focusing_illusion | Cólico biliar || No da peritonitis.
+- belief_bias | Agruras fuertes que pasan con antiácidos || Es una urgencia quirúrgica.
+E: La perforación de una úlcera péptica es una urgencia quirúrgica. Sus principales factores de riesgo son el consumo de antiinflamatorios no esteroideos, la infección por Helicobacter pylori y el tabaquismo. Se manifiesta con dolor epigástrico súbito e intenso que se generaliza, abdomen en tabla, rebote y, en ocasiones, choque. La radiografía de tórax de pie muestra neumoperitoneo en la mayoría, y la tomografía es más sensible. El tratamiento es reanimación, antibióticos, inhibidor de bomba de protones intravenoso y cirugía con cierre de la perforación con parche de epiplón, laparoscópica o abierta. Después se erradica Helicobacter.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de úlcera péptica complicada
+
+@ cir|acute_abdomen|hollow_viscus_perforation|3|initial_study
+V: Hombre de 45 años con dolor abdominal súbito y generalizado, abdomen rígido y taquicardia. Se sospecha perforación de víscera hueca. Está hemodinámicamente estable.
+P: ¿Cuál es el estudio inicial más accesible para detectar neumoperitoneo?
++ Radiografía de tórax de pie || Detecta aire libre subdiafragmático en la mayoría de las perforaciones.
+- anchoring | Colonoscopia urgente || Está contraindicada en perforación.
+- availability_heuristic | Endoscopia superior urgente || Puede empeorar la perforación.
+- representativeness_heuristic | Serie esofagogastroduodenal con bario || El bario en peritoneo es peligroso.
+- premature_closure | Ultrasonido como estudio definitivo para aire libre || La radiografía o tomografía son más útiles.
+- base_rate_fallacy | Gammagrama hepatobiliar || No detecta perforación.
+- framing_effect | Resonancia magnética como primer estudio || No es el estudio inicial.
+- complexity_bias | Angiografía mesentérica || No es el estudio inicial.
+- information_bias | Amilasa sérica como diagnóstico de perforación || No confirma perforación.
+- belief_bias | Esperar a ver si el dolor cede || Es una urgencia.
+E: Ante sospecha de perforación de víscera hueca, la radiografía de tórax de pie o en decúbito lateral izquierdo es el estudio inicial más accesible y detecta neumoperitoneo en 70 a 80% de los casos. Debe permanecer el paciente erguido o en decúbito unos minutos antes. La tomografía de abdomen es más sensible, detecta cantidades pequeñas de aire, localiza el sitio de perforación y valora otras causas. La endoscopia, la colonoscopia y los estudios con bario están contraindicados ante sospecha de perforación. El hallazgo de neumoperitoneo con peritonitis indica cirugía urgente.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de úlcera péptica complicada
+
+@ cir|acute_abdomen|hollow_viscus_perforation|3|diagnosis
+V: Mujer de 70 años con estreñimiento crónico que presenta dolor en la fosa iliaca izquierda de 3 días, fiebre de 38.5 °C y leucocitosis. La tomografía muestra engrosamiento del sigmoides con divertículos, inflamación de la grasa y una colección de 3 cm con aire.
+P: ¿Cuál es el diagnóstico más probable?
++ Diverticulitis aguda complicada con absceso pericólico || Inflamación diverticular con colección y aire, clasificación de Hinchey I a II.
+- anchoring | Diverticulitis no complicada || Hay una colección.
+- availability_heuristic | Apendicitis aguda || El dolor es en la fosa iliaca izquierda.
+- representativeness_heuristic | Cáncer de sigmoides perforado || Debe descartarse después, pero el cuadro es típico de diverticulitis.
+- premature_closure | Colitis isquémica || No explica la colección con divertículos.
+- base_rate_fallacy | Enfermedad de Crohn || Es menos frecuente a esta edad.
+- framing_effect | Infección urinaria || No explica la colección.
+- inattentional_blindness | Vólvulo de sigmoides || No explica los divertículos inflamados.
+- focusing_illusion | Hernia inguinal incarcerada || No explica los hallazgos.
+- belief_bias | Inflamación por estreñimiento sin importancia || Hay una complicación.
+E: La diverticulitis aguda es la inflamación de un divertículo, generalmente en el sigmoides, por obstrucción y microperforación. Se manifiesta con dolor en la fosa iliaca izquierda, fiebre y leucocitosis. La tomografía confirma el diagnóstico y clasifica la gravedad con la escala de Hinchey. La diverticulitis no complicada se trata de forma ambulatoria, con o sin antibióticos. Los abscesos pequeños se tratan con antibióticos y los mayores de 3 a 4 cm con drenaje percutáneo. La peritonitis purulenta o fecal requiere cirugía urgente, como el procedimiento de Hartmann o la resección con anastomosis. Tras el episodio se realiza colonoscopia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de enfermedad diverticular
+
+@ cir|acute_abdomen|hollow_viscus_perforation|4|treatment_of_choice
+V: Hombre de 65 años con diverticulitis perforada, peritonitis fecal generalizada, presión de 85/50 mmHg y lactato elevado tras reanimación inicial.
+P: ¿Cuál es el tratamiento quirúrgico de elección en este contexto?
++ Laparotomía con resección del sigmoides y colostomía terminal con cierre del recto, procedimiento de Hartmann || Es el procedimiento de elección en peritonitis fecal con inestabilidad.
+- anchoring | Drenaje percutáneo y antibióticos || No es suficiente en peritonitis fecal.
+- availability_heuristic | Antibióticos orales y egreso || Es una urgencia vital.
+- representativeness_heuristic | Resección con anastomosis primaria sin estoma en un paciente en choque || Tiene alto riesgo de fuga.
+- premature_closure | Lavado laparoscópico como único tratamiento en peritonitis fecal || No es adecuado en peritonitis fecal.
+- framing_effect | Colonoscopia descompresiva || Está contraindicada.
+- complexity_bias | Colectomía total con ileorrectoanastomosis || Es excesiva.
+- base_rate_fallacy | Esperar a estabilizar por completo con antibióticos días antes de operar || El control de la fuente es urgente.
+- belief_bias | Enemas para limpiar el colon || Están contraindicados.
+- omission_bias | No operar por la edad || El control de la fuente salva la vida.
+E: La peritonitis fecal por diverticulitis perforada, Hinchey IV, es una urgencia con alta mortalidad. Requiere reanimación, antibióticos de amplio espectro y control de la fuente infecciosa con cirugía urgente. En pacientes inestables o con comorbilidades graves, el procedimiento de Hartmann, que reseca el segmento perforado con colostomía terminal y cierre del muñón rectal, es el de elección. En pacientes estables y seleccionados puede realizarse resección con anastomosis primaria con o sin ileostomía de protección. La reconexión del tránsito tras Hartmann se realiza meses después.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de enfermedad diverticular
+
+@ cir|acute_abdomen|hollow_viscus_perforation|3|diagnosis
+V: Hombre de 74 años con fibrilación auricular sin anticoagulación que presenta dolor abdominal difuso súbito muy intenso, desproporcionado a una exploración abdominal casi normal. Lactato de 5 mmol/L.
+P: ¿Cuál es el diagnóstico más probable?
++ Isquemia mesentérica aguda por embolia de la arteria mesentérica superior || Dolor desproporcionado a la exploración en un paciente con fibrilación auricular y lactato elevado.
+- anchoring | Gastroenteritis aguda || No explica el dolor desproporcionado ni el lactato.
+- availability_heuristic | Pancreatitis aguda || No explica el contexto embólico.
+- representativeness_heuristic | Úlcera perforada || Daría abdomen en tabla con neumoperitoneo.
+- premature_closure | Cólico renal || No explica el lactato elevado.
+- base_rate_fallacy | Colitis isquémica leve || Suele dar dolor leve con rectorragia.
+- framing_effect | Estreñimiento || No explica la gravedad.
+- inattentional_blindness | Infarto agudo de miocardio || Debe descartarse, pero el cuadro abdominal sugiere isquemia mesentérica.
+- focusing_illusion | Aneurisma aórtico roto || Daría choque y masa pulsátil.
+- belief_bias | Exagera el dolor porque la exploración es normal || El dolor desproporcionado es la clave.
+E: La isquemia mesentérica aguda es una urgencia con alta mortalidad. La causa más frecuente es la embolia de la arteria mesentérica superior, generalmente de origen cardiaco por fibrilación auricular o infarto, seguida de la trombosis arterial, la isquemia no oclusiva y la trombosis venosa. Se caracteriza por dolor abdominal intenso desproporcionado a los hallazgos de la exploración en las fases iniciales. El lactato elevado y la acidosis indican isquemia avanzada. La angiotomografía es el estudio de elección. El tratamiento incluye anticoagulación, revascularización endovascular o quirúrgica y resección del intestino necrótico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de isquemia mesentérica aguda
+
+@ cir|acute_abdomen|hollow_viscus_perforation|3|complication_prognosis
+V: Hombre de 58 años con úlcera duodenal perforada operado 36 horas después del inicio de los síntomas por retraso en la atención. Tiene 72 años de edad fisiológica por comorbilidades y llegó en choque.
+P: ¿Cuál es el principal factor que empeora el pronóstico en este caso?
++ El retraso de más de 24 horas en la cirugía junto con el choque al ingreso || Son los principales predictores de mortalidad en úlcera perforada.
+- anchoring | El tamaño pequeño de la perforación || No es el factor principal.
+- availability_heuristic | La localización duodenal en lugar de gástrica || No es el factor principal.
+- representativeness_heuristic | El tipo de sutura empleada || No es determinante.
+- premature_closure | El sexo masculino || No es el factor principal.
+- base_rate_fallacy | El grupo sanguíneo || No influye.
+- framing_effect | La infección por Helicobacter pylori || Influye en la recurrencia, no en la mortalidad aguda.
+- inattentional_blindness | El uso de antiácidos previos || No es el factor principal.
+- focusing_illusion | El consumo de café || No influye.
+- belief_bias | La voluntad del paciente como único factor || No sustituye a los factores clínicos.
+E: La mortalidad de la úlcera péptica perforada es de 10 a 30% y depende principalmente del tiempo transcurrido hasta la cirugía, de la presencia de choque al ingreso, de la edad avanzada y de las comorbilidades. Cada hora de retraso aumenta la mortalidad. La escala de Boey considera choque, enfermedad médica grave y perforación de más de 24 horas. Por ello el diagnóstico y la cirugía tempranos son fundamentales. Las complicaciones incluyen sepsis, abscesos intraabdominales, fuga de la reparación y falla orgánica.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de úlcera péptica complicada
