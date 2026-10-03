@@ -1,0 +1,255 @@
+@ fam|primary_mental_health|anxiety_primary|3|diagnosis
+V: Hombre de 25 años que desde hace 2 años tiene pensamientos intrusivos de que su casa se incendiará, por lo que revisa la estufa y las conexiones eléctricas hasta 30 veces antes de salir, lo que le hace llegar tarde al trabajo. Reconoce que es excesivo pero no puede evitarlo.
+P: ¿Cuál es el diagnóstico más probable?
++ Trastorno obsesivo compulsivo || Obsesiones con compulsiones que consumen tiempo y causan deterioro, con introspección conservada.
+- anchoring | Trastorno de ansiedad generalizada || No predominan preocupaciones múltiples sin rituales.
+- availability_heuristic | Trastorno de personalidad obsesivo compulsivo || En este no hay obsesiones ni compulsiones verdaderas.
+- representativeness_heuristic | Esquizofrenia || Reconoce que sus pensamientos son excesivos.
+- premature_closure | Trastorno de pánico || No hay crisis súbitas.
+- framing_effect | Fobia específica al fuego || Hay rituales de comprobación.
+- complexity_bias | Trastorno delirante || No hay convicción delirante.
+- base_rate_fallacy | Conducta precavida normal || Consume mucho tiempo y causa deterioro.
+- belief_bias | Hipocondría || La preocupación no es por enfermedad.
+- focusing_illusion | Trastorno de estrés postraumático || No hay trauma previo.
+E: El trastorno obsesivo compulsivo se caracteriza por obsesiones, pensamientos, imágenes o impulsos intrusivos y no deseados que causan ansiedad, y compulsiones, conductas o actos mentales repetitivos, como comprobar, lavar, contar u ordenar, que se realizan para reducir esa ansiedad. Consumen más de una hora al día o causan deterioro significativo. La mayoría de los pacientes reconoce que son excesivos. Se diferencia del trastorno de personalidad obsesivo compulsivo, que es un patrón de perfeccionismo y rigidez sin obsesiones verdaderas. El tratamiento es la terapia cognitivo conductual con exposición y prevención de respuesta, e inhibidores selectivos de la recaptura de serotonina a dosis altas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno obsesivo compulsivo ;; Manual diagnóstico y estadístico de los trastornos mentales
+
+@ fam|primary_mental_health|anxiety_primary|2|diagnosis
+V: Mujer de 22 años, estudiante universitaria, que desde hace un año evita exponer en clase, comer frente a otros y asistir a fiestas por miedo intenso a ser juzgada o humillada. Cuando no puede evitarlo presenta rubor, temblor y sudoración. Ha bajado sus calificaciones.
+P: ¿Cuál es el diagnóstico más probable?
++ Trastorno de ansiedad social || Miedo intenso a situaciones sociales por temor a la evaluación negativa, con evitación y deterioro.
+- anchoring | Timidez normal || Hay deterioro académico y evitación persistente.
+- availability_heuristic | Trastorno de pánico con agorafobia || El miedo es a la evaluación de los demás.
+- representativeness_heuristic | Trastorno de ansiedad generalizada || El miedo se limita a situaciones sociales.
+- premature_closure | Trastorno de personalidad esquizoide || En este no hay deseo de relacionarse.
+- framing_effect | Fobia específica a la comida || El miedo es social.
+- complexity_bias | Trastorno del espectro autista de inicio tardío || No hay datos del desarrollo que lo apoyen.
+- base_rate_fallacy | Depresión mayor como diagnóstico principal || No predominan los síntomas depresivos.
+- belief_bias | Hipertiroidismo || Los síntomas son situacionales.
+- focusing_illusion | Trastorno dismórfico corporal || El temor no es por un defecto físico.
+E: El trastorno de ansiedad social, o fobia social, se caracteriza por miedo o ansiedad intensa en situaciones sociales en las que la persona puede ser observada o evaluada por otros, como hablar en público, comer frente a otros o conocer gente, por temor a ser humillada o rechazada. Las situaciones se evitan o se soportan con mucho malestar, durante 6 meses o más, con deterioro funcional. Suele iniciar en la adolescencia y se asocia con depresión y consumo de alcohol. El tratamiento de elección es la terapia cognitivo conductual y los inhibidores selectivos de la recaptura de serotonina. El propranolol se usa en la ansiedad de desempeño ocasional.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto ;; Manual diagnóstico y estadístico de los trastornos mentales
+
+@ fam|primary_mental_health|anxiety_primary|2|diagnosis
+V: Hombre de 45 años que hace 6 semanas fue despedido de su trabajo. Desde entonces está ansioso, con tristeza, insomnio y dificultad para concentrarse, sin cumplir criterios de depresión mayor ni de ansiedad generalizada. Sigue buscando empleo.
+P: ¿Cuál es el diagnóstico más probable?
++ Trastorno de adaptación con ansiedad y ánimo deprimido || Síntomas emocionales en los 3 meses siguientes a un estresor identificable, sin cumplir criterios de otro trastorno.
+- anchoring | Episodio depresivo mayor || No cumple los criterios.
+- availability_heuristic | Trastorno de estrés postraumático || El despido no es un trauma con amenaza a la vida.
+- representativeness_heuristic | Trastorno de ansiedad generalizada || Requiere 6 meses de síntomas.
+- premature_closure | Distimia || Requiere 2 años de síntomas.
+- framing_effect | Reacción normal sin repercusión || Hay malestar significativo.
+- complexity_bias | Trastorno bipolar || No hay episodios de manía.
+- base_rate_fallacy | Trastorno de pánico || No hay crisis súbitas.
+- belief_bias | Hipotiroidismo || El cuadro inició tras el estresor.
+- focusing_illusion | Trastorno de personalidad dependiente || No hay un patrón de larga evolución.
+E: El trastorno de adaptación se caracteriza por síntomas emocionales o conductuales, como ansiedad, tristeza o alteraciones de conducta, que aparecen dentro de los 3 meses siguientes a un estresor identificable, como un despido, un divorcio o una enfermedad, y que son desproporcionados o causan deterioro, sin cumplir criterios de otro trastorno mental. Suele resolverse en los 6 meses siguientes a que termina el estresor o sus consecuencias. El tratamiento de primera línea es la psicoterapia de apoyo, la resolución de problemas y el fortalecimiento de la red de apoyo. Los fármacos se usan solo para síntomas específicos y por tiempo breve.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto ;; Manual diagnóstico y estadístico de los trastornos mentales
+
+@ fam|primary_mental_health|anxiety_primary|3|next_step
+V: Mujer de 36 años con trastorno de pánico que inicia sertralina. Refiere crisis intensas que le impiden trabajar mientras espera el efecto del antidepresivo.
+P: ¿Cuál es la conducta más apropiada para el control inicial de las crisis?
++ Agregar una benzodiacepina por tiempo limitado de 2 a 4 semanas mientras actúa la sertralina, con plan de retiro || Alivia las crisis mientras inicia el efecto del antidepresivo.
+- anchoring | Usar benzodiacepinas como tratamiento único indefinido || Generan tolerancia y dependencia.
+- availability_heuristic | Suspender la sertralina porque no actúa de inmediato || Su efecto tarda semanas.
+- representativeness_heuristic | Iniciar con dosis altas de sertralina desde el primer día || Puede aumentar la ansiedad inicial.
+- premature_closure | Agregar antipsicótico típico || No está indicado.
+- framing_effect | Recomendar que evite salir de casa para prevenir crisis || La evitación empeora el trastorno.
+- complexity_bias | Hospitalización psiquiátrica || No está indicada.
+- base_rate_fallacy | Las crisis de pánico son peligrosas para la vida || No lo son, aunque generan miedo intenso.
+- belief_bias | La psicoterapia no ayuda en el trastorno de pánico || Es de primera línea.
+- omission_bias | No referir a terapia cognitivo conductual || Es igual o más eficaz a largo plazo.
+E: En el trastorno de pánico, los inhibidores selectivos de la recaptura de serotonina son el tratamiento farmacológico de elección, iniciando con dosis bajas porque al inicio pueden aumentar la ansiedad, y su efecto aparece en 2 a 6 semanas. En pacientes con crisis muy incapacitantes, puede agregarse una benzodiacepina de acción prolongada, como clonazepam, por tiempo limitado, habitualmente 2 a 4 semanas, con un plan de retiro gradual. Las benzodiacepinas no deben usarse como monoterapia a largo plazo. La terapia cognitivo conductual, con psicoeducación, reestructuración cognitiva y exposición interoceptiva, es igual de eficaz y reduce las recaídas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno de pánico ;; Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto
+
+@ fam|primary_mental_health|substance_use_family|2|complication_prognosis
+V: Adolescente de 15 años de una zona urbana marginada que inhala thinner desde hace un año. Su familia nota que tiene dificultad para caminar, olvidos y bajo rendimiento escolar.
+P: ¿Cuál es la complicación más característica del consumo crónico de inhalables?
++ Daño neurológico con encefalopatía tóxica, ataxia cerebelosa y neuropatía periférica || Los solventes como el tolueno dañan la mielina.
+- anchoring | Ninguna complicación a largo plazo || Producen daño neurológico grave.
+- availability_heuristic | Cirrosis hepática como complicación principal || La principal es neurológica.
+- representativeness_heuristic | Hipertensión arterial aislada || No es la complicación característica.
+- premature_closure | Diabetes mellitus || No es la complicación característica.
+- framing_effect | Mejoría del rendimiento escolar || Ocurre lo contrario.
+- complexity_bias | Osteoporosis precoz || No es la característica.
+- base_rate_fallacy | Los inhalables son menos dañinos que el alcohol || Son muy neurotóxicos.
+- belief_bias | El daño neurológico siempre es reversible || Puede ser permanente.
+- focusing_illusion | Pancreatitis crónica || No es la característica.
+E: Los inhalables, como thinner, pegamentos, gasolina y aerosoles, son sustancias de inicio temprano, sobre todo en adolescentes de zonas marginadas o en situación de calle, por su bajo costo y fácil acceso. Contienen solventes como el tolueno, que son liposolubles y neurotóxicos. El consumo crónico produce encefalopatía tóxica con deterioro cognitivo, ataxia cerebelosa, neuropatía periférica, pérdida auditiva y visual, además de daño renal y hepático. El consumo agudo puede causar muerte súbita por arritmias, conocida como muerte súbita por inhalación. La prevención y la detección temprana en la escuela y la familia son fundamentales.
+R: Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones ;; Guía de Práctica Clínica de prevención, detección e intervención de las adicciones en atención primaria
+
+@ fam|primary_mental_health|substance_use_family|3|diagnosis
+V: Hombre de 26 años que fuma marihuana diariamente desde hace 5 años. Presenta episodios repetidos de náusea, vómito intenso y dolor abdominal que mejoran con duchas de agua caliente. Estudios de laboratorio e imagen normales.
+P: ¿Cuál es el diagnóstico más probable?
++ Síndrome de hiperémesis por cannabinoides || Vómito cíclico en consumidores crónicos que mejora con baños calientes.
+- anchoring | Gastroenteritis viral recurrente || No explica el patrón ni el alivio con agua caliente.
+- availability_heuristic | Pancreatitis aguda || Los estudios son normales.
+- representativeness_heuristic | Apendicitis || El curso es recurrente y la imagen normal.
+- premature_closure | Enfermedad por reflujo gastroesofágico || No explica el vómito intenso cíclico.
+- framing_effect | Abstinencia de opioides || No consume opioides.
+- complexity_bias | Porfiria aguda intermitente || Es mucho menos probable.
+- base_rate_fallacy | La marihuana solo tiene efecto antiemético || El consumo crónico puede causar hiperémesis.
+- belief_bias | Trastorno de conversión || Tiene una causa identificable.
+- focusing_illusion | Gastroparesia diabética || No tiene diabetes.
+E: El síndrome de hiperémesis por cannabinoides ocurre en consumidores crónicos y frecuentes de marihuana. Se caracteriza por episodios cíclicos de náusea, vómito intenso y dolor abdominal, con alivio característico mediante duchas o baños de agua caliente, y estudios normales. Paradójicamente, aunque los cannabinoides tienen efecto antiemético a dosis bajas, el consumo crónico altera la regulación del vómito. El tratamiento agudo incluye hidratación, antieméticos, haloperidol y capsaicina tópica, y el tratamiento definitivo es suspender el consumo. Su reconocimiento evita estudios innecesarios repetidos.
+R: Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones ;; Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos por consumo de cannabis
+
+@ fam|primary_mental_health|substance_use_family|2|treatment_of_choice
+V: Mujer de 28 años con embarazo de 12 semanas que fuma 10 cigarros al día. Ha intentado dejarlo sola sin éxito y está motivada.
+P: ¿Cuál es el tratamiento de elección para la cesación tabáquica en el embarazo?
++ Intervención conductual intensiva, con terapia de reemplazo de nicotina si no logra dejarlo solo con consejería || La consejería es de primera línea en el embarazo.
+- anchoring | Vareniclina como primera opción || No se recomienda por falta de datos de seguridad en el embarazo.
+- availability_heuristic | Reducir a 5 cigarros como meta suficiente || La meta es la abstinencia completa.
+- representativeness_heuristic | No intervenir para no causar estrés || Fumar daña al feto.
+- premature_closure | Cambiar a cigarro electrónico || No es un tratamiento recomendado.
+- framing_effect | Bupropión como primera línea obligada || La consejería es primero.
+- complexity_bias | Hospitalización para cesación || No es necesaria.
+- base_rate_fallacy | Dejar de fumar en el embarazo causa abstinencia peligrosa para el feto || Dejar de fumar es beneficioso en cualquier momento.
+- belief_bias | Fumar en el embarazo solo afecta a la madre || Causa restricción del crecimiento y parto pretérmino.
+- omission_bias | No abordar el tabaquismo de la pareja || Es un factor de recaída.
+E: El tabaquismo en el embarazo se asocia con restricción del crecimiento fetal, parto pretérmino, desprendimiento de placenta, placenta previa, muerte fetal y síndrome de muerte súbita del lactante. Dejar de fumar en cualquier momento del embarazo es beneficioso. El tratamiento de primera línea es la intervención conductual intensiva. Si no es suficiente, puede usarse terapia de reemplazo de nicotina, preferentemente de forma intermitente, como chicles o pastillas, considerando que su riesgo es menor que el del tabaco. La vareniclina y el bupropión tienen menos datos de seguridad. Se aborda también el tabaquismo de la pareja y el hogar.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del consumo de tabaco ;; Guía de Práctica Clínica de control prenatal con enfoque de riesgo
+
+@ fam|chronic_disease_primary|dyslipidemia_family|3|treatment_of_choice
+V: Hombre de 55 años con diabetes tipo 2 y enfermedad coronaria, en tratamiento con atorvastatina 80 mg, con colesterol LDL de 50 mg/dL. Triglicéridos persistentemente de 250 mg/dL a pesar de dieta y control glucémico.
+P: ¿Cuál es el tratamiento de elección para reducir el riesgo cardiovascular residual?
++ Agregar icosapento de etilo || Redujo eventos cardiovasculares en pacientes con triglicéridos elevados en tratamiento con estatina.
+- anchoring | Suspender la estatina y usar fibrato || La estatina es la base de la prevención.
+- availability_heuristic | Agregar niacina || No redujo eventos.
+- representativeness_heuristic | No hacer nada porque el LDL está en meta || Persiste riesgo residual por triglicéridos.
+- premature_closure | Agregar gemfibrozil a la atorvastatina || Aumenta el riesgo de miopatía.
+- framing_effect | Agregar resinas secuestradoras || Aumentan los triglicéridos.
+- complexity_bias | Aféresis de lipoproteínas || No está indicada.
+- base_rate_fallacy | Cualquier suplemento de omega 3 de venta libre tiene el mismo beneficio || El beneficio se demostró con dosis altas de icosapento de etilo.
+- belief_bias | Los triglicéridos no influyen en el riesgo cardiovascular || Contribuyen al riesgo residual.
+- omission_bias | No revisar alcohol, peso y control de la glucosa || Son causas tratables.
+E: En pacientes con enfermedad cardiovascular o diabetes con factores de riesgo, tratados con estatina y con LDL controlado pero triglicéridos persistentemente entre 150 y 499 mg/dL, existe un riesgo cardiovascular residual. El estudio REDUCE-IT demostró que el icosapento de etilo, un derivado purificado del ácido eicosapentaenoico en dosis de 4 gramos al día, reduce los eventos cardiovasculares en este grupo. Los suplementos de omega 3 de venta libre no han mostrado el mismo beneficio. Antes se optimizan los cambios en el estilo de vida, el control glucémico, el peso y el consumo de alcohol. La estatina se mantiene como base.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en el adulto ;; Guía de la Sociedad Europea de Cardiología para dislipidemias
+
+@ fam|chronic_disease_primary|dyslipidemia_family|2|prevention_screening
+V: Niño de 9 años cuyo padre tiene hipercolesterolemia familiar diagnosticada y tuvo un infarto a los 40 años. El niño está sano y con peso normal.
+P: ¿Cuál es la recomendación de tamizaje más adecuada para el niño?
++ Medir perfil de lípidos ahora como parte del tamizaje en cascada familiar || Los hijos de pacientes con hipercolesterolemia familiar tienen 50 por ciento de probabilidad de heredarla.
+- anchoring | Esperar a la edad adulta para medir lípidos || El diagnóstico temprano permite prevenir.
+- availability_heuristic | No es necesario porque tiene peso normal || La hipercolesterolemia familiar no depende del peso.
+- representativeness_heuristic | Iniciar estatina sin medir lípidos || Primero debe confirmarse.
+- premature_closure | Solo medir glucosa || No detecta la dislipidemia.
+- framing_effect | Prueba de esfuerzo || No es tamizaje de lípidos.
+- complexity_bias | Angiotomografía coronaria || No está indicada.
+- base_rate_fallacy | La hipercolesterolemia familiar no se hereda a los hijos || Es autosómica dominante.
+- belief_bias | Las estatinas nunca se usan en niños || Se usan desde los 8 a 10 años en este trastorno.
+- omission_bias | No estudiar a los hermanos del niño || El tamizaje en cascada incluye a todos.
+E: La hipercolesterolemia familiar heterocigota es autosómica dominante, por lo que cada hijo de un afectado tiene 50 por ciento de probabilidad de heredarla. Se recomienda el tamizaje en cascada de los familiares de primer grado, y en los niños se mide el perfil de lípidos a partir de los 2 años. Un colesterol LDL mayor de 160 mg/dL en un niño con antecedente familiar confirmado sugiere el diagnóstico. El tratamiento inicia con cambios en el estilo de vida y, a partir de los 8 a 10 años, con estatinas. El diagnóstico y tratamiento tempranos reducen el riesgo de enfermedad coronaria prematura.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de hipercolesterolemia familiar ;; Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en la infancia
+
+@ fam|chronic_disease_primary|dyslipidemia_family|2|data_interpretation
+V: Mujer de 48 años con perfil de lípidos sin ayuno. Colesterol total de 240 mg/dL, HDL de 50 mg/dL y triglicéridos de 150 mg/dL.
+P: ¿Qué indica el cálculo del colesterol LDL con la fórmula de Friedewald?
++ Un LDL de 160 mg/dL || LDL es colesterol total menos HDL menos triglicéridos entre 5.
+- anchoring | Un LDL de 190 mg/dL || No resta los triglicéridos entre 5.
+- availability_heuristic | Un LDL de 240 mg/dL || Es el colesterol total.
+- representativeness_heuristic | Un LDL de 140 mg/dL || Es un cálculo erróneo.
+- premature_closure | Un LDL de 90 mg/dL || Resta los triglicéridos completos.
+- framing_effect | No puede calcularse sin ayuno en ningún caso || La fórmula es aceptable con triglicéridos menores de 400.
+- complexity_bias | Se requiere ultracentrifugación obligatoria || Solo cuando la fórmula no es válida.
+- base_rate_fallacy | Un LDL de 210 mg/dL || Es un cálculo erróneo.
+- belief_bias | El HDL alto anula el riesgo del LDL elevado || No lo anula.
+- focusing_illusion | Un colesterol no HDL de 160 mg/dL || El no HDL sería 190.
+E: La fórmula de Friedewald estima el colesterol LDL como colesterol total menos colesterol HDL menos triglicéridos divididos entre 5, en mg/dL. En este caso: 240 menos 50 menos 30 da 160 mg/dL. La fórmula no es válida con triglicéridos mayores de 400 mg/dL, situación en la que se mide el LDL de forma directa o se usan otras fórmulas, como la de Martin-Hopkins. El colesterol no HDL, colesterol total menos HDL, aquí 190 mg/dL, es útil en pacientes con hipertrigliceridemia o sin ayuno. La medición sin ayuno es aceptable para la mayoría de las evaluaciones.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en el adulto ;; Norma Oficial Mexicana para la prevención, tratamiento y control de las dislipidemias
+
+@ fam|chronic_disease_primary|diabetes_primary_care|3|treatment_of_choice
+V: Mujer de 50 años con diabetes tipo 2, índice de masa corporal de 38 y hemoglobina glucosilada de 8.4 por ciento a pesar de metformina a dosis máxima. Sin enfermedad cardiovascular ni renal. Desea perder peso.
+P: ¿Cuál es el fármaco de elección para agregar a la metformina?
++ Agonista del receptor de GLP-1, como semaglutida, o agonista dual GIP y GLP-1 || Reducen la glucosa y producen una pérdida de peso importante.
+- anchoring | Glibenclamida || Aumenta el peso y causa hipoglucemia.
+- availability_heuristic | Pioglitazona || Aumenta el peso.
+- representativeness_heuristic | Insulina basal como primera opción || Aumenta el peso y no es la primera opción en esta paciente.
+- premature_closure | Suspender la metformina || Se mantiene como base.
+- framing_effect | Sibutramina || Fue retirada por riesgo cardiovascular.
+- complexity_bias | Insulina en bomba de infusión || No está indicada.
+- base_rate_fallacy | El peso no influye en la elección del antidiabético || Es un criterio importante.
+- belief_bias | Los agonistas de GLP-1 causan hipoglucemia frecuente en monoterapia || El riesgo es bajo.
+- omission_bias | No informar sobre los efectos gastrointestinales iniciales || Son frecuentes y afectan el apego.
+E: En pacientes con diabetes tipo 2 y obesidad, la elección del segundo fármaco debe considerar el efecto sobre el peso. Los agonistas del receptor de GLP-1, como semaglutida, liraglutida y dulaglutida, y el agonista dual de GIP y GLP-1 tirzepatida, reducen la hemoglobina glucosilada de forma importante, producen pérdida de peso significativa, tienen bajo riesgo de hipoglucemia y, en el caso de varios agonistas de GLP-1, beneficio cardiovascular demostrado. Sus efectos adversos más frecuentes son náusea, vómito y diarrea al inicio, por lo que la dosis se titula gradualmente. Los inhibidores del cotransportador de sodio y glucosa tipo 2 son otra opción que reduce el peso.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento farmacológico de la diabetes mellitus tipo 2 en el primer nivel ;; Estándares de atención en diabetes de la Asociación Americana de Diabetes
+
+@ fam|chronic_disease_primary|diabetes_primary_care|3|complication_prognosis
+V: Hombre de 65 años con diabetes tipo 2 tratado con metformina 2 gramos al día durante 10 años. Refiere hormigueo en los pies y cansancio. Hemoglobina de 10.5 g/dL con volumen corpuscular medio de 108 fL.
+P: ¿Cuál es la complicación del tratamiento que debe descartarse?
++ Deficiencia de vitamina B12 por uso prolongado de metformina || La metformina reduce la absorción de vitamina B12 y causa anemia megaloblástica y neuropatía.
+- anchoring | Neuropatía diabética como única explicación sin estudiar || La anemia macrocítica sugiere deficiencia de B12.
+- availability_heuristic | Anemia por deficiencia de hierro || El volumen corpuscular es alto.
+- representativeness_heuristic | Acidosis láctica crónica || No explica la macrocitosis.
+- premature_closure | Hipoglucemia crónica por metformina || La metformina sola rara vez causa hipoglucemia.
+- framing_effect | Insuficiencia renal como causa de macrocitosis || Causa anemia normocítica.
+- complexity_bias | Síndrome mielodisplásico como primera sospecha || Se considera si se descartan causas frecuentes.
+- base_rate_fallacy | La metformina no tiene efectos a largo plazo || Puede causar deficiencia de B12.
+- belief_bias | La deficiencia de B12 solo ocurre en vegetarianos || También por fármacos y malabsorción.
+- omission_bias | No medir vitamina B12 periódicamente en usuarios de metformina || Se recomienda vigilarla.
+E: El uso prolongado de metformina se asocia con deficiencia de vitamina B12 por disminución de su absorción en el íleon terminal, de forma dependiente de la dosis y del tiempo de uso. Puede causar anemia megaloblástica con macrocitosis y neuropatía periférica, que puede confundirse o sumarse a la neuropatía diabética. Se recomienda medir la vitamina B12 periódicamente en pacientes con uso prolongado, especialmente si presentan neuropatía o anemia. El tratamiento es la suplementación con vitamina B12 oral en dosis altas o intramuscular, sin necesidad de suspender la metformina.
+R: Estándares de atención en diabetes de la Asociación Americana de Diabetes ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la anemia por deficiencia de vitamina B12
+
+@ fam|adolescent_health|adolescent_development|2|data_interpretation
+V: Varón de 14 años con aumento del volumen testicular a 8 mL, vello púbico oscuro y rizado en la base del pene y alargamiento del pene. Ha crecido 9 centímetros en el último año.
+P: ¿Qué indica esta exploración en el desarrollo puberal masculino?
++ Pubertad en estadio 3 de Tanner, con el estirón de crecimiento propio de la pubertad media || El estirón en varones ocurre de forma más tardía que en las niñas.
+- anchoring | Pubertad precoz || Inicia antes de los 9 años en varones.
+- availability_heuristic | Estadio 1 de Tanner prepuberal || Ya hay cambios puberales.
+- representativeness_heuristic | Retraso puberal || Está dentro del rango normal.
+- premature_closure | Estadio 5 de Tanner adulto || Aún no alcanza el desarrollo completo.
+- framing_effect | Crecimiento anormal que requiere hormona del crecimiento || Es normal en la pubertad.
+- complexity_bias | Hiperplasia suprarrenal congénita || El desarrollo es normal para su edad.
+- base_rate_fallacy | El estirón en varones ocurre antes que en mujeres || Ocurre unos 2 años después.
+- belief_bias | Tumor testicular bilateral || El volumen es normal para la pubertad.
+- focusing_illusion | Ginecomastia || No se describe.
+E: En los varones, la pubertad inicia entre los 9 y los 14 años con el aumento del volumen testicular a 4 mL o más, correspondiente al estadio 2 de Tanner. Después aparece el vello púbico y aumenta el tamaño del pene. A diferencia de las niñas, en quienes el estirón ocurre al inicio de la pubertad, en los varones el pico de velocidad de crecimiento ocurre en la pubertad media a tardía, en los estadios 3 y 4, aproximadamente dos años después que en las niñas, y puede alcanzar 9 a 10 centímetros por año. La voz cambia y aparece el vello facial en estadios avanzados.
+R: Guía de Práctica Clínica de control y seguimiento de la salud en la niña y el niño ;; Guía de Práctica Clínica de atención integral del adolescente en el primer nivel
+
+@ fam|public_health|biostatistics|3|data_interpretation
+V: En un ensayo clínico de un nuevo anticoagulante, la incidencia de sangrado mayor fue de 4 por ciento con el nuevo fármaco y de 2 por ciento con el tratamiento estándar.
+P: ¿Qué indica el número necesario a dañar en este estudio?
++ 50 pacientes, es decir, por cada 50 tratados con el nuevo fármaco ocurre un sangrado mayor adicional || Es el inverso del aumento absoluto del riesgo de 2 por ciento.
+- anchoring | 2 pacientes || Confunde el porcentaje con el número necesario.
+- availability_heuristic | 25 pacientes || Usa el riesgo del fármaco nuevo.
+- representativeness_heuristic | 100 por ciento de aumento del riesgo absoluto || Es el aumento relativo.
+- premature_closure | 4 pacientes || Es un cálculo erróneo.
+- framing_effect | 0.5 pacientes || Es un cálculo erróneo.
+- complexity_bias | No puede calcularse sin la razón de momios || Se calcula con los riesgos absolutos.
+- base_rate_fallacy | 200 pacientes || Es un cálculo erróneo.
+- belief_bias | Un número necesario a dañar alto indica más peligro || Un número alto indica menos daño.
+- focusing_illusion | 12 pacientes || Es un cálculo erróneo.
+E: El aumento absoluto del riesgo es la diferencia entre el riesgo del efecto adverso en el grupo tratado y en el control: 4 menos 2 por ciento, es decir, 2 por ciento o 0.02. El número necesario a dañar es su inverso, 1 entre 0.02, es decir, 50: por cada 50 pacientes tratados con el nuevo anticoagulante ocurre un sangrado mayor adicional. Cuanto mayor es el número necesario a dañar, menor es el daño. Para decidir un tratamiento se compara con el número necesario a tratar para el beneficio. El aumento relativo del riesgo aquí es de 100 por ciento, cifra que puede exagerar la percepción del daño.
+R: Manual de epidemiología clínica para el primer nivel de atención ;; Guía para la lectura crítica de ensayos clínicos
+
+@ fam|preventive_medicine|adult_immunizations|2|prevention_screening
+V: Hombre de 32 años que viajará por trabajo a una zona rural con malas condiciones de saneamiento. Nunca ha tenido hepatitis A ni ha sido vacunado. Pregunta qué vacuna le conviene.
+P: ¿Cuál es la recomendación de vacunación más adecuada para prevenir la hepatitis transmitida por agua y alimentos?
++ Vacuna inactivada contra hepatitis A, idealmente antes del viaje, con una segunda dosis a los 6 a 12 meses || Protege contra la transmisión fecal oral.
+- anchoring | Vacuna contra hepatitis B como protección para este riesgo || La hepatitis B se transmite por sangre y sexo.
+- availability_heuristic | No es necesaria porque es adulto joven || La infección en adultos suele ser más sintomática.
+- representativeness_heuristic | Antibiótico profiláctico durante el viaje || No previene una infección viral.
+- premature_closure | Vacuna contra fiebre amarilla como protección de hepatitis || Previene otra enfermedad.
+- framing_effect | Inmunoglobulina mensual de por vida || La vacuna da protección duradera.
+- complexity_bias | Antiviral profiláctico || No está indicado.
+- base_rate_fallacy | La hepatitis A siempre es leve en adultos || Puede ser grave y prolongada.
+- belief_bias | La vacuna contra hepatitis A es de virus vivos contraindicada en adultos || Es inactivada.
+- omission_bias | No dar recomendaciones sobre agua y alimentos seguros || Son parte de la prevención.
+E: La hepatitis A se transmite por vía fecal oral, a través de agua y alimentos contaminados, y es frecuente en zonas con saneamiento deficiente. En niños suele ser leve o asintomática, pero en adultos es más sintomática y puede ser grave. La vacuna inactivada contra hepatitis A es muy eficaz; una dosis brinda protección en 2 a 4 semanas y la segunda, a los 6 a 12 meses, da protección duradera. Se recomienda a viajeros a zonas endémicas, personas con hepatopatía crónica, hombres que tienen sexo con hombres y usuarios de drogas. También se dan recomendaciones de higiene, agua potable y alimentos cocidos.
+R: Lineamientos de vacunación del Programa de Vacunación Universal ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la hepatitis A
+
+@ fam|family_health|family_functionality|3|next_step
+V: Familia que acude porque el hijo de 9 años presenta enuresis secundaria, bajo rendimiento escolar y tristeza desde que sus padres iniciaron un proceso de divorcio conflictivo hace 4 meses. Los padres discuten frente a él.
+P: ¿Cuál es la conducta más apropiada?
++ Abordar el impacto del divorcio en el niño, orientar a los padres para no involucrarlo en el conflicto, mantener rutinas y referir a apoyo psicológico || Los síntomas del niño se relacionan con la crisis familiar.
+- anchoring | Iniciar desmopresina como única medida || No aborda la causa.
+- availability_heuristic | Solicitar urocultivo y ultrasonido renal como prioridad || La relación temporal con la crisis es clara, aunque se descarten causas orgánicas.
+- representativeness_heuristic | Recomendar que los padres sigan juntos por el bien del niño || La decisión es de los padres.
+- premature_closure | Considerarlo un problema de conducta que requiere castigo || Empeora los síntomas.
+- framing_effect | Recomendar que el niño elija con qué padre vivir || No debe ponerse en esa posición.
+- complexity_bias | Hospitalizar al niño para estudio || No está indicado.
+- base_rate_fallacy | El divorcio no afecta a los niños de esta edad || Puede afectarlos significativamente.
+- belief_bias | La enuresis secundaria siempre es orgánica || Puede ser por estrés.
+- omission_bias | No evaluar si hay violencia en el hogar || Debe explorarse.
+E: El divorcio es una crisis paranormativa que afecta a todos los miembros de la familia. En los niños puede manifestarse con regresión, como enuresis secundaria, alteraciones del sueño, tristeza, ansiedad, problemas de conducta y bajo rendimiento escolar. El impacto depende más del nivel de conflicto entre los padres que del divorcio en sí. El médico familiar debe descartar causas orgánicas cuando sea pertinente, orientar a los padres para no involucrar al niño en el conflicto ni hablar mal del otro padre, mantener rutinas y contacto con ambos padres, y referir a apoyo psicológico. También debe explorar la presencia de violencia.
+R: Manual de medicina familiar del Instituto Mexicano del Seguro Social ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la enuresis en niños
