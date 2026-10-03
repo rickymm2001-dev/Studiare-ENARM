@@ -1,0 +1,1801 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "ped-02-crecimiento-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "developmental_milestones",
+      "vignette": "Lactante de 6 meses en consulta de niño sano. Se sienta con apoyo de sus manos al frente, transfiere objetos de una mano a otra, balbucea con sílabas como ba y ma y voltea al escuchar su nombre. Aún no gatea.",
+      "prompt": "¿Qué indica el desarrollo de este lactante?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Retraso motor grueso porque no gatea",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El gateo suele aparecer entre los 8 y 10 meses."
+        },
+        {
+          "key": "b",
+          "text": "Parálisis cerebral leve",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay alteraciones del tono ni asimetrías."
+        },
+        {
+          "key": "c",
+          "text": "Hipoacusia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Voltea al escuchar su nombre."
+        },
+        {
+          "key": "d",
+          "text": "Retraso del lenguaje",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "El balbuceo silábico es normal a esta edad."
+        },
+        {
+          "key": "e",
+          "text": "Todos los bebés deben caminar a los 6 meses",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La marcha aparece alrededor de los 12 meses."
+        },
+        {
+          "key": "f",
+          "text": "Desarrollo normal para su edad",
+          "correct": true,
+          "rationale": "Sedestación con apoyo, transferencia de objetos y balbuceo son hitos de los 6 meses."
+        },
+        {
+          "key": "g",
+          "text": "Retraso global del desarrollo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Cumple los hitos esperados."
+        },
+        {
+          "key": "h",
+          "text": "Hipotonía central",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "La sedestación con apoyo es adecuada."
+        },
+        {
+          "key": "i",
+          "text": "Desarrollo adelantado que requiere estimulación especial",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es el esperado."
+        },
+        {
+          "key": "j",
+          "text": "Trastorno del espectro autista",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Responde a su nombre y balbucea."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "La vigilancia del desarrollo compara los logros del niño con los hitos esperados por edad en las áreas motora gruesa, motora fina, lenguaje y social. A los 6 meses se espera que se siente con apoyo, que ruede, que transfiera objetos entre manos, que balbucee sílabas y que responda a su nombre. El gateo aparece hacia los 8 a 10 meses, la sedestación sin apoyo hacia los 8, la marcha independiente entre los 12 y 15 meses y las primeras palabras con significado hacia el año. En México se usa la prueba de Evaluación del Desarrollo Infantil para detectar riesgo de retraso.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la atención a la salud del niño",
+        "Manual de la prueba de Evaluación del Desarrollo Infantil"
+      ]
+    },
+    {
+      "key": "ped-02-crecimiento-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "developmental_milestones",
+      "vignette": "Niño de 18 meses que no dice ninguna palabra con significado, no señala objetos para pedir ni para mostrar, mantiene poco contacto visual y no responde a su nombre. Juega alineando carritos. Su audición no ha sido evaluada.",
+      "prompt": "¿Cuál es la conducta a seguir?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aplicar una prueba de tamizaje de autismo, evaluar la audición y referir a evaluación especializada del desarrollo",
+          "correct": true,
+          "rationale": "Hay banderas rojas de lenguaje y comunicación social."
+        },
+        {
+          "key": "b",
+          "text": "Solicitar resonancia magnética de cráneo de rutina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "c",
+          "text": "Iniciar terapia de lenguaje sin más estudios",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Primero debe descartarse hipoacusia y valorarse el desarrollo completo."
+        },
+        {
+          "key": "d",
+          "text": "Tranquilizar a la familia porque los varones hablan más tarde",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Las banderas rojas no deben atribuirse al sexo."
+        },
+        {
+          "key": "e",
+          "text": "No referir para evitar etiquetar al niño",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La referencia oportuna beneficia al niño."
+        },
+        {
+          "key": "f",
+          "text": "Solicitar electroencefalograma de rutina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicado sin crisis."
+        },
+        {
+          "key": "g",
+          "text": "Diagnosticar autismo en la consulta y cerrar el caso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El diagnóstico requiere evaluación especializada."
+        },
+        {
+          "key": "h",
+          "text": "Atribuirlo a que es hijo único",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica las banderas rojas."
+        },
+        {
+          "key": "i",
+          "text": "Reducir el tiempo de pantalla y revalorar en un año",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Retrasa la intervención temprana."
+        },
+        {
+          "key": "j",
+          "text": "Esperar a los 3 años para valorar el lenguaje",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "La intervención temprana mejora el pronóstico."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "f"
+      ],
+      "explanation": "La ausencia de palabras a los 16 meses, de frases de dos palabras a los 24 meses, de señalamiento a los 12 meses y cualquier pérdida de habilidades son banderas rojas que requieren evaluación. El poco contacto visual, la falta de respuesta al nombre y el juego repetitivo sugieren trastorno del espectro autista. Se recomienda aplicar una herramienta de tamizaje como el M CHAT R entre los 18 y 24 meses, evaluar siempre la audición y referir a evaluación especializada. La intervención temprana intensiva mejora la comunicación y la conducta, por lo que no debe esperarse a que el niño crezca.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y manejo de los trastornos del espectro autista",
+        "Manual de la prueba de Evaluación del Desarrollo Infantil"
+      ]
+    },
+    {
+      "key": "ped-02-crecimiento-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "developmental_milestones",
+      "vignette": "Niño de 12 meses que en la exploración se pone de pie sosteniéndose de los muebles y da pasos laterales. Dice mamá y papá con significado, hace pinza fina con índice y pulgar y busca un objeto escondido bajo un pañal. Juega a decir adiós con la mano.",
+      "prompt": "¿Qué indica el desarrollo de este niño?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Retraso motor porque aún no camina solo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La marcha independiente puede aparecer hasta los 15 meses."
+        },
+        {
+          "key": "b",
+          "text": "Retraso motor fino",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La pinza fina está presente."
+        },
+        {
+          "key": "c",
+          "text": "Debe usar andadera para aprender a caminar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La andadera no ayuda y causa accidentes."
+        },
+        {
+          "key": "d",
+          "text": "Distrofia muscular de Duchenne",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay datos de debilidad."
+        },
+        {
+          "key": "e",
+          "text": "Trastorno del espectro autista",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Tiene interacción social adecuada."
+        },
+        {
+          "key": "f",
+          "text": "Desarrollo normal para los 12 meses",
+          "correct": true,
+          "rationale": "Bipedestación con apoyo, pinza fina, dos palabras y permanencia del objeto son hitos esperados."
+        },
+        {
+          "key": "g",
+          "text": "Displasia de cadera",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay datos de asimetría ni marcha anormal."
+        },
+        {
+          "key": "h",
+          "text": "Desarrollo superior que sugiere superdotación",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Corresponde a lo esperado."
+        },
+        {
+          "key": "i",
+          "text": "Hipotonía congénita",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Logra la bipedestación."
+        },
+        {
+          "key": "j",
+          "text": "Retraso del lenguaje",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Dos palabras con significado son esperadas al año."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "Al año de edad se espera que el niño se ponga de pie con apoyo y camine sostenido de los muebles, que haga pinza fina, que diga una a tres palabras con significado, que imite gestos como decir adiós y que tenga permanencia del objeto. La marcha independiente aparece entre los 12 y 15 meses, y se considera bandera roja si no camina a los 18 meses. Las andaderas no aceleran la marcha y se asocian a caídas y lesiones, por lo que no se recomiendan. La vigilancia del desarrollo debe realizarse en cada consulta del niño sano.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la atención a la salud del niño",
+        "Manual de la prueba de Evaluación del Desarrollo Infantil"
+      ]
+    },
+    {
+      "key": "ped-02-crecimiento-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "developmental_milestones",
+      "vignette": "Lactante de 4 meses. Al colocarlo boca abajo levanta la cabeza y el tórax apoyándose en los antebrazos. Sostiene la cabeza al jalarlo para sentarlo, se ríe a carcajadas y lleva las manos a la línea media. El reflejo de Moro ya es incompleto.",
+      "prompt": "¿Qué indica la exploración neurológica de este lactante?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Desarrollo normal con desaparición esperada de los reflejos primitivos",
+          "correct": true,
+          "rationale": "El Moro desaparece entre los 4 y 6 meses."
+        },
+        {
+          "key": "b",
+          "text": "Parálisis cerebral",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El control cefálico es adecuado."
+        },
+        {
+          "key": "c",
+          "text": "Lesión neurológica porque el Moro está incompleto",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Su atenuación es esperada a esta edad."
+        },
+        {
+          "key": "d",
+          "text": "Atrofia muscular espinal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay debilidad ni arreflexia."
+        },
+        {
+          "key": "e",
+          "text": "Hipertonía por manos en línea media",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Llevar las manos a la línea media es normal."
+        },
+        {
+          "key": "f",
+          "text": "Los reflejos primitivos deben persistir todo el primer año",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Su persistencia es anormal."
+        },
+        {
+          "key": "g",
+          "text": "Retraso motor",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Cumple los hitos de los 4 meses."
+        },
+        {
+          "key": "h",
+          "text": "Hipoacusia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No se describe falta de respuesta al sonido."
+        },
+        {
+          "key": "i",
+          "text": "Hipotonía central",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Levanta cabeza y tórax."
+        },
+        {
+          "key": "j",
+          "text": "Lesión del plexo braquial",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay asimetría."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "i"
+      ],
+      "explanation": "Los reflejos primitivos están presentes al nacer y desaparecen conforme madura la corteza. El Moro desaparece entre los 4 y 6 meses, la prensión palmar hacia los 3 a 4 meses, la prensión plantar entre los 9 y 12 meses y el reflejo tónico asimétrico del cuello hacia los 4 a 6 meses. Su persistencia o asimetría sugiere lesión neurológica. A los 4 meses se espera control cefálico completo, apoyo en antebrazos en decúbito prono, risa a carcajadas, seguimiento visual de 180 grados y manos en la línea media. Un Moro asimétrico en el recién nacido orienta a fractura de clavícula o lesión del plexo braquial.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la atención a la salud del niño"
+      ]
+    },
+    {
+      "key": "ped-02-crecimiento-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "developmental_milestones",
+      "vignette": "Niña de 2 años que hasta los 18 meses decía varias palabras y caminaba bien. En los últimos 4 meses dejó de hablar, perdió el uso intencional de las manos y realiza movimientos de lavado de manos constantes. El perímetro cefálico ha dejado de crecer.",
+      "prompt": "¿Cuál es la conducta a seguir?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solicitar solo estudio de audición",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la pérdida motora."
+        },
+        {
+          "key": "b",
+          "text": "Atribuirlo a celos por un hermano nuevo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica la microcefalia."
+        },
+        {
+          "key": "c",
+          "text": "Considerarlo autismo y referir solo a terapia conductual",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La pérdida de uso de manos y la microcefalia adquirida sugieren otra causa."
+        },
+        {
+          "key": "d",
+          "text": "Revalorar en un año",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Retrasa el diagnóstico."
+        },
+        {
+          "key": "e",
+          "text": "Biopsia muscular como primer estudio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el abordaje inicial."
+        },
+        {
+          "key": "f",
+          "text": "Referir a neurología pediátrica para estudio genético dirigido por sospecha de síndrome de Rett",
+          "correct": true,
+          "rationale": "Regresión del desarrollo con estereotipias de manos y desaceleración del perímetro cefálico en una niña."
+        },
+        {
+          "key": "g",
+          "text": "Diagnosticar parálisis cerebral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La parálisis cerebral no es regresiva."
+        },
+        {
+          "key": "h",
+          "text": "Atribuirlo a vacunas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No hay relación causal."
+        },
+        {
+          "key": "i",
+          "text": "No estudiar porque no tiene tratamiento curativo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El diagnóstico orienta el manejo y el consejo genético."
+        },
+        {
+          "key": "j",
+          "text": "Tranquilizar porque es una etapa normal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La regresión nunca es normal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "La regresión del desarrollo, es decir la pérdida de habilidades ya adquiridas, siempre es una bandera roja y requiere evaluación neurológica. El síndrome de Rett afecta casi exclusivamente a niñas y se debe a mutaciones del gen MECP2 en el cromosoma X. Tras un desarrollo inicial aparentemente normal, entre los 6 y 18 meses aparecen pérdida del lenguaje y del uso intencional de las manos, estereotipias como lavado o retorcimiento de manos, alteraciones de la marcha, desaceleración del crecimiento del perímetro cefálico y crisis epilépticas. El diagnóstico es clínico y se confirma con estudio genético. El manejo es multidisciplinario.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de detección oportuna de alteraciones del desarrollo en niños"
+      ]
+    },
+    {
+      "key": "ped-02-crecimiento-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "developmental_milestones",
+      "vignette": "Lactante de 9 meses sin control cefálico completo y que no se sienta. Tiene hipertonía de extremidades inferiores con reflejos aumentados y cruza las piernas en tijera al suspenderlo. Antecedente de prematurez de 30 semanas con hemorragia intraventricular.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Atribuirlo a desnutrición",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la espasticidad."
+        },
+        {
+          "key": "b",
+          "text": "Iniciar solo suplementos vitamínicos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No tratan la lesión neurológica."
+        },
+        {
+          "key": "c",
+          "text": "Solicitar estudio metabólico como único paso",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Hay una causa probable conocida."
+        },
+        {
+          "key": "d",
+          "text": "Cirugía ortopédica inmediata",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "e",
+          "text": "Referir a rehabilitación e intervención temprana y a neurología pediátrica por sospecha de parálisis cerebral espástica",
+          "correct": true,
+          "rationale": "Retraso motor con espasticidad en un prematuro con lesión cerebral."
+        },
+        {
+          "key": "f",
+          "text": "Masajes caseros como único tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No sustituyen la rehabilitación."
+        },
+        {
+          "key": "g",
+          "text": "No referir hasta tener diagnóstico definitivo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La rehabilitación debe iniciarse con la sospecha."
+        },
+        {
+          "key": "h",
+          "text": "Esperar porque los prematuros se atrasan por edad corregida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "A los 9 meses, con 7 corregidos, ya debería tener control cefálico."
+        },
+        {
+          "key": "i",
+          "text": "Colocar andadera para fortalecer las piernas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No ayuda y puede empeorar el patrón."
+        },
+        {
+          "key": "j",
+          "text": "Revalorar a los 2 años",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "La intervención temprana es clave."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "La parálisis cerebral es un trastorno permanente y no progresivo del movimiento y la postura por lesión del cerebro en desarrollo. La prematurez, la hemorragia intraventricular, la leucomalacia periventricular y la asfixia son factores de riesgo. En prematuros la edad corregida se usa hasta los 2 años, pero la falta de control cefálico a los 7 meses corregidos es anormal. La forma espástica es la más frecuente y la diplejía espástica es típica del prematuro. Las señales tempranas incluyen hipertonía, reflejos aumentados, postura en tijera y persistencia de reflejos primitivos. La intervención temprana y la rehabilitación deben iniciarse ante la sospecha.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la parálisis cerebral infantil"
+      ]
+    },
+    {
+      "key": "ped-02-crecimiento-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "developmental_milestones",
+      "vignette": "Niño de 3 años que corre, sube escaleras alternando los pies y pedalea un triciclo. Dice frases de tres palabras, sabe su nombre, copia un círculo y juega con otros niños compartiendo juguetes. Sus padres preguntan si se desarrolla bien.",
+      "prompt": "¿Qué indica el desarrollo de este niño?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Desarrollo adelantado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es el esperado."
+        },
+        {
+          "key": "b",
+          "text": "Discapacidad intelectual leve",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Cumple los hitos."
+        },
+        {
+          "key": "c",
+          "text": "Retraso motor fino porque no copia un cuadrado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El cuadrado se copia hacia los 4 años."
+        },
+        {
+          "key": "d",
+          "text": "Torpeza motora",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Pedalea y sube escaleras."
+        },
+        {
+          "key": "e",
+          "text": "Hipoacusia leve",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Su lenguaje es adecuado."
+        },
+        {
+          "key": "f",
+          "text": "A los 3 años debe leer y escribir",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Esos logros aparecen en edad escolar."
+        },
+        {
+          "key": "g",
+          "text": "Retraso del lenguaje por no usar oraciones largas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Las frases de tres palabras son esperadas a los 3 años."
+        },
+        {
+          "key": "h",
+          "text": "Desarrollo normal para los 3 años",
+          "correct": true,
+          "rationale": "Triciclo, escaleras alternadas, frases de tres palabras y copia de círculo son hitos de esta edad."
+        },
+        {
+          "key": "i",
+          "text": "Trastorno del espectro autista",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Juega con otros y comparte."
+        },
+        {
+          "key": "j",
+          "text": "Trastorno por déficit de atención",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Correr y jugar son normales a esta edad."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "h",
+        "j"
+      ],
+      "explanation": "A los 3 años se espera que el niño corra con estabilidad, suba escaleras alternando los pies, pedalee un triciclo, copie un círculo, diga frases de tres palabras, sepa su nombre y edad, y empiece a jugar de forma cooperativa. El lenguaje debe ser entendido por extraños en al menos 75%. A los 4 años copia una cruz o un cuadrado, salta en un pie y cuenta historias, y a los 5 copia un triángulo. Conocer estos hitos permite tranquilizar a la familia cuando el desarrollo es normal y detectar a tiempo las desviaciones.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la atención a la salud del niño"
+      ]
+    },
+    {
+      "key": "ped-02-crecimiento-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "child_malnutrition",
+      "vignette": "Niño de 2 años con edema bilateral con fosita en piernas y pies, abdomen prominente, cabello delgado, despigmentado y que se desprende con facilidad, y lesiones de piel descamativas en zonas de presión. Su dieta es principalmente atole y tortilla. Albúmina de 2.1 g/dL.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome nefrótico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da edema e hipoalbuminemia, pero no lesiones de piel ni de cabello por carencia."
+        },
+        {
+          "key": "b",
+          "text": "Marasmo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la desnutrición, pero el marasmo no tiene edema."
+        },
+        {
+          "key": "c",
+          "text": "Desnutrición grave tipo kwashiorkor",
+          "correct": true,
+          "rationale": "Edema, alteraciones de cabello y piel e hipoalbuminemia por dieta pobre en proteínas."
+        },
+        {
+          "key": "d",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el edema con hipoalbuminemia grave por dieta."
+        },
+        {
+          "key": "e",
+          "text": "Insuficiencia cardiaca",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica las alteraciones de piel y cabello."
+        },
+        {
+          "key": "f",
+          "text": "Enfermedad celiaca",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede causar desnutrición, pero la dieta explica el cuadro."
+        },
+        {
+          "key": "g",
+          "text": "Obesidad por dieta rica en carbohidratos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El abdomen prominente es por edema y hepatomegalia."
+        },
+        {
+          "key": "h",
+          "text": "Cirrosis hepática",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No hay antecedentes de hepatopatía."
+        },
+        {
+          "key": "i",
+          "text": "Niño sano y robusto por su abdomen grande",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El abdomen grande refleja desnutrición."
+        },
+        {
+          "key": "j",
+          "text": "Pelagra aislada",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "La dermatitis no explica el edema."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "e"
+      ],
+      "explanation": "La desnutrición grave se clasifica en marasmo, kwashiorkor y mixta. El kwashiorkor se debe a una dieta deficiente sobre todo en proteínas con aporte relativo de carbohidratos. Se caracteriza por edema bilateral con fosita, hipoalbuminemia, hígado graso con hepatomegalia, cabello delgado, despigmentado y quebradizo, dermatosis en placas descamativas, apatía e irritabilidad. El peso puede parecer conservado por el edema. El marasmo, en cambio, muestra emaciación grave sin edema, con pérdida de grasa y músculo. El tratamiento sigue fases de estabilización, con manejo de hipoglucemia, hipotermia, deshidratación e infección, y después de rehabilitación nutricional.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la desnutrición en menores de 5 años",
+        "Organización Mundial de la Salud. Manejo de la desnutrición grave"
+      ]
+    },
+    {
+      "key": "ped-02-crecimiento-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "child_malnutrition",
+      "vignette": "Niña de 18 meses con desnutrición grave tipo marasmo que ingresa al hospital. Está hipotérmica, con glucosa capilar de 50 mg/dL y signos de infección respiratoria. No tiene edema.",
+      "prompt": "¿Cuál es el tratamiento inicial prioritario?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Iniciar dieta hipercalórica rica en proteínas desde el primer día",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede provocar síndrome de realimentación."
+        },
+        {
+          "key": "b",
+          "text": "Corregir la hipoglucemia y la hipotermia, iniciar antibióticos y alimentación cautelosa con fórmula de inicio",
+          "correct": true,
+          "rationale": "La fase de estabilización atiende primero lo que amenaza la vida."
+        },
+        {
+          "key": "c",
+          "text": "Transfundir albúmina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada de rutina."
+        },
+        {
+          "key": "d",
+          "text": "Diuréticos para eliminar líquido",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No tiene edema y están contraindicados."
+        },
+        {
+          "key": "e",
+          "text": "Esperar el resultado de cultivos antes de antibióticos",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "La infección suele estar presente aunque no se manifieste."
+        },
+        {
+          "key": "f",
+          "text": "No alimentar hasta corregir la infección",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La alimentación cautelosa debe iniciar pronto."
+        },
+        {
+          "key": "g",
+          "text": "Dar soluciones intravenosas en bolo rápido de rutina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede causar insuficiencia cardiaca."
+        },
+        {
+          "key": "h",
+          "text": "Dar solo agua de arroz y té",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No aporta los nutrientes necesarios."
+        },
+        {
+          "key": "i",
+          "text": "Nutrición parenteral total como primera opción",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se prefiere la vía oral o por sonda."
+        },
+        {
+          "key": "j",
+          "text": "Administrar hierro desde el ingreso",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se retrasa hasta la fase de rehabilitación."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "El manejo de la desnutrición grave sigue los diez pasos de la Organización Mundial de la Salud en dos fases. En la estabilización, de los días 1 a 7, se tratan o previenen hipoglucemia e hipotermia, se corrige la deshidratación con solución de rehidratación para desnutridos y con cautela, se corrigen electrolitos, se tratan infecciones con antibióticos de forma empírica, se corrigen micronutrientes sin hierro y se inicia alimentación cautelosa con fórmula F 75. En la rehabilitación se aumenta el aporte con F 100 para lograr crecimiento compensatorio y se agrega hierro. La realimentación rápida puede causar hipofosfatemia, insuficiencia cardiaca y muerte.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Manejo de la desnutrición grave",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la desnutrición en menores de 5 años"
+      ]
+    },
+    {
+      "key": "ped-02-crecimiento-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "child_malnutrition",
+      "vignette": "Niño de 3 años con desnutrición grave que al tercer día de rehabilitación nutricional con aumento rápido del aporte calórico presenta debilidad, dificultad respiratoria, edema y arritmia. Fósforo sérico de 1.2 mg/dL y potasio de 2.9 mEq/L.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Sepsis nosocomial",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede coexistir, pero la hipofosfatemia orienta a realimentación."
+        },
+        {
+          "key": "b",
+          "text": "Alergia a la fórmula",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No da hipofosfatemia."
+        },
+        {
+          "key": "c",
+          "text": "Miocarditis viral",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable en este contexto."
+        },
+        {
+          "key": "d",
+          "text": "Deshidratación",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Hay edema."
+        },
+        {
+          "key": "e",
+          "text": "Neumonía por aspiración",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica los electrolitos."
+        },
+        {
+          "key": "f",
+          "text": "Hipoglucemia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica la hipofosfatemia."
+        },
+        {
+          "key": "g",
+          "text": "Kwashiorkor tardío",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la arritmia con hipofosfatemia."
+        },
+        {
+          "key": "h",
+          "text": "Mejoría esperada por el aumento de peso",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El edema no es ganancia real."
+        },
+        {
+          "key": "i",
+          "text": "Síndrome de realimentación",
+          "correct": true,
+          "rationale": "Hipofosfatemia e hipopotasemia con falla cardiaca al aumentar rápido el aporte."
+        },
+        {
+          "key": "j",
+          "text": "Insuficiencia renal aguda",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No se describe elevación de azoados."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "El síndrome de realimentación ocurre al reintroducir de forma rápida la nutrición en pacientes con desnutrición grave. La insulina liberada por los carbohidratos introduce fósforo, potasio y magnesio a la célula, lo que produce hipofosfatemia, hipopotasemia e hipomagnesemia, además de retención de sodio y agua y deficiencia de tiamina. Las consecuencias incluyen debilidad, insuficiencia respiratoria, insuficiencia cardiaca, arritmias, edema y muerte. Se previene iniciando con aporte bajo, aumentándolo de forma gradual, vigilando electrolitos los primeros días y suplementando fósforo, potasio, magnesio y tiamina. Ante el síndrome se reduce el aporte y se corrigen los electrolitos.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Manejo de la desnutrición grave"
+      ]
+    },
+    {
+      "key": "ped-02-crecimiento-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "child_malnutrition",
+      "vignette": "Niño de 4 años con peso para la talla en menos 1 desviación estándar y talla para la edad en menos 2.5 desviaciones estándar según las tablas de la Organización Mundial de la Salud. Vive en una comunidad rural con poca variedad de alimentos y ha tenido diarreas frecuentes.",
+      "prompt": "¿Qué indica este resultado antropométrico?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Desnutrición crónica con talla baja y peso adecuado para su estatura",
+          "correct": true,
+          "rationale": "Talla para la edad menor de menos 2 desviaciones refleja desnutrición crónica."
+        },
+        {
+          "key": "b",
+          "text": "Talla baja familiar sin relación nutricional",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El contexto apoya la causa nutricional."
+        },
+        {
+          "key": "c",
+          "text": "Estado nutricional normal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La talla baja indica desnutrición crónica."
+        },
+        {
+          "key": "d",
+          "text": "Obesidad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El peso para la talla no lo indica."
+        },
+        {
+          "key": "e",
+          "text": "Hipotiroidismo congénito",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Se detecta por tamiz y daría otros datos."
+        },
+        {
+          "key": "f",
+          "text": "Sobrepeso",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "g",
+          "text": "Desnutrición aguda moderada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El peso para la talla no lo indica."
+        },
+        {
+          "key": "h",
+          "text": "Deficiencia de hormona de crecimiento",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara y el contexto explica la talla."
+        },
+        {
+          "key": "i",
+          "text": "Desnutrición aguda grave",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El peso para la talla está cerca de lo normal."
+        },
+        {
+          "key": "j",
+          "text": "Será alto de adulto porque ya comerá mejor",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La talla perdida difícilmente se recupera."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "i"
+      ],
+      "explanation": "Los indicadores antropométricos de la Organización Mundial de la Salud permiten clasificar la desnutrición. El peso para la talla bajo, o emaciación, indica desnutrición aguda. La talla para la edad baja, o desmedro, indica desnutrición crónica, por deficiencias prolongadas e infecciones repetidas. El peso para la edad es un indicador global que no distingue entre ambas. Se considera alteración un valor menor de menos 2 desviaciones estándar y grave menor de menos 3. La desnutrición crónica en los primeros mil días afecta el crecimiento y el desarrollo cognitivo, y es difícil de revertir, por lo que la prevención temprana es prioritaria.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Patrones de crecimiento infantil",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la desnutrición en menores de 5 años"
+      ]
+    },
+    {
+      "key": "ped-02-crecimiento-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "child_malnutrition",
+      "vignette": "Niña de 2 años en una brigada de salud comunitaria. Su circunferencia media del brazo es de 11 cm y no tiene edema. Está alerta y come con apetito.",
+      "prompt": "¿Qué indica esta medición del brazo?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Medición poco confiable que debe ignorarse",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un indicador validado."
+        },
+        {
+          "key": "b",
+          "text": "Desnutrición aguda grave",
+          "correct": true,
+          "rationale": "Una circunferencia media del brazo menor de 11.5 cm en niños de 6 a 59 meses indica desnutrición aguda grave."
+        },
+        {
+          "key": "c",
+          "text": "Desnutrición crónica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La medición del brazo refleja desnutrición aguda."
+        },
+        {
+          "key": "d",
+          "text": "Hipotrofia muscular por falta de ejercicio",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Refleja la reserva de músculo y grasa."
+        },
+        {
+          "key": "e",
+          "text": "Desnutrición aguda moderada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El punto de corte de moderada es de 11.5 a 12.5 cm."
+        },
+        {
+          "key": "f",
+          "text": "Brazos delgados por constitución familiar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El punto de corte es independiente de la familia."
+        },
+        {
+          "key": "g",
+          "text": "Riesgo de desnutrición solamente",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Ya cumple criterio de grave."
+        },
+        {
+          "key": "h",
+          "text": "Sobrepeso",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Indica lo contrario."
+        },
+        {
+          "key": "i",
+          "text": "Estado nutricional normal porque come con apetito",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El apetito no descarta desnutrición grave."
+        },
+        {
+          "key": "j",
+          "text": "Kwashiorkor",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No tiene edema."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "i"
+      ],
+      "explanation": "La circunferencia media del brazo es una medición simple y útil en la comunidad para detectar desnutrición aguda en niños de 6 a 59 meses. Un valor menor de 11.5 cm indica desnutrición aguda grave, de 11.5 a 12.5 cm desnutrición aguda moderada y mayor de 12.5 cm normal. La desnutrición aguda grave también se define por peso para la talla menor de menos 3 desviaciones estándar o por edema bilateral. Los niños sin complicaciones y con apetito conservado pueden tratarse de forma ambulatoria con alimento terapéutico listo para consumir, mientras que los que tienen complicaciones o no comen requieren hospitalización.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Manejo de la desnutrición grave"
+      ]
+    },
+    {
+      "key": "ped-02-crecimiento-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "child_malnutrition",
+      "vignette": "Lactante de 6 meses alimentado exclusivamente al seno materno, con crecimiento adecuado. La madre pregunta cómo iniciar la alimentación complementaria para prevenir la anemia y la desnutrición.",
+      "prompt": "¿Cuál es la recomendación de prevención más adecuada a esta edad?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Iniciar con jugos y caldos como primeros alimentos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aportan pocos nutrientes."
+        },
+        {
+          "key": "b",
+          "text": "Agregar azúcar y sal para mejorar el sabor",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se recomiendan."
+        },
+        {
+          "key": "c",
+          "text": "Dar leche de vaca entera como bebida principal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No se recomienda antes del año."
+        },
+        {
+          "key": "d",
+          "text": "Evitar el huevo hasta los 2 años por alergia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Retrasarlo no previene la alergia."
+        },
+        {
+          "key": "e",
+          "text": "Iniciar alimentos complementarios ricos en hierro, como carnes, junto con la lactancia materna continua",
+          "correct": true,
+          "rationale": "A los 6 meses las reservas de hierro disminuyen y la leche no cubre todas las necesidades."
+        },
+        {
+          "key": "f",
+          "text": "Sustituir la leche materna por fórmula",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La lactancia debe continuar hasta los 2 años o más."
+        },
+        {
+          "key": "g",
+          "text": "Suplementos multivitamínicos sin alimentos complementarios",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No sustituyen una dieta adecuada."
+        },
+        {
+          "key": "h",
+          "text": "Continuar solo con seno materno hasta el año",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Aumenta el riesgo de deficiencias."
+        },
+        {
+          "key": "i",
+          "text": "Esperar hasta el año para dar carne",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La carne aporta hierro y zinc desde los 6 meses."
+        },
+        {
+          "key": "j",
+          "text": "No ofrecer alimentos nuevos para evitar alergias",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasar la introducción no la previene."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "La alimentación complementaria debe iniciar a los 6 meses, manteniendo la lactancia materna hasta los 2 años o más. A esta edad las reservas de hierro se agotan, por lo que deben ofrecerse alimentos ricos en hierro y zinc, como carnes, hígado, leguminosas y cereales fortificados. Se introducen alimentos en consistencia de puré, avanzando a picados y trozos, con variedad de frutas, verduras y proteínas. No se recomienda agregar sal ni azúcar, ni dar leche de vaca entera antes del año. Retrasar alimentos potencialmente alergénicos como huevo o cacahuate no previene la alergia. En México se recomienda suplementar hierro en grupos de riesgo.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana promoción y educación para la salud en materia alimentaria",
+        "Guía de Práctica Clínica de alimentación complementaria"
+      ]
+    },
+    {
+      "key": "ped-02-crecimiento-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "child_malnutrition",
+      "vignette": "Niño de 3 años con antecedente de desnutrición crónica desde el primer año de vida y diarrea persistente. En la evaluación muestra talla baja y retraso en el lenguaje y en las habilidades cognitivas respecto a sus pares.",
+      "prompt": "¿Cuál es la secuela más importante de la desnutrición en los primeros mil días?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Obesidad inmediata en la infancia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede aparecer después, pero no es la secuela principal."
+        },
+        {
+          "key": "b",
+          "text": "Caries dental",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es la secuela más importante."
+        },
+        {
+          "key": "c",
+          "text": "Talla baja que siempre se recupera por completo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La recuperación suele ser parcial."
+        },
+        {
+          "key": "d",
+          "text": "Diabetes tipo 1",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No se relaciona."
+        },
+        {
+          "key": "e",
+          "text": "Ninguna secuela si el niño come bien después",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Las secuelas pueden ser permanentes."
+        },
+        {
+          "key": "f",
+          "text": "Miopía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es la secuela característica."
+        },
+        {
+          "key": "g",
+          "text": "Hipertensión arterial inmediata",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es un riesgo a largo plazo, no la secuela principal."
+        },
+        {
+          "key": "h",
+          "text": "Asma",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No se relaciona."
+        },
+        {
+          "key": "i",
+          "text": "Daño irreversible en el crecimiento lineal y en el desarrollo cognitivo",
+          "correct": true,
+          "rationale": "El cerebro y el crecimiento son más vulnerables desde la concepción hasta los 2 años."
+        },
+        {
+          "key": "j",
+          "text": "Solo bajo peso transitorio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Las secuelas son duraderas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "i"
+      ],
+      "explanation": "Los primeros mil días, desde la concepción hasta los 2 años, son una ventana crítica para el crecimiento y el desarrollo cerebral. La desnutrición en este periodo produce talla baja difícil de recuperar, menor desarrollo cognitivo, peor rendimiento escolar, menor productividad en la vida adulta y mayor riesgo de enfermedades crónicas como obesidad, diabetes e hipertensión si después hay exceso de calorías. Las infecciones repetidas, sobre todo diarreicas, empeoran la absorción y el crecimiento. Por ello, la prevención incluye nutrición materna adecuada, lactancia materna, alimentación complementaria correcta, agua segura, higiene, vacunación y vigilancia del crecimiento.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Patrones de crecimiento infantil",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la desnutrición en menores de 5 años"
+      ]
+    },
+    {
+      "key": "ped-02-crecimiento-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "breastfeeding",
+      "vignette": "Mujer puérpera de 24 horas con su primer hijo sano de término. Pregunta durante cuánto tiempo debe dar solo seno materno.",
+      "prompt": "¿Cuál es la recomendación de prevención en salud infantil sobre la lactancia?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Complementar con agua y té desde el nacimiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Desplaza la leche y aumenta el riesgo de infección."
+        },
+        {
+          "key": "b",
+          "text": "Cambiar a fórmula a los 3 meses",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay beneficio."
+        },
+        {
+          "key": "c",
+          "text": "Lactancia materna exclusiva durante los primeros 6 meses y continuarla con alimentos complementarios hasta los 2 años o más",
+          "correct": true,
+          "rationale": "Es la recomendación de la Organización Mundial de la Salud."
+        },
+        {
+          "key": "d",
+          "text": "Seguir la costumbre familiar de dar atole",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "No se recomienda."
+        },
+        {
+          "key": "e",
+          "text": "Suspender la lactancia al iniciar alimentos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Debe continuar."
+        },
+        {
+          "key": "f",
+          "text": "Fórmula especial para todos los recién nacidos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La leche materna es el alimento ideal."
+        },
+        {
+          "key": "g",
+          "text": "Lactancia exclusiva hasta el año",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "A los 6 meses deben iniciarse alimentos."
+        },
+        {
+          "key": "h",
+          "text": "La leche de la madre primeriza es insuficiente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La mayoría produce leche suficiente."
+        },
+        {
+          "key": "i",
+          "text": "Lactancia exclusiva solo el primer mes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es insuficiente."
+        },
+        {
+          "key": "j",
+          "text": "No dar el calostro por ser amarillo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El calostro es muy valioso."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "La Organización Mundial de la Salud recomienda iniciar la lactancia en la primera hora de vida, mantenerla exclusiva durante 6 meses, sin agua, tés ni otros líquidos, y continuarla con alimentación complementaria hasta los 2 años o más. La leche materna reduce el riesgo de diarrea, infecciones respiratorias, otitis, muerte súbita, obesidad y diabetes, y en la madre disminuye el riesgo de cáncer de mama y ovario. El calostro es rico en inmunoglobulina A y factores protectores. La lactancia a libre demanda, el alojamiento conjunto y el apoyo a la técnica son claves para lograrla.",
+      "gpcRefs": [
+        "Organización Mundial de la Salud. Lactancia materna",
+        "Guía de Práctica Clínica de lactancia materna"
+      ]
+    },
+    {
+      "key": "ped-02-crecimiento-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "breastfeeding",
+      "vignette": "Mujer de 26 años con 10 días de puerperio que tiene grietas y dolor intenso en ambos pezones al amamantar. El bebé gana peso adecuadamente. Al observar la toma, el bebé toma solo el pezón y tiene los labios hacia dentro.",
+      "prompt": "¿Cuál es la conducta a seguir?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Espaciar las tomas a cada 4 horas",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Favorece congestión."
+        },
+        {
+          "key": "b",
+          "text": "Corregir la posición y el agarre para que el bebé tome gran parte de la areola con los labios evertidos",
+          "correct": true,
+          "rationale": "El mal agarre es la causa más común de grietas."
+        },
+        {
+          "key": "c",
+          "text": "Suspender la lactancia y dar fórmula",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "d",
+          "text": "Continuar igual porque el dolor es normal",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "El dolor persistente indica un problema corregible."
+        },
+        {
+          "key": "e",
+          "text": "Solicitar ultrasonido mamario",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "f",
+          "text": "No intervenir porque el bebé gana peso",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El dolor puede llevar a abandonar la lactancia."
+        },
+        {
+          "key": "g",
+          "text": "Usar pezoneras de forma permanente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No corrigen la causa."
+        },
+        {
+          "key": "h",
+          "text": "Lavar los pezones con jabón antes de cada toma",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Reseca la piel."
+        },
+        {
+          "key": "i",
+          "text": "Iniciar antibiótico oral",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay datos de infección."
+        },
+        {
+          "key": "j",
+          "text": "Aplicar alcohol en los pezones",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Reseca y empeora las grietas."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "El dolor y las grietas del pezón suelen deberse a un mal agarre. Un buen agarre se reconoce por boca bien abierta, labios evertidos, mentón tocando el pecho, más areola visible arriba que abajo y succión lenta y profunda. Corregir la posición resuelve la mayoría de los casos. Se recomienda aplicar unas gotas de leche en el pezón después de la toma, dejarlo secar al aire y no usar jabón ni alcohol. También deben revisarse anquiloglosia y candidiasis. Suspender la lactancia no es necesario y aumenta el riesgo de congestión y mastitis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de lactancia materna"
+      ]
+    },
+    {
+      "key": "ped-02-crecimiento-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "breastfeeding",
+      "vignette": "Mujer de 30 años que amamanta y toma un medicamento. Pregunta si debe dejar de dar seno. Su madre le dice que la lactancia está contraindicada en cualquier enfermedad materna.",
+      "prompt": "¿Cuál de las siguientes es una contraindicación real de la lactancia materna en México?",
+      "polarity": "negative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Infección materna por virus de la inmunodeficiencia humana cuando hay acceso a sucedáneos seguros",
+          "correct": true,
+          "rationale": "Es una contraindicación cuando la alimentación de reemplazo es aceptable, factible y segura."
+        },
+        {
+          "key": "b",
+          "text": "Ictericia neonatal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No contraindica la lactancia."
+        },
+        {
+          "key": "c",
+          "text": "Madre con diabetes tipo 2 en tratamiento con metformina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es compatible."
+        },
+        {
+          "key": "d",
+          "text": "Uso de paracetamol materno",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es compatible."
+        },
+        {
+          "key": "e",
+          "text": "Resfriado común de la madre",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La leche aporta anticuerpos."
+        },
+        {
+          "key": "f",
+          "text": "Mastitis materna",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No contraindica la lactancia y vaciar el pecho ayuda."
+        },
+        {
+          "key": "g",
+          "text": "Madre con hipotiroidismo tratado con levotiroxina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es compatible."
+        },
+        {
+          "key": "h",
+          "text": "Hepatitis B materna con vacuna e inmunoglobulina al bebé",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede amamantar."
+        },
+        {
+          "key": "i",
+          "text": "Cualquier enfermedad de la madre",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La mayoría son compatibles con la lactancia."
+        },
+        {
+          "key": "j",
+          "text": "Toma de vacunas maternas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son compatibles."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "h"
+      ],
+      "explanation": "Las contraindicaciones reales de la lactancia son pocas. Incluyen galactosemia clásica en el bebé, infección materna por virus de la inmunodeficiencia humana cuando hay alternativa segura, virus linfotrópico de células T humanas, tuberculosis activa no tratada hasta que la madre deje de ser contagiosa, lesiones de herpes en el pecho del lado afectado, uso de drogas ilícitas y algunos fármacos como quimioterapia o radiofármacos. La mastitis, los resfriados, la hepatitis B con profilaxis al bebé y la mayoría de los medicamentos son compatibles. Ante dudas sobre fármacos se recomienda consultar fuentes especializadas en lugar de suspender la lactancia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de lactancia materna",
+        "Organización Mundial de la Salud. Lactancia materna"
+      ]
+    },
+    {
+      "key": "ped-02-crecimiento-q18",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "breastfeeding",
+      "vignette": "Mujer puérpera que nota que al amamantar a su bebé siente contracciones uterinas y la leche sale con fuerza, incluso del pecho contrario. Pregunta qué hormona produce ese efecto.",
+      "prompt": "¿Cuál es el mecanismo del reflejo de eyección de la leche?",
+      "polarity": "affirmative",
+      "task": "mechanism",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "La hormona de crecimiento contrae el útero",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No participa."
+        },
+        {
+          "key": "b",
+          "text": "La dopamina causa la eyección",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "La dopamina inhibe la prolactina."
+        },
+        {
+          "key": "c",
+          "text": "La prolactina contrae los conductos galactóforos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La prolactina estimula la producción, no la eyección."
+        },
+        {
+          "key": "d",
+          "text": "La succión estimula la liberación de oxitocina por la neurohipófisis, que contrae las células mioepiteliales de los alveolos",
+          "correct": true,
+          "rationale": "La oxitocina causa eyección y contracciones uterinas."
+        },
+        {
+          "key": "e",
+          "text": "La progesterona estimula la salida de leche",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Su descenso permite iniciar la lactancia."
+        },
+        {
+          "key": "f",
+          "text": "La adrenalina favorece la eyección",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El estrés la inhibe."
+        },
+        {
+          "key": "g",
+          "text": "Los estrógenos liberan la leche",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Sus niveles bajan tras el parto."
+        },
+        {
+          "key": "h",
+          "text": "Se debe a que la madre toma mucha agua",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La hidratación no causa el reflejo."
+        },
+        {
+          "key": "i",
+          "text": "El cortisol produce las contracciones",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es su función."
+        },
+        {
+          "key": "j",
+          "text": "La insulina libera la leche",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No participa."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "e",
+        "g"
+      ],
+      "explanation": "La lactancia depende de dos hormonas. La prolactina, secretada por la adenohipófisis, estimula la síntesis de leche en los alveolos, y su liberación aumenta con la succión frecuente. La oxitocina, secretada por la neurohipófisis en respuesta a la succión, al llanto o a pensar en el bebé, contrae las células mioepiteliales y produce la eyección de la leche. La oxitocina también contrae el útero y favorece su involución. El estrés, el dolor y la ansiedad pueden inhibir el reflejo de eyección. La caída de la progesterona tras la expulsión de la placenta permite que la prolactina inicie la producción abundante de leche.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de lactancia materna"
+      ]
+    },
+    {
+      "key": "ped-02-crecimiento-q19",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "growth_development",
+      "subtopic": "breastfeeding",
+      "vignette": "Lactante de 3 semanas con escasa ganancia de peso, tomas largas y frecuentes y la madre refiere dolor y grietas en el pezón. A la exploración el bebé no puede sacar la lengua más allá de la encía, la punta de la lengua tiene forma de corazón y el frenillo es corto y grueso.",
+      "prompt": "¿Cuál es el diagnóstico más probable de la dificultad para amamantar?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Anquiloglosia",
+          "correct": true,
+          "rationale": "El frenillo corto limita el movimiento de la lengua y dificulta el agarre."
+        },
+        {
+          "key": "b",
+          "text": "Bebé flojo que no quiere comer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay una causa anatómica."
+        },
+        {
+          "key": "c",
+          "text": "Reflujo gastroesofágico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica las alteraciones de la lengua."
+        },
+        {
+          "key": "d",
+          "text": "Hipogalactia materna",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se ancla en la poca ganancia, pero el problema está en la lengua del bebé."
+        },
+        {
+          "key": "e",
+          "text": "Cólico del lactante",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el problema mecánico."
+        },
+        {
+          "key": "f",
+          "text": "Estenosis hipertrófica de píloro",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Daría vómito en proyectil."
+        },
+        {
+          "key": "g",
+          "text": "Candidiasis oral",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da placas blancas, no frenillo corto."
+        },
+        {
+          "key": "h",
+          "text": "Mastitis materna",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El problema primario es del bebé."
+        },
+        {
+          "key": "i",
+          "text": "Macroglosia por hipotiroidismo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La lengua no es grande sino restringida."
+        },
+        {
+          "key": "j",
+          "text": "Paladar hendido",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No se describe defecto del paladar."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "g",
+        "j"
+      ],
+      "explanation": "La anquiloglosia es un frenillo lingual corto o engrosado que limita la movilidad de la lengua. Puede dificultar el agarre y la succión, lo que causa dolor y grietas en la madre, tomas prolongadas, ingesta insuficiente y poca ganancia de peso. En la exploración la lengua no se eleva ni sale más allá de la encía y puede tener forma de corazón al intentar sacarla. No todos los frenillos cortos causan problemas, por lo que la decisión de tratar se basa en la dificultad funcional. La frenotomía es un procedimiento sencillo y eficaz cuando la lactancia está comprometida, acompañado de apoyo en la técnica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de lactancia materna"
+      ]
+    }
+  ]
+}

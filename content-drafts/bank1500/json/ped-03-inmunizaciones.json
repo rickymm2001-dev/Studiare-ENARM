@@ -1,0 +1,1424 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "ped-03-inmunizaciones-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "immunizations",
+      "subtopic": "vaccination_schedule",
+      "vignette": "Recién nacido sano de término de 12 horas de vida, con peso de 3 200 g, antes de su egreso del hospital. La madre tiene serología negativa para hepatitis B.",
+      "prompt": "¿Qué vacunas de prevención corresponden al nacer según el esquema nacional?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hexavalente y rotavirus",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Inician a los 2 meses."
+        },
+        {
+          "key": "b",
+          "text": "Ninguna hasta que cumpla un mes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "BCG y hepatitis B se aplican al nacer."
+        },
+        {
+          "key": "c",
+          "text": "BCG y primera dosis de hepatitis B",
+          "correct": true,
+          "rationale": "Son las vacunas del nacimiento en el esquema mexicano."
+        },
+        {
+          "key": "d",
+          "text": "Varicela",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No forma parte del esquema al nacer."
+        },
+        {
+          "key": "e",
+          "text": "Neumocócica conjugada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Inicia a los 2 meses."
+        },
+        {
+          "key": "f",
+          "text": "Influenza",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se aplica desde los 6 meses."
+        },
+        {
+          "key": "g",
+          "text": "Diferir todas por ser muy pequeño",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Al nacer el sistema inmune responde adecuadamente."
+        },
+        {
+          "key": "h",
+          "text": "Solo BCG y hepatitis B hasta los 2 meses",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La hepatitis B se aplica al nacer."
+        },
+        {
+          "key": "i",
+          "text": "Todas las vacunas del primer año juntas",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el esquema."
+        },
+        {
+          "key": "j",
+          "text": "Triple viral",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se aplica al año."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "En el esquema nacional de vacunación de México al nacer se aplican la vacuna BCG, que protege contra formas graves de tuberculosis como la meníngea y la miliar, y la primera dosis de hepatitis B. A los 2, 4 y 6 meses se aplica la vacuna hexavalente, que incluye difteria, tos ferina acelular, tétanos, poliomielitis inactivada, Haemophilus influenzae tipo b y hepatitis B, con refuerzo a los 18 meses. Rotavirus y neumococo conjugada inician a los 2 meses. La triple viral se aplica al año, e influenza cada temporada desde los 6 meses. El esquema vigente debe revisarse cada año.",
+      "gpcRefs": [
+        "Secretaría de Salud. Esquema nacional de vacunación",
+        "Manual de vacunación de la Secretaría de Salud"
+      ]
+    },
+    {
+      "key": "ped-03-inmunizaciones-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "immunizations",
+      "subtopic": "vaccination_schedule",
+      "vignette": "Lactante de 2 meses, sano, que acude a su consulta de niño sano con su cartilla de vacunación completa para la edad del nacimiento.",
+      "prompt": "¿Qué vacunas de prevención le corresponden a los 2 meses?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "DPT de refuerzo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se aplica a los 4 años."
+        },
+        {
+          "key": "b",
+          "text": "Virus del papiloma humano",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se aplica en la preadolescencia."
+        },
+        {
+          "key": "c",
+          "text": "BCG y hepatitis B",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ya se aplicaron al nacer."
+        },
+        {
+          "key": "d",
+          "text": "Aplicar una vacuna por consulta para no saturarlo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Aplicar varias el mismo día es seguro."
+        },
+        {
+          "key": "e",
+          "text": "Hepatitis A y varicela",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No son del esquema a esta edad."
+        },
+        {
+          "key": "f",
+          "text": "Hexavalente, rotavirus y neumocócica conjugada",
+          "correct": true,
+          "rationale": "Son las vacunas indicadas a los 2 meses."
+        },
+        {
+          "key": "g",
+          "text": "Solo influenza",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Inicia a los 6 meses."
+        },
+        {
+          "key": "h",
+          "text": "Triple viral",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Corresponde a los 12 meses."
+        },
+        {
+          "key": "i",
+          "text": "Solo rotavirus",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Faltan las demás."
+        },
+        {
+          "key": "j",
+          "text": "Esperar a los 6 meses para iniciar el esquema",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El esquema inicia a los 2 meses."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "A los 2 meses se inicia la serie primaria con la vacuna hexavalente, la primera dosis de rotavirus por vía oral y la primera dosis de neumocócica conjugada. A los 4 meses se repiten las tres, a los 6 meses se aplica la tercera dosis de hexavalente y, según el producto, de rotavirus, y se inicia influenza. Aplicar varias vacunas el mismo día es seguro y eficaz, y retrasarlas deja al lactante desprotegido en la etapa de mayor riesgo de tos ferina, neumonía y diarrea grave. Las vacunas de rotavirus tienen edades máximas para iniciar y completar el esquema.",
+      "gpcRefs": [
+        "Secretaría de Salud. Esquema nacional de vacunación",
+        "Manual de vacunación de la Secretaría de Salud"
+      ]
+    },
+    {
+      "key": "ped-03-inmunizaciones-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "immunizations",
+      "subtopic": "vaccination_schedule",
+      "vignette": "Lactante de 9 meses que llega a consulta. Su cartilla muestra solo BCG y hepatitis B al nacer, sin otras vacunas, por cambio de domicilio. Está sano.",
+      "prompt": "¿Cuál es la conducta a seguir?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Iniciar el esquema de recuperación aplicando las vacunas atrasadas en esta visita sin reiniciar series",
+          "correct": true,
+          "rationale": "No se reinicia el esquema y se aplican las vacunas correspondientes."
+        },
+        {
+          "key": "b",
+          "text": "Esperar a los 12 meses para aplicar todo junto",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Prolonga el periodo sin protección."
+        },
+        {
+          "key": "c",
+          "text": "Reiniciar todo el esquema desde el nacimiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No se repiten las dosis aplicadas."
+        },
+        {
+          "key": "d",
+          "text": "Aplicar solo la triple viral",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Faltan vacunas prioritarias."
+        },
+        {
+          "key": "e",
+          "text": "Medir anticuerpos antes de vacunar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se requiere."
+        },
+        {
+          "key": "f",
+          "text": "Aplicar una vacuna por mes para evitar reacciones",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa la protección."
+        },
+        {
+          "key": "g",
+          "text": "Dejarlo así porque ya pasó la edad",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Siempre debe completarse el esquema."
+        },
+        {
+          "key": "h",
+          "text": "No vacunar para evitar eventos adversos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo de enfermedad es mayor."
+        },
+        {
+          "key": "i",
+          "text": "Las vacunas atrasadas ya no sirven",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Siguen siendo eficaces."
+        },
+        {
+          "key": "j",
+          "text": "Aplicar rotavirus como primera vacuna",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Ya excedió la edad máxima para iniciarla."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "Cuando un niño tiene vacunas atrasadas se aplica un esquema de recuperación. La regla es que no se reinician series interrumpidas y que deben aplicarse en la misma visita todas las vacunas posibles, respetando los intervalos mínimos entre dosis. Algunas vacunas tienen límites de edad, como rotavirus, que no se inicia después de la edad máxima establecida por el fabricante, y la neumocócica, cuyo número de dosis depende de la edad de inicio. No es necesario medir anticuerpos. Aprovechar cualquier contacto con los servicios de salud para vacunar reduce las oportunidades perdidas.",
+      "gpcRefs": [
+        "Manual de vacunación de la Secretaría de Salud"
+      ]
+    },
+    {
+      "key": "ped-03-inmunizaciones-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "immunizations",
+      "subtopic": "vaccination_schedule",
+      "vignette": "Niña de 12 meses sana que acude a vacunación. Tiene esquema completo hasta los 6 meses.",
+      "prompt": "¿Qué vacuna de prevención le corresponde al año de edad?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Toxoide tetánico diftérico de adulto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "b",
+          "text": "DPT de los 4 años",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se aplica más adelante."
+        },
+        {
+          "key": "c",
+          "text": "BCG de refuerzo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La BCG no se refuerza."
+        },
+        {
+          "key": "d",
+          "text": "Esperar a la edad escolar para la triple viral",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Deja al niño sin protección."
+        },
+        {
+          "key": "e",
+          "text": "Rotavirus",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ya excedió su edad."
+        },
+        {
+          "key": "f",
+          "text": "Triple viral contra sarampión, rubéola y parotiditis, junto con la dosis correspondiente de neumocócica conjugada",
+          "correct": true,
+          "rationale": "A los 12 meses se aplican triple viral y refuerzo de neumococo."
+        },
+        {
+          "key": "g",
+          "text": "Virus del papiloma humano",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se aplica en la preadolescencia."
+        },
+        {
+          "key": "h",
+          "text": "Solo hepatitis B",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No corresponde a esta edad."
+        },
+        {
+          "key": "i",
+          "text": "Triple viral a los 6 meses en todos los casos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Solo se adelanta en brotes."
+        },
+        {
+          "key": "j",
+          "text": "La triple viral causa autismo y debe evitarse",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No existe tal relación."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "La vacuna triple viral es de virus vivos atenuados y protege contra sarampión, rubéola y parotiditis. En México se aplica una dosis a los 12 meses y una segunda dosis a los 18 meses, aunque el esquema puede actualizarse, por lo que se debe consultar el vigente. A los 12 meses también corresponde el refuerzo de la vacuna neumocócica conjugada. Los estudios han descartado de forma consistente la relación entre la triple viral y el autismo. Ante brotes de sarampión puede aplicarse una dosis cero desde los 6 meses, que no cuenta para el esquema.",
+      "gpcRefs": [
+        "Secretaría de Salud. Esquema nacional de vacunación",
+        "Manual de vacunación de la Secretaría de Salud"
+      ]
+    },
+    {
+      "key": "ped-03-inmunizaciones-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "immunizations",
+      "subtopic": "vaccination_schedule",
+      "vignette": "Niña de 11 años, sana, que cursa el quinto año de primaria. La madre pregunta qué vacuna le corresponde para prevenir cáncer en el futuro.",
+      "prompt": "¿Cuál es la vacuna de prevención indicada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Vacuna contra el virus del papiloma humano",
+          "correct": true,
+          "rationale": "Previene cáncer cervicouterino y otros cánceres asociados."
+        },
+        {
+          "key": "b",
+          "text": "Influenza como única vacuna",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No previene cáncer."
+        },
+        {
+          "key": "c",
+          "text": "Neumocócica polisacárida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No corresponde a esta edad."
+        },
+        {
+          "key": "d",
+          "text": "Hepatitis A",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No previene cáncer cervicouterino."
+        },
+        {
+          "key": "e",
+          "text": "BCG",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Protege contra tuberculosis grave."
+        },
+        {
+          "key": "f",
+          "text": "No vacunar porque es muy pequeña",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es la edad ideal."
+        },
+        {
+          "key": "g",
+          "text": "La vacuna promueve el inicio temprano de la vida sexual",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No hay evidencia de ello."
+        },
+        {
+          "key": "h",
+          "text": "Esperar a que inicie vida sexual para vacunar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es más eficaz antes de la exposición."
+        },
+        {
+          "key": "i",
+          "text": "Realizar citología antes de vacunar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No se requiere."
+        },
+        {
+          "key": "j",
+          "text": "Vacuna contra herpes zóster",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se indica en adultos mayores."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "j"
+      ],
+      "explanation": "La vacuna contra el virus del papiloma humano previene la infección por los tipos de alto riesgo, principalmente 16 y 18, responsables de la mayoría de los cánceres cervicouterinos, además de cánceres anales, orofaríngeos y de pene. Es más eficaz si se aplica antes del inicio de la vida sexual, por lo que se aplica en la preadolescencia. En México se aplica en quinto de primaria o a los 11 años, y se ha ampliado a niños. No sustituye al tamizaje con citología o prueba de virus del papiloma en la edad adulta. No hay evidencia de que promueva conductas sexuales de riesgo.",
+      "gpcRefs": [
+        "Secretaría de Salud. Esquema nacional de vacunación",
+        "Guía de Práctica Clínica de prevención y detección de cáncer cervicouterino"
+      ]
+    },
+    {
+      "key": "ped-03-inmunizaciones-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "immunizations",
+      "subtopic": "vaccination_schedule",
+      "vignette": "Lactante de 2 meses que recibirá vacuna de rotavirus y vacuna hexavalente. La madre pregunta por qué una se da por boca y la otra inyectada, y cuál contiene virus vivos.",
+      "prompt": "¿Cuál es el mecanismo por el que protege el producto oral contra rotavirus?",
+      "polarity": "affirmative",
+      "task": "mechanism",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Contiene anticuerpos ya formados",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Eso es inmunidad pasiva."
+        },
+        {
+          "key": "b",
+          "text": "Es una vacuna de ácido ribonucleico mensajero",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es su plataforma."
+        },
+        {
+          "key": "c",
+          "text": "Contiene virus inactivados inyectables",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es oral y atenuada."
+        },
+        {
+          "key": "d",
+          "text": "Es una vacuna conjugada de polisacárido",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Ese es el tipo de neumococo y Haemophilus."
+        },
+        {
+          "key": "e",
+          "text": "Es un toxoide que neutraliza toxinas bacterianas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los toxoides se usan en tétanos y difteria."
+        },
+        {
+          "key": "f",
+          "text": "Es una vacuna oral de virus vivos atenuados que induce inmunidad intestinal local y sistémica",
+          "correct": true,
+          "rationale": "Imita la infección natural en el intestino."
+        },
+        {
+          "key": "g",
+          "text": "Causa la enfermedad completa para generar defensas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Está atenuada."
+        },
+        {
+          "key": "h",
+          "text": "Actúa como antibiótico intestinal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un antimicrobiano."
+        },
+        {
+          "key": "i",
+          "text": "Protege solo por inmunidad de mucosas respiratorias",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Actúa en el intestino."
+        },
+        {
+          "key": "j",
+          "text": "Funciona estimulando solo linfocitos T sin anticuerpos",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Induce anticuerpos."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "e",
+        "f"
+      ],
+      "explanation": "Las vacunas se clasifican en vivas atenuadas e inactivadas. Las vivas atenuadas, como rotavirus, triple viral, varicela, BCG y fiebre amarilla, se replican de forma limitada y generan una respuesta inmune similar a la infección natural, con protección duradera. La vacuna de rotavirus se aplica por vía oral e induce inmunoglobulina A intestinal y anticuerpos séricos. Las inactivadas incluyen virus completos muertos, subunidades, toxoides y vacunas conjugadas, y suelen requerir varias dosis y refuerzos. La vacuna de rotavirus tiene un riesgo muy bajo de invaginación intestinal, por lo que se respetan las edades máximas de aplicación.",
+      "gpcRefs": [
+        "Manual de vacunación de la Secretaría de Salud"
+      ]
+    },
+    {
+      "key": "ped-03-inmunizaciones-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "immunizations",
+      "subtopic": "vaccination_schedule",
+      "vignette": "Lactante de 4 meses que 6 horas después de recibir la vacuna hexavalente presenta fiebre de 38.3 °C, irritabilidad y enrojecimiento con induración de 2 cm en el sitio de aplicación. Come bien y está consolable.",
+      "prompt": "¿Cuál es el pronóstico de este evento?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Es un evento leve y esperado que se resuelve en uno a tres días con manejo sintomático",
+          "correct": true,
+          "rationale": "La reacción local y la fiebre baja son los eventos más frecuentes."
+        },
+        {
+          "key": "b",
+          "text": "Indica sepsis y requiere hemocultivo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Está activo y consolable."
+        },
+        {
+          "key": "c",
+          "text": "Es un absceso que requiere drenaje",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay fluctuación ni pus."
+        },
+        {
+          "key": "d",
+          "text": "Contraindica completar el esquema",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es una contraindicación."
+        },
+        {
+          "key": "e",
+          "text": "Es una reacción anafiláctica que contraindica dosis futuras",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La anafilaxia ocurre en minutos con datos sistémicos."
+        },
+        {
+          "key": "f",
+          "text": "Suspender las siguientes vacunas por precaución",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Deja al niño sin protección."
+        },
+        {
+          "key": "g",
+          "text": "Requiere hospitalización para vigilancia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "h",
+          "text": "Es síndrome de Guillain Barré",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay debilidad."
+        },
+        {
+          "key": "i",
+          "text": "Debe aplicarse alcohol o pomada en el sitio",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No se recomienda."
+        },
+        {
+          "key": "j",
+          "text": "Es encefalopatía postvacunal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay alteración neurológica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "Los eventos supuestamente atribuibles a la vacunación o inmunización más frecuentes son leves. Incluyen dolor, enrojecimiento e induración en el sitio de aplicación y fiebre baja en las primeras 48 horas. Se manejan con compresas frías, paracetamol si hay malestar y vigilancia. No contraindican dosis futuras. Los eventos graves, como anafilaxia en los primeros minutos, encefalopatía en los siete días siguientes o crisis convulsivas, son raros y deben notificarse. Todo evento debe registrarse y notificarse según la normatividad de vigilancia epidemiológica vigente.",
+      "gpcRefs": [
+        "Manual de eventos supuestamente atribuibles a la vacunación o inmunización",
+        "Manual de vacunación de la Secretaría de Salud"
+      ]
+    },
+    {
+      "key": "ped-03-inmunizaciones-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "immunizations",
+      "subtopic": "vaccination_schedule",
+      "vignette": "Mujer de 28 años con embarazo de 28 semanas, sana, en control prenatal. Tiene un hijo de 2 años con esquema completo. Pregunta qué vacuna protegerá a su bebé contra la tos ferina en los primeros meses.",
+      "prompt": "¿Cuál es la vacuna de prevención indicada en el embarazo?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Triple viral",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Está contraindicada en el embarazo."
+        },
+        {
+          "key": "b",
+          "text": "BCG a la madre",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No protege contra tos ferina."
+        },
+        {
+          "key": "c",
+          "text": "Las vacunas en el embarazo dañan al feto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La Tdpa es segura."
+        },
+        {
+          "key": "d",
+          "text": "Virus del papiloma humano",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No protege contra tos ferina."
+        },
+        {
+          "key": "e",
+          "text": "Vacunar solo al recién nacido al nacer contra tos ferina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La primera dosis infantil es a los 2 meses."
+        },
+        {
+          "key": "f",
+          "text": "Dar azitromicina profiláctica durante el embarazo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es la medida indicada."
+        },
+        {
+          "key": "g",
+          "text": "Evitar toda vacuna en el embarazo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La Tdpa y la influenza están indicadas."
+        },
+        {
+          "key": "h",
+          "text": "Tdpa, toxoide tetánico, diftérico y tos ferina acelular, entre las 20 y 36 semanas de cada embarazo",
+          "correct": true,
+          "rationale": "Los anticuerpos maternos pasan al bebé y lo protegen antes de su propia vacunación."
+        },
+        {
+          "key": "i",
+          "text": "Esperar al puerperio para vacunar a la madre",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Pierde la transferencia de anticuerpos."
+        },
+        {
+          "key": "j",
+          "text": "Varicela",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Está contraindicada en el embarazo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "h"
+      ],
+      "explanation": "La tos ferina es más grave en lactantes menores de 3 meses, que aún no completan su vacunación. La vacunación con Tdpa durante cada embarazo, idealmente entre las semanas 20 y 36, genera anticuerpos maternos que atraviesan la placenta y protegen al recién nacido. También se recomienda la vacuna de influenza en cualquier trimestre durante la temporada. Las vacunas de virus vivos, como triple viral, varicela y fiebre amarilla, están contraindicadas en el embarazo. La estrategia de capullo, vacunar a convivientes, complementa la protección.",
+      "gpcRefs": [
+        "Secretaría de Salud. Esquema nacional de vacunación",
+        "Guía de Práctica Clínica de control prenatal"
+      ]
+    },
+    {
+      "key": "ped-03-inmunizaciones-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "immunizations",
+      "subtopic": "vaccine_contraindications",
+      "vignette": "Lactante de 6 meses con rinorrea hialina y tos leve desde hace 2 días, temperatura de 37.6 °C, activo y comiendo bien. Le corresponden vacunas del esquema.",
+      "prompt": "¿Cuál es la conducta más apropiada respecto a la vacunación?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Las vacunas empeoran el resfriado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No lo empeoran."
+        },
+        {
+          "key": "b",
+          "text": "Solicitar biometría antes de vacunar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No se requiere."
+        },
+        {
+          "key": "c",
+          "text": "Vacunar en esta visita porque una enfermedad leve con o sin febrícula no contraindica la aplicación",
+          "correct": true,
+          "rationale": "Las enfermedades leves no son contraindicación."
+        },
+        {
+          "key": "d",
+          "text": "Vacunar solo si los padres firman que asumen el riesgo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "e",
+          "text": "Aplicar solo la mitad de la dosis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Las dosis no se fraccionan."
+        },
+        {
+          "key": "f",
+          "text": "Esperar a la siguiente campaña",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Retrasa la protección."
+        },
+        {
+          "key": "g",
+          "text": "Diferir un mes por la tos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Pierde una oportunidad de vacunación."
+        },
+        {
+          "key": "h",
+          "text": "Diferir hasta que no tenga ningún síntoma",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es una falsa contraindicación."
+        },
+        {
+          "key": "i",
+          "text": "Dar antibiótico y vacunar en una semana",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay indicación de antibiótico."
+        },
+        {
+          "key": "j",
+          "text": "No vacunar para evitar culpar a la vacuna si empeora",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Retrasa la protección."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "h",
+        "i"
+      ],
+      "explanation": "Las contraindicaciones verdaderas de las vacunas son pocas. Las falsas contraindicaciones son causa frecuente de oportunidades perdidas de vacunación. Entre ellas están las infecciones respiratorias leves con o sin fiebre baja, la diarrea leve, el uso de antibióticos, la prematurez, la lactancia materna, las alergias que no son a componentes de la vacuna, los antecedentes familiares de eventos adversos y la convalecencia de una enfermedad. Solo una enfermedad moderada o grave, con o sin fiebre, es una precaución para diferir la vacuna hasta la mejoría. Vacunar en cada contacto posible es una prioridad de salud pública.",
+      "gpcRefs": [
+        "Manual de vacunación de la Secretaría de Salud"
+      ]
+    },
+    {
+      "key": "ped-03-inmunizaciones-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "immunizations",
+      "subtopic": "vaccine_contraindications",
+      "vignette": "Niño de 18 meses que hace 6 meses presentó urticaria generalizada, sibilancias e hipotensión a los 10 minutos de recibir una vacuna. Hoy le corresponde la siguiente dosis de la misma vacuna.",
+      "prompt": "¿Qué indica este antecedente para la siguiente dosis?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Es una contraindicación absoluta para aplicar otra dosis de la misma vacuna o con el componente responsable",
+          "correct": true,
+          "rationale": "La anafilaxia a una dosis previa contraindica las siguientes."
+        },
+        {
+          "key": "b",
+          "text": "Es una reacción local sin importancia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Fue sistémica y grave."
+        },
+        {
+          "key": "c",
+          "text": "Puede aplicarse premedicando con antihistamínico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No previene una anafilaxia."
+        },
+        {
+          "key": "d",
+          "text": "No referir a alergología para evitar trámites",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La evaluación especializada orienta las siguientes vacunas."
+        },
+        {
+          "key": "e",
+          "text": "Requiere repetir la dosis en terapia intensiva sin evaluación",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se refiere a alergología."
+        },
+        {
+          "key": "f",
+          "text": "Puede aplicarse a mitad de dosis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se fraccionan las dosis."
+        },
+        {
+          "key": "g",
+          "text": "Contraindica todas las vacunas de por vida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Solo las que contienen el componente responsable."
+        },
+        {
+          "key": "h",
+          "text": "Solo indica vacunar en el otro brazo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No cambia el riesgo."
+        },
+        {
+          "key": "i",
+          "text": "Indica que la vacuna estaba mal conservada",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es la explicación."
+        },
+        {
+          "key": "j",
+          "text": "Es una precaución leve que no cambia nada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es una contraindicación."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "La anafilaxia a una dosis previa de una vacuna o a uno de sus componentes es una contraindicación absoluta para dosis posteriores de esa vacuna. Se recomienda referir a alergología para identificar el componente responsable, como gelatina, neomicina o levadura, y decidir qué vacunas pueden aplicarse. Toda unidad de vacunación debe contar con adrenalina y personal capacitado, y se recomienda observar al paciente 15 a 30 minutos después de vacunar. Las reacciones locales o la fiebre no son contraindicación. La alergia al huevo, incluso grave, ya no contraindica la triple viral ni la vacuna de influenza.",
+      "gpcRefs": [
+        "Manual de vacunación de la Secretaría de Salud",
+        "Manual de eventos supuestamente atribuibles a la vacunación o inmunización"
+      ]
+    },
+    {
+      "key": "ped-03-inmunizaciones-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "immunizations",
+      "subtopic": "vaccine_contraindications",
+      "vignette": "Niño de 5 años con leucemia linfoblástica aguda en quimioterapia de inducción. Le corresponde un refuerzo de vacunas y su hermana de 1 año necesita la triple viral.",
+      "prompt": "¿Cuál es la conducta más apropiada respecto a la vacunación?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aplicar BCG de refuerzo al paciente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es viva y está contraindicada."
+        },
+        {
+          "key": "b",
+          "text": "Medir anticuerpos a toda la familia antes de vacunar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "c",
+          "text": "Aplicar triple viral al paciente para protegerlo del sarampión",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Las vacunas vivas pueden causar enfermedad en inmunosuprimidos."
+        },
+        {
+          "key": "d",
+          "text": "Vacunar al paciente con rotavirus",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es viva y no corresponde por edad."
+        },
+        {
+          "key": "e",
+          "text": "No aplicar vacunas de virus vivos al paciente y vacunar a la hermana con su esquema habitual, incluida la triple viral",
+          "correct": true,
+          "rationale": "Las vacunas vivas están contraindicadas en inmunosupresión, pero vacunar a los convivientes lo protege."
+        },
+        {
+          "key": "f",
+          "text": "La quimioterapia no afecta la respuesta a vacunas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La reduce de forma importante."
+        },
+        {
+          "key": "g",
+          "text": "Suspender toda vacunación familiar durante el tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Deja a todos desprotegidos."
+        },
+        {
+          "key": "h",
+          "text": "Las vacunas inactivadas están prohibidas en cáncer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Pueden aplicarse, aunque la respuesta sea menor."
+        },
+        {
+          "key": "i",
+          "text": "No vacunar al paciente con influenza inactivada",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Se recomienda en pacientes oncológicos."
+        },
+        {
+          "key": "j",
+          "text": "No vacunar a la hermana para no contagiar al paciente",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La triple viral no se transmite y la vacunación de convivientes lo protege."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "Las vacunas de virus vivos atenuados, como triple viral, varicela, BCG, rotavirus y fiebre amarilla, están contraindicadas en pacientes con inmunosupresión grave por quimioterapia, dosis altas de corticosteroides, trasplante o inmunodeficiencias primarias, porque pueden causar enfermedad diseminada. Las vacunas inactivadas son seguras, aunque su respuesta puede ser menor, y la influenza inactivada se recomienda cada año. Los convivientes deben estar bien vacunados, incluida la triple viral, que no se transmite. Tras terminar la quimioterapia se espera de 3 a 6 meses para revacunar según las recomendaciones de oncología.",
+      "gpcRefs": [
+        "Manual de vacunación de la Secretaría de Salud"
+      ]
+    },
+    {
+      "key": "ped-03-inmunizaciones-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "immunizations",
+      "subtopic": "vaccine_contraindications",
+      "vignette": "Recién nacido de 32 semanas y 1 500 g, hijo de madre sana con serología negativa para hepatitis B, que cumple 2 meses de edad cronológica en la unidad de cuidados intermedios. Está estable y ganando peso.",
+      "prompt": "¿Qué indica su prematurez para la vacunación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Debe recibir dosis reducidas por su peso",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Las dosis no se ajustan al peso."
+        },
+        {
+          "key": "b",
+          "text": "Las vacunas están contraindicadas hasta que pese 2 500 g",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Solo la BCG se difiere hasta 2 kg."
+        },
+        {
+          "key": "c",
+          "text": "Debe esperar al egreso para vacunar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se vacuna aunque esté hospitalizado."
+        },
+        {
+          "key": "d",
+          "text": "La prematurez contraindica la vacuna de rotavirus en hospitalizados siempre",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Depende de las políticas de la unidad."
+        },
+        {
+          "key": "e",
+          "text": "Debe vacunarse según su edad cronológica con las mismas dosis que un recién nacido de término",
+          "correct": true,
+          "rationale": "La prematurez no es contraindicación ni requiere edad corregida."
+        },
+        {
+          "key": "f",
+          "text": "Medir títulos antes de cada vacuna",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No se requiere."
+        },
+        {
+          "key": "g",
+          "text": "Diferir por precaución hasta el año",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Aumenta el riesgo de tos ferina e infecciones."
+        },
+        {
+          "key": "h",
+          "text": "La vacunación temprana daña su desarrollo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No hay evidencia."
+        },
+        {
+          "key": "i",
+          "text": "Debe vacunarse según su edad corregida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se usa la edad cronológica."
+        },
+        {
+          "key": "j",
+          "text": "Los prematuros no responden a las vacunas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Responden adecuadamente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "i"
+      ],
+      "explanation": "Los prematuros estables deben vacunarse según su edad cronológica, con las mismas dosis e intervalos que los recién nacidos de término, porque responden adecuadamente y tienen mayor riesgo de complicaciones por infecciones prevenibles. La BCG se difiere hasta que pesen al menos 2 kg. En hijos de madre con serología negativa que pesan menos de 2 kg, la dosis de hepatitis B al nacer puede diferirse o no contarse en el esquema según la norma, mientras que en hijos de madre positiva se aplican vacuna e inmunoglobulina en las primeras 12 horas. Los prematuros pueden presentar apneas tras vacunar, por lo que se vigilan si están hospitalizados.",
+      "gpcRefs": [
+        "Manual de vacunación de la Secretaría de Salud"
+      ]
+    },
+    {
+      "key": "ped-03-inmunizaciones-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "immunizations",
+      "subtopic": "vaccine_contraindications",
+      "vignette": "Recién nacido de término, hijo de madre con antígeno de superficie de hepatitis B positivo detectado en el control prenatal. Nace sano por parto vaginal.",
+      "prompt": "¿Cuál es la medida de prevención indicada para evitar la transmisión?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo la inmunoglobulina sin vacuna",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No genera protección duradera."
+        },
+        {
+          "key": "b",
+          "text": "No vacunar para no interferir con los anticuerpos maternos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La vacuna es fundamental."
+        },
+        {
+          "key": "c",
+          "text": "Contraindicar la lactancia materna",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede amamantar con profilaxis."
+        },
+        {
+          "key": "d",
+          "text": "Esperar a los 6 meses para medir antígenos antes de actuar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Pierde la ventana de prevención."
+        },
+        {
+          "key": "e",
+          "text": "Biopsia hepática al recién nacido",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "f",
+          "text": "Dar antivirales al recién nacido",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es la medida estándar."
+        },
+        {
+          "key": "g",
+          "text": "Solo la vacuna de hepatitis B al mes de vida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se requiere en las primeras horas junto con inmunoglobulina."
+        },
+        {
+          "key": "h",
+          "text": "Bañar al bebé con antisépticos elimina el riesgo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No previene la infección."
+        },
+        {
+          "key": "i",
+          "text": "Vacuna de hepatitis B e inmunoglobulina contra hepatitis B en las primeras 12 horas de vida, en sitios diferentes",
+          "correct": true,
+          "rationale": "La combinación reduce la transmisión perinatal en más de 90%."
+        },
+        {
+          "key": "j",
+          "text": "Cesárea obligatoria para evitar el contagio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicada solo por hepatitis B."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "La transmisión perinatal de hepatitis B produce infección crónica en hasta 90% de los recién nacidos infectados. Para prevenirla, los hijos de madres con antígeno de superficie positivo deben recibir la vacuna de hepatitis B y la inmunoglobulina específica en las primeras 12 horas de vida, en sitios anatómicos diferentes, y completar el esquema. Después se miden el antígeno de superficie y los anticuerpos entre los 9 y 12 meses. En madres con carga viral alta se considera tenofovir en el tercer trimestre. La lactancia materna está permitida y la vía de nacimiento se decide por indicación obstétrica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención y diagnóstico de hepatitis B",
+        "Manual de vacunación de la Secretaría de Salud"
+      ]
+    },
+    {
+      "key": "ped-03-inmunizaciones-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "immunizations",
+      "subtopic": "vaccine_contraindications",
+      "vignette": "Niño de 3 años con alergia al huevo que presentó urticaria y vómito al comer huevo revuelto. Le falta la segunda dosis de triple viral. La madre cree que la vacuna está prohibida por su alergia.",
+      "prompt": "¿Qué indica la alergia al huevo para aplicar la triple viral?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo puede aplicarse en terapia intensiva",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "b",
+          "text": "Contraindica la vacuna de por vida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es una falsa contraindicación."
+        },
+        {
+          "key": "c",
+          "text": "Requiere desensibilización al huevo antes de vacunar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "d",
+          "text": "Debe sustituirse por gammaglobulina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No sustituye a la vacuna."
+        },
+        {
+          "key": "e",
+          "text": "Requiere pruebas cutáneas con la vacuna antes de aplicarla",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se recomiendan de rutina."
+        },
+        {
+          "key": "f",
+          "text": "Hay que evitar todas las vacunas en niños alérgicos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Solo se evitan si hay alergia a un componente."
+        },
+        {
+          "key": "g",
+          "text": "No contraindica la vacuna y puede aplicarse de forma habitual en una unidad con capacidad de atender reacciones",
+          "correct": true,
+          "rationale": "La triple viral contiene cantidades insignificantes de proteína de huevo."
+        },
+        {
+          "key": "h",
+          "text": "No aplicarla para no arriesgarse",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Deja al niño sin protección contra sarampión."
+        },
+        {
+          "key": "i",
+          "text": "Debe aplicarse fraccionada en varias dosis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "j",
+          "text": "La mayoría de los alérgicos al huevo hacen anafilaxia con la vacuna",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es excepcional."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "La vacuna triple viral se cultiva en fibroblastos de embrión de pollo y contiene cantidades mínimas de proteína de huevo, insuficientes para provocar reacciones en alérgicos. Por ello la alergia al huevo, incluso grave, no contraindica la vacuna y no se requieren pruebas cutáneas previas. Las reacciones alérgicas a la triple viral, cuando ocurren, suelen deberse a gelatina o neomicina. Lo mismo aplica para la vacuna de influenza. La vacuna de fiebre amarilla sí contiene más proteína de huevo y requiere precaución. Toda vacunación se realiza en un sitio con capacidad de tratar anafilaxia.",
+      "gpcRefs": [
+        "Manual de vacunación de la Secretaría de Salud"
+      ]
+    },
+    {
+      "key": "ped-03-inmunizaciones-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "immunizations",
+      "subtopic": "vaccine_contraindications",
+      "vignette": "Lactante de 3 meses con diagnóstico reciente de inmunodeficiencia combinada grave. Le correspondía la segunda dosis de rotavirus y no recibió BCG al nacer por antecedente familiar de un hermano fallecido por infecciones.",
+      "prompt": "¿Cuál es la conducta más apropiada respecto a las vacunas vivas?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aplicar BCG de inmediato porque no la recibió",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede causar becegeítis diseminada."
+        },
+        {
+          "key": "b",
+          "text": "Las inmunodeficiencias no modifican la vacunación",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Sí la modifican."
+        },
+        {
+          "key": "c",
+          "text": "Suspender también todas las inactivadas de forma permanente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Pueden aplicarse según indicación del inmunólogo."
+        },
+        {
+          "key": "d",
+          "text": "Vacunar porque el beneficio siempre supera el riesgo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No en este caso."
+        },
+        {
+          "key": "e",
+          "text": "Vacunar con todas las vacunas vivas a mitad de dosis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Siguen siendo peligrosas."
+        },
+        {
+          "key": "f",
+          "text": "La lactancia sustituye todas las vacunas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No ofrece protección suficiente."
+        },
+        {
+          "key": "g",
+          "text": "Contraindicar rotavirus y BCG y referir a inmunología para el manejo específico",
+          "correct": true,
+          "rationale": "Las vacunas vivas pueden causar infección diseminada en inmunodeficiencias combinadas."
+        },
+        {
+          "key": "h",
+          "text": "Aplicar BCG y vigilar con radiografía semanal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La complicación puede ser grave."
+        },
+        {
+          "key": "i",
+          "text": "No referir porque no hay tratamiento",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El trasplante de células madre puede ser curativo."
+        },
+        {
+          "key": "j",
+          "text": "Aplicar la segunda dosis de rotavirus para completar el esquema",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede causar diarrea crónica por el virus vacunal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La inmunodeficiencia combinada grave es una urgencia pediátrica. Los lactantes presentan infecciones graves, recurrentes u oportunistas, diarrea crónica y falla de medro desde los primeros meses, y un antecedente familiar de muerte temprana por infecciones es una señal de alarma. Las vacunas vivas, como BCG, rotavirus, triple viral y varicela, están contraindicadas porque pueden causar infección diseminada. El tratamiento definitivo es el trasplante de células progenitoras hematopoyéticas, idealmente antes de infecciones graves. El tamizaje neonatal ampliado puede detectarla con la medición de círculos de escisión del receptor de células T.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico de inmunodeficiencias primarias",
+        "Manual de vacunación de la Secretaría de Salud"
+      ]
+    }
+  ]
+}
