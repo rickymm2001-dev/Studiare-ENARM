@@ -1,0 +1,1430 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "fam-05b-ansiedad-sustancias-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "anxiety_primary",
+      "vignette": "Mujer de 34 años que desde hace 8 meses se preocupa de forma excesiva y difícil de controlar por su trabajo, su salud y sus hijos. Refiere tensión muscular, irritabilidad, cansancio, dificultad para concentrarse e insomnio. Hormona estimulante de la tiroides normal. No consume cafeína en exceso ni sustancias.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Trastorno de pánico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se caracteriza por crisis súbitas recurrentes."
+        },
+        {
+          "key": "b",
+          "text": "Fobia específica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El temor no es a un objeto o situación concretos."
+        },
+        {
+          "key": "c",
+          "text": "Hipertiroidismo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La hormona estimulante de la tiroides es normal."
+        },
+        {
+          "key": "d",
+          "text": "Insomnio primario",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El insomnio es parte del cuadro."
+        },
+        {
+          "key": "e",
+          "text": "Trastorno obsesivo compulsivo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay obsesiones ni compulsiones."
+        },
+        {
+          "key": "f",
+          "text": "Trastorno de ansiedad generalizada",
+          "correct": true,
+          "rationale": "Preocupación excesiva por múltiples temas durante 6 meses o más con síntomas físicos."
+        },
+        {
+          "key": "g",
+          "text": "Trastorno de adaptación",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La duración es mayor y no hay un estresor concreto."
+        },
+        {
+          "key": "h",
+          "text": "Trastorno de estrés postraumático",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay evento traumático."
+        },
+        {
+          "key": "i",
+          "text": "Estrés normal sin necesidad de tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay malestar y deterioro significativos."
+        },
+        {
+          "key": "j",
+          "text": "Episodio depresivo mayor",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No predominan el ánimo deprimido ni la anhedonia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "j"
+      ],
+      "explanation": "El trastorno de ansiedad generalizada se caracteriza por ansiedad y preocupación excesivas y difíciles de controlar sobre diversos temas, la mayoría de los días durante al menos 6 meses, con al menos tres síntomas como inquietud, fatiga, dificultad para concentrarse, irritabilidad, tensión muscular y alteraciones del sueño, que causan malestar o deterioro significativo. Deben descartarse causas médicas, como hipertiroidismo, y el consumo de cafeína, estimulantes o la abstinencia de sustancias. En atención primaria se usa el cuestionario GAD-7 para tamizaje y seguimiento. Es frecuente su coexistencia con depresión.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto",
+        "Manual diagnóstico y estadístico de los trastornos mentales"
+      ]
+    },
+    {
+      "key": "fam-05b-ansiedad-sustancias-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "anxiety_primary",
+      "vignette": "Hombre de 40 años con trastorno de ansiedad generalizada de 1 año de evolución, GAD-7 de 15. Ha intentado técnicas de relajación sin mejoría suficiente. Sin consumo de alcohol.",
+      "prompt": "¿Cuál es el tratamiento farmacológico de elección a largo plazo?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Amitriptilina como primera opción",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Tiene más efectos adversos."
+        },
+        {
+          "key": "b",
+          "text": "No ofrecer terapia cognitivo conductual",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es igual de eficaz."
+        },
+        {
+          "key": "c",
+          "text": "Los inhibidores de la recaptura actúan desde el primer día",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Tardan semanas en hacer efecto."
+        },
+        {
+          "key": "d",
+          "text": "Alprazolam diario por tiempo indefinido",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Las benzodiacepinas generan tolerancia y dependencia."
+        },
+        {
+          "key": "e",
+          "text": "Inhibidor selectivo de la recaptura de serotonina, como sertralina o escitalopram",
+          "correct": true,
+          "rationale": "Son de primera línea y no generan dependencia."
+        },
+        {
+          "key": "f",
+          "text": "Antipsicótico típico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "g",
+          "text": "Litio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "h",
+          "text": "Zolpidem nocturno",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es un hipnótico, no trata la ansiedad."
+        },
+        {
+          "key": "i",
+          "text": "Propranolol como monoterapia a largo plazo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Solo alivia síntomas físicos situacionales."
+        },
+        {
+          "key": "j",
+          "text": "No requiere tratamiento farmacológico nunca",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Con síntomas moderados a graves está indicado."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "El tratamiento del trastorno de ansiedad generalizada combina psicoterapia, especialmente terapia cognitivo conductual, y fármacos. Los inhibidores selectivos de la recaptura de serotonina, como sertralina, escitalopram y paroxetina, y los inhibidores de la recaptura de serotonina y noradrenalina, como venlafaxina y duloxetina, son de primera línea. Su efecto aparece en 2 a 6 semanas y al inicio pueden aumentar transitoriamente la ansiedad, por lo que se comienza con dosis bajas. Las benzodiacepinas solo se usan a corto plazo mientras actúa el antidepresivo, por el riesgo de tolerancia, dependencia, caídas y deterioro cognitivo. La buspirona es una alternativa.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto",
+        "Programa de acción para superar las brechas en salud mental de la Organización Mundial de la Salud"
+      ]
+    },
+    {
+      "key": "fam-05b-ansiedad-sustancias-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "anxiety_primary",
+      "vignette": "Mujer de 26 años que acude a urgencias por tercera vez en el mes por episodios súbitos de palpitaciones, falta de aire, temblor, sensación de muerte inminente y hormigueo en las manos que alcanzan su máximo en 10 minutos. Entre episodios teme que se repitan.",
+      "prompt": "¿Cuál es el estudio inicial más apropiado antes de confirmar un trastorno de pánico?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Electroencefalograma de 24 horas a todos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Solo ante sospecha de epilepsia."
+        },
+        {
+          "key": "b",
+          "text": "Metanefrinas como estudio obligatorio inicial",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Solo con hipertensión paroxística."
+        },
+        {
+          "key": "c",
+          "text": "Ecocardiograma transesofágico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es invasivo."
+        },
+        {
+          "key": "d",
+          "text": "Gasometría arterial en cada episodio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es necesaria de rutina."
+        },
+        {
+          "key": "e",
+          "text": "Electrocardiograma, glucosa y hormona estimulante de la tiroides para descartar causas médicas",
+          "correct": true,
+          "rationale": "Arritmias, hipertiroidismo e hipoglucemia pueden simular crisis de pánico."
+        },
+        {
+          "key": "f",
+          "text": "Tomografía de tórax con contraste a todos",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No está indicada sin sospecha de tromboembolia."
+        },
+        {
+          "key": "g",
+          "text": "Ningún estudio porque los síntomas son claramente psicológicos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se deben descartar causas médicas."
+        },
+        {
+          "key": "h",
+          "text": "Prueba de esfuerzo como primer estudio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "i",
+          "text": "Cateterismo cardiaco",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es invasivo y no está indicado."
+        },
+        {
+          "key": "j",
+          "text": "Resonancia magnética cerebral de rutina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicada sin datos neurológicos."
+        }
+      ],
+      "canonical": [
+        "e",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "El trastorno de pánico se caracteriza por crisis de angustia recurrentes e inesperadas, con miedo intenso que alcanza su máximo en minutos y síntomas como palpitaciones, sudoración, temblor, disnea, dolor torácico, mareo, parestesias y miedo a morir o perder el control, seguidas de un mes o más de preocupación por nuevas crisis o cambios de conducta. Antes del diagnóstico se descartan causas médicas con electrocardiograma, glucosa y hormona estimulante de la tiroides, además de consumo de cafeína o estimulantes. El tratamiento es terapia cognitivo conductual e inhibidores selectivos de la recaptura de serotonina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno de pánico"
+      ]
+    },
+    {
+      "key": "fam-05b-ansiedad-sustancias-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "anxiety_primary",
+      "vignette": "Hombre de 30 años con miedo intenso a volar en avión desde hace años. Evita los viajes de trabajo y ha perdido oportunidades laborales. No tiene otros síntomas de ansiedad.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hablar del miedo lo empeora",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La exposición controlada lo reduce."
+        },
+        {
+          "key": "b",
+          "text": "Inhibidor de la recaptura de serotonina como primera opción",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La psicoterapia de exposición es superior."
+        },
+        {
+          "key": "c",
+          "text": "Antipsicótico atípico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "d",
+          "text": "Terapia electroconvulsiva",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "e",
+          "text": "Benzodiacepinas diarias por tiempo indefinido",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No tratan la fobia y generan dependencia."
+        },
+        {
+          "key": "f",
+          "text": "Hipnosis como tratamiento de primera línea",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es el estándar."
+        },
+        {
+          "key": "g",
+          "text": "No evaluar el impacto funcional",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Determina la necesidad de tratamiento."
+        },
+        {
+          "key": "h",
+          "text": "Recomendar evitar los aviones para siempre",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La evitación mantiene la fobia."
+        },
+        {
+          "key": "i",
+          "text": "Terapia de exposición gradual",
+          "correct": true,
+          "rationale": "Es el tratamiento más eficaz de las fobias específicas."
+        },
+        {
+          "key": "j",
+          "text": "Las fobias desaparecen solas en adultos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Suelen ser crónicas."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "h",
+        "i"
+      ],
+      "explanation": "La fobia específica es un miedo intenso, persistente y desproporcionado a un objeto o situación concretos, como animales, alturas, sangre o volar, con evitación activa y deterioro funcional durante 6 meses o más. Es uno de los trastornos de ansiedad más frecuentes. El tratamiento de elección es la terapia de exposición, que consiste en exponerse de forma gradual y repetida al estímulo temido, incluida la exposición con realidad virtual, hasta que la ansiedad disminuye por habituación. Las benzodiacepinas pueden usarse ocasionalmente antes de una exposición inevitable, pero interfieren con el aprendizaje de la terapia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto",
+        "Manual diagnóstico y estadístico de los trastornos mentales"
+      ]
+    },
+    {
+      "key": "fam-05b-ansiedad-sustancias-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "anxiety_primary",
+      "vignette": "Mujer de 32 años que hace 3 meses sufrió un asalto con arma. Desde entonces tiene pesadillas, recuerdos intrusivos, evita salir sola por la calle donde ocurrió, se sobresalta con facilidad y duerme mal. Ha dejado de trabajar.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Psicosis reactiva breve",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay síntomas psicóticos."
+        },
+        {
+          "key": "b",
+          "text": "Trastorno de estrés postraumático",
+          "correct": true,
+          "rationale": "Reexperimentación, evitación y alerta aumentada por más de un mes tras un trauma."
+        },
+        {
+          "key": "c",
+          "text": "Fobia específica a la calle",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Los síntomas son más amplios."
+        },
+        {
+          "key": "d",
+          "text": "Trastorno de pánico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Las crisis no son inesperadas."
+        },
+        {
+          "key": "e",
+          "text": "Trastorno de estrés agudo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Dura menos de un mes."
+        },
+        {
+          "key": "f",
+          "text": "Reacción normal que no requiere atención",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Hay deterioro funcional."
+        },
+        {
+          "key": "g",
+          "text": "Episodio depresivo mayor como diagnóstico principal",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Predominan los síntomas relacionados con el trauma."
+        },
+        {
+          "key": "h",
+          "text": "Insomnio primario",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El insomnio es parte del cuadro."
+        },
+        {
+          "key": "i",
+          "text": "Trastorno de adaptación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El trauma y los síntomas específicos orientan a estrés postraumático."
+        },
+        {
+          "key": "j",
+          "text": "Trastorno de ansiedad generalizada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La preocupación no es por múltiples temas."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "El trastorno de estrés postraumático aparece tras la exposición a un evento traumático, como amenaza de muerte, lesión grave o violencia sexual. Se caracteriza por síntomas intrusivos, como recuerdos, pesadillas y escenas retrospectivas, evitación de estímulos relacionados, alteraciones negativas del ánimo y la cognición, y aumento de la alerta, con hipervigilancia, sobresalto e insomnio, durante más de un mes con deterioro funcional. Si dura menos de un mes se denomina trastorno de estrés agudo. El tratamiento de primera línea es la psicoterapia centrada en el trauma, y los inhibidores selectivos de la recaptura de serotonina son eficaces.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno de estrés postraumático",
+        "Manual diagnóstico y estadístico de los trastornos mentales"
+      ]
+    },
+    {
+      "key": "fam-05b-ansiedad-sustancias-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "anxiety_primary",
+      "vignette": "Mujer de 68 años que toma clonazepam 2 mg cada noche desde hace 8 años para dormir. Ha tenido dos caídas en el último año y olvidos frecuentes. Desea dejar el medicamento.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Agregar zolpidem y mantener el clonazepam",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Suma riesgos."
+        },
+        {
+          "key": "b",
+          "text": "Hospitalizar para desintoxicación en todos los casos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La mayoría puede reducir de forma ambulatoria."
+        },
+        {
+          "key": "c",
+          "text": "Reducción gradual de la dosis durante varias semanas o meses con apoyo de terapia cognitivo conductual para el insomnio",
+          "correct": true,
+          "rationale": "Evita el síndrome de abstinencia."
+        },
+        {
+          "key": "d",
+          "text": "El uso prolongado no genera dependencia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Genera tolerancia y dependencia."
+        },
+        {
+          "key": "e",
+          "text": "Cambiar a alprazolam de acción corta",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tiene más riesgo de abstinencia y dependencia."
+        },
+        {
+          "key": "f",
+          "text": "Aumentar la dosis para mejorar el sueño",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Empeora los efectos adversos."
+        },
+        {
+          "key": "g",
+          "text": "Mantener el clonazepam porque ya está acostumbrada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Causa caídas y deterioro cognitivo."
+        },
+        {
+          "key": "h",
+          "text": "Suspender de inmediato el clonazepam",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede causar abstinencia grave y convulsiones."
+        },
+        {
+          "key": "i",
+          "text": "No explicar los síntomas esperados durante la reducción",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Mejora el apego."
+        },
+        {
+          "key": "j",
+          "text": "Las benzodiacepinas son seguras en adultos mayores",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Están en los criterios de Beers."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "El uso prolongado de benzodiacepinas genera tolerancia y dependencia física. En adultos mayores aumenta el riesgo de caídas, fracturas, deterioro cognitivo, delirium y accidentes, por lo que están en los criterios de Beers como fármacos a evitar. La suspensión abrupta puede causar ansiedad de rebote, insomnio, temblor y, con dosis altas, convulsiones. Se recomienda una reducción gradual, de 10 a 25 por ciento de la dosis cada 2 a 4 semanas, ajustando según los síntomas, acompañada de terapia cognitivo conductual para el insomnio, que es el tratamiento de primera línea del insomnio crónico.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del insomnio en el adulto mayor",
+        "Criterios de Beers de la Sociedad Americana de Geriatría"
+      ]
+    },
+    {
+      "key": "fam-05b-ansiedad-sustancias-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "anxiety_primary",
+      "vignette": "Hombre de 45 años con insomnio de conciliación de 6 meses de evolución, 4 noches por semana, que afecta su desempeño laboral. Sin depresión, ansiedad ni apnea del sueño. Usa el celular en la cama y toma café por la tarde.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Quedarse en la cama aunque no tenga sueño ayuda a dormir",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Refuerza el insomnio."
+        },
+        {
+          "key": "b",
+          "text": "Alcohol antes de dormir",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Fragmenta el sueño."
+        },
+        {
+          "key": "c",
+          "text": "Antihistamínicos de venta libre diarios",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Tienen efectos anticolinérgicos y tolerancia."
+        },
+        {
+          "key": "d",
+          "text": "Antipsicótico atípico como quetiapina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado para insomnio."
+        },
+        {
+          "key": "e",
+          "text": "Polisomnografía obligatoria antes de tratar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesaria sin sospecha de otro trastorno."
+        },
+        {
+          "key": "f",
+          "text": "No preguntar por ronquido y apneas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte de la evaluación."
+        },
+        {
+          "key": "g",
+          "text": "El insomnio crónico no requiere tratamiento",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Afecta la salud y el desempeño."
+        },
+        {
+          "key": "h",
+          "text": "Terapia cognitivo conductual para el insomnio con medidas de higiene del sueño",
+          "correct": true,
+          "rationale": "Es el tratamiento de primera línea del insomnio crónico."
+        },
+        {
+          "key": "i",
+          "text": "Benzodiacepina diaria por tiempo indefinido",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Genera dependencia."
+        },
+        {
+          "key": "j",
+          "text": "Zolpidem como primera opción a largo plazo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se reserva para uso breve."
+        }
+      ],
+      "canonical": [
+        "c",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "El insomnio crónico se define por dificultad para iniciar o mantener el sueño al menos tres noches por semana durante tres meses o más, con repercusión diurna. El tratamiento de primera línea es la terapia cognitivo conductual para el insomnio, que incluye control de estímulos, como usar la cama solo para dormir y levantarse si no concilia el sueño, restricción del tiempo en cama, reestructuración cognitiva y relajación, junto con higiene del sueño: horario regular, evitar cafeína por la tarde, alcohol y pantallas antes de dormir. Su efecto es más duradero que el de los fármacos, que se reservan para uso breve.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del insomnio",
+        "Guía de la Academia Americana de Medicina del Sueño"
+      ]
+    },
+    {
+      "key": "fam-05b-ansiedad-sustancias-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "substance_use_family",
+      "vignette": "Hombre de 50 años con consumo diario de alcohol de 15 años, hospitalizado por una fractura. A las 36 horas de su última bebida presenta temblor, sudoración, ansiedad, taquicardia de 115 y presión de 160/95 mmHg. Escala CIWA-Ar de 18.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dar alcohol para evitar la abstinencia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es un tratamiento aceptado."
+        },
+        {
+          "key": "b",
+          "text": "Haloperidol como monoterapia",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Disminuye el umbral convulsivo."
+        },
+        {
+          "key": "c",
+          "text": "Propofol en infusión de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para casos refractarios en terapia intensiva."
+        },
+        {
+          "key": "d",
+          "text": "Betabloqueador como único tratamiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Enmascara signos sin prevenir complicaciones."
+        },
+        {
+          "key": "e",
+          "text": "Solo vigilancia porque es leve",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Una puntuación de 18 requiere tratamiento."
+        },
+        {
+          "key": "f",
+          "text": "Naltrexona en la fase aguda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se usa para mantener la abstinencia."
+        },
+        {
+          "key": "g",
+          "text": "Disulfiram para controlar los síntomas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Está contraindicado en este contexto."
+        },
+        {
+          "key": "h",
+          "text": "Administrar glucosa antes que tiamina",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede precipitar encefalopatía de Wernicke."
+        },
+        {
+          "key": "i",
+          "text": "Benzodiacepina, como diazepam o lorazepam, guiada por síntomas, junto con tiamina",
+          "correct": true,
+          "rationale": "Las benzodiacepinas previenen la progresión a convulsiones y delirium tremens."
+        },
+        {
+          "key": "j",
+          "text": "La abstinencia alcohólica nunca es grave",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede ser mortal."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "i"
+      ],
+      "explanation": "El síndrome de abstinencia alcohólica inicia de 6 a 24 horas después de la última bebida, con temblor, ansiedad, sudoración, taquicardia, hipertensión, náusea e insomnio. Las convulsiones aparecen en las primeras 48 horas y el delirium tremens entre las 48 y 96 horas, con mortalidad elevada si no se trata. La escala CIWA-Ar mide la gravedad; una puntuación mayor de 8 a 10 indica tratamiento. Las benzodiacepinas son el tratamiento de elección; el lorazepam se prefiere en hepatopatía grave y adultos mayores. Se administra tiamina antes de la glucosa para prevenir la encefalopatía de Wernicke.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de abstinencia alcohólica",
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones"
+      ]
+    },
+    {
+      "key": "fam-05b-ansiedad-sustancias-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "substance_use_family",
+      "vignette": "Hombre de 55 años con alcoholismo crónico que llega desnutrido y confuso. Presenta nistagmo horizontal, oftalmoplejía del sexto par bilateral y marcha atáxica con base amplia.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Intoxicación alcohólica aguda",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la oftalmoplejía."
+        },
+        {
+          "key": "b",
+          "text": "Hipoglucemia aislada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica la oftalmoplejía."
+        },
+        {
+          "key": "c",
+          "text": "Delirium tremens",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Cursa con hiperactividad autonómica intensa."
+        },
+        {
+          "key": "d",
+          "text": "Neuropatía periférica alcohólica aislada",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la confusión ni la oftalmoplejía."
+        },
+        {
+          "key": "e",
+          "text": "Encefalopatía hepática",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Cursa con asterixis, no con oftalmoplejía."
+        },
+        {
+          "key": "f",
+          "text": "Síndrome de Korsakoff ya establecido",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se caracteriza por amnesia con confabulación."
+        },
+        {
+          "key": "g",
+          "text": "Encefalopatía de Wernicke por deficiencia de tiamina",
+          "correct": true,
+          "rationale": "Tríada de confusión, oftalmoplejía y ataxia."
+        },
+        {
+          "key": "h",
+          "text": "Esclerosis múltiple",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No corresponde al contexto."
+        },
+        {
+          "key": "i",
+          "text": "Mielinólisis pontina central espontánea",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se asocia con corrección rápida de sodio."
+        },
+        {
+          "key": "j",
+          "text": "Evento vascular cerebral de tallo como primera opción",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La tríada en un alcohólico desnutrido orienta a Wernicke."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La encefalopatía de Wernicke es una urgencia neurológica por deficiencia de tiamina, frecuente en alcoholismo crónico, desnutrición, hiperémesis y cirugía bariátrica. Se caracteriza por la tríada de alteración del estado mental, oftalmoplejía o nistagmo y ataxia, aunque la tríada completa solo aparece en una minoría. El tratamiento es tiamina intravenosa en dosis altas de inmediato, antes de administrar glucosa, que puede precipitarla o agravarla. Sin tratamiento puede progresar al síndrome de Korsakoff, con amnesia anterógrada y retrógrada y confabulación, frecuentemente irreversible.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de abstinencia alcohólica",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la encefalopatía de Wernicke"
+      ]
+    },
+    {
+      "key": "fam-05b-ansiedad-sustancias-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "substance_use_family",
+      "vignette": "Hombre de 48 años con trastorno por consumo de alcohol que completó la desintoxicación hace 2 semanas y desea mantenerse en abstinencia. Función hepática con transaminasas ligeramente elevadas. No usa opioides.",
+      "prompt": "¿Cuál es el fármaco de elección para prevenir recaídas?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Disulfiram sin consentimiento ni supervisión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Requiere aceptación y tiene riesgos."
+        },
+        {
+          "key": "b",
+          "text": "Ningún fármaco porque basta la voluntad",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Los fármacos mejoran los resultados."
+        },
+        {
+          "key": "c",
+          "text": "Diazepam a largo plazo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Genera dependencia cruzada."
+        },
+        {
+          "key": "d",
+          "text": "La naltrexona se puede dar con opioides sin problema",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Desencadena abstinencia a opioides."
+        },
+        {
+          "key": "e",
+          "text": "Las recaídas son raras tras la desintoxicación",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Son muy frecuentes."
+        },
+        {
+          "key": "f",
+          "text": "Naltrexona",
+          "correct": true,
+          "rationale": "Reduce el deseo de consumo y las recaídas a consumo intenso."
+        },
+        {
+          "key": "g",
+          "text": "Metadona",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se usa en dependencia a opioides."
+        },
+        {
+          "key": "h",
+          "text": "No referir a grupos de ayuda mutua o psicoterapia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son parte del tratamiento."
+        },
+        {
+          "key": "i",
+          "text": "Antipsicótico de depósito",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "j",
+          "text": "Haloperidol de mantenimiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicado."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "f"
+      ],
+      "explanation": "Después de la desintoxicación, el tratamiento del trastorno por consumo de alcohol busca prevenir recaídas con intervenciones psicosociales, como entrevista motivacional, terapia cognitivo conductual y grupos de ayuda mutua, y fármacos. La naltrexona, antagonista opioide, reduce el deseo y el efecto placentero del alcohol; está contraindicada en usuarios de opioides y en hepatitis aguda o insuficiencia hepática. El acamprosato es útil en hepatopatía y requiere ajuste renal. El disulfiram produce una reacción aversiva al beber y requiere motivación y supervisión. Las benzodiacepinas solo se usan durante la abstinencia aguda.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno por consumo de alcohol",
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones"
+      ]
+    },
+    {
+      "key": "fam-05b-ansiedad-sustancias-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "substance_use_family",
+      "vignette": "Mujer de 45 años que fuma 20 cigarros al día desde hace 25 años y desea dejar de fumar. El primer cigarro lo fuma a los 5 minutos de despertar. Sin enfermedad psiquiátrica ni cardiopatía inestable.",
+      "prompt": "¿Cuál es el tratamiento farmacológico de elección para la cesación?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Vareniclina o terapia de reemplazo de nicotina combinada, junto con consejería",
+          "correct": true,
+          "rationale": "Son los tratamientos más eficaces para la cesación."
+        },
+        {
+          "key": "b",
+          "text": "Cigarro electrónico como tratamiento de primera línea",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es el tratamiento recomendado de primera línea."
+        },
+        {
+          "key": "c",
+          "text": "Benzodiacepinas para la ansiedad por abstinencia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No aumentan la cesación."
+        },
+        {
+          "key": "d",
+          "text": "Solo fuerza de voluntad sin apoyo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene baja tasa de éxito."
+        },
+        {
+          "key": "e",
+          "text": "Hospitalización para dejar de fumar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "f",
+          "text": "Cambiar a cigarros ligeros",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No reducen el riesgo."
+        },
+        {
+          "key": "g",
+          "text": "La terapia de reemplazo de nicotina causa cáncer",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La nicotina no es el principal carcinógeno."
+        },
+        {
+          "key": "h",
+          "text": "Reducir a 10 cigarros como meta final",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La meta es la abstinencia completa."
+        },
+        {
+          "key": "i",
+          "text": "Después de 25 años ya no hay beneficio en dejar de fumar",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El beneficio existe a cualquier edad."
+        },
+        {
+          "key": "j",
+          "text": "No fijar una fecha para dejar de fumar ni dar seguimiento",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Mejoran el éxito."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "d",
+        "f"
+      ],
+      "explanation": "El tabaquismo es la principal causa prevenible de muerte. El abordaje en atención primaria sigue las 5 A: averiguar, aconsejar, apreciar la disposición, ayudar y acordar seguimiento. El fumar a los pocos minutos de despertar indica alta dependencia a la nicotina, según la prueba de Fagerström. La combinación de consejería y fármacos es la estrategia más eficaz. La vareniclina, agonista parcial del receptor nicotínico, es el fármaco individual más eficaz, y la terapia de reemplazo de nicotina combinada, con parche más una forma de acción rápida, tiene eficacia similar. El bupropión es otra opción. Se fija una fecha para dejar de fumar.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del consumo de tabaco",
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones"
+      ]
+    },
+    {
+      "key": "fam-05b-ansiedad-sustancias-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "substance_use_family",
+      "vignette": "Hombre de 42 años con consumo excesivo de alcohol que en consulta dice que \"sí bebe bastante, pero no le afecta\" y no considera cambiar en este momento. Su esposa está preocupada.",
+      "prompt": "¿Cuál es la conducta más apropiada según la etapa de cambio del paciente?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Prescribir naltrexona de inmediato",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No está dispuesto a cambiar."
+        },
+        {
+          "key": "b",
+          "text": "Entrevista motivacional para explorar su ambivalencia, sin confrontar, y dar información sobre los riesgos",
+          "correct": true,
+          "rationale": "Se encuentra en la etapa de precontemplación."
+        },
+        {
+          "key": "c",
+          "text": "Los pacientes en precontemplación nunca cambian",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Pueden avanzar con intervención."
+        },
+        {
+          "key": "d",
+          "text": "Confrontarlo de forma directa para que acepte que es alcohólico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aumenta la resistencia."
+        },
+        {
+          "key": "e",
+          "text": "Darle de alta porque no quiere cambiar",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se pierde la oportunidad de intervenir."
+        },
+        {
+          "key": "f",
+          "text": "No ofrecer apoyo a la familia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La familia también requiere orientación."
+        },
+        {
+          "key": "g",
+          "text": "Fijar una fecha para dejar de beber hoy mismo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Corresponde a la etapa de preparación."
+        },
+        {
+          "key": "h",
+          "text": "Solicitar estudios de imagen hepática como única intervención",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No aborda la conducta."
+        },
+        {
+          "key": "i",
+          "text": "Amenazarlo con consecuencias graves es lo más eficaz",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El miedo no motiva un cambio sostenido."
+        },
+        {
+          "key": "j",
+          "text": "Referirlo a internamiento obligatorio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicado."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "e"
+      ],
+      "explanation": "El modelo transteórico de Prochaska y DiClemente describe las etapas del cambio: precontemplación, cuando la persona no considera cambiar; contemplación, cuando reconoce el problema pero tiene ambivalencia; preparación, cuando planea cambiar pronto; acción; y mantenimiento. La recaída es parte del proceso. En la precontemplación se recomienda la entrevista motivacional, que explora la ambivalencia con empatía, evita la confrontación, refleja las discrepancias entre conducta y metas y respeta la autonomía. Se brinda información sobre los riesgos y se mantiene la relación terapéutica. La familia puede recibir orientación y apoyo en grupos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, detección e intervención de las adicciones en atención primaria",
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones"
+      ]
+    },
+    {
+      "key": "fam-05b-ansiedad-sustancias-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "substance_use_family",
+      "vignette": "Hombre de 28 años encontrado inconsciente en su casa con una jeringa a un lado. Frecuencia respiratoria de 5 por minuto, pupilas puntiformes y saturación de 82 por ciento.",
+      "prompt": "¿Cuál es el tratamiento de elección inmediato además de apoyar la ventilación?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Naloxona intravenosa, intramuscular o intranasal",
+          "correct": true,
+          "rationale": "Revierte la depresión respiratoria por opioides."
+        },
+        {
+          "key": "b",
+          "text": "Fisostigmina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se usa en intoxicación anticolinérgica."
+        },
+        {
+          "key": "c",
+          "text": "Lavado gástrico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "d",
+          "text": "Carbón activado de inicio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es útil en una intoxicación por vía intravenosa."
+        },
+        {
+          "key": "e",
+          "text": "Atropina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se usa en intoxicación por organofosforados."
+        },
+        {
+          "key": "f",
+          "text": "Flumazenil",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Revierte benzodiacepinas, no opioides."
+        },
+        {
+          "key": "g",
+          "text": "Glucagón",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se usa en intoxicación por betabloqueadores."
+        },
+        {
+          "key": "h",
+          "text": "Solo observar porque recuperará la conciencia",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La depresión respiratoria puede ser mortal."
+        },
+        {
+          "key": "i",
+          "text": "Bicarbonato de sodio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se usa en intoxicación por tricíclicos."
+        },
+        {
+          "key": "j",
+          "text": "No vigilar tras la naloxona",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Su efecto puede durar menos que el del opioide."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "f"
+      ],
+      "explanation": "La intoxicación por opioides se caracteriza por la tríada de depresión del estado de conciencia, depresión respiratoria y miosis puntiforme. El tratamiento inmediato es asegurar la vía aérea y la ventilación con bolsa válvula mascarilla y administrar naloxona, antagonista opioide, por vía intravenosa, intramuscular o intranasal, con el objetivo de restaurar una respiración adecuada, no necesariamente la conciencia completa. Como su efecto dura de 30 a 90 minutos y puede ser menor que el del opioide, se debe vigilar al paciente y repetir dosis o usar infusión. En dependientes puede precipitar abstinencia. El fentanilo es un problema creciente en el norte de México.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las intoxicaciones por opioides",
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones"
+      ]
+    },
+    {
+      "key": "fam-05b-ansiedad-sustancias-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "substance_use_family",
+      "vignette": "Hombre de 24 años traído por su familia por agitación, ideas de que lo persiguen y alucinaciones auditivas desde hace 2 días. Consume metanfetamina inhalada a diario desde hace meses y no ha dormido en 3 días. Taquicardia, midriasis y pérdida de peso importante.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hipoglucemia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el cuadro completo."
+        },
+        {
+          "key": "b",
+          "text": "Crisis de ansiedad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica la psicosis."
+        },
+        {
+          "key": "c",
+          "text": "Abstinencia alcohólica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay consumo de alcohol."
+        },
+        {
+          "key": "d",
+          "text": "Delirium por infección del sistema nervioso central sin datos clínicos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay fiebre ni datos meníngeos."
+        },
+        {
+          "key": "e",
+          "text": "Esquizofrenia de inicio agudo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El consumo y los signos simpaticomiméticos orientan a psicosis inducida."
+        },
+        {
+          "key": "f",
+          "text": "Intoxicación por marihuana leve",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica la intensidad ni los signos."
+        },
+        {
+          "key": "g",
+          "text": "Intoxicación por opioides",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Causa miosis y sedación."
+        },
+        {
+          "key": "h",
+          "text": "Trastorno psicótico inducido por metanfetamina",
+          "correct": true,
+          "rationale": "Psicosis paranoide con consumo intenso y signos simpaticomiméticos."
+        },
+        {
+          "key": "i",
+          "text": "Encefalitis autoinmune",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es mucho menos probable."
+        },
+        {
+          "key": "j",
+          "text": "Trastorno bipolar en fase maníaca como única explicación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El consumo explica el cuadro."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "La metanfetamina, conocida como cristal, es un estimulante cuyo consumo ha aumentado en México, sobre todo en el norte. Produce euforia, insomnio, anorexia, taquicardia, hipertensión, midriasis e hipertermia. El consumo intenso puede causar psicosis con ideas paranoides de persecución, alucinaciones auditivas y táctiles, agitación y conductas violentas, similar a la esquizofrenia. La psicosis inducida suele mejorar en días a semanas con la abstinencia, aunque puede persistir. El manejo agudo incluye un entorno tranquilo, benzodiacepinas para la agitación, antipsicóticos si es necesario y vigilancia de complicaciones cardiovasculares.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la intoxicación por estimulantes",
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones"
+      ]
+    },
+    {
+      "key": "fam-05b-ansiedad-sustancias-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "substance_use_family",
+      "vignette": "Mujer de 50 años que acude angustiada porque su esposo bebe en exceso desde hace años. Ella cubre sus ausencias en el trabajo, paga sus deudas y ha dejado de ver a sus amigas. Se siente culpable y agotada.",
+      "prompt": "¿Cuál es la conducta más apropiada para ayudar a esta paciente?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hospitalizarla para descanso",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "b",
+          "text": "Considerarlo un problema exclusivo del esposo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Afecta a la dinámica familiar."
+        },
+        {
+          "key": "c",
+          "text": "Recomendar divorcio inmediato como única opción",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La decisión es suya."
+        },
+        {
+          "key": "d",
+          "text": "Si ella se esfuerza más su esposo dejará de beber",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No depende de ella."
+        },
+        {
+          "key": "e",
+          "text": "Reconocer el impacto en ella, orientarla sobre grupos de apoyo para familiares como Al-Anon y evaluar su salud mental y seguridad",
+          "correct": true,
+          "rationale": "El consumo de un miembro afecta a toda la familia."
+        },
+        {
+          "key": "f",
+          "text": "Prescribir benzodiacepinas como única intervención",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No aborda el problema."
+        },
+        {
+          "key": "g",
+          "text": "Indicarle que siga cubriendo a su esposo para mantener la estabilidad",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Refuerza el consumo."
+        },
+        {
+          "key": "h",
+          "text": "Decirle que no puede hacer nada hasta que su esposo acepte tratamiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ella puede recibir apoyo por sí misma."
+        },
+        {
+          "key": "i",
+          "text": "Las familias no se ven afectadas por el alcoholismo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El impacto es amplio."
+        },
+        {
+          "key": "j",
+          "text": "No preguntar por violencia en el hogar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es frecuente en estos contextos."
+        }
+      ],
+      "canonical": [
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "El consumo problemático de alcohol o drogas afecta a toda la familia. Los familiares pueden desarrollar conductas de codependencia, como encubrir el consumo, asumir responsabilidades del consumidor, descuidar sus propias necesidades y sentir culpa, lo que puede mantener el problema. Se asocian con ansiedad, depresión, agotamiento y aislamiento. El médico familiar debe reconocer este impacto, evaluar la salud mental y la seguridad de los familiares, incluida la violencia, y orientar sobre grupos de apoyo como Al-Anon y servicios de atención a las adicciones. Los Centros de Atención Primaria en Adicciones ofrecen apoyo a familiares.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, detección e intervención de las adicciones en atención primaria",
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,239 @@
+@ fam|primary_mental_health|anxiety_primary|2|diagnosis
+V: Mujer de 34 años que desde hace 8 meses se preocupa de forma excesiva y difícil de controlar por su trabajo, su salud y sus hijos. Refiere tensión muscular, irritabilidad, cansancio, dificultad para concentrarse e insomnio. Hormona estimulante de la tiroides normal. No consume cafeína en exceso ni sustancias.
+P: ¿Cuál es el diagnóstico más probable?
++ Trastorno de ansiedad generalizada || Preocupación excesiva por múltiples temas durante 6 meses o más con síntomas físicos.
+- anchoring | Trastorno de pánico || Se caracteriza por crisis súbitas recurrentes.
+- availability_heuristic | Episodio depresivo mayor || No predominan el ánimo deprimido ni la anhedonia.
+- representativeness_heuristic | Hipertiroidismo || La hormona estimulante de la tiroides es normal.
+- premature_closure | Trastorno obsesivo compulsivo || No hay obsesiones ni compulsiones.
+- framing_effect | Fobia específica || El temor no es a un objeto o situación concretos.
+- complexity_bias | Trastorno de estrés postraumático || No hay evento traumático.
+- base_rate_fallacy | Trastorno de adaptación || La duración es mayor y no hay un estresor concreto.
+- belief_bias | Estrés normal sin necesidad de tratamiento || Hay malestar y deterioro significativos.
+- focusing_illusion | Insomnio primario || El insomnio es parte del cuadro.
+E: El trastorno de ansiedad generalizada se caracteriza por ansiedad y preocupación excesivas y difíciles de controlar sobre diversos temas, la mayoría de los días durante al menos 6 meses, con al menos tres síntomas como inquietud, fatiga, dificultad para concentrarse, irritabilidad, tensión muscular y alteraciones del sueño, que causan malestar o deterioro significativo. Deben descartarse causas médicas, como hipertiroidismo, y el consumo de cafeína, estimulantes o la abstinencia de sustancias. En atención primaria se usa el cuestionario GAD-7 para tamizaje y seguimiento. Es frecuente su coexistencia con depresión.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto ;; Manual diagnóstico y estadístico de los trastornos mentales
+
+@ fam|primary_mental_health|anxiety_primary|2|treatment_of_choice
+V: Hombre de 40 años con trastorno de ansiedad generalizada de 1 año de evolución, GAD-7 de 15. Ha intentado técnicas de relajación sin mejoría suficiente. Sin consumo de alcohol.
+P: ¿Cuál es el tratamiento farmacológico de elección a largo plazo?
++ Inhibidor selectivo de la recaptura de serotonina, como sertralina o escitalopram || Son de primera línea y no generan dependencia.
+- anchoring | Alprazolam diario por tiempo indefinido || Las benzodiacepinas generan tolerancia y dependencia.
+- availability_heuristic | Propranolol como monoterapia a largo plazo || Solo alivia síntomas físicos situacionales.
+- representativeness_heuristic | Antipsicótico típico || No está indicado.
+- premature_closure | Amitriptilina como primera opción || Tiene más efectos adversos.
+- framing_effect | Zolpidem nocturno || Es un hipnótico, no trata la ansiedad.
+- complexity_bias | Litio || No está indicado.
+- base_rate_fallacy | No requiere tratamiento farmacológico nunca || Con síntomas moderados a graves está indicado.
+- belief_bias | Los inhibidores de la recaptura actúan desde el primer día || Tardan semanas en hacer efecto.
+- omission_bias | No ofrecer terapia cognitivo conductual || Es igual de eficaz.
+E: El tratamiento del trastorno de ansiedad generalizada combina psicoterapia, especialmente terapia cognitivo conductual, y fármacos. Los inhibidores selectivos de la recaptura de serotonina, como sertralina, escitalopram y paroxetina, y los inhibidores de la recaptura de serotonina y noradrenalina, como venlafaxina y duloxetina, son de primera línea. Su efecto aparece en 2 a 6 semanas y al inicio pueden aumentar transitoriamente la ansiedad, por lo que se comienza con dosis bajas. Las benzodiacepinas solo se usan a corto plazo mientras actúa el antidepresivo, por el riesgo de tolerancia, dependencia, caídas y deterioro cognitivo. La buspirona es una alternativa.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto ;; Programa de acción para superar las brechas en salud mental de la Organización Mundial de la Salud
+
+@ fam|primary_mental_health|anxiety_primary|3|initial_study
+V: Mujer de 26 años que acude a urgencias por tercera vez en el mes por episodios súbitos de palpitaciones, falta de aire, temblor, sensación de muerte inminente y hormigueo en las manos que alcanzan su máximo en 10 minutos. Entre episodios teme que se repitan.
+P: ¿Cuál es el estudio inicial más apropiado antes de confirmar un trastorno de pánico?
++ Electrocardiograma, glucosa y hormona estimulante de la tiroides para descartar causas médicas || Arritmias, hipertiroidismo e hipoglucemia pueden simular crisis de pánico.
+- anchoring | Cateterismo cardiaco || Es invasivo y no está indicado.
+- availability_heuristic | Resonancia magnética cerebral de rutina || No está indicada sin datos neurológicos.
+- representativeness_heuristic | Ningún estudio porque los síntomas son claramente psicológicos || Se deben descartar causas médicas.
+- premature_closure | Prueba de esfuerzo como primer estudio || No es el primer paso.
+- framing_effect | Electroencefalograma de 24 horas a todos || Solo ante sospecha de epilepsia.
+- complexity_bias | Metanefrinas como estudio obligatorio inicial || Solo con hipertensión paroxística.
+- base_rate_fallacy | Gasometría arterial en cada episodio || No es necesaria de rutina.
+- belief_bias | Ecocardiograma transesofágico || Es invasivo.
+- information_bias | Tomografía de tórax con contraste a todos || No está indicada sin sospecha de tromboembolia.
+E: El trastorno de pánico se caracteriza por crisis de angustia recurrentes e inesperadas, con miedo intenso que alcanza su máximo en minutos y síntomas como palpitaciones, sudoración, temblor, disnea, dolor torácico, mareo, parestesias y miedo a morir o perder el control, seguidas de un mes o más de preocupación por nuevas crisis o cambios de conducta. Antes del diagnóstico se descartan causas médicas con electrocardiograma, glucosa y hormona estimulante de la tiroides, además de consumo de cafeína o estimulantes. El tratamiento es terapia cognitivo conductual e inhibidores selectivos de la recaptura de serotonina.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto ;; Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno de pánico
+
+@ fam|primary_mental_health|anxiety_primary|2|treatment_of_choice
+V: Hombre de 30 años con miedo intenso a volar en avión desde hace años. Evita los viajes de trabajo y ha perdido oportunidades laborales. No tiene otros síntomas de ansiedad.
+P: ¿Cuál es el tratamiento de elección?
++ Terapia de exposición gradual || Es el tratamiento más eficaz de las fobias específicas.
+- anchoring | Benzodiacepinas diarias por tiempo indefinido || No tratan la fobia y generan dependencia.
+- availability_heuristic | Inhibidor de la recaptura de serotonina como primera opción || La psicoterapia de exposición es superior.
+- representativeness_heuristic | Recomendar evitar los aviones para siempre || La evitación mantiene la fobia.
+- premature_closure | Antipsicótico atípico || No está indicado.
+- framing_effect | Hipnosis como tratamiento de primera línea || No es el estándar.
+- complexity_bias | Terapia electroconvulsiva || No está indicada.
+- base_rate_fallacy | Las fobias desaparecen solas en adultos || Suelen ser crónicas.
+- belief_bias | Hablar del miedo lo empeora || La exposición controlada lo reduce.
+- omission_bias | No evaluar el impacto funcional || Determina la necesidad de tratamiento.
+E: La fobia específica es un miedo intenso, persistente y desproporcionado a un objeto o situación concretos, como animales, alturas, sangre o volar, con evitación activa y deterioro funcional durante 6 meses o más. Es uno de los trastornos de ansiedad más frecuentes. El tratamiento de elección es la terapia de exposición, que consiste en exponerse de forma gradual y repetida al estímulo temido, incluida la exposición con realidad virtual, hasta que la ansiedad disminuye por habituación. Las benzodiacepinas pueden usarse ocasionalmente antes de una exposición inevitable, pero interfieren con el aprendizaje de la terapia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de ansiedad en el adulto ;; Manual diagnóstico y estadístico de los trastornos mentales
+
+@ fam|primary_mental_health|anxiety_primary|3|diagnosis
+V: Mujer de 32 años que hace 3 meses sufrió un asalto con arma. Desde entonces tiene pesadillas, recuerdos intrusivos, evita salir sola por la calle donde ocurrió, se sobresalta con facilidad y duerme mal. Ha dejado de trabajar.
+P: ¿Cuál es el diagnóstico más probable?
++ Trastorno de estrés postraumático || Reexperimentación, evitación y alerta aumentada por más de un mes tras un trauma.
+- anchoring | Trastorno de estrés agudo || Dura menos de un mes.
+- availability_heuristic | Trastorno de ansiedad generalizada || La preocupación no es por múltiples temas.
+- representativeness_heuristic | Episodio depresivo mayor como diagnóstico principal || Predominan los síntomas relacionados con el trauma.
+- premature_closure | Fobia específica a la calle || Los síntomas son más amplios.
+- framing_effect | Trastorno de pánico || Las crisis no son inesperadas.
+- complexity_bias | Psicosis reactiva breve || No hay síntomas psicóticos.
+- base_rate_fallacy | Reacción normal que no requiere atención || Hay deterioro funcional.
+- belief_bias | Trastorno de adaptación || El trauma y los síntomas específicos orientan a estrés postraumático.
+- focusing_illusion | Insomnio primario || El insomnio es parte del cuadro.
+E: El trastorno de estrés postraumático aparece tras la exposición a un evento traumático, como amenaza de muerte, lesión grave o violencia sexual. Se caracteriza por síntomas intrusivos, como recuerdos, pesadillas y escenas retrospectivas, evitación de estímulos relacionados, alteraciones negativas del ánimo y la cognición, y aumento de la alerta, con hipervigilancia, sobresalto e insomnio, durante más de un mes con deterioro funcional. Si dura menos de un mes se denomina trastorno de estrés agudo. El tratamiento de primera línea es la psicoterapia centrada en el trauma, y los inhibidores selectivos de la recaptura de serotonina son eficaces.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno de estrés postraumático ;; Manual diagnóstico y estadístico de los trastornos mentales
+
+@ fam|primary_mental_health|anxiety_primary|3|next_step
+V: Mujer de 68 años que toma clonazepam 2 mg cada noche desde hace 8 años para dormir. Ha tenido dos caídas en el último año y olvidos frecuentes. Desea dejar el medicamento.
+P: ¿Cuál es la conducta más apropiada?
++ Reducción gradual de la dosis durante varias semanas o meses con apoyo de terapia cognitivo conductual para el insomnio || Evita el síndrome de abstinencia.
+- anchoring | Suspender de inmediato el clonazepam || Puede causar abstinencia grave y convulsiones.
+- availability_heuristic | Cambiar a alprazolam de acción corta || Tiene más riesgo de abstinencia y dependencia.
+- representativeness_heuristic | Mantener el clonazepam porque ya está acostumbrada || Causa caídas y deterioro cognitivo.
+- premature_closure | Agregar zolpidem y mantener el clonazepam || Suma riesgos.
+- framing_effect | Aumentar la dosis para mejorar el sueño || Empeora los efectos adversos.
+- complexity_bias | Hospitalizar para desintoxicación en todos los casos || La mayoría puede reducir de forma ambulatoria.
+- base_rate_fallacy | Las benzodiacepinas son seguras en adultos mayores || Están en los criterios de Beers.
+- belief_bias | El uso prolongado no genera dependencia || Genera tolerancia y dependencia.
+- omission_bias | No explicar los síntomas esperados durante la reducción || Mejora el apego.
+E: El uso prolongado de benzodiacepinas genera tolerancia y dependencia física. En adultos mayores aumenta el riesgo de caídas, fracturas, deterioro cognitivo, delirium y accidentes, por lo que están en los criterios de Beers como fármacos a evitar. La suspensión abrupta puede causar ansiedad de rebote, insomnio, temblor y, con dosis altas, convulsiones. Se recomienda una reducción gradual, de 10 a 25 por ciento de la dosis cada 2 a 4 semanas, ajustando según los síntomas, acompañada de terapia cognitivo conductual para el insomnio, que es el tratamiento de primera línea del insomnio crónico.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del insomnio en el adulto mayor ;; Criterios de Beers de la Sociedad Americana de Geriatría
+
+@ fam|primary_mental_health|anxiety_primary|2|treatment_of_choice
+V: Hombre de 45 años con insomnio de conciliación de 6 meses de evolución, 4 noches por semana, que afecta su desempeño laboral. Sin depresión, ansiedad ni apnea del sueño. Usa el celular en la cama y toma café por la tarde.
+P: ¿Cuál es el tratamiento de elección?
++ Terapia cognitivo conductual para el insomnio con medidas de higiene del sueño || Es el tratamiento de primera línea del insomnio crónico.
+- anchoring | Benzodiacepina diaria por tiempo indefinido || Genera dependencia.
+- availability_heuristic | Zolpidem como primera opción a largo plazo || Se reserva para uso breve.
+- representativeness_heuristic | Antihistamínicos de venta libre diarios || Tienen efectos anticolinérgicos y tolerancia.
+- premature_closure | Alcohol antes de dormir || Fragmenta el sueño.
+- framing_effect | Polisomnografía obligatoria antes de tratar || No es necesaria sin sospecha de otro trastorno.
+- complexity_bias | Antipsicótico atípico como quetiapina || No está indicado para insomnio.
+- base_rate_fallacy | El insomnio crónico no requiere tratamiento || Afecta la salud y el desempeño.
+- belief_bias | Quedarse en la cama aunque no tenga sueño ayuda a dormir || Refuerza el insomnio.
+- omission_bias | No preguntar por ronquido y apneas || Es parte de la evaluación.
+E: El insomnio crónico se define por dificultad para iniciar o mantener el sueño al menos tres noches por semana durante tres meses o más, con repercusión diurna. El tratamiento de primera línea es la terapia cognitivo conductual para el insomnio, que incluye control de estímulos, como usar la cama solo para dormir y levantarse si no concilia el sueño, restricción del tiempo en cama, reestructuración cognitiva y relajación, junto con higiene del sueño: horario regular, evitar cafeína por la tarde, alcohol y pantallas antes de dormir. Su efecto es más duradero que el de los fármacos, que se reservan para uso breve.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del insomnio ;; Guía de la Academia Americana de Medicina del Sueño
+
+@ fam|primary_mental_health|substance_use_family|3|treatment_of_choice
+V: Hombre de 50 años con consumo diario de alcohol de 15 años, hospitalizado por una fractura. A las 36 horas de su última bebida presenta temblor, sudoración, ansiedad, taquicardia de 115 y presión de 160/95 mmHg. Escala CIWA-Ar de 18.
+P: ¿Cuál es el tratamiento de elección?
++ Benzodiacepina, como diazepam o lorazepam, guiada por síntomas, junto con tiamina || Las benzodiacepinas previenen la progresión a convulsiones y delirium tremens.
+- anchoring | Haloperidol como monoterapia || Disminuye el umbral convulsivo.
+- availability_heuristic | Dar alcohol para evitar la abstinencia || No es un tratamiento aceptado.
+- representativeness_heuristic | Solo vigilancia porque es leve || Una puntuación de 18 requiere tratamiento.
+- premature_closure | Betabloqueador como único tratamiento || Enmascara signos sin prevenir complicaciones.
+- framing_effect | Naltrexona en la fase aguda || Se usa para mantener la abstinencia.
+- complexity_bias | Propofol en infusión de inicio || Se reserva para casos refractarios en terapia intensiva.
+- base_rate_fallacy | La abstinencia alcohólica nunca es grave || Puede ser mortal.
+- belief_bias | Disulfiram para controlar los síntomas || Está contraindicado en este contexto.
+- omission_bias | Administrar glucosa antes que tiamina || Puede precipitar encefalopatía de Wernicke.
+E: El síndrome de abstinencia alcohólica inicia de 6 a 24 horas después de la última bebida, con temblor, ansiedad, sudoración, taquicardia, hipertensión, náusea e insomnio. Las convulsiones aparecen en las primeras 48 horas y el delirium tremens entre las 48 y 96 horas, con mortalidad elevada si no se trata. La escala CIWA-Ar mide la gravedad; una puntuación mayor de 8 a 10 indica tratamiento. Las benzodiacepinas son el tratamiento de elección; el lorazepam se prefiere en hepatopatía grave y adultos mayores. Se administra tiamina antes de la glucosa para prevenir la encefalopatía de Wernicke.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de abstinencia alcohólica ;; Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones
+
+@ fam|primary_mental_health|substance_use_family|3|diagnosis
+V: Hombre de 55 años con alcoholismo crónico que llega desnutrido y confuso. Presenta nistagmo horizontal, oftalmoplejía del sexto par bilateral y marcha atáxica con base amplia.
+P: ¿Cuál es el diagnóstico más probable?
++ Encefalopatía de Wernicke por deficiencia de tiamina || Tríada de confusión, oftalmoplejía y ataxia.
+- anchoring | Intoxicación alcohólica aguda || No explica la oftalmoplejía.
+- availability_heuristic | Evento vascular cerebral de tallo como primera opción || La tríada en un alcohólico desnutrido orienta a Wernicke.
+- representativeness_heuristic | Encefalopatía hepática || Cursa con asterixis, no con oftalmoplejía.
+- premature_closure | Síndrome de Korsakoff ya establecido || Se caracteriza por amnesia con confabulación.
+- framing_effect | Delirium tremens || Cursa con hiperactividad autonómica intensa.
+- complexity_bias | Esclerosis múltiple || No corresponde al contexto.
+- base_rate_fallacy | Hipoglucemia aislada || No explica la oftalmoplejía.
+- belief_bias | Mielinólisis pontina central espontánea || Se asocia con corrección rápida de sodio.
+- focusing_illusion | Neuropatía periférica alcohólica aislada || No explica la confusión ni la oftalmoplejía.
+E: La encefalopatía de Wernicke es una urgencia neurológica por deficiencia de tiamina, frecuente en alcoholismo crónico, desnutrición, hiperémesis y cirugía bariátrica. Se caracteriza por la tríada de alteración del estado mental, oftalmoplejía o nistagmo y ataxia, aunque la tríada completa solo aparece en una minoría. El tratamiento es tiamina intravenosa en dosis altas de inmediato, antes de administrar glucosa, que puede precipitarla o agravarla. Sin tratamiento puede progresar al síndrome de Korsakoff, con amnesia anterógrada y retrógrada y confabulación, frecuentemente irreversible.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del síndrome de abstinencia alcohólica ;; Guía de Práctica Clínica de diagnóstico y tratamiento de la encefalopatía de Wernicke
+
+@ fam|primary_mental_health|substance_use_family|2|treatment_of_choice
+V: Hombre de 48 años con trastorno por consumo de alcohol que completó la desintoxicación hace 2 semanas y desea mantenerse en abstinencia. Función hepática con transaminasas ligeramente elevadas. No usa opioides.
+P: ¿Cuál es el fármaco de elección para prevenir recaídas?
++ Naltrexona || Reduce el deseo de consumo y las recaídas a consumo intenso.
+- anchoring | Diazepam a largo plazo || Genera dependencia cruzada.
+- availability_heuristic | Disulfiram sin consentimiento ni supervisión || Requiere aceptación y tiene riesgos.
+- representativeness_heuristic | Ningún fármaco porque basta la voluntad || Los fármacos mejoran los resultados.
+- premature_closure | Haloperidol de mantenimiento || No está indicado.
+- framing_effect | Metadona || Se usa en dependencia a opioides.
+- complexity_bias | Antipsicótico de depósito || No está indicado.
+- base_rate_fallacy | Las recaídas son raras tras la desintoxicación || Son muy frecuentes.
+- belief_bias | La naltrexona se puede dar con opioides sin problema || Desencadena abstinencia a opioides.
+- omission_bias | No referir a grupos de ayuda mutua o psicoterapia || Son parte del tratamiento.
+E: Después de la desintoxicación, el tratamiento del trastorno por consumo de alcohol busca prevenir recaídas con intervenciones psicosociales, como entrevista motivacional, terapia cognitivo conductual y grupos de ayuda mutua, y fármacos. La naltrexona, antagonista opioide, reduce el deseo y el efecto placentero del alcohol; está contraindicada en usuarios de opioides y en hepatitis aguda o insuficiencia hepática. El acamprosato es útil en hepatopatía y requiere ajuste renal. El disulfiram produce una reacción aversiva al beber y requiere motivación y supervisión. Las benzodiacepinas solo se usan durante la abstinencia aguda.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno por consumo de alcohol ;; Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones
+
+@ fam|primary_mental_health|substance_use_family|2|treatment_of_choice
+V: Mujer de 45 años que fuma 20 cigarros al día desde hace 25 años y desea dejar de fumar. El primer cigarro lo fuma a los 5 minutos de despertar. Sin enfermedad psiquiátrica ni cardiopatía inestable.
+P: ¿Cuál es el tratamiento farmacológico de elección para la cesación?
++ Vareniclina o terapia de reemplazo de nicotina combinada, junto con consejería || Son los tratamientos más eficaces para la cesación.
+- anchoring | Solo fuerza de voluntad sin apoyo || Tiene baja tasa de éxito.
+- availability_heuristic | Benzodiacepinas para la ansiedad por abstinencia || No aumentan la cesación.
+- representativeness_heuristic | Cambiar a cigarros ligeros || No reducen el riesgo.
+- premature_closure | Cigarro electrónico como tratamiento de primera línea || No es el tratamiento recomendado de primera línea.
+- framing_effect | Reducir a 10 cigarros como meta final || La meta es la abstinencia completa.
+- complexity_bias | Hospitalización para dejar de fumar || No es necesaria.
+- base_rate_fallacy | Después de 25 años ya no hay beneficio en dejar de fumar || El beneficio existe a cualquier edad.
+- belief_bias | La terapia de reemplazo de nicotina causa cáncer || La nicotina no es el principal carcinógeno.
+- omission_bias | No fijar una fecha para dejar de fumar ni dar seguimiento || Mejoran el éxito.
+E: El tabaquismo es la principal causa prevenible de muerte. El abordaje en atención primaria sigue las 5 A: averiguar, aconsejar, apreciar la disposición, ayudar y acordar seguimiento. El fumar a los pocos minutos de despertar indica alta dependencia a la nicotina, según la prueba de Fagerström. La combinación de consejería y fármacos es la estrategia más eficaz. La vareniclina, agonista parcial del receptor nicotínico, es el fármaco individual más eficaz, y la terapia de reemplazo de nicotina combinada, con parche más una forma de acción rápida, tiene eficacia similar. El bupropión es otra opción. Se fija una fecha para dejar de fumar.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del consumo de tabaco ;; Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones
+
+@ fam|primary_mental_health|substance_use_family|2|next_step
+V: Hombre de 42 años con consumo excesivo de alcohol que en consulta dice que "sí bebe bastante, pero no le afecta" y no considera cambiar en este momento. Su esposa está preocupada.
+P: ¿Cuál es la conducta más apropiada según la etapa de cambio del paciente?
++ Entrevista motivacional para explorar su ambivalencia, sin confrontar, y dar información sobre los riesgos || Se encuentra en la etapa de precontemplación.
+- anchoring | Prescribir naltrexona de inmediato || No está dispuesto a cambiar.
+- availability_heuristic | Confrontarlo de forma directa para que acepte que es alcohólico || Aumenta la resistencia.
+- representativeness_heuristic | Darle de alta porque no quiere cambiar || Se pierde la oportunidad de intervenir.
+- premature_closure | Referirlo a internamiento obligatorio || No está indicado.
+- framing_effect | Fijar una fecha para dejar de beber hoy mismo || Corresponde a la etapa de preparación.
+- complexity_bias | Solicitar estudios de imagen hepática como única intervención || No aborda la conducta.
+- base_rate_fallacy | Los pacientes en precontemplación nunca cambian || Pueden avanzar con intervención.
+- belief_bias | Amenazarlo con consecuencias graves es lo más eficaz || El miedo no motiva un cambio sostenido.
+- omission_bias | No ofrecer apoyo a la familia || La familia también requiere orientación.
+E: El modelo transteórico de Prochaska y DiClemente describe las etapas del cambio: precontemplación, cuando la persona no considera cambiar; contemplación, cuando reconoce el problema pero tiene ambivalencia; preparación, cuando planea cambiar pronto; acción; y mantenimiento. La recaída es parte del proceso. En la precontemplación se recomienda la entrevista motivacional, que explora la ambivalencia con empatía, evita la confrontación, refleja las discrepancias entre conducta y metas y respeta la autonomía. Se brinda información sobre los riesgos y se mantiene la relación terapéutica. La familia puede recibir orientación y apoyo en grupos.
+R: Guía de Práctica Clínica de prevención, detección e intervención de las adicciones en atención primaria ;; Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones
+
+@ fam|primary_mental_health|substance_use_family|3|treatment_of_choice
+V: Hombre de 28 años encontrado inconsciente en su casa con una jeringa a un lado. Frecuencia respiratoria de 5 por minuto, pupilas puntiformes y saturación de 82 por ciento.
+P: ¿Cuál es el tratamiento de elección inmediato además de apoyar la ventilación?
++ Naloxona intravenosa, intramuscular o intranasal || Revierte la depresión respiratoria por opioides.
+- anchoring | Flumazenil || Revierte benzodiacepinas, no opioides.
+- availability_heuristic | Atropina || Se usa en intoxicación por organofosforados.
+- representativeness_heuristic | Carbón activado de inicio || No es útil en una intoxicación por vía intravenosa.
+- premature_closure | Lavado gástrico || No está indicado.
+- framing_effect | Bicarbonato de sodio || Se usa en intoxicación por tricíclicos.
+- complexity_bias | Fisostigmina || Se usa en intoxicación anticolinérgica.
+- base_rate_fallacy | Solo observar porque recuperará la conciencia || La depresión respiratoria puede ser mortal.
+- belief_bias | Glucagón || Se usa en intoxicación por betabloqueadores.
+- omission_bias | No vigilar tras la naloxona || Su efecto puede durar menos que el del opioide.
+E: La intoxicación por opioides se caracteriza por la tríada de depresión del estado de conciencia, depresión respiratoria y miosis puntiforme. El tratamiento inmediato es asegurar la vía aérea y la ventilación con bolsa válvula mascarilla y administrar naloxona, antagonista opioide, por vía intravenosa, intramuscular o intranasal, con el objetivo de restaurar una respiración adecuada, no necesariamente la conciencia completa. Como su efecto dura de 30 a 90 minutos y puede ser menor que el del opioide, se debe vigilar al paciente y repetir dosis o usar infusión. En dependientes puede precipitar abstinencia. El fentanilo es un problema creciente en el norte de México.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las intoxicaciones por opioides ;; Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones
+
+@ fam|primary_mental_health|substance_use_family|3|diagnosis
+V: Hombre de 24 años traído por su familia por agitación, ideas de que lo persiguen y alucinaciones auditivas desde hace 2 días. Consume metanfetamina inhalada a diario desde hace meses y no ha dormido en 3 días. Taquicardia, midriasis y pérdida de peso importante.
+P: ¿Cuál es el diagnóstico más probable?
++ Trastorno psicótico inducido por metanfetamina || Psicosis paranoide con consumo intenso y signos simpaticomiméticos.
+- anchoring | Esquizofrenia de inicio agudo || El consumo y los signos simpaticomiméticos orientan a psicosis inducida.
+- availability_heuristic | Intoxicación por opioides || Causa miosis y sedación.
+- representativeness_heuristic | Abstinencia alcohólica || No hay consumo de alcohol.
+- premature_closure | Trastorno bipolar en fase maníaca como única explicación || El consumo explica el cuadro.
+- framing_effect | Delirium por infección del sistema nervioso central sin datos clínicos || No hay fiebre ni datos meníngeos.
+- complexity_bias | Encefalitis autoinmune || Es mucho menos probable.
+- base_rate_fallacy | Intoxicación por marihuana leve || No explica la intensidad ni los signos.
+- belief_bias | Crisis de ansiedad || No explica la psicosis.
+- focusing_illusion | Hipoglucemia || No explica el cuadro completo.
+E: La metanfetamina, conocida como cristal, es un estimulante cuyo consumo ha aumentado en México, sobre todo en el norte. Produce euforia, insomnio, anorexia, taquicardia, hipertensión, midriasis e hipertermia. El consumo intenso puede causar psicosis con ideas paranoides de persecución, alucinaciones auditivas y táctiles, agitación y conductas violentas, similar a la esquizofrenia. La psicosis inducida suele mejorar en días a semanas con la abstinencia, aunque puede persistir. El manejo agudo incluye un entorno tranquilo, benzodiacepinas para la agitación, antipsicóticos si es necesario y vigilancia de complicaciones cardiovasculares.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la intoxicación por estimulantes ;; Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones
+
+@ fam|primary_mental_health|substance_use_family|2|next_step
+V: Mujer de 50 años que acude angustiada porque su esposo bebe en exceso desde hace años. Ella cubre sus ausencias en el trabajo, paga sus deudas y ha dejado de ver a sus amigas. Se siente culpable y agotada.
+P: ¿Cuál es la conducta más apropiada para ayudar a esta paciente?
++ Reconocer el impacto en ella, orientarla sobre grupos de apoyo para familiares como Al-Anon y evaluar su salud mental y seguridad || El consumo de un miembro afecta a toda la familia.
+- anchoring | Decirle que no puede hacer nada hasta que su esposo acepte tratamiento || Ella puede recibir apoyo por sí misma.
+- availability_heuristic | Indicarle que siga cubriendo a su esposo para mantener la estabilidad || Refuerza el consumo.
+- representativeness_heuristic | Prescribir benzodiacepinas como única intervención || No aborda el problema.
+- premature_closure | Recomendar divorcio inmediato como única opción || La decisión es suya.
+- framing_effect | Considerarlo un problema exclusivo del esposo || Afecta a la dinámica familiar.
+- complexity_bias | Hospitalizarla para descanso || No está indicado.
+- base_rate_fallacy | Las familias no se ven afectadas por el alcoholismo || El impacto es amplio.
+- belief_bias | Si ella se esfuerza más su esposo dejará de beber || No depende de ella.
+- omission_bias | No preguntar por violencia en el hogar || Es frecuente en estos contextos.
+E: El consumo problemático de alcohol o drogas afecta a toda la familia. Los familiares pueden desarrollar conductas de codependencia, como encubrir el consumo, asumir responsabilidades del consumidor, descuidar sus propias necesidades y sentir culpa, lo que puede mantener el problema. Se asocian con ansiedad, depresión, agotamiento y aislamiento. El médico familiar debe reconocer este impacto, evaluar la salud mental y la seguridad de los familiares, incluida la violencia, y orientar sobre grupos de apoyo como Al-Anon y servicios de atención a las adicciones. Los Centros de Atención Primaria en Adicciones ofrecen apoyo a familiares.
+R: Guía de Práctica Clínica de prevención, detección e intervención de las adicciones en atención primaria ;; Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones
