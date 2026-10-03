@@ -1,0 +1,1050 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "urg-03b-envenenamientos-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "toxicology",
+      "subtopic": "envenomations",
+      "vignette": "Niño de 6 años en Morelos picado por un alacrán en la mano hace 40 minutos. Presenta inquietud, sialorrea, sensación de cuerpo extraño en la garganta, estornudos, nistagmo y taquicardia.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Gluconato de calcio como tratamiento principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No neutraliza el veneno."
+        },
+        {
+          "key": "b",
+          "text": "El antiveneno siempre causa anafilaxia grave y no debe usarse en niños",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Los faboterápicos son seguros."
+        },
+        {
+          "key": "c",
+          "text": "Torniquete en el brazo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Está contraindicado."
+        },
+        {
+          "key": "d",
+          "text": "Antihistamínico como único tratamiento",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No neutraliza el veneno."
+        },
+        {
+          "key": "e",
+          "text": "Faboterápico antialacrán intravenoso",
+          "correct": true,
+          "rationale": "Está indicado en la intoxicación por picadura de alacrán con signos sistémicos."
+        },
+        {
+          "key": "f",
+          "text": "Solo hielo local y observación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene signos sistémicos que requieren antiveneno."
+        },
+        {
+          "key": "g",
+          "text": "Incisión y succión del sitio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Está contraindicada."
+        },
+        {
+          "key": "h",
+          "text": "No vigilar complicaciones respiratorias y cardiovasculares",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son las causas de muerte."
+        },
+        {
+          "key": "i",
+          "text": "Hemodiálisis",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "j",
+          "text": "Las picaduras de alacrán siempre son leves en niños",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Los niños tienen mayor riesgo de cuadros graves."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "f"
+      ],
+      "explanation": "La intoxicación por picadura de alacrán del género Centruroides es un problema de salud pública en México, especialmente en Morelos, Guerrero, Jalisco, Guanajuato y Michoacán. Su veneno es neurotóxico y actúa sobre los canales de sodio. Se clasifica en leve, con dolor y parestesias locales; moderada, con inquietud, sialorrea, sensación de cuerpo extraño en la faringe, estornudos, prurito nasal, nistagmo y taquicardia; y grave, con dificultad respiratoria, arritmias, convulsiones o edema pulmonar. Los niños menores de 5 años y los adultos mayores tienen mayor riesgo. El tratamiento de los casos moderados y graves es el faboterápico antialacrán intravenoso.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención y control de la intoxicación por picadura de alacrán",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la intoxicación por picadura de alacrán"
+      ]
+    },
+    {
+      "key": "urg-03b-envenenamientos-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "toxicology",
+      "subtopic": "envenomations",
+      "vignette": "Hombre de 40 años que mientras limpiaba una bodega sintió un piquete en la mano. Una hora después presenta dolor intenso que se extiende al abdomen, rigidez abdominal en tabla, sudoración, hipertensión y calambres musculares. Abdomen sin datos de irritación peritoneal real.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Abdomen agudo quirúrgico por perforación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El antecedente y la ausencia de irritación peritoneal orientan a envenenamiento."
+        },
+        {
+          "key": "b",
+          "text": "Requiere laparotomía exploradora urgente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No hay abdomen quirúrgico."
+        },
+        {
+          "key": "c",
+          "text": "Las arañas no causan síntomas sistémicos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La viuda negra sí."
+        },
+        {
+          "key": "d",
+          "text": "Pancreatitis aguda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el antecedente ni los calambres."
+        },
+        {
+          "key": "e",
+          "text": "Porfiria aguda intermitente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No explica el antecedente."
+        },
+        {
+          "key": "f",
+          "text": "Latrodectismo por mordedura de viuda negra",
+          "correct": true,
+          "rationale": "Dolor y rigidez muscular con abdomen en tabla tras una mordedura."
+        },
+        {
+          "key": "g",
+          "text": "Reacción alérgica local",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el cuadro sistémico."
+        },
+        {
+          "key": "h",
+          "text": "Tétanos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Tiene un periodo de incubación de días."
+        },
+        {
+          "key": "i",
+          "text": "Picadura de alacrán",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Produce sialorrea y síntomas neurológicos distintos."
+        },
+        {
+          "key": "j",
+          "text": "Loxoscelismo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Causa lesión necrótica local."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "i",
+        "j"
+      ],
+      "explanation": "El latrodectismo es causado por la mordedura de la araña viuda negra, del género Latrodectus, cuyo veneno, la alfa latrotoxina, provoca liberación masiva de neurotransmisores. Produce dolor local que se extiende a grupos musculares grandes, rigidez y calambres, característicamente abdomen en tabla que puede confundirse con un abdomen agudo, además de sudoración, hipertensión, taquicardia, sialorrea y ansiedad. El tratamiento incluye analgesia con opioides, benzodiacepinas para los espasmos y el faboterápico antiarácnido en casos moderados a graves. El gluconato de calcio ya no se recomienda.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la mordedura de araña viuda negra",
+        "Manual de toxicología clínica de urgencias"
+      ]
+    },
+    {
+      "key": "urg-03b-envenenamientos-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "toxicology",
+      "subtopic": "envenomations",
+      "vignette": "Mujer de 35 años que despertó con dolor en el muslo después de dormir en una cabaña. A las 24 horas presenta una lesión con centro violáceo, halo isquémico pálido y eritema periférico, conocida como placa marmórea. Orina oscura y anemia.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Loxoscelismo cutáneo visceral por mordedura de araña violinista",
+          "correct": true,
+          "rationale": "Lesión necrótica en placa marmórea con hemólisis."
+        },
+        {
+          "key": "b",
+          "text": "Picadura de abeja",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No causa necrosis extensa."
+        },
+        {
+          "key": "c",
+          "text": "Pioderma gangrenoso",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No explica la hemólisis aguda."
+        },
+        {
+          "key": "d",
+          "text": "La araña violinista no se encuentra en México",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es frecuente en México."
+        },
+        {
+          "key": "e",
+          "text": "Celulitis bacteriana simple",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica la hemólisis ni la placa marmórea."
+        },
+        {
+          "key": "f",
+          "text": "Picadura de alacrán",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No causa necrosis."
+        },
+        {
+          "key": "g",
+          "text": "Latrodectismo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No causa necrosis local."
+        },
+        {
+          "key": "h",
+          "text": "Fascitis necrosante por estreptococo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La evolución y la hemólisis orientan a loxoscelismo."
+        },
+        {
+          "key": "i",
+          "text": "Trombosis venosa profunda",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la lesión cutánea."
+        },
+        {
+          "key": "j",
+          "text": "Las lesiones necróticas siempre son bacterianas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Pueden ser tóxicas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "El loxoscelismo es causado por la mordedura de la araña violinista, del género Loxosceles, frecuente en México dentro de las casas. Su veneno contiene esfingomielinasa D, que causa necrosis tisular y hemólisis. La forma cutánea, la más frecuente, se manifiesta con una lesión dolorosa que evoluciona a la placa marmórea, con centro violáceo, halo pálido isquémico y eritema periférico, que puede ulcerarse. La forma cutánea visceral incluye hemólisis, hemoglobinuria, insuficiencia renal y coagulopatía, más frecuente en niños. El tratamiento incluye el faboterápico antiloxosceles, analgesia, cuidado de la herida y vigilancia de la función renal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del loxoscelismo",
+        "Manual de toxicología clínica de urgencias"
+      ]
+    },
+    {
+      "key": "urg-03b-envenenamientos-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "toxicology",
+      "subtopic": "envenomations",
+      "vignette": "Hombre de 45 años, campesino de Sonora, mordido por una víbora de cascabel en la pierna hace 1 hora. Presenta edema que se extiende a la rodilla, equimosis, dolor intenso y sangrado por las encías. Tiempo de protrombina prolongado.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo antibiótico y observación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No neutraliza el veneno."
+        },
+        {
+          "key": "b",
+          "text": "El antiveneno solo sirve en las primeras 2 horas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es útil mientras haya envenenamiento activo."
+        },
+        {
+          "key": "c",
+          "text": "Torniquete arterial y succión de la herida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Están contraindicados."
+        },
+        {
+          "key": "d",
+          "text": "Las mordeduras de víbora siempre requieren amputación",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El antiveneno previene complicaciones."
+        },
+        {
+          "key": "e",
+          "text": "Fasciotomía profiláctica inmediata",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Solo con síndrome compartimental confirmado."
+        },
+        {
+          "key": "f",
+          "text": "Faboterápico antiviperino intravenoso en dosis según la gravedad",
+          "correct": true,
+          "rationale": "Neutraliza el veneno y revierte la coagulopatía."
+        },
+        {
+          "key": "g",
+          "text": "Heparina para la coagulopatía",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Está contraindicada."
+        },
+        {
+          "key": "h",
+          "text": "No marcar el avance del edema cada hora",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Guía la dosis."
+        },
+        {
+          "key": "i",
+          "text": "Aplicar hielo directo sobre la herida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede causar más daño tisular."
+        },
+        {
+          "key": "j",
+          "text": "Plasma fresco congelado como tratamiento principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No neutraliza el veneno."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "Las mordeduras por víboras de la familia Viperidae, como cascabel y nauyaca, causan envenenamiento con efectos locales, como edema progresivo, equimosis, flictenas y necrosis, y sistémicos, como coagulopatía de consumo, sangrado, hipotensión y lesión renal. La gravedad se clasifica según la extensión del edema y las alteraciones sistémicas. El tratamiento es el faboterápico antiviperino intravenoso en dosis según la gravedad, repetido si progresa el edema o persiste la coagulopatía, con inmovilización de la extremidad a la altura del corazón. Están contraindicados el torniquete, la incisión, la succión y el hielo directo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la mordedura de serpiente venenosa",
+        "Manual de toxicología clínica de urgencias"
+      ]
+    },
+    {
+      "key": "urg-03b-envenenamientos-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "toxicology",
+      "subtopic": "envenomations",
+      "vignette": "Niño de 10 años mordido en la mano por una serpiente con anillos rojos, amarillos y negros mientras jugaba en el campo en Veracruz. Una hora después presenta ptosis palpebral, diplopía, disartria y dificultad para deglutir, con edema local mínimo.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Faboterápico anticoral intravenoso y vigilancia estrecha de la función respiratoria",
+          "correct": true,
+          "rationale": "El veneno de coralillo es neurotóxico y puede causar parálisis respiratoria."
+        },
+        {
+          "key": "b",
+          "text": "Torniquete arterial",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Está contraindicado."
+        },
+        {
+          "key": "c",
+          "text": "Faboterápico antiviperino",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No neutraliza el veneno de coralillo."
+        },
+        {
+          "key": "d",
+          "text": "Fasciotomía",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "e",
+          "text": "La ausencia de dolor local indica que no hubo envenenamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El coralillo causa pocos síntomas locales."
+        },
+        {
+          "key": "f",
+          "text": "No preparar el manejo de la vía aérea",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede requerir intubación."
+        },
+        {
+          "key": "g",
+          "text": "Solo observación porque no hay edema importante",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El veneno de coralillo causa poco edema pero es grave."
+        },
+        {
+          "key": "h",
+          "text": "Atropina sola como tratamiento definitivo",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No neutraliza el veneno."
+        },
+        {
+          "key": "i",
+          "text": "Plasmaféresis de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el tratamiento de elección."
+        },
+        {
+          "key": "j",
+          "text": "Las serpientes de colores son siempre inofensivas",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El coralillo es muy venenoso."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "Las serpientes coralillo, del género Micrurus, de la familia Elapidae, tienen un veneno neurotóxico que bloquea la unión neuromuscular. Producen pocos signos locales, por lo que la mordedura puede subestimarse, y síntomas neurológicos que inician en horas: ptosis, diplopía, disartria, disfagia, sialorrea, debilidad y parálisis respiratoria, que es la causa de muerte. El tratamiento es el faboterápico anticoral intravenoso, idealmente antes de que aparezcan síntomas graves, y vigilancia estrecha con soporte ventilatorio. Los inhibidores de la acetilcolinesterasa con atropina pueden ayudar como medida complementaria.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la mordedura de serpiente venenosa",
+        "Manual de toxicología clínica de urgencias"
+      ]
+    },
+    {
+      "key": "urg-03b-envenenamientos-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "toxicology",
+      "subtopic": "envenomations",
+      "vignette": "Mujer de 30 años picada por una abeja en el jardín. A los 10 minutos presenta urticaria generalizada, edema de labios, disnea con sibilancias y presión de 80/50 mmHg.",
+      "prompt": "¿Cuál es el tratamiento de elección inmediato?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Antihistamínico oral como única medida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No trata la anafilaxia grave."
+        },
+        {
+          "key": "b",
+          "text": "Aplicar hielo y observar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No trata la anafilaxia."
+        },
+        {
+          "key": "c",
+          "text": "La adrenalina está contraindicada si hay hipertensión previa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "En anafilaxia no hay contraindicación absoluta."
+        },
+        {
+          "key": "d",
+          "text": "La anafilaxia por abeja nunca es mortal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede ser mortal."
+        },
+        {
+          "key": "e",
+          "text": "Solo salbutamol inhalado",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No trata la hipotensión."
+        },
+        {
+          "key": "f",
+          "text": "No prescribir autoinyector de adrenalina y referir a alergología",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Previene muertes futuras."
+        },
+        {
+          "key": "g",
+          "text": "Intubación inmediata antes de la adrenalina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La adrenalina es prioritaria."
+        },
+        {
+          "key": "h",
+          "text": "Adrenalina intramuscular 0.5 mg en la cara anterolateral del muslo",
+          "correct": true,
+          "rationale": "Es el tratamiento de primera línea de la anafilaxia."
+        },
+        {
+          "key": "i",
+          "text": "Adrenalina intravenosa en bolo de 1 mg",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es la dosis del paro y causa arritmias."
+        },
+        {
+          "key": "j",
+          "text": "Hidrocortisona intravenosa como primera medida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Actúa en horas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "La anafilaxia es una reacción de hipersensibilidad sistémica grave, de inicio rápido, que puede ser mortal. Las picaduras de himenópteros, como abejas y avispas, son una causa frecuente. El tratamiento de primera línea es la adrenalina intramuscular en la cara anterolateral del muslo, 0.01 mg por kilo, máximo 0.5 mg en adultos, que puede repetirse cada 5 a 15 minutos. Se complementa con posición supina, oxígeno, líquidos intravenosos y broncodilatadores. Los antihistamínicos y esteroides son coadyuvantes. Se recomienda prescribir un autoinyector de adrenalina y referir a alergología para inmunoterapia con veneno.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la anafilaxia",
+        "Guía de la Organización Mundial de Alergia para anafilaxia"
+      ]
+    },
+    {
+      "key": "urg-03b-envenenamientos-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "toxicology",
+      "subtopic": "envenomations",
+      "vignette": "Hombre de 60 años atacado por un enjambre de abejas africanizadas, con más de 300 picaduras. A las 12 horas presenta orina oscura, disminución del volumen urinario, creatinina de 3.5 mg/dL y creatina cinasa muy elevada.",
+      "prompt": "¿Cuál es la complicación más probable?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Glomerulonefritis postestreptocócica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay antecedente infeccioso."
+        },
+        {
+          "key": "b",
+          "text": "La orina oscura es por deshidratación sin importancia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Indica mioglobinuria o hemoglobinuria."
+        },
+        {
+          "key": "c",
+          "text": "Rabdomiólisis y hemólisis con lesión renal aguda por toxicidad directa del veneno",
+          "correct": true,
+          "rationale": "El envenenamiento masivo causa daño muscular, hemólisis y falla renal."
+        },
+        {
+          "key": "d",
+          "text": "No hidratar intensamente ni vigilar el potasio",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es el manejo de la rabdomiólisis."
+        },
+        {
+          "key": "e",
+          "text": "Nefropatía por contraste",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hubo contraste."
+        },
+        {
+          "key": "f",
+          "text": "Infección urinaria complicada",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la creatina cinasa elevada."
+        },
+        {
+          "key": "g",
+          "text": "Vasculitis sistémica primaria",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "El antecedente explica el cuadro."
+        },
+        {
+          "key": "h",
+          "text": "Anafilaxia tardía",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El cuadro es tóxico, no alérgico."
+        },
+        {
+          "key": "i",
+          "text": "Deshidratación simple",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la creatina cinasa tan elevada."
+        },
+        {
+          "key": "j",
+          "text": "Las picaduras múltiples solo causan problemas alérgicos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Pueden causar toxicidad sistémica."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "h"
+      ],
+      "explanation": "Las picaduras masivas de abejas africanizadas, generalmente más de 50 a 100, pueden causar toxicidad sistémica por la gran cantidad de veneno, independiente de la alergia. El veneno contiene melitina y fosfolipasa A2, que causan hemólisis, rabdomiólisis, lesión renal aguda, hepatotoxicidad, miocarditis y síndrome de dificultad respiratoria. El manejo incluye retirar los aguijones, tratar la anafilaxia si existe, hidratación intensa para prevenir la lesión renal, vigilancia de potasio, creatina cinasa y función renal, y hemodiálisis si es necesario. No existe un antiveneno de uso general en México.",
+      "gpcRefs": [
+        "Manual de toxicología clínica de urgencias",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la rabdomiólisis"
+      ]
+    },
+    {
+      "key": "urg-03b-envenenamientos-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "toxicology",
+      "subtopic": "envenomations",
+      "vignette": "Mujer de 25 años mordida en la mano por su gato hace 6 horas. La herida es punzante y profunda, con eritema inicial. Tiene esquema antitetánico vigente.",
+      "prompt": "¿Cuál es el tratamiento antibiótico de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "No dar antibiótico porque la herida es pequeña",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Las mordeduras de gato tienen alto riesgo de infección."
+        },
+        {
+          "key": "b",
+          "text": "Cerrar la herida con sutura primaria sin lavar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Las heridas punzantes de mano no se suturan."
+        },
+        {
+          "key": "c",
+          "text": "Cefalexina sola",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Tiene poca actividad contra Pasteurella."
+        },
+        {
+          "key": "d",
+          "text": "La rabia nunca se transmite por gatos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Los gatos pueden transmitir rabia."
+        },
+        {
+          "key": "e",
+          "text": "Amoxicilina con ácido clavulánico",
+          "correct": true,
+          "rationale": "Cubre Pasteurella multocida, anaerobios y estafilococos."
+        },
+        {
+          "key": "f",
+          "text": "No valorar el riesgo de rabia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe evaluarse."
+        },
+        {
+          "key": "g",
+          "text": "Las mordeduras de gato se infectan menos que las de perro",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se infectan más."
+        },
+        {
+          "key": "h",
+          "text": "Vancomicina intravenosa de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es la primera opción."
+        },
+        {
+          "key": "i",
+          "text": "Solo antisépticos tópicos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No previenen la infección profunda."
+        },
+        {
+          "key": "j",
+          "text": "Dicloxacilina sola",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No cubre bien Pasteurella."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "Las mordeduras de gato causan heridas punzantes profundas que se infectan con mayor frecuencia que las de perro, hasta en 30 a 50 por ciento. El microorganismo característico es Pasteurella multocida, que produce celulitis de inicio rápido, en las primeras 12 a 24 horas. También participan estafilococos, estreptococos y anaerobios. El tratamiento incluye lavado abundante, no suturar las heridas punzantes de la mano, profilaxis antitetánica según el esquema, evaluación del riesgo de rabia y amoxicilina con ácido clavulánico, que es el antibiótico de elección para la profilaxis y el tratamiento. En alérgicos se usa doxiciclina o una combinación con clindamicina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las mordeduras por animales",
+        "Guía para la atención médica y antirrábica de la persona expuesta al virus de la rabia"
+      ]
+    },
+    {
+      "key": "urg-03b-envenenamientos-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "toxicology",
+      "subtopic": "envenomations",
+      "vignette": "Hombre de 30 años que golpeó a otra persona en la boca durante una pelea hace 2 días. Presenta una herida pequeña sobre la articulación metacarpofalángica del tercer dedo con eritema, edema y dolor al mover el dedo.",
+      "prompt": "¿Cuál es la complicación más probable que debe descartarse?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Puede suturarse de inmediato para cerrar la herida",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No deben suturarse."
+        },
+        {
+          "key": "b",
+          "text": "Contusión simple sin riesgo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El eritema y el dolor a la movilización sugieren infección profunda."
+        },
+        {
+          "key": "c",
+          "text": "Artritis séptica o tenosinovitis por mordedura humana de puño cerrado",
+          "correct": true,
+          "rationale": "La herida sobre el nudillo puede penetrar la articulación y los tendones."
+        },
+        {
+          "key": "d",
+          "text": "Gota aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La herida explica el cuadro."
+        },
+        {
+          "key": "e",
+          "text": "Picadura de insecto",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay antecedente."
+        },
+        {
+          "key": "f",
+          "text": "Reacción alérgica local",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "g",
+          "text": "Osteosarcoma",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "h",
+          "text": "No referir a cirugía de mano para exploración y lavado",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Suele requerirse."
+        },
+        {
+          "key": "i",
+          "text": "Fractura del boxeador como única lesión",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La herida y los signos inflamatorios sugieren infección."
+        },
+        {
+          "key": "j",
+          "text": "Las mordeduras humanas rara vez se infectan",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tienen alto riesgo de infección."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "d",
+        "i"
+      ],
+      "explanation": "La lesión de puño cerrado ocurre al golpear la boca de otra persona, causando una herida sobre la articulación metacarpofalángica que puede penetrar la cápsula articular y las vainas tendinosas. Al extender los dedos, la herida se desplaza y oculta la profundidad. Tiene alto riesgo de infección por la flora oral humana, incluida Eikenella corrodens, estreptococos, estafilococos y anaerobios, con artritis séptica, tenosinovitis y osteomielitis. Requiere radiografía, exploración y lavado quirúrgico por cirugía de mano, no sutura primaria, y antibiótico con amoxicilina y ácido clavulánico o intravenoso si hay infección establecida.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las mordeduras por animales",
+        "Guía de Práctica Clínica de infecciones de mano"
+      ]
+    },
+    {
+      "key": "urg-03b-envenenamientos-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "toxicology",
+      "subtopic": "envenomations",
+      "vignette": "Mujer de 28 años que mientras nadaba en una playa de Quintana Roo tuvo contacto con una medusa. Presenta dolor intenso urente y lesiones lineales eritematosas en la pierna. Sin síntomas sistémicos.",
+      "prompt": "¿Cuál es la conducta inicial más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Retirar los tentáculos con pinzas, irrigar con agua de mar o vinagre según la especie y aplicar calor local",
+          "correct": true,
+          "rationale": "Inactiva los nematocistos y alivia el dolor."
+        },
+        {
+          "key": "b",
+          "text": "Aplicar orina sobre la lesión",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es eficaz."
+        },
+        {
+          "key": "c",
+          "text": "Antiveneno específico en todos los casos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Solo en especies muy peligrosas."
+        },
+        {
+          "key": "d",
+          "text": "Torniquete en la pierna",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "e",
+          "text": "No vigilar datos de anafilaxia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede ocurrir."
+        },
+        {
+          "key": "f",
+          "text": "Retirar los tentáculos con las manos desnudas es seguro",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede causar más picaduras."
+        },
+        {
+          "key": "g",
+          "text": "Frotar la piel con arena",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Libera más veneno."
+        },
+        {
+          "key": "h",
+          "text": "Lavar con agua dulce abundante",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede activar los nematocistos."
+        },
+        {
+          "key": "i",
+          "text": "Antibiótico intravenoso de inmediato",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay infección."
+        },
+        {
+          "key": "j",
+          "text": "Las picaduras de medusa siempre son mortales",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La mayoría son leves."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "h"
+      ],
+      "explanation": "Las medusas tienen nematocistos que inyectan veneno al contacto, causando dolor urente intenso y lesiones lineales eritematosas. El manejo incluye salir del agua, retirar los tentáculos con pinzas o guantes sin frotar, irrigar con agua de mar, y en muchas especies aplicar vinagre para inactivar los nematocistos, y después inmersión en agua caliente, alrededor de 43 a 45 grados, por 20 a 45 minutos para aliviar el dolor. El agua dulce y el frotamiento pueden activar los nematocistos. Se vigila la anafilaxia y las reacciones sistémicas, que son raras.",
+      "gpcRefs": [
+        "Manual de toxicología clínica de urgencias",
+        "Guía de atención de lesiones por fauna marina"
+      ]
+    },
+    {
+      "key": "urg-03b-envenenamientos-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "emergency_medicine",
+      "topic": "toxicology",
+      "subtopic": "envenomations",
+      "vignette": "Hombre de 50 años mordido por una víbora de cascabel en el pie hace 2 horas. Presenta edema limitado al pie y tobillo, sin equimosis extensa. Tiempo de protrombina, fibrinógeno y plaquetas normales. Sin síntomas sistémicos.",
+      "prompt": "¿Qué indica esta evaluación sobre la gravedad del envenenamiento?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Que requiere amputación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "b",
+          "text": "Envenenamiento neurotóxico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Las víboras de cascabel causan principalmente daño local y hematotóxico."
+        },
+        {
+          "key": "c",
+          "text": "Envenenamiento grave con indicación de fasciotomía",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay datos de gravedad."
+        },
+        {
+          "key": "d",
+          "text": "Todas las mordeduras de víbora son graves",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Hay mordeduras secas y leves."
+        },
+        {
+          "key": "e",
+          "text": "Indicación de oxigenación por membrana extracorpórea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No corresponde."
+        },
+        {
+          "key": "f",
+          "text": "La gravedad no cambia después de la primera hora",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede progresar."
+        },
+        {
+          "key": "g",
+          "text": "No marcar los bordes del edema",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Permite vigilar la progresión."
+        },
+        {
+          "key": "h",
+          "text": "Envenenamiento leve, que requiere vigilancia con repetición de estudios y valorar antiveneno según la progresión",
+          "correct": true,
+          "rationale": "El edema limitado sin alteraciones de laboratorio indica un grado leve."
+        },
+        {
+          "key": "i",
+          "text": "Que el laboratorio normal descarta progresión futura",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Puede alterarse en horas."
+        },
+        {
+          "key": "j",
+          "text": "Que no hubo envenenamiento y puede darse de alta de inmediato",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Debe vigilarse al menos 12 a 24 horas."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "La gravedad del envenenamiento por víboras se clasifica según los efectos locales y sistémicos. En el envenenamiento leve el edema se limita a la zona de la mordedura sin alteraciones sistémicas ni de laboratorio; en el moderado el edema progresa a una articulación mayor con alteraciones leves de la coagulación; y en el grave hay edema extenso, sangrado, hipotensión o coagulopatía importante. Hasta una cuarta parte de las mordeduras son secas, sin envenenamiento. Todo paciente mordido debe vigilarse al menos 12 a 24 horas, marcando el avance del edema y repitiendo los estudios de coagulación, porque el cuadro puede progresar.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la mordedura de serpiente venenosa",
+        "Manual de toxicología clínica de urgencias"
+      ]
+    }
+  ]
+}
