@@ -1,0 +1,1620 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "fam-07b-expediente-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "clinical_record_nom",
+      "vignette": "Un médico familiar se pregunta durante cuánto tiempo debe conservar los expedientes clínicos de los pacientes atendidos en su consultorio privado.",
+      "prompt": "¿Qué indica la norma mexicana del expediente clínico sobre su conservación?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "El expediente es propiedad exclusiva del paciente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es propiedad del prestador, con derechos del paciente."
+        },
+        {
+          "key": "b",
+          "text": "Enviarlo a la Secretaría de Salud para su resguardo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Lo resguarda el prestador."
+        },
+        {
+          "key": "c",
+          "text": "Conservarlo por un periodo mínimo de 5 años contados a partir de la fecha del último acto médico",
+          "correct": true,
+          "rationale": "Es el plazo que establece la norma."
+        },
+        {
+          "key": "d",
+          "text": "Conservarlo solo si hubo una complicación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Todos se conservan."
+        },
+        {
+          "key": "e",
+          "text": "Conservarlo 30 años en todos los casos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es el plazo establecido."
+        },
+        {
+          "key": "f",
+          "text": "Los consultorios privados no están obligados a llevar expediente",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Están obligados."
+        },
+        {
+          "key": "g",
+          "text": "Entregarlo al paciente en original al terminar la atención",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se le entrega un resumen, no el original."
+        },
+        {
+          "key": "h",
+          "text": "Conservarlo hasta la muerte del médico",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es el criterio."
+        },
+        {
+          "key": "i",
+          "text": "Destruirlo al dar de alta al paciente",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Debe conservarse."
+        },
+        {
+          "key": "j",
+          "text": "Conservarlo solo 1 año",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es menor al plazo establecido."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "La norma oficial mexicana del expediente clínico establece que los expedientes deben conservarse por un periodo mínimo de cinco años contados a partir de la fecha del último acto médico. El expediente es propiedad de la institución o del prestador de servicios médicos que lo genera, quien es responsable de su resguardo, pero el paciente es titular de los derechos sobre los datos y tiene derecho a recibir un resumen clínico. Aplica a instituciones públicas, sociales y privadas, y a consultorios. La información es confidencial y solo puede darse a conocer a terceros por orden de autoridad competente o con autorización del paciente.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana del expediente clínico",
+        "Ley General de Salud"
+      ]
+    },
+    {
+      "key": "fam-07b-expediente-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "clinical_record_nom",
+      "vignette": "Paciente de 50 años que fue atendido en un hospital y se cambió a otra institución. Solicita al hospital una copia completa de su expediente original para llevarla a su nuevo médico.",
+      "prompt": "¿Cuál es la conducta más apropiada según la norma?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Entregarle el expediente original completo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El original debe resguardarlo la institución."
+        },
+        {
+          "key": "b",
+          "text": "No registrar la entrega del resumen",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe documentarse."
+        },
+        {
+          "key": "c",
+          "text": "Entregarle un resumen clínico por escrito, conservando el expediente original en la institución",
+          "correct": true,
+          "rationale": "El paciente tiene derecho a un resumen clínico; el original pertenece al prestador."
+        },
+        {
+          "key": "d",
+          "text": "El paciente no tiene derecho a ninguna información de su expediente",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tiene derecho a un resumen."
+        },
+        {
+          "key": "e",
+          "text": "Entregarlo solo a su empleador",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Viola la confidencialidad."
+        },
+        {
+          "key": "f",
+          "text": "Exigir una orden judicial para darle información",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es necesaria para el propio paciente."
+        },
+        {
+          "key": "g",
+          "text": "Solo los abogados pueden solicitar información del expediente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El paciente puede solicitarla."
+        },
+        {
+          "key": "h",
+          "text": "Negarle cualquier información por confidencialidad",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La confidencialidad no aplica frente al propio paciente."
+        },
+        {
+          "key": "i",
+          "text": "Enviar el expediente por correo electrónico a cualquier persona que lo pida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Requiere autorización."
+        },
+        {
+          "key": "j",
+          "text": "Destruir el expediente porque el paciente se cambió de institución",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Debe conservarse."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "i"
+      ],
+      "explanation": "Según la norma del expediente clínico, el expediente original es propiedad de la institución o del prestador y debe resguardarse. El paciente, su familiar, tutor o representante legal tiene derecho a solicitar por escrito un resumen clínico, que debe contener los datos relevantes del padecimiento, diagnósticos, tratamientos, estudios y pronóstico. Las copias del expediente pueden entregarse a autoridades judiciales, órganos de procuración de justicia o autoridades sanitarias que lo soliciten formalmente, y al paciente en los términos que establece la ley de protección de datos personales. La confidencialidad protege al paciente frente a terceros, no frente a sí mismo.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana del expediente clínico",
+        "Ley General de Protección de Datos Personales en Posesión de Sujetos Obligados"
+      ]
+    },
+    {
+      "key": "fam-07b-expediente-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "clinical_record_nom",
+      "vignette": "Un residente redacta la nota de evolución diaria de un paciente hospitalizado. Su adscrito le pide que incluya los elementos que exige la norma del expediente clínico.",
+      "prompt": "¿Qué elementos indica la norma para una nota de evolución?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Puede escribirse con abreviaturas no estandarizadas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Deben evitarse."
+        },
+        {
+          "key": "b",
+          "text": "Solo los signos vitales",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Faltan otros elementos."
+        },
+        {
+          "key": "c",
+          "text": "Únicamente la firma del médico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es un requisito, pero no suficiente."
+        },
+        {
+          "key": "d",
+          "text": "Solo las indicaciones de enfermería",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es una sección del expediente, no la nota."
+        },
+        {
+          "key": "e",
+          "text": "La nota de evolución es opcional en pacientes estables",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es obligatoria."
+        },
+        {
+          "key": "f",
+          "text": "Solo los resultados de laboratorio",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Faltan otros elementos."
+        },
+        {
+          "key": "g",
+          "text": "Una transcripción completa de todas las conversaciones",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "h",
+          "text": "Opiniones personales sobre la familia del paciente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No corresponden al expediente."
+        },
+        {
+          "key": "i",
+          "text": "Evolución y actualización del cuadro clínico, signos vitales, resultados de estudios, diagnósticos, tratamiento e indicaciones y pronóstico",
+          "correct": true,
+          "rationale": "Son los elementos mínimos de la nota de evolución."
+        },
+        {
+          "key": "j",
+          "text": "Solo el diagnóstico de ingreso",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es insuficiente."
+        }
+      ],
+      "canonical": [
+        "b",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "La norma oficial mexicana del expediente clínico establece que la nota de evolución debe elaborarse cada vez que se proporciona atención al paciente, y en hospitalización al menos una vez por día. Debe contener la evolución y actualización del cuadro clínico, incluido el abuso o dependencia de sustancias si existe, los signos vitales, los resultados relevantes de estudios, los diagnósticos o problemas clínicos, el pronóstico y el tratamiento e indicaciones médicas, con la dosis, vía y periodicidad de los medicamentos. Todas las notas deben tener fecha, hora, nombre completo y firma de quien las elabora, y escribirse con letra legible, sin abreviaturas ni tachaduras.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana del expediente clínico",
+        "Manual de procedimientos para la integración del expediente clínico"
+      ]
+    },
+    {
+      "key": "fam-07b-expediente-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "clinical_record_nom",
+      "vignette": "Un médico se percata de que escribió una dosis equivocada en la nota de evolución del día anterior, ya firmada. Desea corregirla.",
+      "prompt": "¿Cuál es la conducta más apropiada según la norma del expediente clínico?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Arrancar la hoja y rehacer la nota",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Constituye alteración del expediente."
+        },
+        {
+          "key": "b",
+          "text": "Pedir a enfermería que corrija la nota",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Debe corregirla quien la elaboró."
+        },
+        {
+          "key": "c",
+          "text": "Modificar el expediente es aceptable si el error fue menor",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Toda alteración es indebida."
+        },
+        {
+          "key": "d",
+          "text": "Elaborar una nota aclaratoria con fecha, hora y firma, sin borrar ni alterar la nota original",
+          "correct": true,
+          "rationale": "Las correcciones no deben ocultar lo escrito previamente."
+        },
+        {
+          "key": "e",
+          "text": "Tachar hasta que no se lea y escribir encima",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No deben hacerse tachaduras que oculten."
+        },
+        {
+          "key": "f",
+          "text": "Los errores en el expediente no tienen relevancia legal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Pueden tenerla."
+        },
+        {
+          "key": "g",
+          "text": "No informar al equipo sobre el error de dosis",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe asegurarse la seguridad del paciente."
+        },
+        {
+          "key": "h",
+          "text": "No corregir para evitar problemas legales",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El error debe aclararse."
+        },
+        {
+          "key": "i",
+          "text": "Usar corrector líquido y escribir la dosis correcta encima",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Está prohibido alterar el expediente."
+        },
+        {
+          "key": "j",
+          "text": "Solicitar autorización judicial para corregir",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "i"
+      ],
+      "explanation": "El expediente clínico es un documento médico legal. La norma establece que las notas deben escribirse con letra legible, sin abreviaturas, sin enmendaduras ni tachaduras, y conservarse en buen estado. Si se comete un error, no se debe borrar, usar corrector, arrancar hojas ni sobrescribir, porque eso constituye una alteración del documento. Lo correcto es elaborar una nota aclaratoria con fecha, hora, nombre y firma que explique el error y la información correcta. Además, si el error afectó la atención, se informa al equipo y se toman medidas para la seguridad del paciente.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana del expediente clínico",
+        "Acciones esenciales para la seguridad del paciente"
+      ]
+    },
+    {
+      "key": "fam-07b-expediente-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "clinical_record_nom",
+      "vignette": "Un paciente es dado de alta del hospital después de 5 días por neumonía. El residente debe elaborar la nota correspondiente al egreso.",
+      "prompt": "¿Qué contenido indica la norma para la nota de egreso?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Fecha de ingreso y egreso, motivo del egreso, diagnósticos finales, resumen de la evolución, manejo, problemas pendientes, plan y recomendaciones de seguimiento",
+          "correct": true,
+          "rationale": "Son los elementos de la nota de egreso."
+        },
+        {
+          "key": "b",
+          "text": "La nota de egreso es opcional",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es obligatoria."
+        },
+        {
+          "key": "c",
+          "text": "Solo la firma de alta del paciente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No sustituye la nota médica."
+        },
+        {
+          "key": "d",
+          "text": "Solo se elabora si el paciente fallece",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se elabora en todo egreso."
+        },
+        {
+          "key": "e",
+          "text": "Puede omitir los problemas pendientes si el paciente mejoró",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Deben incluirse."
+        },
+        {
+          "key": "f",
+          "text": "Solo los signos vitales del último día",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Faltan elementos."
+        },
+        {
+          "key": "g",
+          "text": "Una copia de todas las notas de evolución sin resumen",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Debe ser un resumen."
+        },
+        {
+          "key": "h",
+          "text": "Solo la cuenta hospitalaria",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es un documento administrativo."
+        },
+        {
+          "key": "i",
+          "text": "Solo la receta de medicamentos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es una parte, no la nota completa."
+        },
+        {
+          "key": "j",
+          "text": "Solo el diagnóstico de ingreso",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es insuficiente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "i",
+        "j"
+      ],
+      "explanation": "La norma del expediente clínico establece que la nota de egreso debe contener la fecha de ingreso y de egreso, el motivo del egreso, como mejoría, curación, alta voluntaria, traslado o defunción, los diagnósticos finales, un resumen de la evolución y el estado actual, el manejo durante la estancia, los problemas clínicos pendientes, el plan de manejo y tratamiento, las recomendaciones para la vigilancia ambulatoria, la atención de factores de riesgo y el pronóstico. En caso de defunción, se señalan las causas de la muerte y si se solicitó necropsia. La nota de egreso facilita la continuidad de la atención en el primer nivel.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana del expediente clínico",
+        "Manual de procedimientos para la integración del expediente clínico"
+      ]
+    },
+    {
+      "key": "fam-07b-expediente-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "clinical_record_nom",
+      "vignette": "Hombre de 28 años que acude a urgencias con una herida por arma blanca en el abdomen. Refiere que fue asaltado. Se estabiliza y se programa para laparotomía.",
+      "prompt": "¿Cuál es la obligación médico legal del médico respecto a esta lesión?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "No dar aviso porque el paciente no quiere denunciar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El aviso es obligatorio."
+        },
+        {
+          "key": "b",
+          "text": "Dar aviso al ministerio público y documentar detalladamente las lesiones en el expediente",
+          "correct": true,
+          "rationale": "Las lesiones que pueden constituir un delito requieren aviso."
+        },
+        {
+          "key": "c",
+          "text": "El aviso al ministerio público rompe el secreto profesional de forma ilegal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es una excepción legal."
+        },
+        {
+          "key": "d",
+          "text": "Negar la atención hasta que llegue la policía",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La atención médica es prioritaria."
+        },
+        {
+          "key": "e",
+          "text": "Solo dar aviso si el paciente fallece",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El aviso es por las lesiones."
+        },
+        {
+          "key": "f",
+          "text": "Esperar a que el paciente se recupere para decidir si se avisa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El aviso debe ser oportuno."
+        },
+        {
+          "key": "g",
+          "text": "Los médicos no tienen obligación de dar aviso de lesiones",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Están obligados."
+        },
+        {
+          "key": "h",
+          "text": "No describir las lesiones con detalle",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son relevantes para el proceso legal."
+        },
+        {
+          "key": "i",
+          "text": "Llamar a los medios de comunicación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Viola la confidencialidad."
+        },
+        {
+          "key": "j",
+          "text": "Solicitar autorización del paciente para atenderlo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es una urgencia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "i"
+      ],
+      "explanation": "La norma del expediente clínico y la legislación penal establecen que el médico que atiende a una persona con lesiones que pueden constituir un delito, como heridas por arma blanca o de fuego, agresiones o intoxicaciones intencionales, debe dar aviso al ministerio público. El aviso se realiza mediante el formato correspondiente y se registra en el expediente. Las lesiones deben describirse con detalle: tipo, localización, dimensiones, características y gravedad. La atención médica no se condiciona ni se retrasa por el aviso. Es una excepción legal al secreto profesional.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana del expediente clínico",
+        "Código Nacional de Procedimientos Penales"
+      ]
+    },
+    {
+      "key": "fam-07b-expediente-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "clinical_record_nom",
+      "vignette": "En la elaboración de la historia clínica de un paciente nuevo en medicina familiar, el médico debe registrar los apartados que exige la norma.",
+      "prompt": "¿Qué apartados indica la norma para la historia clínica?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Interrogatorio con ficha de identificación, antecedentes heredofamiliares, personales patológicos y no patológicos, padecimiento actual e interrogatorio por aparatos y sistemas, exploración física, resultados de estudios, diagnósticos, tratamiento y pronóstico",
+          "correct": true,
+          "rationale": "Son los elementos de la historia clínica."
+        },
+        {
+          "key": "b",
+          "text": "La exploración física es opcional si hay estudios de imagen",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es obligatoria."
+        },
+        {
+          "key": "c",
+          "text": "Un cuestionario de 500 preguntas obligatorio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el requisito."
+        },
+        {
+          "key": "d",
+          "text": "Solo los antecedentes familiares",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Faltan elementos."
+        },
+        {
+          "key": "e",
+          "text": "Solo el pronóstico",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Faltan elementos."
+        },
+        {
+          "key": "f",
+          "text": "Solo los estudios de laboratorio",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Faltan elementos."
+        },
+        {
+          "key": "g",
+          "text": "Solo los signos vitales y el peso",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es insuficiente."
+        },
+        {
+          "key": "h",
+          "text": "La historia clínica puede omitirse en pacientes jóvenes sanos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es obligatoria."
+        },
+        {
+          "key": "i",
+          "text": "La historia clínica solo es obligatoria en hospitalización",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es obligatoria también en consulta externa."
+        },
+        {
+          "key": "j",
+          "text": "Solo el motivo de consulta y la receta",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es insuficiente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "g",
+        "j"
+      ],
+      "explanation": "La norma oficial mexicana del expediente clínico establece que la historia clínica debe elaborarse por el médico y contener: interrogatorio con ficha de identificación, grupo étnico, antecedentes heredofamiliares, personales patológicos, incluidos alergias, consumo de sustancias y transfusiones, y personales no patológicos, padecimiento actual e interrogatorio por aparatos y sistemas; exploración física con signos vitales, peso, talla y datos de cabeza, cuello, tórax, abdomen, extremidades y genitales; resultados de estudios previos; diagnósticos o problemas clínicos; pronóstico; e indicación terapéutica. En consulta externa se complementa con notas de evolución en cada visita.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana del expediente clínico",
+        "Manual de procedimientos para la integración del expediente clínico"
+      ]
+    },
+    {
+      "key": "fam-07b-expediente-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "clinical_record_nom",
+      "vignette": "Un médico redacta una receta para un paciente con hipertensión. El farmacéutico la rechaza porque le faltan datos.",
+      "prompt": "¿Qué datos indica la normativa sanitaria que debe contener una receta médica?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "La cédula profesional es opcional",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es obligatoria."
+        },
+        {
+          "key": "b",
+          "text": "Puede omitirse la fecha si el tratamiento es crónico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Siempre debe tener fecha."
+        },
+        {
+          "key": "c",
+          "text": "El diagnóstico detallado es el único requisito",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Faltan otros datos."
+        },
+        {
+          "key": "d",
+          "text": "Las recetas verbales son válidas para cualquier medicamento",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se requiere receta escrita."
+        },
+        {
+          "key": "e",
+          "text": "Puede usarse un recetario sin datos del médico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Debe contener sus datos."
+        },
+        {
+          "key": "f",
+          "text": "Solo la dosis y no la duración",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Debe incluir la duración."
+        },
+        {
+          "key": "g",
+          "text": "Solo la firma del médico",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Faltan datos."
+        },
+        {
+          "key": "h",
+          "text": "Nombre, cédula profesional y domicilio del médico, nombre del paciente, fecha, medicamento con dosis, vía, frecuencia y duración, y firma autógrafa",
+          "correct": true,
+          "rationale": "Son los requisitos de la receta."
+        },
+        {
+          "key": "i",
+          "text": "Solo el nombre del medicamento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es insuficiente."
+        },
+        {
+          "key": "j",
+          "text": "Requiere sello de la Secretaría de Salud en todos los casos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es requisito general."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "El Reglamento de Insumos para la Salud establece que la receta médica debe contener el nombre del médico, el nombre de la institución que expidió su título, la cédula profesional, el domicilio, la fecha de expedición, el nombre del paciente, el nombre del medicamento preferentemente por su denominación genérica, la presentación, la dosis, la vía, la frecuencia y la duración del tratamiento, y la firma autógrafa del médico. Los medicamentos controlados, como los estupefacientes, requieren recetarios especiales con código de barras. Una receta incompleta puede ser rechazada y favorece errores de medicación.",
+      "gpcRefs": [
+        "Reglamento de Insumos para la Salud",
+        "Ley General de Salud"
+      ]
+    },
+    {
+      "key": "fam-07b-expediente-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "clinical_record_nom",
+      "vignette": "Un hospital implementa un sistema de expediente clínico electrónico. El área de informática pregunta qué norma regula el intercambio de información y la seguridad de estos sistemas.",
+      "prompt": "¿Qué normativa indica los requisitos del expediente clínico electrónico en México?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Una ley exclusiva de cada estado sin norma federal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Hay una norma federal."
+        },
+        {
+          "key": "b",
+          "text": "No existe regulación para el expediente electrónico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Sí existe."
+        },
+        {
+          "key": "c",
+          "text": "La norma de planificación familiar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No aplica."
+        },
+        {
+          "key": "d",
+          "text": "El expediente electrónico no requiere firma del médico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Requiere firma electrónica."
+        },
+        {
+          "key": "e",
+          "text": "La norma oficial mexicana de sistemas de información de registro electrónico para la salud, junto con la norma del expediente clínico",
+          "correct": true,
+          "rationale": "Regula la interoperabilidad, la seguridad y la confidencialidad."
+        },
+        {
+          "key": "f",
+          "text": "Solo el reglamento interno del hospital",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Debe cumplir la norma nacional."
+        },
+        {
+          "key": "g",
+          "text": "El expediente electrónico puede compartirse libremente entre hospitales sin controles",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Requiere controles de acceso."
+        },
+        {
+          "key": "h",
+          "text": "La norma de atención del embarazo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No aplica."
+        },
+        {
+          "key": "i",
+          "text": "La norma de vigilancia epidemiológica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Regula la notificación de enfermedades."
+        },
+        {
+          "key": "j",
+          "text": "La norma de residuos peligrosos biológico infecciosos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No regula expedientes."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "En México, la norma oficial mexicana sobre sistemas de información de registro electrónico para la salud establece las características que deben tener los sistemas de expediente clínico electrónico para garantizar la interoperabilidad, el procesamiento, la interpretación, la confidencialidad, la seguridad y el uso de estándares y catálogos de la información de los registros electrónicos en salud. Complementa a la norma del expediente clínico, que define su contenido. Los sistemas deben permitir la firma electrónica, el control de accesos con registro de quién consulta o modifica la información y la protección de datos personales.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana de sistemas de información de registro electrónico para la salud",
+        "Norma Oficial Mexicana del expediente clínico"
+      ]
+    },
+    {
+      "key": "fam-07b-expediente-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "clinical_record_nom",
+      "vignette": "Hombre de 75 años con diabetes e hipertensión fallece en su domicilio, atendido por su médico familiar, quien lo trataba regularmente. La causa de muerte es un infarto en un paciente con enfermedad conocida. La familia solicita el certificado de defunción.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solicitar autorización del juez familiar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "b",
+          "text": "Exigir necropsia obligatoria antes de certificar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es necesaria en muerte natural con causa conocida."
+        },
+        {
+          "key": "c",
+          "text": "Negarse y enviar siempre el caso al ministerio público",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Solo procede si la muerte es violenta o sospechosa."
+        },
+        {
+          "key": "d",
+          "text": "No registrar la diabetes e hipertensión como causas contribuyentes",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Deben registrarse."
+        },
+        {
+          "key": "e",
+          "text": "Expedir el certificado de defunción con la secuencia de causas de muerte y dar el certificado a la familia",
+          "correct": true,
+          "rationale": "La muerte es natural, en un paciente con enfermedad conocida y seguimiento médico."
+        },
+        {
+          "key": "f",
+          "text": "Solo el médico forense puede expedir certificados de defunción",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El médico tratante puede hacerlo."
+        },
+        {
+          "key": "g",
+          "text": "Toda muerte en domicilio es sospechosa",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No necesariamente."
+        },
+        {
+          "key": "h",
+          "text": "Escribir solo paro cardiorrespiratorio como causa básica",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es el mecanismo, no la causa."
+        },
+        {
+          "key": "i",
+          "text": "Esperar 72 horas antes de certificar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es un requisito."
+        },
+        {
+          "key": "j",
+          "text": "Pedir que la familia llene el certificado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Lo llena el médico."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "h"
+      ],
+      "explanation": "El certificado de defunción es un documento médico legal obligatorio que lo expide el médico que conoce las causas de la muerte, como el médico tratante, en casos de muerte natural. Debe registrar la secuencia de causas: la causa directa o inmediata, las causas intermedias y la causa básica, que es la enfermedad que inició la cadena de eventos, además de otras condiciones contribuyentes. No se deben anotar mecanismos como paro cardiorrespiratorio como causa. Si la muerte es violenta, accidental, sospechosa o de causa desconocida, se da aviso al ministerio público y el certificado lo expide el médico legista. Las causas se codifican para las estadísticas de mortalidad.",
+      "gpcRefs": [
+        "Manual de llenado del certificado de defunción de la Dirección General de Información en Salud",
+        "Ley General de Salud"
+      ]
+    },
+    {
+      "key": "fam-07b-expediente-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "clinical_record_nom",
+      "vignette": "Un residente escribe en el expediente las siglas IAM, EPOC y DM2 en sus notas, además de abreviaturas propias como \"pte. c/ dlr abd\". El jefe de servicio le recuerda la norma.",
+      "prompt": "¿Qué indica la norma del expediente clínico sobre el uso de abreviaturas?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Las notas legibles no tienen importancia legal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Son un documento médico legal."
+        },
+        {
+          "key": "b",
+          "text": "Cada hospital puede crear sus propias abreviaturas sin restricción",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La norma pide evitarlas."
+        },
+        {
+          "key": "c",
+          "text": "Cualquier abreviatura es válida si el autor la entiende",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La norma prohíbe las abreviaturas."
+        },
+        {
+          "key": "d",
+          "text": "Las abreviaturas nunca causan errores clínicos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Son causa frecuente de errores."
+        },
+        {
+          "key": "e",
+          "text": "Solo importa que la nota esté firmada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El contenido también debe cumplir la norma."
+        },
+        {
+          "key": "f",
+          "text": "La norma solo regula el formato de las hojas",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Regula el contenido y la redacción."
+        },
+        {
+          "key": "g",
+          "text": "Las abreviaturas en medicamentos son seguras",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Son una causa frecuente de errores."
+        },
+        {
+          "key": "h",
+          "text": "Las abreviaturas son obligatorias para ahorrar espacio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es así."
+        },
+        {
+          "key": "i",
+          "text": "Solo los diagnósticos pueden abreviarse libremente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La norma pide evitarlas."
+        },
+        {
+          "key": "j",
+          "text": "Las notas deben escribirse con lenguaje técnico médico, letra legible y sin abreviaturas",
+          "correct": true,
+          "rationale": "El uso de abreviaturas favorece errores de interpretación."
+        }
+      ],
+      "canonical": [
+        "c",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "La norma oficial mexicana del expediente clínico establece que las notas médicas deben elaborarse con lenguaje técnico médico, sin abreviaturas, con letra legible, sin enmendaduras ni tachaduras, y conservarse en buen estado. Las abreviaturas, sobre todo las no estandarizadas, generan errores de interpretación de diagnósticos, dosis y vías de administración, y son una causa reconocida de eventos adversos. Las acciones esenciales para la seguridad del paciente de la Secretaría de Salud incluyen la comunicación efectiva y la prescripción segura. El expediente es un documento médico legal, por lo que su claridad es indispensable.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana del expediente clínico",
+        "Acciones esenciales para la seguridad del paciente"
+      ]
+    },
+    {
+      "key": "fam-07b-expediente-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "clinical_record_nom",
+      "vignette": "Un abogado acude a la clínica y solicita una copia completa del expediente de un paciente para un juicio laboral, sin presentar autorización del paciente ni orden de una autoridad.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Entregar solo los diagnósticos sin autorización",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "También son confidenciales."
+        },
+        {
+          "key": "b",
+          "text": "No registrar la solicitud y la respuesta",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe documentarse."
+        },
+        {
+          "key": "c",
+          "text": "Negar la entrega por la confidencialidad del expediente y solicitar autorización por escrito del paciente u orden de autoridad competente",
+          "correct": true,
+          "rationale": "La información solo se entrega a terceros con autorización o por mandato legal."
+        },
+        {
+          "key": "d",
+          "text": "Los empleadores tienen derecho a conocer los expedientes de sus trabajadores",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No sin autorización."
+        },
+        {
+          "key": "e",
+          "text": "La confidencialidad no aplica en juicios laborales",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Requiere orden de autoridad."
+        },
+        {
+          "key": "f",
+          "text": "Destruir el expediente para evitar problemas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es ilegal."
+        },
+        {
+          "key": "g",
+          "text": "Entregar el original para agilizar el juicio",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El original se resguarda."
+        },
+        {
+          "key": "h",
+          "text": "Entregar la copia porque es un abogado",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No tiene autorización."
+        },
+        {
+          "key": "i",
+          "text": "Publicar el expediente en un registro público",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Viola la confidencialidad."
+        },
+        {
+          "key": "j",
+          "text": "Informar verbalmente el contenido al abogado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "También viola la confidencialidad."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "h"
+      ],
+      "explanation": "La información contenida en el expediente clínico es confidencial y está protegida por la norma del expediente clínico y la legislación de protección de datos personales. Solo puede darse a conocer a terceros con autorización por escrito del paciente o su representante legal, o por solicitud de autoridad judicial, órganos de procuración de justicia, autoridades sanitarias o la Comisión Nacional de Arbitraje Médico, en el ejercicio de sus funciones. Una solicitud de un abogado o de un empleador sin estos requisitos debe negarse. Se recomienda registrar la solicitud y la respuesta, y orientar al solicitante sobre el procedimiento correcto.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana del expediente clínico",
+        "Ley Federal de Protección de Datos Personales en Posesión de los Particulares"
+      ]
+    },
+    {
+      "key": "fam-07b-expediente-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "clinical_record_nom",
+      "vignette": "Un paciente es enviado desde la unidad de medicina familiar a un hospital de segundo nivel para valoración por cardiología. El médico familiar elabora el documento correspondiente.",
+      "prompt": "¿Qué documento indica la norma para este envío y qué debe contener?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Una copia completa del expediente original",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se envía un resumen."
+        },
+        {
+          "key": "b",
+          "text": "Nota de egreso hospitalario",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Corresponde al alta de hospitalización."
+        },
+        {
+          "key": "c",
+          "text": "Certificado médico de salud",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es para referencia."
+        },
+        {
+          "key": "d",
+          "text": "El paciente debe explicar verbalmente su caso al especialista",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La nota garantiza la continuidad."
+        },
+        {
+          "key": "e",
+          "text": "Solo una receta con el nombre del especialista",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es el documento adecuado."
+        },
+        {
+          "key": "f",
+          "text": "No es necesario documentar las referencias",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es obligatorio."
+        },
+        {
+          "key": "g",
+          "text": "Nota de interconsulta interna únicamente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se usa dentro del mismo establecimiento."
+        },
+        {
+          "key": "h",
+          "text": "Hoja de enfermería",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es el documento de referencia."
+        },
+        {
+          "key": "i",
+          "text": "Solo una llamada telefónica sin documento",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Debe documentarse por escrito."
+        },
+        {
+          "key": "j",
+          "text": "Nota de referencia con establecimiento que envía y que recibe, resumen clínico, motivo del envío, impresión diagnóstica y terapéutica empleada",
+          "correct": true,
+          "rationale": "Es el documento para la referencia entre niveles."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "La norma del expediente clínico establece que la nota de referencia y traslado debe elaborarse por el médico cuando un paciente se envía a otro establecimiento, y debe contener el establecimiento que envía y el que recibe, el resumen clínico con los motivos del envío, la impresión diagnóstica, incluidos el abuso y la dependencia de sustancias, y la terapéutica empleada. La nota de interconsulta se usa para solicitar la opinión de otro especialista dentro del mismo establecimiento. La contrarreferencia es la respuesta del nivel receptor al nivel que envió, para asegurar la continuidad de la atención.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana del expediente clínico",
+        "Lineamientos del sistema de referencia y contrarreferencia"
+      ]
+    },
+    {
+      "key": "fam-07b-expediente-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "clinical_record_nom",
+      "vignette": "Paciente de 60 años hospitalizado por neumonía que, en contra de la recomendación médica, decide irse a su casa antes de completar el tratamiento intravenoso. Es capaz y comprende los riesgos.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solicitar una orden judicial para mantenerlo internado",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No procede en un paciente capaz."
+        },
+        {
+          "key": "b",
+          "text": "Llamar a la policía para que lo detengan",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No procede."
+        },
+        {
+          "key": "c",
+          "text": "Darle de alta sin documentar nada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Debe documentarse el egreso voluntario."
+        },
+        {
+          "key": "d",
+          "text": "Un paciente que rechaza el tratamiento es incapaz por definición",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El rechazo no implica incapacidad."
+        },
+        {
+          "key": "e",
+          "text": "Sedarlo para evitar que se vaya",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es ilegal y no ético."
+        },
+        {
+          "key": "f",
+          "text": "Retenerlo en el hospital contra su voluntad",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Viola su autonomía."
+        },
+        {
+          "key": "g",
+          "text": "Explicarle los riesgos, documentar en el expediente la información dada y que firme la hoja de egreso voluntario, ofreciendo tratamiento y seguimiento alternativos",
+          "correct": true,
+          "rationale": "El paciente capaz puede rechazar la hospitalización."
+        },
+        {
+          "key": "h",
+          "text": "El alta voluntaria libera al médico de toda responsabilidad sin importar la información dada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Debe haber información documentada."
+        },
+        {
+          "key": "i",
+          "text": "Negarle cualquier receta o seguimiento por su decisión",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe ofrecerse la mejor alternativa posible."
+        },
+        {
+          "key": "j",
+          "text": "No darle datos de alarma para regresar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son parte de la atención."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "El egreso voluntario ocurre cuando un paciente capaz, o su representante, decide abandonar el hospital en contra de la recomendación médica. La norma del expediente clínico establece que debe elaborarse una hoja de egreso voluntario firmada por el paciente o su representante y por el médico, en la que se registra la información proporcionada sobre los riesgos y las consecuencias. El médico debe explicar los riesgos, ofrecer alternativas como tratamiento oral y seguimiento cercano, dar datos de alarma y dejar abierta la posibilidad de regresar. El paciente capaz tiene derecho a rechazar el tratamiento.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana del expediente clínico",
+        "Carta de los derechos generales de los pacientes de la Comisión Nacional de Arbitraje Médico"
+      ]
+    },
+    {
+      "key": "fam-07b-expediente-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "clinical_record_nom",
+      "vignette": "Un paciente insatisfecho con la atención recibida en una clínica privada desea presentar una queja por una posible mala práctica sin acudir de inmediato a un juicio.",
+      "prompt": "¿Qué instancia indica la normativa mexicana para la resolución de conflictos entre pacientes y prestadores de servicios médicos?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo el ministerio público",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es para delitos, no para conciliación."
+        },
+        {
+          "key": "b",
+          "text": "Las quejas médicas solo pueden resolverse en juicio penal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Existen vías alternativas."
+        },
+        {
+          "key": "c",
+          "text": "La Comisión Federal para la Protección contra Riesgos Sanitarios para quejas individuales",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Regula productos y establecimientos."
+        },
+        {
+          "key": "d",
+          "text": "La Procuraduría Federal del Consumidor como única vía",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es la instancia especializada."
+        },
+        {
+          "key": "e",
+          "text": "El Colegio de Médicos como autoridad sancionadora",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es una autoridad legal de arbitraje."
+        },
+        {
+          "key": "f",
+          "text": "El Instituto Nacional de Transparencia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Regula el acceso a la información."
+        },
+        {
+          "key": "g",
+          "text": "La Comisión Nacional de Arbitraje Médico o la comisión estatal correspondiente",
+          "correct": true,
+          "rationale": "Ofrece conciliación y arbitraje en conflictos médico paciente."
+        },
+        {
+          "key": "h",
+          "text": "La Suprema Corte de Justicia como primera instancia",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es la primera instancia."
+        },
+        {
+          "key": "i",
+          "text": "Solo las redes sociales",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es una instancia formal."
+        },
+        {
+          "key": "j",
+          "text": "No existe una instancia para estos conflictos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Sí existe."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "g"
+      ],
+      "explanation": "La Comisión Nacional de Arbitraje Médico, creada en 1996, es un órgano desconcentrado de la Secretaría de Salud que ofrece mecanismos alternativos para la resolución de conflictos entre usuarios y prestadores de servicios médicos, públicos y privados, mediante orientación, gestión inmediata, conciliación y arbitraje, sin costo. Existen comisiones estatales en la mayoría de las entidades. También promovió la Carta de los Derechos Generales de los Pacientes y la de los médicos. Su objetivo es mejorar la calidad de la atención y la seguridad del paciente. El expediente clínico completo y bien elaborado es fundamental en estos procesos.",
+      "gpcRefs": [
+        "Decreto de creación de la Comisión Nacional de Arbitraje Médico",
+        "Carta de los derechos generales de los pacientes de la Comisión Nacional de Arbitraje Médico"
+      ]
+    },
+    {
+      "key": "fam-07b-expediente-q16",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "clinical_record_nom",
+      "vignette": "Antes de una cirugía programada, el cirujano elabora una nota en el expediente con los datos del procedimiento que realizará al día siguiente.",
+      "prompt": "¿Qué contenido indica la norma para la nota preoperatoria?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "El riesgo quirúrgico no debe registrarse para no alarmar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Debe registrarse."
+        },
+        {
+          "key": "b",
+          "text": "La nota preoperatoria es opcional en cirugía menor",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es obligatoria."
+        },
+        {
+          "key": "c",
+          "text": "Solo los resultados de laboratorio",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Faltan elementos."
+        },
+        {
+          "key": "d",
+          "text": "Basta con una nota verbal al equipo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Debe ser escrita."
+        },
+        {
+          "key": "e",
+          "text": "Solo la técnica anestésica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Corresponde a la nota preanestésica."
+        },
+        {
+          "key": "f",
+          "text": "Solo el nombre del cirujano",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Es insuficiente."
+        },
+        {
+          "key": "g",
+          "text": "Fecha de la cirugía, diagnóstico, plan quirúrgico, tipo de intervención, riesgo quirúrgico, cuidados y plan terapéutico preoperatorios y pronóstico",
+          "correct": true,
+          "rationale": "Son los elementos de la nota preoperatoria."
+        },
+        {
+          "key": "h",
+          "text": "Solo los signos vitales del día",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Faltan elementos."
+        },
+        {
+          "key": "i",
+          "text": "Una descripción de los hallazgos operatorios",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Corresponde a la nota posoperatoria."
+        },
+        {
+          "key": "j",
+          "text": "Solo el consentimiento informado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es otro documento."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "f",
+        "g"
+      ],
+      "explanation": "La norma del expediente clínico establece que la nota preoperatoria debe ser elaborada por el cirujano dentro de un periodo no mayor de 24 horas antes de la cirugía programada, y contener la fecha de la cirugía, el diagnóstico, el plan quirúrgico, el tipo de intervención quirúrgica, el riesgo quirúrgico, los cuidados y el plan terapéutico preoperatorios y el pronóstico. Además, el anestesiólogo elabora la nota preanestésica con la valoración del riesgo anestésico, y después de la cirugía se elabora la nota posoperatoria con la técnica, los hallazgos, los incidentes, el sangrado y el estado del paciente.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana del expediente clínico",
+        "Manual de procedimientos para la integración del expediente clínico"
+      ]
+    },
+    {
+      "key": "fam-07b-expediente-q17",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "medical_ethics_law",
+      "subtopic": "clinical_record_nom",
+      "vignette": "Un hospital revisa qué procedimientos requieren carta de consentimiento informado por escrito según la norma del expediente clínico.",
+      "prompt": "¿Qué situación indica la norma como requisito de carta de consentimiento informado?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cualquier consulta externa de rutina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se requiere carta escrita en cada consulta."
+        },
+        {
+          "key": "b",
+          "text": "Solo los procedimientos estéticos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La lista es más amplia."
+        },
+        {
+          "key": "c",
+          "text": "Solo las cirugías mayores",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "También otros procedimientos."
+        },
+        {
+          "key": "d",
+          "text": "La carta firmada libera al médico de toda responsabilidad por negligencia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No exime de la mala práctica."
+        },
+        {
+          "key": "e",
+          "text": "La toma de presión arterial",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No requiere carta escrita."
+        },
+        {
+          "key": "f",
+          "text": "Solo procedimientos realizados en hospitales privados",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Aplica a todas las instituciones."
+        },
+        {
+          "key": "g",
+          "text": "Solo la necropsia",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Es solo uno de los eventos."
+        },
+        {
+          "key": "h",
+          "text": "Ningún procedimiento requiere carta escrita",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Varios la requieren."
+        },
+        {
+          "key": "i",
+          "text": "Solo cuando el paciente lo solicite",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es obligatoria en ciertos eventos."
+        },
+        {
+          "key": "j",
+          "text": "Ingreso hospitalario, procedimientos quirúrgicos, anestesia, salpingoclasia y vasectomía, transfusiones e investigación clínica, entre otros",
+          "correct": true,
+          "rationale": "La norma enumera los eventos que la requieren."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "La norma oficial mexicana del expediente clínico establece que se requiere carta de consentimiento informado por escrito, entre otros, en el ingreso hospitalario, los procedimientos de cirugía mayor, los procedimientos que requieren anestesia general o regional, la salpingoclasia y la vasectomía, el trasplante, la investigación clínica en seres humanos, la necropsia hospitalaria, los procedimientos diagnósticos y terapéuticos considerados de alto riesgo y la amputación o mutilación. La carta debe incluir el acto autorizado, los riesgos y beneficios esperados, la autorización para atender contingencias y las firmas del paciente, del médico y de dos testigos. No exime de responsabilidad por negligencia.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana del expediente clínico",
+        "Manual de procedimientos para la integración del expediente clínico"
+      ]
+    }
+  ]
+}

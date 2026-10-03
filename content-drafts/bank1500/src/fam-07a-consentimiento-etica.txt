@@ -1,0 +1,255 @@
+@ fam|medical_ethics_law|informed_consent|2|data_interpretation
+V: Hombre de 60 años al que se le propone una colecistectomía laparoscópica. El cirujano le explica el diagnóstico, el procedimiento, los beneficios, los riesgos, las alternativas y las consecuencias de no operarse. El paciente comprende y firma.
+P: ¿Qué principio bioético se respeta principalmente con este proceso?
++ Autonomía || El paciente decide de forma libre e informada sobre su atención.
+- anchoring | Justicia || Se refiere a la distribución equitativa de recursos.
+- availability_heuristic | Beneficencia || Se refiere a actuar en beneficio del paciente.
+- representativeness_heuristic | No maleficencia || Se refiere a no causar daño.
+- premature_closure | Confidencialidad || Se refiere a proteger la información.
+- framing_effect | Paternalismo médico || Es lo opuesto a respetar la autonomía.
+- complexity_bias | Principio del doble efecto || Se aplica a acciones con efectos buenos y malos.
+- base_rate_fallacy | Utilitarismo || Busca el mayor bien para el mayor número.
+- belief_bias | El consentimiento es solo un trámite administrativo || Es un proceso ético y legal.
+- focusing_illusion | Veracidad exclusivamente || Es parte del proceso, pero el principio central es la autonomía.
+E: Los cuatro principios de la bioética de Beauchamp y Childress son autonomía, el respeto a la capacidad de la persona para decidir sobre su cuerpo y su salud; beneficencia, actuar en beneficio del paciente; no maleficencia, evitar causar daño; y justicia, la distribución equitativa de los recursos y el trato igualitario. El consentimiento informado es la expresión práctica del principio de autonomía: es un proceso de comunicación en el que el paciente capaz recibe información suficiente y comprensible sobre el diagnóstico, el procedimiento, los beneficios, los riesgos, las alternativas y las consecuencias de no tratarse, y decide de forma libre y voluntaria.
+R: Norma Oficial Mexicana del expediente clínico ;; Guía nacional para la integración y el funcionamiento de los comités hospitalarios de bioética
+
+@ fam|medical_ethics_law|informed_consent|3|next_step
+V: Hombre de 35 años llega a urgencias inconsciente tras un accidente de tránsito, con hemorragia intraabdominal y choque. No hay familiares presentes ni documentos sobre sus preferencias. Requiere cirugía inmediata.
+P: ¿Cuál es la conducta más apropiada respecto al consentimiento?
++ Realizar la cirugía de urgencia sin consentimiento escrito, documentando la urgencia en el expediente || En una urgencia que pone en riesgo la vida y sin posibilidad de obtener consentimiento, se actúa en beneficio del paciente.
+- anchoring | Esperar a localizar a un familiar para que firme || El retraso pone en riesgo su vida.
+- availability_heuristic | Solicitar autorización a un juez antes de operar || No hay tiempo y no es necesario.
+- representativeness_heuristic | No operar porque no hay consentimiento || Es una excepción reconocida.
+- premature_closure | Pedir a un desconocido que firme como testigo responsable || No es válido como representante.
+- framing_effect | Trasladarlo a otro hospital para que allá decidan || Retrasa una atención urgente.
+- complexity_bias | Convocar al comité de bioética antes de operar || No hay tiempo en una urgencia.
+- base_rate_fallacy | Toda cirugía sin firma es ilegal sin excepción || La urgencia es una excepción.
+- belief_bias | Solo el director del hospital puede autorizar || La norma prevé la autorización de dos médicos en urgencias.
+- omission_bias | No registrar la justificación en el expediente || Debe documentarse.
+E: La norma mexicana del expediente clínico establece que en casos de urgencia, cuando el paciente no puede otorgar su consentimiento y no está presente un familiar o representante legal, los médicos autorizados del hospital pueden realizar el procedimiento necesario para salvar la vida o evitar un daño grave, previa valoración del caso y con el acuerdo de al menos dos de ellos, dejando constancia por escrito en el expediente clínico. Esta excepción se basa en los principios de beneficencia y en el consentimiento presunto. Cuando el paciente recupera la capacidad, se le informa de lo realizado.
+R: Norma Oficial Mexicana del expediente clínico ;; Reglamento de la Ley General de Salud en materia de prestación de servicios de atención médica
+
+@ fam|medical_ethics_law|informed_consent|3|next_step
+V: Mujer de 40 años, testigo de Jehová, consciente, orientada y con capacidad para decidir, con sangrado digestivo y hemoglobina de 7 g/dL, hemodinámicamente estable. Rechaza transfusiones de sangre aun conociendo los riesgos.
+P: ¿Cuál es la conducta más apropiada?
++ Respetar su decisión, documentar el rechazo informado y ofrecer alternativas sin sangre || Una adulta capaz tiene derecho a rechazar un tratamiento.
+- anchoring | Transfundir de todas formas porque la vida es prioritaria || Viola su autonomía y es ilegal en una adulta capaz.
+- availability_heuristic | Solicitar a su esposo que autorice la transfusión || La decisión corresponde a la paciente capaz.
+- representativeness_heuristic | Declararla incapaz por su creencia religiosa || Sus creencias no la hacen incapaz.
+- premature_closure | Dar de alta voluntaria inmediata sin otras opciones || Debe seguir recibiendo atención con alternativas.
+- framing_effect | Transfundirla mientras está sedada || Es una violación grave de su autonomía.
+- complexity_bias | Solicitar una orden judicial para transfundir a una adulta capaz || No procede.
+- base_rate_fallacy | El rechazo de transfusión nunca es válido || Es válido en adultos capaces.
+- belief_bias | Respetar su decisión equivale a abandonarla || Se continúa la atención con alternativas.
+- omission_bias | No explorar alternativas como hierro intravenoso o eritropoyetina || Son opciones válidas.
+E: Una persona adulta con capacidad para decidir tiene derecho a aceptar o rechazar cualquier tratamiento, incluso si el rechazo pone en riesgo su vida, como ocurre con los testigos de Jehová que rechazan transfusiones. El médico debe asegurarse de que la paciente comprenda los riesgos, respetar su decisión, documentar el rechazo informado en el expediente y ofrecer alternativas, como agentes hemostáticos, hierro intravenoso, eritropoyetina, técnicas de ahorro de sangre y control endoscópico del sangrado. La situación es distinta en menores de edad, en quienes prevalece el interés superior del menor.
+R: Norma Oficial Mexicana del expediente clínico ;; Guía nacional para la integración y el funcionamiento de los comités hospitalarios de bioética
+
+@ fam|medical_ethics_law|informed_consent|3|next_step
+V: Niño de 6 años con leucemia que requiere transfusión urgente de concentrado eritrocitario por hemoglobina de 4 g/dL e inestabilidad hemodinámica. Sus padres, testigos de Jehová, rechazan la transfusión.
+P: ¿Cuál es la conducta más apropiada?
++ Transfundir para salvar la vida del niño, documentar e informar a las autoridades conforme al interés superior del menor || En menores en riesgo vital prevalece su derecho a la vida y la salud.
+- anchoring | Respetar la decisión de los padres sin transfundir || El interés superior del menor prevalece en riesgo vital.
+- availability_heuristic | Esperar a que el niño decida por sí mismo || No tiene capacidad legal ni hay tiempo.
+- representativeness_heuristic | Dar de alta al niño con sus padres || Lo expone a la muerte.
+- premature_closure | Solo administrar soluciones cristaloides indefinidamente || No corrige la anemia grave.
+- framing_effect | Transferir la responsabilidad a otro hospital sin atender || Retrasa una atención urgente.
+- complexity_bias | Esperar una sesión ordinaria del comité de bioética para decidir || No hay tiempo en una urgencia vital.
+- base_rate_fallacy | Los padres tienen derecho absoluto sobre los tratamientos de sus hijos || Su autoridad tiene límites.
+- belief_bias | Transfundir implica faltar al respeto a la familia sin justificación || Se justifica por el riesgo vital del menor.
+- omission_bias | No intentar dialogar con los padres ni ofrecer alternativas cuando sea posible || El diálogo debe intentarse.
+E: En los menores de edad, las decisiones las toman los padres o tutores en función del interés superior del niño. Cuando los padres rechazan un tratamiento necesario para salvar la vida de su hijo, como una transfusión en una urgencia, prevalece el derecho del menor a la vida y la salud. En urgencias se procede a transfundir, se documenta en el expediente la justificación médica y se da aviso a las autoridades correspondientes, como el sistema de protección de niñas, niños y adolescentes. En situaciones no urgentes se busca el diálogo, alternativas sin sangre y, de ser necesario, la intervención del comité de bioética y la autoridad judicial.
+R: Ley General de los Derechos de Niñas, Niños y Adolescentes ;; Guía nacional para la integración y el funcionamiento de los comités hospitalarios de bioética
+
+@ fam|medical_ethics_law|informed_consent|3|data_interpretation
+V: Hombre de 78 años con demencia moderada al que se propone una cirugía de cadera. No comprende la información, no puede repetir lo que se le explica ni razonar sobre las opciones. Su hija es su cuidadora principal.
+P: ¿Qué indica la evaluación de la capacidad del paciente para decidir?
++ Que no tiene capacidad para esta decisión y el consentimiento lo otorga su representante legal o familiar responsable || Carece de comprensión, apreciación y razonamiento.
+- anchoring | Que tiene capacidad plena porque es adulto || La edad adulta no garantiza capacidad.
+- availability_heuristic | Que el diagnóstico de demencia anula cualquier decisión en cualquier tema || La capacidad se evalúa para cada decisión.
+- representativeness_heuristic | Que el médico debe decidir solo sin involucrar a la familia || Debe involucrarse al representante.
+- premature_closure | Que debe esperarse a que mejore la demencia para operar || La demencia es progresiva.
+- framing_effect | Que el paciente puede firmar porque sabe escribir su nombre || Firmar no es lo mismo que comprender.
+- complexity_bias | Que se requiere una resolución judicial de interdicción para cualquier procedimiento || No siempre es necesaria.
+- base_rate_fallacy | Que todos los adultos mayores carecen de capacidad || La capacidad depende del individuo.
+- belief_bias | Que su opinión no debe considerarse en absoluto || Se debe buscar su asentimiento en lo posible.
+- focusing_illusion | Que la hija debe decidir según sus propios valores y no los del paciente || Debe decidir según los valores y el interés del paciente.
+E: La capacidad para tomar decisiones médicas es específica para cada decisión y se evalúa con cuatro criterios: comprender la información, apreciar cómo se aplica a la propia situación, razonar sobre las opciones y expresar una elección. Un diagnóstico como la demencia no implica por sí solo incapacidad, pero cuando el paciente no cumple estos criterios, el consentimiento lo otorga su representante legal o familiar responsable, quien debe decidir según los valores conocidos y el interés del paciente. Aun así, se busca la participación y el asentimiento del paciente en la medida de lo posible, y se documenta la evaluación.
+R: Norma Oficial Mexicana del expediente clínico ;; Guía nacional para la integración y el funcionamiento de los comités hospitalarios de bioética
+
+@ fam|medical_ethics_law|informed_consent|3|data_interpretation
+V: Paciente de 80 años con cáncer metastásico y dolor intenso refractario en etapa terminal. Se indica morfina en dosis crecientes para controlar el dolor, sabiendo que puede deprimir la respiración y acortar la vida.
+P: ¿Qué principio bioético justifica este tratamiento?
++ Principio del doble efecto || La intención es aliviar el dolor; el posible acortamiento de la vida es un efecto previsto pero no buscado.
+- anchoring | Eutanasia activa || La intención no es causar la muerte.
+- availability_heuristic | Principio de justicia distributiva || Se refiere a la distribución de recursos.
+- representativeness_heuristic | Encarnizamiento terapéutico || Es lo opuesto, prolongar la vida sin beneficio.
+- premature_closure | Suicidio médicamente asistido || El paciente no busca morir con este tratamiento.
+- framing_effect | Principio de no maleficencia que prohíbe la morfina || El alivio del dolor es beneficio.
+- complexity_bias | Principio de precaución ambiental || No aplica.
+- base_rate_fallacy | La morfina en cuidados paliativos casi siempre acorta la vida || Bien titulada rara vez lo hace.
+- belief_bias | Aliviar el dolor con opioides está prohibido en México || Es un derecho del paciente.
+- focusing_illusion | Principio de autonomía exclusivamente || El fundamento principal es el doble efecto.
+E: El principio del doble efecto justifica una acción que tiene un efecto bueno y uno malo cuando la acción en sí es buena o neutra, la intención es lograr el efecto bueno, el efecto malo no es el medio para lograr el bueno y existe una razón proporcionada. En cuidados paliativos justifica el uso de opioides y la sedación paliativa para aliviar síntomas refractarios, aunque exista riesgo de depresión respiratoria. Se distingue de la eutanasia, en la que la intención es causar la muerte, prohibida en México. La Ley General de Salud reconoce el derecho a los cuidados paliativos.
+R: Ley General de Salud en materia de cuidados paliativos ;; Guía de Práctica Clínica de cuidados paliativos en el primer nivel
+
+@ fam|medical_ethics_law|informed_consent|3|data_interpretation
+V: Hombre de 70 años con insuficiencia cardiaca terminal que, en pleno uso de sus facultades, firmó ante notario un documento en el que manifiesta su deseo de no ser reanimado ni recibir medidas que prolonguen artificialmente su vida.
+P: ¿Qué figura legal indica este documento?
++ Voluntad anticipada || Expresa la decisión de una persona capaz sobre tratamientos futuros en caso de enfermedad terminal.
+- anchoring | Testamento de bienes || Se refiere a la distribución del patrimonio.
+- availability_heuristic | Carta de consentimiento para cirugía || Se refiere a un procedimiento concreto.
+- representativeness_heuristic | Solicitud de eutanasia || La eutanasia no está permitida en México.
+- premature_closure | Poder notarial para asuntos bancarios || No se refiere a decisiones médicas.
+- framing_effect | Alta voluntaria || Se refiere al egreso hospitalario.
+- complexity_bias | Declaración de interdicción || La declara un juez.
+- base_rate_fallacy | Un documento sin validez legal en México || Varias entidades tienen ley de voluntad anticipada.
+- belief_bias | Obliga al médico a practicar eutanasia || Solo rechaza medidas que prolongan la vida.
+- focusing_illusion | Carta de rechazo de transfusiones exclusivamente || Es más amplia.
+E: La voluntad anticipada es el documento en el que una persona capaz manifiesta su decisión de recibir o no ciertos tratamientos médicos, como reanimación cardiopulmonar o ventilación mecánica, en caso de encontrarse en una situación de enfermedad terminal en la que no pueda expresar su voluntad. En México existen leyes de voluntad anticipada en la Ciudad de México y varias entidades federativas, y la Ley General de Salud reconoce el derecho a los cuidados paliativos y a rechazar tratamientos que prolonguen la vida de forma desproporcionada. No es eutanasia: busca evitar la obstinación terapéutica y permitir una muerte digna.
+R: Ley de voluntad anticipada para el Distrito Federal ;; Ley General de Salud en materia de cuidados paliativos
+
+@ fam|medical_ethics_law|informed_consent|2|next_step
+V: Hombre de 55 años con diagnóstico reciente de cáncer de páncreas avanzado. Su familia pide al médico que no le diga el diagnóstico porque "no lo soportaría". El paciente es capaz y pregunta qué tiene.
+P: ¿Cuál es la conducta más apropiada?
++ Informar al paciente su diagnóstico de forma gradual, empática y según lo que desee saber, escuchando también a la familia || El paciente capaz tiene derecho a conocer su diagnóstico.
+- anchoring | Ocultar el diagnóstico porque la familia lo pide || Viola el derecho del paciente a la información.
+- availability_heuristic | Mentirle diciéndole que tiene una gastritis || Viola el principio de veracidad.
+- representativeness_heuristic | Informarle de golpe todos los detalles sin preparación || La comunicación debe ser cuidadosa.
+- premature_closure | Delegar en la familia la decisión de informarle || La información corresponde al paciente.
+- framing_effect | Darle la información por escrito sin conversación || La noticia requiere diálogo.
+- complexity_bias | Solicitar autorización judicial para informarle || No es necesaria.
+- base_rate_fallacy | Los pacientes prefieren no conocer malas noticias || La mayoría desea saber.
+- belief_bias | Ocultar el diagnóstico protege siempre al paciente || Le impide tomar decisiones.
+- omission_bias | No ofrecer apoyo emocional ni plan de seguimiento || Es parte de la comunicación.
+E: El paciente capaz tiene derecho a recibir información veraz, suficiente y comprensible sobre su diagnóstico, pronóstico y tratamiento, como lo establece la Carta de los Derechos Generales de los Pacientes. La familia puede ser aliada, pero no tiene derecho a decidir que el paciente no sea informado. El protocolo SPIKES orienta la comunicación de malas noticias: preparar el entorno, explorar lo que el paciente sabe, preguntar cuánto quiere saber, dar la información de forma clara y gradual, responder a las emociones y acordar un plan. El paciente puede decidir no conocer detalles y delegar en un familiar.
+R: Carta de los derechos generales de los pacientes de la Comisión Nacional de Arbitraje Médico ;; Guía de Práctica Clínica de cuidados paliativos en el primer nivel
+
+@ fam|medical_ethics_law|informed_consent|3|next_step
+V: Adolescente de 16 años con diagnóstico reciente de VIH que pide al médico que no informe a sus padres. Es capaz de comprender su situación y acepta iniciar tratamiento antirretroviral.
+P: ¿Cuál es la conducta más apropiada respecto a la confidencialidad?
++ Respetar la confidencialidad, brindar el tratamiento, fomentar que involucre a un adulto de confianza y orientar sobre la notificación a sus parejas || Se protege su derecho a la confidencialidad y a la atención.
+- anchoring | Informar de inmediato a los padres sin su consentimiento || Viola su confidencialidad sin justificación de riesgo inminente.
+- availability_heuristic | Negar el tratamiento hasta que acuda con sus padres || Retrasa una atención necesaria.
+- representativeness_heuristic | Informar a su escuela || Viola la confidencialidad.
+- premature_closure | Publicar el caso para fines epidemiológicos con su nombre || La notificación epidemiológica es confidencial.
+- framing_effect | Informar a todos sus contactos sin su autorización como primera medida || Se busca la notificación asistida y voluntaria.
+- complexity_bias | Solicitar una orden judicial para iniciar tratamiento || No es necesaria.
+- base_rate_fallacy | Los adolescentes no tienen derecho a la confidencialidad || La norma la reconoce.
+- belief_bias | Respetar la confidencialidad impide la notificación epidemiológica || La notificación al sistema de vigilancia es confidencial.
+- omission_bias | No ofrecer apoyo psicológico || Es parte de la atención integral.
+E: La confidencialidad es un deber del médico y un derecho del paciente, incluidos los adolescentes, especialmente en temas de salud sexual y reproductiva, VIH y salud mental. Las normas mexicanas sobre VIH y salud del adolescente reconocen el derecho a recibir atención con confidencialidad. Se recomienda fomentar que el adolescente involucre a un adulto de confianza, sin imponerlo. Las excepciones a la confidencialidad incluyen el riesgo grave para el paciente o terceros, como ideación suicida o abuso, y la notificación al sistema de vigilancia epidemiológica, que también es confidencial. Se orienta sobre la notificación a las parejas sexuales.
+R: Norma Oficial Mexicana para la prevención y el control de la infección por virus de la inmunodeficiencia humana ;; Norma Oficial Mexicana para la atención a la salud del grupo etario de 10 a 19 años
+
+@ fam|medical_ethics_law|informed_consent|2|data_interpretation
+V: Un hospital debe decidir a qué paciente asignar la única cama disponible en la unidad de terapia intensiva entre varios pacientes graves. Se aplican criterios clínicos objetivos de gravedad y probabilidad de beneficio, sin considerar la capacidad de pago ni la condición social.
+P: ¿Qué principio bioético se aplica principalmente en esta decisión?
++ Justicia || Distribuye recursos limitados de forma equitativa con criterios objetivos.
+- anchoring | Autonomía || Se refiere a la decisión libre del paciente.
+- availability_heuristic | Beneficencia individual exclusivamente || La decisión involucra la distribución entre varios pacientes.
+- representativeness_heuristic | No maleficencia || Se refiere a no causar daño.
+- premature_closure | Confidencialidad || Se refiere a proteger la información.
+- framing_effect | Doble efecto || Se aplica a acciones con efectos buenos y malos.
+- complexity_bias | Principio de precaución || No corresponde.
+- base_rate_fallacy | Paternalismo || No describe la decisión.
+- belief_bias | Asignar la cama al primero que llegue sin evaluar es lo más justo || Deben considerarse criterios clínicos.
+- focusing_illusion | Veracidad || Se refiere a decir la verdad.
+E: El principio de justicia en bioética se refiere a la distribución equitativa de los recursos sanitarios y al trato igualitario de las personas, sin discriminación por condición social, económica, étnica, religiosa o de otro tipo. Cuando los recursos son escasos, como camas de terapia intensiva o ventiladores, se usan criterios clínicos objetivos y transparentes, como gravedad, probabilidad de beneficio y pronóstico, generalmente con el apoyo de un comité o un protocolo de triaje. Durante la pandemia de COVID-19 se elaboraron guías de asignación de recursos de medicina crítica basadas en este principio.
+R: Guía nacional para la integración y el funcionamiento de los comités hospitalarios de bioética ;; Guía bioética para asignación de recursos de medicina crítica del Consejo de Salubridad General
+
+@ fam|medical_ethics_law|informed_consent|3|next_step
+V: Mujer de 45 años que habla solo náhuatl acude con su hija de 12 años, quien traduce. Se le propone una histerectomía por miomatosis con sangrado anemizante. El hospital cuenta con un intérprete institucional.
+P: ¿Cuál es la conducta más apropiada para obtener el consentimiento informado?
++ Solicitar el apoyo del intérprete capacitado para informar en su lengua y verificar la comprensión || Garantiza información comprensible y respeta su derecho lingüístico.
+- anchoring | Usar a la hija de 12 años como intérprete para toda la información || No es adecuado por su edad y por el contenido.
+- availability_heuristic | Pedirle que firme en español aunque no lo entienda || El consentimiento no sería válido.
+- representativeness_heuristic | Decidir por ella porque no habla español || Viola su autonomía.
+- premature_closure | Operar sin consentimiento porque la comunicación es difícil || No es una urgencia vital.
+- framing_effect | Pedir al esposo que firme en su lugar sin informarla || La decisión corresponde a la paciente.
+- complexity_bias | Trasladarla a otra ciudad para encontrar un intérprete sin necesidad || El hospital ya cuenta con uno.
+- base_rate_fallacy | Los pacientes indígenas no requieren consentimiento detallado || Tienen los mismos derechos.
+- belief_bias | Con mostrar dibujos es suficiente sin intérprete || No garantiza comprensión completa.
+- omission_bias | No documentar la participación del intérprete || Debe registrarse.
+E: El consentimiento informado solo es válido si el paciente comprende la información. Las personas que hablan lenguas indígenas tienen derecho a recibir atención y información en su lengua, conforme a la Ley General de Derechos Lingüísticos de los Pueblos Indígenas y la Ley General de Salud. Se recomienda usar intérpretes capacitados y evitar a menores de edad como intérpretes, especialmente en temas delicados, por su edad, la posible omisión de información y el impacto emocional. Se verifica la comprensión pidiendo al paciente que explique con sus palabras lo que entendió y se documenta la participación del intérprete en el expediente.
+R: Ley General de Derechos Lingüísticos de los Pueblos Indígenas ;; Norma Oficial Mexicana del expediente clínico
+
+@ fam|medical_ethics_law|informed_consent|3|data_interpretation
+V: Un investigador desea realizar un ensayo clínico con un nuevo antihipertensivo en pacientes de su consulta. Planea iniciar el estudio sin someterlo a ningún comité y obtener solo un consentimiento verbal.
+P: ¿Qué requisito ético indica la normativa para este tipo de investigación?
++ Aprobación previa por comités de ética en investigación e investigación y consentimiento informado por escrito || La investigación en humanos requiere revisión independiente y consentimiento documentado.
+- anchoring | Basta con el consentimiento verbal del paciente || La investigación con riesgo requiere consentimiento escrito.
+- availability_heuristic | Solo se requiere la autorización del director de la clínica || Se requiere la revisión de comités.
+- representativeness_heuristic | No se requiere consentimiento si el fármaco es prometedor || El consentimiento es indispensable.
+- premature_closure | Es suficiente con informar a los pacientes al terminar el estudio || Deben ser informados antes.
+- framing_effect | Pagar a los pacientes elimina la necesidad de consentimiento || No la elimina.
+- complexity_bias | Se requiere aprobación del Congreso de la Unión || No es el requisito.
+- base_rate_fallacy | La investigación en la consulta privada no está regulada || Está regulada.
+- belief_bias | El beneficio para la ciencia justifica omitir el consentimiento || Los derechos del participante prevalecen.
+- focusing_illusion | Solo se requiere registrar el estudio después de publicarlo || El registro y la aprobación son previos.
+E: La investigación en seres humanos se rige por principios internacionales como el Código de Núremberg, la Declaración de Helsinki y el Informe Belmont, que establecen el respeto por las personas, la beneficencia y la justicia. En México, el Reglamento de la Ley General de Salud en materia de investigación exige que los protocolos sean aprobados por los comités de investigación y de ética en investigación de la institución, y que los participantes otorguen un consentimiento informado por escrito, de forma libre, con información sobre objetivos, riesgos, beneficios, alternativas, confidencialidad y el derecho a retirarse en cualquier momento sin consecuencias.
+R: Reglamento de la Ley General de Salud en materia de investigación para la salud ;; Declaración de Helsinki de la Asociación Médica Mundial
+
+@ fam|medical_ethics_law|informed_consent|3|data_interpretation
+V: Hombre de 85 años con demencia avanzada, inmóvil, sin comunicación verbal y con neumonía por aspiración recurrente. Su familia, de acuerdo con el equipo médico, decide no intubarlo ni ingresarlo a terapia intensiva y priorizar su confort.
+P: ¿Qué indica esta decisión desde el punto de vista bioético?
++ Adecuación del esfuerzo terapéutico para evitar la obstinación terapéutica || Se evitan medidas desproporcionadas y se priorizan los cuidados paliativos.
+- anchoring | Eutanasia activa || No se busca provocar la muerte.
+- availability_heuristic | Abandono del paciente || Se continúa con cuidados de confort.
+- representativeness_heuristic | Negligencia médica || Es una decisión clínica y ética fundamentada.
+- premature_closure | Suicidio asistido || No aplica.
+- framing_effect | Violación del principio de beneficencia || Se busca el mayor beneficio posible para el paciente.
+- complexity_bias | Requiere autorización judicial obligatoria || No es necesaria en este contexto.
+- base_rate_fallacy | Toda medida disponible debe aplicarse siempre || Las medidas desproporcionadas no benefician.
+- belief_bias | Limitar tratamientos equivale a matar al paciente || La muerte se debe a la enfermedad.
+- focusing_illusion | Principio de justicia distributiva exclusivamente || El fundamento principal es la proporcionalidad.
+E: La adecuación o limitación del esfuerzo terapéutico consiste en no iniciar o retirar medidas que solo prolongan la vida de forma desproporcionada sin ofrecer un beneficio real, en pacientes con enfermedades avanzadas e irreversibles, priorizando el confort y la dignidad. Se basa en los principios de beneficencia, no maleficencia y autonomía, y evita la obstinación terapéutica o encarnizamiento. Se diferencia de la eutanasia porque la muerte se debe a la evolución de la enfermedad. Debe ser una decisión compartida con el paciente o su representante, documentada en el expediente, y puede apoyarse en el comité de bioética.
+R: Ley General de Salud en materia de cuidados paliativos ;; Guía nacional para la integración y el funcionamiento de los comités hospitalarios de bioética
+
+@ fam|medical_ethics_law|informed_consent|2|data_interpretation
+V: Un representante de un laboratorio farmacéutico ofrece a un médico familiar un viaje con todos los gastos pagados a un destino turístico a cambio de prescribir su nuevo medicamento.
+P: ¿Qué indica esta situación desde el punto de vista ético?
++ Un conflicto de interés que debe rechazarse porque compromete la objetividad de las decisiones clínicas || La prescripción debe basarse en la evidencia y el interés del paciente.
+- anchoring | Una práctica aceptable si el medicamento es bueno || Condicionar la prescripción a un beneficio personal no es ético.
+- availability_heuristic | Una forma válida de educación médica continua || No es educativa si está condicionada.
+- representativeness_heuristic | Un incentivo que no influye en la prescripción || Los estudios muestran que sí influye.
+- premature_closure | Una decisión solo de la vida privada del médico || Afecta a los pacientes.
+- framing_effect | Aceptable si no se informa a los pacientes || La ocultación agrava el problema.
+- complexity_bias | Un asunto exclusivo de la Comisión Federal de Competencia || Es principalmente ético.
+- base_rate_fallacy | Los conflictos de interés son raros en medicina || Son frecuentes.
+- belief_bias | Los médicos son inmunes a la influencia de la industria || Están expuestos a ella.
+- focusing_illusion | Un problema de confidencialidad || El problema es la objetividad.
+E: Un conflicto de interés ocurre cuando un interés secundario, como un beneficio económico o personal, puede influir indebidamente en el juicio profesional, cuyo interés primario es el bienestar del paciente. Aceptar regalos, viajes o beneficios condicionados a la prescripción de un medicamento compromete la objetividad, afecta la confianza de los pacientes y puede aumentar costos sin beneficio clínico. Los códigos de ética médica recomiendan rechazar estos incentivos, declarar los conflictos de interés en investigación y docencia y basar las decisiones en la mejor evidencia disponible.
+R: Código de bioética para el personal de salud de la Comisión Nacional de Bioética ;; Lineamientos de transparencia en la relación con la industria farmacéutica
+
+@ fam|medical_ethics_law|informed_consent|3|next_step
+V: Mujer de 30 años que acude por lesiones en la cara y el brazo compatibles con agresión. Refiere que su pareja la golpeó. Pide que no se haga nada legal porque teme represalias.
+P: ¿Cuál es la conducta más apropiada desde el punto de vista legal y ético?
++ Atender las lesiones, informarle de sus derechos, elaborar un plan de seguridad y dar aviso al ministerio público conforme a la norma, explicándole el procedimiento || Las lesiones por violencia requieren aviso, respetando la atención integral.
+- anchoring | Atender las lesiones y no registrar nada por respeto a su decisión || La norma obliga a registrar y dar aviso.
+- availability_heuristic | Llamar a la pareja para mediar el conflicto || Puede aumentar el riesgo.
+- representativeness_heuristic | Negarle la atención hasta que denuncie || La atención no se condiciona.
+- premature_closure | Dar de alta sin evaluar el riesgo || Debe evaluarse el riesgo de nuevas agresiones.
+- framing_effect | Recomendarle que regrese a casa y evite provocar a su pareja || Culpabiliza a la víctima.
+- complexity_bias | Hospitalizarla obligatoriamente para protegerla || No está indicado si no lo requiere.
+- base_rate_fallacy | La violencia de pareja es un asunto privado sin implicaciones legales || Es un delito.
+- belief_bias | El médico no tiene obligaciones en casos de violencia || La norma establece obligaciones.
+- omission_bias | No documentar las lesiones en el expediente || Deben documentarse con detalle.
+E: La norma mexicana sobre violencia familiar, sexual y contra las mujeres establece que el personal de salud debe brindar atención médica y psicológica, informar a la usuaria sobre sus derechos y las opciones de apoyo, elaborar un plan de seguridad, registrar el caso y dar aviso al ministerio público cuando las lesiones lo ameriten, mediante el formato establecido. El aviso al ministerio público no equivale a una denuncia por parte de la paciente. Las lesiones deben documentarse con detalle en el expediente. El médico no debe culpabilizar a la víctima ni condicionar la atención a que denuncie.
+R: Norma Oficial Mexicana sobre violencia familiar, sexual y contra las mujeres ;; Norma Oficial Mexicana del expediente clínico
+
+@ fam|medical_ethics_law|informed_consent|3|next_step
+V: Mujer de 26 años con 2 hijos que solicita salpingoclasia después de su parto. Su esposo se opone. Ella es mayor de edad, capaz y ha recibido información sobre métodos reversibles y la naturaleza permanente del procedimiento.
+P: ¿Cuál es la conducta más apropiada respecto al consentimiento?
++ Realizar el procedimiento con el consentimiento informado por escrito de la paciente, sin requerir la autorización del esposo || La decisión sobre su cuerpo corresponde a la paciente capaz.
+- anchoring | Exigir la firma del esposo como requisito indispensable || No es requisito legal.
+- availability_heuristic | Negar el procedimiento por ser joven || La edad adulta y la capacidad le permiten decidir.
+- representativeness_heuristic | Realizar vasectomía al esposo en su lugar || La decisión es de la paciente.
+- premature_closure | Diferir la decisión hasta que el esposo acepte || Viola su autonomía.
+- framing_effect | Realizarlo sin explicar que es permanente || El consentimiento requiere información completa.
+- complexity_bias | Solicitar autorización judicial || No es necesaria.
+- base_rate_fallacy | Los métodos definitivos solo se permiten a mayores de 35 años || No hay ese requisito legal.
+- belief_bias | La familia debe decidir sobre la anticoncepción de la mujer || La decisión es personal.
+- omission_bias | No ofrecer consejería sobre métodos reversibles de larga duración || Debe ofrecerse.
+E: La norma mexicana de los servicios de planificación familiar establece que la elección de un método anticonceptivo, incluidos los definitivos, es una decisión libre e informada de la persona usuaria. Para la oclusión tubaria bilateral o la vasectomía se requiere consejería sobre su carácter permanente y las alternativas reversibles, y el consentimiento informado por escrito de la persona que se someterá al procedimiento, sin necesidad de la autorización de la pareja. Realizar un procedimiento anticonceptivo sin consentimiento es una violación de derechos. En personas jóvenes se debe asegurar una consejería cuidadosa por el riesgo de arrepentimiento.
+R: Norma Oficial Mexicana de los servicios de planificación familiar ;; Norma Oficial Mexicana del expediente clínico
