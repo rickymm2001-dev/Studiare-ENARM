@@ -1,0 +1,1430 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "fam-04b-adolescente-riesgo-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_risk",
+      "vignette": "Adolescente de 16 años que acude sola a solicitar un método anticonceptivo. Tiene pareja desde hace 4 meses y relaciones sexuales ocasionalmente sin protección. No desea embarazarse en los próximos años.",
+      "prompt": "¿Cuál es la recomendación de prevención más adecuada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Negar el método hasta que acuda con su madre o tutor",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La norma mexicana permite brindar anticoncepción a adolescentes."
+        },
+        {
+          "key": "b",
+          "text": "Solo método del ritmo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Tiene alta tasa de falla."
+        },
+        {
+          "key": "c",
+          "text": "Esterilización tubaria",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es apropiada en una adolescente."
+        },
+        {
+          "key": "d",
+          "text": "El condón solo es suficiente y no requiere otro método",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Su eficacia de uso típico es menor."
+        },
+        {
+          "key": "e",
+          "text": "Píldora de emergencia como método regular",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es un método de uso regular."
+        },
+        {
+          "key": "f",
+          "text": "Ofrecer un método reversible de acción prolongada, como implante o dispositivo intrauterino, junto con condón",
+          "correct": true,
+          "rationale": "Son los más eficaces y se recomiendan como primera opción en adolescentes."
+        },
+        {
+          "key": "g",
+          "text": "El dispositivo intrauterino está contraindicado en adolescentes sin hijos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es seguro en nulíparas."
+        },
+        {
+          "key": "h",
+          "text": "Los anticonceptivos causan infertilidad permanente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es cierto."
+        },
+        {
+          "key": "i",
+          "text": "No ofrecer prueba de infecciones de transmisión sexual",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte de la atención."
+        },
+        {
+          "key": "j",
+          "text": "Recomendar solo abstinencia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No previene embarazos en quien ya tiene actividad sexual."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "Los métodos anticonceptivos reversibles de acción prolongada, como el implante subdérmico de etonogestrel y los dispositivos intrauterinos de cobre o con levonorgestrel, tienen tasas de falla menores de 1 por ciento y no dependen del uso diario, por lo que se recomiendan como primera opción en adolescentes. Son seguros en nulíparas. Se recomienda el doble método con condón para prevenir infecciones de transmisión sexual. La norma mexicana de salud del adolescente reconoce el derecho de los adolescentes a recibir información y métodos anticonceptivos con confidencialidad. El embarazo adolescente es un problema prioritario en México.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana de los servicios de planificación familiar",
+        "Norma Oficial Mexicana para la atención a la salud del grupo etario de 10 a 19 años"
+      ]
+    },
+    {
+      "key": "fam-04b-adolescente-riesgo-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_risk",
+      "vignette": "Adolescente de 17 años que acude 36 horas después de una relación sexual en la que se rompió el condón. No usa otro método. Su última menstruación fue hace 12 días.",
+      "prompt": "¿Cuál es la medida de prevención de embarazo más adecuada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ultrasonido transvaginal antes de dar el método",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "b",
+          "text": "Iniciar anticonceptivos orales combinados a dosis habitual como única medida",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No actúan como emergencia de forma inmediata."
+        },
+        {
+          "key": "c",
+          "text": "Ducha vaginal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No previene el embarazo."
+        },
+        {
+          "key": "d",
+          "text": "Ya pasaron más de 24 horas y no es eficaz",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El levonorgestrel es eficaz hasta 72 horas o más."
+        },
+        {
+          "key": "e",
+          "text": "Exigir prueba de embarazo previa obligatoria",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es requisito si no hay sospecha de embarazo previo."
+        },
+        {
+          "key": "f",
+          "text": "No ofrecer un método regular después",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es una oportunidad de consejería."
+        },
+        {
+          "key": "g",
+          "text": "Anticoncepción de emergencia con levonorgestrel 1.5 mg en dosis única o dispositivo intrauterino de cobre",
+          "correct": true,
+          "rationale": "Se encuentra dentro del periodo eficaz."
+        },
+        {
+          "key": "h",
+          "text": "Requiere autorización de sus padres",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No se requiere."
+        },
+        {
+          "key": "i",
+          "text": "Esperar al retraso menstrual para hacer prueba de embarazo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se pierde la oportunidad de prevenir."
+        },
+        {
+          "key": "j",
+          "text": "La píldora de emergencia es abortiva",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Actúa principalmente retrasando la ovulación."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "La anticoncepción de emergencia reduce el riesgo de embarazo después de una relación sexual sin protección o con falla del método. El levonorgestrel 1.5 mg en dosis única es más eficaz cuanto antes se toma, idealmente en las primeras 72 horas, y puede usarse hasta 120 horas con menor eficacia. Actúa principalmente retrasando o inhibiendo la ovulación y no interrumpe un embarazo establecido. El dispositivo intrauterino de cobre insertado en los primeros 5 días es el método de emergencia más eficaz y además brinda anticoncepción continua. Se ofrece consejería para un método regular y tamizaje de infecciones.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana de los servicios de planificación familiar",
+        "Lineamiento técnico de anticoncepción de emergencia"
+      ]
+    },
+    {
+      "key": "fam-04b-adolescente-riesgo-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_risk",
+      "vignette": "Adolescente de 15 años que en la entrevista refiere tristeza, aislamiento, bajo rendimiento escolar y que ha pensado en quitarse la vida. Tiene un plan de tomar pastillas de su madre. Nunca lo ha intentado.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Iniciar fluoxetina y citar en 3 meses",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Requiere valoración urgente."
+        },
+        {
+          "key": "b",
+          "text": "Preguntar por suicidio aumenta el riesgo, por lo que se debe evitar el tema",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Preguntar no aumenta el riesgo."
+        },
+        {
+          "key": "c",
+          "text": "Considerarlo una búsqueda de atención típica de la adolescencia",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe tomarse en serio."
+        },
+        {
+          "key": "d",
+          "text": "Darle una plática sobre el valor de la vida y enviarlo a casa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es insuficiente."
+        },
+        {
+          "key": "e",
+          "text": "Mantener la confidencialidad y citarlo en un mes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El riesgo de daño rompe la confidencialidad."
+        },
+        {
+          "key": "f",
+          "text": "Solicitar estudios de laboratorio completos antes de decidir",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No retrasan la referencia."
+        },
+        {
+          "key": "g",
+          "text": "Los adolescentes rara vez completan un suicidio",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es una de las principales causas de muerte."
+        },
+        {
+          "key": "h",
+          "text": "No recomendar retirar los medicamentos y medios letales del hogar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es una medida protectora."
+        },
+        {
+          "key": "i",
+          "text": "Considerarlo riesgo alto, no dejarlo solo, informar a los padres y referir de inmediato a valoración psiquiátrica urgente",
+          "correct": true,
+          "rationale": "La ideación con plan específico es una urgencia."
+        },
+        {
+          "key": "j",
+          "text": "Si no lo ha intentado no está en riesgo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El plan indica riesgo alto."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "i"
+      ],
+      "explanation": "El suicidio es una de las principales causas de muerte en adolescentes en México. Se debe preguntar de forma directa sobre ideación suicida, ya que hacerlo no aumenta el riesgo. La ideación con un plan específico, acceso a medios o intentos previos indica riesgo alto y requiere valoración psiquiátrica urgente, sin dejar solo al paciente. En esta situación se rompe la confidencialidad para proteger su vida y se informa a los padres o tutores. Se recomienda restringir el acceso a medios letales, como medicamentos y armas. Los trastornos depresivos y el consumo de sustancias son factores asociados.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y manejo de la conducta suicida en el primer nivel",
+        "Programa de acción específico de prevención del suicidio"
+      ]
+    },
+    {
+      "key": "fam-04b-adolescente-riesgo-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_risk",
+      "vignette": "Adolescente de 16 años con pérdida de 12 kilos en 4 meses por restricción alimentaria y ejercicio excesivo. Índice de masa corporal de 15. Amenorrea de 3 meses. Frecuencia cardiaca de 38 por minuto, presión de 80/50 mmHg, potasio de 2.8 mEq/L.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hospitalizar para estabilización médica con realimentación cuidadosa",
+          "correct": true,
+          "rationale": "La bradicardia grave, la hipotensión y la hipopotasemia son criterios de hospitalización."
+        },
+        {
+          "key": "b",
+          "text": "Iniciar fluoxetina como tratamiento principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No corrige la desnutrición ni la inestabilidad."
+        },
+        {
+          "key": "c",
+          "text": "Psicoterapia ambulatoria como única medida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Primero requiere estabilizarse."
+        },
+        {
+          "key": "d",
+          "text": "Considerar la bradicardia un signo de buena condición física",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Con estos datos es un signo de gravedad."
+        },
+        {
+          "key": "e",
+          "text": "La amenorrea es normal en adolescentes deportistas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Indica deficiencia energética."
+        },
+        {
+          "key": "f",
+          "text": "Tratamiento ambulatorio con nutriólogo cada mes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene inestabilidad médica."
+        },
+        {
+          "key": "g",
+          "text": "Nutrición parenteral total de inicio en todos los casos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se prefiere la vía oral o enteral."
+        },
+        {
+          "key": "h",
+          "text": "No vigilar fósforo durante la realimentación",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La hipofosfatemia es grave."
+        },
+        {
+          "key": "i",
+          "text": "Dieta hipercalórica rápida en casa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Riesgo de síndrome de realimentación."
+        },
+        {
+          "key": "j",
+          "text": "La anorexia solo afecta a mujeres de clase alta",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Afecta a cualquier grupo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "f",
+        "i"
+      ],
+      "explanation": "La anorexia nerviosa se caracteriza por restricción de la ingesta con peso significativamente bajo, miedo intenso a ganar peso y alteración de la imagen corporal. Tiene la mortalidad más alta entre los trastornos mentales. Los criterios de hospitalización incluyen frecuencia cardiaca menor de 50 de día o 45 de noche, presión menor de 90/45, hipotensión ortostática, alteraciones electrolíticas como hipopotasemia o hipofosfatemia, arritmias, índice de masa corporal muy bajo o menor de 75 por ciento del peso esperado y rechazo a comer. La realimentación debe ser gradual con vigilancia de fósforo, potasio y magnesio por el riesgo de síndrome de realimentación.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de la conducta alimentaria",
+        "Guía de Práctica Clínica de atención integral del adolescente en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-04b-adolescente-riesgo-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_risk",
+      "vignette": "Adolescente de 17 años con peso normal que refiere episodios en los que come grandes cantidades de comida en poco tiempo con sensación de pérdida de control, seguidos de vómito autoinducido, 3 veces por semana desde hace 6 meses. Tiene callosidades en el dorso de la mano y aumento de volumen de las parótidas.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Anorexia nerviosa tipo purgativo",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Requiere peso significativamente bajo."
+        },
+        {
+          "key": "b",
+          "text": "Trastorno de rumiación",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Consiste en regurgitar sin náusea."
+        },
+        {
+          "key": "c",
+          "text": "Bulimia nerviosa",
+          "correct": true,
+          "rationale": "Atracones con conductas compensatorias en una paciente con peso normal."
+        },
+        {
+          "key": "d",
+          "text": "Trastorno de evitación restricción de alimentos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No hay atracones."
+        },
+        {
+          "key": "e",
+          "text": "Parotiditis viral",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica los atracones."
+        },
+        {
+          "key": "f",
+          "text": "Enfermedad por reflujo gastroesofágico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la conducta."
+        },
+        {
+          "key": "g",
+          "text": "Gastroparesia diabética",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay diabetes."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome de Prader-Willi",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es genético y de inicio infantil."
+        },
+        {
+          "key": "i",
+          "text": "Sialoadenitis bacteriana",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el patrón alimentario."
+        },
+        {
+          "key": "j",
+          "text": "Trastorno por atracón",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No incluye conductas compensatorias."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "La bulimia nerviosa se caracteriza por episodios recurrentes de atracones, con ingesta de grandes cantidades de comida y sensación de pérdida de control, seguidos de conductas compensatorias inapropiadas, como vómito autoinducido, laxantes, diuréticos, ayuno o ejercicio excesivo, al menos una vez por semana durante 3 meses, con una autoevaluación muy influida por el peso. A diferencia de la anorexia, el peso suele ser normal. Los signos físicos incluyen el signo de Russell, callosidades en los nudillos, hipertrofia de parótidas, erosión dental e hipopotasemia con alcalosis metabólica. El tratamiento es la terapia cognitivo conductual, y la fluoxetina es útil.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de la conducta alimentaria",
+        "Guía de Práctica Clínica de atención integral del adolescente en el primer nivel"
+      ]
+    },
+    {
+      "key": "fam-04b-adolescente-riesgo-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_risk",
+      "vignette": "Adolescente de 15 años que acude a consulta general. Refiere que en las fiestas sus amigos toman alcohol y fuman marihuana. El médico desea tamizar el consumo de sustancias de forma breve y validada.",
+      "prompt": "¿Cuál es la herramienta de tamizaje más adecuada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Cuestionario CAGE para adultos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está validado en adolescentes."
+        },
+        {
+          "key": "b",
+          "text": "Electroencefalograma",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "c",
+          "text": "Cuestionario CRAFFT",
+          "correct": true,
+          "rationale": "Está validado para detectar consumo de riesgo de alcohol y drogas en adolescentes."
+        },
+        {
+          "key": "d",
+          "text": "No ofrecer intervención breve si el tamizaje es positivo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La intervención breve es eficaz."
+        },
+        {
+          "key": "e",
+          "text": "No preguntar porque es menor de edad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El consumo inicia en la adolescencia."
+        },
+        {
+          "key": "f",
+          "text": "Si sus amigos consumen él también, por lo que no es necesario preguntar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Debe evaluarse individualmente."
+        },
+        {
+          "key": "g",
+          "text": "Preguntar solo a los padres",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El adolescente es la mejor fuente."
+        },
+        {
+          "key": "h",
+          "text": "Escala de depresión de Beck",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Evalúa depresión."
+        },
+        {
+          "key": "i",
+          "text": "Prueba de drogas en orina de rutina sin consentimiento",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es tamizaje y viola la confidencialidad."
+        },
+        {
+          "key": "j",
+          "text": "El consumo solo es relevante en mayores de 18 años",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El inicio temprano aumenta el riesgo de dependencia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "El cuestionario CRAFFT es una herramienta de tamizaje validada para adolescentes de 12 a 21 años que evalúa el consumo de alcohol, marihuana y otras sustancias. Sus preguntas se refieren a viajar en auto con alguien intoxicado, usar sustancias para relajarse, consumir a solas, olvidar cosas, que familiares o amigos sugieran reducir el consumo y meterse en problemas. Dos o más respuestas positivas indican riesgo alto. Un resultado positivo se sigue de una intervención breve y, según el caso, referencia a servicios especializados. El inicio temprano del consumo aumenta el riesgo de adicción.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, detección e intervención de las adicciones en atención primaria",
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones"
+      ]
+    },
+    {
+      "key": "fam-04b-adolescente-riesgo-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_risk",
+      "vignette": "Niña de 10 años que cursa quinto grado de primaria. Su madre pregunta si debe vacunarla contra el virus del papiloma humano porque \"todavía es muy pequeña\".",
+      "prompt": "¿Cuál es la recomendación más adecuada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Esperar a que inicie su vida sexual",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La protección es mayor antes de la exposición."
+        },
+        {
+          "key": "b",
+          "text": "No informar que también previene otros cánceres",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Previene cánceres anogenitales y orofaríngeos."
+        },
+        {
+          "key": "c",
+          "text": "Medir anticuerpos contra el virus antes de vacunar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "d",
+          "text": "La vacuna causa infertilidad",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es cierto."
+        },
+        {
+          "key": "e",
+          "text": "La vacuna sustituye el tamizaje futuro de cáncer cervicouterino",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El tamizaje sigue siendo necesario."
+        },
+        {
+          "key": "f",
+          "text": "El virus del papiloma humano es raro",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es la infección de transmisión sexual más frecuente."
+        },
+        {
+          "key": "g",
+          "text": "La vacuna fomenta el inicio temprano de relaciones sexuales",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No hay evidencia de ello."
+        },
+        {
+          "key": "h",
+          "text": "Realizar citología antes de vacunar",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es necesaria."
+        },
+        {
+          "key": "i",
+          "text": "Vacunar ahora, porque la vacuna es más eficaz antes del inicio de la vida sexual",
+          "correct": true,
+          "rationale": "El esquema en niñas de 9 a 14 años es de menos dosis y con mejor respuesta."
+        },
+        {
+          "key": "j",
+          "text": "Vacunar solo a partir de los 18 años",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se pierde el beneficio máximo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "La vacuna contra el virus del papiloma humano previene la infección por los tipos de alto riesgo responsables de la mayoría de los cánceres cervicouterinos, además de otros cánceres anogenitales y orofaríngeos y, según la vacuna, verrugas genitales. Es más eficaz cuando se aplica antes del inicio de la vida sexual. En México se aplica a niñas de quinto grado de primaria o de 11 años no escolarizadas, y la recomendación internacional incluye también a niños. En menores de 15 años la respuesta inmune es mayor, lo que permite esquemas de menos dosis. La vacunación no sustituye el tamizaje en la edad adulta.",
+      "gpcRefs": [
+        "Lineamientos de vacunación del Programa de Vacunación Universal",
+        "Norma Oficial Mexicana para la prevención, detección, diagnóstico, tratamiento, control y vigilancia epidemiológica del cáncer cervicouterino"
+      ]
+    },
+    {
+      "key": "fam-04b-adolescente-riesgo-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_risk",
+      "vignette": "Adolescente de 18 años, sexualmente activa con dos parejas en el último año, que acude a revisión. Asintomática, sin flujo ni dolor pélvico.",
+      "prompt": "¿Cuál es la prueba de tamizaje de infecciones de transmisión sexual más recomendada para ella?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tratamiento empírico sin pruebas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se prefiere el diagnóstico."
+        },
+        {
+          "key": "b",
+          "text": "No realizar pruebas porque está asintomática",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La mayoría de estas infecciones es asintomática."
+        },
+        {
+          "key": "c",
+          "text": "Ultrasonido pélvico como tamizaje",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No detecta infecciones asintomáticas."
+        },
+        {
+          "key": "d",
+          "text": "No ofrecer prueba de VIH y sífilis",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son parte del paquete preventivo."
+        },
+        {
+          "key": "e",
+          "text": "Prueba de amplificación de ácidos nucleicos para Chlamydia trachomatis y Neisseria gonorrhoeae",
+          "correct": true,
+          "rationale": "Se recomienda en mujeres sexualmente activas menores de 25 años."
+        },
+        {
+          "key": "f",
+          "text": "Laparoscopia diagnóstica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es invasiva."
+        },
+        {
+          "key": "g",
+          "text": "Cultivo de exudado faríngeo de rutina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es el tamizaje estándar."
+        },
+        {
+          "key": "h",
+          "text": "El condón ocasional elimina la necesidad de tamizaje",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El riesgo persiste."
+        },
+        {
+          "key": "i",
+          "text": "Citología cervical a los 18 años para infecciones",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es una prueba para estas infecciones."
+        },
+        {
+          "key": "j",
+          "text": "Tamizar solo a trabajadoras sexuales",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El grupo de mayor prevalencia son los jóvenes."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "Chlamydia trachomatis es la infección bacteriana de transmisión sexual más frecuente y la mayoría de las mujeres infectadas no tiene síntomas. Sin tratamiento puede causar enfermedad pélvica inflamatoria, infertilidad y embarazo ectópico. Por ello se recomienda tamizaje anual en mujeres sexualmente activas menores de 25 años y en mayores con factores de riesgo, con pruebas de amplificación de ácidos nucleicos en orina o exudado vaginal, que detectan también gonorrea. Se ofrecen además pruebas de VIH, sífilis y hepatitis, y consejería sobre el uso del condón. El tratamiento se extiende a las parejas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de las infecciones de transmisión sexual en el primer nivel",
+        "Norma Oficial Mexicana para la prevención y control de las infecciones de transmisión sexual"
+      ]
+    },
+    {
+      "key": "fam-04b-adolescente-riesgo-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_risk",
+      "vignette": "En un informe estatal de salud se presentan las causas de muerte en adolescentes de 15 a 19 años. El director pide identificar la causa que debe ser prioridad para las campañas preventivas.",
+      "prompt": "¿Qué indican las estadísticas sobre la principal causa de defunción en este grupo de edad?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Las enfermedades diarreicas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Predominan en lactantes."
+        },
+        {
+          "key": "b",
+          "text": "Las causas externas, como accidentes de tránsito, homicidios y suicidios",
+          "correct": true,
+          "rationale": "Son las principales causas de muerte en adolescentes."
+        },
+        {
+          "key": "c",
+          "text": "La diabetes mellitus",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Es causa principal en adultos."
+        },
+        {
+          "key": "d",
+          "text": "Los tumores malignos como primera causa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Son causa importante pero no la primera."
+        },
+        {
+          "key": "e",
+          "text": "Las infecciones respiratorias",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Predominan en menores de 5 años."
+        },
+        {
+          "key": "f",
+          "text": "Las complicaciones del embarazo como única causa",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Contribuyen pero no son la principal."
+        },
+        {
+          "key": "g",
+          "text": "Las enfermedades raras genéticas",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Son poco frecuentes."
+        },
+        {
+          "key": "h",
+          "text": "La desnutrición",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es la principal en este grupo."
+        },
+        {
+          "key": "i",
+          "text": "Las malformaciones congénitas",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Predominan en menores de 1 año."
+        },
+        {
+          "key": "j",
+          "text": "Las enfermedades cardiovasculares",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Predominan en adultos mayores."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "e",
+        "j"
+      ],
+      "explanation": "En México y en el mundo, las causas externas, que incluyen accidentes de tránsito, homicidios, suicidios y ahogamientos, son las principales causas de muerte en adolescentes y adultos jóvenes, sobre todo en varones. Muchas de ellas se relacionan con conductas de riesgo, como conducir bajo los efectos del alcohol, no usar cinturón de seguridad ni casco, el acceso a armas y la violencia. Por ello, las intervenciones preventivas en adolescentes se enfocan en la seguridad vial, la prevención de violencia, la salud mental y el consumo de sustancias. Las enfermedades crónicas aún son poco frecuentes en esta edad.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la atención a la salud del grupo etario de 10 a 19 años",
+        "Programa de acción específico de salud sexual y reproductiva para adolescentes"
+      ]
+    },
+    {
+      "key": "fam-04b-adolescente-riesgo-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_risk",
+      "vignette": "Adolescente de 14 años que acude con su madre por dolor abdominal. Durante la entrevista a solas refiere que su novio de 16 años la amenaza, revisa su celular y la ha empujado. Tiene miedo de terminar la relación.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Indicarle que termine la relación sin más apoyo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No considera los riesgos ni la red de apoyo."
+        },
+        {
+          "key": "b",
+          "text": "Confrontar al novio en la consulta",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede aumentar el riesgo."
+        },
+        {
+          "key": "c",
+          "text": "Considerarlo un conflicto normal de pareja adolescente",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El control y la agresión física son violencia."
+        },
+        {
+          "key": "d",
+          "text": "Si no hay lesiones visibles no es violencia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La violencia psicológica también lo es."
+        },
+        {
+          "key": "e",
+          "text": "La violencia en el noviazgo es rara en adolescentes",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es frecuente."
+        },
+        {
+          "key": "f",
+          "text": "No registrar el caso conforme a la norma de violencia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe documentarse y notificarse."
+        },
+        {
+          "key": "g",
+          "text": "Solicitar tomografía de abdomen para documentar lesiones",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada sin datos."
+        },
+        {
+          "key": "h",
+          "text": "Validar su relato, evaluar su seguridad, elaborar un plan de seguridad y activar la red de apoyo y los servicios de atención a la violencia",
+          "correct": true,
+          "rationale": "Es violencia en el noviazgo."
+        },
+        {
+          "key": "i",
+          "text": "Mantener absoluta confidencialidad sin ninguna acción",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Hay riesgo de daño."
+        },
+        {
+          "key": "j",
+          "text": "Tratar solo el dolor abdominal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se pierde la oportunidad de intervenir."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "La violencia en el noviazgo es frecuente en adolescentes e incluye violencia psicológica, como control, celos, amenazas y vigilancia del celular, física y sexual. Se asocia con depresión, consumo de sustancias, embarazo no planeado y conductas suicidas. El médico debe preguntar en privado, escuchar sin juzgar, validar el relato, evaluar el riesgo inmediato, elaborar un plan de seguridad e involucrar a un adulto de confianza y a los servicios especializados. La norma mexicana sobre violencia familiar, sexual y contra las mujeres establece la obligación de detectar, atender, registrar y notificar estos casos, especialmente en menores de edad.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana sobre violencia familiar, sexual y contra las mujeres",
+        "Guía de Práctica Clínica de detección y atención de la violencia en adolescentes"
+      ]
+    },
+    {
+      "key": "fam-04b-adolescente-riesgo-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_risk",
+      "vignette": "Adolescente de 16 años que usa cigarro electrónico desde hace 6 meses porque cree que es inofensivo. No fuma cigarros convencionales. Su padre fuma.",
+      "prompt": "¿Cuál es la recomendación de prevención más adecuada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Informar que los vapeadores contienen nicotina y otras sustancias dañinas, y ofrecer consejería breve para la cesación",
+          "correct": true,
+          "rationale": "El vapeo genera adicción y se asocia con inicio del tabaquismo."
+        },
+        {
+          "key": "b",
+          "text": "La nicotina no es adictiva en adolescentes",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Son más vulnerables a la adicción."
+        },
+        {
+          "key": "c",
+          "text": "No intervenir porque no fuma cigarros",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El vapeo también es un riesgo."
+        },
+        {
+          "key": "d",
+          "text": "Recomendar solo reducir la frecuencia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La meta es suspender."
+        },
+        {
+          "key": "e",
+          "text": "Prescribir vareniclina como primera medida en adolescentes",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La consejería es el primer paso."
+        },
+        {
+          "key": "f",
+          "text": "El vapeo solo contiene vapor de agua",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Contiene nicotina, metales y otros compuestos."
+        },
+        {
+          "key": "g",
+          "text": "Recomendar cambiar a cigarro convencional de bajo contenido",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es igualmente dañino."
+        },
+        {
+          "key": "h",
+          "text": "Considerarlo una alternativa segura al tabaco",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es inocuo."
+        },
+        {
+          "key": "i",
+          "text": "Tomografía de tórax de alta resolución de rutina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada sin síntomas."
+        },
+        {
+          "key": "j",
+          "text": "No preguntar por otros consumos ni involucrar a la familia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte del abordaje."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "Los cigarros electrónicos y vapeadores contienen nicotina, saborizantes, metales y otros compuestos tóxicos. La nicotina es altamente adictiva, sobre todo en el cerebro adolescente en desarrollo, y su uso se asocia con mayor riesgo de iniciar el consumo de cigarros convencionales. Además se han descrito lesiones pulmonares graves asociadas al vapeo. En México su comercialización está prohibida. Se recomienda preguntar por el consumo de tabaco y vapeadores en todas las consultas con adolescentes, dar consejería breve con la estrategia de las 5 A y abordar el tabaquismo en el hogar como factor de riesgo.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del consumo de tabaco",
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones"
+      ]
+    },
+    {
+      "key": "fam-04b-adolescente-riesgo-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_risk",
+      "vignette": "Adolescente de 13 años que acude por dolor abdominal recurrente los días de escuela, sin datos de alarma y con exploración normal. Al entrevistarlo refiere que unos compañeros lo insultan, lo excluyen y publican burlas sobre él en redes sociales.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solicitar endoscopia por el dolor abdominal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay datos de alarma."
+        },
+        {
+          "key": "b",
+          "text": "Reconocer el acoso escolar, evaluar su estado emocional y riesgo suicida, involucrar a los padres y coordinar con la escuela",
+          "correct": true,
+          "rationale": "El acoso escolar causa síntomas somáticos y afecta la salud mental."
+        },
+        {
+          "key": "c",
+          "text": "Considerarlo una conducta normal entre adolescentes",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "El acoso no es normal."
+        },
+        {
+          "key": "d",
+          "text": "Hospitalizar para estudio del dolor",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "e",
+          "text": "Recomendar que cambie de escuela sin más intervención",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No resuelve la situación ni el estado emocional."
+        },
+        {
+          "key": "f",
+          "text": "No preguntar por ideación suicida",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte de la evaluación."
+        },
+        {
+          "key": "g",
+          "text": "Si responde con agresión el acoso terminará",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede agravar la situación."
+        },
+        {
+          "key": "h",
+          "text": "Indicar que ignore a sus compañeros",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Minimiza el problema."
+        },
+        {
+          "key": "i",
+          "text": "El acoso por redes sociales no tiene consecuencias reales",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se asocia con depresión y suicidio."
+        },
+        {
+          "key": "j",
+          "text": "Dar antiespasmódico y alta",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No aborda la causa."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "El acoso escolar es la agresión intencional y repetida en una relación de desequilibrio de poder, e incluye agresiones verbales, físicas, exclusión social y acoso por medios digitales o ciberacoso. Las víctimas presentan síntomas somáticos como dolor abdominal y cefalea, ausentismo escolar, ansiedad, depresión, baja autoestima y mayor riesgo de conducta suicida. Ante síntomas recurrentes sin causa orgánica en edad escolar se debe preguntar por el acoso. El abordaje incluye evaluar el estado emocional y el riesgo suicida, involucrar a la familia, coordinar con la escuela y referir a salud mental si es necesario.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de atención integral del adolescente en el primer nivel",
+        "Protocolo de prevención y atención del acoso escolar de la Secretaría de Educación Pública"
+      ]
+    },
+    {
+      "key": "fam-04b-adolescente-riesgo-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_risk",
+      "vignette": "Adolescente de 13 años, embarazada de 10 semanas. Refiere que el padre del embarazo es un hombre de 28 años vecino de su comunidad. Acude con su tía.",
+      "prompt": "¿Cuál es la conducta más apropiada además del control prenatal?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Considerar el caso como probable violencia sexual, notificar a las autoridades y ofrecer información sobre sus derechos, incluida la interrupción legal del embarazo",
+          "correct": true,
+          "rationale": "La diferencia de edad y su edad configuran un probable delito."
+        },
+        {
+          "key": "b",
+          "text": "Recomendar que se case con el padre del embarazo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es una solución y está prohibido el matrimonio infantil."
+        },
+        {
+          "key": "c",
+          "text": "Solicitar estudios genéticos de paternidad antes de actuar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No retrasan la protección."
+        },
+        {
+          "key": "d",
+          "text": "Referir a la menor a otra unidad sin atención ni notificación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe atenderse y notificarse."
+        },
+        {
+          "key": "e",
+          "text": "El embarazo en menores de 15 años es poco frecuente en México",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es un problema relevante."
+        },
+        {
+          "key": "f",
+          "text": "Iniciar control prenatal sin ninguna otra acción",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se omite la protección de la menor."
+        },
+        {
+          "key": "g",
+          "text": "Mantener confidencialidad absoluta",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La violencia sexual contra menores requiere notificación."
+        },
+        {
+          "key": "h",
+          "text": "Considerarlo una relación consensuada válida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Una niña de 13 años no puede consentir con un adulto de 28."
+        },
+        {
+          "key": "i",
+          "text": "Solo se notifica si la menor lo autoriza",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La notificación es obligatoria."
+        },
+        {
+          "key": "j",
+          "text": "No ofrecer atención psicológica",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte de la atención integral."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "El embarazo en menores de 15 años suele asociarse con violencia sexual, especialmente cuando la pareja es un adulto. La norma mexicana sobre violencia familiar, sexual y contra las mujeres obliga a los servicios de salud a brindar atención médica y psicológica, informar sobre sus derechos, ofrecer anticoncepción de emergencia, profilaxis de infecciones y la interrupción voluntaria del embarazo en casos de violación, y notificar al ministerio público. El embarazo a esta edad tiene más riesgo de complicaciones obstétricas, como preeclampsia, parto pretérmino y anemia. El interés superior de la niña guía todas las decisiones.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana sobre violencia familiar, sexual y contra las mujeres",
+        "Estrategia nacional para la prevención del embarazo en adolescentes"
+      ]
+    },
+    {
+      "key": "fam-04b-adolescente-riesgo-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_risk",
+      "vignette": "Adolescente de 17 años que acaba de obtener su permiso para conducir. Sus padres preguntan qué medidas deben promover para prevenir accidentes.",
+      "prompt": "¿Cuál es la recomendación preventiva con mayor impacto?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo comprar un automóvil más grande",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No sustituye las conductas seguras."
+        },
+        {
+          "key": "b",
+          "text": "Conducir de noche con amigos para ganar experiencia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumenta el riesgo."
+        },
+        {
+          "key": "c",
+          "text": "Examen psicométrico anual obligatorio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es la medida principal."
+        },
+        {
+          "key": "d",
+          "text": "Los adolescentes conducen mejor por sus reflejos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La inexperiencia y la impulsividad aumentan el riesgo."
+        },
+        {
+          "key": "e",
+          "text": "Usar el celular solo en semáforos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Distrae igualmente."
+        },
+        {
+          "key": "f",
+          "text": "Los accidentes son una causa rara de muerte en adolescentes",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Son una de las principales."
+        },
+        {
+          "key": "g",
+          "text": "Permitir conducir después de beber poco alcohol",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Cualquier cantidad aumenta el riesgo en conductores jóvenes."
+        },
+        {
+          "key": "h",
+          "text": "No hablar del riesgo de viajar con conductores intoxicados",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "También es un riesgo."
+        },
+        {
+          "key": "i",
+          "text": "Uso constante del cinturón de seguridad, no conducir bajo efectos de alcohol ni usar el celular al manejar",
+          "correct": true,
+          "rationale": "Son las medidas más eficaces para reducir muertes por tránsito."
+        },
+        {
+          "key": "j",
+          "text": "El cinturón solo es necesario en carretera",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "También reduce lesiones en ciudad."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "Los accidentes de tránsito son una de las principales causas de muerte y discapacidad en adolescentes y adultos jóvenes. Los factores de riesgo incluyen la inexperiencia, la velocidad, el consumo de alcohol y drogas, el uso del celular, conducir de noche y llevar pasajeros jóvenes. Las medidas preventivas más eficaces son el uso constante del cinturón de seguridad, que reduce la mortalidad cerca de la mitad, no conducir bajo efectos de sustancias, no usar el celular, el uso de casco en motocicleta y los programas de licencia graduada. Los padres pueden establecer acuerdos de conducción segura.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la atención a la salud del grupo etario de 10 a 19 años",
+        "Programa de acción específico de seguridad vial"
+      ]
+    },
+    {
+      "key": "fam-04b-adolescente-riesgo-q15",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "adolescent_health",
+      "subtopic": "adolescent_risk",
+      "vignette": "Adolescente de 15 años que acude por cortes superficiales lineales en la cara interna de ambos antebrazos en distintas etapas de cicatrización. Refiere que se corta para aliviar la angustia y que no quiere morir.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Aceptar que no hay riesgo porque niega deseos de morir",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El riesgo debe evaluarse de forma completa."
+        },
+        {
+          "key": "b",
+          "text": "Hospitalizar en todos los casos aunque no haya ideación suicida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se decide según el riesgo."
+        },
+        {
+          "key": "c",
+          "text": "Atender las heridas, evaluar de forma completa el riesgo suicida y los trastornos asociados e involucrar a los padres con referencia a salud mental",
+          "correct": true,
+          "rationale": "Las autolesiones no suicidas se asocian con mayor riesgo de suicidio."
+        },
+        {
+          "key": "d",
+          "text": "Curar las heridas y dar alta sin más evaluación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se omite el riesgo asociado."
+        },
+        {
+          "key": "e",
+          "text": "Considerarlo una conducta para llamar la atención sin importancia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Indica sufrimiento significativo."
+        },
+        {
+          "key": "f",
+          "text": "Si los cortes son superficiales no hay problema psicológico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La gravedad física no refleja el sufrimiento."
+        },
+        {
+          "key": "g",
+          "text": "Las autolesiones son raras en adolescentes",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Son frecuentes."
+        },
+        {
+          "key": "h",
+          "text": "Reprenderla para que deje de hacerlo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumenta la vergüenza y el ocultamiento."
+        },
+        {
+          "key": "i",
+          "text": "Iniciar antipsicóticos de inmediato",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No están indicados de entrada."
+        },
+        {
+          "key": "j",
+          "text": "No preguntar por violencia o abuso",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son factores asociados."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "d",
+        "e"
+      ],
+      "explanation": "Las autolesiones no suicidas son conductas de daño deliberado sin intención de morir, como cortes, quemaduras o golpes, frecuentes en adolescentes, sobre todo mujeres. Suelen usarse para regular emociones intensas. Aunque no tengan intención suicida, se asocian con mayor riesgo de intentos suicidas futuros, depresión, ansiedad, trastornos de la conducta alimentaria, consumo de sustancias y antecedentes de abuso. El abordaje incluye atender las heridas, evaluar el riesgo suicida de forma completa, explorar trastornos asociados y factores de estrés, involucrar a la familia y referir a salud mental. La terapia dialéctica conductual es eficaz.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y manejo de la conducta suicida en el primer nivel",
+        "Guía de Práctica Clínica de atención integral del adolescente en el primer nivel"
+      ]
+    }
+  ]
+}

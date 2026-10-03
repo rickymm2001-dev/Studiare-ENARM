@@ -1,0 +1,239 @@
+@ fam|adolescent_health|adolescent_risk|2|prevention_screening
+V: Adolescente de 16 años que acude sola a solicitar un método anticonceptivo. Tiene pareja desde hace 4 meses y relaciones sexuales ocasionalmente sin protección. No desea embarazarse en los próximos años.
+P: ¿Cuál es la recomendación de prevención más adecuada?
++ Ofrecer un método reversible de acción prolongada, como implante o dispositivo intrauterino, junto con condón || Son los más eficaces y se recomiendan como primera opción en adolescentes.
+- anchoring | Negar el método hasta que acuda con su madre o tutor || La norma mexicana permite brindar anticoncepción a adolescentes.
+- availability_heuristic | Recomendar solo abstinencia || No previene embarazos en quien ya tiene actividad sexual.
+- representativeness_heuristic | El dispositivo intrauterino está contraindicado en adolescentes sin hijos || Es seguro en nulíparas.
+- premature_closure | Solo método del ritmo || Tiene alta tasa de falla.
+- framing_effect | Píldora de emergencia como método regular || No es un método de uso regular.
+- complexity_bias | Esterilización tubaria || No es apropiada en una adolescente.
+- base_rate_fallacy | El condón solo es suficiente y no requiere otro método || Su eficacia de uso típico es menor.
+- belief_bias | Los anticonceptivos causan infertilidad permanente || No es cierto.
+- omission_bias | No ofrecer prueba de infecciones de transmisión sexual || Es parte de la atención.
+E: Los métodos anticonceptivos reversibles de acción prolongada, como el implante subdérmico de etonogestrel y los dispositivos intrauterinos de cobre o con levonorgestrel, tienen tasas de falla menores de 1 por ciento y no dependen del uso diario, por lo que se recomiendan como primera opción en adolescentes. Son seguros en nulíparas. Se recomienda el doble método con condón para prevenir infecciones de transmisión sexual. La norma mexicana de salud del adolescente reconoce el derecho de los adolescentes a recibir información y métodos anticonceptivos con confidencialidad. El embarazo adolescente es un problema prioritario en México.
+R: Norma Oficial Mexicana de los servicios de planificación familiar ;; Norma Oficial Mexicana para la atención a la salud del grupo etario de 10 a 19 años
+
+@ fam|adolescent_health|adolescent_risk|2|prevention_screening
+V: Adolescente de 17 años que acude 36 horas después de una relación sexual en la que se rompió el condón. No usa otro método. Su última menstruación fue hace 12 días.
+P: ¿Cuál es la medida de prevención de embarazo más adecuada?
++ Anticoncepción de emergencia con levonorgestrel 1.5 mg en dosis única o dispositivo intrauterino de cobre || Se encuentra dentro del periodo eficaz.
+- anchoring | Esperar al retraso menstrual para hacer prueba de embarazo || Se pierde la oportunidad de prevenir.
+- availability_heuristic | Iniciar anticonceptivos orales combinados a dosis habitual como única medida || No actúan como emergencia de forma inmediata.
+- representativeness_heuristic | La píldora de emergencia es abortiva || Actúa principalmente retrasando la ovulación.
+- premature_closure | Ya pasaron más de 24 horas y no es eficaz || El levonorgestrel es eficaz hasta 72 horas o más.
+- framing_effect | Ducha vaginal || No previene el embarazo.
+- complexity_bias | Ultrasonido transvaginal antes de dar el método || No es necesario.
+- base_rate_fallacy | Exigir prueba de embarazo previa obligatoria || No es requisito si no hay sospecha de embarazo previo.
+- belief_bias | Requiere autorización de sus padres || No se requiere.
+- omission_bias | No ofrecer un método regular después || Es una oportunidad de consejería.
+E: La anticoncepción de emergencia reduce el riesgo de embarazo después de una relación sexual sin protección o con falla del método. El levonorgestrel 1.5 mg en dosis única es más eficaz cuanto antes se toma, idealmente en las primeras 72 horas, y puede usarse hasta 120 horas con menor eficacia. Actúa principalmente retrasando o inhibiendo la ovulación y no interrumpe un embarazo establecido. El dispositivo intrauterino de cobre insertado en los primeros 5 días es el método de emergencia más eficaz y además brinda anticoncepción continua. Se ofrece consejería para un método regular y tamizaje de infecciones.
+R: Norma Oficial Mexicana de los servicios de planificación familiar ;; Lineamiento técnico de anticoncepción de emergencia
+
+@ fam|adolescent_health|adolescent_risk|3|next_step
+V: Adolescente de 15 años que en la entrevista refiere tristeza, aislamiento, bajo rendimiento escolar y que ha pensado en quitarse la vida. Tiene un plan de tomar pastillas de su madre. Nunca lo ha intentado.
+P: ¿Cuál es la conducta más apropiada?
++ Considerarlo riesgo alto, no dejarlo solo, informar a los padres y referir de inmediato a valoración psiquiátrica urgente || La ideación con plan específico es una urgencia.
+- anchoring | Mantener la confidencialidad y citarlo en un mes || El riesgo de daño rompe la confidencialidad.
+- availability_heuristic | Iniciar fluoxetina y citar en 3 meses || Requiere valoración urgente.
+- representativeness_heuristic | Preguntar por suicidio aumenta el riesgo, por lo que se debe evitar el tema || Preguntar no aumenta el riesgo.
+- premature_closure | Considerarlo una búsqueda de atención típica de la adolescencia || Debe tomarse en serio.
+- framing_effect | Darle una plática sobre el valor de la vida y enviarlo a casa || Es insuficiente.
+- complexity_bias | Solicitar estudios de laboratorio completos antes de decidir || No retrasan la referencia.
+- base_rate_fallacy | Los adolescentes rara vez completan un suicidio || Es una de las principales causas de muerte.
+- belief_bias | Si no lo ha intentado no está en riesgo || El plan indica riesgo alto.
+- omission_bias | No recomendar retirar los medicamentos y medios letales del hogar || Es una medida protectora.
+E: El suicidio es una de las principales causas de muerte en adolescentes en México. Se debe preguntar de forma directa sobre ideación suicida, ya que hacerlo no aumenta el riesgo. La ideación con un plan específico, acceso a medios o intentos previos indica riesgo alto y requiere valoración psiquiátrica urgente, sin dejar solo al paciente. En esta situación se rompe la confidencialidad para proteger su vida y se informa a los padres o tutores. Se recomienda restringir el acceso a medios letales, como medicamentos y armas. Los trastornos depresivos y el consumo de sustancias son factores asociados.
+R: Guía de Práctica Clínica de prevención, diagnóstico y manejo de la conducta suicida en el primer nivel ;; Programa de acción específico de prevención del suicidio
+
+@ fam|adolescent_health|adolescent_risk|3|next_step
+V: Adolescente de 16 años con pérdida de 12 kilos en 4 meses por restricción alimentaria y ejercicio excesivo. Índice de masa corporal de 15. Amenorrea de 3 meses. Frecuencia cardiaca de 38 por minuto, presión de 80/50 mmHg, potasio de 2.8 mEq/L.
+P: ¿Cuál es la conducta más apropiada?
++ Hospitalizar para estabilización médica con realimentación cuidadosa || La bradicardia grave, la hipotensión y la hipopotasemia son criterios de hospitalización.
+- anchoring | Tratamiento ambulatorio con nutriólogo cada mes || Tiene inestabilidad médica.
+- availability_heuristic | Iniciar fluoxetina como tratamiento principal || No corrige la desnutrición ni la inestabilidad.
+- representativeness_heuristic | Dieta hipercalórica rápida en casa || Riesgo de síndrome de realimentación.
+- premature_closure | Considerar la bradicardia un signo de buena condición física || Con estos datos es un signo de gravedad.
+- framing_effect | Psicoterapia ambulatoria como única medida || Primero requiere estabilizarse.
+- complexity_bias | Nutrición parenteral total de inicio en todos los casos || Se prefiere la vía oral o enteral.
+- base_rate_fallacy | La anorexia solo afecta a mujeres de clase alta || Afecta a cualquier grupo.
+- belief_bias | La amenorrea es normal en adolescentes deportistas || Indica deficiencia energética.
+- omission_bias | No vigilar fósforo durante la realimentación || La hipofosfatemia es grave.
+E: La anorexia nerviosa se caracteriza por restricción de la ingesta con peso significativamente bajo, miedo intenso a ganar peso y alteración de la imagen corporal. Tiene la mortalidad más alta entre los trastornos mentales. Los criterios de hospitalización incluyen frecuencia cardiaca menor de 50 de día o 45 de noche, presión menor de 90/45, hipotensión ortostática, alteraciones electrolíticas como hipopotasemia o hipofosfatemia, arritmias, índice de masa corporal muy bajo o menor de 75 por ciento del peso esperado y rechazo a comer. La realimentación debe ser gradual con vigilancia de fósforo, potasio y magnesio por el riesgo de síndrome de realimentación.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de la conducta alimentaria ;; Guía de Práctica Clínica de atención integral del adolescente en el primer nivel
+
+@ fam|adolescent_health|adolescent_risk|2|diagnosis
+V: Adolescente de 17 años con peso normal que refiere episodios en los que come grandes cantidades de comida en poco tiempo con sensación de pérdida de control, seguidos de vómito autoinducido, 3 veces por semana desde hace 6 meses. Tiene callosidades en el dorso de la mano y aumento de volumen de las parótidas.
+P: ¿Cuál es el diagnóstico más probable?
++ Bulimia nerviosa || Atracones con conductas compensatorias en una paciente con peso normal.
+- anchoring | Anorexia nerviosa tipo purgativo || Requiere peso significativamente bajo.
+- availability_heuristic | Trastorno por atracón || No incluye conductas compensatorias.
+- representativeness_heuristic | Parotiditis viral || No explica los atracones.
+- premature_closure | Enfermedad por reflujo gastroesofágico || No explica la conducta.
+- framing_effect | Trastorno de rumiación || Consiste en regurgitar sin náusea.
+- complexity_bias | Síndrome de Prader-Willi || Es genético y de inicio infantil.
+- base_rate_fallacy | Gastroparesia diabética || No hay diabetes.
+- belief_bias | Trastorno de evitación restricción de alimentos || No hay atracones.
+- focusing_illusion | Sialoadenitis bacteriana || No explica el patrón alimentario.
+E: La bulimia nerviosa se caracteriza por episodios recurrentes de atracones, con ingesta de grandes cantidades de comida y sensación de pérdida de control, seguidos de conductas compensatorias inapropiadas, como vómito autoinducido, laxantes, diuréticos, ayuno o ejercicio excesivo, al menos una vez por semana durante 3 meses, con una autoevaluación muy influida por el peso. A diferencia de la anorexia, el peso suele ser normal. Los signos físicos incluyen el signo de Russell, callosidades en los nudillos, hipertrofia de parótidas, erosión dental e hipopotasemia con alcalosis metabólica. El tratamiento es la terapia cognitivo conductual, y la fluoxetina es útil.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de los trastornos de la conducta alimentaria ;; Guía de Práctica Clínica de atención integral del adolescente en el primer nivel
+
+@ fam|adolescent_health|adolescent_risk|2|prevention_screening
+V: Adolescente de 15 años que acude a consulta general. Refiere que en las fiestas sus amigos toman alcohol y fuman marihuana. El médico desea tamizar el consumo de sustancias de forma breve y validada.
+P: ¿Cuál es la herramienta de tamizaje más adecuada?
++ Cuestionario CRAFFT || Está validado para detectar consumo de riesgo de alcohol y drogas en adolescentes.
+- anchoring | Prueba de drogas en orina de rutina sin consentimiento || No es tamizaje y viola la confidencialidad.
+- availability_heuristic | Cuestionario CAGE para adultos || No está validado en adolescentes.
+- representativeness_heuristic | Preguntar solo a los padres || El adolescente es la mejor fuente.
+- premature_closure | No preguntar porque es menor de edad || El consumo inicia en la adolescencia.
+- framing_effect | Escala de depresión de Beck || Evalúa depresión.
+- complexity_bias | Electroencefalograma || No está indicado.
+- base_rate_fallacy | El consumo solo es relevante en mayores de 18 años || El inicio temprano aumenta el riesgo de dependencia.
+- belief_bias | Si sus amigos consumen él también, por lo que no es necesario preguntar || Debe evaluarse individualmente.
+- omission_bias | No ofrecer intervención breve si el tamizaje es positivo || La intervención breve es eficaz.
+E: El cuestionario CRAFFT es una herramienta de tamizaje validada para adolescentes de 12 a 21 años que evalúa el consumo de alcohol, marihuana y otras sustancias. Sus preguntas se refieren a viajar en auto con alguien intoxicado, usar sustancias para relajarse, consumir a solas, olvidar cosas, que familiares o amigos sugieran reducir el consumo y meterse en problemas. Dos o más respuestas positivas indican riesgo alto. Un resultado positivo se sigue de una intervención breve y, según el caso, referencia a servicios especializados. El inicio temprano del consumo aumenta el riesgo de adicción.
+R: Guía de Práctica Clínica de prevención, detección e intervención de las adicciones en atención primaria ;; Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones
+
+@ fam|adolescent_health|adolescent_risk|2|prevention_screening
+V: Niña de 10 años que cursa quinto grado de primaria. Su madre pregunta si debe vacunarla contra el virus del papiloma humano porque "todavía es muy pequeña".
+P: ¿Cuál es la recomendación más adecuada?
++ Vacunar ahora, porque la vacuna es más eficaz antes del inicio de la vida sexual || El esquema en niñas de 9 a 14 años es de menos dosis y con mejor respuesta.
+- anchoring | Esperar a que inicie su vida sexual || La protección es mayor antes de la exposición.
+- availability_heuristic | Vacunar solo a partir de los 18 años || Se pierde el beneficio máximo.
+- representativeness_heuristic | La vacuna fomenta el inicio temprano de relaciones sexuales || No hay evidencia de ello.
+- premature_closure | Realizar citología antes de vacunar || No es necesaria.
+- framing_effect | La vacuna sustituye el tamizaje futuro de cáncer cervicouterino || El tamizaje sigue siendo necesario.
+- complexity_bias | Medir anticuerpos contra el virus antes de vacunar || No es necesario.
+- base_rate_fallacy | El virus del papiloma humano es raro || Es la infección de transmisión sexual más frecuente.
+- belief_bias | La vacuna causa infertilidad || No es cierto.
+- omission_bias | No informar que también previene otros cánceres || Previene cánceres anogenitales y orofaríngeos.
+E: La vacuna contra el virus del papiloma humano previene la infección por los tipos de alto riesgo responsables de la mayoría de los cánceres cervicouterinos, además de otros cánceres anogenitales y orofaríngeos y, según la vacuna, verrugas genitales. Es más eficaz cuando se aplica antes del inicio de la vida sexual. En México se aplica a niñas de quinto grado de primaria o de 11 años no escolarizadas, y la recomendación internacional incluye también a niños. En menores de 15 años la respuesta inmune es mayor, lo que permite esquemas de menos dosis. La vacunación no sustituye el tamizaje en la edad adulta.
+R: Lineamientos de vacunación del Programa de Vacunación Universal ;; Norma Oficial Mexicana para la prevención, detección, diagnóstico, tratamiento, control y vigilancia epidemiológica del cáncer cervicouterino
+
+@ fam|adolescent_health|adolescent_risk|2|prevention_screening
+V: Adolescente de 18 años, sexualmente activa con dos parejas en el último año, que acude a revisión. Asintomática, sin flujo ni dolor pélvico.
+P: ¿Cuál es la prueba de tamizaje de infecciones de transmisión sexual más recomendada para ella?
++ Prueba de amplificación de ácidos nucleicos para Chlamydia trachomatis y Neisseria gonorrhoeae || Se recomienda en mujeres sexualmente activas menores de 25 años.
+- anchoring | No realizar pruebas porque está asintomática || La mayoría de estas infecciones es asintomática.
+- availability_heuristic | Cultivo de exudado faríngeo de rutina || No es el tamizaje estándar.
+- representativeness_heuristic | Citología cervical a los 18 años para infecciones || No es una prueba para estas infecciones.
+- premature_closure | Tratamiento empírico sin pruebas || Se prefiere el diagnóstico.
+- framing_effect | Laparoscopia diagnóstica || Es invasiva.
+- complexity_bias | Ultrasonido pélvico como tamizaje || No detecta infecciones asintomáticas.
+- base_rate_fallacy | Tamizar solo a trabajadoras sexuales || El grupo de mayor prevalencia son los jóvenes.
+- belief_bias | El condón ocasional elimina la necesidad de tamizaje || El riesgo persiste.
+- omission_bias | No ofrecer prueba de VIH y sífilis || Son parte del paquete preventivo.
+E: Chlamydia trachomatis es la infección bacteriana de transmisión sexual más frecuente y la mayoría de las mujeres infectadas no tiene síntomas. Sin tratamiento puede causar enfermedad pélvica inflamatoria, infertilidad y embarazo ectópico. Por ello se recomienda tamizaje anual en mujeres sexualmente activas menores de 25 años y en mayores con factores de riesgo, con pruebas de amplificación de ácidos nucleicos en orina o exudado vaginal, que detectan también gonorrea. Se ofrecen además pruebas de VIH, sífilis y hepatitis, y consejería sobre el uso del condón. El tratamiento se extiende a las parejas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las infecciones de transmisión sexual en el primer nivel ;; Norma Oficial Mexicana para la prevención y control de las infecciones de transmisión sexual
+
+@ fam|adolescent_health|adolescent_risk|2|data_interpretation
+V: En un informe estatal de salud se presentan las causas de muerte en adolescentes de 15 a 19 años. El director pide identificar la causa que debe ser prioridad para las campañas preventivas.
+P: ¿Qué indican las estadísticas sobre la principal causa de defunción en este grupo de edad?
++ Las causas externas, como accidentes de tránsito, homicidios y suicidios || Son las principales causas de muerte en adolescentes.
+- anchoring | Las infecciones respiratorias || Predominan en menores de 5 años.
+- availability_heuristic | Las enfermedades cardiovasculares || Predominan en adultos mayores.
+- representativeness_heuristic | La diabetes mellitus || Es causa principal en adultos.
+- premature_closure | Las enfermedades diarreicas || Predominan en lactantes.
+- framing_effect | Los tumores malignos como primera causa || Son causa importante pero no la primera.
+- complexity_bias | Las enfermedades raras genéticas || Son poco frecuentes.
+- base_rate_fallacy | Las complicaciones del embarazo como única causa || Contribuyen pero no son la principal.
+- belief_bias | La desnutrición || No es la principal en este grupo.
+- focusing_illusion | Las malformaciones congénitas || Predominan en menores de 1 año.
+E: En México y en el mundo, las causas externas, que incluyen accidentes de tránsito, homicidios, suicidios y ahogamientos, son las principales causas de muerte en adolescentes y adultos jóvenes, sobre todo en varones. Muchas de ellas se relacionan con conductas de riesgo, como conducir bajo los efectos del alcohol, no usar cinturón de seguridad ni casco, el acceso a armas y la violencia. Por ello, las intervenciones preventivas en adolescentes se enfocan en la seguridad vial, la prevención de violencia, la salud mental y el consumo de sustancias. Las enfermedades crónicas aún son poco frecuentes en esta edad.
+R: Norma Oficial Mexicana para la atención a la salud del grupo etario de 10 a 19 años ;; Programa de acción específico de salud sexual y reproductiva para adolescentes
+
+@ fam|adolescent_health|adolescent_risk|3|next_step
+V: Adolescente de 14 años que acude con su madre por dolor abdominal. Durante la entrevista a solas refiere que su novio de 16 años la amenaza, revisa su celular y la ha empujado. Tiene miedo de terminar la relación.
+P: ¿Cuál es la conducta más apropiada?
++ Validar su relato, evaluar su seguridad, elaborar un plan de seguridad y activar la red de apoyo y los servicios de atención a la violencia || Es violencia en el noviazgo.
+- anchoring | Considerarlo un conflicto normal de pareja adolescente || El control y la agresión física son violencia.
+- availability_heuristic | Indicarle que termine la relación sin más apoyo || No considera los riesgos ni la red de apoyo.
+- representativeness_heuristic | Confrontar al novio en la consulta || Puede aumentar el riesgo.
+- premature_closure | Tratar solo el dolor abdominal || Se pierde la oportunidad de intervenir.
+- framing_effect | Mantener absoluta confidencialidad sin ninguna acción || Hay riesgo de daño.
+- complexity_bias | Solicitar tomografía de abdomen para documentar lesiones || No está indicada sin datos.
+- base_rate_fallacy | La violencia en el noviazgo es rara en adolescentes || Es frecuente.
+- belief_bias | Si no hay lesiones visibles no es violencia || La violencia psicológica también lo es.
+- omission_bias | No registrar el caso conforme a la norma de violencia || Debe documentarse y notificarse.
+E: La violencia en el noviazgo es frecuente en adolescentes e incluye violencia psicológica, como control, celos, amenazas y vigilancia del celular, física y sexual. Se asocia con depresión, consumo de sustancias, embarazo no planeado y conductas suicidas. El médico debe preguntar en privado, escuchar sin juzgar, validar el relato, evaluar el riesgo inmediato, elaborar un plan de seguridad e involucrar a un adulto de confianza y a los servicios especializados. La norma mexicana sobre violencia familiar, sexual y contra las mujeres establece la obligación de detectar, atender, registrar y notificar estos casos, especialmente en menores de edad.
+R: Norma Oficial Mexicana sobre violencia familiar, sexual y contra las mujeres ;; Guía de Práctica Clínica de detección y atención de la violencia en adolescentes
+
+@ fam|adolescent_health|adolescent_risk|2|prevention_screening
+V: Adolescente de 16 años que usa cigarro electrónico desde hace 6 meses porque cree que es inofensivo. No fuma cigarros convencionales. Su padre fuma.
+P: ¿Cuál es la recomendación de prevención más adecuada?
++ Informar que los vapeadores contienen nicotina y otras sustancias dañinas, y ofrecer consejería breve para la cesación || El vapeo genera adicción y se asocia con inicio del tabaquismo.
+- anchoring | Considerarlo una alternativa segura al tabaco || No es inocuo.
+- availability_heuristic | Recomendar cambiar a cigarro convencional de bajo contenido || Es igualmente dañino.
+- representativeness_heuristic | No intervenir porque no fuma cigarros || El vapeo también es un riesgo.
+- premature_closure | Prescribir vareniclina como primera medida en adolescentes || La consejería es el primer paso.
+- framing_effect | Recomendar solo reducir la frecuencia || La meta es suspender.
+- complexity_bias | Tomografía de tórax de alta resolución de rutina || No está indicada sin síntomas.
+- base_rate_fallacy | El vapeo solo contiene vapor de agua || Contiene nicotina, metales y otros compuestos.
+- belief_bias | La nicotina no es adictiva en adolescentes || Son más vulnerables a la adicción.
+- omission_bias | No preguntar por otros consumos ni involucrar a la familia || Es parte del abordaje.
+E: Los cigarros electrónicos y vapeadores contienen nicotina, saborizantes, metales y otros compuestos tóxicos. La nicotina es altamente adictiva, sobre todo en el cerebro adolescente en desarrollo, y su uso se asocia con mayor riesgo de iniciar el consumo de cigarros convencionales. Además se han descrito lesiones pulmonares graves asociadas al vapeo. En México su comercialización está prohibida. Se recomienda preguntar por el consumo de tabaco y vapeadores en todas las consultas con adolescentes, dar consejería breve con la estrategia de las 5 A y abordar el tabaquismo en el hogar como factor de riesgo.
+R: Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del consumo de tabaco ;; Norma Oficial Mexicana para la prevención, tratamiento y control de las adicciones
+
+@ fam|adolescent_health|adolescent_risk|2|next_step
+V: Adolescente de 13 años que acude por dolor abdominal recurrente los días de escuela, sin datos de alarma y con exploración normal. Al entrevistarlo refiere que unos compañeros lo insultan, lo excluyen y publican burlas sobre él en redes sociales.
+P: ¿Cuál es la conducta más apropiada?
++ Reconocer el acoso escolar, evaluar su estado emocional y riesgo suicida, involucrar a los padres y coordinar con la escuela || El acoso escolar causa síntomas somáticos y afecta la salud mental.
+- anchoring | Solicitar endoscopia por el dolor abdominal || No hay datos de alarma.
+- availability_heuristic | Indicar que ignore a sus compañeros || Minimiza el problema.
+- representativeness_heuristic | Considerarlo una conducta normal entre adolescentes || El acoso no es normal.
+- premature_closure | Dar antiespasmódico y alta || No aborda la causa.
+- framing_effect | Recomendar que cambie de escuela sin más intervención || No resuelve la situación ni el estado emocional.
+- complexity_bias | Hospitalizar para estudio del dolor || No está indicado.
+- base_rate_fallacy | El acoso por redes sociales no tiene consecuencias reales || Se asocia con depresión y suicidio.
+- belief_bias | Si responde con agresión el acoso terminará || Puede agravar la situación.
+- omission_bias | No preguntar por ideación suicida || Es parte de la evaluación.
+E: El acoso escolar es la agresión intencional y repetida en una relación de desequilibrio de poder, e incluye agresiones verbales, físicas, exclusión social y acoso por medios digitales o ciberacoso. Las víctimas presentan síntomas somáticos como dolor abdominal y cefalea, ausentismo escolar, ansiedad, depresión, baja autoestima y mayor riesgo de conducta suicida. Ante síntomas recurrentes sin causa orgánica en edad escolar se debe preguntar por el acoso. El abordaje incluye evaluar el estado emocional y el riesgo suicida, involucrar a la familia, coordinar con la escuela y referir a salud mental si es necesario.
+R: Guía de Práctica Clínica de atención integral del adolescente en el primer nivel ;; Protocolo de prevención y atención del acoso escolar de la Secretaría de Educación Pública
+
+@ fam|adolescent_health|adolescent_risk|3|next_step
+V: Adolescente de 13 años, embarazada de 10 semanas. Refiere que el padre del embarazo es un hombre de 28 años vecino de su comunidad. Acude con su tía.
+P: ¿Cuál es la conducta más apropiada además del control prenatal?
++ Considerar el caso como probable violencia sexual, notificar a las autoridades y ofrecer información sobre sus derechos, incluida la interrupción legal del embarazo || La diferencia de edad y su edad configuran un probable delito.
+- anchoring | Iniciar control prenatal sin ninguna otra acción || Se omite la protección de la menor.
+- availability_heuristic | Mantener confidencialidad absoluta || La violencia sexual contra menores requiere notificación.
+- representativeness_heuristic | Considerarlo una relación consensuada válida || Una niña de 13 años no puede consentir con un adulto de 28.
+- premature_closure | Referir a la menor a otra unidad sin atención ni notificación || Debe atenderse y notificarse.
+- framing_effect | Recomendar que se case con el padre del embarazo || No es una solución y está prohibido el matrimonio infantil.
+- complexity_bias | Solicitar estudios genéticos de paternidad antes de actuar || No retrasan la protección.
+- base_rate_fallacy | El embarazo en menores de 15 años es poco frecuente en México || Es un problema relevante.
+- belief_bias | Solo se notifica si la menor lo autoriza || La notificación es obligatoria.
+- omission_bias | No ofrecer atención psicológica || Es parte de la atención integral.
+E: El embarazo en menores de 15 años suele asociarse con violencia sexual, especialmente cuando la pareja es un adulto. La norma mexicana sobre violencia familiar, sexual y contra las mujeres obliga a los servicios de salud a brindar atención médica y psicológica, informar sobre sus derechos, ofrecer anticoncepción de emergencia, profilaxis de infecciones y la interrupción voluntaria del embarazo en casos de violación, y notificar al ministerio público. El embarazo a esta edad tiene más riesgo de complicaciones obstétricas, como preeclampsia, parto pretérmino y anemia. El interés superior de la niña guía todas las decisiones.
+R: Norma Oficial Mexicana sobre violencia familiar, sexual y contra las mujeres ;; Estrategia nacional para la prevención del embarazo en adolescentes
+
+@ fam|adolescent_health|adolescent_risk|2|prevention_screening
+V: Adolescente de 17 años que acaba de obtener su permiso para conducir. Sus padres preguntan qué medidas deben promover para prevenir accidentes.
+P: ¿Cuál es la recomendación preventiva con mayor impacto?
++ Uso constante del cinturón de seguridad, no conducir bajo efectos de alcohol ni usar el celular al manejar || Son las medidas más eficaces para reducir muertes por tránsito.
+- anchoring | Solo comprar un automóvil más grande || No sustituye las conductas seguras.
+- availability_heuristic | Permitir conducir después de beber poco alcohol || Cualquier cantidad aumenta el riesgo en conductores jóvenes.
+- representativeness_heuristic | Usar el celular solo en semáforos || Distrae igualmente.
+- premature_closure | El cinturón solo es necesario en carretera || También reduce lesiones en ciudad.
+- framing_effect | Conducir de noche con amigos para ganar experiencia || Aumenta el riesgo.
+- complexity_bias | Examen psicométrico anual obligatorio || No es la medida principal.
+- base_rate_fallacy | Los accidentes son una causa rara de muerte en adolescentes || Son una de las principales.
+- belief_bias | Los adolescentes conducen mejor por sus reflejos || La inexperiencia y la impulsividad aumentan el riesgo.
+- omission_bias | No hablar del riesgo de viajar con conductores intoxicados || También es un riesgo.
+E: Los accidentes de tránsito son una de las principales causas de muerte y discapacidad en adolescentes y adultos jóvenes. Los factores de riesgo incluyen la inexperiencia, la velocidad, el consumo de alcohol y drogas, el uso del celular, conducir de noche y llevar pasajeros jóvenes. Las medidas preventivas más eficaces son el uso constante del cinturón de seguridad, que reduce la mortalidad cerca de la mitad, no conducir bajo efectos de sustancias, no usar el celular, el uso de casco en motocicleta y los programas de licencia graduada. Los padres pueden establecer acuerdos de conducción segura.
+R: Norma Oficial Mexicana para la atención a la salud del grupo etario de 10 a 19 años ;; Programa de acción específico de seguridad vial
+
+@ fam|adolescent_health|adolescent_risk|3|next_step
+V: Adolescente de 15 años que acude por cortes superficiales lineales en la cara interna de ambos antebrazos en distintas etapas de cicatrización. Refiere que se corta para aliviar la angustia y que no quiere morir.
+P: ¿Cuál es la conducta más apropiada?
++ Atender las heridas, evaluar de forma completa el riesgo suicida y los trastornos asociados e involucrar a los padres con referencia a salud mental || Las autolesiones no suicidas se asocian con mayor riesgo de suicidio.
+- anchoring | Curar las heridas y dar alta sin más evaluación || Se omite el riesgo asociado.
+- availability_heuristic | Considerarlo una conducta para llamar la atención sin importancia || Indica sufrimiento significativo.
+- representativeness_heuristic | Hospitalizar en todos los casos aunque no haya ideación suicida || Se decide según el riesgo.
+- premature_closure | Aceptar que no hay riesgo porque niega deseos de morir || El riesgo debe evaluarse de forma completa.
+- framing_effect | Reprenderla para que deje de hacerlo || Aumenta la vergüenza y el ocultamiento.
+- complexity_bias | Iniciar antipsicóticos de inmediato || No están indicados de entrada.
+- base_rate_fallacy | Las autolesiones son raras en adolescentes || Son frecuentes.
+- belief_bias | Si los cortes son superficiales no hay problema psicológico || La gravedad física no refleja el sufrimiento.
+- omission_bias | No preguntar por violencia o abuso || Son factores asociados.
+E: Las autolesiones no suicidas son conductas de daño deliberado sin intención de morir, como cortes, quemaduras o golpes, frecuentes en adolescentes, sobre todo mujeres. Suelen usarse para regular emociones intensas. Aunque no tengan intención suicida, se asocian con mayor riesgo de intentos suicidas futuros, depresión, ansiedad, trastornos de la conducta alimentaria, consumo de sustancias y antecedentes de abuso. El abordaje incluye atender las heridas, evaluar el riesgo suicida de forma completa, explorar trastornos asociados y factores de estrés, involucrar a la familia y referir a salud mental. La terapia dialéctica conductual es eficaz.
+R: Guía de Práctica Clínica de prevención, diagnóstico y manejo de la conducta suicida en el primer nivel ;; Guía de Práctica Clínica de atención integral del adolescente en el primer nivel

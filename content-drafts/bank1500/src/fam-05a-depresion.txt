@@ -1,0 +1,191 @@
+@ fam|primary_mental_health|depression_primary|2|diagnosis
+V: Mujer de 38 años que desde hace 5 semanas presenta tristeza la mayor parte del día, pérdida de interés en sus actividades, insomnio de despertar temprano, cansancio, dificultad para concentrarse y sentimientos de culpa. Ha faltado al trabajo. Sin consumo de sustancias. Hormona estimulante de la tiroides normal.
+P: ¿Cuál es el diagnóstico más probable?
++ Episodio depresivo mayor || Cumple 5 o más síntomas durante al menos 2 semanas con deterioro funcional.
+- anchoring | Trastorno de adaptación || No hay un estresor identificable y el cuadro es más grave.
+- availability_heuristic | Trastorno de ansiedad generalizada || Predomina el ánimo deprimido y la anhedonia.
+- representativeness_heuristic | Distimia || Requiere al menos 2 años de síntomas.
+- premature_closure | Hipotiroidismo || La hormona estimulante de la tiroides es normal.
+- framing_effect | Duelo normal || No hay una pérdida reciente.
+- complexity_bias | Trastorno bipolar tipo I || No hay antecedente de manía.
+- base_rate_fallacy | Síndrome de fatiga crónica || No explica la anhedonia y la culpa.
+- belief_bias | Tristeza normal que no requiere tratamiento || Hay deterioro funcional.
+- focusing_illusion | Insomnio primario || El insomnio es parte del cuadro.
+E: El episodio depresivo mayor se diagnostica con al menos cinco síntomas durante dos semanas o más, incluido ánimo deprimido o anhedonia, entre los siguientes: alteración del sueño, del apetito o del peso, fatiga, agitación o enlentecimiento psicomotor, culpa o inutilidad, dificultad para concentrarse e ideas de muerte o suicidio, con malestar o deterioro funcional significativo. Deben descartarse causas médicas, como hipotiroidismo, anemia y efectos de fármacos o sustancias, y antecedentes de manía o hipomanía. Es una de las principales causas de discapacidad. En el primer nivel se usa el cuestionario PHQ-9 para tamizaje y seguimiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto ;; Programa de acción para superar las brechas en salud mental de la Organización Mundial de la Salud
+
+@ fam|primary_mental_health|depression_primary|2|treatment_of_choice
+V: Hombre de 45 años con episodio depresivo mayor moderado de 2 meses de evolución, sin ideación suicida ni síntomas psicóticos. Sin enfermedades crónicas ni otros medicamentos. Acepta tratamiento farmacológico.
+P: ¿Cuál es el tratamiento farmacológico de elección?
++ Inhibidor selectivo de la recaptura de serotonina, como sertralina o fluoxetina || Son de primera línea por su eficacia, seguridad y tolerabilidad.
+- anchoring | Amitriptilina a dosis altas || Los tricíclicos tienen más efectos adversos y son letales en sobredosis.
+- availability_heuristic | Clonazepam como monoterapia || Las benzodiacepinas no tratan la depresión.
+- representativeness_heuristic | Litio como primera opción || Se usa en trastorno bipolar o como potenciador.
+- premature_closure | Antipsicótico atípico como monoterapia inicial || No es de primera línea sin psicosis.
+- framing_effect | Inhibidor de la monoaminooxidasa || Tiene interacciones peligrosas.
+- complexity_bias | Terapia electroconvulsiva de inicio || Se reserva para casos graves o refractarios.
+- base_rate_fallacy | Vitaminas del complejo B como tratamiento principal || No tratan la depresión.
+- belief_bias | Los antidepresivos generan adicción || No producen adicción, aunque pueden dar síntomas de suspensión.
+- omission_bias | No ofrecer psicoterapia || La combinación es más eficaz.
+E: Los inhibidores selectivos de la recaptura de serotonina, como sertralina, fluoxetina, escitalopram y citalopram, son los antidepresivos de primera línea en el primer nivel por su eficacia, buena tolerabilidad y seguridad en sobredosis. Sus efectos adversos más frecuentes son náusea, cefalea, insomnio o somnolencia y disfunción sexual. La respuesta se evalúa a las 4 a 6 semanas. La psicoterapia, como la terapia cognitivo conductual, es eficaz en depresión leve a moderada y su combinación con fármacos es superior en la moderada a grave. Los tricíclicos son eficaces pero tienen efectos anticolinérgicos, cardiotoxicidad y son letales en sobredosis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto ;; Programa de acción para superar las brechas en salud mental de la Organización Mundial de la Salud
+
+@ fam|primary_mental_health|depression_primary|3|next_step
+V: Mujer de 50 años con episodio depresivo mayor tratada con sertralina 100 mg. Hace 2 meses alcanzó la remisión completa de los síntomas después de 3 meses de tratamiento. Pregunta si ya puede suspender el medicamento.
+P: ¿Cuál es la conducta más apropiada?
++ Continuar el antidepresivo a la misma dosis al menos 6 a 12 meses después de la remisión || Reduce el riesgo de recaída.
+- anchoring | Suspender de inmediato porque ya está bien || Aumenta el riesgo de recaída y síntomas de suspensión.
+- availability_heuristic | Reducir a la mitad la dosis de forma permanente || La dosis eficaz se mantiene.
+- representativeness_heuristic | Mantenerlo de por vida en todos los casos || Se reserva para episodios recurrentes.
+- premature_closure | Cambiar a otro antidepresivo || Está respondiendo bien.
+- framing_effect | Suspender y reiniciar solo si recae || Aumenta el riesgo.
+- complexity_bias | Agregar litio para prevenir recaídas || No está indicado en un primer episodio.
+- base_rate_fallacy | La depresión no recae después de la remisión || La recaída es frecuente.
+- belief_bias | Los antidepresivos pierden efecto después de 3 meses || No es cierto.
+- omission_bias | No planear la suspensión gradual al terminar || Debe ser gradual.
+E: El tratamiento de la depresión tiene tres fases: aguda, hasta lograr la remisión; de continuación, de 6 a 12 meses después de la remisión con la misma dosis eficaz, para prevenir recaídas; y de mantenimiento, en pacientes con alto riesgo de recurrencia, como tres o más episodios, episodios graves o síntomas residuales, que puede durar años. Al suspender el antidepresivo se reduce la dosis gradualmente durante varias semanas para evitar el síndrome de suspensión, con mareo, irritabilidad y síntomas similares a gripe, más frecuente con paroxetina y venlafaxina. La fluoxetina tiene menor riesgo por su vida media larga.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto ;; Guía de la Asociación Americana de Psiquiatría para el trastorno depresivo mayor
+
+@ fam|primary_mental_health|depression_primary|3|next_step
+V: Hombre de 40 años con episodio depresivo mayor que inició fluoxetina 20 mg hace 7 semanas con buen apego. Mejoría menor de 25 por ciento en el PHQ-9. Tolera bien el fármaco. Sin ideación suicida.
+P: ¿Cuál es la conducta más apropiada?
++ Optimizar la dosis o cambiar a otro antidepresivo si no responde tras una dosis adecuada || Una respuesta mínima a las 6 a 8 semanas requiere ajuste.
+- anchoring | Mantener la misma dosis 6 meses más sin cambios || Prolonga la enfermedad.
+- availability_heuristic | Suspender todo tratamiento || No resuelve la depresión.
+- representativeness_heuristic | Agregar diazepam como única medida || No trata la depresión.
+- premature_closure | Diagnosticar depresión resistente de inmediato || Requiere al menos dos tratamientos adecuados.
+- framing_effect | Combinar tres antidepresivos a la vez || Aumenta el riesgo de síndrome serotoninérgico.
+- complexity_bias | Terapia electroconvulsiva inmediata || No es el siguiente paso.
+- base_rate_fallacy | Esperar 6 meses antes de evaluar respuesta || La evaluación es a las 4 a 8 semanas.
+- belief_bias | Si un antidepresivo no funciona, ninguno funcionará || Muchos responden a otro fármaco.
+- omission_bias | No revisar el diagnóstico ni la presencia de comorbilidades || Pueden explicar la falta de respuesta.
+E: La respuesta a un antidepresivo se evalúa después de 4 a 8 semanas a dosis adecuada. Si la mejoría es mínima, se confirma el apego y el diagnóstico, se buscan comorbilidades como consumo de alcohol, ansiedad o hipotiroidismo, y se considera aumentar la dosis si es posible, cambiar a otro antidepresivo de la misma o de otra clase, o potenciar con psicoterapia u otros fármacos. La depresión resistente se define por falta de respuesta a dos o más antidepresivos a dosis y tiempo adecuados, y requiere referencia a psiquiatría. Los cuestionarios como el PHQ-9 permiten medir la respuesta de forma objetiva.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto ;; Guía de la Asociación Americana de Psiquiatría para el trastorno depresivo mayor
+
+@ fam|primary_mental_health|depression_primary|3|initial_study
+V: Mujer de 28 años con depresión que solicita antidepresivo. En el interrogatorio refiere que hace un año tuvo una semana en la que casi no durmió, gastó todos sus ahorros, hablaba muy rápido y se sentía capaz de todo.
+P: ¿Cuál es la evaluación inicial más apropiada antes de prescribir?
++ Evaluar a fondo un posible trastorno bipolar antes de iniciar un antidepresivo en monoterapia || El episodio descrito sugiere manía previa.
+- anchoring | Iniciar sertralina sin más preguntas || Los antidepresivos solos pueden inducir manía.
+- availability_heuristic | Considerarlo un episodio de felicidad normal || El cuadro sugiere manía.
+- representativeness_heuristic | Iniciar benzodiacepina para el insomnio y diferir la evaluación || No aborda el diagnóstico.
+- premature_closure | Diagnosticar depresión unipolar por el cuadro actual || El antecedente cambia el diagnóstico.
+- framing_effect | Solicitar resonancia magnética cerebral como primer paso || No es necesaria inicialmente.
+- complexity_bias | Electroencefalograma obligatorio || No es el primer paso.
+- base_rate_fallacy | El trastorno bipolar es muy raro para considerarlo || Es relativamente frecuente.
+- belief_bias | Los antidepresivos son seguros en el trastorno bipolar en monoterapia || Pueden inducir viraje a manía.
+- omission_bias | No preguntar por antecedentes familiares de trastorno bipolar || Es un dato importante.
+E: Antes de iniciar un antidepresivo se debe preguntar por antecedentes de manía o hipomanía y por historia familiar de trastorno bipolar. Un episodio de al menos una semana con ánimo elevado o irritable, disminución de la necesidad de dormir, verborrea, grandiosidad, gastos excesivos y deterioro funcional corresponde a un episodio maníaco y establece el diagnóstico de trastorno bipolar tipo I. En estos pacientes los antidepresivos en monoterapia pueden inducir viraje a manía o ciclación rápida. El tratamiento se basa en estabilizadores del ánimo, como litio o valproato, o antipsicóticos atípicos, y requiere referencia a psiquiatría.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno bipolar ;; Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto
+
+@ fam|primary_mental_health|depression_primary|2|prevention_screening
+V: Hombre de 55 años que acude a control de diabetes. El médico desea incorporar el tamizaje de depresión en la consulta de forma breve.
+P: ¿Cuál es la herramienta de tamizaje inicial más adecuada?
++ Cuestionario PHQ-2 y, si es positivo, PHQ-9 || Es breve y validado en atención primaria.
+- anchoring | No tamizar porque el paciente acude por diabetes || Las enfermedades crónicas aumentan el riesgo de depresión.
+- availability_heuristic | Inventario multifásico de personalidad de Minnesota || Es extenso y no es de tamizaje.
+- representativeness_heuristic | Solo preguntar si está estresado || No es una herramienta validada.
+- premature_closure | Escala de Glasgow || Evalúa el estado de conciencia.
+- framing_effect | Minimental de Folstein || Evalúa deterioro cognitivo.
+- complexity_bias | Resonancia magnética funcional || No es una herramienta clínica de tamizaje.
+- base_rate_fallacy | Tamizar solo a mujeres || También afecta a hombres.
+- belief_bias | Escala de Hamilton aplicada por un psiquiatra a todos || No es práctica para tamizaje.
+- omission_bias | No dar seguimiento a un tamizaje positivo || El tamizaje requiere sistema de atención.
+E: Se recomienda el tamizaje de depresión en adultos en atención primaria cuando existen sistemas para confirmar el diagnóstico, tratar y dar seguimiento. El PHQ-2 pregunta por ánimo deprimido y anhedonia en las últimas dos semanas; si es positivo, se aplica el PHQ-9, que también clasifica la gravedad y sirve para el seguimiento: 5 a 9 leve, 10 a 14 moderada, 15 a 19 moderadamente grave y 20 o más grave. La pregunta 9 explora ideas de muerte y requiere evaluar el riesgo suicida. Las personas con diabetes, cardiopatía o dolor crónico tienen mayor prevalencia de depresión, que empeora su control.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto ;; Recomendaciones de tamizaje del grupo de servicios preventivos de Estados Unidos
+
+@ fam|primary_mental_health|depression_primary|3|treatment_of_choice
+V: Mujer de 78 años con episodio depresivo mayor, hipertensión e hiperplasia del ritmo cardiaco con bloqueo de rama. Toma varios medicamentos. Vive con su hija y tiene caídas ocasionales.
+P: ¿Cuál es el antidepresivo de elección en esta paciente?
++ Sertralina a dosis inicial baja con aumento gradual || Es segura en adultos mayores por su bajo perfil de interacciones y efecto cardiaco.
+- anchoring | Amitriptilina || Sus efectos anticolinérgicos y cardiacos son peligrosos en adultos mayores.
+- availability_heuristic | Diazepam || Aumenta el riesgo de caídas y deterioro cognitivo.
+- representativeness_heuristic | No tratar porque la depresión es normal en la vejez || No es parte normal del envejecimiento.
+- premature_closure | Paroxetina a dosis altas || Tiene efecto anticolinérgico y más interacciones.
+- framing_effect | Imipramina || Es un tricíclico con riesgo cardiaco.
+- complexity_bias | Inhibidor de la monoaminooxidasa || Tiene interacciones peligrosas.
+- base_rate_fallacy | Citalopram a dosis máxima de 60 mg || Puede prolongar el intervalo QT en adultos mayores.
+- belief_bias | Los adultos mayores no responden a antidepresivos || Responden adecuadamente.
+- omission_bias | No vigilar sodio sérico || Los inhibidores de recaptura pueden causar hiponatremia.
+E: La depresión en el adulto mayor es frecuente, está subdiagnosticada y no es parte normal del envejecimiento. Se asocia con deterioro funcional, cognitivo y mayor mortalidad. Los inhibidores selectivos de la recaptura de serotonina, especialmente sertralina y escitalopram, son de elección por su seguridad, iniciando con dosis bajas y aumentando lentamente. El citalopram no debe superar 20 mg en mayores de 60 años por la prolongación del intervalo QT. Se vigila la hiponatremia por secreción inadecuada de hormona antidiurética y el riesgo de sangrado. Los tricíclicos y las benzodiacepinas deben evitarse según los criterios de Beers.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la depresión en el adulto mayor ;; Criterios de Beers de la Sociedad Americana de Geriatría
+
+@ fam|primary_mental_health|depression_primary|3|diagnosis
+V: Hombre de 62 años cuya esposa falleció hace 6 semanas. Refiere tristeza, llanto al recordarla y dificultad para dormir. Mantiene sus actividades, conserva la capacidad de disfrutar momentos con sus nietos, no tiene sentimientos de inutilidad ni ideación suicida.
+P: ¿Cuál es el diagnóstico más probable?
++ Duelo normal || Los síntomas son proporcionales a la pérdida y no hay alteración global de la autoestima.
+- anchoring | Episodio depresivo mayor || Conserva la capacidad de disfrute y la autoestima.
+- availability_heuristic | Trastorno de estrés postraumático || No hay un evento traumático con reexperimentación.
+- representativeness_heuristic | Duelo prolongado || Requiere más de 12 meses de síntomas intensos.
+- premature_closure | Demencia incipiente || No hay alteraciones cognitivas.
+- framing_effect | Trastorno de ansiedad generalizada || No predomina la preocupación excesiva.
+- complexity_bias | Trastorno bipolar || No hay episodios de manía.
+- base_rate_fallacy | Psicosis reactiva || No hay síntomas psicóticos.
+- belief_bias | Requiere antidepresivo de inmediato || No es necesario en el duelo normal.
+- focusing_illusion | Hipotiroidismo || El cuadro se explica por la pérdida.
+E: El duelo es la reacción normal ante la pérdida de un ser querido. Incluye tristeza, llanto, alteraciones del sueño y del apetito, añoranza y pensamientos sobre la persona fallecida, que llegan en oleadas al recordarla. A diferencia de la depresión mayor, en el duelo se conserva la autoestima, la capacidad de experimentar emociones positivas y la funcionalidad general, y si hay pensamientos de muerte se relacionan con reunirse con el fallecido. El manejo incluye acompañamiento, escucha y apoyo de la red familiar. Se sospecha depresión o duelo prolongado si hay inutilidad, ideación suicida, síntomas psicóticos o deterioro persistente.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto ;; Manual diagnóstico y estadístico de los trastornos mentales
+
+@ fam|primary_mental_health|depression_primary|3|complication_prognosis
+V: Hombre de 35 años en tratamiento con sertralina que acude por dolor de espalda. Le prescriben tramadol. A las 24 horas presenta agitación, diaforesis, temblor, diarrea, temperatura de 38.8 grados, mioclonías e hiperreflexia en miembros inferiores.
+P: ¿Cuál es la complicación más probable?
++ Síndrome serotoninérgico por la combinación de sertralina y tramadol || Ambos aumentan la serotonina y la tríada es alteración mental, autonómica y neuromuscular.
+- anchoring | Síndrome neuroléptico maligno || Se asocia con antipsicóticos y causa rigidez con hiporreflexia.
+- availability_heuristic | Abstinencia de opioides || No explica la hiperreflexia ni la fiebre con mioclonías.
+- representativeness_heuristic | Infección viral con fiebre || No explica las mioclonías.
+- premature_closure | Crisis de ansiedad || No explica la fiebre ni la hiperreflexia.
+- framing_effect | Hipertermia maligna || Ocurre con anestésicos inhalados y succinilcolina.
+- complexity_bias | Tirotoxicosis aguda espontánea || La relación temporal con el tramadol es clara.
+- base_rate_fallacy | Reacción alérgica al tramadol || No causa este cuadro neuromuscular.
+- belief_bias | El tramadol no tiene efecto serotoninérgico || Inhibe la recaptura de serotonina.
+- focusing_illusion | Intoxicación por anticolinérgicos || Causa piel seca, no diaforesis.
+E: El síndrome serotoninérgico resulta del exceso de actividad serotoninérgica, generalmente por la combinación de fármacos como inhibidores de la recaptura de serotonina con tramadol, triptanos, linezolid, inhibidores de la monoaminooxidasa, dextrometorfano o meperidina. Se caracteriza por alteración del estado mental, inestabilidad autonómica con taquicardia, diaforesis, diarrea e hipertermia, y alteraciones neuromusculares como temblor, mioclonías e hiperreflexia, más marcadas en miembros inferiores, con clonus. Inicia en horas. El tratamiento es suspender los fármacos, medidas de soporte, benzodiacepinas y, en casos moderados a graves, ciproheptadina.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto ;; Guía de Práctica Clínica de diagnóstico y tratamiento de intoxicaciones por medicamentos
+
+@ fam|primary_mental_health|depression_primary|3|complication_prognosis
+V: Mujer de 30 años con depresión que ingiere intencionalmente 30 tabletas de amitriptilina de 25 mg. A su llegada está somnolienta, con pupilas dilatadas, piel seca y frecuencia cardiaca de 130. El electrocardiograma muestra QRS de 140 milisegundos.
+P: ¿Cuál es la complicación más grave asociada a este hallazgo electrocardiográfico?
++ Arritmias ventriculares y convulsiones por bloqueo de canales de sodio || Un QRS mayor de 100 milisegundos predice toxicidad grave.
+- anchoring | Hepatitis fulminante || No es la complicación principal de los tricíclicos.
+- availability_heuristic | Síndrome serotoninérgico como complicación principal || La toxicidad cardiaca es la más grave.
+- representativeness_heuristic | Hipoglucemia grave || No es característica.
+- premature_closure | Insuficiencia renal aguda por mioglobina como primera complicación || No es la principal.
+- framing_effect | Pancreatitis aguda || No es característica.
+- complexity_bias | Agranulocitosis aguda || No ocurre en sobredosis aguda.
+- base_rate_fallacy | La sobredosis de tricíclicos es benigna || Es de las más letales.
+- belief_bias | La midriasis indica que no hay riesgo cardiaco || Son parte del mismo síndrome.
+- focusing_illusion | Hipertermia por calor ambiental || No explica el cuadro.
+E: La sobredosis de antidepresivos tricíclicos es una de las intoxicaciones medicamentosas más letales. Sus efectos se deben al bloqueo de canales de sodio cardiacos, con ensanchamiento del QRS y arritmias ventriculares; al efecto anticolinérgico, con midriasis, piel seca, taquicardia, retención urinaria y delirio; al bloqueo alfa adrenérgico, con hipotensión; y a convulsiones. Un QRS mayor de 100 milisegundos predice convulsiones y mayor de 160, arritmias ventriculares. El tratamiento es bicarbonato de sodio intravenoso. Por eso en pacientes con depresión y riesgo suicida se prefieren los inhibidores selectivos de la recaptura de serotonina.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de intoxicaciones por medicamentos ;; Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto
+
+@ fam|primary_mental_health|depression_primary|2|prevention_screening
+V: Mujer de 29 años, con parto hace 4 semanas, que acude a la revisión de su bebé. Refiere llanto frecuente, ansiedad, insomnio aunque el bebé duerma y sentimientos de no ser buena madre desde hace 2 semanas.
+P: ¿Cuál es la herramienta de tamizaje más adecuada en este momento?
++ Escala de depresión posparto de Edimburgo || Está validada para detectar depresión perinatal.
+- anchoring | No tamizar porque es tristeza posparto normal || La tristeza posparto se resuelve en 2 semanas y es leve.
+- availability_heuristic | Escala de Apgar || Evalúa al recién nacido.
+- representativeness_heuristic | Escala de Glasgow || Evalúa el estado de conciencia.
+- premature_closure | Medir hormonas tiroideas como única evaluación || No sustituye el tamizaje.
+- framing_effect | Minimental || Evalúa deterioro cognitivo.
+- complexity_bias | Resonancia magnética de cráneo || No está indicada.
+- base_rate_fallacy | La depresión posparto es rara || Afecta a 10 a 15 por ciento de las madres.
+- belief_bias | La lactancia previene la depresión posparto por completo || No la previene en todos los casos.
+- omission_bias | No preguntar por pensamientos de dañarse o dañar al bebé || Es parte de la evaluación.
+E: La depresión posparto afecta a 10 a 15 por ciento de las mujeres, inicia habitualmente en las primeras semanas después del parto y se distingue de la tristeza posparto, que es leve, aparece en los primeros días y se resuelve en dos semanas. La escala de depresión posparto de Edimburgo, con 10 preguntas, es la herramienta de tamizaje validada; una puntuación de 10 a 13 o más sugiere depresión. La consulta del niño sano es una oportunidad para el tamizaje. Siempre se pregunta por pensamientos de dañarse o dañar al bebé. La psicosis posparto es una urgencia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la depresión en el embarazo y posparto ;; Guía de Práctica Clínica de control prenatal con enfoque de riesgo
+
+@ fam|primary_mental_health|depression_primary|2|treatment_of_choice
+V: Mujer de 32 años con depresión leve, PHQ-9 de 8, sin ideación suicida. Prefiere no tomar medicamentos. Tiene buena red de apoyo y puede acudir a sesiones semanales.
+P: ¿Cuál es el tratamiento de elección?
++ Psicoterapia estructurada, como terapia cognitivo conductual, junto con activación conductual y seguimiento || Es eficaz como tratamiento inicial en depresión leve.
+- anchoring | Antidepresivo obligatorio en todos los casos || En depresión leve puede iniciarse con psicoterapia.
+- availability_heuristic | Benzodiacepinas || No tratan la depresión.
+- representativeness_heuristic | Ningún tratamiento porque es leve || Requiere intervención y seguimiento.
+- premature_closure | Hospitalización psiquiátrica || No está indicada.
+- framing_effect | Antipsicótico atípico || No está indicado.
+- complexity_bias | Estimulación magnética transcraneal de inicio || No es de primera línea.
+- base_rate_fallacy | La psicoterapia no es eficaz en la depresión || Tiene eficacia demostrada.
+- belief_bias | Solo el ejercicio sin ningún seguimiento clínico || Es útil como complemento, con seguimiento.
+- omission_bias | No reevaluar en 4 a 6 semanas || Se debe medir la respuesta.
+E: En la depresión leve, las intervenciones psicológicas son el tratamiento inicial recomendado, como la terapia cognitivo conductual, la activación conductual, la terapia interpersonal y la terapia de solución de problemas, junto con recomendaciones de actividad física, higiene del sueño y apoyo social. Los antidepresivos se consideran si el paciente los prefiere, si hay antecedente de depresión moderada o grave o si los síntomas persisten. Se debe dar seguimiento con escalas como el PHQ-9 en 4 a 6 semanas. La preferencia del paciente es importante en la elección del tratamiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto ;; Programa de acción para superar las brechas en salud mental de la Organización Mundial de la Salud

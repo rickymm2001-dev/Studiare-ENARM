@@ -1,0 +1,1145 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "fam-05a-depresion-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "depression_primary",
+      "vignette": "Mujer de 38 años que desde hace 5 semanas presenta tristeza la mayor parte del día, pérdida de interés en sus actividades, insomnio de despertar temprano, cansancio, dificultad para concentrarse y sentimientos de culpa. Ha faltado al trabajo. Sin consumo de sustancias. Hormona estimulante de la tiroides normal.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Tristeza normal que no requiere tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Hay deterioro funcional."
+        },
+        {
+          "key": "b",
+          "text": "Insomnio primario",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El insomnio es parte del cuadro."
+        },
+        {
+          "key": "c",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La hormona estimulante de la tiroides es normal."
+        },
+        {
+          "key": "d",
+          "text": "Duelo normal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No hay una pérdida reciente."
+        },
+        {
+          "key": "e",
+          "text": "Distimia",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Requiere al menos 2 años de síntomas."
+        },
+        {
+          "key": "f",
+          "text": "Síndrome de fatiga crónica",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica la anhedonia y la culpa."
+        },
+        {
+          "key": "g",
+          "text": "Trastorno de ansiedad generalizada",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Predomina el ánimo deprimido y la anhedonia."
+        },
+        {
+          "key": "h",
+          "text": "Episodio depresivo mayor",
+          "correct": true,
+          "rationale": "Cumple 5 o más síntomas durante al menos 2 semanas con deterioro funcional."
+        },
+        {
+          "key": "i",
+          "text": "Trastorno de adaptación",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No hay un estresor identificable y el cuadro es más grave."
+        },
+        {
+          "key": "j",
+          "text": "Trastorno bipolar tipo I",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay antecedente de manía."
+        }
+      ],
+      "canonical": [
+        "e",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "El episodio depresivo mayor se diagnostica con al menos cinco síntomas durante dos semanas o más, incluido ánimo deprimido o anhedonia, entre los siguientes: alteración del sueño, del apetito o del peso, fatiga, agitación o enlentecimiento psicomotor, culpa o inutilidad, dificultad para concentrarse e ideas de muerte o suicidio, con malestar o deterioro funcional significativo. Deben descartarse causas médicas, como hipotiroidismo, anemia y efectos de fármacos o sustancias, y antecedentes de manía o hipomanía. Es una de las principales causas de discapacidad. En el primer nivel se usa el cuestionario PHQ-9 para tamizaje y seguimiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto",
+        "Programa de acción para superar las brechas en salud mental de la Organización Mundial de la Salud"
+      ]
+    },
+    {
+      "key": "fam-05a-depresion-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "depression_primary",
+      "vignette": "Hombre de 45 años con episodio depresivo mayor moderado de 2 meses de evolución, sin ideación suicida ni síntomas psicóticos. Sin enfermedades crónicas ni otros medicamentos. Acepta tratamiento farmacológico.",
+      "prompt": "¿Cuál es el tratamiento farmacológico de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Los antidepresivos generan adicción",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No producen adicción, aunque pueden dar síntomas de suspensión."
+        },
+        {
+          "key": "b",
+          "text": "Clonazepam como monoterapia",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Las benzodiacepinas no tratan la depresión."
+        },
+        {
+          "key": "c",
+          "text": "Antipsicótico atípico como monoterapia inicial",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es de primera línea sin psicosis."
+        },
+        {
+          "key": "d",
+          "text": "Terapia electroconvulsiva de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para casos graves o refractarios."
+        },
+        {
+          "key": "e",
+          "text": "No ofrecer psicoterapia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La combinación es más eficaz."
+        },
+        {
+          "key": "f",
+          "text": "Vitaminas del complejo B como tratamiento principal",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No tratan la depresión."
+        },
+        {
+          "key": "g",
+          "text": "Inhibidor de la monoaminooxidasa",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Tiene interacciones peligrosas."
+        },
+        {
+          "key": "h",
+          "text": "Litio como primera opción",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se usa en trastorno bipolar o como potenciador."
+        },
+        {
+          "key": "i",
+          "text": "Inhibidor selectivo de la recaptura de serotonina, como sertralina o fluoxetina",
+          "correct": true,
+          "rationale": "Son de primera línea por su eficacia, seguridad y tolerabilidad."
+        },
+        {
+          "key": "j",
+          "text": "Amitriptilina a dosis altas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los tricíclicos tienen más efectos adversos y son letales en sobredosis."
+        }
+      ],
+      "canonical": [
+        "b",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "Los inhibidores selectivos de la recaptura de serotonina, como sertralina, fluoxetina, escitalopram y citalopram, son los antidepresivos de primera línea en el primer nivel por su eficacia, buena tolerabilidad y seguridad en sobredosis. Sus efectos adversos más frecuentes son náusea, cefalea, insomnio o somnolencia y disfunción sexual. La respuesta se evalúa a las 4 a 6 semanas. La psicoterapia, como la terapia cognitivo conductual, es eficaz en depresión leve a moderada y su combinación con fármacos es superior en la moderada a grave. Los tricíclicos son eficaces pero tienen efectos anticolinérgicos, cardiotoxicidad y son letales en sobredosis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto",
+        "Programa de acción para superar las brechas en salud mental de la Organización Mundial de la Salud"
+      ]
+    },
+    {
+      "key": "fam-05a-depresion-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "depression_primary",
+      "vignette": "Mujer de 50 años con episodio depresivo mayor tratada con sertralina 100 mg. Hace 2 meses alcanzó la remisión completa de los síntomas después de 3 meses de tratamiento. Pregunta si ya puede suspender el medicamento.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Mantenerlo de por vida en todos los casos",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se reserva para episodios recurrentes."
+        },
+        {
+          "key": "b",
+          "text": "Suspender y reiniciar solo si recae",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumenta el riesgo."
+        },
+        {
+          "key": "c",
+          "text": "Suspender de inmediato porque ya está bien",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta el riesgo de recaída y síntomas de suspensión."
+        },
+        {
+          "key": "d",
+          "text": "Cambiar a otro antidepresivo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Está respondiendo bien."
+        },
+        {
+          "key": "e",
+          "text": "No planear la suspensión gradual al terminar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe ser gradual."
+        },
+        {
+          "key": "f",
+          "text": "Continuar el antidepresivo a la misma dosis al menos 6 a 12 meses después de la remisión",
+          "correct": true,
+          "rationale": "Reduce el riesgo de recaída."
+        },
+        {
+          "key": "g",
+          "text": "La depresión no recae después de la remisión",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La recaída es frecuente."
+        },
+        {
+          "key": "h",
+          "text": "Reducir a la mitad la dosis de forma permanente",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La dosis eficaz se mantiene."
+        },
+        {
+          "key": "i",
+          "text": "Los antidepresivos pierden efecto después de 3 meses",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es cierto."
+        },
+        {
+          "key": "j",
+          "text": "Agregar litio para prevenir recaídas",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado en un primer episodio."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "h"
+      ],
+      "explanation": "El tratamiento de la depresión tiene tres fases: aguda, hasta lograr la remisión; de continuación, de 6 a 12 meses después de la remisión con la misma dosis eficaz, para prevenir recaídas; y de mantenimiento, en pacientes con alto riesgo de recurrencia, como tres o más episodios, episodios graves o síntomas residuales, que puede durar años. Al suspender el antidepresivo se reduce la dosis gradualmente durante varias semanas para evitar el síndrome de suspensión, con mareo, irritabilidad y síntomas similares a gripe, más frecuente con paroxetina y venlafaxina. La fluoxetina tiene menor riesgo por su vida media larga.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto",
+        "Guía de la Asociación Americana de Psiquiatría para el trastorno depresivo mayor"
+      ]
+    },
+    {
+      "key": "fam-05a-depresion-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "depression_primary",
+      "vignette": "Hombre de 40 años con episodio depresivo mayor que inició fluoxetina 20 mg hace 7 semanas con buen apego. Mejoría menor de 25 por ciento en el PHQ-9. Tolera bien el fármaco. Sin ideación suicida.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Diagnosticar depresión resistente de inmediato",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Requiere al menos dos tratamientos adecuados."
+        },
+        {
+          "key": "b",
+          "text": "Agregar diazepam como única medida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No trata la depresión."
+        },
+        {
+          "key": "c",
+          "text": "Si un antidepresivo no funciona, ninguno funcionará",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Muchos responden a otro fármaco."
+        },
+        {
+          "key": "d",
+          "text": "Terapia electroconvulsiva inmediata",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el siguiente paso."
+        },
+        {
+          "key": "e",
+          "text": "Optimizar la dosis o cambiar a otro antidepresivo si no responde tras una dosis adecuada",
+          "correct": true,
+          "rationale": "Una respuesta mínima a las 6 a 8 semanas requiere ajuste."
+        },
+        {
+          "key": "f",
+          "text": "No revisar el diagnóstico ni la presencia de comorbilidades",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Pueden explicar la falta de respuesta."
+        },
+        {
+          "key": "g",
+          "text": "Esperar 6 meses antes de evaluar respuesta",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La evaluación es a las 4 a 8 semanas."
+        },
+        {
+          "key": "h",
+          "text": "Combinar tres antidepresivos a la vez",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Aumenta el riesgo de síndrome serotoninérgico."
+        },
+        {
+          "key": "i",
+          "text": "Suspender todo tratamiento",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No resuelve la depresión."
+        },
+        {
+          "key": "j",
+          "text": "Mantener la misma dosis 6 meses más sin cambios",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Prolonga la enfermedad."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "i",
+        "j"
+      ],
+      "explanation": "La respuesta a un antidepresivo se evalúa después de 4 a 8 semanas a dosis adecuada. Si la mejoría es mínima, se confirma el apego y el diagnóstico, se buscan comorbilidades como consumo de alcohol, ansiedad o hipotiroidismo, y se considera aumentar la dosis si es posible, cambiar a otro antidepresivo de la misma o de otra clase, o potenciar con psicoterapia u otros fármacos. La depresión resistente se define por falta de respuesta a dos o más antidepresivos a dosis y tiempo adecuados, y requiere referencia a psiquiatría. Los cuestionarios como el PHQ-9 permiten medir la respuesta de forma objetiva.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto",
+        "Guía de la Asociación Americana de Psiquiatría para el trastorno depresivo mayor"
+      ]
+    },
+    {
+      "key": "fam-05a-depresion-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "depression_primary",
+      "vignette": "Mujer de 28 años con depresión que solicita antidepresivo. En el interrogatorio refiere que hace un año tuvo una semana en la que casi no durmió, gastó todos sus ahorros, hablaba muy rápido y se sentía capaz de todo.",
+      "prompt": "¿Cuál es la evaluación inicial más apropiada antes de prescribir?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "El trastorno bipolar es muy raro para considerarlo",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es relativamente frecuente."
+        },
+        {
+          "key": "b",
+          "text": "Iniciar benzodiacepina para el insomnio y diferir la evaluación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No aborda el diagnóstico."
+        },
+        {
+          "key": "c",
+          "text": "Considerarlo un episodio de felicidad normal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "El cuadro sugiere manía."
+        },
+        {
+          "key": "d",
+          "text": "No preguntar por antecedentes familiares de trastorno bipolar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es un dato importante."
+        },
+        {
+          "key": "e",
+          "text": "Los antidepresivos son seguros en el trastorno bipolar en monoterapia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Pueden inducir viraje a manía."
+        },
+        {
+          "key": "f",
+          "text": "Evaluar a fondo un posible trastorno bipolar antes de iniciar un antidepresivo en monoterapia",
+          "correct": true,
+          "rationale": "El episodio descrito sugiere manía previa."
+        },
+        {
+          "key": "g",
+          "text": "Solicitar resonancia magnética cerebral como primer paso",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es necesaria inicialmente."
+        },
+        {
+          "key": "h",
+          "text": "Diagnosticar depresión unipolar por el cuadro actual",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El antecedente cambia el diagnóstico."
+        },
+        {
+          "key": "i",
+          "text": "Iniciar sertralina sin más preguntas",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Los antidepresivos solos pueden inducir manía."
+        },
+        {
+          "key": "j",
+          "text": "Electroencefalograma obligatorio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el primer paso."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "Antes de iniciar un antidepresivo se debe preguntar por antecedentes de manía o hipomanía y por historia familiar de trastorno bipolar. Un episodio de al menos una semana con ánimo elevado o irritable, disminución de la necesidad de dormir, verborrea, grandiosidad, gastos excesivos y deterioro funcional corresponde a un episodio maníaco y establece el diagnóstico de trastorno bipolar tipo I. En estos pacientes los antidepresivos en monoterapia pueden inducir viraje a manía o ciclación rápida. El tratamiento se basa en estabilizadores del ánimo, como litio o valproato, o antipsicóticos atípicos, y requiere referencia a psiquiatría.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno bipolar",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto"
+      ]
+    },
+    {
+      "key": "fam-05a-depresion-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "depression_primary",
+      "vignette": "Hombre de 55 años que acude a control de diabetes. El médico desea incorporar el tamizaje de depresión en la consulta de forma breve.",
+      "prompt": "¿Cuál es la herramienta de tamizaje inicial más adecuada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Inventario multifásico de personalidad de Minnesota",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es extenso y no es de tamizaje."
+        },
+        {
+          "key": "b",
+          "text": "Minimental de Folstein",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Evalúa deterioro cognitivo."
+        },
+        {
+          "key": "c",
+          "text": "Escala de Hamilton aplicada por un psiquiatra a todos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es práctica para tamizaje."
+        },
+        {
+          "key": "d",
+          "text": "Solo preguntar si está estresado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es una herramienta validada."
+        },
+        {
+          "key": "e",
+          "text": "Escala de Glasgow",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Evalúa el estado de conciencia."
+        },
+        {
+          "key": "f",
+          "text": "Resonancia magnética funcional",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es una herramienta clínica de tamizaje."
+        },
+        {
+          "key": "g",
+          "text": "No dar seguimiento a un tamizaje positivo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El tamizaje requiere sistema de atención."
+        },
+        {
+          "key": "h",
+          "text": "Tamizar solo a mujeres",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "También afecta a hombres."
+        },
+        {
+          "key": "i",
+          "text": "Cuestionario PHQ-2 y, si es positivo, PHQ-9",
+          "correct": true,
+          "rationale": "Es breve y validado en atención primaria."
+        },
+        {
+          "key": "j",
+          "text": "No tamizar porque el paciente acude por diabetes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Las enfermedades crónicas aumentan el riesgo de depresión."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "i",
+        "j"
+      ],
+      "explanation": "Se recomienda el tamizaje de depresión en adultos en atención primaria cuando existen sistemas para confirmar el diagnóstico, tratar y dar seguimiento. El PHQ-2 pregunta por ánimo deprimido y anhedonia en las últimas dos semanas; si es positivo, se aplica el PHQ-9, que también clasifica la gravedad y sirve para el seguimiento: 5 a 9 leve, 10 a 14 moderada, 15 a 19 moderadamente grave y 20 o más grave. La pregunta 9 explora ideas de muerte y requiere evaluar el riesgo suicida. Las personas con diabetes, cardiopatía o dolor crónico tienen mayor prevalencia de depresión, que empeora su control.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto",
+        "Recomendaciones de tamizaje del grupo de servicios preventivos de Estados Unidos"
+      ]
+    },
+    {
+      "key": "fam-05a-depresion-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "depression_primary",
+      "vignette": "Mujer de 78 años con episodio depresivo mayor, hipertensión e hiperplasia del ritmo cardiaco con bloqueo de rama. Toma varios medicamentos. Vive con su hija y tiene caídas ocasionales.",
+      "prompt": "¿Cuál es el antidepresivo de elección en esta paciente?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Amitriptilina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Sus efectos anticolinérgicos y cardiacos son peligrosos en adultos mayores."
+        },
+        {
+          "key": "b",
+          "text": "Citalopram a dosis máxima de 60 mg",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede prolongar el intervalo QT en adultos mayores."
+        },
+        {
+          "key": "c",
+          "text": "Los adultos mayores no responden a antidepresivos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Responden adecuadamente."
+        },
+        {
+          "key": "d",
+          "text": "Diazepam",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aumenta el riesgo de caídas y deterioro cognitivo."
+        },
+        {
+          "key": "e",
+          "text": "Sertralina a dosis inicial baja con aumento gradual",
+          "correct": true,
+          "rationale": "Es segura en adultos mayores por su bajo perfil de interacciones y efecto cardiaco."
+        },
+        {
+          "key": "f",
+          "text": "Paroxetina a dosis altas",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Tiene efecto anticolinérgico y más interacciones."
+        },
+        {
+          "key": "g",
+          "text": "Imipramina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es un tricíclico con riesgo cardiaco."
+        },
+        {
+          "key": "h",
+          "text": "No vigilar sodio sérico",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Los inhibidores de recaptura pueden causar hiponatremia."
+        },
+        {
+          "key": "i",
+          "text": "No tratar porque la depresión es normal en la vejez",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es parte normal del envejecimiento."
+        },
+        {
+          "key": "j",
+          "text": "Inhibidor de la monoaminooxidasa",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Tiene interacciones peligrosas."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "i"
+      ],
+      "explanation": "La depresión en el adulto mayor es frecuente, está subdiagnosticada y no es parte normal del envejecimiento. Se asocia con deterioro funcional, cognitivo y mayor mortalidad. Los inhibidores selectivos de la recaptura de serotonina, especialmente sertralina y escitalopram, son de elección por su seguridad, iniciando con dosis bajas y aumentando lentamente. El citalopram no debe superar 20 mg en mayores de 60 años por la prolongación del intervalo QT. Se vigila la hiponatremia por secreción inadecuada de hormona antidiurética y el riesgo de sangrado. Los tricíclicos y las benzodiacepinas deben evitarse según los criterios de Beers.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la depresión en el adulto mayor",
+        "Criterios de Beers de la Sociedad Americana de Geriatría"
+      ]
+    },
+    {
+      "key": "fam-05a-depresion-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "depression_primary",
+      "vignette": "Hombre de 62 años cuya esposa falleció hace 6 semanas. Refiere tristeza, llanto al recordarla y dificultad para dormir. Mantiene sus actividades, conserva la capacidad de disfrutar momentos con sus nietos, no tiene sentimientos de inutilidad ni ideación suicida.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Duelo normal",
+          "correct": true,
+          "rationale": "Los síntomas son proporcionales a la pérdida y no hay alteración global de la autoestima."
+        },
+        {
+          "key": "b",
+          "text": "Trastorno de estrés postraumático",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No hay un evento traumático con reexperimentación."
+        },
+        {
+          "key": "c",
+          "text": "Trastorno bipolar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay episodios de manía."
+        },
+        {
+          "key": "d",
+          "text": "Demencia incipiente",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay alteraciones cognitivas."
+        },
+        {
+          "key": "e",
+          "text": "Requiere antidepresivo de inmediato",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es necesario en el duelo normal."
+        },
+        {
+          "key": "f",
+          "text": "Trastorno de ansiedad generalizada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No predomina la preocupación excesiva."
+        },
+        {
+          "key": "g",
+          "text": "Duelo prolongado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Requiere más de 12 meses de síntomas intensos."
+        },
+        {
+          "key": "h",
+          "text": "Hipotiroidismo",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "El cuadro se explica por la pérdida."
+        },
+        {
+          "key": "i",
+          "text": "Psicosis reactiva",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay síntomas psicóticos."
+        },
+        {
+          "key": "j",
+          "text": "Episodio depresivo mayor",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Conserva la capacidad de disfrute y la autoestima."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "g",
+        "j"
+      ],
+      "explanation": "El duelo es la reacción normal ante la pérdida de un ser querido. Incluye tristeza, llanto, alteraciones del sueño y del apetito, añoranza y pensamientos sobre la persona fallecida, que llegan en oleadas al recordarla. A diferencia de la depresión mayor, en el duelo se conserva la autoestima, la capacidad de experimentar emociones positivas y la funcionalidad general, y si hay pensamientos de muerte se relacionan con reunirse con el fallecido. El manejo incluye acompañamiento, escucha y apoyo de la red familiar. Se sospecha depresión o duelo prolongado si hay inutilidad, ideación suicida, síntomas psicóticos o deterioro persistente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto",
+        "Manual diagnóstico y estadístico de los trastornos mentales"
+      ]
+    },
+    {
+      "key": "fam-05a-depresion-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "depression_primary",
+      "vignette": "Hombre de 35 años en tratamiento con sertralina que acude por dolor de espalda. Le prescriben tramadol. A las 24 horas presenta agitación, diaforesis, temblor, diarrea, temperatura de 38.8 grados, mioclonías e hiperreflexia en miembros inferiores.",
+      "prompt": "¿Cuál es la complicación más probable?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome neuroléptico maligno",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se asocia con antipsicóticos y causa rigidez con hiporreflexia."
+        },
+        {
+          "key": "b",
+          "text": "Hipertermia maligna",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Ocurre con anestésicos inhalados y succinilcolina."
+        },
+        {
+          "key": "c",
+          "text": "El tramadol no tiene efecto serotoninérgico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Inhibe la recaptura de serotonina."
+        },
+        {
+          "key": "d",
+          "text": "Reacción alérgica al tramadol",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No causa este cuadro neuromuscular."
+        },
+        {
+          "key": "e",
+          "text": "Abstinencia de opioides",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No explica la hiperreflexia ni la fiebre con mioclonías."
+        },
+        {
+          "key": "f",
+          "text": "Crisis de ansiedad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la fiebre ni la hiperreflexia."
+        },
+        {
+          "key": "g",
+          "text": "Infección viral con fiebre",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica las mioclonías."
+        },
+        {
+          "key": "h",
+          "text": "Síndrome serotoninérgico por la combinación de sertralina y tramadol",
+          "correct": true,
+          "rationale": "Ambos aumentan la serotonina y la tríada es alteración mental, autonómica y neuromuscular."
+        },
+        {
+          "key": "i",
+          "text": "Intoxicación por anticolinérgicos",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Causa piel seca, no diaforesis."
+        },
+        {
+          "key": "j",
+          "text": "Tirotoxicosis aguda espontánea",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "La relación temporal con el tramadol es clara."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "El síndrome serotoninérgico resulta del exceso de actividad serotoninérgica, generalmente por la combinación de fármacos como inhibidores de la recaptura de serotonina con tramadol, triptanos, linezolid, inhibidores de la monoaminooxidasa, dextrometorfano o meperidina. Se caracteriza por alteración del estado mental, inestabilidad autonómica con taquicardia, diaforesis, diarrea e hipertermia, y alteraciones neuromusculares como temblor, mioclonías e hiperreflexia, más marcadas en miembros inferiores, con clonus. Inicia en horas. El tratamiento es suspender los fármacos, medidas de soporte, benzodiacepinas y, en casos moderados a graves, ciproheptadina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de intoxicaciones por medicamentos"
+      ]
+    },
+    {
+      "key": "fam-05a-depresion-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "depression_primary",
+      "vignette": "Mujer de 30 años con depresión que ingiere intencionalmente 30 tabletas de amitriptilina de 25 mg. A su llegada está somnolienta, con pupilas dilatadas, piel seca y frecuencia cardiaca de 130. El electrocardiograma muestra QRS de 140 milisegundos.",
+      "prompt": "¿Cuál es la complicación más grave asociada a este hallazgo electrocardiográfico?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "La sobredosis de tricíclicos es benigna",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es de las más letales."
+        },
+        {
+          "key": "b",
+          "text": "Pancreatitis aguda",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es característica."
+        },
+        {
+          "key": "c",
+          "text": "Hipoglucemia grave",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es característica."
+        },
+        {
+          "key": "d",
+          "text": "Hipertermia por calor ambiental",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el cuadro."
+        },
+        {
+          "key": "e",
+          "text": "Síndrome serotoninérgico como complicación principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La toxicidad cardiaca es la más grave."
+        },
+        {
+          "key": "f",
+          "text": "Arritmias ventriculares y convulsiones por bloqueo de canales de sodio",
+          "correct": true,
+          "rationale": "Un QRS mayor de 100 milisegundos predice toxicidad grave."
+        },
+        {
+          "key": "g",
+          "text": "Hepatitis fulminante",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es la complicación principal de los tricíclicos."
+        },
+        {
+          "key": "h",
+          "text": "Agranulocitosis aguda",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No ocurre en sobredosis aguda."
+        },
+        {
+          "key": "i",
+          "text": "Insuficiencia renal aguda por mioglobina como primera complicación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es la principal."
+        },
+        {
+          "key": "j",
+          "text": "La midriasis indica que no hay riesgo cardiaco",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Son parte del mismo síndrome."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "g"
+      ],
+      "explanation": "La sobredosis de antidepresivos tricíclicos es una de las intoxicaciones medicamentosas más letales. Sus efectos se deben al bloqueo de canales de sodio cardiacos, con ensanchamiento del QRS y arritmias ventriculares; al efecto anticolinérgico, con midriasis, piel seca, taquicardia, retención urinaria y delirio; al bloqueo alfa adrenérgico, con hipotensión; y a convulsiones. Un QRS mayor de 100 milisegundos predice convulsiones y mayor de 160, arritmias ventriculares. El tratamiento es bicarbonato de sodio intravenoso. Por eso en pacientes con depresión y riesgo suicida se prefieren los inhibidores selectivos de la recaptura de serotonina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de intoxicaciones por medicamentos",
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto"
+      ]
+    },
+    {
+      "key": "fam-05a-depresion-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "depression_primary",
+      "vignette": "Mujer de 29 años, con parto hace 4 semanas, que acude a la revisión de su bebé. Refiere llanto frecuente, ansiedad, insomnio aunque el bebé duerma y sentimientos de no ser buena madre desde hace 2 semanas.",
+      "prompt": "¿Cuál es la herramienta de tamizaje más adecuada en este momento?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Medir hormonas tiroideas como única evaluación",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No sustituye el tamizaje."
+        },
+        {
+          "key": "b",
+          "text": "Resonancia magnética de cráneo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "c",
+          "text": "Escala de depresión posparto de Edimburgo",
+          "correct": true,
+          "rationale": "Está validada para detectar depresión perinatal."
+        },
+        {
+          "key": "d",
+          "text": "La lactancia previene la depresión posparto por completo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No la previene en todos los casos."
+        },
+        {
+          "key": "e",
+          "text": "Escala de Apgar",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Evalúa al recién nacido."
+        },
+        {
+          "key": "f",
+          "text": "No preguntar por pensamientos de dañarse o dañar al bebé",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es parte de la evaluación."
+        },
+        {
+          "key": "g",
+          "text": "No tamizar porque es tristeza posparto normal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La tristeza posparto se resuelve en 2 semanas y es leve."
+        },
+        {
+          "key": "h",
+          "text": "La depresión posparto es rara",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Afecta a 10 a 15 por ciento de las madres."
+        },
+        {
+          "key": "i",
+          "text": "Minimental",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Evalúa deterioro cognitivo."
+        },
+        {
+          "key": "j",
+          "text": "Escala de Glasgow",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Evalúa el estado de conciencia."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La depresión posparto afecta a 10 a 15 por ciento de las mujeres, inicia habitualmente en las primeras semanas después del parto y se distingue de la tristeza posparto, que es leve, aparece en los primeros días y se resuelve en dos semanas. La escala de depresión posparto de Edimburgo, con 10 preguntas, es la herramienta de tamizaje validada; una puntuación de 10 a 13 o más sugiere depresión. La consulta del niño sano es una oportunidad para el tamizaje. Siempre se pregunta por pensamientos de dañarse o dañar al bebé. La psicosis posparto es una urgencia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la depresión en el embarazo y posparto",
+        "Guía de Práctica Clínica de control prenatal con enfoque de riesgo"
+      ]
+    },
+    {
+      "key": "fam-05a-depresion-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "primary_mental_health",
+      "subtopic": "depression_primary",
+      "vignette": "Mujer de 32 años con depresión leve, PHQ-9 de 8, sin ideación suicida. Prefiere no tomar medicamentos. Tiene buena red de apoyo y puede acudir a sesiones semanales.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Antidepresivo obligatorio en todos los casos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "En depresión leve puede iniciarse con psicoterapia."
+        },
+        {
+          "key": "b",
+          "text": "La psicoterapia no es eficaz en la depresión",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tiene eficacia demostrada."
+        },
+        {
+          "key": "c",
+          "text": "Benzodiacepinas",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No tratan la depresión."
+        },
+        {
+          "key": "d",
+          "text": "No reevaluar en 4 a 6 semanas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Se debe medir la respuesta."
+        },
+        {
+          "key": "e",
+          "text": "Ningún tratamiento porque es leve",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Requiere intervención y seguimiento."
+        },
+        {
+          "key": "f",
+          "text": "Psicoterapia estructurada, como terapia cognitivo conductual, junto con activación conductual y seguimiento",
+          "correct": true,
+          "rationale": "Es eficaz como tratamiento inicial en depresión leve."
+        },
+        {
+          "key": "g",
+          "text": "Antipsicótico atípico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "h",
+          "text": "Hospitalización psiquiátrica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "i",
+          "text": "Estimulación magnética transcraneal de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es de primera línea."
+        },
+        {
+          "key": "j",
+          "text": "Solo el ejercicio sin ningún seguimiento clínico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es útil como complemento, con seguimiento."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "f"
+      ],
+      "explanation": "En la depresión leve, las intervenciones psicológicas son el tratamiento inicial recomendado, como la terapia cognitivo conductual, la activación conductual, la terapia interpersonal y la terapia de solución de problemas, junto con recomendaciones de actividad física, higiene del sueño y apoyo social. Los antidepresivos se consideran si el paciente los prefiere, si hay antecedente de depresión moderada o grave o si los síntomas persisten. Se debe dar seguimiento con escalas como el PHQ-9 en 4 a 6 semanas. La preferencia del paciente es importante en la elección del tratamiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento del trastorno depresivo en el adulto",
+        "Programa de acción para superar las brechas en salud mental de la Organización Mundial de la Salud"
+      ]
+    }
+  ]
+}
