@@ -1,0 +1,303 @@
+@ cir|anesthesiology|local_anesthetics|3|next_step
+V: Hombre de 35 años que refiere haber tenido una reacción alérgica con urticaria tras la aplicación de procaína en una consulta dental hace años. Requiere sutura de una herida en la mano.
+P: ¿Cuál es la conducta más apropiada respecto al anestésico local?
++ Usar un anestésico del grupo amida, como lidocaína sin conservadores || La alergia a los ésteres no implica reactividad cruzada con las amidas.
+- anchoring | Evitar cualquier anestésico local y suturar sin anestesia || Hay alternativas seguras.
+- availability_heuristic | Usar otro anestésico del grupo éster como tetracaína || Tiene reactividad cruzada con la procaína.
+- representativeness_heuristic | Anestesia general para una sutura simple || Es excesiva.
+- premature_closure | Pruebas cutáneas con todos los anestésicos antes de cualquier sutura urgente || No son necesarias para elegir una amida.
+- framing_effect | Usar benzocaína tópica || Es un éster.
+- complexity_bias | Premedicar con corticosteroides en dosis altas y usar el mismo éster || No es adecuado.
+- base_rate_fallacy | Todos los anestésicos locales tienen la misma alergenicidad || Los ésteres son más alergénicos.
+- belief_bias | Aplicar hielo en lugar de anestesia como estándar || No es una anestesia adecuada.
+- omission_bias | No preguntar por alergias antes de aplicar anestesia || Es fundamental.
+E: Los anestésicos locales se dividen en ésteres y amidas. Los ésteres, como procaína, tetracaína, benzocaína y cocaína, se metabolizan por las colinesterasas plasmáticas a ácido paraaminobenzoico, que es alergénico, por lo que las reacciones alérgicas son más frecuentes. Las amidas, como lidocaína, bupivacaína, ropivacaína y mepivacaína, se metabolizan en el hígado y rara vez causan alergia verdadera, aunque algunas reacciones se deben a conservadores como los parabenos. La alergia a un éster no implica reactividad cruzada con las amidas. Muchas reacciones atribuidas a alergia son vasovagales o por la adrenalina.
+R: Guía de Práctica Clínica de anestesia local y regional
+
+@ cir|anesthesiology|local_anesthetics|3|treatment_of_choice
+V: Mujer de 45 años que durante un bloqueo del plexo braquial con bupivacaína presenta convulsiones seguidas de taquicardia ventricular. Se suspende la inyección, se maneja la vía aérea y se administra midazolam.
+P: ¿Cuál es el tratamiento específico de elección para la toxicidad cardiaca?
++ Emulsión lipídica al 20% intravenosa en bolo y en infusión || Secuestra el anestésico liposoluble y revierte la cardiotoxicidad.
+- anchoring | Lidocaína intravenosa para la arritmia || Es otro anestésico local y empeora la toxicidad.
+- availability_heuristic | Adrenalina a dosis altas como en el paro habitual || Se usan dosis reducidas en esta toxicidad.
+- representativeness_heuristic | Dantroleno || Es para hipertermia maligna.
+- premature_closure | Naloxona || Es para opioides.
+- framing_effect | Gluconato de calcio como antídoto específico || No es el antídoto.
+- complexity_bias | Hemodiálisis urgente || No es eficaz.
+- base_rate_fallacy | Flumazenil || Es para benzodiacepinas.
+- belief_bias | Esperar a que el anestésico se elimine solo || La cardiotoxicidad puede ser mortal.
+- omission_bias | No usar la emulsión por falta de experiencia || Es el tratamiento recomendado.
+E: La emulsión lipídica intravenosa al 20% es el tratamiento específico de la toxicidad sistémica por anestésicos locales, sobre todo de la cardiotoxicidad por bupivacaína. Se administra un bolo de 1.5 mL/kg seguido de una infusión, y puede repetirse el bolo. Su mecanismo incluye secuestrar el anestésico liposoluble en la fase lipídica. Junto con ella se maneja la vía aérea con oxígeno, se tratan las convulsiones con benzodiacepinas y se realiza reanimación cardiopulmonar si hay paro, con dosis reducidas de adrenalina y evitando la lidocaína y la vasopresina. Toda unidad que realiza bloqueos debe contar con emulsión lipídica.
+R: Guía de Práctica Clínica de anestesia local y regional
+
+@ cir|colorectal_anorectal|diverticular_disease|3|next_step
+V: Hombre de 58 años que se recuperó de un primer episodio de diverticulitis aguda no complicada hace 6 semanas, confirmado por tomografía. Nunca se ha realizado colonoscopia.
+P: ¿Cuál es el siguiente paso?
++ Realizar colonoscopia para descartar cáncer colorrectal || La tomografía puede confundir un cáncer con diverticulitis.
+- anchoring | Sigmoidectomía electiva tras el primer episodio no complicado || No se recomienda de rutina.
+- availability_heuristic | Ningún estudio porque ya se resolvió || Debe descartarse cáncer.
+- representativeness_heuristic | Antibióticos profilácticos mensuales || No previenen la recurrencia.
+- premature_closure | Dieta sin semillas de por vida || No es necesaria.
+- framing_effect | Tomografía cada 3 meses || No es necesaria.
+- complexity_bias | Colectomía total profiláctica || Es excesiva.
+- base_rate_fallacy | Colonoscopia durante la fase aguda || Está contraindicada.
+- belief_bias | Los divertículos nunca se relacionan con el cáncer || Pueden coexistir o confundirse.
+- omission_bias | No ofrecer la colonoscopia por la incomodidad || Es importante descartar cáncer.
+E: Después de un episodio de diverticulitis, sobre todo el primero o complicado, se recomienda colonoscopia de 6 a 8 semanas después de la resolución si no se ha realizado recientemente, para descartar cáncer colorrectal, que puede simular diverticulitis en la tomografía. La sigmoidectomía electiva ya no se recomienda de forma rutinaria tras dos episodios, sino que se individualiza según la frecuencia, la gravedad, las complicaciones, la inmunosupresión y la calidad de vida. La fibra, la actividad física y el control del peso reducen las recurrencias.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de enfermedad diverticular
+
+@ cir|ophthalmology|cataract|3|diagnosis
+V: Hombre de 65 años con diabetes de 20 años de evolución y mal control que presenta disminución progresiva de la visión. El fondo de ojo muestra microaneurismas, hemorragias en llama, exudados duros y neovasos en la papila.
+P: ¿Cuál es el diagnóstico más probable?
++ Retinopatía diabética proliferativa || Neovasos en un diabético de larga evolución con hallazgos de retinopatía.
+- anchoring | Retinopatía diabética no proliferativa || La presencia de neovasos define la forma proliferativa.
+- availability_heuristic | Catarata senil || No explica los hallazgos del fondo de ojo.
+- representativeness_heuristic | Retinopatía hipertensiva || Los neovasos y el contexto orientan a diabetes.
+- premature_closure | Degeneración macular asociada a la edad || Da drusas y neovascularización coroidea macular.
+- base_rate_fallacy | Oclusión de la vena central de la retina || Da hemorragias en los cuatro cuadrantes de forma aguda.
+- framing_effect | Glaucoma de ángulo abierto || No explica los hallazgos.
+- inattentional_blindness | Desprendimiento de retina aislado || No explica los neovasos.
+- focusing_illusion | Papiledema || No explica los microaneurismas.
+- belief_bias | Vista cansada por la edad || Hay daño retiniano grave.
+E: La retinopatía diabética es una complicación microvascular de la diabetes y una de las principales causas de ceguera en adultos en edad productiva. Se clasifica en no proliferativa, con microaneurismas, hemorragias, exudados duros y algodonosos, y proliferativa, con neovasos en la papila o la retina por isquemia, que pueden sangrar o causar desprendimiento traccional. El edema macular puede ocurrir en cualquier etapa. Se recomienda fondo de ojo anual en diabéticos. El tratamiento incluye control de la glucosa y la presión, fotocoagulación panretiniana con láser, antiangiogénicos intravítreos y vitrectomía.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la retinopatía diabética
+
+@ cir|ophthalmology|cataract|3|diagnosis
+V: Mujer de 70 años con pérdida súbita e indolora de la visión del ojo derecho al despertar. Tiene fibrilación auricular. El fondo de ojo muestra la retina pálida con una mancha rojo cereza en la mácula.
+P: ¿Cuál es el diagnóstico más probable?
++ Oclusión de la arteria central de la retina || Pérdida visual súbita indolora con retina pálida y mancha rojo cereza.
+- anchoring | Oclusión de la vena central de la retina || Da hemorragias en los cuatro cuadrantes.
+- availability_heuristic | Desprendimiento de retina || Se precede de destellos y cortina.
+- representativeness_heuristic | Catarata || Es progresiva.
+- premature_closure | Glaucoma agudo || Es doloroso con ojo rojo.
+- base_rate_fallacy | Neuritis óptica || Es dolorosa con los movimientos oculares en jóvenes.
+- framing_effect | Hemorragia vítrea || Impediría ver el fondo de ojo.
+- inattentional_blindness | Migraña con aura || Es transitoria y binocular.
+- focusing_illusion | Degeneración macular || Es progresiva.
+- belief_bias | Vista nublada por dormir mal || Es una urgencia vascular.
+E: La oclusión de la arteria central de la retina se manifiesta con pérdida visual súbita, indolora y profunda de un ojo. Se debe generalmente a émbolos de origen carotídeo o cardiaco, por fibrilación auricular, o a arteritis de células gigantes en mayores de 50 años. El fondo de ojo muestra la retina pálida y edematosa con una mancha rojo cereza en la mácula, porque la coroides subyacente se transparenta. Es una urgencia equivalente a un evento vascular cerebral, por lo que se refiere a un centro especializado y se estudia la fuente embólica. Se mide la velocidad de sedimentación para descartar arteritis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de las oclusiones vasculares de la retina
+
+@ cir|ophthalmology|glaucoma|3|risk_factor
+V: Mujer de 60 años con asma que usa corticosteroide inhalado y en ocasiones gotas oftálmicas de corticosteroide por conjuntivitis alérgica que se automedica. En su revisión tiene presión intraocular de 30 mmHg.
+P: ¿Cuál es el factor que más probablemente elevó su presión intraocular?
++ Uso de corticosteroides oftálmicos tópicos || Pueden causar glaucoma cortisónico por menor drenaje del humor acuoso.
+- anchoring | El asma por sí misma || No eleva la presión intraocular.
+- availability_heuristic | El uso de antihistamínicos orales como causa principal || Pueden precipitar ángulo cerrado, pero los corticosteroides tópicos explican el aumento crónico.
+- representativeness_heuristic | La conjuntivitis alérgica || No eleva la presión intraocular.
+- premature_closure | El sexo femenino || No es la causa.
+- base_rate_fallacy | El consumo de café || Su efecto es mínimo.
+- framing_effect | El uso de lentes de lectura || No influye.
+- inattentional_blindness | La exposición al sol || No eleva la presión.
+- focusing_illusion | El estrés || No es la causa principal.
+- belief_bias | Leer mucho de noche || No eleva la presión intraocular.
+E: Los corticosteroides, sobre todo los oftálmicos tópicos y también los sistémicos, inhalados y perioculares, pueden elevar la presión intraocular en personas susceptibles al disminuir el drenaje del humor acuoso por la malla trabecular. Esto puede causar glaucoma cortisónico con daño del nervio óptico si no se detecta. También favorecen la catarata subcapsular posterior. Por ello no deben usarse gotas de corticosteroide sin supervisión oftalmológica, y los pacientes que las usan por periodos prolongados requieren medición de la presión intraocular. La automedicación con gotas es un riesgo.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del glaucoma primario de ángulo abierto
+
+@ cir|otolaryngology|epistaxis|3|next_step
+V: Hombre de 45 años con epistaxis anterior izquierda recurrente que no cedió con compresión de 15 minutos ni con vasoconstrictor tópico. Se identifica un vaso sangrante en el área de Little.
+P: ¿Cuál es el siguiente paso?
++ Cauterización del vaso sangrante con nitrato de plata o eléctrica y, si persiste, taponamiento anterior || Es la siguiente medida tras la falla de la compresión.
+- anchoring | Taponamiento posterior con balón || Se reserva para epistaxis posterior.
+- availability_heuristic | Ligadura de la arteria carótida externa || Es excesiva.
+- representativeness_heuristic | Transfusión || No hay inestabilidad.
+- premature_closure | Repetir la compresión indefinidamente || Ya falló.
+- framing_effect | Cauterizar ambos lados del tabique en la misma sesión || Aumenta el riesgo de perforación septal.
+- complexity_bias | Embolización arterial como siguiente paso || Se reserva para casos refractarios.
+- base_rate_fallacy | Antibióticos sistémicos como tratamiento del sangrado || No detienen el sangrado.
+- belief_bias | Colocar algodón con pasta dental en la nariz || No es eficaz.
+- omission_bias | Egresar sin tratar el sitio sangrante || Recurrirá.
+E: Cuando la epistaxis anterior no cede con compresión y vasoconstrictores tópicos y se identifica el sitio sangrante, se realiza cauterización química con nitrato de plata o eléctrica. No se recomienda cauterizar ambos lados del tabique en la misma sesión por el riesgo de perforación septal. Si la cauterización falla o no se identifica el sitio, se coloca un taponamiento anterior con materiales reabsorbibles o no reabsorbibles, que se retira en 24 a 72 horas. Se buscan causas como coagulopatía, anticoagulantes, hipertensión y tumores en epistaxis recurrentes.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la epistaxis
+
+@ cir|otolaryngology|epistaxis|3|risk_factor
+V: Mujer de 40 años con epistaxis recurrentes desde la infancia, telangiectasias en los labios, la lengua y los dedos, anemia ferropénica y su padre tiene el mismo problema.
+P: ¿Cuál es el factor causal más probable de sus epistaxis?
++ Telangiectasia hemorrágica hereditaria o enfermedad de Rendu Osler Weber || Epistaxis recurrentes, telangiectasias mucocutáneas y herencia autosómica dominante.
+- anchoring | Hábito de hurgarse la nariz || No explica las telangiectasias ni la herencia.
+- availability_heuristic | Hipertensión arterial || No explica las telangiectasias.
+- representativeness_heuristic | Enfermedad de von Willebrand || No explica las telangiectasias.
+- premature_closure | Resequedad ambiental || No explica el cuadro completo.
+- base_rate_fallacy | Angiofibroma juvenil || Ocurre en adolescentes varones.
+- framing_effect | Uso de anticoagulantes || No hay antecedente.
+- inattentional_blindness | Cáncer nasofaríngeo || No explica las telangiectasias desde la infancia.
+- focusing_illusion | Púrpura trombocitopénica inmune || No explica las telangiectasias.
+- belief_bias | Sangrado por debilidad de la sangre sin causa || Hay una enfermedad hereditaria.
+E: La telangiectasia hemorrágica hereditaria es una enfermedad autosómica dominante por mutaciones de genes como ENG y ACVRL1, que causan malformaciones vasculares. Se caracteriza por epistaxis recurrentes, que suelen ser el primer síntoma, telangiectasias en labios, lengua, mucosas y dedos, y malformaciones arteriovenosas en pulmón, hígado, cerebro y tubo digestivo, con sangrado gastrointestinal y anemia ferropénica. El diagnóstico se basa en los criterios de Curaçao. Se buscan malformaciones arteriovenosas pulmonares y cerebrales. El tratamiento incluye hidratación nasal, láser, ácido tranexámico, hierro y antiangiogénicos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la epistaxis
+
+@ cir|pancreas|pancreatic_cancer|3|diagnosis
+V: Mujer de 55 años con hallazgo incidental en una tomografía de un quiste en la cola del páncreas de 4 cm, con septos y paredes gruesas, sin comunicación con el conducto pancreático. Sin antecedente de pancreatitis. Asintomática.
+P: ¿Cuál es el diagnóstico más probable?
++ Neoplasia quística mucinosa del páncreas || Quiste con septos en la cola del páncreas en una mujer sin antecedente de pancreatitis.
+- anchoring | Pseudoquiste pancreático || Requiere antecedente de pancreatitis.
+- availability_heuristic | Quiste simple sin importancia || Los septos y la pared gruesa son sospechosos.
+- representativeness_heuristic | Adenocarcinoma sólido de páncreas || La lesión es quística.
+- premature_closure | Absceso pancreático || No hay fiebre.
+- base_rate_fallacy | Cistoadenoma seroso típico en panal || Suele ser microquístico con cicatriz central.
+- framing_effect | Quiste hidatídico || Es raro en el páncreas.
+- inattentional_blindness | Tumor neuroendocrino funcional || Daría síntomas hormonales.
+- focusing_illusion | Neoplasia papilar mucinosa intraductal || Se comunica con el conducto pancreático.
+- belief_bias | Los quistes nunca son malignos || Algunos tienen potencial maligno.
+E: Las neoplasias quísticas del páncreas son hallazgos cada vez más frecuentes. Incluyen el cistoadenoma seroso, benigno y microquístico, la neoplasia quística mucinosa, en mujeres de mediana edad en el cuerpo y la cola, con potencial maligno, y la neoplasia papilar mucinosa intraductal, que se comunica con los conductos y también puede malignizarse. Deben distinguirse del pseudoquiste, que tiene antecedente de pancreatitis. El ultrasonido endoscópico con análisis del líquido ayuda en el diagnóstico. Las neoplasias mucinosas con datos de riesgo se resecan.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del cáncer de páncreas
+
+@ cir|perioperative|postoperative_fluids|3|next_step
+V: Hombre de 72 años con colectomía hace 1 día que presenta diuresis de 15 mL por hora en las últimas 3 horas, taquicardia de 110 y presión de 100/60 mmHg. Sonda vesical permeable.
+P: ¿Cuál es el siguiente paso?
++ Administrar un bolo de solución cristaloide balanceada de 250 a 500 mL y reevaluar la respuesta || La oliguria posoperatoria con taquicardia sugiere hipovolemia.
+- anchoring | Furosemida intravenosa para aumentar la diuresis || Empeora la hipovolemia.
+- availability_heuristic | Restringir los líquidos para evitar sobrecarga || Empeora la hipoperfusión.
+- representativeness_heuristic | Iniciar hemodiálisis || No hay indicación.
+- premature_closure | Esperar a que orine más por la mañana sin intervenir || Retrasa el tratamiento.
+- framing_effect | Dopamina a dosis renal || No protege el riñón.
+- complexity_bias | Biopsia renal || No está indicada.
+- base_rate_fallacy | Cambiar la sonda vesical como única medida || Ya está permeable.
+- belief_bias | La oliguria es normal el primer día y no requiere acciones || Con taquicardia requiere evaluación.
+- omission_bias | No buscar sangrado como causa de la hipovolemia || Debe descartarse.
+E: La oliguria posoperatoria, diuresis menor de 0.5 mL/kg/h, es frecuente y suele deberse a hipovolemia por pérdidas, sangrado, tercer espacio o aporte insuficiente, aunque también a la respuesta hormonal al estrés. Primero se verifica la permeabilidad de la sonda. Si hay datos de hipovolemia se administran bolos de cristaloides balanceados y se reevalúa la respuesta. Se descartan sangrado, fuga de anastomosis y sepsis. Los diuréticos están contraindicados en la oliguria por hipovolemia, y la dopamina a dosis renal no protege el riñón.
+R: Guía de Práctica Clínica de manejo de líquidos y electrolitos en el paciente quirúrgico
+
+@ cir|vascular_surgery|peripheral_arterial_disease|3|diagnosis
+V: Hombre de 70 años diabético y fumador con dolor en el pie derecho en reposo que empeora en la noche y mejora al colgar la pierna. Tiene una úlcera seca en la punta del primer dedo, piel fría, brillante, sin vello y sin pulsos distales. Índice tobillo brazo de 0.3.
+P: ¿Cuál es el diagnóstico más probable?
++ Isquemia crítica crónica de la extremidad || Dolor en reposo, úlcera isquémica e índice tobillo brazo muy bajo.
+- anchoring | Claudicación intermitente estable || Ya tiene dolor en reposo y úlcera.
+- availability_heuristic | Úlcera venosa || Es húmeda en el maléolo medial con edema.
+- representativeness_heuristic | Neuropatía diabética sin isquemia || No explica la ausencia de pulsos ni el índice bajo.
+- premature_closure | Celulitis del pie || No explica la isquemia.
+- base_rate_fallacy | Isquemia arterial aguda embólica || Es de inicio súbito.
+- framing_effect | Gota en el primer dedo || Da inflamación aguda sin isquemia.
+- inattentional_blindness | Osteomielitis sin isquemia || La isquemia es evidente.
+- focusing_illusion | Fenómeno de Raynaud || Es episódico.
+- belief_bias | Dolor por la edad que mejora con pomadas || Es una isquemia que amenaza la extremidad.
+E: La isquemia crítica crónica de la extremidad es la etapa avanzada de la enfermedad arterial periférica. Se manifiesta con dolor en reposo, que empeora al acostarse y mejora al colgar la pierna, úlceras isquémicas que no cicatrizan o gangrena, con índice tobillo brazo generalmente menor de 0.4. Tiene alto riesgo de amputación y mortalidad. Requiere evaluación urgente por cirugía vascular con estudios de imagen para revascularización endovascular o quirúrgica, además de control de los factores de riesgo, antiagregación, estatinas y cuidado de las heridas.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad arterial periférica
+
+@ cir|vascular_surgery|peripheral_arterial_disease|3|diagnosis
+V: Mujer de 65 años con edema de ambas piernas de años, dermatitis ocre en la parte baja de las piernas, várices visibles y una úlcera húmeda, poco dolorosa, en el maléolo medial izquierdo. Pulsos pedios presentes.
+P: ¿Cuál es el diagnóstico más probable?
++ Úlcera venosa por insuficiencia venosa crónica || Úlcera en el maléolo medial con edema, dermatitis ocre, várices y pulsos presentes.
+- anchoring | Úlcera arterial isquémica || Es dolorosa, seca, distal y sin pulsos.
+- availability_heuristic | Úlcera neuropática diabética || Se localiza en puntos de presión de la planta.
+- representativeness_heuristic | Pioderma gangrenoso || Tiene bordes violáceos de rápida progresión.
+- premature_closure | Celulitis || No explica los cambios crónicos.
+- base_rate_fallacy | Carcinoma epidermoide de Marjolin || Es un cáncer en úlceras crónicas de muchos años, se considera si no cicatriza.
+- framing_effect | Vasculitis cutánea || No explica las várices y el edema crónico.
+- inattentional_blindness | Trombosis venosa profunda aguda || El cuadro es crónico.
+- focusing_illusion | Linfedema primario || No explica la dermatitis ocre y las várices.
+- belief_bias | Herida que se cura con remedios caseros || Requiere compresión.
+E: La úlcera venosa es la úlcera de la pierna más frecuente y se debe a la hipertensión venosa crónica por insuficiencia valvular o secuelas de trombosis. Se localiza típicamente en la región del maléolo medial, es superficial, húmeda, con bordes irregulares y poco dolorosa, y se acompaña de edema, dermatitis ocre, lipodermatoesclerosis y várices. Los pulsos están presentes, aunque se debe medir el índice tobillo brazo antes de la compresión. El tratamiento principal es la terapia de compresión, la elevación de las piernas, el cuidado de la herida y el tratamiento de la insuficiencia venosa.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la insuficiencia venosa crónica
+
+@ cir|thoracic_surgery|pneumothorax|4|diagnosis
+V: Hombre de 55 años con cáncer de pulmón que tras una biopsia transtorácica guiada por tomografía presenta disnea súbita, dolor torácico y disminución del murmullo en el lado puncionado. Estable con saturación de 92%.
+P: ¿Cuál es el diagnóstico más probable?
++ Neumotórax iatrogénico || Complicación frecuente de la biopsia pulmonar transtorácica.
+- anchoring | Progresión del cáncer || No explica el inicio súbito tras la biopsia.
+- availability_heuristic | Tromboembolia pulmonar || No explica la relación con la biopsia ni el murmullo disminuido.
+- representativeness_heuristic | Hemotórax masivo || Daría matidez e inestabilidad.
+- premature_closure | Neumonía || No explica el inicio súbito.
+- base_rate_fallacy | Taponamiento cardiaco || No explica los hallazgos pulmonares.
+- framing_effect | Crisis de ansiedad tras el procedimiento || Hay hallazgos objetivos.
+- inattentional_blindness | Derrame pleural maligno || No explica el inicio súbito.
+- focusing_illusion | Embolia gaseosa sistémica || Daría alteraciones neurológicas o cardiacas.
+- belief_bias | Dolor normal tras la punción || Hay un neumotórax.
+E: El neumotórax iatrogénico es una complicación frecuente de procedimientos como la biopsia pulmonar transtorácica, la colocación de catéteres venosos centrales subclavios, la toracocentesis, la ventilación mecánica con presión positiva y la reanimación cardiopulmonar. Se sospecha con disnea, dolor torácico o hipoxemia tras el procedimiento. La radiografía de tórax confirma el diagnóstico. Los neumotórax pequeños y estables se observan con oxígeno, y los grandes o sintomáticos se drenan. En pacientes con ventilación mecánica se coloca sonda pleural por el riesgo de neumotórax a tensión.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del neumotórax espontáneo
+
+@ cir|hernias|ventral_hernia|3|diagnosis
+V: Hombre de 45 años con dolor en el epigastrio y una pequeña masa dolorosa en la línea media entre el ombligo y el apéndice xifoides que aparece al hacer esfuerzo.
+P: ¿Cuál es el diagnóstico más probable?
++ Hernia epigástrica || Defecto en la línea alba por arriba del ombligo.
+- anchoring | Diástasis de los rectos || Es una separación difusa sin defecto aponeurótico ni masa dolorosa.
+- availability_heuristic | Úlcera péptica || No explica la masa en la pared.
+- representativeness_heuristic | Hernia umbilical || Está en el ombligo.
+- premature_closure | Lipoma subcutáneo || No aparece con el esfuerzo de esta forma.
+- base_rate_fallacy | Hernia de Spiegel || Está en la línea semilunar.
+- framing_effect | Pancreatitis crónica || No explica la masa.
+- inattentional_blindness | Hernia hiatal || Es interna y no palpable.
+- focusing_illusion | Quiste sebáceo || Es superficial en la piel.
+- belief_bias | Músculo inflamado por ejercicio || Hay un defecto herniario.
+E: La hernia epigástrica es la protrusión de grasa preperitoneal o epiplón a través de un defecto en la línea alba entre el apéndice xifoides y el ombligo. Es más frecuente en hombres de 20 a 50 años. Suele ser pequeña, puede ser múltiple y causar dolor desproporcionado por la incarceración de la grasa. Debe distinguirse de la diástasis de los rectos, que es una separación de los músculos rectos sin defecto aponeurótico verdadero y no requiere cirugía. El tratamiento de la hernia epigástrica sintomática es la reparación, con malla en defectos mayores.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la hernia ventral e incisional
+
+@ cir|trauma|abdominal_trauma|3|diagnosis
+V: Hombre de 28 años con traumatismo abdominal cerrado por golpe con el manubrio de la bicicleta en el epigastrio. A las 24 horas presenta dolor epigástrico irradiado a la espalda, vómito y amilasa elevada. La tomografía muestra edema peripancreático y una línea de fractura en el cuello del páncreas.
+P: ¿Cuál es el diagnóstico más probable?
++ Lesión traumática del páncreas || Golpe epigástrico con manubrio, amilasa elevada y fractura pancreática.
+- anchoring | Contusión de pared abdominal || No explica la amilasa ni la fractura pancreática.
+- availability_heuristic | Lesión esplénica || La tomografía muestra lesión pancreática.
+- representativeness_heuristic | Pancreatitis alcohólica || El contexto es traumático.
+- premature_closure | Gastritis por el golpe || No explica los hallazgos.
+- base_rate_fallacy | Lesión hepática aislada || La lesión es pancreática.
+- framing_effect | Úlcera péptica perforada || No explica la fractura pancreática.
+- inattentional_blindness | Lesión renal || No explica la amilasa elevada.
+- focusing_illusion | Hematoma duodenal aislado || La tomografía muestra fractura pancreática.
+- belief_bias | Dolor muscular que se quita con reposo || Hay una lesión de órgano.
+E: Las lesiones del páncreas son poco frecuentes en el trauma abdominal cerrado, pero el golpe con el manubrio de la bicicleta o el volante comprime el páncreas contra la columna vertebral, típicamente en el cuello. Los síntomas pueden ser tardíos. La amilasa elevada y la tomografía apoyan el diagnóstico, y la colangiopancreatografía por resonancia evalúa la integridad del conducto pancreático, que determina el manejo. Las lesiones sin afección ductal se manejan de forma conservadora o con drenaje, y las del cuerpo o cola con lesión ductal con pancreatectomía distal. Las complicaciones incluyen fístula y pseudoquiste.
+R: Programa Avanzado de Apoyo Vital en Trauma del Colegio Americano de Cirujanos
+
+@ cir|colorectal_anorectal|anal_fissure_fistula|3|diagnosis
+V: Hombre de 22 años con dolor y secreción purulenta intermitente en la región sacrococcígea, en el surco interglúteo, donde hay varios orificios pequeños con pelos saliendo de ellos. Es velludo y pasa muchas horas sentado.
+P: ¿Cuál es el diagnóstico más probable?
++ Enfermedad pilonidal o quiste pilonidal || Orificios en el surco interglúteo con pelos en un joven velludo que pasa mucho tiempo sentado.
+- anchoring | Fístula anal || El orificio externo estaría cerca del ano y comunicado con el canal anal.
+- availability_heuristic | Absceso perianal || Se localiza junto al ano.
+- representativeness_heuristic | Hidradenitis supurativa || Afecta axilas e ingles.
+- premature_closure | Furúnculo simple || No explica los orificios con pelos crónicos.
+- base_rate_fallacy | Teratoma sacrococcígeo || Es congénito en recién nacidos.
+- framing_effect | Quiste sebáceo infectado || No explica los orificios con pelos en la línea media.
+- inattentional_blindness | Tuberculosis cutánea || Es rara.
+- focusing_illusion | Escara por presión || No hay inmovilidad.
+- belief_bias | Granos por sudar mucho || Es una enfermedad crónica.
+E: La enfermedad pilonidal es una infección crónica de la piel y el tejido subcutáneo en el surco interglúteo de la región sacrococcígea, causada por la penetración de pelos en la piel que generan una reacción a cuerpo extraño y senos. Es más frecuente en hombres jóvenes, velludos, obesos y que pasan mucho tiempo sentados. Se manifiesta como absceso agudo o como senos crónicos con secreción y orificios con pelos en la línea media. El absceso se trata con incisión y drenaje lateral, y la enfermedad crónica con escisión y cierre o colgajos. La depilación reduce la recurrencia.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de la enfermedad pilonidal
+
+@ cir|acute_abdomen|bowel_obstruction|3|diagnosis
+V: Hombre de 70 años en el tercer día posoperatorio de una cirugía de cadera que presenta distensión abdominal masiva, sin dolor intenso, con canalización escasa de gases. La radiografía muestra dilatación del colon derecho y transverso con ciego de 11 cm sin punto de obstrucción mecánica.
+P: ¿Cuál es el diagnóstico más probable?
++ Pseudoobstrucción colónica aguda o síndrome de Ogilvie || Dilatación colónica masiva sin obstrucción mecánica en un paciente posoperado.
+- anchoring | Vólvulo de sigmoides || Daría imagen en grano de café con torsión.
+- availability_heuristic | Cáncer de colon obstructivo || No hay punto de obstrucción mecánica.
+- representativeness_heuristic | Íleo de intestino delgado || La dilatación es del colon.
+- premature_closure | Megacolon tóxico por colitis || No hay colitis ni toxicidad.
+- base_rate_fallacy | Enfermedad de Hirschsprung del adulto || Es crónica.
+- framing_effect | Estreñimiento simple || No explica la dilatación masiva.
+- inattentional_blindness | Isquemia mesentérica || Daría dolor desproporcionado.
+- focusing_illusion | Oclusión por bridas || No hay punto de transición mecánico.
+- belief_bias | Gases por la comida del hospital || Hay riesgo de perforación cecal.
+E: La pseudoobstrucción colónica aguda o síndrome de Ogilvie es una dilatación masiva del colon sin obstrucción mecánica, generalmente del ciego y el colon derecho. Ocurre en pacientes hospitalizados con enfermedades graves, posoperatorio de cirugía ortopédica o cardiaca, alteraciones electrolíticas y uso de opioides. El riesgo de perforación aumenta con un ciego mayor de 10 a 12 cm. El tratamiento inicial es conservador con ayuno, sonda nasogástrica y rectal, corrección de electrolitos y suspensión de opioides. Si no mejora se usa neostigmina intravenosa, colonoscopia descompresiva y cirugía si hay perforación.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de oclusión intestinal
+
+@ cir|acute_abdomen|hollow_viscus_perforation|3|diagnosis
+V: Mujer de 45 años que tras una colonoscopia con polipectomía presenta, a las 6 horas, dolor abdominal intenso progresivo, distensión, fiebre y rebote. La radiografía de tórax muestra aire libre subdiafragmático.
+P: ¿Cuál es el diagnóstico más probable?
++ Perforación colónica iatrogénica || Dolor, peritonitis y neumoperitoneo tras colonoscopia con polipectomía.
+- anchoring | Distensión normal por el aire de la colonoscopia || El rebote y el neumoperitoneo indican perforación.
+- availability_heuristic | Síndrome postpolipectomía sin perforación || No daría neumoperitoneo libre.
+- representativeness_heuristic | Úlcera péptica perforada || El contexto es la colonoscopia.
+- premature_closure | Apendicitis aguda || No explica el antecedente ni el neumoperitoneo.
+- base_rate_fallacy | Pancreatitis aguda || No da neumoperitoneo.
+- framing_effect | Hemorragia postpolipectomía || Daría rectorragia.
+- inattentional_blindness | Diverticulitis aguda no complicada || No explica el neumoperitoneo.
+- focusing_illusion | Gastroenteritis por la preparación || No explica los hallazgos.
+- belief_bias | Gases que se eliminarán solos || Es una urgencia quirúrgica.
+E: La perforación es una complicación rara pero grave de la colonoscopia, más frecuente con procedimientos terapéuticos como polipectomía, dilatación o mucosectomía. Se manifiesta con dolor abdominal, distensión, fiebre y signos peritoneales en las horas siguientes. La radiografía o la tomografía muestran neumoperitoneo. Las perforaciones pequeñas detectadas durante el procedimiento pueden cerrarse con clips endoscópicos. Las que se presentan con peritonitis generalizada requieren cirugía. Se debe distinguir del síndrome postpolipectomía, que causa dolor y fiebre por quemadura transmural sin perforación libre.
+R: Guía de Práctica Clínica de detección y diagnóstico del cáncer colorrectal
+
+@ cir|perioperative|preoperative_assessment|3|next_step
+V: Hombre de 62 años con diabetes tipo 2 en tratamiento con metformina e insulina glargina, programado para hernioplastia inguinal ambulatoria a las 8 de la mañana.
+P: ¿Cuál es la conducta más apropiada sobre sus medicamentos para la diabetes?
++ Suspender la metformina el día de la cirugía y reducir la dosis de insulina basal de la noche previa alrededor de 20%, con monitoreo de glucosa || Previene la hipoglucemia y la acidosis láctica.
+- anchoring | Aplicar la dosis completa de insulina y la metformina el día de la cirugía sin comer || Aumenta el riesgo de hipoglucemia.
+- availability_heuristic | Suspender toda la insulina una semana antes || Causa descontrol grave.
+- representativeness_heuristic | Cancelar la cirugía por tener diabetes || No está indicado si está controlado.
+- premature_closure | Cambiar a sulfonilureas el día de la cirugía || Aumentan el riesgo de hipoglucemia.
+- framing_effect | Administrar glucosa al 50% de forma rutinaria antes de la cirugía || No es necesario.
+- complexity_bias | Hospitalizar 3 días antes para ajustar la insulina || No es necesario.
+- base_rate_fallacy | No medir la glucosa en el perioperatorio || Debe vigilarse.
+- belief_bias | La diabetes no influye en la cirugía || Aumenta las complicaciones.
+- omission_bias | No dar indicaciones claras al paciente || Puede causar errores.
+E: El manejo perioperatorio de la diabetes busca evitar la hipoglucemia y la hiperglucemia, que se asocia a infecciones y mala cicatrización. La metformina suele suspenderse el día de la cirugía, y en cirugías mayores o con contraste se valora la función renal. Las sulfonilureas se suspenden el día de la cirugía. La insulina basal se reduce alrededor de 20% la noche previa o la mañana de la cirugía. Los inhibidores de SGLT2 se suspenden de 3 a 4 días antes por el riesgo de cetoacidosis euglucémica. Se mide la glucosa capilar y se corrige con insulina, con meta de 100 a 180 mg/dL.
+R: Guía de Práctica Clínica de valoración perioperatoria en cirugía no cardiaca en el adulto
