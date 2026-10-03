@@ -3,7 +3,7 @@
 // ramas quedan plegadas con un resumen (D-078). El examen completo llega en el siguiente bloque.
 import { Play } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate, useSearchParams } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
 import { PLANS } from '@/config/billing';
@@ -54,9 +54,16 @@ function Setup({ session }: { session: ReadySession }) {
     [api.repos, session.user.id],
   );
   const events = useUserEvents(session.user.id);
-  const [topics, setTopics] = useState<Set<string>>(() => new Set(ALL_TOPICS));
+  // Los focos de Progreso llegan con un tema o una estructura ya elegidos (D-078)
+  const [params] = useSearchParams();
+  const [topics, setTopics] = useState<Set<string>>(() => {
+    const preset = params.get('topic');
+    return new Set(preset && ALL_TOPICS.includes(preset) ? [preset] : ALL_TOPICS);
+  });
   const [difficulty, setDifficulty] = useState<Difficulty>('all');
-  const [structure, setStructure] = useState<Structure>('all');
+  const [structure, setStructure] = useState<Structure>(() =>
+    params.get('structure') === 'negative' ? 'negative' : 'all',
+  );
   const [count, setCount] = useState('10');
 
   const header = (

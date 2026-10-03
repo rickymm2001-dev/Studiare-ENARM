@@ -53,7 +53,7 @@
 - Compactación de pantallas en curso (D-078), en 6 bloques con capturas de antes y después
   - [x] 1. Modo enfoque en pregunta, tarjeta y retroalimentación. Encabezado delgado y barra fija de acciones en el teléfono, dos columnas en computadora
   - [x] 2. Repasar y Simular con el botón de empezar arriba, ramas en acordeón y mazos, temas y límites plegados con resumen. En el teléfono Repasar pasó de 4613 a 844 px de alto y Simular de 4256 a 934
-  - [ ] 3. Progreso en una sola página
+  - [x] 3. Progreso en una sola página. Cifras en una fila, tus 3 focos de la semana con atajo para practicar (el simulador abre con el tema o las negativas ya elegidos), lecturas de Conócete como filas que se abren y ramas que se abren a sus subespecialidades, con las que no tienen datos ocultas. En el teléfono pasó de 8362 a 2482 px de alto
   - [ ] 4. Marco de pantallas
   - [ ] 5. Configuración por secciones
   - [ ] 6. Inicio y Mazos

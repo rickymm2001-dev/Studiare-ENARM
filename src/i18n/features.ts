@@ -634,6 +634,25 @@ export const featureText = {
     mastery: (percent: number) => `Dominio estimado de ${percent}%`,
     calibrating: (missing: number) =>
       `Calibrando, faltan unas ${missing.toLocaleString('es-MX')} respuestas`,
+    statsLabel: 'Tus cifras',
+    masteryLabel: 'Dominio estimado',
+    focusTitle: (n: number) =>
+      n === 0
+        ? 'Tus focos de la semana'
+        : n === 1
+          ? 'Tu foco de la semana'
+          : `Tus ${n} focos de la semana`,
+    focusCalibrating: (have: number, need: number) =>
+      `Calibrando. Tus focos aparecen al juntar ${need} respuestas y llevas ${have}.`,
+    focusKinds: { technique: 'Técnica', topic: 'Tema' },
+    weakTopic: (percent: number) =>
+      `Tu dominio estimado es de ${percent}%. Practica preguntas de este tema para subirlo.`,
+    practice: 'Practicar',
+    reviewNow: 'Repasar',
+    showEmpty: (n: number) => `Mostrar las que no tienen datos (${n})`,
+    hideEmpty: 'Ocultar las que no tienen datos',
+    emptyHidden: (n: number) =>
+      plural(n, 'subespecialidad sin datos todavía', 'subespecialidades sin datos todavía'),
   },
   topicPicker: {
     trunks: 'Ramas troncales',
