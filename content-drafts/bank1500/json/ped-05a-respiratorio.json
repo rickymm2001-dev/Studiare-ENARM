@@ -1,0 +1,1227 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "ped-05a-respiratorio-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_respiratory",
+      "subtopic": "bronchiolitis",
+      "vignette": "Lactante de 4 meses en temporada invernal con rinorrea y tos de 3 días, ahora con dificultad respiratoria. Frecuencia respiratoria de 58 por minuto, tiraje intercostal leve, sibilancias y estertores finos bilaterales. Saturación de 94% al aire ambiente. Es su primer episodio.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Neumonía bacteriana",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Daría fiebre alta, estado tóxico y hallazgos focales."
+        },
+        {
+          "key": "b",
+          "text": "Asma del lactante",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se diagnostica con episodios recurrentes, no con el primero."
+        },
+        {
+          "key": "c",
+          "text": "Reflujo gastroesofágico con aspiración",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica el cuadro viral."
+        },
+        {
+          "key": "d",
+          "text": "Cuerpo extraño en vía aérea",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es raro a esta edad y sin antecedente de atragantamiento."
+        },
+        {
+          "key": "e",
+          "text": "Tos ferina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da accesos de tos con estridor inspiratorio sin sibilancias."
+        },
+        {
+          "key": "f",
+          "text": "Fibrosis quística",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No hay datos de falla de medro ni infecciones repetidas."
+        },
+        {
+          "key": "g",
+          "text": "Gripa sin importancia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Tiene dificultad respiratoria que requiere vigilancia."
+        },
+        {
+          "key": "h",
+          "text": "Laringotraqueítis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da estridor y tos traqueal, no sibilancias."
+        },
+        {
+          "key": "i",
+          "text": "Bronquiolitis aguda",
+          "correct": true,
+          "rationale": "Primer episodio de sibilancias en menor de 2 años tras un cuadro catarral en invierno."
+        },
+        {
+          "key": "j",
+          "text": "Insuficiencia cardiaca por cardiopatía",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No hay soplo ni hepatomegalia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "h",
+        "i"
+      ],
+      "explanation": "La bronquiolitis es la infección respiratoria baja más frecuente en menores de 2 años, con mayor incidencia en menores de 6 meses y en invierno. El virus sincicial respiratorio es el agente principal. Inicia con rinorrea y tos, y en 2 a 3 días aparecen taquipnea, tiraje, sibilancias y estertores finos. El diagnóstico es clínico y no requiere radiografía ni estudios virales de rutina. Los factores de riesgo de enfermedad grave son edad menor de 3 meses, prematurez, cardiopatía congénita, enfermedad pulmonar crónica e inmunodeficiencia. El cuadro alcanza su máximo entre los días 3 y 5.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de bronquiolitis aguda"
+      ]
+    },
+    {
+      "key": "ped-05a-respiratorio-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_respiratory",
+      "subtopic": "bronchiolitis",
+      "vignette": "Lactante de 6 meses con bronquiolitis moderada, saturación de 91%, frecuencia respiratoria de 60 por minuto y dificultad para alimentarse. Está hospitalizado.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Vaporizaciones con mentol",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Pueden irritar la vía aérea."
+        },
+        {
+          "key": "b",
+          "text": "Ribavirina de rutina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para casos muy seleccionados."
+        },
+        {
+          "key": "c",
+          "text": "Fisioterapia torácica con percusión",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es útil."
+        },
+        {
+          "key": "d",
+          "text": "Montelukast",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es eficaz en la fase aguda."
+        },
+        {
+          "key": "e",
+          "text": "Adrenalina nebulizada de rutina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No se recomienda de rutina."
+        },
+        {
+          "key": "f",
+          "text": "Suspender la alimentación oral sin indicación",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Solo se suspende si hay riesgo de aspiración."
+        },
+        {
+          "key": "g",
+          "text": "Antibióticos de amplio espectro",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La causa es viral."
+        },
+        {
+          "key": "h",
+          "text": "Medidas de soporte con oxígeno para saturación de 90 a 92% o más, aspiración nasal e hidratación",
+          "correct": true,
+          "rationale": "El tratamiento es de soporte."
+        },
+        {
+          "key": "i",
+          "text": "Salbutamol nebulizado de rutina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No mejora los desenlaces en la bronquiolitis."
+        },
+        {
+          "key": "j",
+          "text": "Corticosteroides sistémicos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No son eficaces."
+        }
+      ],
+      "canonical": [
+        "g",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "El tratamiento de la bronquiolitis es de soporte. Incluye oxígeno suplementario si la saturación es persistentemente menor de 90 a 92%, aspiración superficial de secreciones nasales, hidratación por vía oral, por sonda o intravenosa si no puede alimentarse, y vigilancia. Los broncodilatadores, corticosteroides, antibióticos, fisioterapia torácica y descongestionantes no han mostrado beneficio y no se recomiendan de rutina. La solución salina hipertónica nebulizada puede considerarse en hospitalizados. El oxígeno a alto flujo por cánula nasal o la presión positiva se usan en casos graves.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de bronquiolitis aguda"
+      ]
+    },
+    {
+      "key": "ped-05a-respiratorio-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_respiratory",
+      "subtopic": "bronchiolitis",
+      "vignette": "Lactante de 2 meses, nacido a las 34 semanas, con bronquiolitis de 2 días. Presenta dos episodios de apnea, tiraje subcostal intenso, quejido y saturación de 87% con oxígeno por puntas nasales.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Hospitalizar en una unidad con capacidad de soporte ventilatorio e iniciar oxígeno a alto flujo o presión positiva",
+          "correct": true,
+          "rationale": "Tiene criterios de gravedad, apneas e hipoxemia."
+        },
+        {
+          "key": "b",
+          "text": "Broncoscopia diagnóstica urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "c",
+          "text": "Dar té de canela para la tos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es útil y puede ser peligroso."
+        },
+        {
+          "key": "d",
+          "text": "No intubar ni escalar el soporte por miedo a complicaciones",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La falla respiratoria requiere soporte."
+        },
+        {
+          "key": "e",
+          "text": "Solo aspiración nasal y observación en casa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Requiere soporte respiratorio."
+        },
+        {
+          "key": "f",
+          "text": "Esperar a que el cuadro pase su pico antes de actuar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede presentar falla respiratoria."
+        },
+        {
+          "key": "g",
+          "text": "Antibióticos y egreso en 24 horas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La causa es viral y tiene gravedad."
+        },
+        {
+          "key": "h",
+          "text": "Manejo ambulatorio con salbutamol",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene criterios de gravedad."
+        },
+        {
+          "key": "i",
+          "text": "Corticosteroides intravenosos como medida principal",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No son eficaces."
+        },
+        {
+          "key": "j",
+          "text": "Mantener las puntas nasales sin cambios",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "La hipoxemia persiste."
+        }
+      ],
+      "canonical": [
+        "a",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "Los criterios de hospitalización en bronquiolitis incluyen edad menor de 3 meses, prematurez, comorbilidades, apneas, dificultad respiratoria moderada a grave, saturación persistentemente menor de 90 a 92%, intolerancia a la vía oral y condiciones sociales que impiden la vigilancia. Las apneas son más frecuentes en menores de 2 meses y en prematuros. Los pacientes con hipoxemia o trabajo respiratorio que no mejoran con oxígeno convencional requieren oxígeno a alto flujo, presión positiva continua o ventilación mecánica en una unidad de cuidados intensivos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de bronquiolitis aguda"
+      ]
+    },
+    {
+      "key": "ped-05a-respiratorio-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_respiratory",
+      "subtopic": "bronchiolitis",
+      "vignette": "Lactante de 3 meses con displasia broncopulmonar, nacido a las 28 semanas. Inicia la temporada de virus sincicial respiratorio. La madre pregunta cómo protegerlo.",
+      "prompt": "¿Cuál es la medida de prevención específica indicada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Mantenerlo muy abrigado en casa cerrada",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No previene y puede aumentar el riesgo."
+        },
+        {
+          "key": "b",
+          "text": "Ribavirina profiláctica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se usa como profilaxis."
+        },
+        {
+          "key": "c",
+          "text": "Corticosteroide inhalado preventivo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No previene la bronquiolitis."
+        },
+        {
+          "key": "d",
+          "text": "Evitar la lactancia materna para no contagiarlo",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La lactancia protege."
+        },
+        {
+          "key": "e",
+          "text": "Antibiótico profiláctico durante el invierno",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No previene infecciones virales."
+        },
+        {
+          "key": "f",
+          "text": "Anticuerpo monoclonal contra el virus sincicial respiratorio, como nirsevimab o palivizumab, durante la temporada",
+          "correct": true,
+          "rationale": "Previene la enfermedad grave en lactantes de alto riesgo."
+        },
+        {
+          "key": "g",
+          "text": "Ninguna medida porque todos se contagian",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Existen medidas eficaces."
+        },
+        {
+          "key": "h",
+          "text": "Gammaglobulina intravenosa mensual inespecífica",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es la medida indicada."
+        },
+        {
+          "key": "i",
+          "text": "Salbutamol inhalado diario",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No previene la infección."
+        },
+        {
+          "key": "j",
+          "text": "Vacuna de influenza al lactante de 3 meses",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se aplica desde los 6 meses."
+        }
+      ],
+      "canonical": [
+        "e",
+        "f",
+        "i",
+        "j"
+      ],
+      "explanation": "Los lactantes con prematurez extrema, displasia broncopulmonar o cardiopatía congénita con repercusión tienen alto riesgo de bronquiolitis grave. La inmunoprofilaxis con anticuerpos monoclonales contra la proteína F del virus sincicial respiratorio reduce las hospitalizaciones. El palivizumab se aplica mensualmente durante la temporada y el nirsevimab, de acción prolongada, en dosis única. También existe vacuna materna en el embarazo en algunos países. Las medidas generales incluyen lavado de manos, lactancia materna, evitar humo de tabaco y aglomeraciones y limitar el contacto con personas enfermas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de bronquiolitis aguda"
+      ]
+    },
+    {
+      "key": "ped-05a-respiratorio-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_respiratory",
+      "subtopic": "bronchiolitis",
+      "vignette": "Lactante de 7 semanas hospitalizado por bronquiolitis grave con apneas. Se revisan sus antecedentes para identificar por qué cursó con mayor gravedad.",
+      "prompt": "¿Cuál es el factor de riesgo más importante de gravedad en este caso?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Edad menor de 3 meses",
+          "correct": true,
+          "rationale": "Los lactantes pequeños tienen vías aéreas estrechas y mayor riesgo de apnea."
+        },
+        {
+          "key": "b",
+          "text": "Lactancia materna exclusiva",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es protectora."
+        },
+        {
+          "key": "c",
+          "text": "Antecedente de dermatitis atópica materna",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es el factor principal de gravedad."
+        },
+        {
+          "key": "d",
+          "text": "Nacimiento en verano",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es relevante."
+        },
+        {
+          "key": "e",
+          "text": "Sexo femenino",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es un factor de riesgo relevante."
+        },
+        {
+          "key": "f",
+          "text": "Vacunación al corriente",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No aumenta el riesgo."
+        },
+        {
+          "key": "g",
+          "text": "Ser primogénito",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Los hermanos mayores aumentan la exposición, no al revés."
+        },
+        {
+          "key": "h",
+          "text": "Salir al frío sin gorro",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es una causa de gravedad."
+        },
+        {
+          "key": "i",
+          "text": "Peso adecuado al nacer",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No aumenta el riesgo."
+        },
+        {
+          "key": "j",
+          "text": "Uso de chupón",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es un factor de gravedad."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "f"
+      ],
+      "explanation": "Los factores asociados a bronquiolitis grave son edad menor de 3 meses, prematurez, especialmente menor de 32 semanas, displasia broncopulmonar, cardiopatía congénita con repercusión hemodinámica, inmunodeficiencia, enfermedades neuromusculares y síndrome de Down. También influyen la exposición al humo de tabaco, la falta de lactancia materna y la convivencia con hermanos en edad escolar o asistencia a guardería. Los menores de 2 meses y los prematuros tienen mayor riesgo de apneas, que pueden ser la primera manifestación. Identificar estos factores ayuda a decidir hospitalización y profilaxis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de bronquiolitis aguda"
+      ]
+    },
+    {
+      "key": "ped-05a-respiratorio-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_respiratory",
+      "subtopic": "bronchiolitis",
+      "vignette": "Lactante de 5 meses con cuadro típico de bronquiolitis leve, saturación de 95%, buena alimentación y sin factores de riesgo. Los padres piden una radiografía y estudios de laboratorio.",
+      "prompt": "¿Cuál es el abordaje inicial más apropiado?",
+      "polarity": "affirmative",
+      "task": "initial_study",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solo una radiografía confirma la bronquiolitis",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El diagnóstico es clínico."
+        },
+        {
+          "key": "b",
+          "text": "Prueba de sudor para descartar fibrosis quística",
+          "correct": false,
+          "bias": "information_bias",
+          "rationale": "No hay indicación."
+        },
+        {
+          "key": "c",
+          "text": "Gasometría arterial",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicada en casos leves."
+        },
+        {
+          "key": "d",
+          "text": "Diagnóstico clínico sin radiografía ni estudios de laboratorio de rutina",
+          "correct": true,
+          "rationale": "En la bronquiolitis típica los estudios no cambian el manejo."
+        },
+        {
+          "key": "e",
+          "text": "Hemocultivo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "El riesgo de bacteriemia es muy bajo."
+        },
+        {
+          "key": "f",
+          "text": "No explicar signos de alarma porque es leve",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La familia debe vigilar la evolución."
+        },
+        {
+          "key": "g",
+          "text": "Tomografía de tórax",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "h",
+          "text": "Panel viral de rutina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No cambia el manejo en la mayoría."
+        },
+        {
+          "key": "i",
+          "text": "Radiografía de tórax en todos los casos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta el uso innecesario de antibióticos."
+        },
+        {
+          "key": "j",
+          "text": "Biometría hemática y proteína C reactiva",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No distinguen bien y no cambian el manejo."
+        }
+      ],
+      "canonical": [
+        "c",
+        "d",
+        "i",
+        "j"
+      ],
+      "explanation": "El diagnóstico de bronquiolitis se basa en la historia y la exploración. En casos típicos no se recomiendan la radiografía de tórax, la biometría hemática, los reactantes de fase aguda ni las pruebas virales de rutina, porque no cambian el tratamiento y la radiografía puede mostrar atelectasias que se interpretan como neumonía y llevan a antibióticos innecesarios. Los estudios se reservan para casos graves, evolución atípica o sospecha de complicaciones. La oximetría de pulso es útil para valorar la gravedad. Se explican a los padres los signos de alarma, como dificultad respiratoria, apneas, cianosis y rechazo al alimento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de bronquiolitis aguda"
+      ]
+    },
+    {
+      "key": "ped-05a-respiratorio-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_respiratory",
+      "subtopic": "bronchiolitis",
+      "vignette": "Niño de 3 años con antecedente de bronquiolitis grave por virus sincicial respiratorio a los 3 meses que requirió hospitalización. Desde entonces ha tenido varios episodios de sibilancias con infecciones virales.",
+      "prompt": "¿Cuál es la secuela más frecuente asociada a la bronquiolitis grave en el lactante?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ninguna, siempre se resuelve sin consecuencias",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Las sibilancias recurrentes son frecuentes."
+        },
+        {
+          "key": "b",
+          "text": "Inmunodeficiencia adquirida",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es consecuencia de la bronquiolitis."
+        },
+        {
+          "key": "c",
+          "text": "Sibilancias recurrentes en los años siguientes",
+          "correct": true,
+          "rationale": "La bronquiolitis grave se asocia a hiperreactividad bronquial posterior."
+        },
+        {
+          "key": "d",
+          "text": "Fibrosis pulmonar progresiva",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es una secuela habitual."
+        },
+        {
+          "key": "e",
+          "text": "Asma grave persistente obligada de por vida",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No todos desarrollan asma."
+        },
+        {
+          "key": "f",
+          "text": "Pulmones débiles para siempre",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La mayoría mejora con el crecimiento."
+        },
+        {
+          "key": "g",
+          "text": "Cardiopatía congénita adquirida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se adquiere por la infección."
+        },
+        {
+          "key": "h",
+          "text": "Hipertensión pulmonar en todos los casos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara."
+        },
+        {
+          "key": "i",
+          "text": "Bronquiectasias en todos los casos",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Son raras salvo en bronquiolitis obliterante."
+        },
+        {
+          "key": "j",
+          "text": "Retraso del desarrollo neurológico",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es una secuela habitual."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "d",
+        "i"
+      ],
+      "explanation": "Muchos lactantes que tuvieron bronquiolitis grave presentan episodios recurrentes de sibilancias durante los años preescolares, generalmente desencadenados por infecciones virales. No está claro si el virus causa la hiperreactividad o si revela una predisposición previa. La mayoría mejora con la edad, pero algunos desarrollan asma, sobre todo si tienen atopia o antecedente familiar. Una complicación rara pero grave es la bronquiolitis obliterante, más asociada a adenovirus, con obstrucción persistente. El seguimiento permite identificar a los niños que requieren tratamiento controlador.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de bronquiolitis aguda"
+      ]
+    },
+    {
+      "key": "ped-05a-respiratorio-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_respiratory",
+      "subtopic": "croup",
+      "vignette": "Niño de 2 años con rinorrea y febrícula de un día que en la noche despierta con tos perruna, disfonía y estridor inspiratorio al llorar. En reposo no tiene estridor ni tiraje y está tranquilo.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Epiglotitis",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da fiebre alta, aspecto tóxico, sialorrea y postura en trípode."
+        },
+        {
+          "key": "b",
+          "text": "Laringotraqueítis viral o crup leve",
+          "correct": true,
+          "rationale": "Tos perruna, disfonía y estridor inspiratorio tras pródromo catarral."
+        },
+        {
+          "key": "c",
+          "text": "Aspiración de cuerpo extraño",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Inicia de forma súbita con atragantamiento."
+        },
+        {
+          "key": "d",
+          "text": "Traqueítis bacteriana",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da aspecto tóxico y fiebre alta."
+        },
+        {
+          "key": "e",
+          "text": "Laringomalacia",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Es congénita y desde el nacimiento."
+        },
+        {
+          "key": "f",
+          "text": "Absceso retrofaríngeo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da sialorrea y rigidez de cuello."
+        },
+        {
+          "key": "g",
+          "text": "Asma",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da sibilancias espiratorias."
+        },
+        {
+          "key": "h",
+          "text": "Bronquiolitis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da sibilancias espiratorias, no estridor."
+        },
+        {
+          "key": "i",
+          "text": "Tos por el frío de la noche",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica el estridor."
+        },
+        {
+          "key": "j",
+          "text": "Angioedema",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se acompaña de edema facial y urticaria."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "El crup o laringotraqueítis es la causa más frecuente de estridor agudo en niños de 6 meses a 3 años. El virus parainfluenza tipo 1 es el agente principal. Tras un pródromo catarral aparecen tos perruna, disfonía y estridor inspiratorio, que empeoran por la noche y con la agitación. La escala de Westley valora estridor, tiraje, entrada de aire, cianosis y estado de conciencia para clasificar la gravedad. El diagnóstico es clínico. La radiografía, que muestra el signo de la aguja o del campanario, solo se usa ante dudas diagnósticas.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de laringotraqueítis aguda en niños"
+      ]
+    },
+    {
+      "key": "ped-05a-respiratorio-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_respiratory",
+      "subtopic": "croup",
+      "vignette": "Niña de 18 meses con crup leve, tos perruna y estridor solo al llorar, sin tiraje en reposo. Escala de Westley de 1.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Intubación preventiva",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "b",
+          "text": "Antitusivos con codeína",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Están contraindicados en niños pequeños."
+        },
+        {
+          "key": "c",
+          "text": "Sacar al niño al aire frío de la noche como único tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No sustituye al corticosteroide."
+        },
+        {
+          "key": "d",
+          "text": "Antihistamínicos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No son eficaces."
+        },
+        {
+          "key": "e",
+          "text": "Antibiótico oral",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La causa es viral."
+        },
+        {
+          "key": "f",
+          "text": "Adrenalina nebulizada de rutina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para crup moderado a grave."
+        },
+        {
+          "key": "g",
+          "text": "Solo nebulizaciones de vapor frío",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No han mostrado beneficio."
+        },
+        {
+          "key": "h",
+          "text": "No dar nada porque es leve",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El corticosteroide beneficia también al crup leve."
+        },
+        {
+          "key": "i",
+          "text": "Dexametasona oral en dosis única de 0.15 a 0.6 mg/kg",
+          "correct": true,
+          "rationale": "El corticosteroide reduce la gravedad y las consultas en todos los grados de crup."
+        },
+        {
+          "key": "j",
+          "text": "Salbutamol nebulizado",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No actúa sobre el edema laríngeo."
+        }
+      ],
+      "canonical": [
+        "e",
+        "f",
+        "i",
+        "j"
+      ],
+      "explanation": "Los corticosteroides son la base del tratamiento del crup en todos los grados de gravedad. La dexametasona oral en dosis única de 0.15 a 0.6 mg/kg reduce la gravedad, las consultas de regreso y las hospitalizaciones. Su efecto inicia en una a dos horas. La budesonida nebulizada es una alternativa si el niño vomita. La adrenalina nebulizada se agrega en crup moderado o grave por su efecto rápido, y se vigila al paciente 2 a 4 horas por posible efecto rebote. Los antibióticos, antitusivos, antihistamínicos y el vapor no se recomiendan.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de laringotraqueítis aguda en niños"
+      ]
+    },
+    {
+      "key": "ped-05a-respiratorio-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_respiratory",
+      "subtopic": "croup",
+      "vignette": "Niño de 2 años con crup que presenta estridor en reposo, tiraje supraesternal e intercostal moderado y agitación. Saturación de 94%. Recibió dexametasona hace 20 minutos.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Administrar adrenalina nebulizada y vigilar al menos 2 a 4 horas",
+          "correct": true,
+          "rationale": "Crup moderado a grave con estridor en reposo."
+        },
+        {
+          "key": "b",
+          "text": "Nebulizar salbutamol",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No actúa sobre el edema subglótico."
+        },
+        {
+          "key": "c",
+          "text": "Repetir la dexametasona en 10 minutos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Su efecto aún no inicia y no es la medida rápida."
+        },
+        {
+          "key": "d",
+          "text": "Egresar con dexametasona y vigilancia en casa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene estridor en reposo y tiraje."
+        },
+        {
+          "key": "e",
+          "text": "Radiografía lateral de cuello antes de tratar",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "f",
+          "text": "Dar baños de vapor caliente",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No son eficaces y pueden quemar."
+        },
+        {
+          "key": "g",
+          "text": "Intubar de inmediato",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Primero se usa adrenalina nebulizada."
+        },
+        {
+          "key": "h",
+          "text": "Explorar la faringe con abatelenguas a fondo",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Puede agitarlo y empeorar la obstrucción."
+        },
+        {
+          "key": "i",
+          "text": "No usar adrenalina por miedo a taquicardia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El beneficio supera el riesgo."
+        },
+        {
+          "key": "j",
+          "text": "Observar sin intervenir hasta que actúe el corticosteroide",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "La obstrucción es moderada a grave."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "g"
+      ],
+      "explanation": "En el crup moderado a grave, con estridor en reposo y tiraje, se administra adrenalina nebulizada, que produce vasoconstricción y reduce el edema subglótico en minutos. Puede usarse adrenalina racémica o L adrenalina 1 en 1 000 a 0.5 mL/kg con máximo de 5 mL. Como su efecto dura unas 2 horas, el paciente debe vigilarse al menos de 2 a 4 horas por posible regreso de los síntomas. Se mantiene al niño tranquilo en brazos de sus padres y se administra oxígeno si la saturación es baja. Si requiere más de una dosis o persiste grave, se hospitaliza.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de laringotraqueítis aguda en niños"
+      ]
+    },
+    {
+      "key": "ped-05a-respiratorio-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_respiratory",
+      "subtopic": "croup",
+      "vignette": "Niño de 4 años sin vacunas que inicia de forma súbita con fiebre de 40 °C, aspecto tóxico, dolor de garganta intenso, voz apagada y sialorrea. Está sentado inclinado hacia adelante con el cuello extendido y la boca abierta. Tiene estridor suave sin tos perruna.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Difteria",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Da membrana grisácea con inicio más gradual."
+        },
+        {
+          "key": "b",
+          "text": "Angioedema hereditario",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No da fiebre alta."
+        },
+        {
+          "key": "c",
+          "text": "Mononucleosis infecciosa",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No da obstrucción súbita con postura en trípode."
+        },
+        {
+          "key": "d",
+          "text": "Epiglotitis aguda",
+          "correct": true,
+          "rationale": "Inicio súbito con fiebre alta, aspecto tóxico, sialorrea y postura en trípode en un niño no vacunado."
+        },
+        {
+          "key": "e",
+          "text": "Crisis asmática",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da sibilancias espiratorias."
+        },
+        {
+          "key": "f",
+          "text": "Berrinche con llanto prolongado",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica la fiebre ni la sialorrea."
+        },
+        {
+          "key": "g",
+          "text": "Aspiración de cuerpo extraño",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Inicia con atragantamiento sin fiebre."
+        },
+        {
+          "key": "h",
+          "text": "Absceso periamigdalino",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da trismus y desviación de la úvula."
+        },
+        {
+          "key": "i",
+          "text": "Laringotraqueítis viral",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Tiene pródromo catarral y tos perruna, sin aspecto tóxico."
+        },
+        {
+          "key": "j",
+          "text": "Faringoamigdalitis estreptocócica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No da estridor ni postura en trípode."
+        }
+      ],
+      "canonical": [
+        "d",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "La epiglotitis es una infección bacteriana de la epiglotis y estructuras supraglóticas que causa obstrucción rápida de la vía aérea. Históricamente se debía a Haemophilus influenzae tipo b y es rara en vacunados, aunque puede deberse a estreptococos y estafilococos. Se manifiesta con inicio súbito, fiebre alta, aspecto tóxico, odinofagia, disfagia, sialorrea, voz apagada y postura en trípode con cuello extendido. No suele haber tos perruna. Es una urgencia, por lo que no se debe explorar la faringe ni agitar al niño. Se asegura la vía aérea en quirófano por personal experto y se administran antibióticos como ceftriaxona.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de laringotraqueítis aguda en niños"
+      ]
+    },
+    {
+      "key": "ped-05a-respiratorio-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_respiratory",
+      "subtopic": "croup",
+      "vignette": "Niño de 3 años con sospecha clínica de epiglotitis, sentado en trípode, con sialorrea y estridor. Está ansioso y su saturación es de 93%.",
+      "prompt": "¿Cuál es la conducta inmediata más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Inducir el vómito para limpiar la garganta",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es peligroso."
+        },
+        {
+          "key": "b",
+          "text": "Explorar la faringe con abatelenguas para confirmar",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Puede desencadenar obstrucción completa."
+        },
+        {
+          "key": "c",
+          "text": "Dexametasona oral y egreso",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es una urgencia vital."
+        },
+        {
+          "key": "d",
+          "text": "Nebulizar salbutamol",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No trata la obstrucción supraglótica."
+        },
+        {
+          "key": "e",
+          "text": "Acostarlo para tomar una radiografía lateral de cuello",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Acostarlo puede empeorar la obstrucción."
+        },
+        {
+          "key": "f",
+          "text": "Tomografía de cuello urgente",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa el manejo de la vía aérea."
+        },
+        {
+          "key": "g",
+          "text": "Canalizar una vena antes de asegurar la vía aérea",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Agitarlo es peligroso."
+        },
+        {
+          "key": "h",
+          "text": "No avisar a anestesia hasta confirmar el diagnóstico",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El retraso puede ser fatal."
+        },
+        {
+          "key": "i",
+          "text": "Mantenerlo tranquilo con sus padres, dar oxígeno sin forzarlo y asegurar la vía aérea en quirófano por el equipo experto",
+          "correct": true,
+          "rationale": "Evitar agitarlo previene la obstrucción completa."
+        },
+        {
+          "key": "j",
+          "text": "Observar en la sala de urgencias general",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Requiere manejo inmediato de la vía aérea."
+        }
+      ],
+      "canonical": [
+        "b",
+        "e",
+        "g",
+        "i"
+      ],
+      "explanation": "Ante la sospecha de epiglotitis la prioridad es proteger la vía aérea. Se evita cualquier maniobra que agite al niño, como explorar la faringe, acostarlo, canalizarlo o separarlo de sus padres, porque puede desencadenar obstrucción completa. Se administra oxígeno de forma no invasiva y se avisa de inmediato a anestesiología y otorrinolaringología para intubar en quirófano con equipo para traqueostomía de urgencia. Una vez asegurada la vía aérea se toman cultivos y se inicia ceftriaxona o cefotaxima intravenosa. La vacunación contra Haemophilus influenzae tipo b es la principal medida de prevención.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de laringotraqueítis aguda en niños"
+      ]
+    },
+    {
+      "key": "ped-05a-respiratorio-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_respiratory",
+      "subtopic": "croup",
+      "vignette": "Niño de 18 meses que mientras comía cacahuates presentó un acceso súbito de tos, asfixia momentánea y cianosis que cedió. Desde entonces tiene tos persistente. Afebril. A la auscultación hay disminución del murmullo vesicular y sibilancias localizadas en el hemitórax derecho.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Crisis asmática",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Las sibilancias suelen ser difusas y bilaterales."
+        },
+        {
+          "key": "b",
+          "text": "Tuberculosis endobronquial",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es rara y crónica."
+        },
+        {
+          "key": "c",
+          "text": "Malformación pulmonar congénita",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el inicio súbito."
+        },
+        {
+          "key": "d",
+          "text": "Neumonía bacteriana",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica el inicio súbito con atragantamiento."
+        },
+        {
+          "key": "e",
+          "text": "Ya se resolvió porque dejó de ahogarse",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El objeto puede seguir en el bronquio."
+        },
+        {
+          "key": "f",
+          "text": "Aspiración de cuerpo extraño en bronquio derecho",
+          "correct": true,
+          "rationale": "Inicio súbito con atragantamiento y hallazgos unilaterales."
+        },
+        {
+          "key": "g",
+          "text": "Laringotraqueítis viral",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da estridor y tos perruna tras un catarro."
+        },
+        {
+          "key": "h",
+          "text": "Alergia al cacahuate con anafilaxia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Daría urticaria o hipotensión, no hallazgos unilaterales."
+        },
+        {
+          "key": "i",
+          "text": "Reflujo gastroesofágico",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica los hallazgos focales."
+        },
+        {
+          "key": "j",
+          "text": "Bronquiolitis",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tiene pródromo viral y hallazgos bilaterales."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "g",
+        "j"
+      ],
+      "explanation": "La aspiración de cuerpo extraño es más frecuente entre 1 y 3 años, sobre todo con alimentos como cacahuates, semillas y uvas. Tras el episodio de asfixia puede haber un periodo asintomático engañoso. Los hallazgos típicos son tos persistente, sibilancias unilaterales y disminución del murmullo vesicular, más a menudo en el lado derecho porque el bronquio es más vertical. La radiografía puede ser normal o mostrar atrapamiento aéreo unilateral, mejor visible en espiración o en decúbito lateral. Ante sospecha clínica se realiza broncoscopia rígida, que es diagnóstica y terapéutica. Se recomienda no dar alimentos duros y pequeños a menores de 4 años.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de cuerpo extraño en vía aérea en niños"
+      ]
+    }
+  ]
+}

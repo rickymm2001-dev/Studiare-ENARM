@@ -1,0 +1,207 @@
+@ ped|pediatric_respiratory|pediatric_asthma|3|diagnosis
+V: Niño de 7 años con episodios recurrentes de tos nocturna, sibilancias y opresión torácica que empeoran con el ejercicio, la risa y el polvo. Tiene rinitis alérgica y su madre es asmática. La espirometría muestra obstrucción que mejora 15% tras broncodilatador.
+P: ¿Cuál es el diagnóstico más probable?
++ Asma || Síntomas respiratorios variables con obstrucción reversible y antecedentes atópicos.
+- anchoring | Bronquiolitis recurrente || Ocurre en menores de 2 años con infección viral.
+- availability_heuristic | Reflujo gastroesofágico || No explica la obstrucción reversible.
+- representativeness_heuristic | Fibrosis quística || Daría infecciones, desnutrición y obstrucción poco reversible.
+- premature_closure | Cuerpo extraño en vía aérea || Los síntomas serían persistentes y unilaterales.
+- base_rate_fallacy | Disfunción de cuerdas vocales || Da estridor inspiratorio sin obstrucción reversible.
+- framing_effect | Bronquitis crónica || Es propia de fumadores adultos.
+- inattentional_blindness | Tos ferina || Da accesos de tos sin obstrucción reversible.
+- focusing_illusion | Insuficiencia cardiaca || No hay datos cardiacos.
+- belief_bias | Tos por falta de condición física || No explica la reversibilidad.
+E: El asma es una enfermedad inflamatoria crónica de la vía aérea caracterizada por síntomas respiratorios variables, como sibilancias, tos, disnea y opresión torácica, con limitación variable del flujo aéreo. Los desencadenantes incluyen infecciones virales, alérgenos, ejercicio, humo, cambios de temperatura y emociones. En niños mayores de 5 años se confirma con espirometría que muestra obstrucción con aumento del volumen espiratorio forzado en el primer segundo de 12% o más tras broncodilatador. Los antecedentes de atopia personal o familiar apoyan el diagnóstico. En menores de 5 años el diagnóstico es clínico y se apoya en la respuesta al tratamiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del asma en menores de 18 años ;; Iniciativa Global para el Asma
+
+@ ped|pediatric_respiratory|pediatric_asthma|3|initial_treatment
+V: Niña de 8 años con crisis asmática. Habla en frases, tiene tiraje intercostal moderado, frecuencia respiratoria de 32 por minuto, sibilancias espiratorias difusas y saturación de 92%.
+P: ¿Cuál es el tratamiento inicial?
++ Salbutamol inhalado con espaciador repetido cada 20 minutos en la primera hora, corticosteroide sistémico y oxígeno para saturación de 94 a 98% || Crisis moderada.
+- anchoring | Solo salbutamol y egreso inmediato || Requiere vigilar respuesta y corticosteroide.
+- availability_heuristic | Antibiótico como primera medida || La crisis no se debe a infección bacteriana.
+- representativeness_heuristic | Aminofilina intravenosa de primera línea || No se recomienda de inicio.
+- premature_closure | Montelukast oral como tratamiento de la crisis || No es útil en la crisis aguda.
+- framing_effect | Sedantes para disminuir la ansiedad || Pueden deprimir la respiración.
+- complexity_bias | Intubación inmediata || No tiene criterios.
+- base_rate_fallacy | Corticosteroide inhalado solo como rescate || No es la medida inicial de la crisis moderada.
+- belief_bias | Vaporizaciones con eucalipto || No son eficaces.
+- omission_bias | Evitar el oxígeno para no generar dependencia || La hipoxemia debe corregirse.
+E: La crisis asmática se clasifica en leve, moderada o grave según la capacidad de hablar, la frecuencia respiratoria, el uso de músculos accesorios, la saturación y el estado de conciencia. El tratamiento inicial incluye salbutamol inhalado con espaciador, de 4 a 10 disparos cada 20 minutos durante la primera hora, oxígeno para mantener saturación de 94 a 98% y corticosteroide sistémico temprano, como prednisolona oral 1 a 2 mg/kg. En crisis graves se agrega bromuro de ipratropio y se considera sulfato de magnesio intravenoso. Se reevalúa después de cada intervención.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del asma en menores de 18 años ;; Iniciativa Global para el Asma
+
+@ ped|pediatric_respiratory|pediatric_asthma|3|treatment_of_choice
+V: Niño de 9 años con asma que presenta síntomas diurnos 3 veces por semana, despierta por tos 2 noches al mes y usa salbutamol de rescate con frecuencia. No usa tratamiento controlador.
+P: ¿Cuál es el tratamiento controlador de elección?
++ Corticosteroide inhalado a dosis baja de forma diaria || Es el controlador más eficaz en el asma persistente.
+- anchoring | Salbutamol inhalado diario como único tratamiento || No controla la inflamación.
+- availability_heuristic | Corticosteroide oral diario || Tiene efectos adversos importantes.
+- representativeness_heuristic | Antibiótico profiláctico || No es útil.
+- premature_closure | Teofilina oral de primera elección || Es menos eficaz y tiene más efectos adversos.
+- framing_effect | Agonista beta de acción prolongada solo || Aumenta el riesgo sin corticosteroide.
+- complexity_bias | Biológicos anti IgE de inicio || Se reservan para asma grave.
+- base_rate_fallacy | Antihistamínico oral diario || No controla el asma.
+- belief_bias | Evitar los inhaladores porque generan adicción || No generan adicción.
+- omission_bias | No usar corticosteroides por miedo a afectar el crecimiento || A dosis bajas el efecto es mínimo.
+E: El tratamiento controlador del asma reduce la inflamación, los síntomas y el riesgo de crisis. En niños con síntomas frecuentes o despertares nocturnos el controlador de elección es un corticosteroide inhalado a dosis baja de forma diaria, como budesonida o fluticasona. Si no hay control se aumenta la dosis o se agrega un agonista beta de acción prolongada en niños mayores. El montelukast es una alternativa menos eficaz. El tratamiento se ajusta de forma escalonada según el control. Se revisa la técnica inhalatoria, la adherencia y los desencadenantes antes de escalar. Los corticosteroides inhalados a dosis bajas tienen un efecto mínimo sobre la talla.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del asma en menores de 18 años ;; Iniciativa Global para el Asma
+
+@ ped|pediatric_respiratory|pediatric_asthma|4|next_step
+V: Niño de 10 años con crisis asmática que no mejora tras una hora de salbutamol con ipratropio y corticosteroide intravenoso. Está somnoliento, con respiración superficial, tórax silencioso a la auscultación y saturación de 86% con oxígeno.
+P: ¿Cuál es el siguiente paso?
++ Trasladar a terapia intensiva, administrar sulfato de magnesio intravenoso y preparar soporte ventilatorio || Crisis con riesgo vital, somnolencia y tórax silencioso.
+- anchoring | Continuar salbutamol y egresar si mejora la saturación || Tiene datos de paro respiratorio inminente.
+- availability_heuristic | Sedar para mejorar la ansiedad || Puede precipitar el paro.
+- representativeness_heuristic | Iniciar antibiótico intravenoso como medida principal || No trata la obstrucción.
+- premature_closure | Interpretar el tórax silencioso como mejoría || Indica obstrucción muy grave.
+- framing_effect | Dar montelukast oral || No sirve en la crisis grave.
+- complexity_bias | Tomografía de tórax antes de actuar || Retrasa el tratamiento.
+- status_quo_bias | Mantener el mismo esquema otra hora || No hay respuesta.
+- belief_bias | Dar líquidos abundantes para fluidificar el moco || No trata la crisis.
+- omission_bias | Evitar la intubación hasta el paro || La preparación temprana es clave.
+E: Los signos de paro respiratorio inminente en una crisis asmática son somnolencia o confusión, tórax silencioso, movimiento paradójico, bradicardia, cianosis y saturación menor de 90% pese al oxígeno. El tórax silencioso indica que casi no entra aire. Estos pacientes requieren manejo en terapia intensiva con oxígeno, broncodilatadores continuos, corticosteroide intravenoso y sulfato de magnesio intravenoso, que relaja el músculo liso bronquial. La ventilación no invasiva o la intubación por personal experto se consideran si hay deterioro. Los sedantes están contraindicados fuera del contexto de la intubación.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del asma en menores de 18 años ;; Iniciativa Global para el Asma
+
+@ ped|pediatric_respiratory|pediatric_asthma|3|data_interpretation
+V: Niño de 3 años con 4 episodios de sibilancias en el último año, todos con resfriados, y también sibilancias al reír y correr entre episodios. Tiene dermatitis atópica y su padre es asmático. El índice predictivo de asma es positivo.
+P: ¿Qué indica el índice predictivo de asma positivo?
++ Alta probabilidad de que las sibilancias persistan y se trate de asma en la edad escolar || Combina sibilancias recurrentes con criterios mayores o menores de atopia.
+- anchoring | Que las sibilancias desaparecerán con certeza a los 6 años || Indica lo contrario.
+- availability_heuristic | Diagnóstico confirmado de fibrosis quística || No evalúa esa enfermedad.
+- representativeness_heuristic | Indicación de antibiótico profiláctico || No tiene relación.
+- premature_closure | Que se trata solo de bronquiolitis recurrente || A esta edad y con atopia sugiere asma.
+- base_rate_fallacy | Que requiere broncoscopia || No es una indicación.
+- framing_effect | Que el niño tiene alergia alimentaria grave || No evalúa alergia alimentaria.
+- inattentional_blindness | Que debe evitar la actividad física || El ejercicio debe mantenerse con buen control.
+- focusing_illusion | Que es un falso positivo por la dermatitis || La dermatitis es parte del índice.
+- belief_bias | Que crecerá sin tratamiento y se curará solo || El riesgo de persistencia es alto.
+E: En menores de 5 años no puede hacerse espirometría con facilidad, por lo que el diagnóstico de asma es clínico. El índice predictivo de asma ayuda a estimar el riesgo de que las sibilancias recurrentes persistan. Se considera positivo con sibilancias frecuentes más un criterio mayor, como asma en un padre o dermatitis atópica, o dos menores, como rinitis alérgica, sibilancias sin resfriado o eosinofilia mayor de 4%. Un índice positivo aumenta mucho la probabilidad de asma en la edad escolar. Estos niños pueden beneficiarse de una prueba terapéutica con corticosteroide inhalado y seguimiento.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del asma en menores de 18 años
+
+@ ped|pediatric_respiratory|pediatric_asthma|3|prevention_screening
+V: Niña de 8 años con asma controlada con corticosteroide inhalado. Vive con su padre fumador, tiene un perro en su cuarto y es alérgica a ácaros. La madre pregunta qué medidas ayudan a prevenir crisis.
+P: ¿Cuál es la medida de prevención ambiental más importante?
++ Eliminar la exposición al humo de tabaco en casa || El humo de tabaco empeora el asma y aumenta las crisis.
+- anchoring | Suspender el corticosteroide inhalado cuando esté bien || Aumenta el riesgo de crisis.
+- availability_heuristic | Evitar todo ejercicio físico || El ejercicio se recomienda con buen control.
+- representativeness_heuristic | Tomar antibióticos cada invierno || No previenen crisis.
+- premature_closure | Mudarse a otra ciudad de inmediato || No es una medida práctica ni garantizada.
+- framing_effect | Evitar todas las vacunas || La vacuna de influenza se recomienda.
+- complexity_bias | Inmunoterapia sin control del ambiente || No sustituye las medidas ambientales.
+- base_rate_fallacy | Usar purificadores de ozono || El ozono irrita la vía aérea.
+- belief_bias | Que el padre fume solo en la cocina || El humo se dispersa en la casa.
+- omission_bias | No hacer cambios porque ya usa medicamento || Las medidas ambientales mejoran el control.
+E: El control del asma incluye tratamiento farmacológico y medidas no farmacológicas. Evitar el humo de tabaco es la medida ambiental más importante, ya que la exposición aumenta la frecuencia y gravedad de las crisis y reduce la respuesta a los corticosteroides. También se recomienda reducir la exposición a alérgenos relevantes, como ácaros con fundas antiácaros y lavado de ropa de cama con agua caliente, y mantener mascotas fuera del dormitorio si hay sensibilización. Se recomienda vacunarse contra influenza cada año, mantener actividad física y contar con un plan de acción escrito para crisis.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento del asma en menores de 18 años ;; Iniciativa Global para el Asma
+
+@ ped|pediatric_respiratory|pediatric_asthma|2|mechanism
+V: Adolescente de 13 años con asma que usa salbutamol inhalado para las crisis. Pregunta por qué el inhalador le quita la falta de aire en minutos y por qué a veces siente palpitaciones.
+P: ¿Cuál es el mecanismo de acción del salbutamol?
++ Estimula los receptores beta 2 del músculo liso bronquial y produce broncodilatación rápida || Su acción en receptores beta también explica la taquicardia y el temblor.
+- anchoring | Reduce la inflamación de la vía aérea como un corticosteroide || No es antiinflamatorio.
+- availability_heuristic | Bloquea los receptores muscarínicos || Ese es el mecanismo del ipratropio.
+- representativeness_heuristic | Bloquea los leucotrienos || Ese es el mecanismo del montelukast.
+- premature_closure | Inhibe la fosfodiesterasa || Es el mecanismo de la teofilina.
+- base_rate_fallacy | Neutraliza la IgE circulante || Es el mecanismo del omalizumab.
+- framing_effect | Estabiliza los mastocitos || Es el mecanismo del cromoglicato.
+- inattentional_blindness | Fluidifica las secreciones || No es mucolítico.
+- focusing_illusion | Bloquea los receptores beta 1 del corazón || Los estimula de forma secundaria.
+- belief_bias | Funciona como un sedante que calma la respiración || No es sedante.
+E: El salbutamol es un agonista beta 2 adrenérgico de acción corta. Al estimular los receptores beta 2 del músculo liso bronquial aumenta el AMP cíclico y produce relajación y broncodilatación en minutos, con efecto de 4 a 6 horas. Es el medicamento de rescate en las crisis. Sus efectos adversos incluyen taquicardia, palpitaciones, temblor e hipopotasemia, por estimulación de receptores beta en otros tejidos. No tiene efecto antiinflamatorio, por lo que el uso frecuente indica mal control y necesidad de tratamiento controlador. En adolescentes y adultos se prefiere como rescate la combinación de budesonida con formoterol.
+R: Iniciativa Global para el Asma
+
+@ ped|pediatric_respiratory|pediatric_pneumonia|2|diagnosis
+V: Niño de 3 años con fiebre de 39.5 °C, tos y dificultad respiratoria de 2 días. Frecuencia respiratoria de 48 por minuto, tiraje subcostal y estertores crepitantes con soplo tubario en la base derecha. Saturación de 93%.
+P: ¿Cuál es el diagnóstico más probable?
++ Neumonía adquirida en la comunidad || Fiebre, taquipnea y hallazgos focales de consolidación.
+- anchoring | Bronquiolitis || Es propia de menores de 2 años con sibilancias difusas.
+- availability_heuristic | Crisis asmática || Da sibilancias difusas sin fiebre alta ni consolidación.
+- representativeness_heuristic | Laringotraqueítis || Da estridor y tos perruna.
+- premature_closure | Resfriado común || No explica la taquipnea ni los hallazgos focales.
+- base_rate_fallacy | Tuberculosis pulmonar || Su evolución es crónica.
+- framing_effect | Cuerpo extraño en vía aérea || Inicia con atragantamiento sin fiebre.
+- inattentional_blindness | Derrame pericárdico || No explica la consolidación.
+- focusing_illusion | Faringitis estreptocócica || No explica los hallazgos pulmonares.
+- belief_bias | Tos por cambio de clima || No explica la fiebre ni la taquipnea.
+E: La neumonía adquirida en la comunidad es una causa importante de mortalidad en menores de 5 años. La taquipnea es el signo más sensible. Según la Organización Mundial de la Salud se considera taquipnea una frecuencia de 60 o más en menores de 2 meses, 50 o más de 2 a 12 meses y 40 o más de 1 a 5 años. Otros datos son fiebre, tos, tiraje, estertores, soplo tubario y disminución del murmullo. Los virus son la causa más común en menores de 2 años y Streptococcus pneumoniae es la principal causa bacteriana. El tiraje subcostal, la saturación baja o la incapacidad para beber indican gravedad.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de neumonía adquirida en la comunidad en niños ;; Organización Mundial de la Salud. Atención integrada a las enfermedades prevalentes de la infancia
+
+@ ped|pediatric_respiratory|pediatric_pneumonia|2|treatment_of_choice
+V: Niña de 4 años con neumonía adquirida en la comunidad sin criterios de gravedad, saturación de 96%, que bebe y come bien. Esquema de vacunación completo y sin alergias.
+P: ¿Cuál es el tratamiento de elección?
++ Amoxicilina oral a dosis altas de forma ambulatoria || Es el antibiótico de primera elección para neumonía bacteriana no grave.
+- anchoring | Azitromicina como primera elección en todos los casos || Se reserva para sospecha de atípicos.
+- availability_heuristic | Ceftriaxona intravenosa con hospitalización || No tiene criterios de gravedad.
+- representativeness_heuristic | Ciprofloxacino oral || No es de elección en niños.
+- premature_closure | Solo antitusivos y antipiréticos || La neumonía bacteriana requiere antibiótico.
+- framing_effect | Trimetoprim con sulfametoxazol || Tiene mayor resistencia del neumococo.
+- complexity_bias | Vancomicina con meropenem || Es excesivo.
+- base_rate_fallacy | Oseltamivir de rutina || Solo si hay influenza.
+- belief_bias | Jarabes caseros de miel y limón || No tratan la infección.
+- omission_bias | Esperar el resultado de cultivos para iniciar || La neumonía se trata de forma empírica.
+E: En niños con neumonía adquirida en la comunidad sin criterios de gravedad el tratamiento es ambulatorio con amoxicilina oral a dosis de 80 a 90 mg/kg/día durante 5 a 7 días, que cubre a Streptococcus pneumoniae. En niños mayores de 5 años con sospecha de Mycoplasma o Chlamydophila se puede agregar o usar un macrólido. La hospitalización se indica en menores de 3 a 6 meses, con hipoxemia, dificultad respiratoria grave, incapacidad para beber, aspecto tóxico, complicaciones o falla del tratamiento oral, y en esos casos se usa ampicilina o cefalosporina de tercera generación intravenosa.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de neumonía adquirida en la comunidad en niños
+
+@ ped|pediatric_respiratory|pediatric_pneumonia|3|diagnosis
+V: Adolescente de 12 años con tos seca persistente de 10 días, cefalea, malestar general, febrícula y dolor faríngeo. A la exploración tiene pocos estertores. La radiografía muestra infiltrado intersticial bilateral más extenso de lo que sugiere la clínica. Varios compañeros de su escuela tienen síntomas similares.
+P: ¿Cuál es el diagnóstico más probable?
++ Neumonía atípica por Mycoplasma pneumoniae || Escolar con tos seca prolongada, síntomas generales y disociación clínico radiológica.
+- anchoring | Neumonía neumocócica || Da fiebre alta e inicio súbito con consolidación lobar.
+- availability_heuristic | Bronquiolitis || Es propia de lactantes.
+- representativeness_heuristic | Tuberculosis pulmonar || Su evolución es más larga con síntomas constitucionales.
+- premature_closure | Crisis asmática || No explica el infiltrado ni los síntomas generales.
+- base_rate_fallacy | Neumonía por Staphylococcus aureus || Da cuadro grave con neumatoceles.
+- framing_effect | Resfriado común || No explica el infiltrado.
+- inattentional_blindness | Neumonía por aspiración || No hay factores de riesgo.
+- focusing_illusion | Fibrosis quística || No explica el cuadro agudo en brote.
+- belief_bias | Tos por estrés escolar || No explica el infiltrado.
+E: Mycoplasma pneumoniae es una causa frecuente de neumonía en escolares y adolescentes, con brotes en escuelas. Su presentación es gradual, con tos seca persistente, cefalea, malestar, febrícula y faringitis. La exploración suele mostrar pocos hallazgos en comparación con una radiografía con infiltrado intersticial o en parches, lo que se llama disociación clínico radiológica. Puede asociarse a manifestaciones extrapulmonares, como anemia hemolítica por crioaglutininas, miringitis bulosa, eritema multiforme y síndrome de Stevens Johnson. El tratamiento de elección es un macrólido, como azitromicina, porque Mycoplasma no tiene pared celular y no responde a betalactámicos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de neumonía adquirida en la comunidad en niños
+
+@ ped|pediatric_respiratory|pediatric_pneumonia|4|complication_prognosis
+V: Niño de 5 años con neumonía lobar derecha tratado con amoxicilina desde hace 4 días. Persiste con fiebre, dolor pleurítico y matidez a la percusión con murmullo abolido en la base derecha. La radiografía muestra opacidad con borramiento del seno costodiafragmático y línea de Damoiseau.
+P: ¿Cuál es la complicación que presenta?
++ Derrame pleural paraneumónico, posible empiema || Fiebre persistente, matidez y opacidad con borramiento del seno.
+- anchoring | Falla del antibiótico por resistencia sin complicación || No explica la matidez ni el borramiento.
+- availability_heuristic | Absceso pulmonar || Da cavidad con nivel hidroaéreo.
+- representativeness_heuristic | Neumotórax || Daría hiperresonancia.
+- premature_closure | Atelectasia simple || No explica la fiebre persistente con línea de Damoiseau.
+- base_rate_fallacy | Tumor mediastinal || No corresponde al cuadro agudo.
+- framing_effect | Insuficiencia cardiaca con derrame bilateral || El derrame es unilateral y paraneumónico.
+- inattentional_blindness | Pericarditis purulenta || No explica los hallazgos pleurales.
+- focusing_illusion | Neumatocele || Es una lesión quística aérea.
+- belief_bias | Mejoría normal que tarda en notarse || La matidez indica complicación.
+E: El derrame pleural paraneumónico es la complicación más frecuente de la neumonía bacteriana en niños. Se sospecha con fiebre persistente después de 48 a 72 horas de antibiótico, dolor pleurítico, matidez y disminución del murmullo. La radiografía muestra borramiento del seno costodiafragmático y el ultrasonido confirma y cuantifica el líquido y detecta tabiques. Los agentes más comunes son Streptococcus pneumoniae, Staphylococcus aureus y Streptococcus pyogenes. Los derrames grandes o con compromiso respiratorio requieren drenaje con sonda pleural, y los tabicados pueden tratarse con fibrinolíticos o toracoscopia, además de antibióticos intravenosos.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de neumonía adquirida en la comunidad en niños
+
+@ ped|pediatric_respiratory|pediatric_pneumonia|3|risk_factor
+V: Lactante de 8 meses con neumonía grave que desarrolla neumatoceles y empiema. Tuvo varicela hace 2 semanas con lesiones de piel infectadas.
+P: ¿Cuál es el agente causal más probable?
++ Staphylococcus aureus || La neumonía con neumatoceles y empiema tras lesiones de piel infectadas es característica.
+- anchoring | Streptococcus pneumoniae || Es el más común, pero los neumatoceles orientan a estafilococo.
+- availability_heuristic | Virus sincicial respiratorio || No causa neumatoceles ni empiema.
+- representativeness_heuristic | Mycoplasma pneumoniae || Da neumonía leve en escolares.
+- premature_closure | Haemophilus influenzae tipo b || Es raro en vacunados y no se asocia a varicela.
+- base_rate_fallacy | Pneumocystis jirovecii || Ocurre en inmunosuprimidos.
+- framing_effect | Chlamydia trachomatis || Afecta a lactantes de 1 a 3 meses con conjuntivitis.
+- inattentional_blindness | Mycobacterium tuberculosis || Su evolución es crónica.
+- focusing_illusion | Virus de varicela directamente || La neumonía por varicela no da empiema con neumatoceles.
+- belief_bias | Hongos del ambiente || No es lo más probable.
+E: Staphylococcus aureus causa neumonías graves y de evolución rápida, sobre todo en lactantes, después de influenza o varicela con lesiones de piel sobreinfectadas, o en infecciones asociadas a catéteres. Es característica la formación de neumatoceles, abscesos, empiema y neumotórax. Las cepas productoras de leucocidina de Panton Valentine se asocian a mayor gravedad. El tratamiento empírico debe cubrir estafilococo resistente a meticilina según la epidemiología local, con vancomicina o clindamicina, y drenaje del empiema. Ante neumonía grave tras varicela o influenza debe sospecharse este agente.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de neumonía adquirida en la comunidad en niños
+
+@ ped|pediatric_respiratory|pediatric_pneumonia|3|diagnosis
+V: Lactante de 6 semanas, nacido por parto vaginal, afebril, con tos en accesos de una semana y taquipnea. Tuvo conjuntivitis purulenta a los 10 días de vida. La biometría muestra eosinofilia y la radiografía infiltrados intersticiales bilaterales con hiperinsuflación.
+P: ¿Cuál es el diagnóstico más probable?
++ Neumonía por Chlamydia trachomatis || Lactante afebril de 1 a 3 meses con tos en staccato, conjuntivitis previa y eosinofilia.
+- anchoring | Bronquiolitis por virus sincicial respiratorio || No explica la conjuntivitis previa ni la eosinofilia.
+- availability_heuristic | Neumonía neumocócica || Da fiebre y consolidación.
+- representativeness_heuristic | Tos ferina || Da accesos de tos con estridor y linfocitosis.
+- premature_closure | Sepsis neonatal tardía || No hay datos de afección sistémica.
+- base_rate_fallacy | Neumonía por estreptococo del grupo B || Ocurre en los primeros días.
+- framing_effect | Reflujo gastroesofágico con aspiración || No explica la conjuntivitis.
+- inattentional_blindness | Fibrosis quística || No explica el cuadro agudo con conjuntivitis.
+- focusing_illusion | Asma del lactante || No se diagnostica a esta edad.
+- belief_bias | Tos por el frío del cuarto || No explica la eosinofilia.
+E: La neumonía por Chlamydia trachomatis afecta a lactantes de 1 a 3 meses que adquirieron la infección en el canal de parto. Suele haber antecedente de conjuntivitis a los 5 a 14 días de vida. El lactante está afebril o con febrícula, con taquipnea y tos en staccato, es decir, accesos cortos y entrecortados. La biometría puede mostrar eosinofilia y la radiografía infiltrados intersticiales con hiperinsuflación. El tratamiento es azitromicina oral por 3 días o eritromicina por 14 días, que se asocia a estenosis hipertrófica del píloro. La madre y su pareja también deben tratarse.
+R: Guía de Práctica Clínica de diagnóstico y tratamiento de neumonía adquirida en la comunidad en niños

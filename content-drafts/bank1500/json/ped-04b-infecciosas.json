@@ -1,0 +1,1321 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "ped-04b-infecciosas-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_infectious",
+      "subtopic": "acute_otitis_media",
+      "vignette": "Niño de 2 años con fiebre de 38.8 °C, irritabilidad y que se jala la oreja derecha desde hace un día, tras un resfriado. La otoscopia muestra membrana timpánica derecha abombada, opaca y eritematosa con movilidad disminuida.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Otitis media aguda",
+          "correct": true,
+          "rationale": "Abombamiento de la membrana timpánica con signos de inflamación aguda."
+        },
+        {
+          "key": "b",
+          "text": "Otitis externa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Afecta el conducto y duele al mover el trago."
+        },
+        {
+          "key": "c",
+          "text": "Dentición",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica los hallazgos otoscópicos."
+        },
+        {
+          "key": "d",
+          "text": "Mastoiditis aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Daría desplazamiento del pabellón y dolor retroauricular."
+        },
+        {
+          "key": "e",
+          "text": "Colesteatoma",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es crónico y no da fiebre aguda."
+        },
+        {
+          "key": "f",
+          "text": "Otitis media con derrame",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No tiene signos agudos de inflamación ni abombamiento."
+        },
+        {
+          "key": "g",
+          "text": "Cuerpo extraño en el oído",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se vería en el conducto."
+        },
+        {
+          "key": "h",
+          "text": "Miringitis bulosa aislada",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da vesículas en la membrana."
+        },
+        {
+          "key": "i",
+          "text": "Faringitis estreptocócica",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No explica el tímpano abombado."
+        },
+        {
+          "key": "j",
+          "text": "Infección por agua en el baño",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Esa se relaciona con otitis externa."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "d",
+        "f"
+      ],
+      "explanation": "La otitis media aguda es una de las infecciones más frecuentes en niños pequeños y suele seguir a una infección respiratoria viral. Los agentes principales son Streptococcus pneumoniae, Haemophilus influenzae no tipificable y Moraxella catarrhalis. El diagnóstico requiere inicio agudo, signos de inflamación como otalgia o fiebre y derrame en oído medio, con abombamiento moderado o grave de la membrana timpánica como el hallazgo más específico. La otitis media con derrame, en cambio, tiene líquido sin signos agudos y no requiere antibiótico. La otoscopia neumática ayuda a valorar la movilidad timpánica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de otitis media aguda en la edad pediátrica"
+      ]
+    },
+    {
+      "key": "ped-04b-infecciosas-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_infectious",
+      "subtopic": "acute_otitis_media",
+      "vignette": "Niña de 3 años con otitis media aguda unilateral, fiebre de 39 °C y otalgia intensa desde hace 2 días. No ha recibido antibióticos en el último mes y no es alérgica a la penicilina.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Azitromicina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para alergia grave a betalactámicos por mayor resistencia."
+        },
+        {
+          "key": "b",
+          "text": "Antihistamínicos y descongestionantes",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No son eficaces."
+        },
+        {
+          "key": "c",
+          "text": "Timpanocentesis de rutina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se reserva para fallas de tratamiento."
+        },
+        {
+          "key": "d",
+          "text": "Amoxicilina a dosis altas de 80 a 90 mg/kg/día",
+          "correct": true,
+          "rationale": "Es el antibiótico de primera elección por su cobertura contra neumococo."
+        },
+        {
+          "key": "e",
+          "text": "Ceftriaxona intramuscular de primera elección",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se reserva para casos especiales."
+        },
+        {
+          "key": "f",
+          "text": "Ciprofloxacino oral",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No se usa como primera línea en niños."
+        },
+        {
+          "key": "g",
+          "text": "Gotas óticas con antibiótico",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Son para otitis externa o con tubos de ventilación."
+        },
+        {
+          "key": "h",
+          "text": "Solo observar sin analgesia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El dolor siempre debe tratarse."
+        },
+        {
+          "key": "i",
+          "text": "Gotas de aceite tibio en el oído",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No tratan la infección."
+        },
+        {
+          "key": "j",
+          "text": "Trimetoprim con sulfametoxazol",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Tiene alta resistencia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "d",
+        "e",
+        "g"
+      ],
+      "explanation": "El tratamiento de la otitis media aguda incluye analgesia con paracetamol o ibuprofeno en todos los casos. La amoxicilina a dosis altas de 80 a 90 mg/kg/día es el antibiótico de primera elección. Si recibió amoxicilina en los últimos 30 días, tiene conjuntivitis purulenta o falla al tratamiento, se usa amoxicilina con ácido clavulánico. En alergia no grave a penicilina se usan cefalosporinas, y en alergia grave macrólidos. La duración es de 10 días en menores de 2 años o casos graves y de 5 a 7 días en mayores con enfermedad leve. En niños mayores con cuadro leve y unilateral puede observarse 48 a 72 horas con seguimiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de otitis media aguda en la edad pediátrica"
+      ]
+    },
+    {
+      "key": "ped-04b-infecciosas-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_infectious",
+      "subtopic": "acute_otitis_media",
+      "vignette": "Niño de 4 años con otitis media aguda unilateral leve, otalgia moderada de 12 horas y temperatura de 38 °C. Está en buen estado general. Los padres son confiables y pueden regresar fácilmente a consulta.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ningún tratamiento ni seguimiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Requiere analgesia y vigilancia."
+        },
+        {
+          "key": "b",
+          "text": "Tomografía de oído",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "c",
+          "text": "Algodón con alcohol en el oído",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede causar daño."
+        },
+        {
+          "key": "d",
+          "text": "Dar antibiótico porque siempre se ha hecho",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "La observación reduce el uso innecesario."
+        },
+        {
+          "key": "e",
+          "text": "Amoxicilina con clavulánico por 14 días de inmediato",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Puede observarse y la duración es excesiva."
+        },
+        {
+          "key": "f",
+          "text": "Antibiótico intravenoso hospitalario",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es necesario."
+        },
+        {
+          "key": "g",
+          "text": "Referir a otorrinolaringología para tubos de ventilación",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "h",
+          "text": "Antihistamínico oral",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es útil."
+        },
+        {
+          "key": "i",
+          "text": "Analgesia y observación por 48 a 72 horas con antibiótico si no mejora o empeora",
+          "correct": true,
+          "rationale": "En mayores de 2 años con enfermedad leve unilateral es válida la observación."
+        },
+        {
+          "key": "j",
+          "text": "No dar analgésico para no ocultar síntomas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El dolor debe tratarse."
+        }
+      ],
+      "canonical": [
+        "e",
+        "f",
+        "g",
+        "i"
+      ],
+      "explanation": "Muchas otitis medias agudas se resuelven sin antibiótico. La observación con analgesia durante 48 a 72 horas es una opción en niños mayores de 2 años con otitis unilateral o bilateral no grave, y en niños de 6 a 23 meses con otitis unilateral no grave, siempre que haya seguimiento asegurado. Se considera grave la otalgia moderada a intensa de más de 48 horas o fiebre de 39 °C o más. Si los síntomas persisten o empeoran se inicia antibiótico. Esta estrategia reduce el uso innecesario de antibióticos, los efectos adversos y la resistencia bacteriana sin aumentar las complicaciones.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de otitis media aguda en la edad pediátrica"
+      ]
+    },
+    {
+      "key": "ped-04b-infecciosas-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_infectious",
+      "subtopic": "acute_otitis_media",
+      "vignette": "Niño de 3 años con otitis media aguda tratada de forma incompleta hace 10 días. Ahora presenta fiebre, dolor e inflamación detrás de la oreja izquierda, con eritema, aumento de volumen fluctuante y el pabellón auricular desplazado hacia adelante y abajo.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Otitis externa maligna",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ocurre en adultos diabéticos."
+        },
+        {
+          "key": "b",
+          "text": "Colesteatoma congénito",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es crónico."
+        },
+        {
+          "key": "c",
+          "text": "Golpe en la oreja",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica la fiebre ni la evolución."
+        },
+        {
+          "key": "d",
+          "text": "Pericondritis",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Afecta el cartílago del pabellón."
+        },
+        {
+          "key": "e",
+          "text": "Celulitis del pabellón auricular",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica el desplazamiento."
+        },
+        {
+          "key": "f",
+          "text": "Absceso dental",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Está en otra localización."
+        },
+        {
+          "key": "g",
+          "text": "Mastoiditis aguda",
+          "correct": true,
+          "rationale": "Inflamación retroauricular con desplazamiento del pabellón tras otitis media."
+        },
+        {
+          "key": "h",
+          "text": "Linfadenitis retroauricular simple",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No desplaza el pabellón."
+        },
+        {
+          "key": "i",
+          "text": "Quiste sebáceo infectado",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se relaciona con la otitis."
+        },
+        {
+          "key": "j",
+          "text": "Parotiditis",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La inflamación es preauricular y en ángulo mandibular."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "g",
+        "h"
+      ],
+      "explanation": "La mastoiditis aguda es la complicación más frecuente de la otitis media aguda. La infección se extiende a las celdillas mastoideas y produce dolor, eritema y aumento de volumen retroauricular, con borramiento del surco y desplazamiento del pabellón hacia adelante y abajo. Se confirma con tomografía cuando se sospechan complicaciones como absceso subperióstico, trombosis del seno sigmoideo o absceso intracraneal. El tratamiento incluye hospitalización, antibióticos intravenosos de amplio espectro y miringotomía con o sin tubo de ventilación. La mastoidectomía se reserva para falla del tratamiento o complicaciones.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de otitis media aguda en la edad pediátrica"
+      ]
+    },
+    {
+      "key": "ped-04b-infecciosas-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_infectious",
+      "subtopic": "acute_otitis_media",
+      "vignette": "Lactante de 14 meses con su cuarto episodio de otitis media aguda en 6 meses. Asiste a guardería, se alimenta con biberón acostado y ambos padres fuman dentro de casa. Recibió lactancia materna solo un mes.",
+      "prompt": "¿Cuál es el factor de riesgo modificable más importante en este caso?",
+      "polarity": "affirmative",
+      "task": "risk_factor",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Exposición al humo de tabaco en casa",
+          "correct": true,
+          "rationale": "Es un factor de riesgo importante y modificable de otitis recurrente."
+        },
+        {
+          "key": "b",
+          "text": "Antecedente familiar de otitis",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es modificable."
+        },
+        {
+          "key": "c",
+          "text": "Vacunación completa contra neumococo",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Es protectora."
+        },
+        {
+          "key": "d",
+          "text": "Uso de chupón ocasional",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Contribuye poco."
+        },
+        {
+          "key": "e",
+          "text": "Lactancia materna",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Es protectora."
+        },
+        {
+          "key": "f",
+          "text": "Sexo masculino",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No es modificable."
+        },
+        {
+          "key": "g",
+          "text": "Clima frío",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No es el factor principal."
+        },
+        {
+          "key": "h",
+          "text": "Edad entre 6 y 24 meses",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es modificable."
+        },
+        {
+          "key": "i",
+          "text": "Baño diario en tina",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "No es un factor de otitis media."
+        },
+        {
+          "key": "j",
+          "text": "Exposición al viento sin gorro",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No causa otitis media."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "h"
+      ],
+      "explanation": "Los factores de riesgo de otitis media aguda recurrente incluyen edad de 6 a 24 meses, asistencia a guardería, exposición al humo de tabaco, alimentación con biberón en posición acostada, uso prolongado del chupón, falta de lactancia materna, antecedentes familiares, alteraciones craneofaciales como paladar hendido y síndrome de Down. Los factores protectores son lactancia materna, vacunación contra neumococo e influenza y evitar el humo de tabaco. Se considera recurrente con tres episodios en 6 meses o cuatro en un año. En casos seleccionados se valoran tubos de ventilación.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de otitis media aguda en la edad pediátrica"
+      ]
+    },
+    {
+      "key": "ped-04b-infecciosas-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_infectious",
+      "subtopic": "acute_otitis_media",
+      "vignette": "Niño de 3 años que hace 3 meses tuvo otitis media aguda bilateral tratada. Desde entonces los padres notan que sube el volumen de la televisión. Afebril y sin dolor. La otoscopia muestra membranas timpánicas opacas, retraídas, con nivel hidroaéreo y movilidad disminuida.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Corticosteroides orales por un mes",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No son eficaces."
+        },
+        {
+          "key": "b",
+          "text": "Antihistamínicos y descongestionantes",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No son eficaces."
+        },
+        {
+          "key": "c",
+          "text": "Nuevo ciclo de amoxicilina con clavulánico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No tiene infección aguda."
+        },
+        {
+          "key": "d",
+          "text": "Gotas óticas con antibiótico",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No llegan al oído medio con tímpano íntegro."
+        },
+        {
+          "key": "e",
+          "text": "No referir para evitar cirugía",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La referencia permite decidir oportunamente."
+        },
+        {
+          "key": "f",
+          "text": "Resonancia magnética de cráneo",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "g",
+          "text": "Observar un año más sin estudios",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "Retrasa la atención de la hipoacusia."
+        },
+        {
+          "key": "h",
+          "text": "Realizar audiometría o timpanometría y referir a otorrinolaringología por derrame persistente con hipoacusia",
+          "correct": true,
+          "rationale": "Otitis media con derrame bilateral de más de 3 meses con afección auditiva."
+        },
+        {
+          "key": "i",
+          "text": "Lavados de oído con agua tibia",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No tratan el derrame."
+        },
+        {
+          "key": "j",
+          "text": "Tranquilizar sin seguimiento",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La hipoacusia puede afectar el lenguaje."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "explanation": "La otitis media con derrame es la presencia de líquido en el oído medio sin signos de infección aguda. Es frecuente después de una otitis media aguda y la mayoría se resuelve en 3 meses. No se tratan con antibióticos, corticosteroides, antihistamínicos ni descongestionantes. Si persiste más de 3 meses, se realiza evaluación auditiva. La hipoacusia bilateral persistente, el retraso del lenguaje o alteraciones estructurales del tímpano son indicaciones para colocar tubos de ventilación. Los niños con riesgo de alteraciones del desarrollo requieren evaluación más temprana.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de otitis media aguda en la edad pediátrica"
+      ]
+    },
+    {
+      "key": "ped-04b-infecciosas-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_infectious",
+      "subtopic": "acute_otitis_media",
+      "vignette": "Niña de 5 años con otitis media aguda que recibió amoxicilina a dosis altas durante 3 días. Persiste con fiebre de 39 °C, otalgia intensa y membrana timpánica abombada. No es alérgica.",
+      "prompt": "¿Cuál es el tratamiento de elección ante la falla terapéutica?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Vancomicina intravenosa",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "b",
+          "text": "Agregar vitamina C a dosis altas",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No trata la infección."
+        },
+        {
+          "key": "c",
+          "text": "Azitromicina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Tiene mayor resistencia y no está indicada sin alergia."
+        },
+        {
+          "key": "d",
+          "text": "Clindamicina sola como primera opción",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No cubre Haemophilus."
+        },
+        {
+          "key": "e",
+          "text": "Agregar antihistamínico",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es útil."
+        },
+        {
+          "key": "f",
+          "text": "Gotas óticas de ciprofloxacino",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No sirven con tímpano íntegro."
+        },
+        {
+          "key": "g",
+          "text": "Amoxicilina con ácido clavulánico a dosis altas",
+          "correct": true,
+          "rationale": "Cubre Haemophilus y Moraxella productores de betalactamasa."
+        },
+        {
+          "key": "h",
+          "text": "Continuar amoxicilina sola otros 7 días",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ya falló a las 48 a 72 horas."
+        },
+        {
+          "key": "i",
+          "text": "Suspender antibiótico y observar",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La falla requiere ajustar el antibiótico."
+        },
+        {
+          "key": "j",
+          "text": "No ajustar porque el antibiótico tarda en actuar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "A las 72 horas ya debería mejorar."
+        }
+      ],
+      "canonical": [
+        "c",
+        "f",
+        "g",
+        "h"
+      ],
+      "explanation": "Se considera falla terapéutica cuando persisten o empeoran los síntomas después de 48 a 72 horas de antibiótico. La causa más frecuente es la presencia de bacterias productoras de betalactamasa, como Haemophilus influenzae no tipificable y Moraxella catarrhalis. Se cambia a amoxicilina con ácido clavulánico a dosis altas. Si falla, se usa ceftriaxona intramuscular por 3 días. En fallas repetidas se considera timpanocentesis para cultivo. En niños con alergia grave a la penicilina se usan macrólidos o clindamicina según el caso.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de otitis media aguda en la edad pediátrica"
+      ]
+    },
+    {
+      "key": "ped-04b-infecciosas-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_infectious",
+      "subtopic": "streptococcal_pharyngitis",
+      "vignette": "Niña de 8 años con fiebre de 39 °C, dolor intenso al tragar y cefalea de inicio súbito. No tiene tos ni rinorrea. Las amígdalas están hipertróficas con exudado y hay adenopatías cervicales anteriores dolorosas.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Candidiasis oral",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da placas blancas en la mucosa."
+        },
+        {
+          "key": "b",
+          "text": "Difteria",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da membrana grisácea adherente y se presenta en no vacunados."
+        },
+        {
+          "key": "c",
+          "text": "Faringoamigdalitis por estreptococo del grupo A",
+          "correct": true,
+          "rationale": "Fiebre, exudado, adenopatía cervical dolorosa y ausencia de tos en una escolar."
+        },
+        {
+          "key": "d",
+          "text": "Dolor de garganta por tomar frío",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es una causa."
+        },
+        {
+          "key": "e",
+          "text": "Gonorrea faríngea",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No corresponde al contexto."
+        },
+        {
+          "key": "f",
+          "text": "Herpangina",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da vesículas en el paladar posterior."
+        },
+        {
+          "key": "g",
+          "text": "Mononucleosis infecciosa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da adenopatías posteriores, esplenomegalia y fatiga."
+        },
+        {
+          "key": "h",
+          "text": "Epiglotitis",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Da sialorrea y dificultad respiratoria."
+        },
+        {
+          "key": "i",
+          "text": "Faringitis viral",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Suele tener tos, rinorrea o conjuntivitis."
+        },
+        {
+          "key": "j",
+          "text": "Absceso periamigdalino",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Da trismus, voz de papa caliente y desviación de la úvula."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "i"
+      ],
+      "explanation": "La faringoamigdalitis por Streptococcus pyogenes es más frecuente entre los 5 y 15 años. Se sospecha con fiebre, odinofagia de inicio súbito, exudado amigdalino, adenopatías cervicales anteriores dolorosas, petequias en el paladar y ausencia de tos, rinorrea o conjuntivitis, que sugieren causa viral. La escala de Centor modificada por McIsaac suma puntos por fiebre, exudado, adenopatía, ausencia de tos y edad de 3 a 14 años. Con puntaje intermedio o alto se confirma con prueba rápida de antígeno o cultivo faríngeo antes de dar antibiótico, para evitar su uso en infecciones virales.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de faringoamigdalitis aguda"
+      ]
+    },
+    {
+      "key": "ped-04b-infecciosas-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_infectious",
+      "subtopic": "streptococcal_pharyngitis",
+      "vignette": "Niño de 9 años con faringoamigdalitis y prueba rápida de antígeno positiva para estreptococo del grupo A. No es alérgico a la penicilina.",
+      "prompt": "¿Cuál es el tratamiento de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Penicilina benzatínica intramuscular dosis única o amoxicilina oral por 10 días",
+          "correct": true,
+          "rationale": "Erradican al estreptococo y previenen la fiebre reumática."
+        },
+        {
+          "key": "b",
+          "text": "Solo analgésicos porque es autolimitada",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "El antibiótico previene complicaciones."
+        },
+        {
+          "key": "c",
+          "text": "Azitromicina por 3 días como primera elección",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para alergia a penicilina."
+        },
+        {
+          "key": "d",
+          "text": "Trimetoprim con sulfametoxazol",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No erradica de forma confiable al estreptococo."
+        },
+        {
+          "key": "e",
+          "text": "Amigdalectomía inmediata",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada."
+        },
+        {
+          "key": "f",
+          "text": "Ciprofloxacino",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es adecuado."
+        },
+        {
+          "key": "g",
+          "text": "Gárgaras con bicarbonato como único tratamiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No erradican la bacteria."
+        },
+        {
+          "key": "h",
+          "text": "Tetraciclina",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Tiene alta resistencia y se evita en niños."
+        },
+        {
+          "key": "i",
+          "text": "Amoxicilina por 3 días",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La duración debe ser de 10 días."
+        },
+        {
+          "key": "j",
+          "text": "Suspender el antibiótico al bajar la fiebre",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El ciclo debe completarse."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "i"
+      ],
+      "explanation": "El tratamiento de la faringoamigdalitis estreptocócica busca acortar los síntomas, reducir el contagio y prevenir complicaciones supurativas y la fiebre reumática. Los tratamientos de elección son penicilina benzatínica intramuscular en dosis única, 600 000 unidades en menores de 27 kg y 1 200 000 en mayores, o amoxicilina oral durante 10 días. En alergia a penicilina no grave se usan cefalosporinas de primera generación, y en alergia grave macrólidos o clindamicina. El tratamiento iniciado hasta 9 días después del inicio de los síntomas aún previene la fiebre reumática, aunque no la glomerulonefritis.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de faringoamigdalitis aguda"
+      ]
+    },
+    {
+      "key": "ped-04b-infecciosas-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_infectious",
+      "subtopic": "streptococcal_pharyngitis",
+      "vignette": "Niño de 10 años que hace 3 semanas tuvo faringitis no tratada. Ahora presenta fiebre, dolor e inflamación que migra de rodilla a codo y a tobillo, y un soplo sistólico nuevo en foco mitral. Antiestreptolisinas elevadas.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Artritis reactiva postentérica",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Sigue a infecciones intestinales."
+        },
+        {
+          "key": "b",
+          "text": "Endocarditis infecciosa",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No explica la artritis migratoria tras faringitis."
+        },
+        {
+          "key": "c",
+          "text": "Artritis idiopática juvenil",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No se relaciona con la faringitis previa ni migra así."
+        },
+        {
+          "key": "d",
+          "text": "Dolores de crecimiento",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Son nocturnos sin inflamación ni fiebre."
+        },
+        {
+          "key": "e",
+          "text": "Lupus eritematoso sistémico",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No explica el antecedente."
+        },
+        {
+          "key": "f",
+          "text": "Reacción al frío en las articulaciones",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica la carditis."
+        },
+        {
+          "key": "g",
+          "text": "Fiebre reumática aguda",
+          "correct": true,
+          "rationale": "Poliartritis migratoria y carditis tras faringitis estreptocócica, con evidencia de infección previa."
+        },
+        {
+          "key": "h",
+          "text": "Artritis séptica",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Afecta una articulación sin migrar."
+        },
+        {
+          "key": "i",
+          "text": "Glomerulonefritis postestreptocócica",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Afecta el riñón con hematuria y edema."
+        },
+        {
+          "key": "j",
+          "text": "Enfermedad de Kawasaki",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da fiebre prolongada con mucositis."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "La fiebre reumática es una complicación no supurativa de la faringitis por estreptococo del grupo A, por mimetismo molecular. Aparece de 2 a 4 semanas después. Se diagnostica con los criterios de Jones, que requieren evidencia de infección estreptocócica previa más dos criterios mayores, o uno mayor y dos menores. Los criterios mayores son carditis, poliartritis migratoria, corea de Sydenham, eritema marginado y nódulos subcutáneos. La carditis puede dejar valvulopatía reumática, sobre todo mitral. El tratamiento incluye penicilina para erradicar el estreptococo, antiinflamatorios y profilaxis secundaria con penicilina benzatínica cada 3 o 4 semanas durante años.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de fiebre reumática"
+      ]
+    },
+    {
+      "key": "ped-04b-infecciosas-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_infectious",
+      "subtopic": "streptococcal_pharyngitis",
+      "vignette": "Niño de 7 años que hace 2 semanas tuvo faringitis. Ahora presenta edema palpebral matutino, orina color refresco de cola e hipertensión de 130/85 mmHg. Examen general de orina con eritrocitos dismórficos y cilindros hemáticos. Complemento C3 bajo.",
+      "prompt": "¿Cuál es la complicación que presenta?",
+      "polarity": "affirmative",
+      "task": "complication_prognosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Síndrome de Alport",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es hereditario con sordera."
+        },
+        {
+          "key": "b",
+          "text": "Hipertensión esencial",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "No explica la hematuria."
+        },
+        {
+          "key": "c",
+          "text": "Síndrome nefrótico de cambios mínimos",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Da proteinuria masiva sin hematuria ni hipertensión."
+        },
+        {
+          "key": "d",
+          "text": "Litiasis renal",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No da cilindros hemáticos."
+        },
+        {
+          "key": "e",
+          "text": "Orina oscura por poca agua",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica los cilindros ni la hipertensión."
+        },
+        {
+          "key": "f",
+          "text": "Fiebre reumática",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Afecta corazón y articulaciones."
+        },
+        {
+          "key": "g",
+          "text": "Púrpura de Henoch Schönlein",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da púrpura palpable y dolor abdominal."
+        },
+        {
+          "key": "h",
+          "text": "Glomerulonefritis postestreptocócica",
+          "correct": true,
+          "rationale": "Síndrome nefrítico con C3 bajo de 1 a 3 semanas tras faringitis."
+        },
+        {
+          "key": "i",
+          "text": "Nefropatía por IgA",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La hematuria aparece durante la infección y el C3 es normal."
+        },
+        {
+          "key": "j",
+          "text": "Infección de vías urinarias",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No da cilindros hemáticos ni C3 bajo."
+        }
+      ],
+      "canonical": [
+        "c",
+        "h",
+        "i",
+        "j"
+      ],
+      "explanation": "La glomerulonefritis postestreptocócica es la causa más frecuente de síndrome nefrítico en niños. Aparece de 1 a 3 semanas después de una faringitis o de 3 a 6 semanas después de una infección de piel por cepas nefritogénicas. Se manifiesta con hematuria macroscópica, edema, hipertensión y oliguria. Los estudios muestran eritrocitos dismórficos, cilindros hemáticos, C3 bajo que se normaliza en 6 a 8 semanas y antiestreptolisinas elevadas. El tratamiento es de soporte, con restricción de sal y líquidos, diuréticos y antihipertensivos. A diferencia de la fiebre reumática, el antibiótico no la previene. El pronóstico en niños es excelente.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de glomerulonefritis aguda postestreptocócica"
+      ]
+    },
+    {
+      "key": "ped-04b-infecciosas-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_infectious",
+      "subtopic": "streptococcal_pharyngitis",
+      "vignette": "Adolescente de 15 años con faringitis de 5 días que empeora. Tiene fiebre, odinofagia intensa unilateral izquierda, trismus, voz apagada como de papa caliente y salivación. El pilar amigdalino izquierdo está abombado y la úvula desviada a la derecha.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 4,
+      "options": [
+        {
+          "key": "a",
+          "text": "Absceso retrofaríngeo",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es más común en niños pequeños con rigidez de cuello."
+        },
+        {
+          "key": "b",
+          "text": "Linfoma amigdalino",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es crónico y sin fiebre aguda."
+        },
+        {
+          "key": "c",
+          "text": "Absceso dental",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Se localiza en la encía."
+        },
+        {
+          "key": "d",
+          "text": "Inflamación por gritar mucho",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica el cuadro infeccioso."
+        },
+        {
+          "key": "e",
+          "text": "Angina de Ludwig",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Afecta el piso de la boca."
+        },
+        {
+          "key": "f",
+          "text": "Faringoamigdalitis estreptocócica no complicada",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No explica el trismus ni la desviación de la úvula."
+        },
+        {
+          "key": "g",
+          "text": "Absceso periamigdalino",
+          "correct": true,
+          "rationale": "Trismus, voz de papa caliente y desviación de la úvula al lado contrario."
+        },
+        {
+          "key": "h",
+          "text": "Epiglotitis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Da dificultad respiratoria con faringe normal."
+        },
+        {
+          "key": "i",
+          "text": "Mononucleosis infecciosa",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da inflamación bilateral sin desviación."
+        },
+        {
+          "key": "j",
+          "text": "Difteria",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da membrana grisácea."
+        }
+      ],
+      "canonical": [
+        "f",
+        "g",
+        "h",
+        "i"
+      ],
+      "explanation": "El absceso periamigdalino es la complicación supurativa más frecuente de la faringoamigdalitis y es más común en adolescentes y adultos jóvenes. Se forma entre la cápsula amigdalina y el músculo constrictor de la faringe. Se manifiesta con odinofagia intensa unilateral, fiebre, trismus, voz de papa caliente, sialorrea y otalgia refleja. A la exploración hay abombamiento del pilar amigdalino y desviación de la úvula al lado opuesto. El tratamiento es drenaje por punción o incisión más antibióticos con cobertura de estreptococo y anaerobios, como amoxicilina con ácido clavulánico o clindamicina. La amigdalectomía se considera en recurrencias.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de faringoamigdalitis aguda"
+      ]
+    },
+    {
+      "key": "ped-04b-infecciosas-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_infectious",
+      "subtopic": "streptococcal_pharyngitis",
+      "vignette": "Niño de 6 años con odinofagia y fiebre de 38.5 °C. Tiene exudado amigdalino y adenopatía cervical anterior dolorosa, sin tos. La escala de Centor modificada es de 4 puntos. La prueba rápida de antígeno estreptocócico resulta negativa.",
+      "prompt": "¿Cuál es el siguiente paso?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Dar penicilina a toda la familia",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "b",
+          "text": "Tomografía de cuello",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No hay datos de absceso."
+        },
+        {
+          "key": "c",
+          "text": "Solicitar antiestreptolisinas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No sirven para la infección aguda."
+        },
+        {
+          "key": "d",
+          "text": "Repetir la prueba rápida en un mes",
+          "correct": false,
+          "bias": "status_quo_bias",
+          "rationale": "No es útil."
+        },
+        {
+          "key": "e",
+          "text": "Gárgaras y reposo sin seguimiento",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Puede quedar una infección no tratada."
+        },
+        {
+          "key": "f",
+          "text": "Diagnosticar mononucleosis sin estudios",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay datos suficientes."
+        },
+        {
+          "key": "g",
+          "text": "Tomar cultivo faríngeo para confirmar antes de decidir el antibiótico",
+          "correct": true,
+          "rationale": "En niños una prueba rápida negativa debe confirmarse con cultivo."
+        },
+        {
+          "key": "h",
+          "text": "No hacer nada porque la prueba fue negativa",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El riesgo de fiebre reumática justifica confirmar."
+        },
+        {
+          "key": "i",
+          "text": "Descartar infección estreptocócica por la prueba negativa",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La sensibilidad de la prueba no es perfecta."
+        },
+        {
+          "key": "j",
+          "text": "Iniciar azitromicina empírica",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No está indicada sin confirmar y sin alergia."
+        }
+      ],
+      "canonical": [
+        "c",
+        "g",
+        "i",
+        "j"
+      ],
+      "explanation": "En niños y adolescentes con sospecha de faringitis estreptocócica, una prueba rápida de antígeno positiva confirma la infección y permite iniciar antibiótico. Como su sensibilidad es de alrededor de 85%, una prueba negativa debe confirmarse con cultivo faríngeo, que es el estándar de referencia. En adultos no es necesario el cultivo tras una prueba negativa por el bajo riesgo de fiebre reumática. Las antiestreptolisinas reflejan infección pasada y no sirven para el diagnóstico agudo. Retrasar el antibiótico hasta tener el cultivo no aumenta el riesgo de fiebre reumática si se inicia en los primeros 9 días.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de faringoamigdalitis aguda"
+      ]
+    },
+    {
+      "key": "ped-04b-infecciosas-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "pediatrics",
+      "topic": "pediatric_infectious",
+      "subtopic": "streptococcal_pharyngitis",
+      "vignette": "Adolescente de 16 años con fiebre, odinofagia, exudado amigdalino y fatiga intensa de 10 días. Tiene adenopatías cervicales posteriores y esplenomegalia. Recibió amoxicilina y presentó un exantema maculopapular generalizado. La biometría muestra linfocitosis con linfocitos atípicos.",
+      "prompt": "¿Cuál es el diagnóstico más probable?",
+      "polarity": "affirmative",
+      "task": "diagnosis",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Escarlatina",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Da exantema áspero sin esplenomegalia."
+        },
+        {
+          "key": "b",
+          "text": "Síndrome de Stevens Johnson",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Afecta mucosas de forma grave."
+        },
+        {
+          "key": "c",
+          "text": "Mononucleosis infecciosa por virus de Epstein Barr",
+          "correct": true,
+          "rationale": "Faringitis con adenopatías posteriores, esplenomegalia, linfocitos atípicos y exantema con amoxicilina."
+        },
+        {
+          "key": "d",
+          "text": "Cansancio por estudiar mucho",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No explica los hallazgos."
+        },
+        {
+          "key": "e",
+          "text": "Difteria",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Da membrana grisácea."
+        },
+        {
+          "key": "f",
+          "text": "Faringitis estreptocócica con alergia a la penicilina",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El exantema con amoxicilina es típico de la mononucleosis."
+        },
+        {
+          "key": "g",
+          "text": "Leucemia aguda",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Los linfocitos atípicos y el cuadro agudo orientan a infección."
+        },
+        {
+          "key": "h",
+          "text": "Infección aguda por virus de la inmunodeficiencia humana",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es menos probable."
+        },
+        {
+          "key": "i",
+          "text": "Faringitis viral por adenovirus",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No explica la esplenomegalia y los linfocitos atípicos."
+        },
+        {
+          "key": "j",
+          "text": "Toxoplasmosis",
+          "correct": false,
+          "bias": "inattentional_blindness",
+          "rationale": "Da adenopatías sin faringitis exudativa."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "f",
+        "g"
+      ],
+      "explanation": "La mononucleosis infecciosa es causada por el virus de Epstein Barr y es frecuente en adolescentes. Se manifiesta con fiebre, faringoamigdalitis exudativa, adenopatías cervicales posteriores, fatiga intensa y esplenomegalia. La biometría muestra linfocitosis con linfocitos atípicos y pueden elevarse las transaminasas. El diagnóstico se apoya en anticuerpos heterófilos o serología específica. La amoxicilina provoca un exantema maculopapular en muchos pacientes, lo que no implica alergia verdadera. El tratamiento es sintomático. Se recomienda evitar deportes de contacto por 3 a 4 semanas por riesgo de rotura esplénica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de mononucleosis infecciosa"
+      ]
+    }
+  ]
+}
