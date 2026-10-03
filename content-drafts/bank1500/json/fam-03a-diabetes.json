@@ -1,0 +1,1335 @@
+{
+  "cases": [],
+  "questions": [
+    {
+      "key": "fam-03a-diabetes-q01",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "diabetes_primary_care",
+      "vignette": "Hombre de 48 años con diagnóstico reciente de diabetes tipo 2. Glucosa en ayuno de 165 mg/dL, hemoglobina glucosilada de 7.8 por ciento, índice de masa corporal de 31, tasa de filtración glomerular de 90 mL/min. Sin síntomas de hiperglucemia ni cardiopatía.",
+      "prompt": "¿Cuál es el tratamiento inicial farmacológico más apropiado junto con cambios en el estilo de vida?",
+      "polarity": "affirmative",
+      "task": "initial_treatment",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Acarbosa como monoterapia inicial",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Tiene menor eficacia y más efectos gastrointestinales."
+        },
+        {
+          "key": "b",
+          "text": "Solo dieta por un año antes de cualquier fármaco",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Con hemoglobina de 7.8 se recomienda iniciar fármaco."
+        },
+        {
+          "key": "c",
+          "text": "Insulina basal desde el diagnóstico",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se reserva para hiperglucemia grave o síntomas catabólicos."
+        },
+        {
+          "key": "d",
+          "text": "Metformina",
+          "correct": true,
+          "rationale": "Es el fármaco de primera línea por su eficacia, seguridad, bajo costo y neutralidad en el peso."
+        },
+        {
+          "key": "e",
+          "text": "No iniciar tratamiento porque no tiene síntomas",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La hiperglucemia asintomática causa daño."
+        },
+        {
+          "key": "f",
+          "text": "Glibenclamida como primera opción",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Causa hipoglucemia y aumento de peso."
+        },
+        {
+          "key": "g",
+          "text": "Suplementos herbolarios como sustituto",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No tienen evidencia suficiente."
+        },
+        {
+          "key": "h",
+          "text": "Pioglitazona",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Causa retención de líquidos y aumento de peso."
+        },
+        {
+          "key": "i",
+          "text": "Insulina rápida antes de cada comida",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No es el inicio adecuado."
+        },
+        {
+          "key": "j",
+          "text": "Triple terapia oral desde el inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada con esta cifra."
+        }
+      ],
+      "canonical": [
+        "b",
+        "c",
+        "d",
+        "f"
+      ],
+      "explanation": "En la diabetes tipo 2 la metformina es el fármaco de primera línea, junto con cambios en el estilo de vida, cuando no hay contraindicaciones. Reduce la producción hepática de glucosa, disminuye la hemoglobina glucosilada entre 1 y 1.5 puntos, no causa hipoglucemia en monoterapia, es neutral o favorable en el peso y es barata. Se inicia en dosis bajas con los alimentos y se aumenta gradualmente para reducir los efectos gastrointestinales. Si el paciente tiene enfermedad cardiovascular, insuficiencia cardiaca o enfermedad renal, se agregan inhibidores del cotransportador de sodio y glucosa tipo 2 o agonistas del receptor de GLP-1.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento farmacológico de la diabetes mellitus tipo 2 en el primer nivel",
+        "Estándares de atención en diabetes de la Asociación Americana de Diabetes"
+      ]
+    },
+    {
+      "key": "fam-03a-diabetes-q02",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "diabetes_primary_care",
+      "vignette": "Mujer de 58 años con diabetes tipo 2 de 8 años de evolución, en tratamiento con metformina. Acude a su control trimestral. No refiere síntomas en los pies y nunca le han revisado los pies con instrumentos.",
+      "prompt": "¿Cuál es la medida de tamizaje de pie diabético recomendada?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Biopsia de nervio sural",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Es invasiva y no es de tamizaje."
+        },
+        {
+          "key": "b",
+          "text": "Gammagrama óseo",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Se usa ante sospecha de osteomielitis."
+        },
+        {
+          "key": "c",
+          "text": "Angiografía de miembros inferiores",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Es invasiva."
+        },
+        {
+          "key": "d",
+          "text": "Electromiografía de rutina",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No es necesaria para el tamizaje."
+        },
+        {
+          "key": "e",
+          "text": "Radiografía de pies anual",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No detecta la neuropatía."
+        },
+        {
+          "key": "f",
+          "text": "Exploración cada cinco años",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Debe ser al menos anual."
+        },
+        {
+          "key": "g",
+          "text": "Exploración anual con monofilamento de 10 gramos, diapasón y palpación de pulsos",
+          "correct": true,
+          "rationale": "Detecta pérdida de sensibilidad protectora y enfermedad arterial."
+        },
+        {
+          "key": "h",
+          "text": "Solo revisar a pacientes insulinodependientes",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Todos los diabéticos lo requieren."
+        },
+        {
+          "key": "i",
+          "text": "No educar sobre el autocuidado de los pies",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "La educación reduce amputaciones."
+        },
+        {
+          "key": "j",
+          "text": "Revisar los pies solo si refiere dolor",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La neuropatía suele ser indolora."
+        }
+      ],
+      "canonical": [
+        "d",
+        "e",
+        "g",
+        "j"
+      ],
+      "explanation": "La neuropatía periférica diabética es la principal causa de úlceras y amputaciones no traumáticas. Se recomienda revisar los pies de todos los pacientes con diabetes al menos una vez al año, con inspección de piel y uñas, deformidades, palpación de pulsos pedios y tibiales posteriores, y evaluación de la sensibilidad protectora con monofilamento de 10 gramos, junto con diapasón de 128 Hz o reflejos aquíleos. Los pacientes con pérdida de sensibilidad o enfermedad arterial requieren revisión en cada consulta, calzado adecuado y educación para la inspección diaria. El índice tobillo brazo se usa si hay pulsos disminuidos.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento del pie diabético",
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de la diabetes mellitus"
+      ]
+    },
+    {
+      "key": "fam-03a-diabetes-q03",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "diabetes_primary_care",
+      "vignette": "Hombre de 52 años con diabetes tipo 2 de 3 años de evolución, bien controlado. Su agudeza visual es normal y nunca ha acudido a revisión oftalmológica.",
+      "prompt": "¿Cuál es la recomendación de tamizaje de retinopatía diabética?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Angiografía con fluoresceína de rutina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se reserva para casos específicos."
+        },
+        {
+          "key": "b",
+          "text": "Revisión solo si tiene hipertensión",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Todos los diabéticos lo requieren."
+        },
+        {
+          "key": "c",
+          "text": "No requiere revisión porque ve bien",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La retinopatía es asintomática hasta etapas avanzadas."
+        },
+        {
+          "key": "d",
+          "text": "Agudeza visual con cartilla de Snellen como tamizaje suficiente",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No detecta lesiones tempranas."
+        },
+        {
+          "key": "e",
+          "text": "Medición de presión intraocular como único estudio",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No detecta retinopatía."
+        },
+        {
+          "key": "f",
+          "text": "Revisión solo a los 10 años de evolución",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "En diabetes tipo 2 se inicia al diagnóstico."
+        },
+        {
+          "key": "g",
+          "text": "Lentes graduados para prevenir retinopatía",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No la previenen."
+        },
+        {
+          "key": "h",
+          "text": "Esperar a que tenga visión borrosa",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Sería tardío."
+        },
+        {
+          "key": "i",
+          "text": "Fondo de ojo con pupila dilatada o retinografía y repetir anualmente",
+          "correct": true,
+          "rationale": "Se recomienda desde el diagnóstico de diabetes tipo 2."
+        },
+        {
+          "key": "j",
+          "text": "Tomografía de coherencia óptica de rutina a todos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Se usa en edema macular."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "i"
+      ],
+      "explanation": "La retinopatía diabética es una de las principales causas de ceguera prevenible en adultos en edad productiva. En la diabetes tipo 2 el tamizaje se realiza desde el momento del diagnóstico, porque la enfermedad puede llevar años sin detectarse, y en la tipo 1 a los cinco años del diagnóstico. Se realiza con fondo de ojo bajo dilatación pupilar por un oftalmólogo o con retinografía digital interpretada. Si no hay retinopatía y el control es bueno, puede repetirse cada uno o dos años; si hay lesiones, con mayor frecuencia. El buen control de glucosa, presión y lípidos reduce la progresión.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de retinopatía diabética",
+        "Estándares de atención en diabetes de la Asociación Americana de Diabetes"
+      ]
+    },
+    {
+      "key": "fam-03a-diabetes-q04",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "diabetes_primary_care",
+      "vignette": "Hombre de 62 años con diabetes tipo 2 en tratamiento con metformina, hemoglobina glucosilada de 8.1 por ciento. Tuvo un infarto agudo de miocardio hace un año y tiene insuficiencia cardiaca con fracción de expulsión de 35 por ciento. Tasa de filtración de 65 mL/min.",
+      "prompt": "¿Cuál es el fármaco de elección para agregar a la metformina?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Inhibidor del cotransportador de sodio y glucosa tipo 2, como empagliflozina o dapagliflozina",
+          "correct": true,
+          "rationale": "Reduce hospitalizaciones por insuficiencia cardiaca y mortalidad cardiovascular."
+        },
+        {
+          "key": "b",
+          "text": "Aumentar solo la dosis de metformina sin agregar otro fármaco",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No aprovecha el beneficio cardiovascular."
+        },
+        {
+          "key": "c",
+          "text": "Pioglitazona",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Está contraindicada en insuficiencia cardiaca."
+        },
+        {
+          "key": "d",
+          "text": "Saxagliptina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Se asoció con más hospitalizaciones por insuficiencia cardiaca."
+        },
+        {
+          "key": "e",
+          "text": "Insulina rápida en cada comida",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es la siguiente opción."
+        },
+        {
+          "key": "f",
+          "text": "Acarbosa más repaglinida",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No tienen beneficio cardiovascular demostrado."
+        },
+        {
+          "key": "g",
+          "text": "Suspender la metformina por el infarto",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "No está contraindicada."
+        },
+        {
+          "key": "h",
+          "text": "Mantener el mismo tratamiento hasta el próximo año",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "El descontrol requiere ajuste."
+        },
+        {
+          "key": "i",
+          "text": "Clorpropamida",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Está en desuso por hipoglucemia prolongada."
+        },
+        {
+          "key": "j",
+          "text": "Glibenclamida",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No tiene beneficio cardiovascular y causa hipoglucemia."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "En pacientes con diabetes tipo 2 e insuficiencia cardiaca, enfermedad renal crónica o enfermedad cardiovascular aterosclerótica establecida, se recomienda agregar un fármaco con beneficio cardiovascular o renal demostrado, independientemente de la hemoglobina glucosilada. Los inhibidores del cotransportador de sodio y glucosa tipo 2 reducen hospitalizaciones por insuficiencia cardiaca, mortalidad cardiovascular y progresión de la enfermedad renal. Los agonistas del receptor de GLP-1 reducen eventos cardiovasculares ateroscleróticos. Las tiazolidinedionas están contraindicadas en insuficiencia cardiaca por la retención de líquidos. La metformina se mantiene como base del tratamiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento farmacológico de la diabetes mellitus tipo 2 en el primer nivel",
+        "Estándares de atención en diabetes de la Asociación Americana de Diabetes"
+      ]
+    },
+    {
+      "key": "fam-03a-diabetes-q05",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "diabetes_primary_care",
+      "vignette": "Mujer de 70 años con diabetes tipo 2 tratada con glibenclamida. La traen por confusión, sudoración y temblor. Glucosa capilar de 45 mg/dL. Está consciente y puede deglutir.",
+      "prompt": "¿Cuál es el tratamiento de elección inmediato?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Solución glucosada al 50 por ciento intravenosa en una paciente que puede deglutir como primera opción",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "La vía oral es preferible si puede deglutir."
+        },
+        {
+          "key": "b",
+          "text": "Esperar a que se recupere sola",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Puede progresar a coma."
+        },
+        {
+          "key": "c",
+          "text": "No vigilar recurrencia por la sulfonilurea",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Puede repetirse durante horas."
+        },
+        {
+          "key": "d",
+          "text": "Chocolate como mejor opción por su contenido de azúcar",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La grasa retrasa la absorción."
+        },
+        {
+          "key": "e",
+          "text": "Tomografía de cráneo antes de dar glucosa",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Retrasa el tratamiento."
+        },
+        {
+          "key": "f",
+          "text": "Dar solo una comida rica en grasa",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La grasa retrasa la absorción."
+        },
+        {
+          "key": "g",
+          "text": "Glucagón intramuscular como primera opción",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Se usa si no puede deglutir."
+        },
+        {
+          "key": "h",
+          "text": "15 a 20 gramos de glucosa o carbohidratos de absorción rápida por vía oral y repetir la glucosa en 15 minutos",
+          "correct": true,
+          "rationale": "Es la regla de los 15 en una paciente que puede deglutir."
+        },
+        {
+          "key": "i",
+          "text": "Aumentar la dosis de glibenclamida",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Es la causa de la hipoglucemia."
+        },
+        {
+          "key": "j",
+          "text": "Insulina rápida subcutánea",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Agravaría la hipoglucemia."
+        }
+      ],
+      "canonical": [
+        "b",
+        "g",
+        "h",
+        "j"
+      ],
+      "explanation": "La hipoglucemia es la complicación aguda más frecuente del tratamiento de la diabetes, sobre todo con insulina y sulfonilureas como la glibenclamida, especialmente en adultos mayores y con insuficiencia renal. En una persona consciente que puede deglutir se aplica la regla de los 15: dar 15 a 20 gramos de glucosa o carbohidratos simples, como jugo o refresco regular, y revalorar la glucosa en 15 minutos, repitiendo si sigue baja. Al recuperarse se da un alimento con carbohidratos complejos. Si no puede deglutir se usa glucagón o glucosa intravenosa. Las sulfonilureas causan hipoglucemias prolongadas, por lo que se vigila y se ajusta el tratamiento.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipoglucemia en el adulto",
+        "Estándares de atención en diabetes de la Asociación Americana de Diabetes"
+      ]
+    },
+    {
+      "key": "fam-03a-diabetes-q06",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "diabetes_primary_care",
+      "vignette": "Hombre de 65 años con diabetes tipo 2 tratada con metformina 2 gramos al día. En su control, la tasa de filtración glomerular estimada es de 25 mL/min/1.73 m2, previamente de 45.",
+      "prompt": "¿Cuál es la conducta más apropiada respecto a la metformina?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Duplicar la dosis para mejorar el control",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Está contraindicada."
+        },
+        {
+          "key": "b",
+          "text": "No buscar la causa del deterioro renal",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe evaluarse."
+        },
+        {
+          "key": "c",
+          "text": "La metformina daña el riñón y causó el deterioro",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No es nefrotóxica."
+        },
+        {
+          "key": "d",
+          "text": "La metformina solo se ajusta con filtración menor de 10",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "El umbral es 30."
+        },
+        {
+          "key": "e",
+          "text": "Suspender la metformina",
+          "correct": true,
+          "rationale": "Está contraindicada con filtración menor de 30 por el riesgo de acidosis láctica."
+        },
+        {
+          "key": "f",
+          "text": "Suspender todos los antidiabéticos sin sustituto",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se debe mantener el control."
+        },
+        {
+          "key": "g",
+          "text": "Agregar glibenclamida y mantener la metformina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Ambas son problemáticas en insuficiencia renal."
+        },
+        {
+          "key": "h",
+          "text": "Cambiar a metformina de liberación prolongada a la misma dosis",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La contraindicación es igual."
+        },
+        {
+          "key": "i",
+          "text": "Iniciar hemodiálisis para continuar la metformina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es una indicación."
+        },
+        {
+          "key": "j",
+          "text": "Mantener la misma dosis",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "El riesgo de acidosis láctica aumenta."
+        }
+      ],
+      "canonical": [
+        "a",
+        "e",
+        "h",
+        "j"
+      ],
+      "explanation": "La metformina se elimina por vía renal y su acumulación aumenta el riesgo de acidosis láctica. Con una tasa de filtración glomerular de 45 o más puede usarse a dosis completa; entre 30 y 44 se reduce la dosis, habitualmente a un máximo de 1 gramo al día, y no se inicia; con filtración menor de 30 está contraindicada. También se suspende temporalmente ante estudios con contraste yodado en pacientes con función renal reducida o en situaciones de hipoperfusión. Como alternativas se consideran inhibidores de DPP-4 con ajuste renal, como linagliptina, agonistas de GLP-1 o insulina. La metformina no es nefrotóxica.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento farmacológico de la diabetes mellitus tipo 2 en el primer nivel",
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la enfermedad renal crónica temprana"
+      ]
+    },
+    {
+      "key": "fam-03a-diabetes-q07",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "diabetes_primary_care",
+      "vignette": "Mujer de 55 años con diabetes tipo 2 de 5 años de evolución y presión arterial de 128/78 mmHg. Nunca se le ha medido albúmina en orina. Creatinina sérica normal.",
+      "prompt": "¿Cuál es el estudio de tamizaje de nefropatía diabética recomendado?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "No es necesario porque la creatinina es normal",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La albuminuria aparece antes de que suba la creatinina."
+        },
+        {
+          "key": "b",
+          "text": "Ultrasonido renal anual",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "No detecta nefropatía temprana."
+        },
+        {
+          "key": "c",
+          "text": "Urografía excretora",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Usa contraste y no está indicada."
+        },
+        {
+          "key": "d",
+          "text": "Tamizar solo si tiene hipertensión descontrolada",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Todos los diabéticos lo requieren."
+        },
+        {
+          "key": "e",
+          "text": "Medir nitrógeno ureico como única prueba",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es poco sensible."
+        },
+        {
+          "key": "f",
+          "text": "Esperar a que tenga edema",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Sería tardío."
+        },
+        {
+          "key": "g",
+          "text": "Biopsia renal",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es una prueba de tamizaje."
+        },
+        {
+          "key": "h",
+          "text": "Examen general de orina con tira reactiva como única prueba",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No detecta albuminuria moderada."
+        },
+        {
+          "key": "i",
+          "text": "Cociente albúmina creatinina en muestra aislada de orina y tasa de filtración estimada anualmente",
+          "correct": true,
+          "rationale": "Detecta daño renal temprano."
+        },
+        {
+          "key": "j",
+          "text": "Gammagrama renal",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es una prueba de tamizaje."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "h",
+        "i"
+      ],
+      "explanation": "La enfermedad renal diabética es la principal causa de enfermedad renal crónica terminal en México. Se recomienda tamizaje anual en todos los pacientes con diabetes tipo 2 desde el diagnóstico, y en la tipo 1 a partir de los cinco años, con cociente albúmina creatinina en una muestra aislada de orina y tasa de filtración glomerular estimada. Un cociente de 30 a 300 mg/g indica albuminuria moderada, y debe confirmarse en dos de tres muestras en tres a seis meses. La albuminuria precede a la caída de la filtración. Su detección indica iniciar inhibidores de la enzima convertidora o antagonistas del receptor de angiotensina.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la enfermedad renal crónica temprana",
+        "Estándares de atención en diabetes de la Asociación Americana de Diabetes"
+      ]
+    },
+    {
+      "key": "fam-03a-diabetes-q08",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "diabetes_primary_care",
+      "vignette": "Hombre de 56 años con diabetes tipo 2 e hipertensión arterial. Presión arterial de 142/88 mmHg en varias consultas. Cociente albúmina creatinina de 180 mg/g. Tasa de filtración de 70 mL/min.",
+      "prompt": "¿Cuál es el antihipertensivo de elección?",
+      "polarity": "affirmative",
+      "task": "treatment_of_choice",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Inhibidor de la enzima convertidora de angiotensina, como enalapril, o un antagonista del receptor de angiotensina",
+          "correct": true,
+          "rationale": "Reducen la presión y la albuminuria y retrasan la progresión renal."
+        },
+        {
+          "key": "b",
+          "text": "Propranolol",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "No es de elección en este contexto."
+        },
+        {
+          "key": "c",
+          "text": "Nifedipino de acción rápida",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No es adecuado."
+        },
+        {
+          "key": "d",
+          "text": "No vigilar potasio y creatinina al iniciar",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Deben medirse."
+        },
+        {
+          "key": "e",
+          "text": "Combinar enalapril con losartán",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La doble inhibición aumenta hiperpotasemia y daño renal."
+        },
+        {
+          "key": "f",
+          "text": "Alfa bloqueador como prazosina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es de primera línea."
+        },
+        {
+          "key": "g",
+          "text": "Hidroclorotiazida como monoterapia inicial",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No tiene el efecto antiproteinúrico."
+        },
+        {
+          "key": "h",
+          "text": "Solo dieta baja en sal sin fármaco",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Ya requiere tratamiento farmacológico."
+        },
+        {
+          "key": "i",
+          "text": "Los inhibidores de la enzima convertidora dañan el riñón diabético",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Lo protegen."
+        },
+        {
+          "key": "j",
+          "text": "Esperar a que la presión supere 160/100",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "La meta es menor de 130/80."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "e",
+        "g"
+      ],
+      "explanation": "En pacientes con diabetes e hipertensión con albuminuria, los inhibidores de la enzima convertidora de angiotensina o los antagonistas del receptor de angiotensina son de elección porque, además de bajar la presión, reducen la albuminuria y retrasan la progresión de la enfermedad renal. La meta de presión arterial habitual es menor de 130/80 mmHg. No deben combinarse entre sí por el riesgo de hiperpotasemia e insuficiencia renal aguda. Se miden potasio y creatinina de una a dos semanas después de iniciarlos; un aumento de creatinina de hasta 30 por ciento es aceptable. Los inhibidores del cotransportador de sodio y glucosa tipo 2 agregan protección renal.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la hipertensión arterial en el primer nivel",
+        "Guía de Práctica Clínica de prevención, diagnóstico y tratamiento de la enfermedad renal crónica temprana"
+      ]
+    },
+    {
+      "key": "fam-03a-diabetes-q09",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "diabetes_primary_care",
+      "vignette": "Mujer de 60 años con diabetes tipo 2 tratada con metformina y glibenclamida a dosis máximas durante un año, con buena adherencia. Hemoglobina glucosilada de 9.5 por ciento. Peso estable, sin cetosis.",
+      "prompt": "¿Cuál es la conducta más apropiada para mejorar el control glucémico?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "No enseñar automonitoreo ni manejo de hipoglucemia",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Es indispensable al iniciar insulina."
+        },
+        {
+          "key": "b",
+          "text": "La insulina causa ceguera",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "La hiperglucemia es la que causa daño."
+        },
+        {
+          "key": "c",
+          "text": "Mantener el mismo esquema y reforzar dieta por otro año",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "La inercia terapéutica aumenta complicaciones."
+        },
+        {
+          "key": "d",
+          "text": "Bomba de insulina de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "e",
+          "text": "Suspender todos los orales y usar solo insulina en dosis altas",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Se puede mantener la metformina."
+        },
+        {
+          "key": "f",
+          "text": "Iniciar insulina basal nocturna con 10 unidades o 0.1 a 0.2 unidades por kilo y titular según la glucosa en ayuno",
+          "correct": true,
+          "rationale": "La falla a dos orales con hemoglobina mayor de 9 justifica insulina."
+        },
+        {
+          "key": "g",
+          "text": "Hospitalizar para iniciar insulina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Se inicia de forma ambulatoria."
+        },
+        {
+          "key": "h",
+          "text": "Agregar un cuarto antidiabético oral sin evaluar insulina",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Tiene menor eficacia con esta cifra."
+        },
+        {
+          "key": "i",
+          "text": "La insulina solo se usa en diabetes tipo 1",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "También en tipo 2."
+        },
+        {
+          "key": "j",
+          "text": "Iniciar insulina rápida en cada comida como primer paso",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Se inicia con insulina basal."
+        }
+      ],
+      "canonical": [
+        "c",
+        "e",
+        "f",
+        "j"
+      ],
+      "explanation": "La diabetes tipo 2 es progresiva y muchos pacientes requieren insulina con el tiempo. Cuando hay falla a dos o más antidiabéticos orales con buena adherencia, o hemoglobina glucosilada mayor de 9 a 10 por ciento, se recomienda iniciar insulina basal, como NPH nocturna o un análogo de acción prolongada como glargina, con 10 unidades o 0.1 a 0.2 unidades por kilo al día, titulando cada tres días según la glucosa en ayuno. La metformina se mantiene, y puede reducirse o suspenderse la sulfonilurea por el riesgo de hipoglucemia. Es indispensable enseñar automonitoreo, técnica de aplicación y reconocimiento de hipoglucemia.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de tratamiento de la diabetes mellitus tipo 2 con insulina en el primer nivel",
+        "Estándares de atención en diabetes de la Asociación Americana de Diabetes"
+      ]
+    },
+    {
+      "key": "fam-03a-diabetes-q10",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "diabetes_primary_care",
+      "vignette": "Hombre de 42 años con glucosa en ayuno de 112 mg/dL y hemoglobina glucosilada de 6.0 por ciento en dos ocasiones. Índice de masa corporal de 30, sedentario.",
+      "prompt": "¿Cuál es la intervención de prevención de diabetes más eficaz en este paciente?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Insulina basal preventiva",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "No está indicada en prediabetes."
+        },
+        {
+          "key": "b",
+          "text": "Cirugía bariátrica inmediata",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicada con estos datos."
+        },
+        {
+          "key": "c",
+          "text": "Cambios intensivos en el estilo de vida con pérdida de 7 por ciento del peso y 150 minutos semanales de actividad física",
+          "correct": true,
+          "rationale": "Reduce la progresión a diabetes en cerca de 58 por ciento."
+        },
+        {
+          "key": "d",
+          "text": "No medir glucosa anualmente",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Se requiere vigilancia."
+        },
+        {
+          "key": "e",
+          "text": "Repetir estudios en 10 años sin intervención",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Debe intervenirse y vigilarse anualmente."
+        },
+        {
+          "key": "f",
+          "text": "La prediabetes revierte sola en la mayoría",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Muchos progresan sin intervención."
+        },
+        {
+          "key": "g",
+          "text": "No requiere intervención porque no es diabético",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "La prediabetes tiene alto riesgo de progresión."
+        },
+        {
+          "key": "h",
+          "text": "Glibenclamida preventiva",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Causa hipoglucemia y no se recomienda."
+        },
+        {
+          "key": "i",
+          "text": "Dieta sin carbohidratos absoluta",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No es sostenible ni recomendada."
+        },
+        {
+          "key": "j",
+          "text": "Suplementos de canela como tratamiento principal",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "No tienen evidencia suficiente."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "g",
+        "h"
+      ],
+      "explanation": "La prediabetes se define por glucosa en ayuno de 100 a 125 mg/dL, glucosa a las 2 horas de la curva de tolerancia de 140 a 199 mg/dL o hemoglobina glucosilada de 5.7 a 6.4 por ciento. Estas personas tienen alto riesgo de diabetes y enfermedad cardiovascular. El Programa de Prevención de Diabetes demostró que los cambios intensivos en el estilo de vida, con pérdida de al menos 7 por ciento del peso y 150 minutos semanales de actividad física moderada, reducen la progresión a diabetes en 58 por ciento, más que la metformina. La metformina puede considerarse en menores de 60 años con obesidad importante o antecedente de diabetes gestacional.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de la diabetes mellitus",
+        "Estándares de atención en diabetes de la Asociación Americana de Diabetes"
+      ]
+    },
+    {
+      "key": "fam-03a-diabetes-q11",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "diabetes_primary_care",
+      "vignette": "Hombre de 50 años con diabetes tipo 2 en tratamiento con metformina e inhibidor del cotransportador de sodio y glucosa tipo 2. Presenta gastroenteritis con vómito y diarrea desde hace 2 días y casi no ha comido.",
+      "prompt": "¿Cuál es la conducta más apropiada respecto a sus medicamentos?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Duplicar la metformina por la hiperglucemia del estrés",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aumenta el riesgo."
+        },
+        {
+          "key": "b",
+          "text": "Mantener todos los medicamentos igual",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Aumenta el riesgo de acidosis láctica y cetoacidosis."
+        },
+        {
+          "key": "c",
+          "text": "Suspender temporalmente metformina y el inhibidor del cotransportador, hidratarse y vigilar glucosa y cetonas",
+          "correct": true,
+          "rationale": "Son las reglas de días de enfermedad."
+        },
+        {
+          "key": "d",
+          "text": "Iniciar glibenclamida en lugar de los fármacos suspendidos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Causa hipoglucemia sin ingesta."
+        },
+        {
+          "key": "e",
+          "text": "El inhibidor del cotransportador protege contra la deshidratación",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Aumenta las pérdidas urinarias."
+        },
+        {
+          "key": "f",
+          "text": "Ayuno absoluto sin líquidos",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Favorece la deshidratación."
+        },
+        {
+          "key": "g",
+          "text": "La cetoacidosis no ocurre en diabetes tipo 2",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Puede ocurrir con estos fármacos."
+        },
+        {
+          "key": "h",
+          "text": "No dar datos de alarma para acudir a urgencias",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Son parte de la educación."
+        },
+        {
+          "key": "i",
+          "text": "Hospitalización inmediata en todos los casos",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "Solo si no tolera la vía oral o hay datos de alarma."
+        },
+        {
+          "key": "j",
+          "text": "Suspender la hidratación oral",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Empeora la deshidratación."
+        }
+      ],
+      "canonical": [
+        "a",
+        "b",
+        "c",
+        "j"
+      ],
+      "explanation": "Durante enfermedades agudas con deshidratación, vómito o ingesta reducida se aplican las reglas de días de enfermedad. Se suspenden temporalmente los fármacos que aumentan el riesgo en esas condiciones: metformina por acidosis láctica, inhibidores del cotransportador de sodio y glucosa tipo 2 por cetoacidosis euglucémica y depleción de volumen, y también diuréticos, inhibidores de la enzima convertidora y antiinflamatorios por lesión renal. Se recomienda hidratación frecuente, monitoreo de glucosa y, si es posible, de cetonas. La insulina basal habitualmente no se suspende. Se reinician al recuperar la ingesta.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento farmacológico de la diabetes mellitus tipo 2 en el primer nivel",
+        "Estándares de atención en diabetes de la Asociación Americana de Diabetes"
+      ]
+    },
+    {
+      "key": "fam-03a-diabetes-q12",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "diabetes_primary_care",
+      "vignette": "Mujer de 50 años con diabetes tipo 2 sin enfermedad cardiovascular conocida. Colesterol LDL de 115 mg/dL. Presión arterial controlada. No fuma.",
+      "prompt": "¿Cuál es la recomendación más adecuada respecto a la prevención cardiovascular con estatinas?",
+      "polarity": "affirmative",
+      "task": "prevention_screening",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "No dar estatina porque el LDL es menor de 130",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "En diabéticos la indicación no depende solo del LDL."
+        },
+        {
+          "key": "b",
+          "text": "Ezetimiba más inhibidor de PCSK9 de inicio",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No es el primer paso."
+        },
+        {
+          "key": "c",
+          "text": "Omega 3 como sustituto de estatina",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No sustituye."
+        },
+        {
+          "key": "d",
+          "text": "Esperar a que tenga un evento cardiovascular",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "La prevención primaria está indicada."
+        },
+        {
+          "key": "e",
+          "text": "Las estatinas solo se usan en hombres",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Benefician a ambos sexos."
+        },
+        {
+          "key": "f",
+          "text": "Fibrato como primera opción",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "La estatina es el fármaco de primera línea."
+        },
+        {
+          "key": "g",
+          "text": "No medir lípidos en el seguimiento",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Debe evaluarse la respuesta."
+        },
+        {
+          "key": "h",
+          "text": "Iniciar estatina de intensidad moderada",
+          "correct": true,
+          "rationale": "Se recomienda en diabéticos de 40 a 75 años independientemente del colesterol."
+        },
+        {
+          "key": "i",
+          "text": "Ácido acetilsalicílico como única medida preventiva",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "En prevención primaria se individualiza."
+        },
+        {
+          "key": "j",
+          "text": "Las estatinas causan diabetes por lo que no deben usarse en diabéticos",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "El beneficio supera el riesgo."
+        }
+      ],
+      "canonical": [
+        "a",
+        "f",
+        "h",
+        "i"
+      ],
+      "explanation": "Las personas con diabetes tienen un riesgo cardiovascular elevado. En adultos con diabetes de 40 a 75 años sin enfermedad cardiovascular se recomienda una estatina de intensidad al menos moderada, como atorvastatina 10 a 20 mg o rosuvastatina 5 a 10 mg, independientemente del colesterol basal. Si tienen factores de riesgo adicionales o daño a órgano blanco, se prefiere alta intensidad con meta de LDL menor de 70 mg/dL. En prevención secundaria la meta es menor de 55 mg/dL. Se controla el perfil de lípidos a las 4 a 12 semanas para valorar respuesta y apego.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de dislipidemias en el adulto",
+        "Estándares de atención en diabetes de la Asociación Americana de Diabetes"
+      ]
+    },
+    {
+      "key": "fam-03a-diabetes-q13",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "diabetes_primary_care",
+      "vignette": "Mujer de 82 años con diabetes tipo 2, deterioro cognitivo leve y caídas frecuentes. Vive sola. Recibe glibenclamida e insulina NPH. Hemoglobina glucosilada de 6.2 por ciento y episodios de mareo y sudoración por las tardes.",
+      "prompt": "¿Cuál es la conducta más apropiada?",
+      "polarity": "affirmative",
+      "task": "next_step",
+      "difficulty": 3,
+      "options": [
+        {
+          "key": "a",
+          "text": "Desintensificar el tratamiento con una meta de hemoglobina glucosilada menos estricta, de 7.5 a 8 por ciento, y suspender la glibenclamida",
+          "correct": true,
+          "rationale": "Tiene alto riesgo de hipoglucemia y una meta estricta no es apropiada."
+        },
+        {
+          "key": "b",
+          "text": "Hospitalizar para infusión de insulina",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No está indicado."
+        },
+        {
+          "key": "c",
+          "text": "Aumentar la insulina para bajar la hemoglobina a 5.5",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Aumenta el riesgo de hipoglucemia y muerte."
+        },
+        {
+          "key": "d",
+          "text": "La meta es igual para todos los diabéticos",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Se individualiza."
+        },
+        {
+          "key": "e",
+          "text": "Las hipoglucemias no afectan a los adultos mayores",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Causan caídas y eventos cardiovasculares."
+        },
+        {
+          "key": "f",
+          "text": "Suspender todo tratamiento y dejar sin control",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "Debe mantenerse un control individualizado."
+        },
+        {
+          "key": "g",
+          "text": "No revisar quién administra los medicamentos",
+          "correct": false,
+          "bias": "omission_bias",
+          "rationale": "Su deterioro cognitivo afecta el apego."
+        },
+        {
+          "key": "h",
+          "text": "Mantener el esquema porque la hemoglobina está en meta",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Está sobretratada con riesgo de hipoglucemia."
+        },
+        {
+          "key": "i",
+          "text": "Atribuir los síntomas a la edad",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "Son compatibles con hipoglucemia."
+        },
+        {
+          "key": "j",
+          "text": "Agregar pioglitazona",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Aumenta el riesgo de fracturas y edema."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "h",
+        "j"
+      ],
+      "explanation": "Las metas de control glucémico deben individualizarse según la edad, la esperanza de vida, las comorbilidades, el deterioro cognitivo y el riesgo de hipoglucemia. En adultos mayores frágiles, con deterioro cognitivo o con alto riesgo de hipoglucemia, se recomienda una meta de hemoglobina glucosilada menos estricta, entre 7.5 y 8 por ciento, e incluso más alta si la esperanza de vida es limitada. La hipoglucemia en adultos mayores causa caídas, fracturas, arritmias y deterioro cognitivo. Se deben suspender las sulfonilureas de acción prolongada como glibenclamida y simplificar los esquemas de insulina. La desintensificación es una práctica recomendada.",
+      "gpcRefs": [
+        "Guía de Práctica Clínica de diagnóstico y tratamiento de la diabetes en el adulto mayor",
+        "Estándares de atención en diabetes de la Asociación Americana de Diabetes"
+      ]
+    },
+    {
+      "key": "fam-03a-diabetes-q14",
+      "caseKey": null,
+      "caseOrder": null,
+      "branch": "family_medicine",
+      "topic": "chronic_disease_primary",
+      "subtopic": "diabetes_primary_care",
+      "vignette": "Hombre de 45 años sin síntomas de hiperglucemia acude con resultados de laboratorio. Glucosa plasmática en ayuno de 132 mg/dL hace un mes y hemoglobina glucosilada de 6.8 por ciento hoy.",
+      "prompt": "¿Qué indica la combinación de estos resultados?",
+      "polarity": "affirmative",
+      "task": "data_interpretation",
+      "difficulty": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Se requiere una curva de tolerancia obligatoria antes de concluir",
+          "correct": false,
+          "bias": "representativeness_heuristic",
+          "rationale": "Ya hay dos pruebas anormales."
+        },
+        {
+          "key": "b",
+          "text": "Error de laboratorio por diferencia entre pruebas",
+          "correct": false,
+          "bias": "focusing_illusion",
+          "rationale": "Ambos resultados son concordantes."
+        },
+        {
+          "key": "c",
+          "text": "Prediabetes",
+          "correct": false,
+          "bias": "anchoring",
+          "rationale": "Ambas cifras superan el umbral de diabetes."
+        },
+        {
+          "key": "d",
+          "text": "Diabetes tipo 1 por los valores altos",
+          "correct": false,
+          "bias": "premature_closure",
+          "rationale": "No hay datos para esa clasificación."
+        },
+        {
+          "key": "e",
+          "text": "Resultados normales",
+          "correct": false,
+          "bias": "availability_heuristic",
+          "rationale": "Están elevados."
+        },
+        {
+          "key": "f",
+          "text": "Diabetes mellitus confirmada por dos pruebas diferentes por arriba del umbral",
+          "correct": true,
+          "rationale": "Dos pruebas anormales en un paciente asintomático confirman el diagnóstico."
+        },
+        {
+          "key": "g",
+          "text": "Solo la glucosa al azar mayor de 200 confirma diabetes",
+          "correct": false,
+          "bias": "base_rate_fallacy",
+          "rationale": "Hay varios criterios válidos."
+        },
+        {
+          "key": "h",
+          "text": "Requiere anticuerpos antiGAD para confirmar diabetes",
+          "correct": false,
+          "bias": "complexity_bias",
+          "rationale": "No son necesarios para el diagnóstico."
+        },
+        {
+          "key": "i",
+          "text": "Intolerancia a la glucosa posprandial aislada",
+          "correct": false,
+          "bias": "framing_effect",
+          "rationale": "No se midió la posprandial."
+        },
+        {
+          "key": "j",
+          "text": "La hemoglobina glucosilada no sirve para diagnóstico",
+          "correct": false,
+          "bias": "belief_bias",
+          "rationale": "Es un criterio aceptado."
+        }
+      ],
+      "canonical": [
+        "a",
+        "c",
+        "e",
+        "f"
+      ],
+      "explanation": "El diagnóstico de diabetes se establece con glucosa plasmática en ayuno de 126 mg/dL o más, glucosa a las 2 horas de una curva de tolerancia con 75 gramos de 200 mg/dL o más, hemoglobina glucosilada de 6.5 por ciento o más con método estandarizado, o glucosa al azar de 200 mg/dL o más con síntomas clásicos. En ausencia de hiperglucemia inequívoca, se requieren dos resultados anormales, ya sea de la misma prueba en dos ocasiones o de dos pruebas diferentes. En este paciente, la glucosa en ayuno de 132 y la hemoglobina de 6.8 confirman diabetes.",
+      "gpcRefs": [
+        "Norma Oficial Mexicana para la prevención, tratamiento y control de la diabetes mellitus",
+        "Estándares de atención en diabetes de la Asociación Americana de Diabetes"
+      ]
+    }
+  ]
+}
