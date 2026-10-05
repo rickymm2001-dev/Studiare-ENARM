@@ -6,6 +6,16 @@ import type { ReviewedToday } from '@/engines/fsrs';
 import { studyDayOf } from '@/engines/studyDay';
 import { isVolumeAward } from '@/engines/xp';
 
+export type ReviewEndReason = 'completed' | 'abandoned';
+
+export function reviewEndReason(
+  position: number,
+  queueLength: number,
+  explicit?: ReviewEndReason,
+): ReviewEndReason {
+  return explicit ?? (position >= queueLength ? 'completed' : 'abandoned');
+}
+
 export function latestCardStates(events: readonly AppEvent[]): Map<string, FsrsCardState> {
   const states = new Map<string, FsrsCardState>();
   for (const event of events) {

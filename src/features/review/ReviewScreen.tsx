@@ -44,7 +44,13 @@ import { deckIds } from '@/demo/content/deckEntities';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
 import { ReviewSetup } from './ReviewSetup';
 import { cardMatches, type ReviewMode, type ReviewSelection } from './selection';
-import { latestCardStates, renderCloze, reviewedToday, volumeXpToday } from './study';
+import {
+  latestCardStates,
+  renderCloze,
+  reviewedToday,
+  reviewEndReason,
+  volumeXpToday,
+} from './study';
 
 type Confidence = 'dont_know' | 'unsure' | 'sure';
 type Cause = keyof typeof t.review.causes;
@@ -284,14 +290,16 @@ function ReviewSession({
     );
   };
 
-  const finish = async (options: { celebrate?: boolean } = {}) => {
+  const finish = async (
+    options: { celebrate?: boolean; reason?: 'completed' | 'abandoned' } = {},
+  ) => {
     if (sessionId.current) {
       await api.recordEvent(
         createEvent(
           'session_ended',
           {
             kind: 'review',
-            reason: position >= queue.length ? 'completed' : 'abandoned',
+            reason: reviewEndReason(position, queue.length, options.reason),
             items: reviewed,
             correct: null,
             durationMs: Math.round(study.activeMs()),
@@ -310,7 +318,7 @@ function ReviewSession({
     const nextPosition = position + 1;
     setPosition(nextPosition);
     setConfidence(null);
-    if (nextPosition >= queue.length) void finish();
+    if (nextPosition >= queue.length) void finish({ reason: 'completed' });
     else setStep(settings.cardConfidenceStep ? 'confidence' : 'front');
   };
 
