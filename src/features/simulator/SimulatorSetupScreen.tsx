@@ -1,6 +1,6 @@
 // Configurar simulador (pantalla 7). Práctica por rama, dificultad y estructura, con el límite
 // diario del plan Gratis como bandera de acceso. Los filtros y el botón de empezar van arriba y las
-// ramas quedan plegadas con un resumen (D-078). El examen completo llega en el siguiente bloque.
+// ramas quedan plegadas con un resumen (D-078). Debajo va la tarjeta del examen completo.
 import { Play } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
@@ -25,6 +25,7 @@ import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { ALL_TOPICS } from '../shared/topics';
 import { useUserEvents } from '../shared/useUserEvents';
+import { ExamSetupCard } from '../exam/ExamSetupCard';
 import { clock, usePractice } from './practice';
 
 type Difficulty = 'all' | 'easy' | 'medium' | 'hard';
@@ -234,12 +235,7 @@ function Setup({ session }: { session: ReadySession }) {
           </Disclosure>
         </div>
       </Card>
-      <Card aria-labelledby="examen-titulo" className="flex flex-col gap-0.5 py-3">
-        <h2 id="examen-titulo" className="font-semibold text-fg">
-          {t.simulator.exam}
-        </h2>
-        <p className="text-sm text-fg-muted">{t.simulator.examSoon}</p>
-      </Card>
+      <ExamSetupCard session={session} questions={questions} plan={plan} left={left} />
     </>
   );
 }

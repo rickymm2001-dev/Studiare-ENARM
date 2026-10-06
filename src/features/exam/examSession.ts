@@ -8,9 +8,10 @@ import type { DataApi } from '@/data/context';
 import { createEvent, type Clock } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
 import type { Question } from '@/data/schemas/bank';
-import type { AppEvent } from '@/data/schemas/events';
+import type { AppEvent, EventPayload } from '@/data/schemas/events';
 import type { User, UserSettings } from '@/data/schemas/people';
 import { buildExam } from '@/engines/exam';
+import { sampleOptions } from '@/engines/sampler';
 import { sendErrorsToReview, type FailedQuestion } from '../review/sendErrors';
 import { recordAnswerWithXp } from '../simulator/answerXp';
 import { buildBundle, type QuestionBundle } from '../simulator/useQuestion';
@@ -23,6 +24,7 @@ import {
   isFinished,
   markRecorded,
   markSessionEnded,
+  recordShown,
   setQueuedErrors,
   type ExamState,
 } from './examState';
@@ -116,6 +118,51 @@ export async function startExam(input: {
   );
   saveExamState(state);
   return state;
+}
+
+export type ShownPayload = EventPayload<'question_shown'>;
+
+/**
+ * Fija las opciones de una pregunta la primera vez que se ve y devuelve lo que hay que registrar
+ * como question_shown. Es el set canónico del médico, así el examen cuenta para el puntaje (7.8), con
+ * una semilla fija para que sea el mismo si se reanuda. Las vistas siguientes no cambian nada
+ */
+export function showQuestion(
+  state: ExamState,
+  index: number,
+  bundle: QuestionBundle | undefined,
+): { state: ExamState; shown: ShownPayload | null } {
+  const id = state.questionIds[index];
+  if (id === undefined || !bundle || state.shownOptions[id]) return { state, shown: null };
+  const sample = sampleOptions({
+    options: bundle.options.map((option) => ({
+      id: option.id,
+      isCorrect: option.isCorrect,
+      biasTag: option.biasTag,
+    })),
+    canonicalOptionIds: bundle.question.canonicalOptionIds,
+    mode: 'canonical',
+    count: bundle.question.canonicalOptionIds.length,
+    seed: `${state.examId}|${id}`.slice(0, 64),
+  });
+  return {
+    state: recordShown(
+      state,
+      id,
+      sample.shown.map((entry) => entry.optionId),
+    ),
+    shown: {
+      questionVersionId: id,
+      shownOptions: sample.shown.map((entry) => ({
+        optionVersionId: entry.optionId,
+        position: entry.position,
+      })),
+      seed: sample.seed,
+      samplingMode: sample.mode,
+      highlightEnabled: state.highlight,
+      positionInSession: index,
+    },
+  };
 }
 
 export interface CloseInput {

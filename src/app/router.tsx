@@ -3,6 +3,8 @@ import type { ComponentType } from 'react';
 import { createBrowserRouter, type RouteObject } from 'react-router';
 import { SubscriptionScreen } from '@/features/billing/SubscriptionScreen';
 import { DecksScreen } from '@/features/decks/DecksScreen';
+import { ExamResultsScreen } from '@/features/exam/ExamResultsScreen';
+import { ExamScreen } from '@/features/exam/ExamScreen';
 import { HomeScreen } from '@/features/home/HomeScreen';
 import { ReviewScreen } from '@/features/review/ReviewScreen';
 import { OnboardingScreen } from '@/features/onboarding/OnboardingScreen';
@@ -32,6 +34,8 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, ComponentType>> = {
   feedback: FeedbackScreen,
   sessionSummary: SessionSummaryScreen,
   simulatorSetup: SimulatorSetupScreen,
+  exam: ExamScreen,
+  examResults: ExamResultsScreen,
   decks: DecksScreen,
   planner: PlannerScreen,
   subscription: SubscriptionScreen,

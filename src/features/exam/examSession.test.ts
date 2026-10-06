@@ -3,8 +3,9 @@ import { afterEach, describe, expect, it } from 'vitest';
 import type { AppEvent } from '@/data/schemas/events';
 import { makeQuestionWithOptions, makeUser, testApi } from '@/data/testing/fixtures';
 import { errorIds } from '@/data/usecases/errorCards';
-import { closeExam, loadExamBundles, startExam } from './examSession';
+import { closeExam, loadExamBundles, showQuestion, startExam } from './examSession';
 import {
+  answerOf,
   choose,
   finishExamState,
   goTo,
@@ -69,6 +70,49 @@ describe('inicio del examen', () => {
     const bundles = await loadExamBundles(api, [...questions.map((q) => q.id), 'no-existe']);
     expect(bundles.size).toBe(3);
     expect(bundles.get(questions[0]?.id ?? '')?.options).toHaveLength(4);
+  });
+});
+
+describe('primera vista de una pregunta', () => {
+  it('fija el set canónico con semilla fija y devuelve lo que hay que registrar', async () => {
+    const env = await setup(2);
+    const started = await startExam({
+      api: env.api,
+      user: env.user,
+      questions: env.questions,
+      requested: 2,
+      options,
+      nowMs: T0,
+    });
+    if (!started) throw new Error('sin examen');
+    const bundles = await loadExamBundles(env.api, started.questionIds);
+    const id = started.questionIds[0] ?? '';
+
+    const first = showQuestion(started, 0, bundles.get(id));
+    expect(first.shown).toMatchObject({
+      questionVersionId: id,
+      samplingMode: 'canonical',
+      positionInSession: 0,
+      highlightEnabled: false,
+    });
+    expect(first.shown?.shownOptions).toHaveLength(4);
+    expect(first.state.shownOptions[id]).toEqual(
+      first.shown?.shownOptions.map((entry) => entry.optionVersionId),
+    );
+    expect(answerOf(first.state, id).shown).toBe(true);
+
+    // Las vistas siguientes no cambian nada ni se registran otra vez
+    expect(showQuestion(first.state, 0, bundles.get(id))).toEqual({
+      state: first.state,
+      shown: null,
+    });
+    // Reanudar desde cero da las mismas opciones en el mismo orden
+    expect(showQuestion(started, 0, bundles.get(id)).state.shownOptions[id]).toEqual(
+      first.state.shownOptions[id],
+    );
+    // Sin pregunta cargada o fuera de rango no hay nada que fijar
+    expect(showQuestion(started, 0, undefined).shown).toBeNull();
+    expect(showQuestion(started, 99, bundles.get(id)).shown).toBeNull();
   });
 });
 

@@ -458,9 +458,6 @@ export const featureText = {
     seePlans: 'Ver planes',
     start: 'Empezar práctica',
     preparing: 'Preparando el banco…',
-    exam: 'Examen completo',
-    examSoon:
-      'Próximamente. Un simulacro con el formato del ENARM, 280 preguntas en dos bloques con reloj.',
     noQuestions: 'No hay preguntas con estos filtros.',
     progress: (n: number, of: number) => `Pregunta ${n} de ${of}`,
     caseLabel: 'Caso clínico',

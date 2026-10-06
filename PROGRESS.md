@@ -6,7 +6,7 @@
 - Fase A aprobada por Ricardo el 2026-10-02
 - Fase B en curso desde el 2026-10-02. Ricardo la aprobó junto con la Fase A
 - Bloques 9 y 10 terminados. Bloque 8 (contenido demo) pausado con 4 de 6 lotes y sin mazos (D-050)
-- Fase C en curso. Bloques 1 a 8 terminados y faltan el 9 y el 10, ver su sección. Hay 17 de 28 pantallas construidas y 11 siguen como esqueleto con aviso de Próximamente
+- Fase C en curso. Bloques 1 a 8 terminados y faltan el 9 y el 10, ver su sección. Hay 19 de 28 pantallas construidas y 9 siguen como esqueleto con aviso de Próximamente
 - Fase P en curso (D-060). Bloques 1 a 4 terminados, 7 y 9 a medias, 5, 6 y 8 sin empezar, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
 - Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
@@ -77,12 +77,13 @@ Ricardo pidió ver tomar forma la interfaz completa antes de seguir con el banco
 - [x] 6. Mazos de Paco y repaso con FSRS, confianza y causa del error
 - [x] 7. Simulador de práctica con pregunta, retroalimentación y resumen
 - [x] 8. Party con grupos, código de invitación, tabla semanal y retos colectivos
-- [ ] 9. Progreso, planificador y examen completo. Planificador hecho (D-081), faltan el examen con sus resultados y la carga futura y la dificultad en Progreso
+- [ ] 9. Progreso, planificador y examen completo. Planificador (D-081), examen con resultados y errores al repaso (D-082) hechos, falta la carga futura y la dificultad en Progreso
 - [ ] 10. Duelos de Party, tutor y pruebas e2e de las pantallas nuevas
 
 ### Bitácora por bloque
+- Examen completo y errores al repaso (D-082). Pantallas 8 y 9 con reloj de pared, navegación libre, marcar para revisar, descarte de opciones, alarmas de tiempo y de ritmo, y resultados por rama, tema, estructura, trampa, reactivos raros y descarte con la revisión de cada pregunta. Las respuestas se registran al terminar, fechadas cuando se eligieron, y retoman sin duplicar si se interrumpe. Cada pregunta fallada pasa a Mis errores como tarjeta de pregunta y Repasar las pone primero. El plan Gratis limita el examen a las preguntas que le quedan hoy. Prueba e2e del flujo 4 y correcciones de contraste en las etiquetas de rama
 - Planificador, pantalla 13 (D-081). Plan de hoy y de la semana con la carga real de repaso, el tiempo disponible y los temas a reforzar, con aviso de sobrecarga y dos ajustes con su efecto. Los minutos calibran hasta tener 3 días de estudio. Lo declarado gana sobre el promedio real. 10 pruebas unitarias del armado del plan y una e2e. Entra al riel como Plan y a Accesos en Perfil
-- Pruebas e2e al día (D-079). Flujos 1, 2, 5 y 6 de 14.1 con prueba propia en tests/e2e y el ayudante signUp. Faltan el flujo 4, que llega con el examen, y la prueba de estado calibrando y la de etiquetas
+- Pruebas e2e al día (D-079). Flujos 1, 2, 5 y 6 de 14.1 con prueba propia en tests/e2e y el ayudante signUp. El flujo 4 llegó con el examen (D-082). Faltan la prueba de estado calibrando y la de etiquetas
 - Bloques 1 a 6. Commits 55dc312, 1826448 y 40de8a4. Verificado en el navegador, de la bienvenida al repaso de una tarjeta de Urgencias con sus intervalos de FSRS
 - Bloque 7. Práctica por rama, dificultad y estructura con el límite diario del plan Gratis. Opciones con el muestreo diverso, negaciones resaltadas en la frase de la pregunta, confianza antes de responder, cada cambio de respuesta registrado y XP con el motor xp. La retroalimentación muestra el sesgo probable del distractor elegido, la explicación, las GPC por verificar, la causa del error y el reporte para revisión médica. El banco demo se guarda en la base la primera vez que se abre el simulador
 - Bloque 8. Grupos locales con código de 6 caracteres. Al crear un grupo se pueden sumar 6 compañeros simulados, marcados, con actividad determinista por día. Tabla semanal desde el lunes a las 4 a. m. y retos colectivos que cuentan desde su primer día. Reclamar un reto cumplido registra challenge_completed y 100 XP una sola vez. Solo se comparte alias, XP, nivel y racha (9.6). 311 pruebas pasan

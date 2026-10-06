@@ -69,7 +69,12 @@ export const examText = {
       marked > 0
         ? `${plural(answered, 'contestada', 'contestadas')} · ${plural(marked, 'marcada', 'marcadas')}`
         : plural(answered, 'contestada', 'contestadas'),
-    navigatorLegend: 'Contestada, marcada, en blanco y actual',
+    legend: {
+      answered: 'Contestada',
+      marked: 'Marcada',
+      blank: 'En blanco',
+      current: 'Actual',
+    },
     goToQuestion: (n: number, status: string) => `Pregunta ${n}, ${status}`,
     status: {
       answered: 'contestada',
@@ -112,9 +117,9 @@ export const examText = {
     },
     summaryTitle: 'Tu examen',
     accuracy: (correct: number, total: number) => `${correct} de ${total} correctas`,
-    answered: (n: number) => `Contestadas ${n}`,
-    blank: (n: number) => `En blanco ${n}`,
-    marked: (n: number) => `Marcadas ${n}`,
+    answered: 'Contestadas',
+    blank: 'En blanco',
+    marked: 'Marcadas',
     time: (used: string, total: string) => `Tiempo ${used} de ${total}`,
     perQuestion: (seconds: number) => `${seconds} s por pregunta contestada`,
     xp: (xp: number) => `+${xp.toLocaleString('es-MX')} XP`,
