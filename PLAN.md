@@ -381,3 +381,28 @@ Valores por defecto en src/config/thresholds.ts, editables desde admin (12).
 - Repo privado remoto. Hecho (D-048)
 - Cuenta gratuita de Cloudflare antes de la Fase F
 - Opcionales sin fecha. Prompt maestro de flashcards, clave de API y banco de opción múltiple
+
+## 10. Directrices V2 (D-080)
+
+Dónde se aplica cada directriz del Prompt V2. Antes de cada bloque se revisa en silencio que soporte la imperfección y los sesgos, que integre freemium y referidos y que evite el código espagueti.
+
+| Directriz | Dónde se aplica | Cuándo |
+|---|---|---|
+| Simulador imperfecto, descarte de opciones y manejo de la frustración | Práctica y examen. El alumno tacha opciones, queda guardado en cada respuesta y la retroalimentación explica qué se podía descartar | Fase C, bloque 9 |
+| Tipologías de reactivo (patognomónico, característico, resolución inversa, control, incoherente, dato oscuro y perspectiva del paciente) | Esquemas zod de pregunta y de contenido, validadores y plantilla del importador. Los de control y los incoherentes se reportan aparte | Esquema en Fase C bloque 9. Editor e importador en Fase E |
+| Muestreo dirigido a los sesgos del alumno | Motor sampler con varias etiquetas y más opciones por pregunta. Opción en Simular con estado calibrando hasta tener los errores etiquetados que pide 7.4 | Fase C, bloque 9 |
+| Alarmas de tiempo | Motor puro timeAlerts, con avisos por tiempo restante y por ritmo, en pantalla y para lector de pantalla, apagables | Fase C, bloque 9 |
+| Datos pre-clasificados | Los motores de IA leen solo lo que el médico ya etiquetó y nunca clasifican en bruto | Fase D |
+| IA con otro proveedor | Proxy sin atarse a un proveedor. OpenAI pendiente de confirmar y sin chat abierto | Fase D, tras confirmar |
+| Plan Gratis | Banderas por plan con tope de banco, y el mismo límite aplicado en el servidor con permisos por fila | Fase P, bloque 10 nuevo |
+| Referidos con mes gratis | Tablas, funciones y avisos de pago en el servidor, y la pantalla en Party. Antes se confirma qué cuenta como concretado | Fase P, bloque 11 nuevo |
+
+Criterios de aceptación nuevos
+
+| Criterio | Prueba |
+|---|---|
+| Un reactivo anómalo de cada tipo pasa el esquema y la ingesta | Pruebas de esquema y de check-draft con un caso de cada tipo |
+| Las alarmas salen en los umbrales y se pueden apagar | Pruebas del motor timeAlerts y e2e del examen |
+| El muestreo dirigido sube las opciones con el sesgo del alumno y sigue incluyendo la correcta | Pruebas por propiedades en sampler |
+| El alumno Gratis no pasa de su tope ni con el navegador manipulado | Prueba SQL de permisos por fila en Fase P |
+| El mes gratis solo lo da el servidor y una sola vez por referido | Prueba SQL y prueba de la función de avisos |

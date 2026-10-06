@@ -7,7 +7,6 @@ import { Link } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { SessionHeader } from '@/app/layout/SessionHeader';
 import { screenPath } from '@/app/screens';
-import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { useDataApi } from '@/data/context';
 import { updateProfile } from '@/data/usecases/profile';
 import { createEvent } from '@/data/events/createEvent';
@@ -25,7 +24,6 @@ import {
 } from '@/engines/fsrs';
 import { studyDayOf } from '@/engines/studyDay';
 import { awardXp } from '@/engines/xp';
-import { examDateFor } from '@/config/exam';
 import { t } from '@/i18n/es-MX';
 import { StudyPausedDialog } from '../shared/StudyPausedDialog';
 import { useStudyClock } from '../shared/useStudyClock';
@@ -44,6 +42,7 @@ import { useUserEvents } from '../shared/useUserEvents';
 import { deckIds } from '@/demo/content/deckEntities';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
 import { ReviewSetup } from './ReviewSetup';
+import { schedulerConfig } from './schedulerConfig';
 import { cardMatches, type ReviewMode, type ReviewSelection } from './selection';
 import {
   latestCardStates,
@@ -169,22 +168,6 @@ function AddDeckButton() {
       </Link>
     </Button>
   );
-}
-
-function schedulerConfig(session: ReadySession): SchedulerConfig {
-  const { user, settings } = session;
-  return {
-    desiredRetention: settings.desiredRetention,
-    maxIntervalDays: settings.maxIntervalDays,
-    spacing: settings.spacing,
-    examDate: examDateFor(user),
-    timeZone: user.timeZone,
-    thresholds: {
-      ...DEFAULT_THRESHOLDS.fsrs,
-      newCardsPerDay: settings.newCardsPerDay,
-      reviewsPerDay: settings.reviewsPerDay,
-    },
-  };
 }
 
 /** Cola del día para unas tarjetas y un modo. Repasos vencidos primero y luego las nuevas */

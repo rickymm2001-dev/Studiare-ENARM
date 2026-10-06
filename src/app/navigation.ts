@@ -3,6 +3,7 @@
 // y abajo, en el riel, su grupo de administración (D-076).
 import {
   BookOpenCheck,
+  CalendarDays,
   ChartLine,
   ClipboardList,
   Coins,
@@ -53,6 +54,7 @@ const studentNav: readonly NavItem[] = [
   { path: screenPath('review'), label: t.navItems.review, icon: BookOpenCheck },
   { path: screenPath('simulatorSetup'), label: t.navItems.simulate, icon: ClipboardList },
   { path: screenPath('progress'), label: t.navItems.progress, icon: ChartLine },
+  { path: screenPath('planner'), label: t.navItems.planner, icon: CalendarDays, railOnly: true },
   { path: screenPath('decks'), label: t.navItems.decks, icon: Layers, railOnly: true },
   { path: screenPath('party'), label: t.navItems.party, icon: PartyPopper, railOnly: true },
   profile,

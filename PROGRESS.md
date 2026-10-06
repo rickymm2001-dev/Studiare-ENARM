@@ -6,12 +6,13 @@
 - Fase A aprobada por Ricardo el 2026-10-02
 - Fase B en curso desde el 2026-10-02. Ricardo la aprobó junto con la Fase A
 - Bloques 9 y 10 terminados. Bloque 8 (contenido demo) pausado con 4 de 6 lotes y sin mazos (D-050)
-- Fase C en curso. Bloques 1 a 8 terminados y faltan el 9 y el 10, ver su sección. Hay 16 de 28 pantallas construidas y 12 siguen como esqueleto con aviso de Próximamente
+- Fase C en curso. Bloques 1 a 8 terminados y faltan el 9 y el 10, ver su sección. Hay 17 de 28 pantallas construidas y 11 siguen como esqueleto con aviso de Próximamente
 - Fase P en curso (D-060). Bloques 1 a 4 terminados, 7 y 9 a medias, 5, 6 y 8 sin empezar, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
 - Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
 - Auditoría del repaso hecha con Codex el 2026-10-04. Una sesión que llega al final de la cola se cierra como completada y no como abandonada
 - Banco y mazos en pausa por indicación de Ricardo del 2026-10-06. No se escriben ni se corrigen preguntas ni tarjetas, solo se programa
+- Directrices V2 integradas a la memoria del proyecto el 2026-10-06 (D-080, CLAUDE.md y PLAN.md sección 10). Se aplican desde el examen. Quedan por confirmar el LLM de OpenAI y qué cuenta como referido concretado
 - Pendiente de la Fase B. Cierre según 15.1, con el banco y los mazos pendientes para el final (D-050). Antes del cierre Ricardo decide el ajuste de sesgos (D-051) y si se prueba el cambio del método de fatiga. El lote 5 quedó a medias en content-drafts/b5, con Medicina interna (13) y Pediatría (12) validadas
 - Todo el trabajo se sube a GitHub con push frecuente y el CI corre npm run check en cada push a cualquier rama (D-050)
 - Trabajo desde GitHub listo (D-049). CI con npm run check en cada push, scripts de contenido en scripts/content y workflow de revisión en .claude/workflows
@@ -61,7 +62,7 @@
   - [x] 4. Marco de pantallas. La explicación de cada pantalla pasa a un ícono de información, el aviso de demo queda en una línea delgada y es la única etiqueta de Datos simulados en los encabezados, Inicio y Perfil ya no repiten racha y nivel, Perfil sin el botón de Configuración duplicado y Agregar mazo dentro de la tarjeta de Repasar
   - [x] 5. Configuración en 4 secciones con pestañas, Estudio, Apariencia, Pomodoro y Cuenta y datos. Una sola barra de guardar por sección que aparece solo con cambios, el tema junto con la apariencia, retención, tope e intervalos por botón plegados en Opciones avanzadas, tamaño del texto como control segmentado y fuentes en cuadrícula de 2. En el teléfono pasó de 5283 px a secciones de 844 a 1244 px
   - [x] 6. Inicio y Mazos. En el teléfono racha y meta diaria van lado a lado y el heatmap ocupa todo el ancho, y Editar tablero pasa al encabezado. Cada mazo es una tarjeta compacta con sus temas plegados y Sube tu mazo y Crear mazo quedan en una sola tarjeta. Inicio pasó de 1422 a 1082 px de alto en el teléfono y Mazos de 1820 a 1376
-- Siguiente. Orden acordado el 2026-10-06. 1) Poner al día las pruebas e2e y que el CI las corra. 2) Bloques 9 y 10 de la Fase C con planificador, examen completo, tutor sin IA, duelos, compartir logro, mazos a mano y los widgets de Inicio que faltan, y cerrar la fase con 15.1. 3) Segunda parte de la nube con la bitácora, cuando Ricardo haya probado su cuenta y se haya hecho dueño. 4) Fase D con IA en modo simulado. 5) Pagos con Stripe y Mercado Pago cuando existan las cuentas. El banco y los mazos de Pediatría y Cirugía quedan en pausa
+- Siguiente. Orden acordado el 2026-10-06. 1) Poner al día las pruebas e2e y que el CI las corra. 2) Bloques 9 y 10 de la Fase C con planificador, examen completo con alarmas de tiempo, descarte de opciones y tipologías de reactivo (D-080), tutor sin IA, duelos, compartir logro, mazos a mano y los widgets de Inicio que faltan, y cerrar la fase con 15.1. 3) Segunda parte de la nube con la bitácora, cuando Ricardo haya probado su cuenta y se haya hecho dueño. 4) Fase D con IA en modo simulado. 5) Pagos con Stripe y Mercado Pago cuando existan las cuentas. El banco y los mazos de Pediatría y Cirugía quedan en pausa
 
 ## Fase C. Pantallas del alumno (esqueleto funcionando)
 
@@ -76,10 +77,11 @@ Ricardo pidió ver tomar forma la interfaz completa antes de seguir con el banco
 - [x] 6. Mazos de Paco y repaso con FSRS, confianza y causa del error
 - [x] 7. Simulador de práctica con pregunta, retroalimentación y resumen
 - [x] 8. Party con grupos, código de invitación, tabla semanal y retos colectivos
-- [ ] 9. Progreso, planificador y examen completo
+- [ ] 9. Progreso, planificador y examen completo. Planificador hecho (D-081), faltan el examen con sus resultados y la carga futura y la dificultad en Progreso
 - [ ] 10. Duelos de Party, tutor y pruebas e2e de las pantallas nuevas
 
 ### Bitácora por bloque
+- Planificador, pantalla 13 (D-081). Plan de hoy y de la semana con la carga real de repaso, el tiempo disponible y los temas a reforzar, con aviso de sobrecarga y dos ajustes con su efecto. Los minutos calibran hasta tener 3 días de estudio. Lo declarado gana sobre el promedio real. 10 pruebas unitarias del armado del plan y una e2e. Entra al riel como Plan y a Accesos en Perfil
 - Pruebas e2e al día (D-079). Flujos 1, 2, 5 y 6 de 14.1 con prueba propia en tests/e2e y el ayudante signUp. Faltan el flujo 4, que llega con el examen, y la prueba de estado calibrando y la de etiquetas
 - Bloques 1 a 6. Commits 55dc312, 1826448 y 40de8a4. Verificado en el navegador, de la bienvenida al repaso de una tarjeta de Urgencias con sus intervalos de FSRS
 - Bloque 7. Práctica por rama, dificultad y estructura con el límite diario del plan Gratis. Opciones con el muestreo diverso, negaciones resaltadas en la frase de la pregunta, confianza antes de responder, cada cambio de respuesta registrado y XP con el motor xp. La retroalimentación muestra el sesgo probable del distractor elegido, la explicación, las GPC por verificar, la causa del error y el reporte para revisión médica. El banco demo se guarda en la base la primera vez que se abre el simulador

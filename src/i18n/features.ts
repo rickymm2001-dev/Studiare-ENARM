@@ -325,6 +325,64 @@ export const featureText = {
     createTitle: 'Crear mazo',
     createBody: 'Próximamente podrás crear tus propios mazos aquí mismo.',
   },
+  planner: {
+    todayTitle: 'Plan de hoy',
+    minutesOf: (planned: number, available: number) => `${planned} de ${available} min`,
+    cardsLine: (reviews: number, fresh: number) => {
+      const due = plural(reviews, 'tarjeta vencida', 'tarjetas vencidas');
+      const fresher = plural(fresh, 'tarjeta nueva', 'tarjetas nuevas');
+      if (reviews > 0 && fresh > 0) return `Repasa ${due} y aprende ${fresher}`;
+      return reviews > 0 ? `Repasa ${due}` : `Aprende ${fresher}`;
+    },
+    simulator: (n: number, topic: string | null) =>
+      topic
+        ? `Practica ${plural(n, 'pregunta', 'preguntas')} de ${topic}`
+        : `Practica ${plural(n, 'pregunta', 'preguntas')} mezcladas`,
+    challenge: (minutes: number) => `Un reto de ${minutes} minutos en Party`,
+    goReview: 'Repasar',
+    goSimulate: 'Practicar',
+    goParty: 'Ir a Party',
+    nothingToday: 'No hay nada pendiente para hoy con tus mazos y tu tiempo.',
+    nothingTodayHint: 'Practica con el simulador o sigue un mazo nuevo.',
+    noDecksTitle: 'Todavía no sigues ningún mazo',
+    noDecksBody: 'Sin mazos el plan solo trae práctica de preguntas. Sigue uno para sumar repasos.',
+    goDecks: 'Ir a Mazos',
+    topicsCalibrating:
+      'Tus temas a reforzar siguen calibrando. Con 5 respuestas en un tema, el bloque de práctica apunta a tu tema más débil.',
+    overloadTitle: 'Tu carga no cabe en tu tiempo',
+    overloadBody: (needed: number, available: number) =>
+      `Los próximos 7 días piden en promedio ${needed} min al día y tienes ${available}. Elige un ajuste.`,
+    reduceNew: (value: number, effect: number) =>
+      `Baja las tarjetas nuevas a ${value} por día. Libera unos ${effect} min al día.`,
+    raiseMinutes: (value: number, effect: number) =>
+      `Sube tu tiempo a ${value} min al día. Son ${effect} min más que ahora.`,
+    apply: 'Aplicar',
+    applied: 'Listo, el plan ya usa ese cambio.',
+    minutesTitle: 'Tu tiempo al día',
+    minutesMeasured: (days: number, average: number) =>
+      `Usamos tu promedio real de ${plural(days, 'día', 'días')} de estudio, ${average} min al día.`,
+    minutesDeclared: (minutes: number) => `Usamos los ${minutes} min que declaraste.`,
+    minutesRealAverage: (days: number, average: number) =>
+      `Tu promedio real de ${plural(days, 'día', 'días')} de estudio es ${average} min.`,
+    minutesRealSoon: 'Si no declaras minutos, con 3 días de estudio usaremos tu promedio real.',
+    minutesProvisional: (minutes: number) =>
+      `Mientras calibramos, el plan usa ${minutes} min al día. Puedes poner los tuyos aquí.`,
+    minutesUnit: 'días de estudio',
+    minutesLabel: 'Minutos que puedes estudiar al día',
+    minutesSave: 'Guardar',
+    minutesSaved: 'Guardado',
+    minutesUseReal: 'Usar mi promedio real',
+    minutesError: 'Escribe un número entre 5 y 720.',
+    weekTitle: 'Esta semana',
+    today: 'Hoy',
+    tomorrow: 'Mañana',
+    reviewsShort: (n: number) => plural(n, 'repaso', 'repasos'),
+    newShort: (n: number) => plural(n, 'nueva', 'nuevas'),
+    questionsShort: (n: number) => plural(n, 'pregunta', 'preguntas'),
+    challengeShort: 'reto',
+    emptyDay: 'Sin carga',
+    dayMinutes: (planned: number, available: number) => `${planned} de ${available} min`,
+  },
   review: {
     noDecksTitle: 'Todavía no sigues ningún mazo',
     noDecksBody: 'Sigue un mazo precargado para empezar a repasar.',

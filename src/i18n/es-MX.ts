@@ -166,6 +166,7 @@ export const t = {
     users: 'Usuarios',
     platform: 'Plataforma',
     decks: 'Mazos',
+    planner: 'Plan',
     party: 'Party',
     admin: 'Administración',
   },
