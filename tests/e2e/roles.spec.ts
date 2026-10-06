@@ -4,6 +4,9 @@ import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import { expect, expectNoSeriousA11yViolations, test } from './support/fixtures';
 
+/** La base activa vive en Configuración, en la sección Cuenta y datos (D-065, D-078) */
+const ACCOUNT_SETTINGS = `${SCREENS.settings.path}?seccion=account`;
+
 test('elegir Médico lleva al banco con la navegación del médico y se recuerda', async ({
   page,
 }) => {
@@ -22,15 +25,15 @@ test('elegir Médico lleva al banco con la navegación del médico y se recuerda
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.questionBank.title);
 });
 
-test('el alumno no entra al área de admin y puede ir a cambiar de rol', async ({ page }) => {
+test('el alumno no entra al área de admin', async ({ page }) => {
   await page.goto(SCREENS.aiCosts.path);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.access.adminTitle);
-  await page.getByRole('link', { name: t.roles.change }).click();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.roleSelector.title);
+  await expect(page.getByText(t.access.description)).toBeVisible();
+  await expectNoSeriousA11yViolations(page);
 });
 
 test('Demostración marca Datos simulados en toda pantalla y se puede volver', async ({ page }) => {
-  await page.goto(SCREENS.profile.path);
+  await page.goto(ACCOUNT_SETTINGS);
   await expect(page.getByText(t.database.storedIn('enarm_real'))).toBeVisible();
   await page.getByRole('radio', { name: new RegExp(t.database.demo) }).click();
   await expect(page.getByText(t.database.storedIn('enarm_demo'))).toBeVisible();
@@ -45,12 +48,12 @@ test('Demostración marca Datos simulados en toda pantalla y se puede volver', a
 
   await page.getByRole('button', { name: t.database.backToReal }).click();
   await expect(page.getByRole('note')).toHaveCount(0);
-  await page.goto(SCREENS.profile.path);
+  await page.goto(ACCOUNT_SETTINGS);
   await expect(page.getByText(t.database.storedIn('enarm_real'))).toBeVisible();
 });
 
 test('las dos bases existen por separado en IndexedDB', async ({ page }) => {
-  await page.goto(SCREENS.profile.path);
+  await page.goto(ACCOUNT_SETTINGS);
   await expect(page.getByText(t.database.users(0))).toBeVisible();
   await page.getByRole('radio', { name: new RegExp(t.database.demo) }).click();
   await expect(page.getByText(t.database.storedIn('enarm_demo'))).toBeVisible();

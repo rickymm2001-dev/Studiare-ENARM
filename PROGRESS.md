@@ -9,6 +9,7 @@
 - Fase C en curso. Bloques 1 a 8 terminados y faltan el 9 y el 10, ver su sección. Hay 16 de 28 pantallas construidas y 12 siguen como esqueleto con aviso de Próximamente
 - Fase P en curso (D-060). Bloques 1 a 4 terminados, 7 y 9 a medias, 5, 6 y 8 sin empezar, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
+- Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
 - Auditoría del repaso hecha con Codex el 2026-10-04. Una sesión que llega al final de la cola se cierra como completada y no como abandonada
 - Banco y mazos en pausa por indicación de Ricardo del 2026-10-06. No se escriben ni se corrigen preguntas ni tarjetas, solo se programa
 - Pendiente de la Fase B. Cierre según 15.1, con el banco y los mazos pendientes para el final (D-050). Antes del cierre Ricardo decide el ajuste de sesgos (D-051) y si se prueba el cambio del método de fatiga. El lote 5 quedó a medias en content-drafts/b5, con Medicina interna (13) y Pediatría (12) validadas
@@ -79,6 +80,7 @@ Ricardo pidió ver tomar forma la interfaz completa antes de seguir con el banco
 - [ ] 10. Duelos de Party, tutor y pruebas e2e de las pantallas nuevas
 
 ### Bitácora por bloque
+- Pruebas e2e al día (D-079). Flujos 1, 2, 5 y 6 de 14.1 con prueba propia en tests/e2e y el ayudante signUp. Faltan el flujo 4, que llega con el examen, y la prueba de estado calibrando y la de etiquetas
 - Bloques 1 a 6. Commits 55dc312, 1826448 y 40de8a4. Verificado en el navegador, de la bienvenida al repaso de una tarjeta de Urgencias con sus intervalos de FSRS
 - Bloque 7. Práctica por rama, dificultad y estructura con el límite diario del plan Gratis. Opciones con el muestreo diverso, negaciones resaltadas en la frase de la pregunta, confianza antes de responder, cada cambio de respuesta registrado y XP con el motor xp. La retroalimentación muestra el sesgo probable del distractor elegido, la explicación, las GPC por verificar, la causa del error y el reporte para revisión médica. El banco demo se guarda en la base la primera vez que se abre el simulador
 - Bloque 8. Grupos locales con código de 6 caracteres. Al crear un grupo se pueden sumar 6 compañeros simulados, marcados, con actividad determinista por día. Tabla semanal desde el lunes a las 4 a. m. y retos colectivos que cuentan desde su primer día. Reclamar un reto cumplido registra challenge_completed y 100 XP una sola vez. Solo se comparte alias, XP, nivel y racha (9.6). 311 pruebas pasan

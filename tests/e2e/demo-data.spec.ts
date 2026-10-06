@@ -8,7 +8,7 @@ test('genera la demo en un worker, la guarda en enarm_demo y la puede regenerar'
   page,
 }) => {
   test.setTimeout(180_000);
-  await page.goto(SCREENS.profile.path);
+  await page.goto(`${SCREENS.settings.path}?seccion=account`);
   await page.getByRole('radio', { name: new RegExp(t.database.demo) }).click();
   const panel = page.getByRole('region', { name: t.demoData.title });
   await expect(panel).toContainText(t.demoData.empty);

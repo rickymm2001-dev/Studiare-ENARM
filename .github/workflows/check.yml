@@ -1,5 +1,6 @@
 # Corre npm run check en cada push a cualquier rama y en cada pull request (typecheck, lint y pruebas con cobertura).
-# No usa secretos. La clave de la API vive solo en server/.env.local y nunca llega aquí.
+# En un trabajo aparte corre las pruebas de punta a punta con Playwright (e2e), que se habían quedado viejas
+# porque nadie las corría. No usa secretos. La clave de la API vive solo en server/.env.local y nunca llega aquí.
 name: check
 
 on:
@@ -30,3 +31,18 @@ jobs:
       - run: npm run check
       # Permisos por fila y roles del esquema de Supabase contra un Postgres local temporal (D-069)
       - run: npm run test:sql
+
+  # Pruebas de punta a punta en Chromium, en teléfono y escritorio, contra el build de producción y
+  # con el proxy de IA en modo simulado (14.1). Los navegadores van dentro del proyecto (D-033)
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: node scripts/playwright.ts install --with-deps chromium
+      - run: npm run e2e

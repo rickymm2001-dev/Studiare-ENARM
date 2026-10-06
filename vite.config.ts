@@ -61,8 +61,9 @@ export default defineConfig({
         ],
       },
       workbox: {
-        // La app completa queda en caché para abrir sin conexión después de la primera carga
-        globPatterns: ['**/*.{js,css,html,svg,png,webmanifest}'],
+        // La app completa queda en caché para abrir sin conexión después de la primera carga. Las
+        // fuentes propias (woff2, unos 480 KB) entran para que el diseño no cambie sin conexión
+        globPatterns: ['**/*.{js,css,html,svg,png,webmanifest,woff2}'],
         // Las imágenes de los mazos demo (unos 47 MB) y el worker de simulación, que trae los mazos
         // y pesa varios MB, no se precargan. Se guardan la primera vez que se usan (D-053)
         globIgnores: ['demo-media/**', 'assets/simulate.worker-*.js'],

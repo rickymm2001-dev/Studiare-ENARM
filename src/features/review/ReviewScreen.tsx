@@ -387,6 +387,8 @@ function ReviewSession({
       <Button
         variant="secondary"
         size="sm"
+        // En el teléfono solo se ve el ícono, así que el nombre va en la etiqueta (axe, button-name)
+        aria-label={t.reviewSetup.change}
         onClick={() => {
           // Lo calificado ya quedó en la bitácora. Solo se cierra la sesión y se vuelve a elegir
           void finish({ celebrate: false }).then(onChangeSelection);
