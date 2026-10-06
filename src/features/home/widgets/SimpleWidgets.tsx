@@ -17,12 +17,12 @@ function BigNumber({
   caption?: string;
 }) {
   return (
-    <div className="flex items-center gap-3">
-      <span className="text-primary [&_svg]:size-8" aria-hidden>
+    <div className="flex items-center gap-2 sm:gap-3">
+      <span className="text-primary [&_svg]:size-6 sm:[&_svg]:size-8" aria-hidden>
         {icon}
       </span>
-      <div className="flex flex-col">
-        <span className="text-2xl font-bold">{value}</span>
+      <div className="flex min-w-0 flex-col">
+        <span className="text-xl font-bold sm:text-2xl">{value}</span>
         {caption ? <span className="text-sm text-fg-muted">{caption}</span> : null}
       </div>
     </div>
@@ -39,7 +39,7 @@ export function StreakWidget({ snapshot }: { snapshot: Snapshot }) {
         caption={t.widgets.streak.best(streak.best)}
       />
       <p className="flex items-center gap-2 text-sm text-fg-muted">
-        <Snowflake aria-hidden className="size-4" />
+        <Snowflake aria-hidden className="size-4 shrink-0" />
         {t.widgets.streak.freezes(streak.freezesAvailable)}
       </p>
       <p className="text-sm">
@@ -107,8 +107,8 @@ export function DailyGoalWidget({ snapshot }: { snapshot: Snapshot }) {
     <div className="flex flex-col gap-2">
       <BigNumber
         icon={<Target />}
-        value={t.widgets.goal.progress(Math.min(done, goal.value), goal.value, metric)}
-        caption={done >= goal.value ? t.widgets.goal.met : undefined}
+        value={t.widgets.goal.ratio(Math.min(done, goal.value), goal.value)}
+        caption={done >= goal.value ? t.widgets.goal.met : metric}
       />
       <ProgressBar
         value={Math.min(done, goal.value)}

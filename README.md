@@ -2,7 +2,7 @@
 
 Prototipo funcional de una plataforma integral para preparar el ENARM, en español de México. Es una página web (PWA) con Vite, React y TypeScript, datos locales en el navegador y un proxy pequeño hacia la API de Claude.
 
-Este repositorio es privado. Todo el contenido clínico de demostración está escrito por IA, lleva etiqueta visible de demo y espera revisión médica.
+Este repositorio es público desde D-055. Todo el contenido clínico de demostración está escrito por IA, lleva etiqueta visible de demo y espera revisión médica.
 
 ## Por dónde empezar
 

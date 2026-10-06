@@ -8,6 +8,7 @@ import { useLiveData } from '@/data/hooks';
 import type { WidgetLayout } from '@/data/schemas/activity';
 import { studyDayOf } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
+import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { SelectField } from '@/ui/components/field';
@@ -70,19 +71,20 @@ function Dashboard({ session }: { session: ReadySession }) {
         title={t.screens.home.title}
         description={`${t.home.greeting(user.alias)}. ${t.screens.home.description}`}
         stats={false}
+        actions={
+          <Button
+            variant={editing ? 'primary' : 'secondary'}
+            size="sm"
+            aria-pressed={editing}
+            onClick={() => {
+              setEditing((value) => !value);
+            }}
+          >
+            <Pencil aria-hidden />
+            {editing ? t.home.doneEditing : t.home.edit}
+          </Button>
+        }
       />
-      <div className="flex flex-wrap items-end gap-2">
-        <Button
-          variant={editing ? 'primary' : 'secondary'}
-          size="sm"
-          onClick={() => {
-            setEditing((value) => !value);
-          }}
-        >
-          <Pencil aria-hidden />
-          {editing ? t.home.doneEditing : t.home.edit}
-        </Button>
-      </div>
       {editing ? (
         <Card>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -123,11 +125,14 @@ function Dashboard({ session }: { session: ReadySession }) {
         </Card>
       ) : null}
       {layout.widgets.length === 0 ? <p className="text-fg-muted">{t.home.empty}</p> : null}
-      <div className="grid gap-4 md:grid-cols-2">
+      {/* En el teléfono racha y meta van lado a lado y lo demás a todo lo ancho (D-078). En
+          computadora son dos columnas y el heatmap ocupa las dos */}
+      <div className="grid grid-cols-2 gap-3 md:gap-4">
         {layout.widgets.map((widget, index) => (
           <WidgetFrame
             key={widget.id}
             name={t.widgets.names[widget.type]}
+            className={widgetSpan(widget.type, editing)}
             editing={editing}
             first={index === 0}
             last={index === layout.widgets.length - 1}
@@ -203,8 +208,24 @@ function WidgetBody({
   }
 }
 
+/** Widgets chicos que en el teléfono comparten renglón de dos en dos */
+const HALF_ON_PHONE: ReadonlySet<WidgetType> = new Set(['streak', 'daily_goal']);
+
+/**
+ * Columnas que ocupa cada widget. Al editar todos van a todo lo ancho para que quepan los botones
+ * de subir, bajar y quitar
+ */
+function widgetSpan(type: WidgetType, editing: boolean): string {
+  if (editing) return 'col-span-2 md:col-span-1';
+  return cn(
+    HALF_ON_PHONE.has(type) ? 'col-span-1' : 'col-span-2',
+    type === 'heatmap' ? 'md:col-span-2' : 'md:col-span-1',
+  );
+}
+
 function WidgetFrame({
   name,
+  className,
   editing,
   first,
   last,
@@ -214,6 +235,7 @@ function WidgetFrame({
   children,
 }: {
   name: string;
+  className?: string;
   editing: boolean;
   first: boolean;
   last: boolean;
@@ -224,7 +246,7 @@ function WidgetFrame({
 }) {
   const [showSettings, setShowSettings] = useState(false);
   return (
-    <Card aria-label={name}>
+    <Card aria-label={name} className={className}>
       <CardHeader className="flex-row items-center justify-between gap-2">
         <CardTitle>{name}</CardTitle>
         <div className="flex gap-1">

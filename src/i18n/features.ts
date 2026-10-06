@@ -134,7 +134,7 @@ export const featureText = {
     streak: {
       current: (n: number) => plural(n, 'día', 'días'),
       best: (n: number) => `Récord ${plural(n, 'día', 'días')}`,
-      freezes: (n: number) => `${plural(n, 'congelador', 'congeladores')} guardados`,
+      freezes: (n: number) => plural(n, 'congelador guardado', 'congeladores guardados'),
       todayMet: 'Ya cumpliste la meta de hoy',
       todayPending: 'Todavía no cumples la meta de hoy',
     },
@@ -157,6 +157,7 @@ export const featureText = {
     },
     goal: {
       progress: (done: number, goal: number, metric: string) => `${done} de ${goal} ${metric}`,
+      ratio: (done: number, goal: number) => `${done} de ${goal}`,
       metricNames: {
         cards: 'tarjetas',
         questions: 'preguntas',
@@ -315,6 +316,9 @@ export const featureText = {
     adding: 'Agregando…',
     loading: 'Cargando mazos…',
     noDecksInBranch: 'Sin mazos todavía en esta rama.',
+    topicsTitle: 'Temas del mazo',
+    topicsSummary: (n: number) => plural(n, 'tema principal', 'temas principales'),
+    yoursTitle: 'Tus mazos',
     importTitle: 'Sube tu mazo',
     importBody:
       'Pronto podrás subir tus mazos desde otras apps de tarjetas, Word, Excel o CSV. Tus mazos serán privados.',

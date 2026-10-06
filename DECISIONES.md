@@ -650,3 +650,15 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Se entrega en Excel con scripts/content/bank-excel.ts porque la segunda parte de la nube, que sube el banco a Supabase, sigue pendiente
 - Es borrador generado con IA. Queda fuera del banco de la app y de la demo hasta que un médico lo revise y se cite la frase que respalda cada respuesta
 - Algunos temas sin subtema exacto quedaron en el subtema más cercano. La lista vive en content-drafts/bank1500/README.md
+
+### D-078. Compactación de pantallas
+- Fecha 2026-10-03 los bloques 1 a 5 y 2026-10-06 la integración y el bloque 6. Origen R, implementación de Claude
+- Ricardo pidió que las pantallas ocuparan menos alto y se leyeran de un vistazo, sobre todo en el teléfono. Se hizo en 6 bloques con capturas de antes y después en docs/screenshots/compactacion
+- Modo enfoque. En pregunta, tarjeta y retroalimentación el encabezado es delgado, sin racha, nivel ni descripción (SessionHeader). En el teléfono una barra fija abajo reúne confianza, revelar, calificar y siguiente (ActionDock). En computadora el caso va a la izquierda y las opciones a la derecha. El reporte para revisión médica queda plegado
+- Repasar y Simular. El botón de empezar queda arriba. Mazos, ramas, subespecialidades y límites de hoy se pliegan con un resumen de lo marcado (Disclosure)
+- Progreso en una sola página con las cifras en una fila, tus 3 focos de la semana con atajo al simulador, las lecturas de Conócete como filas que se abren y las ramas que se abren a sus subespecialidades. Las que no tienen datos quedan ocultas
+- Marco de pantallas. La explicación de cada pantalla queda tras un ícono de información. El aviso de demostración ocupa una línea y es la única etiqueta de Datos simulados en los encabezados. Inicio y Perfil no repiten racha y nivel. Agregar mazo pasa a la tarjeta de Repasar
+- Configuración en 4 secciones con pestañas, Estudio, Apariencia, Pomodoro y Cuenta y datos, con la sección abierta en la dirección (seccion). Una sola barra de guardar por sección que aparece solo con cambios (SaveBar)
+- Inicio y Mazos. En el teléfono racha y meta diaria van lado a lado, el heatmap ocupa todo el ancho y Editar tablero pasa al encabezado. Cada mazo es una tarjeta compacta con sus temas plegados, y Sube tu mazo y Crear mazo quedan en una sola tarjeta. La meta diaria muestra el cociente grande y la métrica debajo, y el congelador concuerda en singular
+- Alto de la página en el teléfono, antes y después. Repasar 4613 a 844, Simular 4256 a 844, Progreso 8362 a 2310, Configuración 5405 a 938, Inicio 1422 a 1082, Mazos 1820 a 1376 y Perfil 1338 a 1106
+- Integración. La rama main-y84jz2 con los bloques 1 a 5 quedó sin juntar con main entre el 2026-10-03 y el 2026-10-06, así que la demo publicada no la tenía. El merge salió limpio con la corrección de Codex del repaso. Pasan typecheck, lint y las 357 pruebas unitarias
