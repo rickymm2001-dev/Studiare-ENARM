@@ -1,8 +1,8 @@
-// Selector de ramas troncales y subespecialidades (D-066). Arriba las 6 troncales, abajo todas las
-// subespecialidades agrupadas por troncal, en tantas columnas como quepan. Marcar una troncal marca
-// o desmarca todas sus subespecialidades.
-import { CheckCheck, X } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+// Selector de ramas troncales y subespecialidades (D-066, D-078). Cada troncal es una fila con su
+// casilla y su total. Sus subespecialidades se ven solo al abrir la fila, para que las 72 no llenen
+// la pantalla. Marcar una troncal marca o desmarca todas sus subespecialidades.
+import { CheckCheck, ChevronDown, X } from 'lucide-react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { topicTaxonomy } from '@/demo/content';
 import { t } from '@/i18n/es-MX';
 import { toneClasses } from '@/ui/branches';
@@ -16,6 +16,7 @@ function TriCheckbox({
   onChange,
   label,
   hint,
+  stacked = false,
   className,
 }: {
   checked: boolean;
@@ -23,6 +24,8 @@ function TriCheckbox({
   onChange: (checked: boolean) => void;
   label: string;
   hint?: string;
+  /** Pone el conteo debajo del nombre, para que nombres largos no se partan en el teléfono */
+  stacked?: boolean;
   className?: string;
 }) {
   const ref = useRef<HTMLInputElement>(null);
@@ -39,14 +42,27 @@ function TriCheckbox({
       <input
         ref={ref}
         type="checkbox"
-        className="size-4 accent-[var(--color-primary)]"
+        className="size-4 shrink-0 accent-[var(--color-primary)]"
         checked={checked}
         onChange={(event) => {
           onChange(event.target.checked);
         }}
       />
-      <span className="flex-1">{label}</span>
-      {hint ? <span className="text-xs text-fg-muted tabular-nums">{hint}</span> : null}
+      {stacked ? (
+        <span className="flex min-w-0 flex-1 flex-col leading-tight">
+          <span>{label}</span>
+          {hint ? (
+            <span className="text-xs font-normal text-fg-muted tabular-nums">{hint}</span>
+          ) : null}
+        </span>
+      ) : (
+        <>
+          <span className="min-w-0 flex-1">{label}</span>
+          {hint ? (
+            <span className="shrink-0 text-xs text-fg-muted tabular-nums">{hint}</span>
+          ) : null}
+        </>
+      )}
     </label>
   );
 }
@@ -56,6 +72,7 @@ export function BranchTopicPicker({
   onChange,
   counts,
   countLabel = t.topicPicker.questions,
+  showCount = true,
 }: {
   selected: ReadonlySet<string>;
   onChange: (next: Set<string>) => void;
@@ -63,7 +80,11 @@ export function BranchTopicPicker({
   counts?: ReadonlyMap<string, number>;
   /** Texto del total de cada troncal. Preguntas por defecto */
   countLabel?: (n: number) => string;
+  /** Muestra cuántas subespecialidades van marcadas. Se apaga si ya lo dice el resumen de afuera */
+  showCount?: boolean;
 }) {
+  const baseId = useId();
+  const [open, setOpen] = useState<ReadonlySet<string>>(() => new Set());
   const setMany = (keys: readonly string[], on: boolean) => {
     const next = new Set(selected);
     for (const key of keys) {
@@ -74,23 +95,64 @@ export function BranchTopicPicker({
   };
   const countOf = (keys: readonly string[]) =>
     counts ? keys.reduce((sum, key) => sum + (counts.get(key) ?? 0), 0) : undefined;
+  const toggleOpen = (key: string) => {
+    const next = new Set(open);
+    if (next.has(key)) next.delete(key);
+    else next.add(key);
+    setOpen(next);
+  };
 
   return (
-    <div className="flex flex-col gap-4">
-      <fieldset>
-        <legend className="mb-2 font-semibold">{t.topicPicker.trunks}</legend>
-        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-          {topicTaxonomy.branches.map((branch) => {
-            const keys = branch.topics.map((topic) => topic.key);
-            const on = keys.filter((key) => selected.has(key)).length;
-            const total = countOf(keys);
-            return (
-              <div
-                key={branch.key}
-                className={cn('rounded-lg px-2 py-1', toneClasses(branch.key).chip)}
-              >
+    <fieldset className="flex flex-col gap-2">
+      <legend className="sr-only">{t.topicPicker.trunks}</legend>
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+        {showCount ? (
+          <span className="text-sm text-fg-muted" aria-live="polite">
+            {t.topicPicker.selected(selected.size, ALL_TOPICS.length)}
+          </span>
+        ) : null}
+        <div className="ml-auto flex gap-1">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              onChange(new Set(ALL_TOPICS));
+            }}
+          >
+            <CheckCheck aria-hidden />
+            {t.topicPicker.all}
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              onChange(new Set());
+            }}
+          >
+            <X aria-hidden />
+            {t.topicPicker.none}
+          </Button>
+        </div>
+      </div>
+      <ul className="divide-y divide-line overflow-hidden rounded-lg border border-line">
+        {topicTaxonomy.branches.map((branch) => {
+          const keys = branch.topics.map((topic) => topic.key);
+          const on = keys.filter((key) => selected.has(key)).length;
+          const total = countOf(keys);
+          const isOpen = open.has(branch.key);
+          const panelId = `${baseId}-${branch.key}`;
+          return (
+            <li key={branch.key}>
+              <div className={cn('flex items-center gap-1 pr-1', total === 0 && 'opacity-60')}>
+                <span
+                  aria-hidden
+                  className={cn('ml-2 h-6 w-1 shrink-0 rounded-full', toneClasses(branch.key).bar)}
+                />
                 <TriCheckbox
-                  className="font-semibold hover:bg-transparent"
+                  stacked
+                  className="min-h-touch flex-1 py-1 font-semibold hover:bg-transparent"
                   label={branch.name}
                   hint={
                     total === undefined
@@ -107,70 +169,47 @@ export function BranchTopicPicker({
                     setMany(keys, checked);
                   }}
                 />
-              </div>
-            );
-          })}
-        </div>
-        <div className="mt-3 flex flex-wrap gap-2">
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            onClick={() => {
-              onChange(new Set(ALL_TOPICS));
-            }}
-          >
-            <CheckCheck aria-hidden />
-            {t.topicPicker.all}
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            onClick={() => {
-              onChange(new Set());
-            }}
-          >
-            <X aria-hidden />
-            {t.topicPicker.none}
-          </Button>
-          <span className="self-center text-sm text-fg-muted">
-            {t.topicPicker.selected(selected.size, ALL_TOPICS.length)}
-          </span>
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend className="mb-2 font-semibold">{t.topicPicker.subspecialties}</legend>
-        <div className="grid gap-x-4 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
-          {topicTaxonomy.branches.map((branch) => (
-            <div key={branch.key} className="flex flex-col">
-              <p
-                className={cn(
-                  'mb-1 text-xs font-bold tracking-wide uppercase',
-                  toneClasses(branch.key).chip.split(' ')[1],
-                )}
-              >
-                {branch.name}
-              </p>
-              {branch.topics.map((topic) => {
-                const count = counts?.get(topic.key);
-                return (
-                  <TriCheckbox
-                    key={topic.key}
-                    label={topic.name}
-                    hint={count === undefined ? undefined : String(count)}
-                    checked={selected.has(topic.key)}
-                    onChange={(checked) => {
-                      setMany([topic.key], checked);
-                    }}
+                <button
+                  type="button"
+                  aria-expanded={isOpen}
+                  aria-controls={panelId}
+                  aria-label={t.topicPicker.toggle(branch.name, on, keys.length)}
+                  onClick={() => {
+                    toggleOpen(branch.key);
+                  }}
+                  className="flex min-h-touch shrink-0 items-center gap-1 rounded-md px-2 text-xs text-fg-muted tabular-nums hover:bg-muted"
+                >
+                  {t.topicPicker.of(on, keys.length)}
+                  <ChevronDown
+                    aria-hidden
+                    className={cn('size-4 transition-transform', isOpen && 'rotate-180')}
                   />
-                );
-              })}
-            </div>
-          ))}
-        </div>
-      </fieldset>
-    </div>
+                </button>
+              </div>
+              <div
+                id={panelId}
+                hidden={!isOpen}
+                className="grid gap-x-4 border-t border-line bg-muted/40 px-2 py-1 pl-6 sm:grid-cols-2 lg:grid-cols-3"
+              >
+                {branch.topics.map((topic) => {
+                  const count = counts?.get(topic.key);
+                  return (
+                    <TriCheckbox
+                      key={topic.key}
+                      label={topic.name}
+                      hint={count === undefined ? undefined : String(count)}
+                      checked={selected.has(topic.key)}
+                      onChange={(checked) => {
+                        setMany([topic.key], checked);
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </fieldset>
   );
 }

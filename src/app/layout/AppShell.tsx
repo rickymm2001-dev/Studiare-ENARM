@@ -66,19 +66,21 @@ export function AppShell() {
         </div>
       </header>
 
+      {/* Aviso de demostración en una sola línea delgada. Es la etiqueta visible de Datos
+          simulados para toda la pantalla, así que las pantallas ya no repiten la suya (D-078) */}
       {database === 'demo' ? (
         <div
           role="note"
-          className={`flex flex-wrap items-center justify-center gap-x-3 gap-y-1 border-b border-sim-line bg-sim px-4 py-2 text-sm text-sim-fg ${rail}`}
+          className={`flex items-center justify-center gap-x-3 border-b border-sim-line bg-sim px-4 text-xs text-sim-fg sm:text-sm ${rail}`}
         >
-          <span className="flex items-center gap-2 font-semibold">
-            <FlaskConical aria-hidden className="size-4" />
-            {t.labels.simulatedData}
+          <span className="flex min-w-0 items-center gap-1.5">
+            <FlaskConical aria-hidden className="size-3.5 shrink-0 sm:size-4" />
+            <span className="font-semibold">{t.labels.simulatedData}</span>
+            <span className="sr-only sm:not-sr-only sm:truncate">{t.database.banner}</span>
           </span>
-          <span>{t.database.banner}</span>
           <button
             type="button"
-            className="min-h-touch rounded-sm px-2 font-semibold underline underline-offset-4"
+            className="min-h-8 shrink-0 rounded-sm px-1 font-semibold underline underline-offset-4"
             onClick={() => {
               setDatabase('real');
             }}

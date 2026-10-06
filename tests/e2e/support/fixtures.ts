@@ -2,6 +2,8 @@
 // Cada prueba falla si la página escribe errores en la consola o lanza excepciones.
 import AxeBuilder from '@axe-core/playwright';
 import { test as base, expect, type Page } from '@playwright/test';
+import { SCREENS } from '@/app/screens';
+import { t } from '@/i18n/es-MX';
 
 export const test = base.extend<{ consoleErrors: string[] }>({
   consoleErrors: [
@@ -56,4 +58,17 @@ export async function presetPreferences(
     },
     { theme: 'system', role: 'student', database: 'real', ...preferences },
   );
+}
+
+/**
+ * Crea una cuenta local por la bienvenida y deja la sesión abierta en Inicio (flujo 1). Sin
+ * Supabase configurado la cuenta vive solo en este navegador, así que no hay correo que confirmar
+ */
+export async function signUp(page: Page, alias = 'Ana'): Promise<void> {
+  await page.goto(SCREENS.onboarding.path);
+  await page.getByLabel(t.onboarding.alias, { exact: true }).fill(alias);
+  await page.getByLabel(t.account.email, { exact: true }).fill(`${alias.toLowerCase()}@ejemplo.mx`);
+  await page.getByLabel(t.onboarding.privacyAccept).check();
+  await page.getByRole('button', { name: t.onboarding.create }).click();
+  await expect(page.getByRole('heading', { level: 1, name: t.screens.home.title })).toBeVisible();
 }

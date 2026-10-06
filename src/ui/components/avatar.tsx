@@ -3,7 +3,17 @@ import type { Account } from '@/data/schemas/people';
 import { cn } from '@/ui/cn';
 import { GeneratedAvatar } from './generated-avatar';
 
-const TONES = ['bg-mi', 'bg-ped', 'bg-gyo', 'bg-cir', 'bg-urg', 'bg-primary'];
+// Colores fijos y no los de las ramas. Las iniciales son blancas y los colores de las ramas en modo
+// oscuro son pasteles, así que no alcanzaban el contraste de 4.5 a 1. Estos van de 4.9 a 7.8 en
+// los dos temas
+const TONES = [
+  'bg-[#0e5a6b]',
+  'bg-[#b92b74]',
+  'bg-[#6a4bc4]',
+  'bg-[#c2410c]',
+  'bg-[#0f766e]',
+  'bg-[#15803d]',
+];
 
 function hash(text: string): number {
   let value = 0;

@@ -60,7 +60,12 @@ test('el service worker se registra y Chromium la considera instalable', async (
   const { installabilityErrors } = (await cdp.send('Page.getInstallabilityErrors')) as {
     installabilityErrors: { errorId: string }[];
   };
-  expect(installabilityErrors.map((error) => error.errorId)).toEqual([]);
+  // Algunas versiones de Chromium cuentan el contexto aislado de Playwright como incógnito. Eso no
+  // depende de la app, y con un contexto persistente la lista sale vacía
+  const blockers = installabilityErrors
+    .map((error) => error.errorId)
+    .filter((id) => id !== 'in-incognito');
+  expect(blockers).toEqual([]);
 });
 
 test('después de la primera carga abre sin conexión', async ({ page, context }) => {

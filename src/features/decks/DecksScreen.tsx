@@ -1,6 +1,7 @@
 // Mazos (pantalla 12). Precargados que el alumno sigue o deja, con su avance, agrupados por rama
-// troncal con sus subespecialidades (D-066). Subir mazos y crearlos a mano llegan después.
-import { BookPlus, Check, FileUp, Layers, PencilLine } from 'lucide-react';
+// troncal con sus subespecialidades (D-066). Cada mazo es una tarjeta compacta con sus temas
+// plegados (D-078). Subir mazos y crearlos a mano llegan después.
+import { BookPlus, Check, ChevronDown, FileUp, Layers, PencilLine } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -86,49 +87,64 @@ function Decks({ session }: { session: ReadySession }) {
                     key={file.key}
                     className="flex flex-col gap-2 rounded-lg border border-line bg-surface p-3 shadow-card"
                   >
-                    <span
-                      className={`self-start rounded-full px-2.5 py-0.5 text-xs font-bold ${toneClasses(deckBranch(file)).chip}`}
-                    >
-                      {branchName(deckBranch(file))}
-                    </span>
                     <div className="flex items-start gap-3">
                       <span
                         aria-hidden
-                        className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${toneClasses(file.key).icon}`}
+                        className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${toneClasses(file.key).icon}`}
                       >
                         <Layers className="size-5" />
                       </span>
-                      <div className="flex flex-1 flex-col">
+                      <div className="flex min-w-0 flex-1 flex-col">
                         <span className="font-semibold">{file.name}</span>
-                        <span className="text-sm text-fg-muted">{t.decks.author(file.author)}</span>
-                        <span className="text-sm text-fg-muted">
-                          {t.decks.stats(file.notes.length, file.media.length)}
-                        </span>
-                        <span className="mt-1 flex flex-wrap gap-1">
-                          {topTopics(file).map(([topic, count]) => (
-                            <span
-                              key={topic}
-                              className="rounded-full bg-muted px-2 py-0.5 text-xs text-fg-muted"
-                            >
-                              {topicName.get(topic) ?? topic} · {count}
-                            </span>
-                          ))}
+                        <span className="text-xs text-fg-muted sm:text-sm">
+                          {t.decks.author(file.author)}
                         </span>
                       </div>
                     </div>
-                    {isFollowed && cardIds.length > 0 ? (
-                      <ProgressBar
-                        value={studied}
-                        max={cardIds.length}
-                        label={t.decks.progress(studied, cardIds.length)}
-                      />
-                    ) : null}
-                    {isFollowed && cardIds.length > 0 ? (
-                      <span className="text-sm text-fg-muted">
-                        {t.decks.progress(studied, cardIds.length)}
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-fg-muted">
+                      <span
+                        className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${toneClasses(deckBranch(file)).chip}`}
+                      >
+                        {branchName(deckBranch(file))}
                       </span>
+                      <span>{t.decks.stats(file.notes.length, file.media.length)}</span>
+                    </div>
+                    {isFollowed && cardIds.length > 0 ? (
+                      <div className="flex flex-col gap-1">
+                        <ProgressBar
+                          value={studied}
+                          max={cardIds.length}
+                          label={t.decks.progress(studied, cardIds.length)}
+                          className="h-2"
+                        />
+                        <span className="text-xs text-fg-muted sm:text-sm">
+                          {t.decks.progress(studied, cardIds.length)}
+                        </span>
+                      </div>
                     ) : null}
-                    <div className="flex flex-wrap gap-2">
+                    <details className="group">
+                      <summary className="flex min-h-8 cursor-pointer list-none items-center gap-1 text-sm font-semibold text-primary [&::-webkit-details-marker]:hidden">
+                        {t.decks.topicsTitle}
+                        <span className="font-normal text-fg-muted">
+                          · {t.decks.topicsSummary(topTopics(file).length)}
+                        </span>
+                        <ChevronDown
+                          aria-hidden
+                          className="size-4 text-fg-muted transition-transform group-open:rotate-180"
+                        />
+                      </summary>
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {topTopics(file).map(([topic, count]) => (
+                          <span
+                            key={topic}
+                            className="rounded-full bg-muted px-2 py-0.5 text-xs text-fg-muted"
+                          >
+                            {topicName.get(topic) ?? topic} · {count}
+                          </span>
+                        ))}
+                      </div>
+                    </details>
+                    <div className="flex flex-wrap items-center gap-2">
                       {session.isDemo ? (
                         <span className="flex items-center gap-1 text-sm font-medium text-success">
                           <Check aria-hidden className="size-4" />
@@ -177,23 +193,26 @@ function Decks({ session }: { session: ReadySession }) {
           </div>
         )}
       </Card>
-      <Card aria-labelledby="importar-titulo">
+      <Card aria-labelledby="tus-mazos-titulo">
         <CardHeader>
-          <CardTitle id="importar-titulo" className="flex items-center gap-2">
-            <FileUp aria-hidden className="size-5" />
-            {t.decks.importTitle}
-          </CardTitle>
-          <CardDescription>{t.decks.importBody}</CardDescription>
+          <CardTitle id="tus-mazos-titulo">{t.decks.yoursTitle}</CardTitle>
         </CardHeader>
-      </Card>
-      <Card aria-labelledby="crear-mazo-titulo">
-        <CardHeader>
-          <CardTitle id="crear-mazo-titulo" className="flex items-center gap-2">
-            <PencilLine aria-hidden className="size-5" />
-            {t.decks.createTitle}
-          </CardTitle>
-          <CardDescription>{t.decks.createBody}</CardDescription>
-        </CardHeader>
+        <ul className="grid gap-3 md:grid-cols-2">
+          <li className="flex items-start gap-3">
+            <FileUp aria-hidden className="mt-0.5 size-5 shrink-0 text-primary" />
+            <div className="flex flex-col">
+              <span className="font-semibold">{t.decks.importTitle}</span>
+              <span className="text-sm text-fg-muted">{t.decks.importBody}</span>
+            </div>
+          </li>
+          <li className="flex items-start gap-3">
+            <PencilLine aria-hidden className="mt-0.5 size-5 shrink-0 text-primary" />
+            <div className="flex flex-col">
+              <span className="font-semibold">{t.decks.createTitle}</span>
+              <span className="text-sm text-fg-muted">{t.decks.createBody}</span>
+            </div>
+          </li>
+        </ul>
       </Card>
     </>
   );

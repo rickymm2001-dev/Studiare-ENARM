@@ -5,6 +5,7 @@ import { BookOpen, CheckCircle2, Plus, Shuffle } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
+import { SessionHeader } from '@/app/layout/SessionHeader';
 import { screenPath } from '@/app/screens';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { useDataApi } from '@/data/context';
@@ -30,10 +31,10 @@ import { StudyPausedDialog } from '../shared/StudyPausedDialog';
 import { useStudyClock } from '../shared/useStudyClock';
 import { PomodoroNotice, PomodoroPill } from '../pomodoro/Pomodoro';
 import { celebrate } from '@/ui/celebrate';
+import { ActionDock } from '@/ui/components/action-dock';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
-import { SimulatedDataLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { followedDeckIds } from '../decks/followed';
 import { buildSnapshot } from '../home/snapshot';
@@ -116,13 +117,9 @@ function ReviewLoader({ session }: { session: ReadySession }) {
   if (selection === null) {
     return (
       <>
-        <ScreenHeader
-          title={t.screens.review.title}
-          description={t.screens.review.description}
-          badges={session.isDemo ? <SimulatedDataLabel /> : undefined}
-          actions={<AddDeckButton />}
-        />
+        <ScreenHeader title={t.screens.review.title} description={t.screens.review.description} />
         <ReviewSetup
+          addDeck={<AddDeckButton />}
           cards={cards}
           deckNames={deckNames}
           topicOfCard={topicOfCard}
@@ -165,7 +162,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
 
 function AddDeckButton() {
   return (
-    <Button asChild variant="secondary" size="sm">
+    <Button asChild variant="ghost" size="sm">
       <Link to={screenPath('decks')}>
         <Plus aria-hidden />
         {t.reviewSetup.addDeck}
@@ -385,29 +382,26 @@ function ReviewSession({
     next();
   };
 
-  const header = (
+  const sessionActions = (
     <>
-      <ScreenHeader
-        title={t.screens.review.title}
-        description={t.screens.review.description}
-        badges={session.isDemo ? <SimulatedDataLabel /> : undefined}
-        actions={
-          <>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => {
-                // Lo calificado ya quedó en la bitácora. Solo se cierra la sesión y se vuelve a elegir
-                void finish({ celebrate: false }).then(onChangeSelection);
-              }}
-            >
-              <Shuffle aria-hidden />
-              <span className="hidden sm:inline">{t.reviewSetup.change}</span>
-            </Button>
-            <PomodoroPill session={session} />
-          </>
-        }
-      />
+      <Button
+        variant="secondary"
+        size="sm"
+        // En el teléfono solo se ve el ícono, así que el nombre va en la etiqueta (axe, button-name)
+        aria-label={t.reviewSetup.change}
+        onClick={() => {
+          // Lo calificado ya quedó en la bitácora. Solo se cierra la sesión y se vuelve a elegir
+          void finish({ celebrate: false }).then(onChangeSelection);
+        }}
+      >
+        <Shuffle aria-hidden />
+        <span className="hidden sm:inline">{t.reviewSetup.change}</span>
+      </Button>
+      <PomodoroPill session={session} />
+    </>
+  );
+  const extras = (
+    <>
       <PomodoroNotice session={session} />
       {study.paused ? (
         <StudyPausedDialog
@@ -419,6 +413,16 @@ function ReviewSession({
           }}
         />
       ) : null}
+    </>
+  );
+  const header = (
+    <>
+      <ScreenHeader
+        title={t.screens.review.title}
+        description={t.screens.review.description}
+        actions={sessionActions}
+      />
+      {extras}
     </>
   );
 
@@ -466,14 +470,39 @@ function ReviewSession({
 
   return (
     <>
-      {header}
-      <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-fg-muted">
-        <span>
-          {t.review.remaining(remainingReviews, queue.length - position - remainingReviews)}
-        </span>
-        <span aria-live="polite">{lastXp > 0 ? t.review.xpGained(lastXp) : ''}</span>
-      </div>
-      <Card aria-label={t.review.deck(deckNames.get(card.deckId) ?? '')} className="w-full">
+      {/* Modo enfoque (D-078). Sin racha, nivel ni descripción mientras se repasa */}
+      <SessionHeader
+        title={t.screens.review.title}
+        meta={
+          <>
+            <span>
+              {t.review.remaining(remainingReviews, queue.length - position - remainingReviews)}
+            </span>
+            <span aria-live="polite" className="font-semibold text-success">
+              {lastXp > 0 ? t.review.xpGained(lastXp) : ''}
+            </span>
+          </>
+        }
+        actions={
+          <>
+            {sessionActions}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                void finish();
+              }}
+            >
+              {t.review.finish}
+            </Button>
+          </>
+        }
+      />
+      {extras}
+      <Card
+        aria-label={t.review.deck(deckNames.get(card.deckId) ?? '')}
+        className="w-full lg:max-w-reading"
+      >
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <Badge variant={isNew ? 'info' : 'neutral'}>
             {isNew ? t.review.newCard : t.review.reviewCard}
@@ -489,66 +518,8 @@ function ReviewSession({
         ) : null}
       </Card>
 
-      {step === 'confidence' ? (
-        <div className="flex flex-col gap-2">
-          <p className="font-medium">{t.review.confidenceQuestion}</p>
-          <div className="grid grid-cols-3 gap-2">
-            {(['dont_know', 'unsure', 'sure'] as Confidence[]).map((value) => (
-              <Button
-                key={value}
-                variant="secondary"
-                onClick={() => {
-                  setConfidence(value);
-                  setStep('front');
-                }}
-              >
-                {t.review.confidence[value]}
-              </Button>
-            ))}
-          </div>
-        </div>
-      ) : null}
-
-      {step === 'front' ? (
-        <Button
-          size="lg"
-          onClick={() => {
-            revealedAt.current = clock();
-            setStep('back');
-          }}
-        >
-          <BookOpen aria-hidden />
-          {t.review.show}
-        </Button>
-      ) : null}
-
-      {step === 'back' && preview ? (
-        <div className="flex flex-col gap-2">
-          <p className="font-medium">{t.review.rateQuestion}</p>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            {RATINGS.map((rating) => (
-              <Button
-                key={rating}
-                variant={
-                  rating === 'again' ? 'danger' : rating === 'good' ? 'primary' : 'secondary'
-                }
-                className="flex-col gap-0 py-2"
-                onClick={() => {
-                  void rate(rating);
-                }}
-              >
-                <span>{t.review.ratings[rating]}</span>
-                <span className="text-xs opacity-80">
-                  {t.review.interval(intervalLabel(preview[rating].state, new Date()))}
-                </span>
-              </Button>
-            ))}
-          </div>
-        </div>
-      ) : null}
-
       {step === 'cause' ? (
-        <fieldset className="flex flex-col gap-2">
+        <fieldset className="flex flex-col gap-2 lg:max-w-reading">
           <legend className="mb-1 font-medium">{t.review.causeQuestion}</legend>
           <div className="grid gap-2 sm:grid-cols-2">
             {(Object.keys(t.review.causes) as Cause[]).map((cause) => (
@@ -574,17 +545,68 @@ function ReviewSession({
             {t.review.skipCause}
           </Button>
         </fieldset>
-      ) : null}
+      ) : (
+        // Confianza, revelar y calificar, siempre a la mano en el teléfono (D-078)
+        <ActionDock className="lg:max-w-reading">
+          {step === 'confidence' ? (
+            <>
+              <p className="text-sm font-medium">{t.review.confidenceQuestion}</p>
+              <div className="grid grid-cols-3 gap-2">
+                {(['dont_know', 'unsure', 'sure'] as Confidence[]).map((value) => (
+                  <Button
+                    key={value}
+                    variant="secondary"
+                    onClick={() => {
+                      setConfidence(value);
+                      setStep('front');
+                    }}
+                  >
+                    {t.review.confidence[value]}
+                  </Button>
+                ))}
+              </div>
+            </>
+          ) : null}
 
-      <Button
-        variant="ghost"
-        className="self-start"
-        onClick={() => {
-          void finish();
-        }}
-      >
-        {t.review.finish}
-      </Button>
+          {step === 'front' ? (
+            <Button
+              size="lg"
+              onClick={() => {
+                revealedAt.current = clock();
+                setStep('back');
+              }}
+            >
+              <BookOpen aria-hidden />
+              {t.review.show}
+            </Button>
+          ) : null}
+
+          {step === 'back' && preview ? (
+            <>
+              <p className="text-sm font-medium">{t.review.rateQuestion}</p>
+              <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+                {RATINGS.map((rating) => (
+                  <Button
+                    key={rating}
+                    variant={
+                      rating === 'again' ? 'danger' : rating === 'good' ? 'primary' : 'secondary'
+                    }
+                    className="flex-col gap-0 px-1 py-1.5 text-sm whitespace-normal sm:px-3 sm:text-base"
+                    onClick={() => {
+                      void rate(rating);
+                    }}
+                  >
+                    <span>{t.review.ratings[rating]}</span>
+                    <span className="text-xs opacity-80">
+                      {t.review.interval(intervalLabel(preview[rating].state, new Date()))}
+                    </span>
+                  </Button>
+                ))}
+              </div>
+            </>
+          ) : null}
+        </ActionDock>
+      )}
     </>
   );
 }

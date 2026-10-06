@@ -13,10 +13,12 @@ test('muestra IA simulada con el proxy en modo simulado y nunca llama a Anthropi
   });
 
   const health = page.waitForResponse((response) => response.url().endsWith('/api/health'));
-  await page.goto(SCREENS.profile.path);
+  // El modo de la IA se ve en Configuración, en Cuenta y datos (D-065, D-078)
+  await page.goto(`${SCREENS.settings.path}?seccion=account`);
   expect(await (await health).json()).toMatchObject({ status: 'ok', mode: 'mock' });
 
-  await expect(page.getByRole('banner').getByText(t.ai.badge.mock)).toBeVisible();
-  await expect(page.getByText(t.ai.detail.mock)).toBeVisible();
+  const card = page.getByRole('region', { name: t.ai.cardTitle });
+  await expect(card.getByText(t.ai.badge.mock)).toBeVisible();
+  await expect(card.getByText(t.ai.detail.mock)).toBeVisible();
   expect(external).toEqual([]);
 });
