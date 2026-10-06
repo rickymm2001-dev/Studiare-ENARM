@@ -10,6 +10,7 @@ import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { CheckboxField, TextField } from '@/ui/components/field';
+import { SaveBar } from '@/ui/components/save-bar';
 import type { ReadySession } from '../shared/RequireSession';
 import { formatClock } from './timer';
 import { usePomodoro, usePomodoroUi } from './usePomodoro';
@@ -201,6 +202,7 @@ export function PomodoroSettingsForm({
       value={String(draft[key])}
       onChange={(event) => {
         setDraft({ ...draft, [key]: Math.min(max, Math.max(1, Number(event.target.value) || 1)) });
+        setStatus('');
       }}
     />
   );
@@ -243,6 +245,7 @@ export function PomodoroSettingsForm({
         checked={draft.sound}
         onChange={(event) => {
           setDraft({ ...draft, sound: event.target.checked });
+          setStatus('');
         }}
       />
       <CheckboxField
@@ -251,14 +254,17 @@ export function PomodoroSettingsForm({
         checked={draft.notifications}
         onChange={(event) => {
           setDraft({ ...draft, notifications: event.target.checked });
+          setStatus('');
         }}
       />
-      <Button type="submit" size="sm" className="self-start">
-        {t.pomodoro.save}
-      </Button>
-      <p role="status" className="text-sm text-fg-muted">
-        {status}
-      </p>
+      <SaveBar
+        dirty={JSON.stringify(draft) !== JSON.stringify(value)}
+        status={status}
+        onDiscard={() => {
+          setDraft(value);
+          setStatus('');
+        }}
+      />
     </form>
   );
 }

@@ -1,12 +1,12 @@
 // Perfil (pantalla 15, D-065). Quién eres en Studiare. Foto, nivel, racha, cuenta y suscripción.
-// Los ajustes viven en Configuración.
-import { Flame, Settings, Star } from 'lucide-react';
+// Los ajustes viven en Configuración, que se abre desde Accesos en el teléfono y desde el riel en
+// computadora. Sin racha ni nivel en el encabezado porque la tarjeta ya los muestra (D-078).
+import { Flame, Star } from 'lucide-react';
 import { Link } from 'react-router';
 import { LevelLadderDialog } from '@/app/layout/LevelLadderDialog';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { ADMIN_LINKS, NAV_BY_ROLE, type NavItem } from '@/app/navigation';
 import { usePreferences } from '@/app/preferences';
-import { screenPath } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
 import { Avatar } from '@/ui/components/avatar';
 import { Button } from '@/ui/components/button';
@@ -34,14 +34,7 @@ function Profile({ session }: { session: ReadySession }) {
     <ScreenHeader
       title={t.screens.profile.title}
       description={t.screens.profile.description}
-      actions={
-        <Button asChild variant="secondary" size="sm">
-          <Link to={screenPath('settings')}>
-            <Settings aria-hidden />
-            {t.screens.settings.title}
-          </Link>
-        </Button>
-      }
+      stats={false}
     />
   );
   if (events === undefined || account === undefined) {

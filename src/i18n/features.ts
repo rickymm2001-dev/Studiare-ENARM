@@ -207,6 +207,20 @@ export const featureText = {
     goalsTitle: 'Metas y repaso',
     saveChanges: 'Guardar cambios',
     unsaved: 'Tienes cambios sin guardar.',
+    discard: 'Descartar',
+    discarded: 'Volvimos a lo que tenías guardado.',
+    sections: {
+      study: 'Estudio',
+      appearance: 'Apariencia',
+      pomodoro: 'Pomodoro',
+      account: 'Cuenta y datos',
+    },
+    sectionsLabel: 'Secciones de Configuración',
+    dailyTitle: 'Metas del día',
+    advanced: 'Opciones avanzadas del repaso',
+    advancedSummary: (retention: number, maxDays: number | null) =>
+      `Retención ${retention}% · ${maxDays === null ? 'sin tope' : `tope de ${maxDays} días`}`,
+    studyOptionsTitle: 'Al estudiar',
     retention: 'Retención deseada',
     retentionHint:
       'Qué tanto quieres recordar cada tarjeta. 90% es lo recomendado por los creadores de FSRS. Más alto da repasos más seguidos. Entre 80% y 97%.',
@@ -347,8 +361,7 @@ export const featureText = {
   },
   simulator: {
     setupTitle: 'Configura tu práctica',
-    bankNote: (n: number) =>
-      `Banco de demostración con ${plural(n, 'pregunta', 'preguntas')}, no validado por médicos.`,
+    bankNote: (n: number) => `Banco de demostración con ${plural(n, 'pregunta', 'preguntas')}.`,
     branches: 'Ramas',
     difficulty: 'Dificultad',
     difficulties: {
@@ -363,7 +376,7 @@ export const featureText = {
       negative: 'Solo negativas o de excepción',
       affirmative: 'Solo afirmativas',
     },
-    count: 'Número de preguntas',
+    count: 'Preguntas',
     available: (n: number) =>
       `${plural(n, 'pregunta disponible', 'preguntas disponibles')} con estos filtros`,
     limit: (left: number) =>
@@ -635,6 +648,25 @@ export const featureText = {
     mastery: (percent: number) => `Dominio estimado de ${percent}%`,
     calibrating: (missing: number) =>
       `Calibrando, faltan unas ${missing.toLocaleString('es-MX')} respuestas`,
+    statsLabel: 'Tus cifras',
+    masteryLabel: 'Dominio estimado',
+    focusTitle: (n: number) =>
+      n === 0
+        ? 'Tus focos de la semana'
+        : n === 1
+          ? 'Tu foco de la semana'
+          : `Tus ${n} focos de la semana`,
+    focusCalibrating: (have: number, need: number) =>
+      `Calibrando. Tus focos aparecen al juntar ${need} respuestas y llevas ${have}.`,
+    focusKinds: { technique: 'Técnica', topic: 'Tema' },
+    weakTopic: (percent: number) =>
+      `Tu dominio estimado es de ${percent}%. Practica preguntas de este tema para subirlo.`,
+    practice: 'Practicar',
+    reviewNow: 'Repasar',
+    showEmpty: (n: number) => `Mostrar las que no tienen datos (${n})`,
+    hideEmpty: 'Ocultar las que no tienen datos',
+    emptyHidden: (n: number) =>
+      plural(n, 'subespecialidad sin datos todavía', 'subespecialidades sin datos todavía'),
   },
   topicPicker: {
     trunks: 'Ramas troncales',
@@ -644,6 +676,10 @@ export const featureText = {
     selected: (n: number, of: number) => `${n} de ${of} subespecialidades`,
     questions: (n: number) => `${n.toLocaleString('es-MX')} preguntas`,
     noQuestions: 'Sin preguntas todavía',
+    of: (n: number, of: number) => `${n} de ${of}`,
+    toggle: (branch: string, n: number, of: number) =>
+      `Ver las subespecialidades de ${branch}, ${n} de ${of} marcadas`,
+    title: 'Ramas y subespecialidades',
   },
   reviewSetup: {
     title: 'Qué quieres repasar',
@@ -652,7 +688,11 @@ export const featureText = {
     modes: { today: 'Lo que toca hoy', due: 'Solo vencidas', new: 'Solo nuevas' },
     decks: 'Mazos',
     cards: (n: number) => `${n.toLocaleString('es-MX')} en total`,
+    filters: 'Mazos y temas',
+    filtersSummary: (decks: number, topics: number, of: number) =>
+      `${plural(decks, 'mazo', 'mazos')} · ${topics} de ${of} temas`,
     limits: 'Límites de hoy',
+    limitsSummary: (newCards: number, reviews: number) => `${newCards} nuevas · ${reviews} repasos`,
     limitsHint:
       'Las tarjetas nuevas y los repasos que entran cada día. Se guardan para los próximos días.',
     limitsSaved: 'Guardado. El número de tarjetas de abajo ya usa tus nuevos límites.',

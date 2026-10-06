@@ -1,6 +1,6 @@
 // Ajustes del alumno. La cuenta y la suscripción van en Perfil. Metas y repaso, estudio, Pomodoro,
-// exportar y borrar datos van en Configuración (D-065). Cada cambio queda como evento
-// settings_changed.
+// exportar y borrar datos van en las secciones de Configuración (D-065, D-078). Cada cambio queda
+// como evento settings_changed.
 import { CreditCard, Download, LogOut, Trash2 } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router';
@@ -15,7 +15,9 @@ import type { UserSettings } from '@/data/schemas/people';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
+import { Disclosure } from '@/ui/components/disclosure';
 import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
+import { SaveBar } from '@/ui/components/save-bar';
 import { PomodoroSettingsForm } from '../pomodoro/Pomodoro';
 import type { ReadySession } from '../shared/RequireSession';
 
@@ -59,30 +61,43 @@ export function AccountSection({ session }: { session: ReadySession }) {
   );
 }
 
-/** Configuración. Metas, estudio, Pomodoro, exportar y borrar */
-export function StudySettings({ session }: { session: ReadySession }) {
+/** Configuración, sección Estudio. Metas del día, opciones al estudiar y repaso avanzado */
+export function StudySection({ session }: { session: ReadySession }) {
   const api = useDataApi();
   const { user, settings } = session;
-  const signOut = usePreferences((state) => state.signOut);
-  const saveSettings = (patch: Partial<UserSettings>) =>
-    updateProfile(api, user, { settings: patch });
+  return (
+    <Card aria-label={t.settings.sections.study}>
+      <StudyForm
+        settings={settings}
+        onSave={(patch) => updateProfile(api, user, { settings: patch })}
+      />
+    </Card>
+  );
+}
 
+/** Configuración, sección Pomodoro */
+export function PomodoroSection({ session }: { session: ReadySession }) {
+  const api = useDataApi();
+  const { user, settings } = session;
+  return (
+    <Card aria-label={t.settings.pomodoroTitle} className="lg:max-w-3xl">
+      <PomodoroSettingsForm
+        value={settings.pomodoro}
+        onSave={async (pomodoro) => {
+          await updateProfile(api, user, { settings: { pomodoro } });
+        }}
+      />
+    </Card>
+  );
+}
+
+/** Configuración, sección Cuenta y datos. Exportar y borrar */
+export function DataSection({ session }: { session: ReadySession }) {
+  const api = useDataApi();
+  const { user } = session;
+  const signOut = usePreferences((state) => state.signOut);
   return (
     <>
-      <Section id="metas-titulo" title={t.settings.goalsTitle}>
-        <GoalsForm settings={settings} onSave={saveSettings} />
-      </Section>
-      <Section id="estudio-titulo" title={t.settings.studyTitle}>
-        <StudyForm settings={settings} onSave={saveSettings} />
-      </Section>
-      <Section id="pomodoro-ajustes" title={t.settings.pomodoroTitle}>
-        <PomodoroSettingsForm
-          value={settings.pomodoro}
-          onSave={async (pomodoro) => {
-            await saveSettings({ pomodoro });
-          }}
-        />
-      </Section>
       <Section
         id="exportar-titulo"
         title={t.settings.exportTitle}
@@ -173,7 +188,64 @@ const STUDY_KEYS = [
   'errorsToReview',
 ] as const;
 
-/** Opciones de estudio con su botón de guardar (D-071) */
+const SPACING_OPTIONS = [50, 75, 100, 125, 150, 200];
+
+const draftOf = (settings: UserSettings) => ({
+  retention: String(Math.round(settings.desiredRetention * 100)),
+  maxInterval: toOption(settings.maxIntervalDays),
+  spacing: settings.spacing,
+  newCards: String(settings.newCardsPerDay),
+  reviews: String(settings.reviewsPerDay),
+  metric: settings.dailyGoal.metric,
+  goal: String(settings.dailyGoal.value),
+  cardConfidenceStep: settings.cardConfidenceStep,
+  negationHighlightPractice: settings.negationHighlightPractice,
+  negationHighlightExam: settings.negationHighlightExam,
+  errorsToReview: settings.errorsToReview,
+  optionsShown: settings.optionsShown,
+});
+type StudyDraft = ReturnType<typeof draftOf>;
+
+const clamp = (value: string, min: number, max: number) =>
+  Math.min(max, Math.max(min, Number(value) || min));
+
+/** Lo que se guarda a partir del borrador, ya con los límites de cada campo */
+const patchOf = (draft: StudyDraft) => ({
+  desiredRetention: clamp(draft.retention, 80, 97) / 100,
+  maxIntervalDays: fromOption(draft.maxInterval),
+  spacing: draft.spacing,
+  newCardsPerDay: clamp(draft.newCards, 0, 500),
+  reviewsPerDay: clamp(draft.reviews, 0, 5000),
+  dailyGoal: { metric: draft.metric, value: clamp(draft.goal, 1, 1000) },
+  cardConfidenceStep: draft.cardConfidenceStep,
+  negationHighlightPractice: draft.negationHighlightPractice,
+  negationHighlightExam: draft.negationHighlightExam,
+  errorsToReview: draft.errorsToReview,
+  optionsShown: draft.optionsShown,
+});
+
+/** Hay cambios si algún valor que se guardaría es distinto del guardado */
+function differs(patch: ReturnType<typeof patchOf>, settings: UserSettings) {
+  return (
+    patch.desiredRetention !== settings.desiredRetention ||
+    patch.maxIntervalDays !== settings.maxIntervalDays ||
+    (['hard', 'good', 'easy'] as const).some(
+      (rating) => patch.spacing[rating] !== settings.spacing[rating],
+    ) ||
+    patch.newCardsPerDay !== settings.newCardsPerDay ||
+    patch.reviewsPerDay !== settings.reviewsPerDay ||
+    patch.dailyGoal.metric !== settings.dailyGoal.metric ||
+    patch.dailyGoal.value !== settings.dailyGoal.value ||
+    STUDY_KEYS.some((key) => patch[key] !== settings[key]) ||
+    patch.optionsShown !== settings.optionsShown
+  );
+}
+
+/**
+ * Metas, opciones al estudiar y repaso avanzado en un solo formulario con una sola barra de
+ * guardar que aparece al haber cambios (D-078). Retención, tope e intervalos por botón quedan
+ * plegados porque casi nadie los cambia
+ */
 function StudyForm({
   settings,
   onSave,
@@ -181,207 +253,174 @@ function StudyForm({
   settings: UserSettings;
   onSave: (patch: Partial<UserSettings>) => Promise<unknown>;
 }) {
-  const [draft, setDraft] = useState(() => ({
-    cardConfidenceStep: settings.cardConfidenceStep,
-    negationHighlightPractice: settings.negationHighlightPractice,
-    negationHighlightExam: settings.negationHighlightExam,
-    errorsToReview: settings.errorsToReview,
-    optionsShown: settings.optionsShown,
-  }));
+  const [draft, setDraft] = useState(() => draftOf(settings));
   const [status, setStatus] = useState('');
+  const change = (patch: Partial<StudyDraft>) => {
+    setDraft((current) => ({ ...current, ...patch }));
+    setStatus('');
+  };
+  const patch = patchOf(draft);
+  const dirty = differs(patch, settings);
   return (
     <form
-      className="flex flex-col gap-3"
+      className="flex flex-col gap-4"
       onSubmit={(event) => {
         event.preventDefault();
-        void onSave(draft).then(() => {
+        void onSave(patch).then(() => {
           setStatus(t.settings.saved);
         });
       }}
     >
-      {STUDY_KEYS.map((key) => (
-        <CheckboxField
-          key={key}
-          label={t.settings[key]}
-          checked={draft[key]}
-          onChange={(event) => {
-            setDraft({ ...draft, [key]: event.target.checked });
-            setStatus('');
-          }}
-        />
-      ))}
-      <SelectField
-        label={t.settings.optionsShown}
-        value={String(draft.optionsShown)}
-        options={[4, 5, 6].map((n) => ({ value: String(n), label: String(n) }))}
-        onChange={(event) => {
-          setDraft({ ...draft, optionsShown: Number(event.target.value) });
-          setStatus('');
-        }}
-      />
-      <div className="flex flex-wrap items-center gap-3">
-        <Button type="submit">{t.settings.saveChanges}</Button>
-        <p role="status" className="text-sm text-fg-muted">
-          {status}
-        </p>
-      </div>
-    </form>
-  );
-}
-
-const SPACING_OPTIONS = [50, 75, 100, 125, 150, 200];
-
-function GoalsForm({
-  settings,
-  onSave,
-}: {
-  settings: UserSettings;
-  onSave: (patch: Partial<UserSettings>) => Promise<unknown>;
-}) {
-  const [retention, setRetention] = useState(String(Math.round(settings.desiredRetention * 100)));
-  const [maxInterval, setMaxInterval] = useState(toOption(settings.maxIntervalDays));
-  const [spacing, setSpacing] = useState(settings.spacing);
-  const [newCards, setNewCards] = useState(String(settings.newCardsPerDay));
-  const [reviews, setReviews] = useState(String(settings.reviewsPerDay));
-  const [metric, setMetric] = useState(settings.dailyGoal.metric);
-  const [goal, setGoal] = useState(String(settings.dailyGoal.value));
-  const [status, setStatus] = useState('');
-  const clamp = (value: string, min: number, max: number) =>
-    Math.min(max, Math.max(min, Number(value) || min));
-  // Aviso de cambios sin guardar para que nadie crea que ya se aplicaron
-  const dirty =
-    clamp(retention, 80, 97) / 100 !== settings.desiredRetention ||
-    fromOption(maxInterval) !== settings.maxIntervalDays ||
-    JSON.stringify(spacing) !== JSON.stringify(settings.spacing) ||
-    clamp(newCards, 0, 500) !== settings.newCardsPerDay ||
-    clamp(reviews, 0, 5000) !== settings.reviewsPerDay ||
-    metric !== settings.dailyGoal.metric ||
-    clamp(goal, 1, 1000) !== settings.dailyGoal.value;
-  return (
-    <form
-      className="flex flex-col gap-3"
-      onSubmit={(event) => {
-        event.preventDefault();
-        void onSave({
-          desiredRetention: clamp(retention, 80, 97) / 100,
-          maxIntervalDays: fromOption(maxInterval),
-          spacing,
-          newCardsPerDay: clamp(newCards, 0, 500),
-          reviewsPerDay: clamp(reviews, 0, 5000),
-          dailyGoal: { metric, value: clamp(goal, 1, 1000) },
-        }).then(() => {
-          setStatus(t.settings.saved);
-        });
-      }}
-    >
-      <TextField
-        label={t.settings.retention}
-        hint={t.settings.retentionHint}
-        type="number"
-        min={80}
-        max={97}
-        value={retention}
-        onChange={(event) => {
-          setRetention(event.target.value);
-        }}
-      />
-      <SelectField
-        label={t.settings.maxInterval}
-        hint={t.settings.maxIntervalHint}
-        value={maxInterval}
-        options={MAX_INTERVAL_OPTIONS.map((value) => ({
-          value,
-          label: t.settings.maxIntervalOption(fromOption(value)),
-        }))}
-        onChange={(event) => {
-          setMaxInterval(event.target.value);
-        }}
-      />
-      <fieldset className="flex flex-col gap-2 rounded-lg bg-muted p-3">
-        <legend className="font-semibold">{t.settings.spacingTitle}</legend>
-        <p className="text-sm text-fg-muted">{t.settings.spacingHint}</p>
-        <div className="grid gap-3 sm:grid-cols-3">
-          {(['hard', 'good', 'easy'] as const).map((rating) => (
-            <SelectField
-              key={rating}
-              label={t.settings.spacingLabels[rating]}
-              value={String(Math.round(spacing[rating] * 100))}
-              options={SPACING_OPTIONS.map((percent) => ({
-                value: String(percent),
-                label: t.settings.spacingOption(percent),
-              }))}
-              onChange={(event) => {
-                setSpacing({ ...spacing, [rating]: Number(event.target.value) / 100 });
-              }}
-            />
-          ))}
+      <fieldset>
+        <legend className="mb-2 font-semibold">{t.settings.dailyTitle}</legend>
+        <div className="grid grid-cols-2 items-end gap-3 lg:grid-cols-4">
+          <TextField
+            label={t.settings.newCardsPerDay}
+            type="number"
+            inputMode="numeric"
+            min={0}
+            max={500}
+            value={draft.newCards}
+            onChange={(event) => {
+              change({ newCards: event.target.value });
+            }}
+          />
+          <TextField
+            label={t.settings.reviewsPerDay}
+            type="number"
+            inputMode="numeric"
+            min={0}
+            max={5000}
+            value={draft.reviews}
+            onChange={(event) => {
+              change({ reviews: event.target.value });
+            }}
+          />
+          <SelectField
+            label={t.onboarding.goalMetric}
+            value={draft.metric}
+            options={(['cards', 'questions', 'focusMinutes'] as const).map((value) => ({
+              value,
+              label: t.onboarding.goalMetrics[value],
+            }))}
+            onChange={(event) => {
+              change({ metric: event.target.value as UserSettings['dailyGoal']['metric'] });
+            }}
+          />
+          <TextField
+            label={t.onboarding.goalValue}
+            type="number"
+            inputMode="numeric"
+            min={1}
+            max={1000}
+            value={draft.goal}
+            onChange={(event) => {
+              change({ goal: event.target.value });
+            }}
+          />
         </div>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          className="self-start"
-          onClick={() => {
-            setSpacing({ hard: 1, good: 1, easy: 1 });
-            setMaxInterval('21');
-            setRetention('90');
-          }}
-        >
-          {t.settings.resetRecommended}
-        </Button>
       </fieldset>
-      <div className="grid gap-3 sm:grid-cols-2">
-        <TextField
-          label={t.settings.newCardsPerDay}
-          type="number"
-          min={0}
-          max={500}
-          value={newCards}
+
+      <fieldset className="flex flex-col gap-2">
+        <legend className="mb-1 font-semibold">{t.settings.studyOptionsTitle}</legend>
+        {STUDY_KEYS.map((key) => (
+          <CheckboxField
+            key={key}
+            label={t.settings[key]}
+            checked={draft[key]}
+            onChange={(event) => {
+              change({ [key]: event.target.checked });
+            }}
+          />
+        ))}
+        <SelectField
+          className="max-w-56"
+          label={t.settings.optionsShown}
+          value={String(draft.optionsShown)}
+          options={[4, 5, 6].map((n) => ({ value: String(n), label: String(n) }))}
           onChange={(event) => {
-            setNewCards(event.target.value);
+            change({ optionsShown: Number(event.target.value) });
           }}
         />
+      </fieldset>
+
+      <Disclosure
+        title={t.settings.advanced}
+        summary={t.settings.advancedSummary(
+          Math.round(patch.desiredRetention * 100),
+          patch.maxIntervalDays,
+        )}
+      >
         <TextField
-          label={t.settings.reviewsPerDay}
+          label={t.settings.retention}
+          hint={t.settings.retentionHint}
           type="number"
-          min={0}
-          max={5000}
-          value={reviews}
+          min={80}
+          max={97}
+          value={draft.retention}
           onChange={(event) => {
-            setReviews(event.target.value);
+            change({ retention: event.target.value });
           }}
         />
         <SelectField
-          label={t.onboarding.goalMetric}
-          value={metric}
-          options={(['cards', 'questions', 'focusMinutes'] as const).map((value) => ({
+          label={t.settings.maxInterval}
+          hint={t.settings.maxIntervalHint}
+          value={draft.maxInterval}
+          options={MAX_INTERVAL_OPTIONS.map((value) => ({
             value,
-            label: t.onboarding.goalMetrics[value],
+            label: t.settings.maxIntervalOption(fromOption(value)),
           }))}
           onChange={(event) => {
-            setMetric(event.target.value as UserSettings['dailyGoal']['metric']);
+            change({ maxInterval: event.target.value });
           }}
         />
-        <TextField
-          label={t.onboarding.goalValue}
-          type="number"
-          min={1}
-          max={1000}
-          value={goal}
-          onChange={(event) => {
-            setGoal(event.target.value);
-          }}
-        />
-      </div>
-      <Button type="submit" className="self-start">
-        {t.settings.saveChanges}
-      </Button>
-      <p
-        role="status"
-        className={dirty ? 'text-sm font-semibold text-warning' : 'text-sm text-fg-muted'}
-      >
-        {dirty ? t.settings.unsaved : status}
-      </p>
+        <fieldset className="flex flex-col gap-2 rounded-lg bg-muted p-3">
+          <legend className="font-semibold">{t.settings.spacingTitle}</legend>
+          <p className="text-sm text-fg-muted">{t.settings.spacingHint}</p>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {(['hard', 'good', 'easy'] as const).map((rating) => (
+              <SelectField
+                key={rating}
+                label={t.settings.spacingLabels[rating]}
+                value={String(Math.round(draft.spacing[rating] * 100))}
+                options={SPACING_OPTIONS.map((percent) => ({
+                  value: String(percent),
+                  label: t.settings.spacingOption(percent),
+                }))}
+                onChange={(event) => {
+                  change({
+                    spacing: { ...draft.spacing, [rating]: Number(event.target.value) / 100 },
+                  });
+                }}
+              />
+            ))}
+          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="self-start"
+            onClick={() => {
+              change({
+                spacing: { hard: 1, good: 1, easy: 1 },
+                maxInterval: '21',
+                retention: '90',
+              });
+            }}
+          >
+            {t.settings.resetRecommended}
+          </Button>
+        </fieldset>
+      </Disclosure>
+
+      <SaveBar
+        dirty={dirty}
+        status={status}
+        onDiscard={() => {
+          setDraft(draftOf(settings));
+          setStatus(t.settings.discarded);
+        }}
+      />
     </form>
   );
 }

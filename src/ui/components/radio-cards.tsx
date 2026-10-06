@@ -17,6 +17,8 @@ interface RadioCardsProps<T extends string> {
   options: readonly RadioCardOption<T>[];
   onValueChange: (value: T) => void;
   className?: string;
+  /** row pone las opciones lado a lado, compactas, para pocas opciones sin descripción */
+  layout?: 'stack' | 'row';
 }
 
 export function RadioCards<T extends string>({
@@ -26,6 +28,7 @@ export function RadioCards<T extends string>({
   options,
   onValueChange,
   className,
+  layout = 'stack',
 }: RadioCardsProps<T>) {
   const legendId = useId();
   const descriptionId = useId();
@@ -49,7 +52,7 @@ export function RadioCards<T extends string>({
           const match = options.find((option) => option.value === next);
           if (match) onValueChange(match.value);
         }}
-        className="grid gap-2"
+        className={cn('grid gap-2', layout === 'row' && 'grid-cols-3')}
       >
         {options.map((option) => (
           <RadioGroup.Item
@@ -57,12 +60,16 @@ export function RadioCards<T extends string>({
             value={option.value}
             className={cn(
               'flex min-h-touch w-full items-center gap-3 rounded-md border border-line bg-surface px-3 py-2 text-left text-fg',
+              layout === 'row' && 'flex-col justify-center gap-1 px-2 text-center',
               'hover:bg-muted data-[state=checked]:border-primary data-[state=checked]:bg-primary-soft',
             )}
           >
             <span
               aria-hidden
-              className="flex size-5 shrink-0 items-center justify-center rounded-full border-2 border-line-strong"
+              className={cn(
+                'flex size-5 shrink-0 items-center justify-center rounded-full border-2 border-line-strong',
+                layout === 'row' && 'sr-only',
+              )}
             >
               <RadioGroup.Indicator className="size-2.5 rounded-full bg-primary" />
             </span>
@@ -72,7 +79,9 @@ export function RadioCards<T extends string>({
               </span>
             ) : null}
             <span className="flex flex-col">
-              <span className="font-medium">{option.label}</span>
+              <span className={cn('font-medium', layout === 'row' && 'text-sm leading-tight')}>
+                {option.label}
+              </span>
               {option.description ? (
                 <span className="text-sm text-fg-muted">{option.description}</span>
               ) : null}

@@ -11,7 +11,6 @@ import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { SelectField } from '@/ui/components/field';
-import { SimulatedDataLabel } from '@/ui/components/labels';
 import { CalibratingState, LoadingState } from '@/ui/states/states';
 import { useSession } from '@/app/session';
 import { LandingScreen } from '../landing/LandingScreen';
@@ -70,7 +69,7 @@ function Dashboard({ session }: { session: ReadySession }) {
       <ScreenHeader
         title={t.screens.home.title}
         description={`${t.home.greeting(user.alias)}. ${t.screens.home.description}`}
-        badges={session.isDemo ? <SimulatedDataLabel /> : undefined}
+        stats={false}
       />
       <div className="flex flex-wrap items-end gap-2">
         <Button

@@ -3,7 +3,7 @@
 import { Timer } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { ScreenHeader } from '@/app/layout/ScreenHeader';
+import { SessionHeader } from '@/app/layout/SessionHeader';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
@@ -15,8 +15,9 @@ import { awardXp } from '@/engines/xp';
 import { t } from '@/i18n/es-MX';
 import { toneClasses } from '@/ui/branches';
 import { cn } from '@/ui/cn';
+import { ActionDock } from '@/ui/components/action-dock';
 import { Button } from '@/ui/components/button';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
+import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { buildSnapshot } from '../home/snapshot';
@@ -48,10 +49,12 @@ function Practice({ session }: { session: ReadySession }) {
   const events = useUserEvents(session.user.id);
 
   const header = (
-    <ScreenHeader
+    <SessionHeader
       title={t.screens.question.title}
-      description={
-        active ? t.simulator.progress(practice.index + 1, practice.questionIds.length) : undefined
+      meta={
+        active ? (
+          <span>{t.simulator.progress(practice.index + 1, practice.questionIds.length)}</span>
+        ) : undefined
       }
       badges={<DemoContentLabel />}
     />
@@ -258,9 +261,19 @@ function QuestionCard({
     void navigate(screenPath('feedback'));
   };
 
+  const ready = selected !== null && confidence !== null;
+  // Con caso clínico, en computadora el caso va a la izquierda y las opciones a la derecha, así
+  // ninguna línea pasa de unos 75 caracteres. Sin caso, la pregunta va en una columna de lectura
+  const twoColumns = Boolean(vignette);
   return (
-    <Card aria-labelledby="pregunta-frase" className="w-full">
-      <CardHeader>
+    <Card
+      aria-labelledby="pregunta-frase"
+      className={cn(
+        'w-full',
+        twoColumns ? 'lg:grid lg:grid-cols-2 lg:items-start lg:gap-6' : 'lg:max-w-reading',
+      )}
+    >
+      <CardHeader className={twoColumns ? 'lg:sticky lg:top-4 lg:mb-0' : undefined}>
         <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-fg-muted">
           <span
             className={`rounded-full px-2.5 py-0.5 font-semibold ${toneClasses(question.branch).chip}`}
@@ -286,64 +299,72 @@ function QuestionCard({
         </CardTitle>
       </CardHeader>
 
-      <fieldset className="flex flex-col gap-2">
-        <legend className="sr-only">{t.simulator.options}</legend>
-        {shown.map((option, position) => (
-          <label
-            key={option.id}
-            className={cn(
-              'flex cursor-pointer items-start gap-3 rounded-md border border-line p-3 hover:bg-muted',
-              selected === option.id && 'border-primary bg-primary-soft',
-            )}
-          >
-            <input
-              type="radio"
-              name="opcion"
-              className="mt-1"
-              checked={selected === option.id}
-              onChange={() => {
-                choose(option.id);
-              }}
-            />
-            <span>
-              <span className="mr-1 font-semibold">{String.fromCharCode(65 + position)}.</span>
-              {option.text}
-            </span>
-          </label>
-        ))}
-      </fieldset>
-
-      <fieldset className="mt-4 flex flex-col gap-2">
-        <legend className="mb-1 font-medium">{t.simulator.confidenceQuestion}</legend>
-        <div className="flex flex-wrap gap-2">
-          {(['guessed', 'unsure', 'sure'] as const).map((level) => (
-            <Button
-              key={level}
-              variant={confidence === level ? 'primary' : 'secondary'}
-              aria-pressed={confidence === level}
-              onClick={() => {
-                setConfidence(level);
-              }}
+      <div className="flex flex-col">
+        <fieldset className="flex flex-col gap-2">
+          <legend className="sr-only">{t.simulator.options}</legend>
+          {shown.map((option, position) => (
+            <label
+              key={option.id}
+              className={cn(
+                'flex cursor-pointer items-start gap-3 rounded-md border border-line p-3 hover:bg-muted',
+                selected === option.id && 'border-primary bg-primary-soft',
+              )}
             >
-              {t.simulator.confidence[level]}
-            </Button>
+              <input
+                type="radio"
+                name="opcion"
+                className="mt-1"
+                checked={selected === option.id}
+                onChange={() => {
+                  choose(option.id);
+                }}
+              />
+              <span>
+                <span className="mr-1 font-semibold">{String.fromCharCode(65 + position)}.</span>
+                {option.text}
+              </span>
+            </label>
           ))}
-        </div>
-      </fieldset>
+        </fieldset>
 
-      <div className="mt-4 flex flex-col gap-2">
-        <Button
-          className="self-start"
-          disabled={!selected || !confidence || busy}
-          onClick={() => {
-            void answer();
-          }}
-        >
-          {t.simulator.answer}
-        </Button>
-        {!selected || !confidence ? (
-          <CardDescription>{t.simulator.chooseFirst}</CardDescription>
-        ) : null}
+        {/* Confianza y responder, siempre a la mano en el teléfono (D-078) */}
+        <ActionDock className="mt-3 -mb-4 rounded-b-xl lg:mt-4 lg:mb-0 lg:rounded-none">
+          <fieldset className="flex flex-col gap-1.5">
+            <legend className="text-sm font-medium">
+              {t.simulator.confidenceQuestion}
+              {ready ? null : (
+                <span className="hidden font-normal text-fg-muted sm:inline">
+                  {' '}
+                  · {t.simulator.chooseFirst}
+                </span>
+              )}
+            </legend>
+            <div className="flex flex-wrap items-center gap-2">
+              {(['guessed', 'unsure', 'sure'] as const).map((level) => (
+                <Button
+                  key={level}
+                  className="flex-1 px-3 sm:flex-none"
+                  variant={confidence === level ? 'primary' : 'secondary'}
+                  aria-pressed={confidence === level}
+                  onClick={() => {
+                    setConfidence(level);
+                  }}
+                >
+                  {t.simulator.confidence[level]}
+                </Button>
+              ))}
+              <Button
+                className="basis-full sm:ml-auto sm:basis-auto lg:ml-0"
+                disabled={!ready || busy}
+                onClick={() => {
+                  void answer();
+                }}
+              >
+                {t.simulator.answer}
+              </Button>
+            </div>
+          </fieldset>
+        </ActionDock>
       </div>
     </Card>
   );

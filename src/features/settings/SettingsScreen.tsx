@@ -1,7 +1,9 @@
-// Configuración (pantalla 27, D-065). Separada de Perfil. Base activa, metas y repaso, estudio,
-// Pomodoro, tema, apariencia, modo de IA, exportar y borrar datos.
-import { FlaskConical, Monitor, Moon, Sun, UserRound } from 'lucide-react';
-import type { ReactNode } from 'react';
+// Configuración (pantalla 27, D-065). Separada de Perfil. En secciones con pestañas (D-078). Estudio
+// con metas y repaso, Apariencia con tema y estilo, Pomodoro, y Cuenta y datos con la base activa,
+// el modo de IA, exportar y borrar.
+import { FlaskConical, UserRound } from 'lucide-react';
+import { Tabs } from 'radix-ui';
+import { useSearchParams } from 'react-router';
 import { AiModeBadge } from '@/ai/AiModeBadge';
 import { useAiStatus } from '@/ai/useAiStatus';
 import { usePreferences } from '@/app/preferences';
@@ -13,19 +15,10 @@ import { t } from '@/i18n/es-MX';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SimulatedDataLabel } from '@/ui/components/labels';
 import { RadioCards } from '@/ui/components/radio-cards';
-import { applyTheme, resolveTheme, useApplyTheme, type ThemePreference } from '@/ui/theme';
-import { useEffect, useState } from 'react';
-import { Button } from '@/ui/components/button';
 import { useSession } from '@/app/session';
-import { StudySettings } from '../profile/AccountSettings';
+import { DataSection, PomodoroSection, StudySection } from '../profile/AccountSettings';
 import { AppearanceSettings } from './AppearanceSettings';
 import { DemoDataPanel } from './DemoDataPanel';
-
-const THEME_OPTIONS = [
-  { value: 'system', label: t.theme.system, icon: <Monitor /> },
-  { value: 'light', label: t.theme.light, icon: <Sun /> },
-  { value: 'dark', label: t.theme.dark, icon: <Moon /> },
-] as const satisfies readonly { value: ThemePreference; label: string; icon: ReactNode }[];
 
 const DATABASE_OPTIONS = [
   {
@@ -42,99 +35,103 @@ const DATABASE_OPTIONS = [
   },
 ] as const;
 
-/** Tema visual con vista previa y botón de guardar (D-071) */
-function ThemeCard({
-  current,
-  onSave,
-}: {
-  current: ThemePreference;
-  onSave: (theme: ThemePreference) => void;
-}) {
-  const [draft, setDraft] = useState<ThemePreference>(current);
-  const [status, setStatus] = useState('');
-  // Vista previa al momento. Al salir sin guardar vuelve el tema guardado
-  useApplyTheme(draft);
-  useEffect(
-    () => () => {
-      const dark =
-        typeof window.matchMedia === 'function' &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches;
-      applyTheme(document.documentElement, resolveTheme(usePreferences.getState().theme, dark));
-    },
-    [],
-  );
-  return (
-    <Card>
-      <RadioCards
-        legend={t.theme.legend}
-        value={draft}
-        options={THEME_OPTIONS}
-        onValueChange={(value) => {
-          setDraft(value);
-          setStatus('');
-        }}
-      />
-      <div className="mt-3 flex flex-wrap items-center gap-3">
-        <Button
-          disabled={draft === current}
-          onClick={() => {
-            onSave(draft);
-            setStatus(t.settings.saved);
-          }}
-        >
-          {t.settings.saveChanges}
-        </Button>
-        <p role="status" className="text-sm text-fg-muted">
-          {draft !== current ? t.appearance.unsaved : status}
-        </p>
-      </div>
-    </Card>
-  );
-}
+const SECTIONS = ['study', 'appearance', 'pomodoro', 'account'] as const;
+type SectionKey = (typeof SECTIONS)[number];
+const isSection = (value: string | null): value is SectionKey =>
+  SECTIONS.includes(value as SectionKey);
 
 export function SettingsScreen() {
-  const theme = usePreferences((state) => state.theme);
-  const setTheme = usePreferences((state) => state.setTheme);
   const database = usePreferences((state) => state.database);
   const setDatabase = usePreferences((state) => state.setDatabase);
   const aiStatus = useAiStatus();
   const session = useSession();
+  // La sección abierta vive en la dirección, para volver a ella o enlazarla (D-078)
+  const [params, setParams] = useSearchParams();
+  const requested = params.get('seccion');
+  const ready = session.status === 'ready' ? session : null;
+  const available = SECTIONS.filter(
+    (key) => ready !== null || key === 'appearance' || key === 'account',
+  );
+  const section: SectionKey =
+    isSection(requested) && available.includes(requested) ? requested : (available[0] ?? 'account');
 
   return (
     <>
-      <ScreenHeader title={t.screens.settings.title} description={t.screens.settings.description} />
+      <ScreenHeader
+        title={t.screens.settings.title}
+        description={t.screens.settings.description}
+        stats={false}
+      />
 
-      {/* En computadora las tarjetas van en dos columnas (D-057) */}
-      <div className="grid items-start gap-4 lg:grid-cols-2">
-        <Card>
-          <RadioCards
-            legend={t.database.legend}
-            description={t.database.description}
-            value={database}
-            options={DATABASE_OPTIONS}
-            onValueChange={setDatabase}
-          />
-          <DatabaseStatus />
-        </Card>
+      <Tabs.Root
+        value={section}
+        onValueChange={(value) => {
+          setParams({ seccion: value }, { replace: true });
+        }}
+        className="flex flex-col gap-3"
+      >
+        <Tabs.List
+          aria-label={t.settings.sectionsLabel}
+          className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 lg:mx-0 lg:px-0"
+        >
+          {available.map((key) => (
+            <Tabs.Trigger
+              key={key}
+              value={key}
+              className="min-h-9 shrink-0 rounded-full border-2 border-line bg-surface px-3.5 text-sm font-semibold whitespace-nowrap text-fg-muted transition-colors hover:border-line-strong data-[state=active]:border-primary data-[state=active]:bg-primary-soft data-[state=active]:text-primary"
+            >
+              {t.settings.sections[key]}
+            </Tabs.Trigger>
+          ))}
+        </Tabs.List>
 
-        {database === 'demo' ? <DemoDataPanel /> : null}
+        {ready ? (
+          <Tabs.Content value="study" className="outline-none">
+            <StudySection session={ready} />
+          </Tabs.Content>
+        ) : null}
 
-        {session.status === 'ready' ? <StudySettings session={session} /> : null}
+        <Tabs.Content value="appearance" className="outline-none">
+          <AppearanceSettings />
+        </Tabs.Content>
 
-        <ThemeCard current={theme} onSave={setTheme} />
+        {ready ? (
+          <Tabs.Content value="pomodoro" className="outline-none">
+            <PomodoroSection session={ready} />
+          </Tabs.Content>
+        ) : null}
 
-        <AppearanceSettings />
+        {/* En computadora las tarjetas van en dos columnas (D-057) */}
+        <Tabs.Content
+          value="account"
+          className="grid items-start gap-3 outline-none lg:grid-cols-2"
+        >
+          <Card>
+            <RadioCards
+              legend={t.database.legend}
+              description={t.database.description}
+              value={database}
+              options={DATABASE_OPTIONS}
+              onValueChange={setDatabase}
+            />
+            <DatabaseStatus />
+          </Card>
 
-        <Card aria-labelledby="ia-titulo">
-          <CardHeader>
-            <div className="flex flex-wrap items-center gap-2">
-              <CardTitle id="ia-titulo">{t.ai.cardTitle}</CardTitle>
-              <AiModeBadge status={aiStatus} />
-            </div>
-            <CardDescription>{t.ai.detail[aiStatus.kind]}</CardDescription>
-          </CardHeader>
-        </Card>
-      </div>
+          {database === 'demo' ? <DemoDataPanel /> : null}
+
+          <Card aria-labelledby="ia-titulo">
+            <CardHeader className="mb-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <CardTitle id="ia-titulo">{t.ai.cardTitle}</CardTitle>
+                <AiModeBadge status={aiStatus} />
+              </div>
+              <CardDescription>{t.ai.detail[aiStatus.kind]}</CardDescription>
+            </CardHeader>
+          </Card>
+
+          {ready ? <DataSection session={ready} /> : null}
+        </Tabs.Content>
+      </Tabs.Root>
     </>
   );
 }

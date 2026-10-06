@@ -144,6 +144,7 @@ export const t = {
     logoAlt: 'Studiare, ir al inicio',
     skipToContent: 'Saltar al contenido',
     documentTitle: (screenTitle: string) => `${screenTitle} · ${BRAND.name}`,
+    aboutScreen: (screenTitle: string) => `Qué hay en ${screenTitle}`,
   },
   nav: {
     label: 'Navegación principal',

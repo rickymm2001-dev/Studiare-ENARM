@@ -50,6 +50,13 @@
 - Proyecto de Supabase creado por Ricardo. Cuenta en la nube con enlace al correo, rol desde el servidor y datos de cuenta sincronizados (D-075). 353 pruebas pasan
 - Auditoría completa de la página con corrección de tarjetas nuevas por día (D-076)
 - Banco grande de 1500 preguntas terminado en borrador (D-077). 250 por troncal con 10 opciones, todas validadas. Excel en content-drafts/bank1500/Studiare-banco-1500-borrador.xlsx y guía en content-drafts/bank1500/README.md. Falta la revisión médica y subirlo a Supabase con la segunda parte de la nube
+- Compactación de pantallas en curso (D-078), en 6 bloques con capturas de antes y después
+  - [x] 1. Modo enfoque en pregunta, tarjeta y retroalimentación. Encabezado delgado y barra fija de acciones en el teléfono, dos columnas en computadora
+  - [x] 2. Repasar y Simular con el botón de empezar arriba, ramas en acordeón y mazos, temas y límites plegados con resumen. En el teléfono Repasar pasó de 4613 a 844 px de alto y Simular de 4256 a 934
+  - [x] 3. Progreso en una sola página. Cifras en una fila, tus 3 focos de la semana con atajo para practicar (el simulador abre con el tema o las negativas ya elegidos), lecturas de Conócete como filas que se abren y ramas que se abren a sus subespecialidades, con las que no tienen datos ocultas. En el teléfono pasó de 8362 a 2482 px de alto
+  - [x] 4. Marco de pantallas. La explicación de cada pantalla pasa a un ícono de información, el aviso de demo queda en una línea delgada y es la única etiqueta de Datos simulados en los encabezados, Inicio y Perfil ya no repiten racha y nivel, Perfil sin el botón de Configuración duplicado y Agregar mazo dentro de la tarjeta de Repasar
+  - [x] 5. Configuración en 4 secciones con pestañas, Estudio, Apariencia, Pomodoro y Cuenta y datos. Una sola barra de guardar por sección que aparece solo con cambios, el tema junto con la apariencia, retención, tope e intervalos por botón plegados en Opciones avanzadas, tamaño del texto como control segmentado y fuentes en cuadrícula de 2. En el teléfono pasó de 5283 px a secciones de 844 a 1244 px
+  - [ ] 6. Inicio y Mazos
 - Siguiente. Ricardo prueba su cuenta y se hace dueño. Luego segunda parte de la nube con bitácora, usuarios y banco. Después Fase B del banco con trampas explícitas y luego Fase D con IA en modo simulado, como pidió Ricardo. Después bloque 5 de pagos
 
 ## Fase C. Pantallas del alumno (esqueleto funcionando)
