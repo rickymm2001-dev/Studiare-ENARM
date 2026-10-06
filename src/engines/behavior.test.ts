@@ -222,6 +222,18 @@ describe('calibración metacognitiva', () => {
     expect(calibrationReport(build([45, 48], [18, 20], [18, 20])).label).toBe('underconfident');
   });
 
+  it('las respuestas sin confianza declarada no cuentan en la calibración (D-080)', () => {
+    const withConfidence = build([45, 50], [12, 20], [3, 10]);
+    const exam = Array.from({ length: 40 }, () => response({ confidence: null, correct: false }));
+    const mixed = calibrationReport([...withConfidence, ...exam]);
+    const clean = calibrationReport(withConfidence);
+    expect(mixed.responses).toBe(clean.responses);
+    expect(mixed.label).toBe(clean.label);
+    expect(mixed.calibrationGap).toBe(clean.calibrationGap);
+    // Solo respuestas de examen no alcanzan para calibrar
+    expect(calibrationReport(exam)).toMatchObject({ responses: 0, ready: false, label: null });
+  });
+
   it('calibrado cuando coincide y calibrando con pocas respuestas', () => {
     expect(calibrationReport(build([45, 50], [12, 20], [3, 10])).label).toBe('calibrated');
     const few = calibrationReport(build([5, 10], [2, 5], [1, 5]));

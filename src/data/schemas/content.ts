@@ -1,7 +1,7 @@
 // Esquemas de los archivos de contenido en src/demo/content. Son datos que los médicos pueden
 // editar sin tocar código (13). La Fase B los llena y las pruebas los validan al cargarlos.
 import { z } from 'zod';
-import { TaxonomyKeySchema } from './common';
+import { ClueStrengthSchema, ItemKindSchema, TaxonomyKeySchema } from './common';
 import { QuestionTaskSchema } from './bank';
 
 /** Estado de revisión de un archivo de contenido escrito por Claude */
@@ -152,6 +152,12 @@ export const DemoQuestionSchema = z.strictObject({
   explanation: z.string().min(1),
   /** Solo el título general de la GPC, sin claves, años ni páginas. Por verificar (11.1) */
   gpcRefs: z.array(z.string().min(5).max(200)).min(1).max(3),
+  /** Tipos de reactivo raros y datos con su fuerza diagnóstica, opcionales (D-080) */
+  kinds: z.array(ItemKindSchema).max(5).optional(),
+  clues: z
+    .array(z.strictObject({ text: z.string().min(1).max(300), strength: ClueStrengthSchema }))
+    .max(20)
+    .optional(),
 });
 export type DemoQuestion = z.infer<typeof DemoQuestionSchema>;
 

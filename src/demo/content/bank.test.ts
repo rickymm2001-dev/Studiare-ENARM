@@ -65,3 +65,29 @@ describe('banco demo como entidades', () => {
     expect(direct?.question.vignette).toBe('');
   });
 });
+
+describe('tipos de reactivo de V2 en un lote (D-080)', () => {
+  it('un lote con kinds y clues llega a la pregunta, y uno sin ellos no los trae', () => {
+    const [first] = questionBatches;
+    if (!first) throw new Error('faltan lotes');
+    const [item, ...rest] = first.questions;
+    if (!item) throw new Error('faltan preguntas');
+    const special = {
+      ...item,
+      kinds: ['control', 'patient_perspective'] as const,
+      clues: [{ text: 'Dato que define el diagnóstico', strength: 'pathognomonic' as const }],
+    };
+    const bank = buildDemoBank([
+      {
+        ...first,
+        cases: first.cases,
+        questions: [{ ...special, kinds: [...special.kinds] }, ...rest],
+      },
+    ]);
+    const [withKinds, plain] = bank.questions;
+    expect(withKinds?.question.itemKinds).toEqual(['control', 'patient_perspective']);
+    expect(withKinds?.question.clues?.[0]?.strength).toBe('pathognomonic');
+    expect(plain?.question.itemKinds).toBeUndefined();
+    expect(plain?.question.clues).toBeUndefined();
+  });
+});

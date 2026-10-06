@@ -46,6 +46,29 @@ export const CardConfidenceSchema = z.enum(['dont_know', 'unsure', 'sure']);
 /** Confianza autorreportada en opción múltiple (7.1). Adiviné, Dudé y Seguro */
 export const McqConfidenceSchema = z.enum(['guessed', 'unsure', 'sure']);
 
+/**
+ * Tipos de reactivo que el esquema acepta además del estándar (D-080). El ENARM tiene reactivos
+ * raros y el simulador debe poder tenerlos. Un reactivo puede tener varios tipos. Ningún validador
+ * rechaza un reactivo por ser imperfecto
+ */
+export const ItemKindSchema = z.enum([
+  /** Casos casi idénticos que solo se separan por las opciones de tratamiento */
+  'inverse_resolution',
+  /** Con incoherencias intencionales en el caso */
+  'incoherent',
+  /** De control, para medir la atención del alumno */
+  'control',
+  /** Con datos muy específicos u oscuros */
+  'obscure_detail',
+  /** Escrito desde la perspectiva del paciente */
+  'patient_perspective',
+]);
+export type ItemKind = z.infer<typeof ItemKindSchema>;
+
+/** Qué tanto define un dato del caso al diagnóstico. Patognomónico y característico son distintos */
+export const ClueStrengthSchema = z.enum(['pathognomonic', 'characteristic', 'nonspecific']);
+export type ClueStrength = z.infer<typeof ClueStrengthSchema>;
+
 /** Botones de FSRS en español: Otra vez, Difícil, Bien y Fácil */
 export const FsrsRatingSchema = z.enum(['again', 'hard', 'good', 'easy']);
 

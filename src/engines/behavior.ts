@@ -42,7 +42,8 @@ export interface ResponseRecord {
   /** Palabras de la viñeta, la frase y las opciones mostradas */
   words: number;
   correct: boolean;
-  confidence: Confidence;
+  /** null cuando no se pidió, como en el examen. No entra a la calibración (D-080) */
+  confidence: Confidence | null;
   /** Probabilidad de acierto esperada por la dificultad y la habilidad, para ajustar */
   expected: number;
   /** Cambios de respuesta, cada uno con si la opción anterior y la nueva eran correctas */
@@ -370,8 +371,10 @@ export interface CalibrationReport {
 }
 
 export function calibrationReport(
-  responses: readonly Pick<ResponseRecord, 'correct' | 'confidence'>[],
+  all: readonly Pick<ResponseRecord, 'correct' | 'confidence'>[],
 ): CalibrationReport {
+  // Solo cuentan las respuestas en las que el alumno dijo qué tan seguro estaba
+  const responses = all.filter((response) => response.confidence !== null);
   const levels = {} as CalibrationReport['levels'];
   let weightedGap = 0;
   for (const level of ['guessed', 'unsure', 'sure'] as const) {

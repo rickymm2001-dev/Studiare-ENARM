@@ -159,7 +159,8 @@ export interface ResponseFacts {
   /** Orden dentro de la sesión, desde 0 */
   order: number;
   correct: boolean;
-  confidence: 'guessed' | 'unsure' | 'sure';
+  /** null cuando no se pidió, como en el examen (D-080) */
+  confidence: 'guessed' | 'unsure' | 'sure' | null;
   /** Posición elegida y posición de la correcta, desde 0, y cuántas opciones había */
   chosenPosition: number;
   correctPosition: number;
@@ -241,7 +242,7 @@ export function countBehaviorIndicators(
         if (fact.chosenPosition === 0 || fact.chosenPosition === fact.shownCount - 1)
           counts.serial_position_effect.k += 1;
       }
-      if (!fact.firstChoiceCorrect && fact.confidence !== 'sure') {
+      if (!fact.firstChoiceCorrect && fact.confidence !== null && fact.confidence !== 'sure') {
         counts.status_quo_bias.n += 1;
         if (!fact.changed) counts.status_quo_bias.k += 1;
       }

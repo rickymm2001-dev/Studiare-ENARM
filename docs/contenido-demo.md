@@ -22,6 +22,15 @@ Cada lote lleva 50 preguntas mezcladas. El total queda en 75 por rama.
 | 5 | 13 | 12 | 13 | 12 |
 | 6 | 12 | 13 | 12 | 13 |
 
+## Reactivos raros, opcionales (D-080)
+
+El ENARM tiene preguntas raras y el simulador debe poder tenerlas. Cada pregunta de un lote acepta dos campos opcionales. Ninguno es obligatorio y ningún validador rechaza una pregunta por ser imperfecta.
+
+- kinds. Lista con uno o varios tipos. inverse_resolution (casos casi idénticos que solo se separan por las opciones de tratamiento), incoherent (con incoherencias intencionales), control (para medir la atención), obscure_detail (con datos muy específicos u oscuros) y patient_perspective (desde la perspectiva del paciente)
+- clues. Datos del caso con su fuerza diagnóstica. pathognomonic si el dato por sí solo define el diagnóstico, characteristic si es típico pero no exclusivo y nonspecific si no discrimina
+
+Los resultados del examen reportan aparte los reactivos de control, incoherentes y de los demás tipos.
+
 ## Lo que valida la prueba de cada lote
 
 La prueba es src/demo/content/questions/questions.test.ts y el esquema es DemoQuestionBatchSchema en src/data/schemas/content.ts.

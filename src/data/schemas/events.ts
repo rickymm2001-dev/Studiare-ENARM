@@ -67,10 +67,15 @@ export const EventPayloadSchemas = {
     questionVersionId: IdSchema,
     optionVersionId: IdSchema,
     correct: z.boolean(),
-    confidence: McqConfidenceSchema,
+    /** null cuando no se pidió, como en el examen, que no la pregunta para parecerse al real */
+    confidence: McqConfidenceSchema.nullable(),
     msToAnswer: Ms,
     changeCount: z.int().nonnegative(),
     highlightEnabled: z.boolean(),
+    /** Opciones que el alumno descartó antes de contestar, para medir su descarte (D-080) */
+    eliminatedOptionVersionIds: z.array(IdSchema).max(10).optional(),
+    /** La marcó para revisar en el examen */
+    markedForReview: z.boolean().optional(),
   }),
   cause_reported: z.strictObject({
     targetKind: z.enum(['question', 'card']),
