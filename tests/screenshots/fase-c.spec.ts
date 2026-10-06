@@ -83,6 +83,9 @@ test('pantallas del alumno con la demostración', async ({ page }, info) => {
     if (name === '06-tutor') {
       await page.getByRole('region', { name: t.tutor.report.title }).waitFor({ timeout: 60_000 });
     }
+    if (name === '03-simular') {
+      await page.getByRole('region', { name: t.exam.cardTitle }).waitFor({ timeout: 60_000 });
+    }
     if (name === '04-progreso') {
       await page
         .getByRole('region', { name: t.progress.futureLoad.title })
@@ -99,7 +102,7 @@ test('práctica, examen completo y resultados', async ({ page }, info) => {
 
   // Práctica de 5 preguntas
   await page.goto(SCREENS.simulatorSetup.path);
-  await page.getByLabel(t.simulator.count).selectOption('5');
+  await page.getByLabel(t.simulator.count, { exact: true }).selectOption('5');
   const start = page.getByRole('button', { name: t.simulator.start });
   await expect(start).toBeEnabled({ timeout: 60_000 });
   await start.click();

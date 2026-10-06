@@ -4,13 +4,7 @@
 import type { Page } from '@playwright/test';
 import { SCREENS, type ScreenKey } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
-import {
-  expect,
-  expectNoSeriousA11yViolations,
-  presetPreferences,
-  signUp,
-  test,
-} from './support/fixtures';
+import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
 const demoContent = (page: Page) => page.getByText(t.labels.demoContent).first();
 
@@ -24,10 +18,11 @@ test('preguntas, examen y mazos de demostración dicen que no están validados p
   await page.goto(SCREENS.decks.path);
   await expect(demoContent(page)).toBeVisible();
 
-  // Configurar la práctica, la pregunta, la retroalimentación y el resumen
+  // Configurar la práctica, la pregunta, la retroalimentación y el resumen. El banco demo se
+  // siembra la primera vez que se entra y puede tardar
   await page.goto(SCREENS.simulatorSetup.path);
-  await expect(demoContent(page)).toBeVisible();
-  await page.getByLabel(t.simulator.count).selectOption('5');
+  await expect(demoContent(page)).toBeVisible({ timeout: 60_000 });
+  await page.getByLabel(t.simulator.count, { exact: true }).selectOption('5');
   const start = page.getByRole('button', { name: t.simulator.start });
   await expect(start).toBeEnabled({ timeout: 60_000 });
   await start.click();
@@ -58,8 +53,14 @@ test('preguntas, examen y mazos de demostración dicen que no están validados p
 test('la base de demostración marca Datos simulados en toda pantalla del alumno', async ({
   page,
 }) => {
-  test.setTimeout(180_000);
-  await presetPreferences(page, { database: 'demo' });
+  test.setTimeout(360_000);
+  // Con la demostración generada cada pantalla trae sus datos simulados y no el aviso de vacía
+  await page.goto(`${SCREENS.settings.path}?seccion=account`);
+  await page.getByRole('radio', { name: new RegExp(t.database.demo) }).click();
+  const panel = page.getByRole('region', { name: t.demoData.title });
+  await panel.getByRole('button', { name: t.demoData.generate }).click();
+  await expect(panel.getByRole('status')).toHaveText(/Listo\. Se guardaron/, { timeout: 200_000 });
+
   const screens: ScreenKey[] = [
     'home',
     'review',
@@ -87,7 +88,7 @@ test('la base de demostración marca Datos simulados en toda pantalla del alumno
     page
       .getByRole('region', { name: t.party.share.title })
       .getByRole('figure', { name: t.party.share.previewLabel }),
-  ).toContainText(t.party.share.simulatedBanner);
+  ).toContainText(t.party.share.simulatedBanner, { timeout: 30_000 });
   await expectNoSeriousA11yViolations(page);
 });
 
