@@ -97,7 +97,6 @@ export const featureText = {
     remove: (name: string) => `Quitar ${name}`,
     settings: (name: string) => `Ajustes de ${name}`,
     empty: 'Tu tablero está vacío. Agrega un widget o elige un acomodo.',
-    comingSoon: 'Este widget estará disponible pronto.',
   },
   widgets: {
     party: {
@@ -164,6 +163,43 @@ export const featureText = {
         focusMinutes: 'minutos de estudio',
       },
       met: 'Meta cumplida',
+    },
+    // Widgets de análisis. Dicen lo mismo que Progreso y el tutor, en chico (9.1)
+    weakTopics: {
+      hint: 'Los temas con menor dominio estimado, de los que ya hay respuestas suficientes.',
+      unit: 'respuestas en un tema',
+      none: 'Ningún tema está por debajo de 60% de dominio. Sigue con tu práctica.',
+      noneInBranch: 'Ningún tema de esta rama está por debajo de 60% de dominio.',
+      practice: (topic: string) => `Practicar ${topic}`,
+      seeAll: 'Ver todos los temas',
+      settings: {
+        count: 'Cuántos temas',
+        countOption: (n: number) => `${n} temas`,
+        branch: 'Rama',
+        allBranches: 'Todas las ramas',
+      },
+    },
+    biasPattern: {
+      hint: 'Los tipos de distractor que más te atraen cuando fallas.',
+      unit: 'errores con trampa etiquetada',
+      pattern: 'Patrón',
+      none: 'Ningún tipo de distractor se destaca todavía en tus errores.',
+      row: (name: string, share: number) =>
+        `${name}. Lo eliges ${Math.round(share * 100)}% de las veces que aparece al fallar`,
+      seeAll: 'Ver tu perfil completo',
+    },
+    futureLoad: {
+      empty: 'Todavía no sigues ningún mazo, así que no hay carga que proyectar.',
+      goToDecks: 'Ir a Mazos',
+      summary: (average: number, peak: string) =>
+        `${plural(average, 'repaso', 'repasos')} por día en promedio. Día más cargado ${peak}.`,
+      seeAll: 'Ver la carga completa',
+      settings: { days: 'Periodo', daysOption: (n: number) => `${n} días` },
+    },
+    latestHypothesis: {
+      forming: 'Posible patrón',
+      helpful: 'Dijiste que te sirve',
+      open: 'Abrir el tutor',
     },
   },
   pomodoro: {

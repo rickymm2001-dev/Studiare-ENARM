@@ -6,13 +6,9 @@ import { BookOpenCheck, ChevronDown, Clock, Hourglass, ListChecks, Target } from
 import { useState, type ReactNode } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
-import { useDataApi } from '@/data/context';
-import { useLiveData } from '@/data/hooks';
 import { topicTaxonomy } from '@/demo/content';
 import { deckIds } from '@/demo/content/deckEntities';
-import { buildInsights } from '@/engines/insights';
-import { studyDayOf } from '@/engines/studyDay';
-import { analyzeCategories, analyzeTopics } from '@/engines/topics';
+import { analyzeCategories, type TopicMastery } from '@/engines/topics';
 import { t } from '@/i18n/es-MX';
 import { toneClasses } from '@/ui/branches';
 import { cn } from '@/ui/cn';
@@ -21,16 +17,16 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/ca
 import { LoadingState } from '@/ui/states/states';
 import { deckBranch } from '../decks/deckBranch';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
+import { useDecksAndCards } from '../decks/useDecksAndCards';
 import { buildSnapshot } from '../home/snapshot';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
-import { useAnsweredBank } from '../shared/useAnsweredBank';
 import { useUserEvents } from '../shared/useUserEvents';
-import { buildInsightInput } from './insightFacts';
 import { DifficultyCard } from './DifficultyCard';
 import { difficultyRows } from './difficultyView';
 import { FutureLoadSection } from './FutureLoadSection';
-import { weakTopicsFrom } from './focusItems';
 import { InsightsPanel, WeeklyFocus } from './InsightsPanel';
+import { masteryChip } from './masteryChip';
+import { useAnalysis } from './useAnalysis';
 
 export function ProgressScreen() {
   return (
@@ -39,24 +35,18 @@ export function ProgressScreen() {
 }
 
 function Progress({ session }: { session: ReadySession }) {
-  const api = useDataApi();
   const { user, settings } = session;
   const events = useUserEvents(user.id);
   const catalog = useDeckCatalog();
-  const content = useLiveData(async () => {
-    const [decks, cards] = await Promise.all([api.repos.decks.list(), api.repos.cards.list()]);
-    return { decks, cards };
-  }, [api.repos]);
-  const bank = useAnsweredBank(events);
-  const questions = bank?.questions;
+  const content = useDecksAndCards();
+  const analysis = useAnalysis(session, events);
 
   const header = (
     <ScreenHeader title={t.screens.progress.title} description={t.progress.description} />
   );
   if (
     events === undefined ||
-    bank === undefined ||
-    questions === undefined ||
+    analysis === undefined ||
     catalog === undefined ||
     content === undefined
   ) {
@@ -68,21 +58,7 @@ function Progress({ session }: { session: ReadySession }) {
     );
   }
 
-  // Respuestas con su rama, subespecialidad y dificultad
-  const responses = events.flatMap((event) => {
-    if (event.type !== 'question_answered') return [];
-    const info = questions.get(event.payload.questionVersionId);
-    return info
-      ? [
-          {
-            branch: info.branch,
-            topic: info.topic,
-            level: info.physicianDifficulty,
-            correct: event.payload.correct,
-          },
-        ]
-      : [];
-  });
+  const { responses, byTopic, report, weakTopics } = analysis;
   const cardNote = new Map(content.cards.map((card) => [card.id, card.noteId]));
   // Tarjetas repasadas por rama y subespecialidad, con lo que dicen las notas de cada mazo
   const noteInfo = new Map<string, { branch: string; topic: string | null }>();
@@ -123,28 +99,6 @@ function Progress({ session }: { session: ReadySession }) {
       minResponsesPerCategory: DEFAULT_THRESHOLDS.structure.minResponsesPerCategory,
     }).map((entry) => [entry.category, entry]),
   );
-  const byTopic = new Map(
-    analyzeTopics({
-      responses,
-      taxonomy: topicTaxonomy,
-      averageRetrievability: {},
-      thresholds: DEFAULT_THRESHOLDS.topics,
-    }).topics.map((entry) => [entry.topic, entry]),
-  );
-
-  const report = buildInsights(
-    buildInsightInput({
-      events,
-      bank,
-      timeZone: user.timeZone,
-      today: studyDayOf(new Date(), user.timeZone),
-      desiredRetention: settings.desiredRetention,
-      thresholds: DEFAULT_THRESHOLDS,
-    }),
-  );
-
-  // Subespecialidades con dominio bajo, de la más débil a la menos, para los focos de la semana
-  const weakTopics = weakTopicsFrom(byTopic);
 
   return (
     <>
@@ -201,14 +155,7 @@ function Stat({ icon, label, value }: { icon: ReactNode; label: string; value: R
   );
 }
 
-const masteryChip = (mastery: number) =>
-  mastery >= 0.75
-    ? 'bg-success-soft text-success'
-    : mastery >= 0.6
-      ? 'bg-warning-soft text-warning'
-      : 'bg-danger-soft text-danger';
-
-type TopicEntry = ReturnType<typeof analyzeTopics>['topics'][number];
+type TopicEntry = TopicMastery;
 type BranchEntry = ReturnType<typeof analyzeCategories>[number];
 
 /**

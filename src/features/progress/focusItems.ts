@@ -97,6 +97,46 @@ export function weeklyFocusItems(
   ];
 }
 
+export interface BiasProfileRow {
+  tag: string;
+  name: string;
+  /** Qué parte de las veces que aparece al fallar lo elige, de 0 a 1 */
+  share: number;
+  /** Ya es un patrón y no solo parte de su perfil */
+  pattern: boolean;
+}
+
+/** Los tipos de distractor que más le atraen al alumno, hasta tres. Vacío mientras calibra */
+export function biasProfileRows(report: InsightReport): BiasProfileRow[] {
+  const profile = report.insights.find((insight) => insight.id === 'bias_profile');
+  if (profile?.state.kind !== 'ready') return [];
+  const { values, refs } = profile.state;
+  const patterns = new Set(
+    report.insights.flatMap((insight) =>
+      insight.id.startsWith('bias:') && insight.state.kind === 'ready' ? [insight.id.slice(5)] : [],
+    ),
+  );
+  return [0, 1, 2].flatMap((index) => {
+    const tag = refs[`tag${index}`];
+    return tag
+      ? [
+          {
+            tag,
+            name: biasByKey.get(tag)?.name ?? tag,
+            share: values[`share${index}`] ?? 0,
+            pattern: patterns.has(tag),
+          },
+        ]
+      : [];
+  });
+}
+
+/** Cuántos errores con trampa etiquetada lleva y cuántos pide el perfil. null si ya no calibra */
+export function biasCalibration(report: InsightReport): { have: number; need: number } | null {
+  const state = report.insights.find((insight) => insight.id === 'biases')?.state;
+  return state?.kind === 'calibrating' ? { have: state.have, need: state.need } : null;
+}
+
 /** Dominio por debajo del cual una subespecialidad cuenta como débil */
 export const WEAK_TOPIC_BELOW = 0.6;
 

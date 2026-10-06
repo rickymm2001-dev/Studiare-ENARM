@@ -6,13 +6,14 @@ import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import type { WidgetLayout } from '@/data/schemas/activity';
+import type { AppEvent } from '@/data/schemas/events';
 import { studyDayOf } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { SelectField } from '@/ui/components/field';
-import { CalibratingState, LoadingState } from '@/ui/states/states';
+import { LoadingState } from '@/ui/states/states';
 import { useSession } from '@/app/session';
 import { LandingScreen } from '../landing/LandingScreen';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
@@ -25,13 +26,21 @@ import {
   moveWidget,
   removeWidget,
   updateWidgetSettings,
+  WIDGETS_WITH_SETTINGS,
   type Preset,
   type WidgetType,
 } from './layouts';
 import { buildSnapshot, type Snapshot } from './snapshot';
+import {
+  BiasPatternWidget,
+  FutureLoadWidget,
+  LatestHypothesisWidget,
+  WeakTopicsWidget,
+} from './widgets/AnalysisWidgets';
 import { HeatmapWidget } from './widgets/HeatmapWidget';
 import { DEFAULT_HEATMAP, type HeatmapSettings } from './widgets/heatmapSettings';
 import { DailyGoalWidget, LevelWidget, StreakWidget, TodayWidget } from './widgets/SimpleWidgets';
+import { WidgetSettingsForm } from './widgets/WidgetSettingsForm';
 
 export function HomeScreen() {
   // Sin sesión, la raíz es la portada de venta (D-068)
@@ -143,16 +152,12 @@ function Dashboard({ session }: { session: ReadySession }) {
               save(removeWidget(layout, widget.id));
             }}
             settingsPanel={
-              widget.type === 'heatmap' ? (
-                <HeatmapSettingsForm
-                  value={{ ...DEFAULT_HEATMAP, ...(widget.settings as Partial<HeatmapSettings>) }}
+              WIDGETS_WITH_SETTINGS.has(widget.type) ? (
+                <WidgetSettingsForm
+                  type={widget.type}
+                  settings={widget.settings}
                   onChange={(next) => {
-                    save(
-                      updateWidgetSettings(layout, widget.id, {
-                        range: next.range,
-                        metric: next.metric,
-                      }),
-                    );
+                    save(updateWidgetSettings(layout, widget.id, next));
                   }}
                 />
               ) : null
@@ -163,6 +168,7 @@ function Dashboard({ session }: { session: ReadySession }) {
               settings={widget.settings}
               snapshot={snapshot}
               session={session}
+              events={events}
             />
           </WidgetFrame>
         ))}
@@ -176,11 +182,13 @@ function WidgetBody({
   settings,
   snapshot,
   session,
+  events,
 }: {
   type: WidgetType;
   settings: Record<string, unknown>;
   snapshot: Snapshot;
   session: ReadySession;
+  events: readonly AppEvent[];
 }) {
   switch (type) {
     case 'heatmap':
@@ -201,10 +209,17 @@ function WidgetBody({
       return <DailyGoalWidget snapshot={snapshot} />;
     case 'party_challenge':
       return <PartyWidget session={session} snapshot={snapshot} />;
+    case 'weak_topics':
+      return <WeakTopicsWidget session={session} events={events} settings={settings} />;
     case 'bias_pattern':
-      return <CalibratingState current={0} target={40} unit={t.states.exampleUnit} />;
+      return <BiasPatternWidget session={session} events={events} settings={settings} />;
+    case 'future_load':
+      return <FutureLoadWidget session={session} events={events} settings={settings} />;
+    case 'latest_hypothesis':
+      return <LatestHypothesisWidget session={session} events={events} settings={settings} />;
     default:
-      return <p className="text-sm text-fg-muted">{t.home.comingSoon}</p>;
+      // El Pomodoro y la cuenta regresiva ya no son widgets y el tablero los filtra
+      return null;
   }
 }
 
@@ -302,44 +317,5 @@ function WidgetFrame({
       {showSettings ? <div className="mb-3 rounded-md bg-muted p-3">{settingsPanel}</div> : null}
       {children}
     </Card>
-  );
-}
-
-function HeatmapSettingsForm({
-  value,
-  onChange,
-}: {
-  value: HeatmapSettings;
-  onChange: (next: HeatmapSettings) => void;
-}) {
-  return (
-    <div className="grid gap-3 sm:grid-cols-2">
-      <SelectField
-        label={t.widgets.heatmap.range}
-        value={String(value.range)}
-        options={[
-          { value: 'auto', label: t.widgets.heatmap.auto },
-          ...[90, 180, 365].map((n) => ({ value: String(n), label: t.widgets.heatmap.days(n) })),
-        ]}
-        onChange={(event) => {
-          const raw = event.target.value;
-          onChange({
-            ...value,
-            range: raw === 'auto' ? 'auto' : (Number(raw) as HeatmapSettings['range']),
-          });
-        }}
-      />
-      <SelectField
-        label={t.widgets.heatmap.metric}
-        value={value.metric}
-        options={(['cards', 'questions', 'focusMinutes'] as const).map((metric) => ({
-          value: metric,
-          label: t.widgets.heatmap.metrics[metric],
-        }))}
-        onChange={(event) => {
-          onChange({ ...value, metric: event.target.value as HeatmapSettings['metric'] });
-        }}
-      />
-    </div>
   );
 }

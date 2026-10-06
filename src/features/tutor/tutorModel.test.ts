@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import type { ErrorContext } from '@/engines/forgetting';
-import { buildHypotheses, confusedPairs, hypothesisKey, pickTop, RULE_ACTIONS } from './tutorModel';
+import {
+  buildHypotheses,
+  confusedPairs,
+  hypothesisKey,
+  latestHypothesis,
+  pickTop,
+  RULE_ACTIONS,
+} from './tutorModel';
 
 const thresholds = DEFAULT_THRESHOLDS.forgetting;
 const NOW = new Date('2026-10-06T15:00:00.000Z');
@@ -175,5 +182,32 @@ describe('hipótesis que se abren de entrada', () => {
     expect(pickTop(sorted, 3)).toEqual({ top: sorted, rest: [] });
     expect(pickTop([], 3)).toEqual({ top: [], rest: [] });
     expect(pickTop(sorted, 0)).toEqual({ top: [], rest: sorted });
+  });
+});
+
+describe('la última hipótesis', () => {
+  const h = (id: string, recentFindings: number, ...times: string[]) => ({
+    id,
+    recentFindings,
+    items: times.map((at) => ({ at })) as never,
+  });
+
+  it('es la del error más reciente aunque tenga menos hallazgos', () => {
+    const older = h('a', 9, '2026-10-01T10:00:00.000Z', '2026-09-30T10:00:00.000Z');
+    const newer = h('b', 5, '2026-10-03T10:00:00.000Z');
+    expect(latestHypothesis([older, newer])?.id).toBe('b');
+    expect(latestHypothesis([newer, older])?.id).toBe('b');
+  });
+
+  it('con el mismo error más reciente gana la de más hallazgos', () => {
+    const few = h('a', 5, '2026-10-03T10:00:00.000Z');
+    const many = h('b', 8, '2026-10-03T10:00:00.000Z');
+    expect(latestHypothesis([few, many])?.id).toBe('b');
+    expect(latestHypothesis([many, few])?.id).toBe('b');
+  });
+
+  it('sin hipótesis no inventa ninguna', () => {
+    const none: ReturnType<typeof h>[] = [];
+    expect(latestHypothesis(none)).toBeUndefined();
   });
 });

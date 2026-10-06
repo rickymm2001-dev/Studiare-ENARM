@@ -165,3 +165,25 @@ export function pickTop<T extends Pick<Hypothesis, 'rule'>>(
     rest: sorted.filter((hypothesis) => !chosen.has(hypothesis)),
   };
 }
+
+/**
+ * La hipótesis cuyo error más reciente es el más nuevo, que es la que conviene recordarle en Inicio.
+ * Con empate gana la de más hallazgos
+ */
+export function latestHypothesis<T extends Pick<Hypothesis, 'items' | 'recentFindings'>>(
+  list: readonly T[],
+): T | undefined {
+  let latest: T | undefined;
+  for (const hypothesis of list) {
+    // Los errores de cada hipótesis vienen del más reciente al más antiguo
+    const at = hypothesis.items[0]?.at ?? '';
+    const latestAt = latest?.items[0]?.at ?? '';
+    if (
+      latest === undefined ||
+      at > latestAt ||
+      (at === latestAt && hypothesis.recentFindings > latest.recentFindings)
+    )
+      latest = hypothesis;
+  }
+  return latest;
+}

@@ -25,7 +25,13 @@ import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { ProgressBar } from '@/ui/components/progress-bar';
-import { biasByKey, describeInsight, weeklyFocusItems, type WeakTopic } from './focusItems';
+import {
+  biasProfileRows,
+  describeInsight,
+  weeklyFocusItems,
+  type BiasProfileRow as BiasProfileRowData,
+  type WeakTopic,
+} from './focusItems';
 
 const text = t.insights;
 const levelStyle: Record<InsightLevel, { icon: ReactNode; chip: string; color: string }> = {
@@ -107,7 +113,7 @@ export function WeeklyFocus({
 
 export function InsightsPanel({ report }: { report: InsightReport }) {
   const areas: InsightArea[] = ['exam', 'traps', 'study'];
-  const profile = report.insights.find((insight) => insight.id === 'bias_profile');
+  const profileRows = biasProfileRows(report);
   return (
     <Card aria-labelledby="conocete-titulo">
       <CardHeader className="mb-3">
@@ -146,7 +152,7 @@ export function InsightsPanel({ report }: { report: InsightReport }) {
                     <InsightRow insight={insight} />
                   </li>
                 ))}
-                {area === 'traps' && profile ? <BiasProfileRow insight={profile} /> : null}
+                {area === 'traps' ? <BiasProfileRow rows={profileRows} /> : null}
                 {waiting.map((insight) => (
                   <li key={insight.id}>
                     <CalibratingRow insight={insight} />
@@ -243,13 +249,7 @@ function CalibratingRow({ insight }: { insight: Insight }) {
   );
 }
 
-function BiasProfileRow({ insight }: { insight: Insight }) {
-  if (insight.state.kind !== 'ready') return null;
-  const { values, refs } = insight.state;
-  const rows = [0, 1, 2].flatMap((index) => {
-    const tag = refs[`tag${index}`];
-    return tag ? [{ tag, share: values[`share${index}`] ?? 0 }] : [];
-  });
+function BiasProfileRow({ rows }: { rows: readonly BiasProfileRowData[] }) {
   if (rows.length === 0) return null;
   return (
     <li>
@@ -259,7 +259,7 @@ function BiasProfileRow({ insight }: { insight: Insight }) {
           {rows.map((row) => (
             <li key={row.tag} className="flex flex-col gap-1">
               <span className="flex justify-between gap-2">
-                <span className="font-semibold">{biasByKey.get(row.tag)?.name ?? row.tag}</span>
+                <span className="font-semibold">{row.name}</span>
                 <span className="shrink-0 text-xs text-fg-muted tabular-nums">
                   {Math.round(row.share * 100)}%
                 </span>

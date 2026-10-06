@@ -25,6 +25,13 @@ export const ALL_WIDGETS: WidgetType[] = [
   'latest_hypothesis',
 ];
 
+/** Widgets que traen ajustes. Solo ellos muestran el botón de ajustes */
+export const WIDGETS_WITH_SETTINGS: ReadonlySet<WidgetType> = new Set([
+  'heatmap',
+  'weak_topics',
+  'future_load',
+]);
+
 export function layoutFromPreset(userId: string, preset: Exclude<Preset, 'custom'>): WidgetLayout {
   return {
     userId,
