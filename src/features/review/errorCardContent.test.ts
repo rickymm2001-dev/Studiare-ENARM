@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { makeQuestionWithOptions } from '@/data/testing/fixtures';
-import { errorCardContent, escapeHtml } from './errorCardContent';
+import { escapeHtml } from '@/data/content/plainText';
+import { errorCardContent } from './errorCardContent';
 
 function bundle() {
   const { question, options } = makeQuestionWithOptions();

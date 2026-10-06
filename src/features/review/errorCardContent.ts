@@ -2,6 +2,7 @@
 // sale del banco tal cual, la viñeta y la frase al frente y la clave con su explicación atrás, y las
 // etiquetas que lo acompañan son de la interfaz. Por eso la tarjeta hereda el estado editorial de
 // la pregunta y no pasa por la revisión de contenido generado.
+import { escapeHtml, textToHtml } from '@/data/content/plainText';
 import { t } from '@/i18n/es-MX';
 import type { QuestionBundle } from '../simulator/useQuestion';
 
@@ -11,29 +12,6 @@ export interface ErrorCardContent {
   back: string;
   /** Frase del banco que respalda la tarjeta. Es la explicación, o el porqué de la clave */
   quote: string;
-}
-
-const ESCAPES: Readonly<Record<string, string>> = {
-  '&': '&amp;',
-  '<': '&lt;',
-  '>': '&gt;',
-  '"': '&quot;',
-  "'": '&#39;',
-};
-
-/** El banco es texto plano. Se escapa antes de meterlo a una tarjeta, que es HTML */
-export function escapeHtml(text: string): string {
-  return text.replace(/[&<>"']/g, (char) => ESCAPES[char] ?? char);
-}
-
-/** Texto plano a párrafos. Una línea en blanco separa párrafos y un salto simple es un br */
-function paragraphs(text: string): string {
-  return text
-    .split(/\n{2,}/)
-    .map((paragraph) => paragraph.trim())
-    .filter(Boolean)
-    .map((paragraph) => `<p>${escapeHtml(paragraph).replace(/\n/g, '<br>')}</p>`)
-    .join('');
 }
 
 const QUOTE_MAX = 2000;
@@ -54,10 +32,10 @@ export function errorCardContent(
     : undefined;
   const why = question.explanation.trim() || correct.rationale;
 
-  const front = `${vignette ? paragraphs(vignette) : ''}<p><strong>${escapeHtml(question.prompt)}</strong></p>`;
+  const front = `${vignette ? textToHtml(vignette) : ''}<p><strong>${escapeHtml(question.prompt)}</strong></p>`;
   const lines = [
     `<p><strong>${t.errorCards.correctAnswer}.</strong> ${escapeHtml(correct.text)}</p>`,
-    paragraphs(why),
+    textToHtml(why),
   ];
   if (chosenOptionId === null) {
     lines.push(`<p>${t.errorCards.leftBlank}</p>`);

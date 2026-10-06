@@ -77,10 +77,11 @@ Ricardo pidió ver tomar forma la interfaz completa antes de seguir con el banco
 - [x] 6. Mazos de Paco y repaso con FSRS, confianza y causa del error
 - [x] 7. Simulador de práctica con pregunta, retroalimentación y resumen
 - [x] 8. Party con grupos, código de invitación, tabla semanal y retos colectivos
-- [ ] 9. Progreso, planificador y examen completo. Planificador (D-081), examen con resultados y errores al repaso (D-082) hechos, falta la carga futura y la dificultad en Progreso
+- [x] 9. Progreso, planificador y examen completo. Planificador (D-081), examen con resultados y errores al repaso (D-082), carga futura y dificultad en Progreso (D-083)
 - [ ] 10. Duelos de Party, tutor y pruebas e2e de las pantallas nuevas
 
 ### Bitácora por bloque
+- Progreso con carga futura y dificultad, y mazos a mano (D-083). Carga futura a 30 y 60 días con la proyección del planificador, exactitud por dificultad con estado calibrando y el editor de mazos y tarjetas propias con texto plano escapado. Pruebas unitarias del armado, de los casos de uso y del editor, y e2e de Progreso y de mazos a mano
 - Examen completo y errores al repaso (D-082). Pantallas 8 y 9 con reloj de pared, navegación libre, marcar para revisar, descarte de opciones, alarmas de tiempo y de ritmo, y resultados por rama, tema, estructura, trampa, reactivos raros y descarte con la revisión de cada pregunta. Las respuestas se registran al terminar, fechadas cuando se eligieron, y retoman sin duplicar si se interrumpe. Cada pregunta fallada pasa a Mis errores como tarjeta de pregunta y Repasar las pone primero. El plan Gratis limita el examen a las preguntas que le quedan hoy. Prueba e2e del flujo 4 y correcciones de contraste en las etiquetas de rama
 - Planificador, pantalla 13 (D-081). Plan de hoy y de la semana con la carga real de repaso, el tiempo disponible y los temas a reforzar, con aviso de sobrecarga y dos ajustes con su efecto. Los minutos calibran hasta tener 3 días de estudio. Lo declarado gana sobre el promedio real. 10 pruebas unitarias del armado del plan y una e2e. Entra al riel como Plan y a Accesos en Perfil
 - Pruebas e2e al día (D-079). Flujos 1, 2, 5 y 6 de 14.1 con prueba propia en tests/e2e y el ayudante signUp. El flujo 4 llegó con el examen (D-082). Faltan la prueba de estado calibrando y la de etiquetas

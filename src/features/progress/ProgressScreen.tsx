@@ -26,6 +26,9 @@ import { buildSnapshot } from '../home/snapshot';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 import { buildInsightInput } from './insightFacts';
+import { DifficultyCard } from './DifficultyCard';
+import { difficultyRows } from './difficultyView';
+import { FutureLoadSection } from './FutureLoadSection';
 import { InsightsPanel, WeeklyFocus, type WeakTopic } from './InsightsPanel';
 
 export function ProgressScreen() {
@@ -39,10 +42,10 @@ function Progress({ session }: { session: ReadySession }) {
   const { user, settings } = session;
   const events = useUserEvents(user.id);
   const catalog = useDeckCatalog();
-  const cardNote = useLiveData(
-    async () => new Map((await api.repos.cards.list()).map((card) => [card.id, card.noteId])),
-    [api.repos],
-  );
+  const content = useLiveData(async () => {
+    const [decks, cards] = await Promise.all([api.repos.decks.list(), api.repos.cards.list()]);
+    return { decks, cards };
+  }, [api.repos]);
   const answeredIds = (events ?? []).flatMap((event) =>
     event.type === 'question_answered' ? [event.payload.questionVersionId] : [],
   );
@@ -78,7 +81,7 @@ function Progress({ session }: { session: ReadySession }) {
     bank === undefined ||
     questions === undefined ||
     catalog === undefined ||
-    cardNote === undefined
+    content === undefined
   ) {
     return (
       <>
@@ -88,12 +91,22 @@ function Progress({ session }: { session: ReadySession }) {
     );
   }
 
-  // Respuestas con su rama y subespecialidad
+  // Respuestas con su rama, subespecialidad y dificultad
   const responses = events.flatMap((event) => {
     if (event.type !== 'question_answered') return [];
     const info = questions.get(event.payload.questionVersionId);
-    return info ? [{ branch: info.branch, topic: info.topic, correct: event.payload.correct }] : [];
+    return info
+      ? [
+          {
+            branch: info.branch,
+            topic: info.topic,
+            level: info.physicianDifficulty,
+            correct: event.payload.correct,
+          },
+        ]
+      : [];
   });
+  const cardNote = new Map(content.cards.map((card) => [card.id, card.noteId]));
   // Tarjetas repasadas por rama y subespecialidad, con lo que dicen las notas de cada mazo
   const noteInfo = new Map<string, { branch: string; topic: string | null }>();
   for (const file of catalog) {
@@ -192,6 +205,16 @@ function Progress({ session }: { session: ReadySession }) {
         cardsByBranch={cardsByBranch}
         cardsByTopic={cardsByTopic}
       />
+
+      <div className="grid items-start gap-3 lg:grid-cols-2">
+        <DifficultyCard
+          rows={difficultyRows({
+            responses,
+            minResponses: DEFAULT_THRESHOLDS.structure.minResponsesPerCategory,
+          })}
+        />
+        <FutureLoadSection session={session} events={events} content={content} />
+      </div>
     </>
   );
 }

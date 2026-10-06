@@ -53,7 +53,7 @@ export interface PlannerView {
  * tiempo de una nueva, así que se resta para no contarla dos veces. Después recorta cada día a los
  * límites del alumno y descuenta lo que ya hizo hoy, para que coincida con la cola de Repasar
  */
-function applyLimits(
+export function applyLimits(
   load: readonly DayLoad[],
   limits: { reviewsPerDay: number; newCardsPerDay: number },
   done: ReviewedToday,

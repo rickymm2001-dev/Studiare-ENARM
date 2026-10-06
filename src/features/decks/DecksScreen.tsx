@@ -1,7 +1,8 @@
 // Mazos (pantalla 12). Precargados que el alumno sigue o deja, con su avance, agrupados por rama
 // troncal con sus subespecialidades (D-066). Cada mazo es una tarjeta compacta con sus temas
-// plegados (D-078). Subir mazos y crearlos a mano llegan después.
-import { BookPlus, Check, ChevronDown, FileUp, Layers, PencilLine } from 'lucide-react';
+// plegados (D-078). Abajo van los mazos del alumno, que crea y llena a mano. Subir mazos de otras
+// apps llega con la Fase E.
+import { BookPlus, Check, ChevronDown, Layers } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -22,6 +23,7 @@ import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 import { latestCardStates } from '../review/study';
 import { followedDeckIds } from './followed';
+import { OwnDecksCard } from './OwnDecksCard';
 import { deckBranch, topTopics } from './deckBranch';
 import { useDeckCatalog } from './useDeckCatalog';
 
@@ -195,48 +197,12 @@ function Decks({ session }: { session: ReadySession }) {
           </div>
         )}
       </Card>
-      <Card aria-labelledby="tus-mazos-titulo">
-        <CardHeader>
-          <CardTitle id="tus-mazos-titulo">{t.decks.yoursTitle}</CardTitle>
-        </CardHeader>
-        <ul className="grid gap-3 md:grid-cols-2">
-          {ownDecks.map((deck) => {
-            const cardIds = stored?.cardsByDeck.get(deck.id) ?? [];
-            const studied = cardIds.filter((cardId) => states.has(cardId)).length;
-            return (
-              <li key={deck.id} className="flex items-start gap-3">
-                <Layers aria-hidden className="mt-0.5 size-5 shrink-0 text-primary" />
-                <div className="flex min-w-0 flex-1 flex-col items-start gap-1">
-                  <span className="flex flex-wrap items-center gap-2 font-semibold">
-                    {deck.name}
-                    {deck.isDemo ? <DemoContentLabel /> : null}
-                  </span>
-                  <span className="text-sm text-fg-muted">
-                    {t.decks.progress(studied, cardIds.length)}
-                  </span>
-                  <Button asChild size="sm" variant="ghost">
-                    <Link to={screenPath('review')}>{t.widgets.today.review}</Link>
-                  </Button>
-                </div>
-              </li>
-            );
-          })}
-          <li className="flex items-start gap-3">
-            <FileUp aria-hidden className="mt-0.5 size-5 shrink-0 text-primary" />
-            <div className="flex flex-col">
-              <span className="font-semibold">{t.decks.importTitle}</span>
-              <span className="text-sm text-fg-muted">{t.decks.importBody}</span>
-            </div>
-          </li>
-          <li className="flex items-start gap-3">
-            <PencilLine aria-hidden className="mt-0.5 size-5 shrink-0 text-primary" />
-            <div className="flex flex-col">
-              <span className="font-semibold">{t.decks.createTitle}</span>
-              <span className="text-sm text-fg-muted">{t.decks.createBody}</span>
-            </div>
-          </li>
-        </ul>
-      </Card>
+      <OwnDecksCard
+        session={session}
+        decks={ownDecks}
+        cardsByDeck={stored?.cardsByDeck ?? new Map()}
+        states={states}
+      />
     </>
   );
 }

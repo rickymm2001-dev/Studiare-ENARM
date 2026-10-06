@@ -66,6 +66,29 @@ export function TextField({
   );
 }
 
+export function TextAreaField({
+  label,
+  hint,
+  error,
+  className,
+  ...props
+}: FieldShell & Omit<ComponentProps<'textarea'>, 'className'>) {
+  const id = useId();
+  return (
+    <Shell id={id} label={label} hint={hint} error={error} className={className}>
+      {(describedBy) => (
+        <textarea
+          id={id}
+          className={cn(control, 'min-h-24 py-2 leading-relaxed')}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={describedBy}
+          {...props}
+        />
+      )}
+    </Shell>
+  );
+}
+
 export function SelectField({
   label,
   hint,

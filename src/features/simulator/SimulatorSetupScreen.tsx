@@ -24,6 +24,7 @@ import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { ALL_TOPICS } from '../shared/topics';
+import { difficultyGroupOf } from '../shared/difficulty';
 import { useUserEvents } from '../shared/useUserEvents';
 import { ExamSetupCard } from '../exam/ExamSetupCard';
 import { clock, usePractice } from './practice';
@@ -92,10 +93,8 @@ function Setup({ session }: { session: ReadySession }) {
   const left = limit === null ? null : Math.max(0, limit - answeredToday);
   // Preguntas por subespecialidad con los filtros de dificultad y estructura, para el selector
   const matchesLevel = (question: (typeof questions)[number]) => {
-    const level = question.physicianDifficulty;
-    if (difficulty === 'easy' && level > 2) return false;
-    if (difficulty === 'medium' && level !== 3) return false;
-    if (difficulty === 'hard' && level < 4) return false;
+    if (difficulty !== 'all' && difficultyGroupOf(question.physicianDifficulty) !== difficulty)
+      return false;
     return structure === 'all' || question.structure.polarity === structure;
   };
   const countsByTopic = new Map<string, number>();
@@ -103,15 +102,9 @@ function Setup({ session }: { session: ReadySession }) {
     if (matchesLevel(question))
       countsByTopic.set(question.topic, (countsByTopic.get(question.topic) ?? 0) + 1);
   }
-  const filtered = questions.filter((question) => {
-    if (!topics.has(question.topic)) return false;
-    const level = question.physicianDifficulty;
-    if (difficulty === 'easy' && level > 2) return false;
-    if (difficulty === 'medium' && level !== 3) return false;
-    if (difficulty === 'hard' && level < 4) return false;
-    if (structure !== 'all' && question.structure.polarity !== structure) return false;
-    return true;
-  });
+  const filtered = questions.filter(
+    (question) => topics.has(question.topic) && matchesLevel(question),
+  );
   const wanted = Math.min(Number(count), filtered.length, left ?? Number.POSITIVE_INFINITY);
 
   const start = async () => {
