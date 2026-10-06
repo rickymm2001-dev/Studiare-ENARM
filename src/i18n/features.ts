@@ -11,7 +11,7 @@ export const branchNames: Record<string, string> = {
   emergency_medicine: 'Urgencias',
 };
 
-const plural = (n: number, one: string, many: string) =>
+export const plural = (n: number, one: string, many: string) =>
   `${n.toLocaleString('es-MX')} ${n === 1 ? one : many}`;
 
 export const featureText = {
@@ -420,6 +420,17 @@ export const featureText = {
     finish: 'Terminar sesión',
     xpGained: (xp: number) => `+${xp} XP`,
     deck: (name: string) => `Mazo ${name}`,
+    errorCard: 'Error de pregunta',
+  },
+  // Tarjetas que salen de las preguntas falladas (7.1). El texto sale del banco, aquí solo van las
+  // etiquetas que lo acompañan
+  errorCards: {
+    deckName: 'Mis errores',
+    deckDescription: 'Las preguntas que fallaste en práctica y en examen, listas para repasar.',
+    correctAnswer: 'Respuesta correcta',
+    yourChoice: 'Elegiste',
+    leftBlank: 'La dejaste en blanco.',
+    whyAttracts: 'Por qué atrae',
   },
   simulator: {
     setupTitle: 'Configura tu práctica',
@@ -488,6 +499,9 @@ export const featureText = {
     summaryAccuracy: (correct: number, total: number) => `${correct} de ${total} correctas`,
     summaryXp: (xp: number) => `${xp.toLocaleString('es-MX')} XP ganados`,
     summaryTime: (time: string) => `Tiempo total ${time}`,
+    summaryErrors: (n: number) =>
+      `${plural(n, 'error pasó', 'errores pasaron')} a tu repaso en Mis errores`,
+    sentToReview: 'Esta pregunta pasó a tu repaso en Mis errores.',
     again: 'Otra práctica',
   },
   appearance: {

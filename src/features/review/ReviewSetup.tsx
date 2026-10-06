@@ -91,7 +91,7 @@ export function ReviewSetup({
             className="w-full sm:w-auto"
             disabled={total === 0}
             onClick={() => {
-              saveSelection(selection);
+              saveSelection(selection, deckIds);
               onStart(selection);
             }}
           >

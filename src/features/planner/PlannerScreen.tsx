@@ -59,10 +59,7 @@ function Planner({ session }: { session: ReadySession }) {
     if (!ready) return null;
     const now = new Date();
     const today = studyDayOf(now, user.timeZone);
-    const followed = followedDeckIds(
-      session,
-      content.decks.map((deck) => deck.id),
-    );
+    const followed = followedDeckIds(session, content.decks);
     const cards = content.cards.filter((card) => followed.has(card.deckId));
     const states = latestCardStates(events);
     const noteOfCard = new Map(cards.map((card) => [card.id, card.noteId]));

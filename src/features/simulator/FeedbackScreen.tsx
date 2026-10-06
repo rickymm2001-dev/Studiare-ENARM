@@ -185,6 +185,9 @@ function FeedbackBody({
               ) : null}
             </CardTitle>
             <CardDescription>{question.prompt}</CardDescription>
+            {answer.sentToReview ? (
+              <p className="mt-1 text-sm font-medium text-primary">{t.simulator.sentToReview}</p>
+            ) : null}
           </CardHeader>
           <ul className="flex flex-col gap-2">
             {shown.map((option, position) => {

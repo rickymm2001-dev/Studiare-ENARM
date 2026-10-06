@@ -44,11 +44,13 @@ function Decks({ session }: { session: ReadySession }) {
     const cardsByDeck = new Map<string, string[]>();
     for (const card of cards)
       cardsByDeck.set(card.deckId, [...(cardsByDeck.get(card.deckId) ?? []), card.id]);
-    return { deckIds: decks.map((deck) => deck.id), cardsByDeck };
+    return { decks, cardsByDeck };
   }, [api.repos]);
   const [busy, setBusy] = useState<string | null>(null);
 
-  const followed = followedDeckIds(session, stored?.deckIds ?? []);
+  const followed = followedDeckIds(session, stored?.decks ?? []);
+  // Mazos propios del alumno, como Mis errores, que se arma con sus preguntas falladas
+  const ownDecks = (stored?.decks ?? []).filter((deck) => deck.ownerId === session.user.id);
   const states = latestCardStates(events ?? []);
   // Mazos en el orden de las ramas troncales y las ramas sin mazos juntas en una línea (D-076)
   const branchOrder = topicTaxonomy.branches.map((branch) => branch.key);
@@ -198,6 +200,27 @@ function Decks({ session }: { session: ReadySession }) {
           <CardTitle id="tus-mazos-titulo">{t.decks.yoursTitle}</CardTitle>
         </CardHeader>
         <ul className="grid gap-3 md:grid-cols-2">
+          {ownDecks.map((deck) => {
+            const cardIds = stored?.cardsByDeck.get(deck.id) ?? [];
+            const studied = cardIds.filter((cardId) => states.has(cardId)).length;
+            return (
+              <li key={deck.id} className="flex items-start gap-3">
+                <Layers aria-hidden className="mt-0.5 size-5 shrink-0 text-primary" />
+                <div className="flex min-w-0 flex-1 flex-col items-start gap-1">
+                  <span className="flex flex-wrap items-center gap-2 font-semibold">
+                    {deck.name}
+                    {deck.isDemo ? <DemoContentLabel /> : null}
+                  </span>
+                  <span className="text-sm text-fg-muted">
+                    {t.decks.progress(studied, cardIds.length)}
+                  </span>
+                  <Button asChild size="sm" variant="ghost">
+                    <Link to={screenPath('review')}>{t.widgets.today.review}</Link>
+                  </Button>
+                </div>
+              </li>
+            );
+          })}
           <li className="flex items-start gap-3">
             <FileUp aria-hidden className="mt-0.5 size-5 shrink-0 text-primary" />
             <div className="flex flex-col">

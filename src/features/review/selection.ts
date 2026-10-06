@@ -27,10 +27,17 @@ export function loadSelection(
     const saved = JSON.parse(raw) as Partial<{
       mode: ReviewMode;
       decks: string[];
+      knownDecks: string[];
       topics: string[];
       includeUntagged: boolean;
     }>;
-    const decks = (saved.decks ?? []).filter((id) => deckIds.includes(id));
+    // Un mazo que no existía al guardar la selección entra marcado, como Mis errores o uno recién
+    // seguido. Solo se respeta que el alumno haya desmarcado los que ya conocía
+    const known = new Set(saved.knownDecks ?? saved.decks ?? []);
+    const decks = [
+      ...(saved.decks ?? []).filter((id) => deckIds.includes(id)),
+      ...deckIds.filter((id) => !known.has(id)),
+    ];
     return {
       mode: saved.mode === 'due' || saved.mode === 'new' ? saved.mode : 'today',
       // Si los mazos guardados ya no se siguen, se usan todos
@@ -43,13 +50,15 @@ export function loadSelection(
   }
 }
 
-export function saveSelection(selection: ReviewSelection): void {
+/** deckIds son todos los mazos que había al guardar, para distinguir los nuevos después */
+export function saveSelection(selection: ReviewSelection, deckIds: readonly string[]): void {
   try {
     localStorage.setItem(
       KEY,
       JSON.stringify({
         mode: selection.mode,
         decks: [...selection.decks],
+        knownDecks: [...deckIds],
         topics: [...selection.topics],
         includeUntagged: selection.includeUntagged,
       }),

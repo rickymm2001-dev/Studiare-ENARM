@@ -17,7 +17,7 @@ export function CardHtml({ html, className }: { html: string; className?: string
   return (
     <div
       className={cn(
-        'card-html text-lg leading-relaxed [&_img]:my-2 [&_img]:max-h-80 [&_img]:rounded-md [&_li]:ml-5 [&_li]:list-disc [&_mark]:rounded-sm [&_mark]:bg-primary-soft [&_mark]:px-1 [&_mark]:text-fg [&_ol>li]:list-decimal',
+        'card-html text-lg leading-relaxed [&_img]:my-2 [&_img]:max-h-80 [&_img]:rounded-md [&_li]:ml-5 [&_li]:list-disc [&_mark]:rounded-sm [&_mark]:bg-primary-soft [&_mark]:px-1 [&_mark]:text-fg [&_ol>li]:list-decimal [&_p+p]:mt-3',
         className,
       )}
       // Saneado con DOMPurify y lista corta de etiquetas

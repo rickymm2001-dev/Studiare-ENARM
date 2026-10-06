@@ -78,6 +78,7 @@ function Summary({ session }: { session: ReadySession }) {
   const correct = answers.filter((answer) => answer.correct).length;
   const xp = answers.reduce((sum, answer) => sum + answer.xp, 0);
   const totalMs = answers.reduce((sum, answer) => sum + answer.msToAnswer, 0);
+  const sentToReview = answers.filter((answer) => answer.sentToReview).length;
   const byConfidence = (['sure', 'unsure', 'guessed'] as McqConfidence[]).map((level) => {
     const group = answers.filter((answer) => answer.confidence === level);
     return { level, total: group.length, correct: group.filter((a) => a.correct).length };
@@ -99,6 +100,11 @@ function Summary({ session }: { session: ReadySession }) {
             {formatDuration(totalMs)}
           </Stat>
         </dl>
+        {sentToReview > 0 ? (
+          <p className="mt-3 text-sm font-medium text-primary">
+            {t.simulator.summaryErrors(sentToReview)}
+          </p>
+        ) : null}
         <h3 className="mt-4 font-medium">{t.simulator.byConfidence}</h3>
         <ul className="mt-1 flex flex-col gap-1 text-sm">
           {byConfidence

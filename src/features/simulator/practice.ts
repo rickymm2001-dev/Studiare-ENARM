@@ -13,6 +13,8 @@ export interface PracticeAnswer {
   xp: number;
   /** Opciones mostradas en orden */
   shownOptionIds: string[];
+  /** La pregunta fallada quedó en Mis errores para el repaso */
+  sentToReview: boolean;
 }
 
 export interface PracticeState {

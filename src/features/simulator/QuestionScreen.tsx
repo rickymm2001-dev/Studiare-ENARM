@@ -10,8 +10,7 @@ import { createEvent } from '@/data/events/createEvent';
 import type { AppEvent } from '@/data/schemas/events';
 import { structureDictionary, topicTaxonomy } from '@/demo/content';
 import { sampleOptions } from '@/engines/sampler';
-import { findNegations, type HighlightRange } from '@/engines/structure';
-import { awardXp } from '@/engines/xp';
+import { findNegations } from '@/engines/structure';
 import { t } from '@/i18n/es-MX';
 import { toneClasses } from '@/ui/branches';
 import { cn } from '@/ui/cn';
@@ -20,10 +19,11 @@ import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
-import { buildSnapshot } from '../home/snapshot';
-import { volumeXpToday } from '../review/study';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
+import { sendErrorsToReview } from '../review/sendErrors';
+import { recordAnswerWithXp } from './answerXp';
+import { HighlightedPrompt } from './HighlightedPrompt';
 import { clock, formatDuration, usePractice, type McqConfidence } from './practice';
 import { useQuestion, type QuestionBundle } from './useQuestion';
 
@@ -91,23 +91,6 @@ export function NoActivePractice({ header }: { header: React.ReactNode }) {
       </Card>
     </>
   );
-}
-
-/** Parte la frase en tramos normales y resaltados */
-function HighlightedPrompt({ text, ranges }: { text: string; ranges: HighlightRange[] }) {
-  const parts: React.ReactNode[] = [];
-  let cursor = 0;
-  ranges.forEach((range, index) => {
-    if (range.start > cursor) parts.push(text.slice(cursor, range.start));
-    parts.push(
-      <mark key={index} className="rounded bg-warning-soft px-0.5 font-semibold text-fg">
-        {text.slice(range.start, range.end)}
-      </mark>,
-    );
-    cursor = range.end;
-  });
-  if (cursor < text.length) parts.push(text.slice(cursor));
-  return <>{parts}</>;
 }
 
 function QuestionCard({
@@ -212,38 +195,32 @@ function QuestionCard({
     const msToAnswer = Math.max(0, clock() - shownAt.current);
     const chosen = options.find((option) => option.id === selected);
     const correct = chosen?.isCorrect === true;
-    const answered = await api.recordEvent(
-      createEvent(
-        'question_answered',
-        {
-          questionVersionId: question.id,
-          optionVersionId: selected,
-          correct,
-          confidence,
-          msToAnswer,
-          changeCount: changes,
-          highlightEnabled,
-        },
-        ctx,
-      ),
-    );
-    const allEvents = [...events, answered];
-    const snapshot = buildSnapshot({ events: allEvents, user, settings, now: new Date() });
-    const awards = awardXp({
-      activity: {
-        kind: 'mcq',
+    const { xp } = await recordAnswerWithXp({
+      api,
+      user,
+      settings,
+      ctx,
+      payload: {
+        questionVersionId: question.id,
+        optionVersionId: selected,
         correct,
-        physicianDifficulty: question.physicianDifficulty,
-        eventId: answered.id,
+        confidence,
+        msToAnswer,
+        changeCount: changes,
+        highlightEnabled,
       },
-      streakDays: snapshot.streak.current,
-      volumeXpToday: volumeXpToday(allEvents, snapshot.today),
+      physicianDifficulty: question.physicianDifficulty,
+      events,
     });
-    let xp = 0;
-    for (const award of awards) {
-      await api.recordEvent(createEvent('xp_awarded', award, ctx));
-      xp += award.amount;
-    }
+    // Un fallo pasa al repaso al momento. Si la tarjeta no se puede guardar la práctica sigue,
+    // porque la respuesta ya quedó en la bitácora
+    const sentToReview =
+      !correct &&
+      settings.errorsToReview &&
+      (await sendErrorsToReview(api, user, settings, [{ bundle, chosenOptionId: selected }]).then(
+        () => true,
+        () => false,
+      ));
     practice.set({
       answers: [
         ...practice.answers,
@@ -255,6 +232,7 @@ function QuestionCard({
           msToAnswer,
           xp,
           shownOptionIds: shown.map((option) => option.id),
+          sentToReview,
         },
       ],
     });
