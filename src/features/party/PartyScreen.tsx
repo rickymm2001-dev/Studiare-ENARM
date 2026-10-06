@@ -1,6 +1,7 @@
 // Party (pantalla 14). Grupos con código de invitación, tabla semanal por XP desde el lunes a las
-// 4 a. m. y retos colectivos. Solo se comparte alias, XP, nivel y racha (9.6). Los duelos llegan
-// después. Sin servidor, todo vive en este navegador y los compañeros simulados van marcados.
+// 4 a. m., retos colectivos y duelos con las mismas preguntas. Se comparte alias, XP, nivel y racha, y
+// en un duelo cuántas acertaste y cuánto tardaste en esas preguntas (9.6). Sin servidor, todo vive en
+// este navegador y los compañeros simulados van marcados.
 import { Copy, LogOut, Plus, Trophy, Users } from 'lucide-react';
 import { useState, type SyntheticEvent } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -27,8 +28,12 @@ import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
 import { SimulatedDataLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { buildSnapshot, type Snapshot } from '../home/snapshot';
+import { dailyQuestions } from '../shared/dailyLimit';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
+import { AchievementShare } from './AchievementShare';
+import { DuelRow } from './DuelRow';
+import { NewDuelForm } from './NewDuelForm';
 import { challengeContributions, memberStats, type ChallengeMetric } from './stats';
 
 export function PartyScreen() {
@@ -47,11 +52,15 @@ function Party({ session }: { session: ReadySession }) {
     ]);
     return { groups, memberships, challenges };
   }, [api.repos]);
+  const subscription = useLiveData(
+    () => api.repos.subscriptions.get(user.id).then((value) => value ?? null),
+    [api.repos, user.id],
+  );
 
   const header = (
     <ScreenHeader title={t.screens.party.title} description={t.screens.party.description} />
   );
-  if (events === undefined || data === undefined) {
+  if (events === undefined || data === undefined || subscription === undefined) {
     return (
       <>
         {header}
@@ -59,7 +68,14 @@ function Party({ session }: { session: ReadySession }) {
       </>
     );
   }
-  const snapshot = buildSnapshot({ events, user, settings, now: new Date() });
+  const now = new Date();
+  const snapshot = buildSnapshot({ events, user, settings, now });
+  const { left: questionsLeft } = dailyQuestions({
+    events,
+    subscription,
+    timeZone: user.timeZone,
+    now,
+  });
   const mine = data.memberships.filter((item) => item.userId === user.id && item.leftAt === null);
   const myGroups = mine
     .map((membership) => ({
@@ -72,6 +88,7 @@ function Party({ session }: { session: ReadySession }) {
     <>
       {header}
       <p className="text-sm text-fg-muted">{t.party.privacy}</p>
+      <AchievementShare snapshot={snapshot} alias={user.alias} simulated={session.isDemo} />
       {myGroups.map(({ group, membership }) => (
         <GroupCard
           key={group.id}
@@ -84,6 +101,7 @@ function Party({ session }: { session: ReadySession }) {
           snapshot={snapshot}
           events={events}
           session={session}
+          questionsLeft={questionsLeft}
         />
       ))}
       <div className="grid gap-4 md:grid-cols-2">
@@ -194,6 +212,7 @@ function GroupCard({
   snapshot,
   events,
   session,
+  questionsLeft,
 }: {
   group: Group;
   membership: Membership;
@@ -202,6 +221,8 @@ function GroupCard({
   snapshot: Snapshot;
   events: AppEvent[];
   session: ReadySession;
+  /** Preguntas que le quedan hoy según su plan. null es sin límite */
+  questionsLeft: number | null;
 }) {
   const api = useDataApi();
   const { user } = session;
@@ -286,18 +307,31 @@ function GroupCard({
         <p className="text-sm text-fg-muted">{t.party.noChallenges}</p>
       ) : null}
       <ul className="flex flex-col gap-3">
-        {challenges.map((challenge) => (
-          <ChallengeRow
-            key={challenge.id}
-            challenge={challenge}
-            members={members}
-            snapshot={snapshot}
-            events={events}
-            session={session}
-          />
-        ))}
+        {challenges.map((challenge) =>
+          challenge.kind === 'duel' ? (
+            <DuelRow
+              key={challenge.id}
+              challenge={challenge}
+              rival={members.find((member) => member.id === challenge.opponentId)}
+              self={membership}
+              events={events}
+              session={session}
+              questionsLeft={questionsLeft}
+            />
+          ) : (
+            <ChallengeRow
+              key={challenge.id}
+              challenge={challenge}
+              members={members}
+              snapshot={snapshot}
+              events={events}
+              session={session}
+            />
+          ),
+        )}
       </ul>
       <NewChallengeForm group={group} />
+      <NewDuelForm group={group} members={members} selfId={membership.id} />
 
       <Button
         variant="ghost"

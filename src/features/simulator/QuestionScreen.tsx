@@ -121,9 +121,10 @@ function QuestionCard({
         canonicalOptionIds: question.canonicalOptionIds,
         mode: 'diverse',
         count: settings.optionsShown,
-        seed: `${sessionId}|${question.id}`.slice(0, 64),
+        // En un duelo las opciones salen iguales para los dos jugadores, así que la semilla es el duelo
+        seed: `${practice.duelId ?? sessionId}|${question.id}`.slice(0, 64),
       }),
-    [options, question, settings.optionsShown, sessionId],
+    [options, question, settings.optionsShown, sessionId, practice.duelId],
   );
   const shown = sample.shown.map(
     (entry) => options.find((option) => option.id === entry.optionId) as (typeof options)[number],

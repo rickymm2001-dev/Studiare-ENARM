@@ -112,3 +112,35 @@ export async function createChallenge(
     endsAt: new Date(startsAt.getTime() + 7 * 86_400_000).toISOString(),
   });
 }
+
+/**
+ * Reta a un compañero a un duelo con las mismas preguntas para los dos (9.6). Las preguntas se fijan
+ * al crearlo, así un banco que cambia después no cambia el duelo. Quien llama las elige con una
+ * semilla que sale del id del duelo
+ */
+export async function createDuel(
+  api: Pick<DataApi, 'repos'>,
+  group: Group,
+  input: {
+    id: string;
+    title: string;
+    opponent: Pick<Membership, 'id'>;
+    questionIds: readonly string[];
+  },
+): Promise<Challenge> {
+  if (input.questionIds.length === 0) throw new RangeError('Un duelo necesita preguntas');
+  const startsAt = new Date();
+  return api.repos.challenges.put({
+    id: input.id,
+    groupId: group.id,
+    kind: 'duel',
+    title: input.title.trim(),
+    metric: 'accuracy',
+    target: input.questionIds.length,
+    isSimulated: group.isSimulated,
+    startsAt: startsAt.toISOString(),
+    endsAt: new Date(startsAt.getTime() + 7 * 86_400_000).toISOString(),
+    opponentId: input.opponent.id,
+    questionIds: [...input.questionIds],
+  });
+}

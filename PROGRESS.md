@@ -6,7 +6,7 @@
 - Fase A aprobada por Ricardo el 2026-10-02
 - Fase B en curso desde el 2026-10-02. Ricardo la aprobó junto con la Fase A
 - Bloques 9 y 10 terminados. Bloque 8 (contenido demo) pausado con 4 de 6 lotes y sin mazos (D-050)
-- Fase C en curso. Bloques 1 a 8 terminados y faltan el 9 y el 10, ver su sección. Hay 19 de 28 pantallas construidas y 9 siguen como esqueleto con aviso de Próximamente
+- Fase C con sus 10 bloques programados. Falta el cierre según 15.1 y la aprobación de Ricardo, ver su sección. Hay 20 de 28 pantallas construidas y 8 siguen como esqueleto con aviso de Próximamente
 - Fase P en curso (D-060). Bloques 1 a 4 terminados, 7 y 9 a medias, 5, 6 y 8 sin empezar, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
 - Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
@@ -30,8 +30,8 @@
 - [x] 3. Esquema de Supabase con permisos por fila y roles, probado en Postgres local (D-069)
 - [x] 4. Usuarios con roles por nivel y asignaciones a médicos, banco del médico solo con lo asignado (D-070)
 - [ ] 5. Pagos con Stripe y Mercado Pago en modo prueba
-- [ ] 6. Plan del día, misiones, ligas, insignias, duelos y compartir
-- [~] 7. Progreso con estadísticas de técnica. Conócete listo (D-074), falta carga futura y dificultad
+- [~] 6. Plan del día (D-081), duelos y compartir logro (D-084) listos. Faltan misiones, ligas e insignias
+- [x] 7. Progreso con estadísticas de técnica, Conócete (D-074), carga futura y dificultad (D-083)
 - [ ] 8. Subir mazos desde otras apps, CSV, Excel y Word
 - [~] 9. Sincronización con el servidor. Cuenta en la nube con enlace al correo y rol del servidor listos (D-075), falta subir la bitácora y el banco
 
@@ -62,7 +62,7 @@
   - [x] 4. Marco de pantallas. La explicación de cada pantalla pasa a un ícono de información, el aviso de demo queda en una línea delgada y es la única etiqueta de Datos simulados en los encabezados, Inicio y Perfil ya no repiten racha y nivel, Perfil sin el botón de Configuración duplicado y Agregar mazo dentro de la tarjeta de Repasar
   - [x] 5. Configuración en 4 secciones con pestañas, Estudio, Apariencia, Pomodoro y Cuenta y datos. Una sola barra de guardar por sección que aparece solo con cambios, el tema junto con la apariencia, retención, tope e intervalos por botón plegados en Opciones avanzadas, tamaño del texto como control segmentado y fuentes en cuadrícula de 2. En el teléfono pasó de 5283 px a secciones de 844 a 1244 px
   - [x] 6. Inicio y Mazos. En el teléfono racha y meta diaria van lado a lado y el heatmap ocupa todo el ancho, y Editar tablero pasa al encabezado. Cada mazo es una tarjeta compacta con sus temas plegados y Sube tu mazo y Crear mazo quedan en una sola tarjeta. Inicio pasó de 1422 a 1082 px de alto en el teléfono y Mazos de 1820 a 1376
-- Siguiente. Orden acordado el 2026-10-06. 1) Poner al día las pruebas e2e y que el CI las corra. 2) Bloques 9 y 10 de la Fase C con planificador, examen completo con alarmas de tiempo, descarte de opciones y tipologías de reactivo (D-080), tutor sin IA, duelos, compartir logro, mazos a mano y los widgets de Inicio que faltan, y cerrar la fase con 15.1. 3) Segunda parte de la nube con la bitácora, cuando Ricardo haya probado su cuenta y se haya hecho dueño. 4) Fase D con IA en modo simulado. 5) Pagos con Stripe y Mercado Pago cuando existan las cuentas. El banco y los mazos de Pediatría y Cirugía quedan en pausa
+- Siguiente. Orden acordado el 2026-10-06. 1) Poner al día las pruebas e2e y que el CI las corra. 2) Bloques 9 y 10 de la Fase C con planificador, examen completo con alarmas de tiempo, descarte de opciones y tipologías de reactivo (D-080), tutor sin IA, duelos, compartir logro, mazos a mano y los widgets de Inicio que faltan (hechos), y cerrar la fase con 15.1 (en curso, falta la aprobación de Ricardo). 3) Segunda parte de la nube con la bitácora, cuando Ricardo haya probado su cuenta y se haya hecho dueño. 4) Fase D con IA en modo simulado. 5) Pagos con Stripe y Mercado Pago cuando existan las cuentas. El banco y los mazos de Pediatría y Cirugía quedan en pausa
 
 ## Fase C. Pantallas del alumno (esqueleto funcionando)
 
@@ -78,9 +78,10 @@ Ricardo pidió ver tomar forma la interfaz completa antes de seguir con el banco
 - [x] 7. Simulador de práctica con pregunta, retroalimentación y resumen
 - [x] 8. Party con grupos, código de invitación, tabla semanal y retos colectivos
 - [x] 9. Progreso, planificador y examen completo. Planificador (D-081), examen con resultados y errores al repaso (D-082), carga futura y dificultad en Progreso (D-083)
-- [ ] 10. Duelos de Party, tutor y pruebas e2e de las pantallas nuevas
+- [x] 10. Tutor sin IA, widgets de análisis de Inicio, duelos y tarjeta de logro de Party, mazos a mano y pruebas e2e de las pantallas nuevas (D-083, D-084)
 
 ### Bitácora por bloque
+- Tutor, widgets de análisis, duelos y tarjeta de logro (D-084). Tutor sin IA con hipótesis por reglas sobre los errores de 14 días, evidencia, acciones de la lista cerrada, respuesta del alumno, informe semanal con plantilla y consejos por sesgo en borrador. Inicio con temas débiles, patrón de sesgo, carga futura y última hipótesis, con ajustes validados y estado calibrando. Un solo análisis de respuestas para Progreso y los widgets. Duelos de Party con las mismas 20 preguntas fijadas al crear el duelo, jugados con el simulador como sesión de tipo reto, con compañeros simulados marcados y el límite del plan Gratis. Tarjeta de logro con Web Share API y descarga de respaldo. Pruebas unitarias de cada pieza, de componentes del botón de compartir y de los widgets, y e2e del tutor con Inicio, del duelo completo y de compartir
 - Progreso con carga futura y dificultad, y mazos a mano (D-083). Carga futura a 30 y 60 días con la proyección del planificador, exactitud por dificultad con estado calibrando y el editor de mazos y tarjetas propias con texto plano escapado. Pruebas unitarias del armado, de los casos de uso y del editor, y e2e de Progreso y de mazos a mano
 - Examen completo y errores al repaso (D-082). Pantallas 8 y 9 con reloj de pared, navegación libre, marcar para revisar, descarte de opciones, alarmas de tiempo y de ritmo, y resultados por rama, tema, estructura, trampa, reactivos raros y descarte con la revisión de cada pregunta. Las respuestas se registran al terminar, fechadas cuando se eligieron, y retoman sin duplicar si se interrumpe. Cada pregunta fallada pasa a Mis errores como tarjeta de pregunta y Repasar las pone primero. El plan Gratis limita el examen a las preguntas que le quedan hoy. Prueba e2e del flujo 4 y correcciones de contraste en las etiquetas de rama
 - Planificador, pantalla 13 (D-081). Plan de hoy y de la semana con la carga real de repaso, el tiempo disponible y los temas a reforzar, con aviso de sobrecarga y dos ajustes con su efecto. Los minutos calibran hasta tener 3 días de estudio. Lo declarado gana sobre el promedio real. 10 pruebas unitarias del armado del plan y una e2e. Entra al riel como Plan y a Accesos en Perfil

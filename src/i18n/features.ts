@@ -103,6 +103,7 @@ export const featureText = {
       empty: 'Aún no estás en un grupo.',
       go: 'Ir a Party',
       rank: (rank: number, of: number) => `Lugar ${rank} de ${of}`,
+      duelsPending: (n: number) => `${plural(n, 'duelo espera', 'duelos esperan')} tu turno`,
     },
     names: {
       heatmap: 'Heatmap de estudio',
@@ -927,7 +928,7 @@ export const featureText = {
   },
   party: {
     privacy:
-      'En un grupo solo compartes tu alias, tu XP, tu nivel y tu racha. Nunca tu exactitud ni tus sesgos. Por ahora los grupos viven en este navegador.',
+      'En un grupo compartes tu alias, tu XP, tu nivel y tu racha. En un duelo, además, cuántas aciertas y cuánto tardas en esas preguntas. Nunca tu exactitud por tema ni tus sesgos. Por ahora los grupos viven en este navegador.',
     createTitle: 'Crear un grupo',
     createHint: 'Aún no estás en ningún grupo. Crea uno o únete con un código.',
     groupName: 'Nombre del grupo',
@@ -969,6 +970,62 @@ export const featureText = {
     createChallenge: 'Crear reto',
     cancel: 'Cancelar',
     leave: 'Salir del grupo',
+    duel: {
+      newButton: 'Retar a un compañero',
+      rival: 'Compañero',
+      noRivals:
+        'Un duelo necesita un compañero. Crea el grupo con compañeros simulados para probarlo. Con personas reales llegará con la versión en línea.',
+      create: 'Crear duelo',
+      noQuestions: 'El banco todavía no tiene preguntas para armar un duelo.',
+      createFailed: 'No se pudo crear el duelo. Intenta de nuevo.',
+      title: (alias: string) => `Duelo contra ${alias}`,
+      rules: (n: number) =>
+        `Las mismas ${plural(n, 'pregunta', 'preguntas')} para los dos. Gana quien acierte más y, si empatan, quien tarde menos.`,
+      oneTry: 'Es un solo intento. Las preguntas que no contestes cuentan como incorrectas.',
+      rivalPlayed: 'Tu compañero ya jugó. Juega tus preguntas para ver quién ganó.',
+      play: 'Jugar mi duelo',
+      needQuestions: (n: number, left: number) =>
+        `Este duelo pide ${plural(n, 'pregunta', 'preguntas')} y hoy te quedan ${left} en el plan Gratis.`,
+      seePlans: 'Ver planes',
+      result: 'Resultado del duelo',
+      player: 'Jugador',
+      hits: 'Aciertos',
+      time: 'Tiempo',
+      hitsOf: (correct: number, total: number) => `${correct} de ${total}`,
+      you: 'Tú',
+      verdicts: {
+        win_accuracy: 'Ganaste por exactitud.',
+        win_time: 'Ganaste por tiempo. Empataron en aciertos.',
+        lose_accuracy: 'Perdiste por exactitud.',
+        lose_time: 'Perdiste por tiempo. Empataron en aciertos.',
+        draw: 'Empate. Mismos aciertos y mismo tiempo.',
+      },
+      seeResult: 'Ver el resultado del duelo',
+    },
+    share: {
+      title: 'Comparte tu logro',
+      hint: 'Una imagen con tu nivel, tu racha y tus XP de la semana. No se comparte nada hasta que tú lo decidas.',
+      previewLabel: 'Vista previa de tu tarjeta de logro',
+      level: (n: number) => `Nivel ${n}`,
+      streakLabel: 'Racha',
+      streakValue: (n: number) => plural(n, 'día', 'días'),
+      xpLabel: 'XP esta semana',
+      includeAlias: 'Incluir mi alias en la tarjeta',
+      button: 'Compartir mi logro',
+      working: 'Preparando la imagen…',
+      shareTitle: 'Mi logro',
+      shareText: (level: number, title: string, streak: number, weeklyXp: number) =>
+        `Voy en el nivel ${level} (${title}), con ${plural(streak, 'día', 'días')} de racha y ${weeklyXp.toLocaleString('es-MX')} XP esta semana.`,
+      simulatedBanner: 'Datos de demostración. No son logros reales.',
+      fileName: 'mi-logro.png',
+      outcomes: {
+        shared: 'Listo. Elegiste dónde compartirla.',
+        downloaded:
+          'Tu navegador no puede compartir imágenes directamente, así que se descargó la tarjeta. Súbela donde quieras.',
+        cancelled: 'No se compartió nada.',
+        failed: 'No se pudo crear la imagen. Intenta de nuevo.',
+      },
+    },
   },
   cloud: {
     loginNote:

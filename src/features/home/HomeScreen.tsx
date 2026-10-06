@@ -208,7 +208,7 @@ function WidgetBody({
     case 'daily_goal':
       return <DailyGoalWidget snapshot={snapshot} />;
     case 'party_challenge':
-      return <PartyWidget session={session} snapshot={snapshot} />;
+      return <PartyWidget session={session} snapshot={snapshot} events={events} />;
     case 'weak_topics':
       return <WeakTopicsWidget session={session} events={events} settings={settings} />;
     case 'bias_pattern':

@@ -12,12 +12,14 @@
  *   - Empates en la tabla. Mismo lugar para el mismo XP, y el orden por alias
  *   - Duelo. Gana más exactitud y desempata el menor tiempo total. Si todo empata, es empate
  *   - Códigos de 6 caracteres sin letras ni números que se confundan (sin 0, O, 1, I ni L)
- * Umbrales. Grupos de hasta 50 miembros y códigos de 6 caracteres (J).
+ * Umbrales. Grupos de hasta 50 miembros, códigos de 6 caracteres y duelos de 20 preguntas (J).
  */
 import type { Rng } from './random';
 
 export const MAX_GROUP_MEMBERS = 50;
 export const INVITE_CODE_LENGTH = 6;
+/** Preguntas de un duelo, las mismas para los dos jugadores (9.6) */
+export const DUEL_QUESTIONS = 20;
 const CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 
 export function generateInviteCode(rng: Rng): string {

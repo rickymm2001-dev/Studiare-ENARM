@@ -6,14 +6,11 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
-import { PLANS } from '@/config/billing';
 import { useDataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
 import { useLiveData } from '@/data/hooks';
 import { ensureDemoBank } from '@/data/usecases/bank';
-import { studyDayOf } from '@/engines/studyDay';
-import { createRng } from '@/engines/random';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -24,10 +21,12 @@ import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { ALL_TOPICS } from '../shared/topics';
+import { dailyQuestions } from '../shared/dailyLimit';
 import { difficultyGroupOf } from '../shared/difficulty';
 import { useUserEvents } from '../shared/useUserEvents';
 import { ExamSetupCard } from '../exam/ExamSetupCard';
 import { clock, usePractice } from './practice';
+import { pickQuestions } from './pickQuestions';
 
 type Difficulty = 'all' | 'easy' | 'medium' | 'hard';
 type Structure = 'all' | 'negative' | 'affirmative';
@@ -83,14 +82,12 @@ function Setup({ session }: { session: ReadySession }) {
     );
   }
 
-  const plan = subscription?.status === 'active' ? subscription.plan : 'free';
-  const limit = PLANS[plan].access.dailyQuestions;
-  const today = studyDayOf(new Date(), session.user.timeZone);
-  const answeredToday = events.filter(
-    (event) =>
-      event.type === 'question_answered' && studyDayOf(new Date(event.at), event.tz) === today,
-  ).length;
-  const left = limit === null ? null : Math.max(0, limit - answeredToday);
+  const { plan, left } = dailyQuestions({
+    events,
+    subscription,
+    timeZone: session.user.timeZone,
+    now: new Date(),
+  });
   // Preguntas por subespecialidad con los filtros de dificultad y estructura, para el selector
   const matchesLevel = (question: (typeof questions)[number]) => {
     if (difficulty !== 'all' && difficultyGroupOf(question.physicianDifficulty) !== difficulty)
@@ -109,12 +106,8 @@ function Setup({ session }: { session: ReadySession }) {
 
   const start = async () => {
     const sessionId = newId();
-    const rng = createRng(`practice|${sessionId}`);
     // Los casos seriados se mantienen juntos y en orden
-    const picked = rng.shuffle(filtered).slice(0, wanted);
-    const ordered = [...picked].sort((a, b) =>
-      a.caseId && a.caseId === b.caseId ? (a.caseOrder ?? 0) - (b.caseOrder ?? 0) : 0,
-    );
+    const ordered = pickQuestions(filtered, `practice|${sessionId}`, wanted);
     await api.recordEvent(
       createEvent(
         'session_started',
@@ -133,6 +126,8 @@ function Setup({ session }: { session: ReadySession }) {
       answers: [],
       startedAt: clock(),
       ended: false,
+      kind: 'practice',
+      duelId: null,
     });
     void navigate(screenPath('question'));
   };

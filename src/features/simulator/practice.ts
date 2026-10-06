@@ -26,6 +26,10 @@ export interface PracticeState {
   startedAt: number;
   /** Ya se registró el fin de la sesión */
   ended: boolean;
+  /** Práctica libre o duelo de Party. Es el tipo de sesión que queda en la bitácora */
+  kind: 'practice' | 'challenge';
+  /** El duelo que se juega. null en una práctica libre */
+  duelId: string | null;
   set: (patch: Partial<Omit<PracticeState, 'set'>>) => void;
 }
 
@@ -37,6 +41,8 @@ export const usePractice = create<PracticeState>()((set) => ({
   answers: [],
   startedAt: 0,
   ended: false,
+  kind: 'practice',
+  duelId: null,
   set: (patch) => {
     set(patch);
   },
