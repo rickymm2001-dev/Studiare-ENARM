@@ -8,7 +8,6 @@ import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
-import type { ClinicalCase, Option, Question } from '@/data/schemas/bank';
 import { topicTaxonomy } from '@/demo/content';
 import { deckIds } from '@/demo/content/deckEntities';
 import { buildInsights } from '@/engines/insights';
@@ -24,12 +23,14 @@ import { deckBranch } from '../decks/deckBranch';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
 import { buildSnapshot } from '../home/snapshot';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
+import { useAnsweredBank } from '../shared/useAnsweredBank';
 import { useUserEvents } from '../shared/useUserEvents';
 import { buildInsightInput } from './insightFacts';
 import { DifficultyCard } from './DifficultyCard';
 import { difficultyRows } from './difficultyView';
 import { FutureLoadSection } from './FutureLoadSection';
-import { InsightsPanel, WeeklyFocus, type WeakTopic } from './InsightsPanel';
+import { weakTopicsFrom } from './focusItems';
+import { InsightsPanel, WeeklyFocus } from './InsightsPanel';
 
 export function ProgressScreen() {
   return (
@@ -46,31 +47,7 @@ function Progress({ session }: { session: ReadySession }) {
     const [decks, cards] = await Promise.all([api.repos.decks.list(), api.repos.cards.list()]);
     return { decks, cards };
   }, [api.repos]);
-  const answeredIds = (events ?? []).flatMap((event) =>
-    event.type === 'question_answered' ? [event.payload.questionVersionId] : [],
-  );
-  const bank = useLiveData(async () => {
-    const ids = [...new Set(answeredIds)];
-    const found = (await Promise.all(ids.map((id) => api.repos.questions.get(id)))).filter(
-      (question) => question !== undefined,
-    );
-    const options = (
-      await Promise.all(
-        found.map((question) => api.repos.options.listForQuestionVersion(question.id)),
-      )
-    ).flat();
-    const caseIds = [
-      ...new Set(found.flatMap((question) => (question.caseId ? [question.caseId] : []))),
-    ];
-    const cases = (await Promise.all(caseIds.map((id) => api.repos.cases.get(id)))).filter(
-      (item) => item !== undefined,
-    );
-    return {
-      questions: new Map<string, Question>(found.map((question) => [question.id, question])),
-      options: new Map<string, Option>(options.map((option) => [option.id, option])),
-      cases: new Map<string, ClinicalCase>(cases.map((item) => [item.id, item])),
-    };
-  }, [api.repos, answeredIds.join(',')]);
+  const bank = useAnsweredBank(events);
   const questions = bank?.questions;
 
   const header = (
@@ -167,16 +144,7 @@ function Progress({ session }: { session: ReadySession }) {
   );
 
   // Subespecialidades con dominio bajo, de la más débil a la menos, para los focos de la semana
-  const weakTopics: WeakTopic[] = topicTaxonomy.branches
-    .flatMap((branch) =>
-      branch.topics.flatMap((topic) => {
-        const state = byTopic.get(topic.key)?.state;
-        return state?.kind === 'ready' && state.mastery < 0.6
-          ? [{ key: topic.key, name: topic.name, branchName: branch.name, mastery: state.mastery }]
-          : [];
-      }),
-    )
-    .sort((a, b) => a.mastery - b.mastery);
+  const weakTopics = weakTopicsFrom(byTopic);
 
   return (
     <>

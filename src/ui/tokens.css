@@ -35,6 +35,7 @@
   /* Racha */
   --enarm-streak: #e2541b;
   --enarm-streak-soft: #fde4d8;
+  --enarm-streak-ink: #b04115;
 
   /* Estados */
   --enarm-success: #1c7a4b;
@@ -104,6 +105,7 @@
     --enarm-accent-fg: #241900;
     --enarm-streak: #ff8a4c;
     --enarm-streak-soft: #3d1d0e;
+    --enarm-streak-ink: #ff8a4c;
     --enarm-success: #6ee0a0;
     --enarm-success-soft: #123224;
     --enarm-warning: #f5c86a;
@@ -163,6 +165,7 @@
   --enarm-accent-fg: #241900;
   --enarm-streak: #ff8a4c;
   --enarm-streak-soft: #3d1d0e;
+  --enarm-streak-ink: #ff8a4c;
   --enarm-success: #6ee0a0;
   --enarm-success-soft: #123224;
   --enarm-warning: #f5c86a;
@@ -244,6 +247,7 @@
   --color-accent-fg: var(--enarm-accent-fg);
   --color-streak: var(--enarm-streak);
   --color-streak-soft: var(--enarm-streak-soft);
+  --color-streak-ink: var(--enarm-streak-ink);
   --color-mi: var(--enarm-mi);
   --color-mi-soft: var(--enarm-mi-soft);
   --color-mi-ink: var(--enarm-mi-ink);

@@ -478,6 +478,8 @@ export const featureText = {
     yourChoice: 'Elegiste',
     leftBlank: 'La dejaste en blanco.',
     whyAttracts: 'Por qué atrae',
+    contrastTitle: 'Distingue estas dos respuestas',
+    contrastAsk: '¿Qué las diferencia?',
   },
   simulator: {
     setupTitle: 'Configura tu práctica',

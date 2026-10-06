@@ -10,14 +10,30 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
 import { LOAD_HORIZONS, type FutureLoad, type LoadHorizon } from './futureLoad';
+import { formatDay, loadSummary } from './loadFormat';
 
-const dayFormat = new Intl.DateTimeFormat('es-MX', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-});
-/** AAAA-MM-DD a 6 oct. El día es de calendario, así que se formatea en UTC para que no se corra */
-const formatDay = (day: string) => dayFormat.format(new Date(`${day}T12:00:00Z`));
+/** Barras de repasos y de tarjetas nuevas de cada día, con su resumen para el lector de pantalla */
+export function LoadBars({ load, className }: { load: FutureLoad; className?: string }) {
+  const max = Math.max(1, ...load.days.map((day) => day.reviews + day.newCards));
+  return (
+    <div
+      role="img"
+      aria-label={loadSummary(load).chartLabel}
+      className={cn('flex items-end gap-px', className)}
+    >
+      {load.days.map((day) => {
+        const reviews = (day.reviews / max) * 100;
+        const fresh = (day.newCards / max) * 100;
+        return (
+          <div key={day.day} className="flex h-full min-w-0 flex-1 flex-col justify-end">
+            <div className="w-full rounded-t-sm bg-accent/60" style={{ height: `${fresh}%` }} />
+            <div className="w-full bg-primary" style={{ height: `${reviews}%` }} />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 export function FutureLoadCard({
   load,
@@ -48,14 +64,7 @@ export function FutureLoadCard({
     );
   }
 
-  const max = Math.max(1, ...load.days.map((day) => day.reviews + day.newCards));
-  const peakText = load.peak
-    ? text.peakValue(formatDay(load.peak.day), load.peak.reviews + load.peak.newCards)
-    : '—';
-  const average = Math.round(load.averageReviews);
-  const chartLabel = load.peak
-    ? text.chart(load.horizon, average, peakText)
-    : text.chartEmpty(load.horizon);
+  const { peakText, average } = loadSummary(load);
 
   return (
     <Card aria-labelledby="carga-futura">
@@ -85,18 +94,7 @@ export function FutureLoadCard({
           </div>
         </fieldset>
 
-        <div role="img" aria-label={chartLabel} className="flex h-28 items-end gap-px">
-          {load.days.map((day) => {
-            const reviews = (day.reviews / max) * 100;
-            const fresh = (day.newCards / max) * 100;
-            return (
-              <div key={day.day} className="flex h-full min-w-0 flex-1 flex-col justify-end">
-                <div className="w-full rounded-t-sm bg-accent/60" style={{ height: `${fresh}%` }} />
-                <div className="w-full bg-primary" style={{ height: `${reviews}%` }} />
-              </div>
-            );
-          })}
-        </div>
+        <LoadBars load={load} className="h-28" />
         <div aria-hidden className="flex justify-between text-xs text-fg-muted">
           <span>{formatDay(load.days[0]?.day ?? '')}</span>
           <span>{formatDay(load.days.at(-1)?.day ?? '')}</span>

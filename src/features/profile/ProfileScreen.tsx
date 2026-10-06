@@ -81,7 +81,7 @@ function Profile({ session }: { session: ReadySession }) {
             </button>
           </LevelLadderDialog>
           <div className="flex flex-wrap gap-2">
-            <span className="flex items-center gap-1.5 rounded-full bg-streak-soft px-3 py-1.5 font-bold text-streak">
+            <span className="flex items-center gap-1.5 rounded-full bg-streak-soft px-3 py-1.5 font-bold text-streak-ink">
               <Flame aria-hidden className="size-4" />
               {t.profileCard.streak(streak.current, streak.best)}
             </span>

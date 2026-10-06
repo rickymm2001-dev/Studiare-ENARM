@@ -128,6 +128,21 @@ describe('errores al repaso (7.1)', () => {
     expect(byDate).toEqual([first, second, third].map((entry) => entry.questionVersionId));
   });
 
+  it('una tarjeta con su propia clave no choca con la de la pregunta y tampoco se duplica', async () => {
+    const { api } = setup();
+    const user = makeUser();
+    const failed = input();
+    const contrast = input({ questionVersionId: failed.questionVersionId, key: 'contraste|a|b' });
+    expect(await queueErrorCards(api, user, [failed, contrast], deck, NOW)).toBe(2);
+    expect(await queueErrorCards(api, user, [contrast], deck, NOW)).toBe(0);
+    const notes = await api.repos.notes.list();
+    expect(notes).toHaveLength(2);
+    // Las dos citan la misma pregunta como fuente
+    expect(new Set(notes.map((note) => note.sourceQuestionVersionId))).toEqual(
+      new Set([failed.questionVersionId]),
+    );
+  });
+
   it('los IDs son los mismos entre corridas', () => {
     const user = '01JAA6S0000000000000000000';
     expect(errorIds.deck(user)).toBe(errorIds.deck(user));

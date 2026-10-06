@@ -15,6 +15,7 @@ import { QuestionBankScreen } from '@/features/physician/QuestionBankScreen';
 import { ProfileScreen } from '@/features/profile/ProfileScreen';
 import { ProgressScreen } from '@/features/progress/ProgressScreen';
 import { SettingsScreen } from '@/features/settings/SettingsScreen';
+import { TutorScreen } from '@/features/tutor/TutorScreen';
 import { RoleSelectorScreen } from '@/features/role/RoleSelectorScreen';
 import { FeedbackScreen } from '@/features/simulator/FeedbackScreen';
 import { QuestionScreen } from '@/features/simulator/QuestionScreen';
@@ -38,6 +39,7 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, ComponentType>> = {
   examResults: ExamResultsScreen,
   decks: DecksScreen,
   planner: PlannerScreen,
+  tutor: TutorScreen,
   subscription: SubscriptionScreen,
   party: PartyScreen,
   profile: ProfileScreen,

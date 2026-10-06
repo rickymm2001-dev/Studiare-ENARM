@@ -4,6 +4,7 @@ import { BRAND } from '@/config/brand';
 import type { Phase, ScreenKey } from '@/app/screens';
 import { examText } from './exam';
 import { featureText } from './features';
+import { tutorText } from './tutor';
 
 interface ScreenText {
   title: string;
@@ -141,6 +142,7 @@ const screens: Record<ScreenKey, ScreenText> = {
 export const t = {
   ...featureText,
   ...examText,
+  ...tutorText,
   app: {
     name: BRAND.name,
     logoAlt: 'Studiare, ir al inicio',
@@ -169,6 +171,7 @@ export const t = {
     platform: 'Plataforma',
     decks: 'Mazos',
     planner: 'Plan',
+    tutor: 'Tutor',
     party: 'Party',
     admin: 'Administración',
   },

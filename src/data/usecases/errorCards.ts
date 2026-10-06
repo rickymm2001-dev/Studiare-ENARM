@@ -21,8 +21,13 @@ export const errorIds = {
 export const TOPIC_TAG_PREFIX = 'topic:';
 
 export interface ErrorCardInput {
-  /** Versión de la pregunta que falló */
+  /** Versión de la pregunta que falló. Es la fuente de la tarjeta */
   questionVersionId: string;
+  /**
+   * Identifica la tarjeta para no duplicarla. Por defecto es la pregunta. Una tarjeta de contraste
+   * entre dos preguntas lleva su propia clave
+   */
+  key?: string;
   /** Subespecialidad de la pregunta */
   topic: string;
   /** La tarjeta hereda el estado editorial y la marca de demostración de su pregunta */
@@ -45,16 +50,17 @@ export async function queueErrorCards(
   deck: { name: string; description: string },
   now: Date = new Date(),
 ): Promise<number> {
+  const keyOf = (input: ErrorCardInput) => input.key ?? input.questionVersionId;
   const seen = new Set<string>();
   const unique = inputs.filter((input) => {
-    if (seen.has(input.questionVersionId)) return false;
-    seen.add(input.questionVersionId);
+    if (seen.has(keyOf(input))) return false;
+    seen.add(keyOf(input));
     return true;
   });
   if (unique.length === 0) return 0;
 
   const existing = await Promise.all(
-    unique.map((input) => api.repos.notes.get(errorIds.note(user.id, input.questionVersionId))),
+    unique.map((input) => api.repos.notes.get(errorIds.note(user.id, keyOf(input)))),
   );
   const fresh = unique.filter((_, index) => existing[index] === undefined);
 
@@ -82,7 +88,7 @@ export async function queueErrorCards(
   fresh.forEach((input, index) => {
     // Un milisegundo de diferencia por tarjeta conserva el orden en que se fallaron
     const createdAt = new Date(now.getTime() + index).toISOString();
-    const noteId = errorIds.note(user.id, input.questionVersionId);
+    const noteId = errorIds.note(user.id, keyOf(input));
     notes.push({
       id: noteId,
       deckId,
@@ -98,7 +104,7 @@ export async function queueErrorCards(
       createdAt,
     });
     cards.push({
-      id: errorIds.card(user.id, input.questionVersionId),
+      id: errorIds.card(user.id, keyOf(input)),
       noteId,
       deckId,
       ordinal: 0,

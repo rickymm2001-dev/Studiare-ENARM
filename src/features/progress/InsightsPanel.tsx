@@ -13,8 +13,6 @@ import {
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
-import { screenPath } from '@/app/screens';
-import { biasTaxonomy, biasTips } from '@/demo/content';
 import {
   INSIGHT_MINIMUMS,
   type Insight,
@@ -27,11 +25,9 @@ import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { ProgressBar } from '@/ui/components/progress-bar';
+import { biasByKey, describeInsight, weeklyFocusItems, type WeakTopic } from './focusItems';
 
 const text = t.insights;
-const biasByKey = new Map(biasTaxonomy.biases.map((bias) => [bias.key, bias]));
-const tipByKey = new Map(biasTips.tips.map((tip) => [tip.biasKey, tip.tip]));
-
 const levelStyle: Record<InsightLevel, { icon: ReactNode; chip: string; color: string }> = {
   strength: {
     icon: <CheckCircle2 aria-hidden />,
@@ -43,53 +39,13 @@ const levelStyle: Record<InsightLevel, { icon: ReactNode; chip: string; color: s
 };
 const levelOrder: Record<InsightLevel, number> = { focus: 0, watch: 1, strength: 2 };
 
-/** Título, frase y acción de un hallazgo listo */
-function describe(insight: Insight): { title: string; body: string; action: string } {
-  const state = insight.state;
-  const values = state.kind === 'ready' ? state.values : {};
-  const refs = state.kind === 'ready' ? state.refs : {};
-  const level = state.kind === 'ready' ? state.level : 'watch';
-  if (insight.id.startsWith('bias:')) {
-    const tag = insight.id.slice(5);
-    const bias = biasByKey.get(tag);
-    return {
-      title: bias?.name ?? tag,
-      body: `${text.biasText(values.attraction ?? 0, values.baseline ?? 0)} ${bias?.distractorDefinition ?? ''}`,
-      action: tipByKey.get(tag) ?? text.biasFallbackAction,
-    };
-  }
-  const copy = text.copy[insight.id];
-  if (!copy) return { title: insight.id, body: '', action: '' };
-  return {
-    title: copy.title,
-    body: copy.text(values, refs, level),
-    action: copy.action(values, refs, level),
-  };
-}
-
 const calibratingTitle = (insight: Insight) =>
   (insight.id.startsWith('bias') ? text.copy.biases?.title : text.copy[insight.id]?.title) ??
   insight.id;
 
-/** Dónde se practica cada foco. Los hábitos de repaso van a Repasar y lo demás al simulador */
-function practiceLink(insightId: string): { to: string; review: boolean } {
-  if (insightId === 'negation')
-    return { to: `${screenPath('simulatorSetup')}?structure=negative`, review: false };
-  if (['retention', 'leeches', 'consistency', 'session_length'].includes(insightId))
-    return { to: screenPath('review'), review: true };
-  return { to: screenPath('simulatorSetup'), review: false };
-}
-
-export interface WeakTopic {
-  key: string;
-  name: string;
-  branchName: string;
-  mastery: number;
-}
-
 /**
- * Tus focos de la semana. Hasta 3, mezclando técnica (los focos del informe, ya ordenados por peso)
- * y la subespecialidad más débil cuando hay una con dominio bajo. Cada uno lleva a practicarlo
+ * Tus focos de la semana. Hasta 3, mezclando técnica y la subespecialidad más débil cuando hay una
+ * con dominio bajo. Cada uno lleva a practicarlo
  */
 export function WeeklyFocus({
   report,
@@ -98,23 +54,7 @@ export function WeeklyFocus({
   report: InsightReport;
   weakTopics: readonly WeakTopic[];
 }) {
-  const technique = report.focus.slice(0, weakTopics.length > 0 ? 2 : 3);
-  const topics = weakTopics.slice(0, 3 - technique.length);
-  const items = [
-    ...technique.map((insight) => {
-      const { title, action } = describe(insight);
-      const link = practiceLink(insight.id);
-      return { key: insight.id, kind: t.progress.focusKinds.technique, title, action, ...link };
-    }),
-    ...topics.map((topic) => ({
-      key: topic.key,
-      kind: `${t.progress.focusKinds.topic} · ${topic.branchName}`,
-      title: topic.name,
-      action: t.progress.weakTopic(Math.round(topic.mastery * 100)),
-      to: `${screenPath('simulatorSetup')}?topic=${encodeURIComponent(topic.key)}`,
-      review: false,
-    })),
-  ];
+  const items = weeklyFocusItems(report, weakTopics);
   return (
     <Card aria-labelledby="focos-titulo" className="border-l-4 border-l-danger">
       <CardHeader className="mb-3">
@@ -254,7 +194,7 @@ function Row({
 function InsightRow({ insight }: { insight: Insight }) {
   if (insight.state.kind !== 'ready') return null;
   const style = levelStyle[insight.state.level];
-  const { title, body, action } = describe(insight);
+  const { title, body, action } = describeInsight(insight);
   return (
     <Row
       lead={<span className={style.color}>{style.icon}</span>}
