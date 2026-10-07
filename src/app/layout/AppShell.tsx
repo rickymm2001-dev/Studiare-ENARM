@@ -13,6 +13,7 @@ import { screenPath } from '../screens';
 import { useSession } from '../session';
 import { usePreferences } from '../preferences';
 import { BottomNav } from './BottomNav';
+import { OtherDeviceNotice } from './OtherDeviceNotice';
 import { PwaUpdatePrompt } from './PwaUpdatePrompt';
 
 export function AppShell() {
@@ -99,6 +100,8 @@ export function AppShell() {
           {t.offlineBanner}
         </div>
       )}
+
+      <OtherDeviceNotice className={rail} />
 
       <div className={rail}>
         <main
