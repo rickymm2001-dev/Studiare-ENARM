@@ -50,8 +50,10 @@ export async function recordAnswerWithXp(input: {
   const xpEvents: AppEvent[] = [];
   let xp = 0;
   for (const award of awards) {
-    xpEvents.push(await api.recordEvent(createEvent('xp_awarded', award, ctx)));
-    xp += award.amount;
+    const stored = await api.recordEvent(createEvent('xp_awarded', award, ctx));
+    xpEvents.push(stored);
+    // Se suma lo guardado, que si el registro se reintentó es lo que quedó la primera vez
+    if (stored.type === 'xp_awarded') xp += stored.payload.amount;
   }
   return { answered, xpEvents, xp };
 }

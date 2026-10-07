@@ -9,7 +9,7 @@ import { screenPath } from '@/app/screens';
 import { PLANS, type PlanKey } from '@/config/billing';
 import { useDataApi } from '@/data/context';
 import type { Question } from '@/data/schemas/bank';
-import { EXAM_SIZES, examTotalMs } from '@/engines/exam';
+import { examTotalMs } from '@/engines/exam';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -19,9 +19,11 @@ import { DemoContentLabel } from '@/ui/components/labels';
 import type { ReadySession } from '../shared/RequireSession';
 import { clock } from '../simulator/practice';
 import { startExam } from './examSession';
+import { allowedExamSizes, defaultExamSize } from './examSizes';
 import {
   answeredCount,
   finishExamState,
+  isClosed,
   isFinished,
   remainingMs,
   type ExamState,
@@ -43,9 +45,10 @@ export function ExamSetupCard({
   const api = useDataApi();
   const navigate = useNavigate();
   const { user, settings } = session;
+  const access = PLANS[plan].access;
   // El examen guardado se lee una vez al entrar y se actualiza con lo que se haga aquí
   const [stored, setStored] = useState<ExamState | null>(() => loadExamState(user.id));
-  const [size, setSize] = useState<number>(20);
+  const [size, setSize] = useState<number>(() => defaultExamSize(access.fullExam, left));
   const [highlight, setHighlight] = useState(settings.negationHighlightExam);
   const [askConfidence, setAskConfidence] = useState(false);
   const [alerts, setAlerts] = useState(true);
@@ -98,8 +101,21 @@ export function ExamSetupCard({
     );
   }
 
-  const access = PLANS[plan].access;
-  const sizes = EXAM_SIZES.filter((option) => option !== 280 || access.fullExam);
+  // Un examen que terminó y todavía no se registra no se pisa con otro. Los resultados lo retoman
+  if (stored && !isClosed(stored)) {
+    return (
+      <Card aria-labelledby="examen-titulo">
+        {header}
+        <p className="font-medium">{text.unsavedTitle}</p>
+        <p className="mb-3 text-sm text-fg-muted">{text.unsavedBody}</p>
+        <Button asChild className="self-start">
+          <Link to={screenPath('examResults')}>{text.saveAndSee}</Link>
+        </Button>
+      </Card>
+    );
+  }
+
+  const sizes = allowedExamSizes(access.fullExam);
   const requested = Math.min(size, left ?? Number.POSITIVE_INFINITY);
   const count = Math.min(requested, questions.length);
   const limitedByPlan = left !== null && left < Math.min(size, questions.length);
@@ -204,10 +220,9 @@ export function ExamSetupCard({
             <div>
               <p className="font-medium">{text.lastTitle}</p>
               <p className="text-sm text-fg-muted">
-                {text.lastBody(
-                  stored.recorded.length > 0 ? stored.recorded.length : answeredCount(stored),
-                  stored.questionIds.length,
-                )}
+                {stored.correct === null
+                  ? text.lastBodyUnscored(answeredCount(stored), stored.questionIds.length)
+                  : text.lastBody(stored.correct, stored.questionIds.length)}
               </p>
             </div>
             <Button asChild variant="secondary" size="sm">

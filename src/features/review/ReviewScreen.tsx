@@ -33,6 +33,7 @@ import { ActionDock } from '@/ui/components/action-dock';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
+import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { followedDeckIds } from '../decks/followed';
 import { buildSnapshot } from '../home/snapshot';
@@ -129,6 +130,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
         <ScreenHeader title={t.screens.review.title} description={t.screens.review.description} />
         <ReviewSetup
           addDeck={<AddDeckButton />}
+          hasDemo={content.decks.some((deck) => followed.has(deck.id) && deck.isDemo)}
           cards={cards}
           deckNames={deckNames}
           topicOfCard={topicOfCard}
@@ -502,6 +504,7 @@ function ReviewSession({
             {isNew ? t.review.newCard : t.review.reviewCard}
           </Badge>
           {isQuestionNote(note) ? <Badge variant="warning">{t.review.errorCard}</Badge> : null}
+          {note.isDemo ? <DemoContentLabel /> : null}
           <span className="text-sm text-fg-muted">{deckNames.get(card.deckId)}</span>
         </div>
         <CardHtml html={front} />

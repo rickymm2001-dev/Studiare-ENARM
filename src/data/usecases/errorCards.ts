@@ -59,8 +59,10 @@ export async function queueErrorCards(
   });
   if (unique.length === 0) return 0;
 
+  // La tarjeta se guarda al final, así si un intento se cortó entre la nota y la tarjeta el
+  // siguiente la completa en vez de darla por hecha
   const existing = await Promise.all(
-    unique.map((input) => api.repos.notes.get(errorIds.note(user.id, keyOf(input)))),
+    unique.map((input) => api.repos.cards.get(errorIds.card(user.id, keyOf(input)))),
   );
   const fresh = unique.filter((_, index) => existing[index] === undefined);
 

@@ -26,7 +26,7 @@ import { formatClock } from './clock';
 import { ExamReview } from './ExamReview';
 import { MIN_QUESTIONS_PER_TOPIC, examScoreOf, rankedTallies } from './examResults';
 import { closeExam, loadExamBundles } from './examSession';
-import { elapsedMs, isFinished, type ExamState } from './examState';
+import { elapsedMs, isClosed, isFinished, type ExamState } from './examState';
 import { loadExamState } from './examStorage';
 
 const biasName = new Map(biasTaxonomy.biases.map((bias) => [bias.key, bias.name]));
@@ -65,6 +65,8 @@ function ExamResults({ session }: { session: ReadySession }) {
   const [state, setState] = useState<ExamState | null>(() => loadExamState(user.id));
   const [bundles, setBundles] = useState<Map<string, QuestionBundle> | null>(null);
   const [error, setError] = useState(false);
+  // Cada reintento del cierre cuenta para que el efecto vuelva a correr
+  const [attempt, setAttempt] = useState(0);
   const closing = useRef(false);
 
   // Las preguntas del examen, una sola vez
@@ -97,11 +99,10 @@ function ExamResults({ session }: { session: ReadySession }) {
   });
   const ready = state !== null && isFinished(state) && bundles !== null && events !== undefined;
   useEffect(() => {
-    if (!ready || closing.current) return;
-    if (state.sessionEnded && state.queuedErrors !== null) return;
+    if (!ready || closing.current || isClosed(state)) return;
     closing.current = true;
     startClosing(state, bundles);
-  }, [ready, state, bundles]);
+  }, [ready, state, bundles, attempt]);
 
   const score = useMemo(
     () => (state && bundles ? examScoreOf(state, bundles) : null),
@@ -118,7 +119,7 @@ function ExamResults({ session }: { session: ReadySession }) {
       </>
     );
   }
-  const saving = !(state.sessionEnded && state.queuedErrors !== null);
+  const saving = !isClosed(state);
 
   return (
     <>
@@ -127,7 +128,16 @@ function ExamResults({ session }: { session: ReadySession }) {
         description={t.screens.examResults.description}
         badges={<DemoContentLabel />}
       />
-      <Summary state={state} score={score} saving={saving} error={error} />
+      <Summary
+        state={state}
+        score={score}
+        saving={saving}
+        error={error}
+        onRetry={() => {
+          setError(false);
+          setAttempt((count) => count + 1);
+        }}
+      />
       <ErrorsCard state={state} score={score} sending={settings.errorsToReview} saving={saving} />
       <div className="grid gap-3 lg:grid-cols-2 lg:items-start">
         <BranchCard score={score} />
@@ -171,11 +181,13 @@ function Summary({
   score,
   saving,
   error,
+  onRetry,
 }: {
   state: ExamState;
   score: ExamScore;
   saving: boolean;
   error: boolean;
+  onRetry: () => void;
 }) {
   const text = t.examResults;
   const used = elapsedMs(state, state.finishedAtMs ?? state.startedAtMs);
@@ -217,9 +229,14 @@ function Summary({
         </p>
       ) : null}
       {error ? (
-        <p role="alert" className="mt-2 text-sm font-medium text-danger">
-          {text.saveError}
-        </p>
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <p role="alert" className="text-sm font-medium text-danger">
+            {text.saveError}
+          </p>
+          <Button size="sm" variant="secondary" onClick={onRetry}>
+            {text.retry}
+          </Button>
+        </div>
       ) : null}
     </Card>
   );

@@ -143,6 +143,28 @@ describe('errores al repaso (7.1)', () => {
     );
   });
 
+  it('si se cortó entre la nota y la tarjeta, reintentar completa la tarjeta y no duplica la nota', async () => {
+    const { api } = setup();
+    const user = makeUser();
+    const failed = input();
+    // Un intento que alcanzó a guardar la nota y se cortó antes de la tarjeta
+    const { repos } = api;
+    const flaky = {
+      repos: {
+        ...repos,
+        cards: { ...repos.cards, putMany: () => Promise.reject(new Error('red')) },
+      },
+    };
+    await expect(queueErrorCards(flaky, user, [failed], deck, NOW)).rejects.toThrow('red');
+    expect(await repos.notes.list()).toHaveLength(1);
+    expect(await repos.cards.list()).toHaveLength(0);
+
+    expect(await queueErrorCards(api, user, [failed], deck, NOW)).toBe(1);
+    expect(await repos.notes.list()).toHaveLength(1);
+    expect(await repos.cards.list()).toHaveLength(1);
+    expect(await queueErrorCards(api, user, [failed], deck, NOW)).toBe(0);
+  });
+
   it('los IDs son los mismos entre corridas', () => {
     const user = '01JAA6S0000000000000000000';
     expect(errorIds.deck(user)).toBe(errorIds.deck(user));

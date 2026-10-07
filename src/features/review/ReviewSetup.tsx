@@ -10,12 +10,14 @@ import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
 import { CheckboxField, TextField } from '@/ui/components/field';
+import { DemoContentLabel } from '@/ui/components/labels';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { ALL_TOPICS } from '../shared/topics';
 import { loadSelection, saveSelection, type ReviewMode, type ReviewSelection } from './selection';
 
 export function ReviewSetup({
   addDeck,
+  hasDemo,
   cards,
   deckNames,
   topicOfCard,
@@ -26,6 +28,8 @@ export function ReviewSetup({
 }: {
   /** Atajo para agregar un mazo, junto al título */
   addDeck?: ReactNode;
+  /** Algún mazo que se sigue es de demostración, así que el repaso lleva su etiqueta (4.6) */
+  hasDemo: boolean;
   cards: CardEntity[];
   deckNames: Map<string, string>;
   /** Subespecialidad de cada tarjeta. null si su nota no la trae */
@@ -55,9 +59,12 @@ export function ReviewSetup({
   return (
     <Card aria-labelledby="que-repasar">
       <CardHeader className="mb-3 flex-row flex-wrap items-center justify-between gap-2">
-        <CardTitle id="que-repasar" className="text-base sm:text-lg">
-          {text.title}
-        </CardTitle>
+        <div className="flex flex-wrap items-center gap-2">
+          <CardTitle id="que-repasar" className="text-base sm:text-lg">
+            {text.title}
+          </CardTitle>
+          {hasDemo ? <DemoContentLabel /> : null}
+        </div>
         {addDeck}
       </CardHeader>
       <div className="flex flex-col gap-3">

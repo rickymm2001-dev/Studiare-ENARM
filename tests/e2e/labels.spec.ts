@@ -42,6 +42,15 @@ test('preguntas, examen y mazos de demostración dicen que no están validados p
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.sessionSummary.title);
   await expect(demoContent(page)).toBeVisible();
 
+  // Repasar, con las preguntas falladas que pasaron a Mis errores. La etiqueta va al elegir qué
+  // repasar y en cada tarjeta, porque lleva texto médico de un banco que ningún médico validó
+  await page.goto(SCREENS.review.path);
+  await expect(demoContent(page)).toBeVisible();
+  await page.getByRole('button', { name: /^Repasar [\d,]+ tarjetas?$/ }).click();
+  await expect(page.getByText(t.review.errorCard)).toBeVisible();
+  await expect(demoContent(page)).toBeVisible();
+  await expectNoSeriousA11yViolations(page);
+
   // El examen completo, en curso
   await page.goto(SCREENS.simulatorSetup.path);
   const card = page.getByRole('region', { name: t.exam.cardTitle });

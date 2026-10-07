@@ -135,7 +135,7 @@ test('examen completo y resultados', async ({ page }, info) => {
   await card.getByRole('button', { name: t.exam.start }).click();
   await expect(page.getByRole('timer')).toBeVisible();
   await page.getByRole('radio').first().check();
-  await page.getByRole('button', { name: t.exam.discardOption('C') }).click();
+  await page.getByRole('button', { name: t.choice.discardOption('C') }).click();
   await page.getByRole('button', { name: t.exam.mark }).click();
   await capture(page, '15-examen', project);
   for (let index = 2; index <= 20; index += 1) {

@@ -1,7 +1,7 @@
 // Adaptador del banco demo a entidades de la base con IDs estables (D-052).
 import { describe, expect, it } from 'vitest';
 import { ClinicalCaseSchema, OptionSchema, QuestionSchema } from '@/data/schemas/bank';
-import { stableUlid } from '../stableId';
+import { rankedUlid, stableUlid, ULID_RANKS } from '../stableId';
 import { buildDemoBank, demoIds } from './bank';
 import { questionBatches } from './questions';
 
@@ -16,6 +16,23 @@ describe('IDs estables', () => {
   it('rechaza tiempos fuera del rango de un ULID', () => {
     expect(() => stableUlid('a', -1)).toThrow(RangeError);
     expect(() => stableUlid('a', 1.5)).toThrow(RangeError);
+  });
+
+  it('con rango, los IDs del mismo milisegundo se ordenan por su rango y se repiten', () => {
+    const ids = Array.from({ length: ULID_RANKS }, (_, rank) => rankedUlid('a', 5000, rank));
+    expect(ids).toEqual([...ids].sort());
+    expect(new Set(ids).size).toBe(ULID_RANKS);
+    expect(rankedUlid('a', 5000, 3)).toBe(rankedUlid('a', 5000, 3));
+    expect(rankedUlid('a', 5000, 3)).not.toBe(rankedUlid('b', 5000, 3));
+    expect(rankedUlid('a', 5000, 0)).toMatch(/^[0-9A-HJKMNP-TV-Z]{26}$/);
+    // El tiempo manda sobre el rango
+    expect(rankedUlid('a', 5001, 0) > rankedUlid('a', 5000, ULID_RANKS - 1)).toBe(true);
+  });
+
+  it('rechaza un rango fuera de lo que se puede ordenar', () => {
+    expect(() => rankedUlid('a', 0, -1)).toThrow(RangeError);
+    expect(() => rankedUlid('a', 0, ULID_RANKS)).toThrow(RangeError);
+    expect(() => rankedUlid('a', 0, 1.5)).toThrow(RangeError);
   });
 });
 

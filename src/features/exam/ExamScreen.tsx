@@ -145,6 +145,9 @@ function ExamRunner({
   const [banner, setBanner] = useState<Banner | null>(null);
   const [nudge, setNudge] = useState<string | null>(null);
   const [finishOpen, setFinishOpen] = useState(false);
+  // Al cambiar de pregunta el foco pasa al enunciado, así el lector de pantalla lo lee. La primera
+  // pregunta no lo pide para no quitarle el foco a la página al entrar
+  const [focusPrompt, setFocusPrompt] = useState(false);
   const ctx = { userId: user.id, tz: user.timeZone, sessionId: initial.examId };
 
   const commit = (change: (current: ExamState) => ExamState) => {
@@ -158,6 +161,21 @@ function ExamRunner({
   const finish = (reason: ExamEndReason) => {
     commit((current) => finishExamState(current, clock(), reason));
     void navigate(screenPath('examResults'), { replace: true });
+  };
+
+  /**
+   * Con el tiempo agotado el examen cierra por tiempo en vez de aceptar el cambio, como en el
+   * examen real. Sin esto una respuesta elegida entre el límite y el siguiente tic contaría. true si
+   * cerró
+   */
+  const closeIfTimeIsUp = () => {
+    if (remainingMs(stateRef.current, clock()) > 0) return false;
+    finish('time_up');
+    return true;
+  };
+
+  const edit = (change: (current: ExamState) => ExamState) => {
+    if (!closeIfTimeIsUp()) commit(change);
   };
 
   const currentId = state.questionIds[state.current] ?? '';
@@ -174,13 +192,16 @@ function ExamRunner({
   };
 
   const visit = (index: number) => {
+    if (closeIfTimeIsUp()) return;
     const at = clock();
     commit((current) => goTo(current, index, at));
     setNudge(null);
+    setFocusPrompt(true);
     showCurrent();
   };
 
   const onChoose = (optionId: string) => {
+    if (closeIfTimeIsUp()) return;
     const at = clock();
     const current = stateRef.current;
     const result = choose(current, currentId, optionId, at);
@@ -328,12 +349,14 @@ function ExamRunner({
           highlight={state.highlight}
           askConfidence={state.askConfidence}
           nudge={nudge}
+          position={t.exam.progress(state.current + 1, total)}
+          focusPrompt={focusPrompt}
           onChoose={onChoose}
           onToggleDiscard={(optionId) => {
-            commit((current) => toggleEliminated(current, currentId, optionId));
+            edit((current) => toggleEliminated(current, currentId, optionId));
           }}
           onConfidence={(level) => {
-            commit((current) => setConfidence(current, currentId, level));
+            edit((current) => setConfidence(current, currentId, level));
           }}
         />
       ) : (
@@ -362,7 +385,7 @@ function ExamRunner({
             aria-pressed={answer.marked}
             className="h-auto min-h-touch py-1.5 text-sm whitespace-normal"
             onClick={() => {
-              commit((current) => toggleMarked(current, currentId));
+              edit((current) => toggleMarked(current, currentId));
             }}
           >
             <Flag aria-hidden />

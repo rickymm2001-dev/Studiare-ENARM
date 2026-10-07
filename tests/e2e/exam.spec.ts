@@ -9,6 +9,13 @@ import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/f
 
 const QUESTIONS = 20;
 
+/**
+ * El contador de la pregunta en el encabezado. El enunciado también lleva la posición para el
+ * lector de pantalla, así que se busca el texto exacto
+ */
+const progress = (page: Page, n: number) =>
+  page.getByText(t.exam.progress(n, QUESTIONS), { exact: true });
+
 /** Una cifra del resumen, que se lee como término y valor */
 async function expectStat(summary: Locator, label: string, value: number) {
   await expect(summary.locator('dl > div').filter({ hasText: label })).toContainText(String(value));
@@ -40,17 +47,23 @@ async function leaveTimeRemaining(page: Page, remainingMs: number) {
   }, remainingMs);
 }
 
+/** Cuántos exámenes guardados hay en el navegador */
+const storedExams = (page: Page) =>
+  page.evaluate(
+    () => Object.keys(localStorage).filter((name) => name.startsWith('enarm.exam.v1.')).length,
+  );
+
 test('examen de 20 con descarte y marca, resultados y errores al repaso', async ({ page }) => {
   test.setTimeout(240_000);
   await signUp(page);
   await startExam(page);
-  await expect(page.getByText(t.exam.progress(1, QUESTIONS))).toBeVisible();
+  await expect(progress(page, 1)).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 
   // Primera pregunta. Elige A, descarta C y la marca para revisar
   await page.getByRole('radio').first().check();
-  await page.getByRole('button', { name: t.exam.discardOption('C') }).click();
-  await expect(page.getByRole('button', { name: t.exam.restoreOption('C') })).toBeVisible();
+  await page.getByRole('button', { name: t.choice.discardOption('C') }).click();
+  await expect(page.getByRole('button', { name: t.choice.restoreOption('C') })).toBeVisible();
   await page.getByRole('button', { name: t.exam.mark }).click();
   await expect(page.getByRole('button', { name: t.exam.unmark })).toBeVisible();
 
@@ -58,17 +71,17 @@ test('examen de 20 con descarte y marca, resultados y errores al repaso', async 
   await page.reload();
   await expect(page.getByRole('timer')).toBeVisible();
   await expect(page.getByRole('radio').first()).toBeChecked();
-  await expect(page.getByRole('button', { name: t.exam.restoreOption('C') })).toBeVisible();
+  await expect(page.getByRole('button', { name: t.choice.restoreOption('C') })).toBeVisible();
   await expect(page.getByRole('button', { name: t.exam.unmark })).toBeVisible();
 
   // La segunda se queda en blanco y las demás se contestan con la primera opción
   await page.getByRole('button', { name: t.exam.next, exact: true }).click();
-  await expect(page.getByText(t.exam.progress(2, QUESTIONS))).toBeVisible();
+  await expect(progress(page, 2)).toBeVisible();
   for (let index = 2; index < QUESTIONS; index += 1) {
     await page.getByRole('button', { name: t.exam.next, exact: true }).click();
     await page.getByRole('radio').first().check();
   }
-  await expect(page.getByText(t.exam.progress(QUESTIONS, QUESTIONS))).toBeVisible();
+  await expect(progress(page, QUESTIONS)).toBeVisible();
 
   // La cuadrícula muestra el estado de cada pregunta y lleva a cualquiera
   await page.getByText(t.exam.navigatorTitle).click();
@@ -81,7 +94,7 @@ test('examen de 20 con descarte y marca, resultados y errores al repaso', async 
     page.getByRole('button', { name: t.exam.goToQuestion(2, t.exam.status.blank) }),
   ).toBeVisible();
   await page.getByRole('button', { name: new RegExp(`^${t.exam.goToQuestion(2, '')}`) }).click();
-  await expect(page.getByText(t.exam.progress(2, QUESTIONS))).toBeVisible();
+  await expect(progress(page, 2)).toBeVisible();
 
   // Al terminar avisa cuántas quedan en blanco y cuántas marcó
   await page.getByRole('button', { name: t.exam.finish }).click();
@@ -140,12 +153,11 @@ test('examen de 20 con descarte y marca, resultados y errores al repaso', async 
 
   // En el plan Gratis las respuestas del examen cuentan para el límite del día
   await page.goto(SCREENS.simulatorSetup.path);
-  await expect(
-    page.getByRole('region', { name: t.exam.cardTitle }).getByText(t.exam.limitedTo(1)),
-  ).toBeVisible();
-  await expect(
-    page.getByRole('region', { name: t.exam.cardTitle }).getByText(t.exam.lastTitle),
-  ).toBeVisible();
+  const setup = page.getByRole('region', { name: t.exam.cardTitle });
+  await expect(setup.getByText(t.exam.limitedTo(1))).toBeVisible();
+  // El último examen dice cuántas acertó del total y no cuántas contestó
+  await expect(setup.getByText(t.exam.lastTitle)).toBeVisible();
+  await expect(setup.getByText(t.exam.lastBody(QUESTIONS - 1 - missed, QUESTIONS))).toBeVisible();
 });
 
 test('con poco tiempo avisa y al acabarse cierra solo', async ({ page }) => {
@@ -206,4 +218,54 @@ test('sin un examen guardado las pantallas lo dicen y llevan a configurarlo', as
   await expect(page).toHaveURL(new RegExp(`${SCREENS.simulatorSetup.path}$`));
   await page.goto(SCREENS.examResults.path);
   await expect(page.getByText(t.examResults.noExam)).toBeVisible();
+});
+
+test('un examen terminado que no se guardó se retoma desde Simular y no se pisa con otro', async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  await signUp(page);
+  await startExam(page);
+  await page.getByRole('radio').first().check();
+
+  // El examen terminó pero se cerró la pestaña antes de guardar sus respuestas
+  await page.evaluate(() => {
+    const key = Object.keys(localStorage).find((name) => name.startsWith('enarm.exam.v1.'));
+    if (!key) throw new Error('No hay examen guardado');
+    const state = JSON.parse(localStorage.getItem(key) ?? '{}') as Record<string, unknown>;
+    state.finishedAtMs = Date.now();
+    state.endReason = 'completed';
+    localStorage.setItem(key, JSON.stringify(state));
+  });
+  await page.goto(SCREENS.simulatorSetup.path);
+  const card = page.getByRole('region', { name: t.exam.cardTitle });
+  await expect(card.getByText(t.exam.unsavedTitle)).toBeVisible({ timeout: 60_000 });
+  await expect(card.getByRole('button', { name: t.exam.start })).toHaveCount(0);
+  await expectNoSeriousA11yViolations(page);
+
+  // Los resultados lo guardan y entonces sí se puede armar otro. Se espera a que cargue el resumen,
+  // porque antes de eso tampoco se ve el aviso de que está guardando
+  await card.getByRole('link', { name: t.exam.saveAndSee }).click();
+  await expect(page).toHaveURL(new RegExp(`${SCREENS.examResults.path}$`));
+  await expect(page.getByRole('region', { name: t.examResults.summaryTitle })).toBeVisible({
+    timeout: 60_000,
+  });
+  await expect(page.getByText(t.examResults.saving)).toHaveCount(0, { timeout: 60_000 });
+  await page.goto(SCREENS.simulatorSetup.path);
+  await expect(page.getByRole('region', { name: t.exam.cardTitle })).toBeVisible();
+  await expect(card.getByText(t.exam.lastTitle)).toBeVisible();
+  await expect(card.getByRole('button', { name: t.exam.start })).toBeVisible();
+});
+
+test('al borrar mis datos también se va el examen guardado en el navegador', async ({ page }) => {
+  test.setTimeout(120_000);
+  await signUp(page);
+  await startExam(page);
+  await page.getByRole('radio').first().check();
+  expect(await storedExams(page)).toBe(1);
+
+  await page.goto(`${SCREENS.settings.path}?seccion=account`);
+  await page.getByRole('button', { name: t.settings.delete }).click();
+  await page.getByRole('button', { name: t.settings.deleteConfirm }).click();
+  await expect.poll(() => storedExams(page)).toBe(0);
 });

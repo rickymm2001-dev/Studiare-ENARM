@@ -1,7 +1,7 @@
 // Pregunta del examen. Caso clínico, frase con negaciones resaltadas si el alumno lo pidió y opciones
 // que se pueden descartar. Descartar no cambia la respuesta, solo ayuda a pensar, y queda registrado
 // para medir cómo descarta (D-080). No muestra si acertó, eso llega con los resultados.
-import { Ban, RotateCcw } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 import { structureDictionary } from '@/demo/content';
 import { findNegations } from '@/engines/structure';
 import { t } from '@/i18n/es-MX';
@@ -10,6 +10,7 @@ import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { HighlightedPrompt } from '../simulator/HighlightedPrompt';
+import { OptionChoice } from '../simulator/OptionChoice';
 import type { QuestionBundle } from '../simulator/useQuestion';
 import { TOPIC_NAMES } from '../shared/topics';
 import type { ExamAnswerState } from './examState';
@@ -23,6 +24,8 @@ export function ExamQuestion({
   highlight,
   askConfidence,
   nudge,
+  position,
+  focusPrompt,
   onChoose,
   onToggleDiscard,
   onConfidence,
@@ -35,6 +38,10 @@ export function ExamQuestion({
   askConfidence: boolean;
   /** Aviso de que lleva mucho en esta pregunta. null si no toca */
   nudge: string | null;
+  /** Dónde va en el examen, por ejemplo Pregunta 3 de 20. Se lee al pasar el foco al enunciado */
+  position: string;
+  /** Pasa el foco al enunciado al mostrarse, para que el lector de pantalla lo lea */
+  focusPrompt: boolean;
   onChoose: (optionId: string) => void;
   onToggleDiscard: (optionId: string) => void;
   onConfidence: (level: Confidence | null) => void;
@@ -46,6 +53,11 @@ export function ExamQuestion({
   });
   const ranges = highlight ? findNegations(question.prompt, structureDictionary) : [];
   const twoColumns = Boolean(vignette);
+  const promptRef = useRef<HTMLHeadingElement>(null);
+  // La pregunta se monta de nuevo en cada cambio (la pantalla le pone key), así que basta al montar
+  useEffect(() => {
+    if (focusPrompt) promptRef.current?.focus();
+  }, [focusPrompt]);
 
   return (
     <Card
@@ -77,7 +89,13 @@ export function ExamQuestion({
             <p className="whitespace-pre-line">{vignette}</p>
           </div>
         ) : null}
-        <CardTitle id="examen-pregunta-frase" className="mt-3 text-lg leading-snug">
+        <CardTitle
+          id="examen-pregunta-frase"
+          ref={promptRef}
+          tabIndex={-1}
+          className="mt-3 text-lg leading-snug focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+        >
+          <span className="sr-only">{position}. </span>
           <HighlightedPrompt text={question.prompt} ranges={ranges} />
         </CardTitle>
       </CardHeader>
@@ -92,64 +110,24 @@ export function ExamQuestion({
           </p>
         ) : null}
         <fieldset className="flex flex-col gap-2">
-          <legend className="mb-1 text-sm text-fg-muted">{t.exam.optionsHint}</legend>
+          <legend className="mb-1 text-sm text-fg-muted">{t.choice.optionsHint}</legend>
           <ul className="flex flex-col gap-2">
-            {shown.map((option, position) => {
-              const letter = String.fromCharCode(65 + position);
-              const selected = answer.optionId === option.id;
-              const discarded = answer.eliminated.includes(option.id);
-              return (
-                <li
-                  key={option.id}
-                  className={cn(
-                    'flex items-stretch rounded-md border border-line',
-                    selected && 'border-primary bg-primary-soft',
-                    discarded && 'bg-muted',
-                  )}
-                >
-                  <label className="flex min-w-0 flex-1 cursor-pointer items-start gap-3 p-3 hover:bg-muted/60">
-                    <input
-                      type="radio"
-                      name="opcion-examen"
-                      className="mt-1"
-                      checked={selected}
-                      onChange={() => {
-                        onChoose(option.id);
-                      }}
-                    />
-                    <span className={cn(discarded && 'text-fg-muted line-through')}>
-                      <span className="mr-1 font-semibold">{letter}.</span>
-                      {option.text}
-                      {discarded ? (
-                        <span className="sr-only"> ({t.exam.discardedLabel})</span>
-                      ) : null}
-                    </span>
-                  </label>
-                  <button
-                    type="button"
-                    aria-pressed={discarded}
-                    aria-label={
-                      discarded ? t.exam.restoreOption(letter) : t.exam.discardOption(letter)
-                    }
-                    title={discarded ? t.exam.restore : t.exam.discard}
-                    disabled={selected}
-                    onClick={() => {
-                      onToggleDiscard(option.id);
-                    }}
-                    className={cn(
-                      'flex w-11 shrink-0 items-center justify-center rounded-r-md border-l border-line text-fg-muted hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40',
-                      discarded && 'text-danger',
-                    )}
-                  >
-                    {discarded ? (
-                      <RotateCcw aria-hidden className="size-4" />
-                    ) : (
-                      <Ban aria-hidden className="size-4" />
-                    )}
-                  </button>
-                </li>
-              );
-            })}
+            {shown.map((option, position) => (
+              <OptionChoice
+                key={option.id}
+                name="opcion-examen"
+                letter={String.fromCharCode(65 + position)}
+                text={option.text}
+                selected={answer.optionId === option.id}
+                discarded={answer.eliminated.includes(option.id)}
+                onChoose={() => {
+                  onChoose(option.id);
+                }}
+                onToggleDiscard={() => {
+                  onToggleDiscard(option.id);
+                }}
+              />
+            ))}
           </ul>
         </fieldset>
 

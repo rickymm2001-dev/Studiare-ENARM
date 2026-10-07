@@ -5,6 +5,16 @@ import { plural } from './features';
 const minutesOf = (ms: number) => Math.max(1, Math.round(ms / 60_000));
 
 export const examText = {
+  // Opciones que se pueden descartar, en la práctica y en el examen
+  choice: {
+    optionsHint:
+      'Descartar lo que sabes que no es te acerca a la respuesta. Tus descartes no cambian tu respuesta.',
+    discard: 'Descartar',
+    restore: 'Volver a incluir',
+    discardedLabel: 'Descartada',
+    discardOption: (letter: string) => `Descartar la opción ${letter}`,
+    restoreOption: (letter: string) => `Volver a incluir la opción ${letter}`,
+  },
   exam: {
     // Tarjeta en Simular
     cardTitle: 'Examen completo',
@@ -40,7 +50,13 @@ export const examText = {
     finishNow: 'Terminar y ver resultados',
     lastTitle: 'Tu último examen',
     lastBody: (correct: number, total: number) => `${correct} de ${total} correctas.`,
+    lastBodyUnscored: (answered: number, total: number) =>
+      `Contestaste ${answered} de ${total} preguntas.`,
     seeResults: 'Ver resultados',
+    unsavedTitle: 'Falta guardar tu último examen',
+    unsavedBody:
+      'Ya terminó, pero sus respuestas todavía no quedaron en tu historial. Entra a los resultados para guardarlas antes de empezar otro examen.',
+    saveAndSee: 'Guardar y ver resultados',
 
     // Pantalla del examen
     progress: (n: number, of: number) => `Pregunta ${n} de ${of}`,
@@ -53,13 +69,6 @@ export const examText = {
     unmark: 'Quitar marca',
     marked: 'Marcada para revisar',
     finish: 'Terminar examen',
-    discard: 'Descartar',
-    restore: 'Volver a incluir',
-    discardedLabel: 'Descartada',
-    discardOption: (letter: string) => `Descartar la opción ${letter}`,
-    restoreOption: (letter: string) => `Volver a incluir la opción ${letter}`,
-    optionsHint:
-      'Descartar lo que sabes que no es te acerca a la respuesta. Tus descartes no cambian tu respuesta.',
     confidenceOptional: '¿Qué tan seguro estás? (opcional)',
     stuck: (time: string) =>
       `Llevas ${time} en esta pregunta, más del doble de tu ritmo. Elige la opción más probable, márcala para revisar y sigue.`,
@@ -109,7 +118,8 @@ export const examText = {
   },
   examResults: {
     saving: 'Guardando tus respuestas…',
-    saveError: 'No se pudieron guardar todas tus respuestas. Recarga la página para reintentar.',
+    saveError: 'No se pudieron guardar todas tus respuestas. Lo que ya se guardó no se repite.',
+    retry: 'Reintentar',
     ended: {
       completed: 'Terminaste el examen.',
       time_up: 'Se acabó el tiempo. Lo que quedó sin contestar cuenta en blanco.',

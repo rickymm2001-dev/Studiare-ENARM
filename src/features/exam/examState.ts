@@ -63,6 +63,8 @@ export const ExamStateSchema = z.strictObject({
   /** XP ganado por las respuestas ya registradas */
   xp: z.int().nonnegative(),
   sessionEnded: z.boolean(),
+  /** Aciertos del examen. Se fijan al registrar el fin de la sesión, null mientras no pase */
+  correct: z.int().nonnegative().nullable().default(null),
   /** Errores que pasaron al repaso. null si todavía no se hace o el alumno lo apagó */
   queuedErrors: z.int().nonnegative().nullable(),
 });
@@ -116,6 +118,7 @@ export function createExamState(input: {
     recorded: [],
     xp: 0,
     sessionEnded: false,
+    correct: null,
     queuedErrors: null,
   };
 }
@@ -145,6 +148,13 @@ export const remainingMs = (state: ExamState, nowMs: number): number =>
   state.totalMs - elapsedMs(state, nowMs);
 
 export const isFinished = (state: ExamState): boolean => state.finishedAtMs !== null;
+
+/**
+ * El examen terminó y ya quedó todo en la bitácora y en el repaso. Mientras no, empezar otro
+ * pisaría el estado que todavía falta registrar
+ */
+export const isClosed = (state: ExamState): boolean =>
+  isFinished(state) && state.sessionEnded && state.queuedErrors !== null;
 
 export const answeredCount = (state: ExamState): number =>
   state.questionIds.filter((id) => answerOf(state, id).optionId !== null).length;
@@ -176,7 +186,10 @@ export interface ChooseResult {
   changed: boolean;
 }
 
-/** Elige una opción. Si estaba descartada se vuelve a incluir */
+/**
+ * Elige una opción. Si estaba descartada se vuelve a incluir. Con el examen cerrado o pasado el
+ * tiempo ya no cuenta, como en el examen real
+ */
 export function choose(
   state: ExamState,
   questionId: string,
@@ -184,7 +197,8 @@ export function choose(
   nowMs: number,
 ): ChooseResult {
   const current = answerOf(state, questionId);
-  if (current.optionId === optionId) return { state, from: current.optionId, changed: false };
+  if (isFinished(state) || nowMs >= deadlineMs(state) || current.optionId === optionId)
+    return { state, from: current.optionId, changed: false };
   return {
     state: withAnswer(state, questionId, {
       optionId,
@@ -202,6 +216,7 @@ export function setConfidence(
   questionId: string,
   confidence: ExamAnswerState['confidence'],
 ): ExamState {
+  if (isFinished(state)) return state;
   return withAnswer(state, questionId, { confidence });
 }
 
@@ -212,7 +227,7 @@ export function toggleEliminated(
   optionId: string,
 ): ExamState {
   const current = answerOf(state, questionId);
-  if (current.optionId === optionId) return state;
+  if (isFinished(state) || current.optionId === optionId) return state;
   const eliminated = current.eliminated.includes(optionId)
     ? current.eliminated.filter((id) => id !== optionId)
     : [...current.eliminated, optionId];
@@ -220,6 +235,7 @@ export function toggleEliminated(
 }
 
 export function toggleMarked(state: ExamState, questionId: string): ExamState {
+  if (isFinished(state)) return state;
   return withAnswer(state, questionId, { marked: !answerOf(state, questionId).marked });
 }
 
@@ -257,9 +273,11 @@ export function markRecorded(state: ExamState, questionId: string, xp: number): 
   return { ...state, recorded: [...state.recorded, questionId], xp: state.xp + xp };
 }
 
-export const markSessionEnded = (state: ExamState): ExamState => ({
+/** Anota que el fin de la sesión ya quedó en la bitácora, con los aciertos que tuvo */
+export const markSessionEnded = (state: ExamState, correct: number): ExamState => ({
   ...state,
   sessionEnded: true,
+  correct,
 });
 
 export const setQueuedErrors = (state: ExamState, count: number): ExamState => ({

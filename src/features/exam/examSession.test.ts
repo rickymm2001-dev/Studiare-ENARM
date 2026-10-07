@@ -9,6 +9,7 @@ import {
   choose,
   finishExamState,
   goTo,
+  isClosed,
   toggleEliminated,
   toggleMarked,
   type ExamState,
@@ -178,7 +179,8 @@ describe('cierre del examen', () => {
     });
 
     // Solo el error pasa a Mis errores. Lo que quedó en blanco no
-    expect(closed).toMatchObject({ sessionEnded: true, queuedErrors: 1 });
+    expect(closed).toMatchObject({ sessionEnded: true, queuedErrors: 1, correct: 1 });
+    expect(isClosed(closed)).toBe(true);
     expect(closed.recorded).toEqual([first, second]);
     const notes = await repos.notes.list();
     expect(notes.map((note) => note.sourceQuestionVersionId)).toEqual([second]);
@@ -245,6 +247,144 @@ describe('cierre del examen', () => {
     expect(all.filter((event) => event.type === 'question_answered')).toHaveLength(2);
     expect(all.filter((event) => event.type === 'session_ended')).toHaveLength(1);
     expect(resumed).toMatchObject({ sessionEnded: true, queuedErrors: 1 });
+  });
+
+  it('si se corta justo después de guardar una respuesta, retomarlo no la duplica ni cambia su XP', async () => {
+    const { api, user, state, bundles, events } = await finishedExam();
+    // Referencia, el mismo examen cerrado de corrido
+    const reference = await finishedExam();
+    const done = await closeExam({
+      api: reference.api,
+      user: reference.user,
+      settings: reference.user.settings,
+      state: reference.state,
+      bundles: reference.bundles,
+      events: [],
+    });
+    const referenceXp = (await reference.events()).filter((event) => event.type === 'xp_awarded');
+
+    // Se corta después de guardar el primer XP, antes de que el cierre lo anote en el estado
+    let xpCalls = 0;
+    const flaky = {
+      repos: api.repos,
+      recordEvent: async (event: AppEvent) => {
+        const stored = await api.recordEvent(event);
+        if (event.type === 'xp_awarded') {
+          xpCalls += 1;
+          if (xpCalls === 1) throw new Error('red');
+        }
+        return stored;
+      },
+    };
+    let saved = state;
+    await expect(
+      closeExam({
+        api: flaky,
+        user,
+        settings: user.settings,
+        state,
+        bundles,
+        events: [],
+        onProgress: (next) => {
+          saved = next;
+        },
+      }),
+    ).rejects.toThrow('red');
+    expect(saved.recorded).toHaveLength(0);
+
+    const resumed = await closeExam({
+      api,
+      user,
+      settings: user.settings,
+      state: saved,
+      bundles,
+      events: await events(),
+    });
+    const all = await events();
+    expect(all.filter((event) => event.type === 'question_answered')).toHaveLength(2);
+    expect(all.filter((event) => event.type === 'session_ended')).toHaveLength(1);
+    // Mismo XP que cerrado de corrido, sin premios repetidos
+    const xp = all.filter((event) => event.type === 'xp_awarded');
+    expect(xp.map((event) => event.payload.amount)).toEqual(
+      referenceXp.map((event) => event.payload.amount),
+    );
+    expect(new Set(xp.map((event) => event.id)).size).toBe(xp.length);
+    expect(resumed.xp).toBe(done.xp);
+    expect(resumed).toMatchObject({ sessionEnded: true, queuedErrors: 1 });
+  });
+
+  it('si se corta después de guardar el fin de la sesión, retomarlo no lo repite', async () => {
+    const { api, user, state, bundles, events } = await finishedExam();
+    let ended = 0;
+    const flaky = {
+      repos: api.repos,
+      recordEvent: async (event: AppEvent) => {
+        const stored = await api.recordEvent(event);
+        if (event.type === 'session_ended') {
+          ended += 1;
+          throw new Error('red');
+        }
+        return stored;
+      },
+    };
+    let saved = state;
+    await expect(
+      closeExam({
+        api: flaky,
+        user,
+        settings: user.settings,
+        state,
+        bundles,
+        events: [],
+        onProgress: (next) => {
+          saved = next;
+        },
+      }),
+    ).rejects.toThrow('red');
+    expect(ended).toBe(1);
+    expect(saved.sessionEnded).toBe(false);
+
+    const resumed = await closeExam({
+      api,
+      user,
+      settings: user.settings,
+      state: saved,
+      bundles,
+      events: await events(),
+    });
+    const all = await events();
+    expect(all.filter((event) => event.type === 'session_ended')).toHaveLength(1);
+    expect(resumed).toMatchObject({ sessionEnded: true, queuedErrors: 1 });
+  });
+
+  it('el fin de la sesión queda después de las respuestas aunque compartan el milisegundo', async () => {
+    const env = await setup(1);
+    const started = await startExam({
+      api: env.api,
+      user: env.user,
+      questions: env.questions,
+      requested: 1,
+      options,
+      nowMs: T0,
+    });
+    if (!started) throw new Error('sin examen');
+    const bundles = await loadExamBundles(env.api, started.questionIds);
+    const id = started.questionIds[0] ?? '';
+    const right = bundles.get(id)?.options.find((option) => option.isCorrect)?.id ?? '';
+    const chosen = choose(started, id, right, T0 + 9_000).state;
+    await closeExam({
+      api: env.api,
+      user: env.user,
+      settings: env.user.settings,
+      state: finishExamState(chosen, T0 + 9_000, 'completed'),
+      bundles,
+      events: [],
+    });
+    const types = (await env.events())
+      .filter((event) => event.at === iso(T0 + 9_000))
+      .map((event) => event.type);
+    expect(types[0]).toBe('question_answered');
+    expect(types.at(-1)).toBe('session_ended');
   });
 
   it('con el ajuste apagado no manda errores al repaso', async () => {

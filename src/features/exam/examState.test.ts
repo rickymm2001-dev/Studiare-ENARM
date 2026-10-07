@@ -10,9 +10,13 @@ import {
   ExamStateSchema,
   finishExamState,
   goTo,
+  isClosed,
   markedCount,
   markNudged,
+  markRecorded,
+  markSessionEnded,
   recordShown,
+  setQueuedErrors,
   remainingMs,
   setConfidence,
   toggleEliminated,
@@ -144,6 +148,31 @@ describe('estado del examen', () => {
     expect(goTo(closed, 2, T0 + 99 * MINUTE)).toBe(closed);
   });
 
+  it('una respuesta elegida después del límite no cuenta, como en el examen real', () => {
+    const { state, ids } = fresh();
+    const [q] = ids as [string];
+    const option = newId();
+    const late = choose(state, q, option, T0 + 10 * MINUTE);
+    expect(late).toMatchObject({ changed: false, from: null });
+    expect(late.state).toBe(state);
+    expect(choose(state, q, option, T0 + 10 * MINUTE + 400).changed).toBe(false);
+    // Un instante antes del límite sí cuenta
+    expect(choose(state, q, option, T0 + 10 * MINUTE - 1).changed).toBe(true);
+  });
+
+  it('con el examen cerrado ya no cambia ninguna respuesta, marca ni descarte', () => {
+    const { state, ids } = fresh();
+    const [q] = ids as [string];
+    const [a, b] = [newId(), newId()];
+    const answered = choose(state, q, a, T0 + 1000).state;
+    const closed = finishExamState(answered, T0 + 2000, 'completed');
+    expect(choose(closed, q, b, T0 + 3000)).toMatchObject({ changed: false, from: a });
+    expect(choose(closed, q, b, T0 + 3000).state).toBe(closed);
+    expect(toggleMarked(closed, q)).toBe(closed);
+    expect(toggleEliminated(closed, q, b)).toBe(closed);
+    expect(setConfidence(closed, q, 'sure')).toBe(closed);
+  });
+
   it('registra los avisos de tiempo una sola vez', () => {
     const { state } = fresh();
     const next = addFiredAlerts(state, ['half', 'pace-20']);
@@ -154,6 +183,37 @@ describe('estado del examen', () => {
       'pace-20',
       'quarter',
     ]);
+  });
+});
+
+describe('cierre del examen', () => {
+  it('solo está cerrado cuando terminó, quedó en la bitácora y pasaron los errores al repaso', () => {
+    const { state } = fresh();
+    expect(isClosed(state)).toBe(false);
+    const finished = finishExamState(state, T0 + MINUTE, 'completed');
+    expect(isClosed(finished)).toBe(false);
+    const ended = markSessionEnded(finished, 3);
+    expect(ended).toMatchObject({ sessionEnded: true, correct: 3 });
+    expect(isClosed(ended)).toBe(false);
+    expect(isClosed(setQueuedErrors(ended, 0))).toBe(true);
+    // Sin terminar nunca está cerrado, aunque los pasos ya estén anotados
+    expect(isClosed(setQueuedErrors(markSessionEnded(state, 0), 0))).toBe(false);
+  });
+
+  it('anota cada respuesta registrada una sola vez, con su XP', () => {
+    const { state, ids } = fresh();
+    const [q] = ids as [string];
+    const once = markRecorded(state, q, 12);
+    expect(once).toMatchObject({ recorded: [q], xp: 12 });
+    expect(markRecorded(once, q, 12)).toBe(once);
+  });
+
+  it('un examen guardado antes de existir el campo de aciertos se lee con null', () => {
+    const { state } = fresh();
+    const { correct: _correct, ...old } = state;
+    const parsed = ExamStateSchema.safeParse(old);
+    expect(parsed.success).toBe(true);
+    expect(parsed.data?.correct).toBeNull();
   });
 });
 

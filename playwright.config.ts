@@ -15,6 +15,9 @@ export default defineConfig({
     baseURL: PREVIEW_URL,
     locale: 'es-MX',
     timezoneId: 'America/Merida',
+    // La interfaz respeta prefers-reduced-motion y deja sus animaciones en un instante. Sin esto axe
+    // a veces mide el contraste de una tarjeta a medio aparecer y marca una violación que no existe
+    reducedMotion: 'reduce',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     // Solo en entornos con un Chromium ya instalado fuera del proyecto, por ejemplo una sesión en

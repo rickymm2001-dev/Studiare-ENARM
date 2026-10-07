@@ -10,6 +10,8 @@ import { newId } from '@/data/ids';
 import type { Question } from '@/data/schemas/bank';
 import type { AppEvent, EventPayload } from '@/data/schemas/events';
 import type { User, UserSettings } from '@/data/schemas/people';
+import { recordEventOnce } from '@/data/usecases/recordEvent';
+import { rankedUlid, ULID_RANKS } from '@/demo/stableId';
 import { buildExam } from '@/engines/exam';
 import { sampleOptions } from '@/engines/sampler';
 import { sendErrorsToReview, type FailedQuestion } from '../review/sendErrors';
@@ -37,6 +39,23 @@ export interface ExamOptions {
 }
 
 const clockAt = (ms: number): Clock => ({ now: () => new Date(ms) });
+
+/** El fin de la sesión va al final de su milisegundo, después de cualquier respuesta fechada igual */
+const ENDED_RANK = ULID_RANKS - 1;
+
+/**
+ * Generador de los IDs de los eventos de una respuesta al cerrar. Salen del examen, la pregunta y el
+ * momento en que se eligió, así reintentar un cierre que se cortó a la mitad pide los mismos IDs y
+ * la bitácora, que rechaza un ID repetido, no recibe nada dos veces
+ */
+function answerEventIds(examId: string, questionId: string, at: number): () => string {
+  let rank = 0;
+  return () => {
+    const id = rankedUlid(`exam|${examId}|${questionId}`, at, rank);
+    rank += 1;
+    return id;
+  };
+}
 
 /** Carga las preguntas del examen con sus opciones y la viñeta de su caso, una sola vez */
 export async function loadExamBundles(
@@ -205,6 +224,9 @@ async function runClose(input: CloseInput): Promise<ExamState> {
     saveExamState(next);
     input.onProgress?.(next);
   };
+  const once: Pick<DataApi, 'recordEvent'> = {
+    recordEvent: (event) => recordEventOnce(api, event),
+  };
 
   // 1. Cada respuesta con su XP, fechada cuando el alumno la eligió
   for (const id of state.questionIds) {
@@ -214,9 +236,16 @@ async function runClose(input: CloseInput): Promise<ExamState> {
     // Una opción que ya no existe no se puede registrar como respuesta
     const chosen = bundle.options.find((option) => option.id === answer.optionId);
     if (!chosen) continue;
-    const at = answer.answeredAtMs ?? state.finishedAtMs ?? Date.now();
+    const at = Math.trunc(answer.answeredAtMs ?? state.finishedAtMs ?? Date.now());
+    const answeredId = answerEventIds(state.examId, id, at)();
+    // Lo que un intento anterior dejó de esta misma respuesta no cuenta, para que el XP salga igual
+    const history = known.filter(
+      (event) =>
+        event.id !== answeredId &&
+        !(event.type === 'xp_awarded' && event.payload.sourceEventId === answeredId),
+    );
     const recorded = await recordAnswerWithXp({
-      api,
+      api: once,
       user,
       settings,
       ctx: {
@@ -224,6 +253,7 @@ async function runClose(input: CloseInput): Promise<ExamState> {
         tz: user.timeZone,
         sessionId: state.examId,
         clock: clockAt(at),
+        newId: answerEventIds(state.examId, id, at),
       },
       payload: {
         questionVersionId: id,
@@ -237,19 +267,20 @@ async function runClose(input: CloseInput): Promise<ExamState> {
         ...(answer.marked ? { markedForReview: true } : {}),
       },
       physicianDifficulty: bundle.question.physicianDifficulty,
-      events: known,
+      events: history,
     });
-    known = [...known, recorded.answered, ...recorded.xpEvents];
+    known = [...history, recorded.answered, ...recorded.xpEvents];
     persist(markRecorded(state, id, recorded.xp));
   }
 
   // 2. El fin de la sesión, fechado cuando terminó el examen
   if (!state.sessionEnded) {
-    const finishedAt = state.finishedAtMs ?? Date.now();
+    const finishedAt = Math.trunc(state.finishedAtMs ?? Date.now());
     const correct = examAnswers(state, bundles).filter(
       (answer) => answer.optionId !== null && answer.correct,
     ).length;
-    await api.recordEvent(
+    await recordEventOnce(
+      api,
       createEvent(
         'session_ended',
         {
@@ -260,10 +291,16 @@ async function runClose(input: CloseInput): Promise<ExamState> {
           durationMs: Math.round(elapsedMs(state, finishedAt)),
           xp: state.xp,
         },
-        { userId: user.id, tz: user.timeZone, sessionId: state.examId, clock: clockAt(finishedAt) },
+        {
+          userId: user.id,
+          tz: user.timeZone,
+          sessionId: state.examId,
+          clock: clockAt(finishedAt),
+          newId: () => rankedUlid(`exam-ended|${state.examId}`, finishedAt, ENDED_RANK),
+        },
       ),
     );
-    persist(markSessionEnded(state));
+    persist(markSessionEnded(state, correct));
   }
 
   // 3. Los errores pasan al repaso. Las preguntas en blanco no, porque no fueron un error
