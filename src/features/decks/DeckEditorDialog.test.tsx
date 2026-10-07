@@ -61,6 +61,41 @@ function renderEditor() {
 }
 
 describe('editor de tarjetas del mazo', () => {
+  it('avisa de una tarjeta larga tras una pausa y de un duplicado, sin bloquear el guardado', async () => {
+    const typing = userEvent.setup();
+    renderEditor();
+    await screen.findByRole('dialog');
+    const front = screen.getByLabelText(t.decks.editor.front);
+    const back = screen.getByLabelText(t.decks.editor.back);
+
+    // Una respuesta de más de 50 palabras es un aviso, y la región de estado existe desde antes
+    expect(screen.getAllByRole('status').length).toBeGreaterThan(0);
+    await typing.type(front, '¿Qué es la FEVI?');
+    await typing.click(back);
+    await typing.paste(Array.from({ length: 60 }, (_, index) => `palabra${index}`).join(' '));
+    expect(
+      await screen.findByText(t.cardQuality.footer, undefined, { timeout: 3000 }),
+    ).toBeVisible();
+    expect(screen.getByText(/La respuesta tiene 60 palabras y es muy larga/)).toBeVisible();
+
+    // El aviso no impide guardar
+    await typing.click(screen.getByRole('button', { name: t.decks.editor.save }));
+    expect(await screen.findByText(t.decks.editor.saved)).toBeVisible();
+    // Al limpiar el formulario los avisos se van, la tarjeta no sale duplicada de sí misma
+    await waitFor(() => {
+      expect(screen.queryByText(t.cardQuality.footer)).toBeNull();
+    });
+    expect(screen.queryByText(/Ya tienes una tarjeta con este mismo texto/)).toBeNull();
+
+    // Escribir otra con el mismo frente avisa del duplicado
+    await typing.type(screen.getByLabelText(t.decks.editor.front), '¿Qué es la FEVI?');
+    expect(
+      await screen.findByText(/Ya tienes una tarjeta con este mismo texto/, undefined, {
+        timeout: 3000,
+      }),
+    ).toBeVisible();
+  });
+
   it('pide lo que falta antes de guardar y avisa de un texto sin huecos', async () => {
     const typing = userEvent.setup();
     renderEditor();

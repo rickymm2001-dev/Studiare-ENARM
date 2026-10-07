@@ -3,7 +3,7 @@
 // plano que se guarda escapado. Una tarjeta nueva aparece en Repasar al guardarla.
 import { Pencil, Trash2, X } from 'lucide-react';
 import { Dialog } from 'radix-ui';
-import { useId, useState } from 'react';
+import { useId, useMemo, useState } from 'react';
 import { htmlToText } from '@/data/content/plainText';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
@@ -19,14 +19,21 @@ import {
   type NoteDraft,
   type NoteKind,
 } from '@/data/usecases/manualDecks';
+import { checkCardQuality } from '@/engines/cardQuality';
+import { buildDuplicateIndex, findDuplicates } from '@/engines/duplicates';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { TextAreaField } from '@/ui/components/field';
 import type { ReadySession } from '../shared/RequireSession';
+import { useDebouncedValue } from '../shared/useDebouncedValue';
+import { CardQualityHints } from './CardQualityHints';
 
 /** Los tipos de tarjeta en el orden en que se ofrecen */
 const KINDS: readonly NoteKind[] = ['basic', 'basic_reverse', 'cloze'];
+
+/** Pausa tras teclear antes de revisar la tarjeta, para no anunciar cada letra al lector de pantalla */
+const HINTS_DELAY_MS = 500;
 
 const emptyDraft = (kind: NoteKind): NoteDraft => {
   switch (kind) {
@@ -63,6 +70,12 @@ export function DeckEditorDialog({
   const cards = useLiveData(
     async () => (await api.repos.cards.list()).filter((card) => card.deckId === deck.id),
     [api.repos, deck.id],
+  );
+  // Los duplicados se buscan entre todas tus tarjetas y las de los mazos que sigues, no solo en este mazo
+  const everyNote = useLiveData(() => api.repos.notes.list(), [api.repos]);
+  const duplicateIndex = useMemo(
+    () => (everyNote ? buildDuplicateIndex(everyNote) : null),
+    [everyNote],
   );
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draft, setDraft] = useState<NoteDraft>(emptyDraft('basic'));
@@ -115,6 +128,23 @@ export function DeckEditorDialog({
       setError('save');
     }
   };
+
+  // Al limpiar el formulario tras guardar los avisos se van de una vez y no esperan la pausa, si no
+  // la tarjeta recién guardada saldría como duplicada de sí misma
+  const pausedDraft = useDebouncedValue(draft, HINTS_DELAY_MS);
+  const isBlank =
+    draft.kind === 'cloze'
+      ? draft.text === '' && draft.extra === ''
+      : draft.front === '' && draft.back === '';
+  const settledDraft = isBlank ? draft : pausedDraft;
+  const issues = useMemo(() => checkCardQuality(settledDraft), [settledDraft]);
+  const duplicates = useMemo(
+    () =>
+      duplicateIndex
+        ? findDuplicates(settledDraft, duplicateIndex, editingId ? { excludeId: editingId } : {})
+        : null,
+    [duplicateIndex, settledDraft, editingId],
+  );
 
   const errorText = error === null ? null : error === 'save' ? text.saveError : text.errors[error];
   // La cuenta de cartas avisa lo que no es obvio, los huecos de una cloze y las dos de una inversa
@@ -234,6 +264,7 @@ export function DeckEditorDialog({
             {cardCount > 0 ? (
               <p className="text-sm text-fg-muted">{text.cards(cardCount)}</p>
             ) : null}
+            <CardQualityHints issues={issues} duplicates={duplicates} />
 
             {errorText ? (
               <p role="alert" className="text-sm font-medium text-danger">
