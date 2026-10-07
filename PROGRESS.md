@@ -6,8 +6,8 @@
 - Fase A aprobada por Ricardo el 2026-10-02
 - Fase B en curso desde el 2026-10-02. Ricardo la aprobó junto con la Fase A
 - Bloques 9 y 10 terminados. Bloque 8 (contenido demo) pausado con 4 de 6 lotes y sin mazos (D-050)
-- Fase C con sus 10 bloques programados. Falta el cierre según 15.1 y la aprobación de Ricardo, ver su sección. Hay 20 de 28 pantallas construidas y 8 siguen como esqueleto con aviso de Próximamente
-- Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki. Empieza cuando Ricardo apruebe el cierre de la Fase C, que sigue con unos arreglos de la revisión independiente
+- Fase C con sus 10 bloques programados y el cierre de 15.1 hecho. Espera la aprobación de Ricardo, ver su sección. Hay 20 de 28 pantallas construidas y 8 siguen como esqueleto con aviso de Próximamente
+- Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. Empieza cuando Ricardo apruebe el cierre de la Fase C
 - Fase P en curso (D-060). Bloques 1 a 4 terminados, 7 y 9 a medias, 5, 6 y 8 sin empezar, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
 - Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
@@ -80,6 +80,56 @@ Ricardo pidió ver tomar forma la interfaz completa antes de seguir con el banco
 - [x] 8. Party con grupos, código de invitación, tabla semanal y retos colectivos
 - [x] 9. Progreso, planificador y examen completo. Planificador (D-081), examen con resultados y errores al repaso (D-082), carga futura y dificultad en Progreso (D-083)
 - [x] 10. Tutor sin IA, widgets de análisis de Inicio, duelos y tarjeta de logro de Party, mazos a mano y pruebas e2e de las pantallas nuevas (D-083, D-084)
+
+### Cierre de la fase (15.1)
+
+#### Evidencia por criterio de aceptación
+| Criterio | Prueba | Resultado |
+|---|---|---|
+| npm run check pasa | typecheck de 3 proyectos, ESLint y Vitest con cobertura | Pasa. 718 pruebas pasan y 2 se omiten, en 105 archivos |
+| Los motores superan el 90% de cobertura | Cobertura de Vitest sobre src/engines | Pasa con 99.4% de sentencias |
+| La app compila sin secretos | npm run build con scripts/secrets.ts sobre dist | Pasa. Sin secretos en dist |
+| Los flujos 1, 2, 4, 5 y 6 de 14.1 funcionan | tests/e2e con un archivo por flujo, en teléfono y escritorio | Pasan |
+| Estado calibrando en cada función que depende de datos | tests/e2e/calibrating.spec.ts con un alumno nuevo, más pruebas de pantalla del plan y los resultados | Pasa |
+| Toda demostración y dato simulado lleva etiqueta | tests/e2e/labels.spec.ts, que incluye Party, duelos y tarjeta de logro | Pasa |
+| Sin violaciones serias de accesibilidad y sin desbordes de lado en el teléfono | axe en cada prueba de pantalla, con la revisión de desbordamiento horizontal dentro del mismo ayudante | Pasa |
+| El examen se puede retomar sin duplicar eventos | examSession.test.ts y recordEvent.test.ts, con IDs de evento fijos por respuesta | Pasa |
+| El plan Gratis se respeta en práctica, examen, duelo y plan del día | Pruebas de dailyLimit, examSizes, planner y duelos | Pasa |
+
+#### Conteo de pruebas al cierre
+- Vitest. 718 pruebas pasan y 2 se omiten, en 105 archivos de 106. Cobertura de sentencias 72.1% en general y 99.4% en src/engines
+- Playwright. 134 pruebas pasan, 67 por proyecto en teléfono (390 por 844) y escritorio (1280 por 800), en 8.6 minutos. Corren con movimiento reducido para que axe no mida tarjetas a medio aparecer
+- Capturas. docs/screenshots/fase-c con las pantallas del alumno con la demostración y los flujos de práctica, examen, mazos propios y Party con duelo y tarjeta de logro, en teléfono y escritorio, claro y oscuro. Se regeneran con npm run screenshots
+
+#### Revisión independiente (15.1, paso 3)
+- Revisaron el código de la fase agentes que no lo escribieron, contra la especificación, PLAN.md y DECISIONES.md. Se agruparon los hallazgos por área y todos se corrigieron o se documentaron, ver D-082 y D-084
+- Seguridad y Party. El cliente de Supabase aceptaba la llave anterior de servicio por parecerse a la pública. El premio de los retos colectivos se podía cobrar una y otra vez con metas que cumplían solos los compañeros simulados. Volver atrás desde la retroalimentación dejaba contestar otra vez la misma pregunta
+- Examen. El cierre no era idempotente, un examen terminado que no se registró se podía pisar con otro, seguían contando respuestas después del límite de tiempo, el último examen no decía cuántas acertó y el foco no se movía al cambiar de pregunta
+- Práctica y simulador. El descarte de opciones y el muestreo dirigido a las trampas del alumno de D-080 no estaban conectados, y la opción correcta no se repartía parejo entre posiciones
+- Plan Gratis y calibrando. Un examen abierto no apartaba las preguntas del día, el plan proponía más práctica de la permitida y faltaba el estado calibrando en el plan y en los resultados
+- Tutor y Progreso. Los consejos por sesgo no decían su base ni que son borrador, el widget de temas débiles calibraba con todos los temas aunque se eligiera una rama, y el editor aceptaba huecos sin cerrar
+- Pruebas. Faltaban pruebas de pantalla con Testing Library, de las reglas del borrador para reactivos raros y de la visibilidad de la pestaña
+- Al correr el e2e completo con la revisión de desbordamiento apareció uno más, el informe del tutor se salía de lado en el teléfono por la etiqueta de borrador, que no podía pasar a dos renglones. Se corrigió junto con las cuadrículas de una columna de Progreso, Planificador, Configuración y Resultados
+
+#### Desviaciones y notas
+- Solo el heatmap, los temas débiles y la carga futura tienen ajustes en el tablero de Inicio. Los demás widgets no tienen nada que ajustar todavía (D-084)
+- El informe del tutor se llama Tu resumen y no informe semanal, porque todavía no es semanal ni trae olvidos ni planificador (D-084)
+- Los grupos, compañeros y retos simulados del Party local viven en la base activa y no en enarm_demo, marcados como simulados. Hay que dejarlos fuera cuando la bitácora se sincronice (D-084)
+- Los mazos de Paco y el banco siguen en pausa por indicación de Ricardo del 2026-10-06. Esta fase solo programó
+- Una corrida de e2e falló antes por no encontrar el Chromium de Playwright. Se arregla con la variable PW_CHROMIUM_PATH apuntando al Chromium instalado, sin descargar nada
+- La corrida completa de e2e antes de este cierre tuvo 131 de 134. Las tres que fallaron eran de Party y del tutor en teléfono, y se corrigieron. La última corrida pasó las 134
+
+#### Decisiones de la fase
+- D-080 a D-084 con las directrices V2, el planificador, el examen, Progreso y el tutor. D-085 y D-086 con la guía de Anki y las bibliotecas, que son el plan de la Fase C2
+
+#### Preguntas abiertas para Ricardo
+1. Banco y mazos. La Fase B sigue sin cerrarse del todo. Recomiendo cerrarla con las 200 preguntas existentes, para no frenar las etapas de la Fase C2 mientras el banco está en pausa
+2. Fatiga de decisión (D-054). Recomiendo adoptar la tendencia como método por defecto, porque es más estable y marca menos. Los tercios de 7.6 siguen siendo los que usa la app hasta que lo decidas
+3. Referido concretado (D-080). Recomiendo que cuente cuando el aviso de la pasarela de pago verifica el primer pago del referido, porque no se puede fabricar desde el navegador
+4. Segundo proveedor de LLM. Si se agrega el LLM de OpenAI y con qué alcance, porque CLAUDE.md dice proxy hacia la API de Claude y nada de chat libre. Mientras no lo confirmes, el proxy de la Fase D no se ata a un proveedor y la IA solo da explicaciones estructuradas (D-080)
+5. Textos académicos fundamentales para las señales de la IA (D-085). Propondré una lista provisional que confirmas tú o un médico
+6. Licencia de Paco para uso comercial y qué funciones son gratis y cuáles de pago (D-085)
+7. Ritmo de trabajo. Si quieres que avance entre etapas de la Fase C2 sin detenerme, o que me detenga al cierre de cada una como pide 15.1. Recomiendo detenerme en cada una al principio y pasar a avanzar sin parar cuando hayas probado dos
 
 ### Bitácora por bloque
 - Tutor, widgets de análisis, duelos y tarjeta de logro (D-084). Tutor sin IA con hipótesis por reglas sobre los errores de 14 días, evidencia, acciones de la lista cerrada, respuesta del alumno, informe semanal con plantilla y consejos por sesgo en borrador. Inicio con temas débiles, patrón de sesgo, carga futura y última hipótesis, con ajustes validados y estado calibrando. Un solo análisis de respuestas para Progreso y los widgets. Duelos de Party con las mismas 20 preguntas fijadas al crear el duelo, jugados con el simulador como sesión de tipo reto, con compañeros simulados marcados y el límite del plan Gratis. Tarjeta de logro con Web Share API y descarga de respaldo. Pruebas unitarias de cada pieza, de componentes del botón de compartir y de los widgets, y e2e del tutor con Inicio, del duelo completo y de compartir

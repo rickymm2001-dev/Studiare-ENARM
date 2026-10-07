@@ -340,7 +340,7 @@ Bloques
 
 ### Fase C2. Organización, carga diaria, apuntes e importación (D-085 y D-086)
 
-Nace de la guía de Anki que compartió Ricardo y de su idea de sumar lo mejor de RemNote. Va antes de la Fase D y cada etapa cierra según 15.1 con aprobación de Ricardo. Las 14 filas son las de la tabla que aprobó el 2026-10-07.
+Nace de la guía de Anki que compartió Ricardo y de su idea de sumar lo mejor de RemNote. Va antes de la Fase D y cada etapa cierra según 15.1 con aprobación de Ricardo. Las 14 filas son las de la tabla que aprobó el 2026-10-07. La conversación completa, con el diagnóstico, la entrevista, la tabla de controversias y la aprobación, está en docs/ANALISIS_GUIA_ANKI.md.
 
 Etapas
 0. Cerrar la Fase C con lo que falta de la revisión (descarte y muestreo dirigido en la práctica, calibrando en el plan y límite Gratis, pruebas de pantallas y visibilidad), la corrida final y su aprobación
