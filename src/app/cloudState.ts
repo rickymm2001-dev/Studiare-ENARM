@@ -5,10 +5,13 @@ import { getCloud } from '@/data/cloud/client';
 import type { DataApi } from '@/data/context';
 import { pushLocalAccount } from '@/data/usecases/cloudLink';
 
+/** Por qué la app cerró la sesión sin que el alumno lo pidiera */
+export type SignOutReason = 'other_device';
+
 export type CloudState =
   | { status: 'off' }
   | { status: 'checking' }
-  | { status: 'signed-out' }
+  | { status: 'signed-out'; reason?: SignOutReason }
   | { status: 'linked'; identity: CloudIdentity }
   | { status: 'error' };
 
@@ -20,6 +23,14 @@ export const useCloud = create<{ state: CloudState; set: (state: CloudState) => 
     },
   }),
 );
+
+/**
+ * Estado al quedar sin sesión. Si ya se sabía el motivo, como other_device, lo conserva, porque el
+ * aviso de que la sesión se cerró llega antes que el SIGNED_OUT de Supabase y no debe borrarlo
+ */
+export function signedOutState(previous: CloudState): CloudState {
+  return previous.status === 'signed-out' && previous.reason ? previous : { status: 'signed-out' };
+}
 
 /** Sube alias y datos de cuenta si hay cuenta en la nube conectada. No hace nada sin ella */
 export async function pushAccountIfLinked(api: Pick<DataApi, 'repos'>, userId: string) {
