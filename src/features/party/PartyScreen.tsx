@@ -2,11 +2,10 @@
 // 4 a. m., retos colectivos y duelos con las mismas preguntas. Se comparte alias, XP, nivel y racha, y
 // en un duelo cuántas acertaste y cuánto tardaste en esas preguntas (9.6). Sin servidor, todo vive en
 // este navegador y los compañeros simulados van marcados.
-import { Copy, LogOut, Plus, Trophy, Users } from 'lucide-react';
+import { Copy, LogOut, Plus, Users } from 'lucide-react';
 import { useState, type SyntheticEvent } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useDataApi } from '@/data/context';
-import { createEvent } from '@/data/events/createEvent';
 import { useLiveData } from '@/data/hooks';
 import type { Challenge, Group, Membership } from '@/data/schemas/activity';
 import type { AppEvent } from '@/data/schemas/events';
@@ -17,11 +16,8 @@ import {
   leaveGroup,
   type JoinResult,
 } from '@/data/usecases/party';
-import { collectiveProgress, weeklyLeaderboard } from '@/engines/party';
-import { studyDayOf } from '@/engines/studyDay';
-import { awardXp } from '@/engines/xp';
+import { weeklyLeaderboard } from '@/engines/party';
 import { t } from '@/i18n/es-MX';
-import { celebrate } from '@/ui/celebrate';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
@@ -32,9 +28,10 @@ import { dailyQuestions } from '../shared/dailyLimit';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 import { AchievementShare } from './AchievementShare';
+import { ChallengeRow } from './ChallengeRow';
 import { DuelRow } from './DuelRow';
 import { NewDuelForm } from './NewDuelForm';
-import { challengeContributions, memberStats, type ChallengeMetric } from './stats';
+import { memberStats, type ChallengeMetric } from './stats';
 
 export function PartyScreen() {
   return <RequireSession screen="party">{(session) => <Party session={session} />}</RequireSession>;
@@ -345,86 +342,6 @@ function GroupCard({
         {t.party.leave}
       </Button>
     </Card>
-  );
-}
-
-function ChallengeRow({
-  challenge,
-  members,
-  snapshot,
-  events,
-  session,
-}: {
-  challenge: Challenge;
-  members: Membership[];
-  snapshot: Snapshot;
-  events: AppEvent[];
-  session: ReadySession;
-}) {
-  const api = useDataApi();
-  const { user } = session;
-  const startDay = studyDayOf(new Date(challenge.startsAt), user.timeZone);
-  const progress = collectiveProgress(
-    challengeContributions(challenge, members, { userId: user.id, snapshot, startDay }),
-    challenge.target,
-  );
-  const claimed = events.some(
-    (event) => event.type === 'challenge_completed' && event.payload.challengeId === challenge.id,
-  );
-  const claim = async () => {
-    const ctx = { userId: user.id, tz: user.timeZone };
-    const completed = await api.recordEvent(
-      createEvent(
-        'challenge_completed',
-        { challengeId: challenge.id, groupId: challenge.groupId },
-        ctx,
-      ),
-    );
-    for (const award of awardXp({
-      activity: { kind: 'challenge', eventId: completed.id },
-      streakDays: snapshot.streak.current,
-      volumeXpToday: 0,
-    })) {
-      await api.recordEvent(createEvent('xp_awarded', award, ctx));
-    }
-    celebrate('badge');
-  };
-  const percent = Math.round(progress.fraction * 100);
-  return (
-    <li className="rounded-md bg-muted p-3">
-      <p className="flex items-center gap-2 font-medium">
-        <Trophy aria-hidden className="size-4" />
-        {challenge.title}
-      </p>
-      <div
-        className="mt-2 h-2 w-full overflow-hidden rounded-full bg-surface"
-        role="progressbar"
-        aria-label={challenge.title}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={percent}
-      >
-        <div className="h-full bg-primary" style={{ width: `${percent}%` }} />
-      </div>
-      <p className="mt-1 text-sm text-fg-muted">
-        {t.party.progress(progress.total, progress.target, t.party.metrics[challenge.metric])}
-      </p>
-      {progress.completed ? (
-        claimed ? (
-          <p className="text-sm text-success">{t.party.claimed}</p>
-        ) : (
-          <Button
-            size="sm"
-            className="mt-2"
-            onClick={() => {
-              void claim();
-            }}
-          >
-            {t.party.claim}
-          </Button>
-        )
-      ) : null}
-    </li>
   );
 }
 

@@ -928,7 +928,7 @@ export const featureText = {
   },
   party: {
     privacy:
-      'En un grupo compartes tu alias, tu XP, tu nivel y tu racha. En un duelo, además, cuántas aciertas y cuánto tardas en esas preguntas. Nunca tu exactitud por tema ni tus sesgos. Por ahora los grupos viven en este navegador.',
+      'En un grupo compartes tu alias, tu XP, tu nivel y tu racha. En un duelo, además, cuántas aciertas y cuánto tardas en esas preguntas. Nunca tu exactitud por tema, tus sesgos ni tu conducta de estudio. Por ahora los grupos viven en este navegador.',
     createTitle: 'Crear un grupo',
     createHint: 'Aún no estás en ningún grupo. Crea uno o únete con un código.',
     groupName: 'Nombre del grupo',
@@ -963,6 +963,9 @@ export const featureText = {
     metrics: { cards: 'tarjetas', questions: 'preguntas', xp: 'XP', accuracy: 'preguntas' },
     claim: 'Reclamar 100 XP',
     claimed: 'Reto cumplido. Ya sumaste tus 100 XP.',
+    needOwnContribution:
+      'Tus compañeros simulados ya cumplieron la meta, pero tú todavía no aportas nada. Estudia algo y vuelve a reclamar tus 100 XP.',
+    oneClaimPerDay: 'Hoy ya reclamaste el premio de un reto. El de este lo reclamas mañana.',
     newChallenge: 'Nuevo reto',
     challengeTitle: 'Nombre del reto',
     metric: 'Qué cuenta',

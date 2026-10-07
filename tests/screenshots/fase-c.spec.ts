@@ -95,7 +95,7 @@ test('pantallas del alumno con la demostración', async ({ page }, info) => {
   }
 });
 
-test('práctica, examen completo y resultados', async ({ page }, info) => {
+test('práctica con pregunta, retroalimentación y resumen', async ({ page }, info) => {
   test.setTimeout(300_000);
   const project = info.project.name;
   await signUp(page);
@@ -121,8 +121,13 @@ test('práctica, examen completo y resultados', async ({ page }, info) => {
   await page.getByRole('button', { name: t.simulator.finish }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.sessionSummary.title);
   await capture(page, '13-resumen', project);
+});
 
-  // Examen completo corto de 20 preguntas
+// Aparte de la práctica porque el plan Gratis deja 20 preguntas al día y el examen usa las 20
+test('examen completo y resultados', async ({ page }, info) => {
+  test.setTimeout(300_000);
+  const project = info.project.name;
+  await signUp(page);
   await page.goto(SCREENS.simulatorSetup.path);
   const card = page.getByRole('region', { name: t.exam.cardTitle });
   await expect(card.getByText(t.exam.timeTotal(examTotalMs(20)))).toBeVisible({ timeout: 60_000 });

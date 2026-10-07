@@ -6,6 +6,7 @@ import { t } from '@/i18n/es-MX';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
 test('crea un grupo, ve la tabla, se une con su código y completa un reto', async ({ page }) => {
+  test.setTimeout(180_000);
   await signUp(page);
   await page.goto(SCREENS.party.path);
   await expect(page.getByText(t.party.privacy)).toBeVisible();
@@ -43,26 +44,60 @@ test('crea un grupo, ve la tabla, se une con su código y completa un reto', asy
   await join.getByRole('button', { name: t.party.join }).click();
   await expect(join.getByRole('status')).toHaveText(t.party.joinResults.not_found);
 
-  // Reto colectivo. Con una meta pequeña los compañeros simulados lo cumplen y se reclama una vez
+  // Reto colectivo. Con una meta de una tarjeta los compañeros simulados lo cumplen solos, pero sin
+  // aporte propio no hay premio, porque si no cualquiera inflaba su XP con datos simulados
   await group.getByRole('button', { name: t.party.newChallenge }).click();
   await group.getByLabel(t.party.challengeTitle).fill('Primeras tarjetas');
   await group.getByLabel(t.party.metric).selectOption('cards');
   await group.getByLabel(t.party.target).fill('1');
   await group.getByRole('button', { name: t.party.createChallenge }).click();
   await expect(group.getByRole('progressbar', { name: 'Primeras tarjetas' })).toBeVisible();
+  await expect(group.getByText(t.party.needOwnContribution)).toBeVisible();
+  await expect(group.getByRole('button', { name: t.party.claim })).toHaveCount(0);
+
+  // Con una tarjeta repasada ya hay aporte propio y se reclama una sola vez
+  await page.goto(SCREENS.decks.path);
+  const deck = page.getByRole('listitem').filter({ hasText: 'Urgencias (Paco)' });
+  await deck.getByRole('button', { name: t.decks.follow }).click();
+  await expect(deck.getByRole('button', { name: t.decks.unfollow })).toBeVisible({
+    timeout: 60_000,
+  });
+  await page.goto(SCREENS.review.path);
+  await page.getByRole('button', { name: /^Repasar [\d,]+ tarjetas?$/ }).click();
+  await page.getByRole('button', { name: t.review.confidence.sure, exact: true }).click();
+  await page.getByRole('button', { name: t.review.show }).click();
+  await page.getByRole('button', { name: new RegExp(`^${t.review.ratings.good}`) }).click();
+  await page.getByRole('button', { name: t.review.finish }).click();
+  await expect(page.getByText(t.review.doneTitle)).toBeVisible();
+
+  await page.goto(SCREENS.party.path);
+  await expect(group.getByText(t.party.needOwnContribution)).toHaveCount(0);
   await group.getByRole('button', { name: t.party.claim }).click();
   await expect(group.getByText(t.party.claimed)).toBeVisible();
   await expect(group.getByRole('button', { name: t.party.claim })).toHaveCount(0);
 
-  // Los 100 XP del reto ya cuentan en Inicio
-  await page.goto('/');
-  await expect(page.getByText(t.widgets.level.total(100))).toBeVisible();
+  // Un segundo reto del mismo día también se cumple, pero el premio es de uno por día
+  await group.getByRole('button', { name: t.party.newChallenge }).click();
+  await group.getByLabel(t.party.challengeTitle).fill('Otra meta');
+  await group.getByLabel(t.party.metric).selectOption('cards');
+  await group.getByLabel(t.party.target).fill('1');
+  await group.getByRole('button', { name: t.party.createChallenge }).click();
+  await expect(group.getByText(t.party.oneClaimPerDay)).toBeVisible();
+  await expect(group.getByRole('button', { name: t.party.claim })).toHaveCount(0);
 
-  // Salir del grupo lo quita de la lista
+  // Los 100 XP del reto y las tarjetas repasadas ya cuentan en Inicio, y una sola vez
+  await page.goto('/');
+  await expect(page.getByText(/^1\d\d XP en total$/)).toBeVisible();
+
+  // Salir del grupo lo quita de la lista y el mismo código lo vuelve a abrir
   await page.goto(SCREENS.party.path);
   await page.getByRole('button', { name: t.party.leave }).click();
   await expect(page.getByRole('region', { name: 'Guardia de los jueves' })).toHaveCount(0);
   await expect(page.getByText(t.party.createHint)).toBeVisible();
+  await join.getByLabel(t.party.code).fill(code);
+  await join.getByRole('button', { name: t.party.join }).click();
+  await expect(join.getByRole('status')).toHaveText(t.party.joinResults.joined);
+  await expect(page.getByRole('region', { name: 'Guardia de los jueves' })).toBeVisible();
 });
 
 // Duelos (9.6). Se reta a un compañero simulado, las 20 preguntas son las mismas para los dos y gana
@@ -116,8 +151,26 @@ test('reta a un compañero a un duelo, lo juega y ve quién ganó', async ({ pag
     /\d+ de 20/,
   );
   await expect(played.getByRole('row', { name: /Diego M\./ })).toContainText(t.party.simulated);
-  const verdicts = Object.values(t.party.duel.verdicts);
-  await expect(played.getByRole('status')).toHaveText(new RegExp(verdicts.join('|')));
+  // El veredicto sale de comparar las dos filas. Mayor exactitud gana y con la misma decide el tiempo
+  const hits = async (row: string | RegExp) => {
+    const text = (await played.getByRole('row', { name: row }).textContent()) ?? '';
+    return Number(/(\d+) de 20/.exec(text)?.[1]);
+  };
+  const mine = await hits(new RegExp(t.party.duel.you));
+  const theirs = await hits(/Diego M\./);
+  const verdict = played.getByRole('status');
+  if (mine > theirs) await expect(verdict).toHaveText(t.party.duel.verdicts.win_accuracy);
+  else if (mine < theirs) await expect(verdict).toHaveText(t.party.duel.verdicts.lose_accuracy);
+  else
+    await expect(verdict).toHaveText(
+      new RegExp(
+        [
+          t.party.duel.verdicts.win_time,
+          t.party.duel.verdicts.lose_time,
+          t.party.duel.verdicts.draw,
+        ].join('|'),
+      ),
+    );
   await expect(played.getByRole('button', { name: t.party.duel.play })).toHaveCount(0);
   await expectNoSeriousA11yViolations(page);
 

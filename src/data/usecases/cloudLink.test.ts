@@ -2,6 +2,7 @@ import 'fake-indexeddb/auto';
 import { afterEach, describe, expect, it } from 'vitest';
 import { parseRole, toCloudAccount } from '../cloud/account';
 import { readCloudConfig } from '../cloud/client';
+import { jwtRole } from '../cloud/keyRole';
 import type { EnarmDb } from '../db/database';
 import { createDexieRepositories } from '../repos/dexie/createRepositories';
 import { freshDb } from '../testing/fixtures';
@@ -56,6 +57,41 @@ describe('configuración de la nube (D-075)', () => {
         VITE_SUPABASE_ANON_KEY: 'sb_secret_abcdefghijklmnopqrst',
       }),
     ).toBeNull();
+  });
+});
+
+describe('llaves de servicio en el navegador (D-075)', () => {
+  const url = 'https://bkjbcdwglyllizupokqm.supabase.co';
+  const base64url = (text: string) =>
+    btoa(text).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const jwt = (role: string) =>
+    [
+      base64url('{"alg":"HS256","typ":"JWT"}'),
+      base64url(JSON.stringify({ iss: 'supabase', role })),
+      'firma-de-prueba-0123456789',
+    ].join('.');
+
+  it('la llave pública anterior, un JWT con rol anon, sigue funcionando', () => {
+    const publicKey = jwt('anon');
+    expect(readCloudConfig({ VITE_SUPABASE_URL: url, VITE_SUPABASE_ANON_KEY: publicKey })).toEqual({
+      url,
+      publicKey,
+    });
+  });
+
+  it('la llave anterior de servicio, un JWT con rol service_role, no pasa', () => {
+    for (const role of ['service_role', 'supabase_admin', 'authenticated']) {
+      expect(
+        readCloudConfig({ VITE_SUPABASE_URL: url, VITE_SUPABASE_ANON_KEY: jwt(role) }),
+      ).toBeNull();
+    }
+  });
+
+  it('un texto que no es JWT o que no se puede leer no cambia lo que ya se aceptaba', () => {
+    expect(jwtRole('sb_publishable_abcdefghijklmnop')).toBeNull();
+    expect(jwtRole('a.b.c')).toBeNull();
+    expect(jwtRole('')).toBeNull();
+    expect(jwtRole(`${jwt('anon').split('.')[0]}.%%%.firma`)).toBeNull();
   });
 });
 

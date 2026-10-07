@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { newId } from '@/data/testing/fixtures';
 import { DUEL_QUESTIONS } from '@/engines/party';
 import { answered, event, minute, option, question } from '../tutor/testing/fixtures';
-import { duelSize, duelView, playerDuelResult, simulatedDuelResult } from './duels';
+import { duelSize, duelView, playerDuelResult, simulatedDuelResult, verdictFor } from './duels';
 
 const duelId = newId();
 const questions = Array.from({ length: 3 }, () => question({ id: newId() }));
@@ -135,8 +135,45 @@ describe('rival simulado', () => {
   });
 });
 
+describe('quién gana', () => {
+  const result = (memberId: string, correct: number, totalMs: number) => ({
+    memberId,
+    correct,
+    answered: 20,
+    totalMs,
+  });
+
+  it('gana quien acierta más, aunque tarde más', () => {
+    expect(verdictFor(result('yo', 15, 900_000), result('rival', 12, 300_000))).toEqual({
+      kind: 'win',
+      by: 'accuracy',
+    });
+    expect(verdictFor(result('yo', 11, 100_000), result('rival', 12, 900_000))).toEqual({
+      kind: 'lose',
+      by: 'accuracy',
+    });
+  });
+
+  it('con los mismos aciertos desempata el menor tiempo', () => {
+    expect(verdictFor(result('yo', 12, 600_000), result('rival', 12, 700_000))).toEqual({
+      kind: 'win',
+      by: 'time',
+    });
+    expect(verdictFor(result('yo', 12, 800_000), result('rival', 12, 700_000))).toEqual({
+      kind: 'lose',
+      by: 'time',
+    });
+  });
+
+  it('con todo igual es empate', () => {
+    expect(verdictFor(result('yo', 12, 700_000), result('rival', 12, 700_000))).toEqual({
+      kind: 'draw',
+    });
+  });
+});
+
 describe('vista del duelo', () => {
-  const rival = { id: newId() };
+  const rival = { id: 'rival-fijo' };
   const play = (correctCount: number, ms: number) => [
     started(sessionA, minute(0)),
     ...questions.map((_, index) =>
@@ -151,19 +188,19 @@ describe('vista del duelo', () => {
     });
   });
 
-  it('decidido trae los dos resultados y el veredicto desde el punto de vista del alumno', () => {
+  it('decidido trae los dos resultados y el veredicto que sale de compararlos', () => {
     const view = duelView({ events: play(3, 30_000), challenge, selfId: SELF, opponent: rival });
-    if (view.status !== 'decided') throw new Error('debía estar decidido');
-    expect(view.self).toMatchObject({ memberId: SELF, correct: 3, answered: 3 });
-    expect(view.rival.memberId).toBe(rival.id);
-    // Con 3 de 3 y el rival al menos con la misma exactitud solo puede ganar, empatar o perder por tiempo
-    expect(['win', 'lose', 'draw']).toContain(view.verdict.kind);
-    if (view.rival.correct < 3) expect(view.verdict).toEqual({ kind: 'win', by: 'accuracy' });
+    expect(view.status).toBe('decided');
+    if (view.status !== 'decided') return;
+    expect(view.self).toEqual({ memberId: SELF, correct: 3, answered: 3, totalMs: 30_000 });
+    expect(view.rival).toEqual(simulatedDuelResult(rival, challenge));
+    expect(view.verdict).toEqual(verdictFor(view.self, view.rival));
   });
 
-  it('perder por exactitud contra un rival con más aciertos', () => {
-    const view = duelView({ events: play(0, 30_000), challenge, selfId: SELF, opponent: rival });
-    if (view.status !== 'decided') throw new Error('debía estar decidido');
-    if (view.rival.correct > 0) expect(view.verdict).toEqual({ kind: 'lose', by: 'accuracy' });
+  it('el mismo duelo da siempre el mismo veredicto al volver a abrirlo', () => {
+    const events = play(2, 45_000);
+    const first = duelView({ events, challenge, selfId: SELF, opponent: rival });
+    const second = duelView({ events, challenge, selfId: SELF, opponent: rival });
+    expect(second).toEqual(first);
   });
 });

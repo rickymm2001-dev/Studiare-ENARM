@@ -89,6 +89,14 @@ export type DuelView =
   | { status: 'pending' }
   | { status: 'decided'; self: DuelResult; rival: DuelResult; verdict: DuelVerdict };
 
+/** Quién gana según 9.6, desde el punto de vista del alumno */
+export function verdictFor(self: DuelResult, rival: DuelResult): DuelVerdict {
+  const outcome = decideDuel(self, rival);
+  return outcome.kind === 'draw'
+    ? { kind: 'draw' }
+    : { kind: outcome.memberId === self.memberId ? 'win' : 'lose', by: outcome.by };
+}
+
 /** Lo que muestra un duelo desde el punto de vista del alumno */
 export function duelView(input: {
   events: readonly AppEvent[];
@@ -99,10 +107,5 @@ export function duelView(input: {
   const self = playerDuelResult(input.events, input.challenge, input.selfId);
   if (!self) return { status: 'pending' };
   const rival = simulatedDuelResult(input.opponent, input.challenge);
-  const outcome = decideDuel(self, rival);
-  const verdict: DuelVerdict =
-    outcome.kind === 'draw'
-      ? { kind: 'draw' }
-      : { kind: outcome.memberId === self.memberId ? 'win' : 'lose', by: outcome.by };
-  return { status: 'decided', self, rival, verdict };
+  return { status: 'decided', self, rival, verdict: verdictFor(self, rival) };
 }

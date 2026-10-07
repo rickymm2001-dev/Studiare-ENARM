@@ -2,14 +2,13 @@
 // la pregunta (7.5), confianza antes de ver la respuesta, temporizador y registro de cada cambio.
 import { Timer } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, Navigate, useNavigate } from 'react-router';
 import { SessionHeader } from '@/app/layout/SessionHeader';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
 import type { AppEvent } from '@/data/schemas/events';
 import { structureDictionary, topicTaxonomy } from '@/demo/content';
-import { sampleOptions } from '@/engines/sampler';
 import { findNegations } from '@/engines/structure';
 import { t } from '@/i18n/es-MX';
 import { toneClasses } from '@/ui/branches';
@@ -24,6 +23,7 @@ import { useUserEvents } from '../shared/useUserEvents';
 import { sendErrorsToReview } from '../review/sendErrors';
 import { recordAnswerWithXp } from './answerXp';
 import { HighlightedPrompt } from './HighlightedPrompt';
+import { sampleForQuestion } from './optionSampling';
 import { clock, formatDuration, usePractice, type McqConfidence } from './practice';
 import { useQuestion, type QuestionBundle } from './useQuestion';
 
@@ -47,6 +47,15 @@ function Practice({ session }: { session: ReadySession }) {
     practice.index < practice.questionIds.length;
   const bundle = useQuestion(active ? practice.questionIds[practice.index] : undefined);
   const events = useUserEvents(session.user.id);
+  // Si el alumno regresa desde la retroalimentación, esta pregunta ya tiene respuesta y no se
+  // contesta otra vez. Con el gesto de atrás se contaba doble y un duelo se cerraba sin la última
+  if (
+    practice.sessionId !== null &&
+    practice.userId === session.user.id &&
+    practice.answers.length > practice.index
+  ) {
+    return <Navigate to={screenPath('feedback')} replace />;
+  }
 
   const header = (
     <SessionHeader
@@ -112,17 +121,17 @@ function QuestionCard({
 
   const sample = useMemo(
     () =>
-      sampleOptions({
+      sampleForQuestion({
         options: options.map((option) => ({
           id: option.id,
           isCorrect: option.isCorrect,
           biasTag: option.biasTag,
         })),
         canonicalOptionIds: question.canonicalOptionIds,
-        mode: 'diverse',
-        count: settings.optionsShown,
-        // En un duelo las opciones salen iguales para los dos jugadores, así que la semilla es el duelo
-        seed: `${practice.duelId ?? sessionId}|${question.id}`.slice(0, 64),
+        questionId: question.id,
+        sessionId,
+        duelId: practice.duelId,
+        optionsShown: settings.optionsShown,
       }),
     [options, question, settings.optionsShown, sessionId, practice.duelId],
   );
