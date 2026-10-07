@@ -6,6 +6,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { z } from 'zod';
+import { checkQuestions } from './draftRules.ts';
 
 const root = resolve(import.meta.dirname, '..', '..');
 const readJson = (path: string): unknown => JSON.parse(readFileSync(path, 'utf8')) as unknown;
@@ -34,6 +35,8 @@ const QuestionSchema = z.object({
   canonical: z.array(z.string()),
   explanation: z.string(),
   gpcRefs: z.array(z.string()),
+  /** Tipos de reactivo raros, opcionales. Con alguno las reglas de forma se relajan (D-080) */
+  kinds: z.array(z.string()).optional(),
 });
 const DraftSchema = z.union([
   z.array(QuestionSchema),
@@ -85,9 +88,6 @@ const topics = new Map(
     ),
   ),
 );
-const YEAR = /(?<!\d)(19|20)\d{2}(?!\d)/;
-const CATALOG_CODE = /[A-Z]{2,}-\d/;
-const KEYS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
 
 const files = process.argv.slice(2);
 if (files.length === 0) {
@@ -98,62 +98,18 @@ if (files.length === 0) {
 let failed = false;
 for (const file of files) {
   const questions = DraftSchema.parse(readJson(resolve(file)));
-  const problems: string[] = [];
   const count = (values: string[]) => {
     const counts = new Map<string, number>();
     for (const value of values) counts.set(value, (counts.get(value) ?? 0) + 1);
     return [...counts.entries()].sort((a, b) => b[1] - a[1]);
   };
-  let detected = 0;
-  let agree = 0;
-
-  for (const question of questions) {
-    const { key } = question;
-    const words = question.explanation.trim().split(/\s+/).length;
-    if (words < 80 || words > 150) problems.push(`${key} explicación de ${words} palabras`);
-    const topic = topics.get(question.topic);
-    if (topic?.branch !== question.branch) problems.push(`${key} rama y tema no coinciden`);
-    if (!topic?.subtopics.has(question.subtopic))
-      problems.push(`${key} subtema ${question.subtopic}`);
-    if (question.options.map((option) => option.key).join('') !== KEYS.join(''))
-      problems.push(`${key} las opciones deben ser a-j en orden`);
-    const correct = question.options.filter((option) => option.correct);
-    if (correct.length !== 1) problems.push(`${key} tiene ${correct.length} opciones correctas`);
-    for (const option of question.options) {
-      if (option.correct && option.bias) problems.push(`${key}${option.key} correcta con sesgo`);
-      if (!option.correct && !taggable.has(option.bias ?? ''))
-        problems.push(`${key}${option.key} sesgo no válido ${option.bias ?? '(vacío)'}`);
-      for (const secondary of option.secondaryBiases ?? [])
-        if (!allBiases.has(secondary))
-          problems.push(`${key}${option.key} sesgo secundario ${secondary}`);
-    }
-    if (new Set(question.options.map((o) => o.text.trim().toLowerCase())).size !== 10)
-      problems.push(`${key} opciones repetidas`);
-    if (
-      new Set(question.canonical).size !== 4 ||
-      !question.canonical.includes(correct[0]?.key ?? '')
-    )
-      problems.push(`${key} el set canónico debe tener 4 claves e incluir la correcta`);
-    for (const reference of question.gpcRefs)
-      if (YEAR.test(reference) || CATALOG_CODE.test(reference))
-        problems.push(`${key} referencia con año o clave de catálogo`);
-
-    const auto = engine.analyzeStructure(
-      {
-        vignette: question.vignette,
-        prompt: question.prompt,
-        serialCase: question.caseKey !== null,
-      },
-      dictionary,
-    );
-    if (auto.polarity !== question.polarity)
-      problems.push(`${key} polaridad ${question.polarity}, el motor dice ${auto.polarity}`);
-    if (auto.task !== null) {
-      detected += 1;
-      if (auto.task === question.task) agree += 1;
-      else problems.push(`${key} tarea ${question.task}, el motor dice ${auto.task}`);
-    }
-  }
+  const report = checkQuestions(questions, {
+    taggable,
+    allBiases,
+    topics,
+    analyze: (question) => engine.analyzeStructure(question, dictionary),
+  });
+  const { problems, notes, detected, agree } = report;
 
   const negatives = questions.filter((question) => question.polarity === 'negative').length;
   console.log(`\n${file}`);
@@ -167,6 +123,10 @@ for (const file of files) {
       .map(([bias, n]) => `${bias} ${n}`)
       .join(', '),
   );
+  if (notes.length > 0) {
+    console.log(`Avisos de reactivos raros, no fallan (${notes.length})`);
+    for (const note of notes) console.log(`- ${note}`);
+  }
   if (problems.length > 0) {
     failed = true;
     console.log(`Problemas (${problems.length})`);

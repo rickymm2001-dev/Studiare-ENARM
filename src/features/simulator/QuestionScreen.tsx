@@ -2,16 +2,14 @@
 // la pregunta (7.5), confianza antes de ver la respuesta, temporizador y registro de cada cambio.
 import { Timer } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, Navigate, useNavigate } from 'react-router';
 import { SessionHeader } from '@/app/layout/SessionHeader';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
 import type { AppEvent } from '@/data/schemas/events';
 import { structureDictionary, topicTaxonomy } from '@/demo/content';
-import { sampleOptions } from '@/engines/sampler';
-import { findNegations, type HighlightRange } from '@/engines/structure';
-import { awardXp } from '@/engines/xp';
+import { findNegations } from '@/engines/structure';
 import { t } from '@/i18n/es-MX';
 import { toneClasses } from '@/ui/branches';
 import { cn } from '@/ui/cn';
@@ -20,10 +18,14 @@ import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
-import { buildSnapshot } from '../home/snapshot';
-import { volumeXpToday } from '../review/study';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
+import { useVisibilityLog } from '../shared/useVisibilityLog';
+import { sendErrorsToReview } from '../review/sendErrors';
+import { recordAnswerWithXp } from './answerXp';
+import { HighlightedPrompt } from './HighlightedPrompt';
+import { OptionChoice } from './OptionChoice';
+import { correctPositionCounts, sampleForQuestion } from './optionSampling';
 import { clock, formatDuration, usePractice, type McqConfidence } from './practice';
 import { useQuestion, type QuestionBundle } from './useQuestion';
 
@@ -47,6 +49,20 @@ function Practice({ session }: { session: ReadySession }) {
     practice.index < practice.questionIds.length;
   const bundle = useQuestion(active ? practice.questionIds[practice.index] : undefined);
   const events = useUserEvents(session.user.id);
+  useVisibilityLog({
+    userId: session.user.id,
+    timeZone: session.user.timeZone,
+    sessionId: active ? practice.sessionId : null,
+  });
+  // Si el alumno regresa desde la retroalimentación, esta pregunta ya tiene respuesta y no se
+  // contesta otra vez. Con el gesto de atrás se contaba doble y un duelo se cerraba sin la última
+  if (
+    practice.sessionId !== null &&
+    practice.userId === session.user.id &&
+    practice.answers.length > practice.index
+  ) {
+    return <Navigate to={screenPath('feedback')} replace />;
+  }
 
   const header = (
     <SessionHeader
@@ -93,23 +109,6 @@ export function NoActivePractice({ header }: { header: React.ReactNode }) {
   );
 }
 
-/** Parte la frase en tramos normales y resaltados */
-function HighlightedPrompt({ text, ranges }: { text: string; ranges: HighlightRange[] }) {
-  const parts: React.ReactNode[] = [];
-  let cursor = 0;
-  ranges.forEach((range, index) => {
-    if (range.start > cursor) parts.push(text.slice(cursor, range.start));
-    parts.push(
-      <mark key={index} className="rounded bg-warning-soft px-0.5 font-semibold text-fg">
-        {text.slice(range.start, range.end)}
-      </mark>,
-    );
-    cursor = range.end;
-  });
-  if (cursor < text.length) parts.push(text.slice(cursor));
-  return <>{parts}</>;
-}
-
 function QuestionCard({
   bundle,
   session,
@@ -129,18 +128,33 @@ function QuestionCard({
 
   const sample = useMemo(
     () =>
-      sampleOptions({
+      sampleForQuestion({
         options: options.map((option) => ({
           id: option.id,
           isCorrect: option.isCorrect,
           biasTag: option.biasTag,
         })),
         canonicalOptionIds: question.canonicalOptionIds,
-        mode: 'diverse',
-        count: settings.optionsShown,
-        seed: `${sessionId}|${question.id}`.slice(0, 64),
+        questionId: question.id,
+        sessionId,
+        duelId: practice.duelId,
+        optionsShown: settings.optionsShown,
+        targetTags: practice.targetTags,
+        // La correcta se reparte parejo entre las posiciones de las preguntas de esta práctica
+        correctPositionCounts: correctPositionCounts(
+          practice.answers.map((previous) => previous.correctPosition),
+          Math.min(settings.optionsShown, options.length),
+        ),
       }),
-    [options, question, settings.optionsShown, sessionId],
+    [
+      options,
+      question,
+      settings.optionsShown,
+      sessionId,
+      practice.duelId,
+      practice.targetTags,
+      practice.answers,
+    ],
   );
   const shown = sample.shown.map(
     (entry) => options.find((option) => option.id === entry.optionId) as (typeof options)[number],
@@ -148,6 +162,8 @@ function QuestionCard({
   const ranges = highlightEnabled ? findNegations(question.prompt, structureDictionary) : [];
 
   const [selected, setSelected] = useState<string | null>(null);
+  // Opciones que tachó. Descartar no cambia la respuesta, solo ayuda a pensar (D-080)
+  const [eliminated, setEliminated] = useState<string[]>([]);
   const [confidence, setConfidence] = useState<McqConfidence | null>(null);
   const [changes, setChanges] = useState(0);
   const [elapsed, setElapsed] = useState(0);
@@ -204,6 +220,15 @@ function QuestionCard({
       ),
     );
     setSelected(optionId);
+    // Elegir una opción tachada la vuelve a incluir
+    setEliminated((current) => current.filter((id) => id !== optionId));
+  };
+
+  const toggleDiscard = (optionId: string) => {
+    if (optionId === selected) return;
+    setEliminated((current) =>
+      current.includes(optionId) ? current.filter((id) => id !== optionId) : [...current, optionId],
+    );
   };
 
   const answer = async () => {
@@ -212,38 +237,33 @@ function QuestionCard({
     const msToAnswer = Math.max(0, clock() - shownAt.current);
     const chosen = options.find((option) => option.id === selected);
     const correct = chosen?.isCorrect === true;
-    const answered = await api.recordEvent(
-      createEvent(
-        'question_answered',
-        {
-          questionVersionId: question.id,
-          optionVersionId: selected,
-          correct,
-          confidence,
-          msToAnswer,
-          changeCount: changes,
-          highlightEnabled,
-        },
-        ctx,
-      ),
-    );
-    const allEvents = [...events, answered];
-    const snapshot = buildSnapshot({ events: allEvents, user, settings, now: new Date() });
-    const awards = awardXp({
-      activity: {
-        kind: 'mcq',
+    const { xp } = await recordAnswerWithXp({
+      api,
+      user,
+      settings,
+      ctx,
+      payload: {
+        questionVersionId: question.id,
+        optionVersionId: selected,
         correct,
-        physicianDifficulty: question.physicianDifficulty,
-        eventId: answered.id,
+        confidence,
+        msToAnswer,
+        changeCount: changes,
+        highlightEnabled,
+        ...(eliminated.length > 0 ? { eliminatedOptionVersionIds: eliminated } : {}),
       },
-      streakDays: snapshot.streak.current,
-      volumeXpToday: volumeXpToday(allEvents, snapshot.today),
+      physicianDifficulty: question.physicianDifficulty,
+      events,
     });
-    let xp = 0;
-    for (const award of awards) {
-      await api.recordEvent(createEvent('xp_awarded', award, ctx));
-      xp += award.amount;
-    }
+    // Un fallo pasa al repaso al momento. Si la tarjeta no se puede guardar la práctica sigue,
+    // porque la respuesta ya quedó en la bitácora
+    const sentToReview =
+      !correct &&
+      settings.errorsToReview &&
+      (await sendErrorsToReview(api, user, settings, [{ bundle, chosenOptionId: selected }]).then(
+        () => true,
+        () => false,
+      ));
     practice.set({
       answers: [
         ...practice.answers,
@@ -255,6 +275,9 @@ function QuestionCard({
           msToAnswer,
           xp,
           shownOptionIds: shown.map((option) => option.id),
+          eliminatedOptionIds: eliminated,
+          correctPosition: sample.correctPosition,
+          sentToReview,
         },
       ],
     });
@@ -301,30 +324,28 @@ function QuestionCard({
 
       <div className="flex flex-col">
         <fieldset className="flex flex-col gap-2">
-          <legend className="sr-only">{t.simulator.options}</legend>
-          {shown.map((option, position) => (
-            <label
-              key={option.id}
-              className={cn(
-                'flex cursor-pointer items-start gap-3 rounded-md border border-line p-3 hover:bg-muted',
-                selected === option.id && 'border-primary bg-primary-soft',
-              )}
-            >
-              <input
-                type="radio"
+          <legend className="mb-1 text-sm text-fg-muted">
+            <span className="sr-only">{t.simulator.options}. </span>
+            {t.choice.optionsHint}
+          </legend>
+          <ul className="flex flex-col gap-2">
+            {shown.map((option, position) => (
+              <OptionChoice
+                key={option.id}
                 name="opcion"
-                className="mt-1"
-                checked={selected === option.id}
-                onChange={() => {
+                letter={String.fromCharCode(65 + position)}
+                text={option.text}
+                selected={selected === option.id}
+                discarded={eliminated.includes(option.id)}
+                onChoose={() => {
                   choose(option.id);
                 }}
+                onToggleDiscard={() => {
+                  toggleDiscard(option.id);
+                }}
               />
-              <span>
-                <span className="mr-1 font-semibold">{String.fromCharCode(65 + position)}.</span>
-                {option.text}
-              </span>
-            </label>
-          ))}
+            ))}
+          </ul>
         </fieldset>
 
         {/* Confianza y responder, siempre a la mano en el teléfono (D-078) */}

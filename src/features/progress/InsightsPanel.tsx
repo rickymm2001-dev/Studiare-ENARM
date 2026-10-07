@@ -13,8 +13,6 @@ import {
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
-import { screenPath } from '@/app/screens';
-import { biasTaxonomy, biasTips } from '@/demo/content';
 import {
   INSIGHT_MINIMUMS,
   type Insight,
@@ -27,11 +25,16 @@ import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { ProgressBar } from '@/ui/components/progress-bar';
+import { DraftBadge } from '../shared/DraftBadge';
+import {
+  biasProfileRows,
+  describeInsight,
+  weeklyFocusItems,
+  type BiasProfileRow as BiasProfileRowData,
+  type WeakTopic,
+} from './focusItems';
 
 const text = t.insights;
-const biasByKey = new Map(biasTaxonomy.biases.map((bias) => [bias.key, bias]));
-const tipByKey = new Map(biasTips.tips.map((tip) => [tip.biasKey, tip.tip]));
-
 const levelStyle: Record<InsightLevel, { icon: ReactNode; chip: string; color: string }> = {
   strength: {
     icon: <CheckCircle2 aria-hidden />,
@@ -43,53 +46,13 @@ const levelStyle: Record<InsightLevel, { icon: ReactNode; chip: string; color: s
 };
 const levelOrder: Record<InsightLevel, number> = { focus: 0, watch: 1, strength: 2 };
 
-/** Título, frase y acción de un hallazgo listo */
-function describe(insight: Insight): { title: string; body: string; action: string } {
-  const state = insight.state;
-  const values = state.kind === 'ready' ? state.values : {};
-  const refs = state.kind === 'ready' ? state.refs : {};
-  const level = state.kind === 'ready' ? state.level : 'watch';
-  if (insight.id.startsWith('bias:')) {
-    const tag = insight.id.slice(5);
-    const bias = biasByKey.get(tag);
-    return {
-      title: bias?.name ?? tag,
-      body: `${text.biasText(values.attraction ?? 0, values.baseline ?? 0)} ${bias?.distractorDefinition ?? ''}`,
-      action: tipByKey.get(tag) ?? text.biasFallbackAction,
-    };
-  }
-  const copy = text.copy[insight.id];
-  if (!copy) return { title: insight.id, body: '', action: '' };
-  return {
-    title: copy.title,
-    body: copy.text(values, refs, level),
-    action: copy.action(values, refs, level),
-  };
-}
-
 const calibratingTitle = (insight: Insight) =>
   (insight.id.startsWith('bias') ? text.copy.biases?.title : text.copy[insight.id]?.title) ??
   insight.id;
 
-/** Dónde se practica cada foco. Los hábitos de repaso van a Repasar y lo demás al simulador */
-function practiceLink(insightId: string): { to: string; review: boolean } {
-  if (insightId === 'negation')
-    return { to: `${screenPath('simulatorSetup')}?structure=negative`, review: false };
-  if (['retention', 'leeches', 'consistency', 'session_length'].includes(insightId))
-    return { to: screenPath('review'), review: true };
-  return { to: screenPath('simulatorSetup'), review: false };
-}
-
-export interface WeakTopic {
-  key: string;
-  name: string;
-  branchName: string;
-  mastery: number;
-}
-
 /**
- * Tus focos de la semana. Hasta 3, mezclando técnica (los focos del informe, ya ordenados por peso)
- * y la subespecialidad más débil cuando hay una con dominio bajo. Cada uno lleva a practicarlo
+ * Tus focos de la semana. Hasta 3, mezclando técnica y la subespecialidad más débil cuando hay una
+ * con dominio bajo. Cada uno lleva a practicarlo
  */
 export function WeeklyFocus({
   report,
@@ -98,23 +61,7 @@ export function WeeklyFocus({
   report: InsightReport;
   weakTopics: readonly WeakTopic[];
 }) {
-  const technique = report.focus.slice(0, weakTopics.length > 0 ? 2 : 3);
-  const topics = weakTopics.slice(0, 3 - technique.length);
-  const items = [
-    ...technique.map((insight) => {
-      const { title, action } = describe(insight);
-      const link = practiceLink(insight.id);
-      return { key: insight.id, kind: t.progress.focusKinds.technique, title, action, ...link };
-    }),
-    ...topics.map((topic) => ({
-      key: topic.key,
-      kind: `${t.progress.focusKinds.topic} · ${topic.branchName}`,
-      title: topic.name,
-      action: t.progress.weakTopic(Math.round(topic.mastery * 100)),
-      to: `${screenPath('simulatorSetup')}?topic=${encodeURIComponent(topic.key)}`,
-      review: false,
-    })),
-  ];
+  const items = weeklyFocusItems(report, weakTopics);
   return (
     <Card aria-labelledby="focos-titulo" className="border-l-4 border-l-danger">
       <CardHeader className="mb-3">
@@ -156,6 +103,7 @@ export function WeeklyFocus({
                   </Button>
                 </div>
                 <p className="text-sm text-fg-muted">{item.action}</p>
+                {item.draft ? <DraftBadge /> : null}
               </div>
             </li>
           ))}
@@ -167,7 +115,7 @@ export function WeeklyFocus({
 
 export function InsightsPanel({ report }: { report: InsightReport }) {
   const areas: InsightArea[] = ['exam', 'traps', 'study'];
-  const profile = report.insights.find((insight) => insight.id === 'bias_profile');
+  const profileRows = biasProfileRows(report);
   return (
     <Card aria-labelledby="conocete-titulo">
       <CardHeader className="mb-3">
@@ -206,7 +154,7 @@ export function InsightsPanel({ report }: { report: InsightReport }) {
                     <InsightRow insight={insight} />
                   </li>
                 ))}
-                {area === 'traps' && profile ? <BiasProfileRow insight={profile} /> : null}
+                {area === 'traps' ? <BiasProfileRow rows={profileRows} /> : null}
                 {waiting.map((insight) => (
                   <li key={insight.id}>
                     <CalibratingRow insight={insight} />
@@ -254,7 +202,7 @@ function Row({
 function InsightRow({ insight }: { insight: Insight }) {
   if (insight.state.kind !== 'ready') return null;
   const style = levelStyle[insight.state.level];
-  const { title, body, action } = describe(insight);
+  const { title, body, action, draft } = describeInsight(insight);
   return (
     <Row
       lead={<span className={style.color}>{style.icon}</span>}
@@ -271,6 +219,7 @@ function InsightRow({ insight }: { insight: Insight }) {
         <span>
           <span className="sr-only">{text.whatToDo}. </span>
           {action}
+          {draft ? <DraftBadge className="ml-2" /> : null}
         </span>
       </p>
     </Row>
@@ -303,13 +252,7 @@ function CalibratingRow({ insight }: { insight: Insight }) {
   );
 }
 
-function BiasProfileRow({ insight }: { insight: Insight }) {
-  if (insight.state.kind !== 'ready') return null;
-  const { values, refs } = insight.state;
-  const rows = [0, 1, 2].flatMap((index) => {
-    const tag = refs[`tag${index}`];
-    return tag ? [{ tag, share: values[`share${index}`] ?? 0 }] : [];
-  });
+function BiasProfileRow({ rows }: { rows: readonly BiasProfileRowData[] }) {
   if (rows.length === 0) return null;
   return (
     <li>
@@ -319,7 +262,7 @@ function BiasProfileRow({ insight }: { insight: Insight }) {
           {rows.map((row) => (
             <li key={row.tag} className="flex flex-col gap-1">
               <span className="flex justify-between gap-2">
-                <span className="font-semibold">{biasByKey.get(row.tag)?.name ?? row.tag}</span>
+                <span className="font-semibold">{row.name}</span>
                 <span className="shrink-0 text-xs text-fg-muted tabular-nums">
                   {Math.round(row.share * 100)}%
                 </span>

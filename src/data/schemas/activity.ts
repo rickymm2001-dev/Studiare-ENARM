@@ -139,17 +139,29 @@ export const MembershipSchema = z.strictObject({
 });
 export type Membership = z.infer<typeof MembershipSchema>;
 
-export const ChallengeSchema = z.strictObject({
-  id: IdSchema,
-  groupId: IdSchema,
-  kind: z.enum(['collective', 'duel']),
-  title: z.string().trim().min(1).max(80),
-  metric: z.enum(['cards', 'questions', 'xp', 'accuracy']),
-  target: z.number().positive(),
-  isSimulated: z.boolean(),
-  startsAt: UtcDateTimeSchema,
-  endsAt: UtcDateTimeSchema,
-});
+export const ChallengeSchema = z
+  .strictObject({
+    id: IdSchema,
+    groupId: IdSchema,
+    kind: z.enum(['collective', 'duel']),
+    title: z.string().trim().min(1).max(80),
+    metric: z.enum(['cards', 'questions', 'xp', 'accuracy']),
+    target: z.number().positive(),
+    isSimulated: z.boolean(),
+    startsAt: UtcDateTimeSchema,
+    endsAt: UtcDateTimeSchema,
+    /** Solo en duelos. La membresía del compañero al que se reta (9.6) */
+    opponentId: IdSchema.optional(),
+    /** Solo en duelos. Las preguntas que contestan los dos, fijadas al crear el duelo */
+    questionIds: z.array(IdSchema).min(1).max(40).optional(),
+  })
+  .refine(
+    (challenge) =>
+      challenge.kind === 'duel'
+        ? challenge.opponentId !== undefined && challenge.questionIds !== undefined
+        : challenge.opponentId === undefined && challenge.questionIds === undefined,
+    { message: 'Un duelo lleva rival y preguntas, y un reto colectivo no' },
+  );
 export type Challenge = z.infer<typeof ChallengeSchema>;
 
 /** Los 12 widgets de 9.1 */

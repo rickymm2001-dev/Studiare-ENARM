@@ -13,7 +13,7 @@ const badgeVariants = cva(
         warning: 'border-transparent bg-warning-soft text-warning',
         danger: 'border-transparent bg-danger-soft text-danger',
         accent: 'border-transparent bg-accent-soft text-accent',
-        streak: 'border-transparent bg-streak-soft text-streak',
+        streak: 'border-transparent bg-streak-soft text-streak-ink',
         demo: 'border-demo-line bg-demo text-demo-fg',
         simulated: 'border-sim-line bg-sim text-sim-fg',
       },

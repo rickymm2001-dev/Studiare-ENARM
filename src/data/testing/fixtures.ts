@@ -1,10 +1,11 @@
 // Datos de prueba para la capa de datos. Solo los usan las pruebas.
 import { monotonicFactory } from 'ulid';
 import { createEnarmDb, type EnarmDb } from '../db/database';
+import { createDexieRepositories } from '../repos/dexie/createRepositories';
 import type { DatabaseKind } from '../databases';
 import { createEvent, type Clock } from '../events/createEvent';
 import type { Question, Option } from '../schemas/bank';
-import type { EventPayload, EventType } from '../schemas/events';
+import type { AppEvent, EventPayload, EventType } from '../schemas/events';
 import { UserSettingsSchema, type User } from '../schemas/people';
 
 let dbCounter = 0;
@@ -13,6 +14,22 @@ let dbCounter = 0;
 export function freshDb(kind: DatabaseKind = 'real'): EnarmDb {
   dbCounter += 1;
   return createEnarmDb(kind, { name: `test-${kind}-${dbCounter}-${Date.now()}` });
+}
+
+/**
+ * API de datos de prueba sobre una base nueva. recordEvent solo agrega a la bitácora, sin las
+ * derivaciones, que tienen sus propias pruebas. Las pantallas no pueden importar Dexie, así que sus
+ * pruebas de integración pasan por aquí
+ */
+export function testApi(kind: DatabaseKind = 'real') {
+  const db = freshDb(kind);
+  const repos = createDexieRepositories(db);
+  return {
+    repos,
+    recordEvent: (event: AppEvent) => repos.events.append(event),
+    /** Borra la base al terminar la prueba */
+    dispose: () => db.delete(),
+  };
 }
 
 export const newId = monotonicFactory();

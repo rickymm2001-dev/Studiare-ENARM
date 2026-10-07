@@ -11,7 +11,7 @@ export const branchNames: Record<string, string> = {
   emergency_medicine: 'Urgencias',
 };
 
-const plural = (n: number, one: string, many: string) =>
+export const plural = (n: number, one: string, many: string) =>
   `${n.toLocaleString('es-MX')} ${n === 1 ? one : many}`;
 
 export const featureText = {
@@ -97,13 +97,13 @@ export const featureText = {
     remove: (name: string) => `Quitar ${name}`,
     settings: (name: string) => `Ajustes de ${name}`,
     empty: 'Tu tablero está vacío. Agrega un widget o elige un acomodo.',
-    comingSoon: 'Este widget estará disponible pronto.',
   },
   widgets: {
     party: {
       empty: 'Aún no estás en un grupo.',
       go: 'Ir a Party',
       rank: (rank: number, of: number) => `Lugar ${rank} de ${of}`,
+      duelsPending: (n: number) => `${plural(n, 'duelo espera', 'duelos esperan')} tu turno`,
     },
     names: {
       heatmap: 'Heatmap de estudio',
@@ -164,6 +164,43 @@ export const featureText = {
         focusMinutes: 'minutos de estudio',
       },
       met: 'Meta cumplida',
+    },
+    // Widgets de análisis. Dicen lo mismo que Progreso y el tutor, en chico (9.1)
+    weakTopics: {
+      hint: 'Los temas con menor dominio estimado, de los que ya hay respuestas suficientes.',
+      unit: 'respuestas en un tema',
+      none: 'Ningún tema está por debajo de 60% de dominio. Sigue con tu práctica.',
+      noneInBranch: 'Ningún tema de esta rama está por debajo de 60% de dominio.',
+      practice: (topic: string) => `Practicar ${topic}`,
+      seeAll: 'Ver todos los temas',
+      settings: {
+        count: 'Cuántos temas',
+        countOption: (n: number) => `${n} temas`,
+        branch: 'Rama',
+        allBranches: 'Todas las ramas',
+      },
+    },
+    biasPattern: {
+      hint: 'Los tipos de distractor que más te atraen cuando fallas.',
+      unit: 'errores con trampa etiquetada',
+      pattern: 'Patrón',
+      none: 'Ningún tipo de distractor se destaca todavía en tus errores.',
+      row: (name: string, share: number) =>
+        `${name}. Lo eliges ${Math.round(share * 100)}% de las veces que aparece al fallar`,
+      seeAll: 'Ver tu perfil completo',
+    },
+    futureLoad: {
+      empty: 'Todavía no sigues ningún mazo, así que no hay carga que proyectar.',
+      goToDecks: 'Ir a Mazos',
+      summary: (average: number, peak: string) =>
+        `${plural(average, 'repaso', 'repasos')} por día en promedio. Día más cargado ${peak}.`,
+      seeAll: 'Ver la carga completa',
+      settings: { days: 'Periodo', daysOption: (n: number) => `${n} días` },
+    },
+    latestHypothesis: {
+      forming: 'Posible patrón',
+      helpful: 'Dijiste que te sirve',
+      open: 'Abrir el tutor',
     },
   },
   pomodoro: {
@@ -323,7 +360,116 @@ export const featureText = {
     importBody:
       'Pronto podrás subir tus mazos desde otras apps de tarjetas, Word, Excel o CSV. Tus mazos serán privados.',
     createTitle: 'Crear mazo',
-    createBody: 'Próximamente podrás crear tus propios mazos aquí mismo.',
+    createBody: 'Escribe tus propias tarjetas. Son privadas y solo las ves tú.',
+    nameLabel: 'Nombre del mazo',
+    createButton: 'Crear mazo',
+    creating: 'Creando…',
+    nameError: 'Escribe un nombre para el mazo.',
+    createError: 'No se pudo crear el mazo. Intenta de nuevo.',
+    editCards: 'Editar tarjetas',
+    deleteDeck: 'Eliminar mazo',
+    confirmDelete: (name: string) => `¿Eliminar ${name} con todas sus tarjetas?`,
+    confirmDeleteYes: 'Sí, eliminar',
+    confirmDeleteNo: 'Cancelar',
+    deleteError: 'No se pudo eliminar el mazo. Intenta de nuevo.',
+    editor: {
+      title: (name: string) => `Tarjetas de ${name}`,
+      description:
+        'Agrega, edita o borra las tarjetas de este mazo. Aparecen en Repasar al guardarlas.',
+      close: 'Cerrar',
+      kind: 'Tipo de tarjeta',
+      basic: 'Pregunta y respuesta',
+      cloze: 'Con huecos',
+      front: 'Pregunta',
+      back: 'Respuesta',
+      text: 'Texto con huecos',
+      clozeHint:
+        'Pon cada respuesta entre llaves, como {{c1::respuesta}}. Una pista va al final, {{c1::respuesta::pista}}. Cada número de hueco hace una tarjeta.',
+      extra: 'Nota extra (opcional)',
+      add: 'Agregar tarjeta',
+      save: 'Guardar tarjeta',
+      saveChanges: 'Guardar cambios',
+      cancel: 'Cancelar',
+      saved: 'Tarjeta guardada.',
+      saveError: 'No se pudo guardar la tarjeta. Intenta de nuevo.',
+      listTitle: (n: number) => (n === 1 ? '1 tarjeta' : `${n.toLocaleString('es-MX')} tarjetas`),
+      empty: 'Este mazo todavía no tiene tarjetas.',
+      edit: 'Editar',
+      delete: 'Borrar',
+      editNote: (preview: string) => `Editar la tarjeta ${preview}`,
+      deleteNote: (preview: string) => `Borrar la tarjeta ${preview}`,
+      cards: (n: number) => (n === 1 ? '1 carta' : `${n} cartas`),
+      errors: {
+        empty_front: 'Escribe la pregunta.',
+        empty_back: 'Escribe la respuesta.',
+        empty_text: 'Escribe el texto de la tarjeta.',
+        no_cloze: 'Agrega al menos un hueco, como {{c1::respuesta}}.',
+        unclosed_cloze:
+          'Un hueco no está completo. Cada uno lleva la forma {{c1::respuesta}}, con su respuesta y sus dos llaves de cierre.',
+        too_long: 'El texto es demasiado largo. Divídelo en dos tarjetas.',
+      },
+    },
+    yourCards: (n: number) => (n === 1 ? '1 tarjeta' : `${n.toLocaleString('es-MX')} tarjetas`),
+  },
+  planner: {
+    todayTitle: 'Plan de hoy',
+    minutesOf: (planned: number, available: number) => `${planned} de ${available} min`,
+    cardsLine: (reviews: number, fresh: number) => {
+      const due = plural(reviews, 'tarjeta vencida', 'tarjetas vencidas');
+      const fresher = plural(fresh, 'tarjeta nueva', 'tarjetas nuevas');
+      if (reviews > 0 && fresh > 0) return `Repasa ${due} y aprende ${fresher}`;
+      return reviews > 0 ? `Repasa ${due}` : `Aprende ${fresher}`;
+    },
+    simulator: (n: number, topic: string | null) =>
+      topic
+        ? `Practica ${plural(n, 'pregunta', 'preguntas')} de ${topic}`
+        : `Practica ${plural(n, 'pregunta', 'preguntas')} mezcladas`,
+    challenge: (minutes: number) => `Un reto de ${minutes} minutos en Party`,
+    goReview: 'Repasar',
+    goSimulate: 'Practicar',
+    goParty: 'Ir a Party',
+    nothingToday: 'No hay nada pendiente para hoy con tus mazos y tu tiempo.',
+    nothingTodayHint: 'Practica con el simulador o sigue un mazo nuevo.',
+    noDecksTitle: 'Todavía no sigues ningún mazo',
+    noDecksBody: 'Sin mazos el plan solo trae práctica de preguntas. Sigue uno para sumar repasos.',
+    goDecks: 'Ir a Mazos',
+    limitNote: (limit: number) =>
+      `Tu plan Gratis deja ${limit} preguntas al día, así que el bloque de práctica se recortó a lo que te permite.`,
+    topicsCalibrating:
+      'Tus temas a reforzar siguen calibrando. Cuando un tema tenga respuestas suficientes, el bloque de práctica apunta a tu tema más débil.',
+    overloadTitle: 'Tu carga no cabe en tu tiempo',
+    overloadBody: (needed: number, available: number) =>
+      `Los próximos 7 días piden en promedio ${needed} min al día y tienes ${available}. Elige un ajuste.`,
+    reduceNew: (value: number, effect: number) =>
+      `Baja las tarjetas nuevas a ${value} por día. Libera unos ${effect} min al día.`,
+    raiseMinutes: (value: number, effect: number) =>
+      `Sube tu tiempo a ${value} min al día. Son ${effect} min más que ahora.`,
+    apply: 'Aplicar',
+    applied: 'Listo, el plan ya usa ese cambio.',
+    minutesTitle: 'Tu tiempo al día',
+    minutesMeasured: (days: number, average: number) =>
+      `Usamos tu promedio real de ${plural(days, 'día', 'días')} de estudio, ${average} min al día.`,
+    minutesDeclared: (minutes: number) => `Usamos los ${minutes} min que declaraste.`,
+    minutesRealAverage: (days: number, average: number) =>
+      `Tu promedio real de ${plural(days, 'día', 'días')} de estudio es ${average} min.`,
+    minutesRealSoon: 'Si no declaras minutos, con 3 días de estudio usaremos tu promedio real.',
+    minutesProvisional: (minutes: number) =>
+      `Mientras calibramos, el plan usa ${minutes} min al día. Puedes poner los tuyos aquí.`,
+    minutesUnit: 'días de estudio',
+    minutesLabel: 'Minutos que puedes estudiar al día',
+    minutesSave: 'Guardar',
+    minutesSaved: 'Guardado',
+    minutesUseReal: 'Usar mi promedio real',
+    minutesError: 'Escribe un número entre 5 y 720.',
+    weekTitle: 'Esta semana',
+    today: 'Hoy',
+    tomorrow: 'Mañana',
+    reviewsShort: (n: number) => plural(n, 'repaso', 'repasos'),
+    newShort: (n: number) => plural(n, 'nueva', 'nuevas'),
+    questionsShort: (n: number) => plural(n, 'pregunta', 'preguntas'),
+    challengeShort: 'reto',
+    emptyDay: 'Sin carga',
+    dayMinutes: (planned: number, available: number) => `${planned} de ${available} min`,
   },
   review: {
     noDecksTitle: 'Todavía no sigues ningún mazo',
@@ -362,6 +508,19 @@ export const featureText = {
     finish: 'Terminar sesión',
     xpGained: (xp: number) => `+${xp} XP`,
     deck: (name: string) => `Mazo ${name}`,
+    errorCard: 'Error de pregunta',
+  },
+  // Tarjetas que salen de las preguntas falladas (7.1). El texto sale del banco, aquí solo van las
+  // etiquetas que lo acompañan
+  errorCards: {
+    deckName: 'Mis errores',
+    deckDescription: 'Las preguntas que fallaste en práctica y en examen, listas para repasar.',
+    correctAnswer: 'Respuesta correcta',
+    yourChoice: 'Elegiste',
+    leftBlank: 'La dejaste en blanco.',
+    whyAttracts: 'Por qué atrae',
+    contrastTitle: 'Distingue estas dos respuestas',
+    contrastAsk: '¿Qué las diferencia?',
   },
   simulator: {
     setupTitle: 'Configura tu práctica',
@@ -386,12 +545,12 @@ export const featureText = {
     limit: (left: number) =>
       `Te quedan ${plural(left, 'pregunta', 'preguntas')} hoy en el plan Gratis`,
     limitReached: 'Llegaste al límite de preguntas de hoy del plan Gratis.',
+    limitUsedByExam:
+      'Tu examen sin terminar tiene apartadas las preguntas que te quedaban hoy en el plan Gratis.',
+    goToOpenExam: 'Ir a mi examen',
     seePlans: 'Ver planes',
     start: 'Empezar práctica',
     preparing: 'Preparando el banco…',
-    exam: 'Examen completo',
-    examSoon:
-      'Próximamente. Un simulacro con el formato del ENARM, 280 preguntas en dos bloques con reloj.',
     noQuestions: 'No hay preguntas con estos filtros.',
     progress: (n: number, of: number) => `Pregunta ${n} de ${of}`,
     caseLabel: 'Caso clínico',
@@ -430,7 +589,31 @@ export const featureText = {
     summaryAccuracy: (correct: number, total: number) => `${correct} de ${total} correctas`,
     summaryXp: (xp: number) => `${xp.toLocaleString('es-MX')} XP ganados`,
     summaryTime: (time: string) => `Tiempo total ${time}`,
+    summaryErrors: (n: number) =>
+      `${plural(n, 'error pasó', 'errores pasaron')} a tu repaso en Mis errores`,
+    sentToReview: 'Esta pregunta pasó a tu repaso en Mis errores.',
     again: 'Otra práctica',
+    discardReview: {
+      title: 'Qué podías descartar',
+      hint: 'Aunque no sepas la respuesta, descartar lo que sabes que no es te acerca a ella.',
+      discardedCorrect:
+        'Descartaste la respuesta correcta. Antes de tachar una opción, busca por qué sería incorrecta.',
+      allDiscarded: 'Descartaste todas las opciones incorrectas. Así se llega a la respuesta.',
+      someDiscarded: (done: number, total: number) =>
+        `Descartaste ${done} de ${total} opciones incorrectas. Estas eran las que se podían tachar.`,
+      noneDiscarded: 'No descartaste ninguna. Estas se podían tachar, y cada una dice por qué.',
+      youDiscarded: 'La descartaste',
+    },
+    targeted: {
+      label: 'Dirigir las opciones a mis trampas',
+      hint: (names: string) =>
+        `Sube las opciones con las trampas que más te atrapan, ${names}. Nunca llena toda la pregunta con ellas.`,
+      unit: 'errores con trampa etiquetada',
+      calibrating:
+        'Se activa cuando tus errores ya muestran qué trampas te atrapan más. Mientras tanto las opciones salen variadas.',
+      none: 'Ninguna trampa se destaca todavía en tus errores, así que las opciones salen variadas.',
+      loading: 'Revisando tus errores…',
+    },
   },
   appearance: {
     title: 'Apariencia',
@@ -671,6 +854,34 @@ export const featureText = {
     hideEmpty: 'Ocultar las que no tienen datos',
     emptyHidden: (n: number) =>
       plural(n, 'subespecialidad sin datos todavía', 'subespecialidades sin datos todavía'),
+    difficultyTitle: 'Según la dificultad',
+    difficultyHint:
+      'Tu exactitud en preguntas fáciles, medias y difíciles. La dificultad es la que estimó el médico y se calibra con las respuestas de todos los alumnos.',
+    difficultyOf: (correct: number, total: number) =>
+      `${correct.toLocaleString('es-MX')} de ${total.toLocaleString('es-MX')} correctas`,
+    difficultyCalibrating: (missing: number) =>
+      `Calibrando, faltan ${plural(missing, 'respuesta', 'respuestas')} en este grupo`,
+    futureLoad: {
+      title: 'Carga futura',
+      hint: 'Cuántos repasos y tarjetas nuevas te tocan, con tu configuración de hoy. Supone que contestas Bien en cada repaso y que empiezas tus tarjetas nuevas al ritmo de tu límite diario.',
+      horizonLabel: 'Periodo',
+      horizon: (days: number) => `${days} días`,
+      average: 'Repasos por día en promedio',
+      peak: 'Día más cargado',
+      peakValue: (day: string, total: number) =>
+        `${day} con ${plural(total, 'tarjeta', 'tarjetas')}`,
+      total: 'Repasos en el periodo',
+      newCards: 'Tarjetas nuevas en el periodo',
+      chart: (days: number, average: number, peak: string) =>
+        `Carga de los próximos ${days} días. ${average} repasos por día en promedio y el día más cargado es ${peak}.`,
+      chartEmpty: (days: number) => `Sin carga en los próximos ${days} días.`,
+      reviews: 'Repasos',
+      fresh: 'Nuevas',
+      weeks: 'Ver por semana',
+      week: (start: string) => `Semana del ${start}`,
+      empty: 'Todavía no sigues ningún mazo, así que no hay carga que proyectar.',
+      goToDecks: 'Ir a Mazos',
+    },
   },
   topicPicker: {
     trunks: 'Ramas troncales',
@@ -745,7 +956,7 @@ export const featureText = {
   },
   party: {
     privacy:
-      'En un grupo solo compartes tu alias, tu XP, tu nivel y tu racha. Nunca tu exactitud ni tus sesgos. Por ahora los grupos viven en este navegador.',
+      'En un grupo compartes tu alias, tu XP, tu nivel y tu racha. En un duelo, además, cuántas aciertas y cuánto tardas en esas preguntas. Nunca tu exactitud por tema, tus sesgos ni tu conducta de estudio. Por ahora los grupos viven en este navegador.',
     createTitle: 'Crear un grupo',
     createHint: 'Aún no estás en ningún grupo. Crea uno o únete con un código.',
     groupName: 'Nombre del grupo',
@@ -780,6 +991,9 @@ export const featureText = {
     metrics: { cards: 'tarjetas', questions: 'preguntas', xp: 'XP', accuracy: 'preguntas' },
     claim: 'Reclamar 100 XP',
     claimed: 'Reto cumplido. Ya sumaste tus 100 XP.',
+    needOwnContribution:
+      'Tus compañeros simulados ya cumplieron la meta, pero tú todavía no aportas nada. Estudia algo y vuelve a reclamar tus 100 XP.',
+    oneClaimPerDay: 'Hoy ya reclamaste el premio de un reto. El de este lo reclamas mañana.',
     newChallenge: 'Nuevo reto',
     challengeTitle: 'Nombre del reto',
     metric: 'Qué cuenta',
@@ -787,6 +1001,62 @@ export const featureText = {
     createChallenge: 'Crear reto',
     cancel: 'Cancelar',
     leave: 'Salir del grupo',
+    duel: {
+      newButton: 'Retar a un compañero',
+      rival: 'Compañero',
+      noRivals:
+        'Un duelo necesita un compañero. Crea el grupo con compañeros simulados para probarlo. Con personas reales llegará con la versión en línea.',
+      create: 'Crear duelo',
+      noQuestions: 'El banco todavía no tiene preguntas para armar un duelo.',
+      createFailed: 'No se pudo crear el duelo. Intenta de nuevo.',
+      title: (alias: string) => `Duelo contra ${alias}`,
+      rules: (n: number) =>
+        `Las mismas ${plural(n, 'pregunta', 'preguntas')} para los dos. Gana quien acierte más y, si empatan, quien tarde menos.`,
+      oneTry: 'Es un solo intento. Las preguntas que no contestes cuentan como incorrectas.',
+      rivalPlayed: 'Tu compañero ya jugó. Juega tus preguntas para ver quién ganó.',
+      play: 'Jugar mi duelo',
+      needQuestions: (n: number, left: number) =>
+        `Este duelo pide ${plural(n, 'pregunta', 'preguntas')} y hoy te quedan ${left} en el plan Gratis.`,
+      seePlans: 'Ver planes',
+      result: 'Resultado del duelo',
+      player: 'Jugador',
+      hits: 'Aciertos',
+      time: 'Tiempo',
+      hitsOf: (correct: number, total: number) => `${correct} de ${total}`,
+      you: 'Tú',
+      verdicts: {
+        win_accuracy: 'Ganaste por exactitud.',
+        win_time: 'Ganaste por tiempo. Empataron en aciertos.',
+        lose_accuracy: 'Perdiste por exactitud.',
+        lose_time: 'Perdiste por tiempo. Empataron en aciertos.',
+        draw: 'Empate. Mismos aciertos y mismo tiempo.',
+      },
+      seeResult: 'Ver el resultado del duelo',
+    },
+    share: {
+      title: 'Comparte tu logro',
+      hint: 'Una imagen con tu nivel, tu racha y tus XP de la semana. No se comparte nada hasta que tú lo decidas.',
+      previewLabel: 'Vista previa de tu tarjeta de logro',
+      level: (n: number) => `Nivel ${n}`,
+      streakLabel: 'Racha',
+      streakValue: (n: number) => plural(n, 'día', 'días'),
+      xpLabel: 'XP esta semana',
+      includeAlias: 'Incluir mi alias en la tarjeta',
+      button: 'Compartir mi logro',
+      working: 'Preparando la imagen…',
+      shareTitle: 'Mi logro',
+      shareText: (level: number, title: string, streak: number, weeklyXp: number) =>
+        `Voy en el nivel ${level} (${title}), con ${plural(streak, 'día', 'días')} de racha y ${weeklyXp.toLocaleString('es-MX')} XP esta semana.`,
+      simulatedBanner: 'Datos de demostración. No son logros reales.',
+      fileName: 'mi-logro.png',
+      outcomes: {
+        shared: 'Listo. Elegiste dónde compartirla.',
+        downloaded:
+          'Tu navegador no puede compartir imágenes directamente, así que se descargó la tarjeta. Súbela donde quieras.',
+        cancelled: 'No se compartió nada.',
+        failed: 'No se pudo crear la imagen. Intenta de nuevo.',
+      },
+    },
   },
   cloud: {
     loginNote:

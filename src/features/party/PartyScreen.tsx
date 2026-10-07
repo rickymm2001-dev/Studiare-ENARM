@@ -1,11 +1,11 @@
 // Party (pantalla 14). Grupos con código de invitación, tabla semanal por XP desde el lunes a las
-// 4 a. m. y retos colectivos. Solo se comparte alias, XP, nivel y racha (9.6). Los duelos llegan
-// después. Sin servidor, todo vive en este navegador y los compañeros simulados van marcados.
-import { Copy, LogOut, Plus, Trophy, Users } from 'lucide-react';
+// 4 a. m., retos colectivos y duelos con las mismas preguntas. Se comparte alias, XP, nivel y racha, y
+// en un duelo cuántas acertaste y cuánto tardaste en esas preguntas (9.6). Sin servidor, todo vive en
+// este navegador y los compañeros simulados van marcados.
+import { Copy, LogOut, Plus, Users } from 'lucide-react';
 import { useState, type SyntheticEvent } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useDataApi } from '@/data/context';
-import { createEvent } from '@/data/events/createEvent';
 import { useLiveData } from '@/data/hooks';
 import type { Challenge, Group, Membership } from '@/data/schemas/activity';
 import type { AppEvent } from '@/data/schemas/events';
@@ -16,20 +16,23 @@ import {
   leaveGroup,
   type JoinResult,
 } from '@/data/usecases/party';
-import { collectiveProgress, weeklyLeaderboard } from '@/engines/party';
-import { studyDayOf } from '@/engines/studyDay';
-import { awardXp } from '@/engines/xp';
+import { weeklyLeaderboard } from '@/engines/party';
 import { t } from '@/i18n/es-MX';
-import { celebrate } from '@/ui/celebrate';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
 import { SimulatedDataLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { buildSnapshot, type Snapshot } from '../home/snapshot';
+import { reservedByStoredExam } from '../exam/examStorage';
+import { dailyQuestions } from '../shared/dailyLimit';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
-import { challengeContributions, memberStats, type ChallengeMetric } from './stats';
+import { AchievementShare } from './AchievementShare';
+import { ChallengeRow } from './ChallengeRow';
+import { DuelRow } from './DuelRow';
+import { NewDuelForm } from './NewDuelForm';
+import { memberStats, type ChallengeMetric } from './stats';
 
 export function PartyScreen() {
   return <RequireSession screen="party">{(session) => <Party session={session} />}</RequireSession>;
@@ -47,11 +50,15 @@ function Party({ session }: { session: ReadySession }) {
     ]);
     return { groups, memberships, challenges };
   }, [api.repos]);
+  const subscription = useLiveData(
+    () => api.repos.subscriptions.get(user.id).then((value) => value ?? null),
+    [api.repos, user.id],
+  );
 
   const header = (
     <ScreenHeader title={t.screens.party.title} description={t.screens.party.description} />
   );
-  if (events === undefined || data === undefined) {
+  if (events === undefined || data === undefined || subscription === undefined) {
     return (
       <>
         {header}
@@ -59,7 +66,15 @@ function Party({ session }: { session: ReadySession }) {
       </>
     );
   }
-  const snapshot = buildSnapshot({ events, user, settings, now: new Date() });
+  const now = new Date();
+  const snapshot = buildSnapshot({ events, user, settings, now });
+  const { left: questionsLeft } = dailyQuestions({
+    events,
+    subscription,
+    timeZone: user.timeZone,
+    now,
+    reserved: reservedByStoredExam(user.id),
+  });
   const mine = data.memberships.filter((item) => item.userId === user.id && item.leftAt === null);
   const myGroups = mine
     .map((membership) => ({
@@ -72,6 +87,7 @@ function Party({ session }: { session: ReadySession }) {
     <>
       {header}
       <p className="text-sm text-fg-muted">{t.party.privacy}</p>
+      <AchievementShare snapshot={snapshot} alias={user.alias} simulated={session.isDemo} />
       {myGroups.map(({ group, membership }) => (
         <GroupCard
           key={group.id}
@@ -84,6 +100,7 @@ function Party({ session }: { session: ReadySession }) {
           snapshot={snapshot}
           events={events}
           session={session}
+          questionsLeft={questionsLeft}
         />
       ))}
       <div className="grid gap-4 md:grid-cols-2">
@@ -194,6 +211,7 @@ function GroupCard({
   snapshot,
   events,
   session,
+  questionsLeft,
 }: {
   group: Group;
   membership: Membership;
@@ -202,6 +220,8 @@ function GroupCard({
   snapshot: Snapshot;
   events: AppEvent[];
   session: ReadySession;
+  /** Preguntas que le quedan hoy según su plan. null es sin límite */
+  questionsLeft: number | null;
 }) {
   const api = useDataApi();
   const { user } = session;
@@ -286,18 +306,31 @@ function GroupCard({
         <p className="text-sm text-fg-muted">{t.party.noChallenges}</p>
       ) : null}
       <ul className="flex flex-col gap-3">
-        {challenges.map((challenge) => (
-          <ChallengeRow
-            key={challenge.id}
-            challenge={challenge}
-            members={members}
-            snapshot={snapshot}
-            events={events}
-            session={session}
-          />
-        ))}
+        {challenges.map((challenge) =>
+          challenge.kind === 'duel' ? (
+            <DuelRow
+              key={challenge.id}
+              challenge={challenge}
+              rival={members.find((member) => member.id === challenge.opponentId)}
+              self={membership}
+              events={events}
+              session={session}
+              questionsLeft={questionsLeft}
+            />
+          ) : (
+            <ChallengeRow
+              key={challenge.id}
+              challenge={challenge}
+              members={members}
+              snapshot={snapshot}
+              events={events}
+              session={session}
+            />
+          ),
+        )}
       </ul>
       <NewChallengeForm group={group} />
+      <NewDuelForm group={group} members={members} selfId={membership.id} />
 
       <Button
         variant="ghost"
@@ -311,86 +344,6 @@ function GroupCard({
         {t.party.leave}
       </Button>
     </Card>
-  );
-}
-
-function ChallengeRow({
-  challenge,
-  members,
-  snapshot,
-  events,
-  session,
-}: {
-  challenge: Challenge;
-  members: Membership[];
-  snapshot: Snapshot;
-  events: AppEvent[];
-  session: ReadySession;
-}) {
-  const api = useDataApi();
-  const { user } = session;
-  const startDay = studyDayOf(new Date(challenge.startsAt), user.timeZone);
-  const progress = collectiveProgress(
-    challengeContributions(challenge, members, { userId: user.id, snapshot, startDay }),
-    challenge.target,
-  );
-  const claimed = events.some(
-    (event) => event.type === 'challenge_completed' && event.payload.challengeId === challenge.id,
-  );
-  const claim = async () => {
-    const ctx = { userId: user.id, tz: user.timeZone };
-    const completed = await api.recordEvent(
-      createEvent(
-        'challenge_completed',
-        { challengeId: challenge.id, groupId: challenge.groupId },
-        ctx,
-      ),
-    );
-    for (const award of awardXp({
-      activity: { kind: 'challenge', eventId: completed.id },
-      streakDays: snapshot.streak.current,
-      volumeXpToday: 0,
-    })) {
-      await api.recordEvent(createEvent('xp_awarded', award, ctx));
-    }
-    celebrate('badge');
-  };
-  const percent = Math.round(progress.fraction * 100);
-  return (
-    <li className="rounded-md bg-muted p-3">
-      <p className="flex items-center gap-2 font-medium">
-        <Trophy aria-hidden className="size-4" />
-        {challenge.title}
-      </p>
-      <div
-        className="mt-2 h-2 w-full overflow-hidden rounded-full bg-surface"
-        role="progressbar"
-        aria-label={challenge.title}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={percent}
-      >
-        <div className="h-full bg-primary" style={{ width: `${percent}%` }} />
-      </div>
-      <p className="mt-1 text-sm text-fg-muted">
-        {t.party.progress(progress.total, progress.target, t.party.metrics[challenge.metric])}
-      </p>
-      {progress.completed ? (
-        claimed ? (
-          <p className="text-sm text-success">{t.party.claimed}</p>
-        ) : (
-          <Button
-            size="sm"
-            className="mt-2"
-            onClick={() => {
-              void claim();
-            }}
-          >
-            {t.party.claim}
-          </Button>
-        )
-      ) : null}
-    </li>
   );
 }
 

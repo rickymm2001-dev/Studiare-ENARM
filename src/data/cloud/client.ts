@@ -2,6 +2,7 @@
 // que viajan al navegador por diseño. La seguridad la dan los permisos por fila del esquema
 // (D-069). Sin las dos variables la app sigue funcionando completa en el navegador.
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { jwtRole } from './keyRole';
 
 export interface CloudConfig {
   url: string;
@@ -16,8 +17,11 @@ export function readCloudConfig(
   const publicKey =
     typeof env.VITE_SUPABASE_ANON_KEY === 'string' ? env.VITE_SUPABASE_ANON_KEY.trim() : '';
   if (!/^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(url) || publicKey.length < 20) return null;
-  // Nunca se acepta una llave secreta en el navegador
+  // Nunca se acepta una llave secreta en el navegador. Ni la nueva (sb_secret_) ni la anterior, que
+  // es un JWT con rol de servicio y se parece a la llave pública. Solo pasa el rol anon
   if (publicKey.startsWith('sb_secret_')) return null;
+  const role = jwtRole(publicKey);
+  if (role !== null && role !== 'anon') return null;
   return { url, publicKey };
 }
 

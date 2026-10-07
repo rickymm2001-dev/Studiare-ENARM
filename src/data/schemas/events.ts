@@ -67,10 +67,15 @@ export const EventPayloadSchemas = {
     questionVersionId: IdSchema,
     optionVersionId: IdSchema,
     correct: z.boolean(),
-    confidence: McqConfidenceSchema,
+    /** null cuando no se pidió, como en el examen, que no la pregunta para parecerse al real */
+    confidence: McqConfidenceSchema.nullable(),
     msToAnswer: Ms,
     changeCount: z.int().nonnegative(),
     highlightEnabled: z.boolean(),
+    /** Opciones que el alumno descartó antes de contestar, para medir su descarte (D-080) */
+    eliminatedOptionVersionIds: z.array(IdSchema).max(10).optional(),
+    /** La marcó para revisar en el examen */
+    markedForReview: z.boolean().optional(),
   }),
   cause_reported: z.strictObject({
     targetKind: z.enum(['question', 'card']),
@@ -151,6 +156,8 @@ export const EventPayloadSchemas = {
   ai_artifact_approved: z.strictObject({ artifactId: IdSchema, kind: AiArtifactKindSchema }),
   ai_artifact_edited: z.strictObject({ artifactId: IdSchema, kind: AiArtifactKindSchema }),
   ai_artifact_rejected: z.strictObject({ artifactId: IdSchema, kind: AiArtifactKindSchema }),
+  /** El alumno vuelve a mostrar algo que había descartado, así el estado del artefacto sigue a la bitácora */
+  ai_artifact_reopened: z.strictObject({ artifactId: IdSchema, kind: AiArtifactKindSchema }),
   hypothesis_feedback: z.strictObject({
     artifactId: IdSchema,
     /** No me ayuda guarda false (8.2) */
@@ -245,6 +252,7 @@ export const AppEventSchema = z.discriminatedUnion('type', [
   eventSchemaFor('ai_artifact_approved'),
   eventSchemaFor('ai_artifact_edited'),
   eventSchemaFor('ai_artifact_rejected'),
+  eventSchemaFor('ai_artifact_reopened'),
   eventSchemaFor('hypothesis_feedback'),
   eventSchemaFor('action_applied'),
   eventSchemaFor('deck_imported'),

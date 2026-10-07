@@ -121,7 +121,11 @@ for (const file of files) {
     for (const line of lines) {
       if (line.startsWith('+ ')) {
         const [text, rationale] = line.slice(2).split('||');
-        options.push({ correct: true, text: (text ?? '').trim(), rationale: (rationale ?? '').trim() });
+        options.push({
+          correct: true,
+          text: (text ?? '').trim(),
+          rationale: (rationale ?? '').trim(),
+        });
       } else if (line.startsWith('- ')) {
         const [head, rationale] = line.slice(2).split('||');
         const bar = (head ?? '').indexOf('|');
@@ -138,7 +142,10 @@ for (const file of files) {
       problems.push(`${key} opción sin texto o sin justificación`);
     const correct = options.find((option) => option.correct);
     const distractors = options.filter((option) => !option.correct);
-    const canonicalSet = new Set<RawOption>([...(correct ? [correct] : []), ...distractors.slice(0, 3)]);
+    const canonicalSet = new Set<RawOption>([
+      ...(correct ? [correct] : []),
+      ...distractors.slice(0, 3),
+    ]);
     const ordered = shuffle(options, hash(key));
     let caseKey: string | null = null;
     let caseOrder: number | null = null;

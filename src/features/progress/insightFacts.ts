@@ -36,16 +36,13 @@ export function buildInsightInput(input: {
   const sessionStart = new Map<string, number>();
   const shown = new Map<string, Extract<AppEvent, { type: 'question_shown' }>>();
   const changes = new Map<string, Extract<AppEvent, { type: 'answer_changed' }>[]>();
-  const reportedMisread = new Set<string>();
-  for (const event of events)
-    if (
-      event.type === 'cause_reported' &&
-      event.payload.targetKind === 'question' &&
-      event.payload.cause === 'misread'
-    )
-      reportedMisread.add(event.payload.targetId);
 
-  type Draft = Omit<AnswerFact, 'misread'> & { reported: boolean };
+  // La causa que reporta el alumno se ata a su respuesta más reciente de esa pregunta, no a todas las
+  // veces que la contestó. El ID de la causa puede ser el de la versión o el de la pregunta
+  type Draft = Omit<AnswerFact, 'misread'> & {
+    reported: boolean;
+    questionIds: readonly string[];
+  };
   const drafts: Draft[] = [];
   const reviews: ReviewFact[] = [];
   const sessionMinutes: number[] = [];
@@ -62,9 +59,15 @@ export function buildInsightInput(input: {
       case 'session_ended':
         sessionMinutes.push(event.payload.durationMs / 60_000);
         break;
-      case 'cause_reported':
+      case 'cause_reported': {
         causes.push(event.payload.cause);
+        if (event.payload.targetKind === 'question' && event.payload.cause === 'misread') {
+          const target = event.payload.targetId;
+          const latest = drafts.findLast((draft) => draft.questionIds.includes(target));
+          if (latest) latest.reported = true;
+        }
         break;
+      }
       case 'question_shown':
         shown.set(key + event.payload.questionVersionId, event);
         changes.set(key + event.payload.questionVersionId, []);
@@ -130,7 +133,8 @@ export function buildInsightInput(input: {
           topic: question.topic,
           visibleTags: shownOptions.flatMap((option) => (option.biasTag ? [option.biasTag] : [])),
           chosenTag: chosen?.biasTag ?? null,
-          reported: reportedMisread.has(question.id) || reportedMisread.has(question.questionId),
+          reported: false,
+          questionIds: [question.id, question.questionId],
         });
         break;
       }
@@ -141,7 +145,7 @@ export function buildInsightInput(input: {
 
   // La mala lectura usa el ritmo personal, así que va en una segunda pasada
   const pace = personalPace(drafts, input.thresholds.behavior);
-  const answers: AnswerFact[] = drafts.map(({ reported, ...draft }) => ({
+  const answers: AnswerFact[] = drafts.map(({ reported, questionIds: _questionIds, ...draft }) => ({
     ...draft,
     misread: isProbableMisread({
       polarity: draft.polarity,

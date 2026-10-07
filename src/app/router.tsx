@@ -3,15 +3,19 @@ import type { ComponentType } from 'react';
 import { createBrowserRouter, type RouteObject } from 'react-router';
 import { SubscriptionScreen } from '@/features/billing/SubscriptionScreen';
 import { DecksScreen } from '@/features/decks/DecksScreen';
+import { ExamResultsScreen } from '@/features/exam/ExamResultsScreen';
+import { ExamScreen } from '@/features/exam/ExamScreen';
 import { HomeScreen } from '@/features/home/HomeScreen';
 import { ReviewScreen } from '@/features/review/ReviewScreen';
 import { OnboardingScreen } from '@/features/onboarding/OnboardingScreen';
+import { PlannerScreen } from '@/features/planner/PlannerScreen';
 import { AdminUsersScreen } from '@/features/admin/AdminUsersScreen';
 import { PartyScreen } from '@/features/party/PartyScreen';
 import { QuestionBankScreen } from '@/features/physician/QuestionBankScreen';
 import { ProfileScreen } from '@/features/profile/ProfileScreen';
 import { ProgressScreen } from '@/features/progress/ProgressScreen';
 import { SettingsScreen } from '@/features/settings/SettingsScreen';
+import { TutorScreen } from '@/features/tutor/TutorScreen';
 import { RoleSelectorScreen } from '@/features/role/RoleSelectorScreen';
 import { FeedbackScreen } from '@/features/simulator/FeedbackScreen';
 import { QuestionScreen } from '@/features/simulator/QuestionScreen';
@@ -31,7 +35,11 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, ComponentType>> = {
   feedback: FeedbackScreen,
   sessionSummary: SessionSummaryScreen,
   simulatorSetup: SimulatorSetupScreen,
+  exam: ExamScreen,
+  examResults: ExamResultsScreen,
   decks: DecksScreen,
+  planner: PlannerScreen,
+  tutor: TutorScreen,
   subscription: SubscriptionScreen,
   party: PartyScreen,
   profile: ProfileScreen,

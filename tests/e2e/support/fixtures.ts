@@ -24,11 +24,26 @@ export const test = base.extend<{ consoleErrors: string[] }>({
 
 export { expect };
 
+/**
+ * La página no se desborda a los lados. Un contenido más ancho que la pantalla hace que el teléfono
+ * se aleje para acomodarlo y mueve los botones de lugar, además de dar scroll horizontal
+ */
+export async function expectNoHorizontalOverflow(page: Page): Promise<void> {
+  const widths = await page.evaluate(() => ({
+    content: document.documentElement.scrollWidth,
+    screen: document.documentElement.clientWidth,
+  }));
+  expect(widths.content, 'ancho del contenido contra el de la pantalla').toBeLessThanOrEqual(
+    widths.screen,
+  );
+}
+
 /** Cero violaciones serias o críticas de accesibilidad (14.1) */
 export async function expectNoSeriousA11yViolations(page: Page): Promise<void> {
   // axe falló una vez de forma intermitente en la primera prueba tras el build, con un JSON
   // incompleto. Se analiza solo cuando la página terminó de cargar y la red está quieta
   await page.waitForLoadState('networkidle');
+  await expectNoHorizontalOverflow(page);
   const results = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
     .analyze();

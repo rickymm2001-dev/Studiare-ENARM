@@ -338,6 +338,31 @@ Bloques
 | Aviso de pago repetido no activa dos veces | prueba de la función de avisos |
 | Ninguna llave secreta en el repo ni en el bundle | tests/security/no-secrets.test.ts |
 
+### Fase C2. Organización, carga diaria, apuntes e importación (D-085 y D-086)
+
+Nace de la guía de Anki que compartió Ricardo y de su idea de sumar lo mejor de RemNote. Va antes de la Fase D y cada etapa cierra según 15.1 con aprobación de Ricardo. Las 14 filas son las de la tabla que aprobó el 2026-10-07. La conversación completa, con el diagnóstico, la entrevista, la tabla de controversias y la aprobación, está en docs/ANALISIS_GUIA_ANKI.md.
+
+Etapas
+0. Cerrar la Fase C con lo que falta de la revisión (descarte y muestreo dirigido en la práctica, calibrando en el plan y límite Gratis, pruebas de pantallas y visibilidad), la corrida final y su aprobación
+1. Organización. Filas 3, 4, 9 y 12. Mazos en árbol con migración de los mazos de Paco, etiquetas en ruta sin espacios con migración de las 42 etiquetas con espacio, pantalla Explorar con filtros, búsqueda y acciones por lote, básica con tarjeta inversa, cloze anidado, revisión de calidad y duplicados, y fecha de modificación con marca de borrado
+2. Carga diaria. Filas 5, 6, 7, 8 y 14. Contadores de Nuevas, Aprendizaje y Programadas, perfil guía de un toque, nuevas por día según la carga proyectada, temporizador opcional, flujo de sanguijuelas, repartir, posponer y adelantar como eventos nuevos, aviso de recuperación, días fáciles y banderas de acceso por función
+3. Apuntes tipo RemNote. Fila 2. Editor en esquema con marcas rápidas que crean tarjetas, enlaces entre apuntes y etiquetas, guardado en el modelo de notas y tarjetas
+4. Importar y exportar. Fila 13. Importador .apkg, CSV, Excel y Word, y exportación a CSV con encabezados y un identificador por tarjeta
+5. IA para tarjetas desde PDF y textos. Fila 10 con la opción B de Ricardo. La IA nunca corrige. Señala la controversia con su explicación y el alumno la marca como verificada o edita la tarjeta
+6. Sincronización entre dispositivos. Fila 12 completa, con la nube parte 2
+
+| Criterio de aceptación | Prueba |
+|---|---|
+| Migrar a mazos en árbol no pierde notas ni tarjetas | Prueba de migración con los 3 mazos de Paco que compara conteos y claves antes y después |
+| Ninguna etiqueta guardada tiene espacios y las rutas conservan su jerarquía | Prueba de saneo con las 42 etiquetas conocidas |
+| Explorar filtra miles de tarjetas sin trabarse | Prueba de rendimiento con 20,000 tarjetas generadas |
+| Repartir, posponer y adelantar no editan la bitácora y se reconstruyen igual | Prueba de reconstrucción de estado derivado con eventos nuevos |
+| Los días fáciles bajan la carga de esos días sin pasar del límite diario | Prueba con la simulación de carga futura |
+| Los apuntes crean, actualizan y borran sus tarjetas sin perder el historial de las que siguen | Prueba de sincronización entre apuntes y tarjetas |
+| El importador rechaza archivos dañados o maliciosos con un mensaje claro | Fixtures generados por código y un zip malicioso |
+| La IA nunca cambia un texto y cada señal explica su motivo con textos de la lista cerrada | Evaluación con casos dorados y prueba de que la señal se quita al verificar y deja un evento |
+| Dos dispositivos que editan lo mismo conservan la edición más reciente | Prueba de conflicto con fecha de modificación |
+
 ## 7. Umbrales
 
 Valores por defecto en src/config/thresholds.ts, editables desde admin (12).
@@ -381,3 +406,28 @@ Valores por defecto en src/config/thresholds.ts, editables desde admin (12).
 - Repo privado remoto. Hecho (D-048)
 - Cuenta gratuita de Cloudflare antes de la Fase F
 - Opcionales sin fecha. Prompt maestro de flashcards, clave de API y banco de opción múltiple
+
+## 10. Directrices V2 (D-080)
+
+Dónde se aplica cada directriz del Prompt V2. Antes de cada bloque se revisa en silencio que soporte la imperfección y los sesgos, que integre freemium y referidos y que evite el código espagueti.
+
+| Directriz | Dónde se aplica | Cuándo |
+|---|---|---|
+| Simulador imperfecto, descarte de opciones y manejo de la frustración | Práctica y examen. El alumno tacha opciones, queda guardado en cada respuesta y la retroalimentación explica qué se podía descartar | Fase C, bloque 9 |
+| Tipologías de reactivo (patognomónico, característico, resolución inversa, control, incoherente, dato oscuro y perspectiva del paciente) | Esquemas zod de pregunta y de contenido, validadores y plantilla del importador. Los de control y los incoherentes se reportan aparte | Esquema en Fase C bloque 9. Editor e importador en Fase E |
+| Muestreo dirigido a los sesgos del alumno | Motor sampler con varias etiquetas y más opciones por pregunta. Opción en Simular con estado calibrando hasta tener los errores etiquetados que pide 7.4 | Fase C, bloque 9 |
+| Alarmas de tiempo | Motor puro timeAlerts, con avisos por tiempo restante y por ritmo, en pantalla y para lector de pantalla, apagables | Fase C, bloque 9 |
+| Datos pre-clasificados | Los motores de IA leen solo lo que el médico ya etiquetó y nunca clasifican en bruto | Fase D |
+| IA con otro proveedor | Proxy sin atarse a un proveedor. OpenAI pendiente de confirmar y sin chat abierto | Fase D, tras confirmar |
+| Plan Gratis | Banderas por plan con tope de banco, y el mismo límite aplicado en el servidor con permisos por fila | Fase P, bloque 10 nuevo |
+| Referidos con mes gratis | Tablas, funciones y avisos de pago en el servidor, y la pantalla en Party. Antes se confirma qué cuenta como concretado | Fase P, bloque 11 nuevo |
+
+Criterios de aceptación nuevos
+
+| Criterio | Prueba |
+|---|---|
+| Un reactivo anómalo de cada tipo pasa el esquema y la ingesta | Pruebas de esquema y de check-draft con un caso de cada tipo |
+| Las alarmas salen en los umbrales y se pueden apagar | Pruebas del motor timeAlerts y e2e del examen |
+| El muestreo dirigido sube las opciones con el sesgo del alumno y sigue incluyendo la correcta | Pruebas por propiedades en sampler |
+| El alumno Gratis no pasa de su tope ni con el navegador manipulado | Prueba SQL de permisos por fila en Fase P |
+| El mes gratis solo lo da el servidor y una sola vez por referido | Prueba SQL y prueba de la función de avisos |

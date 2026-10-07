@@ -1,6 +1,7 @@
 # Proyecto
 Prototipo funcional de una plataforma integral para preparar el ENARM, en español de México.
 La especificación completa vive en docs/PROMPT_PROTOTIPO.md. El plan vigente vive en PLAN.md, el avance en PROGRESS.md y las decisiones en DECISIONES.md.
+La guía de Anki y la Fase C2 (organización, carga diaria, apuntes, importación) están en docs/ANALISIS_GUIA_ANKI.md.
 Si algo es ambiguo o contradice la especificación, pregunta a Ricardo antes de suponer.
 
 # Stack
@@ -18,7 +19,8 @@ Un servidor local pequeño en la carpeta server hace de proxy hacia la API de Cl
 - IMPORTANT. Ningún secreto en el código, en el repo ni en el bundle del cliente. La clave se llama ENARM_ANTHROPIC_KEY y vive en server/.env.local
 - IMPORTANT. Nunca crees, leas ni sugieras la variable ANTHROPIC_API_KEY
 - Los eventos de repaso y de respuesta solo se agregan, nunca se editan ni se borran
-- Todo texto médico que genere la IA va anclado al banco, cita la frase que lo respalda y queda en borrador hasta que alguien lo apruebe
+- Todo texto médico que genere la IA va anclado al banco o, desde la Fase C2 (D-085), a un PDF o texto que aporta el alumno. Cita la frase literal que lo respalda y queda en borrador, con la etiqueta de no validada por médico, hasta que alguien lo apruebe
+- La IA nunca corrige por su cuenta lo que considera mal. Solo lo señala con un texto que explica la controversia y que se apoya únicamente en textos académicos fundamentales del ENARM, de una lista cerrada. El alumno marca que ya lo verificó, lo que queda como evento y quita la señal, o edita esa misma tarjeta o pregunta
 - Las funciones que dependen de datos muestran estado calibrando hasta llegar a su umbral
 - Nada de chat libre con IA ni predicción del puntaje ENARM
 - Todo vive como página web que funciona completa en el navegador. Instalarla como PWA es opcional. Nada de apps nativas ni de tienda
@@ -28,6 +30,15 @@ Un servidor local pequeño en la carpeta server hace de proxy hacia la API de Cl
 - Interfaz en español de México con trato de tú. Código y nombres en inglés
 - Antes de usar la API de una librería, revisa su documentación vigente
 - No instales nada global ni cambies la configuración del sistema sin preguntar
+
+# Filosofía del producto (V2, D-080)
+- El objetivo es enseñar a contestar el ENARM y no solo medicina. Entrena el descarte de opciones y el manejo de la frustración ante preguntas que el alumno no sabe, para que use la lógica y no solo la memoria
+- El simulador es imperfecto a propósito, como el examen real. El esquema y la ingesta aceptan reactivos patognomónicos y característicos, de resolución inversa, con incoherencias, de control, con datos oscuros y desde la perspectiva del paciente, y ningún validador los rechaza por no ser perfectos
+- El muestreo dirigido sube las opciones con los sesgos a los que el alumno es propenso, y el simulador avisa según el tiempo restante para entrenar la presión del examen
+- La IA opera detrás de la base de datos sobre datos que el médico ya etiquetó, incluidos los sesgos. Nunca clasifica datos en bruto en tiempo real
+- El plan Gratis tiene límites estrictos al banco y se aplican también en el servidor. Los referidos viven en Party y dan un mes gratis automático desde el servidor
+- Antes de proponer un bloque de código, un esquema o validar un lote, revisa en silencio que soporte la imperfección y los sesgos, que integre freemium y referidos, y que evite el código espagueti. Resume a Ricardo cómo se aplica al bloque
+- Pendiente de confirmar con Ricardo en D-080 el LLM de OpenAI como segundo proveedor y qué cuenta como referido concretado. Mientras tanto rigen las reglas de arriba
 
 # Flujo
 - Trabaja por fases. Al cerrar cada fase sigue la sección 15.1 de la especificación y detente a esperar aprobación

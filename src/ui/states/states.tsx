@@ -180,3 +180,40 @@ export function CalibratingState({
     </StateFrame>
   );
 }
+
+/**
+ * Versión corta de calibrando para tarjetas y renglones donde no cabe el cuadro completo. Dice
+ * cuánto falta, como pide 4.3, en una sola línea con su barra
+ */
+export function CalibratingNote({
+  current,
+  target,
+  unit,
+  className,
+}: {
+  current: number;
+  target: number;
+  unit: string;
+  className?: string;
+}) {
+  const missing = Math.max(target - current, 0);
+  const progress = t.states.calibrating.progress(Math.min(current, target), target, unit);
+  return (
+    <div
+      role="status"
+      className={cn(
+        'flex flex-col gap-1.5 rounded-md bg-primary-soft px-3 py-2 text-sm',
+        className,
+      )}
+    >
+      <p className="flex flex-wrap items-center gap-x-2 text-primary">
+        <Gauge aria-hidden className="size-4 shrink-0" />
+        <span className="font-semibold">{t.states.calibrating.title}</span>
+        <span>
+          {progress}. {t.states.calibrating.remaining(missing, unit)}
+        </span>
+      </p>
+      <ProgressBar value={current} max={target} label={progress} className="h-1.5" />
+    </div>
+  );
+}

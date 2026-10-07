@@ -11,7 +11,10 @@
  * Método por modo
  *   - Canónico para el examen completo. El set que marcó el médico
  *   - Diverso para práctica. Maximiza etiquetas distintas y evita repetirle al alumno un set ya visto
- *   - Dirigido para retos. Incluye al menos un distractor de la etiqueta que más atrae al alumno
+ *   - Dirigido para retos y entrenamiento. Con una etiqueta incluye al menos un distractor de la que
+ *     más atrae al alumno. Con una lista de sesgos a los que es propenso (D-080) llena con ellos
+ *     tantos distractores como quepan, por turnos del más al menos atractor, y completa con
+ *     etiquetas variadas
  *   - Estratificado para calibrar. Elige los distractores con menos exposiciones
  *   La correcta va a la posición menos usada hasta ahora (empates por semilla) y el resto se baraja.
  * Umbrales. Una variante entra al puntaje del examen solo con 200 exposiciones por distractor (J).
@@ -38,6 +41,13 @@ export interface SampleRequest {
   seenSets?: readonly (readonly string[])[];
   /** Etiqueta que más atrae al alumno, para el modo dirigido */
   targetTag?: string | null;
+  /**
+   * Sesgos a los que el alumno es propenso, del que más lo atrae al que menos, para el modo
+   * dirigido (D-080). Si viene, manda sobre targetTag
+   */
+  targetTags?: readonly string[];
+  /** Tope de distractores con un sesgo propenso. Por defecto todos los que quepan */
+  maxTargeted?: number;
   /** Exposiciones de cada opción en la población, para el modo estratificado */
   exposures?: Readonly<Record<string, number>>;
   /** Veces que la correcta cayó en cada posición en esta sesión, para balancear */
@@ -94,6 +104,46 @@ function pickDiverse(
   return chosen;
 }
 
+/**
+ * Distractores con los sesgos a los que el alumno es propenso. Toma por turnos de cada sesgo, del
+ * más al menos atractor, así entran todos los que lo atrapan y no solo el principal. Lo que falta
+ * se completa con etiquetas variadas
+ */
+function pickTargeted(
+  distractors: readonly SamplerOption[],
+  needed: number,
+  rng: Rng,
+  targetTags: readonly string[],
+  maxTargeted: number | undefined,
+): SamplerOption[] {
+  const limit = Math.max(0, Math.min(needed, maxTargeted ?? needed));
+  const byTag = new Map(
+    targetTags.map((tag) => [
+      tag,
+      rng.shuffle(distractors.filter((option) => option.biasTag === tag)),
+    ]),
+  );
+  const chosen: SamplerOption[] = [];
+  let progressed = true;
+  while (chosen.length < limit && progressed) {
+    progressed = false;
+    for (const tag of targetTags) {
+      const next = byTag.get(tag)?.shift();
+      if (next === undefined || chosen.length >= limit) continue;
+      chosen.push(next);
+      progressed = true;
+    }
+  }
+  const taken = new Set(chosen.map((option) => option.id));
+  const rest = pickDiverse(
+    distractors.filter((option) => !taken.has(option.id)),
+    needed - chosen.length,
+    rng,
+    new Set(chosen.map((option) => option.biasTag ?? '')),
+  );
+  return [...chosen, ...rest];
+}
+
 function chooseDistractors(
   request: SampleRequest,
   rng: Rng,
@@ -120,6 +170,8 @@ function chooseDistractors(
         .map(({ option }) => option);
     }
     case 'targeted': {
+      if (request.targetTags && request.targetTags.length > 0)
+        return pickTargeted(distractors, needed, rng, request.targetTags, request.maxTargeted);
       const targets = distractors.filter(
         (option) => option.biasTag !== null && option.biasTag === request.targetTag,
       );

@@ -2,7 +2,9 @@
 // El código usa claves en inglés y nunca escribe texto visible fuera de este archivo.
 import { BRAND } from '@/config/brand';
 import type { Phase, ScreenKey } from '@/app/screens';
+import { examText } from './exam';
 import { featureText } from './features';
+import { tutorText } from './tutor';
 
 interface ScreenText {
   title: string;
@@ -139,6 +141,8 @@ const screens: Record<ScreenKey, ScreenText> = {
 
 export const t = {
   ...featureText,
+  ...examText,
+  ...tutorText,
   app: {
     name: BRAND.name,
     logoAlt: 'Studiare, ir al inicio',
@@ -166,6 +170,8 @@ export const t = {
     users: 'Usuarios',
     platform: 'Plataforma',
     decks: 'Mazos',
+    planner: 'Plan',
+    tutor: 'Tutor',
     party: 'Party',
     admin: 'Administración',
   },

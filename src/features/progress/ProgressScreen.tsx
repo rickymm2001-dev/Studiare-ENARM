@@ -6,14 +6,9 @@ import { BookOpenCheck, ChevronDown, Clock, Hourglass, ListChecks, Target } from
 import { useState, type ReactNode } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
-import { useDataApi } from '@/data/context';
-import { useLiveData } from '@/data/hooks';
-import type { ClinicalCase, Option, Question } from '@/data/schemas/bank';
 import { topicTaxonomy } from '@/demo/content';
 import { deckIds } from '@/demo/content/deckEntities';
-import { buildInsights } from '@/engines/insights';
-import { studyDayOf } from '@/engines/studyDay';
-import { analyzeCategories, analyzeTopics } from '@/engines/topics';
+import { analyzeCategories, type TopicMastery } from '@/engines/topics';
 import { t } from '@/i18n/es-MX';
 import { toneClasses } from '@/ui/branches';
 import { cn } from '@/ui/cn';
@@ -22,11 +17,16 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/ca
 import { LoadingState } from '@/ui/states/states';
 import { deckBranch } from '../decks/deckBranch';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
+import { useDecksAndCards } from '../decks/useDecksAndCards';
 import { buildSnapshot } from '../home/snapshot';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
-import { buildInsightInput } from './insightFacts';
-import { InsightsPanel, WeeklyFocus, type WeakTopic } from './InsightsPanel';
+import { DifficultyCard } from './DifficultyCard';
+import { difficultyRows } from './difficultyView';
+import { FutureLoadSection } from './FutureLoadSection';
+import { InsightsPanel, WeeklyFocus } from './InsightsPanel';
+import { masteryChip } from './masteryChip';
+import { useAnalysis } from './useAnalysis';
 
 export function ProgressScreen() {
   return (
@@ -35,50 +35,20 @@ export function ProgressScreen() {
 }
 
 function Progress({ session }: { session: ReadySession }) {
-  const api = useDataApi();
   const { user, settings } = session;
   const events = useUserEvents(user.id);
   const catalog = useDeckCatalog();
-  const cardNote = useLiveData(
-    async () => new Map((await api.repos.cards.list()).map((card) => [card.id, card.noteId])),
-    [api.repos],
-  );
-  const answeredIds = (events ?? []).flatMap((event) =>
-    event.type === 'question_answered' ? [event.payload.questionVersionId] : [],
-  );
-  const bank = useLiveData(async () => {
-    const ids = [...new Set(answeredIds)];
-    const found = (await Promise.all(ids.map((id) => api.repos.questions.get(id)))).filter(
-      (question) => question !== undefined,
-    );
-    const options = (
-      await Promise.all(
-        found.map((question) => api.repos.options.listForQuestionVersion(question.id)),
-      )
-    ).flat();
-    const caseIds = [
-      ...new Set(found.flatMap((question) => (question.caseId ? [question.caseId] : []))),
-    ];
-    const cases = (await Promise.all(caseIds.map((id) => api.repos.cases.get(id)))).filter(
-      (item) => item !== undefined,
-    );
-    return {
-      questions: new Map<string, Question>(found.map((question) => [question.id, question])),
-      options: new Map<string, Option>(options.map((option) => [option.id, option])),
-      cases: new Map<string, ClinicalCase>(cases.map((item) => [item.id, item])),
-    };
-  }, [api.repos, answeredIds.join(',')]);
-  const questions = bank?.questions;
+  const content = useDecksAndCards();
+  const analysis = useAnalysis(session, events);
 
   const header = (
     <ScreenHeader title={t.screens.progress.title} description={t.progress.description} />
   );
   if (
     events === undefined ||
-    bank === undefined ||
-    questions === undefined ||
+    analysis === undefined ||
     catalog === undefined ||
-    cardNote === undefined
+    content === undefined
   ) {
     return (
       <>
@@ -88,12 +58,8 @@ function Progress({ session }: { session: ReadySession }) {
     );
   }
 
-  // Respuestas con su rama y subespecialidad
-  const responses = events.flatMap((event) => {
-    if (event.type !== 'question_answered') return [];
-    const info = questions.get(event.payload.questionVersionId);
-    return info ? [{ branch: info.branch, topic: info.topic, correct: event.payload.correct }] : [];
-  });
+  const { responses, byTopic, report, weakTopics } = analysis;
+  const cardNote = new Map(content.cards.map((card) => [card.id, card.noteId]));
   // Tarjetas repasadas por rama y subespecialidad, con lo que dicen las notas de cada mazo
   const noteInfo = new Map<string, { branch: string; topic: string | null }>();
   for (const file of catalog) {
@@ -133,37 +99,6 @@ function Progress({ session }: { session: ReadySession }) {
       minResponsesPerCategory: DEFAULT_THRESHOLDS.structure.minResponsesPerCategory,
     }).map((entry) => [entry.category, entry]),
   );
-  const byTopic = new Map(
-    analyzeTopics({
-      responses,
-      taxonomy: topicTaxonomy,
-      averageRetrievability: {},
-      thresholds: DEFAULT_THRESHOLDS.topics,
-    }).topics.map((entry) => [entry.topic, entry]),
-  );
-
-  const report = buildInsights(
-    buildInsightInput({
-      events,
-      bank,
-      timeZone: user.timeZone,
-      today: studyDayOf(new Date(), user.timeZone),
-      desiredRetention: settings.desiredRetention,
-      thresholds: DEFAULT_THRESHOLDS,
-    }),
-  );
-
-  // Subespecialidades con dominio bajo, de la más débil a la menos, para los focos de la semana
-  const weakTopics: WeakTopic[] = topicTaxonomy.branches
-    .flatMap((branch) =>
-      branch.topics.flatMap((topic) => {
-        const state = byTopic.get(topic.key)?.state;
-        return state?.kind === 'ready' && state.mastery < 0.6
-          ? [{ key: topic.key, name: topic.name, branchName: branch.name, mastery: state.mastery }]
-          : [];
-      }),
-    )
-    .sort((a, b) => a.mastery - b.mastery);
 
   return (
     <>
@@ -192,6 +127,16 @@ function Progress({ session }: { session: ReadySession }) {
         cardsByBranch={cardsByBranch}
         cardsByTopic={cardsByTopic}
       />
+
+      <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
+        <DifficultyCard
+          rows={difficultyRows({
+            responses,
+            minResponses: DEFAULT_THRESHOLDS.structure.minResponsesPerCategory,
+          })}
+        />
+        <FutureLoadSection session={session} events={events} content={content} />
+      </div>
     </>
   );
 }
@@ -210,14 +155,7 @@ function Stat({ icon, label, value }: { icon: ReactNode; label: string; value: R
   );
 }
 
-const masteryChip = (mastery: number) =>
-  mastery >= 0.75
-    ? 'bg-success-soft text-success'
-    : mastery >= 0.6
-      ? 'bg-warning-soft text-warning'
-      : 'bg-danger-soft text-danger';
-
-type TopicEntry = ReturnType<typeof analyzeTopics>['topics'][number];
+type TopicEntry = TopicMastery;
 type BranchEntry = ReturnType<typeof analyzeCategories>[number];
 
 /**

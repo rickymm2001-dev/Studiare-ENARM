@@ -13,6 +13,7 @@ export const CARD_ALLOWED_TAGS = [
   'u',
   'sub',
   'sup',
+  'mark',
   'br',
   'div',
   'p',

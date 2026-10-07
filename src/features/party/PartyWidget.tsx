@@ -1,4 +1,5 @@
-// Widget de Party para Inicio (9.1). Tu lugar en la tabla de tu primer grupo y su reto activo.
+// Widget de Party para Inicio (9.1). Tu lugar en la tabla de tu primer grupo, su reto colectivo
+// activo y los duelos que esperan tu turno.
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
@@ -8,11 +9,21 @@ import { studyDayOf } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { SimulatedDataLabel } from '@/ui/components/labels';
+import type { AppEvent } from '@/data/schemas/events';
 import type { Snapshot } from '../home/snapshot';
 import type { ReadySession } from '../shared/RequireSession';
+import { duelView } from './duels';
 import { challengeContributions, memberStats } from './stats';
 
-export function PartyWidget({ session, snapshot }: { session: ReadySession; snapshot: Snapshot }) {
+export function PartyWidget({
+  session,
+  snapshot,
+  events,
+}: {
+  session: ReadySession;
+  snapshot: Snapshot;
+  events: readonly AppEvent[];
+}) {
   const api = useDataApi();
   const { user } = session;
   const data = useLiveData(async () => {
@@ -25,7 +36,7 @@ export function PartyWidget({ session, snapshot }: { session: ReadySession; snap
       (item) => item.groupId === group.id,
     );
     const members = memberships.filter((item) => item.groupId === group.id && item.leftAt === null);
-    return { mine, group, members, challenge: challenges.at(-1) ?? null };
+    return { mine, group, members, challenges };
   }, [api.repos, user.id]);
 
   if (data === undefined) return null;
@@ -41,7 +52,18 @@ export function PartyWidget({ session, snapshot }: { session: ReadySession; snap
   }
   const rows = weeklyLeaderboard(memberStats(data.members, { userId: user.id, snapshot }));
   const me = rows.find((row) => row.memberId === data.mine.id);
-  const challenge = data.challenge;
+  // El widget muestra el reto colectivo más reciente. Los duelos se cuentan aparte
+  const challenge = data.challenges.filter((item) => item.kind === 'collective').at(-1) ?? null;
+  const pendingDuels = data.challenges.filter(
+    (item) =>
+      item.kind === 'duel' &&
+      duelView({
+        events,
+        challenge: item,
+        selfId: data.mine.id,
+        opponent: { id: item.opponentId ?? '' },
+      }).status === 'pending',
+  ).length;
   const progress = challenge
     ? collectiveProgress(
         challengeContributions(challenge, data.members, {
@@ -65,6 +87,9 @@ export function PartyWidget({ session, snapshot }: { session: ReadySession; snap
         <p className="text-sm text-fg-muted">
           {challenge.title} · {Math.round(progress.fraction * 100)}%
         </p>
+      ) : null}
+      {pendingDuels > 0 ? (
+        <p className="text-sm font-medium">{t.widgets.party.duelsPending(pendingDuels)}</p>
       ) : null}
       <Link className="text-sm underline" to={screenPath('party')}>
         {t.widgets.party.go}

@@ -87,6 +87,9 @@ function toQuestion(item: DemoQuestion, caseVignette: string | null): DemoBankQu
     structure: { polarity: item.polarity, task: item.task, format, source: 'physician' },
     explanation: item.explanation,
     gpcRefs: item.gpcRefs.map((title) => ({ title, status: 'to_verify' })),
+    // Tipos de reactivo raros y datos con su fuerza diagnóstica, solo si el lote los trae (D-080)
+    ...(item.kinds ? { itemKinds: item.kinds } : {}),
+    ...(item.clues ? { clues: item.clues } : {}),
     physicianDifficulty: item.difficulty,
     canonicalOptionIds: item.canonical.map((key) => demoIds.optionVersion(item.key, key)),
     editorialStatus: 'draft',

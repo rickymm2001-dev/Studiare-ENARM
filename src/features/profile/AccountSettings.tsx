@@ -10,6 +10,7 @@ import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
 import { exportUserData } from '@/data/usecases/exportData';
 import { updateProfile } from '@/data/usecases/profile';
+import { clearExamState } from '../exam/examStorage';
 import { fromOption, MAX_INTERVAL_OPTIONS, toOption } from '../review/intervalOptions';
 import type { UserSettings } from '@/data/schemas/people';
 import { t } from '@/i18n/es-MX';
@@ -94,6 +95,7 @@ export function PomodoroSection({ session }: { session: ReadySession }) {
 /** Configuración, sección Cuenta y datos. Exportar y borrar */
 export function DataSection({ session }: { session: ReadySession }) {
   const api = useDataApi();
+  const { deleteAllData } = api;
   const { user } = session;
   const signOut = usePreferences((state) => state.signOut);
   return (
@@ -122,7 +124,18 @@ export function DataSection({ session }: { session: ReadySession }) {
           {t.settings.export}
         </Button>
       </Section>
-      {api.deleteAllData ? <DeleteCard onDelete={api.deleteAllData} onDeleted={signOut} /> : null}
+      {deleteAllData ? (
+        <DeleteCard
+          onDelete={async () => {
+            // El examen en curso vive en el navegador y no en la base, así que se borra aparte. Hay
+            // que leer los perfiles antes, porque con la base borrada ya no se sabe de quién eran
+            const users = await api.repos.users.list();
+            await deleteAllData();
+            for (const { id } of users) clearExamState(id);
+          }}
+          onDeleted={signOut}
+        />
+      ) : null}
     </>
   );
 }

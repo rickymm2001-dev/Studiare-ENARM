@@ -1,19 +1,16 @@
 // Configurar simulador (pantalla 7). Práctica por rama, dificultad y estructura, con el límite
 // diario del plan Gratis como bandera de acceso. Los filtros y el botón de empezar van arriba y las
-// ramas quedan plegadas con un resumen (D-078). El examen completo llega en el siguiente bloque.
+// ramas quedan plegadas con un resumen (D-078). Debajo va la tarjeta del examen completo.
 import { Play } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
-import { PLANS } from '@/config/billing';
 import { useDataApi } from '@/data/context';
 import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
 import { useLiveData } from '@/data/hooks';
 import { ensureDemoBank } from '@/data/usecases/bank';
-import { studyDayOf } from '@/engines/studyDay';
-import { createRng } from '@/engines/random';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -24,8 +21,16 @@ import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { BranchTopicPicker } from '../shared/BranchTopicPicker';
 import { ALL_TOPICS } from '../shared/topics';
+import { dailyQuestions } from '../shared/dailyLimit';
+import { difficultyGroupOf } from '../shared/difficulty';
 import { useUserEvents } from '../shared/useUserEvents';
+import { ExamSetupCard } from '../exam/ExamSetupCard';
+import { reservedByStoredExam } from '../exam/examStorage';
+import { useAnalysis } from '../progress/useAnalysis';
+import { targetBiasTags } from '../progress/focusItems';
 import { clock, usePractice } from './practice';
+import { pickQuestions } from './pickQuestions';
+import { TargetedSamplingField } from './TargetedSamplingField';
 
 type Difficulty = 'all' | 'easy' | 'medium' | 'hard';
 type Structure = 'all' | 'negative' | 'affirmative';
@@ -54,6 +59,7 @@ function Setup({ session }: { session: ReadySession }) {
     [api.repos, session.user.id],
   );
   const events = useUserEvents(session.user.id);
+  const analysis = useAnalysis(session, events);
   // Los focos de Progreso llegan con un tema o una estructura ya elegidos (D-078)
   const [params] = useSearchParams();
   const [topics, setTopics] = useState<Set<string>>(() => {
@@ -65,6 +71,7 @@ function Setup({ session }: { session: ReadySession }) {
     params.get('structure') === 'negative' ? 'negative' : 'all',
   );
   const [count, setCount] = useState('10');
+  const [targeted, setTargeted] = useState(false);
 
   const header = (
     <ScreenHeader
@@ -81,20 +88,17 @@ function Setup({ session }: { session: ReadySession }) {
     );
   }
 
-  const plan = subscription?.status === 'active' ? subscription.plan : 'free';
-  const limit = PLANS[plan].access.dailyQuestions;
-  const today = studyDayOf(new Date(), session.user.timeZone);
-  const answeredToday = events.filter(
-    (event) =>
-      event.type === 'question_answered' && studyDayOf(new Date(event.at), event.tz) === today,
-  ).length;
-  const left = limit === null ? null : Math.max(0, limit - answeredToday);
+  const { plan, left, reserved } = dailyQuestions({
+    events,
+    subscription,
+    timeZone: session.user.timeZone,
+    now: new Date(),
+    reserved: reservedByStoredExam(session.user.id),
+  });
   // Preguntas por subespecialidad con los filtros de dificultad y estructura, para el selector
   const matchesLevel = (question: (typeof questions)[number]) => {
-    const level = question.physicianDifficulty;
-    if (difficulty === 'easy' && level > 2) return false;
-    if (difficulty === 'medium' && level !== 3) return false;
-    if (difficulty === 'hard' && level < 4) return false;
+    if (difficulty !== 'all' && difficultyGroupOf(question.physicianDifficulty) !== difficulty)
+      return false;
     return structure === 'all' || question.structure.polarity === structure;
   };
   const countsByTopic = new Map<string, number>();
@@ -102,31 +106,30 @@ function Setup({ session }: { session: ReadySession }) {
     if (matchesLevel(question))
       countsByTopic.set(question.topic, (countsByTopic.get(question.topic) ?? 0) + 1);
   }
-  const filtered = questions.filter((question) => {
-    if (!topics.has(question.topic)) return false;
-    const level = question.physicianDifficulty;
-    if (difficulty === 'easy' && level > 2) return false;
-    if (difficulty === 'medium' && level !== 3) return false;
-    if (difficulty === 'hard' && level < 4) return false;
-    if (structure !== 'all' && question.structure.polarity !== structure) return false;
-    return true;
-  });
+  const filtered = questions.filter(
+    (question) => topics.has(question.topic) && matchesLevel(question),
+  );
   const wanted = Math.min(Number(count), filtered.length, left ?? Number.POSITIVE_INFINITY);
 
   const start = async () => {
     const sessionId = newId();
-    const rng = createRng(`practice|${sessionId}`);
     // Los casos seriados se mantienen juntos y en orden
-    const picked = rng.shuffle(filtered).slice(0, wanted);
-    const ordered = [...picked].sort((a, b) =>
-      a.caseId && a.caseId === b.caseId ? (a.caseOrder ?? 0) - (b.caseOrder ?? 0) : 0,
-    );
+    const ordered = pickQuestions(filtered, `practice|${sessionId}`, wanted);
+    // Solo se dirige si la opción está encendida y el perfil ya tiene trampas que dirigir
+    const targetTags = targeted && analysis ? targetBiasTags(analysis.report) : [];
     await api.recordEvent(
       createEvent(
         'session_started',
         {
           kind: 'practice',
-          config: { topics: [...topics], difficulty, structure, count: wanted },
+          config: {
+            topics: [...topics],
+            difficulty,
+            structure,
+            count: wanted,
+            sampling: targetTags.length > 0 ? 'targeted' : 'diverse',
+            ...(targetTags.length > 0 ? { targetTags } : {}),
+          },
         },
         { userId: session.user.id, tz: session.user.timeZone, sessionId },
       ),
@@ -139,6 +142,9 @@ function Setup({ session }: { session: ReadySession }) {
       answers: [],
       startedAt: clock(),
       ended: false,
+      kind: 'practice',
+      duelId: null,
+      targetTags,
     });
     void navigate(screenPath('question'));
   };
@@ -188,8 +194,18 @@ function Setup({ session }: { session: ReadySession }) {
               }}
             />
           </div>
+          <TargetedSamplingField
+            report={analysis?.report}
+            checked={targeted}
+            onChange={setTargeted}
+          />
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            {left === 0 ? (
+            {left === 0 && reserved > 0 ? (
+              // El límite del día lo tiene apartado un examen que todavía no termina
+              <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
+                <Link to={screenPath('exam')}>{t.simulator.goToOpenExam}</Link>
+              </Button>
+            ) : left === 0 ? (
               <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
                 <Link to={screenPath('subscription')}>{t.simulator.seePlans}</Link>
               </Button>
@@ -212,7 +228,11 @@ function Setup({ session }: { session: ReadySession }) {
                 <>
                   {' · '}
                   <span className={left === 0 ? 'font-semibold text-fg' : undefined}>
-                    {left > 0 ? t.simulator.limit(left) : t.simulator.limitReached}
+                    {left > 0
+                      ? t.simulator.limit(left)
+                      : reserved > 0
+                        ? t.simulator.limitUsedByExam
+                        : t.simulator.limitReached}
                   </span>
                 </>
               ) : null}
@@ -234,12 +254,7 @@ function Setup({ session }: { session: ReadySession }) {
           </Disclosure>
         </div>
       </Card>
-      <Card aria-labelledby="examen-titulo" className="flex flex-col gap-0.5 py-3">
-        <h2 id="examen-titulo" className="font-semibold text-fg">
-          {t.simulator.exam}
-        </h2>
-        <p className="text-sm text-fg-muted">{t.simulator.examSoon}</p>
-      </Card>
+      <ExamSetupCard session={session} questions={questions} plan={plan} left={left} />
     </>
   );
 }

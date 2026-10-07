@@ -19,6 +19,7 @@ import { SelectField } from '@/ui/components/field';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
+import { DiscardReviewCard } from './DiscardReviewCard';
 import { usePractice, type PracticeAnswer } from './practice';
 import { NoActivePractice } from './QuestionScreen';
 import { useQuestion, type QuestionBundle } from './useQuestion';
@@ -185,6 +186,9 @@ function FeedbackBody({
               ) : null}
             </CardTitle>
             <CardDescription>{question.prompt}</CardDescription>
+            {answer.sentToReview ? (
+              <p className="mt-1 text-sm font-medium text-primary">{t.simulator.sentToReview}</p>
+            ) : null}
           </CardHeader>
           <ul className="flex flex-col gap-2">
             {shown.map((option, position) => {
@@ -235,6 +239,12 @@ function FeedbackBody({
               {causePicker}
             </Card>
           ) : null}
+
+          <DiscardReviewCard
+            shown={shown}
+            eliminated={answer.eliminatedOptionIds}
+            chosenId={answer.optionVersionId}
+          />
 
           <Card aria-labelledby="explicacion">
             <CardHeader>

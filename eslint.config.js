@@ -79,9 +79,10 @@ export default defineConfig([
     },
   },
 
-  // El router es configuración, no un módulo de componentes con recarga en caliente
+  // El router es configuración y el armado de pantallas de prueba solo corre en Vitest, así que no
+  // son módulos de componentes con recarga en caliente
   {
-    files: ['src/app/router.tsx'],
+    files: ['src/app/router.tsx', 'src/app/testing/**/*.tsx'],
     rules: { 'react-refresh/only-export-components': 'off' },
   },
 

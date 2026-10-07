@@ -1,7 +1,7 @@
 // Esquemas de los archivos de contenido en src/demo/content. Son datos que los médicos pueden
 // editar sin tocar código (13). La Fase B los llena y las pruebas los validan al cargarlos.
 import { z } from 'zod';
-import { TaxonomyKeySchema } from './common';
+import { ClueStrengthSchema, ItemKindSchema, TaxonomyKeySchema } from './common';
 import { QuestionTaskSchema } from './bank';
 
 /** Estado de revisión de un archivo de contenido escrito por Claude */
@@ -133,26 +133,38 @@ export const DemoOptionSchema = z.strictObject({
   rationale: z.string().min(1).max(400),
 });
 
-export const DemoQuestionSchema = z.strictObject({
-  key: z.string().regex(/^b\d-q\d{2}$/),
-  caseKey: z.string().nullable(),
-  caseOrder: z.int().min(1).max(3).nullable(),
-  branch: TaxonomyKeySchema,
-  topic: TaxonomyKeySchema,
-  subtopic: TaxonomyKeySchema,
-  /** Viñeta propia, o datos que se agregan al caso seriado en este paso */
-  vignette: z.string().max(2000),
-  prompt: z.string().min(5).max(400),
-  polarity: z.enum(['affirmative', 'negative']),
-  task: QuestionTaskSchema,
-  difficulty: z.int().min(1).max(5),
-  options: z.array(DemoOptionSchema).length(10),
-  /** Las 4 opciones del set canónico, la correcta y 3 distractores */
-  canonical: z.array(z.string().regex(/^[a-j]$/)).length(4),
-  explanation: z.string().min(1),
-  /** Solo el título general de la GPC, sin claves, años ni páginas. Por verificar (11.1) */
-  gpcRefs: z.array(z.string().min(5).max(200)).min(1).max(3),
-});
+export const DemoQuestionSchema = z
+  .strictObject({
+    key: z.string().regex(/^b\d-q\d{2}$/),
+    caseKey: z.string().nullable(),
+    caseOrder: z.int().min(1).max(3).nullable(),
+    branch: TaxonomyKeySchema,
+    topic: TaxonomyKeySchema,
+    subtopic: TaxonomyKeySchema,
+    /** Viñeta propia, o datos que se agregan al caso seriado en este paso */
+    vignette: z.string().max(2000),
+    prompt: z.string().min(5).max(400),
+    polarity: z.enum(['affirmative', 'negative']),
+    task: QuestionTaskSchema,
+    difficulty: z.int().min(1).max(5),
+    /** 10 en una pregunta estándar. Un tipo raro puede traer menos, de 4 a 10 (D-080) */
+    options: z.array(DemoOptionSchema).min(4).max(10),
+    /** Las 4 opciones del set canónico, la correcta y 3 distractores */
+    canonical: z.array(z.string().regex(/^[a-j]$/)).length(4),
+    explanation: z.string().min(1),
+    /** Solo el título general de la GPC, sin claves, años ni páginas. Por verificar (11.1) */
+    gpcRefs: z.array(z.string().min(5).max(200)).min(1).max(3),
+    /** Tipos de reactivo raros y datos con su fuerza diagnóstica, opcionales (D-080) */
+    kinds: z.array(ItemKindSchema).max(5).optional(),
+    clues: z
+      .array(z.strictObject({ text: z.string().min(1).max(300), strength: ClueStrengthSchema }))
+      .max(20)
+      .optional(),
+  })
+  .refine((question) => (question.kinds?.length ?? 0) > 0 || question.options.length === 10, {
+    message: 'Una pregunta estándar lleva 10 opciones. Solo un tipo raro puede traer menos',
+    path: ['options'],
+  });
 export type DemoQuestion = z.infer<typeof DemoQuestionSchema>;
 
 export const DemoQuestionBatchSchema = z.strictObject({

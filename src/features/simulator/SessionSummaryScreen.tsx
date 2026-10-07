@@ -1,6 +1,6 @@
 // Resumen de sesión (pantalla 6). Exactitud, XP, tiempo, exactitud por confianza y la lista de
 // respuestas. Registra el fin de la sesión una sola vez.
-import { CheckCircle2, XCircle } from 'lucide-react';
+import { CheckCircle2, Swords, XCircle } from 'lucide-react';
 import { useEffect } from 'react';
 import { Link } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -54,7 +54,7 @@ function Summary({ session }: { session: ReadySession }) {
       createEvent(
         'session_ended',
         {
-          kind: 'practice',
+          kind: state.kind,
           reason: state.answers.length >= state.questionIds.length ? 'completed' : 'abandoned',
           items: state.answers.length,
           correct: state.answers.filter((answer) => answer.correct).length,
@@ -78,6 +78,7 @@ function Summary({ session }: { session: ReadySession }) {
   const correct = answers.filter((answer) => answer.correct).length;
   const xp = answers.reduce((sum, answer) => sum + answer.xp, 0);
   const totalMs = answers.reduce((sum, answer) => sum + answer.msToAnswer, 0);
+  const sentToReview = answers.filter((answer) => answer.sentToReview).length;
   const byConfidence = (['sure', 'unsure', 'guessed'] as McqConfidence[]).map((level) => {
     const group = answers.filter((answer) => answer.confidence === level);
     return { level, total: group.length, correct: group.filter((a) => a.correct).length };
@@ -99,6 +100,19 @@ function Summary({ session }: { session: ReadySession }) {
             {formatDuration(totalMs)}
           </Stat>
         </dl>
+        {sentToReview > 0 ? (
+          <p className="mt-3 text-sm font-medium text-primary">
+            {t.simulator.summaryErrors(sentToReview)}
+          </p>
+        ) : null}
+        {practice.duelId ? (
+          <Button asChild className="mt-3 self-start">
+            <Link to={screenPath('party')}>
+              <Swords aria-hidden />
+              {t.party.duel.seeResult}
+            </Link>
+          </Button>
+        ) : null}
         <h3 className="mt-4 font-medium">{t.simulator.byConfidence}</h3>
         <ul className="mt-1 flex flex-col gap-1 text-sm">
           {byConfidence

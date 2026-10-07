@@ -1,7 +1,14 @@
 // Banco de preguntas. Casos, preguntas y opciones con versiones inmutables (6.1, 6.2, 7.8).
 // Editar una pregunta crea una versión nueva y las estadísticas se guardan por versión.
 import { z } from 'zod';
-import { EditorialStatusSchema, IdSchema, TaxonomyKeySchema, UtcDateTimeSchema } from './common';
+import {
+  ClueStrengthSchema,
+  EditorialStatusSchema,
+  IdSchema,
+  ItemKindSchema,
+  TaxonomyKeySchema,
+  UtcDateTimeSchema,
+} from './common';
 
 /**
  * Viñeta clínica compartida por las preguntas de un caso seriado. Es inmutable. Editarla crea
@@ -44,6 +51,13 @@ export const GpcReferenceSchema = z.strictObject({
   status: z.enum(['to_verify', 'verified']),
 });
 
+/** Dato del caso que el médico marca como patognomónico, característico o inespecífico (D-080) */
+export const ClueSchema = z.strictObject({
+  text: z.string().min(1).max(300),
+  strength: ClueStrengthSchema,
+});
+export type Clue = z.infer<typeof ClueSchema>;
+
 export const QuestionSchema = z
   .strictObject({
     /** ID de esta versión. Las estadísticas se guardan con este ID */
@@ -64,6 +78,10 @@ export const QuestionSchema = z
     structure: QuestionStructureSchema,
     explanation: z.string().max(4000),
     gpcRefs: z.array(GpcReferenceSchema).max(10),
+    /** Tipos de reactivo raros. Ausente es un reactivo estándar (D-080) */
+    itemKinds: z.array(ItemKindSchema).max(5).optional(),
+    /** Datos del caso con su fuerza diagnóstica, que pone el médico (D-080) */
+    clues: z.array(ClueSchema).max(20).optional(),
     /** Dificultad que estima el médico, de 1 a 5 (7.7) */
     physicianDifficulty: z.int().min(1).max(5),
     /** Set canónico. La correcta y los distractores estándar, en IDs de opción de esta versión (7.8) */

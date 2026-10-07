@@ -1,5 +1,6 @@
 // Flujo 5 de 14.1. Tablero de widgets, agregar, configurar, reordenar y quitar, con acomodos
 // predefinidos. Todo con botones, así que también se maneja con teclado (9.1)
+import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { t } from '@/i18n/es-MX';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 import type { Page } from '@playwright/test';
@@ -26,7 +27,17 @@ test('agregar, configurar, reordenar y quitar widgets, y se recuerda al recargar
   // Agregar. Un widget con datos que aún no alcanzan muestra su estado en vez de cifras inventadas
   await page.getByLabel(t.home.addLabel).selectOption('bias_pattern');
   await page.getByRole('button', { name: t.home.add, exact: true }).click();
-  await expect(page.getByRole('region', { name: names.bias_pattern })).toBeVisible();
+  const bias = page.getByRole('region', { name: names.bias_pattern });
+  await expect(bias).toBeVisible();
+  await expect(bias.getByText(t.states.calibrating.title)).toBeVisible();
+  await expect(
+    bias.getByText(
+      t.states.calibrating.remaining(
+        DEFAULT_THRESHOLDS.bias.minTaggedErrors,
+        t.widgets.biasPattern.unit,
+      ),
+    ),
+  ).toBeVisible();
 
   // Reordenar con botones accesibles por teclado
   await page.getByRole('button', { name: t.home.moveDown(names.today) }).focus();

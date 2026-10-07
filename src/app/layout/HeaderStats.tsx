@@ -27,7 +27,7 @@ function Stats({ user, settings }: { user: User; settings: UserSettings }) {
   return (
     <div className="flex items-center gap-2">
       <span
-        className="flex items-center gap-1 rounded-full bg-streak-soft px-2.5 py-1 text-sm font-bold text-streak"
+        className="flex items-center gap-1 rounded-full bg-streak-soft px-2.5 py-1 text-sm font-bold text-streak-ink"
         aria-label={t.headerStats.streak(streak.current)}
         title={t.headerStats.streak(streak.current)}
       >

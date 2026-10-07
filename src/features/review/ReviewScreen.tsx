@@ -7,7 +7,6 @@ import { Link } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { SessionHeader } from '@/app/layout/SessionHeader';
 import { screenPath } from '@/app/screens';
-import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { useDataApi } from '@/data/context';
 import { updateProfile } from '@/data/usecases/profile';
 import { createEvent } from '@/data/events/createEvent';
@@ -25,7 +24,6 @@ import {
 } from '@/engines/fsrs';
 import { studyDayOf } from '@/engines/studyDay';
 import { awardXp } from '@/engines/xp';
-import { examDateFor } from '@/config/exam';
 import { t } from '@/i18n/es-MX';
 import { StudyPausedDialog } from '../shared/StudyPausedDialog';
 import { useStudyClock } from '../shared/useStudyClock';
@@ -35,6 +33,7 @@ import { ActionDock } from '@/ui/components/action-dock';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
+import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { followedDeckIds } from '../decks/followed';
 import { buildSnapshot } from '../home/snapshot';
@@ -44,12 +43,16 @@ import { useUserEvents } from '../shared/useUserEvents';
 import { deckIds } from '@/demo/content/deckEntities';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
 import { ReviewSetup } from './ReviewSetup';
+import { schedulerConfig } from './schedulerConfig';
 import { cardMatches, type ReviewMode, type ReviewSelection } from './selection';
 import {
+  errorsFirst,
+  isQuestionNote,
   latestCardStates,
   renderCloze,
   reviewedToday,
   reviewEndReason,
+  topicFromTags,
   volumeXpToday,
 } from './study';
 
@@ -85,11 +88,12 @@ function ReviewLoader({ session }: { session: ReadySession }) {
   const [selection, setSelection] = useState<ReviewSelection | null>(null);
   if (events === undefined || content === undefined || catalog === undefined)
     return <LoadingState />;
-  const followed = followedDeckIds(
-    session,
-    content.decks.map((deck) => deck.id),
+  const followed = followedDeckIds(session, content.decks);
+  const noteById = new Map(content.notes.map((note) => [note.id, note]));
+  const cards = errorsFirst(
+    content.cards.filter((card) => followed.has(card.deckId)),
+    noteById,
   );
-  const cards = content.cards.filter((card) => followed.has(card.deckId));
   if (cards.length === 0) {
     return (
       <>
@@ -107,11 +111,17 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     );
   }
   const deckNames = new Map(content.decks.map((deck) => [deck.id, deck.name]));
-  // Subespecialidad de cada tarjeta, según la nota de su mazo
+  // Subespecialidad de cada tarjeta. Las de mazos precargados la traen en su nota y las de
+  // preguntas falladas en una etiqueta
   const noteTopic = new Map<string, string | null>();
   for (const file of catalog)
     for (const note of file.notes) noteTopic.set(deckIds.note(note.key), note.topic);
-  const topicOfCard = new Map(cards.map((card) => [card.id, noteTopic.get(card.noteId) ?? null]));
+  const topicOfCard = new Map(
+    cards.map((card) => [
+      card.id,
+      noteTopic.get(card.noteId) ?? topicFromTags(noteById.get(card.noteId)?.tags),
+    ]),
+  );
   const config = schedulerConfig(session);
 
   if (selection === null) {
@@ -120,6 +130,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
         <ScreenHeader title={t.screens.review.title} description={t.screens.review.description} />
         <ReviewSetup
           addDeck={<AddDeckButton />}
+          hasDemo={content.decks.some((deck) => followed.has(deck.id) && deck.isDemo)}
           cards={cards}
           deckNames={deckNames}
           topicOfCard={topicOfCard}
@@ -169,22 +180,6 @@ function AddDeckButton() {
       </Link>
     </Button>
   );
-}
-
-function schedulerConfig(session: ReadySession): SchedulerConfig {
-  const { user, settings } = session;
-  return {
-    desiredRetention: settings.desiredRetention,
-    maxIntervalDays: settings.maxIntervalDays,
-    spacing: settings.spacing,
-    examDate: examDateFor(user),
-    timeZone: user.timeZone,
-    thresholds: {
-      ...DEFAULT_THRESHOLDS.fsrs,
-      newCardsPerDay: settings.newCardsPerDay,
-      reviewsPerDay: settings.reviewsPerDay,
-    },
-  };
 }
 
 /** Cola del día para unas tarjetas y un modo. Repasos vencidos primero y luego las nuevas */
@@ -333,7 +328,8 @@ function ReviewSession({
         {
           cardId: card.id,
           deckId: card.deckId,
-          source: 'card',
+          // Las tarjetas de preguntas falladas se marcan para separarlas en el análisis
+          source: isQuestionNote(note) ? 'question' : 'card',
           rating,
           confidence,
           msToReveal: Math.max(0, msToReveal),
@@ -507,6 +503,8 @@ function ReviewSession({
           <Badge variant={isNew ? 'info' : 'neutral'}>
             {isNew ? t.review.newCard : t.review.reviewCard}
           </Badge>
+          {isQuestionNote(note) ? <Badge variant="warning">{t.review.errorCard}</Badge> : null}
+          {note.isDemo ? <DemoContentLabel /> : null}
           <span className="text-sm text-fg-muted">{deckNames.get(card.deckId)}</span>
         </div>
         <CardHtml html={front} />

@@ -227,6 +227,20 @@ describe('indicadores de conducta (D-042)', () => {
     expect(counts.zeigarnik_effect).toEqual({ k: 1, n: 1 });
   });
 
+  it('una respuesta sin confianza declarada no cuenta como no seguro ni como seguro (D-080)', () => {
+    const counts = countBehaviorIndicators(
+      facts([
+        // Examen. No se pidió la confianza
+        { confidence: null, correct: false, firstChoiceCorrect: false, changed: false },
+        { confidence: null, correct: false, firstChoiceCorrect: false, changed: true },
+        // Práctica. No estaba seguro y no cambió
+        { confidence: 'unsure', correct: false, firstChoiceCorrect: false, changed: false },
+      ]),
+    );
+    expect(counts.status_quo_bias).toEqual({ k: 1, n: 1 });
+    expect(counts.overconfidence_effect).toEqual({ k: 0, n: 0 });
+  });
+
   it('calibra con pocos casos y marca patrón solo si el intervalo supera la línea base', () => {
     expect(evaluateIndicator('overconfidence_effect', { k: 5, n: 10 }, 0.1).status).toEqual({
       kind: 'calibrating',

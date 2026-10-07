@@ -39,6 +39,8 @@ export interface DayPlan {
   reviews: number;
   newCards: number;
   simulatorQuestions: number;
+  /** El límite de preguntas del plan del alumno recortó el bloque de simulador de este día */
+  simulatorCapped: boolean;
   /** Tema del simulador, el primero de las prioridades de topics */
   simulatorTopic: string | null;
   challenge: boolean;
@@ -78,6 +80,8 @@ function planDay(
   minutesAvailable: number,
   topic: string | null,
   timing: PlannerTiming,
+  /** Tope de preguntas de simulador de este día. null es sin tope */
+  questionCap: number | null,
 ): DayPlan {
   let remaining = minutesAvailable * 60;
   const reviews = Math.min(load.reviews, Math.floor(remaining / timing.secondsPerReview));
@@ -89,13 +93,15 @@ function planDay(
   remaining -= newCards * timing.secondsPerNew;
   const challenge = remaining >= timing.challengeMinutes * 60 * 2;
   if (challenge) remaining -= timing.challengeMinutes * 60;
-  const simulatorQuestions = Math.max(0, Math.floor(remaining / timing.secondsPerQuestion));
+  const fitting = Math.max(0, Math.floor(remaining / timing.secondsPerQuestion));
+  const simulatorQuestions = questionCap === null ? fitting : Math.min(fitting, questionCap);
   remaining -= simulatorQuestions * timing.secondsPerQuestion;
   return {
     day: load.day,
     reviews,
     newCards,
     simulatorQuestions,
+    simulatorCapped: simulatorQuestions < fitting,
     simulatorTopic: simulatorQuestions > 0 ? topic : null,
     challenge,
     minutesPlanned: (minutesAvailable * 60 - remaining) / 60,
@@ -115,6 +121,11 @@ export function buildPlan(input: {
   loadWithFewerNew?: { newPerDay: number; load: readonly DayLoad[] };
   priorityTopics: readonly string[];
   timing?: PlannerTiming;
+  /**
+   * Preguntas que el plan del alumno le deja contestar. Hoy es lo que le queda y los demás días el
+   * límite diario completo. null es sin límite. Así el plan no propone más práctica de la permitida
+   */
+  questionLimit?: { today: number | null; perDay: number | null };
 }): PlannerOutput {
   const timing = input.timing ?? DEFAULT_TIMING;
   const usePomodoro = input.pomodoroMinutes.length >= 3;
@@ -129,11 +140,19 @@ export function buildPlan(input: {
         minutesAvailable,
         input.priorityTopics[index % Math.max(input.priorityTopics.length, 1)] ?? null,
         timing,
+        (index === 0 ? input.questionLimit?.today : input.questionLimit?.perDay) ?? null,
       ),
     );
   const emptyDay: DayLoad = { day: input.today, reviews: 0, newCards: 0 };
   const today =
-    week[0] ?? planDay(emptyDay, minutesAvailable, input.priorityTopics[0] ?? null, timing);
+    week[0] ??
+    planDay(
+      emptyDay,
+      minutesAvailable,
+      input.priorityTopics[0] ?? null,
+      timing,
+      input.questionLimit?.today ?? null,
+    );
 
   const average = (loads: readonly DayLoad[]) => {
     const days = loads.slice(0, 7);
