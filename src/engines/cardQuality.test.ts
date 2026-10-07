@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_CARD_QUALITY, type CardQualityConfig } from '@/config/cardQuality';
 import { checkCardQuality, type CardDraft, type CardQualityIssue } from './cardQuality';
+import { normalizeForDuplicates } from './duplicates';
 
 const words = (count: number, word = 'palabra') =>
   Array.from({ length: count }, () => word).join(' ');
@@ -438,6 +439,20 @@ describe('huecos de cloze', () => {
         'hole_without_context',
       ),
     ).toMatchObject({ severity: 'warning', contextWords: 3, minimum: 8 });
+  });
+});
+
+describe('textos hostiles', () => {
+  it('miles de huecos anidados no rompen la revisión ni la normalización', () => {
+    const deep = `${'{{c1::'.repeat(5000)}x${'}}'.repeat(5000)}`;
+    expect(() => checkCardQuality(cloze(deep))).not.toThrow();
+    expect(() => normalizeForDuplicates(deep)).not.toThrow();
+  });
+
+  it('etiquetas sin cerrar, scripts y entidades raras solo dan texto', () => {
+    const odd = '<p><b>Hola <script>alert(1)</script> &#99999999; &foo; <img src=';
+    expect(() => checkCardQuality(basic(odd, odd))).not.toThrow();
+    expect(() => checkCardQuality(cloze(odd))).not.toThrow();
   });
 });
 

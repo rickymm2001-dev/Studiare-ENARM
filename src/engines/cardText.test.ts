@@ -153,6 +153,16 @@ describe('parseCloze', () => {
     expect(parseCloze('')).toEqual({ parts: [], holes: [] });
   });
 
+  it('limita la profundidad para que un texto malicioso no desborde la pila', () => {
+    const deep = `${'{{c1::'.repeat(5000)}x${'}}'.repeat(5000)}`;
+    const parsed = parseCloze(deep);
+    expect(parsed.holes).toHaveLength(20);
+    expect(() => clozeFlatten(parsed.parts)).not.toThrow();
+    expect(() => clozeRender(parsed.parts, 1, { hints: true })).not.toThrow();
+    const sensible = parseCloze('{{c1::{{c2::{{c3::{{c4::x}}}}}}}}');
+    expect(sensible.holes).toHaveLength(4);
+  });
+
   it('un hueco puede traer HTML y atravesar etiquetas', () => {
     const { holes } = parseCloze('<p>Es {{c1::<b>dos</b> cosas}}</p>');
     expect(clozeFlatten(holes[0]?.content ?? [])).toBe('<b>dos</b> cosas');

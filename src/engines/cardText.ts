@@ -179,6 +179,12 @@ export function countWords(plain: string): number {
 
 // Cloze
 
+/**
+ * Anidar más que esto no tiene uso, y miles de huecos uno dentro de otro desbordarían la pila de la
+ * recursión con un texto malicioso. Los que pasen del tope quedan como texto
+ */
+const MAX_CLOZE_DEPTH = 20;
+
 /** Un hueco, con lo que esconde (que puede traer otros huecos adentro) y su pista */
 export interface ClozeNode {
   kind: 'hole';
@@ -261,7 +267,8 @@ export function parseCloze(source: string): ClozeParse {
   let index = 0;
   while (index < source.length) {
     opening.lastIndex = index;
-    const open = source.startsWith('{{c', index) ? opening.exec(source) : null;
+    const canOpen = stack.length < MAX_CLOZE_DEPTH && source.startsWith('{{c', index);
+    const open = canOpen ? opening.exec(source) : null;
     if (open) {
       flush();
       stack.push({ ordinal: Number(open[1]), opening: open[0], content: [] });
