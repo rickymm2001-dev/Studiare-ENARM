@@ -17,9 +17,11 @@ import { cn } from '@/ui/cn';
 import { ActionDock } from '@/ui/components/action-dock';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
+import { Kbd, KeyHint } from '@/ui/components/key-hint';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
+import { useShortcuts } from '../shared/useShortcuts';
 import { useVisibilityLog } from '../shared/useVisibilityLog';
 import { clock } from '../simulator/practice';
 import type { QuestionBundle } from '../simulator/useQuestion';
@@ -292,6 +294,36 @@ function ExamRunner({
   const firstBlank = state.questionIds.findIndex((id) => answerOf(state, id).optionId === null);
   const firstMarked = state.questionIds.findIndex((id) => answerOf(state, id).marked);
 
+  // Teclado (D-087). Letras o números eligen, Mayús con la letra descarta, Enter o la flecha derecha
+  // sigue, la flecha izquierda regresa y M marca. No actúa con la ventana de terminar abierta
+  const keys: Record<string, () => void> = {};
+  (shownIds ?? []).forEach((optionId, position) => {
+    const letter = String.fromCharCode(97 + position);
+    keys[letter] = () => {
+      onChoose(optionId);
+    };
+    keys[`shift+${letter}`] = () => {
+      edit((current) => toggleEliminated(current, currentId, optionId));
+    };
+    if (position < 9) {
+      keys[String(position + 1)] = () => {
+        onChoose(optionId);
+      };
+    }
+  });
+  const goNext = () => {
+    if (state.current < total - 1) visit(state.current + 1);
+  };
+  keys.enter = goNext;
+  keys.arrowright = goNext;
+  keys.arrowleft = () => {
+    if (state.current > 0) visit(state.current - 1);
+  };
+  keys.m = () => {
+    edit((current) => toggleMarked(current, currentId));
+  };
+  useShortcuts(keys, !finishOpen);
+
   return (
     <>
       <SessionHeader
@@ -410,6 +442,12 @@ function ExamRunner({
             <ChevronRight aria-hidden />
           </Button>
         </div>
+        <KeyHint>
+          <Kbd>A</Kbd> a <Kbd>{String.fromCharCode(64 + (shownIds?.length ?? 4))}</Kbd>{' '}
+          {t.exam.keys.choose} · <Kbd>{t.exam.keys.shift}</Kbd> + {t.exam.keys.letter}{' '}
+          {t.exam.keys.discard} · <Kbd>Enter</Kbd> {t.exam.keys.next} · <Kbd>←</Kbd>{' '}
+          {t.exam.keys.previous} · <Kbd>M</Kbd> {t.exam.keys.mark}
+        </KeyHint>
       </ActionDock>
 
       <ExamNavigator state={state} onGo={visit} />

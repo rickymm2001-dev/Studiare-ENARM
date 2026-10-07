@@ -64,6 +64,16 @@ export const examText = {
     timeLeft: 'Tiempo restante',
     timeLeftValue: (time: string) => `Tiempo restante ${time}`,
     previous: 'Anterior',
+    // Atajos de teclado. Se ven solo donde hay teclado (D-087)
+    keys: {
+      choose: 'eligen',
+      shift: 'Mayús',
+      letter: 'la letra',
+      discard: 'descarta',
+      next: 'sigue',
+      previous: 'regresa',
+      mark: 'marca',
+    },
     next: 'Siguiente',
     mark: 'Marcar para revisar',
     unmark: 'Quitar marca',

@@ -26,8 +26,13 @@ export const UserSettingsSchema = z.strictObject({
     .default({ hard: 1, good: 1, easy: 1 }),
   newCardsPerDay: z.int().min(0).max(500).default(20),
   reviewsPerDay: z.int().min(0).max(5000).default(200),
-  /** Paso de confianza antes de revelar en tarjetas. Se puede apagar para modo rápido (7.1) */
-  cardConfidenceStep: z.boolean().default(true),
+  /**
+   * Preguntar la seguridad antes de ver la respuesta, en tarjetas y en preguntas. Apagado por
+   * defecto para estudiar más rápido (D-087). Quien lo enciende alimenta las lecturas de confianza
+   */
+  cardConfidenceStep: z.boolean().default(false),
+  /** Cuándo ver la retroalimentación de la práctica. Al final de la sesión o tras cada pregunta (D-087) */
+  practiceFeedback: z.enum(['end', 'each']).default('end'),
   /** Resaltado de negaciones. Encendido en práctica y apagado en examen completo (7.5) */
   negationHighlightPractice: z.boolean().default(true),
   negationHighlightExam: z.boolean().default(false),

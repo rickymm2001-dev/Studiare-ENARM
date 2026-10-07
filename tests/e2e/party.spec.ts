@@ -3,7 +3,13 @@
 // simulados (9.6, 4.6)
 import { SCREENS } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
-import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
+import {
+  answerPracticeQuestion,
+  expect,
+  expectNoSeriousA11yViolations,
+  signUp,
+  test,
+} from './support/fixtures';
 
 test('crea un grupo, ve la tabla, se une con su código y completa un reto', async ({ page }) => {
   test.setTimeout(180_000);
@@ -64,7 +70,6 @@ test('crea un grupo, ve la tabla, se une con su código y completa un reto', asy
   });
   await page.goto(SCREENS.review.path);
   await page.getByRole('button', { name: /^Repasar [\d,]+ tarjetas?$/ }).click();
-  await page.getByRole('button', { name: t.review.confidence.sure, exact: true }).click();
   await page.getByRole('button', { name: t.review.show }).click();
   await page.getByRole('button', { name: new RegExp(`^${t.review.ratings.good}`) }).click();
   await page.getByRole('button', { name: t.review.finish }).click();
@@ -135,12 +140,7 @@ test('reta a un compañero a un duelo, lo juega y ve quién ganó', async ({ pag
   await group.getByRole('button', { name: t.party.duel.play }).click();
   await expect(page.getByText(t.simulator.progress(1, 20))).toBeVisible();
   for (let index = 1; index <= 20; index += 1) {
-    await page.getByRole('radio').first().check();
-    await page.getByRole('button', { name: t.simulator.confidence.sure }).click();
-    await page.getByRole('button', { name: t.simulator.answer, exact: true }).click();
-    await page
-      .getByRole('button', { name: index === 20 ? t.simulator.finish : t.simulator.next })
-      .click();
+    await answerPracticeQuestion(page, index, 20);
   }
   await page.getByRole('link', { name: t.party.duel.seeResult }).click();
 

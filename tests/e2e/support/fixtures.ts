@@ -87,3 +87,32 @@ export async function signUp(page: Page, alias = 'Ana'): Promise<void> {
   await page.getByRole('button', { name: t.onboarding.create }).click();
   await expect(page.getByRole('heading', { level: 1, name: t.screens.home.title })).toBeVisible();
 }
+
+/**
+ * Contesta la pregunta number de total de la práctica con la primera opción. La retroalimentación
+ * va al final de la sesión (D-087), así que responder pasa directo a la siguiente pregunta o al
+ * resumen. Espera a que la siguiente esté en pantalla antes de volver, para no contestar sobre la
+ * pregunta que se está yendo
+ */
+export async function answerPracticeQuestion(
+  page: Page,
+  number: number,
+  total: number,
+): Promise<void> {
+  const last = number === total;
+  await page.getByRole('radio').first().check();
+  await page
+    .getByRole('button', {
+      name: last ? t.simulator.answerAndFinish : t.simulator.answerAndNext,
+    })
+    .click();
+  if (last) {
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      t.screens.sessionSummary.title,
+    );
+  } else {
+    await expect(
+      page.getByText(t.simulator.progress(number + 1, total), { exact: true }),
+    ).toBeVisible();
+  }
+}

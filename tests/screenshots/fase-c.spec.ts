@@ -36,12 +36,29 @@ async function capture(page: Page, name: string, projectName: string) {
   });
 }
 
-/** Una respuesta de práctica con la primera opción y la confianza Dudé */
-async function answerPractice(page: Page, last: boolean) {
+/** Una respuesta de práctica con la primera opción. La retroalimentación va al final (D-087) */
+async function answerPractice(page: Page, number: number, total: number) {
   await page.getByRole('radio').first().check();
-  await page.getByRole('button', { name: t.simulator.confidence.unsure }).click();
-  await page.getByRole('button', { name: t.simulator.answer, exact: true }).click();
-  await page.getByRole('button', { name: last ? t.simulator.finish : t.simulator.next }).waitFor();
+  const last = number === total;
+  await page
+    .getByRole('button', { name: last ? t.simulator.answerAndFinish : t.simulator.answerAndNext })
+    .click();
+  // Se espera a la pregunta que sigue para no contestar sobre la que se va
+  if (!last) await page.getByText(t.simulator.progress(number + 1, total)).waitFor();
+}
+
+/** Empieza una práctica de 5 preguntas. feedback each la muestra después de cada pregunta */
+async function startPractice(page: Page, feedback: 'end' | 'each') {
+  await page.goto(SCREENS.simulatorSetup.path);
+  const practice = page.getByRole('region', { name: t.simulator.setupTitle });
+  await practice.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
+  await practice
+    .getByRole('combobox', { name: t.settings.practiceFeedback })
+    .selectOption(feedback);
+  const start = practice.getByRole('button', { name: t.simulator.start });
+  await expect(start).toBeEnabled({ timeout: 60_000 });
+  await start.click();
+  await expect(page.getByText(t.simulator.progress(1, 5))).toBeVisible();
 }
 
 test('pantallas del alumno con la demostración', async ({ page }, info) => {
@@ -100,27 +117,41 @@ test('práctica con pregunta, retroalimentación y resumen', async ({ page }, in
   const project = info.project.name;
   await signUp(page);
 
-  // Práctica de 5 preguntas
-  await page.goto(SCREENS.simulatorSetup.path);
-  const practice = page.getByRole('region', { name: t.simulator.setupTitle });
-  await practice.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
-  const start = practice.getByRole('button', { name: t.simulator.start });
-  await expect(start).toBeEnabled({ timeout: 60_000 });
-  await start.click();
-  await expect(page.getByText(t.simulator.progress(1, 5))).toBeVisible();
+  // Práctica de 5 preguntas con la retroalimentación después de cada una
+  await startPractice(page, 'each');
   await page.getByRole('radio').first().check();
-  await page.getByRole('button', { name: t.simulator.confidence.unsure }).click();
   await capture(page, '11-pregunta', project);
   await page.getByRole('button', { name: t.simulator.answer, exact: true }).click();
   await page.getByRole('button', { name: t.simulator.next }).waitFor();
   await capture(page, '12-retroalimentacion', project);
   for (let index = 2; index <= 5; index += 1) {
     await page.getByRole('button', { name: t.simulator.next }).click();
-    await answerPractice(page, index === 5);
+    await page.getByRole('radio').first().check();
+    await page.getByRole('button', { name: t.simulator.answer, exact: true }).click();
+    await page
+      .getByRole('button', { name: index === 5 ? t.simulator.finish : t.simulator.next })
+      .waitFor();
   }
   await page.getByRole('button', { name: t.simulator.finish }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.sessionSummary.title);
   await capture(page, '13-resumen', project);
+});
+
+// Lo de siempre. La retroalimentación llega al final y el resumen trae la revisión de cada pregunta
+test('práctica con la retroalimentación al final', async ({ page }, info) => {
+  test.setTimeout(300_000);
+  const project = info.project.name;
+  await signUp(page);
+  await startPractice(page, 'end');
+  for (let index = 1; index <= 5; index += 1) {
+    await answerPractice(page, index, 5);
+  }
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.sessionSummary.title);
+  const answers = page.getByRole('region', { name: t.simulator.review });
+  await expect(answers.getByRole('listitem').first()).toBeVisible();
+  // Las falladas vienen abiertas con su retroalimentación. Se espera a que carguen
+  await expect(answers.getByText(t.simulator.explanation).first()).toBeVisible({ timeout: 30_000 });
+  await capture(page, '13b-resumen-con-revision', project);
 });
 
 // Aparte de la práctica porque el plan Gratis deja 20 preguntas al día y el examen usa las 20
@@ -195,12 +226,7 @@ test('mazos propios y Party con duelo y tarjeta de logro', async ({ page }, info
   await group.getByRole('button', { name: t.party.duel.play }).click();
   await expect(page.getByText(t.simulator.progress(1, 20))).toBeVisible();
   for (let index = 1; index <= 20; index += 1) {
-    await page.getByRole('radio').first().check();
-    await page.getByRole('button', { name: t.simulator.confidence.sure }).click();
-    await page.getByRole('button', { name: t.simulator.answer, exact: true }).click();
-    await page
-      .getByRole('button', { name: index === 20 ? t.simulator.finish : t.simulator.next })
-      .click();
+    await answerPractice(page, index, 20);
   }
   await page.getByRole('link', { name: t.party.duel.seeResult }).click();
   await expect(

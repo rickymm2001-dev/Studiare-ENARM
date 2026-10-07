@@ -82,13 +82,24 @@ export class ImmutableEventError extends Error {
 
 /** Versión actual del esquema de Dexie. Cada cambio de índices sube esta versión con su migración */
 // 2 agrega accounts (D-068) y 3 agrega reviewAssignments (D-070). Dexie crea las tablas nuevas sin
-// tocar los datos
-export const DB_VERSION = 3;
+// tocar los datos. 4 apaga una vez la pregunta de confianza previa (D-087)
+export const DB_VERSION = 4;
 
 export function createEnarmDb(kind: DatabaseKind, options?: { name?: string }): EnarmDb {
   const db = new Dexie(options?.name ?? DATABASE_NAMES[kind]) as EnarmDb;
   Object.defineProperty(db, 'kind', { value: kind, enumerable: true });
-  db.version(DB_VERSION).stores(storesFor(kind));
+  db.version(DB_VERSION)
+    .stores(storesFor(kind))
+    .upgrade((tx) =>
+      // Quien venía con el valor de siempre, encendido, pasa al modo rápido. Se puede volver a
+      // encender en Configuración. Solo corre al subir de versión, no cada vez que se abre
+      tx
+        .table<{ settings: { cardConfidenceStep?: boolean } }>('users')
+        .toCollection()
+        .modify((user) => {
+          user.settings.cardConfidenceStep = false;
+        }),
+    );
   db.use({
     stack: 'dbcore',
     name: 'append-only-events',

@@ -142,7 +142,6 @@ test('examen de 20 con descarte y marca, resultados y errores al repaso', async 
   await expect(page).toHaveURL(new RegExp(`${SCREENS.review.path}$`));
   await page.getByRole('button', { name: /^Repasar [\d,]+ tarjetas?$/ }).click();
   await expect(page.getByText(t.review.errorCard)).toBeVisible();
-  await page.getByRole('button', { name: t.review.confidence.unsure, exact: true }).click();
   await page.getByRole('button', { name: t.review.show }).click();
   await expect(page.getByText(t.errorCards.correctAnswer)).toBeVisible();
 

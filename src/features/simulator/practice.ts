@@ -8,7 +8,8 @@ export interface PracticeAnswer {
   questionVersionId: string;
   optionVersionId: string;
   correct: boolean;
-  confidence: McqConfidence;
+  /** null si no se preguntó. La pregunta de seguridad viene apagada (D-087) */
+  confidence: McqConfidence | null;
   msToAnswer: number;
   xp: number;
   /** Opciones mostradas en orden */

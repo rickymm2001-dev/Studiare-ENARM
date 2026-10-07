@@ -54,16 +54,14 @@ test('crea un mazo, escribe tarjetas, las repasa, las edita y borra el mazo', as
   await page.goto(SCREENS.review.path);
   await page.getByRole('button', { name: /^Repasar 2 tarjetas$/ }).click();
   // Primero la tarjeta tiene que estar en pantalla, si no la ausencia de la etiqueta no prueba nada
-  const sure = page.getByRole('button', { name: t.review.confidence.sure, exact: true });
-  await expect(sure).toBeVisible();
+  const show = page.getByRole('button', { name: t.review.show });
+  await expect(show).toBeVisible();
   await expect(page.getByText(t.review.errorCard)).toHaveCount(0);
-  await sure.click();
   await expect(page.getByText('¿Qué mide la tasa de filtrado glomerular?')).toBeVisible();
-  await page.getByRole('button', { name: t.review.show }).click();
+  await show.click();
   await expect(page.getByText('Cuánta sangre filtran los riñones por minuto')).toBeVisible();
   await page.getByRole('button', { name: new RegExp(`^${t.review.ratings.good}`) }).click();
   // La segunda es la de hueco
-  await page.getByRole('button', { name: t.review.confidence.unsure, exact: true }).click();
   await expect(page.getByText('[…]')).toBeVisible();
 
   // Editar una tarjeta cambia su texto y borrarla la quita

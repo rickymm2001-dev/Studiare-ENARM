@@ -7,7 +7,7 @@ import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import type { DataApi } from '@/data/context';
 import { newId } from '@/data/testing/fixtures';
-import type { User } from '@/data/schemas/people';
+import { UserSettingsSchema, type User } from '@/data/schemas/people';
 import { t } from '@/i18n/es-MX';
 
 // El confeti usa un canvas que jsdom no trae
@@ -71,10 +71,10 @@ describe('pantalla de Repasar', () => {
       await screen.findByRole('button', { name: t.reviewSetup.start(1) }, { timeout: 10_000 }),
     );
 
-    // Confianza antes de revelar, luego la respuesta y la calificación
+    // Sin pregunta de confianza. Revela la respuesta y califica (D-087)
     expect(await screen.findByText('¿Cuál es el tratamiento de primera línea?')).toBeVisible();
     expect(screen.queryByText('Amoxicilina')).toBeNull();
-    await typing.click(screen.getByRole('button', { name: t.review.confidence.sure }));
+    expect(screen.queryByRole('button', { name: t.review.confidence.sure })).toBeNull();
     await typing.click(screen.getByRole('button', { name: t.review.show }));
     expect(screen.getByText('Amoxicilina')).toBeVisible();
     await typing.click(
@@ -87,7 +87,7 @@ describe('pantalla de Repasar', () => {
       const events = await api.repos.events.query({ userId: user.id });
       const reviewed = events.filter((event) => event.type === 'card_reviewed');
       expect(reviewed).toHaveLength(1);
-      expect(reviewed[0]?.payload).toMatchObject({ rating: 'good', confidence: 'sure' });
+      expect(reviewed[0]?.payload).toMatchObject({ rating: 'good', confidence: null });
       // Calificar al instante no da XP, para que no se pueda ganar tocando sin leer
       expect(events.some((event) => event.type === 'xp_awarded')).toBe(false);
     });
@@ -99,8 +99,7 @@ describe('pantalla de Repasar', () => {
     await typing.click(
       await screen.findByRole('button', { name: t.reviewSetup.start(1) }, { timeout: 10_000 }),
     );
-    await typing.click(await screen.findByRole('button', { name: t.review.confidence.unsure }));
-    await typing.click(screen.getByRole('button', { name: t.review.show }));
+    await typing.click(await screen.findByRole('button', { name: t.review.show }));
     await typing.click(
       screen.getByRole('button', { name: new RegExp(`^${t.review.ratings.again}`) }),
     );
@@ -110,6 +109,55 @@ describe('pantalla de Repasar', () => {
       const events = await api.repos.events.query({ userId: user.id });
       expect(events.find((event) => event.type === 'cause_reported')?.payload).toMatchObject({
         targetKind: 'card',
+        cause: 'forgot',
+      });
+    });
+  });
+
+  it('con la seguridad encendida la pregunta antes de revelar y la registra', async () => {
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.review.path, {
+      seed: seedDeck(false),
+      user: { settings: UserSettingsSchema.parse({ cardConfidenceStep: true }) },
+    });
+    await typing.click(
+      await screen.findByRole('button', { name: t.reviewSetup.start(1) }, { timeout: 10_000 }),
+    );
+    await typing.click(await screen.findByRole('button', { name: t.review.confidence.sure }));
+    await typing.click(screen.getByRole('button', { name: t.review.show }));
+    await typing.click(
+      screen.getByRole('button', { name: new RegExp(`^${t.review.ratings.good}`) }),
+    );
+    const { api, user } = app;
+    await waitFor(async () => {
+      const events = await api.repos.events.query({ userId: user.id });
+      expect(events.find((event) => event.type === 'card_reviewed')?.payload).toMatchObject({
+        confidence: 'sure',
+      });
+    });
+  });
+
+  it('se puede repasar solo con el teclado, Espacio muestra y los números califican', async () => {
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.review.path, { seed: seedDeck(false) });
+    await typing.click(
+      await screen.findByRole('button', { name: t.reviewSetup.start(1) }, { timeout: 10_000 }),
+    );
+    await screen.findByText('¿Cuál es el tratamiento de primera línea?');
+    (document.activeElement as HTMLElement | null)?.blur();
+    await typing.keyboard(' ');
+    expect(await screen.findByText('Amoxicilina')).toBeVisible();
+    // 1 es Otra vez. La tarjeta pregunta la causa y 2 elige Lo olvidé
+    await typing.keyboard('1');
+    expect(await screen.findByText(t.review.causeQuestion)).toBeVisible();
+    await typing.keyboard('2');
+    const { api, user } = app;
+    await waitFor(async () => {
+      const events = await api.repos.events.query({ userId: user.id });
+      expect(events.find((event) => event.type === 'card_reviewed')?.payload).toMatchObject({
+        rating: 'again',
+      });
+      expect(events.find((event) => event.type === 'cause_reported')?.payload).toMatchObject({
         cause: 'forgot',
       });
     });

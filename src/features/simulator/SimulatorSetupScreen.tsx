@@ -11,6 +11,7 @@ import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
 import { useLiveData } from '@/data/hooks';
 import { ensureDemoBank } from '@/data/usecases/bank';
+import { updateProfile } from '@/data/usecases/profile';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -161,7 +162,7 @@ function Setup({ session }: { session: ReadySession }) {
           <CardDescription>{t.simulator.bankNote(questions.length)}</CardDescription>
         </CardHeader>
         <div className="flex flex-col gap-3">
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <SelectField
               label={t.simulator.difficulty}
               value={difficulty}
@@ -182,7 +183,6 @@ function Setup({ session }: { session: ReadySession }) {
               }}
             />
             <SelectField
-              className="col-span-2 sm:col-span-1"
               label={t.simulator.structure}
               value={structure}
               options={(['all', 'negative', 'affirmative'] as Structure[]).map((value) => ({
@@ -191,6 +191,20 @@ function Setup({ session }: { session: ReadySession }) {
               }))}
               onChange={(event) => {
                 setStructure(event.target.value as Structure);
+              }}
+            />
+            {/* Se guarda en el perfil, así la próxima práctica ya lo trae (D-087) */}
+            <SelectField
+              label={t.settings.practiceFeedback}
+              value={session.settings.practiceFeedback}
+              options={(['end', 'each'] as const).map((value) => ({
+                value,
+                label: t.settings.practiceFeedbackOptions[value],
+              }))}
+              onChange={(event) => {
+                void updateProfile(api, session.user, {
+                  settings: { practiceFeedback: event.target.value as 'end' | 'each' },
+                });
               }}
             />
           </div>
