@@ -31,11 +31,11 @@ El ENARM tiene preguntas raras y el simulador debe poder tenerlas. Cada pregunta
 
 Los resultados del examen reportan aparte los reactivos de control, incoherentes y de los demás tipos.
 
-Un reactivo con kinds no se rechaza por ser imperfecto. La explicación puede ser corta, las opciones pueden ser de 4 a 10 en lugar de 10 y lo que difiere del motor de estructura, como la polaridad que puso el médico en un reactivo de control, sale como aviso y no como problema, porque la etiqueta del médico gana (7.5). Lo que sí falla en cualquier tipo es un error de fondo, como dos respuestas correctas, un sesgo inventado, un set canónico que no incluye la correcta o una explicación vacía. Las reglas viven en scripts/content/draftRules.ts y tienen una prueba por tipo en tests/content/draftRules.test.ts.
+Un reactivo con kinds no se rechaza por ser imperfecto. La explicación puede ser corta y lo que difiere del motor de estructura, como la polaridad que puso el médico en un reactivo de control, sale como aviso y no como problema, porque la etiqueta del médico gana (7.5). La cantidad de opciones ya no depende de los kinds, porque cualquier pregunta puede traer de 4 a 10 (ver la sección de 4 a 6 opciones). Lo que sí falla en cualquier tipo es un error de fondo, como dos respuestas correctas, un sesgo inventado, un set canónico que no incluye la correcta o una explicación vacía. Las reglas viven en scripts/content/draftRules.ts y tienen una prueba por tipo en tests/content/draftRules.test.ts.
 
 ## Lo que valida la prueba de cada lote
 
-La prueba es src/demo/content/questions/questions.test.ts y el esquema es DemoQuestionBatchSchema en src/data/schemas/content.ts.
+La prueba es src/demo/content/questions/questions.test.ts y el esquema es DemoQuestionBatchSchema en src/data/schemas/content.ts. Lo que sigue describe las 200 preguntas demo, que traen 10 opciones. El esquema en sí acepta de 4 a 10.
 
 - 50 preguntas con claves bN-qNN únicas y estado pending_physician_review
 - Las 4 ramas con al menos 12 preguntas cada una
@@ -48,6 +48,70 @@ La prueba es src/demo/content/questions/questions.test.ts y el esquema es DemoQu
 - La polaridad declarada coincide con el motor de estructura y la tarea coincide en al menos 85% de las que el motor detecta
 - Al menos un caso seriado por lote, con 2 o 3 preguntas en orden, y su viñeta en cases
 - Entre todos los lotes, dificultades de 1 a 5
+
+## Preguntas de 4 a 6 opciones (banco del médico)
+
+En la reunión del equipo se acordó que el banco de preguntas tendrá hasta 6 opciones por pregunta. El examen real trae 4 y la plataforma sube la dificultad mostrando más. Cada opción incorrecta lleva el sesgo cognitivo que la hace tentadora y el banco incluye preguntas de control. El médico entrega un Excel con 4,000 a 5,000 preguntas a principios de noviembre.
+
+- El esquema de lotes acepta de 4 a 10 opciones por pregunta, con o sin kinds. Antes exigía 10 salvo que la pregunta trajera kinds, lo que habría rechazado el banco nuevo. Las 200 preguntas demo siguen con 10 y siguen pasando
+- El set canónico siempre es de 4 opciones, la correcta y 3 distractores. Con 4 opciones son todas. Con 5 o 6 lo elige el médico, o la plataforma toma la correcta y las tres primeras incorrectas. El esquema pide que sus claves existan entre las opciones de la pregunta, lo que antes se cumplía solo por traer a a j completas
+- Las opciones van en orden a, b, c y así hasta la última, sin saltar letras
+- check-draft ya no falla por no traer 10 opciones. Avisa en cada pregunta estándar con otra cantidad, muestra cuántas opciones trae cada pregunta y limita los avisos que imprime. Lo que sigue fallando es lo de fondo, como menos de 4 opciones, letras fuera de orden, dos correctas, un sesgo inventado o un set canónico que no incluye la correcta
+- Si el alumno pide ver más opciones de las que tiene una pregunta, el simulador muestra todas, sin repetir y con la correcta dentro del rango de posiciones. El examen muestra siempre el set canónico de 4, así que una pregunta de 4, 5 o 6 opciones se ve igual
+- Las pruebas de estas formas usan preguntas sintéticas generadas por código, con textos neutros como Opción A. Viven en src/data/testing/syntheticQuestions.ts y nunca llevan medicina inventada
+
+## Plantilla de Excel del banco
+
+Para que el médico entregue el banco sin tocar código hay una plantilla de Excel. Se genera con este comando.
+
+```bash
+npm run bank:template
+```
+
+Escribe content-drafts/bank-plantilla/Studiare-banco-plantilla.xlsx, que ya está en el repositorio. Si cambian las taxonomías o las columnas, se vuelve a generar. Trae cinco hojas.
+
+- Instrucciones. Explica cada columna y las reglas del banco con trato de tú. Una sola opción correcta, un sesgo por opción incorrecta, de 4 a 6 opciones, tipos de reactivo con control incluido, dificultad de 1 a 5 y estado borrador
+- Preguntas. Una fila por pregunta, con listas desplegables en rama, subespecialidad, subtema, dificultad, tipo de reactivo, tarea, polaridad, sesgo de cada opción y letra correcta, tomadas de las taxonomías de src/demo/content. Las listas cubren 6,000 filas. Trae una sola fila de ejemplo, en amarillo y con marcadores como Escribe aquí el caso clínico, que se borra antes de entregar
+- Sesgos. Cada sesgo con la definición de cómo luce una opción incorrecta
+- Temas. La tabla de rama, subespecialidad y subtema, para saber qué va con qué
+- Listas. La fuente de las listas desplegables
+
+Las columnas de la hoja Preguntas, en orden.
+
+- ID, rama troncal, subespecialidad, subtema y dificultad
+- Tipo de reactivo, tarea y polaridad, que son opcionales. Si el médico deja vacía la tarea o la polaridad, las detecta el motor de estructura. Si hay varios tipos, se separan con punto y coma
+- Caso clínico y pregunta
+- Opción, justificación y sesgo, de la A a la F. La A a la D son obligatorias y la E y la F se dejan en blanco si no se usan. La correcta no lleva sesgo
+- Correcta, con su letra, y set canónico, que es opcional
+- Explicación, referencias y estado
+
+### Cómo entra el archivo lleno
+
+El mismo bank-convert que convierte el banco de 1500 acepta archivos de Excel. Deja el JSON en una carpeta json junto al archivo, con el formato de borrador que revisa check-draft.
+
+```bash
+node scripts/content/bank-convert.ts ruta/al/banco.xlsx
+```
+
+```bash
+node scripts/content/check-draft.ts ruta/al/json/banco.json
+```
+
+- Cada problema sale con el número de fila y, si la fila tiene ID, con el ID. Una fila con problemas no pasa al JSON y el comando termina con error, mientras las demás sí pasan
+- La fila de ejemplo se omite por su ID, que empieza con Ejemplo. Si una fila conserva texto de la plantilla, como Escribe aquí o Elige de la lista, se señala
+- Una fila sin ID recibe uno con el nombre del archivo, por ejemplo banco-q0001
+- La rama, la subespecialidad y el subtema se validan uno dentro del otro. Una subespecialidad que existe pero es de otra rama se señala como tal
+- El tipo de reactivo se traduce a kinds. Una pregunta de control entra como control y su polaridad declarada gana sobre la del motor
+- Todo entra como borrador, pendiente de revisión médica. Un estado distinto de Borrador se señala
+- El comando acepta --out para elegir la carpeta de salida
+
+La prueba de ida y vuelta es tests/content/bankExcel.test.ts. Arma por código una plantilla con 3 preguntas sintéticas de 4, 5 y 6 opciones, una de ellas de control, la convierte con el comando real y comprueba que valida con el esquema del lote, con las reglas del borrador, con check-draft y con el adaptador del banco.
+
+### Lo que la plantilla todavía no cubre
+
+- Casos seriados y datos con su fuerza diagnóstica (clues). El esquema los acepta, pero la plantilla no tiene columnas para ellos. Se agregan cuando el médico los pida
+- La clave de pregunta de los lotes demo, que es bN-qNN, solo alcanza para pocos lotes de 50. Un banco de miles necesita otra forma de clave y un destino distinto de los lotes demo, que se define con el importador del médico de la Fase E. Mientras tanto la plantilla acepta cualquier ID y la revisión se hace con check-draft
+- check-draft trata como problema una tarea o una polaridad declarada que difiere del motor en una pregunta estándar, porque así se escribió para los borradores de Claude. En el Excel del médico la etiqueta del médico debería ganar, como en 7.5. Queda por decidir si ahí pasa a aviso
 
 ## Cómo se comporta el motor de estructura
 

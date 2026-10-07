@@ -1,7 +1,8 @@
 // Revisa un borrador de preguntas demo antes de unirlo a un lote (docs/contenido-demo.md).
 // Uso: node scripts/content/check-draft.ts <archivo.json> [<archivo.json> ...]
 // Acepta un arreglo de preguntas o un lote con { questions }. Usa el motor real de estructura
-// para la polaridad y la tarea, igual que src/demo/content/questions/questions.test.ts.
+// para la polaridad y la tarea, igual que src/demo/content/questions/questions.test.ts. Una pregunta
+// puede traer de 4 a 10 opciones, con o sin tipos de reactivo. Si no trae 10, solo avisa.
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -89,6 +90,9 @@ const topics = new Map(
   ),
 );
 
+/** Un banco de miles de preguntas daría miles de avisos. Se muestran los primeros */
+const MAX_NOTES = 40;
+
 const files = process.argv.slice(2);
 if (files.length === 0) {
   console.error('Uso: node scripts/content/check-draft.ts <archivo.json> [...]');
@@ -116,6 +120,10 @@ for (const file of files) {
   console.log(`${questions.length} preguntas, ${negatives} negativas`);
   console.log('Ramas', Object.fromEntries(count(questions.map((q) => q.branch))));
   console.log('Dificultad', Object.fromEntries(count(questions.map((q) => String(q.difficulty)))));
+  console.log(
+    'Opciones por pregunta',
+    Object.fromEntries(count(questions.map((q) => String(q.options.length)))),
+  );
   console.log(`Tareas que detecta el motor ${detected}, coinciden ${agree}`);
   console.log(
     'Sesgos',
@@ -124,8 +132,9 @@ for (const file of files) {
       .join(', '),
   );
   if (notes.length > 0) {
-    console.log(`Avisos de reactivos raros, no fallan (${notes.length})`);
-    for (const note of notes) console.log(`- ${note}`);
+    console.log(`Avisos, no fallan (${notes.length})`);
+    for (const note of notes.slice(0, MAX_NOTES)) console.log(`- ${note}`);
+    if (notes.length > MAX_NOTES) console.log(`- y ${notes.length - MAX_NOTES} avisos más`);
   }
   if (problems.length > 0) {
     failed = true;

@@ -1,7 +1,10 @@
 // Validación del contenido demo de preguntas (11.1, D-030, D-042). Corre sobre los lotes que existen.
 import { describe, expect, it } from 'vitest';
+import { DemoQuestionBatchSchema } from '@/data/schemas/content';
+import { makeSyntheticBatch, makeSyntheticQuestion } from '@/data/testing/syntheticQuestions';
 import { analyzeStructure } from '@/engines/structure';
 import { biasTaxonomy, structureDictionary, taggableBiasKeys, topicTaxonomy } from '../index';
+import { buildDemoBank } from '../bank';
 import { questionBatches } from './index';
 
 const words = (text: string) => text.trim().split(/\s+/).filter(Boolean).length;
@@ -154,5 +157,74 @@ describe('lotes de preguntas demo', () => {
   it('las dificultades usan toda la escala', () => {
     const levels = new Set(allQuestions.map(({ question }) => question.difficulty));
     expect([...levels].sort()).toEqual([1, 2, 3, 4, 5]);
+  });
+});
+
+describe('preguntas de 4, 5 y 6 opciones (banco nuevo)', () => {
+  // Preguntas generadas por código con textos neutros. Prueban la forma, no la medicina
+  const counts = [4, 5, 6];
+
+  it('las 200 preguntas existentes siguen con sus 10 opciones y pasan el esquema', () => {
+    expect(allQuestions).toHaveLength(200);
+    for (const { question } of allQuestions)
+      expect(question.options, question.key).toHaveLength(10);
+  });
+
+  it('el esquema acepta de 4 a 10 opciones con o sin tipos de reactivo', () => {
+    for (const total of [4, 5, 6, 7, 8, 9, 10]) {
+      const batch = makeSyntheticBatch([total]);
+      expect(DemoQuestionBatchSchema.safeParse(batch).success, `${total} opciones`).toBe(true);
+      const withKind = makeSyntheticBatch([total]);
+      withKind.questions = withKind.questions.map((question) => ({
+        ...question,
+        kinds: ['control'],
+      }));
+      expect(DemoQuestionBatchSchema.safeParse(withKind).success, `${total} con kinds`).toBe(true);
+    }
+  });
+
+  it('rechaza menos de 4 opciones', () => {
+    for (const total of [1, 3]) {
+      const question = makeSyntheticQuestion(total);
+      const result = DemoQuestionBatchSchema.safeParse({
+        ...makeSyntheticBatch([4]),
+        questions: [question],
+      });
+      expect(result.success).toBe(false);
+      expect(result.error?.issues.some((issue) => issue.path.includes('options'))).toBe(true);
+    }
+  });
+
+  it('rechaza un set canónico que apunta a una opción que no existe o repetida', () => {
+    const lost = makeSyntheticQuestion(5, {}, { canonical: ['a', 'b', 'c', 'f'] });
+    const repeated = makeSyntheticQuestion(5, {}, { canonical: ['a', 'b', 'b', 'c'] });
+    for (const question of [lost, repeated]) {
+      const batch = { ...makeSyntheticBatch([5]), questions: [question] };
+      expect(DemoQuestionBatchSchema.safeParse(batch).success).toBe(false);
+    }
+  });
+
+  it('cada pregunta tiene una correcta, sesgo en cada distractor y set canónico de 4 que existe', () => {
+    const batch = makeSyntheticBatch(counts);
+    batch.questions.forEach((question, index) => {
+      expect(question.options, question.key).toHaveLength(counts[index] ?? 0);
+      const correct = question.options.filter((option) => option.correct);
+      expect(correct, question.key).toHaveLength(1);
+      expect(question.canonical, question.key).toHaveLength(4);
+      expect(question.canonical, question.key).toContain(correct[0]?.key);
+      for (const option of question.options.filter((candidate) => !candidate.correct))
+        expect(taggableBiasKeys.has(option.bias ?? ''), `${question.key}${option.key}`).toBe(true);
+    });
+  });
+
+  it('se convierten en entidades del banco con los esquemas de la base', () => {
+    const bank = buildDemoBank([makeSyntheticBatch(counts)]);
+    expect(bank.questions.map((entry) => entry.options.length)).toEqual(counts);
+    for (const entry of bank.questions) {
+      expect(entry.question.canonicalOptionIds).toHaveLength(4);
+      const ids = new Set(entry.options.map((option) => option.id));
+      for (const id of entry.question.canonicalOptionIds) expect(ids.has(id)).toBe(true);
+      expect(entry.options.filter((option) => option.isCorrect)).toHaveLength(1);
+    }
   });
 });

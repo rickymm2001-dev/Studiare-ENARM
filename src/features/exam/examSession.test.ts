@@ -1,7 +1,8 @@
 import 'fake-indexeddb/auto';
 import { afterEach, describe, expect, it } from 'vitest';
+import type { Option } from '@/data/schemas/bank';
 import type { AppEvent } from '@/data/schemas/events';
-import { makeQuestionWithOptions, makeUser, testApi } from '@/data/testing/fixtures';
+import { makeQuestionWithOptions, makeUser, newId, testApi } from '@/data/testing/fixtures';
 import { errorIds } from '@/data/usecases/errorCards';
 import { closeExam, loadExamBundles, showQuestion, startExam } from './examSession';
 import {
@@ -142,6 +143,61 @@ describe('primera vista de una pregunta', () => {
     // Sin pregunta cargada o fuera de rango no hay nada que fijar
     expect(showQuestion(started, 0, undefined).shown).toBeNull();
     expect(showQuestion(started, 99, bundles.get(id)).shown).toBeNull();
+  });
+});
+
+/** Una pregunta del banco nuevo con 4, 5 o 6 opciones. El set canónico sigue siendo de 4 */
+function makeQuestionWithOptionCount(total: number) {
+  const { question, options: base } = makeQuestionWithOptions();
+  const extra: Option[] = Array.from({ length: Math.max(0, total - base.length) }, (_, index) => ({
+    ...(base[1] as Option),
+    id: newId(),
+    optionId: newId(),
+    text: `Opción ${base.length + index + 1}`,
+  }));
+  const all = [...base, ...extra];
+  return {
+    question: { ...question, canonicalOptionIds: all.slice(0, 4).map((option) => option.id) },
+    options: all,
+  };
+}
+
+describe('preguntas con 4, 5 y 6 opciones (banco nuevo)', () => {
+  it('el examen muestra siempre el set canónico de 4 aunque la pregunta tenga más opciones', async () => {
+    const api = testApi('real');
+    disposers.push(api.dispose);
+    const user = makeUser();
+    const totals = [4, 5, 6];
+    const stored = [];
+    for (const total of totals) {
+      const built = makeQuestionWithOptionCount(total);
+      await api.repos.questions.addVersion(built.question, built.options);
+      stored.push(built.question);
+    }
+    const started = await startExam({
+      api,
+      user,
+      questions: stored,
+      requested: 3,
+      options,
+      nowMs: T0,
+    });
+    if (!started) throw new Error('sin examen');
+    const bundles = await loadExamBundles(api, started.questionIds);
+    let state = started;
+    for (let index = 0; index < started.questionIds.length; index += 1) {
+      const id = started.questionIds[index] ?? '';
+      state = showQuestion(state, index, bundles.get(id), bundles).state;
+    }
+    for (const question of stored) {
+      const bundle = bundles.get(question.id);
+      expect(bundle?.options.length).toBe(totals[stored.indexOf(question)]);
+      const shown = state.shownOptions[question.id] ?? [];
+      expect(shown, question.id).toHaveLength(4);
+      expect([...shown].sort()).toEqual([...question.canonicalOptionIds].sort());
+      const correct = bundle?.options.find((option) => option.isCorrect)?.id ?? '';
+      expect(shown).toContain(correct);
+    }
   });
 });
 
