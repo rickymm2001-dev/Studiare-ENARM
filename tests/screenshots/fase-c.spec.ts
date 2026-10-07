@@ -145,6 +145,10 @@ test('examen completo y resultados', async ({ page }, info) => {
   await page.getByRole('button', { name: t.exam.finish }).click();
   await page.getByRole('dialog').getByRole('button', { name: t.exam.finishConfirm }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.examResults.title);
+  // Primero el resumen, porque durante la carga todavía no dice que guarda y la espera pasaría de largo
+  await expect(page.getByRole('region', { name: t.examResults.summaryTitle })).toBeVisible({
+    timeout: 60_000,
+  });
   await expect(page.getByText(t.examResults.saving)).toHaveCount(0, { timeout: 60_000 });
   await capture(page, '16-examen-resultados', project);
 });
