@@ -4,7 +4,13 @@
 import type { Page } from '@playwright/test';
 import { SCREENS, type ScreenKey } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
-import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
+import {
+  answerPracticeQuestion,
+  expect,
+  expectNoSeriousA11yViolations,
+  signUp,
+  test,
+} from './support/fixtures';
 
 const demoContent = (page: Page) => page.getByText(t.labels.demoContent).first();
 
@@ -31,13 +37,8 @@ test('preguntas, examen y mazos de demostración dicen que no están validados p
   await expect(page.getByText(t.simulator.progress(1, 5))).toBeVisible();
   await expect(demoContent(page)).toBeVisible();
   for (let index = 1; index <= 5; index += 1) {
-    await page.getByRole('radio').first().check();
-    await page.getByRole('button', { name: t.simulator.confidence.sure }).click();
-    await page.getByRole('button', { name: t.simulator.answer, exact: true }).click();
+    await answerPracticeQuestion(page, index, 5);
     if (index === 1) await expect(demoContent(page)).toBeVisible();
-    await page
-      .getByRole('button', { name: index === 5 ? t.simulator.finish : t.simulator.next })
-      .click();
   }
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.sessionSummary.title);
   await expect(demoContent(page)).toBeVisible();

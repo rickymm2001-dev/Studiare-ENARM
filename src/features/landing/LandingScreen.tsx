@@ -14,7 +14,7 @@ import {
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
-import { PLANS, type PlanKey } from '@/config/billing';
+import { FOUNDER_SEATS, PLANS, type PlanKey } from '@/config/billing';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
@@ -113,7 +113,7 @@ export function LandingScreen() {
           </h2>
           <p className="text-sm text-fg-muted">{t.billing.simulatedNotice}</p>
         </div>
-        <div className="grid gap-3 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
           {(Object.keys(PLANS) as PlanKey[]).map((key) => {
             const plan = PLANS[key];
             const highlighted = key === 'annual';
@@ -134,6 +134,11 @@ export function LandingScreen() {
                   </span>{' '}
                   <span className="text-sm text-fg-muted">{t.billing.periods[key]}</span>
                 </p>
+                {key === 'founder' ? (
+                  <p className="text-sm font-semibold text-success">
+                    {t.billing.founderNote(FOUNDER_SEATS)}
+                  </p>
+                ) : null}
                 <ul className="flex flex-col gap-1 text-sm">
                   <li className="flex items-center gap-2">
                     <Check aria-hidden className="size-4 text-success" />

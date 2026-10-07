@@ -216,6 +216,7 @@ const draftOf = (settings: UserSettings) => ({
   negationHighlightExam: settings.negationHighlightExam,
   errorsToReview: settings.errorsToReview,
   optionsShown: settings.optionsShown,
+  practiceFeedback: settings.practiceFeedback,
 });
 type StudyDraft = ReturnType<typeof draftOf>;
 
@@ -235,6 +236,7 @@ const patchOf = (draft: StudyDraft) => ({
   negationHighlightExam: draft.negationHighlightExam,
   errorsToReview: draft.errorsToReview,
   optionsShown: draft.optionsShown,
+  practiceFeedback: draft.practiceFeedback,
 });
 
 /** Hay cambios si algún valor que se guardaría es distinto del guardado */
@@ -250,7 +252,8 @@ function differs(patch: ReturnType<typeof patchOf>, settings: UserSettings) {
     patch.dailyGoal.metric !== settings.dailyGoal.metric ||
     patch.dailyGoal.value !== settings.dailyGoal.value ||
     STUDY_KEYS.some((key) => patch[key] !== settings[key]) ||
-    patch.optionsShown !== settings.optionsShown
+    patch.optionsShown !== settings.optionsShown ||
+    patch.practiceFeedback !== settings.practiceFeedback
   );
 }
 
@@ -340,12 +343,25 @@ function StudyForm({
           <CheckboxField
             key={key}
             label={t.settings[key]}
+            hint={key === 'cardConfidenceStep' ? t.settings.cardConfidenceStepHint : undefined}
             checked={draft[key]}
             onChange={(event) => {
               change({ [key]: event.target.checked });
             }}
           />
         ))}
+        <SelectField
+          className="max-w-72"
+          label={t.settings.practiceFeedback}
+          value={draft.practiceFeedback}
+          options={(['end', 'each'] as const).map((value) => ({
+            value,
+            label: t.settings.practiceFeedbackOptions[value],
+          }))}
+          onChange={(event) => {
+            change({ practiceFeedback: event.target.value as UserSettings['practiceFeedback'] });
+          }}
+        />
         <SelectField
           className="max-w-56"
           label={t.settings.optionsShown}

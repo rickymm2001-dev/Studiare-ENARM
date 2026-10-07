@@ -3,22 +3,43 @@
 // polaridad con el motor real de estructura y avisa si la tarea declarada no coincide.
 // Uso: node scripts/content/bank-convert.ts [archivo.txt ...]   (sin archivos convierte todos)
 //
+// También convierte la plantilla de Excel que llena el médico (npm run bank:template), con de 4 a
+// 6 opciones por pregunta y las demás en blanco. La lectura vive en bankImport.ts. Cada .xlsx da un
+// JSON junto al archivo, en la carpeta json, con el mismo formato. Luego se revisa con check-draft.
+//   node scripts/content/bank-convert.ts <archivo.xlsx> [--out <carpeta>]
+//
 // Formato de cada pregunta, separadas por una línea en blanco
 //   # CASE <clave>: <viñeta del caso seriado>            (opcional, antes de sus preguntas)
 //   @ <rama>|<tema>|<subtema>|<dificultad 1-5>|<tarea>[|case=<clave>#<orden>]
 //   V: <viñeta>            (vacía en pregunta directa o en caso seriado)
 //   P: <frase de la pregunta>
 //   + <opción correcta> || <por qué es correcta>
-//   - <sesgo> | <distractor> || <por qué atrae>          (nueve líneas, las tres primeras son el set canónico)
+//   - <sesgo> | <distractor> || <por qué atrae>          (de tres a nueve líneas, las tres primeras son el set canónico)
 //   E: <explicación de 80 a 150 palabras>
 //   R: <título de GPC o NOM> ;; <otro título>
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { basename, resolve } from 'node:path';
+import { basename, dirname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { loadTaxonomies, MIN_BANK_OPTIONS } from './bankColumns.ts';
+import { bankPrefix, convertWorkbook, loadWorkbook } from './bankImport.ts';
 
 const root = resolve(import.meta.dirname, '..', '..');
 const srcDir = resolve(root, 'content-drafts/bank1500/src');
-const outDir = resolve(root, 'content-drafts/bank1500/json');
+
+// Argumentos. Archivos .txt o .xlsx y, opcional, --out <carpeta> para la salida
+const argv = process.argv.slice(2);
+const outFlag = argv.indexOf('--out');
+const outFolder = outFlag >= 0 && argv[outFlag + 1] ? resolve(argv[outFlag + 1] as string) : null;
+const inputs = argv.filter(
+  (arg, index) => !arg.startsWith('--') && (outFlag < 0 || index !== outFlag + 1),
+);
+const excelFiles = inputs
+  .filter((arg) => arg.toLowerCase().endsWith('.xlsx'))
+  .map((f) => resolve(f));
+const textFiles = inputs
+  .filter((arg) => !arg.toLowerCase().endsWith('.xlsx'))
+  .map((f) => resolve(f));
+const outDir = outFolder ?? resolve(root, 'content-drafts/bank1500/json');
 
 const BRANCHES: Record<string, string> = {
   mi: 'internal_medicine',
@@ -71,8 +92,8 @@ interface RawOption {
 }
 
 const files =
-  process.argv.slice(2).length > 0
-    ? process.argv.slice(2).map((file) => resolve(file))
+  inputs.length > 0
+    ? textFiles
     : readdirSync(srcDir)
         .filter((name) => name.endsWith('.txt'))
         .sort()
@@ -137,7 +158,11 @@ for (const file of files) {
         });
       }
     }
-    if (options.length !== 10) problems.push(`${key} tiene ${options.length} opciones`);
+    // Una pregunta lleva de 4 a 10 opciones. Con menos de 4 no hay set canónico de 4
+    if (options.length < MIN_BANK_OPTIONS || options.length > KEYS.length)
+      problems.push(
+        `${key} tiene ${options.length} opciones y debe tener de ${MIN_BANK_OPTIONS} a ${KEYS.length}`,
+      );
     if (options.some((option) => !option.text || !option.rationale))
       problems.push(`${key} opción sin texto o sin justificación`);
     const correct = options.find((option) => option.correct);
@@ -206,4 +231,32 @@ for (const file of files) {
     for (const problem of problems) console.log(`- ${problem}`);
   }
 }
+
+/** Convierte una plantilla de Excel llena. Devuelve true si alguna fila trae problemas */
+async function convertExcel(file: string): Promise<boolean> {
+  const prefix = bankPrefix(file);
+  const data = loadTaxonomies(root);
+  const result = convertWorkbook(
+    await loadWorkbook(file),
+    {
+      data,
+      analyze: (question) => engine.analyzeStructure(question, dictionary),
+    },
+    { prefix },
+  );
+  const folder = outFolder ?? resolve(dirname(file), 'json');
+  mkdirSync(folder, { recursive: true });
+  writeFileSync(
+    resolve(folder, `${prefix}.json`),
+    `${JSON.stringify({ cases: [], questions: result.questions }, null, 2)}\n`,
+  );
+  console.log(
+    `${prefix}. ${result.questions.length} preguntas de ${result.rows} filas con datos, ${result.skippedExamples} de ejemplo omitida`,
+  );
+  for (const note of result.notes) console.log(`- ${note}`);
+  for (const problem of result.problems) console.log(`- ${problem}`);
+  return result.problems.length > 0;
+}
+
+for (const file of excelFiles) failed = (await convertExcel(file)) || failed;
 process.exit(failed ? 1 : 0);

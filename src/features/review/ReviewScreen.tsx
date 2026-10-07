@@ -1,6 +1,7 @@
 // Repaso de tarjetas (pantalla 3, 7.1). Cola del día con el motor real de FSRS, confianza previa
-// (apagable), los cuatro botones con su intervalo, causa después de fallar, tiempos y XP. Cada
-// repaso queda como evento card_reviewed con su estado FSRS antes y después.
+// (apagada por defecto, D-087), los cuatro botones con su intervalo, causa después de fallar,
+// tiempos y XP. Todo se puede hacer con el teclado. Cada repaso queda como evento card_reviewed con
+// su estado FSRS antes y después.
 import { BookOpen, CheckCircle2, Plus, Shuffle } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
@@ -26,6 +27,7 @@ import { studyDayOf } from '@/engines/studyDay';
 import { awardXp } from '@/engines/xp';
 import { t } from '@/i18n/es-MX';
 import { StudyPausedDialog } from '../shared/StudyPausedDialog';
+import { useShortcuts } from '../shared/useShortcuts';
 import { useStudyClock } from '../shared/useStudyClock';
 import { PomodoroNotice, PomodoroPill } from '../pomodoro/Pomodoro';
 import { celebrate } from '@/ui/celebrate';
@@ -33,6 +35,7 @@ import { ActionDock } from '@/ui/components/action-dock';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
+import { Kbd, KeyHint } from '@/ui/components/key-hint';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { followedDeckIds } from '../decks/followed';
@@ -43,6 +46,7 @@ import { useUserEvents } from '../shared/useUserEvents';
 import { deckIds } from '@/demo/content/deckEntities';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
 import { ReviewSetup } from './ReviewSetup';
+import { StudyTabs } from './StudyTabs';
 import { schedulerConfig } from './schedulerConfig';
 import { cardMatches, type ReviewMode, type ReviewSelection } from './selection';
 import {
@@ -98,6 +102,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     return (
       <>
         <ScreenHeader title={t.screens.review.title} description={t.screens.review.description} />
+        <StudyTabs />
         <Card aria-labelledby="sin-mazos">
           <CardHeader>
             <CardTitle id="sin-mazos">{t.review.noDecksTitle}</CardTitle>
@@ -128,6 +133,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     return (
       <>
         <ScreenHeader title={t.screens.review.title} description={t.screens.review.description} />
+        <StudyTabs />
         <ReviewSetup
           addDeck={<AddDeckButton />}
           hasDemo={content.decks.some((deck) => followed.has(deck.id) && deck.isDemo)}
@@ -378,6 +384,49 @@ function ReviewSession({
     next();
   };
 
+  const showAnswer = () => {
+    revealedAt.current = clock();
+    setStep('back');
+  };
+
+  // Todo el repaso con el teclado (D-087). Espacio o Enter muestra la respuesta, 1 a 4 califican y
+  // Espacio o Enter en la respuesta es Bien. Tras fallar, 1 a 8 eligen la causa y Espacio omite
+  const keys: Record<string, () => void> = {};
+  if (step === 'confidence') {
+    (['dont_know', 'unsure', 'sure'] as Confidence[]).forEach((value, index) => {
+      keys[String(index + 1)] = () => {
+        setConfidence(value);
+        setStep('front');
+      };
+    });
+  } else if (step === 'front') {
+    keys.space = showAnswer;
+    keys.enter = showAnswer;
+  } else if (step === 'back') {
+    RATINGS.forEach((rating, index) => {
+      keys[String(index + 1)] = () => {
+        void rate(rating);
+      };
+    });
+    keys.space = () => {
+      void rate('good');
+    };
+    keys.enter = keys.space;
+  } else if (step === 'cause') {
+    (Object.keys(t.review.causes) as Cause[]).forEach((cause, index) => {
+      keys[String(index + 1)] = () => {
+        void reportCause(cause);
+      };
+    });
+    const skip = () => {
+      void reportCause(null);
+    };
+    keys.space = skip;
+    keys.enter = skip;
+    keys.escape = skip;
+  }
+  useShortcuts(keys, card !== undefined && step !== 'done' && !study.paused);
+
   const sessionActions = (
     <>
       <Button
@@ -536,12 +585,17 @@ function ReviewSession({
           <Button
             variant="ghost"
             className="self-start"
+            aria-keyshortcuts="Space Enter Escape"
             onClick={() => {
               void reportCause(null);
             }}
           >
             {t.review.skipCause}
           </Button>
+          <KeyHint>
+            <Kbd>1</Kbd> a <Kbd>{Object.keys(t.review.causes).length}</Kbd> {t.review.keys.cause} ·{' '}
+            <Kbd>{t.review.keys.space}</Kbd> {t.review.keys.skip}
+          </KeyHint>
         </fieldset>
       ) : (
         // Confianza, revelar y calificar, siempre a la mano en el teléfono (D-078)
@@ -550,10 +604,11 @@ function ReviewSession({
             <>
               <p className="text-sm font-medium">{t.review.confidenceQuestion}</p>
               <div className="grid grid-cols-3 gap-2">
-                {(['dont_know', 'unsure', 'sure'] as Confidence[]).map((value) => (
+                {(['dont_know', 'unsure', 'sure'] as Confidence[]).map((value, index) => (
                   <Button
                     key={value}
                     variant="secondary"
+                    aria-keyshortcuts={String(index + 1)}
                     onClick={() => {
                       setConfidence(value);
                       setStep('front');
@@ -563,29 +618,32 @@ function ReviewSession({
                   </Button>
                 ))}
               </div>
+              <KeyHint>
+                <Kbd>1</Kbd> a <Kbd>3</Kbd> {t.review.keys.confidence}
+              </KeyHint>
             </>
           ) : null}
 
           {step === 'front' ? (
-            <Button
-              size="lg"
-              onClick={() => {
-                revealedAt.current = clock();
-                setStep('back');
-              }}
-            >
-              <BookOpen aria-hidden />
-              {t.review.show}
-            </Button>
+            <>
+              <Button size="lg" aria-keyshortcuts="Space Enter" onClick={showAnswer}>
+                <BookOpen aria-hidden />
+                {t.review.show}
+              </Button>
+              <KeyHint>
+                <Kbd>{t.review.keys.space}</Kbd> {t.review.keys.show}
+              </KeyHint>
+            </>
           ) : null}
 
           {step === 'back' && preview ? (
             <>
               <p className="text-sm font-medium">{t.review.rateQuestion}</p>
               <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
-                {RATINGS.map((rating) => (
+                {RATINGS.map((rating, index) => (
                   <Button
                     key={rating}
+                    aria-keyshortcuts={String(index + 1)}
                     variant={
                       rating === 'again' ? 'danger' : rating === 'good' ? 'primary' : 'secondary'
                     }
@@ -601,6 +659,10 @@ function ReviewSession({
                   </Button>
                 ))}
               </div>
+              <KeyHint>
+                <Kbd>1</Kbd> a <Kbd>4</Kbd> {t.review.keys.rate} · <Kbd>{t.review.keys.space}</Kbd>{' '}
+                {t.review.keys.good}
+              </KeyHint>
             </>
           ) : null}
         </ActionDock>

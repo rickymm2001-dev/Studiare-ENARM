@@ -101,6 +101,11 @@ export async function recordPrivacyAcceptance(
     .insert({ user_id: authId, notice_version: noticeVersion });
 }
 
+/**
+ * Cierra la sesión de este navegador y de ningún otro. El valor por defecto de Supabase es global
+ * y revoca las sesiones de todos los dispositivos. Con un solo dispositivo activo por cuenta eso
+ * sacaría también al que acaba de ganar la cuenta, así que el alcance es siempre local
+ */
 export async function signOutCloud(cloud: SupabaseClient | null): Promise<void> {
-  if (cloud) await cloud.auth.signOut();
+  if (cloud) await cloud.auth.signOut({ scope: 'local' });
 }

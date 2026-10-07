@@ -13,6 +13,20 @@ test('crea un mazo, escribe tarjetas, las repasa, las edita y borra el mazo', as
   await page.goto(SCREENS.decks.path);
   const own = page.getByRole('region', { name: t.decks.yoursTitle });
 
+  // Repasar y Mazos son una sola sección con dos pestañas (D-087)
+  const tabs = page.getByRole('navigation', { name: t.studyTabs.label });
+  await expect(tabs.getByRole('link', { name: t.studyTabs.decks })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
+  await tabs.getByRole('link', { name: t.studyTabs.review }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.review.title);
+  await page
+    .getByRole('navigation', { name: t.studyTabs.label })
+    .getByRole('link', { name: t.studyTabs.decks })
+    .click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.decks.title);
+
   // Sin nombre no crea nada y lo dice
   await own.getByRole('button', { name: t.decks.createButton }).click();
   await expect(own.getByText(t.decks.nameError)).toBeVisible();
@@ -54,16 +68,14 @@ test('crea un mazo, escribe tarjetas, las repasa, las edita y borra el mazo', as
   await page.goto(SCREENS.review.path);
   await page.getByRole('button', { name: /^Repasar 2 tarjetas$/ }).click();
   // Primero la tarjeta tiene que estar en pantalla, si no la ausencia de la etiqueta no prueba nada
-  const sure = page.getByRole('button', { name: t.review.confidence.sure, exact: true });
-  await expect(sure).toBeVisible();
+  const show = page.getByRole('button', { name: t.review.show });
+  await expect(show).toBeVisible();
   await expect(page.getByText(t.review.errorCard)).toHaveCount(0);
-  await sure.click();
   await expect(page.getByText('¿Qué mide la tasa de filtrado glomerular?')).toBeVisible();
-  await page.getByRole('button', { name: t.review.show }).click();
+  await show.click();
   await expect(page.getByText('Cuánta sangre filtran los riñones por minuto')).toBeVisible();
   await page.getByRole('button', { name: new RegExp(`^${t.review.ratings.good}`) }).click();
   // La segunda es la de hueco
-  await page.getByRole('button', { name: t.review.confidence.unsure, exact: true }).click();
   await expect(page.getByText('[…]')).toBeVisible();
 
   // Editar una tarjeta cambia su texto y borrarla la quita

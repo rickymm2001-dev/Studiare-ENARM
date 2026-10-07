@@ -213,4 +213,198 @@ do $$ begin
 end $$;
 rollback;
 
+-- 13. Un solo dispositivo activo por cuenta. Cada quien reclama el suyo y solo ve su fila
+begin;
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');
+select public.claim_device('dev-d-1', 'Chrome en Windows');
+commit;
+begin;
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000e');
+select public.claim_device('dev-e-1', 'Safari en iPhone');
+do $$ begin
+  if (select count(*) from public.device_sessions) <> 1
+     or (select device_id from public.device_sessions) <> 'dev-e-1' then
+    raise exception 'FALLA 13. Un alumno no ve exactamente su propio dispositivo';
+  end if;
+end $$;
+commit;
+begin;
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');
+do $$ begin
+  if (select count(*) from public.device_sessions) <> 1
+     or (select device_id from public.device_sessions) <> 'dev-d-1'
+     or (select label from public.device_sessions) <> 'Chrome en Windows' then
+    raise exception 'FALLA 13. Un alumno ve el dispositivo de otro o no ve el suyo';
+  end if;
+end $$;
+rollback;
+-- Ni el administrador ni el dueño leen los dispositivos de los alumnos
+begin;
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
+do $$ begin
+  if (select count(*) from public.device_sessions) <> 0 then
+    raise exception 'FALLA 13. El admin ve los dispositivos de los alumnos';
+  end if;
+end $$;
+rollback;
+begin;
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
+do $$ begin
+  if (select count(*) from public.device_sessions) <> 0 then
+    raise exception 'FALLA 13. El dueño ve los dispositivos de los alumnos';
+  end if;
+end $$;
+rollback;
+
+-- 13b. Nadie escribe device_sessions directo, ni la propia fila ni la de otro
+begin;
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');
+do $$ begin
+  begin
+    insert into public.device_sessions (user_id, device_id) values (auth.uid(), 'dev-hack');
+    raise exception 'FALLA 13. Un alumno insertó su dispositivo directo';
+  exception when insufficient_privilege then null; end;
+  begin
+    insert into public.device_sessions (user_id, device_id)
+      values ('00000000-0000-0000-0000-00000000000c', 'dev-hack');
+    raise exception 'FALLA 13. Un alumno insertó un dispositivo a nombre de otro';
+  exception when insufficient_privilege then null; end;
+  update public.device_sessions set device_id = 'dev-hack';
+  delete from public.device_sessions;
+  if (select device_id from public.device_sessions where user_id = auth.uid()) <> 'dev-d-1' then
+    raise exception 'FALLA 13. Un alumno editó o borró su dispositivo directo';
+  end if;
+end $$;
+rollback;
+do $$ begin
+  if (select count(*) from public.device_sessions where device_id = 'dev-hack') <> 0
+     or (select count(*) from public.device_sessions) <> 2 then
+    raise exception 'FALLA 13. Una escritura directa llegó a device_sessions';
+  end if;
+end $$;
+
+-- 13c. claim_device reemplaza al dispositivo anterior y no toca a nadie más
+create temp table first_claim as
+  select claimed_at from public.device_sessions where user_id = '00000000-0000-0000-0000-00000000000d';
+begin;
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');
+select public.claim_device('dev-d-2', 'Firefox en Linux');
+do $$ begin
+  if (select count(*) from public.device_sessions) <> 1
+     or (select device_id from public.device_sessions) <> 'dev-d-2'
+     or (select label from public.device_sessions) <> 'Firefox en Linux' then
+    raise exception 'FALLA 13. claim_device no reemplazó el dispositivo anterior';
+  end if;
+end $$;
+commit;
+do $$ begin
+  if (select claimed_at from public.device_sessions where user_id = '00000000-0000-0000-0000-00000000000d')
+     <= (select claimed_at from first_claim) then
+    raise exception 'FALLA 13. claimed_at no se actualizó al reemplazar el dispositivo';
+  end if;
+  if (select count(*) from public.device_sessions) <> 2
+     or (select device_id from public.device_sessions where user_id = '00000000-0000-0000-0000-00000000000e') <> 'dev-e-1' then
+    raise exception 'FALLA 13. claim_device cambió el dispositivo de otro alumno';
+  end if;
+end $$;
+-- Reclamar dos veces el mismo dispositivo es inofensivo
+begin;
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');
+select public.claim_device('dev-d-2', 'Firefox en Linux');
+do $$ begin
+  if (select count(*) from public.device_sessions) <> 1 then
+    raise exception 'FALLA 13. Reclamar dos veces el mismo dispositivo duplicó la fila';
+  end if;
+end $$;
+rollback;
+
+-- 13d. claim_device rechaza ids vacíos o largos y etiquetas largas, y acepta los límites
+begin;
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');
+do $$ begin
+  begin
+    perform public.claim_device('', 'x');
+    raise exception 'FALLA 13. Se aceptó un id vacío';
+  exception when invalid_parameter_value then null; end;
+  begin
+    perform public.claim_device('   ', 'x');
+    raise exception 'FALLA 13. Se aceptó un id de solo espacios';
+  exception when invalid_parameter_value then null; end;
+  begin
+    perform public.claim_device(null, 'x');
+    raise exception 'FALLA 13. Se aceptó un id nulo';
+  exception when invalid_parameter_value then null; end;
+  begin
+    perform public.claim_device(repeat('a', 81), 'x');
+    raise exception 'FALLA 13. Se aceptó un id de 81 caracteres';
+  exception when invalid_parameter_value then null; end;
+  begin
+    perform public.claim_device('dev-d-3', repeat('b', 81));
+    raise exception 'FALLA 13. Se aceptó una etiqueta de 81 caracteres';
+  exception when invalid_parameter_value then null; end;
+  if (select device_id from public.device_sessions) <> 'dev-d-2' then
+    raise exception 'FALLA 13. Un intento inválido cambió el dispositivo';
+  end if;
+  perform public.claim_device(repeat('a', 80), repeat('b', 80));
+  if (select char_length(device_id) from public.device_sessions) <> 80
+     or (select char_length(label) from public.device_sessions) <> 80 then
+    raise exception 'FALLA 13. Los límites de 80 caracteres no se aceptaron';
+  end if;
+  perform public.claim_device('dev-d-4', null);
+  if (select label from public.device_sessions) <> '' then
+    raise exception 'FALLA 13. Una etiqueta nula no quedó vacía';
+  end if;
+end $$;
+rollback;
+
+-- 13e. Un anónimo no puede llamar la función ni leer la tabla. Sin sesión no hay a quién reclamar
+do $$ begin
+  if has_function_privilege('anon', 'public.claim_device(text, text)', 'execute') then
+    raise exception 'FALLA 13. anon tiene permiso de ejecución sobre claim_device';
+  end if;
+  if not has_function_privilege('authenticated', 'public.claim_device(text, text)', 'execute') then
+    raise exception 'FALLA 13. authenticated no puede ejecutar claim_device';
+  end if;
+end $$;
+begin;
+set local role anon;
+do $$ begin
+  begin
+    perform public.claim_device('dev-anon', 'x');
+    raise exception 'FALLA 13. Un anónimo llamó a claim_device';
+  exception when insufficient_privilege then null; end;
+  if (select count(*) from public.device_sessions) <> 0 then
+    raise exception 'FALLA 13. Un anónimo lee device_sessions';
+  end if;
+end $$;
+rollback;
+begin;
+select pg_temp.as_user('');
+do $$ begin
+  begin
+    perform public.claim_device('dev-sin-uid', 'x');
+    raise exception 'FALLA 13. Se reclamó un dispositivo sin auth.uid()';
+  exception when insufficient_privilege then null; end;
+end $$;
+rollback;
+do $$ begin
+  if (select count(*) from public.device_sessions where device_id in ('dev-anon', 'dev-sin-uid')) <> 0 then
+    raise exception 'FALLA 13. Quedó una fila de un anónimo';
+  end if;
+end $$;
+
+-- 13f. Al borrar la cuenta se borra su dispositivo
+insert into auth.users (id, email, raw_user_meta_data)
+  values ('00000000-0000-0000-0000-00000000000f', 'temporal@x.mx', '{"alias":"Temporal"}');
+begin;
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000f');
+select public.claim_device('dev-f-1', 'Edge en Windows');
+commit;
+delete from auth.users where id = '00000000-0000-0000-0000-00000000000f';
+do $$ begin
+  if (select count(*) from public.device_sessions where user_id = '00000000-0000-0000-0000-00000000000f') <> 0 then
+    raise exception 'FALLA 13. Al borrar la cuenta quedó su dispositivo';
+  end if;
+end $$;
+
 \echo 'TODAS LAS PRUEBAS DE PERMISOS PASARON'

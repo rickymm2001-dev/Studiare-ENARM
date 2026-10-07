@@ -31,3 +31,6 @@ Thumbs.db
 .review/
 .claude/scheduled_tasks.lock
 .claude/settings.local.json
+
+# Ramas de trabajo temporales de agentes
+.claude/worktrees/

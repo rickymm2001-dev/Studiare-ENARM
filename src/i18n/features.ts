@@ -277,7 +277,14 @@ export const featureText = {
     newCardsPerDay: 'Tarjetas nuevas por día',
     reviewsPerDay: 'Repasos máximos por día',
     studyTitle: 'Estudio',
-    cardConfidenceStep: 'Preguntar mi confianza antes de ver la respuesta de una tarjeta',
+    cardConfidenceStep: 'Preguntar qué tan seguro estoy antes de ver la respuesta o de responder',
+    cardConfidenceStepHint:
+      'Está apagado para estudiar más rápido. Si lo enciendes, Progreso puede avisarte cuando fallas con mucha seguridad.',
+    practiceFeedback: 'Retroalimentación de la práctica',
+    practiceFeedbackOptions: {
+      end: 'Al final de la sesión',
+      each: 'Después de cada pregunta',
+    },
     negationHighlightPractice: 'Resaltar negaciones en práctica',
     negationHighlightExam: 'Resaltar negaciones en examen completo',
     errorsToReview: 'Mandar mis errores de preguntas al repaso',
@@ -305,8 +312,15 @@ export const featureText = {
     simulatedNotice:
       'Pagos simulados. En el prototipo no se cobra nada ni se piden datos de tarjeta. Los precios son de ejemplo.',
     current: (plan: string) => `Tu plan actual es ${plan}.`,
-    plans: { free: 'Gratis', monthly: 'Mensual', annual: 'Anual' },
-    periods: { free: 'para siempre', monthly: 'al mes', annual: 'al año' },
+    plans: { free: 'Gratis', founder: 'Fundador', monthly: 'Mensual', annual: 'Anual' },
+    periods: {
+      free: 'para siempre',
+      founder: 'al mes, de por vida',
+      monthly: 'al mes',
+      annual: 'al año',
+    },
+    founderNote: (seats: number) =>
+      `Para los primeros ${seats} usuarios. El precio no sube mientras conserves tu suscripción. El cupo se confirma al cobrar.`,
     price: (mxn: number) => (mxn === 0 ? '$0' : `$${mxn.toLocaleString('es-MX')} MXN`),
     access: {
       dailyQuestions: (n: number | null) =>
@@ -505,6 +519,16 @@ export const featureText = {
       other: 'Otra razón',
     },
     skipCause: 'Omitir',
+    // Atajos de teclado. Se ven solo donde hay teclado (D-087)
+    keys: {
+      space: 'Espacio',
+      show: 'muestra la respuesta',
+      rate: 'califican',
+      good: 'es Bien',
+      cause: 'eligen la causa',
+      skip: 'omite',
+      confidence: 'eligen tu seguridad',
+    },
     finish: 'Terminar sesión',
     xpGained: (xp: number) => `+${xp} XP`,
     deck: (name: string) => `Mazo ${name}`,
@@ -558,7 +582,18 @@ export const featureText = {
     confidenceQuestion: '¿Qué tan seguro estás?',
     confidence: { guessed: 'Adiviné', unsure: 'Dudé', sure: 'Seguro' },
     answer: 'Responder',
-    chooseFirst: 'Elige una opción y tu confianza para responder.',
+    answerAndNext: 'Responder y seguir',
+    answerAndFinish: 'Responder y ver el resumen',
+    // Atajos de teclado. Se ven solo donde hay teclado (D-087)
+    keys: {
+      choose: 'eligen',
+      shift: 'Mayús',
+      letter: 'la letra',
+      discard: 'descarta',
+      answer: 'responde',
+      doubleClick: 'Un doble clic en una opción también responde.',
+      next: 'sigue',
+    },
     elapsed: (time: string) => `Tiempo ${time}`,
     correct: 'Correcto',
     incorrect: 'Incorrecto',
@@ -581,6 +616,11 @@ export const featureText = {
     },
     sendReport: 'Enviar reporte',
     review: 'Tus respuestas',
+    reviewHintEnd:
+      'Aquí está la retroalimentación de cada pregunta. Abre una para ver la explicación, por qué atraía la opción que elegiste y qué podías descartar. Las falladas ya están abiertas.',
+    reviewHintEach: 'Abre una pregunta para volver a ver su retroalimentación.',
+    reviewFilter: 'Qué preguntas ver',
+    reviewFilters: { all: 'Todas', failed: 'Falladas' },
     byConfidence: 'Exactitud según tu confianza',
     abandon: 'Terminar ahora',
     noActive: 'No hay una práctica en curso.',
@@ -1081,6 +1121,12 @@ export const featureText = {
     checking: 'Revisando tu cuenta en la nube…',
     error: 'No pudimos conectar con la nube. Tu avance sigue guardado en este navegador.',
     roleFromCloud: 'Tu rol viene de tu cuenta en la nube y solo un administrador lo puede cambiar.',
+    // Dispositivo único por cuenta. Aparece cuando otro dispositivo entró y esta sesión se cerró
+    otherDevice: {
+      title: 'Tu cuenta se abrió en otro dispositivo',
+      body: 'Cada cuenta tiene un solo dispositivo activo, así que cerramos tu sesión aquí. Si quieres seguir en este dispositivo, vuelve a entrar. Eso cerrará la sesión del otro.',
+      dismiss: 'Entendido',
+    },
   },
   insights: insightText,
 } as const;

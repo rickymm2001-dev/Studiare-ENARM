@@ -1,6 +1,7 @@
 // Una opción de una pregunta de opción múltiple que se puede elegir y descartar. La comparten la
 // práctica y el examen, así tachar una opción se ve y se lee igual en los dos. Descartar no cambia
-// la respuesta, solo ayuda a pensar, y queda registrado para medir cómo descarta (D-080).
+// la respuesta, solo ayuda a pensar, y queda registrado para medir cómo descarta (D-080). Un doble
+// clic en el texto de la opción la elige y la responde, para no cruzar la pantalla hasta el botón (D-087).
 import { Ban, RotateCcw } from 'lucide-react';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
@@ -13,6 +14,7 @@ export function OptionChoice({
   discarded,
   onChoose,
   onToggleDiscard,
+  onActivate,
 }: {
   /** Nombre del grupo de opciones, para que las de una pregunta formen un solo grupo */
   name: string;
@@ -22,6 +24,8 @@ export function OptionChoice({
   discarded: boolean;
   onChoose: () => void;
   onToggleDiscard: () => void;
+  /** Doble clic en la opción. Sin esto el doble clic solo la elige */
+  onActivate?: () => void;
 }) {
   return (
     <li
@@ -31,7 +35,10 @@ export function OptionChoice({
         discarded && 'bg-muted',
       )}
     >
-      <label className="flex min-w-0 flex-1 cursor-pointer items-start gap-3 p-3 hover:bg-muted/60">
+      <label
+        className="flex min-w-0 flex-1 cursor-pointer items-start gap-3 p-3 hover:bg-muted/60"
+        onDoubleClick={onActivate}
+      >
         <input type="radio" name={name} className="mt-1" checked={selected} onChange={onChoose} />
         <span className={cn(discarded && 'text-fg-muted line-through')}>
           <span className="mr-1 font-semibold">{letter}.</span>

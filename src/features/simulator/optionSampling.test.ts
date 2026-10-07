@@ -139,3 +139,88 @@ describe('posición de la correcta', () => {
     expect(worst).toBeGreaterThan(5);
   });
 });
+
+describe('preguntas con 4, 5 y 6 opciones (banco nuevo)', () => {
+  /** Pregunta con la cantidad de opciones que pida la prueba y su set canónico de 4 */
+  const questionOf = (total: number) => {
+    const list: SamplerOption[] = Array.from({ length: total }, (_, index) => ({
+      id: `o${index}`,
+      isCorrect: index === 0,
+      biasTag: index === 0 ? null : `sesgo${index}`,
+    }));
+    return { options: list, canonicalOptionIds: list.slice(0, 4).map((option) => option.id) };
+  };
+
+  for (const total of [4, 5, 6]) {
+    describe(`${total} opciones`, () => {
+      const question = questionOf(total);
+      const input = { ...question, questionId: 'q1', sessionId: 's1', duelId: null };
+
+      it('si el alumno pide ver más de las que hay, muestra todas sin repetir ni romperse', () => {
+        for (const optionsShown of [4, 6, 8, 10]) {
+          const result = sampleForQuestion({ ...input, optionsShown });
+          const ids = shownIds(result);
+          const expected = Math.min(optionsShown, total);
+          expect(ids, `pidió ${optionsShown}`).toHaveLength(expected);
+          expect(new Set(ids).size).toBe(expected);
+          expect(ids).toContain('o0');
+          expect(result.correctPosition).toBeGreaterThanOrEqual(0);
+          expect(result.correctPosition).toBeLessThan(expected);
+          if (optionsShown >= total)
+            expect([...ids].sort()).toEqual(question.options.map((option) => option.id).sort());
+        }
+      });
+
+      it('dirigido a trampas con más opciones pedidas que disponibles tampoco se rompe', () => {
+        for (const optionsShown of [4, 6, 10]) {
+          const result = sampleForQuestion({
+            ...input,
+            optionsShown,
+            targetTags: ['sesgo1', 'sesgo2'],
+          });
+          expect(result.mode).toBe('targeted');
+          expect(shownIds(result)).toHaveLength(Math.min(optionsShown, total));
+          expect(shownIds(result)).toContain('o0');
+        }
+      });
+
+      it('con los conteos de posición del tamaño de lo que se muestra reparte la correcta', () => {
+        const positions: number[] = [];
+        const shown = Math.min(8, total);
+        for (let index = 0; index < shown * 3; index += 1) {
+          const result = sampleForQuestion({
+            ...input,
+            questionId: `q${index}`,
+            optionsShown: 8,
+            correctPositionCounts: correctPositionCounts(positions, shown),
+          });
+          positions.push(result.correctPosition);
+        }
+        expect(correctPositionCounts(positions, shown)).toEqual(
+          Array.from({ length: shown }, () => 3),
+        );
+      });
+
+      it('un duelo muestra 4 del set canónico aunque la pregunta tenga más opciones', () => {
+        const result = sampleForQuestion({ ...input, duelId: 'duelo', optionsShown: 8 });
+        expect(result.shown).toHaveLength(DUEL_OPTIONS);
+        expect(result.isCanonicalSet).toBe(true);
+        expect([...shownIds(result)].sort()).toEqual([...question.canonicalOptionIds].sort());
+      });
+    });
+  }
+
+  it('con 4 opciones el set canónico es la pregunta completa y toda variante lo es', () => {
+    const question = questionOf(4);
+    const results = Array.from({ length: 8 }, (_, index) =>
+      sampleForQuestion({
+        ...question,
+        questionId: 'q1',
+        sessionId: `s${index}`,
+        duelId: null,
+        optionsShown: 4,
+      }),
+    );
+    for (const result of results) expect(result.isCanonicalSet).toBe(true);
+  });
+});

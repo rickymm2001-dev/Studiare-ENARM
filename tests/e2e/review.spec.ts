@@ -23,27 +23,25 @@ test('repasa con confianza, califica, reporta la causa de un fallo y gana XP', a
   await page.getByRole('button', { name: /^Repasar [\d,]+ tarjetas?$/ }).click();
   await expectNoSeriousA11yViolations(page);
 
-  const confidence = (value: keyof typeof t.review.confidence) =>
-    page.getByRole('button', { name: t.review.confidence[value], exact: true });
   const rating = (value: keyof typeof t.review.ratings) =>
     page.getByRole('button', { name: new RegExp(`^${t.review.ratings[value]}`) });
 
-  // Tarjeta 1. Seguro y Bien
-  await confidence('sure').click();
+  // Sin pregunta de confianza (D-087). Tarjeta 1 con el ratón, mostrar y Bien
+  await expect(page.getByRole('button', { name: t.review.confidence.sure })).toHaveCount(0);
   await page.getByRole('button', { name: t.review.show }).click();
   await rating('good').click();
 
-  // Tarjeta 2. Dudo y Otra vez, que pide la causa del fallo
-  await confidence('unsure').click();
-  await page.getByRole('button', { name: t.review.show }).click();
-  await rating('again').click();
+  // Tarjeta 2 solo con el teclado. Espacio muestra, 1 es Otra vez y pide la causa, 2 es Lo olvidé
+  await expect(page.getByRole('button', { name: t.review.show })).toBeVisible();
+  await page.keyboard.press('Space');
+  await page.keyboard.press('1');
   await expect(page.getByText(t.review.causeQuestion)).toBeVisible();
-  await page.getByRole('button', { name: t.review.causes.forgot }).click();
+  await page.keyboard.press('2');
 
-  // Tarjeta 3. No lo sé y Fácil
-  await confidence('dont_know').click();
-  await page.getByRole('button', { name: t.review.show }).click();
-  await rating('easy').click();
+  // Tarjeta 3 con Enter para mostrar y 4 para Fácil
+  await expect(page.getByRole('button', { name: t.review.show })).toBeVisible();
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('4');
 
   // Al terminar la sesión dice cuántas tarjetas repasó y cuánto XP ganó
   await page.getByRole('button', { name: t.review.finish }).click();

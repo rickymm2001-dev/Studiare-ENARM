@@ -1,5 +1,6 @@
 // Pregunta (pantalla 4). Caso clínico, opciones muestreadas, resaltado de negaciones en la frase de
-// la pregunta (7.5), confianza antes de ver la respuesta, temporizador y registro de cada cambio.
+// la pregunta (7.5), temporizador y registro de cada cambio. Se contesta con el teclado o con el
+// ratón sin recorrer la pantalla, y la confianza previa es opcional y viene apagada (D-087).
 import { Timer } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router';
@@ -16,9 +17,11 @@ import { cn } from '@/ui/cn';
 import { ActionDock } from '@/ui/components/action-dock';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
+import { Kbd, KeyHint } from '@/ui/components/key-hint';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
+import { useShortcuts } from '../shared/useShortcuts';
 import { useUserEvents } from '../shared/useUserEvents';
 import { useVisibilityLog } from '../shared/useVisibilityLog';
 import { sendErrorsToReview } from '../review/sendErrors';
@@ -75,6 +78,16 @@ function Practice({ session }: { session: ReadySession }) {
       badges={<DemoContentLabel />}
     />
   );
+  // Con la retroalimentación al final, contestar la última lleva directo al resumen
+  if (
+    !active &&
+    practice.sessionId !== null &&
+    practice.userId === session.user.id &&
+    practice.answers.length > 0 &&
+    practice.index >= practice.questionIds.length
+  ) {
+    return <Navigate to={screenPath('sessionSummary')} replace />;
+  }
   if (!active) return <NoActivePractice header={header} />;
   if (bundle === undefined || events === undefined) {
     return (
@@ -164,17 +177,24 @@ function QuestionCard({
   const [selected, setSelected] = useState<string | null>(null);
   // Opciones que tachó. Descartar no cambia la respuesta, solo ayuda a pensar (D-080)
   const [eliminated, setEliminated] = useState<string[]>([]);
+  // Solo se pregunta si la persona lo encendió. Contestar no lo exige
   const [confidence, setConfidence] = useState<McqConfidence | null>(null);
   const [changes, setChanges] = useState(0);
   const [elapsed, setElapsed] = useState(0);
   const [busy, setBusy] = useState(false);
   const shownAt = useRef(0);
   const logged = useRef(false);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const feedbackAtEnd = settings.practiceFeedback === 'end';
+  const isLast = practice.index + 1 >= practice.questionIds.length;
 
   const ctx = { userId: user.id, tz: user.timeZone, sessionId };
 
   useEffect(() => {
     shownAt.current = clock();
+    // Al pasar a la siguiente pregunta el foco va al enunciado, para que el lector de pantalla lo
+    // lea y el teclado siga desde ahí
+    if (practice.index > 0) titleRef.current?.focus();
     const timer = window.setInterval(() => {
       setElapsed(clock() - shownAt.current);
     }, 1000);
@@ -231,11 +251,11 @@ function QuestionCard({
     );
   };
 
-  const answer = async () => {
-    if (!selected || !confidence || busy) return;
+  const answer = async (picked: string | null = selected) => {
+    if (!picked || busy) return;
     setBusy(true);
     const msToAnswer = Math.max(0, clock() - shownAt.current);
-    const chosen = options.find((option) => option.id === selected);
+    const chosen = options.find((option) => option.id === picked);
     const correct = chosen?.isCorrect === true;
     const { xp } = await recordAnswerWithXp({
       api,
@@ -244,7 +264,7 @@ function QuestionCard({
       ctx,
       payload: {
         questionVersionId: question.id,
-        optionVersionId: selected,
+        optionVersionId: picked,
         correct,
         confidence,
         msToAnswer,
@@ -255,21 +275,27 @@ function QuestionCard({
       physicianDifficulty: question.physicianDifficulty,
       events,
     });
-    // Un fallo pasa al repaso al momento. Si la tarjeta no se puede guardar la práctica sigue,
-    // porque la respuesta ya quedó en la bitácora
-    const sentToReview =
-      !correct &&
-      settings.errorsToReview &&
-      (await sendErrorsToReview(api, user, settings, [{ bundle, chosenOptionId: selected }]).then(
-        () => true,
-        () => false,
-      ));
+    // Un fallo pasa al repaso en segundo plano, para no frenar la siguiente pregunta mientras se
+    // arma la tarjeta. Si no se puede guardar la práctica sigue, porque la respuesta ya quedó en la
+    // bitácora. Cuando termina se marca la respuesta para que el resumen lo diga
+    if (!correct && settings.errorsToReview) {
+      void sendErrorsToReview(api, user, settings, [{ bundle, chosenOptionId: picked }]).then(
+        () => {
+          usePractice.setState((state) => ({
+            answers: state.answers.map((entry) =>
+              entry.questionVersionId === question.id ? { ...entry, sentToReview: true } : entry,
+            ),
+          }));
+        },
+        () => undefined,
+      );
+    }
     practice.set({
       answers: [
         ...practice.answers,
         {
           questionVersionId: question.id,
-          optionVersionId: selected,
+          optionVersionId: picked,
           correct,
           confidence,
           msToAnswer,
@@ -277,14 +303,45 @@ function QuestionCard({
           shownOptionIds: shown.map((option) => option.id),
           eliminatedOptionIds: eliminated,
           correctPosition: sample.correctPosition,
-          sentToReview,
+          sentToReview: false,
         },
       ],
+      // Con la retroalimentación al final se pasa directo a la siguiente pregunta
+      ...(feedbackAtEnd ? { index: practice.index + 1 } : {}),
     });
-    void navigate(screenPath('feedback'));
+    void navigate(
+      screenPath(feedbackAtEnd ? (isLast ? 'sessionSummary' : 'question') : 'feedback'),
+    );
   };
 
-  const ready = selected !== null && confidence !== null;
+  // Teclado. Letras o números eligen, Mayús con la letra descarta y Enter responde
+  const keys: Record<string, () => void> = {
+    enter: () => {
+      void answer();
+    },
+  };
+  shown.forEach((option, position) => {
+    const letter = String.fromCharCode(97 + position);
+    keys[letter] = () => {
+      choose(option.id);
+    };
+    keys[`shift+${letter}`] = () => {
+      toggleDiscard(option.id);
+    };
+    if (position < 9) {
+      keys[String(position + 1)] = () => {
+        choose(option.id);
+      };
+    }
+  });
+  useShortcuts(keys, !busy);
+
+  const ready = selected !== null;
+  const answerLabel = !feedbackAtEnd
+    ? t.simulator.answer
+    : isLast
+      ? t.simulator.answerAndFinish
+      : t.simulator.answerAndNext;
   // Con caso clínico, en computadora el caso va a la izquierda y las opciones a la derecha, así
   // ninguna línea pasa de unos 75 caracteres. Sin caso, la pregunta va en una columna de lectura
   const twoColumns = Boolean(vignette);
@@ -317,7 +374,12 @@ function QuestionCard({
             <p className="whitespace-pre-line">{vignette}</p>
           </div>
         ) : null}
-        <CardTitle id="pregunta-frase" className="mt-3 text-lg leading-snug">
+        <CardTitle
+          id="pregunta-frase"
+          ref={titleRef}
+          tabIndex={-1}
+          className="mt-3 text-lg leading-snug focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+        >
           <HighlightedPrompt text={question.prompt} ranges={ranges} />
         </CardTitle>
       </CardHeader>
@@ -343,48 +405,54 @@ function QuestionCard({
                 onToggleDiscard={() => {
                   toggleDiscard(option.id);
                 }}
+                onActivate={() => {
+                  void answer(option.id);
+                }}
               />
             ))}
           </ul>
         </fieldset>
 
-        {/* Confianza y responder, siempre a la mano en el teléfono (D-078) */}
+        {/* Responder queda pegado a las opciones y siempre en el mismo lugar. En el teléfono va fijo
+            arriba de la navegación (D-078 y D-087) */}
         <ActionDock className="mt-3 -mb-4 rounded-b-xl lg:mt-4 lg:mb-0 lg:rounded-none">
-          <fieldset className="flex flex-col gap-1.5">
-            <legend className="text-sm font-medium">
-              {t.simulator.confidenceQuestion}
-              {ready ? null : (
-                <span className="hidden font-normal text-fg-muted sm:inline">
-                  {' '}
-                  · {t.simulator.chooseFirst}
-                </span>
-              )}
-            </legend>
-            <div className="flex flex-wrap items-center gap-2">
-              {(['guessed', 'unsure', 'sure'] as const).map((level) => (
-                <Button
-                  key={level}
-                  className="flex-1 px-3 sm:flex-none"
-                  variant={confidence === level ? 'primary' : 'secondary'}
-                  aria-pressed={confidence === level}
-                  onClick={() => {
-                    setConfidence(level);
-                  }}
-                >
-                  {t.simulator.confidence[level]}
-                </Button>
-              ))}
-              <Button
-                className="basis-full sm:ml-auto sm:basis-auto lg:ml-0"
-                disabled={!ready || busy}
-                onClick={() => {
-                  void answer();
-                }}
-              >
-                {t.simulator.answer}
-              </Button>
-            </div>
-          </fieldset>
+          {settings.cardConfidenceStep ? (
+            <fieldset className="flex flex-col gap-1.5">
+              <legend className="text-sm font-medium">{t.simulator.confidenceQuestion}</legend>
+              <div className="flex flex-wrap items-center gap-2">
+                {(['guessed', 'unsure', 'sure'] as const).map((level) => (
+                  <Button
+                    key={level}
+                    className="flex-1 px-3 sm:flex-none"
+                    variant={confidence === level ? 'primary' : 'secondary'}
+                    aria-pressed={confidence === level}
+                    onClick={() => {
+                      setConfidence(confidence === level ? null : level);
+                    }}
+                  >
+                    {t.simulator.confidence[level]}
+                  </Button>
+                ))}
+              </div>
+            </fieldset>
+          ) : null}
+          <Button
+            className="w-full lg:w-auto lg:self-start"
+            size="lg"
+            aria-keyshortcuts="Enter"
+            disabled={!ready || busy}
+            onClick={() => {
+              void answer();
+            }}
+          >
+            {answerLabel}
+          </Button>
+          <KeyHint>
+            <Kbd>A</Kbd> a <Kbd>{String.fromCharCode(64 + shown.length)}</Kbd>{' '}
+            {t.simulator.keys.choose} · <Kbd>{t.simulator.keys.shift}</Kbd> +{' '}
+            {t.simulator.keys.letter} {t.simulator.keys.discard} · <Kbd>Enter</Kbd>{' '}
+            {t.simulator.keys.answer} · {t.simulator.keys.doubleClick}
+          </KeyHint>
         </ActionDock>
       </div>
     </Card>

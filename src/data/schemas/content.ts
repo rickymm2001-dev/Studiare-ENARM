@@ -147,7 +147,10 @@ export const DemoQuestionSchema = z
     polarity: z.enum(['affirmative', 'negative']),
     task: QuestionTaskSchema,
     difficulty: z.int().min(1).max(5),
-    /** 10 en una pregunta estándar. Un tipo raro puede traer menos, de 4 a 10 (D-080) */
+    /**
+     * De 4 a 10 opciones, con o sin tipos de reactivo. El examen real trae 4 y el banco nuevo trae
+     * hasta 6 para subir la dificultad. Las 200 preguntas demo traen 10
+     */
     options: z.array(DemoOptionSchema).min(4).max(10),
     /** Las 4 opciones del set canónico, la correcta y 3 distractores */
     canonical: z.array(z.string().regex(/^[a-j]$/)).length(4),
@@ -161,10 +164,20 @@ export const DemoQuestionSchema = z
       .max(20)
       .optional(),
   })
-  .refine((question) => (question.kinds?.length ?? 0) > 0 || question.options.length === 10, {
-    message: 'Una pregunta estándar lleva 10 opciones. Solo un tipo raro puede traer menos',
-    path: ['options'],
-  });
+  .refine(
+    (question) => {
+      // Con 10 opciones toda clave a-j existía. Con menos, el set canónico no puede apuntar fuera
+      const keys = new Set(question.options.map((option) => option.key));
+      return (
+        new Set(question.canonical).size === question.canonical.length &&
+        question.canonical.every((key) => keys.has(key))
+      );
+    },
+    {
+      message: 'El set canónico usa claves distintas de opciones que existen',
+      path: ['canonical'],
+    },
+  );
 export type DemoQuestion = z.infer<typeof DemoQuestionSchema>;
 
 export const DemoQuestionBatchSchema = z.strictObject({
