@@ -344,6 +344,17 @@ do $$ begin
     raise exception 'FALLA B4. La sesión amarrada no ve su bitácora y su cuenta'; end if;
 end $$;
 commit;
+-- Confirmar el mismo dispositivo con un token sin session_id no desamarra la cuenta ni deja otro renglón
+begin;
+select pg_temp.as_user('b0000000-0000-0000-0000-000000000006');
+select public.claim_device('dev-old', 'Chrome en Windows');
+commit;
+do $$ begin
+  if (select session_id from public.device_sessions where user_id = 'b0000000-0000-0000-0000-000000000006') <> 'ses-l2' then
+    raise exception 'FALLA B4. Un token sin session_id desamarró la cuenta'; end if;
+  if (select count(*) from public.device_claims where user_id = 'b0000000-0000-0000-0000-000000000006') <> 1 then
+    raise exception 'FALLA B4. Confirmar sin cambios dejó otro renglón en la bitácora'; end if;
+end $$;
 -- Un token sin session_id que reclama deja la fila sin amarrar (queda abierta como antes, hasta el siguiente reclamo)
 begin;
 select pg_temp.as_user('b0000000-0000-0000-0000-000000000005');

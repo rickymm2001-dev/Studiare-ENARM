@@ -246,6 +246,10 @@ begin
     end if;
   end if;
 
+  -- Confirmar el mismo dispositivo con un token sin session_id no desamarra la cuenta de su sesión.
+  -- Tomarla desde otro dispositivo sí cambia de sesión, porque la anterior ya no es la ganadora
+  if claim_kind = 'refresh' then sid := coalesce(sid, held.session_id); end if;
+
   insert into public.device_sessions (user_id, device_id, label, session_id, claimed_at)
     values (uid, p_device_id, coalesce(p_label, ''), sid, now())
     on conflict (user_id) do update
