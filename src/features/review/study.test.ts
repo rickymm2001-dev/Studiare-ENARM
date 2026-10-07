@@ -11,6 +11,22 @@ describe('cloze', () => {
     );
     expect(renderCloze(html, 1, true)).toBe('El <mark>DIU de cobre</mark> es el método más eficaz');
   });
+
+  it('un hueco dentro de otro se oculta con él y se pregunta con su propio número', () => {
+    const html = '<p>{{c1::El {{c2::ventrículo izquierdo}} bombea a la aorta}}</p>';
+    expect(renderCloze(html, 1, false)).toBe('<p><mark>[…]</mark></p>');
+    expect(renderCloze(html, 2, false)).toBe('<p>El <mark>[…]</mark> bombea a la aorta</p>');
+    expect(renderCloze(html, 1, true)).toBe(
+      '<p><mark>El ventrículo izquierdo bombea a la aorta</mark></p>',
+    );
+    expect(renderCloze(html, 2, true)).toBe(
+      '<p>El <mark>ventrículo izquierdo</mark> bombea a la aorta</p>',
+    );
+  });
+
+  it('un hueco sin cerrar no deja su respuesta en la pregunta', () => {
+    expect(renderCloze('La {{c1::creatinina sube', 1, false)).toBe('La <mark>[…]</mark>');
+  });
 });
 
 describe('reviewEndReason', () => {
