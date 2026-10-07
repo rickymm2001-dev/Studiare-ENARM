@@ -338,6 +338,31 @@ Bloques
 | Aviso de pago repetido no activa dos veces | prueba de la función de avisos |
 | Ninguna llave secreta en el repo ni en el bundle | tests/security/no-secrets.test.ts |
 
+### Fase C2. Organización, carga diaria, apuntes e importación (D-085 y D-086)
+
+Nace de la guía de Anki que compartió Ricardo y de su idea de sumar lo mejor de RemNote. Va antes de la Fase D y cada etapa cierra según 15.1 con aprobación de Ricardo. Las 14 filas son las de la tabla que aprobó el 2026-10-07.
+
+Etapas
+0. Cerrar la Fase C con lo que falta de la revisión (descarte y muestreo dirigido en la práctica, calibrando en el plan y límite Gratis, pruebas de pantallas y visibilidad), la corrida final y su aprobación
+1. Organización. Filas 3, 4, 9 y 12. Mazos en árbol con migración de los mazos de Paco, etiquetas en ruta sin espacios con migración de las 42 etiquetas con espacio, pantalla Explorar con filtros, búsqueda y acciones por lote, básica con tarjeta inversa, cloze anidado, revisión de calidad y duplicados, y fecha de modificación con marca de borrado
+2. Carga diaria. Filas 5, 6, 7, 8 y 14. Contadores de Nuevas, Aprendizaje y Programadas, perfil guía de un toque, nuevas por día según la carga proyectada, temporizador opcional, flujo de sanguijuelas, repartir, posponer y adelantar como eventos nuevos, aviso de recuperación, días fáciles y banderas de acceso por función
+3. Apuntes tipo RemNote. Fila 2. Editor en esquema con marcas rápidas que crean tarjetas, enlaces entre apuntes y etiquetas, guardado en el modelo de notas y tarjetas
+4. Importar y exportar. Fila 13. Importador .apkg, CSV, Excel y Word, y exportación a CSV con encabezados y un identificador por tarjeta
+5. IA para tarjetas desde PDF y textos. Fila 10 con la opción B de Ricardo. La IA nunca corrige. Señala la controversia con su explicación y el alumno la marca como verificada o edita la tarjeta
+6. Sincronización entre dispositivos. Fila 12 completa, con la nube parte 2
+
+| Criterio de aceptación | Prueba |
+|---|---|
+| Migrar a mazos en árbol no pierde notas ni tarjetas | Prueba de migración con los 3 mazos de Paco que compara conteos y claves antes y después |
+| Ninguna etiqueta guardada tiene espacios y las rutas conservan su jerarquía | Prueba de saneo con las 42 etiquetas conocidas |
+| Explorar filtra miles de tarjetas sin trabarse | Prueba de rendimiento con 20,000 tarjetas generadas |
+| Repartir, posponer y adelantar no editan la bitácora y se reconstruyen igual | Prueba de reconstrucción de estado derivado con eventos nuevos |
+| Los días fáciles bajan la carga de esos días sin pasar del límite diario | Prueba con la simulación de carga futura |
+| Los apuntes crean, actualizan y borran sus tarjetas sin perder el historial de las que siguen | Prueba de sincronización entre apuntes y tarjetas |
+| El importador rechaza archivos dañados o maliciosos con un mensaje claro | Fixtures generados por código y un zip malicioso |
+| La IA nunca cambia un texto y cada señal explica su motivo con textos de la lista cerrada | Evaluación con casos dorados y prueba de que la señal se quita al verificar y deja un evento |
+| Dos dispositivos que editan lo mismo conservan la edición más reciente | Prueba de conflicto con fecha de modificación |
+
 ## 7. Umbrales
 
 Valores por defecto en src/config/thresholds.ts, editables desde admin (12).
