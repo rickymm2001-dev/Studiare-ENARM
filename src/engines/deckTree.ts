@@ -53,6 +53,21 @@ export function buildDeckTree<T extends DeckLike>(decks: readonly T[]): DeckNode
   return roots.sort((a, b) => byName(a.deck, b.deck));
 }
 
+/** Los mazos en orden de árbol, cada uno con su nivel, para listarlos con sangría */
+export function flattenDeckTree<T extends DeckLike>(
+  decks: readonly T[],
+): { deck: T; depth: number }[] {
+  const out: { deck: T; depth: number }[] = [];
+  const walk = (nodes: readonly DeckNode<T>[]) => {
+    for (const node of nodes) {
+      out.push({ deck: node.deck, depth: node.depth });
+      walk(node.children);
+    }
+  };
+  walk(buildDeckTree(decks));
+  return out;
+}
+
 /** El mazo y todos los que cuelgan de él, a cualquier nivel */
 export function descendantIds(decks: readonly DeckLike[], id: string): Set<string> {
   const index = childrenIndex(decks);

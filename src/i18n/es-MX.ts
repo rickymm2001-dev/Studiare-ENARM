@@ -68,6 +68,11 @@ const screens: Record<ScreenKey, ScreenText> = {
     title: 'Mazos',
     description: 'Mazos precargados que sigues o dejas, los que importas y los que creas a mano.',
   },
+  explore: {
+    title: 'Explorar',
+    description:
+      'Busca, filtra y ordena todas tus tarjetas. Suspende, etiqueta o muévelas por lote.',
+  },
   planner: {
     title: 'Planificador',
     description: 'Tu plan del día y de la semana según tu fecha del ENARM y tu carga de repaso.',
@@ -155,9 +160,10 @@ export const t = {
     more: 'Más secciones',
   },
   studyTabs: {
-    label: 'Repasar y mazos',
+    label: 'Repasar, mazos y explorar',
     review: 'Repasar',
     decks: 'Mazos',
+    explore: 'Explorar',
   },
   navItems: {
     home: 'Inicio',

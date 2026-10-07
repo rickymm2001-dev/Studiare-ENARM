@@ -6,6 +6,7 @@ import {
   deckChain,
   deckDepth,
   deckPath,
+  flattenDeckTree,
   descendantIds,
   rollupCounts,
   selectionUnitId,
@@ -128,5 +129,22 @@ describe('unidad de selección y conteos', () => {
     expect(totals.get('root')).toBe(22);
     expect(totals.get('own')).toBe(2);
     expect(totals.get('car')).toBe(5);
+  });
+});
+
+describe('flattenDeckTree', () => {
+  it('lista los mazos en orden de árbol con su nivel', () => {
+    const decks = [
+      { id: 'b', name: 'B', parentId: null },
+      { id: 'a1', name: 'A1', parentId: 'a' },
+      { id: 'a', name: 'A', parentId: null },
+      { id: 'a1x', name: 'X', parentId: 'a1' },
+    ];
+    expect(flattenDeckTree(decks).map(({ deck, depth }) => `${depth}:${deck.id}`)).toEqual([
+      '0:a',
+      '1:a1',
+      '2:a1x',
+      '0:b',
+    ]);
   });
 });
