@@ -104,7 +104,7 @@ export function SettingsScreen() {
         {/* En computadora las tarjetas van en dos columnas (D-057) */}
         <Tabs.Content
           value="account"
-          className="grid items-start gap-3 outline-none lg:grid-cols-2"
+          className="grid grid-cols-1 items-start gap-3 outline-none lg:grid-cols-2"
         >
           <Card>
             <RadioCards

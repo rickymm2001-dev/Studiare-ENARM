@@ -87,7 +87,8 @@ test('crea un grupo, ve la tabla, se une con su código y completa un reto', asy
 
   // Los 100 XP del reto y las tarjetas repasadas ya cuentan en Inicio, y una sola vez
   await page.goto('/');
-  await expect(page.getByText(/^1\d\d XP en total$/)).toBeVisible();
+  // El renglón también dice cuánto de eso fue esta semana
+  await expect(page.getByText(/^1\d\d XP en total · 1\d\d XP esta semana$/)).toBeVisible();
 
   // Salir del grupo lo quita de la lista y el mismo código lo vuelve a abrir
   await page.goto(SCREENS.party.path);

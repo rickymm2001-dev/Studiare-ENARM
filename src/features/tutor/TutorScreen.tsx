@@ -245,7 +245,7 @@ function TutorBody({
         </Disclosure>
       ) : null}
 
-      <div className="grid items-start gap-3 lg:grid-cols-2">
+      <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
         <WeeklyReportCard report={view.report} />
         <div className="flex flex-col gap-3">
           <BiasTipsCard tips={view.biasTips} calibration={view.biasCalibration} />

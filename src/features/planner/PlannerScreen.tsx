@@ -139,7 +139,7 @@ function Planner({ session }: { session: ReadySession }) {
   return (
     <>
       {header}
-      <div className="grid items-start gap-3 lg:grid-cols-2">
+      <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
         <TodayCard view={view} calibration={calibration} limit={limit} />
         <div className="flex flex-col gap-3">
           {view.plan.warnings.map((warning) => (

@@ -139,7 +139,7 @@ function ExamResults({ session }: { session: ReadySession }) {
         }}
       />
       <ErrorsCard state={state} score={score} sending={settings.errorsToReview} saving={saving} />
-      <div className="grid gap-3 lg:grid-cols-2 lg:items-start">
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 lg:items-start">
         <BranchCard score={score} />
         <StructureCard score={score} />
         <TrapsCard score={score} />
