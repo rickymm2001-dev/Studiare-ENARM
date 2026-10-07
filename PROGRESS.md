@@ -24,6 +24,29 @@
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
 
+## Reunión del equipo del 2026-10-07 (D-087)
+
+Cambios aplicables que salieron del acta de Gemini. Todo con pruebas unitarias y e2e.
+
+### Bloques
+- [x] 1. Repaso y simulador sin pregunta de confianza por defecto, con migración de la base a la versión 4
+- [x] 2. Retroalimentación al final de la práctica, con la revisión de cada pregunta en el resumen y la opción de verla tras cada pregunta
+- [x] 3. Teclado en práctica, examen y repaso, doble clic para responder y botón de responder pegado a las opciones
+- [x] 4. Repasar y Mazos en una sola sección con dos pestañas
+- [x] 5. Precios. Mensual 150, anual 1,200 y plan Fundador de 79 como valor provisional para los primeros 100 usuarios
+- [x] 6. Banco de 4 a 10 opciones por pregunta y plantilla de Excel con npm run bank:template
+- [x] 7. Un solo dispositivo activo por cuenta, con su migración de SQL que Ricardo debe ejecutar
+
+### Evidencia
+- Vitest. 858 pruebas pasan y 2 se omiten antes de los últimos ajustes, más las de planes y pestañas. test:sql pasa con el bloque nuevo del dispositivo único
+- Playwright. 136 pruebas, 68 por proyecto, con las de teclado y retroalimentación al final en teléfono y escritorio
+- Dos fallas de las pruebas e2e se debieron a que la prueba seguía antes de que la siguiente pregunta cargara. Los ayudantes ahora esperan a la pregunta y a sus opciones
+
+### Pendiente con Ricardo
+- Confirmar el monto del precio Fundador entre 59 y 79 pesos y el precio del anual
+- Ejecutar en el editor de SQL de Supabase el archivo supabase/migrations/20261007000001_single_device.sql, con los pasos de docs/SUPABASE.md
+- Abrir una vez en Excel la plantilla content-drafts/bank-plantilla/Studiare-banco-plantilla.xlsx, que se probó en LibreOffice
+
 ## Fase P. Plataforma real (D-060)
 
 ### Bloques

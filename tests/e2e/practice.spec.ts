@@ -72,11 +72,17 @@ test('la práctica se contesta con el teclado y la retroalimentación llega al f
   await startPractice(page);
   await expectNoSeriousA11yViolations(page);
 
+  // La pregunta está lista cuando ya muestra sus opciones. El avance se ve antes, mientras carga
+  const ready = async (number: number) => {
+    await expect(page.getByText(t.simulator.progress(number, 5), { exact: true })).toBeVisible();
+    await expect(page.getByRole('radio').first()).toBeVisible();
+  };
   const answerButton = (last: boolean) =>
     page.getByRole('button', {
       name: last ? t.simulator.answerAndFinish : t.simulator.answerAndNext,
     });
   // Pregunta 1 solo con teclado. B elige la segunda opción y Enter responde
+  await ready(1);
   await page.keyboard.press('b');
   await expect(page.getByRole('radio').nth(1)).toBeChecked();
   // Mayús con la letra descarta sin cambiar la elegida
@@ -85,25 +91,25 @@ test('la práctica se contesta con el teclado y la retroalimentación llega al f
   await expect(page.getByRole('radio').nth(1)).toBeChecked();
   await page.keyboard.press('Enter');
   // Sin pantalla de retroalimentación, la que sigue es la pregunta 2
-  await expect(page.getByText(t.simulator.progress(2, 5), { exact: true })).toBeVisible();
+  await ready(2);
   await expect(page.getByText(t.simulator.whyAttracts)).toHaveCount(0);
   // El foco queda en el enunciado, para seguir con el teclado y para el lector de pantalla
   await expect(page.locator('#pregunta-frase')).toBeFocused();
 
   // Pregunta 2 con doble clic en una opción, que la elige y responde
   await page.getByRole('radio').nth(2).dblclick();
-  await expect(page.getByText(t.simulator.progress(3, 5), { exact: true })).toBeVisible();
+  await ready(3);
 
   // Pregunta 3 con el número de la opción
   await page.keyboard.press('1');
   await expect(page.getByRole('radio').first()).toBeChecked();
   await page.keyboard.press('Enter');
-  await expect(page.getByText(t.simulator.progress(4, 5), { exact: true })).toBeVisible();
+  await ready(4);
 
   // Pregunta 4 con ratón y la 5 con teclado. La última lleva al resumen
   await page.getByRole('radio').first().check();
   await answerButton(false).click();
-  await expect(page.getByText(t.simulator.progress(5, 5), { exact: true })).toBeVisible();
+  await ready(5);
   await page.keyboard.press('c');
   await expect(answerButton(true)).toBeEnabled();
   await page.keyboard.press('Enter');
