@@ -26,8 +26,8 @@ export interface PlanDef {
 /**
  * Precios en pesos mexicanos. El mensual es el estándar de la reunión del 2026-10-07 y el anual
  * conserva el descuento que ya tenía sobre 12 meses. El Fundador es un precio fijo de por vida para
- * los primeros usuarios, con 79 como valor provisional dentro del rango de 59 a 79 que Ricardo
- * confirma (D-087)
+ * los primeros usuarios y su monto de 79 lo confirmó Ricardo el 2026-10-07 (D-087). El anual sigue
+ * provisional hasta que Ricardo fije su precio
  */
 export const PLANS: Record<PlanKey, PlanDef> = {
   free: {

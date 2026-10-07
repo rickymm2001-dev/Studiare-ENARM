@@ -7,7 +7,7 @@
 - Fase B en curso desde el 2026-10-02. Ricardo la aprobó junto con la Fase A
 - Bloques 9 y 10 terminados. Bloque 8 (contenido demo) pausado con 4 de 6 lotes y sin mazos (D-050)
 - Fase C con sus 10 bloques programados y el cierre de 15.1 hecho. Espera la aprobación de Ricardo, ver su sección. Hay 20 de 28 pantallas construidas y 8 siguen como esqueleto con aviso de Próximamente
-- Reunión del equipo del 2026-10-07 aplicada (D-087). Repaso y simulador más prácticos, sin pregunta de confianza por defecto y con retroalimentación al final, Repasar y Mazos unidos, precio mensual de 150 y plan Fundador, banco de 4 a 10 opciones con plantilla de Excel y un solo dispositivo por cuenta. Falta que Ricardo confirme el precio Fundador y ejecute el SQL del dispositivo único
+- Reunión del equipo del 2026-10-07 aplicada (D-087). Repaso y simulador más prácticos, sin pregunta de confianza por defecto y con retroalimentación al final, Repasar y Mazos unidos, precio mensual de 150 y plan Fundador, banco de 4 a 10 opciones con plantilla de Excel y un solo dispositivo por cuenta. El precio Fundador de 79 ya está confirmado. Falta que Ricardo ejecute el SQL del dispositivo único
 - Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. Empieza cuando Ricardo apruebe el cierre de la Fase C
 - Fase P en curso (D-060). Bloques 1 a 4 terminados, 7 y 9 a medias, 5, 6 y 8 sin empezar, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
@@ -33,7 +33,7 @@ Cambios aplicables que salieron del acta de Gemini. Todo con pruebas unitarias y
 - [x] 2. Retroalimentación al final de la práctica, con la revisión de cada pregunta en el resumen y la opción de verla tras cada pregunta
 - [x] 3. Teclado en práctica, examen y repaso, doble clic para responder y botón de responder pegado a las opciones
 - [x] 4. Repasar y Mazos en una sola sección con dos pestañas
-- [x] 5. Precios. Mensual 150, anual 1,200 y plan Fundador de 79 como valor provisional para los primeros 100 usuarios
+- [x] 5. Precios. Mensual 150, anual 1,200 y plan Fundador de 79 (confirmado) para los primeros 100 usuarios
 - [x] 6. Banco de 4 a 10 opciones por pregunta y plantilla de Excel con npm run bank:template
 - [x] 7. Un solo dispositivo activo por cuenta, con su migración de SQL que Ricardo debe ejecutar
 
@@ -43,7 +43,7 @@ Cambios aplicables que salieron del acta de Gemini. Todo con pruebas unitarias y
 - Dos fallas de las pruebas e2e se debieron a que la prueba seguía antes de que la siguiente pregunta cargara. Los ayudantes ahora esperan a la pregunta y a sus opciones
 
 ### Pendiente con Ricardo
-- Confirmar el monto del precio Fundador entre 59 y 79 pesos y el precio del anual
+- Confirmar el precio del anual, que sigue provisional en 1,200 pesos. El Fundador de 79 ya lo confirmó
 - Ejecutar en el editor de SQL de Supabase el archivo supabase/migrations/20261007000001_single_device.sql, con los pasos de docs/SUPABASE.md
 - Abrir una vez en Excel la plantilla content-drafts/bank-plantilla/Studiare-banco-plantilla.xlsx, que se probó en LibreOffice
 
