@@ -102,8 +102,9 @@ test('práctica, examen completo y resultados', async ({ page }, info) => {
 
   // Práctica de 5 preguntas
   await page.goto(SCREENS.simulatorSetup.path);
-  await page.getByLabel(t.simulator.count, { exact: true }).selectOption('5');
-  const start = page.getByRole('button', { name: t.simulator.start });
+  const practice = page.getByRole('region', { name: t.simulator.setupTitle });
+  await practice.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
+  const start = practice.getByRole('button', { name: t.simulator.start });
   await expect(start).toBeEnabled({ timeout: 60_000 });
   await start.click();
   await expect(page.getByText(t.simulator.progress(1, 5))).toBeVisible();

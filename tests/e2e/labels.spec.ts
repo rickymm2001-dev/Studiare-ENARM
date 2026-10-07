@@ -22,8 +22,10 @@ test('preguntas, examen y mazos de demostración dicen que no están validados p
   // siembra la primera vez que se entra y puede tardar
   await page.goto(SCREENS.simulatorSetup.path);
   await expect(demoContent(page)).toBeVisible({ timeout: 60_000 });
-  await page.getByLabel(t.simulator.count, { exact: true }).selectOption('5');
-  const start = page.getByRole('button', { name: t.simulator.start });
+  // El examen de abajo también pregunta cuántas preguntas, así que se busca dentro de la práctica
+  const practice = page.getByRole('region', { name: t.simulator.setupTitle });
+  await practice.getByRole('combobox', { name: t.simulator.count, exact: true }).selectOption('5');
+  const start = practice.getByRole('button', { name: t.simulator.start });
   await expect(start).toBeEnabled({ timeout: 60_000 });
   await start.click();
   await expect(page.getByText(t.simulator.progress(1, 5))).toBeVisible();
