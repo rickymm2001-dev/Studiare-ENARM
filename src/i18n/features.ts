@@ -1,5 +1,6 @@
 // Textos de las pantallas del alumno de la Fase C, en español de México con trato de tú (4.9).
 // Se integran en t desde es-MX.ts.
+import { deviceLimitText } from './device';
 import { insightText } from './insights';
 
 export const branchNames: Record<string, string> = {
@@ -1127,6 +1128,8 @@ export const featureText = {
       body: 'Cada cuenta tiene un solo dispositivo activo, así que cerramos tu sesión aquí. Si quieres seguir en este dispositivo, vuelve a entrar. Eso cerrará la sesión del otro.',
       dismiss: 'Entendido',
     },
+    // Aparece cuando el servidor no dejó cambiar de dispositivo por el límite de cambios al día
+    deviceLimit: deviceLimitText,
   },
   insights: insightText,
 } as const;
