@@ -5,6 +5,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import ExcelJS from 'exceljs';
+import { TASK_LABELS } from './bankColumns.ts';
 
 const root = resolve(import.meta.dirname, '..', '..');
 const jsonDir = resolve(root, 'content-drafts/bank1500/json');
@@ -61,19 +62,6 @@ const subtopicName = new Map(
     branch.topics.flatMap((topic) => topic.subtopics.map((sub) => [sub.key, sub.name])),
   ),
 );
-const TASKS: Record<string, string> = {
-  diagnosis: 'Diagnóstico',
-  next_step: 'Siguiente paso',
-  initial_study: 'Estudio inicial',
-  confirmatory_study: 'Estudio confirmatorio',
-  initial_treatment: 'Tratamiento inicial',
-  treatment_of_choice: 'Tratamiento de elección',
-  mechanism: 'Mecanismo',
-  risk_factor: 'Factor de riesgo',
-  complication_prognosis: 'Complicación o pronóstico',
-  prevention_screening: 'Prevención o tamizaje',
-  data_interpretation: 'Interpretación de datos',
-};
 
 const questions: Question[] = [];
 const cases: { key: string; vignette: string }[] = [];
@@ -147,7 +135,7 @@ for (const question of questions) {
     vignette: question.vignette,
     prompt: question.prompt,
     polarity: question.polarity === 'negative' ? 'Negativa' : 'Afirmativa',
-    task: TASKS[question.task] ?? question.task,
+    task: TASK_LABELS[question.task] ?? question.task,
     difficulty: question.difficulty,
     correct: (question.options.find((option) => option.correct)?.key ?? '').toUpperCase(),
     canonical: question.canonical.map((key) => key.toUpperCase()).join(', '),
