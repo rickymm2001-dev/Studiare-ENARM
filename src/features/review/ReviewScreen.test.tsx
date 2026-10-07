@@ -55,6 +55,47 @@ function seedDeck(isDemo: boolean) {
   };
 }
 
+type Content =
+  | { kind: 'basic_reverse'; front: string; back: string }
+  | { kind: 'cloze'; text: string; extra: string };
+
+/**
+ * Un mazo propio con una sola nota de un tipo con varias cartas. Las cartas se crean en el orden de
+ * ordinals y entran a la cola por su ID, así que la primera es la que sale. Las hermanas se
+ * entierran para otro día, como en Anki
+ */
+function seedNoteDeck(content: Content, ordinals: readonly number[]) {
+  return async (api: DataApi, user: User) => {
+    const deckId = newId();
+    const noteId = newId();
+    await api.repos.decks.put({
+      id: deckId,
+      name: 'Mi mazo de prueba',
+      description: '',
+      ownerId: user.id,
+      origin: 'manual',
+      visibility: 'private',
+      isDemo: false,
+      createdAt: NOW,
+    });
+    await api.repos.notes.put({
+      id: noteId,
+      deckId,
+      tags: [],
+      origin: 'manual',
+      editorialStatus: 'draft',
+      sourceQuote: null,
+      sourceQuestionVersionId: null,
+      isDemo: false,
+      createdAt: NOW,
+      ...content,
+    });
+    for (const ordinal of ordinals) {
+      await api.repos.cards.put({ id: newId(), noteId, deckId, ordinal, createdAt: NOW });
+    }
+  };
+}
+
 describe('pantalla de Repasar', () => {
   it('sin mazos lo dice y lleva a Mazos', async () => {
     app = await renderApp(SCREENS.review.path);
@@ -202,4 +243,81 @@ describe('pantalla de Repasar', () => {
     await screen.findByRole('button', { name: t.reviewSetup.start(1) }, { timeout: 10_000 });
     expect(screen.queryByText(t.labels.demoContent)).toBeNull();
   });
+
+  it.each([
+    { first: 0, asked: 'Fármaco de primera línea', shown: 'Amoxicilina' },
+    { first: 1, asked: 'Amoxicilina', shown: 'Fármaco de primera línea' },
+  ])(
+    'una tarjeta inversa pregunta $asked cuando sale primero la carta $first y muestra $shown',
+    async ({ first, asked, shown }) => {
+      const typing = userEvent.setup();
+      const ordinals = first === 0 ? [0, 1] : [1, 0];
+      app = await renderApp(SCREENS.review.path, {
+        seed: seedNoteDeck(
+          {
+            kind: 'basic_reverse',
+            front: '<p>Fármaco de primera línea</p>',
+            back: '<p>Amoxicilina</p>',
+          },
+          ordinals,
+        ),
+      });
+      // Las dos cartas son hermanas, así que hoy solo sale una
+      await typing.click(
+        await screen.findByRole('button', { name: t.reviewSetup.start(1) }, { timeout: 10_000 }),
+      );
+      expect(await screen.findByText(asked)).toBeVisible();
+      expect(screen.queryByText(shown)).toBeNull();
+      await typing.click(screen.getByRole('button', { name: t.review.show }));
+      expect(screen.getByText(shown)).toBeVisible();
+      // La pregunta sigue a la vista junto a la respuesta
+      expect(screen.getByText(asked)).toBeVisible();
+      await typing.click(
+        screen.getByRole('button', { name: new RegExp(`^${t.review.ratings.good}`) }),
+      );
+      expect(await screen.findByText(t.review.doneTitle)).toBeVisible();
+      const { api, user } = app;
+      await waitFor(async () => {
+        const events = await api.repos.events.query({ userId: user.id });
+        const reviewed = events.filter((event) => event.type === 'card_reviewed');
+        expect(reviewed).toHaveLength(1);
+        const card = (await api.repos.cards.list()).find(
+          (entry) => entry.id === reviewed[0]?.payload.cardId,
+        );
+        expect(card?.ordinal).toBe(first);
+      });
+    },
+  );
+
+  it.each([
+    { ordinal: 1, front: '[…]', marked: 'El ventrículo izquierdo bombea a la aorta' },
+    { ordinal: 2, front: 'El […] bombea a la aorta', marked: 'ventrículo izquierdo' },
+  ])(
+    'un cloze anidado en la carta c$ordinal oculta lo que toca y lo revela al mostrar',
+    async ({ ordinal, front, marked }) => {
+      const typing = userEvent.setup();
+      app = await renderApp(SCREENS.review.path, {
+        seed: seedNoteDeck(
+          {
+            kind: 'cloze',
+            text: '<p>{{c1::El {{c2::ventrículo izquierdo}} bombea a la aorta}}</p>',
+            extra: '',
+          },
+          ordinal === 1 ? [1, 2] : [2, 1],
+        ),
+      });
+      await typing.click(
+        await screen.findByRole('button', { name: t.reviewSetup.start(1) }, { timeout: 10_000 }),
+      );
+      await screen.findByText('[…]');
+      const faces = () =>
+        [...document.querySelectorAll('.card-html')].map((face) => face.textContent);
+      // En la pregunta no queda nada de lo que se oculta, ni lo del hueco de adentro
+      expect(faces()).toEqual([front]);
+      await typing.click(screen.getByRole('button', { name: t.review.show }));
+      expect(faces()).toEqual([front, 'El ventrículo izquierdo bombea a la aorta']);
+      // Se resalta solo el hueco que se preguntó
+      expect(screen.getByText(marked, { selector: 'mark' })).toBeVisible();
+    },
+  );
 });
