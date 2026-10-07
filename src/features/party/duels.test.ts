@@ -123,8 +123,10 @@ describe('rival simulado', () => {
   });
 
   it('los compañeros no son todos iguales', () => {
-    const results = Array.from({ length: 20 }, () =>
-      simulatedDuelResult({ id: newId() }, challenge),
+    // IDs fijos y un duelo de 20 preguntas. Con IDs al azar y 3 preguntas, que es el tamaño de
+    // challenge, a veces los 20 compañeros caían en el mismo número de aciertos y la prueba fallaba
+    const results = Array.from({ length: 20 }, (_, index) =>
+      simulatedDuelResult({ id: `companero-${index}` }, { id: 'duelo-fijo' }),
     );
     expect(new Set(results.map((result) => result.correct)).size).toBeGreaterThan(1);
   });
