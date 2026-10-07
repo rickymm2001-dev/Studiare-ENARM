@@ -4,6 +4,7 @@ import { BRAND } from '@/config/brand';
 import type { Phase, ScreenKey } from '@/app/screens';
 import { examText } from './exam';
 import { featureText } from './features';
+import { qualityText } from './quality';
 import { tutorText } from './tutor';
 
 interface ScreenText {
@@ -142,6 +143,7 @@ const screens: Record<ScreenKey, ScreenText> = {
 export const t = {
   ...featureText,
   ...examText,
+  ...qualityText,
   ...tutorText,
   app: {
     name: BRAND.name,
