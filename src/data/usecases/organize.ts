@@ -59,13 +59,15 @@ export async function moveNotes(
   const moving = notes.filter((note) => note.deckId !== targetDeckId);
   const stamp = now.toISOString();
   const ids = new Set(moving.map((note) => note.id));
-  await api.repos.notes.putMany(
-    moving.map((note) => ({ ...note, deckId: targetDeckId, updatedAt: stamp })),
-  );
+  // Las cartas van primero. Si algo falla a la mitad la nota sigue en el mazo de antes y mover otra
+  // vez termina el trabajo, en lugar de dejar la nota en un mazo y sus cartas en otro
   // Las cartas de un borrado se mueven también, para que sigan al revivir la nota
   const cards = (await api.repos.cards.listAll()).filter((card) => ids.has(card.noteId));
   await api.repos.cards.putMany(
     cards.map((card) => ({ ...card, deckId: targetDeckId, updatedAt: stamp })),
+  );
+  await api.repos.notes.putMany(
+    moving.map((note) => ({ ...note, deckId: targetDeckId, updatedAt: stamp })),
   );
   return { changed: moving.length, skipped };
 }

@@ -127,6 +127,17 @@ test('arma un árbol de mazos, mueve un submazo y cambia el nombre', async ({ pa
   await expect(own.getByText(t.decks.inside('Medicina interna'))).toBeVisible();
   await expectNoSeriousA11yViolations(page);
 
+  // El editor avisa de una respuesta larga y sigue pasando axe con los avisos a la vista
+  await own.getByRole('button', { name: `${t.decks.editCards}. Nefrología` }).click();
+  const editor = page.getByRole('dialog', { name: t.decks.editor.title('Nefrología') });
+  await editor.getByLabel(t.decks.editor.front, { exact: true }).fill('¿Qué es la TFG?');
+  await editor
+    .getByLabel(t.decks.editor.back, { exact: true })
+    .fill(Array.from({ length: 60 }, (_, index) => `dato${index}`).join(' '));
+  await expect(editor.getByText(t.cardQuality.footer)).toBeVisible({ timeout: 10_000 });
+  await expectNoSeriousA11yViolations(page);
+  await editor.getByRole('button', { name: t.decks.editor.close }).click();
+
   // Al organizarlo se puede regresar al primer nivel y cambiarle el nombre
   await own.getByRole('button', { name: t.decks.organizeLabel('Nefrología') }).click();
   await own.getByLabel(t.decks.renameLabel).fill('Nefrología clínica');

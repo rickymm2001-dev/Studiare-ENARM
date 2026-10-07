@@ -9,7 +9,13 @@ import { useDataApi } from '@/data/context';
 import type { Deck } from '@/data/schemas/decks';
 import type { FsrsCardState } from '@/data/schemas/common';
 import { createManualDeck, deleteManualDeck, DECK_NAME_MAX } from '@/data/usecases/manualDecks';
-import { deckPath, flattenDeckTree } from '@/engines/deckTree';
+import {
+  MAX_DECK_DEPTH,
+  deckDepth,
+  deckPath,
+  deckIndent,
+  flattenDeckTree,
+} from '@/engines/deckTree';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
@@ -76,7 +82,10 @@ export function OwnDecksCard({
 
   // En orden de árbol, cada mazo después del que lo contiene. El destino solo ofrece mazos a mano
   const ordered = flattenDeckTree(decks);
-  const manualTargets = flattenDeckTree(decks.filter((deck) => deck.origin === 'manual'));
+  // Un mazo del último nivel ya no admite submazos
+  const manualTargets = flattenDeckTree(decks.filter((deck) => deck.origin === 'manual')).filter(
+    ({ deck }) => deckDepth(decks, deck.id) < MAX_DECK_DEPTH - 1,
+  );
   // Si el mazo elegido ya no existe, se crea en el primer nivel
   const validParent = manualTargets.some(({ deck }) => deck.id === parentId) ? parentId : '';
 
@@ -218,7 +227,7 @@ export function OwnDecksCard({
                   { value: '', label: t.decks.topLevel },
                   ...manualTargets.map(({ deck, depth }) => ({
                     value: deck.id,
-                    label: `${'\u00a0\u00a0'.repeat(depth)}${deck.name}`,
+                    label: `${deckIndent(depth)}${deck.name}`,
                   })),
                 ]}
                 onChange={(event) => {

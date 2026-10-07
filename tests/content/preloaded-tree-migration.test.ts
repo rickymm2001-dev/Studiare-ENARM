@@ -63,7 +63,9 @@ describe('migración al árbol con los 3 mazos de Paco', () => {
   it(
     'compara conteos y claves antes y después, sin perder nada y sin espacios en las etiquetas',
     {
-      timeout: 120_000,
+      // Reescribir 3,771 notas sobre filas que ya existen es lento en fake-indexeddb, que reordena
+      // sus índices en cada reemplazo. En un navegador real tarda una fracción de segundo
+      timeout: 300_000,
     },
     async () => {
       const { db, repos, entities } = await legacyDatabase(KEYS);
@@ -108,7 +110,7 @@ describe('migración al árbol con los 3 mazos de Paco', () => {
 
   it(
     'repetirla no cambia nada y es seguro con una selección parcial',
-    { timeout: 120_000 },
+    { timeout: 300_000 },
     async () => {
       const { db, repos } = await legacyDatabase(['paco-urgencias']);
       expect(
@@ -125,6 +127,42 @@ describe('migración al árbol con los 3 mazos de Paco', () => {
       expect((await db.decks.toArray()).map((deck) => deck.name)).toContain('ENARM 2027');
     },
   );
+
+  it('si se interrumpe a la mitad, la próxima vez termina el trabajo', async () => {
+    const { db, repos } = await legacyDatabase(['paco-urgencias']);
+    // Los mazos se guardan al final. Aquí la escritura de mazos falla, como si se cerrara la pestaña
+    let failing = true;
+    const interrupted = {
+      ...repos,
+      decks: {
+        ...repos.decks,
+        putMany: (entities: Parameters<typeof repos.decks.putMany>[0]) => {
+          if (failing) return Promise.reject(new Error('Pestaña cerrada'));
+          return repos.decks.putMany(entities);
+        },
+      },
+    };
+    await expect(
+      ensurePreloadedTree({ repos: interrupted }, ['paco-urgencias'], () => Promise.resolve(files)),
+    ).rejects.toThrow('Pestaña cerrada');
+    // El mazo sigue sin su padre, así que la señal de que falta trabajo no se perdió
+    expect((await db.decks.get(deckIds.deck('paco-urgencias')))?.parentId).toBeUndefined();
+
+    failing = false;
+    expect(
+      await ensurePreloadedTree({ repos: interrupted }, ['paco-urgencias'], () =>
+        Promise.resolve(files),
+      ),
+    ).toBe(true);
+    const branch = await db.decks.get(deckIds.deck('paco-urgencias'));
+    expect(branch?.parentId).toBe(deckIds.deck(ROOT_DECK_KEY));
+    // Las notas ya quedaron en su materia y con la ruta de etiqueta
+    const subjects = new Set((await db.decks.toArray()).map((deck) => deck.id));
+    const notes = await db.notes.toArray();
+    expect(notes).toHaveLength(123);
+    expect(notes.every((note) => subjects.has(note.deckId))).toBe(true);
+    expect(notes.some((note) => note.deckId === deckIds.deck('paco-urgencias'))).toBe(false);
+  });
 
   it('sin mazos seguidos no hace nada', async () => {
     const { repos } = await legacyDatabase([]);

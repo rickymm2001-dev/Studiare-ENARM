@@ -4,6 +4,7 @@ import { cleanup, screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
+import { seedManualCards } from '@/data/testing/seedCards';
 import { t } from '@/i18n/es-MX';
 
 let app: RenderedApp | undefined;
@@ -35,5 +36,29 @@ describe('pantalla del plan', () => {
     // Con 4 horas caben muchas más de las 20 que deja el plan Gratis
     expect(await within(today).findByText(t.planner.limitNote(20))).toBeVisible();
     expect(within(today).getByText(t.planner.simulator(20, null))).toBeVisible();
+  });
+
+  it('las tarjetas suspendidas no cuentan para el plan, solo las que siguen activas', async () => {
+    app = await renderApp(SCREENS.planner.path, {
+      user: { dailyMinutes: 60 },
+      seed: async (api, user) => {
+        await seedManualCards(api, user, { count: 3, suspended: 3 });
+      },
+    });
+    const today = await screen.findByRole('region', { name: t.planner.todayTitle });
+    // Todas suspendidas es como no tener mazos que repasar
+    expect(await within(today).findByText(t.planner.noDecksTitle)).toBeVisible();
+    cleanup();
+    await resetApp(app.api);
+
+    app = await renderApp(SCREENS.planner.path, {
+      user: { dailyMinutes: 60 },
+      seed: async (api, user) => {
+        await seedManualCards(api, user, { count: 3, suspended: 2 });
+      },
+    });
+    const withCards = await screen.findByRole('region', { name: t.planner.todayTitle });
+    await within(withCards).findByText(/Faltan \d+ respuestas en un tema/);
+    expect(within(withCards).queryByText(t.planner.noDecksTitle)).toBeNull();
   });
 });

@@ -216,7 +216,33 @@ describe('cambiar el tipo de una tarjeta guardada', () => {
     expect(after).toEqual(before);
   });
 
-  it('al pasar de cloze a básica y de vuelta, la carta del hueco 1 conserva su ID', async () => {
+  it('entre cloze y básica nadie hereda historial, porque el mismo número es otra pregunta', async () => {
+    const { api, user, deck } = await setup();
+    // Una inversa cuya carta 1 pregunta el reverso, que pasa a cloze con su hueco 1
+    const saved = await saveManualNote(api, user, { deckId: deck.id, draft: reverse() });
+    const reverseCard = (await api.repos.cards.list()).find((card) => card.ordinal === 1);
+    await saveManualNote(api, user, {
+      deckId: deck.id,
+      noteId: saved.id,
+      draft: { kind: 'cloze', text: 'El {{c1::VI}} bombea', extra: '' },
+    });
+    const live = await api.repos.cards.list();
+    expect(live.map((card) => card.ordinal)).toEqual([1]);
+    // La carta del hueco 1 es otra, y la de la inversa quedó con su marca de borrado
+    expect(live[0]?.id).not.toBe(reverseCard?.id);
+    const retired = (await api.repos.cards.listAll()).filter((card) => card.deletedAt);
+    expect(retired.map((card) => card.id)).toContain(reverseCard?.id);
+    expect(retired).toHaveLength(2);
+
+    // Y al volver a básica con inversa tampoco revive la del hueco
+    await saveManualNote(api, user, { deckId: deck.id, noteId: saved.id, draft: reverse() });
+    const back = await api.repos.cards.list();
+    expect(back.map((card) => card.ordinal).sort()).toEqual([0, 1]);
+    expect(back.some((card) => card.id === live[0]?.id)).toBe(false);
+    expect(back.some((card) => card.id === reverseCard?.id)).toBe(false);
+  });
+
+  it('dentro de una misma familia sí conserva el ID, aunque haya cartas viejas con el mismo número', async () => {
     const { api, user, deck } = await setup();
     const saved = await saveManualNote(api, user, {
       deckId: deck.id,
@@ -226,15 +252,16 @@ describe('cambiar el tipo de una tarjeta guardada', () => {
     await saveManualNote(api, user, {
       deckId: deck.id,
       noteId: saved.id,
-      draft: { kind: 'basic', front: 'F', back: 'R' },
+      draft: { kind: 'cloze', text: '{{c1::uno}}', extra: '' },
     });
     await saveManualNote(api, user, {
       deckId: deck.id,
       noteId: saved.id,
-      draft: { kind: 'cloze', text: '{{c1::uno}}', extra: '' },
+      draft: { kind: 'cloze', text: '{{c1::uno}} y {{c2::dos}}', extra: '' },
     });
-    const back = (await api.repos.cards.list()).find((card) => card.ordinal === 1);
-    expect(back?.id).toBe(first?.id);
+    const cards = await api.repos.cards.list();
+    expect(cards.find((card) => card.ordinal === 1)?.id).toBe(first?.id);
+    expect(cards).toHaveLength(2);
   });
 });
 

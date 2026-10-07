@@ -105,12 +105,21 @@ export function ResultList({
                 variant="ghost"
                 size="sm"
                 aria-expanded={isOpen}
+                aria-label={
+                  isOpen
+                    ? t.explore.hideCardOf(front.slice(0, 80))
+                    : t.explore.seeCardOf(front.slice(0, 80))
+                }
+                className="max-sm:size-9 max-sm:px-0"
                 onClick={() => {
                   onOpen(isOpen ? null : row.cardId);
                 }}
               >
                 {isOpen ? <EyeOff aria-hidden /> : <Eye aria-hidden />}
-                {isOpen ? t.explore.hideCard : t.explore.seeCard}
+                {/* En el teléfono queda solo el ícono para dejar lugar al texto de la tarjeta */}
+                <span className="max-sm:hidden">
+                  {isOpen ? t.explore.hideCard : t.explore.seeCard}
+                </span>
               </Button>
             </div>
             {faces ? (

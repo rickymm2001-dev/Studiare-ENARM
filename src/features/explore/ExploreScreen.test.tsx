@@ -7,7 +7,8 @@ import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import type { DataApi } from '@/data/context';
 import { newId } from '@/data/testing/fixtures';
-import type { User } from '@/data/schemas/people';
+import { UserSettingsSchema, type User } from '@/data/schemas/people';
+import { deckIds } from '@/demo/content/deckEntities';
 import { t } from '@/i18n/es-MX';
 
 let app: RenderedApp | undefined;
@@ -18,7 +19,9 @@ afterEach(async () => {
 });
 
 const NOW = '2026-10-01T15:00:00.000Z';
-const PRELOADED_DECK = '01JAA6P0000000000000000000';
+// Un mazo precargado que el alumno sigue, con el ID estable que le da su clave
+const FOLLOWED_KEY = 'mazo-precargado-de-prueba';
+const PRELOADED_DECK = deckIds.deck(FOLLOWED_KEY);
 
 /** Dos mazos propios con tres notas, y un mazo precargado con una más */
 async function seed(api: DataApi, user: User) {
@@ -107,7 +110,10 @@ async function seed(api: DataApi, user: User) {
 }
 
 async function openExplore() {
-  app = await renderApp(SCREENS.explore.path, { seed });
+  app = await renderApp(SCREENS.explore.path, {
+    seed,
+    user: { settings: UserSettingsSchema.parse({ followedDecks: [FOLLOWED_KEY] }) },
+  });
   const list = await screen.findByRole('list', { name: t.explore.list }, { timeout: 10_000 });
   return list;
 }
@@ -247,15 +253,90 @@ describe('pantalla de Explorar', () => {
     });
   });
 
+  it('no muestra lo de otro perfil ni lo de mazos precargados que no sigues', async () => {
+    app = await renderApp(SCREENS.explore.path, {
+      user: { settings: UserSettingsSchema.parse({ followedDecks: [FOLLOWED_KEY] }) },
+      seed: async (api, user) => {
+        await seed(api, user);
+        // Un mazo de otro perfil de este mismo navegador y un mazo precargado sin seguir
+        const strangers = [
+          { id: newId(), ownerId: newId(), origin: 'manual' as const, name: 'Mazo ajeno' },
+          {
+            id: deckIds.deck('paco-otro'),
+            ownerId: null,
+            origin: 'preloaded' as const,
+            name: 'Sin seguir',
+          },
+        ];
+        for (const stranger of strangers) {
+          await api.repos.decks.put({
+            ...stranger,
+            description: '',
+            visibility: 'private',
+            isDemo: false,
+            createdAt: NOW,
+          });
+          const noteId = newId();
+          await api.repos.notes.put({
+            id: noteId,
+            deckId: stranger.id,
+            tags: [],
+            origin: stranger.origin,
+            editorialStatus: 'draft',
+            sourceQuote: null,
+            sourceQuestionVersionId: null,
+            isDemo: false,
+            createdAt: NOW,
+            kind: 'basic',
+            front: `Tarjeta de ${stranger.name}`,
+            back: 'x',
+          });
+          await api.repos.cards.put({
+            id: newId(),
+            noteId,
+            deckId: stranger.id,
+            ordinal: 0,
+            createdAt: NOW,
+          });
+        }
+      },
+    });
+    const list = await screen.findByRole('list', { name: t.explore.list }, { timeout: 10_000 });
+    expect(rowsIn(list)).toHaveLength(4);
+    expect(screen.queryByText(/Tarjeta de Mazo ajeno/)).toBeNull();
+    expect(screen.queryByText(/Tarjeta de Sin seguir/)).toBeNull();
+    // Y el selector de mazos tampoco ofrece los que no se ven
+    expect(screen.queryByRole('option', { name: /Mazo ajeno/ })).toBeNull();
+  });
+
+  it('la etiqueta de demostración sale con tarjetas de demostración y no sin ellas', async () => {
+    const list = await openExplore();
+    expect(screen.getAllByText(t.labels.demoContent).length).toBeGreaterThan(0);
+    const typing = userEvent.setup();
+    await typing.selectOptions(screen.getByRole('combobox', { name: t.explore.deck }), [
+      screen.getByRole('option', { name: /Nefrología/ }),
+    ]);
+    await waitFor(() => {
+      expect(screen.queryByText(t.labels.demoContent)).toBeNull();
+    });
+    expect(list).toBeDefined();
+  });
+
   it('abre una tarjeta para ver sus dos caras', async () => {
     const typing = userEvent.setup();
     const list = await openExplore();
     const row = rowsIn(list).find((item) => item.textContent.includes('hiperpotasemia'));
-    await typing.click(within(row as HTMLElement).getByRole('button', { name: t.explore.seeCard }));
+    await typing.click(
+      within(row as HTMLElement).getByRole('button', {
+        name: t.explore.seeCardOf('Tratamiento de la hiperpotasemia'),
+      }),
+    );
     expect(within(row as HTMLElement).getByText(t.explore.front)).toBeVisible();
     expect(within(row as HTMLElement).getByText(t.explore.back)).toBeVisible();
     await typing.click(
-      within(row as HTMLElement).getByRole('button', { name: t.explore.hideCard }),
+      within(row as HTMLElement).getByRole('button', {
+        name: t.explore.hideCardOf('Tratamiento de la hiperpotasemia'),
+      }),
     );
     expect(within(row as HTMLElement).queryByText(t.explore.front)).toBeNull();
   });

@@ -1,7 +1,7 @@
 // Filtros de Explorar. Búsqueda de texto, mazo en árbol, ruta de etiqueta, estado con conteos, tipo
 // y origen, más el orden. Cada opción muestra cuántas tarjetas daría con los demás filtros puestos.
 import { Search } from 'lucide-react';
-import { flattenDeckTree } from '@/engines/deckTree';
+import { deckIndent, flattenDeckTree } from '@/engines/deckTree';
 import type { ExploreStatus } from '@/engines/explore';
 import type { TagNode } from '@/engines/tagPath';
 import type { Deck } from '@/data/schemas/decks';
@@ -46,7 +46,7 @@ export function FilterPanel({
     { value: '', label: t.explore.allDecks },
     ...flattenDeckTree(decks).map(({ deck, depth }) => ({
       value: deck.id,
-      label: t.explore.deckOption('  '.repeat(depth), deck.name, deckCounts.get(deck.id) ?? 0),
+      label: t.explore.deckOption(deckIndent(depth), deck.name, deckCounts.get(deck.id) ?? 0),
     })),
   ];
   const toggleStatus = (status: ExploreStatus) => {

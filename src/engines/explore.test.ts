@@ -53,11 +53,20 @@ const filters = (patch: Partial<ExploreFilters>): ExploreFilters => ({ ...NO_FIL
 const ids = (rows: { cardId: string }[]) => rows.map((row) => row.cardId).sort();
 
 describe('texto de las tarjetas', () => {
-  it('quita el HTML, decodifica entidades y muestra los huecos entre corchetes', () => {
-    expect(plainText('<p>Una&nbsp;{{c1::dosis &amp; vía::pista}} y {{c2::otra}}</p>')).toBe(
-      'Una [dosis & vía] y [otra]',
+  it('quita el HTML, decodifica entidades y deja los huecos dibujados como vienen', () => {
+    expect(plainText('<p>Una&nbsp;dosis &amp; vía <mark>[pista]</mark></p>')).toBe(
+      'Una dosis & vía [pista]',
     );
     expect(plainText('uno<br>dos<ul><li>a</li><li>b</li></ul>')).toBe('uno dos a b');
+  });
+
+  it('un campo enorme y hostil se lee rápido', () => {
+    const hostile = ['<'.repeat(20_000), `{{c1::${':'.repeat(20_000)}`, '&'.repeat(20_000)];
+    for (const text of hostile) {
+      const started = performance.now();
+      plainText(text);
+      expect(performance.now() - started).toBeLessThan(100);
+    }
   });
 
   it('busca sin importar acentos ni mayúsculas', () => {

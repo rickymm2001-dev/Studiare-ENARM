@@ -5,7 +5,7 @@
 // número de hueco. Al editarla las cartas que siguen conservan su ID y con él su historial de repaso.
 // Borrar pone una marca de borrado en lugar de quitar el registro y toda edición pone su fecha de
 // modificación, para sincronizar entre dispositivos (D-085).
-import { descendantIds } from '../../engines/deckTree';
+import { MAX_DECK_DEPTH, deckChain, descendantIds } from '../../engines/deckTree';
 import { clozeHoles, clozeOpenings, type ClozeHole } from '../content/cloze';
 import { htmlToText, textToHtml } from '../content/plainText';
 import type { DataApi } from '../context';
@@ -125,6 +125,8 @@ function contentOf(draft: NoteDraft) {
 
 type Repos = Pick<DataApi, 'repos'>;
 
+const isCloze = (kind: NoteKind) => kind === 'cloze';
+
 async function ownManualDeck(api: Repos, user: Pick<User, 'id'>, deckId: string): Promise<Deck> {
   const deck = await api.repos.decks.get(deckId);
   if (deck?.ownerId !== user.id || deck.origin !== 'manual')
@@ -138,7 +140,12 @@ export async function createManualDeck(
   input: { name: string; description?: string; parentId?: string | null },
   now: Date = new Date(),
 ): Promise<Deck> {
-  if (input.parentId) await ownManualDeck(api, user, input.parentId);
+  if (input.parentId) {
+    await ownManualDeck(api, user, input.parentId);
+    // Mover un mazo ya respeta el tope de niveles, y crear uno nuevo también
+    if (deckChain(await api.repos.decks.list(), input.parentId).length >= MAX_DECK_DEPTH)
+      throw new RangeError('Ya son demasiados niveles de mazos');
+  }
   return api.repos.decks.put({
     id: newId(),
     name: input.name.trim(),
@@ -184,11 +191,24 @@ export async function saveManualNote(
   await api.repos.notes.put(note);
 
   // Una carta por número de carta. Las que siguen conservan su ID, también las que se habían
-  // quitado, que reviven con su historial. Las que sobran quedan con marca de borrado
+  // quitado, que reviven con su historial. Las que sobran quedan con marca de borrado. Entre una
+  // cloze y una básica el mismo número es otra pregunta, porque la carta 1 de una inversa pregunta
+  // el reverso y la del hueco 1 pregunta un dato. Ahí ninguna hereda historial y salen cartas nuevas
   const wanted = cardOrdinals(draft);
   const stamp = now.toISOString();
+  const changesFamily = existing !== undefined && isCloze(existing.kind) !== isCloze(draft.kind);
   const current = (await api.repos.cards.listAll()).filter((card) => card.noteId === note.id);
-  const byOrdinal = new Map(current.map((card) => [card.ordinal, card]));
+  // Si por cambios de tipo hay dos cartas con el mismo número, manda la viva y luego la más reciente
+  const byOrdinal = new Map(
+    (changesFamily ? [] : [...current])
+      .sort(
+        (a, b) =>
+          Number(a.deletedAt === null || a.deletedAt === undefined) -
+            Number(b.deletedAt === null || b.deletedAt === undefined) ||
+          (a.updatedAt ?? a.createdAt).localeCompare(b.updatedAt ?? b.createdAt),
+      )
+      .map((card) => [card.ordinal, card]),
+  );
   const wanting: Card[] = wanted.map((ordinal) => {
     const found = byOrdinal.get(ordinal);
     if (!found) {
@@ -203,8 +223,9 @@ export async function saveManualNote(
     }
     return { ...found, deletedAt: null, ...(found.deletedAt ? { updatedAt: stamp } : {}) };
   });
+  const kept = new Set(wanting.map((card) => card.id));
   const surplus = current
-    .filter((card) => !wanted.includes(card.ordinal) && !card.deletedAt)
+    .filter((card) => !kept.has(card.id) && !card.deletedAt)
     .map((card) => ({ ...card, deletedAt: stamp, updatedAt: stamp }));
   await api.repos.cards.putMany([...wanting, ...surplus]);
   return note;

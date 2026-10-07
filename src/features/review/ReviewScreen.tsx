@@ -44,7 +44,7 @@ import { buildSnapshot } from '../home/snapshot';
 import { CardHtml } from '../shared/CardHtml';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
-import { deckIds } from '@/demo/content/deckEntities';
+import { deckIds, ROOT_DECK_KEY } from '@/demo/content/deckEntities';
 import { deckPath, selectionUnitId } from '@/engines/deckTree';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
 import { ReviewSetup } from './ReviewSetup';
@@ -65,6 +65,8 @@ import {
 type Confidence = 'dont_know' | 'unsure' | 'sure';
 type Cause = keyof typeof t.review.causes;
 const RATINGS: FsrsRating[] = ['again', 'hard', 'good', 'easy'];
+/** ENARM 2027 solo agrupa a las ramas, así que no se elige como unidad de repaso */
+const CONTAINER_DECKS: ReadonlySet<string> = new Set([deckIds.deck(ROOT_DECK_KEY)]);
 
 /** Reloj de la sesión. Solo se llama desde manejadores de eventos */
 function clock(): number {
@@ -103,17 +105,27 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     noteById,
   );
   if (cards.length === 0) {
+    // Si sigues mazos pero todo está suspendido, el aviso lleva a Explorar y no a Mazos
+    const allSuspended = content.cards.some(
+      (card) => followed.has(card.deckId) && suspended.has(card.id),
+    );
     return (
       <>
         <ScreenHeader title={t.screens.review.title} description={t.screens.review.description} />
         <StudyTabs />
         <Card aria-labelledby="sin-mazos">
           <CardHeader>
-            <CardTitle id="sin-mazos">{t.review.noDecksTitle}</CardTitle>
-            <CardDescription>{t.review.noDecksBody}</CardDescription>
+            <CardTitle id="sin-mazos">
+              {allSuspended ? t.review.allSuspendedTitle : t.review.noDecksTitle}
+            </CardTitle>
+            <CardDescription>
+              {allSuspended ? t.review.allSuspendedBody : t.review.noDecksBody}
+            </CardDescription>
           </CardHeader>
           <Button asChild className="self-start">
-            <Link to={screenPath('decks')}>{t.review.goToDecks}</Link>
+            <Link to={screenPath(allSuspended ? 'explore' : 'decks')}>
+              {allSuspended ? t.review.goToExplore : t.review.goToDecks}
+            </Link>
           </Button>
         </Card>
       </>
@@ -121,7 +133,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
   }
   // Se elige y se cuenta por unidad, la rama de un mazo precargado o un mazo propio, y no por cada
   // materia (D-085). Cada tarjeta dice en qué mazo y materia está
-  const unitOf = (deckId: string) => selectionUnitId(content.decks, deckId);
+  const unitOf = (deckId: string) => selectionUnitId(content.decks, deckId, CONTAINER_DECKS);
   const deckNames = new Map(
     content.decks.map((deck) => [deck.id, deckPath(content.decks, deck.id).slice(-2).join(' › ')]),
   );

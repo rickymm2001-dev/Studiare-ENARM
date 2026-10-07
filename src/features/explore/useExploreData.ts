@@ -7,8 +7,10 @@ import { useLiveData } from '@/data/hooks';
 import type { Card, Deck, Note } from '@/data/schemas/decks';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { buildExploreRows, type ExploreRow, type ExploreSource } from '@/engines/explore';
+import { deckChain } from '@/engines/deckTree';
 import { suspendedCardIds } from '@/engines/suspension';
 import { cardFaces, latestCardStates, type CardFaces } from '../review/study';
+import { followedDeckIds } from '../decks/followed';
 import type { ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 
@@ -31,15 +33,30 @@ export function useExploreData(session: ReadySession): ExploreData | undefined {
     ]);
     return { decks, notes, cards };
   }, [api.repos]);
+  const { isDemo } = session;
+  const userId = session.user.id;
+  const followedDecks = session.settings.followedDecks;
   const events = useUserEvents(session.user.id);
 
   return useMemo(() => {
     if (!stored || !events) return undefined;
     const states = latestCardStates(events);
-    const notes = new Map<string, Note>(stored.notes.map((note) => [note.id, note]));
+    // Solo lo que Repasar también ofrece, es decir lo tuyo y lo de los mazos que sigues. La base
+    // local puede traer lo de otros perfiles y mazos que dejaste de seguir
+    const followed = followedDeckIds(
+      { isDemo, user: { id: userId }, settings: { followedDecks } },
+      stored.decks,
+    );
+    const visibleDecks = new Set(followed);
+    for (const id of followed)
+      for (const deck of deckChain(stored.decks, id)) visibleDecks.add(deck.id);
+    const notes = new Map<string, Note>(
+      stored.notes.filter((note) => followed.has(note.deckId)).map((note) => [note.id, note]),
+    );
     const cardsById = new Map<string, Card>();
     const sources: ExploreSource[] = [];
     for (const card of stored.cards) {
+      if (!followed.has(card.deckId)) continue;
       const note = notes.get(card.noteId);
       if (!note) continue;
       cardsById.set(card.id, card);
@@ -70,6 +87,11 @@ export function useExploreData(session: ReadySession): ExploreData | undefined {
       const note = card ? notes.get(card.noteId) : undefined;
       return card && note ? cardFaces(note, card.ordinal) : null;
     };
-    return { decks: stored.decks, rows, facesOf, now: new Date() };
-  }, [stored, events]);
+    return {
+      decks: stored.decks.filter((deck) => visibleDecks.has(deck.id)),
+      rows,
+      facesOf,
+      now: new Date(),
+    };
+  }, [stored, events, isDemo, userId, followedDecks]);
 }

@@ -1,3 +1,4 @@
+import { clozeHoles } from './cloze';
 import { describe, expect, it } from 'vitest';
 import {
   clozeFlatten,
@@ -130,10 +131,13 @@ describe('parseCloze', () => {
     expect(holes[0]?.hint).toBe('pista');
     expect(holes[0]?.content.map((part) => (typeof part === 'string' ? part : 'hueco'))).toEqual([
       'hueco',
-      '',
     ]);
-    const nestedHint = parseCloze('{{c1::A::uno {{c2::dos}} tres}}');
-    expect(nestedHint.holes[0]?.hint).toBe('uno dos tres');
+  });
+
+  it('un :: seguido de otro hueco no es pista, igual que en el repaso', () => {
+    const nested = parseCloze('{{c1::A::uno {{c2::dos}} tres}}');
+    expect(nested.holes[0]?.hint).toBeNull();
+    expect(clozeFlatten(nested.holes[0]?.content ?? [])).toBe('A::uno dos tres');
   });
 
   it('un hueco sin cierre es texto y conserva lo que tiene adentro', () => {
@@ -153,14 +157,43 @@ describe('parseCloze', () => {
     expect(parseCloze('')).toEqual({ parts: [], holes: [] });
   });
 
-  it('limita la profundidad para que un texto malicioso no desborde la pila', () => {
+  it('miles de huecos anidados no desbordan la pila y se leen todos', () => {
     const deep = `${'{{c1::'.repeat(5000)}x${'}}'.repeat(5000)}`;
     const parsed = parseCloze(deep);
-    expect(parsed.holes).toHaveLength(20);
+    expect(parsed.holes).toHaveLength(5000);
     expect(() => clozeFlatten(parsed.parts)).not.toThrow();
     expect(() => clozeRender(parsed.parts, 1, { hints: true })).not.toThrow();
     const sensible = parseCloze('{{c1::{{c2::{{c3::{{c4::x}}}}}}}}');
     expect(sensible.holes).toHaveLength(4);
+  });
+
+  it('lee los huecos igual que el analizador del repaso, en un corpus de casos raros', () => {
+    const corpus = [
+      'La {{c1::metformina::fármaco}} baja la {{c2::glucosa}}',
+      '{{c1::dato::pista con {{c2::otro}} dentro}}',
+      '{{c1::A::x {{c2::B}} y::z}}',
+      '{{c1::a::b::c}} {{c2::x::}} {{c3::y:: }}',
+      '{{c1::{{c2::B}}::pista}}',
+      'Hola {{c1::mundo {{c2::cierra}} sin fin',
+      '{{c1::a {{c2::b {{c3::c}}',
+      '}} { {{x}} {{c::y}} {{cx::z}} ::',
+      `${'{{c1::'.repeat(30)}x${'}}'.repeat(30)}`,
+      '<p>Es {{c1::<b>dos</b> cosas}}</p>',
+    ];
+    for (const text of corpus) {
+      // El analizador del repaso solo lista los huecos cerrados, igual que este
+      const mine = parseCloze(text).holes.map((hole) => ({
+        ordinal: hole.ordinal,
+        answer: clozeFlatten(hole.content),
+        hint: hole.hint ?? undefined,
+      }));
+      const shared = clozeHoles(text).map((hole) => ({
+        ordinal: hole.ordinal,
+        answer: hole.answer,
+        hint: hole.hint?.trim() === '' ? undefined : hole.hint,
+      }));
+      expect(mine, text).toEqual(shared);
+    }
   });
 
   it('un hueco puede traer HTML y atravesar etiquetas', () => {

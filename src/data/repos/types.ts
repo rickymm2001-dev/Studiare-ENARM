@@ -72,9 +72,10 @@ export interface EntityRepo<T, K extends string = Id> {
 /**
  * Entidad que se sincroniza entre dispositivos (D-085, fila 12). Borrar es poner una marca de
  * borrado y no quitar el registro, así otro dispositivo se entera. get y list solo ven lo vivo, y
- * getRaw y listAll ven también lo marcado como borrado, que es lo que necesita la sincronización
+ * getRaw y listAll ven también lo marcado como borrado, que es lo que necesita la sincronización.
+ * No tiene remove, para que nadie quite un registro de verdad y otro dispositivo no se entere
  */
-export interface SyncableRepo<T, K extends string = Id> extends EntityRepo<T, K> {
+export interface SyncableRepo<T, K extends string = Id> extends Omit<EntityRepo<T, K>, 'remove'> {
   getRaw(key: K): Promise<T | undefined>;
   listAll(): Promise<T[]>;
 }

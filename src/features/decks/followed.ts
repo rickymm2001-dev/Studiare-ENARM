@@ -2,7 +2,6 @@
 import type { Deck } from '@/data/schemas/decks';
 import { deckIds } from '@/demo/content/deckEntities';
 import { descendantIds } from '@/engines/deckTree';
-import type { ReadySession } from '../shared/RequireSession';
 
 /**
  * Los mazos propios del alumno, como Mis errores, siempre cuentan como seguidos. En la demo los
@@ -10,7 +9,11 @@ import type { ReadySession } from '../shared/RequireSession';
  * como las materias de un mazo de Paco (D-085)
  */
 export function followedDeckIds(
-  session: ReadySession,
+  session: {
+    isDemo: boolean;
+    user: { id: string };
+    settings: { followedDecks: readonly string[] };
+  },
   stored: readonly Pick<Deck, 'id' | 'name' | 'ownerId' | 'parentId'>[],
 ): Set<string> {
   if (session.isDemo) return new Set(stored.map((deck) => deck.id));

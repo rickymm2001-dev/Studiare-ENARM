@@ -3,6 +3,7 @@
 // orden pedido y cuántas hay de cada estado. El texto de cada fila se normaliza una sola vez al armar
 // las filas, así cada búsqueda es una pasada simple. Con 20,000 tarjetas filtra en milisegundos.
 import type { FsrsCardState } from '@/data/schemas/common';
+import { htmlToPlain } from './cardText';
 import { tagUnder } from './tagPath';
 
 export type ExploreStatus =
@@ -49,24 +50,13 @@ export interface ExploreRow {
   search: string;
 }
 
-const ENTITIES: Record<string, string> = {
-  '&nbsp;': ' ',
-  '&amp;': '&',
-  '&lt;': '<',
-  '&gt;': '>',
-  '&quot;': '"',
-  '&#39;': "'",
-};
-
-/** Texto plano de un HTML saneado. Un hueco {{c1::x::pista}} se ve como [x] */
+/**
+ * Texto plano de un HTML saneado, en una sola línea. Usa el lector de cardText, que recorre el texto
+ * una sola vez, así un campo enorme o hostil no vuelve lento a Explorar. Los huecos ya vienen
+ * dibujados por la cara de la carta, como […], y no hace falta leerlos aquí
+ */
 export function plainText(html: string): string {
-  return html
-    .replace(/\{\{c\d+::([^{}]*?)(?:::[^{}]*)?\}\}/g, '[$1]')
-    .replace(/<\/?(?:br|p|li|ul|ol|div|tr|td|th|table|h[1-6])\b[^>]*>/gi, ' ')
-    .replace(/<[^>]*>/g, '')
-    .replace(/&(?:nbsp|amp|lt|gt|quot|#39);/g, (entity) => ENTITIES[entity] ?? entity)
-    .replace(/\s+/g, ' ')
-    .trim();
+  return htmlToPlain(html);
 }
 
 /** Minúsculas y sin acentos, para buscar sin importar cómo se escribió */

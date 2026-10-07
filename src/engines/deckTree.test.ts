@@ -108,11 +108,22 @@ describe('mover un mazo', () => {
 
 describe('unidad de selección y conteos', () => {
   it('el mazo de primer nivel es su propia unidad y los de abajo cuentan como el del segundo nivel', () => {
-    expect(selectionUnitId(TREE, 'own')).toBe('own');
-    expect(selectionUnitId(TREE, 'root')).toBe('root');
-    expect(selectionUnitId(TREE, 'mi')).toBe('mi');
-    expect(selectionUnitId(TREE, 'inf')).toBe('mi');
-    expect(selectionUnitId(TREE, 'no-existe')).toBe('no-existe');
+    // ENARM 2027 solo agrupa, así que se elige por rama
+    const containers = new Set(['root']);
+    expect(selectionUnitId(TREE, 'own', containers)).toBe('own');
+    expect(selectionUnitId(TREE, 'root', containers)).toBe('root');
+    expect(selectionUnitId(TREE, 'mi', containers)).toBe('mi');
+    expect(selectionUnitId(TREE, 'inf', containers)).toBe('mi');
+    expect(selectionUnitId(TREE, 'no-existe', containers)).toBe('no-existe');
+  });
+
+  it('en un mazo propio la unidad es el de primer nivel, con todos sus submazos', () => {
+    const own = [
+      deck('a', 'Medicina interna'),
+      deck('b', 'Nefrología', 'a'),
+      deck('c', 'Glomerulopatías', 'b'),
+    ];
+    for (const id of ['a', 'b', 'c']) expect(selectionUnitId(own, id)).toBe('a');
   });
 
   it('acumula los conteos de los mazos que cuelgan de cada uno', () => {
@@ -129,6 +140,30 @@ describe('unidad de selección y conteos', () => {
     expect(totals.get('root')).toBe(22);
     expect(totals.get('own')).toBe(2);
     expect(totals.get('car')).toBe(5);
+  });
+});
+
+describe('rollupCounts con muchos mazos', () => {
+  it('es lineal y no se cuelga con un ciclo', () => {
+    const many = Array.from({ length: 3000 }, (_, index) =>
+      deck(`d${index}`, `Mazo ${index}`, index === 0 ? null : `d${Math.floor((index - 1) / 2)}`),
+    );
+    const own = new Map(many.map((entry) => [entry.id, 1]));
+    const started = performance.now();
+    const totals = rollupCounts(many, own);
+    expect(performance.now() - started).toBeLessThan(500);
+    expect(totals.get('d0')).toBe(3000);
+    // Un ciclo no se repite ni se cuelga
+    const loop = [deck('x', 'X', 'y'), deck('y', 'Y', 'x')];
+    expect(
+      rollupCounts(
+        loop,
+        new Map([
+          ['x', 1],
+          ['y', 2],
+        ]),
+      ).size,
+    ).toBe(2);
   });
 });
 

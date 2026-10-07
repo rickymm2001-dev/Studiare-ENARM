@@ -11,9 +11,11 @@ import { updateProfile } from './profile';
 /** Guarda mazos, notas y tarjetas de los archivos con sus IDs estables. Repetirlo no duplica nada */
 async function saveDeckFiles(api: Pick<DataApi, 'repos'>, files: readonly DemoDeckFile[]) {
   const entities = buildDeckEntities(files);
-  await api.repos.decks.putMany(entities.decks);
+  // Los mazos van al final porque ensurePreloadedTree los usa para saber si ya está todo en su lugar.
+  // Si la pestaña se cierra a la mitad, el mazo sigue sin su padre y la próxima vez se repite
   await api.repos.notes.putMany(entities.notes);
   await api.repos.cards.putMany(entities.cards.map((entry) => entry.card));
+  await api.repos.decks.putMany(entities.decks);
 }
 
 export async function followDeck(

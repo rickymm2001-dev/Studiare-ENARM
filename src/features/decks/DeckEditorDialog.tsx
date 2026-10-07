@@ -28,6 +28,7 @@ import { TextAreaField } from '@/ui/components/field';
 import type { ReadySession } from '../shared/RequireSession';
 import { useDebouncedValue } from '../shared/useDebouncedValue';
 import { CardQualityHints } from './CardQualityHints';
+import { followedDeckIds } from './followed';
 
 /** Los tipos de tarjeta en el orden en que se ofrecen */
 const KINDS: readonly NoteKind[] = ['basic', 'basic_reverse', 'cloze'];
@@ -71,8 +72,22 @@ export function DeckEditorDialog({
     async () => (await api.repos.cards.list()).filter((card) => card.deckId === deck.id),
     [api.repos, deck.id],
   );
-  // Los duplicados se buscan entre todas tus tarjetas y las de los mazos que sigues, no solo en este mazo
-  const everyNote = useLiveData(() => api.repos.notes.list(), [api.repos]);
+  // Los duplicados se buscan entre tus tarjetas y las de los mazos que sigues, no solo en este mazo
+  const { isDemo } = session;
+  const userId = session.user.id;
+  const followedKey = session.settings.followedDecks.join(',');
+  const everyNote = useLiveData(async () => {
+    const [decks, all] = await Promise.all([api.repos.decks.list(), api.repos.notes.list()]);
+    const followed = followedDeckIds(
+      {
+        isDemo,
+        user: { id: userId },
+        settings: { followedDecks: followedKey === '' ? [] : followedKey.split(',') },
+      },
+      decks,
+    );
+    return all.filter((note) => followed.has(note.deckId));
+  }, [api.repos, isDemo, userId, followedKey]);
   const duplicateIndex = useMemo(
     () => (everyNote ? buildDuplicateIndex(everyNote) : null),
     [everyNote],

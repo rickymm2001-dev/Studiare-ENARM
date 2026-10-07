@@ -53,6 +53,12 @@ export function buildDeckTree<T extends DeckLike>(decks: readonly T[]): DeckNode
   return roots.sort((a, b) => byName(a.deck, b.deck));
 }
 
+/**
+ * Sangría de un nivel para listar mazos en un selector. Lleva espacios que no se rompen, porque un
+ * option colapsa los espacios normales del inicio y el árbol se vería plano
+ */
+export const deckIndent = (depth: number): string => '\u00a0\u00a0'.repeat(depth);
+
 /** Los mazos en orden de árbol, cada uno con su nivel, para listarlos con sangría */
 export function flattenDeckTree<T extends DeckLike>(
   decks: readonly T[],
@@ -139,13 +145,20 @@ export function canMoveDeck(
 }
 
 /**
- * La unidad que el alumno marca al elegir qué repasar. Un mazo de primer nivel es su propia unidad
- * y uno más abajo cuenta como el mazo del segundo nivel al que pertenece. Así ENARM 2027 con sus
- * ramas y materias se elige por rama y no por cada materia
+ * La unidad que el alumno marca al elegir qué repasar. Un mazo de primer nivel es su propia unidad,
+ * con todo lo que cuelga de él, como en Anki. Un mazo contenedor, como ENARM 2027, solo agrupa y no
+ * se elige. Su unidad es el mazo de abajo, la rama, así ENARM 2027 se elige por rama y no por cada
+ * materia. containerIds son esos mazos que solo agrupan
  */
-export function selectionUnitId(decks: readonly DeckLike[], id: string): string {
+export function selectionUnitId(
+  decks: readonly DeckLike[],
+  id: string,
+  containerIds: ReadonlySet<string> = new Set(),
+): string {
   const chain = deckChain(decks, id);
-  return (chain[1] ?? chain[0])?.id ?? id;
+  const top = chain[0];
+  if (!top) return id;
+  return (containerIds.has(top.id) ? (chain[1] ?? top) : top).id;
 }
 
 /** Cuántos elementos hay en cada mazo contando los de los mazos que cuelgan de él */
@@ -153,11 +166,20 @@ export function rollupCounts(
   decks: readonly DeckLike[],
   own: ReadonlyMap<string, number>,
 ): Map<string, number> {
+  const index = childrenIndex(decks);
   const totals = new Map<string, number>();
-  for (const deck of decks) {
-    let total = 0;
-    for (const id of descendantIds(decks, deck.id)) total += own.get(id) ?? 0;
+  // Cada mazo se calcula una sola vez, de abajo hacia arriba. Un ciclo se corta donde se repite
+  const visit = (deck: DeckLike, path: ReadonlySet<string>): number => {
+    const known = totals.get(deck.id);
+    if (known !== undefined) return known;
+    const next = new Set(path).add(deck.id);
+    let total = own.get(deck.id) ?? 0;
+    for (const child of index.get(deck.id) ?? []) {
+      if (!next.has(child.id)) total += visit(child, next);
+    }
     totals.set(deck.id, total);
-  }
+    return total;
+  };
+  for (const deck of decks) visit(deck, new Set());
   return totals;
 }

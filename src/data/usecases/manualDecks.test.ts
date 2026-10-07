@@ -1,5 +1,6 @@
 import 'fake-indexeddb/auto';
 import { afterEach, describe, expect, it } from 'vitest';
+import { MAX_DECK_DEPTH } from '../../engines/deckTree';
 import { makeUser, testApi } from '../testing/fixtures';
 import { queueErrorCards } from './errorCards';
 import {
@@ -309,5 +310,18 @@ describe('mazos a mano', () => {
         draft: { kind: 'basic', front: 'x', back: 'y' },
       }),
     ).rejects.toThrow('no está en este mazo');
+  });
+});
+
+describe('niveles de mazos al crear', () => {
+  it('no deja crear un mazo más abajo del último nivel', async () => {
+    const { api, user } = setup();
+    let parent = await createManualDeck(api, user, { name: 'Nivel 1' });
+    for (let level = 2; level <= MAX_DECK_DEPTH; level += 1) {
+      parent = await createManualDeck(api, user, { name: `Nivel ${level}`, parentId: parent.id });
+    }
+    await expect(
+      createManualDeck(api, user, { name: 'Demasiado abajo', parentId: parent.id }),
+    ).rejects.toThrow('demasiados niveles');
   });
 });

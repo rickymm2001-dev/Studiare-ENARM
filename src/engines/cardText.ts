@@ -14,10 +14,11 @@
  *   - En texto plano un salto de línea separa bloques. En HTML es un espacio, como en el navegador
  *   - Las entidades se decodifican después de quitar las etiquetas, así un texto escapado como
  *     &lt;b&gt; sigue siendo texto
- *   - El extractor de huecos es propio y mínimo, a propósito. Otro trabajo agrega uno más completo
- *     a src/data/content/cloze.ts, que un motor no puede importar. Se unifican después
+ *   - Los huecos los lee el mismo analizador que usa el repaso, src/engines/cloze.ts. Aquí solo se
+ *     convierte su árbol a la forma que necesitan la calidad y los duplicados
  * Umbrales. Ninguno.
  */
+import { parseCloze as parseClozeTree, type ClozeNode as ClozeTreeNode } from './cloze';
 
 export interface TextBlock {
   text: string;
@@ -179,12 +180,6 @@ export function countWords(plain: string): number {
 
 // Cloze
 
-/**
- * Anidar más que esto no tiene uso, y miles de huecos uno dentro de otro desbordarían la pila de la
- * recursión con un texto malicioso. Los que pasen del tope quedan como texto
- */
-const MAX_CLOZE_DEPTH = 20;
-
 /** Un hueco, con lo que esconde (que puede traer otros huecos adentro) y su pista */
 export interface ClozeNode {
   kind: 'hole';
@@ -203,9 +198,20 @@ export interface ClozeParse {
 
 /** Une las partes como texto, con cada hueco reemplazado por lo que esconde y sin pistas */
 export function clozeFlatten(parts: readonly ClozePart[]): string {
-  return parts
-    .map((part) => (typeof part === 'string' ? part : clozeFlatten(part.content)))
-    .join('');
+  let out = '';
+  // Una pila y no recursión, así miles de huecos uno dentro de otro no desbordan la pila de llamadas
+  const stack: { parts: readonly ClozePart[]; index: number }[] = [{ parts, index: 0 }];
+  for (let frame = stack.at(-1); frame; frame = stack.at(-1)) {
+    const part = frame.parts[frame.index];
+    if (part === undefined) {
+      stack.pop();
+      continue;
+    }
+    frame.index += 1;
+    if (typeof part === 'string') out += part;
+    else stack.push({ parts: part.content, index: 0 });
+  }
+  return out;
 }
 
 /**
@@ -218,81 +224,68 @@ export function clozeRender(
   ordinal: number,
   options: { hints: boolean },
 ): string {
-  return parts
-    .map((part) => {
-      if (typeof part === 'string') return part;
-      if (part.ordinal !== ordinal) return clozeRender(part.content, ordinal, options);
-      return options.hints && part.hint !== null ? ` […${part.hint}] ` : ' […] ';
-    })
-    .join('');
-}
-
-/** Separa la respuesta de la pista, la primera "::" que no es de un hueco anidado */
-function splitHint(content: ClozePart[]): { answer: ClozePart[]; hint: string | null } {
-  const at = content.findIndex((part) => typeof part === 'string' && part.includes('::'));
-  const split = content[at];
-  if (typeof split !== 'string') return { answer: content, hint: null };
-  const cut = split.indexOf('::');
-  const hint = split.slice(cut + 2) + clozeFlatten(content.slice(at + 1));
-  return {
-    answer: [...content.slice(0, at), split.slice(0, cut)],
-    hint: hint.trim() === '' ? null : hint,
-  };
-}
-
-function collectHoles(parts: readonly ClozePart[], into: ClozeNode[]): void {
-  for (const part of parts) {
-    if (typeof part === 'string') continue;
-    into.push(part);
-    collectHoles(part.content, into);
+  let out = '';
+  const stack: { parts: readonly ClozePart[]; index: number }[] = [{ parts, index: 0 }];
+  for (let frame = stack.at(-1); frame; frame = stack.at(-1)) {
+    const part = frame.parts[frame.index];
+    if (part === undefined) {
+      stack.pop();
+      continue;
+    }
+    frame.index += 1;
+    if (typeof part === 'string') out += part;
+    else if (part.ordinal !== ordinal) stack.push({ parts: part.content, index: 0 });
+    else out += options.hints && part.hint !== null ? ` […${part.hint}] ` : ' […] ';
   }
+  return out;
 }
 
 /**
- * Lee los huecos de un texto. Un hueco sin su }} de cierre no es un hueco, queda como texto y lo
- * que tiene adentro se conserva. Un }} suelto es texto
+ * Lee los huecos de un texto con el mismo analizador que usa el repaso (src/engines/cloze.ts), así
+ * un aviso de calidad habla de lo mismo que ve el alumno. Un hueco sin su }} de cierre no es un
+ * hueco para este motor, queda como texto con su contenido en el mismo lugar
  */
 export function parseCloze(source: string): ClozeParse {
-  const root: ClozePart[] = [];
-  const stack: { ordinal: number; opening: string; content: ClozePart[] }[] = [];
-  // Pegajosa, para leer solo en la posición exacta donde va el recorrido
-  const opening = /\{\{c(\d+)::/y;
-  let text = '';
-  const target = () => stack.at(-1)?.content ?? root;
-  const flush = () => {
-    if (text !== '') target().push(text);
-    text = '';
-  };
-
-  let index = 0;
-  while (index < source.length) {
-    opening.lastIndex = index;
-    const canOpen = stack.length < MAX_CLOZE_DEPTH && source.startsWith('{{c', index);
-    const open = canOpen ? opening.exec(source) : null;
-    if (open) {
-      flush();
-      stack.push({ ordinal: Number(open[1]), opening: open[0], content: [] });
-      index += open[0].length;
-    } else if (stack.length > 0 && source.startsWith('}}', index)) {
-      flush();
-      const closed = stack.pop();
-      if (closed) {
-        const { answer, hint } = splitHint(closed.content);
-        target().push({ kind: 'hole', ordinal: closed.ordinal, content: answer, hint });
-      }
-      index += 2;
+  const tree = parseClozeTree(source);
+  const parts: ClozePart[] = [];
+  const holes: ClozeNode[] = [];
+  interface Frame {
+    nodes: readonly ClozeTreeNode[];
+    index: number;
+    out: ClozePart[];
+    /** Lo que falta hacer al terminar de recorrer los hijos de un hueco sin cerrar */
+    after: (() => void) | null;
+  }
+  const stack: Frame[] = [{ nodes: tree.nodes, index: 0, out: parts, after: null }];
+  for (let frame = stack.at(-1); frame; frame = stack.at(-1)) {
+    const node = frame.nodes[frame.index];
+    if (!node) {
+      frame.after?.();
+      stack.pop();
+      continue;
+    }
+    frame.index += 1;
+    if (node.kind === 'text') {
+      frame.out.push(node.text);
+    } else if (node.closed) {
+      const hint = node.hint !== undefined && node.hint.trim() !== '' ? node.hint : null;
+      const hole: ClozeNode = { kind: 'hole', ordinal: node.ordinal, content: [], hint };
+      holes.push(hole);
+      frame.out.push(hole);
+      stack.push({ nodes: node.children, index: 0, out: hole.content, after: null });
     } else {
-      text += source.charAt(index);
-      index += 1;
+      const content: ClozePart[] = [];
+      const target = frame.out;
+      stack.push({
+        nodes: node.children,
+        index: 0,
+        out: content,
+        after: () => {
+          const hint = node.hint === undefined ? [] : [`::${node.hint}`];
+          target.push(`{{c${node.ordinal}::`, ...content, ...hint);
+        },
+      });
     }
   }
-  flush();
-  // Los huecos que nunca cerraron vuelven a ser texto, con su contenido en el mismo lugar
-  for (let unclosed = stack.pop(); unclosed; unclosed = stack.pop()) {
-    target().push(unclosed.opening, ...unclosed.content);
-  }
-
-  const holes: ClozeNode[] = [];
-  collectHoles(root, holes);
-  return { parts: root, holes };
+  return { parts, holes };
 }

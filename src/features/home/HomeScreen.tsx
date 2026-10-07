@@ -30,6 +30,7 @@ import {
   type Preset,
   type WidgetType,
 } from './layouts';
+import { followedDeckIds } from '../decks/followed';
 import { buildSnapshot, type Snapshot } from './snapshot';
 import {
   BiasPatternWidget,
@@ -57,10 +58,16 @@ function Dashboard({ session }: { session: ReadySession }) {
     () => api.repos.widgetLayouts.get(user.id).then((layout) => layout ?? null),
     [api.repos, user.id],
   );
+  // Las tarjetas que Repasar sí ofrece, para que Hoy cuente lo mismo
+  const cards = useLiveData(async () => {
+    const [decks, all] = await Promise.all([api.repos.decks.list(), api.repos.cards.list()]);
+    const followed = followedDeckIds(session, decks);
+    return new Set(all.filter((card) => followed.has(card.deckId)).map((card) => card.id));
+  }, [api.repos, session.isDemo, session.user.id, session.settings.followedDecks.join(',')]);
   const [editing, setEditing] = useState(false);
   const [toAdd, setToAdd] = useState<WidgetType>('heatmap');
 
-  if (events === undefined || stored === undefined) return <LoadingState />;
+  if (events === undefined || stored === undefined || cards === undefined) return <LoadingState />;
   const saved: WidgetLayout = stored ?? layoutFromPreset(user.id, 'essential');
   // El Pomodoro se mudó a Repasar. Un tablero guardado antes ya no lo muestra (D-062)
   const layout: WidgetLayout = {
@@ -72,7 +79,13 @@ function Dashboard({ session }: { session: ReadySession }) {
   const save = (next: WidgetLayout) => {
     void api.repos.widgetLayouts.put(next);
   };
-  const snapshot = buildSnapshot({ events, user, settings, now: new Date() });
+  const snapshot = buildSnapshot({
+    events,
+    user,
+    settings,
+    now: new Date(),
+    activeCardIds: cards,
+  });
 
   return (
     <>

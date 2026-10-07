@@ -7,6 +7,7 @@ import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import type { DataApi } from '@/data/context';
 import { newId } from '@/data/testing/fixtures';
+import { seedManualCards } from '@/data/testing/seedCards';
 import { UserSettingsSchema, type User } from '@/data/schemas/people';
 import { t } from '@/i18n/es-MX';
 
@@ -97,6 +98,32 @@ function seedNoteDeck(content: Content, ordinals: readonly number[]) {
 }
 
 describe('pantalla de Repasar', () => {
+  it('las tarjetas suspendidas no cuentan en el botón de empezar', async () => {
+    app = await renderApp(SCREENS.review.path, {
+      seed: async (api, user) => {
+        await seedManualCards(api, user, { count: 3, suspended: 1 });
+      },
+    });
+    // De tres tarjetas una está suspendida, así que tocan dos
+    expect(
+      await screen.findByRole('button', { name: t.reviewSetup.start(2) }, { timeout: 10_000 }),
+    ).toBeVisible();
+  });
+
+  it('con todo suspendido lo dice y lleva a Explorar, no a Mazos', async () => {
+    app = await renderApp(SCREENS.review.path, {
+      seed: async (api, user) => {
+        await seedManualCards(api, user, { count: 3, suspended: 3 });
+      },
+    });
+    expect(
+      await screen.findByText(t.review.allSuspendedTitle, undefined, { timeout: 10_000 }),
+    ).toBeVisible();
+    expect(screen.queryByText(t.review.noDecksTitle)).toBeNull();
+    const link = screen.getByRole('link', { name: t.review.goToExplore });
+    expect(link).toHaveAttribute('href', SCREENS.explore.path);
+  });
+
   it('sin mazos lo dice y lleva a Mazos', async () => {
     app = await renderApp(SCREENS.review.path);
     expect(

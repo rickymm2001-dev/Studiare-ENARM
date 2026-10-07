@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useDataApi } from '@/data/context';
 import type { Deck } from '@/data/schemas/decks';
 import { addTags, moveNotes, removeTag, setSuspended } from '@/data/usecases/organize';
-import { flattenDeckTree } from '@/engines/deckTree';
+import { deckIndent, flattenDeckTree } from '@/engines/deckTree';
 import { sanitizeTag } from '@/engines/tagPath';
 import type { ExploreRow } from '@/engines/explore';
 import { t } from '@/i18n/es-MX';
@@ -156,7 +156,7 @@ export function BulkActions({
               { value: '', label: t.explore.actions.chooseDeck },
               ...ownDecks.map(({ deck, depth }) => ({
                 value: deck.id,
-                label: `${'  '.repeat(depth)}${deck.name}`,
+                label: `${deckIndent(depth)}${deck.name}`,
               })),
             ]}
             onChange={(event) => {

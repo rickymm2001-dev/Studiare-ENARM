@@ -424,6 +424,8 @@ export const featureText = {
     emptyFront: '(sin texto)',
     seeCard: 'Ver tarjeta',
     hideCard: 'Ocultar tarjeta',
+    seeCardOf: (front: string) => `Ver tarjeta ${front}`,
+    hideCardOf: (front: string) => `Ocultar tarjeta ${front}`,
     front: 'Frente',
     back: 'Reverso',
     newCard: 'Nueva',
@@ -620,6 +622,10 @@ export const featureText = {
     noDecksTitle: 'Todavía no sigues ningún mazo',
     noDecksBody: 'Sigue un mazo precargado para empezar a repasar.',
     goToDecks: 'Ir a Mazos',
+    allSuspendedTitle: 'Todas tus tarjetas están suspendidas',
+    allSuspendedBody:
+      'No hay nada que repasar porque suspendiste todas las tarjetas de tus mazos. Reanúdalas desde Explorar.',
+    goToExplore: 'Ir a Explorar',
     doneTitle: 'Terminaste por hoy',
     doneBody: (cards: number, xp: number) =>
       `Repasaste ${plural(cards, 'tarjeta', 'tarjetas')} y ganaste ${xp.toLocaleString('es-MX')} XP.`,

@@ -6,7 +6,7 @@ import { useDataApi } from '@/data/context';
 import type { Deck } from '@/data/schemas/decks';
 import { moveDeck, renameDeck } from '@/data/usecases/organize';
 import { DECK_NAME_MAX } from '@/data/usecases/manualDecks';
-import { canMoveDeck, flattenDeckTree } from '@/engines/deckTree';
+import { canMoveDeck, deckIndent, flattenDeckTree } from '@/engines/deckTree';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { SelectField, TextField } from '@/ui/components/field';
@@ -86,7 +86,7 @@ export function DeckOrganizer({
             { value: '', label: t.decks.topLevel },
             ...targets.map(({ deck: target, depth }) => ({
               value: target.id,
-              label: `${'  '.repeat(depth)}${target.name}`,
+              label: `${deckIndent(depth)}${target.name}`,
             })),
           ]}
           onChange={(event) => {

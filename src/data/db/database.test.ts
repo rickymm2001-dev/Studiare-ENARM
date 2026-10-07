@@ -100,6 +100,62 @@ describe('versiones de la base', () => {
     expect(card?.updatedAt).toBe(stamp);
   });
 
+  it('una base de la versión 4 con el índice viejo de mazos sube a la 5 y abrirla otra vez no cambia nada', async () => {
+    const name = `migracion4-${newId()}`;
+    names.push(name);
+    // La versión 4 todavía no tenía el índice parentId en los mazos
+    const old = new Dexie(name);
+    old.version(4).stores({ ...storesFor('real'), decks: 'id, ownerId, origin' });
+    await old.open();
+    const stamp = '2026-10-02T10:00:00.000Z';
+    const deckId = newId();
+    const noteId = newId();
+    await old.table('decks').put({
+      id: deckId,
+      name: 'Mazo viejo',
+      description: '',
+      ownerId: null,
+      origin: 'preloaded',
+      visibility: 'public',
+      isDemo: true,
+      createdAt: stamp,
+    });
+    await old.table('notes').put({
+      id: noteId,
+      deckId,
+      tags: ['Tema Uno::Subtema Dos'],
+      origin: 'preloaded',
+      editorialStatus: 'draft',
+      sourceQuote: null,
+      sourceQuestionVersionId: null,
+      isDemo: true,
+      createdAt: stamp,
+      kind: 'basic',
+      front: 'a',
+      back: 'b',
+    });
+    old.close();
+
+    const db = createEnarmDb('real', { name });
+    open.push(db);
+    await db.open();
+    expect(db.verno).toBe(5);
+    // El índice nuevo ya sirve y la nota quedó limpia
+    expect(await db.decks.where('parentId').equals('').count()).toBe(0);
+    expect((await db.decks.toArray()).filter((deck) => deck.parentId === null)).toHaveLength(1);
+    const first = JSON.stringify(await db.notes.toArray());
+    expect((await db.notes.get(noteId))?.tags).toEqual(['Tema_Uno::Subtema_Dos']);
+
+    // Abrirla otra vez, y otra, no vuelve a tocar nada
+    for (let round = 0; round < 2; round += 1) {
+      db.close();
+      const again = createEnarmDb('real', { name });
+      open.push(again);
+      await again.open();
+      expect(JSON.stringify(await again.notes.toArray())).toBe(first);
+    }
+  });
+
   it('una base nueva queda en la versión 5', async () => {
     const name = `nueva-${newId()}`;
     names.push(name);
