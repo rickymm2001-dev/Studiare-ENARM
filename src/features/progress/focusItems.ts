@@ -10,8 +10,16 @@ const text = t.insights;
 export const biasByKey = new Map(biasTaxonomy.biases.map((bias) => [bias.key, bias]));
 export const tipByKey = new Map(biasTips.tips.map((tip) => [tip.biasKey, tip.tip]));
 
-/** Título, frase y acción de un hallazgo listo */
-export function describeInsight(insight: Insight): { title: string; body: string; action: string } {
+/**
+ * Título, frase y acción de un hallazgo listo. draft es true cuando la acción es un consejo por
+ * sesgo, que es un texto base pendiente de revisión médica y tiene que decirlo (8.5)
+ */
+export function describeInsight(insight: Insight): {
+  title: string;
+  body: string;
+  action: string;
+  draft: boolean;
+} {
   const state = insight.state;
   const values = state.kind === 'ready' ? state.values : {};
   const refs = state.kind === 'ready' ? state.refs : {};
@@ -23,14 +31,16 @@ export function describeInsight(insight: Insight): { title: string; body: string
       title: bias?.name ?? tag,
       body: `${text.biasText(values.attraction ?? 0, values.baseline ?? 0)} ${bias?.distractorDefinition ?? ''}`,
       action: tipByKey.get(tag) ?? text.biasFallbackAction,
+      draft: true,
     };
   }
   const copy = text.copy[insight.id];
-  if (!copy) return { title: insight.id, body: '', action: '' };
+  if (!copy) return { title: insight.id, body: '', action: '', draft: false };
   return {
     title: copy.title,
     body: copy.text(values, refs, level),
     action: copy.action(values, refs, level),
+    draft: false,
   };
 }
 
@@ -59,6 +69,8 @@ export interface FocusItem {
   title: string;
   /** Qué hacer */
   action: string;
+  /** La acción es un consejo base pendiente de revisión médica */
+  draft: boolean;
   /** Dónde practicarlo */
   to: string;
   /** El atajo lleva a Repasar y no al simulador */
@@ -77,12 +89,13 @@ export function weeklyFocusItems(
   const topics = weakTopics.slice(0, 3 - technique.length);
   return [
     ...technique.map((insight: Insight): FocusItem => {
-      const { title, action } = describeInsight(insight);
+      const { title, action, draft } = describeInsight(insight);
       return {
         key: insight.id,
         kind: t.progress.focusKinds.technique,
         title,
         action,
+        draft,
         ...practiceLink(insight.id),
       };
     }),
@@ -91,6 +104,7 @@ export function weeklyFocusItems(
       kind: `${t.progress.focusKinds.topic} · ${topic.branchName}`,
       title: topic.name,
       action: t.progress.weakTopic(Math.round(topic.mastery * 100)),
+      draft: false,
       to: `${screenPath('simulatorSetup')}?topic=${encodeURIComponent(topic.key)}`,
       review: false,
     })),

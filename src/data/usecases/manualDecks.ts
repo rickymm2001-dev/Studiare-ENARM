@@ -2,6 +2,7 @@
 // así que quedan en borrador. El texto es plano y se guarda como HTML escapado, así que nada de lo
 // que escribe se vuelve código (14.3). Una tarjeta cloze lleva una carta por cada hueco, y al
 // editarla las cartas de los huecos que siguen conservan su ID y con él su historial de repaso.
+import { clozeHoles, clozeOpenings, type ClozeHole } from '../content/cloze';
 import { htmlToText, textToHtml } from '../content/plainText';
 import type { DataApi } from '../context';
 import { newId } from '../ids';
@@ -16,15 +17,22 @@ export const FIELD_MAX = 3000;
 /** El nombre del mazo cabe en DeckSchema */
 export const DECK_NAME_MAX = 120;
 
-export type DraftError = 'empty_front' | 'empty_back' | 'empty_text' | 'no_cloze' | 'too_long';
+export type DraftError =
+  'empty_front' | 'empty_back' | 'empty_text' | 'no_cloze' | 'unclosed_cloze' | 'too_long';
 
-const CLOZE_START = /\{\{c(\d+)::/g;
+/** Un hueco sirve si tiene número de 1 a 100 y una respuesta que no esté en blanco */
+const usable = (hole: ClozeHole) =>
+  hole.ordinal >= 1 && hole.ordinal <= 100 && hole.answer.trim() !== '';
 
-/** Números de hueco de un texto cloze, de menor a mayor y sin repetir */
+/** Números de hueco de un texto cloze, de menor a mayor y sin repetir. Solo cuentan los completos */
 export function clozeOrdinals(text: string): number[] {
-  const found = new Set<number>();
-  for (const match of text.matchAll(CLOZE_START)) found.add(Number(match[1]));
-  return [...found].filter((ordinal) => ordinal >= 1 && ordinal <= 100).sort((a, b) => a - b);
+  return [
+    ...new Set(
+      clozeHoles(text)
+        .filter(usable)
+        .map((hole) => hole.ordinal),
+    ),
+  ].sort((a, b) => a - b);
 }
 
 /** null si la tarjeta se puede guardar */
@@ -37,7 +45,10 @@ export function validateDraft(draft: NoteDraft): DraftError | null {
     return null;
   }
   if (draft.text.trim() === '') return 'empty_text';
-  return clozeOrdinals(draft.text).length === 0 ? 'no_cloze' : null;
+  const opened = clozeOpenings(draft.text);
+  if (opened === 0) return 'no_cloze';
+  // Un hueco que no cierra o sin respuesta deja la respuesta a la vista en el frente de la tarjeta
+  return clozeHoles(draft.text).filter(usable).length === opened ? null : 'unclosed_cloze';
 }
 
 /** Lo que el editor muestra de una tarjeta guardada, para volver a editarla */

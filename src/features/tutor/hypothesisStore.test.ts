@@ -96,16 +96,30 @@ describe('respuesta del alumno a una hipótesis del tutor', () => {
     ]);
   });
 
-  it('volver a mostrar una descartada la deja en borrador sin tocar la bitácora', async () => {
+  it('volver a mostrar una descartada la deja en borrador y lo anota en la bitácora', async () => {
     const { api, user, hypothesis, events } = setup();
     await respondToHypothesis(api, user, hypothesis, false);
     const before = (await events()).length;
     await reopenHypothesis(api, user, hypothesis);
     const artifact = await api.repos.aiArtifacts.get(hypothesisArtifactId(user.id, hypothesis.key));
     expect(artifact).toMatchObject({ status: 'draft', decidedAt: null, decidedBy: null });
-    expect(await events()).toHaveLength(before);
-    // Una que nunca se tocó no rompe nada
+    const added = (await events()).slice(before);
+    expect(added.map((event) => [event.type, event.payload])).toEqual([
+      ['ai_artifact_reopened', { artifactId: artifact?.id, kind: 'hypothesis' }],
+    ]);
+    // La respuesta anterior sigue en la bitácora, que solo se agrega
+    expect((await events()).some((event) => event.type === 'ai_artifact_rejected')).toBe(true);
+  });
+
+  it('reabrir algo que no está descartado, o que nunca se tocó, no hace nada ni deja evento', async () => {
+    const { api, user, hypothesis, events } = setup();
     await reopenHypothesis(api, user, { key: 'otra|area' });
+    await respondToHypothesis(api, user, hypothesis, true);
+    const before = (await events()).length;
+    await reopenHypothesis(api, user, hypothesis);
+    expect(await events()).toHaveLength(before);
+    const artifact = await api.repos.aiArtifacts.get(hypothesisArtifactId(user.id, hypothesis.key));
+    expect(artifact?.status).toBe('approved');
   });
 
   it('aplicar una acción queda como action_applied ligado a la hipótesis', async () => {

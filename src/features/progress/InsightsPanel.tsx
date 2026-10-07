@@ -25,6 +25,7 @@ import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { ProgressBar } from '@/ui/components/progress-bar';
+import { DraftBadge } from '../shared/DraftBadge';
 import {
   biasProfileRows,
   describeInsight,
@@ -102,6 +103,7 @@ export function WeeklyFocus({
                   </Button>
                 </div>
                 <p className="text-sm text-fg-muted">{item.action}</p>
+                {item.draft ? <DraftBadge /> : null}
               </div>
             </li>
           ))}
@@ -200,7 +202,7 @@ function Row({
 function InsightRow({ insight }: { insight: Insight }) {
   if (insight.state.kind !== 'ready') return null;
   const style = levelStyle[insight.state.level];
-  const { title, body, action } = describeInsight(insight);
+  const { title, body, action, draft } = describeInsight(insight);
   return (
     <Row
       lead={<span className={style.color}>{style.icon}</span>}
@@ -217,6 +219,7 @@ function InsightRow({ insight }: { insight: Insight }) {
         <span>
           <span className="sr-only">{text.whatToDo}. </span>
           {action}
+          {draft ? <DraftBadge className="ml-2" /> : null}
         </span>
       </p>
     </Row>

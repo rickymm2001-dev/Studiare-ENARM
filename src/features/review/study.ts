@@ -1,5 +1,6 @@
 // Lógica de estudio de tarjetas sin React. Estado FSRS más reciente de cada tarjeta desde la
 // bitácora, lo repasado hoy y el texto de las notas cloze.
+import { clozePattern } from '@/data/content/cloze';
 import type { FsrsCardState } from '@/data/schemas/common';
 import type { Card, Note } from '@/data/schemas/decks';
 import type { AppEvent } from '@/data/schemas/events';
@@ -56,18 +57,19 @@ export function volumeXpToday(events: readonly AppEvent[], today: string): numbe
   return total;
 }
 
-const CLOZE = /\{\{c(\d+)::([\s\S]*?)(?:::([\s\S]*?))?\}\}/g;
-
 /**
  * Texto de una nota cloze para la tarjeta del hueco ordinal. Al frente el hueco activo se ve como
  * [...] o con su pista, y al revelar se resalta la respuesta. Los demás huecos muestran su texto.
  * Recibe HTML ya saneado y solo agrega etiquetas mark
  */
 export function renderCloze(html: string, ordinal: number, reveal: boolean): string {
-  return html.replace(CLOZE, (_match, number: string, answer: string, hint: string | undefined) => {
-    if (Number(number) !== ordinal) return answer;
-    return reveal ? `<mark>${answer}</mark>` : `<mark>[${hint ?? '…'}]</mark>`;
-  });
+  return html.replace(
+    clozePattern(),
+    (_match, number: string, answer: string, hint: string | undefined) => {
+      if (Number(number) !== ordinal) return answer;
+      return reveal ? `<mark>${answer}</mark>` : `<mark>[${hint ?? '…'}]</mark>`;
+    },
+  );
 }
 
 /** La tarjeta salió de una pregunta del banco, como las de Mis errores */

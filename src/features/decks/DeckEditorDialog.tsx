@@ -57,6 +57,7 @@ export function DeckEditorDialog({
   const [draft, setDraft] = useState<NoteDraft>(emptyDraft('basic'));
   const [error, setError] = useState<DraftError | 'save' | null>(null);
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
 
   const cardsOf = (noteId: string) => (cards ?? []).filter((card) => card.noteId === noteId).length;
@@ -68,12 +69,15 @@ export function DeckEditorDialog({
   };
 
   const submit = async () => {
+    // Un doble toque no guarda dos veces la misma tarjeta
+    if (saving) return;
     const problem = validateDraft(draft);
     setSaved(false);
     if (problem) {
       setError(problem);
       return;
     }
+    setSaving(true);
     try {
       await saveManualNote(api, session.user, {
         deckId: deck.id,
@@ -86,6 +90,8 @@ export function DeckEditorDialog({
       startNew(draft.kind);
     } catch {
       setError('save');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -142,7 +148,7 @@ export function DeckEditorDialog({
                 <label
                   key={kind}
                   className={cn(
-                    'flex min-h-9 cursor-pointer items-center gap-2 rounded-full border-2 px-3 text-sm font-semibold',
+                    'flex min-h-9 cursor-pointer items-center gap-2 rounded-full border-2 px-3 text-sm font-semibold has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary',
                     draft.kind === kind
                       ? 'border-primary bg-primary-soft text-primary'
                       : 'border-line bg-surface',
@@ -230,7 +236,9 @@ export function DeckEditorDialog({
               </p>
             ) : null}
             <div className="flex flex-wrap gap-2">
-              <Button type="submit">{editingId ? text.saveChanges : text.save}</Button>
+              <Button type="submit" disabled={saving}>
+                {editingId ? text.saveChanges : text.save}
+              </Button>
               {editingId ? (
                 <Button
                   type="button"

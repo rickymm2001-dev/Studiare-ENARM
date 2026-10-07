@@ -91,17 +91,24 @@ export async function respondToHypothesis(
 /** Vuelve a mostrar una hipótesis que el alumno descartó. Su respuesta anterior queda en la bitácora */
 export async function reopenHypothesis(
   api: Api,
-  user: Pick<User, 'id'>,
+  user: Pick<User, 'id' | 'timeZone'>,
   hypothesis: Pick<Hypothesis, 'key'>,
 ): Promise<void> {
   const artifact = await api.repos.aiArtifacts.get(hypothesisArtifactId(user.id, hypothesis.key));
-  if (!artifact) return;
+  if (artifact?.status !== 'rejected') return;
   await api.repos.aiArtifacts.put({
     ...artifact,
     status: 'draft',
     decidedAt: null,
     decidedBy: null,
   });
+  await api.recordEvent(
+    createEvent(
+      'ai_artifact_reopened',
+      { artifactId: artifact.id, kind: 'hypothesis' },
+      context(user),
+    ),
+  );
 }
 
 export async function recordHypothesisAction(

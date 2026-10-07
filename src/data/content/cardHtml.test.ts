@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it } from 'vitest';
+import { renderCloze } from '../../features/review/study';
 import { createCardSanitizer } from './cardHtml';
 
 const sanitizer = createCardSanitizer(window);
@@ -12,6 +13,17 @@ describe('saneado del HTML de tarjetas (14.3)', () => {
       media,
     );
     expect(html).toBe('<span><b>Hola</b></span> <u>mundo</u>rojo');
+  });
+
+  it('conserva el resalte de un hueco cloze, que es lo que distingue la respuesta', () => {
+    const revealed = renderCloze('La <b>{{c1::creatinina}}</b> sube', 1, true);
+    expect(sanitizer.sanitize(revealed, media)).toBe('La <b><mark>creatinina</mark></b> sube');
+    const hidden = renderCloze('La {{c1::creatinina::analito}} sube', 1, false);
+    expect(sanitizer.sanitize(hidden, media)).toBe('La <mark>[analito]</mark> sube');
+    // El resalte no abre la puerta a atributos
+    expect(sanitizer.sanitize('<mark style="x" onclick="y">a</mark>', media)).toBe(
+      '<mark>a</mark>',
+    );
   });
 
   it('quita scripts, eventos y enlaces', () => {

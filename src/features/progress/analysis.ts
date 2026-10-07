@@ -73,14 +73,18 @@ export function buildAnalysis(input: {
 
 /**
  * Cuánto le falta al tema más cercano a mostrar su dominio, para decirlo mientras calibra. null si
- * ya hay temas con dominio listo, que entonces ya se puede decir cuáles son débiles
+ * ya hay temas con dominio listo, que entonces ya se puede decir cuáles son débiles. Con una rama
+ * solo cuentan los temas de esa rama, porque un tema listo de otra no dice nada de la que se mira
  */
 export function topicsCalibration(
-  byTopic: ReadonlyMap<string, Pick<TopicMastery, 'state'>>,
+  byTopic: ReadonlyMap<string, Pick<TopicMastery, 'state' | 'branch'>>,
   fallbackNeed: number,
+  branch: string | null = null,
 ): { have: number; need: number } | null {
   let closest: { have: number; need: number } | null = null;
-  for (const { state } of byTopic.values()) {
+  for (const entry of byTopic.values()) {
+    if (branch !== null && entry.branch !== branch) continue;
+    const { state } = entry;
     if (state.kind === 'ready') return null;
     const need = state.responses + state.responsesNeeded;
     // Gana el que menos le falta y, a igual faltante, el que más respuestas lleva

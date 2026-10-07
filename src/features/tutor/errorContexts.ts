@@ -98,20 +98,40 @@ function lastThirdOfTiringSessions(
 
 type CauseKind = 'question' | 'card';
 
-/** La causa que reportó el alumno justo después de un error, de esa pregunta o tarjeta */
+/**
+ * La causa que reportó el alumno justo después de un error, de esa pregunta o tarjeta. Solo vale
+ * hasta el siguiente intento del mismo elemento, porque una causa reportada días después de otro
+ * intento explica ese intento y no el error anterior
+ */
 function causeLookup(events: readonly AppEvent[]) {
   const byTarget = new Map<string, { at: string; cause: ErrorCause }[]>();
+  const attempts = new Map<string, string[]>();
+  const push = <T>(map: Map<string, T[]>, key: string, value: T) => {
+    const list = map.get(key) ?? [];
+    list.push(value);
+    map.set(key, list);
+  };
   for (const event of events) {
-    if (event.type !== 'cause_reported') continue;
-    const key = `${event.payload.targetKind}|${event.payload.targetId}`;
-    const list = byTarget.get(key) ?? [];
-    list.push({ at: event.at, cause: event.payload.cause });
-    byTarget.set(key, list);
+    if (event.type === 'cause_reported') {
+      push(byTarget, `${event.payload.targetKind}|${event.payload.targetId}`, {
+        at: event.at,
+        cause: event.payload.cause,
+      });
+    } else if (event.type === 'question_answered') {
+      push(attempts, `question|${event.payload.questionVersionId}`, event.at);
+    } else if (event.type === 'card_reviewed') {
+      push(attempts, `card|${event.payload.cardId}`, event.at);
+    }
   }
   for (const list of byTarget.values()) list.sort((a, b) => a.at.localeCompare(b.at));
+  for (const list of attempts.values()) list.sort((a, b) => a.localeCompare(b));
   return (kind: CauseKind, ids: readonly string[], at: string): ErrorCause | null => {
+    // El siguiente intento del mismo elemento, que es el primero con el ID de la versión
+    const next = attempts.get(`${kind}|${ids[0] ?? ''}`)?.find((time) => time > at);
     for (const id of ids) {
-      const found = byTarget.get(`${kind}|${id}`)?.find((entry) => entry.at >= at);
+      const found = byTarget
+        .get(`${kind}|${id}`)
+        ?.find((entry) => entry.at >= at && (next === undefined || entry.at < next));
       if (found) return found.cause;
     }
     return null;

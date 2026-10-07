@@ -64,9 +64,11 @@ export function WeakTopicsWidget({ session, events, settings }: AnalysisWidgetPr
   const { count, branch } = readWeakTopicsSettings(settings);
   if (!analysis) return <WidgetLoading />;
 
+  // Con una rama elegida solo cuenta lo que se sabe de esa rama
   const calibration = topicsCalibration(
     analysis.byTopic,
     DEFAULT_THRESHOLDS.topics.minResponsesPerTopic,
+    branch === ALL_BRANCHES ? null : branch,
   );
   if (calibration)
     return (
@@ -211,12 +213,16 @@ function LatestHypothesis({
   const tutor = t.tutor;
   const text = t.widgets.latestHypothesis;
   const view = useTutorView(session, events, data);
-  const statuses = artifactStatuses(session.user.id, data.artifacts, view.confirmed);
+  const statuses = artifactStatuses(session.user.id, data.artifacts, [
+    ...view.confirmed,
+    ...view.forming,
+  ]);
   // Una que el alumno descartó no se le vuelve a mostrar
   const latest = latestHypothesis(
     view.confirmed.filter((hypothesis) => statuses.get(hypothesis.key) !== 'rejected'),
   );
-  const forming = view.forming[0];
+  // Una que el alumno descartó no vuelve a salir, ni siquiera como patrón que se está formando
+  const forming = view.forming.find((hypothesis) => statuses.get(hypothesis.key) !== 'rejected');
   const areaName = (area: string) => TOPIC_NAMES.get(area) ?? area;
 
   if (latest) {

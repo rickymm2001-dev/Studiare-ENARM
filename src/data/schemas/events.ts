@@ -156,6 +156,8 @@ export const EventPayloadSchemas = {
   ai_artifact_approved: z.strictObject({ artifactId: IdSchema, kind: AiArtifactKindSchema }),
   ai_artifact_edited: z.strictObject({ artifactId: IdSchema, kind: AiArtifactKindSchema }),
   ai_artifact_rejected: z.strictObject({ artifactId: IdSchema, kind: AiArtifactKindSchema }),
+  /** El alumno vuelve a mostrar algo que había descartado, así el estado del artefacto sigue a la bitácora */
+  ai_artifact_reopened: z.strictObject({ artifactId: IdSchema, kind: AiArtifactKindSchema }),
   hypothesis_feedback: z.strictObject({
     artifactId: IdSchema,
     /** No me ayuda guarda false (8.2) */
@@ -250,6 +252,7 @@ export const AppEventSchema = z.discriminatedUnion('type', [
   eventSchemaFor('ai_artifact_approved'),
   eventSchemaFor('ai_artifact_edited'),
   eventSchemaFor('ai_artifact_rejected'),
+  eventSchemaFor('ai_artifact_reopened'),
   eventSchemaFor('hypothesis_feedback'),
   eventSchemaFor('action_applied'),
   eventSchemaFor('deck_imported'),

@@ -106,6 +106,8 @@ function TutorBody({
     statusOf.get(hypothesisArtifactId(user.id, hypothesis.key));
   const shown = view.confirmed.filter((hypothesis) => statusFor(hypothesis) !== 'rejected');
   const dismissed = view.confirmed.filter((hypothesis) => statusFor(hypothesis) === 'rejected');
+  // Una que descartó no se le vuelve a mostrar, ni siquiera como patrón que se está formando
+  const formingShown = view.forming.filter((hypothesis) => statusFor(hypothesis) !== 'rejected');
   const errorCards = content.notes.filter((note) => note.deckId === errorIds.deck(user.id)).length;
   const questionById = new Map(bank.questions.map((question) => [question.id, question]));
 
@@ -216,7 +218,7 @@ function TutorBody({
         </Disclosure>
       ) : null}
 
-      <FormingPatterns forming={view.forming} />
+      <FormingPatterns forming={formingShown} />
 
       {dismissed.length > 0 ? (
         <Disclosure title={text.dismissedTitle(dismissed.length)}>
@@ -229,6 +231,7 @@ function TutorBody({
                   <button
                     type="button"
                     className="min-h-touch rounded-md px-3 font-semibold text-primary hover:bg-muted"
+                    aria-label={`${text.reopen}. ${rule.title}`}
                     onClick={() => {
                       void reopenHypothesis(api, user, hypothesis);
                     }}
@@ -245,7 +248,7 @@ function TutorBody({
       <div className="grid items-start gap-3 lg:grid-cols-2">
         <WeeklyReportCard report={view.report} />
         <div className="flex flex-col gap-3">
-          <BiasTipsCard tips={view.biasTips} calibrating={!view.report.ready} />
+          <BiasTipsCard tips={view.biasTips} calibration={view.biasCalibration} />
           <DraftCardsCard errorCards={errorCards} />
         </div>
       </div>

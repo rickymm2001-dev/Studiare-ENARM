@@ -6,13 +6,15 @@ import { answered, minute, option, question } from '../tutor/testing/fixtures';
 import { buildAnalysis, topicsCalibration } from './analysis';
 import { biasCalibration, biasProfileRows } from './focusItems';
 
-type Entry = Pick<TopicMastery, 'state'>;
-const calibrating = (responses: number, responsesNeeded: number): Entry => ({
+type Entry = Pick<TopicMastery, 'state' | 'branch'>;
+const calibrating = (responses: number, responsesNeeded: number, branch = 'rama'): Entry => ({
+  branch,
   state: { kind: 'calibrating' as const, responses, responsesNeeded },
 });
-const ready: Entry = {
+const ready = (branch = 'rama'): Entry => ({
+  branch,
   state: { kind: 'ready' as const, mastery: 0.5, lower: 0.4, upper: 0.6, responses: 30 },
-};
+});
 
 describe('cuánto falta para que un tema muestre su dominio', () => {
   it('toma el tema al que menos le falta y, a igual faltante, el que más lleva', () => {
@@ -27,9 +29,22 @@ describe('cuánto falta para que un tema muestre su dominio', () => {
   it('si ya hay un tema con dominio listo no hay nada que calibrar', () => {
     const byTopic = new Map<string, Entry>([
       ['a', calibrating(2, 9)],
-      ['b', ready],
+      ['b', ready()],
     ]);
     expect(topicsCalibration(byTopic, 5)).toBeNull();
+  });
+
+  it('con una rama solo cuentan los temas de esa rama', () => {
+    // Un tema listo de cardiología no dice nada de pediatría, que no tiene una sola respuesta
+    const byTopic = new Map<string, Entry>([
+      ['corazon', ready('internal_medicine')],
+      ['crecimiento', calibrating(0, 7, 'pediatrics')],
+      ['neonatos', calibrating(2, 5, 'pediatrics')],
+    ]);
+    expect(topicsCalibration(byTopic, 5)).toBeNull();
+    expect(topicsCalibration(byTopic, 5, 'internal_medicine')).toBeNull();
+    expect(topicsCalibration(byTopic, 5, 'pediatrics')).toEqual({ have: 2, need: 7 });
+    expect(topicsCalibration(byTopic, 5, 'rama_sin_temas')).toEqual({ have: 0, need: 5 });
   });
 
   it('sin temas pide el mínimo por tema y empieza en cero', () => {

@@ -7,7 +7,7 @@ import type { AppEvent } from '@/data/schemas/events';
 import { topicTaxonomy } from '@/demo/content';
 import { buildInsights } from '@/engines/insights';
 import { analyzeTopics, type TopicResponse } from '@/engines/topics';
-import { biasByKey, tipByKey, weakTopicsFrom } from '../progress/focusItems';
+import { biasByKey, biasCalibration, tipByKey, weakTopicsFrom } from '../progress/focusItems';
 import { buildInsightInput, type BankLookup } from '../progress/insightFacts';
 import { buildErrorContexts, type CardFact } from './errorContexts';
 import { buildHypotheses, type Hypothesis } from './tutorModel';
@@ -28,6 +28,8 @@ export interface TutorView {
   recentErrors: number;
   report: WeeklyReport;
   biasTips: BiasTip[];
+  /** Errores con trampa etiquetada que lleva y que pide el motor. null cuando ya no calibra */
+  biasCalibration: { have: number; need: number } | null;
   /** Tema base de cada tema, para llevar a practicarlo cuando falla la base */
   baseTopics: ReadonlyMap<string, string>;
 }
@@ -137,6 +139,7 @@ export function buildTutorView(input: TutorViewInput): TutorView {
     recentErrors: contexts.filter((context) => Date.parse(context.at) >= windowStart).length,
     report: weeklyReport(insightReport, weakTopicsFrom(byTopic)),
     biasTips,
+    biasCalibration: biasCalibration(insightReport),
     baseTopics,
   };
 }

@@ -53,8 +53,11 @@ test('crea un mazo, escribe tarjetas, las repasa, las edita y borra el mazo', as
   // Sin seguir ningún mazo, Repasar ya trae las dos tarjetas propias
   await page.goto(SCREENS.review.path);
   await page.getByRole('button', { name: /^Repasar 2 tarjetas$/ }).click();
+  // Primero la tarjeta tiene que estar en pantalla, si no la ausencia de la etiqueta no prueba nada
+  const sure = page.getByRole('button', { name: t.review.confidence.sure, exact: true });
+  await expect(sure).toBeVisible();
   await expect(page.getByText(t.review.errorCard)).toHaveCount(0);
-  await page.getByRole('button', { name: t.review.confidence.sure, exact: true }).click();
+  await sure.click();
   await expect(page.getByText('¿Qué mide la tasa de filtrado glomerular?')).toBeVisible();
   await page.getByRole('button', { name: t.review.show }).click();
   await expect(page.getByText('Cuánta sangre filtran los riñones por minuto')).toBeVisible();

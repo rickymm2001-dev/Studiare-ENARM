@@ -39,6 +39,24 @@ describe('huecos y validación de una tarjeta a mano', () => {
     expect(validateDraft({ kind: 'cloze', text: 'con {{c1::hueco}}', extra: '' })).toBeNull();
     expect(validateDraft({ kind: 'basic', front: 'x'.repeat(3001), back: 'y' })).toBe('too_long');
   });
+
+  it('un hueco que no cierra o que no tiene respuesta no se acepta, porque dejaría la respuesta a la vista', () => {
+    const cloze = (text: string) => validateDraft({ kind: 'cloze', text, extra: '' });
+    expect(cloze('La {{c1::creatinina sube')).toBe('unclosed_cloze');
+    expect(cloze('La {{c1::creatinina} sube')).toBe('unclosed_cloze');
+    expect(cloze('La {{c1::}} sube')).toBe('unclosed_cloze');
+    expect(cloze('La {{c1::   }} sube')).toBe('unclosed_cloze');
+    expect(cloze('La {{c0::creatinina}} sube')).toBe('unclosed_cloze');
+    // Un hueco bueno no salva a uno que no cierra
+    expect(cloze('La {{c1::creatinina}} y la {{c2::urea sube')).toBe('unclosed_cloze');
+    // Un hueco con pista y varios huecos completos sí pasan
+    expect(cloze('La {{c1::creatinina::analito}} y la {{c2::urea}} suben')).toBeNull();
+  });
+
+  it('los huecos incompletos tampoco cuentan como cartas', () => {
+    expect(clozeOrdinals('La {{c1::creatinina sube')).toEqual([]);
+    expect(clozeOrdinals('{{c1::}} y {{c2::urea}}')).toEqual([2]);
+  });
 });
 
 describe('mazos a mano', () => {

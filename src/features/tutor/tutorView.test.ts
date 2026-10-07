@@ -78,4 +78,46 @@ describe('vista del tutor', () => {
     expect(three.confirmed).toEqual([]);
     expect(three.forming[0]).toMatchObject({ recentFindings: 3, findingsNeeded: 2 });
   });
+
+  it('con respuestas suficientes pero pocos errores con trampa etiquetada dice cuántos faltan', () => {
+    const right = option(newId(), true, 'Buena');
+    const wrong = option(newId(), false, 'Mala');
+    const questions = Array.from({ length: 25 }, () => question({ id: newId() }));
+    const options = questions.flatMap((q) => [
+      { ...right, id: newId(), questionVersionId: q.id },
+      { ...wrong, id: newId(), questionVersionId: q.id },
+    ]);
+    const pick = (q: (typeof questions)[number], correct: boolean) =>
+      options.find((o) => o.questionVersionId === q.id && o.isCorrect === correct)?.id ?? '';
+    // 25 respuestas, 10 de ellas errores en preguntas con un distractor etiquetado
+    const events: AppEvent[] = questions.map((q, index) =>
+      answered(q, pick(q, index >= 10), index >= 10, minute(60 * 20 + index * 3)),
+    );
+    const view = buildTutorView(
+      base({
+        events,
+        questions,
+        options,
+        bank: {
+          questions: new Map(questions.map((q) => [q.id, q])),
+          options: new Map(options.map((o) => [o.id, o])),
+          cases: new Map(),
+        },
+      }),
+    );
+    // El resumen ya tiene sus 20 respuestas, pero los consejos piden 40 errores etiquetados
+    expect(view.report.ready).toBe(true);
+    expect(view.biasTips).toEqual([]);
+    expect(view.biasCalibration).toEqual({
+      have: 10,
+      need: DEFAULT_THRESHOLDS.bias.minTaggedErrors,
+    });
+  });
+
+  it('sin actividad también calibra el perfil de sesgos desde cero', () => {
+    expect(buildTutorView(base()).biasCalibration).toEqual({
+      have: 0,
+      need: DEFAULT_THRESHOLDS.bias.minTaggedErrors,
+    });
+  });
 });

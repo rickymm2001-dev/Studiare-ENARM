@@ -48,7 +48,12 @@ test('un alumno nuevo ve calibrando con cuánto falta en cada análisis y widget
   await expect(
     page
       .getByRole('region', { name: t.tutor.biasTips.title })
-      .getByText(t.tutor.biasTips.calibrating),
+      .getByText(
+        t.states.calibrating.remaining(
+          DEFAULT_THRESHOLDS.bias.minTaggedErrors,
+          t.tutor.biasTips.unit,
+        ),
+      ),
   ).toBeVisible();
 
   // Plan. Los minutos de estudio calibran hasta tener 3 días de estudio

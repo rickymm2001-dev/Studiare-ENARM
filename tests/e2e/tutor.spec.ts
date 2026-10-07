@@ -3,6 +3,7 @@
 // semanal y los consejos por sesgo aparecen. Inicio resume lo mismo en sus widgets de análisis. Sin IA
 // y sin chat libre.
 import { SCREENS } from '@/app/screens';
+import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { t } from '@/i18n/es-MX';
 import { expect, expectNoSeriousA11yViolations, signUp, test } from './support/fixtures';
 
@@ -27,7 +28,12 @@ test('sin datos el tutor calibra, no inventa hipótesis y se abre desde el menú
   await expect(
     page
       .getByRole('region', { name: t.tutor.biasTips.title })
-      .getByText(t.tutor.biasTips.calibrating),
+      .getByText(
+        t.states.calibrating.remaining(
+          DEFAULT_THRESHOLDS.bias.minTaggedErrors,
+          t.tutor.biasTips.unit,
+        ),
+      ),
   ).toBeVisible();
   const drafts = page.getByRole('region', { name: t.tutor.drafts.title });
   await expect(drafts.getByText(t.tutor.drafts.meanwhile)).toBeVisible();

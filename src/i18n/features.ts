@@ -404,6 +404,8 @@ export const featureText = {
         empty_back: 'Escribe la respuesta.',
         empty_text: 'Escribe el texto de la tarjeta.',
         no_cloze: 'Agrega al menos un hueco, como {{c1::respuesta}}.',
+        unclosed_cloze:
+          'Un hueco no está completo. Cada uno lleva la forma {{c1::respuesta}}, con su respuesta y sus dos llaves de cierre.',
         too_long: 'El texto es demasiado largo. Divídelo en dos tarjetas.',
       },
     },

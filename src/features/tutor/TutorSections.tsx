@@ -4,12 +4,12 @@ import { Lightbulb, Play, Target } from 'lucide-react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { t } from '@/i18n/es-MX';
-import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { ProgressBar } from '@/ui/components/progress-bar';
 import { CalibratingNote } from '@/ui/states/states';
 import { INSIGHT_MINIMUMS } from '@/engines/insights';
+import { DraftBadge } from '../shared/DraftBadge';
 import { TOPIC_NAMES } from '../shared/topics';
 import type { BiasTip } from './tutorView';
 import type { Hypothesis } from './tutorModel';
@@ -97,6 +97,7 @@ export function WeeklyReportCard({ report }: { report: WeeklyReport }) {
                     <div className="flex min-w-0 flex-1 flex-col">
                       <span className="leading-snug font-semibold">{item.title}</span>
                       <span className="text-sm text-fg-muted">{item.action}</span>
+                      {item.draft ? <DraftBadge className="mt-1 self-start" /> : null}
                     </div>
                     <LineLink line={{ ...item, text: item.action }} label={text.go} />
                   </li>
@@ -144,13 +145,17 @@ export function WeeklyReportCard({ report }: { report: WeeklyReport }) {
   );
 }
 
-/** Consejos por sesgo. Solo de las trampas que ya se repiten en los errores del alumno */
+/**
+ * Consejos por sesgo. Solo de las trampas que ya se repiten en los errores del alumno y solo cuando
+ * ya hay errores con trampa etiquetada suficientes. Antes dice cuántos lleva y cuántos pide (4.3)
+ */
 export function BiasTipsCard({
   tips,
-  calibrating,
+  calibration,
 }: {
   tips: readonly BiasTip[];
-  calibrating: boolean;
+  /** Errores con trampa etiquetada que lleva y que pide el motor. null si ya no calibra */
+  calibration: { have: number; need: number } | null;
 }) {
   const text = t.tutor.biasTips;
   return (
@@ -162,10 +167,8 @@ export function BiasTipsCard({
         </CardTitle>
         <CardDescription>{text.hint}</CardDescription>
       </CardHeader>
-      {calibrating ? (
-        <p role="status" className="text-sm text-fg-muted">
-          {text.calibrating}
-        </p>
+      {calibration ? (
+        <CalibratingNote current={calibration.have} target={calibration.need} unit={text.unit} />
       ) : tips.length === 0 ? (
         <p className="text-sm text-fg-muted">{text.none}</p>
       ) : (
@@ -174,7 +177,7 @@ export function BiasTipsCard({
             <li key={tip.tag} className="flex flex-col gap-1">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-semibold">{tip.name}</span>
-                <Badge variant="warning">{text.draftLabel}</Badge>
+                <DraftBadge />
               </div>
               <p className="text-sm">{tip.tip}</p>
             </li>

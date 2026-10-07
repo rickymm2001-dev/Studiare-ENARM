@@ -110,7 +110,7 @@ export const tutorText = {
     actionsTitle: 'Qué puedes hacer',
     actions: {
       create_contrast_card: 'Crear tarjeta de contraste',
-      split_card: 'Dividir la tarjeta en Mazos',
+      split_card: 'Ir a Mazos para dividir la tarjeta',
       review_explanation: 'Repasar las explicaciones',
       subtopic_simulator: 'Practicar este tema',
       enable_highlight: 'Encender el resaltado de negaciones',
@@ -141,10 +141,10 @@ export const tutorText = {
     loading: 'Revisando tus errores…',
 
     report: {
-      title: 'Informe de la semana',
-      hint: 'Un resumen con plantilla fija, armado con tus propios números. Las secciones que todavía calibran no aparecen.',
+      title: 'Tu resumen',
+      hint: 'Un resumen con plantilla fija, armado con todos tus números hasta hoy. Las secciones que todavía calibran no aparecen. El informe de cada semana llega con la IA en la siguiente fase.',
       calibrating: (have: number, need: number) =>
-        `Calibrando. El informe aparece al juntar ${need} respuestas y llevas ${have}.`,
+        `Calibrando. El resumen aparece al juntar ${need} respuestas y llevas ${have}.`,
       priorities: 'Tus prioridades',
       noPriorities: 'Por ahora nada es urgente. Sigue con tu práctica y tu repaso.',
       habit: 'Un hábito',
@@ -163,7 +163,7 @@ export const tutorText = {
       title: 'Consejos por sesgo',
       hint: 'Aparecen cuando una trampa ya se repite en tus errores. Son borradores pendientes de revisión médica.',
       draftLabel: 'Borrador pendiente de revisión médica',
-      calibrating: 'Calibrando. Tus trampas aparecen cuando hay errores etiquetados suficientes.',
+      unit: 'errores con trampa etiquetada',
       none: 'Ninguna trampa se repite lo bastante en tus errores como para darte un consejo.',
     },
 

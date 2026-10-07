@@ -135,4 +135,50 @@ describe('buildInsightInput', () => {
     expect(result.studyDays).toEqual(['2026-09-01']);
     expect(result.daysSinceStart).toBe(9);
   });
+
+  it('la mala lectura que reporta el alumno cuenta solo para su respuesta más reciente', () => {
+    const answer = (id: string, minute: number) => ({
+      ...base,
+      id,
+      at: at(minute),
+      type: 'question_answered',
+      payload: {
+        questionVersionId: 'q1',
+        optionVersionId: 'o2',
+        correct: false,
+        confidence: 'sure',
+        msToAnswer: 90_000,
+        changeCount: 0,
+        highlightEnabled: false,
+      },
+    });
+    const events = [
+      // Fallada y sin causa. Una semana después se falla otra vez y ahí dice que leyó mal
+      answer('e1', 10),
+      answer('e2', 10 + 7 * 24 * 60),
+      {
+        ...base,
+        id: 'e3',
+        at: at(11 + 7 * 24 * 60),
+        type: 'cause_reported',
+        payload: { targetKind: 'question', targetId: 'q1', cause: 'misread' },
+      },
+    ] as unknown as AppEvent[];
+    const result = buildInsightInput({
+      events,
+      bank: {
+        questions: new Map([['q1', question]]),
+        options: new Map([
+          ['o1', option('o1', true, null)],
+          ['o2', option('o2', false, 'anchoring')],
+        ]),
+        cases: new Map(),
+      },
+      timeZone: 'America/Mexico_City',
+      today: '2026-09-20',
+      desiredRetention: 0.9,
+      thresholds: DEFAULT_THRESHOLDS,
+    });
+    expect(result.answers.map((item) => item.misread)).toEqual([false, true]);
+  });
 });

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Insight, InsightReport, InsightState } from '@/engines/insights';
-import { biasCalibration, biasProfileRows } from './focusItems';
+import { biasCalibration, biasProfileRows, describeInsight, weeklyFocusItems } from './focusItems';
 
 const insight = (id: string, state: InsightState): Insight => ({
   id,
@@ -69,5 +69,48 @@ describe('perfil de sesgos del alumno', () => {
   it('con errores etiquetados suficientes ya no calibra', () => {
     expect(biasCalibration(reportOf(profile))).toBeNull();
     expect(biasCalibration(reportOf())).toBeNull();
+  });
+});
+
+describe('consejos por sesgo como borrador', () => {
+  const pattern = insight('bias:anchoring', {
+    kind: 'ready',
+    level: 'focus',
+    values: { attraction: 0.6, baseline: 0.25, choices: 12 },
+    refs: { tag: 'anchoring' },
+  });
+  const negation: Insight = {
+    id: 'negation',
+    area: 'exam',
+    weight: 3,
+    state: { kind: 'ready', level: 'focus', values: { negative: 0.4, affirmative: 0.8 }, refs: {} },
+  };
+
+  it('la acción de un patrón de sesgo es un consejo base y lo dice', () => {
+    expect(describeInsight(pattern).draft).toBe(true);
+    expect(describeInsight(pattern).action.length).toBeGreaterThan(0);
+  });
+
+  it('las demás lecturas no son borrador', () => {
+    expect(describeInsight(negation).draft).toBe(false);
+  });
+
+  it('el foco que sale de un patrón de sesgo lleva la marca y el que sale de un tema no', () => {
+    const report = { ...reportOf(pattern, negation), focus: [pattern, negation] };
+    const weak = [
+      {
+        key: 'cardiology',
+        name: 'Cardiología',
+        branch: 'internal_medicine',
+        branchName: 'Medicina interna',
+        mastery: 0.4,
+      },
+    ];
+    const items = weeklyFocusItems(report, weak);
+    expect(items.map((entry) => [entry.key, entry.draft])).toEqual([
+      ['bias:anchoring', true],
+      ['negation', false],
+      ['cardiology', false],
+    ]);
   });
 });

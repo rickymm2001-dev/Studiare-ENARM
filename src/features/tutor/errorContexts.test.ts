@@ -21,6 +21,62 @@ function input(overrides: Partial<ErrorContextInput>): ErrorContextInput {
   };
 }
 
+describe('causa reportada de cada error', () => {
+  it('una causa reportada días después de otro intento no explica el primer error', () => {
+    const failed = question({ id: newId() });
+    const trap = option(newId(), false, 'Furosemida');
+    const day = 86_400_000;
+    const events = [
+      // Primer error, sin causa
+      answered(failed, trap.id, false, minute(0)),
+      // Cuatro días después se vuelve a fallar y ahí sí dice por qué
+      answered(failed, trap.id, false, minute(0) + 4 * day),
+      event(
+        'cause_reported',
+        { targetKind: 'question', targetId: failed.id, cause: 'misread' },
+        minute(1) + 4 * day,
+      ),
+    ];
+    const contexts = buildErrorContexts(
+      input({
+        events,
+        bank: {
+          questions: new Map([[failed.id, failed]]),
+          options: new Map([[trap.id, trap]]),
+          cases: new Map(),
+        },
+      }),
+    );
+    expect(contexts.map((context) => context.reportedCause)).toEqual([null, 'misread']);
+  });
+
+  it('la causa de un error que el alumno acaba de reportar sigue contando para ese error', () => {
+    const failed = question({ id: newId() });
+    const trap = option(newId(), false, 'Furosemida');
+    const events = [
+      answered(failed, trap.id, false, minute(0)),
+      event(
+        'cause_reported',
+        { targetKind: 'question', targetId: failed.id, cause: 'rushed_or_tired' },
+        minute(1),
+      ),
+      // Un intento posterior sin causa no la cambia
+      answered(failed, trap.id, false, minute(100)),
+    ];
+    const contexts = buildErrorContexts(
+      input({
+        events,
+        bank: {
+          questions: new Map([[failed.id, failed]]),
+          options: new Map([[trap.id, trap]]),
+          cases: new Map(),
+        },
+      }),
+    );
+    expect(contexts.map((context) => context.reportedCause)).toEqual(['rushed_or_tired', null]);
+  });
+});
+
 describe('contexto de cada error para las reglas de olvido', () => {
   it('un error de pregunta trae su confianza, su causa y la pregunta con la que se confundió', () => {
     const failed = question({ id: newId() });

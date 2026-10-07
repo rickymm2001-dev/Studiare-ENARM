@@ -109,7 +109,7 @@ export function HypothesisCard({
         </ul>
       </Disclosure>
 
-      {status === 'approved' || status === 'rejected' ? null : (
+      {status === 'rejected' ? null : (
         <>
           <p className="mt-3 text-sm font-medium">{text.actionsTitle}</p>
           <div className="mt-1.5 flex flex-wrap gap-2">
