@@ -124,10 +124,196 @@ delete from public.device_sessions
 where user_id = (select id from auth.users where email = 'alumno@ejemplo.com');
 ```
 
+Si ya aplicaste la segunda migración, usa mejor la función de la sección siguiente. Deja constancia de quién liberó la cuenta y además reinicia el conteo de cambios, que borrar la fila a mano no hace.
+
 ### Qué no hace
 
-- Es un freno para el uso normal y no una barrera. La revisión corre en el navegador, así que alguien con conocimientos técnicos podría saltársela. Una versión estricta, que el servidor revise el dispositivo en cada consulta, queda anotada como idea para más adelante
+- Por sí solo es un freno para el uso normal y no una barrera. La revisión corre en el navegador, así que alguien con conocimientos técnicos podría saltársela. La versión estricta, que la base de datos revise el dispositivo en cada consulta, es la segunda migración y se explica en la sección siguiente
 - Los alumnos que ya tenían sesión antes de aplicar esto entran sin avisos. El primer navegador que abra la nueva versión reclama la cuenta y, de ahí en adelante, gana el último
+
+## Barrera del dispositivo único en el servidor
+
+El freno de la sección anterior vive en el navegador. La barrera hace que la propia base de datos cumpla la regla, aunque alguien manipule su navegador. Va en una segunda migración, que se aplica después de la primera.
+
+### Cómo funciona
+
+- Cuando un navegador reclama la cuenta, la base guarda también la sesión de Supabase con la que entró. Es un dato que viene firmado en el token de acceso y que el navegador no puede cambiar
+- Las tablas con datos del alumno revisan en cada consulta que quien pregunta sea la sesión ganadora. Si no lo es, no ve nada y no puede guardar nada, aunque su sesión siga abierta y su token siga siendo válido
+- Gana el último en entrar, igual que en el freno. El navegador desplazado ve el aviso y sale en cuanto la app lo revisa, a más tardar en un minuto con la pestaña a la vista. Mientras tanto la base ya lo tiene bloqueado
+- Quedan protegidos los datos propios de perfil, cuenta, suscripción, reportes, mazos con sus notas y tarjetas, bitácora de estudio, grupos con sus retos y borradores de IA
+- No se protegen el rol, el alias propio, quién tiene la cuenta, el aviso de privacidad, el historial de pagos, las preguntas aprobadas, la configuración pública ni los mazos públicos. Los primeros se necesitan para poder entrar y reclamar la cuenta, y el resto es contenido compartido o lo escribe el servidor
+- Una cuenta que nadie ha reclamado todavía no se bloquea. Tampoco una cuenta que reclamó antes de esta migración, hasta que su navegador abra la versión nueva de la app, lo que ocurre solo y no gasta ningún cambio
+- Los administradores y el dueño siempre pasan, para que puedan revisar cuentas desde cualquier navegador
+- Límite de cambios, como máximo 3 veces en 24 horas un mismo usuario puede tomar la cuenta desde un dispositivo distinto. El primer reclamo y volver al mismo navegador no cuentan. Al pasarse, el servidor rechaza el cambio y el alumno ve un aviso con la hora en que podrá intentarlo otra vez
+- El límite vive en la tabla platform_settings, en la clave device_limits, y lo cambia un administrador. Si esa fila falta o se daña, valen 3 cambios en 24 horas
+- La tabla device_claims es la bitácora. Guarda un renglón por reclamo con la cuenta, el id del navegador, la etiqueta corta como Chrome en Windows, la hora, el tipo y si el cambio fue rechazado. No guarda IP, modelo ni ubicación. Solo se agrega. Nadie la edita ni la borra, ni siquiera un administrador, y la app tampoco la lee directo. Se consulta desde el editor de SQL o con la función admin_device_claims
+
+### Cómo aplicar la segunda migración
+
+No necesitas terminal. Aplica primero la del freno, que ya debe estar puesta. Mientras no apliques esta, la app sigue con el freno y no pasa nada.
+
+1. En supabase.com abre el proyecto Studiare y entra a SQL Editor
+2. Da clic en New query
+3. Abre en GitHub el archivo supabase/migrations/20261008000001_device_barrier.sql, copia todo su contenido y pégalo
+4. Da clic en Run. Debe decir Success
+5. Si dice que la relación public.device_sessions no existe, falta aplicar la migración del freno. Aplícala y vuelve a correr esta
+6. Es segura de repetir. Si la corres otra vez, no duplica ni cambia nada
+7. Para confirmar que quedó, abre otra New query, pega esto y da clic en Run
+
+```sql
+select
+  to_regclass('public.device_claims') as bitacora,
+  exists (select 1 from information_schema.columns
+          where table_schema = 'public' and table_name = 'device_sessions' and column_name = 'session_id') as columna_session_id,
+  (select count(*) from pg_policies
+    where schemaname = 'public'
+      and coalesce(qual, '') || coalesce(with_check, '') like '%is_active_device%') as politicas_con_barrera,
+  has_function_privilege('anon', 'public.is_active_device()', 'execute') as anon_is_active,
+  has_function_privilege('anon', 'public.admin_release_device(uuid)', 'execute') as anon_libera,
+  has_function_privilege('authenticated', 'public.claim_device(text, text)', 'execute') as alumno_reclama,
+  (select value from public.platform_settings where key = 'device_limits') as limite;
+```
+
+8. Debe salir bitacora con el valor device_claims, columna_session_id en true, politicas_con_barrera en 22, anon_is_active en false, anon_libera en false, alumno_reclama en true y limite con maxChanges 3 y windowHours 24. Si politicas_con_barrera sale en menos de 22 o cualquier valor de anon sale en true, avísame antes de abrir a alumnos
+9. Para que el aviso del límite lleve un enlace de ayuda, crea en GitHub, Settings, Secrets and variables, Actions, pestaña Variables, la variable VITE_SUPPORT_EMAIL con el correo donde quieres recibir las dudas. Es público, lo verán los alumnos. Después corre de nuevo la publicación en Actions, con el flujo pages y Run workflow. Sin esa variable el aviso no muestra enlace y pide al alumno que consulte al equipo por el medio donde le dieron acceso
+
+### Cómo probarlo con dos navegadores
+
+Necesitas dos navegadores distintos, por ejemplo Chrome y Edge, y una cuenta de prueba. Dos pestañas del mismo navegador no sirven, porque comparten dispositivo.
+
+1. En el navegador A entra con el correo de prueba usando el enlace
+2. En el navegador B entra con el mismo correo. Pide un enlace nuevo y ábrelo ahí
+3. Regresa al navegador A. Debe aparecer el aviso Tu cuenta se abrió en otro dispositivo y la página debe quedar sin sesión. Ese aviso es la parte del navegador
+4. Para ver la parte del servidor, corre esto en SQL Editor cambiando el correo. Finge ser un navegador con otra sesión de la misma cuenta, como el que acaba de perder, y pregunta a la base si lo deja pasar. No cambia nada
+
+```sql
+select p.email, public.is_active_device() as el_dispositivo_anterior_pasa
+from (
+  select u.email,
+         set_config('request.jwt.claims',
+           json_build_object('sub', u.id, 'role', 'authenticated', 'session_id', gen_random_uuid()::text)::text, true) as ajuste
+  from auth.users u
+  join public.device_sessions d on d.user_id = u.id
+  where u.email = 'tu-correo-de-prueba@ejemplo.com'
+) p;
+```
+
+5. Debe salir el_dispositivo_anterior_pasa en false. Esa misma respuesta es la que usan las reglas de todas las tablas protegidas, así que con false no puede leer ni guardar sus datos
+6. Para comparar, corre la versión del dispositivo ganador. Debe salir true
+
+```sql
+select p.email, public.is_active_device() as el_dispositivo_ganador_pasa
+from (
+  select u.email,
+         set_config('request.jwt.claims',
+           json_build_object('sub', u.id, 'role', 'authenticated', 'session_id', d.session_id)::text, true) as ajuste
+  from auth.users u
+  join public.device_sessions d on d.user_id = u.id
+  where u.email = 'tu-correo-de-prueba@ejemplo.com'
+) p;
+```
+
+7. Para ver los reclamos de la cuenta, corre esto. Deben aparecer un renglón first del navegador A y un renglón switch del navegador B
+
+```sql
+select c.claimed_at, c.kind, c.rejected, c.label, c.device_id
+from public.device_claims c
+join auth.users u on u.id = c.user_id
+where u.email = 'tu-correo-de-prueba@ejemplo.com'
+order by c.claimed_at desc, c.id desc
+limit 50;
+```
+
+Las pruebas automáticas de la base, que yo corro en un Postgres local, comprueban lo mismo tabla por tabla, incluido que el navegador desplazado no lea ni escriba en cada tabla protegida. Lo que sí queda por confirmar en tu proyecto real es el paso 3 completo con dos navegadores, y avisarme si algo sale distinto.
+
+### Qué ve el alumno al pasar el límite
+
+Para verlo sin hacer cuatro cambios, baja el límite a 1 por un rato. Con el límite en 1, el primer cambio entre navegadores pasa y el segundo se rechaza.
+
+```sql
+update public.platform_settings
+set value = '{"maxChanges":1,"windowHours":24}'
+where key = 'device_limits';
+```
+
+1. En el navegador A entra con el correo de prueba
+2. En el navegador B entra con el mismo correo. Es el primer cambio y pasa. A sale con el aviso de otro dispositivo
+3. En A vuelve a entrar con un enlace nuevo. Es el segundo cambio y el servidor lo rechaza
+4. En A debe verse un aviso que dice Cambiaste de dispositivo demasiadas veces, explica que se cerró la sesión para proteger la cuenta, dice a partir de qué hora podrá volver a entrar desde ese dispositivo y que el otro sigue con la cuenta. Trae el enlace Pedir ayuda si configuraste VITE_SUPPORT_EMAIL, y el botón Entendido
+5. B sigue dentro y sin avisos
+6. Si el servidor no responde por la red, el alumno no ve este aviso ni sale. La app solo lo muestra cuando el servidor dice con claridad que se pasó del límite
+7. Cuando termines, regresa el límite a su valor normal
+
+```sql
+update public.platform_settings
+set value = '{"maxChanges":3,"windowHours":24}'
+where key = 'device_limits';
+```
+
+El intento rechazado queda en device_claims con rejected en true. Lo asienta el navegador con una segunda llamada, porque cuando la base rechaza algo deshace también lo que había escrito.
+
+### Cómo libera una cuenta el administrador
+
+Con admin_release_device. Borra el dispositivo de la cuenta, deja constancia de quién lo hizo y reinicia el conteo de cambios, así que sirve también para quien llegó al límite y necesita entrar ya. El primer dispositivo que reclame después se queda con la cuenta.
+
+En el editor de SQL no hay una sesión iniciada, así que la función necesita saber quién la llama. El truco es decirle que eres tú, el dueño. Cambia los dos correos y corre esto.
+
+```sql
+select public.admin_release_device(a.alumno) as tenia_dispositivo
+from (
+  select (select id from auth.users where email = 'alumno@ejemplo.com') as alumno,
+         set_config('request.jwt.claims',
+           json_build_object('sub', (select id from auth.users where email = 'tu-correo@ejemplo.com'))::text, true) as ajuste
+) a;
+```
+
+- Sale true si la cuenta tenía un dispositivo y false si no tenía ninguno. En los dos casos queda el renglón release en device_claims con tu usuario
+- Si el correo del alumno no existe, la función avisa que no existe esa cuenta
+- Si el correo que pusiste como tuyo no es de un administrador o del dueño, la función se niega
+- Nadie más puede usarla. Se le quitó el permiso a public y a anon, y la función misma pide ser administrador
+- Todavía no hay botón en la app para esto. La función admin_device_claims, que devuelve los últimos 50 reclamos de una cuenta, queda lista para la pantalla de administración
+
+### Cómo detectar cuentas compartidas
+
+La bitácora sirve para ver patrones. Esta consulta lista las cuentas de la última semana con tres o más navegadores distintos o con algún cambio rechazado.
+
+```sql
+select u.email,
+       count(*) filter (where c.kind = 'switch' and not c.rejected) as cambios,
+       count(*) filter (where c.rejected) as rechazos,
+       count(distinct c.device_id) as dispositivos_distintos
+from public.device_claims c
+join auth.users u on u.id = c.user_id
+where c.claimed_at > now() - interval '7 days'
+group by u.email
+having count(distinct c.device_id) >= 3 or count(*) filter (where c.rejected) > 0
+order by dispositivos_distintos desc, cambios desc;
+```
+
+- Es una señal y no una prueba. Alguien con un teléfono, una computadora y una tableta propios también aparece
+- Los rechazos pesan más, porque indican que alguien intentó cambiar de dispositivo más veces de las permitidas
+- La decisión de qué hacer con una cuenta la tomas tú. La app no bloquea ni sanciona por su cuenta
+
+### Qué cubre y qué no cubre
+
+Cubre
+
+- Un navegador desplazado no lee ni guarda los datos protegidos, aunque conserve su sesión, aunque alguien manipule su navegador o edite el código de la página. La regla corre en la base de datos
+- El número de cambios de dispositivo por cuenta queda limitado y registrado
+- La bitácora de reclamos no se puede alterar, ni siquiera por un administrador
+- Solo el administrador libera cuentas o ve los reclamos, y un usuario sin sesión no puede ejecutar ninguna de las funciones nuevas
+
+No cubre
+
+- Quien comparte el acceso a la cuenta, por ejemplo el correo con el que entra, y se turna sin pasar de 3 cambios al día sigue pasando. La barrera impide el uso a la vez, no el uso por turnos. La bitácora existe para detectar ese patrón, con la consulta de arriba
+- Dos personas frente al mismo navegador comparten dispositivo
+- Borrar los datos del navegador crea un id nuevo, así que cuenta como un cambio de dispositivo
+- Las preguntas aprobadas, la configuración pública y los mazos públicos los puede leer cualquier sesión, incluida una desplazada. Es contenido compartido
+- Una cuenta que nadie ha reclamado, o que reclamó antes de esta migración y todavía no abre la versión nueva de la app, no está bloqueada
+- Los administradores y el dueño pasan siempre
+- El flujo de revisión médica no está protegido, porque no son datos del alumno. Si más adelante se quiere un solo dispositivo también para médicos, se suma
+- Un navegador manipulado puede saltarse la llamada que asienta un rechazo. El rechazo no quedaría en la bitácora, aunque sí seguiría bloqueado. Los cambios aceptados siempre quedan registrados porque los escribe la base misma
+- El límite se puede leer desde la página, porque platform_settings es pública para la portada. No es un dato secreto
 
 ## Antes de abrir a alumnos
 
@@ -148,3 +334,4 @@ where user_id = (select id from auth.users where email = 'alumno@ejemplo.com');
 | La bitácora de estudio no se altera | Solo se agrega. Editar o borrar está bloqueado en la base |
 | Los pagos no se falsean | Solo el servidor con la llave secreta activa suscripciones |
 | Una cuenta, un dispositivo | Cada quien lee solo su fila de dispositivo y solo la función claim_device la escribe. Un anónimo no puede llamarla |
+| El dispositivo desplazado queda bloqueado en el servidor | Las tablas con datos del alumno exigen que el token sea el de la sesión ganadora. Cambiar de dispositivo está limitado a 3 veces en 24 horas y cada reclamo queda en una bitácora que nadie edita |

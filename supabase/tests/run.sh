@@ -19,4 +19,7 @@ psql_run() { "${run_as[@]}" "$bin/psql" -h "$work" -p "$port" -U postgres -d pos
 psql_run -f "$here/stub_auth.sql"
 for migration in "$here"/../migrations/*.sql; do psql_run -f "$migration"; done
 psql_run -f "$here/grants.sql"
+# Las migraciones que siguen al freno son idempotentes. Se corre la última otra vez para comprobarlo
+psql_run -f "$(ls "$here"/../migrations/*.sql | tail -1)"
 psql_run -f "$here/rls_test.sql"
+psql_run -f "$here/device_barrier_test.sql"

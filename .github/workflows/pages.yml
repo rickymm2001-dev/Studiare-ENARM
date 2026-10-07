@@ -37,6 +37,8 @@ jobs:
           # URL del proyecto y llave pública de Supabase. Son públicas por diseño (D-069, D-075)
           VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
+          # Correo de ayuda que ve el alumno en los avisos. Es público. Si falta, la app no muestra enlace
+          VITE_SUPPORT_EMAIL: ${{ vars.VITE_SUPPORT_EMAIL }}
       # GitHub Pages responde 404.html a cualquier ruta que no existe. Así abren bien los enlaces directos como /perfil
       - run: cp dist/index.html dist/404.html
       - uses: actions/upload-pages-artifact@v5

@@ -8,7 +8,7 @@ import { forgetDeviceClaim } from '@/data/cloud/device';
 import { useDataApi } from '@/data/context';
 import { linkCloudIdentity, pushLocalAccount } from '@/data/usecases/cloudLink';
 import { PRIVACY_NOTICE_VERSION } from '@/data/usecases/profile';
-import { signedOutState, useCloud } from './cloudState';
+import { signedOutState, useCloud, type CloudState } from './cloudState';
 import { startDeviceGuard, type DeviceGuard } from './deviceGuard';
 import { usePreferences } from './preferences';
 
@@ -37,13 +37,20 @@ export function CloudBridge() {
     // el perfil local ni reclamar la cuenta de nuevo. Se apaga cuando llega el SIGNED_OUT
     let leaving = false;
     const isLeaving = () => leaving;
-    // Ganó otro dispositivo. Primero el aviso, luego salir del perfil local, lo que también cierra
-    // la sesión de la nube solo en este navegador (signOutCloud usa alcance local)
-    const leaveForOtherDevice = () => {
+    // Ganó otro dispositivo, o el servidor no dejó cambiar por el límite diario. Primero el aviso,
+    // luego salir del perfil local, lo que también cierra la sesión de la nube solo en este
+    // navegador (signOutCloud usa alcance local)
+    const leaveWith = (state: CloudState) => {
       leaving = true;
-      setCloud({ status: 'signed-out', reason: 'other_device' });
+      setCloud(state);
       forgetDeviceClaim();
       signOut();
+    };
+    const leaveForOtherDevice = () => {
+      leaveWith({ status: 'signed-out', reason: 'other_device' });
+    };
+    const leaveForDeviceLimit = (retryAt: number | null) => {
+      leaveWith({ status: 'signed-out', reason: 'device_limit', retryAt });
     };
 
     const sync = async () => {
@@ -69,11 +76,14 @@ export function CloudBridge() {
             cloud,
             authId: identity.authId,
             onOtherDevice: leaveForOtherDevice,
+            onDeviceLimit: leaveForDeviceLimit,
           });
           guard = { authId: identity.authId, handle };
           // La primera revisión reclama la cuenta si este navegador acaba de entrar. Si otro
-          // dispositivo la tiene, este ya salió y no sube nada a nombre de la cuenta
-          if ((await handle.first) === 'other' || stopped()) return;
+          // dispositivo la tiene, o el límite diario no dejó cambiar, este ya salió y no sube nada
+          // a nombre de la cuenta
+          const first = await handle.first;
+          if (first.status === 'other' || first.status === 'limit' || stopped()) return;
         }
         await recordPrivacyAcceptance(cloud, identity.authId, PRIVACY_NOTICE_VERSION);
         await pushLocalAccount(api, cloud, identity.authId, userId);
