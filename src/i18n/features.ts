@@ -1081,6 +1081,12 @@ export const featureText = {
     checking: 'Revisando tu cuenta en la nube…',
     error: 'No pudimos conectar con la nube. Tu avance sigue guardado en este navegador.',
     roleFromCloud: 'Tu rol viene de tu cuenta en la nube y solo un administrador lo puede cambiar.',
+    // Dispositivo único por cuenta. Aparece cuando otro dispositivo entró y esta sesión se cerró
+    otherDevice: {
+      title: 'Tu cuenta se abrió en otro dispositivo',
+      body: 'Cada cuenta tiene un solo dispositivo activo, así que cerramos tu sesión aquí. Si quieres seguir en este dispositivo, vuelve a entrar. Eso cerrará la sesión del otro.',
+      dismiss: 'Entendido',
+    },
   },
   insights: insightText,
 } as const;
