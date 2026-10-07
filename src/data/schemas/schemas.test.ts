@@ -45,9 +45,9 @@ describe('esquemas y tablas', () => {
     expect(Object.keys(storesFor('demo'))).toHaveLength(TABLE_NAMES.length);
   });
 
-  it('hay un esquema para los 30 tipos de evento de 6.3, el cambio de suscripción simulada y reabrir un artefacto', () => {
-    expect(EVENT_TYPES).toHaveLength(32);
-    expect(AppEventSchema.options).toHaveLength(32);
+  it('hay un esquema para los 30 tipos de evento de 6.3, el cambio de suscripción simulada, reabrir un artefacto y suspender o reanudar tarjetas', () => {
+    expect(EVENT_TYPES).toHaveLength(34);
+    expect(AppEventSchema.options).toHaveLength(34);
   });
 
   it('los ajustes por defecto siguen la especificación', () => {

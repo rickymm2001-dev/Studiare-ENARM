@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import type { Card, Deck } from '@/data/schemas/decks';
 import type { AppEvent } from '@/data/schemas/events';
 import { studyDayOf } from '@/engines/studyDay';
+import { suspendedCardIds } from '@/engines/suspension';
 import { followedDeckIds } from '../decks/followed';
 import { schedulerConfig } from '../review/schedulerConfig';
 import { latestCardStates, reviewedToday } from '../review/study';
@@ -19,7 +20,10 @@ export function useFutureLoad(
 ): FutureLoad | null {
   return useMemo(() => {
     const followed = followedDeckIds(session, content.decks);
-    const cards = content.cards.filter((card) => followed.has(card.deckId));
+    const suspended = suspendedCardIds(events);
+    const cards = content.cards.filter(
+      (card) => followed.has(card.deckId) && !suspended.has(card.id),
+    );
     if (cards.length === 0) return null;
     const now = new Date();
     const states = latestCardStates(events);

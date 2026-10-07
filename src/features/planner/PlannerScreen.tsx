@@ -14,6 +14,7 @@ import { useLiveData } from '@/data/hooks';
 import { updateProfile } from '@/data/usecases/profile';
 import { topicTaxonomy } from '@/demo/content';
 import { analyzeTopics, type TopicResponse } from '@/engines/topics';
+import { suspendedCardIds } from '@/engines/suspension';
 import { examDateFor } from '@/config/exam';
 import { addDays, studyDayOf } from '@/engines/studyDay';
 import type { DayPlan, OverloadOption } from '@/engines/planner';
@@ -71,7 +72,11 @@ function Planner({ session }: { session: ReadySession }) {
     const now = new Date();
     const today = studyDayOf(now, user.timeZone);
     const followed = followedDeckIds(session, content.decks);
-    const cards = content.cards.filter((card) => followed.has(card.deckId));
+    // Las tarjetas suspendidas no cuentan para la carga ni para el plan (D-085)
+    const suspended = suspendedCardIds(events);
+    const cards = content.cards.filter(
+      (card) => followed.has(card.deckId) && !suspended.has(card.id),
+    );
     const states = latestCardStates(events);
     const noteOfCard = new Map(cards.map((card) => [card.id, card.noteId]));
     const bank = new Map(questions.map((question) => [question.id, question]));

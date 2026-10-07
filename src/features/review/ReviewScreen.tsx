@@ -24,6 +24,7 @@ import {
   type SchedulerConfig,
 } from '@/engines/fsrs';
 import { studyDayOf } from '@/engines/studyDay';
+import { suspendedCardIds } from '@/engines/suspension';
 import { awardXp } from '@/engines/xp';
 import { t } from '@/i18n/es-MX';
 import { StudyPausedDialog } from '../shared/StudyPausedDialog';
@@ -95,8 +96,10 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     return <LoadingState />;
   const followed = followedDeckIds(session, content.decks);
   const noteById = new Map(content.notes.map((note) => [note.id, note]));
+  // Las suspendidas no entran al repaso, pero siguen en el mazo y en Explorar (D-085)
+  const suspended = suspendedCardIds(events);
   const cards = errorsFirst(
-    content.cards.filter((card) => followed.has(card.deckId)),
+    content.cards.filter((card) => followed.has(card.deckId) && !suspended.has(card.id)),
     noteById,
   );
   if (cards.length === 0) {
