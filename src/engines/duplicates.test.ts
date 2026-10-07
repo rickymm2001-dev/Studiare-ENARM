@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { Note } from '@/data/schemas/decks';
 import {
   buildDuplicateIndex,
   duplicateKey,
@@ -82,10 +83,38 @@ describe('duplicateKey', () => {
     expect(firstField({ kind: 'basic', front: 'f' })).toBe('f');
   });
 
-  it('no depende de la respuesta', () => {
-    expect(duplicateKey({ kind: 'basic', front: 'Hola' })).toBe(
-      duplicateKey({ kind: 'basic', front: 'hola', back: 'otra' } as DuplicateNote),
-    );
+  it('no depende de la respuesta y acepta una nota completa sin acoplarse a su esquema', () => {
+    // Una nota con más campos que los mínimos, como las de Dexie, se acepta tal cual
+    const stored = { id: 'n1', kind: 'basic' as const, front: 'hola', back: 'otra', tags: ['a'] };
+    expect(duplicateKey({ kind: 'basic', front: 'Hola' })).toBe(duplicateKey(stored));
+    expect(buildDuplicateIndex([stored]).size).toBe(1);
+  });
+
+  it('una Note del esquema entra al índice sin conversión', () => {
+    const base = {
+      id: '01JAAAAAAAAAAAAAAAAAAAAAAA',
+      deckId: '01JBBBBBBBBBBBBBBBBBBBBBBB',
+      tags: [] as string[],
+      origin: 'manual' as const,
+      editorialStatus: 'approved' as const,
+      sourceQuote: null,
+      sourceQuestionVersionId: null,
+      isDemo: false,
+      createdAt: '2026-10-07T10:00:00.000Z',
+    };
+    const notes: Note[] = [
+      { ...base, kind: 'basic', front: '¿Qué es la FEVI?', back: 'Fracción de eyección' },
+      {
+        ...base,
+        id: '01JCCCCCCCCCCCCCCCCCCCCCCC',
+        kind: 'cloze',
+        text: 'La {{c1::FEVI}}',
+        extra: '',
+      },
+    ];
+    const index = buildDuplicateIndex(notes);
+    expect(index.size).toBe(2);
+    expect(findDuplicates({ kind: 'basic', front: 'la fevi' }, index).totalExact).toBe(1);
   });
 });
 
