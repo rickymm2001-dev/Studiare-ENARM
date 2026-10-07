@@ -5,13 +5,18 @@ import { getCloud } from '@/data/cloud/client';
 import type { DataApi } from '@/data/context';
 import { pushLocalAccount } from '@/data/usecases/cloudLink';
 
-/** Por qué la app cerró la sesión sin que el alumno lo pidiera */
-export type SignOutReason = 'other_device';
+/**
+ * Por qué la app cerró la sesión sin que el alumno lo pidiera. other_device, ganó otro dispositivo.
+ * device_limit, el servidor no dejó cambiar de dispositivo por el límite diario
+ */
+export type SignOutReason = 'other_device' | 'device_limit';
 
 export type CloudState =
   | { status: 'off' }
   | { status: 'checking' }
-  | { status: 'signed-out'; reason?: SignOutReason }
+  | { status: 'signed-out'; reason?: 'other_device' }
+  // retryAt, la hora en milisegundos en que podrá volver a cambiar de dispositivo, o null si no se sabe
+  | { status: 'signed-out'; reason: 'device_limit'; retryAt: number | null }
   | { status: 'linked'; identity: CloudIdentity }
   | { status: 'error' };
 
