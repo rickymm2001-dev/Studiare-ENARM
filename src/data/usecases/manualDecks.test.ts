@@ -153,6 +153,101 @@ describe('mazos a mano', () => {
     expect(await api.repos.cards.list()).toHaveLength(0);
   });
 
+  it('borrar deja una marca de borrado con fecha y no quita el registro, para sincronizar', async () => {
+    const { api, user } = setup();
+    const at = new Date('2026-10-08T12:00:00.000Z');
+    const deck = await createManualDeck(
+      api,
+      user,
+      { name: 'Mazo' },
+      new Date('2026-10-01T12:00:00.000Z'),
+    );
+    const note = await saveManualNote(api, user, {
+      deckId: deck.id,
+      draft: { kind: 'basic', front: 'f', back: 'b' },
+    });
+    await deleteManualNote(api, user, note.id, at);
+    // Ninguna pantalla lo ve, pero sigue guardado con su marca
+    expect(await api.repos.notes.get(note.id)).toBeUndefined();
+    expect(await api.repos.notes.list()).toHaveLength(0);
+    expect(await api.repos.notes.getRaw(note.id)).toMatchObject({
+      deletedAt: at.toISOString(),
+      updatedAt: at.toISOString(),
+    });
+    const cards = await api.repos.cards.listAll();
+    expect(cards).toHaveLength(1);
+    expect(cards[0]?.deletedAt).toBe(at.toISOString());
+  });
+
+  it('una carta que se quita y se vuelve a poner conserva su ID y su historial', async () => {
+    const { api, user } = setup();
+    const deck = await createManualDeck(api, user, { name: 'Mazo' });
+    const note = await saveManualNote(api, user, {
+      deckId: deck.id,
+      draft: { kind: 'cloze', text: '{{c1::a}} {{c2::b}}', extra: '' },
+    });
+    const second = (await api.repos.cards.list()).find((card) => card.ordinal === 2);
+    await saveManualNote(api, user, {
+      deckId: deck.id,
+      noteId: note.id,
+      draft: { kind: 'cloze', text: '{{c1::a}} b', extra: '' },
+    });
+    expect((await api.repos.cards.list()).map((card) => card.ordinal)).toEqual([1]);
+    await saveManualNote(api, user, {
+      deckId: deck.id,
+      noteId: note.id,
+      draft: { kind: 'cloze', text: '{{c1::a}} {{c2::b}}', extra: '' },
+    });
+    const back = (await api.repos.cards.list()).find((card) => card.ordinal === 2);
+    expect(back?.id).toBe(second?.id);
+    expect(back?.deletedAt).toBeNull();
+    expect(await api.repos.cards.listAll()).toHaveLength(2);
+  });
+
+  it('cada edición pone su fecha de modificación y la creación no cambia', async () => {
+    const { api, user } = setup();
+    const deck = await createManualDeck(api, user, { name: 'Mazo' });
+    const created = new Date('2026-10-01T12:00:00.000Z');
+    const note = await saveManualNote(
+      api,
+      user,
+      { deckId: deck.id, draft: { kind: 'basic', front: 'a', back: 'b' } },
+      created,
+    );
+    const later = new Date('2026-10-09T08:30:00.000Z');
+    await saveManualNote(
+      api,
+      user,
+      { deckId: deck.id, noteId: note.id, draft: { kind: 'basic', front: 'a2', back: 'b' } },
+      later,
+    );
+    const stored = await api.repos.notes.get(note.id);
+    expect(stored?.createdAt).toBe(created.toISOString());
+    expect(stored?.updatedAt).toBe(later.toISOString());
+  });
+
+  it('un mazo puede colgar de otro mazo propio y borrar el de arriba borra los de abajo', async () => {
+    const { api, user } = setup();
+    const parent = await createManualDeck(api, user, { name: 'Residencia' });
+    const child = await createManualDeck(api, user, { name: 'Nefrología', parentId: parent.id });
+    expect(child.parentId).toBe(parent.id);
+    await saveManualNote(api, user, {
+      deckId: child.id,
+      draft: { kind: 'basic', front: 'f', back: 'b' },
+    });
+    await deleteManualDeck(api, user, parent.id);
+    expect(await api.repos.decks.list()).toHaveLength(0);
+    expect(await api.repos.notes.list()).toHaveLength(0);
+    expect(await api.repos.cards.list()).toHaveLength(0);
+    expect(await api.repos.decks.listAll()).toHaveLength(2);
+    // No se cuelga de un mazo ajeno
+    const stranger = makeUser();
+    const theirs = await createManualDeck(api, stranger, { name: 'Ajeno' });
+    await expect(
+      createManualDeck(api, user, { name: 'Intruso', parentId: theirs.id }),
+    ).rejects.toThrow();
+  });
+
   it('no deja guardar una tarjeta inválida ni tocar mazos ajenos o generados', async () => {
     const { api, user } = setup();
     const other = makeUser();

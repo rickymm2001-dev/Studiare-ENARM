@@ -23,6 +23,7 @@ import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 import { latestCardStates } from '../review/study';
 import { StudyTabs } from '../review/StudyTabs';
+import { descendantIds } from '@/engines/deckTree';
 import { followedDeckIds } from './followed';
 import { OwnDecksCard } from './OwnDecksCard';
 import { deckBranch, topTopics } from './deckBranch';
@@ -86,7 +87,10 @@ function Decks({ session }: { session: ReadySession }) {
               {orderedFiles.map((file) => {
                 const id = deckIds.deck(file.key);
                 const isFollowed = followed.has(id);
-                const cardIds = stored.cardsByDeck.get(id) ?? [];
+                // Las tarjetas viven en las materias, que cuelgan del mazo (D-085)
+                const cardIds = [...descendantIds(stored.decks, id)].flatMap(
+                  (deckId) => stored.cardsByDeck.get(deckId) ?? [],
+                );
                 const studied = cardIds.filter((cardId) => states.has(cardId)).length;
                 return (
                   <li

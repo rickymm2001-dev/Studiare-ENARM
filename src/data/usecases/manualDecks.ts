@@ -2,6 +2,9 @@
 // así que quedan en borrador. El texto es plano y se guarda como HTML escapado, así que nada de lo
 // que escribe se vuelve código (14.3). Una tarjeta cloze lleva una carta por cada hueco, y al
 // editarla las cartas de los huecos que siguen conservan su ID y con él su historial de repaso.
+// Borrar pone una marca de borrado en lugar de quitar el registro y toda edición pone su fecha de
+// modificación, para sincronizar entre dispositivos (D-085).
+import { descendantIds } from '../../engines/deckTree';
 import { clozeHoles, clozeOpenings, type ClozeHole } from '../content/cloze';
 import { htmlToText, textToHtml } from '../content/plainText';
 import type { DataApi } from '../context';
@@ -70,9 +73,10 @@ async function ownManualDeck(api: Repos, user: Pick<User, 'id'>, deckId: string)
 export async function createManualDeck(
   api: Repos,
   user: Pick<User, 'id'>,
-  input: { name: string; description?: string },
+  input: { name: string; description?: string; parentId?: string | null },
   now: Date = new Date(),
 ): Promise<Deck> {
+  if (input.parentId) await ownManualDeck(api, user, input.parentId);
   return api.repos.decks.put({
     id: newId(),
     name: input.name.trim(),
@@ -81,7 +85,9 @@ export async function createManualDeck(
     origin: 'manual',
     visibility: 'private',
     isDemo: false,
+    parentId: input.parentId ?? null,
     createdAt: now.toISOString(),
+    updatedAt: now.toISOString(),
   });
 }
 
@@ -109,6 +115,7 @@ export async function saveManualNote(
     sourceQuestionVersionId: null,
     isDemo: false,
     createdAt: existing?.createdAt ?? now.toISOString(),
+    updatedAt: now.toISOString(),
   };
   const draft = input.draft;
   const note: Note =
@@ -117,23 +124,30 @@ export async function saveManualNote(
       : { ...base, kind: 'cloze', text: textToHtml(draft.text), extra: textToHtml(draft.extra) };
   await api.repos.notes.put(note);
 
-  // Una carta por hueco. Las de huecos que siguen conservan su ID y las que sobran se quitan
+  // Una carta por hueco. Las de huecos que siguen conservan su ID, también las que se habían
+  // quitado, que reviven con su historial. Las que sobran quedan con marca de borrado
   const wanted = draft.kind === 'basic' ? [0] : clozeOrdinals(draft.text);
-  const current = (await api.repos.cards.list()).filter((card) => card.noteId === note.id);
-  const keep = new Map(current.map((card) => [card.ordinal, card]));
-  const cards: Card[] = wanted.map(
-    (ordinal) =>
-      keep.get(ordinal) ?? {
+  const stamp = now.toISOString();
+  const current = (await api.repos.cards.listAll()).filter((card) => card.noteId === note.id);
+  const byOrdinal = new Map(current.map((card) => [card.ordinal, card]));
+  const wanting: Card[] = wanted.map((ordinal) => {
+    const found = byOrdinal.get(ordinal);
+    if (!found) {
+      return {
         id: newId(),
         noteId: note.id,
         deckId: note.deckId,
         ordinal,
-        createdAt: now.toISOString(),
-      },
-  );
-  await api.repos.cards.putMany(cards.filter((card) => !keep.has(card.ordinal)));
-  for (const card of current)
-    if (!wanted.includes(card.ordinal)) await api.repos.cards.remove(card.id);
+        createdAt: stamp,
+        updatedAt: stamp,
+      };
+    }
+    return { ...found, deletedAt: null, ...(found.deletedAt ? { updatedAt: stamp } : {}) };
+  });
+  const surplus = current
+    .filter((card) => !wanted.includes(card.ordinal) && !card.deletedAt)
+    .map((card) => ({ ...card, deletedAt: stamp, updatedAt: stamp }));
+  await api.repos.cards.putMany([...wanting, ...surplus]);
   return note;
 }
 
@@ -141,25 +155,39 @@ export async function deleteManualNote(
   api: Repos,
   user: Pick<User, 'id'>,
   noteId: string,
+  now: Date = new Date(),
 ): Promise<void> {
   const note = await api.repos.notes.get(noteId);
   if (!note) return;
   await ownManualDeck(api, user, note.deckId);
-  for (const card of (await api.repos.cards.list()).filter((entry) => entry.noteId === noteId))
-    await api.repos.cards.remove(card.id);
-  await api.repos.notes.remove(noteId);
+  const stamp = now.toISOString();
+  const cards = (await api.repos.cards.list()).filter((entry) => entry.noteId === noteId);
+  await api.repos.cards.putMany(
+    cards.map((card) => ({ ...card, deletedAt: stamp, updatedAt: stamp })),
+  );
+  await api.repos.notes.put({ ...note, deletedAt: stamp, updatedAt: stamp });
 }
 
-/** Borra el mazo con sus tarjetas. El historial de repasos queda en la bitácora, que solo se agrega */
+/**
+ * Borra el mazo con sus tarjetas y con los mazos que cuelgan de él. Todo queda con marca de borrado
+ * y el historial de repasos queda en la bitácora, que solo se agrega
+ */
 export async function deleteManualDeck(
   api: Repos,
   user: Pick<User, 'id'>,
   deckId: string,
+  now: Date = new Date(),
 ): Promise<void> {
   await ownManualDeck(api, user, deckId);
-  for (const card of (await api.repos.cards.list()).filter((entry) => entry.deckId === deckId))
-    await api.repos.cards.remove(card.id);
-  for (const note of (await api.repos.notes.list()).filter((entry) => entry.deckId === deckId))
-    await api.repos.notes.remove(note.id);
-  await api.repos.decks.remove(deckId);
+  const stamp = now.toISOString();
+  const decks = await api.repos.decks.list();
+  const doomed = descendantIds(decks, deckId);
+  const mark = <T extends object>(entity: T) => ({ ...entity, deletedAt: stamp, updatedAt: stamp });
+  await api.repos.cards.putMany(
+    (await api.repos.cards.list()).filter((card) => doomed.has(card.deckId)).map(mark),
+  );
+  await api.repos.notes.putMany(
+    (await api.repos.notes.list()).filter((note) => doomed.has(note.deckId)).map(mark),
+  );
+  await api.repos.decks.putMany(decks.filter((deck) => doomed.has(deck.id)).map(mark));
 }

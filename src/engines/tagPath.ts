@@ -4,8 +4,11 @@
 
 /** Separador de niveles de una etiqueta. Es el mismo que usa Anki */
 export const TAG_SEPARATOR = '::';
-/** Largo máximo de una etiqueta completa, igual que el esquema de las notas */
-export const TAG_MAX_LENGTH = 80;
+/**
+ * Largo máximo de una etiqueta completa, igual que el esquema de las notas. Una ruta de cinco
+ * niveles de los mazos de Paco pasa de 80 caracteres, así que el tope es de 200
+ */
+export const TAG_MAX_LENGTH = 200;
 /** Etiquetas máximas por nota, igual que el esquema de las notas */
 export const TAGS_PER_NOTE_MAX = 50;
 

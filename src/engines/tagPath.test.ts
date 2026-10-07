@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  TAG_MAX_LENGTH,
   buildTagTree,
   countByPath,
   normalizeTags,
@@ -43,9 +44,9 @@ describe('sanitizeTag', () => {
   });
 
   it('no pasa del largo máximo ni termina en separador', () => {
-    const long = `${'a'.repeat(79)}::b`;
+    const long = `${'a'.repeat(TAG_MAX_LENGTH - 1)}::b`;
     const result = sanitizeTag(long);
-    expect(result.length).toBeLessThanOrEqual(80);
+    expect(result.length).toBeLessThanOrEqual(TAG_MAX_LENGTH);
     expect(result.endsWith('::')).toBe(false);
     expect(result.endsWith(':')).toBe(false);
   });

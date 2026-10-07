@@ -17,11 +17,15 @@ describe('API del worker de simulación', () => {
     expect(records.options.examDate).toBe('2027-09-15');
     expect(records.users[0]?.examDate).toBe('2027-09-15');
     // Usa los mazos de Paco, no la baraja sintética (D-053)
-    expect(records.decks.map((deck) => deck.name)).toEqual([
-      'Ginecología y obstetricia (Paco)',
-      'Medicina interna (Paco)',
-      'Urgencias (Paco)',
-    ]);
+    // Cuelgan de ENARM 2027 y cada uno trae sus materias como submazos (D-085)
+    expect(records.decks.map((deck) => deck.name)).toEqual(
+      expect.arrayContaining([
+        'ENARM 2027',
+        'Ginecología y obstetricia (Paco)',
+        'Medicina interna (Paco)',
+        'Urgencias (Paco)',
+      ]),
+    );
     expect(records.cards.length).toBeGreaterThan(3700);
   });
 

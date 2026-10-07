@@ -44,6 +44,7 @@ import { CardHtml } from '../shared/CardHtml';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 import { deckIds } from '@/demo/content/deckEntities';
+import { deckPath, selectionUnitId } from '@/engines/deckTree';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
 import { ReviewSetup } from './ReviewSetup';
 import { StudyTabs } from './StudyTabs';
@@ -115,7 +116,15 @@ function ReviewLoader({ session }: { session: ReadySession }) {
       </>
     );
   }
-  const deckNames = new Map(content.decks.map((deck) => [deck.id, deck.name]));
+  // Se elige y se cuenta por unidad, la rama de un mazo precargado o un mazo propio, y no por cada
+  // materia (D-085). Cada tarjeta dice en qué mazo y materia está
+  const unitOf = (deckId: string) => selectionUnitId(content.decks, deckId);
+  const deckNames = new Map(
+    content.decks.map((deck) => [deck.id, deckPath(content.decks, deck.id).slice(-2).join(' › ')]),
+  );
+  const unitNames = new Map(content.decks.map((deck) => [deck.id, deck.name]));
+  const inSelection = (card: CardEntity, topic: string | null, candidate: ReviewSelection) =>
+    cardMatches({ deckId: unitOf(card.deckId) }, topic, candidate);
   // Subespecialidad de cada tarjeta. Las de mazos precargados la traen en su nota y las de
   // preguntas falladas en una etiqueta
   const noteTopic = new Map<string, string | null>();
@@ -137,8 +146,8 @@ function ReviewLoader({ session }: { session: ReadySession }) {
         <ReviewSetup
           addDeck={<AddDeckButton />}
           hasDemo={content.decks.some((deck) => followed.has(deck.id) && deck.isDemo)}
-          cards={cards}
-          deckNames={deckNames}
+          cards={cards.map((card) => ({ ...card, deckId: unitOf(card.deckId) }))}
+          deckNames={unitNames}
           topicOfCard={topicOfCard}
           limits={{
             newCardsPerDay: session.settings.newCardsPerDay,
@@ -148,7 +157,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
           countFor={(candidate) =>
             buildQueue({
               cards: cards.filter((card) =>
-                cardMatches(card, topicOfCard.get(card.id) ?? null, candidate),
+                inSelection(card, topicOfCard.get(card.id) ?? null, candidate),
               ),
               events,
               config,
@@ -165,7 +174,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     <ReviewSession
       key={JSON.stringify([selection.mode, [...selection.decks], [...selection.topics]])}
       session={session}
-      cards={cards.filter((card) => cardMatches(card, topicOfCard.get(card.id) ?? null, selection))}
+      cards={cards.filter((card) => inSelection(card, topicOfCard.get(card.id) ?? null, selection))}
       mode={selection.mode}
       notes={content.notes}
       deckNames={deckNames}

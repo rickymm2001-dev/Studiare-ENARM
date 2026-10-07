@@ -24,6 +24,21 @@
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
 
+## Fase C2. Etapa 1, organización (D-085)
+
+### Bloques
+- [x] B1. Modelo con mazo padre, fecha de modificación y marca de borrado. La base sube a la versión 5 y limpia las etiquetas con espacios. Los repositorios de mazos, notas y tarjetas ocultan lo borrado y dan listAll y getRaw para sincronizar
+- [x] B2. Mazos de Paco en árbol (ENARM 2027, rama y materia) y etiquetas en ruta sin espacios, con migración para quien ya seguía mazos. Repasar elige por rama y no por cada materia
+- [ ] B3. Básica con inversa y cloze anidado
+- [ ] B4. Revisión de calidad y duplicados
+- [ ] B5. Pantalla Explorar con filtros, búsqueda y acciones por lote
+- [ ] B6. Cierre de la etapa según 15.1
+
+### Bitácora
+- Etiquetas en ruta como motor puro en src/engines/tagPath.ts y árbol de mazos en src/engines/deckTree.ts, con sus pruebas. El tope de una etiqueta sube a 200 caracteres porque una ruta de cinco niveles de Paco pasaba de 80 y se cortaba
+- Los mazos de Paco son 1 raíz, 3 ramas y 37 materias. Cada nota guarda su ruta original como una sola etiqueta y la materia es el segundo nivel. La prueba tests/content/preloaded-tree-migration.test.ts parte de la base plana de antes y comprueba que quedan las mismas 3,771 notas y las mismas tarjetas con sus IDs, que ninguna etiqueta tiene espacios y que cada nota cuelga de su rama
+- Borrar un mazo, una nota o una tarjeta propia deja una marca con fecha. Una carta que se quita y se vuelve a poner conserva su ID y su historial
+
 ## Reunión del equipo del 2026-10-07 (D-087)
 
 Cambios aplicables que salieron del acta de Gemini. Todo con pruebas unitarias y e2e.
