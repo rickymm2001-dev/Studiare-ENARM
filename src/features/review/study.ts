@@ -1,6 +1,6 @@
 // Lógica de estudio de tarjetas sin React. Estado FSRS más reciente de cada tarjeta desde la
 // bitácora, lo repasado hoy y el texto de las notas cloze.
-import { clozePattern } from '@/data/content/cloze';
+import { parseCloze, renderClozeFace } from '@/data/content/cloze';
 import type { FsrsCardState } from '@/data/schemas/common';
 import type { Card, Note } from '@/data/schemas/decks';
 import type { AppEvent } from '@/data/schemas/events';
@@ -58,18 +58,41 @@ export function volumeXpToday(events: readonly AppEvent[], today: string): numbe
 }
 
 /**
- * Texto de una nota cloze para la tarjeta del hueco ordinal. Al frente el hueco activo se ve como
- * [...] o con su pista, y al revelar se resalta la respuesta. Los demás huecos muestran su texto.
- * Recibe HTML ya saneado y solo agrega etiquetas mark
+ * Texto de una nota cloze para la tarjeta del hueco ordinal. Al frente todo hueco con ese número se
+ * ve como […] o con su pista, y con él lo que lleva adentro, aunque sean otros huecos. Al revelar se
+ * resaltan. Los demás huecos muestran su texto sin llaves. Recibe HTML ya saneado y solo agrega
+ * etiquetas mark
  */
 export function renderCloze(html: string, ordinal: number, reveal: boolean): string {
-  return html.replace(
-    clozePattern(),
-    (_match, number: string, answer: string, hint: string | undefined) => {
-      if (Number(number) !== ordinal) return answer;
-      return reveal ? `<mark>${answer}</mark>` : `<mark>[${hint ?? '…'}]</mark>`;
-    },
-  );
+  return renderClozeFace(parseCloze(html).nodes, ordinal, reveal);
+}
+
+export interface CardFaces {
+  /** HTML saneado de lo que se pregunta */
+  front: string;
+  /** HTML saneado de lo que se muestra al revelar */
+  back: string;
+}
+
+/**
+ * Las dos caras de una carta según el tipo de su nota. En una básica con tarjeta inversa la carta 0
+ * pregunta el frente y la carta 1 pregunta el reverso. El switch es exhaustivo a propósito, así un
+ * tipo de nota nuevo no compila hasta que se decide cómo se ve
+ */
+export function cardFaces(note: Note, ordinal: number): CardFaces {
+  switch (note.kind) {
+    case 'basic':
+      return { front: note.front, back: note.back };
+    case 'basic_reverse':
+      return ordinal === 1
+        ? { front: note.back, back: note.front }
+        : { front: note.front, back: note.back };
+    case 'cloze':
+      return {
+        front: renderCloze(note.text, ordinal, false),
+        back: `${renderCloze(note.text, ordinal, true)}${note.extra ? `<br>${note.extra}` : ''}`,
+      };
+  }
 }
 
 /** La tarjeta salió de una pregunta del banco, como las de Mis errores */

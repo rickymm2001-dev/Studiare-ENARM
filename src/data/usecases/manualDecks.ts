@@ -1,7 +1,8 @@
 // Mazos y tarjetas hechos a mano por el alumno (3.1). Son privados, del alumno y sin revisión médica,
 // así que quedan en borrador. El texto es plano y se guarda como HTML escapado, así que nada de lo
-// que escribe se vuelve código (14.3). Una tarjeta cloze lleva una carta por cada hueco, y al
-// editarla las cartas de los huecos que siguen conservan su ID y con él su historial de repaso.
+// que escribe se vuelve código (14.3). Una tarjeta básica lleva una carta, una básica con tarjeta
+// inversa lleva dos (la 0 pregunta el frente y la 1 el reverso) y una cloze lleva una carta por cada
+// número de hueco. Al editarla las cartas que siguen conservan su ID y con él su historial de repaso.
 // Borrar pone una marca de borrado en lugar de quitar el registro y toda edición pone su fecha de
 // modificación, para sincronizar entre dispositivos (D-085).
 import { descendantIds } from '../../engines/deckTree';
@@ -13,7 +14,11 @@ import type { Card, Deck, Note } from '../schemas/decks';
 import type { User } from '../schemas/people';
 
 export type NoteDraft =
-  { kind: 'basic'; front: string; back: string } | { kind: 'cloze'; text: string; extra: string };
+  | { kind: 'basic'; front: string; back: string }
+  | { kind: 'basic_reverse'; front: string; back: string }
+  | { kind: 'cloze'; text: string; extra: string };
+
+export type NoteKind = NoteDraft['kind'];
 
 /** Largo máximo de cada campo en texto plano. Escapado cabe en los 20,000 de una nota */
 export const FIELD_MAX = 3000;
@@ -23,7 +28,8 @@ export const DECK_NAME_MAX = 120;
 export type DraftError =
   'empty_front' | 'empty_back' | 'empty_text' | 'no_cloze' | 'unclosed_cloze' | 'too_long';
 
-/** Un hueco sirve si tiene número de 1 a 100 y una respuesta que no esté en blanco */
+/** Un hueco sirve si tiene número de 1 a 100 y una respuesta que no esté en blanco. Vale igual para
+ * un hueco que va dentro de otro */
 const usable = (hole: ClozeHole) =>
   hole.ordinal >= 1 && hole.ordinal <= 100 && hole.answer.trim() !== '';
 
@@ -40,9 +46,9 @@ export function clozeOrdinals(text: string): number[] {
 
 /** null si la tarjeta se puede guardar */
 export function validateDraft(draft: NoteDraft): DraftError | null {
-  const fields = draft.kind === 'basic' ? [draft.front, draft.back] : [draft.text, draft.extra];
+  const fields = draft.kind === 'cloze' ? [draft.text, draft.extra] : [draft.front, draft.back];
   if (fields.some((field) => field.length > FIELD_MAX)) return 'too_long';
-  if (draft.kind === 'basic') {
+  if (draft.kind !== 'cloze') {
     if (draft.front.trim() === '') return 'empty_front';
     if (draft.back.trim() === '') return 'empty_back';
     return null;
@@ -50,15 +56,71 @@ export function validateDraft(draft: NoteDraft): DraftError | null {
   if (draft.text.trim() === '') return 'empty_text';
   const opened = clozeOpenings(draft.text);
   if (opened === 0) return 'no_cloze';
-  // Un hueco que no cierra o sin respuesta deja la respuesta a la vista en el frente de la tarjeta
+  // Un hueco que no cierra o sin respuesta deja la respuesta a la vista en el frente de la tarjeta.
+  // Los huecos anidados cuentan como uno más, así que uno sin cerrar dentro de otro también falla
   return clozeHoles(draft.text).filter(usable).length === opened ? null : 'unclosed_cloze';
+}
+
+/** Los números de carta que genera una tarjeta. Una básica tiene la 0, una inversa la 0 y la 1 */
+export function cardOrdinals(draft: NoteDraft): number[] {
+  switch (draft.kind) {
+    case 'basic':
+      return [0];
+    case 'basic_reverse':
+      return [0, 1];
+    case 'cloze':
+      return clozeOrdinals(draft.text);
+  }
+}
+
+/**
+ * Cambia el tipo de una tarjeta que se está escribiendo sin perder lo escrito, como Cambiar tipo
+ * de nota en Anki. Frente y reverso de las dos básicas son los mismos campos, el frente pasa al
+ * texto con huecos y el reverso a la nota extra
+ */
+export function convertDraft(draft: NoteDraft, kind: NoteKind): NoteDraft {
+  if (draft.kind === kind) return draft;
+  if (draft.kind === 'cloze') {
+    return kind === 'cloze' ? draft : { kind, front: draft.text, back: draft.extra };
+  }
+  return kind === 'cloze'
+    ? { kind: 'cloze', text: draft.front, extra: draft.back }
+    : { kind, front: draft.front, back: draft.back };
 }
 
 /** Lo que el editor muestra de una tarjeta guardada, para volver a editarla */
 export function draftOf(note: Note): NoteDraft {
-  return note.kind === 'basic'
-    ? { kind: 'basic', front: htmlToText(note.front), back: htmlToText(note.back) }
-    : { kind: 'cloze', text: htmlToText(note.text), extra: htmlToText(note.extra) };
+  switch (note.kind) {
+    case 'basic':
+    case 'basic_reverse':
+      return { kind: note.kind, front: htmlToText(note.front), back: htmlToText(note.back) };
+    case 'cloze':
+      return { kind: 'cloze', text: htmlToText(note.text), extra: htmlToText(note.extra) };
+  }
+}
+
+/** Los campos de la nota con el texto ya escapado, para guardarlo como HTML (14.3) */
+function contentOf(draft: NoteDraft) {
+  switch (draft.kind) {
+    case 'basic':
+      return {
+        kind: 'basic',
+        front: textToHtml(draft.front),
+        back: textToHtml(draft.back),
+      } as const;
+    case 'basic_reverse':
+      return {
+        kind: 'basic_reverse',
+        front: textToHtml(draft.front),
+        back: textToHtml(draft.back),
+      } as const;
+    case 'cloze':
+      return {
+        kind: 'cloze',
+        text: textToHtml(draft.text),
+        extra: textToHtml(draft.extra),
+      } as const;
+  }
 }
 
 type Repos = Pick<DataApi, 'repos'>;
@@ -118,15 +180,12 @@ export async function saveManualNote(
     updatedAt: now.toISOString(),
   };
   const draft = input.draft;
-  const note: Note =
-    draft.kind === 'basic'
-      ? { ...base, kind: 'basic', front: textToHtml(draft.front), back: textToHtml(draft.back) }
-      : { ...base, kind: 'cloze', text: textToHtml(draft.text), extra: textToHtml(draft.extra) };
+  const note: Note = { ...base, ...contentOf(draft) };
   await api.repos.notes.put(note);
 
-  // Una carta por hueco. Las de huecos que siguen conservan su ID, también las que se habían
+  // Una carta por número de carta. Las que siguen conservan su ID, también las que se habían
   // quitado, que reviven con su historial. Las que sobran quedan con marca de borrado
-  const wanted = draft.kind === 'basic' ? [0] : clozeOrdinals(draft.text);
+  const wanted = cardOrdinals(draft);
   const stamp = now.toISOString();
   const current = (await api.repos.cards.listAll()).filter((card) => card.noteId === note.id);
   const byOrdinal = new Map(current.map((card) => [card.ordinal, card]));

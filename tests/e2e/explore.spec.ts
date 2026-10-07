@@ -22,7 +22,7 @@ async function resultCount(page: Page): Promise<number> {
     .filter({ hasText: /tarjetas?( de [\d,]+)?$/ })
     .first()
     .innerText();
-  return Number(text.replace(/,/g, '').match(/^\d+/)?.[0]);
+  return Number(/^\d+/.exec(text.replace(/,/g, ''))?.[0]);
 }
 
 test('busca, filtra, suspende por lote y Repasar lo respeta', async ({ page }) => {

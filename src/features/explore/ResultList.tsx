@@ -9,7 +9,7 @@ import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { CardHtml } from '../shared/CardHtml';
-import type { CardFaces } from '../review/cardFaces';
+import type { CardFaces } from '../review/study';
 
 const TAGS_SHOWN = 3;
 

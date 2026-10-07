@@ -64,6 +64,17 @@ export const BasicNoteSchema = z.strictObject({
   back: SanitizedHtmlSchema,
 });
 
+/**
+ * Básica con tarjeta inversa, como en Anki. Una nota con frente y reverso que genera dos cartas, la
+ * de ordinal 0 que pregunta el frente y la de ordinal 1 que pregunta el reverso
+ */
+export const BasicReverseNoteSchema = z.strictObject({
+  ...NoteBaseShape,
+  kind: z.literal('basic_reverse'),
+  front: SanitizedHtmlSchema,
+  back: SanitizedHtmlSchema,
+});
+
 export const ClozeNoteSchema = z.strictObject({
   ...NoteBaseShape,
   kind: z.literal('cloze'),
@@ -73,7 +84,7 @@ export const ClozeNoteSchema = z.strictObject({
 });
 
 export const NoteSchema = z
-  .discriminatedUnion('kind', [BasicNoteSchema, ClozeNoteSchema])
+  .discriminatedUnion('kind', [BasicNoteSchema, BasicReverseNoteSchema, ClozeNoteSchema])
   // Una tarjeta generada siempre cita la frase y la pregunta del banco que la respaldan (4.1)
   .refine(
     (note) =>
@@ -87,7 +98,7 @@ export const CardSchema = z.strictObject({
   id: IdSchema,
   noteId: IdSchema,
   deckId: IdSchema,
-  /** Número de hueco en cloze, 0 en básicas */
+  /** Número de hueco en cloze, 0 en básicas y 0 o 1 en las inversas (1 pregunta el reverso) */
   ordinal: z.int().min(0).max(100),
   createdAt: UtcDateTimeSchema,
   ...SyncShape,

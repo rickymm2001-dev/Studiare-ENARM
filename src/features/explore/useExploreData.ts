@@ -8,8 +8,7 @@ import type { Card, Deck, Note } from '@/data/schemas/decks';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { buildExploreRows, type ExploreRow, type ExploreSource } from '@/engines/explore';
 import { suspendedCardIds } from '@/engines/suspension';
-import { cardFaces, type CardFaces } from '../review/cardFaces';
-import { latestCardStates } from '../review/study';
+import { cardFaces, latestCardStates, type CardFaces } from '../review/study';
 import type { ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 
@@ -44,7 +43,7 @@ export function useExploreData(session: ReadySession): ExploreData | undefined {
       const note = notes.get(card.noteId);
       if (!note) continue;
       cardsById.set(card.id, card);
-      const faces = cardFaces(note, card);
+      const faces = cardFaces(note, card.ordinal);
       sources.push({
         cardId: card.id,
         noteId: note.id,
@@ -69,7 +68,7 @@ export function useExploreData(session: ReadySession): ExploreData | undefined {
     const facesOf = (cardId: string): CardFaces | null => {
       const card = cardsById.get(cardId);
       const note = card ? notes.get(card.noteId) : undefined;
-      return card && note ? cardFaces(note, card) : null;
+      return card && note ? cardFaces(note, card.ordinal) : null;
     };
     return { decks: stored.decks, rows, facesOf, now: new Date() };
   }, [stored, events]);

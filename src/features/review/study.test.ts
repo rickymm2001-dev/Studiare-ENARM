@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import type { Card } from '@/data/schemas/decks';
-import { errorsFirst, isQuestionNote, renderCloze, reviewEndReason, topicFromTags } from './study';
+import type { Card, Note } from '@/data/schemas/decks';
+import {
+  cardFaces,
+  errorsFirst,
+  isQuestionNote,
+  renderCloze,
+  reviewEndReason,
+  topicFromTags,
+} from './study';
 
 describe('cloze', () => {
   it('oculta el hueco activo al frente y lo resalta al revelar', () => {
@@ -10,6 +17,60 @@ describe('cloze', () => {
       'El DIU de cobre es el método más <mark>[calidad]</mark>',
     );
     expect(renderCloze(html, 1, true)).toBe('El <mark>DIU de cobre</mark> es el método más eficaz');
+  });
+
+  it('un hueco dentro de otro se oculta con él y se pregunta con su propio número', () => {
+    const html = '<p>{{c1::El {{c2::ventrículo izquierdo}} bombea a la aorta}}</p>';
+    expect(renderCloze(html, 1, false)).toBe('<p><mark>[…]</mark></p>');
+    expect(renderCloze(html, 2, false)).toBe('<p>El <mark>[…]</mark> bombea a la aorta</p>');
+    expect(renderCloze(html, 1, true)).toBe(
+      '<p><mark>El ventrículo izquierdo bombea a la aorta</mark></p>',
+    );
+    expect(renderCloze(html, 2, true)).toBe(
+      '<p>El <mark>ventrículo izquierdo</mark> bombea a la aorta</p>',
+    );
+  });
+
+  it('un hueco sin cerrar no deja su respuesta en la pregunta', () => {
+    expect(renderCloze('La {{c1::creatinina sube', 1, false)).toBe('La <mark>[…]</mark>');
+  });
+});
+
+describe('caras de una carta', () => {
+  const base = {
+    id: 'n1',
+    deckId: 'd1',
+    tags: [],
+    origin: 'manual' as const,
+    editorialStatus: 'draft' as const,
+    sourceQuote: null,
+    sourceQuestionVersionId: null,
+    isDemo: false,
+    createdAt: '2026-10-01T15:00:00.000Z',
+  };
+
+  it('una básica pregunta el frente y muestra el reverso', () => {
+    const note: Note = { ...base, kind: 'basic', front: '<p>F</p>', back: '<p>R</p>' };
+    expect(cardFaces(note, 0)).toEqual({ front: '<p>F</p>', back: '<p>R</p>' });
+  });
+
+  it('una inversa pregunta el frente en la carta 0 y el reverso en la carta 1', () => {
+    const note: Note = { ...base, kind: 'basic_reverse', front: '<p>F</p>', back: '<p>R</p>' };
+    expect(cardFaces(note, 0)).toEqual({ front: '<p>F</p>', back: '<p>R</p>' });
+    expect(cardFaces(note, 1)).toEqual({ front: '<p>R</p>', back: '<p>F</p>' });
+  });
+
+  it('una cloze usa el número de la carta y agrega la nota extra al revelar', () => {
+    const note: Note = {
+      ...base,
+      kind: 'cloze',
+      text: '<p>{{c1::A {{c2::B}}}}</p>',
+      extra: '<p>Extra</p>',
+    };
+    expect(cardFaces(note, 2)).toEqual({
+      front: '<p>A <mark>[…]</mark></p>',
+      back: '<p>A <mark>B</mark></p><br><p>Extra</p>',
+    });
   });
 });
 
