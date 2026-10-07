@@ -64,6 +64,71 @@ where user_id = (select id from auth.users where email = 'tu-correo@ejemplo.com'
 3. En Perfil debe decir Cuenta en la nube, Conectada como tu correo
 4. Corre el SQL del paso 3 con tu correo y vuelve a cargar la página. Debe aparecer Usuarios en el menú
 
+## Dispositivo único por cuenta
+
+El equipo acordó que cada cuenta tenga un solo dispositivo activo, para evitar que se comparta.
+
+### Cómo funciona
+
+- Gana el último dispositivo en entrar. Al abrir el enlace del correo, ese navegador reclama la cuenta
+- El dispositivo anterior se entera la siguiente vez que la app revisa, que es al volver a la pestaña o, con la pestaña a la vista, a más tardar al minuto. Ahí ve un aviso que dice que su cuenta se abrió en otro dispositivo, se cierra su sesión y puede volver a entrar. Al hacerlo reclama la cuenta y cierra la otra sesión
+- Si la red falla al revisar, la app no saca a nadie. Solo sale quien ve con claridad que otro dispositivo ganó
+- Dos pestañas del mismo navegador cuentan como el mismo dispositivo. Una ventana de incógnito u otro navegador cuentan como otro dispositivo
+- Cerrar sesión en un dispositivo ya no cierra las sesiones de los demás. Si lo hiciera, el dispositivo que ganó la cuenta perdería la suya
+- La tabla device_sessions guarda una fila por cuenta con un id aleatorio del navegador, una etiqueta corta como Chrome en Windows y la hora. No guarda IP, modelo, ubicación ni nada que identifique a la persona
+- Cada alumno lee solo su fila. Nadie la escribe directo, solo la función claim_device. Ni el administrador ni el dueño la ven
+
+### Cómo aplicar la migración
+
+No necesitas terminal. El orden no importa. Mientras no apliques el SQL, la app funciona igual y simplemente no limita dispositivos.
+
+1. En supabase.com abre el proyecto Studiare y entra a SQL Editor
+2. Da clic en New query
+3. Abre en GitHub el archivo supabase/migrations/20261007000001_single_device.sql, copia todo su contenido y pégalo
+4. Da clic en Run. Debe decir Success
+5. Si dice que la tabla ya existe, la migración ya estaba aplicada y no hay nada más que hacer
+6. Para confirmar, abre otra New query, pega esto y da clic en Run
+
+```sql
+select to_regclass('public.device_sessions') as tabla,
+       has_function_privilege('anon', 'public.claim_device(text, text)', 'execute') as anon_puede,
+       has_function_privilege('authenticated', 'public.claim_device(text, text)', 'execute') as alumno_puede;
+```
+
+7. Debe salir tabla con el valor device_sessions, anon_puede en false y alumno_puede en true. Si anon_puede sale en true, avísame antes de abrir a alumnos
+
+### Cómo probarlo con dos navegadores
+
+Necesitas dos navegadores distintos, por ejemplo Chrome y Edge, o una ventana normal y una de incógnito. Dos pestañas del mismo navegador no sirven, porque comparten dispositivo.
+
+1. En el navegador A abre la página y entra con tu correo usando el enlace
+2. En el navegador B abre la página y entra con el mismo correo. Pide un enlace nuevo y ábrelo ahí
+3. Regresa al navegador A, cambia a su pestaña o da clic en su ventana. Debe aparecer el aviso Tu cuenta se abrió en otro dispositivo y la página debe quedar sin sesión. Si no cambias de pestaña, el aviso sale en cuanto pase un minuto con la pestaña a la vista
+4. En el navegador B sigues dentro. Si recargas B, no debe pasar nada
+5. En A da clic en Entendido y vuelve a entrar con un enlace nuevo. Ahora el aviso le sale a B
+6. Para ver quién tiene hoy cada cuenta, corre esto en SQL Editor
+
+```sql
+select u.email, d.label, d.claimed_at
+from public.device_sessions d
+join auth.users u on u.id = d.user_id
+order by d.claimed_at desc;
+```
+
+### Si un alumno queda atorado
+
+Libera su cuenta con esto, cambiando el correo. El primer dispositivo que revise después se queda con ella.
+
+```sql
+delete from public.device_sessions
+where user_id = (select id from auth.users where email = 'alumno@ejemplo.com');
+```
+
+### Qué no hace
+
+- Es un freno para el uso normal y no una barrera. La revisión corre en el navegador, así que alguien con conocimientos técnicos podría saltársela. Una versión estricta, que el servidor revise el dispositivo en cada consulta, queda anotada como idea para más adelante
+- Los alumnos que ya tenían sesión antes de aplicar esto entran sin avisos. El primer navegador que abra la nueva versión reclama la cuenta y, de ahí en adelante, gana el último
+
 ## Antes de abrir a alumnos
 
 - El correo de fábrica de Supabase solo envía a los correos del equipo del proyecto y pocas veces por hora
@@ -82,3 +147,4 @@ where user_id = (select id from auth.users where email = 'tu-correo@ejemplo.com'
 | Los datos personales no se comparten | El correo y los datos de cuenta los ven solo su dueño y el admin |
 | La bitácora de estudio no se altera | Solo se agrega. Editar o borrar está bloqueado en la base |
 | Los pagos no se falsean | Solo el servidor con la llave secreta activa suscripciones |
+| Una cuenta, un dispositivo | Cada quien lee solo su fila de dispositivo y solo la función claim_device la escribe. Un anónimo no puede llamarla |
