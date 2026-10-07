@@ -5,8 +5,11 @@ import { DemoQuestionSchema } from '@/data/schemas/content';
 import { ItemKindSchema } from '@/data/schemas/common';
 import {
   checkQuestions,
+  DEMO_OPTIONS,
+  MIN_OPTIONS,
   OPTION_KEYS,
   type DraftContext,
+  type DraftOption,
   type DraftQuestion,
 } from '../../scripts/content/draftRules';
 
@@ -53,20 +56,59 @@ describe('un reactivo estándar', () => {
     expect(check([question(10)])).toMatchObject({ problems: [], notes: [] });
   });
 
-  it('sigue exigiendo 10 opciones, explicación de 80 a 150 palabras y la polaridad del motor', () => {
+  it('sigue exigiendo explicación de 80 a 150 palabras y la polaridad del motor', () => {
     const report = check([
-      question(8),
       question(10, { key: 'b1-q02', explanation: words(22) }),
       question(10, { key: 'b1-q03', polarity: 'negative' }),
     ]);
-    expect(report.problems).toEqual(
-      expect.arrayContaining([
-        'b1-q01 las opciones deben ser a-j en orden',
-        'b1-q02 explicación de 22 palabras',
-        'b1-q03 polaridad negative, el motor dice affirmative',
-      ]),
-    );
+    expect(report.problems).toEqual([
+      'b1-q02 explicación de 22 palabras',
+      'b1-q03 polaridad negative, el motor dice affirmative',
+    ]);
     expect(report.notes).toEqual([]);
+  });
+
+  it('con 4, 5 o 6 opciones y sin tipos no falla, solo avisa que no son 10', () => {
+    for (const total of [4, 5, 6, 8]) {
+      const report = check([question(total)]);
+      expect(report.problems, `${total} opciones`).toEqual([]);
+      expect(report.notes).toEqual([
+        `b1-q01 tiene ${total} opciones y los lotes demo traen ${DEMO_OPTIONS}`,
+      ]);
+    }
+  });
+
+  it('con menos de 4 opciones, con letras salteadas o con más de 10 sí falla', () => {
+    const skipped = question(6);
+    skipped.options = skipped.options.map((option, index) =>
+      index === 5 ? { ...option, key: 'g' } : option,
+    );
+    const eleven = question(10);
+    eleven.options = [...eleven.options, { ...(eleven.options[9] as DraftOption), key: 'k' }];
+    const report = check([
+      question(3, { key: 'b1-q02', canonical: ['a', 'b', 'c', 'd'] }),
+      { ...skipped, key: 'b1-q03' },
+      { ...eleven, key: 'b1-q04' },
+    ]);
+    for (const id of ['b1-q02', 'b1-q03', 'b1-q04'])
+      expect(report.problems).toContain(
+        `${id} las opciones deben ser a, b, c... en orden, de ${MIN_OPTIONS} a ${OPTION_KEYS.length}`,
+      );
+  });
+
+  it('un set canónico que apunta a una opción que no existe falla con 4, 5 y 6 opciones', () => {
+    for (const total of [4, 5, 6]) {
+      const report = check([question(total, { canonical: ['a', 'b', 'c', 'j'] })]);
+      expect(report.problems.join(), `${total} opciones`).toContain('set canónico');
+    }
+  });
+
+  it('con 4 opciones el set canónico es las 4 y con 6 puede ser cualquiera que incluya la correcta', () => {
+    expect(check([question(4)]).problems).toEqual([]);
+    expect(check([question(6, { canonical: ['a', 'c', 'e', 'f'] })]).problems).toEqual([]);
+    expect(check([question(6, { canonical: ['b', 'c', 'e', 'f'] })]).problems.join()).toContain(
+      'set canónico',
+    );
   });
 
   it('rechaza lo que sí es un error sin importar el tipo, como dos correctas o un sesgo inventado', () => {
@@ -144,10 +186,23 @@ describe('el esquema del lote de contenido demo', () => {
     ...(kinds ? { kinds } : {}),
   });
 
-  it('acepta un reactivo raro con menos de 10 opciones y exige 10 al estándar', () => {
-    expect(DemoQuestionSchema.safeParse(draft(10)).success).toBe(true);
-    expect(DemoQuestionSchema.safeParse(draft(8)).success).toBe(false);
-    expect(DemoQuestionSchema.safeParse(draft(8, ['obscure_detail'])).success).toBe(true);
+  it('acepta de 4 a 10 opciones con o sin tipo de reactivo y rechaza menos de 4', () => {
+    for (const count of [4, 5, 6, 7, 8, 9, 10]) {
+      expect(DemoQuestionSchema.safeParse(draft(count)).success, `${count} sin tipo`).toBe(true);
+      expect(
+        DemoQuestionSchema.safeParse(draft(count, ['control'])).success,
+        `${count} control`,
+      ).toBe(true);
+    }
+    expect(DemoQuestionSchema.safeParse(draft(3)).success).toBe(false);
     expect(DemoQuestionSchema.safeParse(draft(3, ['obscure_detail'])).success).toBe(false);
+  });
+
+  it('rechaza un set canónico con una clave que no es de las opciones', () => {
+    const ok = draft(5);
+    expect(DemoQuestionSchema.safeParse(ok).success).toBe(true);
+    expect(DemoQuestionSchema.safeParse({ ...ok, canonical: ['a', 'b', 'c', 'j'] }).success).toBe(
+      false,
+    );
   });
 });

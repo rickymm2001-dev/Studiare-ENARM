@@ -1,8 +1,9 @@
 // Reglas de un borrador de preguntas demo antes de unirlo a un lote (docs/contenido-demo.md). Son
 // funciones puras que reciben lo que necesitan, para probarlas sin leer archivos. Una pregunta de un
-// tipo raro (D-080) no se rechaza por ser imperfecta. Con tipos, la explicación puede ser corta, las
-// opciones pueden ser menos de 10 y lo que difiere del motor de estructura se avisa pero no falla,
-// porque la etiqueta del médico gana (7.5).
+// tipo raro (D-080) no se rechaza por ser imperfecta. Con tipos, la explicación puede ser corta y lo
+// que difiere del motor de estructura se avisa pero no falla, porque la etiqueta del médico gana
+// (7.5). Cualquier pregunta, con tipos o sin ellos, puede traer de 4 a 10 opciones. El examen real
+// trae 4 y el banco nuevo trae hasta 6. Las 10 de los lotes demo ya no son una regla, solo un aviso.
 
 export interface DraftOption {
   key: string;
@@ -45,7 +46,10 @@ export interface DraftContext {
 
 export interface DraftReport {
   problems: string[];
-  /** Diferencias con el motor en preguntas de un tipo raro. No hacen fallar el borrador */
+  /**
+   * Avisos que no hacen fallar el borrador. Diferencias con el motor en preguntas de un tipo raro y
+   * preguntas que no traen 10 opciones
+   */
   notes: string[];
   /** Preguntas cuya tarea detectó el motor */
   detected: number;
@@ -57,6 +61,10 @@ const YEAR = /(?<!\d)(19|20)\d{2}(?!\d)/;
 const CATALOG_CODE = /[A-Z]{2,}-\d/;
 export const OPTION_KEYS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
 const CANONICAL_SIZE = 4;
+/** Menos opciones que el set canónico no dejan elegir 3 distractores */
+export const MIN_OPTIONS = CANONICAL_SIZE;
+/** Cuántas opciones traían los lotes demo. Con otra cantidad solo se avisa */
+export const DEMO_OPTIONS = OPTION_KEYS.length;
 
 const wordCount = (text: string) => text.trim().split(/\s+/).filter(Boolean).length;
 
@@ -84,12 +92,14 @@ function checkQuestion(question: DraftQuestion, context: DraftContext, report: D
     problems.push(`${key} subtema ${question.subtopic}`);
 
   const keys = question.options.map((option) => option.key);
-  const expected = rare ? OPTION_KEYS.slice(0, keys.length) : OPTION_KEYS;
-  if (keys.join('') !== expected.join('') || (rare && keys.length < CANONICAL_SIZE))
+  const expected = OPTION_KEYS.slice(0, keys.length);
+  if (keys.join('') !== expected.join('') || keys.length < MIN_OPTIONS)
     problems.push(
-      rare
-        ? `${key} las opciones deben ser a, b, c... en orden y al menos ${CANONICAL_SIZE}`
-        : `${key} las opciones deben ser a-j en orden`,
+      `${key} las opciones deben ser a, b, c... en orden, de ${MIN_OPTIONS} a ${OPTION_KEYS.length}`,
+    );
+  else if (!rare && keys.length !== DEMO_OPTIONS)
+    report.notes.push(
+      `${key} tiene ${keys.length} opciones y los lotes demo traen ${DEMO_OPTIONS}`,
     );
 
   const correct = question.options.filter((option) => option.correct);
