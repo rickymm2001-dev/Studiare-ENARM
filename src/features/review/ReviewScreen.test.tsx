@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import 'fake-indexeddb/auto';
-import { cleanup, screen, waitFor } from '@testing-library/react';
+import { cleanup, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SCREENS } from '@/app/screens';
@@ -62,6 +62,26 @@ describe('pantalla de Repasar', () => {
       await screen.findByText(t.review.noDecksTitle, undefined, { timeout: 10_000 }),
     ).toBeVisible();
     expect(screen.getByRole('link', { name: t.review.goToDecks })).toBeVisible();
+  });
+
+  it('Repasar y Mazos son pestañas de una sola sección y Repasar es la activa aquí', async () => {
+    const typing = userEvent.setup();
+    app = await renderApp(SCREENS.review.path, { seed: seedDeck(false) });
+    await screen.findByRole('button', { name: t.reviewSetup.start(1) }, { timeout: 10_000 });
+    const tabs = screen.getByRole('navigation', { name: t.studyTabs.label });
+    expect(within(tabs).getByRole('link', { name: t.studyTabs.review })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+    await typing.click(within(tabs).getByRole('link', { name: t.studyTabs.decks }));
+    expect(
+      await screen.findByRole('heading', { level: 1, name: t.screens.decks.title }),
+    ).toBeVisible();
+    const decksTabs = screen.getByRole('navigation', { name: t.studyTabs.label });
+    expect(within(decksTabs).getByRole('link', { name: t.studyTabs.decks })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
   });
 
   it('ofrece repasar lo que toca y registra la calificación con su XP', async () => {

@@ -3,7 +3,7 @@
 import { Check, Minus, Receipt } from 'lucide-react';
 import { useState } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
-import { PLANS, type PlanAccess, type PlanKey } from '@/config/billing';
+import { FOUNDER_SEATS, PLANS, type PlanAccess, type PlanKey } from '@/config/billing';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import { changePlan } from '@/data/usecases/subscription';
@@ -96,7 +96,7 @@ function Billing({ session }: { session: ReadySession }) {
           </div>
         </Card>
       ) : (
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
           {(Object.keys(PLANS) as PlanKey[]).map((key) => {
             const plan = PLANS[key];
             const isCurrent = key === current;
@@ -115,6 +115,11 @@ function Billing({ session }: { session: ReadySession }) {
                     <span className="text-2xl font-bold">{t.billing.price(plan.priceMxn)}</span>{' '}
                     <span className="text-sm text-fg-muted">{t.billing.periods[key]}</span>
                   </p>
+                  {key === 'founder' ? (
+                    <p className="text-sm font-semibold text-success">
+                      {t.billing.founderNote(FOUNDER_SEATS)}
+                    </p>
+                  ) : null}
                   {key === 'annual' ? (
                     <p className="text-sm font-semibold text-success">
                       {t.billing.savings(

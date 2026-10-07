@@ -22,6 +22,7 @@ import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 import { latestCardStates } from '../review/study';
+import { StudyTabs } from '../review/StudyTabs';
 import { followedDeckIds } from './followed';
 import { OwnDecksCard } from './OwnDecksCard';
 import { deckBranch, topTopics } from './deckBranch';
@@ -68,6 +69,7 @@ function Decks({ session }: { session: ReadySession }) {
   return (
     <>
       <ScreenHeader title={t.screens.decks.title} description={t.screens.decks.description} />
+      <StudyTabs />
       <Card aria-labelledby="precargados-titulo">
         <CardHeader>
           <div className="flex flex-wrap items-center gap-2">

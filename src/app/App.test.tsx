@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import 'fake-indexeddb/auto';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { createMemoryRouter } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -38,19 +38,32 @@ describe('rutas', () => {
     expect(screen.queryByRole('navigation', { name: t.nav.label })).toBeNull();
   });
 
-  it('las pantallas del alumno muestran 5 secciones y Plan, Tutor, Mazos, Party y Configuración solo en el riel (D-071, D-076)', async () => {
+  it('las pantallas del alumno muestran 5 secciones y Plan, Tutor, Party y Configuración solo en el riel, con Mazos dentro de Repasar (D-071, D-076, D-087)', async () => {
     renderAt(SCREENS.review.path);
     expect(
       await screen.findByRole('heading', { level: 1, name: t.screens.review.title }),
     ).toBeVisible();
     const nav = screen.getByRole('navigation', { name: t.nav.label });
     const items = nav.querySelectorAll('li');
-    expect(items).toHaveLength(10);
+    expect(items).toHaveLength(9);
     expect([...items].filter((item) => !item.className.includes('hidden'))).toHaveLength(5);
-    expect(items[9]).toHaveTextContent(t.navItems.settings);
+    expect(items[8]).toHaveTextContent(t.navItems.settings);
     expect(nav).toHaveTextContent(t.navItems.planner);
     expect(nav).toHaveTextContent(t.navItems.tutor);
-    expect(nav).toHaveTextContent(t.navItems.decks);
+    // Mazos ya no es una sección aparte, es una pestaña de Repasar
+    expect(nav).not.toHaveTextContent(t.navItems.decks);
+  });
+
+  it('Repasar sigue activa cuando el alumno está en Mazos', async () => {
+    renderAt(SCREENS.decks.path);
+    expect(
+      await screen.findByRole('heading', { level: 1, name: t.screens.decks.title }),
+    ).toBeVisible();
+    const nav = screen.getByRole('navigation', { name: t.nav.label });
+    expect(within(nav).getByRole('link', { name: t.navItems.review })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
   });
 
   it('muestra la pantalla de no encontrada en una ruta desconocida', async () => {

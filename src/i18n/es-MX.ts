@@ -154,6 +154,11 @@ export const t = {
     label: 'Navegación principal',
     more: 'Más secciones',
   },
+  studyTabs: {
+    label: 'Repasar y mazos',
+    review: 'Repasar',
+    decks: 'Mazos',
+  },
   navItems: {
     home: 'Inicio',
     review: 'Repasar',

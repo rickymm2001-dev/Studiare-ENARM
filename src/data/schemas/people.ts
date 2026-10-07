@@ -136,7 +136,7 @@ export type Consent = z.infer<typeof ConsentSchema>;
 
 export const SubscriptionSchema = z.strictObject({
   userId: IdSchema,
-  plan: z.enum(['free', 'monthly', 'annual']),
+  plan: z.enum(['free', 'founder', 'monthly', 'annual']),
   status: z.enum(['none', 'active', 'canceled']),
   /** Todo pago del prototipo es simulado (3.2) */
   isSimulated: z.literal(true),

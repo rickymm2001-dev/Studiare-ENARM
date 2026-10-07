@@ -46,6 +46,7 @@ import { useUserEvents } from '../shared/useUserEvents';
 import { deckIds } from '@/demo/content/deckEntities';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
 import { ReviewSetup } from './ReviewSetup';
+import { StudyTabs } from './StudyTabs';
 import { schedulerConfig } from './schedulerConfig';
 import { cardMatches, type ReviewMode, type ReviewSelection } from './selection';
 import {
@@ -101,6 +102,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     return (
       <>
         <ScreenHeader title={t.screens.review.title} description={t.screens.review.description} />
+        <StudyTabs />
         <Card aria-labelledby="sin-mazos">
           <CardHeader>
             <CardTitle id="sin-mazos">{t.review.noDecksTitle}</CardTitle>
@@ -131,6 +133,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     return (
       <>
         <ScreenHeader title={t.screens.review.title} description={t.screens.review.description} />
+        <StudyTabs />
         <ReviewSetup
           addDeck={<AddDeckButton />}
           hasDemo={content.decks.some((deck) => followed.has(deck.id) && deck.isDemo)}

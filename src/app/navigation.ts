@@ -11,7 +11,6 @@ import {
   FileText,
   Flag,
   GraduationCap,
-  Layers,
   PartyPopper,
   House,
   Scale,
@@ -35,6 +34,8 @@ export interface NavItem {
   railOnly?: boolean;
   /** Abre un grupo nuevo en el riel con una línea divisoria */
   groupStart?: boolean;
+  /** Otras rutas que también dejan activa esta sección, como Mazos dentro de Repasar (D-087) */
+  alsoActive?: readonly string[];
 }
 
 const profile: NavItem = {
@@ -52,12 +53,17 @@ const bank: NavItem = { path: screenPath('questionBank'), label: t.navItems.bank
 
 const studentNav: readonly NavItem[] = [
   { path: screenPath('home'), label: t.navItems.home, icon: House, end: true },
-  { path: screenPath('review'), label: t.navItems.review, icon: BookOpenCheck },
+  // Repasar y Mazos son una sola sección con dos pestañas (D-087)
+  {
+    path: screenPath('review'),
+    label: t.navItems.review,
+    icon: BookOpenCheck,
+    alsoActive: [screenPath('decks')],
+  },
   { path: screenPath('simulatorSetup'), label: t.navItems.simulate, icon: ClipboardList },
   { path: screenPath('progress'), label: t.navItems.progress, icon: ChartLine },
   { path: screenPath('planner'), label: t.navItems.planner, icon: CalendarDays, railOnly: true },
   { path: screenPath('tutor'), label: t.navItems.tutor, icon: GraduationCap, railOnly: true },
-  { path: screenPath('decks'), label: t.navItems.decks, icon: Layers, railOnly: true },
   { path: screenPath('party'), label: t.navItems.party, icon: PartyPopper, railOnly: true },
   profile,
   settingsItem,

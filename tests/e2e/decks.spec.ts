@@ -13,6 +13,20 @@ test('crea un mazo, escribe tarjetas, las repasa, las edita y borra el mazo', as
   await page.goto(SCREENS.decks.path);
   const own = page.getByRole('region', { name: t.decks.yoursTitle });
 
+  // Repasar y Mazos son una sola sección con dos pestañas (D-087)
+  const tabs = page.getByRole('navigation', { name: t.studyTabs.label });
+  await expect(tabs.getByRole('link', { name: t.studyTabs.decks })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
+  await tabs.getByRole('link', { name: t.studyTabs.review }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.review.title);
+  await page
+    .getByRole('navigation', { name: t.studyTabs.label })
+    .getByRole('link', { name: t.studyTabs.decks })
+    .click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t.screens.decks.title);
+
   // Sin nombre no crea nada y lo dice
   await own.getByRole('button', { name: t.decks.createButton }).click();
   await expect(own.getByText(t.decks.nameError)).toBeVisible();

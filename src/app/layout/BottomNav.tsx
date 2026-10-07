@@ -1,11 +1,22 @@
 // Navegación inferior en teléfono y riel lateral en pantallas anchas, con las mismas secciones.
-import { Link, NavLink } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
 import type { NavItem } from '../navigation';
 
+/**
+ * La sección está activa en su ruta y en las que declara, por ejemplo Mazos dentro de Repasar. Con
+ * end solo cuenta la ruta exacta, para que Inicio no quede activo en todas
+ */
+function isActive(item: NavItem, pathname: string): boolean {
+  const within = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
+  if (item.end) return pathname === item.path;
+  return within(item.path) || (item.alsoActive ?? []).some(within);
+}
+
 export function BottomNav({ items, homePath }: { items: readonly NavItem[]; homePath: string }) {
   const mobileCount = items.filter((item) => !item.railOnly).length;
+  const { pathname } = useLocation();
   return (
     <nav
       aria-label={t.nav.label}
@@ -34,32 +45,26 @@ export function BottomNav({ items, homePath }: { items: readonly NavItem[]; home
               item.groupStart && 'lg:mx-3 lg:mt-2 lg:border-t lg:border-line lg:pt-2',
             )}
           >
-            <NavLink
+            <Link
               to={item.path}
-              end={item.end ?? false}
-              className={({ isActive }) =>
-                cn(
-                  'flex min-h-nav flex-col items-center justify-center gap-1 px-1 text-xs font-medium text-fg-muted',
-                  'hover:text-fg lg:min-h-14 lg:rounded-md lg:mx-2',
-                  isActive && 'text-primary font-semibold',
-                )
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  <span
-                    aria-hidden
-                    className={cn(
-                      'flex h-8 w-14 items-center justify-center rounded-full transition-all [&_svg]:size-5',
-                      isActive && 'bg-primary text-primary-fg shadow-raised',
-                    )}
-                  >
-                    <item.icon strokeWidth={isActive ? 2.4 : 2} />
-                  </span>
-                  <span className="truncate">{item.label}</span>
-                </>
+              aria-current={isActive(item, pathname) ? 'page' : undefined}
+              className={cn(
+                'flex min-h-nav flex-col items-center justify-center gap-1 px-1 text-xs font-medium text-fg-muted',
+                'hover:text-fg lg:min-h-14 lg:rounded-md lg:mx-2',
+                isActive(item, pathname) && 'text-primary font-semibold',
               )}
-            </NavLink>
+            >
+              <span
+                aria-hidden
+                className={cn(
+                  'flex h-8 w-14 items-center justify-center rounded-full transition-all [&_svg]:size-5',
+                  isActive(item, pathname) && 'bg-primary text-primary-fg shadow-raised',
+                )}
+              >
+                <item.icon strokeWidth={isActive(item, pathname) ? 2.4 : 2} />
+              </span>
+              <span className="truncate">{item.label}</span>
+            </Link>
           </li>
         ))}
       </ul>

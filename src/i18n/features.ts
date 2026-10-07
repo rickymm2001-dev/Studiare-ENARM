@@ -312,8 +312,15 @@ export const featureText = {
     simulatedNotice:
       'Pagos simulados. En el prototipo no se cobra nada ni se piden datos de tarjeta. Los precios son de ejemplo.',
     current: (plan: string) => `Tu plan actual es ${plan}.`,
-    plans: { free: 'Gratis', monthly: 'Mensual', annual: 'Anual' },
-    periods: { free: 'para siempre', monthly: 'al mes', annual: 'al año' },
+    plans: { free: 'Gratis', founder: 'Fundador', monthly: 'Mensual', annual: 'Anual' },
+    periods: {
+      free: 'para siempre',
+      founder: 'al mes, de por vida',
+      monthly: 'al mes',
+      annual: 'al año',
+    },
+    founderNote: (seats: number) =>
+      `Para los primeros ${seats} usuarios. El precio no sube mientras conserves tu suscripción. El cupo se confirma al cobrar.`,
     price: (mxn: number) => (mxn === 0 ? '$0' : `$${mxn.toLocaleString('es-MX')} MXN`),
     access: {
       dailyQuestions: (n: number | null) =>
