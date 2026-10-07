@@ -29,15 +29,33 @@
 ### Bloques
 - [x] B1. Modelo con mazo padre, fecha de modificación y marca de borrado. La base sube a la versión 5 y limpia las etiquetas con espacios. Los repositorios de mazos, notas y tarjetas ocultan lo borrado y dan listAll y getRaw para sincronizar
 - [x] B2. Mazos de Paco en árbol (ENARM 2027, rama y materia) y etiquetas en ruta sin espacios, con migración para quien ya seguía mazos. Repasar elige por rama y no por cada materia
-- [ ] B3. Básica con inversa y cloze anidado
-- [ ] B4. Revisión de calidad y duplicados
-- [ ] B5. Pantalla Explorar con filtros, búsqueda y acciones por lote
-- [ ] B6. Cierre de la etapa según 15.1
+- [x] B3. Básica con tarjeta inversa y cloze anidado con analizador real de huecos, y editor de tres tipos que conserva lo escrito al cambiar de tipo
+- [x] B4. Revisión de calidad y de duplicados dentro del editor, solo avisos y sugerencias
+- [x] B5. Pantalla Explorar con filtros, búsqueda y acciones por lote, y árbol de mazos propios en Mazos
+- [x] B6. Cierre de la etapa según 15.1, con pruebas, capturas y revisión independiente. Falta la aprobación de Ricardo
 
 ### Bitácora
 - Etiquetas en ruta como motor puro en src/engines/tagPath.ts y árbol de mazos en src/engines/deckTree.ts, con sus pruebas. El tope de una etiqueta sube a 200 caracteres porque una ruta de cinco niveles de Paco pasaba de 80 y se cortaba
 - Los mazos de Paco son 1 raíz, 3 ramas y 37 materias. Cada nota guarda su ruta original como una sola etiqueta y la materia es el segundo nivel. La prueba tests/content/preloaded-tree-migration.test.ts parte de la base plana de antes y comprueba que quedan las mismas 3,771 notas y las mismas tarjetas con sus IDs, que ninguna etiqueta tiene espacios y que cada nota cuelga de su rama
 - Borrar un mazo, una nota o una tarjeta propia deja una marca con fecha. Una carta que se quita y se vuelve a poner conserva su ID y su historial
+- Suspender y reanudar son eventos nuevos (cards_suspended y cards_unsuspended, hasta 500 tarjetas cada uno). Repasar, el Planeador y la carga futura no cuentan las suspendidas
+- Explorar es la tercera pestaña de Repasar y Mazos, en /mazos/explorar. Búsqueda por palabras, frases y exclusiones, filtros por mazo, ruta de etiqueta, estado, tipo y origen con el conteo de cada opción, selección de página o de todas las que coinciden y acciones por lote. Lo precargado solo se suspende
+- Los mazos propios se arman en árbol desde Mazos. Se crea un mazo dentro de otro y se reorganiza o renombra sin ciclos
+- Tres agentes en paralelo hicieron los tipos de nota, el motor de calidad y la barrera del dispositivo único. Las ramas se integraron a mano y se resolvió el choque en manualDecks. Los dos motores de huecos (src/data/content/cloze.ts y src/engines/cardText.ts) son independientes porque un motor no puede importar de la capa de datos
+- La prueba de migración de Paco tarda 90 segundos porque fake-indexeddb reordena sus índices al reemplazar 3,771 notas. En el navegador no pasa. Su límite sube a 300 segundos para que no falle cuando la máquina está ocupada
+
+### Evidencia de cierre (15.1)
+- npm run check pasa. 1,215 pruebas de Vitest pasan y 2 se omiten, en 138 archivos. Typecheck y ESLint limpios, y Prettier también
+- Playwright. 142 pruebas pasan, 71 en teléfono y 71 en escritorio, con las nuevas de Explorar, del árbol de mazos y del editor con avisos, todas con axe sin violaciones serias
+- test:sql pasa en Postgres local con las pruebas de permisos y las de la barrera del dispositivo único
+- Capturas en docs/screenshots/fase-c2-etapa1, 16 imágenes. Explorar con la lista y con filtros, selección y una tarjeta abierta, el editor con avisos de calidad y los mazos propios en árbol, en teléfono y escritorio, claro y oscuro
+- Revisión independiente por un subagente que no escribió el código. Sin hallazgos críticos ni pérdida de datos. Reportó 13 hallazgos y se corrigieron todos, con las pruebas que faltaban. El detalle está en D-088
+- Dos pruebas flojas se arreglaron en el camino. La de migración de Paco tardaba 90 segundos en fake-indexeddb y su límite sube a 300. La del aviso de otro dispositivo sin sesión no esperaba a que cargara la portada
+
+### Pendiente con Ricardo para seguir
+- Aprobar la Etapa 1 para pasar a la Etapa 2, carga diaria
+- Preguntas abiertas. Qué funciones son gratis y cuáles de pago (se propone gratis para mazos en árbol, etiquetas, Explorar y calidad). Si en Repasar prefiere que elegir un mazo propio traiga todos sus submazos, que es lo que hace ahora
+- Bug anterior a esta etapa. Borrar una cuenta que ya tiene eventos falla en la base, porque el disparador de solo agregar de events bloquea el borrado en cascada. Afecta el derecho a cancelar la cuenta y se atiende en la Fase E
 
 ## Reunión del equipo del 2026-10-07 (D-087)
 
@@ -50,7 +68,7 @@ Cambios aplicables que salieron del acta de Gemini. Todo con pruebas unitarias y
 - [x] 4. Repasar y Mazos en una sola sección con dos pestañas
 - [x] 5. Precios. Mensual 150, anual 1,200 y plan Fundador de 79 (confirmado) para los primeros 100 usuarios
 - [x] 6. Banco de 4 a 10 opciones por pregunta y plantilla de Excel con npm run bank:template
-- [x] 7. Un solo dispositivo activo por cuenta, con su migración de SQL que Ricardo debe ejecutar
+- [x] 7. Un solo dispositivo activo por cuenta. El freno revisa desde el navegador y la barrera lo hace cumplir en la base de datos, con límite de 3 cambios en 24 horas. Son dos migraciones de SQL que Ricardo debe ejecutar
 
 ### Evidencia
 - Vitest. 858 pruebas pasan y 2 se omiten antes de los últimos ajustes, más las de planes y pestañas. test:sql pasa con el bloque nuevo del dispositivo único
@@ -59,7 +77,8 @@ Cambios aplicables que salieron del acta de Gemini. Todo con pruebas unitarias y
 
 ### Pendiente con Ricardo
 - Confirmar el precio del anual, que sigue provisional en 1,200 pesos. El Fundador de 79 ya lo confirmó
-- Ejecutar en el editor de SQL de Supabase el archivo supabase/migrations/20261007000001_single_device.sql, con los pasos de docs/SUPABASE.md
+- Ejecutar en el editor de SQL de Supabase, en este orden, supabase/migrations/20261007000001_single_device.sql y supabase/migrations/20261008000001_device_barrier.sql, con los pasos de docs/SUPABASE.md
+- Poner en GitHub, en Variables, VITE_SUPPORT_EMAIL con el correo al que escribirá quien pase el límite de cambios, y volver a publicar. Sin ella el aviso no lleva enlace
 - Abrir una vez en Excel la plantilla content-drafts/bank-plantilla/Studiare-banco-plantilla.xlsx, que se probó en LibreOffice
 
 ## Fase P. Plataforma real (D-060)
