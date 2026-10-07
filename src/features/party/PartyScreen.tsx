@@ -24,6 +24,7 @@ import { CheckboxField, SelectField, TextField } from '@/ui/components/field';
 import { SimulatedDataLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { buildSnapshot, type Snapshot } from '../home/snapshot';
+import { reservedByStoredExam } from '../exam/examStorage';
 import { dailyQuestions } from '../shared/dailyLimit';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
@@ -72,6 +73,7 @@ function Party({ session }: { session: ReadySession }) {
     subscription,
     timeZone: user.timeZone,
     now,
+    reserved: reservedByStoredExam(user.id),
   });
   const mine = data.memberships.filter((item) => item.userId === user.id && item.leftAt === null);
   const myGroups = mine

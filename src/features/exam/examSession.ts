@@ -16,6 +16,7 @@ import { buildExam } from '@/engines/exam';
 import { sampleOptions } from '@/engines/sampler';
 import { sendErrorsToReview, type FailedQuestion } from '../review/sendErrors';
 import { recordAnswerWithXp } from '../simulator/answerXp';
+import { correctPositionCounts } from '../simulator/optionSampling';
 import { buildBundle, type QuestionBundle } from '../simulator/useQuestion';
 import { examAnswers, type ExamBundles } from './examResults';
 import {
@@ -142,17 +143,37 @@ export async function startExam(input: {
 export type ShownPayload = EventPayload<'question_shown'>;
 
 /**
+ * En qué posición quedó la correcta en cada pregunta que ya se vio, para repartirla parejo en las
+ * que faltan (7.8). Sin las preguntas cargadas no hay con qué contar y todas empiezan en cero
+ */
+function shownCorrectPositions(
+  state: ExamState,
+  bundles: ReadonlyMap<string, QuestionBundle> | undefined,
+): number[] {
+  if (!bundles) return [];
+  return Object.entries(state.shownOptions).flatMap(([id, shownIds]) => {
+    const correct = bundles.get(id)?.options.find((option) => option.isCorrect);
+    const position = correct ? shownIds.indexOf(correct.id) : -1;
+    return position >= 0 ? [position] : [];
+  });
+}
+
+/**
  * Fija las opciones de una pregunta la primera vez que se ve y devuelve lo que hay que registrar
  * como question_shown. Es el set canónico del médico, así el examen cuenta para el puntaje (7.8), con
- * una semilla fija para que sea el mismo si se reanuda. Las vistas siguientes no cambian nada
+ * una semilla fija para que sea el mismo si se reanuda. Las vistas siguientes no cambian nada. La
+ * posición de la correcta se reparte parejo entre las preguntas que ya se vieron, en el orden en que
+ * el alumno las abre, y queda fija con las opciones
  */
 export function showQuestion(
   state: ExamState,
   index: number,
   bundle: QuestionBundle | undefined,
+  bundles?: ReadonlyMap<string, QuestionBundle>,
 ): { state: ExamState; shown: ShownPayload | null } {
   const id = state.questionIds[index];
   if (id === undefined || !bundle || state.shownOptions[id]) return { state, shown: null };
+  const count = bundle.question.canonicalOptionIds.length;
   const sample = sampleOptions({
     options: bundle.options.map((option) => ({
       id: option.id,
@@ -161,8 +182,9 @@ export function showQuestion(
     })),
     canonicalOptionIds: bundle.question.canonicalOptionIds,
     mode: 'canonical',
-    count: bundle.question.canonicalOptionIds.length,
+    count,
     seed: `${state.examId}|${id}`.slice(0, 64),
+    correctPositionCounts: correctPositionCounts(shownCorrectPositions(state, bundles), count),
   });
   return {
     state: recordShown(

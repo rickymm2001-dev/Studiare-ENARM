@@ -433,8 +433,10 @@ export const featureText = {
     noDecksTitle: 'Todavía no sigues ningún mazo',
     noDecksBody: 'Sin mazos el plan solo trae práctica de preguntas. Sigue uno para sumar repasos.',
     goDecks: 'Ir a Mazos',
+    limitNote: (limit: number) =>
+      `Tu plan Gratis deja ${limit} preguntas al día, así que el bloque de práctica se recortó a lo que te permite.`,
     topicsCalibrating:
-      'Tus temas a reforzar siguen calibrando. Con 5 respuestas en un tema, el bloque de práctica apunta a tu tema más débil.',
+      'Tus temas a reforzar siguen calibrando. Cuando un tema tenga respuestas suficientes, el bloque de práctica apunta a tu tema más débil.',
     overloadTitle: 'Tu carga no cabe en tu tiempo',
     overloadBody: (needed: number, available: number) =>
       `Los próximos 7 días piden en promedio ${needed} min al día y tienes ${available}. Elige un ajuste.`,
@@ -543,6 +545,9 @@ export const featureText = {
     limit: (left: number) =>
       `Te quedan ${plural(left, 'pregunta', 'preguntas')} hoy en el plan Gratis`,
     limitReached: 'Llegaste al límite de preguntas de hoy del plan Gratis.',
+    limitUsedByExam:
+      'Tu examen sin terminar tiene apartadas las preguntas que te quedaban hoy en el plan Gratis.',
+    goToOpenExam: 'Ir a mi examen',
     seePlans: 'Ver planes',
     start: 'Empezar práctica',
     preparing: 'Preparando el banco…',
@@ -588,6 +593,27 @@ export const featureText = {
       `${plural(n, 'error pasó', 'errores pasaron')} a tu repaso en Mis errores`,
     sentToReview: 'Esta pregunta pasó a tu repaso en Mis errores.',
     again: 'Otra práctica',
+    discardReview: {
+      title: 'Qué podías descartar',
+      hint: 'Aunque no sepas la respuesta, descartar lo que sabes que no es te acerca a ella.',
+      discardedCorrect:
+        'Descartaste la respuesta correcta. Antes de tachar una opción, busca por qué sería incorrecta.',
+      allDiscarded: 'Descartaste todas las opciones incorrectas. Así se llega a la respuesta.',
+      someDiscarded: (done: number, total: number) =>
+        `Descartaste ${done} de ${total} opciones incorrectas. Estas eran las que se podían tachar.`,
+      noneDiscarded: 'No descartaste ninguna. Estas se podían tachar, y cada una dice por qué.',
+      youDiscarded: 'La descartaste',
+    },
+    targeted: {
+      label: 'Dirigir las opciones a mis trampas',
+      hint: (names: string) =>
+        `Sube las opciones con las trampas que más te atrapan, ${names}. Nunca llena toda la pregunta con ellas.`,
+      unit: 'errores con trampa etiquetada',
+      calibrating:
+        'Se activa cuando tus errores ya muestran qué trampas te atrapan más. Mientras tanto las opciones salen variadas.',
+      none: 'Ninguna trampa se destaca todavía en tus errores, así que las opciones salen variadas.',
+      loading: 'Revisando tus errores…',
+    },
   },
   appearance: {
     title: 'Apariencia',

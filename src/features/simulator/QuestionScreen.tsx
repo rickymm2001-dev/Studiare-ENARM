@@ -20,10 +20,12 @@ import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
+import { useVisibilityLog } from '../shared/useVisibilityLog';
 import { sendErrorsToReview } from '../review/sendErrors';
 import { recordAnswerWithXp } from './answerXp';
 import { HighlightedPrompt } from './HighlightedPrompt';
-import { sampleForQuestion } from './optionSampling';
+import { OptionChoice } from './OptionChoice';
+import { correctPositionCounts, sampleForQuestion } from './optionSampling';
 import { clock, formatDuration, usePractice, type McqConfidence } from './practice';
 import { useQuestion, type QuestionBundle } from './useQuestion';
 
@@ -47,6 +49,11 @@ function Practice({ session }: { session: ReadySession }) {
     practice.index < practice.questionIds.length;
   const bundle = useQuestion(active ? practice.questionIds[practice.index] : undefined);
   const events = useUserEvents(session.user.id);
+  useVisibilityLog({
+    userId: session.user.id,
+    timeZone: session.user.timeZone,
+    sessionId: active ? practice.sessionId : null,
+  });
   // Si el alumno regresa desde la retroalimentación, esta pregunta ya tiene respuesta y no se
   // contesta otra vez. Con el gesto de atrás se contaba doble y un duelo se cerraba sin la última
   if (
@@ -132,8 +139,22 @@ function QuestionCard({
         sessionId,
         duelId: practice.duelId,
         optionsShown: settings.optionsShown,
+        targetTags: practice.targetTags,
+        // La correcta se reparte parejo entre las posiciones de las preguntas de esta práctica
+        correctPositionCounts: correctPositionCounts(
+          practice.answers.map((previous) => previous.correctPosition),
+          Math.min(settings.optionsShown, options.length),
+        ),
       }),
-    [options, question, settings.optionsShown, sessionId, practice.duelId],
+    [
+      options,
+      question,
+      settings.optionsShown,
+      sessionId,
+      practice.duelId,
+      practice.targetTags,
+      practice.answers,
+    ],
   );
   const shown = sample.shown.map(
     (entry) => options.find((option) => option.id === entry.optionId) as (typeof options)[number],
@@ -141,6 +162,8 @@ function QuestionCard({
   const ranges = highlightEnabled ? findNegations(question.prompt, structureDictionary) : [];
 
   const [selected, setSelected] = useState<string | null>(null);
+  // Opciones que tachó. Descartar no cambia la respuesta, solo ayuda a pensar (D-080)
+  const [eliminated, setEliminated] = useState<string[]>([]);
   const [confidence, setConfidence] = useState<McqConfidence | null>(null);
   const [changes, setChanges] = useState(0);
   const [elapsed, setElapsed] = useState(0);
@@ -197,6 +220,15 @@ function QuestionCard({
       ),
     );
     setSelected(optionId);
+    // Elegir una opción tachada la vuelve a incluir
+    setEliminated((current) => current.filter((id) => id !== optionId));
+  };
+
+  const toggleDiscard = (optionId: string) => {
+    if (optionId === selected) return;
+    setEliminated((current) =>
+      current.includes(optionId) ? current.filter((id) => id !== optionId) : [...current, optionId],
+    );
   };
 
   const answer = async () => {
@@ -218,6 +250,7 @@ function QuestionCard({
         msToAnswer,
         changeCount: changes,
         highlightEnabled,
+        ...(eliminated.length > 0 ? { eliminatedOptionVersionIds: eliminated } : {}),
       },
       physicianDifficulty: question.physicianDifficulty,
       events,
@@ -242,6 +275,8 @@ function QuestionCard({
           msToAnswer,
           xp,
           shownOptionIds: shown.map((option) => option.id),
+          eliminatedOptionIds: eliminated,
+          correctPosition: sample.correctPosition,
           sentToReview,
         },
       ],
@@ -289,30 +324,28 @@ function QuestionCard({
 
       <div className="flex flex-col">
         <fieldset className="flex flex-col gap-2">
-          <legend className="sr-only">{t.simulator.options}</legend>
-          {shown.map((option, position) => (
-            <label
-              key={option.id}
-              className={cn(
-                'flex cursor-pointer items-start gap-3 rounded-md border border-line p-3 hover:bg-muted',
-                selected === option.id && 'border-primary bg-primary-soft',
-              )}
-            >
-              <input
-                type="radio"
+          <legend className="mb-1 text-sm text-fg-muted">
+            <span className="sr-only">{t.simulator.options}. </span>
+            {t.choice.optionsHint}
+          </legend>
+          <ul className="flex flex-col gap-2">
+            {shown.map((option, position) => (
+              <OptionChoice
+                key={option.id}
                 name="opcion"
-                className="mt-1"
-                checked={selected === option.id}
-                onChange={() => {
+                letter={String.fromCharCode(65 + position)}
+                text={option.text}
+                selected={selected === option.id}
+                discarded={eliminated.includes(option.id)}
+                onChoose={() => {
                   choose(option.id);
                 }}
+                onToggleDiscard={() => {
+                  toggleDiscard(option.id);
+                }}
               />
-              <span>
-                <span className="mr-1 font-semibold">{String.fromCharCode(65 + position)}.</span>
-                {option.text}
-              </span>
-            </label>
-          ))}
+            ))}
+          </ul>
         </fieldset>
 
         {/* Confianza y responder, siempre a la mano en el teléfono (D-078) */}

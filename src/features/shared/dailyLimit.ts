@@ -11,6 +11,8 @@ export interface DailyQuestions {
   /** Preguntas por día del plan. null es sin límite */
   limit: number | null;
   answeredToday: number;
+  /** Preguntas de un examen abierto que todavía no están en la bitácora y cuentan para hoy */
+  reserved: number;
   /** Las que le quedan hoy. null es sin límite */
   left: number | null;
 }
@@ -20,6 +22,11 @@ export function dailyQuestions(input: {
   subscription: Pick<Subscription, 'plan' | 'status'> | null | undefined;
   timeZone: string;
   now: Date;
+  /**
+   * Preguntas de un examen abierto que se registran hasta que termina. Cuentan para hoy desde que
+   * empieza, si no el alumno gastaría el límite en práctica y luego terminaría el examen de más
+   */
+  reserved?: number;
 }): DailyQuestions {
   const { subscription } = input;
   const plan: PlanKey = subscription?.status === 'active' ? subscription.plan : 'free';
@@ -30,10 +37,12 @@ export function dailyQuestions(input: {
     (event) =>
       event.type === 'question_answered' && studyDayOf(new Date(event.at), event.tz) === today,
   ).length;
+  const reserved = Math.max(0, input.reserved ?? 0);
   return {
     plan,
     limit,
     answeredToday,
-    left: limit === null ? null : Math.max(0, limit - answeredToday),
+    reserved,
+    left: limit === null ? null : Math.max(0, limit - answeredToday - reserved),
   };
 }

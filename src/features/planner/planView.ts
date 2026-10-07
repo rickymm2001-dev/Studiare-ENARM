@@ -84,6 +84,8 @@ export function buildPlannerView(input: {
   examDate: string | null;
   /** Claves de subespecialidad en orden de prioridad, de los temas a reforzar */
   priorityTopics: readonly string[];
+  /** Preguntas que le deja contestar su plan, hoy y por día. null es sin límite */
+  questionLimit?: { today: number | null; perDay: number | null };
 }): PlannerView {
   const { config, now, today } = input;
   const limits = {
@@ -118,6 +120,7 @@ export function buildPlannerView(input: {
       ? { loadWithFewerNew: { newPerDay: fewerNew, load: project(fewerNew) } }
       : {}),
     priorityTopics: input.priorityTopics,
+    ...(input.questionLimit ? { questionLimit: input.questionLimit } : {}),
   });
 
   const measuredAverage =

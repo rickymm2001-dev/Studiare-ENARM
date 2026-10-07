@@ -74,6 +74,34 @@ describe('inicio del examen', () => {
   });
 });
 
+describe('posición de la correcta en el examen', () => {
+  it('se reparte parejo entre las posiciones sin importar el orden en que se abren las preguntas', async () => {
+    const env = await setup(8);
+    const started = await startExam({
+      api: env.api,
+      user: env.user,
+      questions: env.questions,
+      requested: 8,
+      options,
+      nowMs: T0,
+    });
+    if (!started) throw new Error('sin examen');
+    const bundles = await loadExamBundles(env.api, started.questionIds);
+    let state = started;
+    // Las abre al revés, que es lo que pasa cuando el alumno salta entre preguntas
+    for (const index of [7, 6, 5, 4, 3, 2, 1, 0]) {
+      const id = state.questionIds[index] ?? '';
+      state = showQuestion(state, index, bundles.get(id), bundles).state;
+    }
+    const positions = state.questionIds.map((id) => {
+      const correct = bundles.get(id)?.options.find((option) => option.isCorrect)?.id ?? '';
+      return state.shownOptions[id]?.indexOf(correct) ?? -1;
+    });
+    const counts = [0, 1, 2, 3].map((position) => positions.filter((p) => p === position).length);
+    expect(counts).toEqual([2, 2, 2, 2]);
+  });
+});
+
 describe('primera vista de una pregunta', () => {
   it('fija el set canónico con semilla fija y devuelve lo que hay que registrar', async () => {
     const env = await setup(2);

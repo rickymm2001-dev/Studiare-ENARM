@@ -64,6 +64,21 @@ test('un alumno nuevo ve calibrando con cuánto falta en cada análisis y widget
       .getByText(t.states.calibrating.remaining(3, t.planner.minutesUnit)),
   ).toBeVisible();
 
+  // Simular. Dirigir las opciones a mis trampas calibra y no ofrece nada hasta tener errores
+  // etiquetados. El banco demo se siembra la primera vez que se entra y puede tardar
+  await page.goto(SCREENS.simulatorSetup.path);
+  const practice = page.getByRole('region', { name: t.simulator.setupTitle });
+  await expect(practice.getByText(t.simulator.targeted.label)).toBeVisible({ timeout: 60_000 });
+  await expect(
+    practice.getByText(
+      t.states.calibrating.remaining(
+        DEFAULT_THRESHOLDS.bias.minTaggedErrors,
+        t.simulator.targeted.unit,
+      ),
+    ),
+  ).toBeVisible();
+  await expect(practice.getByRole('checkbox', { name: t.simulator.targeted.label })).toHaveCount(0);
+
   // Inicio. Los cuatro widgets de análisis dicen cuánto falta
   await page.goto('/');
   await page.getByRole('button', { name: t.home.edit }).click();

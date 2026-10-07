@@ -159,6 +159,17 @@ export const isClosed = (state: ExamState): boolean =>
 export const answeredCount = (state: ExamState): number =>
   state.questionIds.filter((id) => answerOf(state, id).optionId !== null).length;
 
+/**
+ * Preguntas de este examen que todavía no están en la bitácora y cuentan para el límite del día.
+ * En curso son todas, porque cualquiera se puede contestar. Al terminar solo las contestadas que
+ * faltan por registrar. Cerrado ya no queda ninguna
+ */
+export function pendingForDailyLimit(state: ExamState): number {
+  if (isClosed(state)) return 0;
+  if (!isFinished(state)) return state.questionIds.length - state.recorded.length;
+  return Math.max(0, answeredCount(state) - state.recorded.length);
+}
+
 export const markedCount = (state: ExamState): number =>
   state.questionIds.filter((id) => answerOf(state, id).marked).length;
 

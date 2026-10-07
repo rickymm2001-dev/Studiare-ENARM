@@ -20,7 +20,13 @@ describe('preguntas que le quedan hoy', () => {
       timeZone: 'America/Merida',
       now,
     });
-    expect(result).toEqual({ plan: 'free', limit, answeredToday: 7, left: limit - 7 });
+    expect(result).toEqual({
+      plan: 'free',
+      limit,
+      answeredToday: 7,
+      reserved: 0,
+      left: limit - 7,
+    });
   });
 
   it('nunca baja de cero aunque haya contestado más', () => {
@@ -32,6 +38,39 @@ describe('preguntas que le quedan hoy', () => {
       now,
     });
     expect(result.left).toBe(0);
+  });
+
+  it('las preguntas de un examen abierto cuentan desde que empieza', () => {
+    const limit = PLANS.free.access.dailyQuestions ?? 0;
+    const result = dailyQuestions({
+      events: answers(5),
+      subscription: null,
+      timeZone: 'America/Merida',
+      now,
+      reserved: 10,
+    });
+    expect(result).toMatchObject({ answeredToday: 5, reserved: 10, left: limit - 15 });
+    // Un examen que lo gasta todo deja la práctica en cero, sin pasar a negativo
+    expect(
+      dailyQuestions({
+        events: answers(5),
+        subscription: null,
+        timeZone: 'America/Merida',
+        now,
+        reserved: limit,
+      }).left,
+    ).toBe(0);
+  });
+
+  it('el examen abierto no limita a un plan de pago', () => {
+    const result = dailyQuestions({
+      events: [],
+      subscription: { plan: 'monthly', status: 'active' },
+      timeZone: 'America/Merida',
+      now,
+      reserved: 280,
+    });
+    expect(result.left).toBeNull();
   });
 
   it('un plan de pago activo no tiene límite', () => {

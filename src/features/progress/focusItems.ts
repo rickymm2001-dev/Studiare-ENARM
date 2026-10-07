@@ -145,6 +145,11 @@ export function biasProfileRows(report: InsightReport): BiasProfileRow[] {
   });
 }
 
+/** Las trampas a las que dirigir las opciones, de la que más atrapa a la que menos. Vacío mientras calibra */
+export function targetBiasTags(report: InsightReport): string[] {
+  return biasProfileRows(report).map((row) => row.tag);
+}
+
 /** Cuántos errores con trampa etiquetada lleva y cuántos pide el perfil. null si ya no calibra */
 export function biasCalibration(report: InsightReport): { have: number; need: number } | null {
   const state = report.insights.find((insight) => insight.id === 'biases')?.state;

@@ -59,6 +59,7 @@ export async function startDuel(
     ended: false,
     kind: 'challenge',
     duelId: challenge.id,
+    targetTags: [],
   });
   return true;
 }

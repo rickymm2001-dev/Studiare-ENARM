@@ -269,3 +269,21 @@ test('al borrar mis datos también se va el examen guardado en el navegador', as
   await page.getByRole('button', { name: t.settings.deleteConfirm }).click();
   await expect.poll(() => storedExams(page)).toBe(0);
 });
+
+test('un examen sin terminar aparta las preguntas del día del plan Gratis', async ({ page }) => {
+  test.setTimeout(120_000);
+  await signUp(page);
+  await startExam(page);
+
+  // El examen de 20 gasta todas las del día aunque todavía no estén en la bitácora
+  await page.goto(SCREENS.simulatorSetup.path);
+  const practice = page.getByRole('region', { name: t.simulator.setupTitle });
+  await expect(practice.getByText(t.simulator.limitUsedByExam)).toBeVisible({ timeout: 60_000 });
+  await expect(practice.getByRole('link', { name: t.simulator.goToOpenExam })).toBeVisible();
+  await expect(practice.getByRole('button', { name: t.simulator.start })).toHaveCount(0);
+
+  // El plan del día tampoco propone más práctica de la que permite el plan Gratis
+  await page.goto(SCREENS.planner.path);
+  await expect(page.getByRole('region', { name: t.planner.todayTitle })).toBeVisible();
+  await expect(page.getByText(t.planner.limitNote(20))).toBeVisible();
+});

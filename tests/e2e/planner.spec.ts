@@ -13,6 +13,8 @@ test('calibra los minutos, avisa la sobrecarga y cada ajuste cambia el plan', as
   const today = page.getByRole('region', { name: t.planner.todayTitle });
   await expect(today.getByText(t.planner.noDecksTitle)).toBeVisible();
   await expect(today.getByText(t.planner.topicsCalibrating)).toBeVisible();
+  // Y dice cuántas respuestas le faltan al tema más cercano, no solo que calibra
+  await expect(today.getByText(/Faltan \d+ respuestas en un tema/)).toBeVisible();
   const time = page.getByRole('region', { name: t.planner.minutesTitle });
   await expect(time.getByText(t.states.calibrating.title)).toBeVisible();
   await expect(

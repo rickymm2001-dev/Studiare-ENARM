@@ -17,7 +17,7 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { ProgressBar } from '@/ui/components/progress-bar';
-import { LoadingState } from '@/ui/states/states';
+import { CalibratingNote, LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { TOPIC_NAMES } from '../shared/topics';
 import { useUserEvents } from '../shared/useUserEvents';
@@ -352,7 +352,14 @@ function StructureCard({ score }: { score: ExamScore }) {
         })}
       </ul>
       {comparable ? null : (
-        <p className="mt-2 text-sm text-fg-muted">{text.structureCalibrating}</p>
+        <div className="mt-2 flex flex-col gap-1.5">
+          <CalibratingNote
+            current={Math.min(score.byPolarity.affirmative.total, score.byPolarity.negative.total)}
+            target={MIN_QUESTIONS_PER_TOPIC}
+            unit={text.structureUnit}
+          />
+          <p className="text-sm text-fg-muted">{text.structureCalibrating}</p>
+        </div>
       )}
       <h3 className="mt-4 mb-2 text-sm font-semibold">{text.taskTitle}</h3>
       <ul className="flex flex-col gap-3">

@@ -25,8 +25,12 @@ import { dailyQuestions } from '../shared/dailyLimit';
 import { difficultyGroupOf } from '../shared/difficulty';
 import { useUserEvents } from '../shared/useUserEvents';
 import { ExamSetupCard } from '../exam/ExamSetupCard';
+import { reservedByStoredExam } from '../exam/examStorage';
+import { useAnalysis } from '../progress/useAnalysis';
+import { targetBiasTags } from '../progress/focusItems';
 import { clock, usePractice } from './practice';
 import { pickQuestions } from './pickQuestions';
+import { TargetedSamplingField } from './TargetedSamplingField';
 
 type Difficulty = 'all' | 'easy' | 'medium' | 'hard';
 type Structure = 'all' | 'negative' | 'affirmative';
@@ -55,6 +59,7 @@ function Setup({ session }: { session: ReadySession }) {
     [api.repos, session.user.id],
   );
   const events = useUserEvents(session.user.id);
+  const analysis = useAnalysis(session, events);
   // Los focos de Progreso llegan con un tema o una estructura ya elegidos (D-078)
   const [params] = useSearchParams();
   const [topics, setTopics] = useState<Set<string>>(() => {
@@ -66,6 +71,7 @@ function Setup({ session }: { session: ReadySession }) {
     params.get('structure') === 'negative' ? 'negative' : 'all',
   );
   const [count, setCount] = useState('10');
+  const [targeted, setTargeted] = useState(false);
 
   const header = (
     <ScreenHeader
@@ -82,11 +88,12 @@ function Setup({ session }: { session: ReadySession }) {
     );
   }
 
-  const { plan, left } = dailyQuestions({
+  const { plan, left, reserved } = dailyQuestions({
     events,
     subscription,
     timeZone: session.user.timeZone,
     now: new Date(),
+    reserved: reservedByStoredExam(session.user.id),
   });
   // Preguntas por subespecialidad con los filtros de dificultad y estructura, para el selector
   const matchesLevel = (question: (typeof questions)[number]) => {
@@ -108,12 +115,21 @@ function Setup({ session }: { session: ReadySession }) {
     const sessionId = newId();
     // Los casos seriados se mantienen juntos y en orden
     const ordered = pickQuestions(filtered, `practice|${sessionId}`, wanted);
+    // Solo se dirige si la opción está encendida y el perfil ya tiene trampas que dirigir
+    const targetTags = targeted && analysis ? targetBiasTags(analysis.report) : [];
     await api.recordEvent(
       createEvent(
         'session_started',
         {
           kind: 'practice',
-          config: { topics: [...topics], difficulty, structure, count: wanted },
+          config: {
+            topics: [...topics],
+            difficulty,
+            structure,
+            count: wanted,
+            sampling: targetTags.length > 0 ? 'targeted' : 'diverse',
+            ...(targetTags.length > 0 ? { targetTags } : {}),
+          },
         },
         { userId: session.user.id, tz: session.user.timeZone, sessionId },
       ),
@@ -128,6 +144,7 @@ function Setup({ session }: { session: ReadySession }) {
       ended: false,
       kind: 'practice',
       duelId: null,
+      targetTags,
     });
     void navigate(screenPath('question'));
   };
@@ -177,8 +194,18 @@ function Setup({ session }: { session: ReadySession }) {
               }}
             />
           </div>
+          <TargetedSamplingField
+            report={analysis?.report}
+            checked={targeted}
+            onChange={setTargeted}
+          />
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            {left === 0 ? (
+            {left === 0 && reserved > 0 ? (
+              // El límite del día lo tiene apartado un examen que todavía no termina
+              <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
+                <Link to={screenPath('exam')}>{t.simulator.goToOpenExam}</Link>
+              </Button>
+            ) : left === 0 ? (
               <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
                 <Link to={screenPath('subscription')}>{t.simulator.seePlans}</Link>
               </Button>
@@ -201,7 +228,11 @@ function Setup({ session }: { session: ReadySession }) {
                 <>
                   {' · '}
                   <span className={left === 0 ? 'font-semibold text-fg' : undefined}>
-                    {left > 0 ? t.simulator.limit(left) : t.simulator.limitReached}
+                    {left > 0
+                      ? t.simulator.limit(left)
+                      : reserved > 0
+                        ? t.simulator.limitUsedByExam
+                        : t.simulator.limitReached}
                   </span>
                 </>
               ) : null}

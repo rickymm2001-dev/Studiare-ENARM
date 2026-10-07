@@ -13,6 +13,7 @@ import {
   isClosed,
   markedCount,
   markNudged,
+  pendingForDailyLimit,
   markRecorded,
   markSessionEnded,
   recordShown,
@@ -198,6 +199,27 @@ describe('cierre del examen', () => {
     expect(isClosed(setQueuedErrors(ended, 0))).toBe(true);
     // Sin terminar nunca está cerrado, aunque los pasos ya estén anotados
     expect(isClosed(setQueuedErrors(markSessionEnded(state, 0), 0))).toBe(false);
+  });
+
+  it('cuenta para el límite del día las preguntas que todavía no están en la bitácora', () => {
+    const { state, ids } = fresh();
+    const [q1, q2] = ids as [string, string];
+    // En curso cualquiera de las 5 se puede contestar
+    expect(pendingForDailyLimit(state)).toBe(5);
+    const answered = choose(
+      choose(state, q1, newId(), T0 + 1000).state,
+      q2,
+      newId(),
+      T0 + 2000,
+    ).state;
+    expect(pendingForDailyLimit(answered)).toBe(5);
+    // Al terminar solo las contestadas que faltan por registrar
+    const finished = finishExamState(answered, T0 + 3000, 'completed');
+    expect(pendingForDailyLimit(finished)).toBe(2);
+    expect(pendingForDailyLimit(markRecorded(finished, q1, 10))).toBe(1);
+    // Cerrado ya no queda nada
+    const closed = setQueuedErrors(markSessionEnded(markRecorded(finished, q1, 10), 1), 0);
+    expect(pendingForDailyLimit(closed)).toBe(0);
   });
 
   it('anota cada respuesta registrada una sola vez, con su XP', () => {

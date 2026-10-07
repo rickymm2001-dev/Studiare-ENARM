@@ -28,8 +28,11 @@ import { followedDeckIds } from '../decks/followed';
 import { buildSnapshot } from '../home/snapshot';
 import { latestCardStates, reviewedToday } from '../review/study';
 import { schedulerConfig } from '../review/schedulerConfig';
+import { topicsCalibration } from '../progress/analysis';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
+import { dailyQuestions } from '../shared/dailyLimit';
+import { reservedByStoredExam } from '../exam/examStorage';
 import { buildPlannerView, MEASURED_DAYS_NEEDED, type PlannerView } from './planView';
 
 const topicName = new Map(
@@ -53,8 +56,16 @@ function Planner({ session }: { session: ReadySession }) {
     return { decks, cards };
   }, [api.repos]);
   const questions = useLiveData(() => api.repos.questions.listLatest(), [api.repos]);
+  const subscription = useLiveData(
+    () => api.repos.subscriptions.get(user.id).then((value) => value ?? null),
+    [api.repos, user.id],
+  );
 
-  const ready = events !== undefined && content !== undefined && questions !== undefined;
+  const ready =
+    events !== undefined &&
+    content !== undefined &&
+    questions !== undefined &&
+    subscription !== undefined;
   const result = useMemo(() => {
     if (!ready) return null;
     const now = new Date();
@@ -77,6 +88,14 @@ function Planner({ session }: { session: ReadySession }) {
       averageRetrievability: {},
       thresholds: DEFAULT_THRESHOLDS.topics,
     });
+    // El plan Gratis solo deja 20 preguntas al día, así que el bloque de práctica no pasa de ahí
+    const daily = dailyQuestions({
+      events,
+      subscription,
+      timeZone: user.timeZone,
+      now,
+      reserved: reservedByStoredExam(user.id),
+    });
     const view = buildPlannerView({
       now,
       today,
@@ -91,10 +110,19 @@ function Planner({ session }: { session: ReadySession }) {
       declaredMinutes: user.dailyMinutes,
       examDate: examDateFor(user),
       priorityTopics: analysis.priorities.map((priority) => priority.topic),
+      questionLimit: { today: daily.left, perDay: daily.limit },
     });
-    return { view, today, topicsReady: analysis.priorities.length > 0 };
+    // Si ya hay temas con dominio listo, el plan apunta al más débil. Si no, dice cuánto falta
+    const calibration =
+      analysis.priorities.length > 0
+        ? null
+        : topicsCalibration(
+            new Map(analysis.topics.map((entry) => [entry.topic, entry])),
+            DEFAULT_THRESHOLDS.topics.minResponsesPerTopic,
+          );
+    return { view, today, calibration, limit: daily.limit };
     // session cambia con el perfil, así que sus ajustes y su alumno ya están cubiertos
-  }, [ready, events, content, questions, session, user, settings]);
+  }, [ready, events, content, questions, subscription, session, user, settings]);
 
   const header = (
     <ScreenHeader title={t.screens.planner.title} description={t.screens.planner.description} />
@@ -107,12 +135,12 @@ function Planner({ session }: { session: ReadySession }) {
       </>
     );
   }
-  const { view, today, topicsReady } = result;
+  const { view, today, calibration, limit } = result;
   return (
     <>
       {header}
       <div className="grid items-start gap-3 lg:grid-cols-2">
-        <TodayCard view={view} topicsReady={topicsReady} />
+        <TodayCard view={view} calibration={calibration} limit={limit} />
         <div className="flex flex-col gap-3">
           {view.plan.warnings.map((warning) => (
             <OverloadCard
@@ -133,7 +161,17 @@ function Planner({ session }: { session: ReadySession }) {
 
 const minutes = (value: number) => Math.round(value);
 
-function TodayCard({ view, topicsReady }: { view: PlannerView; topicsReady: boolean }) {
+function TodayCard({
+  view,
+  calibration,
+  limit,
+}: {
+  view: PlannerView;
+  /** Preguntas por día del plan. null es sin límite */
+  limit: number | null;
+  /** Cuánto falta para que el plan apunte a un tema débil. null si ya hay temas listos */
+  calibration: { have: number; need: number } | null;
+}) {
   const { today } = view.plan;
   const topic = today.simulatorTopic;
   const topicLabel = topic ? (topicName.get(topic) ?? topic) : null;
@@ -207,6 +245,9 @@ function TodayCard({ view, topicsReady }: { view: PlannerView; topicsReady: bool
           ))}
         </ul>
       )}
+      {today.simulatorCapped && limit !== null ? (
+        <p className="mt-3 text-sm text-fg-muted">{t.planner.limitNote(limit)}</p>
+      ) : null}
       {view.cardCount === 0 ? (
         <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg bg-muted p-3">
           <div className="min-w-0 flex-1">
@@ -218,8 +259,15 @@ function TodayCard({ view, topicsReady }: { view: PlannerView; topicsReady: bool
           </Button>
         </div>
       ) : null}
-      {!topicsReady ? (
-        <p className="mt-3 text-sm text-fg-muted">{t.planner.topicsCalibrating}</p>
+      {calibration ? (
+        <div className="mt-3 flex flex-col gap-1.5">
+          <CalibratingNote
+            current={calibration.have}
+            target={calibration.need}
+            unit={t.widgets.weakTopics.unit}
+          />
+          <p className="text-sm text-fg-muted">{t.planner.topicsCalibrating}</p>
+        </div>
       ) : null}
     </Card>
   );

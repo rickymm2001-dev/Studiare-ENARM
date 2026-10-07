@@ -19,6 +19,41 @@ const load = (reviews: number, newCards = 0, days = 30): DayLoad[] =>
   Array.from({ length: days }, (_, index) => ({ day: addDays(TODAY, index), reviews, newCards }));
 
 describe('planificador (7.10)', () => {
+  it('recorta el bloque de simulador al límite de preguntas del plan y lo avisa', () => {
+    const plan = buildPlan({
+      today: TODAY,
+      examDate: null,
+      declaredMinutes: 90,
+      pomodoroMinutes: [],
+      load: load(0),
+      priorityTopics: ['cardio'],
+      questionLimit: { today: 8, perDay: 20 },
+    });
+    // Sin tope caben 60 preguntas en los 90 minutos. Hoy solo le quedan 8 y los demás días 20
+    expect(plan.today).toMatchObject({ simulatorQuestions: 8, simulatorCapped: true });
+    expect(plan.week[1]).toMatchObject({ simulatorQuestions: 20, simulatorCapped: true });
+    expect(plan.today.minutesPlanned).toBeLessThan(plan.today.minutesAvailable);
+  });
+
+  it('sin tope, o con un tope que no se alcanza, no recorta nada', () => {
+    const base = {
+      today: TODAY,
+      examDate: null,
+      declaredMinutes: 30,
+      pomodoroMinutes: [],
+      load: load(0),
+      priorityTopics: [],
+    };
+    const free = buildPlan(base);
+    expect(free.today.simulatorCapped).toBe(false);
+    const roomy = buildPlan({ ...base, questionLimit: { today: 500, perDay: null } });
+    expect(roomy.today.simulatorQuestions).toBe(free.today.simulatorQuestions);
+    expect(roomy.today.simulatorCapped).toBe(false);
+    // Con cero preguntas hoy no hay bloque de simulador ni tema
+    const none = buildPlan({ ...base, questionLimit: { today: 0, perDay: 20 } });
+    expect(none.today).toMatchObject({ simulatorQuestions: 0, simulatorTopic: null });
+  });
+
   it('usa los minutos declarados si no hay Pomodoro y los reales si hay 3 días o más', () => {
     const declared = buildPlan({
       today: TODAY,

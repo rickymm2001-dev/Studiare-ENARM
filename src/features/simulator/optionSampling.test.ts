@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DUEL_OPTIONS } from '@/engines/party';
 import type { SamplerOption } from '@/engines/sampler';
-import { sampleForQuestion } from './optionSampling';
+import { correctPositionCounts, sampleForQuestion } from './optionSampling';
 
 const options: SamplerOption[] = Array.from({ length: 10 }, (_, index) => ({
   id: `o${index}`,
@@ -60,5 +60,82 @@ describe('opciones de una práctica libre', () => {
     const a = sampleForQuestion({ ...base, sessionId: 's1', duelId: null });
     const b = sampleForQuestion({ ...base, sessionId: 's1', duelId: null });
     expect(shownIds(b)).toEqual(shownIds(a));
+  });
+});
+
+describe('opciones dirigidas a las trampas del alumno', () => {
+  const targetTags = ['sesgo1', 'sesgo2'];
+
+  it('suben sus trampas sin llenar toda la pregunta con ellas', () => {
+    for (let index = 0; index < 20; index += 1) {
+      const result = sampleForQuestion({
+        ...base,
+        sessionId: `s${index}`,
+        duelId: null,
+        targetTags,
+      });
+      expect(result.mode).toBe('targeted');
+      const tags = result.shown.map(
+        (entry) => options.find((option) => option.id === entry.optionId)?.biasTag,
+      );
+      // Con 4 opciones hay 3 distractores y a lo más 2 son de sus trampas
+      expect(tags.filter((tag) => tag !== null && targetTags.includes(tag as string))).toHaveLength(
+        2,
+      );
+      expect(shownIds(result)).toContain('o0');
+    }
+  });
+
+  it('sin trampas o en un duelo no cambian el muestreo', () => {
+    expect(sampleForQuestion({ ...base, sessionId: 's1', duelId: null, targetTags: [] }).mode).toBe(
+      'diverse',
+    );
+    const duel = sampleForQuestion({ ...base, sessionId: 's1', duelId: 'duelo', targetTags });
+    expect(duel.mode).toBe('canonical');
+    expect(shownIds(duel)).toEqual(
+      shownIds(sampleForQuestion({ ...base, sessionId: 's9', duelId: 'duelo' })),
+    );
+  });
+});
+
+describe('posición de la correcta', () => {
+  it('cuenta las posiciones y deja fuera lo que no es una posición', () => {
+    expect(correctPositionCounts([0, 2, 2, 5, -1, 1.5], 4)).toEqual([1, 0, 2, 0]);
+    expect(correctPositionCounts([], 3)).toEqual([0, 0, 0]);
+  });
+
+  it('con los conteos de la práctica la reparte parejo entre las posiciones', () => {
+    const positions: number[] = [];
+    for (let index = 0; index < 20; index += 1) {
+      const result = sampleForQuestion({
+        ...base,
+        questionId: `q${index}`,
+        sessionId: 'sesion',
+        duelId: null,
+        correctPositionCounts: correctPositionCounts(positions, 4),
+      });
+      positions.push(result.correctPosition);
+    }
+    expect(Math.max(...correctPositionCounts(positions, 4))).toBe(5);
+    expect(Math.min(...correctPositionCounts(positions, 4))).toBe(5);
+  });
+
+  it('sin conteos se queda con el azar de siempre, que a veces junta varias en una posición', () => {
+    const worst = Math.max(
+      ...Array.from({ length: 30 }, (_, run) => {
+        const positions = Array.from(
+          { length: 20 },
+          (__, index) =>
+            sampleForQuestion({
+              ...base,
+              questionId: `q${index}`,
+              sessionId: `sesion-${run}`,
+              duelId: null,
+            }).correctPosition,
+        );
+        return Math.max(...correctPositionCounts(positions, 4));
+      }),
+    );
+    expect(worst).toBeGreaterThan(5);
   });
 });

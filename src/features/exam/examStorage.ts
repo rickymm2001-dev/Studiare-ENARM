@@ -2,7 +2,7 @@
 // y no en la bitácora porque es estado de pantalla y no un hecho del alumno. Los hechos, como cada
 // respuesta, se registran en la bitácora al ver la pregunta y al terminar. Si el contenido no es
 // válido, se trata como si no hubiera examen.
-import { ExamStateSchema, type ExamState } from './examState';
+import { ExamStateSchema, pendingForDailyLimit, type ExamState } from './examState';
 
 const storageKey = (userId: string) => `enarm.exam.v1.${userId}`;
 
@@ -76,4 +76,16 @@ export function clearExamState(
   } catch {
     // Nada que limpiar
   }
+}
+
+/**
+ * Preguntas del examen guardado del alumno que todavía no están en la bitácora y cuentan para su
+ * límite del día. 0 si no hay examen
+ */
+export function reservedByStoredExam(
+  userId: string,
+  storage: ReadStorage = defaultStorage,
+): number {
+  const state = loadExamState(userId, storage);
+  return state ? pendingForDailyLimit(state) : 0;
 }

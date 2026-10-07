@@ -20,6 +20,7 @@ import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
+import { useVisibilityLog } from '../shared/useVisibilityLog';
 import { clock } from '../simulator/practice';
 import type { QuestionBundle } from '../simulator/useQuestion';
 import { formatClock } from './clock';
@@ -76,7 +77,7 @@ function ExamLoader({ session }: { session: ReadySession }) {
       const bundles = await loadExamBundles(api, stored.questionIds);
       let state = stored;
       const id = state.questionIds[state.current];
-      const first = showQuestion(state, state.current, id ? bundles.get(id) : undefined);
+      const first = showQuestion(state, state.current, id ? bundles.get(id) : undefined, bundles);
       if (first.shown) {
         state = first.state;
         saveExamState(state);
@@ -149,6 +150,8 @@ function ExamRunner({
   // pregunta no lo pide para no quitarle el foco a la página al entrar
   const [focusPrompt, setFocusPrompt] = useState(false);
   const ctx = { userId: user.id, tz: user.timeZone, sessionId: initial.examId };
+  // Cuánto se distrae en un examen de horas queda en la bitácora (6.3)
+  useVisibilityLog({ userId: user.id, timeZone: user.timeZone, sessionId: initial.examId });
 
   const commit = (change: (current: ExamState) => ExamState) => {
     const next = change(stateRef.current);
@@ -185,7 +188,12 @@ function ExamRunner({
   const showCurrent = () => {
     const current = stateRef.current;
     const id = current.questionIds[current.current];
-    const result = showQuestion(current, current.current, id ? bundles.get(id) : undefined);
+    const result = showQuestion(
+      current,
+      current.current,
+      id ? bundles.get(id) : undefined,
+      bundles,
+    );
     if (!result.shown) return;
     commit(() => result.state);
     void api.recordEvent(createEvent('question_shown', result.shown, ctx));

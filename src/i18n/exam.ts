@@ -147,7 +147,8 @@ export const examText = {
     polarity: { affirmative: 'Afirmativas', negative: 'Negativas o de excepción' },
     taskTitle: 'Por tipo de tarea',
     structureCalibrating:
-      'La comparación entre afirmativas y negativas necesita más preguntas para ser confiable. Mira Progreso para ver tu patrón acumulado.',
+      'La comparación entre afirmativas y negativas necesita más preguntas de cada tipo para ser confiable. Mira Progreso para ver tu patrón acumulado.',
+    structureUnit: 'preguntas de cada tipo',
     trapsTitle: 'Trampas en las que caíste',
     trapsNone: 'No caíste en ninguna trampa etiquetada. O no fallaste, o fallaste sin etiqueta.',
     trapCount: (n: number) => plural(n, 'vez', 'veces'),

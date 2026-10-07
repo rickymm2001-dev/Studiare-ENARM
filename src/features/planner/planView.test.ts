@@ -130,6 +130,12 @@ describe('plan del día y de la semana', () => {
     expect(result.cardCount).toBe(15);
   });
 
+  it('pasa el límite de preguntas del plan al motor', () => {
+    const result = view({ declaredMinutes: 90, questionLimit: { today: 20, perDay: 20 } });
+    expect(result.plan.today.simulatorQuestions).toBe(20);
+    expect(result.plan.today.simulatorCapped).toBe(true);
+  });
+
   it('descuenta lo que ya repasó hoy y respeta los límites diarios', () => {
     const cards = [...Array.from({ length: 30 }, (_, index) => dueIn(index, -1)), ...newCards(40)];
     const small: SchedulerConfig = {
