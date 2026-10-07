@@ -67,6 +67,34 @@ export function renderCloze(html: string, ordinal: number, reveal: boolean): str
   return renderClozeFace(parseCloze(html).nodes, ordinal, reveal);
 }
 
+export interface CardFaces {
+  /** HTML saneado de lo que se pregunta */
+  front: string;
+  /** HTML saneado de lo que se muestra al revelar */
+  back: string;
+}
+
+/**
+ * Las dos caras de una carta según el tipo de su nota. En una básica con tarjeta inversa la carta 0
+ * pregunta el frente y la carta 1 pregunta el reverso. El switch es exhaustivo a propósito, así un
+ * tipo de nota nuevo no compila hasta que se decide cómo se ve
+ */
+export function cardFaces(note: Note, ordinal: number): CardFaces {
+  switch (note.kind) {
+    case 'basic':
+      return { front: note.front, back: note.back };
+    case 'basic_reverse':
+      return ordinal === 1
+        ? { front: note.back, back: note.front }
+        : { front: note.front, back: note.back };
+    case 'cloze':
+      return {
+        front: renderCloze(note.text, ordinal, false),
+        back: `${renderCloze(note.text, ordinal, true)}${note.extra ? `<br>${note.extra}` : ''}`,
+      };
+  }
+}
+
 /** La tarjeta salió de una pregunta del banco, como las de Mis errores */
 export function isQuestionNote(note: Pick<Note, 'sourceQuestionVersionId'> | undefined): boolean {
   return note !== undefined && note.sourceQuestionVersionId !== null;

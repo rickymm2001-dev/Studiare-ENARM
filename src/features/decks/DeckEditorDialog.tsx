@@ -1,21 +1,23 @@
 // Editor de las tarjetas de un mazo hecho a mano (3.1). Lista las tarjetas del mazo y deja agregar,
-// editar y borrar, básicas con pregunta y respuesta o con huecos al estilo Anki. Todo es texto plano
-// que se guarda escapado. Una tarjeta nueva aparece en Repasar al guardarla.
+// editar y borrar, básicas, básicas con tarjeta inversa o con huecos al estilo Anki. Todo es texto
+// plano que se guarda escapado. Una tarjeta nueva aparece en Repasar al guardarla.
 import { Pencil, Trash2, X } from 'lucide-react';
 import { Dialog } from 'radix-ui';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { htmlToText } from '@/data/content/plainText';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
 import type { Deck, Note } from '@/data/schemas/decks';
 import {
-  clozeOrdinals,
+  cardOrdinals,
+  convertDraft,
   deleteManualNote,
   draftOf,
   saveManualNote,
   validateDraft,
   type DraftError,
   type NoteDraft,
+  type NoteKind,
 } from '@/data/usecases/manualDecks';
 import { t } from '@/i18n/es-MX';
 import { cn } from '@/ui/cn';
@@ -23,14 +25,22 @@ import { Button } from '@/ui/components/button';
 import { TextAreaField } from '@/ui/components/field';
 import type { ReadySession } from '../shared/RequireSession';
 
-const emptyDraft = (kind: NoteDraft['kind']): NoteDraft =>
-  kind === 'basic'
-    ? { kind: 'basic', front: '', back: '' }
-    : { kind: 'cloze', text: '', extra: '' };
+/** Los tipos de tarjeta en el orden en que se ofrecen */
+const KINDS: readonly NoteKind[] = ['basic', 'basic_reverse', 'cloze'];
+
+const emptyDraft = (kind: NoteKind): NoteDraft => {
+  switch (kind) {
+    case 'basic':
+    case 'basic_reverse':
+      return { kind, front: '', back: '' };
+    case 'cloze':
+      return { kind, text: '', extra: '' };
+  }
+};
 
 /** Primeras palabras de una tarjeta, para nombrar sus botones */
 function previewOf(note: Note): string {
-  const text = htmlToText(note.kind === 'basic' ? note.front : note.text).replace(/\s+/g, ' ');
+  const text = htmlToText(note.kind === 'cloze' ? note.text : note.front).replace(/\s+/g, ' ');
   return text.length > 60 ? `${text.slice(0, 57)}…` : text;
 }
 
@@ -44,6 +54,7 @@ export function DeckEditorDialog({
   onClose: () => void;
 }) {
   const api = useDataApi();
+  const kindHelpId = useId();
   const text = t.decks.editor;
   const notes = useLiveData(
     async () => (await api.repos.notes.list()).filter((note) => note.deckId === deck.id),
@@ -62,7 +73,7 @@ export function DeckEditorDialog({
 
   const cardsOf = (noteId: string) => (cards ?? []).filter((card) => card.noteId === noteId).length;
 
-  const startNew = (kind: NoteDraft['kind']) => {
+  const startNew = (kind: NoteKind) => {
     setEditingId(null);
     setDraft(emptyDraft(kind));
     setError(null);
@@ -106,7 +117,13 @@ export function DeckEditorDialog({
   };
 
   const errorText = error === null ? null : error === 'save' ? text.saveError : text.errors[error];
-  const holes = draft.kind === 'cloze' ? clozeOrdinals(draft.text).length : 0;
+  // La cuenta de cartas avisa lo que no es obvio, los huecos de una cloze y las dos de una inversa
+  const cardCount = draft.kind === 'basic' ? 0 : cardOrdinals(draft).length;
+  const kindLabels: Record<NoteKind, string> = {
+    basic: text.basic,
+    basic_reverse: text.basicReverse,
+    cloze: text.cloze,
+  };
 
   return (
     <Dialog.Root
@@ -142,9 +159,9 @@ export function DeckEditorDialog({
               void submit();
             }}
           >
-            <fieldset className="flex flex-wrap gap-2">
+            <fieldset className="flex flex-wrap gap-2" aria-describedby={kindHelpId}>
               <legend className="mb-1 font-medium">{text.kind}</legend>
-              {(['basic', 'cloze'] as const).map((kind) => (
+              {KINDS.map((kind) => (
                 <label
                   key={kind}
                   className={cn(
@@ -159,49 +176,21 @@ export function DeckEditorDialog({
                     name="tipo-tarjeta"
                     className="sr-only"
                     checked={draft.kind === kind}
-                    // Cambiar de tipo conserva lo escrito en el primer campo para no perderlo
+                    // Cambiar de tipo conserva lo escrito, como Cambiar tipo de nota en Anki
                     onChange={() => {
-                      setDraft(
-                        kind === 'basic'
-                          ? {
-                              kind: 'basic',
-                              front: draft.kind === 'cloze' ? draft.text : '',
-                              back: '',
-                            }
-                          : {
-                              kind: 'cloze',
-                              text: draft.kind === 'basic' ? draft.front : '',
-                              extra: '',
-                            },
-                      );
+                      setDraft(convertDraft(draft, kind));
                       setError(null);
                     }}
                   />
-                  {text[kind]}
+                  {kindLabels[kind]}
                 </label>
               ))}
             </fieldset>
+            <p id={kindHelpId} className="-mt-1 text-sm text-fg-muted">
+              {text.kindHelp[draft.kind]}
+            </p>
 
-            {draft.kind === 'basic' ? (
-              <>
-                <TextAreaField
-                  label={text.front}
-                  value={draft.front}
-                  maxLength={3000}
-                  onChange={(event) => {
-                    setDraft({ ...draft, front: event.target.value });
-                  }}
-                />
-                <TextAreaField
-                  label={text.back}
-                  value={draft.back}
-                  maxLength={3000}
-                  onChange={(event) => {
-                    setDraft({ ...draft, back: event.target.value });
-                  }}
-                />
-              </>
-            ) : (
+            {draft.kind === 'cloze' ? (
               <>
                 <TextAreaField
                   label={text.text}
@@ -221,9 +210,30 @@ export function DeckEditorDialog({
                     setDraft({ ...draft, extra: event.target.value });
                   }}
                 />
-                {holes > 0 ? <p className="text-sm text-fg-muted">{text.cards(holes)}</p> : null}
+              </>
+            ) : (
+              <>
+                <TextAreaField
+                  label={draft.kind === 'basic' ? text.front : text.reverseFront}
+                  value={draft.front}
+                  maxLength={3000}
+                  onChange={(event) => {
+                    setDraft({ ...draft, front: event.target.value });
+                  }}
+                />
+                <TextAreaField
+                  label={draft.kind === 'basic' ? text.back : text.reverseBack}
+                  value={draft.back}
+                  maxLength={3000}
+                  onChange={(event) => {
+                    setDraft({ ...draft, back: event.target.value });
+                  }}
+                />
               </>
             )}
+            {cardCount > 0 ? (
+              <p className="text-sm text-fg-muted">{text.cards(cardCount)}</p>
+            ) : null}
 
             {errorText ? (
               <p role="alert" className="text-sm font-medium text-danger">

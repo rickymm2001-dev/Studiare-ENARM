@@ -12,7 +12,7 @@ import type { AppEvent } from '@/data/schemas/events';
 import { deckIds } from '@/demo/content/deckEntities';
 import { studyDayOf } from '@/engines/studyDay';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
-import { topicFromTags } from '../review/study';
+import { cardFaces, topicFromTags } from '../review/study';
 import type { ReadySession } from '../shared/RequireSession';
 import type { CardFact } from './errorContexts';
 import { hypothesisArtifactId } from './hypothesisStore';
@@ -93,7 +93,9 @@ export function useTutorView(
           card.id,
           {
             topic: catalogTopic.get(card.noteId) ?? topicFromTags(note?.tags),
-            back: note?.kind === 'basic' ? note.back : null,
+            // La respuesta de la carta. En una inversa la carta 1 responde con el frente. Una cloze
+            // no enumera una respuesta, así que no entra a la regla de listas
+            back: note && note.kind !== 'cloze' ? cardFaces(note, card.ordinal).back : null,
           },
         ];
       }),

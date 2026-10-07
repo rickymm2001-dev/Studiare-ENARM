@@ -50,10 +50,10 @@ import { StudyTabs } from './StudyTabs';
 import { schedulerConfig } from './schedulerConfig';
 import { cardMatches, type ReviewMode, type ReviewSelection } from './selection';
 import {
+  cardFaces,
   errorsFirst,
   isQuestionNote,
   latestCardStates,
-  renderCloze,
   reviewedToday,
   reviewEndReason,
   topicFromTags,
@@ -502,11 +502,7 @@ function ReviewSession({
   const state = states.get(card.id) ?? null;
   const isNew = state === null || state.state === 'new';
   const reveal = step === 'back' || step === 'cause';
-  const front = note.kind === 'basic' ? note.front : renderCloze(note.text, card.ordinal, false);
-  const back =
-    note.kind === 'basic'
-      ? note.back
-      : `${renderCloze(note.text, card.ordinal, true)}${note.extra ? `<br>${note.extra}` : ''}`;
+  const { front, back } = cardFaces(note, card.ordinal);
   const remainingReviews = queue.slice(position).filter((id) => {
     const s = states.get(id);
     return s && s.state !== 'new';

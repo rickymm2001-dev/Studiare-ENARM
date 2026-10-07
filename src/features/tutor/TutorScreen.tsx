@@ -4,6 +4,7 @@
 // que se abre. Nada de chat libre ni de predecir el puntaje.
 import { useMemo, useState } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
+import { maskCloze } from '@/data/content/cloze';
 import { useDataApi } from '@/data/context';
 import type { Note } from '@/data/schemas/decks';
 import type { Option } from '@/data/schemas/bank';
@@ -37,9 +38,9 @@ export function TutorScreen() {
 
 /** Texto plano de una tarjeta para nombrarla en la evidencia */
 function plainLabel(note: Note): string {
-  const html = note.kind === 'basic' ? note.front : note.text;
+  // Lo que se pregunta al abrir la carta. En una cloze, sin la respuesta de ningún hueco
+  const html = note.kind === 'cloze' ? maskCloze(note.text) : note.front;
   const text = html
-    .replace(/\{\{c\d+::(.*?)(?:::.*?)?\}\}/g, '[…]')
     .replace(/<[^>]*>/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();

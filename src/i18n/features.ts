@@ -392,13 +392,23 @@ export const featureText = {
         'Agrega, edita o borra las tarjetas de este mazo. Aparecen en Repasar al guardarlas.',
       close: 'Cerrar',
       kind: 'Tipo de tarjeta',
-      basic: 'Pregunta y respuesta',
-      cloze: 'Con huecos',
+      basic: 'Básica',
+      basicReverse: 'Básica con tarjeta inversa',
+      cloze: 'Con huecos (cloze)',
+      kindHelp: {
+        basic: 'Una pregunta y su respuesta. Genera una carta.',
+        basic_reverse:
+          'Un frente y un reverso. Genera dos cartas, una que pregunta el frente y otra que pregunta el reverso.',
+        cloze:
+          'Un texto con huecos que se ocultan al repasar. Genera una carta por cada número de hueco.',
+      },
       front: 'Pregunta',
       back: 'Respuesta',
+      reverseFront: 'Frente',
+      reverseBack: 'Reverso',
       text: 'Texto con huecos',
       clozeHint:
-        'Pon cada respuesta entre llaves, como {{c1::respuesta}}. Una pista va al final, {{c1::respuesta::pista}}. Cada número de hueco hace una tarjeta.',
+        'Pon cada respuesta entre llaves, como {{c1::respuesta}}, y una pista al final, como {{c1::respuesta::pista}}. Un hueco puede ir dentro de otro, por ejemplo {{c1::El {{c2::ventrículo izquierdo}} bombea a la aorta}}. En la carta c1 se oculta todo el hueco y en la c2 solo el ventrículo izquierdo.',
       extra: 'Nota extra (opcional)',
       add: 'Agregar tarjeta',
       save: 'Guardar tarjeta',
