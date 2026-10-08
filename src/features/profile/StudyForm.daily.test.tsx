@@ -7,6 +7,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
+import { UserSettingsSchema } from '@/data/schemas/people';
 import { t } from '@/i18n/es-MX';
 
 // La pantalla trae muchos campos y userEvent tarda más que los 5 segundos por defecto
@@ -117,5 +118,20 @@ describe('ajustes de carga diaria en Configuración', () => {
     expect(toggle).toBeChecked();
     await typing.click(screen.getByRole('button', { name: t.settings.discard }));
     expect(toggle).not.toBeChecked();
+  });
+
+  it('un intervalo máximo del perfil guía que no está en la lista se muestra tal cual', async () => {
+    app = await renderApp(`${SCREENS.settings.path}?seccion=study`, {
+      user: { settings: UserSettingsSchema.parse({ maxIntervalDays: 287 }) },
+    });
+    const typing = userEvent.setup();
+    await typing.click(
+      await screen.findByText(
+        t.settings.advanced,
+        { selector: 'summary span' },
+        { timeout: 10_000 },
+      ),
+    );
+    expect(screen.getByRole('combobox', { name: t.settings.maxInterval })).toHaveValue('287');
   });
 });

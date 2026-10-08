@@ -385,9 +385,9 @@ Valores por defecto en src/config/thresholds.ts, editables desde admin (12).
 | Límites diarios | 20 nuevas y 200 repasos | J |
 | Ritmo propio de repaso para sugerir nuevas por día | 100 repasos medidos, con 20 tarjetas nuevas medidas para usar su tiempo. Antes usa 10 s por repaso y 30 s por nueva | J |
 | Tiempo para tarjetas dentro de los minutos diarios | 50% de los minutos que declara el alumno, sobre el día más pesado de 30 días | J |
-| Aviso de recuperación por atrasos | Más de 40 vencidas de días anteriores o la mitad del límite diario de repasos, lo que sea mayor | J |
-| Tiempo máximo que se guarda por tarjeta | 120 segundos | J |
-| Días fáciles | Solo mueven repasos de 3 días o más, con ventana de 1 día (3 a 6), 2 (7 a 19), 3 (20 a 59) y 5 (60 o más) | J |
+| Aviso de recuperación por atrasos | 40 vencidas de días anteriores o más, o la mitad del límite diario de repasos, lo que sea mayor | J |
+| Tiempo máximo que se guarda en cada paso de una tarjeta, ver la respuesta y calificar | 120 segundos | J |
+| Días fáciles | Solo mueven repasos de 3 días o más, con ventana de 1 día (3 a 6), 2 (7 a 19), 3 (20 a 59) y 5 (60 o más). Estos radios y el máximo de 200 nuevas de la sugerencia viven en los motores y no en la configuración | J |
 
 ## 8. Riesgos
 

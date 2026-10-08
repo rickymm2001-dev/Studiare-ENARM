@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import type { FsrsCardState } from '@/data/schemas/common';
+import { NO_EASY_DAYS } from './easyDays';
 import {
   newCardState,
   projectLoad,
@@ -409,6 +410,16 @@ describe('equivalencia con projectLoad directo', () => {
       name: 'con el examen dentro del horizonte',
       now: NOW,
       config: { ...config, examDate: '2026-11-12' },
+    },
+    // Con días fáciles cada grupo de nuevas se mueve distinto y aun así la cuenta es la misma
+    {
+      name: 'con días fáciles y tope de intervalo',
+      now: NOW,
+      config: {
+        ...capped,
+        easyDays: { ...NO_EASY_DAYS, sat: 'reduced', sun: 'minimum' },
+        examDate: '2026-12-20',
+      },
     },
     // 23:30 locales del 8 de octubre. Las nuevas de hoy entran de inmediato
     { name: 'tarde por la noche', now: new Date('2026-10-09T05:30:00.000Z'), config },

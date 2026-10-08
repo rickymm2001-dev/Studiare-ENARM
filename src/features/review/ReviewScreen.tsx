@@ -430,7 +430,7 @@ function ReviewSession({
     await ensureSession();
     const now = new Date();
     const before = states.get(card.id) ?? null;
-    const outcome = scheduleReview(before, rating, now, config);
+    const outcome = scheduleReview(before, rating, now, config, card.id);
     const msToReveal = Math.min(revealedAt.current - shownAt.current, CARD_TIME_CAP_MS);
     const msToRate = Math.min(now.getTime() - revealedAt.current, CARD_TIME_CAP_MS);
     const reviewedEvent = await api.recordEvent(
@@ -666,7 +666,7 @@ function ReviewSession({
     (id) => states.get(id) ?? null,
   );
   const leechBefore = isLeech(state, config.thresholds);
-  const preview = reveal ? previewReview(state, new Date(), config) : null;
+  const preview = reveal ? previewReview(state, new Date(), config, cardId) : null;
   const suggestions = leech ? leechSuggestions(checkCardQuality(draftOf(note))) : [];
 
   return (

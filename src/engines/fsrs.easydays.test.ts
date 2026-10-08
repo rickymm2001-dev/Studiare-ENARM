@@ -189,6 +189,31 @@ describe('días fáciles en el programador (D-085)', () => {
     expect(toMonday).toBeGreaterThan(0);
   });
 
+  it('con la clave de la tarjeta, las que tienen el mismo estado se reparten entre sábado y lunes', () => {
+    const found = all.find(({ state, now }) => {
+      const plain = scheduleReview(state, 'good', now, base).state;
+      return (
+        weekdayOf(studyDayOf(dueOf(plain), TZ)) === 'sun' &&
+        easyDayRadius(daysBetweenInstants(now, dueOf(plain))) > 0
+      );
+    });
+    if (!found) throw new Error('Debía haber un vencimiento en domingo');
+    const { state, now } = found;
+    const plainDue = dueOf(scheduleReview(state, 'good', now, base).state);
+    const shifts = Array.from({ length: 40 }, (_, index) => {
+      const key = `tarjeta-${index}`;
+      const outcome = scheduleReview(state, 'good', now, withEasy(SUN_MIN), key);
+      // La misma clave da siempre la misma fecha, y la vista previa de los botones coincide
+      expect(scheduleReview(state, 'good', now, withEasy(SUN_MIN), key)).toEqual(outcome);
+      expect(previewReview(state, now, withEasy(SUN_MIN), key).good).toEqual(outcome);
+      return Math.round(daysBetweenInstants(plainDue, dueOf(outcome.state)));
+    });
+    expect(new Set(shifts)).toEqual(new Set([-1, 1]));
+    // Ni un lado ni el otro se llevan casi todas
+    expect(shifts.filter((shift) => shift === -1).length).toBeGreaterThan(10);
+    expect(shifts.filter((shift) => shift === 1).length).toBeGreaterThan(10);
+  });
+
   it('convive con el tope de intervalo y los multiplicadores de botón', () => {
     const extra: Partial<SchedulerConfig> = {
       maxIntervalDays: 21,
@@ -348,10 +373,10 @@ describe('simulación de carga futura con días fáciles (projectLoad)', () => {
   const SETTLED = 21;
 
   /** 600 tarjetas con un historial de repasos reales y el vencimiento repartido en el futuro */
-  function simulationCards(): QueueCard[] {
-    const rng = createRng('easy-days-simulation');
+  function simulationCards(seed = 'easy-days-simulation', count = 600): QueueCard[] {
+    const rng = createRng(seed);
     const cards: QueueCard[] = [];
-    for (let index = 0; index < 600; index += 1) {
+    for (let index = 0; index < count; index += 1) {
       let at = NOW.getTime() - rng.int(5, 200) * DAY_MS - rng.int(0, 86_399) * 1000;
       let state: FsrsCardState | null = null;
       for (let step = 0; step < 60; step += 1) {
@@ -475,6 +500,43 @@ describe('simulación de carga futura con días fáciles (projectLoad)', () => {
     expect(weekdayTotal(load, 'sun', SETTLED)).toBeLessThan(
       weekdayTotal(plainLoad, 'sun', SETTLED),
     );
+  });
+
+  it('el pico se sostiene dentro del factor en 8 semillas distintas', () => {
+    const seeds = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    for (const seed of seeds) {
+      const sample = simulationCards(`pico-${seed}`, 300);
+      const plain = projectLoad({ cards: sample, now: NOW, config: simBase, days: HORIZON });
+      for (const easyDays of [SUN_MIN, SAT_REDUCED]) {
+        const load = projectLoad({
+          cards: sample,
+          now: NOW,
+          config: withEasy(easyDays, simBase),
+          days: HORIZON,
+        });
+        expect(peak(load)).toBeLessThanOrEqual(peak(plain) * PEAK_FACTOR);
+        expect(peak(load)).toBeLessThanOrEqual(simBase.thresholds.reviewsPerDay);
+      }
+    }
+  });
+
+  it('las nuevas de un mismo día no se apilan todas en un solo día vecino', () => {
+    // 3,000 sin ver a 20 por día. Todas las de un día tienen el mismo estado al aprenderlas, así que
+    // sin una clave por tarjeta se moverían en bloque. Con grupos la carga se reparte
+    const unseen: QueueCard[] = Array.from({ length: 3000 }, (_, index) => ({
+      cardId: `nueva-${index}`,
+      noteId: `n-${index}`,
+      state: null,
+    }));
+    const config = { ...simBase, thresholds: { ...simBase.thresholds, newCardsPerDay: 20 } };
+    const plain = projectLoad({ cards: unseen, now: NOW, config, days: 90 });
+    const minimum = projectLoad({
+      cards: unseen,
+      now: NOW,
+      config: { ...config, easyDays: SUN_MIN },
+      days: 90,
+    });
+    expect(peak(minimum)).toBeLessThanOrEqual(peak(plain) * PEAK_FACTOR);
   });
 
   it('es reproducible, la misma proyección da exactamente la misma carga', () => {

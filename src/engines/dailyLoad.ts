@@ -26,11 +26,12 @@
  *     nuevas simula una por una tarjetas que son idénticas y que solo difieren en el día en que
  *     entran. Con cada candidato eso cuesta más de 200 ms y la búsqueda necesita unos 9. Así que
  *     se llama a projectLoad una vez con las tarjetas que ya tienen historial (no dependen de N) y
- *     una vez por cada día de entrada con una sola tarjeta nueva que entra ese día (no dependen de
- *     N tampoco). La carga de N es la primera más, para cada día de entrada, las tarjetas que
- *     entran ese día (las N que siguen en la fila, igual que las reparte projectLoad) por la
- *     segunda. Da exactamente lo mismo que projectLoad con todas las tarjetas, y las pruebas lo
- *     comparan contra esa llamada directa
+ *     una vez por cada día de entrada y por cada grupo de tarjetas nuevas (NEW_CARD_BUCKETS, ver
+ *     fsrs.ts) con una sola tarjeta que entra ese día (no dependen de N tampoco). La carga de N es
+ *     la primera más, para cada día de entrada y grupo, las tarjetas que entran ese día (las N que
+ *     siguen en la fila, repartidas en grupos igual que lo hace projectLoad) por la segunda. Da
+ *     exactamente lo mismo que projectLoad con todas las tarjetas, y las pruebas lo comparan contra
+ *     esa llamada directa, también con días fáciles
  *   - Búsqueda. Búsqueda binaria del mayor N entre 0 y maxNew cuya carga cabe en el presupuesto,
  *     suponiendo que la carga no baja al subir N. Son unas 9 cargas y no 200
  *   - Si ni siquiera con 0 nuevas cabe, el atraso por sí solo ya rebasa el presupuesto. Se
@@ -44,7 +45,13 @@
  * Umbrales. Se reciben como parámetro (TimeRules y NewPerDayRules). maxNew por defecto es 200 y el
  * mínimo de tarjetas nuevas medidas para usar su mediana es 20 (J).
  */
-import { projectLoad, type DayLoad, type QueueCard, type SchedulerConfig } from './fsrs';
+import {
+  NEW_CARD_BUCKETS,
+  projectLoad,
+  type DayLoad,
+  type QueueCard,
+  type SchedulerConfig,
+} from './fsrs';
 import { addDays, studyDayOf, studyDayStart } from './studyDay';
 
 export interface ReviewTimeSample {
@@ -99,7 +106,10 @@ export type NewPerDaySuggestion =
 
 /** Tarjetas nuevas medidas desde las que se usa su mediana y no la referencia (J) */
 export const MIN_NEW_SAMPLES_TO_MEASURE = 20;
-/** Tope de nuevas por día de la búsqueda cuando no se indica otro */
+/**
+ * Tope de nuevas por día de la búsqueda cuando no se indica otro. La sugerencia nunca pasa de aquí
+ * aunque quepan más, así no se propone una avalancha a quien tiene mucho tiempo y poco atraso
+ */
 export const DEFAULT_MAX_NEW = 200;
 
 /** Para no perder una cantidad que cabe justo por ruido de punto flotante */
@@ -188,22 +198,25 @@ function makeLoadProjector(input: {
   // Con historial no depende de las nuevas por día, projectLoad solo las usa para las nuevas
   const base = projectLoad({ cards: seenCards, now, config, days: horizon });
 
-  // Lo que deja una tarjeta nueva que entra el día d. Se proyecta desde el inicio de ese día, que
-  // es el mismo instante de entrada que usa projectLoad (una hora después de empezar el día, o
-  // ahora si es hoy), hasta el mismo final del horizonte. El resultado empieza en el día d
+  // Lo que deja una tarjeta nueva que entra el día d y cae en un grupo de projectLoad. Se proyecta
+  // desde el inicio de ese día, que es el mismo instante de entrada que usa projectLoad (una hora
+  // después de empezar el día, o ahora si es hoy), hasta el mismo final del horizonte. El
+  // resultado empieza en el día d. El grupo decide la clave de los días fáciles
   const single: QueueCard[] = [{ cardId: 'unseen', noteId: 'unseen', state: null }];
   const singleConfig = { ...config, thresholds: { ...config.thresholds, newCardsPerDay: 1 } };
-  const profiles = new Map<number, DayLoad[]>();
-  const profileOf = (entryDay: number): DayLoad[] => {
-    let profile = profiles.get(entryDay);
+  const profiles = new Map<string, DayLoad[]>();
+  const profileOf = (entryDay: number, bucket: number): DayLoad[] => {
+    const key = `${entryDay}|${bucket}`;
+    let profile = profiles.get(key);
     if (!profile) {
       profile = projectLoad({
         cards: single,
         now: entryDay === 0 ? now : studyDayStart(addDays(today, entryDay), config.timeZone),
         config: singleConfig,
         days: horizon - entryDay,
+        newIndexOffset: bucket,
       });
-      profiles.set(entryDay, profile);
+      profiles.set(key, profile);
     }
     return profile;
   };
@@ -215,12 +228,21 @@ function makeLoadProjector(input: {
       // projectLoad mete las nuevas en fila, newPerDay por día, hasta que se acaban
       const entering = Math.min(newPerDay, unseen - entryDay * newPerDay);
       if (entering <= 0) break;
-      profileOf(entryDay).forEach((entry, offset) => {
-        const target = load[entryDay + offset];
-        if (!target) return;
-        target.reviews += entry.reviews * entering;
-        target.newCards += entry.newCards * entering;
-      });
+      const firstIndex = entryDay * newPerDay;
+      for (let bucket = 0; bucket < NEW_CARD_BUCKETS; bucket += 1) {
+        // Las mismas cuentas por grupo que hace projectLoad con todas las tarjetas
+        const shift =
+          (bucket - (firstIndex % NEW_CARD_BUCKETS) + NEW_CARD_BUCKETS) % NEW_CARD_BUCKETS;
+        const count =
+          Math.floor(entering / NEW_CARD_BUCKETS) + (shift < entering % NEW_CARD_BUCKETS ? 1 : 0);
+        if (count === 0) continue;
+        profileOf(entryDay, bucket).forEach((entry, offset) => {
+          const target = load[entryDay + offset];
+          if (!target) return;
+          target.reviews += entry.reviews * count;
+          target.newCards += entry.newCards * count;
+        });
+      }
     }
     return load;
   };

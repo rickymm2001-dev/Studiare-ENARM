@@ -283,13 +283,13 @@ export const featureText = {
     cardTimerTitle: 'Temporizador de tarjeta',
     cardTimerEnabled: 'Mostrar un tiempo sugerido por tarjeta',
     cardTimerHint:
-      'Apagado por defecto. Solo avisa cuánto tiempo conviene tardar y no califica nada. El tiempo que se guarda de cada tarjeta nunca pasa de 2 minutos.',
+      'Apagado por defecto. Solo avisa cuánto tiempo conviene tardar y no califica nada. Lo que se guarda en cada paso, ver la respuesta y calificar, nunca pasa de 2 minutos.',
     cardTimerSeconds: 'Tiempo sugerido',
     cardTimerSecondsOption: (seconds: number) => `${seconds} segundos`,
     cardTimerAutoReveal: 'Mostrar la respuesta sola cuando se acabe el tiempo',
     easyDaysTitle: 'Días fáciles',
     easyDaysHint:
-      'Elige los días de la semana en que quieres menos repasos. Al programar el siguiente repaso de una tarjeta, se mueve unos días para evitarlos. Solo cambia lo que programes desde ahora y la memoria de cada tarjeta no se toca.',
+      'Elige los días de la semana en que quieres menos repasos. Al programar el siguiente repaso de una tarjeta, se mueve unos días para evitarlos. Solo cambia lo que programes desde ahora y la memoria de cada tarjeta no se toca. Si marcas varios días seguidos como casi ninguno, los días de al lado se cargan más.',
     easyDaysSummary: (count: number) =>
       count === 0
         ? 'Todos los días normales'
@@ -371,7 +371,7 @@ export const featureText = {
       easyDays: 'Días fáciles',
       cardTimer: 'Temporizador de tarjeta',
     },
-    featureLocked: (name: string) => `${name} no está incluido en tu plan.`,
+    featureLocked: (name: string) => `Tu plan no incluye ${name.toLowerCase()}.`,
     featureSeePlans: 'Ver planes',
     savings: (percent: number) => `Ahorras ${percent}% contra pagar mes a mes`,
     choose: (plan: string) => `Elegir ${plan}`,
@@ -741,7 +741,7 @@ export const featureText = {
       keep: 'Seguir con ella',
       suspended: 'Tarjeta suspendida. La reanudas desde Explorar.',
       cannotEdit:
-        'Esta tarjeta viene precargada y no se edita. Puedes suspenderla o seguir con ella.',
+        'Esta tarjeta no es de un mazo hecho por ti y no se edita desde aquí. Puedes suspenderla o seguir con ella.',
       keys: {
         suspend: 'suspende',
         edit: 'edita',
@@ -1235,7 +1235,7 @@ export const featureText = {
     backlogOver:
       'Con los atrasos de ahora ya pasas el tiempo que tienes. Reparte los atrasos antes de sumar nuevas.',
     peak: (minutes: number, day: string) =>
-      `El día más pesado sería el ${day}, con unos ${Math.round(minutes)} minutos de tarjetas.`,
+      `El día más pesado sería ${day.toLowerCase()}, con unos ${Math.round(minutes)} minutos de tarjetas.`,
     use: (n: number) => `Usar ${n}`,
     applied: 'Listo, guardamos tu nuevo límite de tarjetas nuevas.',
     current: (n: number) => `Hoy tienes ${n} por día.`,

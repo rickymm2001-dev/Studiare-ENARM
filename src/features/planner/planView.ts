@@ -87,6 +87,11 @@ export function buildPlannerView(input: {
   priorityTopics: readonly string[];
   /** Preguntas que le deja contestar su plan, hoy y por día. null es sin límite */
   questionLimit?: { today: number | null; perDay: number | null };
+  /**
+   * Número de nuevas por día del que parte la propuesta de bajarlas. Sin límite de nuevas el tope
+   * es enorme, y ahí la propuesta parte del número que el alumno tenía guardado
+   */
+  reduceNewFrom?: number;
 }): PlannerView {
   const { config, now, today } = input;
   const limits = {
@@ -106,8 +111,10 @@ export function buildPlannerView(input: {
     );
   const load = project(limits.newCardsPerDay);
   // Si hay sobrecarga se propone la mitad de nuevas por día. Con cero no hay nada que bajar
-  // Sin límite de nuevas el tope es enorme, y la mitad tampoco cabría en el ajuste. Se recorta
-  const fewerNew = Math.min(MAX_NEW_CARDS_PER_DAY, Math.floor(limits.newCardsPerDay / 2));
+  const fewerNew = Math.min(
+    MAX_NEW_CARDS_PER_DAY,
+    Math.floor((input.reduceNewFrom ?? limits.newCardsPerDay) / 2),
+  );
   const measured = measuredMinutes(input.activity, today);
 
   // Lo declarado gana. El motor prefiere los minutos medidos si hay 3 días, así que sin declarar se

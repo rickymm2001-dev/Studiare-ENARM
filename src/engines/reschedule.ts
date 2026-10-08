@@ -22,6 +22,9 @@
  *     olvidadas (menor retrievability) van primero y caen en los primeros días. Cada día recibe lo
  *     más parejo posible sin pasar de su capacidad, que es el límite diario menos lo que ya vence ese
  *     día. Si no alcanza la capacidad total, overCapacity es true y se reparte parejo ignorándola
+ *   - Días fáciles. Repartir salta los días marcados como casi sin repasos (minimum) y da la mitad
+ *     de capacidad a los de menos repasos (reduced). Hoy cuenta siempre. Se reparte entre N días
+ *     útiles aunque eso estire el calendario
  *   - Las que se quedan hoy no generan asignación. Su fecha ya pasó y siguen vencidas hoy
  *   - Posponer. Lleva todas las tarjetas programadas, estén vencidas o no, al menos hasta el inicio
  *     del día de estudio dentro de N días. Nunca adelanta una tarjeta
@@ -38,6 +41,7 @@
  * decide quien llama desde la configuración.
  */
 import type { FsrsCardState } from '@/data/schemas/common';
+import { weekdayOf } from './easyDays';
 import { examDeadline, retrievabilityOf, type QueueCard, type SchedulerConfig } from './fsrs';
 import { addDays, studyDayEnd, studyDayOf, studyDayStart } from './studyDay';
 import { inBatches } from './suspension';
@@ -207,14 +211,24 @@ export function spreadOverdue(input: {
   const todayStart = studyDayStart(today, timeZone).getTime();
   const deadline = examDeadline(config)?.getTime() ?? null;
 
-  // Días disponibles. Ninguno empieza en o después del inicio del día del ENARM
-  const slots: { day: string; start: number; end: number }[] = [];
+  // Días disponibles. Ninguno empieza en o después del inicio del día del ENARM. Los días que el
+  // alumno marcó como casi sin repasos no reciben atrasadas y los de menos repasos reciben la mitad.
+  // Hoy siempre cuenta, porque las vencidas ya están ahí. Se piden N días útiles y se busca hasta
+  // 7 días más allá para completarlos
+  const slots: { day: string; start: number; end: number; share: number }[] = [];
   const requested = clampInt(input.days, 1, MAX_SPREAD_DAYS);
-  for (let offset = 0; offset < requested; offset += 1) {
+  for (let offset = 0; slots.length < requested && offset < requested + 7; offset += 1) {
     const day = addDays(today, offset);
     const start = studyDayStart(day, timeZone).getTime();
     if (deadline !== null && start >= deadline) break;
-    slots.push({ day, start, end: studyDayEnd(day, timeZone).getTime() });
+    const level = offset === 0 ? 'normal' : (config.easyDays?.[weekdayOf(day)] ?? 'normal');
+    if (level === 'minimum') continue;
+    slots.push({
+      day,
+      start,
+      end: studyDayEnd(day, timeZone).getTime(),
+      share: level === 'reduced' ? 0.5 : 1,
+    });
   }
   if (slots.length === 0) return { assignments: [], perDay: [], overCapacity: false };
 
@@ -234,7 +248,9 @@ export function spreadOverdue(input: {
     if (index >= 0) alreadyDue[index] = (alreadyDue[index] ?? 0) + 1;
   }
 
-  const capacities = alreadyDue.map((due) => Math.max(0, config.thresholds.reviewsPerDay - due));
+  const capacities = alreadyDue.map((due, index) =>
+    Math.floor(Math.max(0, config.thresholds.reviewsPerDay - due) * (slots[index]?.share ?? 1)),
+  );
   const capacityTotal = capacities.reduce((sum, capacity) => sum + capacity, 0);
   const overCapacity = capacityTotal < pending.length;
   const allocation = allocateEvenly(

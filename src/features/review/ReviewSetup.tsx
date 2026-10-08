@@ -190,7 +190,12 @@ export function ReviewSetup({
               : text.limitsSummary(limits.newCardsPerDay, limits.reviewsPerDay)
           }
         >
-          <DailyLimits limits={limits} onSave={onSaveLimits} />
+          {/* La clave rehace el borrador cuando los límites cambian desde fuera, por ejemplo al usar la sugerencia */}
+          <DailyLimits
+            key={`${limits.newCardsPerDay}:${limits.reviewsPerDay}`}
+            limits={limits}
+            onSave={onSaveLimits}
+          />
           {limitsExtra}
         </Disclosure>
       </div>

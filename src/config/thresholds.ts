@@ -75,11 +75,11 @@ export const ThresholdsSchema = z.strictObject({
     cardsTimeShare: z.number().min(0.1).max(1).default(0.5),
     /** Días de carga futura con los que se calcula cuántas nuevas por día aguantan (J) */
     suggestionHorizonDays: z.int().positive().default(30),
-    /** Aviso de recuperación con más de estas vencidas de días anteriores (J) */
+    /** Aviso de recuperación con estas vencidas de días anteriores o más (J) */
     recoveryMinOverdue: z.int().positive().default(40),
-    /** o con más de esta fracción del límite diario de repasos (J) */
+    /** o con esta fracción del límite diario de repasos o más, lo que sea mayor (J) */
     recoveryOverdueShareOfLimit: z.number().positive().default(0.5),
-    /** Tope del tiempo que se registra por tarjeta, en segundos. Una pausa larga no lo distorsiona (J) */
+    /** Tope del tiempo que se registra en cada paso de una tarjeta, ver la respuesta y calificar, en segundos. Una pausa larga no lo distorsiona (J) */
     cardTimeCapSeconds: z.int().positive().default(120),
   }),
   behavior: z.strictObject({

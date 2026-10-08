@@ -13,7 +13,8 @@ const moved = (
   cards: { cardId: string; from: string; to: string }[],
   at: number,
   days: number | null = kind === 'advance' || kind === 'undo' ? null : 3,
-): AppEvent => event('cards_rescheduled', { kind, cards, days, undoes: null }, at);
+): AppEvent =>
+  event('cards_rescheduled', { kind, cards, days, undoes: kind === 'undo' ? newId() : null }, at);
 
 describe('última acción de cambio de fecha que se puede deshacer', () => {
   it('sin cambios no hay nada que deshacer', () => {

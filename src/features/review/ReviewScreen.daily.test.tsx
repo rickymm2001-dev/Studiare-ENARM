@@ -154,7 +154,8 @@ describe('temporizador de tarjeta', () => {
     });
     await startSession(typing);
     expect(await screen.findByText(t.review.timer.label)).toBeVisible();
-    expect(screen.getByRole('timer')).toHaveTextContent(/^(30|29) s$/);
+    // Corre desde que se ve la tarjeta, así que con un equipo lento ya puede haber bajado unos segundos
+    expect(screen.getByRole('timer')).toHaveTextContent(/^(2\d|30) s$/);
     // Se puede revelar y calificar como siempre
     await typing.click(screen.getByRole('button', { name: t.review.show }));
     expect(screen.getByText('Amoxicilina')).toBeVisible();

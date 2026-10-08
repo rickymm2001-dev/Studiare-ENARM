@@ -139,6 +139,9 @@ describe('carga diaria en los límites de hoy', () => {
     expect(await within(section).findByText(t.dailyLoad.applied)).toBeInTheDocument();
     const saved = await app.api.repos.users.get(app.user.id);
     expect(saved?.settings.newCardsPerDay).toBe(8);
+    // El campo de arriba ya muestra el número nuevo y no queda un borrador viejo por guardar
+    expect(screen.getByRole('spinbutton', { name: t.settings.newCardsPerDay })).toHaveValue(8);
+    expect(screen.getByRole('button', { name: t.settings.saveChanges })).toBeDisabled();
   });
 
   it('sin minutos de estudio pide ponerlos en Plan', async () => {

@@ -162,7 +162,7 @@ describe('estado más reciente de cada tarjeta', () => {
         kind,
         cards: [{ cardId, from: new Date(minute(0)).toISOString(), to }],
         days: kind === 'undo' ? null : 3,
-        undoes: null,
+        undoes: kind === 'undo' ? newId() : null,
       },
       at,
     );

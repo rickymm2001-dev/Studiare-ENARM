@@ -116,6 +116,10 @@ function Planner({ session }: { session: ReadySession }) {
       examDate: examDateFor(user),
       priorityTopics: analysis.priorities.map((priority) => priority.topic),
       questionLimit: { today: daily.left, perDay: daily.limit },
+      // Sin límite de nuevas, bajar parte de lo que el alumno tenía guardado y no del tope enorme
+      ...(settings.unlimitedNewCards
+        ? { reduceNewFrom: settings.newCardsPerDay > 0 ? settings.newCardsPerDay : 20 }
+        : {}),
     });
     // Si ya hay temas con dominio listo, el plan apunta al más débil. Si no, dice cuánto falta
     const calibration =

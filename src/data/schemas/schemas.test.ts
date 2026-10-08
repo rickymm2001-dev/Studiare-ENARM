@@ -91,6 +91,24 @@ describe('esquemas y tablas', () => {
         payload: { kind: 'undo', cards: [entry], days: null, undoes: newId() },
       }).type,
     ).toBe('cards_rescheduled');
+    // Un deshacer sin el cambio que deshace, o un repartir que dice deshacer algo, no son válidos
+    expect(() =>
+      AppEventSchema.parse({
+        ...base,
+        payload: { kind: 'undo', cards: [entry], days: null, undoes: null },
+      }),
+    ).toThrow();
+    expect(() =>
+      AppEventSchema.parse({ ...base, payload: { ...payload, undoes: newId() } }),
+    ).toThrow();
+    // Repartir y posponer llevan días. Adelantar y deshacer no
+    expect(() => AppEventSchema.parse({ ...base, payload: { ...payload, days: null } })).toThrow();
+    expect(() =>
+      AppEventSchema.parse({ ...base, payload: { ...payload, kind: 'advance', days: 3 } }),
+    ).toThrow();
+    expect(
+      AppEventSchema.parse({ ...base, payload: { ...payload, kind: 'advance', days: null } }).type,
+    ).toBe('cards_rescheduled');
   });
 
   it('los ajustes por defecto siguen la especificación', () => {

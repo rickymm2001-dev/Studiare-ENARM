@@ -130,11 +130,15 @@ export function OverdueTools({
     config,
     days: Number(postponeDays),
   });
+  const advanceAmount = Math.min(
+    MAX_ADVANCE_COUNT,
+    Math.max(0, Math.round(Number(advanceCount) || 0)),
+  );
   const advanceItems = advanceReviews({
     cards: queueCards,
     now: view.now,
     config,
-    count: Math.min(MAX_ADVANCE_COUNT, Math.max(0, Math.round(Number(advanceCount) || 0))),
+    count: advanceAmount,
   });
 
   const preview = (result: typeof plan) =>
@@ -208,7 +212,13 @@ export function OverdueTools({
                 kind: 'postpone',
                 count: await recordReschedule(api, actor, {
                   kind: 'postpone',
-                  assignments: postponeItems,
+                  // Con la hora de ahora y no la de cuando se abrió la pantalla
+                  assignments: postponeCards({
+                    cards: view.dueByToday,
+                    now: new Date(),
+                    config,
+                    days: Number(postponeDays),
+                  }),
                   days: Number(postponeDays),
                 }),
               }));
@@ -242,7 +252,12 @@ export function OverdueTools({
                 kind: 'advance',
                 count: await recordReschedule(api, actor, {
                   kind: 'advance',
-                  assignments: advanceItems,
+                  assignments: advanceReviews({
+                    cards: queueCards,
+                    now: new Date(),
+                    config,
+                    count: advanceAmount,
+                  }),
                   days: null,
                 }),
               }));

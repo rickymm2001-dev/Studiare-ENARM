@@ -12,7 +12,7 @@ import { exportUserData } from '@/data/usecases/exportData';
 import { updateProfile } from '@/data/usecases/profile';
 import { WEEKDAY_KEYS } from '@/engines/easyDays';
 import { clearExamState } from '../exam/examStorage';
-import { fromOption, MAX_INTERVAL_OPTIONS, toOption } from '../review/intervalOptions';
+import { fromOption, maxIntervalOptions, toOption } from '../review/intervalOptions';
 import type { UserSettings } from '@/data/schemas/people';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
@@ -447,7 +447,7 @@ function StudyForm({
           label={t.settings.maxInterval}
           hint={t.settings.maxIntervalHint}
           value={draft.maxInterval}
-          options={MAX_INTERVAL_OPTIONS.map((value) => ({
+          options={maxIntervalOptions(draft.maxInterval).map((value) => ({
             value,
             label: t.settings.maxIntervalOption(fromOption(value)),
           }))}

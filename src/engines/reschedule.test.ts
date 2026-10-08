@@ -20,6 +20,7 @@ import {
   type RecoveryRules,
   type RescheduledCard,
 } from './reschedule';
+import { NO_EASY_DAYS, type EasyDays } from './easyDays';
 import { DAY_MS, studyDayStart } from './studyDay';
 
 const TZ = 'America/Merida';
@@ -516,6 +517,79 @@ describe('spreadOverdue', () => {
       expect(starts.has(entry.to)).toBe(true);
       expect(entry.to > entry.from).toBe(true);
     }
+  });
+});
+
+describe('spreadOverdue con días fáciles', () => {
+  // Jueves 8 de octubre. Viernes 9, sábado 10, domingo 11 y lunes 12
+  const easy = (days: Partial<EasyDays>): SchedulerConfig => ({
+    ...config,
+    easyDays: { ...NO_EASY_DAYS, ...days },
+  });
+
+  it('un día casi sin repasos no recibe atrasadas y se reparte entre los días útiles', () => {
+    const plan = spreadOverdue({
+      cards: overdueByForgetting(30),
+      now: NOW,
+      config: easy({ sat: 'minimum' }),
+      days: 3,
+    });
+    expect(plan.perDay.map((entry) => entry.day)).toEqual([
+      '2026-10-08',
+      '2026-10-09',
+      '2026-10-11',
+    ]);
+    expect(plan.perDay.reduce((total, entry) => total + entry.count, 0)).toBe(30);
+  });
+
+  it('con sábado y domingo en mínimo salta el fin de semana completo', () => {
+    const plan = spreadOverdue({
+      cards: overdueByForgetting(30),
+      now: NOW,
+      config: easy({ sat: 'minimum', sun: 'minimum' }),
+      days: 3,
+    });
+    expect(plan.perDay.map((entry) => entry.day)).toEqual([
+      '2026-10-08',
+      '2026-10-09',
+      '2026-10-12',
+    ]);
+  });
+
+  it('un día con menos repasos recibe la mitad de lo que cabría', () => {
+    // Límite de 20 por día y 40 atrasadas entre jueves, viernes y sábado. El sábado cabe la mitad
+    const plan = spreadOverdue({
+      cards: overdueByForgetting(40),
+      now: NOW,
+      config: {
+        ...easy({ sat: 'reduced' }),
+        thresholds: { ...config.thresholds, reviewsPerDay: 20 },
+      },
+      days: 3,
+    });
+    expect(plan.overCapacity).toBe(false);
+    expect(plan.perDay.map((entry) => entry.count)).toEqual([15, 15, 10]);
+  });
+
+  it('hoy cuenta siempre, aunque hoy sea un día fácil', () => {
+    const plan = spreadOverdue({
+      cards: overdueByForgetting(10),
+      now: NOW,
+      config: easy({ thu: 'minimum' }),
+      days: 2,
+    });
+    expect(plan.perDay[0]?.day).toBe('2026-10-08');
+  });
+
+  it('sin días fáciles reparte igual que antes', () => {
+    const plain = spreadOverdue({ cards: overdueByForgetting(30), now: NOW, config, days: 3 });
+    const normal = spreadOverdue({
+      cards: overdueByForgetting(30),
+      now: NOW,
+      config: easy({}),
+      days: 3,
+    });
+    expect(normal).toEqual(plain);
   });
 });
 

@@ -176,6 +176,19 @@ describe('sobrecarga', () => {
     expect(reduce?.value).toBe(MAX_NEW_CARDS_PER_DAY);
   });
 
+  it('sin límite de nuevas, la propuesta parte del número que el alumno tenía guardado', () => {
+    const unlimited = view({
+      cards: [...Array.from({ length: 120 }, (_, index) => dueIn(index, -1)), ...newCards(200)],
+      declaredMinutes: 10,
+      config: { ...config, thresholds: { ...config.thresholds, newCardsPerDay: 100_000 } },
+      reduceNewFrom: 20,
+    });
+    const reduce = unlimited.plan.warnings[0]?.options.find(
+      (option) => option.action === 'reduce_new',
+    );
+    expect(reduce?.value).toBe(10);
+  });
+
   it('avisa con dos opciones y su efecto en minutos al día', () => {
     const [warning] = overloaded().plan.warnings;
     expect(warning?.kind).toBe('overload');

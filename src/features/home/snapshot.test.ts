@@ -89,7 +89,10 @@ describe('tarjetas por repasar en Inicio', () => {
       moved(a, due, late, minute(20)),
       moved(b, late, soon, minute(21)),
     ];
-    expect(snapshotOf(events).dueCards).toBe(1);
+    // Sin movimientos solo a cuenta. Posponer a la deja en 0, adelantar b la suma, y con los dos queda 1
     expect(snapshotOf([reviewed(a), far(b)]).dueCards).toBe(1);
+    expect(snapshotOf([reviewed(a), far(b), moved(a, due, late, minute(20))]).dueCards).toBe(0);
+    expect(snapshotOf([reviewed(a), far(b), moved(b, late, soon, minute(21))]).dueCards).toBe(2);
+    expect(snapshotOf(events).dueCards).toBe(1);
   });
 });

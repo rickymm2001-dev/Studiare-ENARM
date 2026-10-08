@@ -221,17 +221,28 @@ export const EventPayloadSchemas = {
    * deshacer un cambio anterior. Cada tarjeta lleva su fecha de antes y la nueva. La estabilidad de
    * FSRS no se toca, solo la fecha, y el próximo repaso la corrige con el tiempo transcurrido
    */
-  cards_rescheduled: z.strictObject({
-    kind: z.enum(['spread', 'postpone', 'advance', 'undo']),
-    cards: z
-      .array(z.strictObject({ cardId: IdSchema, from: UtcDateTimeSchema, to: UtcDateTimeSchema }))
-      .min(1)
-      .max(500),
-    /** Entre cuántos días se repartió o cuántos se pospuso. null al adelantar o deshacer */
-    days: z.int().min(1).max(365).nullable(),
-    /** El evento de cambio que se deshace. null si no es un deshacer */
-    undoes: IdSchema.nullable(),
-  }),
+  cards_rescheduled: z
+    .strictObject({
+      kind: z.enum(['spread', 'postpone', 'advance', 'undo']),
+      cards: z
+        .array(z.strictObject({ cardId: IdSchema, from: UtcDateTimeSchema, to: UtcDateTimeSchema }))
+        .min(1)
+        .max(500),
+      /** Entre cuántos días se repartió o cuántos se pospuso. null al adelantar o deshacer */
+      days: z.int().min(1).max(365).nullable(),
+      /** El evento de cambio que se deshace. null si no es un deshacer */
+      undoes: IdSchema.nullable(),
+    })
+    // Solo un deshacer dice qué deshace, y solo repartir y posponer llevan días
+    .refine((payload) => (payload.kind === 'undo') === (payload.undoes !== null), {
+      message: 'Un evento undo debe decir cuál cambio deshace y los demás no',
+      path: ['undoes'],
+    })
+    .refine(
+      (payload) =>
+        (payload.kind === 'spread' || payload.kind === 'postpone') === (payload.days !== null),
+      { message: 'Solo repartir y posponer llevan días', path: ['days'] },
+    ),
 } as const;
 
 export type EventType = keyof typeof EventPayloadSchemas;
