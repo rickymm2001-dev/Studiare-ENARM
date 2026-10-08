@@ -190,7 +190,13 @@ describe('tamaño y datos personales', () => {
 describe('límites', () => {
   it('frena al alumno que pasa su límite diario con 429 y un mensaje claro', async () => {
     const { app, ai } = mockApp();
-    ai.setConfig({ ...ai.config(), limits: { ...ai.config().limits, perStudentPerDay: 2 } });
+    ai.setConfig({
+      ...ai.config(),
+      limits: {
+        ...ai.config().limits,
+        perStudentPerDay: { ...ai.config().limits.perStudentPerDay, forgetting: 2 },
+      },
+    });
     const send = () => post(app, 'forgetting', requestBody(hypothesisInput()));
     expect((await send()).status).toBe(200);
     expect((await send()).status).toBe(200);
@@ -278,10 +284,10 @@ describe('configuración y uso', () => {
     await post(app, 'forgetting', requestBody(hypothesisInput()));
     const body = (await (await app.request('/ai/usage', { headers: HEADERS })).json()) as {
       usage: { calls: number; students: number };
-      limits: { perStudentPerDay: number };
+      limits: { perStudentPerDay: Record<string, number> };
     };
     expect(body.usage).toMatchObject({ calls: 1, students: 1 });
-    expect(body.limits.perStudentPerDay).toBeGreaterThan(0);
+    expect(body.limits.perStudentPerDay.forgetting).toBeGreaterThan(0);
   });
 
   it('PUT /ai/config cambia los límites al instante y los guarda en el archivo', async () => {
@@ -296,14 +302,15 @@ describe('configuración y uso', () => {
     const put = await app.request('/ai/config', {
       method: 'PUT',
       headers: HEADERS,
-      body: JSON.stringify({ limits: { perStudentPerDay: 1 } }),
+      body: JSON.stringify({ limits: { perStudentPerDay: { forgetting: 1 } } }),
     });
     expect(put.status).toBe(200);
-    expect(ai.config().limits.perStudentPerDay).toBe(1);
+    expect(ai.config().limits.perStudentPerDay.forgetting).toBe(1);
+    expect(ai.config().limits.perStudentPerDay.flashcards).toBe(240);
     const saved = JSON.parse(readFileSync(file, 'utf8')) as {
-      limits: { perStudentPerDay: number };
+      limits: { perStudentPerDay: Record<string, number> };
     };
-    expect(saved.limits.perStudentPerDay).toBe(1);
+    expect(saved.limits.perStudentPerDay.forgetting).toBe(1);
     const send = () => post(app, 'forgetting', requestBody(hypothesisInput()));
     expect((await send()).status).toBe(200);
     expect((await send()).status).toBe(429);
@@ -314,7 +321,7 @@ describe('configuración y uso', () => {
     const put = (body: unknown) =>
       app.request('/ai/config', { method: 'PUT', headers: HEADERS, body: JSON.stringify(body) });
     expect((await put({ apiKey: 'x' })).status).toBe(400);
-    expect((await put({ limits: { perStudentPerDay: -3 } })).status).toBe(400);
+    expect((await put({ limits: { perStudentPerDay: { forgetting: -3 } } })).status).toBe(400);
     expect(
       (
         await put({

@@ -1,10 +1,9 @@
 // Generador de tarjetas desde un texto del alumno (D-085, fila 10, opción B). Quita los datos
 // personales, parte el texto en secciones, pide las tarjetas a un generador y deja pasar solo las que
 // aprueba el validador, que revisa cada una contra el texto de donde dice que sale. Lo que no pasa
-// no llega al alumno. El generador es el proxy de IA, o uno simulado y determinista cuando no hay
-// proxy ni clave, como en la demo publicada (D-017). Si el proxy falla, se usa el simulado y se
-// dice. Todo lo que sale es borrador.
-import { z } from 'zod';
+// no llega al alumno. El generador es el proxy de IA, real o simulado, o uno simulado y
+// determinista del propio cliente cuando no hay proxy, como en la demo publicada (D-017). Si el
+// proxy falla, se usa el simulado y se dice. Todo lo que sale es borrador.
 import { newId } from '@/data/ids';
 import { buildDuplicateIndex, findDuplicates, type DuplicateNote } from '@/engines/duplicates';
 import {
@@ -18,48 +17,22 @@ import {
 } from '@/engines/cardGen';
 import { scrubPersonalData, type PiiCounts } from '@/engines/piiFilter';
 import type { AiStatus } from './client';
+import { callEngine, type CallMeta } from './engines';
 
 export const FLASHCARDS_PROMPT_VERSION = 'flashcards.provisional.v1';
 export const SIMULATED_MODEL = 'plantilla-simulada-v1';
 /** Secciones que se procesan en una generación. Más de eso cuesta de más y se avisa */
 export const SECTIONS_PER_GENERATION = 12;
-export const FLASHCARDS_URL = '/api/ai/flashcards';
-const TIMEOUT_MS = 30_000;
-
-/** Lo que el proxy devuelve por sección. Las fuentes de una controversia se revisan después */
-export const ProposedCardsResponseSchema = z.strictObject({
-  cards: z
-    .array(
-      z.strictObject({
-        kind: z.enum(['basic', 'cloze']),
-        front: z.string().min(1).max(3000),
-        back: z.string().max(3000),
-        quote: z.string().min(1).max(2000),
-        controversy: z
-          .strictObject({
-            reason: z.string().max(1000),
-            sources: z
-              .array(
-                z.strictObject({
-                  key: z.string().max(40),
-                  locator: z.string().max(120).nullable().optional(),
-                }),
-              )
-              .max(5),
-          })
-          .nullable()
-          .optional(),
-      }),
-    )
-    .max(10),
-});
 
 export type GeneratorMode = 'real' | 'mock' | 'template';
 
 export interface CardGenerator {
   readonly mode: GeneratorMode;
+  /** El modelo que respondió. Con el proxy se sabe después de la primera llamada */
   readonly model: string;
   generate(section: SourceSection): Promise<ProposedCard[]>;
+  /** Entrega y vacía lo que costaron las llamadas que se hicieron desde la última vez */
+  drainMetas?(): CallMeta[];
 }
 
 /** Sin proxy ni clave. Siempre da las mismas tarjetas para el mismo texto */
@@ -69,36 +42,70 @@ export const simulatedGenerator: CardGenerator = {
   generate: (section) => Promise.resolve(simulateCards(section)),
 };
 
-/** El proxy de IA con clave. Solo se usa en modo real, que es cuando el proxy tiene un modelo */
-export function createProxyGenerator(fetchImpl: typeof fetch = fetch): CardGenerator {
+export interface ProxyGeneratorOptions {
+  /** El estado de la IA. Solo real y mock hablan con el proxy */
+  status: Extract<AiStatus, { kind: 'real' | 'mock' }>;
+  /** El ID seudónimo del alumno, para sus límites diarios */
+  studentRef: string;
+  names?: readonly string[];
+  fetchImpl?: typeof fetch;
+}
+
+/**
+ * Pide las tarjetas de cada sección al proxy de IA. Lo que devuelve ya pasó el esquema y las guardas
+ * en el proxy y otra vez en el cliente. Si algo falla, lanza y quien llama sigue con el simulado
+ */
+export function createProxyGenerator(options: ProxyGeneratorOptions): CardGenerator {
+  let metas: CallMeta[] = [];
+  let model = 'proxy';
   return {
-    mode: 'real',
-    model: 'proxy',
+    mode: options.status.kind,
+    get model() {
+      return model;
+    },
     async generate(section) {
-      const response = await fetchImpl(FLASHCARDS_URL, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json', accept: 'application/json' },
-        body: JSON.stringify({
-          title: section.title,
-          text: section.text,
-          promptVersion: FLASHCARDS_PROMPT_VERSION,
-        }),
-        signal: AbortSignal.timeout(TIMEOUT_MS),
-      });
-      if (!response.ok) throw new Error(`El proxy respondió ${response.status}`);
-      const parsed = ProposedCardsResponseSchema.parse(await response.json());
-      return parsed.cards;
+      const result = await callEngine(
+        'flashcards',
+        { title: section.title, text: section.text },
+        {
+          status: options.status,
+          studentRef: options.studentRef,
+          ...(options.names ? { names: options.names } : {}),
+          ...(options.fetchImpl ? { fetchImpl: options.fetchImpl } : {}),
+        },
+      );
+      // Una llamada que falló también costó y queda en la bitácora
+      if (result.meta) metas.push(result.meta);
+      if (!result.ok) throw new Error(`La IA no atendió la sección: ${result.reason}`);
+      model = result.meta.model;
+      return result.output.cards.map((card) => ({
+        kind: card.kind,
+        front: card.front,
+        back: card.back,
+        quote: card.quote,
+        controversy: card.controversy ?? null,
+      }));
+    },
+    drainMetas() {
+      const taken = metas;
+      metas = [];
+      return taken;
     },
   };
 }
 
 /**
- * Qué generador usar según el estado de la IA. Solo con clave se llama al proxy. En modo simulado
- * del proxy, sin proxy o sin conexión, las tarjetas salen del generador simulado del propio cliente,
- * que es el mismo y no necesita red
+ * Qué generador usar según el estado de la IA. Con el proxy, real o simulado, las tarjetas pasan por
+ * sus límites y su bitácora de costo. Sin proxy o sin conexión salen del generador simulado del
+ * propio cliente, que es el mismo y no necesita red
  */
-export function generatorFor(status: AiStatus, fetchImpl?: typeof fetch): CardGenerator {
-  return status.kind === 'real' ? createProxyGenerator(fetchImpl) : simulatedGenerator;
+export function generatorFor(
+  status: AiStatus,
+  options: Omit<ProxyGeneratorOptions, 'status'>,
+): CardGenerator {
+  return status.kind === 'real' || status.kind === 'mock'
+    ? createProxyGenerator({ ...options, status })
+    : simulatedGenerator;
 }
 
 export interface FlashcardProposal {
@@ -133,6 +140,8 @@ export interface GenerationResult {
   durationMs: number;
   /** El texto que se procesó, ya sin datos personales */
   processedText: string;
+  /** Lo que costó cada llamada al proxy. Vacío con el generador simulado del cliente */
+  metas: CallMeta[];
 }
 
 export interface GenerateOptions {
@@ -158,6 +167,10 @@ export async function generateFlashcards(options: GenerateOptions): Promise<Gene
 
   let generator = options.generator;
   let fellBack = false;
+  const metas: CallMeta[] = [];
+  const collect = () => {
+    metas.push(...(generator.drainMetas?.() ?? []));
+  };
   const proposals: FlashcardProposal[] = [];
   const rejectedBy: Partial<Record<CardIssue, number>> = {};
   let rejected = 0;
@@ -166,7 +179,9 @@ export async function generateFlashcards(options: GenerateOptions): Promise<Gene
     let cards: ProposedCard[];
     try {
       cards = await generator.generate(section);
+      collect();
     } catch {
+      collect();
       // Si el proxy falla se sigue con el simulado, una sola vez, y se dice
       const fallback = options.fallback ?? simulatedGenerator;
       if (generator === fallback) throw new Error('El generador de tarjetas falló');
@@ -221,8 +236,11 @@ export async function generateFlashcards(options: GenerateOptions): Promise<Gene
     mode: generator.mode,
     model: generator.model,
     fellBack,
-    promptVersion: FLASHCARDS_PROMPT_VERSION,
+    promptVersion:
+      metas.find((meta) => meta.mode === generator.mode)?.promptVersion ??
+      FLASHCARDS_PROMPT_VERSION,
     durationMs: Math.max(0, now() - started),
     processedText: scrub.text,
+    metas,
   };
 }

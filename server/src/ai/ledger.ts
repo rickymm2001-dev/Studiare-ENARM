@@ -25,7 +25,7 @@ const EngineTotals = z.strictObject({
 });
 const StateSchema = z.strictObject({
   day: z.string(),
-  students: z.record(z.string(), z.int().nonnegative()),
+  students: z.record(z.string(), z.partialRecord(z.enum(AI_ENGINES), z.int().nonnegative())),
   spentUsd: z.number().nonnegative(),
   byEngine: z.partialRecord(z.enum(AI_ENGINES), EngineTotals),
 });
@@ -98,13 +98,17 @@ export class Ledger {
     dailyBudgetUsd: number;
   }): Admission {
     this.roll();
-    if ((this.state.students[input.studentRef] ?? 0) >= input.perStudentPerDay) {
+    const mine = this.state.students[input.studentRef] ?? {};
+    if ((mine[input.engine] ?? 0) >= input.perStudentPerDay) {
       return { ok: false, reason: 'student_limit' };
     }
     if (this.state.spentUsd >= input.dailyBudgetUsd) {
       return { ok: false, reason: 'budget_exceeded' };
     }
-    this.state.students[input.studentRef] = (this.state.students[input.studentRef] ?? 0) + 1;
+    this.state.students[input.studentRef] = {
+      ...mine,
+      [input.engine]: (mine[input.engine] ?? 0) + 1,
+    };
     const totals = this.state.byEngine[input.engine] ?? { calls: 0, costUsd: 0 };
     this.state.byEngine[input.engine] = { calls: totals.calls + 1, costUsd: totals.costUsd };
     this.save();
@@ -127,8 +131,9 @@ export class Ledger {
   /** Devuelve el cupo de una llamada que no llegó a hacerse, como una falla antes de pedir al modelo */
   release(input: { studentRef: string; engine: AiEngine }): void {
     this.roll();
-    const used = this.state.students[input.studentRef] ?? 0;
-    if (used > 0) this.state.students[input.studentRef] = used - 1;
+    const mine = this.state.students[input.studentRef] ?? {};
+    const used = mine[input.engine] ?? 0;
+    if (used > 0) this.state.students[input.studentRef] = { ...mine, [input.engine]: used - 1 };
     const totals = this.state.byEngine[input.engine];
     if (totals && totals.calls > 0) {
       this.state.byEngine[input.engine] = { calls: totals.calls - 1, costUsd: totals.costUsd };
@@ -139,7 +144,9 @@ export class Ledger {
   summary(): UsageSummary {
     this.roll();
     const students = Object.keys(this.state.students).length;
-    const calls = Object.values(this.state.students).reduce((sum, value) => sum + value, 0);
+    const calls = Object.values(this.state.students)
+      .flatMap((byEngine) => Object.values(byEngine))
+      .reduce((sum, value) => sum + value, 0);
     return {
       day: this.state.day,
       calls,

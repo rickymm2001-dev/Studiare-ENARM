@@ -25,6 +25,7 @@ export default defineConfig({
       'tests/recovery/**/*.test.ts',
       'tests/demo/**/*.test.ts',
       'tests/content/**/*.test.ts',
+      'tests/integration/**/*.test.ts',
     ],
     setupFiles: ['./tests/setup/vitest.setup.ts'],
     restoreMocks: true,

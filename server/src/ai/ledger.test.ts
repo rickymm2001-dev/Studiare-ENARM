@@ -34,6 +34,16 @@ describe('límites por alumno', () => {
     expect(admit(ledger)).toEqual({ ok: false, reason: 'student_limit' });
   });
 
+  it('cada motor tiene su propio cupo para el mismo alumno', () => {
+    const ledger = new Ledger();
+    admit(ledger);
+    admit(ledger);
+    expect(admit(ledger).ok).toBe(false);
+    expect(
+      ledger.admit({ studentRef: 'alumno-uno-0001', engine: 'flashcards', ...LIMITS }),
+    ).toEqual({ ok: true });
+  });
+
   it('cada alumno tiene su propio cupo', () => {
     const ledger = new Ledger();
     admit(ledger, 'alumno-uno-0001');

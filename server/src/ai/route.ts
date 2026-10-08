@@ -132,7 +132,7 @@ export function createAiRoutes(deps: AiRoutesDeps): Hono {
     const admission = deps.ledger.admit({
       studentRef,
       engine,
-      perStudentPerDay: limits.perStudentPerDay,
+      perStudentPerDay: limits.perStudentPerDay[engine],
       dailyBudgetUsd: limits.dailyBudgetUsd,
     });
     if (!admission.ok) return fail(c, admission.reason);

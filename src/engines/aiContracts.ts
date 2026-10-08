@@ -316,6 +316,7 @@ export const AiErrorSchema = z.strictObject({
     validator: true,
     engine: true,
     promptVersion: true,
+    mode: true,
   }).optional(),
 });
 export type AiErrorBody = z.infer<typeof AiErrorSchema>;

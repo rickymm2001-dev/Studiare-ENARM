@@ -53,11 +53,14 @@ describe('cambios', () => {
   it('mezcla solo lo que se manda', () => {
     const next = mergeConfig(DEFAULT_CONFIG, {
       models: { bias_tips: { id: 'claude-haiku-5-5', effort: 'low', maxTokens: 800 } },
-      limits: { perStudentPerDay: 5 },
+      limits: { perStudentPerDay: { bias_tips: 5 } },
     });
     expect(next.models.bias_tips.id).toBe('claude-haiku-5-5');
     expect(next.models.forgetting).toEqual(DEFAULT_CONFIG.models.forgetting);
-    expect(next.limits.perStudentPerDay).toBe(5);
+    expect(next.limits.perStudentPerDay.bias_tips).toBe(5);
+    expect(next.limits.perStudentPerDay.flashcards).toBe(
+      DEFAULT_CONFIG.limits.perStudentPerDay.flashcards,
+    );
     expect(next.limits.dailyBudgetUsd).toBe(DEFAULT_CONFIG.limits.dailyBudgetUsd);
   });
 
@@ -82,23 +85,23 @@ describe('cambios', () => {
       }),
     ).toBe(false);
     expect(bad({ apiKey: 'x' })).toBe(false);
-    expect(bad({ limits: { perStudentPerDay: 0 } })).toBe(false);
+    expect(bad({ limits: { perStudentPerDay: { forgetting: 0 } } })).toBe(false);
     expect(bad({ limits: { dailyBudgetUsd: -1 } })).toBe(false);
     expect(bad({ models: { otro: { id: 'claude-x', effort: null, maxTokens: 500 } } })).toBe(false);
-    expect(bad({ limits: { perStudentPerDay: 10 } })).toBe(true);
+    expect(bad({ limits: { perStudentPerDay: { forgetting: 10 } } })).toBe(true);
   });
 });
 
 describe('archivo local', () => {
   it('guarda y vuelve a leer la configuración completa', () => {
     const file = join(tempDir(), 'ai-config.local.json');
-    const next = mergeConfig(DEFAULT_CONFIG, { limits: { perStudentPerDay: 7 } });
+    const next = mergeConfig(DEFAULT_CONFIG, { limits: { perStudentPerDay: { forgetting: 7 } } });
     saveAiConfig(file, next);
     expect(JSON.parse(readFileSync(file, 'utf8'))).toMatchObject({
-      limits: { perStudentPerDay: 7 },
+      limits: { perStudentPerDay: { forgetting: 7 } },
     });
     // Leer un archivo completo como cambios mezcla igual
-    expect(loadAiConfig(file).limits.perStudentPerDay).toBe(7);
+    expect(loadAiConfig(file).limits.perStudentPerDay.forgetting).toBe(7);
   });
 
   it('sin archivo, con archivo dañado o con valores inválidos usa los de fábrica', () => {
@@ -109,7 +112,7 @@ describe('archivo local', () => {
     writeFileSync(broken, '{ no es json');
     expect(loadAiConfig(broken)).toBe(DEFAULT_CONFIG);
     const invalid = join(dir, 'invalido.json');
-    writeFileSync(invalid, JSON.stringify({ limits: { perStudentPerDay: -4 } }));
+    writeFileSync(invalid, JSON.stringify({ limits: { perStudentPerDay: { forgetting: -4 } } }));
     expect(loadAiConfig(invalid)).toBe(DEFAULT_CONFIG);
   });
 });

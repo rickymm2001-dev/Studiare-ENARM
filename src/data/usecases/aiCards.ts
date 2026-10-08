@@ -7,6 +7,7 @@ import { ACADEMIC_SOURCE_KEYS, type AcademicSourceKey } from '../../config/acade
 import { PLANS, type PlanKey } from '../../config/billing';
 import { studyDayOf } from '../../engines/studyDay';
 import { sanitizeTag } from '../../engines/tagPath';
+import type { CallMeta } from '../../ai/engines';
 import type { FlashcardProposal, GenerationResult } from '../../ai/flashcards';
 import { textToHtml } from '../content/plainText';
 import type { DataApi } from '../context';
@@ -74,6 +75,9 @@ export async function recordGeneration(
 ): Promise<RecordedGeneration> {
   if ((await generationsLeft(api, user, plan, now)) <= 0) throw new GenerationLimitError();
   const stamp = now.toISOString();
+  // Con el proxy, la llamada deja lo que costó cada sección. Sin él no hubo tokens ni costo
+  const sum = (pick: (meta: CallMeta) => number) =>
+    result.metas.reduce((total, meta) => total + pick(meta), 0);
   const call: AiCallLog = {
     id: newId(),
     userId: user.id,
@@ -81,14 +85,17 @@ export async function recordGeneration(
     mode: result.mode,
     model: result.model,
     at: stamp,
-    // Sin un modelo real no hay tokens. Con uno, una estimación de 4 caracteres por token
-    inputTokens: result.mode === 'template' ? 0 : Math.ceil(result.processedText.length / 4),
-    outputTokens: 0,
-    cacheWriteTokens: 0,
-    cacheReadTokens: 0,
-    estimatedCostUsd: 0,
+    inputTokens: sum((meta) => meta.inputTokens),
+    outputTokens: sum((meta) => meta.outputTokens),
+    cacheWriteTokens: sum((meta) => meta.cacheWriteTokens),
+    cacheReadTokens: sum((meta) => meta.cacheReadTokens),
+    estimatedCostUsd: Math.round(sum((meta) => meta.estimatedCostUsd) * 1e6) / 1e6,
     latencyMs: result.durationMs,
-    outcome: result.fellBack ? 'fallback' : 'ok',
+    outcome: result.fellBack
+      ? 'fallback'
+      : result.metas.some((meta) => meta.outcome === 'retried_ok')
+        ? 'retried_ok'
+        : 'ok',
   };
   await api.repos.aiCallLog.put(call);
 

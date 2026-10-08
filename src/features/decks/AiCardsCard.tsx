@@ -124,7 +124,10 @@ function AiCards({ session }: { session: ReadySession }) {
             ? { id: note.id, kind: 'cloze' as const, text: note.text }
             : { id: note.id, kind: note.kind, front: note.front },
         ),
-        generator: generatorFor(status),
+        generator: generatorFor(status, {
+          studentRef: session.user.id,
+          names: [session.user.alias],
+        }),
       });
       const recorded = await recordGeneration(api, session.user, plan, result, sourceTitle);
       setProposals([...result.proposals]);

@@ -1,4 +1,5 @@
 import 'fake-indexeddb/auto';
+import type { CallMeta } from '@/ai/engines';
 import { afterEach, describe, expect, it } from 'vitest';
 import { PLANS } from '@/config/billing';
 import type { FlashcardProposal, GenerationResult } from '../../ai/flashcards';
@@ -40,6 +41,7 @@ const result = (overrides: Partial<GenerationResult> = {}): GenerationResult => 
   promptVersion: 'flashcards.provisional.v1',
   durationMs: 12,
   processedText: 'texto',
+  metas: [],
   ...overrides,
 });
 
@@ -123,6 +125,62 @@ describe('cuota de generaciones', () => {
       (event) => event.type === 'ai_artifact_created',
     );
     expect(events).toHaveLength(1);
+  });
+});
+
+describe('bitácora de costo', () => {
+  const callMeta = (overrides: Partial<CallMeta> = {}): CallMeta => ({
+    engine: 'flashcards',
+    mode: 'real',
+    model: 'claude-sonnet-5-5',
+    promptVersion: 'flashcards.provisional.v1',
+    inputTokens: 800,
+    outputTokens: 300,
+    cacheWriteTokens: 100,
+    cacheReadTokens: 50,
+    estimatedCostUsd: 0.0046,
+    latencyMs: 900,
+    outcome: 'ok',
+    validator: { passed: true, issues: [] },
+    ...overrides,
+  });
+
+  it('suma los tokens y el costo de todas las secciones en una sola llamada', async () => {
+    const { api, user } = setup();
+    await recordGeneration(
+      api,
+      user,
+      'monthly',
+      result({
+        mode: 'real',
+        model: 'claude-sonnet-5-5',
+        metas: [callMeta(), callMeta({ outcome: 'retried_ok', estimatedCostUsd: 0.0054 })],
+      }),
+      'Guía.pdf',
+      NOW,
+    );
+    const calls = await api.repos.aiCallLog.list();
+    expect(calls).toHaveLength(1);
+    expect(calls[0]).toMatchObject({
+      mode: 'real',
+      model: 'claude-sonnet-5-5',
+      inputTokens: 1600,
+      outputTokens: 600,
+      cacheWriteTokens: 200,
+      cacheReadTokens: 100,
+      estimatedCostUsd: 0.01,
+      outcome: 'retried_ok',
+    });
+  });
+
+  it('sin llamadas al proxy no hay tokens ni costo', async () => {
+    const { api, user } = setup();
+    await recordGeneration(api, user, 'monthly', result(), 'Guía.pdf', NOW);
+    expect((await api.repos.aiCallLog.list())[0]).toMatchObject({
+      inputTokens: 0,
+      estimatedCostUsd: 0,
+      outcome: 'ok',
+    });
   });
 });
 

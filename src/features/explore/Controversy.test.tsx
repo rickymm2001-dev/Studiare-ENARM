@@ -36,6 +36,7 @@ const result: GenerationResult = {
   promptVersion: 'flashcards.provisional.v1',
   durationMs: 1,
   processedText: 'x',
+  metas: [],
 };
 
 /** Una tarjeta generada con señal y otra sin señal, guardadas como las guarda la pantalla */

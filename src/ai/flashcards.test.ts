@@ -181,52 +181,116 @@ describe('generateFlashcards', () => {
 });
 
 describe('generadores', () => {
-  it('generatorFor usa el proxy solo con clave y el simulado en los demás casos', () => {
-    expect(generatorFor({ kind: 'real' }).mode).toBe('real');
-    for (const kind of ['mock', 'no-proxy', 'offline', 'checking'] as const) {
-      expect(generatorFor({ kind })).toBe(simulatedGenerator);
+  const STUDENT = '01HZX0000000000000000000AA';
+  const options = { studentRef: STUDENT, names: ['Ana López'] };
+
+  it('generatorFor usa el proxy con clave y en simulado y el generador del cliente en los demás casos', () => {
+    expect(generatorFor({ kind: 'real' }, options).mode).toBe('real');
+    expect(generatorFor({ kind: 'mock' }, options).mode).toBe('mock');
+    for (const kind of ['no-proxy', 'offline', 'checking'] as const) {
+      expect(generatorFor({ kind }, options)).toBe(simulatedGenerator);
     }
   });
 
-  it('el proxy recibe la sección y su respuesta se valida con el esquema', async () => {
+  const section = { index: 0, title: 'Diabetes', text: TEXT };
+  const goodCard = {
+    kind: 'cloze' as const,
+    front:
+      'La {{c1::metformina}} es el tratamiento de primera línea de la diabetes mellitus tipo 2.',
+    back: '',
+    quote: 'La metformina es el tratamiento de primera línea de la diabetes mellitus tipo 2.',
+  };
+  const meta = {
+    engine: 'flashcards',
+    mode: 'real',
+    model: 'claude-sonnet-5-5',
+    promptVersion: 'flashcards.provisional.v1',
+    inputTokens: 800,
+    outputTokens: 300,
+    cacheWriteTokens: 0,
+    cacheReadTokens: 0,
+    estimatedCostUsd: 0.0046,
+    latencyMs: 900,
+    outcome: 'ok',
+    validator: { passed: true, issues: [] },
+  };
+
+  it('el proxy recibe la sección sin datos personales y devuelve tarjetas con su costo', async () => {
     const fetchImpl = vi.fn((_url: string, _init?: RequestInit) =>
-      Promise.resolve(
-        Response.json({
-          cards: [
-            {
-              kind: 'basic',
-              front: 'a',
-              back: 'b',
-              quote: 'una cita de varias palabras',
-              controversy: null,
-            },
-          ],
-        }),
-      ),
+      Promise.resolve(Response.json({ output: { cards: [goodCard] }, meta })),
     ) as unknown as typeof fetch;
-    const generator = createProxyGenerator(fetchImpl);
-    const cards = await generator.generate({ index: 0, title: 'Título', text: 'Texto' });
+    const generator = createProxyGenerator({ status: { kind: 'real' }, ...options, fetchImpl });
+    expect(generator.model).toBe('proxy');
+    const cards = await generator.generate(section);
     expect(cards).toHaveLength(1);
+    expect(cards[0]).toMatchObject({ kind: 'cloze', controversy: null });
+    expect(generator.model).toBe('claude-sonnet-5-5');
     const [url, init] = (fetchImpl as unknown as ReturnType<typeof vi.fn>).mock.calls[0] as [
       string,
       RequestInit,
     ];
     expect(url).toBe('/api/ai/flashcards');
-    expect(JSON.parse(init.body as string)).toMatchObject({ title: 'Título', text: 'Texto' });
+    const body = JSON.parse(init.body as string) as {
+      studentRef: string;
+      input: { title: string; text: string };
+    };
+    expect(body.studentRef).toBe(STUDENT);
+    expect(body.input).toMatchObject({ title: 'Diabetes' });
+    // Entrega lo que costó y se vacía
+    expect(generator.drainMetas?.()).toHaveLength(1);
+    expect(generator.drainMetas?.()).toEqual([]);
   });
 
-  it('una respuesta que no cumple el esquema o con error del proxy lanza', async () => {
+  it('una respuesta inválida o un error del proxy lanza y deja constancia de lo que costó', async () => {
     const wrong = vi.fn(() =>
-      Promise.resolve(Response.json({ cards: [{ kind: 'otro' }] })),
+      Promise.resolve(Response.json({ output: { cards: [{ kind: 'otro' }] }, meta })),
+    ) as unknown as typeof fetch;
+    const generator = createProxyGenerator({
+      status: { kind: 'real' },
+      ...options,
+      fetchImpl: wrong,
+    });
+    await expect(generator.generate(section)).rejects.toThrow('bad_response');
+    expect(generator.drainMetas?.()).toHaveLength(1);
+
+    const limited = vi.fn(() =>
+      Promise.resolve(
+        Response.json(
+          {
+            error: 'student_limit',
+            message: 'Llegaste al límite de usos de IA de hoy. Vuelve mañana.',
+          },
+          { status: 429 },
+        ),
+      ),
     ) as unknown as typeof fetch;
     await expect(
-      createProxyGenerator(wrong).generate({ index: 0, title: null, text: 'x' }),
-    ).rejects.toThrow();
-    const down = vi.fn(() =>
-      Promise.resolve(new Response('', { status: 404 })),
+      createProxyGenerator({ status: { kind: 'mock' }, ...options, fetchImpl: limited }).generate(
+        section,
+      ),
+    ).rejects.toThrow('student_limit');
+  });
+
+  it('el resultado de generar junta lo que costaron las llamadas y cae al simulado si el proxy falla', async () => {
+    const fetchImpl = vi.fn(() =>
+      Promise.resolve(Response.json({ output: { cards: [goodCard] }, meta })),
     ) as unknown as typeof fetch;
-    await expect(
-      createProxyGenerator(down).generate({ index: 0, title: null, text: 'x' }),
-    ).rejects.toThrow('404');
+    const generator = createProxyGenerator({ status: { kind: 'real' }, ...options, fetchImpl });
+    const result = await generateFlashcards({ text: TEXT, generator });
+    expect(result.mode).toBe('real');
+    expect(result.model).toBe('claude-sonnet-5-5');
+    expect(result.promptVersion).toBe('flashcards.provisional.v1');
+    expect(result.metas).toHaveLength(1);
+    expect(result.proposals).toHaveLength(1);
+
+    const down = vi.fn(() => Promise.reject(new TypeError('sin red'))) as unknown as typeof fetch;
+    const fallen = await generateFlashcards({
+      text: TEXT,
+      generator: createProxyGenerator({ status: { kind: 'real' }, ...options, fetchImpl: down }),
+    });
+    expect(fallen.fellBack).toBe(true);
+    expect(fallen.mode).toBe('template');
+    // La llamada que falló queda con su motivo aunque no costó
+    expect(fallen.metas).toHaveLength(1);
   });
 });

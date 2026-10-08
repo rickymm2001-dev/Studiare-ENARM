@@ -27,8 +27,11 @@ export interface ModelPrice {
 }
 
 export interface AiLimits {
-  /** Llamadas por alumno por día (8.1) */
-  perStudentPerDay: number;
+  /**
+   * Llamadas por alumno por día y por motor (8.1). Las tarjetas cuentan una llamada por sección de
+   * texto, y el plan de pago da hasta 20 generaciones de 12 secciones, así que su tope es mayor
+   */
+  perStudentPerDay: Record<AiEngine, number>;
   /** Presupuesto diario total en dólares. Solo cuenta el gasto real */
   dailyBudgetUsd: number;
   /** Tiempo máximo de una llamada al modelo */
@@ -60,7 +63,18 @@ export const DEFAULT_CONFIG: AiConfig = {
     'claude-sonnet-5-5': { input: 2, output: 10, cacheWrite: 2.5, cacheRead: 0.2 },
     'claude-opus-5-5': { input: 4, output: 20, cacheWrite: 5, cacheRead: 0.2 },
   },
-  limits: { perStudentPerDay: 30, dailyBudgetUsd: 5, timeoutMs: 30_000, maxRetries: 2 },
+  limits: {
+    perStudentPerDay: {
+      forgetting: 12,
+      weekly_report: 4,
+      flashcards: 240,
+      bias_tips: 12,
+      restructure: 20,
+    },
+    dailyBudgetUsd: 5,
+    timeoutMs: 30_000,
+    maxRetries: 2,
+  },
 };
 
 const ModelIdSchema = z
@@ -80,7 +94,7 @@ const PriceSchema = z.strictObject({
   cacheRead: z.number().min(0).max(1000),
 });
 const LimitsSchema = z.strictObject({
-  perStudentPerDay: z.int().min(1).max(10_000),
+  perStudentPerDay: z.partialRecord(z.enum(AI_ENGINES), z.int().min(1).max(10_000)),
   dailyBudgetUsd: z.number().min(0).max(100_000),
   timeoutMs: z.int().min(1000).max(120_000),
   maxRetries: z.int().min(0).max(5),
@@ -103,7 +117,14 @@ export function mergeConfig(base: AiConfig, patch: AiConfigPatch): AiConfig {
   const merged: AiConfig = {
     models,
     prices: { ...base.prices, ...patch.prices },
-    limits: { ...base.limits, ...patch.limits },
+    limits: {
+      ...base.limits,
+      ...patch.limits,
+      perStudentPerDay: {
+        ...base.limits.perStudentPerDay,
+        ...patch.limits?.perStudentPerDay,
+      } as Record<AiEngine, number>,
+    },
   };
   // Un modelo sin precio no se puede presupuestar, así que no se acepta
   for (const engine of AI_ENGINES) {
