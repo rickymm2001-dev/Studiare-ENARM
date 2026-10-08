@@ -9,7 +9,7 @@
  * cardGen.ts y es quien decide si una tarjeta pasa.
  * Umbrales. Secciones de hasta 1,800 caracteres y hasta 7 tarjetas por sección.
  */
-import { drugsIn, normalizeForMatch } from './grounding';
+import { drugsIn, normalizeForMatch } from './grounding.ts';
 
 export const SECTION_MAX_CHARS = 1800;
 export const SECTION_MIN_CHARS = 350;

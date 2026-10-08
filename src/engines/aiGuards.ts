@@ -28,15 +28,15 @@ import type {
   WeeklyReportInput,
   WeeklyReportOutput,
   AiEngine,
-} from './aiContracts';
-import { clozeHoles } from './cloze';
+} from './aiContracts.ts';
+import { clozeHoles } from './cloze.ts';
 import {
   ANSWER_GROUNDED_RATIO,
   groundedRatio,
   normalizeForMatch,
   quoteIssues,
   unsupportedFacts,
-} from './grounding';
+} from './grounding.ts';
 
 export type GuardIssue =
   | 'evidence_missing'
@@ -51,7 +51,6 @@ export type GuardIssue =
   | 'priorities_mismatch'
   | 'section_not_provided'
   | 'examples_count'
-  | 'tip_not_anchored'
   | 'option_labels'
   | 'key_count'
   | 'unchanged'
@@ -67,6 +66,32 @@ export interface GuardResult {
   passed: boolean;
   issues: GuardIssue[];
 }
+
+/** Qué falló, en una línea que se le da al modelo en el reintento y se muestra al admin */
+export const GUARD_MESSAGES: Readonly<Record<GuardIssue, string>> = {
+  evidence_missing: 'Hay hipótesis pero no citas ninguna evidencia',
+  evidence_not_in_input: 'Citaste evidencia que no está en los datos',
+  action_not_allowed: 'Propusiste una acción que no está entre las permitidas',
+  new_medical_fact: 'Agregaste una cifra o un fármaco que los datos no traen',
+  mental_health_opinion: 'Opinaste sobre la salud mental del alumno',
+  hypothesis_not_one_sentence: 'La hipótesis debe ser una sola frase',
+  message_sentences: 'El mensaje al alumno debe tener de 2 a 3 frases',
+  inconsistent_empty: 'Sin hipótesis no puede haber evidencia, acciones ni mensaje',
+  ref_not_in_input: 'Usaste una referencia que no está en los datos',
+  priorities_mismatch: 'Las prioridades deben ser las mismas de los datos, sin repetir ni faltar',
+  section_not_provided: 'Hablaste de una sección que no venía en los datos',
+  examples_count: 'Los ejemplos citados no pueden repetirse',
+  option_labels: 'Las letras de las opciones no pueden repetirse',
+  key_count: 'Debe haber exactamente una opción correcta',
+  unchanged: 'La pregunta quedó igual que la original',
+  transform_not_applied: 'No se aplicó la transformación pedida',
+  quote_too_short: 'La cita es demasiado corta',
+  quote_not_in_source: 'La cita no aparece tal cual en el texto de origen',
+  number_not_in_quote: 'Hay una cifra que la cita no trae',
+  drug_not_in_quote: 'Hay un fármaco que la cita no trae',
+  answer_not_grounded: 'La respuesta no se apoya en las palabras de la cita',
+  controversy_invalid: 'La controversia no cita una fuente de la lista cerrada',
+};
 
 const result = (issues: Iterable<GuardIssue>): GuardResult => {
   const unique = [...new Set(issues)];
@@ -194,6 +219,11 @@ export function guardBiasTip(output: BiasTipOutput, input: BiasTipInput): GuardR
 // ---------------------------------------------------------------------------------------------
 // Tarjetas (8.4)
 
+export interface GuardOptions {
+  /** Claves de los textos académicos que una controversia puede citar. Sin ella no se revisa la lista */
+  sourceKeys?: ReadonlySet<string>;
+}
+
 export interface GuardedCards {
   /** Solo las tarjetas que pasaron */
   cards: FlashcardsOutput['cards'];
@@ -206,7 +236,11 @@ export interface GuardedCards {
  * Deja pasar solo las tarjetas ancladas al texto de donde dicen salir. Pasa si no había tarjetas o si
  * al menos una se salvó. Los códigos de lo descartado quedan en la lista para la bitácora
  */
-export function guardFlashcards(output: FlashcardsOutput, input: FlashcardsInput): GuardedCards {
+export function guardFlashcards(
+  output: FlashcardsOutput,
+  input: FlashcardsInput,
+  options: GuardOptions = {},
+): GuardedCards {
   const kept: FlashcardsOutput['cards'] = [];
   const issues: GuardIssue[] = [];
   for (const card of output.cards) {
@@ -223,7 +257,13 @@ export function guardFlashcards(output: FlashcardsOutput, input: FlashcardsInput
     if (groundedRatio(answer, card.quote) < ANSWER_GROUNDED_RATIO) {
       cardIssues.push('answer_not_grounded');
     }
-    if (card.controversy?.sources.length === 0) {
+    const sources = card.controversy?.sources;
+    if (
+      sources !== undefined &&
+      (sources.length === 0 ||
+        (options.sourceKeys !== undefined &&
+          sources.some((entry) => !options.sourceKeys?.has(entry.key))))
+    ) {
       cardIssues.push('controversy_invalid');
     }
     if (cardIssues.length === 0) kept.push(card);
@@ -278,6 +318,7 @@ export function guardOutput<E extends AiEngine>(
   engine: E,
   output: EngineOutputs[E],
   input: EngineInputs[E],
+  options: GuardOptions = {},
 ): GuardResult {
   switch (engine) {
     case 'forgetting':
@@ -289,7 +330,7 @@ export function guardOutput<E extends AiEngine>(
     case 'restructure':
       return guardRestructure(output as RestructureOutput, input as RestructureInput);
     case 'flashcards':
-      return guardFlashcards(output as FlashcardsOutput, input as FlashcardsInput).result;
+      return guardFlashcards(output as FlashcardsOutput, input as FlashcardsInput, options).result;
     default:
       return assertNever(engine);
   }

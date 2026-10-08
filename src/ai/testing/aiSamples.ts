@@ -5,7 +5,7 @@ import type {
   HypothesisInput,
   RestructureInput,
   WeeklyReportInput,
-} from '@/engines/aiContracts';
+} from '../../engines/aiContracts.ts';
 
 export const hypothesisInput = (overrides: Partial<HypothesisInput> = {}): HypothesisInput => ({
   rule: 'interference',

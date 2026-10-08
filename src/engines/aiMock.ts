@@ -26,9 +26,9 @@ import type {
   RestructureOutput,
   WeeklyReportInput,
   WeeklyReportOutput,
-} from './aiContracts';
-import { simulateCards } from './cardSim';
-import { MIN_QUOTE_CHARS, MIN_QUOTE_WORDS, wordsOf } from './grounding';
+} from './aiContracts.ts';
+import { simulateCards } from './cardSim.ts';
+import { MIN_QUOTE_CHARS, MIN_QUOTE_WORDS, wordsOf } from './grounding.ts';
 
 export const MOCK_MODEL = 'respuestas-fijas-v1';
 

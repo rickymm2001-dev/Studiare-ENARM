@@ -310,6 +310,13 @@ export type AiErrorCode = (typeof AI_ERROR_CODES)[number];
 export const AiErrorSchema = z.strictObject({
   error: z.enum(AI_ERROR_CODES),
   message: z.string().max(300),
+  /** Lo que costó la llamada cuando llegó a hacerse y aun así no sirvió */
+  cost: AiCallMetaSchema.omit({
+    outcome: true,
+    validator: true,
+    engine: true,
+    promptVersion: true,
+  }).optional(),
 });
 export type AiErrorBody = z.infer<typeof AiErrorSchema>;
 

@@ -34,3 +34,8 @@ Thumbs.db
 
 # Ramas de trabajo temporales de agentes
 .claude/worktrees/
+
+# Estado local del proxy de IA
+server/ai-config.local.json
+server/.ai-ledger.json
+server/*.tmp

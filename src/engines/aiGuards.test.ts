@@ -250,6 +250,20 @@ describe('tarjetas', () => {
     expect(guardFlashcards({ cards: [noSources] }, input).result.issues).toEqual([
       'controversy_invalid',
     ]);
+    const outside = {
+      ...valid,
+      controversy: { reason: 'x'.repeat(30), sources: [{ key: 'wikipedia' }] },
+    };
+    const keys = new Set(['harrison', 'nom']);
+    expect(guardFlashcards({ cards: [outside] }, input).cards).toEqual([outside]);
+    expect(guardFlashcards({ cards: [outside] }, input, { sourceKeys: keys }).cards).toEqual([]);
+    const inside = {
+      ...outside,
+      controversy: { reason: 'x'.repeat(30), sources: [{ key: 'nom' }] },
+    };
+    expect(guardFlashcards({ cards: [inside] }, input, { sourceKeys: keys }).cards).toEqual([
+      inside,
+    ]);
   });
 });
 
