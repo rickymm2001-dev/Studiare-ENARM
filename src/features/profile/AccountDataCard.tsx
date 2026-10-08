@@ -93,7 +93,7 @@ export function AccountDataCard({
           />
         )}
         <fieldset className="flex flex-col gap-2">
-          <legend className="mb-1 font-semibold">{t.account.avatarTitle}</legend>
+          <legend className="eyebrow mb-1 text-fg-muted">{t.account.avatarTitle}</legend>
           <AvatarPicker
             name={user.alias}
             seed={user.id}

@@ -305,7 +305,7 @@ function StudyForm({
       }}
     >
       <fieldset>
-        <legend className="mb-2 font-semibold">{t.settings.dailyTitle}</legend>
+        <legend className="eyebrow mb-2 text-fg-muted">{t.settings.dailyTitle}</legend>
         <div className="grid grid-cols-2 items-end gap-3 lg:grid-cols-4">
           <TextField
             label={t.settings.newCardsPerDay}
@@ -365,7 +365,7 @@ function StudyForm({
       </fieldset>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 font-semibold">{t.settings.studyOptionsTitle}</legend>
+        <legend className="eyebrow mb-1 text-fg-muted">{t.settings.studyOptionsTitle}</legend>
         {STUDY_KEYS.map((key) => (
           <CheckboxField
             key={key}
@@ -456,7 +456,7 @@ function StudyForm({
           }}
         />
         <fieldset className="flex flex-col gap-2 rounded-lg bg-muted p-3">
-          <legend className="font-semibold">{t.settings.spacingTitle}</legend>
+          <legend className="eyebrow text-fg-muted">{t.settings.spacingTitle}</legend>
           <p className="text-sm text-fg-muted">{t.settings.spacingHint}</p>
           <div className="grid gap-3 sm:grid-cols-3">
             {(['hard', 'good', 'easy'] as const).map((rating) => (

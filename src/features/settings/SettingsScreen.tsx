@@ -72,13 +72,13 @@ export function SettingsScreen() {
       >
         <Tabs.List
           aria-label={t.settings.sectionsLabel}
-          className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 lg:mx-0 lg:px-0"
+          className="flex max-w-full gap-1 self-start overflow-x-auto rounded-full border border-line bg-muted p-1"
         >
           {available.map((key) => (
             <Tabs.Trigger
               key={key}
               value={key}
-              className="min-h-9 shrink-0 rounded-full border-2 border-line bg-surface px-3.5 text-sm font-semibold whitespace-nowrap text-fg-muted transition-colors hover:border-line-strong data-[state=active]:border-primary data-[state=active]:bg-primary-soft data-[state=active]:text-primary"
+              className="min-h-9 shrink-0 rounded-full px-2.5 text-[0.8125rem] font-semibold whitespace-nowrap text-fg-muted transition-colors hover:text-fg data-[state=active]:bg-surface data-[state=active]:text-fg data-[state=active]:shadow-card sm:px-3.5 sm:text-sm"
             >
               {t.settings.sections[key]}
             </Tabs.Trigger>

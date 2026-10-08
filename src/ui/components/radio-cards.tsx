@@ -35,7 +35,7 @@ export function RadioCards<T extends string>({
   return (
     <div className={cn('flex flex-col gap-2', className)}>
       <div>
-        <p id={legendId} className="font-semibold text-fg">
+        <p id={legendId} className="eyebrow text-fg-muted">
           {legend}
         </p>
         {description ? (

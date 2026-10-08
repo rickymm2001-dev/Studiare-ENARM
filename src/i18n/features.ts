@@ -1091,6 +1091,13 @@ export const featureText = {
     calibrating: (missing: number) =>
       `Calibrando, faltan unas ${missing.toLocaleString('es-MX')} respuestas`,
     statsLabel: 'Tus cifras',
+    statShort: {
+      questions: 'Preguntas',
+      accuracy: 'Exactitud',
+      cards: 'Tarjetas',
+      minutes: 'Minutos',
+    },
+    statRest: { questions: 'respondidas', cards: 'repasadas', minutes: 'de estudio' },
     masteryLabel: 'Dominio estimado',
     focusTitle: (n: number) =>
       n === 0

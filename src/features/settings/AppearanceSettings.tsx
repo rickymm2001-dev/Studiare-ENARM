@@ -153,7 +153,7 @@ export function AppearanceSettings() {
         />
 
         <fieldset>
-          <legend className="mb-2 font-semibold">{text.font}</legend>
+          <legend className="eyebrow mb-2 text-fg-muted">{text.font}</legend>
           <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
             {FONT_CHOICES.map((font) => (
               <ChoiceButton
@@ -178,7 +178,7 @@ export function AppearanceSettings() {
         </fieldset>
 
         <fieldset>
-          <legend className="mb-2 font-semibold">{text.size}</legend>
+          <legend className="eyebrow mb-2 text-fg-muted">{text.size}</legend>
           <div className="grid grid-cols-4 overflow-hidden rounded-lg border-2 border-line">
             {SIZE_CHOICES.map((size, index) => (
               <button
@@ -209,7 +209,7 @@ export function AppearanceSettings() {
         </fieldset>
 
         <fieldset>
-          <legend className="mb-2 font-semibold">{text.background}</legend>
+          <legend className="eyebrow mb-2 text-fg-muted">{text.background}</legend>
           <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
             {BACKGROUND_CHOICES.map((background) => (
               <ChoiceButton
@@ -321,7 +321,7 @@ export function AppearanceSettings() {
         </fieldset>
 
         <fieldset className="flex flex-col gap-2">
-          <legend className="mb-1 font-semibold">{text.motion}</legend>
+          <legend className="eyebrow mb-1 text-fg-muted">{text.motion}</legend>
           <CheckboxField
             label={text.animations}
             hint={text.animationsHint}
