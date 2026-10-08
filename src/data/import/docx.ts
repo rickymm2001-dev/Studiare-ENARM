@@ -243,5 +243,5 @@ export function parseDocx(
     });
   }
   if (notes.length === 0 && errors.length === 0) throw new ImportError('empty');
-  return { source: 'docx', fileName, notes, warnings: warnings.toList(), errors };
+  return { source: 'docx', format: 'docx', fileName, notes, warnings: warnings.toList(), errors };
 }

@@ -12,10 +12,11 @@ import type { DataApi } from '../context';
 import { newId } from '../ids';
 import type { Card, Deck, Note } from '../schemas/decks';
 import type { User } from '../schemas/people';
+import { createEvent } from '../events/createEvent';
 import { IMPORT_LIMITS, type ImportLimits } from '../import/limits';
 import type { ParsedImport, ParsedNote, RowError } from '../import/types';
 
-type Repos = Pick<DataApi, 'repos'>;
+type Api = Pick<DataApi, 'repos' | 'recordEvent'>;
 
 export const IMPORT_BATCH = 500;
 /** Largo máximo de un nombre de mazo, igual que el esquema */
@@ -140,8 +141,8 @@ function deckFinder(
 }
 
 export async function importParsed(
-  api: Repos,
-  user: Pick<User, 'id'>,
+  api: Api,
+  user: Pick<User, 'id' | 'timeZone'>,
   parsed: ParsedImport,
   options: ImportOptions,
   now: Date = new Date(),
@@ -282,6 +283,23 @@ export async function importParsed(
     await api.repos.cards.putMany(repairs.slice(at, at + IMPORT_BATCH));
   }
 
+  // Queda en la bitácora qué se importó, con sus avisos. Si no entró nada nuevo no se registra
+  if (notes.length > 0) {
+    await api.recordEvent(
+      createEvent(
+        'deck_imported',
+        {
+          deckId: root.id,
+          format: parsed.format,
+          notes: notes.length,
+          cards: cards.length,
+          media: parsed.warnings.find((warning) => warning.code === 'media_skipped')?.count ?? 0,
+          warnings: parsed.warnings.map((warning) => `${warning.code}:${warning.count}`),
+        },
+        { userId: user.id, tz: user.timeZone, clock: { now: () => now } },
+      ),
+    );
+  }
   return {
     rootDeckId: root.id,
     decksCreated: pendingDecks.filter((deck) => deck.id !== root.id).length,

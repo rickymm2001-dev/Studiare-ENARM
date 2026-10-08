@@ -213,5 +213,12 @@ export function parseApkg(
   } finally {
     db.close();
   }
-  return { source: 'apkg', fileName, notes, warnings: warnings.toList(), errors: [] };
+  return {
+    source: 'apkg',
+    format: chosen === 'collection.anki21b' ? 'apkg_new' : 'apkg_legacy',
+    fileName,
+    notes,
+    warnings: warnings.toList(),
+    errors: [],
+  };
 }

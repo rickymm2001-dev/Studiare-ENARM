@@ -98,6 +98,18 @@ describe('guardar una importación', () => {
     expect(await api.repos.caches.cardState.list()).toHaveLength(0);
     const cloze = notes.find((note) => note.kind === 'cloze');
     expect(cloze && 'text' in cloze ? clozeOrdinals(cloze.text) : []).toEqual([1, 2]);
+    // La bitácora recuerda qué se importó
+    const imported = (await api.repos.events.query({ userId: user.id })).filter(
+      (event) => event.type === 'deck_imported',
+    );
+    expect(imported).toHaveLength(1);
+    expect(imported[0]?.payload).toMatchObject({
+      deckId: deck?.id,
+      format: 'csv',
+      notes: 3,
+      cards: 5,
+      media: 0,
+    });
   });
 
   it('el texto plano se escapa y el HTML peligroso se sanea', async () => {
@@ -194,6 +206,11 @@ describe('volver a importar no duplica', () => {
     const second = await importParsed(api, user, csv(file), options());
     expect(first.notesCreated).toBe(2);
     expect(second).toMatchObject({ notesCreated: 0, duplicates: 2, cardsCreated: 0, repaired: 0 });
+    // Lo que no trajo nada nuevo no deja otro evento
+    const events = (await api.repos.events.query({ userId: user.id })).filter(
+      (event) => event.type === 'deck_imported',
+    );
+    expect(events).toHaveLength(1);
     expect(second.rootDeckId).toBe(first.rootDeckId);
     expect(await api.repos.notes.list()).toHaveLength(2);
     expect(await api.repos.decks.list()).toHaveLength(1);

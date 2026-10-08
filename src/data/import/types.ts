@@ -4,6 +4,8 @@
 
 export type ImportSource = 'apkg' | 'csv' | 'xlsx' | 'docx';
 
+export type ImportFormat = 'apkg_legacy' | 'apkg_new' | 'csv' | 'xlsx' | 'docx';
+
 export type ImportNoteKind = 'basic' | 'basic_reverse' | 'cloze';
 
 export interface ParsedNote {
@@ -47,6 +49,8 @@ export interface RowError {
 
 export interface ParsedImport {
   source: ImportSource;
+  /** Con más detalle que source. Un paquete de Anki puede ser del formato viejo o del nuevo */
+  format: ImportFormat;
   fileName: string;
   notes: ParsedNote[];
   warnings: ImportWarning[];

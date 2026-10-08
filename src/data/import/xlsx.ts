@@ -33,6 +33,7 @@ export async function parseXlsx(
   const result = notesFromRows(rows, { html: false }, limits);
   return {
     source: 'xlsx',
+    format: 'xlsx',
     fileName,
     notes: result.notes,
     warnings: result.warnings,

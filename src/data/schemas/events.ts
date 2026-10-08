@@ -169,7 +169,7 @@ export const EventPayloadSchemas = {
   }),
   deck_imported: z.strictObject({
     deckId: IdSchema,
-    format: z.enum(['apkg_legacy', 'apkg_new']),
+    format: z.enum(['apkg_legacy', 'apkg_new', 'csv', 'xlsx', 'docx']),
     notes: z.int().nonnegative(),
     cards: z.int().nonnegative(),
     media: z.int().nonnegative(),

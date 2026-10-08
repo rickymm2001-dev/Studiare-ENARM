@@ -108,6 +108,7 @@ export function parseCsv(
   );
   return {
     source: 'csv',
+    format: 'csv',
     fileName,
     notes: result.notes,
     warnings: result.warnings,
