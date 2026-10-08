@@ -32,6 +32,7 @@ import {
 } from '../schemas/caches';
 import { CardSchema, DeckSchema, NoteSchema } from '../schemas/decks';
 import { AppEventSchema } from '../schemas/events';
+import { OutlineSchema } from '../schemas/outlines';
 import {
   AccountSchema,
   ConsentSchema,
@@ -58,8 +59,11 @@ export const TABLES = {
   officialScores: { schema: OfficialScoreSchema, indexes: 'userId', kind: 'entity' },
 
   decks: { schema: DeckSchema, indexes: 'id, ownerId, origin, parentId', kind: 'entity' },
-  notes: { schema: NoteSchema, indexes: 'id, deckId, *tags', kind: 'entity' },
+  // outlineId busca las notas de un apunte, también las marcadas como borradas (D-090)
+  notes: { schema: NoteSchema, indexes: 'id, deckId, outlineId, *tags', kind: 'entity' },
   cards: { schema: CardSchema, indexes: 'id, noteId, deckId', kind: 'entity' },
+  // Apuntes en esquema (Fase C2, Etapa 3). Sus líneas con marca son notas y tarjetas
+  outlines: { schema: OutlineSchema, indexes: 'id, ownerId, deckId, updatedAt', kind: 'entity' },
 
   cases: { schema: ClinicalCaseSchema, indexes: 'id', kind: 'entity' },
   questions: {

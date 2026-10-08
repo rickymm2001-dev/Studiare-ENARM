@@ -1,7 +1,7 @@
 import 'fake-indexeddb/auto';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { MAX_DECK_DEPTH } from '../../engines/deckTree';
-import { makeUser, testApi } from '../testing/fixtures';
+import { makeUser, newId, testApi } from '../testing/fixtures';
 import { queueErrorCards } from './errorCards';
 import {
   clozeOrdinals,
@@ -323,5 +323,113 @@ describe('niveles de mazos al crear', () => {
     await expect(
       createManualDeck(api, user, { name: 'Demasiado abajo', parentId: parent.id }),
     ).rejects.toThrow('demasiados niveles');
+  });
+});
+
+describe('etiquetas y unión con un apunte al guardar una tarjeta (D-090)', () => {
+  const LINK = { outlineId: newId(), nodeId: newId() };
+
+  it('sin etiquetas ni apunte la nota queda como siempre, sin campos de apunte', async () => {
+    const { api, user } = setup();
+    const deck = await createManualDeck(api, user, { name: 'Mazo' });
+    const note = await saveManualNote(api, user, {
+      deckId: deck.id,
+      draft: { kind: 'basic', front: 'f', back: 'b' },
+    });
+    expect(note.tags).toEqual([]);
+    expect(note).not.toHaveProperty('outlineId');
+    expect(note).not.toHaveProperty('outlineNodeId');
+    expect(await api.repos.notes.get(note.id)).toEqual(note);
+  });
+
+  it('guarda las etiquetas ya limpias y las reemplaza al editar, y sin etiquetas conserva las que tenía', async () => {
+    const { api, user } = setup();
+    const deck = await createManualDeck(api, user, { name: 'Mazo' });
+    const note = await saveManualNote(api, user, {
+      deckId: deck.id,
+      draft: { kind: 'basic', front: 'f', back: 'b' },
+      tags: ['Medicina Interna::Nefrología', 'medicina interna::nefrología', '  ', 'Otra'],
+    });
+    expect(note.tags).toEqual(['Medicina_Interna::Nefrología', 'Otra']);
+
+    const edited = await saveManualNote(api, user, {
+      deckId: deck.id,
+      noteId: note.id,
+      draft: { kind: 'basic', front: 'f2', back: 'b' },
+    });
+    expect(edited.tags).toEqual(['Medicina_Interna::Nefrología', 'Otra']);
+
+    const replaced = await saveManualNote(api, user, {
+      deckId: deck.id,
+      noteId: note.id,
+      draft: { kind: 'basic', front: 'f2', back: 'b' },
+      tags: ['Nueva'],
+    });
+    expect(replaced.tags).toEqual(['Nueva']);
+    const cleared = await saveManualNote(api, user, {
+      deckId: deck.id,
+      noteId: note.id,
+      draft: { kind: 'basic', front: 'f2', back: 'b' },
+      tags: [],
+    });
+    expect(cleared.tags).toEqual([]);
+    expect((await api.repos.notes.get(note.id))?.tags).toEqual([]);
+  });
+
+  it('guarda la unión con la línea de un apunte y la conserva en las ediciones siguientes', async () => {
+    const { api, user } = setup();
+    const deck = await createManualDeck(api, user, { name: 'Mazo' });
+    const note = await saveManualNote(api, user, {
+      deckId: deck.id,
+      draft: { kind: 'basic', front: 'f', back: 'b' },
+      outline: LINK,
+    });
+    expect(note).toMatchObject({ outlineId: LINK.outlineId, outlineNodeId: LINK.nodeId });
+    expect(await api.repos.notes.listAllByOutline(LINK.outlineId)).toEqual([note]);
+
+    const edited = await saveManualNote(api, user, {
+      deckId: deck.id,
+      noteId: note.id,
+      draft: { kind: 'basic', front: 'otro', back: 'b' },
+    });
+    expect(edited).toMatchObject({ outlineId: LINK.outlineId, outlineNodeId: LINK.nodeId });
+  });
+
+  it('una nota con solo la mitad de la unión no se guarda', async () => {
+    const { api } = setup();
+    const note = {
+      id: '01JAA6Q0000000000000000001',
+      deckId: '01JAA6P0000000000000000001',
+      tags: [],
+      origin: 'manual' as const,
+      editorialStatus: 'draft' as const,
+      sourceQuote: null,
+      sourceQuestionVersionId: null,
+      isDemo: false,
+      createdAt: '2026-10-01T15:00:00.000Z',
+      kind: 'basic' as const,
+      front: '<p>f</p>',
+      back: '<p>b</p>',
+    };
+    await expect(api.repos.notes.put({ ...note, outlineId: LINK.outlineId })).rejects.toThrow();
+    await expect(api.repos.notes.put({ ...note, outlineNodeId: LINK.nodeId })).rejects.toThrow();
+  });
+
+  it('las cartas que ya están como se piden no se vuelven a escribir al editar', async () => {
+    const { api, user } = setup();
+    const deck = await createManualDeck(api, user, { name: 'Mazo' });
+    const note = await saveManualNote(api, user, {
+      deckId: deck.id,
+      draft: { kind: 'cloze', text: '{{c1::a}} {{c2::b}}', extra: '' },
+    });
+    const before = await api.repos.cards.listAll();
+    const spy = vi.spyOn(api.repos.cards, 'putMany');
+    await saveManualNote(api, user, {
+      deckId: deck.id,
+      noteId: note.id,
+      draft: { kind: 'cloze', text: '{{c1::a}} {{c2::b}} editado', extra: '' },
+    });
+    expect(spy).not.toHaveBeenCalled();
+    expect(await api.repos.cards.listAll()).toEqual(before);
   });
 });
