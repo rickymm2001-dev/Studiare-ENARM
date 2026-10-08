@@ -73,11 +73,12 @@ describe('propiedades del motor de apuntes', () => {
         const { plans, issues } = planCards(tree);
         expect(plans.length).toBeLessThanOrEqual(OUTLINE_LIMITS.maxCards);
         const ids = new Set<string>();
-        const walk = (nodes: OutlineNode[]) =>
+        const walk = (nodes: OutlineNode[]) => {
           nodes.forEach((node) => {
             ids.add(node.id);
             walk(node.children);
           });
+        };
         walk(tree);
         expect(plans.every((plan) => ids.has(plan.nodeId))).toBe(true);
         expect(issues.every((issue) => ids.has(issue.nodeId))).toBe(true);
@@ -111,11 +112,12 @@ describe('propiedades del motor de apuntes', () => {
         const back = docToOutline(doc, makeId);
         expect(countNodes(back)).toBe(countNodes(tree));
         const ids: string[] = [];
-        const walk = (nodes: OutlineNode[]) =>
+        const walk = (nodes: OutlineNode[]) => {
           nodes.forEach((node) => {
             ids.push(node.id);
             walk(node.children);
           });
+        };
         walk(back);
         expect(new Set(ids).size).toBe(ids.length);
         expect(ids.every((id) => id !== '')).toBe(true);
