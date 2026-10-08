@@ -671,6 +671,44 @@ export const featureText = {
     xpGained: (xp: number) => `+${xp} XP`,
     deck: (name: string) => `Mazo ${name}`,
     errorCard: 'Error de pregunta',
+    // Tres contadores como en Anki. Siempre con texto, nunca solo con color (D-085, fila 8)
+    counters: {
+      label: 'Lo que falta de la sesión',
+      new: 'Nuevas',
+      learning: 'Aprendizaje',
+      review: 'Programadas',
+      current: 'La tarjeta de ahora cuenta aquí',
+    },
+    timer: {
+      label: 'Tiempo sugerido',
+      left: (seconds: number) => `${seconds} s`,
+      expired: 'Se acabó el tiempo sugerido. Contesta con lo que recuerdes.',
+    },
+    leech: {
+      badge: 'Sanguijuela',
+      title: 'Esta tarjeta es una sanguijuela',
+      body: (lapses: number) =>
+        `La olvidaste ${plural(lapses, 'vez', 'veces')}. Seguir repasándola así gasta tiempo sin enseñarte. Conviene cambiarla.`,
+      suggestionsTitle: 'Qué puedes hacer',
+      suggestions: {
+        split: 'Divídela en tarjetas más chicas, una sola idea en cada una.',
+        shorten: 'Acórtala y deja solo el dato que quieres recordar.',
+        context: 'Dale más contexto al hueco para que se entienda qué se pregunta.',
+        rewrite:
+          'Reescríbela con tus palabras, o agrégale un ejemplo o una imagen que la haga fácil de recordar.',
+      },
+      suspend: 'Suspender',
+      edit: 'Editar tarjeta',
+      keep: 'Seguir con ella',
+      suspended: 'Tarjeta suspendida. La reanudas desde Explorar.',
+      cannotEdit:
+        'Esta tarjeta viene precargada y no se edita. Puedes suspenderla o seguir con ella.',
+      keys: {
+        suspend: 'suspende',
+        edit: 'edita',
+        keep: 'sigue',
+      },
+    },
   },
   // Tarjetas que salen de las preguntas falladas (7.1). El texto sale del banco, aquí solo van las
   // etiquetas que lo acompañan
@@ -1097,6 +1135,12 @@ export const featureText = {
     change: 'Cambiar mazo o tema',
     other: 'Repasar otros temas',
     addDeck: 'Agregar mazo',
+    countersLabel: 'Lo que toca con esta selección',
+    leeches: (n: number) =>
+      n === 1
+        ? 'Tienes 1 sanguijuela, una tarjeta que olvidas una y otra vez.'
+        : `Tienes ${n.toLocaleString('es-MX')} sanguijuelas, tarjetas que olvidas una y otra vez.`,
+    seeLeeches: 'Revisarlas en Explorar',
   },
   studyPause: {
     title: 'Estudio pausado',

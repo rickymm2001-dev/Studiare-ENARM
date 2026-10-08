@@ -55,10 +55,13 @@ function previewOf(note: Note): string {
 export function DeckEditorDialog({
   session,
   deck,
+  initialNoteId,
   onClose,
 }: {
   session: ReadySession;
   deck: Deck;
+  /** Tarjeta que se abre ya lista para editar, por ejemplo una sanguijuela del repaso */
+  initialNoteId?: string;
   onClose: () => void;
 }) {
   const api = useDataApi();
@@ -98,6 +101,16 @@ export function DeckEditorDialog({
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
+  // La tarjeta pedida se abre para editar en cuanto cargan las del mazo, una sola vez
+  const [openedInitial, setOpenedInitial] = useState(initialNoteId === undefined);
+  if (!openedInitial && notes !== undefined) {
+    setOpenedInitial(true);
+    const target = notes.find((note) => note.id === initialNoteId);
+    if (target) {
+      setEditingId(target.id);
+      setDraft(draftOf(target));
+    }
+  }
 
   const cardsOf = (noteId: string) => (cards ?? []).filter((card) => card.noteId === noteId).length;
 

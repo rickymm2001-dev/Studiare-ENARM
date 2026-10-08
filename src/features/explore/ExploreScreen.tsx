@@ -1,12 +1,12 @@
 // Explorar (D-085, fila 4). Todas las tarjetas del alumno en una lista que se busca, filtra y ordena
 // sin trabarse con miles de tarjetas, y sobre la que se actúa por lote. La tercera pestaña de
 // Repasar y Mazos. El texto buscado se aplaza un instante para que escribir nunca se sienta lento.
-import { Link } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { useDeferredValue, useMemo, useState } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { screenPath } from '@/app/screens';
 import { rollupCounts } from '@/engines/deckTree';
-import { filterRows, sortRows, statusCounts } from '@/engines/explore';
+import { filterRows, sortRows, statusCounts, type ExploreStatus } from '@/engines/explore';
 import { buildTagTree, countByPath } from '@/engines/tagPath';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
@@ -29,9 +29,24 @@ export function ExploreScreen() {
   );
 }
 
+/** Estados que se pueden pedir por la dirección, por ejemplo desde el aviso de sanguijuelas */
+const STATUS_PARAMS: Record<string, ExploreStatus> = {
+  nuevas: 'new',
+  aprendiendo: 'learning',
+  repaso: 'review',
+  reaprendiendo: 'relearning',
+  vencidas: 'due',
+  suspendidas: 'suspended',
+  sanguijuelas: 'leech',
+};
+
 function Explore({ session }: { session: ReadySession }) {
   const data = useExploreData(session);
-  const [view, setView] = useState<ExploreView>(INITIAL_VIEW);
+  const [params] = useSearchParams();
+  const [view, setView] = useState<ExploreView>(() => {
+    const asked = STATUS_PARAMS[params.get('estado') ?? ''];
+    return asked ? { ...INITIAL_VIEW, status: new Set([asked]) } : INITIAL_VIEW;
+  });
   const [page, setPage] = useState(0);
   const [selected, setSelected] = useState<ReadonlySet<string>>(() => new Set());
   const [openId, setOpenId] = useState<string | null>(null);
