@@ -87,6 +87,10 @@ const screens: Record<ScreenKey, ScreenText> = {
     title: 'Party',
     description: 'Grupos con código de invitación, tabla semanal, retos de grupo y duelos.',
   },
+  rewards: {
+    title: 'Logros',
+    description: 'Tus misiones del día y de la semana, tu liga y tus insignias.',
+  },
   profile: {
     title: 'Perfil',
     description: 'Quién eres en Studiare. Tu nivel, tu racha, tu cuenta y tu plan.',
@@ -192,6 +196,7 @@ export const t = {
     planner: 'Plan',
     tutor: 'Tutor',
     party: 'Party',
+    rewards: 'Logros',
     admin: 'Administración',
   },
   screens,

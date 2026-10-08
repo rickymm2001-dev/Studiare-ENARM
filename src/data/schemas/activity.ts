@@ -166,7 +166,7 @@ export const ChallengeSchema = z
   );
 export type Challenge = z.infer<typeof ChallengeSchema>;
 
-/** Los 12 widgets de 9.1 */
+/** Los 12 widgets de 9.1 y los tres de logros (Fase P bloque 6) */
 export const WidgetTypeSchema = z.enum([
   'heatmap',
   'pomodoro',
@@ -180,6 +180,9 @@ export const WidgetTypeSchema = z.enum([
   'daily_goal',
   'party_challenge',
   'latest_hypothesis',
+  'missions',
+  'league',
+  'badges',
 ]);
 
 export const WidgetLayoutSchema = z.strictObject({

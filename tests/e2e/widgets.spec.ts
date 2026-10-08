@@ -78,8 +78,10 @@ test('los acomodos predefinidos cambian los widgets', async ({ page }) => {
     .toEqual([
       names.level_xp,
       names.streak,
+      names.league,
       names.party_challenge,
       names.daily_goal,
+      names.missions,
       names.heatmap,
     ]);
   await page.getByLabel(t.home.presetLabel).selectOption('analytic');

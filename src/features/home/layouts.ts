@@ -8,7 +8,15 @@ export type Preset = WidgetLayout['preset'];
 export const PRESETS: Record<Exclude<Preset, 'custom'>, WidgetType[]> = {
   essential: ['today', 'streak', 'daily_goal', 'level_xp', 'heatmap'],
   analytic: ['today', 'heatmap', 'weak_topics', 'bias_pattern', 'future_load'],
-  competitive: ['level_xp', 'streak', 'party_challenge', 'daily_goal', 'heatmap'],
+  competitive: [
+    'level_xp',
+    'streak',
+    'league',
+    'party_challenge',
+    'daily_goal',
+    'missions',
+    'heatmap',
+  ],
 };
 
 // El Pomodoro vive en Repasar (D-062) y la cuenta regresiva al ENARM se quitó (D-065)
@@ -23,6 +31,9 @@ export const ALL_WIDGETS: WidgetType[] = [
   'future_load',
   'party_challenge',
   'latest_hypothesis',
+  'missions',
+  'league',
+  'badges',
 ];
 
 /** Widgets que traen ajustes. Solo ellos muestran el botón de ajustes */

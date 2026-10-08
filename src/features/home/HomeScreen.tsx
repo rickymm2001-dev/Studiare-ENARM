@@ -19,6 +19,7 @@ import { LandingScreen } from '../landing/LandingScreen';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 import { PartyWidget } from '../party/PartyWidget';
+import { BadgesWidget, LeagueWidget, MissionsWidget } from '../rewards/RewardWidgets';
 import {
   addWidget,
   ALL_WIDGETS,
@@ -233,6 +234,12 @@ function WidgetBody({
       return <FutureLoadWidget session={session} events={events} settings={settings} />;
     case 'latest_hypothesis':
       return <LatestHypothesisWidget session={session} events={events} settings={settings} />;
+    case 'missions':
+      return <MissionsWidget session={session} />;
+    case 'league':
+      return <LeagueWidget session={session} />;
+    case 'badges':
+      return <BadgesWidget session={session} />;
     default:
       // El Pomodoro y la cuenta regresiva ya no son widgets y el tablero los filtra
       return null;

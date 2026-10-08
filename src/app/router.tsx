@@ -13,6 +13,7 @@ import { OnboardingScreen } from '@/features/onboarding/OnboardingScreen';
 import { PlannerScreen } from '@/features/planner/PlannerScreen';
 import { AdminUsersScreen } from '@/features/admin/AdminUsersScreen';
 import { PartyScreen } from '@/features/party/PartyScreen';
+import { RewardsScreen } from '@/features/rewards/RewardsScreen';
 import { QuestionBankScreen } from '@/features/physician/QuestionBankScreen';
 import { ProfileScreen } from '@/features/profile/ProfileScreen';
 import { ProgressScreen } from '@/features/progress/ProgressScreen';
@@ -46,6 +47,7 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, ComponentType>> = {
   tutor: TutorScreen,
   subscription: SubscriptionScreen,
   party: PartyScreen,
+  rewards: RewardsScreen,
   profile: ProfileScreen,
   progress: ProgressScreen,
   settings: SettingsScreen,

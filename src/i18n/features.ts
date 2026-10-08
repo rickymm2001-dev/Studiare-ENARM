@@ -119,6 +119,9 @@ export const featureText = {
       daily_goal: 'Meta diaria',
       party_challenge: 'Reto de Party',
       latest_hypothesis: 'Última hipótesis del tutor',
+      missions: 'Misiones de hoy',
+      league: 'Liga de la semana',
+      badges: 'Insignias recientes',
     },
     heatmap: {
       range: 'Rango',
@@ -1825,6 +1828,102 @@ export const featureText = {
       lastWas: (when: string) => `La última sincronización buena fue ${when}.`,
       syncNow: 'Sincronizar ahora',
     },
+  },
+  // Misiones, insignias y ligas (Fase P bloque 6)
+  rewards: {
+    statLeague: 'Liga',
+    statMissions: 'Misiones de hoy',
+    statBadges: 'Insignias',
+    missionsToday: 'Misiones de hoy',
+    missionsWeek: 'Misiones de la semana',
+    leagueTitle: 'Liga de la semana',
+    badgesTitle: 'Insignias',
+    recentTitle: 'Ganadas hace poco',
+    noRecent: 'Todavía no ganas ninguna insignia. La primera llega pronto.',
+    progress: (current: number, target: number) => `${current} de ${target}`,
+    done: 'Cumplida',
+    pending: 'Pendiente',
+    calibrating: (have: number, need: number) =>
+      `Calibrando. Llevas ${have} de ${need} preguntas para medir tus aciertos.`,
+    missions: {
+      dailyCards: (n: number) => `Repasa ${plural(n, 'tarjeta', 'tarjetas')}`,
+      dailyQuestions: (n: number) => `Responde ${plural(n, 'pregunta', 'preguntas')}`,
+      dailyMinutes: (n: number) => `Estudia ${plural(n, 'minuto', 'minutos')}`,
+      weeklyDays: (n: number) => `Estudia ${plural(n, 'día', 'días')} esta semana`,
+      weeklyXp: (n: number) => `Suma ${n.toLocaleString('es-MX')} XP esta semana`,
+      weeklyAccuracy: (n: number) => `Acierta ${n} % de tus preguntas de la semana`,
+    },
+    leagues: {
+      bronze: 'Bronce',
+      silver: 'Plata',
+      gold: 'Oro',
+      sapphire: 'Zafiro',
+      ruby: 'Rubí',
+      diamond: 'Diamante',
+    },
+    leagueNow: (name: string, xp: number) =>
+      `Vas en la liga ${name} con ${xp.toLocaleString('es-MX')} XP esta semana.`,
+    leagueNext: (missing: number, name: string) =>
+      `Te faltan ${missing.toLocaleString('es-MX')} XP para la liga ${name}.`,
+    leagueTop: 'Ya estás en la liga más alta.',
+    leagueMovement: {
+      up: (name: string) => `Subiste de liga. La semana pasada estabas en ${name}.`,
+      down: (name: string) => `Bajaste de liga. La semana pasada estabas en ${name}.`,
+      same: (name: string) => `Sigues en la misma liga que la semana pasada, ${name}.`,
+    },
+    leagueBest: (name: string) => `Tu mejor liga hasta hoy es ${name}.`,
+    leagueNote:
+      'La liga sube con el XP de la semana, de lunes a lunes a las 4 a. m. No da XP extra. Los umbrales son provisionales.',
+    tiers: ['Bronce', 'Plata', 'Oro', 'Platino', 'Diamante'],
+    tierOf: (family: string, tier: string) => `${family}, nivel ${tier}`,
+    earnedOn: (day: string) => `Ganada el ${day}`,
+    locked: 'Por ganar',
+    nextTier: (current: number, target: number) => `Siguiente nivel. ${current} de ${target}`,
+    allTiers: 'Tienes todos los niveles',
+    families: {
+      reviews: {
+        name: 'Repasos',
+        goal: (n: number) => `Repasa ${n.toLocaleString('es-MX')} tarjetas en total`,
+      },
+      answers: {
+        name: 'Preguntas',
+        goal: (n: number) => `Responde ${n.toLocaleString('es-MX')} preguntas en total`,
+      },
+      focus: {
+        name: 'Enfoque',
+        goal: (n: number) => `Estudia ${n.toLocaleString('es-MX')} minutos en total`,
+      },
+      streak: {
+        name: 'Constancia',
+        goal: (n: number) => `Llega a una racha de ${n} días`,
+      },
+      level: { name: 'Nivel', goal: (n: number) => `Llega al nivel ${n}` },
+      exams: {
+        name: 'Exámenes',
+        goal: (n: number) => `Termina ${plural(n, 'examen completo', 'exámenes completos')}`,
+      },
+      duels: {
+        name: 'Duelos',
+        goal: (n: number) => `Termina ${plural(n, 'duelo', 'duelos')}`,
+      },
+      imports: {
+        name: 'Tus mazos',
+        goal: (n: number) => `Importa ${plural(n, 'mazo', 'mazos')} de otra app`,
+      },
+      verifications: {
+        name: 'Verificación',
+        goal: (n: number) =>
+          `Atiende ${plural(n, 'señal de controversia', 'señales de controversia')}`,
+      },
+      aiCards: {
+        name: 'Tarjetas con IA',
+        goal: (n: number) =>
+          `Aprueba ${plural(n, 'tarjeta propuesta', 'tarjetas propuestas')} por la IA`,
+      },
+    },
+    note: 'Las misiones y las ligas no dan XP extra ni predicen tu puntaje del ENARM. Marcan tu avance y salen de tu bitácora.',
+    widgetGo: 'Ver todos los logros',
+    widgetMore: (n: number) => `${n} más`,
   },
   insights: insightText,
 } as const;
