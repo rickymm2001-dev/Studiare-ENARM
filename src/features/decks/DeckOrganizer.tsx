@@ -3,7 +3,7 @@
 // árbol tiene un tope de niveles. Los mazos precargados y Mis errores no se reorganizan.
 import { useState } from 'react';
 import { useDataApi } from '@/data/context';
-import type { Deck } from '@/data/schemas/decks';
+import { isEditableDeck, type Deck } from '@/data/schemas/decks';
 import { moveDeck, renameDeck } from '@/data/usecases/organize';
 import { DECK_NAME_MAX } from '@/data/usecases/manualDecks';
 import { canMoveDeck, deckIndent, flattenDeckTree } from '@/engines/deckTree';
@@ -27,8 +27,10 @@ export function DeckOrganizer({
   const [parent, setParent] = useState(deck.parentId ?? '');
   const [notice, setNotice] = useState<{ text: string; failed: boolean } | null>(null);
 
-  // Solo los mazos hechos a mano, y a los que este mazo puede ir sin hacer un ciclo
-  const targets = flattenDeckTree(decks.filter((entry) => entry.origin === 'manual')).filter(
+  // Solo los mazos propios, hechos a mano o importados, y a los que este mazo puede ir sin hacer un ciclo
+  const targets = flattenDeckTree(
+    decks.filter((entry) => isEditableDeck(entry, session.user.id)),
+  ).filter(
     ({ deck: target }) => target.id !== deck.id && canMoveDeck(decks, deck.id, target.id) === 'ok',
   );
   const fail = () => {

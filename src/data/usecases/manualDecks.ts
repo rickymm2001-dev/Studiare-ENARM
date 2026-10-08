@@ -11,7 +11,7 @@ import { clozeHoles, clozeOpenings, type ClozeHole } from '../content/cloze';
 import { htmlToText, textToHtml } from '../content/plainText';
 import type { DataApi } from '../context';
 import { newId } from '../ids';
-import type { Card, Deck, Note } from '../schemas/decks';
+import { isEditableDeck, type Card, type Deck, type Note } from '../schemas/decks';
 import type { User } from '../schemas/people';
 
 export type NoteDraft =
@@ -130,8 +130,8 @@ const isCloze = (kind: NoteKind) => kind === 'cloze';
 
 async function ownManualDeck(api: Repos, user: Pick<User, 'id'>, deckId: string): Promise<Deck> {
   const deck = await api.repos.decks.get(deckId);
-  if (deck?.ownerId !== user.id || deck.origin !== 'manual')
-    throw new Error('Solo puedes cambiar los mazos que creaste tú');
+  if (!deck || !isEditableDeck(deck, user.id))
+    throw new Error('Solo puedes cambiar los mazos que creaste o importaste tú');
   return deck;
 }
 

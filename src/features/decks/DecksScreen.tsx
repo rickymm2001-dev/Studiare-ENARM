@@ -26,6 +26,8 @@ import { latestCardStates } from '../review/study';
 import { StudyTabs } from '../review/StudyTabs';
 import { descendantIds } from '@/engines/deckTree';
 import { followedDeckIds } from './followed';
+import { ExportDecksCard } from './ExportDecksCard';
+import { ImportDeckCard } from './ImportDeckCard';
 import { OwnDecksCard } from './OwnDecksCard';
 import { deckBranch, topTopics } from './deckBranch';
 import { useDeckCatalog } from './useDeckCatalog';
@@ -243,6 +245,8 @@ function Decks({ session }: { session: ReadySession }) {
         cardsByDeck={stored?.cardsByDeck ?? new Map()}
         states={states}
       />
+      <ImportDeckCard session={session} />
+      <ExportDecksCard session={session} decks={ownDecks} />
     </>
   );
 }

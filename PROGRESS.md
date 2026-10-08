@@ -8,7 +8,7 @@
 - Bloques 9 y 10 terminados. Bloque 8 (contenido demo) pausado con 4 de 6 lotes y sin mazos (D-050)
 - Fase C con sus 10 bloques programados y el cierre de 15.1 hecho. Espera la aprobación de Ricardo, ver su sección. Hay 20 de 28 pantallas construidas y 8 siguen como esqueleto con aviso de Próximamente
 - Reunión del equipo del 2026-10-07 aplicada (D-087). Repaso y simulador más prácticos, sin pregunta de confianza por defecto y con retroalimentación al final, Repasar y Mazos unidos, precio mensual de 150 y plan Fundador, banco de 4 a 10 opciones con plantilla de Excel y un solo dispositivo por cuenta. El precio Fundador de 79 ya está confirmado. Falta que Ricardo ejecute el SQL del dispositivo único
-- Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. La Etapa 1 está aprobada y publicada (PR 20). La Etapa 2, carga diaria, está publicada (PR 21) y espera su aprobación. La Etapa 3, apuntes tipo RemNote, está programada (D-092) y Ricardo pidió seguir con todas las etapas sin preguntar, ver su sección
+- Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. La Etapa 1 está aprobada y publicada (PR 20). La Etapa 2, carga diaria, está publicada (PR 21) y espera su aprobación. Las Etapas 3 (apuntes tipo RemNote, D-092) y 4 (importar y exportar, D-093) están programadas y Ricardo pidió seguir con todas las etapas sin preguntar, ver sus secciones
 - Fase P en curso (D-060). Bloques 1 a 4 terminados, 7 y 9 a medias, 5, 6 y 8 sin empezar, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
 - Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
@@ -24,6 +24,24 @@
 - Logo de Studiare en el encabezado, en modo claro y oscuro (D-056)
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
+
+## Fase C2. Etapa 4, importar y exportar (D-085 y D-093)
+
+### Bloques
+- [x] B1. Lectores con límites y rutas seguras. Paquetes .apkg de los dos formatos con sql.js y zstd, CSV, Excel y Word
+- [x] B2. Guardar la importación como mazo privado con árbol de mazos, sin duplicar, y exportar a CSV con identificador por nota
+- [x] B3. Worker del importador, tarjetas de Subir y Exportar en Mazos, caché propia del motor y la suscripción ya no dice Próximamente
+- [x] B4. Fixtures generados por código, pruebas de lectores, de seguridad, de guardado y de pantalla, y e2e con la app compilada en teléfono y escritorio
+
+### Bitácora
+- Los fixtures se arman con código y no se guardan como binarios. Un .apkg viejo con sql.js, uno nuevo con un marco zstd de bloques sin comprimir, hojas de Excel, documentos de Word, y zips hechos para fallar con tamaños declarados falsos, rutas con .., bombas zstd con y sin tamaño declarado y un XML con entidad externa
+- La prueba e2e con la app compilada confirma que el Worker y el motor de SQLite funcionan en el build real, con un .apkg viejo y uno nuevo
+- El JavaScript inicial ya medía unos 464 KB comprimido antes de las Etapas 3 y 4 y ahora mide unos 480 KB, contra un presupuesto de 300 KB. El importador vive en su propio Worker y no suma al inicial, y lo que sumaron las dos etapas son sus pantallas. Reducirlo con carga diferida por rutas queda como pendiente de la Fase F
+- Se agregan papaparse, read-excel-file, sql.js y fzstd, todas MIT y sin scripts de instalación. npm audit sin las dependencias de desarrollo da 0 vulnerabilidades
+
+### Pendiente con Ricardo para seguir
+- Aprobar las Etapas 2, 3 y 4 en la revisión
+- Decidir si quiere imágenes y audios en las importaciones (IDEAS.md)
 
 ## Fase C2. Etapa 3, apuntes tipo RemNote (D-085 y D-092)
 

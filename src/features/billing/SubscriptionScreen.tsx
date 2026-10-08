@@ -17,7 +17,7 @@ import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 
 /** Funciones que todavía no existen. Se muestran como Próximamente para no prometer de más (D-076) */
-const COMING_SOON: ReadonlySet<keyof PlanAccess> = new Set(['fullExam', 'aiTutor', 'importDecks']);
+const COMING_SOON: ReadonlySet<keyof PlanAccess> = new Set(['fullExam', 'aiTutor']);
 
 const ACCESS_KEYS: (keyof PlanAccess)[] = [
   'dailyQuestions',

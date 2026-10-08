@@ -49,6 +49,11 @@ const NoteBaseShape = {
   sourceQuote: z.string().max(2000).nullable(),
   /** Pregunta del banco de la que sale una tarjeta generada */
   sourceQuestionVersionId: IdSchema.nullable(),
+  /**
+   * Identificador de la nota en el archivo de donde se importó, para no duplicarla si el alumno
+   * vuelve a importar el mismo archivo (D-093). Ausente o null en lo que no se importó
+   */
+  sourceGuid: z.string().max(200).nullable().optional(),
   isDemo: z.boolean(),
   createdAt: UtcDateTimeSchema,
   ...SyncShape,
@@ -113,4 +118,15 @@ export function isLive(entity: { deletedAt?: string | null }): boolean {
 /** Cuándo cambió por última vez. Sin fecha de modificación vale la de creación */
 export function modifiedAt(entity: { createdAt: string; updatedAt?: string | undefined }): string {
   return entity.updatedAt ?? entity.createdAt;
+}
+
+/**
+ * Un mazo que el alumno puede cambiar, el que creó a mano o el que importó de otra app. Lo precargado
+ * y los mazos que arma la app, como Mis errores, no se cambian (D-093)
+ */
+export function isEditableDeck(
+  deck: { ownerId: string | null; origin: z.infer<typeof ContentOriginSchema> },
+  userId: string,
+): boolean {
+  return deck.ownerId === userId && (deck.origin === 'manual' || deck.origin === 'imported');
 }

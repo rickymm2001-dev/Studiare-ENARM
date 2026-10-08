@@ -4,7 +4,7 @@
 import { Layers, Pause, Play, Tag, Tags } from 'lucide-react';
 import { useState } from 'react';
 import { useDataApi } from '@/data/context';
-import type { Deck } from '@/data/schemas/decks';
+import { isEditableDeck, type Deck } from '@/data/schemas/decks';
 import { addTags, moveNotes, removeTag, setSuspended } from '@/data/usecases/organize';
 import { deckIndent, flattenDeckTree } from '@/engines/deckTree';
 import { sanitizeTag } from '@/engines/tagPath';
@@ -41,9 +41,7 @@ export function BulkActions({
   const toSuspend = selected.filter((row) => !row.suspended).map((row) => row.cardId);
   const toResume = selected.filter((row) => row.suspended).map((row) => row.cardId);
   const noteIds = [...new Set(selected.map((row) => row.noteId))];
-  const ownDecks = flattenDeckTree(
-    decks.filter((deck) => deck.ownerId === session.user.id && deck.origin === 'manual'),
-  );
+  const ownDecks = flattenDeckTree(decks.filter((deck) => isEditableDeck(deck, session.user.id)));
   const cleanTag = sanitizeTag(tag);
 
   const run = async (action: () => Promise<string>) => {

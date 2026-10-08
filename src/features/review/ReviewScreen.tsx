@@ -15,7 +15,12 @@ import { updateProfile } from '@/data/usecases/profile';
 import { createEvent } from '@/data/events/createEvent';
 import { newId } from '@/data/ids';
 import { useLiveData } from '@/data/hooks';
-import type { Card as CardEntity, Deck, Note } from '@/data/schemas/decks';
+import {
+  isEditableDeck,
+  type Card as CardEntity,
+  type Deck,
+  type Note,
+} from '@/data/schemas/decks';
 import type { FsrsCardState } from '@/data/schemas/common';
 import type { AppEvent } from '@/data/schemas/events';
 import { checkCardQuality } from '@/engines/cardQuality';
@@ -234,7 +239,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
       editableDecks={
         new Map(
           content.decks
-            .filter((deck) => deck.ownerId === session.user.id && deck.origin === 'manual')
+            .filter((deck) => isEditableDeck(deck, session.user.id))
             .map((deck) => [deck.id, deck]),
         )
       }

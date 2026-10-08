@@ -16,3 +16,7 @@ Ideas que surgieron durante el trabajo y que no entran al prototipo. Cada una di
 - **Entrenar modelos con las interacciones de una universidad.** El piloto con una universidad a precio preferencial buscaría usar las respuestas de los alumnos para entrenar modelos. Pide un consentimiento específico en el registro, datos seudónimos y una decisión sobre qué se comparte. Surgió en la reunión del 2026-10-07 (D-087)
 - **Tutor de repaso por teclado completo.** Qué teclas usar en Explorar y en los apuntes cuando existan. Surgió al hacer el repaso más práctico (D-087)
 - **Dispositivo único con revisión en el servidor.** Hoy la regla de un dispositivo por cuenta la revisa el navegador, así que alguien con conocimientos técnicos puede saltársela. Una versión estricta haría que el servidor compare el dispositivo de cada sesión en cada consulta y rechace a las sesiones que no sean la activa. Surgió al hacer el dispositivo único (acuerdo del equipo del 2026-10-07)
+- **Importar imágenes y audios de los paquetes de Anki.** Hoy se quitan con un aviso. Guardarlos pide una tabla de archivos del alumno en IndexedDB, mostrarlos con una dirección temporal en las tarjetas y llevarlos a la nube cuando haya sincronización. Los límites de D-026 ya cubren el tamaño. Surgió al programar el importador (D-093)
+- **Exportar a paquete .apkg.** Hoy se exporta a CSV. Un .apkg conservaría imágenes y tipos de nota. Surgió al programar la exportación (D-093)
+- **Elegir la hoja de Excel.** Hoy se lee la primera hoja. Surgió al programar el importador (D-093)
+

@@ -623,6 +623,106 @@ export const featureText = {
       error: 'No se pudo borrar el apunte.',
     },
   },
+  // Importar y exportar tarjetas (D-093)
+  importer: {
+    title: 'Sube tu mazo',
+    intro:
+      'Trae tus tarjetas de otra app o de un archivo. Aceptamos paquetes .apkg de Anki, CSV, Excel (.xlsx) y Word (.docx). Tu mazo queda privado y las tarjetas empiezan como nuevas.',
+    fileLabel: 'Archivo para importar',
+    fileHint: 'Hasta 600 MB en un paquete y 50 MB en una hoja o un documento.',
+    reading: 'Leyendo tu archivo…',
+    readError: 'No se pudo leer el archivo.',
+    errors: {
+      too_large: 'El archivo pesa más de lo permitido o contiene demasiado al descomprimirse.',
+      too_many_files: 'El paquete tiene más archivos de los permitidos.',
+      unsafe_path: 'El paquete tiene rutas que no son seguras, así que no se importó.',
+      corrupt: 'El archivo está dañado o no se pudo abrir.',
+      unsupported:
+        'Ese tipo de archivo no se puede importar. Usa .apkg, CSV, Excel (.xlsx) o Word (.docx).',
+      no_collection: 'El paquete no trae una colección de Anki.',
+      empty: 'El archivo no trae tarjetas.',
+    } as Record<string, string>,
+    previewTitle: 'Esto es lo que vamos a importar',
+    previewSource: (source: string, file: string) => `${source} · ${file}`,
+    sources: { apkg: 'Paquete de Anki', csv: 'Texto con columnas', xlsx: 'Excel', docx: 'Word' },
+    kinds: { basic: 'Pregunta y respuesta', basic_reverse: 'Con inversa', cloze: 'Con huecos' },
+    summary: (notes: number, decks: number) =>
+      `${plural(notes, 'nota', 'notas')} en ${plural(decks, 'mazo', 'mazos')}`,
+    warnings: {
+      media_skipped: (n: number) =>
+        `${plural(n, 'imagen o audio', 'imágenes o audios')} no se importan todavía.`,
+      image_occlusion: (n: number) =>
+        `${plural(n, 'nota de oclusión de imagen', 'notas de oclusión de imagen')} se importan como pregunta y respuesta, sin la máscara.`,
+      extra_templates: (n: number) =>
+        `${plural(n, 'nota con más de dos plantillas', 'notas con más de dos plantillas')} se importan como pregunta y respuesta.`,
+      extra_columns: (n: number) =>
+        `${plural(n, 'columna sin uso', 'columnas sin uso')}. Los campos de más de una nota de Anki van al reverso.`,
+      deck_too_deep: (n: number) =>
+        `${plural(n, 'nota está', 'notas están')} en mazos de demasiados niveles y se acomodan en el último nivel permitido.`,
+      revlog_ignored: (n: number) =>
+        `Los ${n.toLocaleString('es-MX')} repasos del archivo no se importan. Todas las tarjetas empiezan como nuevas.`,
+    } as Record<string, (n: number) => string>,
+    rowErrors: {
+      empty_front: 'sin frente',
+      empty_back: 'sin reverso',
+      cloze_without_holes: 'cloze sin huecos',
+      too_long: 'demasiado largo',
+      too_many_notes: 'pasa el máximo de notas por archivo',
+    } as Record<string, string>,
+    rowErrorsTitle: (n: number) =>
+      plural(n, 'fila no se puede importar', 'filas no se pueden importar'),
+    rowError: (position: number | null, reason: string) =>
+      position === null ? reason : `Fila ${position}, ${reason}`,
+    moreErrors: (n: number) => `y ${plural(n, 'más', 'más')}`,
+    sample: 'Así se ven las primeras',
+    deckName: 'Nombre de tu mazo importado',
+    deckNameHint:
+      'Si ya tienes un mazo importado con este nombre, las tarjetas nuevas se suman a él.',
+    rights: 'Tengo derecho a usar este contenido',
+    rightsHint: 'Solo importa material tuyo o que tengas permiso de usar.',
+    rightsRequired: 'Confirma que tienes derecho a usar este contenido.',
+    nameRequired: 'Escribe un nombre para el mazo.',
+    import: (n: number) => `Importar ${plural(n, 'nota', 'notas')}`,
+    importing: 'Importando…',
+    cancel: 'Elegir otro archivo',
+    saveError:
+      'No se pudo guardar la importación. Lo que ya se guardó no se repite al intentar de nuevo.',
+    nothing: 'No hay nada que importar. Revisa las filas con problemas.',
+    doneTitle: 'Importación lista',
+    done: (notes: number, cards: number) =>
+      `${plural(notes, 'nota importada', 'notas importadas')} con ${plural(cards, 'tarjeta', 'tarjetas')}.`,
+    doneDuplicates: (n: number) =>
+      `${plural(n, 'nota ya estaba y se omitió', 'notas ya estaban y se omitieron')}.`,
+    doneRepaired: (n: number) =>
+      `${plural(n, 'tarjeta faltante se completó', 'tarjetas faltantes se completaron')}.`,
+    doneRejected: (n: number) => `${plural(n, 'fila quedó fuera', 'filas quedaron fuera')}.`,
+    again: 'Importar otro archivo',
+    help: {
+      title: 'Cómo preparar tu archivo',
+      summary: 'Columnas, encabezados y marcas',
+      items: [
+        'En CSV y Excel, la primera fila puede ser el encabezado. Entendemos Frente, Reverso, Texto, Extra, Etiquetas, Mazo, Tipo e ID, también en inglés.',
+        'Sin encabezado, la columna 1 es el frente, la 2 el reverso y la 3 las etiquetas.',
+        'Un CSV de Anki con sus líneas que empiezan con # también se entiende, con el tipo de nota, el mazo y el identificador.',
+        'En Word, cada fila de una tabla con dos columnas o más es una tarjeta, y los párrafos con Pregunta :: Respuesta, Término ;; Definición o {{huecos}} también. Los títulos pasan a etiquetas.',
+        'Con un identificador por fila, volver a importar el mismo archivo no duplica nada.',
+      ],
+    },
+  },
+  exporter: {
+    title: 'Exporta tus tarjetas',
+    intro:
+      'Descarga lo que creaste o importaste en un CSV con encabezados y un identificador por nota. Si lo vuelves a importar no se duplica, y Anki lo entiende.',
+    deckLabel: 'Qué exportar',
+    all: 'Todos mis mazos',
+    button: 'Descargar CSV',
+    working: 'Preparando…',
+    done: (notes: number, file: string) =>
+      `${plural(notes, 'nota exportada', 'notas exportadas')} en ${file}.`,
+    empty: 'No hay notas tuyas para exportar todavía.',
+    error: 'No se pudo preparar el archivo. Intenta de nuevo.',
+    noDecks: 'Crea o importa un mazo para poder exportarlo.',
+  },
   decks: {
     emptyBranches: (names: string) => `Todavía sin mazos en ${names}.`,
     preloadedTitle: 'Mazos precargados',

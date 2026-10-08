@@ -1,12 +1,12 @@
 // Tus mazos (pantalla 12). Los mazos del alumno, como Mis errores que arma la app con sus preguntas
 // falladas y los que crea a mano, que se pueden llenar de tarjetas y borrar. Subir mazos de otras
 // apps llega con la Fase E.
-import { FileUp, Layers, PencilLine } from 'lucide-react';
+import { Layers, PencilLine } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { screenPath } from '@/app/screens';
 import { useDataApi } from '@/data/context';
-import type { Deck } from '@/data/schemas/decks';
+import { isEditableDeck, type Deck } from '@/data/schemas/decks';
 import type { FsrsCardState } from '@/data/schemas/common';
 import { createManualDeck, deleteManualDeck, DECK_NAME_MAX } from '@/data/usecases/manualDecks';
 import {
@@ -83,9 +83,9 @@ export function OwnDecksCard({
   // En orden de árbol, cada mazo después del que lo contiene. El destino solo ofrece mazos a mano
   const ordered = flattenDeckTree(decks);
   // Un mazo del último nivel ya no admite submazos
-  const manualTargets = flattenDeckTree(decks.filter((deck) => deck.origin === 'manual')).filter(
-    ({ deck }) => deckDepth(decks, deck.id) < MAX_DECK_DEPTH - 1,
-  );
+  const manualTargets = flattenDeckTree(
+    decks.filter((deck) => isEditableDeck(deck, session.user.id)),
+  ).filter(({ deck }) => deckDepth(decks, deck.id) < MAX_DECK_DEPTH - 1);
   // Si el mazo elegido ya no existe, se crea en el primer nivel
   const validParent = manualTargets.some(({ deck }) => deck.id === parentId) ? parentId : '';
 
@@ -98,7 +98,7 @@ export function OwnDecksCard({
         {ordered.map(({ deck }) => {
           const cardIds = cardsByDeck.get(deck.id) ?? [];
           const studied = cardIds.filter((cardId) => states.has(cardId)).length;
-          const manual = deck.origin === 'manual';
+          const manual = isEditableDeck(deck, session.user.id);
           return (
             <li key={deck.id} className="flex items-start gap-3">
               <Layers aria-hidden className="mt-0.5 size-5 shrink-0 text-primary" />
@@ -190,13 +190,6 @@ export function OwnDecksCard({
             </li>
           );
         })}
-        <li className="flex items-start gap-3">
-          <FileUp aria-hidden className="mt-0.5 size-5 shrink-0 text-primary" />
-          <div className="flex flex-col">
-            <span className="font-semibold">{t.decks.importTitle}</span>
-            <span className="text-sm text-fg-muted">{t.decks.importBody}</span>
-          </div>
-        </li>
         <li className="flex items-start gap-3">
           <PencilLine aria-hidden className="mt-0.5 size-5 shrink-0 text-primary" />
           <form
