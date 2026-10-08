@@ -293,7 +293,9 @@ export const featureText = {
     easyDaysSummary: (count: number) =>
       count === 0
         ? 'Todos los días normales'
-        : `${count === 1 ? '1 día fácil' : `${count} días fáciles`}`,
+        : count === 1
+          ? '1 día fácil'
+          : `${count} días fáciles`,
     easyLevels: { normal: 'Normal', reduced: 'Menos repasos', minimum: 'Casi ninguno' },
     weekdays: {
       mon: 'Lunes',
@@ -361,6 +363,16 @@ export const featureText = {
     included: 'Incluido',
     notIncluded: 'No incluido',
     comingSoon: 'Próximamente',
+    featureNames: {
+      explore: 'Explorar tus tarjetas',
+      overdueTools: 'Herramientas de atrasos',
+      guideProfile: 'Perfil guía',
+      newPerDaySuggestion: 'Sugerencia de tarjetas nuevas',
+      easyDays: 'Días fáciles',
+      cardTimer: 'Temporizador de tarjeta',
+    },
+    featureLocked: (name: string) => `${name} no está incluido en tu plan.`,
+    featureSeePlans: 'Ver planes',
     savings: (percent: number) => `Ahorras ${percent}% contra pagar mes a mes`,
     choose: (plan: string) => `Elegir ${plan}`,
     currentPlan: 'Plan actual',
@@ -1206,6 +1218,9 @@ export const featureText = {
     guideApply: 'Aplicar perfil guía',
     guideApplied: 'Listo, aplicamos el perfil guía.',
     suggestionTitle: 'Tarjetas nuevas por día',
+    calculate: 'Calcular cuántas nuevas me convienen',
+    unlimitedOn:
+      'Tus tarjetas nuevas están sin límite. Entran todas las que haya cada día y los repasos de los días siguientes pueden juntarse.',
     needsMinutes:
       'Para calcular cuántas nuevas aguantas necesitamos saber cuántos minutos estudias al día.',
     goToPlan: 'Poner mis minutos en Plan',
@@ -1215,8 +1230,8 @@ export const featureText = {
     basis: (budget: number) =>
       `Con ${plural(Math.round(budget), 'minuto', 'minutos')} al día para tarjetas, que es la mitad de tu tiempo de estudio.`,
     measuredNote: 'Calculado con tu ritmo real de repaso.',
-    calibratingNote: (reviews: number, needed: number) =>
-      `Calibrando. Por ahora usamos tiempos de referencia, con ${needed} repasos tuyos medimos tu ritmo y llevas ${reviews}.`,
+    calibratingUnit: 'repasos tuyos',
+    referenceTimes: 'Mientras tanto calculamos con tiempos de referencia y no con tu ritmo.',
     backlogOver:
       'Con los atrasos de ahora ya pasas el tiempo que tienes. Reparte los atrasos antes de sumar nuevas.',
     peak: (minutes: number, day: string) =>
@@ -1237,6 +1252,7 @@ export const featureText = {
       `${plural(decks, 'mazo', 'mazos')} · ${topics} de ${of} temas`,
     limits: 'Límites de hoy',
     limitsSummary: (newCards: number, reviews: number) => `${newCards} nuevas · ${reviews} repasos`,
+    limitsSummaryUnlimited: (reviews: number) => `Nuevas sin límite · ${reviews} repasos`,
     limitsHint:
       'Las tarjetas nuevas y los repasos que entran cada día. Se guardan para los próximos días.',
     limitsSaved: 'Guardado. El número de tarjetas de abajo ya usa tus nuevos límites.',

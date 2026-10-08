@@ -29,6 +29,7 @@ export function ReviewSetup({
   countersFor,
   leechCount,
   limits,
+  limitsExtra,
   onSaveLimits,
   onStart,
 }: {
@@ -47,7 +48,9 @@ export function ReviewSetup({
   /** Tarjetas que se olvidan una y otra vez, para avisar y llevar a Explorar */
   leechCount: number;
   /** Límites diarios del alumno. Se cambian aquí mismo y aplican al momento */
-  limits: { newCardsPerDay: number; reviewsPerDay: number };
+  limits: { newCardsPerDay: number; reviewsPerDay: number; unlimitedNewCards: boolean };
+  /** Ayudas de carga diaria que van dentro de los límites, como la sugerencia de nuevas */
+  limitsExtra?: ReactNode;
   onSaveLimits: (patch: { newCardsPerDay: number; reviewsPerDay: number }) => Promise<unknown>;
   onStart: (selection: ReviewSelection) => void;
 }) {
@@ -181,9 +184,14 @@ export function ReviewSetup({
 
         <Disclosure
           title={text.limits}
-          summary={text.limitsSummary(limits.newCardsPerDay, limits.reviewsPerDay)}
+          summary={
+            limits.unlimitedNewCards
+              ? text.limitsSummaryUnlimited(limits.reviewsPerDay)
+              : text.limitsSummary(limits.newCardsPerDay, limits.reviewsPerDay)
+          }
         >
           <DailyLimits limits={limits} onSave={onSaveLimits} />
+          {limitsExtra}
         </Disclosure>
       </div>
     </Card>
@@ -195,7 +203,7 @@ function DailyLimits({
   limits,
   onSave,
 }: {
-  limits: { newCardsPerDay: number; reviewsPerDay: number };
+  limits: { newCardsPerDay: number; reviewsPerDay: number; unlimitedNewCards: boolean };
   onSave: (patch: { newCardsPerDay: number; reviewsPerDay: number }) => Promise<unknown>;
 }) {
   const [newCards, setNewCards] = useState(String(limits.newCardsPerDay));
@@ -217,6 +225,7 @@ function DailyLimits({
           max={500}
           inputMode="numeric"
           value={newCards}
+          disabled={limits.unlimitedNewCards}
           onChange={(event) => {
             setNewCards(event.target.value);
             setSaved(false);

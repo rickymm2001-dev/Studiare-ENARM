@@ -3,7 +3,7 @@
 // último cambio. Todo cambia solo la fecha de la tarjeta y se guarda como evento nuevo, la memoria de
 // la tarjeta no se toca y la bitácora no se edita.
 import { CalendarClock, Undo2 } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { useDataApi } from '@/data/context';
 import type { Card } from '@/data/schemas/decks';
@@ -21,6 +21,7 @@ import {
 import { lastUndoableAction } from '@/engines/rescheduleLog';
 import { studyDayEnd, studyDayOf } from '@/engines/studyDay';
 import { t } from '@/i18n/es-MX';
+import { cn } from '@/ui/cn';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card as Panel, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
@@ -28,6 +29,7 @@ import { Disclosure } from '@/ui/components/disclosure';
 import { SelectField, TextField } from '@/ui/components/field';
 import type { ReadySession } from '../shared/RequireSession';
 import { queueCardsOf } from './dailyLoadData';
+import { dayLabel } from './dayLabel';
 import { schedulerConfig } from './schedulerConfig';
 import { latestCardStates } from './study';
 
@@ -38,15 +40,10 @@ const RULES = {
   overdueShareOfLimit: DEFAULT_THRESHOLDS.daily.recoveryOverdueShareOfLimit,
 };
 
-/** El día con su nombre corto, por ejemplo mié 9. Hoy se escribe Hoy */
-function dayLabel(day: string, today: string): string {
-  if (day === today) return t.overdue.today;
-  return new Intl.DateTimeFormat('es-MX', { weekday: 'short', day: 'numeric', timeZone: 'UTC' }).format(
-    new Date(`${day}T12:00:00Z`),
-  );
+interface Done {
+  kind: 'spread' | 'postpone' | 'advance' | 'undo';
+  count: number;
 }
-
-type Done = { kind: 'spread' | 'postpone' | 'advance' | 'undo'; count: number };
 
 export function OverdueTools({
   session,
@@ -69,7 +66,9 @@ export function OverdueTools({
     const now = new Date();
     const today = studyDayOf(now, config.timeZone);
     const endOfToday = studyDayEnd(today, config.timeZone).getTime();
-    const scheduled = queueCards.filter((card) => card.state !== null && card.state.state !== 'new');
+    const scheduled = queueCards.filter(
+      (card) => card.state !== null && card.state.state !== 'new',
+    );
     const dueByToday = scheduled.filter(
       (card) => new Date((card.state as NonNullable<typeof card.state>).due).getTime() < endOfToday,
     );
@@ -97,12 +96,11 @@ export function OverdueTools({
     [queueCards, view.now, config, spreadDays],
   );
   const suggestedPlan = useMemo(
-    () =>
-      spreadOverdue({ cards: queueCards, now: view.now, config, days: summary.suggestedDays }),
+    () => spreadOverdue({ cards: queueCards, now: view.now, config, days: summary.suggestedDays }),
     [queueCards, view.now, config, summary.suggestedDays],
   );
-  const currentDue = (cardId: string) => states.get(cardId)?.due ?? null;
-  const undoable = useMemo(() => lastUndoableAction(events, currentDue), [events, states]);
+  const currentDue = useCallback((cardId: string) => states.get(cardId)?.due ?? null, [states]);
+  const undoable = useMemo(() => lastUndoableAction(events, currentDue), [events, currentDue]);
 
   const run = async (job: () => Promise<Done>) => {
     setBusy(true);
@@ -256,7 +254,10 @@ export function OverdueTools({
       </div>
 
       {undoable ? (
-        <section aria-label={text.undoTitle} className="flex flex-col gap-2 border-t border-line pt-3">
+        <section
+          aria-label={text.undoTitle}
+          className="flex flex-col gap-2 border-t border-line pt-3"
+        >
           <p className="text-sm">
             {text.undoBody(
               undoable.kind,
@@ -280,21 +281,6 @@ export function OverdueTools({
           </Button>
         </section>
       ) : null}
-
-      <p
-        role="status"
-        className={failed ? 'text-sm font-medium text-danger' : 'text-sm font-medium text-success'}
-      >
-        {busy
-          ? text.working
-          : failed
-            ? text.error
-            : done
-              ? done.count === 0
-                ? text.done.nothing
-                : text.done[done.kind](done.count)
-              : ''}
-      </p>
     </div>
   );
 
@@ -328,6 +314,21 @@ export function OverdueTools({
       <Disclosure title={text.title} summary={text.summary(summary.overdue)}>
         {tools}
       </Disclosure>
+      {/* Fuera del bloque plegado, para que el resultado se vea aunque esté cerrado */}
+      <p
+        role="status"
+        className={cn('text-sm font-medium empty:hidden', failed ? 'text-danger' : 'text-success')}
+      >
+        {busy
+          ? text.working
+          : failed
+            ? text.error
+            : done
+              ? done.count === 0
+                ? text.done.nothing
+                : text.done[done.kind](done.count)
+              : ''}
+      </p>
     </>
   );
 }

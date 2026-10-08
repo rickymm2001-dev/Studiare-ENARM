@@ -15,6 +15,7 @@ import { CheckboxField } from '@/ui/components/field';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { ActionDock } from '@/ui/components/action-dock';
 import { EmptyState, LoadingState } from '@/ui/states/states';
+import { FeatureGate } from '../shared/FeatureGate';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { StudyTabs } from '../review/StudyTabs';
 import { BulkActions, type Notice } from './BulkActions';
@@ -25,7 +26,13 @@ import { INITIAL_VIEW, PAGE_SIZE, filtersOf, pageCount, type ExploreView } from 
 
 export function ExploreScreen() {
   return (
-    <RequireSession screen="explore">{(session) => <Explore session={session} />}</RequireSession>
+    <RequireSession screen="explore">
+      {(session) => (
+        <FeatureGate userId={session.user.id} feature="explore">
+          <Explore session={session} />
+        </FeatureGate>
+      )}
+    </RequireSession>
   );
 }
 

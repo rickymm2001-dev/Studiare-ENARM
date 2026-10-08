@@ -5,17 +5,26 @@ import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import type { SchedulerConfig } from '@/engines/fsrs';
 import type { ReadySession } from '../shared/RequireSession';
 
+/**
+ * Tope práctico de nuevas por día cuando el alumno apaga el límite (D-085, fila 6). Es mayor que
+ * cualquier mazo real y deja la cola, el planificador y la carga futura con la misma cuenta
+ */
+export const UNLIMITED_NEW_CARDS_PER_DAY = 100_000;
+
 export function schedulerConfig(session: Pick<ReadySession, 'user' | 'settings'>): SchedulerConfig {
   const { user, settings } = session;
   return {
     desiredRetention: settings.desiredRetention,
     maxIntervalDays: settings.maxIntervalDays,
     spacing: settings.spacing,
+    easyDays: settings.easyDays,
     examDate: examDateFor(user),
     timeZone: user.timeZone,
     thresholds: {
       ...DEFAULT_THRESHOLDS.fsrs,
-      newCardsPerDay: settings.newCardsPerDay,
+      newCardsPerDay: settings.unlimitedNewCards
+        ? UNLIMITED_NEW_CARDS_PER_DAY
+        : settings.newCardsPerDay,
       reviewsPerDay: settings.reviewsPerDay,
     },
   };

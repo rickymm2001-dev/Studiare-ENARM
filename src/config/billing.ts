@@ -16,11 +16,38 @@ export interface PlanAccess {
   party: boolean;
 }
 
+/**
+ * Funciones de la carga diaria que cada plan puede abrir o cerrar (D-085, fila 14). Hoy todas están
+ * abiertas en todos los planes, porque Ricardo todavía no decide cuáles serán de pago. Cuando lo
+ * decida solo cambia esta tabla y la interfaz ya consulta la bandera en cada punto de entrada
+ */
+export const GATED_FEATURES = [
+  'explore',
+  'overdueTools',
+  'guideProfile',
+  'newPerDaySuggestion',
+  'easyDays',
+  'cardTimer',
+] as const;
+export type GatedFeature = (typeof GATED_FEATURES)[number];
+export type FeatureAccess = Record<GatedFeature, boolean>;
+
+const ALL_FEATURES_OPEN: FeatureAccess = {
+  explore: true,
+  overdueTools: true,
+  guideProfile: true,
+  newPerDaySuggestion: true,
+  easyDays: true,
+  cardTimer: true,
+};
+
 export interface PlanDef {
   key: PlanKey;
   /** Precio de ejemplo en MXN por periodo */
   priceMxn: number;
   access: PlanAccess;
+  /** Funciones de la carga diaria abiertas en este plan */
+  features: FeatureAccess;
 }
 
 /**
@@ -34,20 +61,33 @@ export const PLANS: Record<PlanKey, PlanDef> = {
     key: 'free',
     priceMxn: 0,
     access: { dailyQuestions: 20, fullExam: false, aiTutor: false, importDecks: true, party: true },
+    features: ALL_FEATURES_OPEN,
   },
   founder: {
     key: 'founder',
     priceMxn: 79,
     access: { dailyQuestions: null, fullExam: true, aiTutor: true, importDecks: true, party: true },
+    features: ALL_FEATURES_OPEN,
   },
   monthly: {
     key: 'monthly',
     priceMxn: 150,
     access: { dailyQuestions: null, fullExam: true, aiTutor: true, importDecks: true, party: true },
+    features: ALL_FEATURES_OPEN,
   },
   annual: {
     key: 'annual',
     priceMxn: 1200,
     access: { dailyQuestions: null, fullExam: true, aiTutor: true, importDecks: true, party: true },
+    features: ALL_FEATURES_OPEN,
   },
 };
+
+/** Si el plan abre la función. Recibe la tabla de planes para poder probar con otra */
+export function canUseFeature(
+  plan: PlanKey,
+  feature: GatedFeature,
+  plans: Record<PlanKey, Pick<PlanDef, 'features'>> = PLANS,
+): boolean {
+  return plans[plan].features[feature];
+}

@@ -19,6 +19,7 @@ import type { Card as CardEntity, Deck, Note } from '@/data/schemas/decks';
 import type { FsrsCardState } from '@/data/schemas/common';
 import type { AppEvent } from '@/data/schemas/events';
 import { checkCardQuality } from '@/engines/cardQuality';
+import { canUseFeature } from '@/config/billing';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { counterKindOf, remainingCounters } from '@/engines/counters';
 import {
@@ -49,6 +50,8 @@ import { LoadingState } from '@/ui/states/states';
 import { followedDeckIds } from '../decks/followed';
 import { buildSnapshot } from '../home/snapshot';
 import { CardHtml } from '../shared/CardHtml';
+import { FeatureGate } from '../shared/FeatureGate';
+import { useActivePlan } from '../shared/useActivePlan';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 import { deckIds, ROOT_DECK_KEY } from '@/demo/content/deckEntities';
@@ -58,6 +61,8 @@ import { useDeckCatalog } from '../decks/useDeckCatalog';
 import { CardTimerBar } from './CardTimerBar';
 import { LeechPanel } from './LeechPanel';
 import { ReviewCounters } from './ReviewCounters';
+import { DailyLoadPanel } from './DailyLoadPanel';
+import { OverdueTools } from './OverdueTools';
 import { ReviewSetup } from './ReviewSetup';
 import { StudyTabs } from './StudyTabs';
 import { schedulerConfig } from './schedulerConfig';
@@ -168,6 +173,11 @@ function ReviewLoader({ session }: { session: ReadySession }) {
   );
   const config = schedulerConfig(session);
   const cardStates = latestCardStates(events);
+  // Las herramientas de atrasos solo sirven si ya hay tarjetas con repasos
+  const hasScheduled = cards.some((card) => {
+    const state = cardStates.get(card.id);
+    return state !== undefined && state.state !== 'new';
+  });
   // Las tarjetas que tocarían hoy con una selección
   const queueFor = (candidate: ReviewSelection) =>
     buildQueue({
@@ -183,6 +193,11 @@ function ReviewLoader({ session }: { session: ReadySession }) {
       <>
         <ScreenHeader title={t.screens.review.title} description={t.screens.review.description} />
         <StudyTabs />
+        {hasScheduled ? (
+          <FeatureGate userId={session.user.id} feature="overdueTools">
+            <OverdueTools session={session} cards={cards} events={events} />
+          </FeatureGate>
+        ) : null}
         <ReviewSetup
           addDeck={<AddDeckButton />}
           hasDemo={content.decks.some((deck) => followed.has(deck.id) && deck.isDemo)}
@@ -192,7 +207,9 @@ function ReviewLoader({ session }: { session: ReadySession }) {
           limits={{
             newCardsPerDay: session.settings.newCardsPerDay,
             reviewsPerDay: session.settings.reviewsPerDay,
+            unlimitedNewCards: session.settings.unlimitedNewCards,
           }}
+          limitsExtra={<DailyLoadPanel session={session} cards={cards} events={events} />}
           onSaveLimits={(patch) => updateProfile(api, session.user, { settings: patch })}
           countFor={(candidate) => queueFor(candidate).length}
           countersFor={(candidate) =>
@@ -301,6 +318,8 @@ function ReviewSession({
 }) {
   const api = useDataApi();
   const { user, settings } = session;
+  // Mientras carga el plan se supone el más básico, así el temporizador no aparece sin permiso
+  const timerAllowed = canUseFeature(useActivePlan(user.id) ?? 'free', 'cardTimer');
   const config: SchedulerConfig = useMemo(() => schedulerConfig(session), [session]);
   const noteById = useMemo(() => new Map(notes.map((note) => [note.id, note])), [notes]);
   // Las tarjetas de la sesión se fijan al entrar. Si se suspende una a media sesión, los datos en
@@ -344,7 +363,9 @@ function ReviewSession({
   const study = useStudyClock(step !== 'done' && card !== undefined);
   // Temporizador opcional. Solo corre mientras se ve la tarjeta y se detiene si el estudio se pausa
   const timerRuns =
-    settings.cardTimer.enabled && (step === 'front' || step === 'back' || step === 'confidence');
+    settings.cardTimer.enabled &&
+    timerAllowed &&
+    (step === 'front' || step === 'back' || step === 'confidence');
   const timer = useCardTimer({
     enabled: timerRuns,
     seconds: settings.cardTimer.seconds,
