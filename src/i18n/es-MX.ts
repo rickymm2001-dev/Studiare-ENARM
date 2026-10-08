@@ -4,6 +4,7 @@ import { BRAND } from '@/config/brand';
 import type { Phase, ScreenKey } from '@/app/screens';
 import { examText } from './exam';
 import { featureText } from './features';
+import { outlineText } from './outlines';
 import { qualityText } from './quality';
 import { tutorText } from './tutor';
 
@@ -73,6 +74,11 @@ const screens: Record<ScreenKey, ScreenText> = {
     title: 'Explorar',
     description:
       'Busca, filtra y ordena todas tus tarjetas. Suspende, etiqueta o muévelas por lote.',
+  },
+  outlines: {
+    title: 'Apuntes',
+    description:
+      'Escribe en esquema y vuelve tarjeta cualquier línea con una marca. Enlaza apuntes entre sí.',
   },
   planner: {
     title: 'Planificador',
@@ -148,6 +154,7 @@ const screens: Record<ScreenKey, ScreenText> = {
 export const t = {
   ...featureText,
   ...examText,
+  ...outlineText,
   ...qualityText,
   ...tutorText,
   app: {
@@ -162,10 +169,11 @@ export const t = {
     more: 'Más secciones',
   },
   studyTabs: {
-    label: 'Repasar, mazos y explorar',
+    label: 'Repasar, mazos, explorar y apuntes',
     review: 'Repasar',
     decks: 'Mazos',
     explore: 'Explorar',
+    outlines: 'Apuntes',
   },
   navItems: {
     home: 'Inicio',

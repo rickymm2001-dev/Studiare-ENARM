@@ -213,6 +213,52 @@ export function parseLine(text: string): ParsedLine {
   return { ...base, mark: { type: 'none' } };
 }
 
+export type TokenKind = 'separator' | 'cloze' | 'tag' | 'link' | 'multiline';
+
+export interface MarkToken {
+  /** Posición en el texto de la línea, de start a end sin incluir end */
+  start: number;
+  end: number;
+  kind: TokenKind;
+}
+
+/**
+ * Las partes de una línea que el editor resalta, en orden. Solo marca lo que de verdad cuenta, así
+ * un {{hueco}} dentro de una línea con >> no se pinta como si fuera a ser un hueco
+ */
+export function markTokens(text: string): MarkToken[] {
+  const tokens: MarkToken[] = [];
+  const line = text.replace(/\n/g, ' ');
+  const parsed = parseLine(line);
+  const masked = maskedForMarks(line);
+
+  if (parsed.mark.type === 'multiline') {
+    const end = masked.replace(/\s+$/, '').length;
+    tokens.push({ start: end - 3, end, kind: 'multiline' });
+  } else if (parsed.mark.type !== 'none' && parsed.mark.type !== 'cloze') {
+    const found = findSeparator(masked);
+    if (found) {
+      tokens.push({
+        start: found.index,
+        end: found.index + found.separator.length,
+        kind: 'separator',
+      });
+    }
+  } else if (parsed.mark.type === 'cloze') {
+    for (const match of line.matchAll(/\{\{[\s\S]*?\}\}/g)) {
+      tokens.push({ start: match.index, end: match.index + match[0].length, kind: 'cloze' });
+    }
+  }
+  for (const match of line.matchAll(TAG_PATTERN)) {
+    const start = match.index + (match[1]?.length ?? 0);
+    tokens.push({ start, end: match.index + match[0].length, kind: 'tag' });
+  }
+  for (const match of line.matchAll(LINK_PATTERN)) {
+    tokens.push({ start: match.index, end: match.index + match[0].length, kind: 'link' });
+  }
+  return tokens.sort((a, b) => a.start - b.start);
+}
+
 export type PlanDraft =
   | { kind: 'basic'; front: string; back: string }
   | { kind: 'basic_reverse'; front: string; back: string }

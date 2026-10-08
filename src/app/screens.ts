@@ -1,5 +1,5 @@
-// Registro de las 26 pantallas de la sección 10, más Configuración (D-065), Usuarios (D-070) y
-// Explorar (D-085), con su ruta, área y fase.
+// Registro de las 26 pantallas de la sección 10, más Configuración (D-065), Usuarios (D-070),
+// Explorar (D-085) y Apuntes (D-090), con su ruta, área y fase.
 // Es solo datos. Lo usan el router, la navegación y la prueba de humo que recorre cada ruta.
 // Las rutas visibles van en español y las claves en inglés (D-035).
 
@@ -38,6 +38,7 @@ export const SCREEN_KEYS = [
   'settings',
   'adminUsers',
   'explore',
+  'outlines',
 ] as const;
 
 export type ScreenKey = (typeof SCREEN_KEYS)[number];
@@ -84,6 +85,8 @@ export const SCREENS: Record<ScreenKey, ScreenDef> = {
   adminUsers: { number: 28, path: '/admin/usuarios', area: 'admin', phase: 'C' },
   // Explorar tarjetas, tercera pestaña de Repasar y Mazos (D-085)
   explore: { number: 29, path: '/mazos/explorar', area: 'student', phase: 'C' },
+  // Apuntes en esquema que se vuelven tarjetas, cuarta pestaña de Repasar (D-090)
+  outlines: { number: 30, path: '/apuntes', area: 'student', phase: 'C' },
 };
 
 export function screenPath(key: ScreenKey): string {

@@ -3,6 +3,7 @@ import {
   backlinks,
   countNodes,
   docToOutline,
+  markTokens,
   normalizeTitle,
   numberClozeHoles,
   OUTLINE_LIMITS,
@@ -343,5 +344,31 @@ describe('enlaces entre apuntes', () => {
     expect(
       outlineTags([node('a', 'x #B', node('b', 'y #A #B')), node('c', 'z #Cardio::Arritmias')]),
     ).toEqual(['B', 'A', 'Cardio::Arritmias']);
+  });
+});
+
+describe('markTokens, lo que el editor resalta', () => {
+  const kinds = (text: string) =>
+    markTokens(text).map((token) => [token.kind, text.slice(token.start, token.end)]);
+
+  it('marca el separador y las etiquetas y enlaces', () => {
+    expect(kinds('Asma >> Salbutamol #Neumo [[EPOC]]')).toEqual([
+      ['separator', '>>'],
+      ['tag', '#Neumo'],
+      ['link', '[[EPOC]]'],
+    ]);
+  });
+
+  it('marca los huecos solo si la línea es cloze', () => {
+    expect(kinds('El {{corazón}} bombea')).toEqual([['cloze', '{{corazón}}']]);
+    expect(kinds('Fármaco >> {{beta}} bloqueador')).toEqual([['separator', '>>']]);
+  });
+
+  it('marca los tres signos del final de una línea de varias líneas', () => {
+    expect(kinds('Causas de IC >>>  ')).toEqual([['multiline', '>>>']]);
+  });
+
+  it('una línea sin marcas no resalta nada', () => {
+    expect(markTokens('Solo texto')).toEqual([]);
   });
 });
