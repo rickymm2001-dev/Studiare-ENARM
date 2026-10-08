@@ -217,6 +217,14 @@ export const EventPayloadSchemas = {
     cardIds: z.array(IdSchema).min(1).max(500),
   }),
   /**
+   * El alumno atendió la señal de controversia de una tarjeta generada por la IA (D-085). Marcó que ya
+   * la verificó o la editó. La señal se quita de la tarjeta y este evento queda como constancia
+   */
+  card_controversy_resolved: z.strictObject({
+    noteId: IdSchema,
+    resolution: z.enum(['verified', 'edited']),
+  }),
+  /**
    * Cambio de fecha de repaso de tarjetas (D-085, fila 5). Repartir atrasos, posponer, adelantar o
    * deshacer un cambio anterior. Cada tarjeta lleva su fecha de antes y la nueva. La estabilidad de
    * FSRS no se toca, solo la fecha, y el próximo repaso la corrige con el tiempo transcurrido
@@ -305,6 +313,7 @@ export const AppEventSchema = z.discriminatedUnion('type', [
   eventSchemaFor('cards_suspended'),
   eventSchemaFor('cards_unsuspended'),
   eventSchemaFor('cards_rescheduled'),
+  eventSchemaFor('card_controversy_resolved'),
 ]);
 
 export type AppEvent = z.infer<typeof AppEventSchema>;

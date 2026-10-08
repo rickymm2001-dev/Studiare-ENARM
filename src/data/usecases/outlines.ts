@@ -21,8 +21,8 @@ import {
   deleteManualDeck,
   deleteManualNote,
   draftOf,
+  sameDraft,
   saveManualNote,
-  type NoteDraft,
 } from './manualDecks';
 
 export const OUTLINES_ROOT_DECK = 'Apuntes';
@@ -133,12 +133,6 @@ export interface SaveOutlineResult {
 
 const sameTags = (a: readonly string[], b: readonly string[]) =>
   a.length === b.length && [...a].sort().every((tag, index) => tag === [...b].sort()[index]);
-
-const sameDraft = (a: NoteDraft, b: NoteDraft) =>
-  a.kind === b.kind &&
-  (a.kind === 'cloze'
-    ? b.kind === 'cloze' && a.text === b.text && a.extra === b.extra
-    : b.kind !== 'cloze' && a.front === b.front && a.back === b.back);
 
 /**
  * Guarda las líneas del apunte y deja sus tarjetas al día. Es seguro llamarla seguido, por ejemplo

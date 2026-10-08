@@ -26,6 +26,7 @@ import { latestCardStates } from '../review/study';
 import { StudyTabs } from '../review/StudyTabs';
 import { descendantIds } from '@/engines/deckTree';
 import { followedDeckIds } from './followed';
+import { AiCardsCard } from './AiCardsCard';
 import { ExportDecksCard } from './ExportDecksCard';
 import { ImportDeckCard } from './ImportDeckCard';
 import { OwnDecksCard } from './OwnDecksCard';
@@ -245,6 +246,7 @@ function Decks({ session }: { session: ReadySession }) {
         cardsByDeck={stored?.cardsByDeck ?? new Map()}
         states={states}
       />
+      <AiCardsCard session={session} />
       <ImportDeckCard session={session} />
       <ExportDecksCard session={session} decks={ownDecks} />
     </>

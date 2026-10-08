@@ -66,7 +66,12 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,svg,png,webmanifest,woff2}'],
         // Las imágenes de los mazos demo (unos 47 MB) y el worker de simulación, que trae los mazos
         // y pesa varios MB, no se precargan. Se guardan la primera vez que se usan (D-053)
-        globIgnores: ['demo-media/**', 'assets/simulate.worker-*.js', 'assets/import.worker-*.js'],
+        globIgnores: [
+          'demo-media/**',
+          'assets/simulate.worker-*.js',
+          'assets/import.worker-*.js',
+          'assets/pdf-*.js',
+        ],
         runtimeCaching: [
           {
             urlPattern: new RegExp(`${escapeRegExp(BASE_PATH)}assets/simulate\\.worker-.*\\.js$`),
@@ -81,6 +86,15 @@ export default defineConfig({
             ),
             handler: 'CacheFirst',
             options: { cacheName: 'import-engine', expiration: { maxEntries: 4 } },
+          },
+          // El lector de PDF (pdf.js y su worker) pesa más de 1.5 MB. Se guarda la primera vez que
+          // alguien sube un PDF a las tarjetas con IA (D-094)
+          {
+            urlPattern: new RegExp(
+              `${escapeRegExp(BASE_PATH)}assets/pdf(\\.worker\\.min)?-.*\\.(m?js)$`,
+            ),
+            handler: 'CacheFirst',
+            options: { cacheName: 'pdf-reader', expiration: { maxEntries: 4 } },
           },
           {
             urlPattern: new RegExp(`${escapeRegExp(BASE_PATH)}demo-media/`),

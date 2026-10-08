@@ -100,6 +100,8 @@ export type AiArtifact = z.infer<typeof AiArtifactSchema>;
 
 export const AiCallLogSchema = z.strictObject({
   id: IdSchema,
+  /** Alumno que hizo la llamada, para los límites por alumno. Ausente en llamadas viejas */
+  userId: IdSchema.nullable().optional(),
   engine: z.enum(['forgetting', 'weekly_report', 'flashcards', 'bias_tips', 'restructure']),
   mode: AiModeSchema,
   model: z.string().min(1).max(80),

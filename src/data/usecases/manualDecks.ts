@@ -100,6 +100,13 @@ export function draftOf(note: Note): NoteDraft {
   }
 }
 
+/** Si dos borradores son la misma tarjeta, del mismo tipo y con el mismo texto */
+export function sameDraft(a: NoteDraft, b: NoteDraft): boolean {
+  if (a.kind !== b.kind) return false;
+  if (a.kind === 'cloze' && b.kind === 'cloze') return a.text === b.text && a.extra === b.extra;
+  return a.kind !== 'cloze' && b.kind !== 'cloze' && a.front === b.front && a.back === b.back;
+}
+
 /** Los campos de la nota con el texto ya escapado, para guardarlo como HTML (14.3) */
 function contentOf(draft: NoteDraft) {
   switch (draft.kind) {
@@ -178,19 +185,26 @@ export async function saveManualNote(
   const existing = input.noteId ? await api.repos.notes.get(input.noteId) : undefined;
   if (input.noteId && existing?.deckId !== input.deckId)
     throw new Error('La tarjeta no está en este mazo');
+  const draft = input.draft;
+  // Editar no cambia de dónde viene la tarjeta. Una importada o generada conserva su origen, su
+  // cita y su identificador. Si el texto cambió de verdad, la señal de controversia de la IA se va,
+  // porque el alumno ya atendió esa tarjeta (D-085). Si solo se guardó igual, la señal sigue
+  const edited = existing !== undefined && !sameDraft(draftOf(existing), draft);
   const base = {
     id: existing?.id ?? newId(),
     deckId: input.deckId,
     tags: input.tags ? normalizeTags(input.tags) : (existing?.tags ?? []),
-    origin: 'manual' as const,
-    editorialStatus: 'draft' as const,
-    sourceQuote: null,
-    sourceQuestionVersionId: null,
-    isDemo: false,
+    origin: existing?.origin ?? ('manual' as const),
+    editorialStatus: existing?.editorialStatus ?? ('draft' as const),
+    sourceQuote: existing?.sourceQuote ?? null,
+    sourceQuestionVersionId: existing?.sourceQuestionVersionId ?? null,
+    ...(existing?.sourceGuid ? { sourceGuid: existing.sourceGuid } : {}),
+    ...(existing?.sourceTitle ? { sourceTitle: existing.sourceTitle } : {}),
+    ...(existing?.controversy && !edited ? { controversy: existing.controversy } : {}),
+    isDemo: existing?.isDemo ?? false,
     createdAt: existing?.createdAt ?? now.toISOString(),
     updatedAt: now.toISOString(),
   };
-  const draft = input.draft;
   const note: Note = { ...base, ...contentOf(draft) };
   await api.repos.notes.put(note);
 

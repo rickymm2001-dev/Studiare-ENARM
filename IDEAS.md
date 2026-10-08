@@ -20,3 +20,5 @@ Ideas que surgieron durante el trabajo y que no entran al prototipo. Cada una di
 - **Exportar a paquete .apkg.** Hoy se exporta a CSV. Un .apkg conservaría imágenes y tipos de nota. Surgió al programar la exportación (D-093)
 - **Elegir la hoja de Excel.** Hoy se lee la primera hoja. Surgió al programar el importador (D-093)
 
+- **Reconocimiento de caracteres para PDF escaneados.** Hoy un PDF que es una foto sin texto se rechaza con un mensaje. Leerlo pide OCR, en el navegador con un motor local para no mandar el material a un tercero, y revisar que la cita literal siga existiendo en lo que se leyó. Surgió al programar la lectura de PDF (D-094)
+- **Ruta del servidor para generar tarjetas con el modelo real.** El servidor corre con Node simple y no importa los motores de src. Hará falta compartir el validador, por ejemplo moviendo los motores puros a un paquete que ambos lean, o repetir la validación del lado del cliente como hoy. Surgió al programar las tarjetas con IA (D-094)

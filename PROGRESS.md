@@ -8,7 +8,7 @@
 - Bloques 9 y 10 terminados. Bloque 8 (contenido demo) pausado con 4 de 6 lotes y sin mazos (D-050)
 - Fase C con sus 10 bloques programados y el cierre de 15.1 hecho. Espera la aprobación de Ricardo, ver su sección. Hay 20 de 28 pantallas construidas y 8 siguen como esqueleto con aviso de Próximamente
 - Reunión del equipo del 2026-10-07 aplicada (D-087). Repaso y simulador más prácticos, sin pregunta de confianza por defecto y con retroalimentación al final, Repasar y Mazos unidos, precio mensual de 150 y plan Fundador, banco de 4 a 10 opciones con plantilla de Excel y un solo dispositivo por cuenta. El precio Fundador de 79 ya está confirmado. Falta que Ricardo ejecute el SQL del dispositivo único
-- Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. La Etapa 1 está aprobada y publicada (PR 20). La Etapa 2, carga diaria, está publicada (PR 21) y espera su aprobación. Las Etapas 3 (apuntes tipo RemNote, D-092) y 4 (importar y exportar, D-093) están programadas y Ricardo pidió seguir con todas las etapas sin preguntar, ver sus secciones
+- Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. La Etapa 1 está aprobada y publicada (PR 20). La Etapa 2, carga diaria, está publicada (PR 21) y espera su aprobación. Las Etapas 3 (apuntes tipo RemNote, D-092), 4 (importar y exportar, D-093) y 5 (tarjetas con IA desde PDF y textos, D-094) están programadas y Ricardo pidió seguir con todas las etapas sin preguntar, ver sus secciones
 - Fase P en curso (D-060). Bloques 1 a 4 terminados, 7 y 9 a medias, 5, 6 y 8 sin empezar, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
 - Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
@@ -24,6 +24,29 @@
 - Logo de Studiare en el encabezado, en modo claro y oscuro (D-056)
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
+
+## Fase C2. Etapa 5, tarjetas con IA desde PDF y textos (D-085 y D-094)
+
+Ricardo pidió el 2026-10-08 ejecutar todos los pendientes del plan sin preguntar. No hay clave de IA en este entorno, así que la etapa corre completa con el generador simulado y deja lista la entrada para el modelo real.
+
+### Bloques
+- [x] B1. Filtro de datos personales, lista cerrada de fuentes académicas y motor de generación con validador (puros)
+- [x] B2. Lector de PDF con pdf.js en carga diferida y generador de IA con cuota por plan
+- [x] B3. Guardado en borrador, señal de controversia con eventos de verificar o editar, y tarjeta en Mazos
+- [x] B4. Señal en el repaso y en Explorar, pruebas unitarias, de pantalla y e2e con la app compilada
+
+### Bitácora
+- El validador descarta lo que no pasa y el alumno nunca lo ve. Se probó con propiedades que una cita inventada, una dosis que la cita no trae y una fuente fuera de la lista no llegan nunca a las propuestas
+- La prueba e2e con la app compilada confirma que pdf.js y su worker funcionan en el build real, que un PDF sin texto muestra su mensaje y que el plan de pago genera, guarda, marca la controversia y la quita al verificar
+- pdf.js y su worker (unos 1.7 MB) no entran al precache de la PWA. Tienen su propia caché al usarse
+- El JavaScript inicial pasó de unos 480 a unos 495 KB comprimido por las pantallas nuevas, contra un presupuesto de 300 KB. Reducirlo con carga diferida por rutas sigue como pendiente de la Fase F
+- Se agrega pdfjs-dist. El motor de simulación local no llama a ningún servicio
+- Un cambio chico en la espera de las pruebas de pantalla (asyncUtilTimeout de 5 s) ya estaba desde la Etapa 3
+
+### Pendiente
+- La ruta /api/ai/flashcards del servidor y el modelo real, con la Fase D
+- Reconocimiento de caracteres para PDF escaneados, en IDEAS.md
+- Que Ricardo o un médico confirmen la lista de fuentes, la cuota diaria y el prompt maestro
 
 ## Fase C2. Etapa 4, importar y exportar (D-085 y D-093)
 

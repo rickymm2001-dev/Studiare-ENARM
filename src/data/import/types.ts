@@ -67,7 +67,9 @@ export type ImportErrorCode =
   | 'corrupt'
   | 'unsupported'
   | 'no_collection'
-  | 'empty';
+  | 'empty'
+  /** Un PDF escaneado, sin texto que se pueda seleccionar */
+  | 'no_text';
 
 export class ImportError extends Error {
   readonly code: ImportErrorCode;

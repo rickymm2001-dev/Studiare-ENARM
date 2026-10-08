@@ -9,6 +9,7 @@ import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { CardHtml } from '../shared/CardHtml';
+import { ControversySignal } from '../shared/ControversySignal';
 import type { CardFaces } from '../review/study';
 
 const TAGS_SHOWN = 3;
@@ -37,6 +38,8 @@ function Statuses({ row, timeZone, now }: { row: ExploreRow; timeZone: string; n
       ) : null}
       {row.lapses > 0 ? <Badge variant="neutral">{t.explore.lapses(row.lapses)}</Badge> : null}
       {row.origin === 'preloaded' ? <Badge variant="neutral">{t.explore.preloaded}</Badge> : null}
+      {row.aiDraft ? <Badge variant="warning">{t.aiCards.draftLabel}</Badge> : null}
+      {row.controversy ? <Badge variant="danger">{t.controversy.badge}</Badge> : null}
     </>
   );
 }
@@ -48,6 +51,7 @@ export function ResultList({
   onToggle,
   openId,
   onOpen,
+  onVerify,
   facesOf,
   timeZone,
   now,
@@ -58,6 +62,8 @@ export function ResultList({
   onToggle: (cardId: string) => void;
   openId: string | null;
   onOpen: (cardId: string | null) => void;
+  /** El alumno marca que ya verificó la señal de la IA de una nota */
+  onVerify: (noteId: string) => Promise<void>;
   facesOf: (cardId: string) => CardFaces | null;
   timeZone: string;
   now: Date;
@@ -133,6 +139,12 @@ export function ResultList({
                   <p className="text-xs font-semibold text-fg-muted uppercase">{t.explore.back}</p>
                   <CardHtml html={faces.back} className="text-base" />
                 </div>
+                {row.controversy ? (
+                  <ControversySignal
+                    controversy={row.controversy}
+                    onVerify={() => onVerify(row.noteId)}
+                  />
+                ) : null}
               </div>
             ) : null}
           </li>

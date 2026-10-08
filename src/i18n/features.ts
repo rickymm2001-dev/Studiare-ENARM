@@ -372,6 +372,7 @@ export const featureText = {
     featureNames: {
       explore: 'Explorar tus tarjetas',
       outlines: 'Apuntes',
+      aiCards: 'Tarjetas con IA',
       overdueTools: 'Herramientas de atrasos',
       guideProfile: 'Perfil guía',
       newPerDaySuggestion: 'Sugerencia de tarjetas nuevas',
@@ -722,6 +723,92 @@ export const featureText = {
     empty: 'No hay notas tuyas para exportar todavía.',
     error: 'No se pudo preparar el archivo. Intenta de nuevo.',
     noDecks: 'Crea o importa un mazo para poder exportarlo.',
+  },
+  // Tarjetas con IA desde un texto o PDF del alumno (D-085)
+  aiCards: {
+    title: 'Crea tarjetas con IA',
+    intro:
+      'Pega un texto o sube un PDF. La IA propone tarjetas y cada una trae la frase exacta de tu material que la respalda. Todo queda en borrador y sin validar por un médico hasta que lo revises.',
+    modes: {
+      template: 'IA simulada. Las tarjetas salen de reglas y no de un modelo de IA.',
+      real: 'IA conectada.',
+    },
+    left: (n: number, perDay: number) =>
+      n === 0
+        ? `Ya usaste tus ${perDay} generaciones de hoy. Vuelven mañana a las 4 a. m.`
+        : `Te quedan ${plural(n, 'generación', 'generaciones')} hoy de ${perDay}.`,
+    textLabel: 'Texto de tu material',
+    textHint:
+      'Pega apuntes, un resumen o un fragmento de guía. Los datos personales se ocultan antes de procesarlo.',
+    fileLabel: 'O sube un PDF o un archivo de texto',
+    fileHint: 'Un PDF debe tener texto que se pueda seleccionar. Los escaneados todavía no.',
+    sourceName: 'Nombre de la fuente',
+    sourceNameHint: 'Se guarda en cada tarjeta para que sepas de dónde salió.',
+    defaultSource: 'Texto pegado',
+    readingFile: 'Leyendo el archivo…',
+    fileErrors: {
+      too_large: 'El PDF pesa demasiado o tiene demasiadas páginas.',
+      corrupt: 'El archivo está dañado o no se pudo leer.',
+      no_text:
+        'Este PDF no tiene texto que se pueda seleccionar, probablemente es un escaneo. Todavía no lo sabemos leer.',
+      empty: 'El archivo no trae texto.',
+    } as Record<string, string>,
+    pdfTruncated: 'El PDF era muy largo y se leyó solo una parte.',
+    generate: 'Generar tarjetas',
+    generating: 'Generando…',
+    textRequired: 'Escribe o pega un texto, o sube un archivo.',
+    textTooShort: 'El texto es muy corto para proponer tarjetas.',
+    limitReached: 'Ya usaste tus generaciones de hoy.',
+    error: 'No se pudieron generar las tarjetas. Intenta de nuevo.',
+    resultTitle: 'Tarjetas propuestas',
+    resultSummary: (n: number, sections: number) =>
+      `${plural(n, 'tarjeta propuesta', 'tarjetas propuestas')} de ${plural(sections, 'sección', 'secciones')}.`,
+    scrubbed: (n: number) =>
+      `Se ocultaron ${plural(n, 'dato personal', 'datos personales')} antes de procesar el texto.`,
+    rejected: (n: number) =>
+      `${plural(n, 'propuesta se descartó', 'propuestas se descartaron')} porque no pasaron la revisión contra tu texto. No se te muestran.`,
+    cut: (n: number) =>
+      `Se procesaron solo las primeras ${plural(n, 'sección', 'secciones')} del texto.`,
+    fellBack: 'La IA no respondió y se usó el modo simulado.',
+    nothing:
+      'No salieron tarjetas de este texto. Prueba con un texto más largo y con datos concretos, como definiciones, dosis o criterios.',
+    draftLabel: 'Borrador, no validada por médico',
+    kinds: { basic: 'Pregunta y respuesta', cloze: 'Con huecos' },
+    quote: 'Frase de tu material que la respalda',
+    front: 'Frente',
+    back: 'Reverso',
+    section: (title: string) => `Sección ${title}`,
+    duplicate: 'Ya tienes una tarjeta igual o muy parecida.',
+    select: (n: number) => `Elegir la tarjeta ${n}`,
+    selectAll: 'Elegir todas',
+    selectNone: 'Quitar todas',
+    edit: 'Editar',
+    editedIssues: 'Tu edición agrega algo que la frase no dice. Revísalo.',
+    save: (n: number) => `Guardar ${plural(n, 'tarjeta', 'tarjetas')} en borrador`,
+    saving: 'Guardando…',
+    saveError: 'No se pudieron guardar las tarjetas. Intenta de nuevo.',
+    savedTitle: 'Tarjetas guardadas',
+    saved: (n: number, flagged: number) =>
+      flagged > 0
+        ? `${plural(n, 'tarjeta guardada', 'tarjetas guardadas')} en Tarjetas con IA, ${plural(flagged, 'con señal de controversia', 'con señal de controversia')}.`
+        : `${plural(n, 'tarjeta guardada', 'tarjetas guardadas')} en Tarjetas con IA.`,
+    again: 'Generar con otro texto',
+    seeInExplore: 'Verlas en Explorar',
+    rules:
+      'La IA nunca cambia tu texto ni corrige. Si algo le parece dudoso lo señala con una explicación y fuentes, y tú decides.',
+  },
+  // Señal de controversia de la IA (D-085)
+  controversy: {
+    title: 'La IA marcó una posible controversia',
+    simulated: 'Señal del modo simulado',
+    notChanged: 'La IA no cambió esta tarjeta. Solo la señala para que la revises.',
+    sources: 'Revisa en',
+    verify: 'Ya lo verifiqué',
+    verified: 'Señal quitada. Quedó registrado que la verificaste.',
+    edit: 'Editar la tarjeta',
+    error: 'No se pudo quitar la señal. Intenta de nuevo.',
+    badge: 'Con señal de la IA',
+    editHint: 'Si editas la tarjeta, la señal también se quita.',
   },
   decks: {
     emptyBranches: (names: string) => `Todavía sin mazos en ${names}.`,

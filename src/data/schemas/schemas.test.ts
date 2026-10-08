@@ -45,9 +45,9 @@ describe('esquemas y tablas', () => {
     expect(Object.keys(storesFor('demo'))).toHaveLength(TABLE_NAMES.length);
   });
 
-  it('hay un esquema para los 30 tipos de evento de 6.3, el cambio de suscripción simulada, reabrir un artefacto y suspender o reanudar tarjetas y cambiar su fecha de repaso', () => {
-    expect(EVENT_TYPES).toHaveLength(35);
-    expect(AppEventSchema.options).toHaveLength(35);
+  it('hay un esquema para los 30 tipos de evento de 6.3, el cambio de suscripción simulada, reabrir un artefacto y suspender o reanudar tarjetas, cambiar su fecha de repaso y atender una controversia', () => {
+    expect(EVENT_TYPES).toHaveLength(36);
+    expect(AppEventSchema.options).toHaveLength(36);
   });
 
   it('un cambio de fecha de repaso lleva sus tarjetas con la fecha de antes y la nueva', () => {
@@ -239,6 +239,50 @@ describe('esquemas y tablas', () => {
     };
     expect(NoteSchema.parse(anchored).origin).toBe('generated');
     expect(NoteSchema.parse({ ...note, origin: 'manual' }).origin).toBe('manual');
+    // También vale citar un texto o PDF del alumno, con su título (D-085)
+    const fromText = { ...note, sourceQuote: 'Frase exacta del texto', sourceTitle: 'Guía.pdf' };
+    expect(NoteSchema.parse(fromText).sourceTitle).toBe('Guía.pdf');
+    // Sin título ni pregunta no hay fuente aunque haya frase
+    expect(() => NoteSchema.parse({ ...note, sourceQuote: 'Frase exacta' })).toThrow();
+  });
+
+  it('la señal de controversia solo cita textos de la lista cerrada y no trae texto corregido', () => {
+    const note = {
+      id: newId(),
+      deckId: newId(),
+      kind: 'basic',
+      front: 'Frente',
+      back: 'Reverso',
+      tags: [],
+      origin: 'generated',
+      editorialStatus: 'draft',
+      sourceQuote: 'Frase exacta del texto',
+      sourceQuestionVersionId: null,
+      sourceTitle: 'Guía.pdf',
+      isDemo: false,
+      createdAt: '2026-10-01T10:00:00.000Z',
+    };
+    const controversy = {
+      reason: 'La frase es una afirmación absoluta y las guías la matizan, así que se revisa.',
+      sources: [{ key: 'gpc_cenetec', locator: null }],
+      simulated: true,
+      flaggedAt: '2026-10-01T10:00:00.000Z',
+    };
+    expect(NoteSchema.parse({ ...note, controversy }).controversy?.sources).toHaveLength(1);
+    // Una fuente fuera de la lista, una explicación corta o un campo de más se rechazan
+    expect(() =>
+      NoteSchema.parse({
+        ...note,
+        controversy: { ...controversy, sources: [{ key: 'wiki', locator: null }] },
+      }),
+    ).toThrow();
+    expect(() =>
+      NoteSchema.parse({ ...note, controversy: { ...controversy, reason: 'corta' } }),
+    ).toThrow();
+    expect(() =>
+      NoteSchema.parse({ ...note, controversy: { ...controversy, suggestedText: 'otra cosa' } }),
+    ).toThrow();
+    expect(NoteSchema.parse({ ...note, controversy: null }).controversy).toBeNull();
   });
 
   it('una básica con tarjeta inversa lleva los mismos campos que la básica y la misma regla de cita', () => {

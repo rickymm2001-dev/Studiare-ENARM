@@ -6,6 +6,7 @@ import { Dialog } from 'radix-ui';
 import { useId, useMemo, useState } from 'react';
 import { htmlToText } from '@/data/content/plainText';
 import { useDataApi } from '@/data/context';
+import { saveNoteAndSignals } from '@/data/usecases/aiCards';
 import { useLiveData } from '@/data/hooks';
 import type { Deck, Note } from '@/data/schemas/decks';
 import {
@@ -13,7 +14,6 @@ import {
   convertDraft,
   deleteManualNote,
   draftOf,
-  saveManualNote,
   validateDraft,
   type DraftError,
   type NoteDraft,
@@ -131,7 +131,7 @@ export function DeckEditorDialog({
     }
     setSaving(true);
     try {
-      await saveManualNote(api, session.user, {
+      await saveNoteAndSignals(api, session.user, {
         deckId: deck.id,
         draft,
         ...(editingId ? { noteId: editingId } : {}),
