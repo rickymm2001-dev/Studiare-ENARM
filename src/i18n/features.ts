@@ -252,7 +252,7 @@ export const featureText = {
       study: 'Estudio',
       appearance: 'Apariencia',
       pomodoro: 'Pomodoro',
-      account: 'Cuenta y datos',
+      account: 'Cuenta',
     },
     sectionsLabel: 'Secciones de Configuración',
     dailyTitle: 'Metas del día',
@@ -342,6 +342,12 @@ export const featureText = {
     simulatedNotice:
       'Pagos simulados. En el prototipo no se cobra nada ni se piden datos de tarjeta. Los precios son de ejemplo.',
     current: (plan: string) => `Tu plan actual es ${plan}.`,
+    stats: {
+      plan: 'Plan',
+      daily: 'Preguntas',
+      dailyCaption: 'por día',
+      unlimited: 'sin límite',
+    },
     plans: { free: 'Gratis', founder: 'Fundador', monthly: 'Mensual', annual: 'Anual' },
     periods: {
       free: 'para siempre',
@@ -503,6 +509,15 @@ export const featureText = {
     preloadedDescription:
       'Mazos de demostración que puedes seguir o dejar. No están validados por médicos.',
     author: (name: string) => `De ${name}, compartido con su autorización`,
+    summary: {
+      label: 'Tus mazos en cifras',
+      followed: 'Mazos',
+      followedCaption: 'que sigues',
+      seen: 'Vistas',
+      seenCaption: 'tarjetas',
+      total: 'Tarjetas',
+      totalCaption: 'en tus mazos',
+    },
     stats: (notes: number, media: number) =>
       `${plural(notes, 'nota', 'notas')} · ${plural(media, 'imagen', 'imágenes')}`,
     progress: (studied: number, total: number) =>
@@ -605,6 +620,7 @@ export const featureText = {
   },
   planner: {
     todayTitle: 'Plan de hoy',
+    stats: { minutes: 'Minutos', reviews: 'Repasos', newCards: 'Nuevas' },
     minutesOf: (planned: number, available: number) => `${planned} de ${available} min`,
     cardsLine: (reviews: number, fresh: number) => {
       const due = plural(reviews, 'tarjeta vencida', 'tarjetas vencidas');
@@ -768,6 +784,16 @@ export const featureText = {
   },
   simulator: {
     setupTitle: 'Configura tu práctica',
+    stats: {
+      label: 'Preguntas para tu práctica',
+      available: 'Disponibles',
+      availableCaption: 'con estos filtros',
+      today: 'Hoy',
+      todayCaption: 'te quedan en tu plan',
+      unlimited: 'Sin límite',
+      bank: 'Banco',
+      bankCaption: 'preguntas en total',
+    },
     bankNote: (n: number) => `Banco de demostración con ${plural(n, 'pregunta', 'preguntas')}.`,
     branches: 'Ramas',
     difficulty: 'Dificultad',
@@ -846,6 +872,13 @@ export const featureText = {
     noActive: 'No hay una práctica en curso.',
     goSetup: 'Configurar práctica',
     summaryTitle: 'Resumen de la sesión',
+    summaryLabels: {
+      accuracy: 'Aciertos',
+      xp: 'XP',
+      xpCaption: 'ganados',
+      time: 'Tiempo',
+      timeCaption: 'total',
+    },
     summaryAccuracy: (correct: number, total: number) => `${correct} de ${total} correctas`,
     summaryXp: (xp: number) => `${xp.toLocaleString('es-MX')} XP ganados`,
     summaryTime: (time: string) => `Tiempo total ${time}`,
@@ -940,11 +973,18 @@ export const featureText = {
       approved: 'Aprobada',
       rejected: 'Rechazada',
     },
+    statsLabel: 'Preguntas por estado',
     assignedTo: (names: string) => `Asignada a ${names}`,
     unassigned: 'Sin asignar',
     more: (n: number) => `Y ${n} más`,
   },
   admin: {
+    stats: {
+      label: 'Cuentas por rol',
+      students: 'Alumnos',
+      physicians: 'Médicos',
+      staff: 'Equipo',
+    },
     notice:
       'En el prototipo trabajas sobre las cuentas de este navegador. Con Supabase estas mismas reglas las aplica el servidor y cada cambio queda en la bitácora de auditoría.',
     role: 'Rol',
@@ -1096,6 +1136,13 @@ export const featureText = {
     calibrating: (missing: number) =>
       `Calibrando, faltan unas ${missing.toLocaleString('es-MX')} respuestas`,
     statsLabel: 'Tus cifras',
+    statShort: {
+      questions: 'Preguntas',
+      accuracy: 'Exactitud',
+      cards: 'Tarjetas',
+      minutes: 'Minutos',
+    },
+    statRest: { questions: 'respondidas', cards: 'repasadas', minutes: 'de estudio' },
     masteryLabel: 'Dominio estimado',
     focusTitle: (n: number) =>
       n === 0

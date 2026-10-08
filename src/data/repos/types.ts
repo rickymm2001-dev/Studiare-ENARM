@@ -82,7 +82,7 @@ export interface SyncableRepo<T, K extends string = Id> extends Omit<EntityRepo<
 }
 
 /**
- * Notas con la búsqueda por apunte (D-090). Una nota de un apunte guarda el ID del apunte, y la
+ * Notas con la búsqueda por apunte (D-092). Una nota de un apunte guarda el ID del apunte, y la
  * búsqueda usa su índice en lugar de recorrer todas las notas
  */
 export interface NoteRepo extends SyncableRepo<Note> {

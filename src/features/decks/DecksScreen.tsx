@@ -2,7 +2,7 @@
 // troncal con sus subespecialidades (D-066). Cada mazo es una tarjeta compacta con sus temas
 // plegados (D-078). Abajo van los mazos del alumno, que crea y llena a mano. Subir mazos de otras
 // apps llega con la Fase E.
-import { BookPlus, Check, ChevronDown, Layers } from 'lucide-react';
+import { BookOpenCheck, BookPlus, Check, ChevronDown, Layers, Library } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -17,6 +17,7 @@ import { toneClasses } from '@/ui/branches';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { DemoContentLabel } from '@/ui/components/labels';
+import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { ProgressBar } from '@/ui/components/progress-bar';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
@@ -66,11 +67,44 @@ function Decks({ session }: { session: ReadySession }) {
   );
   const branchName = (key: string) =>
     topicTaxonomy.branches.find((branch) => branch.key === key)?.name ?? key;
+  // Cifras de los mazos que se siguen, sin contar dos veces una tarjeta (D-091)
+  const followedCards = new Set(
+    stored === undefined
+      ? []
+      : [...followed].flatMap((id) =>
+          [...descendantIds(stored.decks, id)].flatMap(
+            (deckId) => stored.cardsByDeck.get(deckId) ?? [],
+          ),
+        ),
+  );
+  const seenCount = [...followedCards].filter((cardId) => states.has(cardId)).length;
 
   return (
     <>
       <ScreenHeader title={t.screens.decks.title} description={t.screens.decks.description} />
       <StudyTabs />
+      {stored !== undefined ? (
+        <StatPanel label={t.decks.summary.label}>
+          <StatCell
+            icon={<Layers />}
+            label={t.decks.summary.followed}
+            value={followed.size.toLocaleString('es-MX')}
+            caption={t.decks.summary.followedCaption}
+          />
+          <StatCell
+            icon={<BookOpenCheck />}
+            label={t.decks.summary.seen}
+            value={seenCount.toLocaleString('es-MX')}
+            caption={t.decks.summary.seenCaption}
+          />
+          <StatCell
+            icon={<Library />}
+            label={t.decks.summary.total}
+            value={followedCards.size.toLocaleString('es-MX')}
+            caption={t.decks.summary.totalCaption}
+          />
+        </StatPanel>
+      ) : null}
       <Card aria-labelledby="precargados-titulo">
         <CardHeader>
           <div className="flex flex-wrap items-center gap-2">

@@ -12,6 +12,7 @@
 - Fase P en curso (D-060). Bloques 1 a 4 terminados, 7 y 9 a medias, 5, 6 y 8 sin empezar, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
 - Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
+- Formato visual del proyecto ROI Sales Companion publicado en la demo (D-090, PR 22) y llevado a todas las pantallas con cifras, con tarjeta oscura y datos reales (D-091). Axe pasa en claro y oscuro. Falta la revisión de Ricardo
 - Auditoría del repaso hecha con Codex el 2026-10-04. Una sesión que llega al final de la cola se cierra como completada y no como abandonada
 - Banco y mazos en pausa por indicación de Ricardo del 2026-10-06. No se escriben ni se corrigen preguntas ni tarjetas, solo se programa
 - Directrices V2 integradas a la memoria del proyecto el 2026-10-06 (D-080, CLAUDE.md y PLAN.md sección 10). Se aplican desde el examen. Quedan por confirmar el LLM de OpenAI y qué cuenta como referido concretado
@@ -24,7 +25,7 @@
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
 
-## Fase C2. Etapa 3, apuntes tipo RemNote (D-085 y D-090)
+## Fase C2. Etapa 3, apuntes tipo RemNote (D-085 y D-092)
 
 ### Bloques
 - [x] B1. Motor puro de apuntes (src/engines/outline.ts). Lee las marcas de una línea, arma el plan de tarjetas, convierte el árbol al documento del editor y de vuelta, y resuelve enlaces y vínculos de regreso
@@ -43,7 +44,7 @@
 - npm run check limpio. Typecheck y lint sin errores y 1,588 pruebas unitarias pasan. En la corrida completa una prueba de seguridad que recorre dist se pasó de sus 5 segundos por la carga en paralelo, pasa sola en 8 segundos y ahora tiene un tope de 60
 - e2e, 158 pasan en móvil y escritorio, con 3 flujos de apuntes nuevos. Escribir marcas y ver las tarjetas en Repasar, partir con Enter al inicio y volver a unir con Backspace comprobando en IndexedDB que la nota y su ID no cambian, y pegar varias líneas
 - Capturas en docs/screenshots/fase-c2-etapa3, la lista de apuntes y un apunte con marcas, en teléfono y escritorio, claro y oscuro
-- Revisión independiente con 14 hallazgos. Se corrigieron los 12 que afectan datos o uso, con pruebas nuevas, y los otros 2 quedaron documentados en D-090 (huecos sin número y un tiempo cuadrático que los topes del editor dejan en menos de 35 ms). Lo más grave era que Enter al inicio y Backspace en los bordes de una línea le quitaban el ID a la tarjeta y se perdía su historial, y que al pasar un tope el guardado rechazaba el apunte entero sin avisar
+- Revisión independiente con 14 hallazgos. Se corrigieron los 12 que afectan datos o uso, con pruebas nuevas, y los otros 2 quedaron documentados en D-092 (huecos sin número y un tiempo cuadrático que los topes del editor dejan en menos de 35 ms). Lo más grave era que Enter al inicio y Backspace en los bordes de una línea le quitaban el ID a la tarjeta y se perdía su historial, y que al pasar un tope el guardado rechazaba el apunte entero sin avisar
 - Las pruebas en Playwright necesitan PW_CHROMIUM_PATH=/opt/pw-browsers/chromium en este entorno, porque el Playwright del proyecto espera otra versión del navegador
 
 ### Pendiente

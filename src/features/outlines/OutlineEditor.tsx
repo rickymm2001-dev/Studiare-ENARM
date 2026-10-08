@@ -1,4 +1,4 @@
-// Editor de apuntes en esquema (D-090). Una lista de viñetas anidadas donde Enter crea una línea,
+// Editor de apuntes en esquema (D-092). Una lista de viñetas anidadas donde Enter crea una línea,
 // Tab la mete en la de arriba y Shift más Tab la saca. El editor solo maneja el árbol de líneas. Las
 // marcas, las tarjetas y el guardado los resuelven el motor y quien lo usa. Va en una carga
 // diferida porque TipTap pesa bastante y no se necesita fuera de Apuntes.

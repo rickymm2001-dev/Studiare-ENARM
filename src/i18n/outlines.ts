@@ -1,4 +1,4 @@
-// Textos de Apuntes (Fase C2, Etapa 3, D-090), en español de México con trato de tú (4.9). Se integran
+// Textos de Apuntes (Fase C2, Etapa 3, D-092), en español de México con trato de tú (4.9). Se integran
 // en t desde es-MX.ts.
 import { plural } from './features';
 

@@ -127,6 +127,9 @@
   .bg-flame {
     background-image: var(--enarm-flame);
   }
+  .bg-brand {
+    background-image: var(--enarm-primary-grad);
+  }
   .text-gradient-gold {
     background-image: var(--enarm-gold);
     background-clip: text;
@@ -167,4 +170,17 @@
   50% {
     box-shadow: 0 0 0 6px rgb(242 193 78 / 0.25);
   }
+}
+
+/*
+  Etiqueta chica en mayúsculas con letra mono, para encabezar grupos y datos (D-079).
+  Va en texto corto. Los textos largos siguen en la fuente de lectura del alumno.
+*/
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }

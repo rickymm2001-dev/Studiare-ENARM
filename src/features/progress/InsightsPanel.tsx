@@ -89,9 +89,7 @@ export function WeeklyFocus({
               <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                 <div className="flex items-start gap-2">
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-semibold tracking-wide text-fg-muted uppercase">
-                      {item.kind}
-                    </p>
+                    <p className="eyebrow text-fg-muted">{item.kind}</p>
                     <p className="leading-snug font-semibold">{item.title}</p>
                   </div>
                   <Button asChild size="sm" variant="secondary" className="shrink-0">
@@ -144,7 +142,7 @@ export function InsightsPanel({ report }: { report: InsightReport }) {
               <h3
                 id={`area-${area}`}
                 title={text.areas[area].hint}
-                className="text-xs font-bold tracking-wide text-fg-muted uppercase"
+                className="eyebrow text-fg-muted"
               >
                 {text.areas[area].title}
               </h3>

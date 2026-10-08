@@ -1,4 +1,4 @@
-// Extensiones de TipTap para el editor de apuntes (D-090). El apunte es una sola lista con viñetas
+// Extensiones de TipTap para el editor de apuntes (D-092). El apunte es una sola lista con viñetas
 // anidadas. Cada línea lleva un nodeId que la une con su tarjeta, y el editor resalta las marcas
 // que cuentan y muestra al final de la línea qué tarjeta saldrá de ella. Aquí no hay reglas de
 // tarjetas, esas viven en el motor src/engines/outline.ts.

@@ -1,4 +1,4 @@
-// Apuntes en esquema (Fase C2, Etapa 3, D-085 fila 2 y D-090). Un apunte es un árbol de líneas y cada
+// Apuntes en esquema (Fase C2, Etapa 3, D-085 fila 2 y D-092). Un apunte es un árbol de líneas y cada
 // línea con una marca (Pregunta >> Respuesta, A :: B, un {{hueco}}, Tema >>>) es una tarjeta del
 // modelo de notas y tarjetas, así FSRS, el tutor y la bitácora siguen funcionando igual. El motor
 // puro src/engines/outline.ts lee las marcas y arma el plan. Aquí se guarda el apunte y se une cada

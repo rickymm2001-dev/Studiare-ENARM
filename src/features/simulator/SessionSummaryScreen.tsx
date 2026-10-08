@@ -1,6 +1,6 @@
 // Resumen de sesión (pantalla 6). Exactitud, XP, tiempo, exactitud por confianza y la revisión de
 // cada respuesta con su retroalimentación (D-087). Registra el fin de la sesión una sola vez.
-import { CheckCircle2, Swords, XCircle } from 'lucide-react';
+import { CheckCircle2, Sparkles, Swords, Target, Timer, XCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -13,6 +13,7 @@ import { celebrate } from '@/ui/celebrate';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { DemoContentLabel } from '@/ui/components/labels';
+import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { AnswerReview } from './AnswerReview';
@@ -102,15 +103,26 @@ function Summary({ session }: { session: ReadySession }) {
         <CardHeader>
           <CardTitle id="resumen-titulo">{t.simulator.summaryTitle}</CardTitle>
         </CardHeader>
-        <dl className="grid gap-3 sm:grid-cols-3">
-          <Stat label={t.simulator.summaryAccuracy(correct, answers.length)}>
-            {Math.round((correct / answers.length) * 100)}%
-          </Stat>
-          <Stat label={t.simulator.summaryXp(xp)}>+{xp}</Stat>
-          <Stat label={t.simulator.summaryTime(formatDuration(totalMs))}>
-            {formatDuration(totalMs)}
-          </Stat>
-        </dl>
+        <StatPanel label={t.simulator.summaryTitle}>
+          <StatCell
+            icon={<Target />}
+            label={t.simulator.summaryLabels.accuracy}
+            value={`${Math.round((correct / answers.length) * 100)}%`}
+            caption={t.simulator.summaryAccuracy(correct, answers.length)}
+          />
+          <StatCell
+            icon={<Sparkles />}
+            label={t.simulator.summaryLabels.xp}
+            value={`+${xp.toLocaleString('es-MX')}`}
+            caption={t.simulator.summaryLabels.xpCaption}
+          />
+          <StatCell
+            icon={<Timer />}
+            label={t.simulator.summaryLabels.time}
+            value={formatDuration(totalMs)}
+            caption={t.simulator.summaryLabels.timeCaption}
+          />
+        </StatPanel>
         {sentToReview > 0 ? (
           <p className="mt-3 text-sm font-medium text-primary">
             {t.simulator.summaryErrors(sentToReview)}
@@ -190,15 +202,6 @@ function Summary({ session }: { session: ReadySession }) {
         </Button>
       </div>
     </>
-  );
-}
-
-function Stat({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="rounded-md bg-muted p-3">
-      <dd className="text-2xl font-semibold">{children}</dd>
-      <dt className="text-sm text-fg-muted">{label}</dt>
-    </div>
   );
 }
 

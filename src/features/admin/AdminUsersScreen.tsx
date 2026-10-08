@@ -1,7 +1,7 @@
 // Usuarios (pantalla 28, D-070). El admin y el dueño ven las cuentas, cambian roles según las
 // reglas de engines/roles y asignan subespecialidades del banco a cada médico. En el prototipo
 // trabaja sobre los perfiles de este navegador. Con Supabase usa set_user_role (D-069).
-import { ClipboardCheck, Crown } from 'lucide-react';
+import { ClipboardCheck, Crown, GraduationCap, ShieldCheck, Stethoscope } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { usePreferences } from '@/app/preferences';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -11,6 +11,7 @@ import { useLiveData } from '@/data/hooks';
 import type { Account, User } from '@/data/schemas/people';
 import { ensureDemoBank } from '@/data/usecases/bank';
 import { setLocalUserRole, setPhysicianTopics } from '@/data/usecases/admin';
+import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { assignableRoles, type AppRole } from '@/engines/roles';
 import { t } from '@/i18n/es-MX';
 import { Avatar } from '@/ui/components/avatar';
@@ -60,6 +61,7 @@ export function AdminUsersScreen() {
   }
   const accountOf = new Map(data.accounts.map((account) => [account.userId, account]));
   const topicOfQuestion = new Map(data.questions.map((q) => [q.questionId, q.topic]));
+  const roleCount = (role: AppRole) => data.users.filter((user) => user.role === role).length;
   // En la demo hay cientos de alumnos simulados. Se muestran primero los que tienen rol
   const users = [...data.users]
     .sort((a, b) => rank(b.role) - rank(a.role) || a.alias.localeCompare(b.alias, 'es'))
@@ -68,6 +70,23 @@ export function AdminUsersScreen() {
   return (
     <>
       {header}
+      <StatPanel label={t.admin.stats.label}>
+        <StatCell
+          icon={<GraduationCap />}
+          label={t.admin.stats.students}
+          value={roleCount('student').toLocaleString('es-MX')}
+        />
+        <StatCell
+          icon={<Stethoscope />}
+          label={t.admin.stats.physicians}
+          value={roleCount('physician').toLocaleString('es-MX')}
+        />
+        <StatCell
+          icon={<ShieldCheck />}
+          label={t.admin.stats.staff}
+          value={(roleCount('admin') + roleCount('owner')).toLocaleString('es-MX')}
+        />
+      </StatPanel>
       <p className="text-sm text-fg-muted">{t.admin.notice}</p>
       {message ? (
         <p role="status" className="rounded-lg bg-muted p-3 text-sm">

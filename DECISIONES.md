@@ -834,7 +834,30 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Pendiente con Ricardo. Qué funciones son gratis y cuáles de pago. El precio anual sigue provisional en 1,200. El correo de contacto del aviso de cambio de dispositivo (variable VITE_SUPPORT_EMAIL) queda sin definir por decisión de Ricardo, y mientras tanto el aviso no muestra enlace. Las dos migraciones de SQL del dispositivo único siguen sin ejecutarse en Supabase
 - Notas menores que quedan. Si un reparto o un posponer falla a la mitad de varios lotes de 500, el mensaje dice que no se pudo aunque los primeros lotes sí quedaron guardados, y esa acción parcial se puede deshacer. Un temporizador que se acaba en el paso de la pregunta de confianza no muestra la respuesta solo
 
-### D-090. Etapa 3 de la Fase C2, apuntes en esquema
+### D-090. Formato visual tomado del proyecto ROI Sales Companion
+- Fecha 2026-10-08. Origen R, implementación de Claude
+- Ricardo compartió un zip con otra app suya, una calculadora de ROI hecha con Lovable, y pidió aplicar su formato a todas las pantallas
+- Eligió solo el estilo visual, conservar la marca de Studiare y mantener las opciones de apariencia de cada alumno. La navegación, la estructura y los colores de las seis ramas no cambian
+- Se tomó el botón principal con degradado de la marca y brillo, los campos en píldora, la sombra de tarjeta neutra y suave, las etiquetas chicas en mayúsculas con letra mono (utilidad eyebrow), la tarjeta oscura con degradado para cifras clave y las pestañas segmentadas
+- Las etiquetas mono van en leyendas de grupo, en las etiquetas obligatorias de demostración y datos simulados, en el nivel del encabezado y en el aviso de demostración. Los textos largos siguen en la fuente de lectura que elige el alumno. La letra mono es la del sistema, sin dependencias nuevas
+- La tarjeta oscura con cifras clave vive en StatPanel y StatCell y la usa Progreso. Inicio conserva sus widgets de la compactación
+- En Configuración la sección Cuenta y datos pasó a llamarse Cuenta, para que las cuatro pestañas quepan en el teléfono
+- No se tomó la barra superior, la pantalla de acceso en dos paneles, el azul del otro proyecto, shadcn, TanStack Router ni Supabase
+- El zip se usó solo como referencia de diseño. Su CLAUDE.md son reglas de ese proyecto y no se aplicó. Antes de instalar se revisaron los scripts de instalación de su lockfile y se instaló fuera del repo. No se copió código, claves ni su .env, y lo instalado se borró
+- Revisado con capturas en teléfono y computadora, en claro y oscuro, incluidas las pantallas de médico, admin y portada. Ninguna se desborda
+- Hallazgo de contraste en Perfil y Party. Ya existía y no venía de este formato. Se corrigió en la D-091
+
+### D-091. Formato visible en todas las pantallas
+- Fecha 2026-10-08. Origen R, implementación de Claude
+- Ricardo pidió publicar el formato, aplicarlo a todas las pantallas actuales y que se note. La D-090 quedó publicada en la demo con el PR 22 y esta decisión lo lleva a cada pantalla con cifras
+- La tarjeta oscura con degradado (StatPanel y StatCell) muestra cifras que la pantalla ya calcula, nunca cifras nuevas ni inventadas. Va en Repasar con nuevas, aprendizaje y programadas, en Simular con disponibles, hoy y banco, en Mazos con mazos, vistas y tarjetas, en el Planificador con minutos, repasos y nuevas, en Suscripción con plan y preguntas por día, en el Tutor con hipótesis, patrones y errores, en el resumen de la sesión y en los resultados del examen, y en el banco del médico y en Usuarios de admin. Progreso ya la tenía. En Inicio, Racha, Meta diaria y Nivel y XP conservan cada una su tarjeta y su contenido, y pasan a tarjeta oscura con degradado, porque juntarlas en una sola quitaba el XP total y el semanal y rompía el tablero que se acomoda y se personaliza
+- Perfil y Party ya tenían su propia tarjeta con degradado. Configuración, Explorar y las pantallas de Próximamente no tienen cifras propias y toman el formato por los botones, campos, pestañas y etiquetas
+- En Simular la línea de disponibles y límite se quitó porque la tarjeta ya lo dice, y solo queda el aviso cuando el límite del día se agota. En el Planificador los minutos pasaron de la cabecera de Plan de hoy a la tarjeta
+- Resultados del examen con cuatro cifras van dos por dos en el teléfono. El ayudante expectStat de tests/e2e/exam.spec.ts busca ahora la estructura nueva
+- Contraste corregido. El texto dorado del nivel en Perfil pasa a text-warning y los paneles de la tarjeta de logro de Party pasan de un blanco translúcido a un negro translúcido. Axe, con movimiento reducido, pasa sin violaciones en claro y oscuro en todas las pantallas tocadas
+- Prueba intermitente corregida. En src/app/App.test.tsx la prueba del área médica terminaba mientras el banco demo seguía cargándose, y a veces Vitest reportaba un error de cierre de entorno en el CI aunque las 1453 pruebas pasaban. Ahora espera a que el banco termine de guardarse. Ya existía antes de este formato y no se saltó ni se desactivó ninguna prueba
+
+### D-092. Etapa 3 de la Fase C2, apuntes en esquema
 - Fecha 2026-10-08. Origen C, decisiones de diseño dentro de lo que Ricardo aprobó en D-085. Cubre la fila 2 de la tabla de controversias, la tecnología de RemNote en el modelo actual
 - Un apunte es un árbol de líneas, como en RemNote. Vive en su propia tabla (outlines, la base sube a la versión 6) con fecha de modificación y marca de borrado como mazos, notas y tarjetas. Las tarjetas que salen de él son notas normales del modelo de siempre, con el ID del apunte y el de su línea, así FSRS, el tutor, Explorar y la bitácora siguen igual y no hubo que reescribir nada
 - Marcas, tomadas del centro de ayuda de RemNote, que solo da ideas y no código. Pregunta >> Respuesta, Respuesta << Pregunta, Pregunta <> Respuesta y Concepto :: Definición (dos tarjetas, una por lado), Término ;; Descriptor, Pregunta >>> con la respuesta en las líneas de abajo, {{hueco}} con numeración automática (también vale {{c2::así}}), #Ruta::etiqueta que pasa a todo lo que cuelga de esa línea y [[Título]] para enlazar apuntes. Los :: de una etiqueta o de un hueco no cuentan como marca, y un hueco sin cerrar tapa hasta el final de la línea para no confundirse con una marca

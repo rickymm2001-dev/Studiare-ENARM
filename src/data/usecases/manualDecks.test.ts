@@ -326,7 +326,7 @@ describe('niveles de mazos al crear', () => {
   });
 });
 
-describe('etiquetas y unión con un apunte al guardar una tarjeta (D-090)', () => {
+describe('etiquetas y unión con un apunte al guardar una tarjeta (D-092)', () => {
   const LINK = { outlineId: newId(), nodeId: newId() };
 
   it('sin etiquetas ni apunte la nota queda como siempre, sin campos de apunte', async () => {

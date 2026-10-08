@@ -136,6 +136,8 @@ export const examText = {
       abandoned: 'Terminaste el examen antes de tiempo.',
     },
     summaryTitle: 'Tu examen',
+    statsLabel: 'Cifras del examen',
+    accuracyLabel: 'Aciertos',
     accuracy: (correct: number, total: number) => `${correct} de ${total} correctas`,
     answered: 'Contestadas',
     blank: 'En blanco',

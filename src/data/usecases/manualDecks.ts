@@ -5,7 +5,7 @@
 // número de hueco. Al editarla las cartas que siguen conservan su ID y con él su historial de repaso.
 // Borrar pone una marca de borrado en lugar de quitar el registro y toda edición pone su fecha de
 // modificación, para sincronizar entre dispositivos (D-085). Las líneas de un apunte en esquema se
-// guardan con las mismas piezas (D-090), así que aquí también viven las que comparten los dos casos
+// guardan con las mismas piezas (D-092), así que aquí también viven las que comparten los dos casos
 // de uso, armar la nota (manualNoteOf) y ajustar sus cartas (reconcileCards).
 import { MAX_DECK_DEPTH, deckChain, descendantIds } from '../../engines/deckTree';
 import { normalizeTags } from '../../engines/tagPath';
@@ -176,7 +176,7 @@ export async function createManualDeck(
   });
 }
 
-/** El apunte y la línea de la que sale una nota (D-090) */
+/** El apunte y la línea de la que sale una nota (D-092) */
 export interface OutlineLink {
   outlineId: string;
   nodeId: string;

@@ -1,4 +1,4 @@
-// Apuntes (D-090). Se escribe un apunte con marcas y salen tarjetas que Repasar ya trae. Al editar el
+// Apuntes (D-092). Se escribe un apunte con marcas y salen tarjetas que Repasar ya trae. Al editar el
 // texto las tarjetas se actualizan sin perder las que siguen, quitar una marca las quita y volver a
 // ponerla las revive. Un enlace a otro apunte se resuelve y se puede crear desde el apunte que lo cita.
 import type { Page } from '@playwright/test';

@@ -1,4 +1,4 @@
-// Apuntes en esquema (Fase C2, Etapa 3, D-085 fila 2 y D-090). Un apunte es un árbol de líneas, como
+// Apuntes en esquema (Fase C2, Etapa 3, D-085 fila 2 y D-092). Un apunte es un árbol de líneas, como
 // en RemNote. Escribir una marca en una línea la vuelve tarjeta del modelo de notas y tarjetas, y la
 // nota guarda el ID del apunte y de la línea para seguir unida a ella. El apunte lleva fecha de
 // modificación y marca de borrado como mazos, notas y tarjetas, para sincronizar entre dispositivos.

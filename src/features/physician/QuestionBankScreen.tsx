@@ -4,6 +4,7 @@
 // versiones, etiquetas y decisiones llega en la Fase E.
 import { useEffect, useState } from 'react';
 import { usePreferences } from '@/app/preferences';
+import { BadgeCheck, FilePen, Hourglass } from 'lucide-react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useSession } from '@/app/session';
 import { useDataApi } from '@/data/context';
@@ -17,6 +18,7 @@ import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SelectField, TextField } from '@/ui/components/field';
+import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { EmptyState, LoadingState } from '@/ui/states/states';
 
@@ -91,9 +93,29 @@ export function QuestionBankScreen() {
     );
   }
 
+  const countOf = (status: Question['editorialStatus']) =>
+    visible.filter((question) => question.editorialStatus === status).length;
+
   return (
     <>
       {header}
+      <StatPanel label={t.bank.statsLabel}>
+        <StatCell
+          icon={<FilePen />}
+          label={t.bank.status.draft}
+          value={countOf('draft').toLocaleString('es-MX')}
+        />
+        <StatCell
+          icon={<Hourglass />}
+          label={t.bank.status.in_review}
+          value={countOf('in_review').toLocaleString('es-MX')}
+        />
+        <StatCell
+          icon={<BadgeCheck />}
+          label={t.bank.status.approved}
+          value={countOf('approved').toLocaleString('es-MX')}
+        />
+      </StatPanel>
       <BankList questions={visible} assignedTo={role === 'physician' ? null : assignedTo} />
     </>
   );

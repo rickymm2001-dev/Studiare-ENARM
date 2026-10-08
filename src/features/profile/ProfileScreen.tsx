@@ -60,7 +60,7 @@ function Profile({ session }: { session: ReadySession }) {
           />
           <div>
             <p className="font-display text-2xl font-extrabold">{user.alias}</p>
-            <p className="font-semibold text-accent">
+            <p className="font-semibold text-warning">
               {t.profileCard.levelLine(level.level, level.title)}
             </p>
           </div>
@@ -85,7 +85,7 @@ function Profile({ session }: { session: ReadySession }) {
               <Flame aria-hidden className="size-4" />
               {t.profileCard.streak(streak.current, streak.best)}
             </span>
-            <span className="flex items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1.5 font-bold text-accent">
+            <span className="flex items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1.5 font-bold text-warning">
               <Star aria-hidden className="size-4" />
               {t.profileCard.xp(totalXp)}
             </span>
@@ -119,7 +119,7 @@ function PhoneShortcuts() {
         .filter(([, items]) => items.length > 0)
         .map(([title, items]) => (
           <Card key={title} className="p-3">
-            <p className="mb-2 text-sm font-semibold text-fg-muted">{title}</p>
+            <p className="eyebrow mb-2 text-fg-muted">{title}</p>
             <div className="grid grid-cols-2 gap-2">
               {items.map((item) => (
                 <Button key={item.path} asChild variant="secondary" className="justify-start">

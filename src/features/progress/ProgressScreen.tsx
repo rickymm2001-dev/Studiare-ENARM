@@ -3,7 +3,7 @@
 // subespecialidad con el modelo beta-binomial del motor topics (D-066). Todo en una sola página con
 // filas que se abren al tocarlas (D-078). Cada dato muestra calibrando hasta tener datos suficientes.
 import { BookOpenCheck, ChevronDown, Clock, Hourglass, ListChecks, Target } from 'lucide-react';
-import { useState, type ReactNode } from 'react';
+import { useState } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { topicTaxonomy } from '@/demo/content';
@@ -14,6 +14,7 @@ import { toneClasses } from '@/ui/branches';
 import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
+import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { LoadingState } from '@/ui/states/states';
 import { deckBranch } from '../decks/deckBranch';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
@@ -103,19 +104,35 @@ function Progress({ session }: { session: ReadySession }) {
   return (
     <>
       {header}
-      <Card
-        aria-label={t.progress.statsLabel}
-        className="grid grid-cols-4 divide-x divide-line p-0"
-      >
-        <Stat icon={<ListChecks />} label={t.progress.questions} value={totals.questions} />
-        <Stat
+      <StatPanel label={t.progress.statsLabel}>
+        <StatCell
+          phoneIcon={false}
+          icon={<ListChecks />}
+          label={t.progress.statShort.questions}
+          srLabel={t.progress.statRest.questions}
+          value={totals.questions.toLocaleString('es-MX')}
+        />
+        <StatCell
+          phoneIcon={false}
           icon={<Target />}
-          label={t.progress.accuracy}
+          label={t.progress.statShort.accuracy}
           value={responses.length > 0 ? `${Math.round((correct / responses.length) * 100)}%` : '—'}
         />
-        <Stat icon={<BookOpenCheck />} label={t.progress.cards} value={totals.cards} />
-        <Stat icon={<Clock />} label={t.progress.minutes} value={totals.minutes} />
-      </Card>
+        <StatCell
+          phoneIcon={false}
+          icon={<BookOpenCheck />}
+          label={t.progress.statShort.cards}
+          srLabel={t.progress.statRest.cards}
+          value={totals.cards.toLocaleString('es-MX')}
+        />
+        <StatCell
+          phoneIcon={false}
+          icon={<Clock />}
+          label={t.progress.statShort.minutes}
+          srLabel={t.progress.statRest.minutes}
+          value={totals.minutes.toLocaleString('es-MX')}
+        />
+      </StatPanel>
 
       <WeeklyFocus report={report} weakTopics={weakTopics} />
 
@@ -138,20 +155,6 @@ function Progress({ session }: { session: ReadySession }) {
         <FutureLoadSection session={session} events={events} content={content} />
       </div>
     </>
-  );
-}
-
-function Stat({ icon, label, value }: { icon: ReactNode; label: string; value: ReactNode }) {
-  return (
-    <div className="flex min-w-0 flex-col gap-0.5 px-2 py-3 sm:px-4">
-      <span aria-hidden className="text-primary [&_svg]:size-4">
-        {icon}
-      </span>
-      <span className="font-display text-lg font-extrabold tabular-nums sm:text-2xl">
-        {typeof value === 'number' ? value.toLocaleString('es-MX') : value}
-      </span>
-      <span className="text-xs leading-tight text-fg-muted sm:text-sm">{label}</span>
-    </div>
   );
 }
 

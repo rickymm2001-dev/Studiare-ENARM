@@ -1,4 +1,4 @@
-// Apuntes (D-090, D-085 fila 2). Cuarta pestaña de Repasar, Mazos y Explorar. Sin parámetros muestra
+// Apuntes (D-092, D-085 fila 2). Cuarta pestaña de Repasar, Mazos y Explorar. Sin parámetros muestra
 // la lista de apuntes y con ?apunte=ID abre ese apunte en el editor. Así hay una sola pantalla en el
 // registro y los enlaces entre apuntes son direcciones normales.
 import { useSearchParams } from 'react-router';

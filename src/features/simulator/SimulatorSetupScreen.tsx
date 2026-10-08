@@ -1,7 +1,7 @@
 // Configurar simulador (pantalla 7). Práctica por rama, dificultad y estructura, con el límite
 // diario del plan Gratis como bandera de acceso. Los filtros y el botón de empezar van arriba y las
 // ramas quedan plegadas con un resumen (D-078). Debajo va la tarjeta del examen completo.
-import { Play } from 'lucide-react';
+import { Gauge, Library, ListChecks, Play } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -17,6 +17,7 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { SelectField } from '@/ui/components/field';
 import { Disclosure } from '@/ui/components/disclosure';
+import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
@@ -153,6 +154,27 @@ function Setup({ session }: { session: ReadySession }) {
   return (
     <>
       {header}
+      <StatPanel label={t.simulator.stats.label}>
+        <StatCell
+          icon={<ListChecks />}
+          label={t.simulator.stats.available}
+          value={filtered.length.toLocaleString('es-MX')}
+          caption={t.simulator.stats.availableCaption}
+        />
+        <StatCell
+          icon={<Gauge />}
+          label={t.simulator.stats.today}
+          value={left === null ? '∞' : left.toLocaleString('es-MX')}
+          srLabel={left === null ? t.simulator.stats.unlimited : undefined}
+          caption={left === null ? t.simulator.stats.unlimited : t.simulator.stats.todayCaption}
+        />
+        <StatCell
+          icon={<Library />}
+          label={t.simulator.stats.bank}
+          value={questions.length.toLocaleString('es-MX')}
+          caption={t.simulator.stats.bankCaption}
+        />
+      </StatPanel>
       <Card aria-labelledby="practica-titulo">
         <CardHeader className="mb-3">
           <div className="flex flex-wrap items-center gap-2">
@@ -236,21 +258,11 @@ function Setup({ session }: { session: ReadySession }) {
                 {t.simulator.start}
               </Button>
             )}
-            <p className="text-sm text-fg-muted">
-              {t.simulator.available(filtered.length)}
-              {left !== null ? (
-                <>
-                  {' · '}
-                  <span className={left === 0 ? 'font-semibold text-fg' : undefined}>
-                    {left > 0
-                      ? t.simulator.limit(left)
-                      : reserved > 0
-                        ? t.simulator.limitUsedByExam
-                        : t.simulator.limitReached}
-                  </span>
-                </>
-              ) : null}
-            </p>
+            {left === 0 ? (
+              <p className="text-sm font-semibold text-fg">
+                {reserved > 0 ? t.simulator.limitUsedByExam : t.simulator.limitReached}
+              </p>
+            ) : null}
           </div>
           {filtered.length === 0 ? (
             <p className="text-sm text-danger">{t.simulator.noQuestions}</p>

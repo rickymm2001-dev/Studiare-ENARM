@@ -3,7 +3,7 @@
 // entrar cierra el examen. Registra las respuestas con su XP y manda los errores al repaso. Son
 // cifras de este examen. No predicen el puntaje del ENARM y los patrones acumulados siguen
 // calibrando en Progreso.
-import { Clock, Layers } from 'lucide-react';
+import { CheckCheck, CircleDashed, Clock, Flag, Layers, Target } from 'lucide-react';
 import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
 import { Link, Navigate } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -17,6 +17,7 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { DemoContentLabel } from '@/ui/components/labels';
 import { ProgressBar } from '@/ui/components/progress-bar';
+import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { CalibratingNote, LoadingState } from '@/ui/states/states';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { TOPIC_NAMES } from '../shared/topics';
@@ -167,15 +168,6 @@ function ExamResults({ session }: { session: ReadySession }) {
 }
 
 /** El término va primero para los lectores de pantalla y la cifra se ve arriba */
-function Stat({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="flex flex-col-reverse justify-end rounded-lg bg-muted p-3">
-      <dt className="text-sm text-fg-muted">{label}</dt>
-      <dd className="text-2xl font-extrabold tabular-nums">{children}</dd>
-    </div>
-  );
-}
-
 function Summary({
   state,
   score,
@@ -199,14 +191,29 @@ function Summary({
         <CardTitle id="examen-resumen">{text.summaryTitle}</CardTitle>
         <CardDescription>{text.ended[state.endReason ?? 'completed']}</CardDescription>
       </CardHeader>
-      <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Stat label={text.accuracy(score.correct, score.total)}>
-          {percent(score.correct, score.total)}%
-        </Stat>
-        <Stat label={text.answered}>{score.answered}</Stat>
-        <Stat label={text.blank}>{score.blank}</Stat>
-        <Stat label={text.marked}>{score.marked}</Stat>
-      </dl>
+      <StatPanel label={text.statsLabel} quad>
+        <StatCell
+          icon={<Target />}
+          label={text.accuracyLabel}
+          value={`${percent(score.correct, score.total)}%`}
+          caption={text.accuracy(score.correct, score.total)}
+        />
+        <StatCell
+          icon={<CheckCheck />}
+          label={text.answered}
+          value={score.answered.toLocaleString('es-MX')}
+        />
+        <StatCell
+          icon={<CircleDashed />}
+          label={text.blank}
+          value={score.blank.toLocaleString('es-MX')}
+        />
+        <StatCell
+          icon={<Flag />}
+          label={text.marked}
+          value={score.marked.toLocaleString('es-MX')}
+        />
+      </StatPanel>
       <p className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-fg-muted">
         <span className="flex items-center gap-1">
           <Clock aria-hidden className="size-4" />

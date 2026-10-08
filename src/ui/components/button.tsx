@@ -1,4 +1,5 @@
-// Botón base al estilo de shadcn/ui, con objetivo táctil de 44 px como mínimo.
+// Botón base al estilo de shadcn/ui, con objetivo táctil de 44 px como mínimo. El principal lleva
+// el degradado de la marca con brillo (D-079).
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Slot } from 'radix-ui';
 import type { ComponentProps } from 'react';
@@ -9,7 +10,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-primary text-primary-fg shadow-raised hover:bg-primary-hover',
+        primary: 'bg-primary bg-brand text-primary-fg shadow-glow hover:brightness-110',
         secondary: 'border border-line bg-surface text-fg shadow-card hover:bg-muted',
         // Llamadas a la acción del juego, en oro
         gold: 'bg-gold text-accent-fg shadow-raised hover:brightness-105',

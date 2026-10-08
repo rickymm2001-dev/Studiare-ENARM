@@ -1,5 +1,5 @@
 /**
- * Apuntes en esquema (Fase C2, Etapa 3, D-085 fila 2 y D-090).
+ * Apuntes en esquema (Fase C2, Etapa 3, D-085 fila 2 y D-092).
  *
  * Qué hace. Un apunte es un árbol de líneas, como en RemNote. Escribir una marca en una línea la
  * vuelve tarjeta. Este motor lee las marcas, arma el plan de tarjetas de todo el apunte, convierte

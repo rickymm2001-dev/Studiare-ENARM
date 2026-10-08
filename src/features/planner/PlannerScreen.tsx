@@ -3,7 +3,15 @@
 // propone ajustes con su efecto en minutos al día. Los minutos salen del promedio real cuando hay
 // 3 días de estudio y, mientras tanto, de lo que declara el alumno o de un valor inicial que
 // aparece como calibrando.
-import { BookOpenCheck, ClipboardList, Flag, TriangleAlert } from 'lucide-react';
+import {
+  BookOpenCheck,
+  ClipboardList,
+  Clock,
+  Flag,
+  RotateCw,
+  Sparkles,
+  TriangleAlert,
+} from 'lucide-react';
 import { useMemo, useState, type SyntheticEvent } from 'react';
 import { Link } from 'react-router';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
@@ -23,6 +31,7 @@ import { cn } from '@/ui/cn';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
 import { TextField } from '@/ui/components/field';
+import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { ProgressBar } from '@/ui/components/progress-bar';
 import { CalibratingNote, EmptyState, LoadingState } from '@/ui/states/states';
 import { followedDeckIds } from '../decks/followed';
@@ -218,18 +227,41 @@ function TodayCard({
 
   return (
     <Card aria-labelledby="plan-hoy">
-      <CardHeader className="mb-2 flex-row flex-wrap items-center justify-between gap-2">
+      <CardHeader className="mb-2">
         <CardTitle id="plan-hoy">{t.planner.todayTitle}</CardTitle>
-        <span className="text-sm text-fg-muted">
-          {t.planner.minutesOf(minutes(today.minutesPlanned), minutes(today.minutesAvailable))}
-        </span>
       </CardHeader>
-      <ProgressBar
-        value={today.minutesPlanned}
-        max={today.minutesAvailable}
+      <StatPanel
         label={t.planner.minutesOf(minutes(today.minutesPlanned), minutes(today.minutesAvailable))}
-        className="mb-3 h-2"
-      />
+        className="mb-3"
+      >
+        <StatCell
+          icon={<Clock />}
+          label={t.planner.stats.minutes}
+          value={`${minutes(today.minutesPlanned)}/${minutes(today.minutesAvailable)}`}
+        >
+          <ProgressBar
+            value={today.minutesPlanned}
+            max={today.minutesAvailable}
+            label={t.planner.minutesOf(
+              minutes(today.minutesPlanned),
+              minutes(today.minutesAvailable),
+            )}
+            tone="light"
+            onDark
+            className="h-1.5"
+          />
+        </StatCell>
+        <StatCell
+          icon={<RotateCw />}
+          label={t.planner.stats.reviews}
+          value={today.reviews.toLocaleString('es-MX')}
+        />
+        <StatCell
+          icon={<Sparkles />}
+          label={t.planner.stats.newCards}
+          value={today.newCards.toLocaleString('es-MX')}
+        />
+      </StatPanel>
       {rows.length === 0 ? (
         <EmptyState
           title={t.planner.nothingToday}

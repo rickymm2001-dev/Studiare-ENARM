@@ -87,7 +87,7 @@ export class ImmutableEventError extends Error {
 // 2 agrega accounts (D-068) y 3 agrega reviewAssignments (D-070). Dexie crea las tablas nuevas sin
 // tocar los datos. 4 apaga una vez la pregunta de confianza previa (D-087). 5 agrega el índice del
 // mazo padre y llena las fechas de modificación y las etiquetas sin espacios (D-085). 6 agrega la tabla
-// de apuntes y el índice outlineId de las notas (D-090). Solo suma, no toca ningún dato que ya exista
+// de apuntes y el índice outlineId de las notas (D-092). Solo suma, no toca ningún dato que ya exista
 export const DB_VERSION = 6;
 
 export function createEnarmDb(kind: DatabaseKind, options?: { name?: string }): EnarmDb {

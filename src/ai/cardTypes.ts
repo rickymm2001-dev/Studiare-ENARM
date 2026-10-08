@@ -1,5 +1,5 @@
 // Contrato entre la app y el proxy de IA para crear tarjetas desde un PDF o un texto del alumno
-// (Fase C2, Etapa 5, D-091). Solo importa zod, así lo leen igual la app y el proxy. Las reglas de
+// (Fase C2, Etapa 5, D-093). Solo importa zod, así lo leen igual la app y el proxy. Las reglas de
 // fondo, cita literal, cifras y dosis que sí están en la fuente, y señales de controversia que solo
 // nombran textos de la lista cerrada, las comprueba src/engines/cardDrafts.ts del lado de la app.
 import { z } from 'zod';

@@ -59,7 +59,7 @@ export const TABLES = {
   officialScores: { schema: OfficialScoreSchema, indexes: 'userId', kind: 'entity' },
 
   decks: { schema: DeckSchema, indexes: 'id, ownerId, origin, parentId', kind: 'entity' },
-  // outlineId busca las notas de un apunte, también las marcadas como borradas (D-090)
+  // outlineId busca las notas de un apunte, también las marcadas como borradas (D-092)
   notes: { schema: NoteSchema, indexes: 'id, deckId, outlineId, *tags', kind: 'entity' },
   cards: { schema: CardSchema, indexes: 'id, noteId, deckId', kind: 'entity' },
   // Apuntes en esquema (Fase C2, Etapa 3). Sus líneas con marca son notas y tarjetas

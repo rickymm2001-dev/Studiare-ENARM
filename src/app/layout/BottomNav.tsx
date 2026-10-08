@@ -58,7 +58,7 @@ export function BottomNav({ items, homePath }: { items: readonly NavItem[]; home
                 aria-hidden
                 className={cn(
                   'flex h-8 w-14 items-center justify-center rounded-full transition-all [&_svg]:size-5',
-                  isActive(item, pathname) && 'bg-primary text-primary-fg shadow-raised',
+                  isActive(item, pathname) && 'bg-primary bg-brand text-primary-fg shadow-glow',
                 )}
               >
                 <item.icon strokeWidth={isActive(item, pathname) ? 2.4 : 2} />

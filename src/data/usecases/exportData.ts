@@ -9,7 +9,7 @@ export async function exportUserData(repos: Repositories, userId: string) {
     repos.events.query({ userId }),
     repos.widgetLayouts.get(userId),
     repos.subscriptions.get(userId),
-    // Los apuntes son texto del alumno y de ellos salen sus tarjetas (D-090)
+    // Los apuntes son texto del alumno y de ellos salen sus tarjetas (D-092)
     repos.outlines.list().then((list) => list.filter((outline) => outline.ownerId === userId)),
   ]);
   return {

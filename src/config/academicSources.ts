@@ -1,4 +1,4 @@
-// Lista cerrada de textos académicos fundamentales del ENARM (Fase C2, Etapa 5, D-085 y D-091). La IA
+// Lista cerrada de textos académicos fundamentales del ENARM (Fase C2, Etapa 5, D-085 y D-093). La IA
 // solo puede apoyar una señal de controversia en estos textos y nunca en otro. Es una lista
 // PROVISIONAL que Ricardo o un médico deben confirmar. Este archivo no importa nada, así lo leen
 // igual la app y el proxy de IA.

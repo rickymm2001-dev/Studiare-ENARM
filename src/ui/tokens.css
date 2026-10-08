@@ -75,7 +75,7 @@
   --enarm-sim-line: #b9acec;
 
   /* Sombras con un toque del color de marca */
-  --enarm-shadow-card: 0 1px 2px rgb(20 32 43 / 0.05), 0 8px 24px -12px rgb(14 90 107 / 0.18);
+  --enarm-shadow-card: 0 1px 0 rgb(20 32 43 / 0.03), 0 8px 24px -16px rgb(20 32 43 / 0.16);
   --enarm-shadow-raised: 0 12px 32px -12px rgb(14 90 107 / 0.35);
   --enarm-shadow-nav: 0 -8px 24px -16px rgb(20 32 43 / 0.25);
 
@@ -83,6 +83,9 @@
   --enarm-hero: linear-gradient(135deg, #0e5a6b 0%, #12406e 55%, #3a2a7a 100%);
   --enarm-gold: linear-gradient(135deg, #f2c14e 0%, #d4952b 100%);
   --enarm-flame: linear-gradient(135deg, #ff9a3c 0%, #e2541b 100%);
+  /* Botón principal. Degradado de la marca con brillo del mismo color (D-079) */
+  --enarm-primary-grad: linear-gradient(135deg, #17697d 0%, #0e5a6b 55%, #0a4351 100%);
+  --enarm-shadow-glow: 0 10px 24px -10px rgb(14 90 107 / 0.55);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -143,6 +146,8 @@
     --enarm-hero: linear-gradient(135deg, #0f3d47 0%, #142a52 55%, #2c1f5c 100%);
     --enarm-gold: linear-gradient(135deg, #f7d27a 0%, #e0a73a 100%);
     --enarm-flame: linear-gradient(135deg, #ffb066 0%, #ff6a2b 100%);
+    --enarm-primary-grad: linear-gradient(135deg, #8ae8df 0%, #4fd1c5 55%, #36b8ac 100%);
+    --enarm-shadow-glow: 0 10px 28px -10px rgb(79 209 197 / 0.45);
   }
 }
 
@@ -203,6 +208,8 @@
   --enarm-hero: linear-gradient(135deg, #0f3d47 0%, #142a52 55%, #2c1f5c 100%);
   --enarm-gold: linear-gradient(135deg, #f7d27a 0%, #e0a73a 100%);
   --enarm-flame: linear-gradient(135deg, #ffb066 0%, #ff6a2b 100%);
+  --enarm-primary-grad: linear-gradient(135deg, #8ae8df 0%, #4fd1c5 55%, #36b8ac 100%);
+  --enarm-shadow-glow: 0 10px 28px -10px rgb(79 209 197 / 0.45);
 }
 
 /*
@@ -270,6 +277,7 @@
   --shadow-card: var(--enarm-shadow-card);
   --shadow-raised: var(--enarm-shadow-raised);
   --shadow-nav: var(--enarm-shadow-nav);
+  --shadow-glow: var(--enarm-shadow-glow);
 }
 
 @theme {

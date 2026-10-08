@@ -103,7 +103,7 @@ describe('repositorios de entidades', () => {
   });
 });
 
-describe('apuntes y búsquedas por índice (D-090)', () => {
+describe('apuntes y búsquedas por índice (D-092)', () => {
   const STAMP = '2026-10-08T12:00:00.000Z';
   const note = (overrides: Record<string, unknown> = {}) => ({
     id: newId(),
