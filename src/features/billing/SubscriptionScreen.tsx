@@ -3,6 +3,7 @@
 import { Check, Crown, Gauge, Minus, Receipt } from 'lucide-react';
 import { useState } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
+import { useCloud } from '@/app/cloudState';
 import { FOUNDER_SEATS, PLANS, type PlanAccess, type PlanKey } from '@/config/billing';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
@@ -14,6 +15,7 @@ import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
 import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
+import { CloudCheckoutCard, PaymentReturnNotice } from './CloudBilling';
 import { useUserEvents } from '../shared/useUserEvents';
 
 /** Funciones que todavía no existen. Se muestran como Próximamente para no prometer de más (D-076) */
@@ -47,6 +49,8 @@ function Billing({ session }: { session: ReadySession }) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
   const current: PlanKey = subscription?.status === 'active' ? subscription.plan : 'free';
+  // Con la nube conectada el plan lo decide el servidor y no hay pago simulado (D-096)
+  const inCloud = useCloud((store) => store.state.status === 'linked');
   const receipts = (events ?? []).flatMap((event) =>
     event.type === 'subscription_changed' && event.payload.receiptId
       ? [{ at: event.at, ...event.payload }]
@@ -55,13 +59,28 @@ function Billing({ session }: { session: ReadySession }) {
 
   return (
     <>
-      <ScreenHeader title={t.screens.subscription.title} description={t.billing.simulatedNotice} />
+      <ScreenHeader
+        title={t.screens.subscription.title}
+        description={inCloud ? t.billing.cloud.notice : t.billing.simulatedNotice}
+      />
+      {inCloud ? (
+        <PaymentReturnNotice
+          userId={user.id}
+          current={subscription === undefined ? undefined : current}
+        />
+      ) : null}
       <StatPanel label={t.billing.current(t.billing.plans[current])}>
         <StatCell
           icon={<Crown />}
           label={t.billing.stats.plan}
           value={t.billing.plans[current]}
-          caption={t.billing.periods[current]}
+          caption={
+            inCloud && subscription?.periodEnd
+              ? t.billing.cloud.validUntil(
+                  new Date(subscription.periodEnd).toLocaleDateString('es-MX'),
+                )
+              : t.billing.periods[current]
+          }
         />
         <StatCell
           icon={<Gauge />}
@@ -78,7 +97,14 @@ function Billing({ session }: { session: ReadySession }) {
           }
         />
       </StatPanel>
-      {checkout ? (
+      {checkout && inCloud ? (
+        <CloudCheckoutCard
+          plan={checkout as Exclude<PlanKey, 'free'>}
+          onBack={() => {
+            setCheckout(null);
+          }}
+        />
+      ) : checkout ? (
         <Card aria-labelledby="checkout-titulo">
           <CardHeader>
             <CardTitle id="checkout-titulo">{t.billing.checkoutTitle}</CardTitle>
@@ -186,16 +212,20 @@ function Billing({ session }: { session: ReadySession }) {
                   })}
                 </ul>
                 {isCurrent ? null : key === 'free' ? (
-                  <Button
-                    variant="secondary"
-                    onClick={() => {
-                      void changePlan(api, user, 'free').then(() => {
-                        setMessage(t.billing.canceled);
-                      });
-                    }}
-                  >
-                    {t.billing.cancel}
-                  </Button>
+                  inCloud ? (
+                    <p className="text-sm text-fg-muted">{t.billing.cloud.cancelNote}</p>
+                  ) : (
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
+                        void changePlan(api, user, 'free').then(() => {
+                          setMessage(t.billing.canceled);
+                        });
+                      }}
+                    >
+                      {t.billing.cancel}
+                    </Button>
+                  )
                 ) : (
                   <Button
                     onClick={() => {

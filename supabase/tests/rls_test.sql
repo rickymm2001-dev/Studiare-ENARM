@@ -108,6 +108,16 @@ rollback;
 begin;
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');
 do $$ begin
+  -- Desde la migración de pagos, un alumno Gratis solo lee las preguntas aprobadas que ya abrió
+  if (select count(*) from public.questions) <> 0 then
+    raise exception 'FALLA 7. El alumno ve preguntas sin abrirlas';
+  end if;
+  if public.grant_question_access('10000000-0000-0000-0000-000000000001') then
+    raise exception 'FALLA 7. El alumno abrió una pregunta sin aprobar';
+  end if;
+  if not public.grant_question_access('10000000-0000-0000-0000-000000000003') then
+    raise exception 'FALLA 7. El alumno no pudo abrir una pregunta aprobada';
+  end if;
   if (select count(*) from public.questions) <> 1 then
     raise exception 'FALLA 7. El alumno ve preguntas sin aprobar';
   end if;

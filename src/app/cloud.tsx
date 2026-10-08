@@ -7,6 +7,7 @@ import { getCloud } from '@/data/cloud/client';
 import { forgetDeviceClaim } from '@/data/cloud/device';
 import { useDataApi } from '@/data/context';
 import { runSync } from '@/data/sync/runSync';
+import { refreshCloudPlan } from '@/data/payments/cloudPlan';
 import { createSupabaseTransport } from '@/data/sync/supabaseTransport';
 import { linkCloudIdentity, pushLocalAccount } from '@/data/usecases/cloudLink';
 import { PRIVACY_NOTICE_VERSION } from '@/data/usecases/profile';
@@ -106,13 +107,16 @@ export function CloudBridge() {
           syncing?.handle.stop();
           const status = useSyncStatus.getState();
           const handle = startSyncScheduler({
-            run: () =>
-              runSync({
+            run: async () => {
+              // El plan lo decide el servidor, así que se refleja aquí en cada ciclo (D-096)
+              await refreshCloudPlan(api, cloud, userId);
+              return runSync({
                 api,
                 transport: createSupabaseTransport(cloud),
                 userId,
                 authId: identity.authId,
-              }),
+              });
+            },
             report: status.set,
           });
           syncing = { authId: identity.authId, handle };

@@ -347,6 +347,39 @@ export const featureText = {
   billing: {
     simulatedNotice:
       'Pagos simulados. En el prototipo no se cobra nada ni se piden datos de tarjeta. Los precios son de ejemplo.',
+    // Con la cuenta en la nube conectada el plan lo decide el servidor (Fase P bloque 5, D-096)
+    cloud: {
+      notice:
+        'Tu plan lo confirma el servidor cuando la pasarela avisa del pago. Los pagos están en modo prueba y no se cobra dinero real hasta que Studiare los active.',
+      source: {
+        payment: 'Tu plan viene de un pago confirmado.',
+        referral: 'Tu plan viene de un mes gratis por referido.',
+        none: 'Todavía no tienes un plan de pago.',
+      },
+      validUntil: (date: string) => `Vale hasta el ${date}.`,
+      checkoutTitle: 'Pagar con la pasarela',
+      provider: 'Pasarela de pago',
+      providers: { stripe: 'Tarjeta con Stripe', mercadopago: 'Mercado Pago' },
+      testMode: 'Modo prueba. Usa una tarjeta de prueba de la pasarela, no una tuya.',
+      go: 'Ir a pagar',
+      opening: 'Abriendo la pasarela…',
+      back: 'Volver a los planes',
+      errors: {
+        founder_full: 'Los lugares del plan Fundador ya se llenaron. Elige otro plan.',
+        not_configured: 'Los pagos todavía no están activados. Intenta más tarde.',
+        unsafe_url: 'La pasarela mandó una dirección que no reconocemos. No la abrimos.',
+        failed: 'No pudimos abrir la pasarela. Intenta de nuevo en unos minutos.',
+      },
+      returning: {
+        ok: 'Estamos confirmando tu pago. Esto tarda unos segundos.',
+        confirmed: 'Tu plan ya está activo. Gracias.',
+        slow: 'Tu pago sigue sin confirmarse. Puede tardar unos minutos. Si pasa más tiempo, escribe al equipo.',
+        canceled: 'Cancelaste el pago. No se cobró nada.',
+      },
+      cancelNote:
+        'Cancelar desde la app llega con la gestión de pagos. Mientras tanto, pídelo al equipo de Studiare por el medio donde te dieron acceso.',
+      refresh: 'Revisar mi plan',
+    },
     current: (plan: string) => `Tu plan actual es ${plan}.`,
     stats: {
       plan: 'Plan',
@@ -1924,6 +1957,36 @@ export const featureText = {
     note: 'Las misiones y las ligas no dan XP extra ni predicen tu puntaje del ENARM. Marcan tu avance y salen de tu bitácora.',
     widgetGo: 'Ver todos los logros',
     widgetMore: (n: number) => `${n} más`,
+  },
+  // Referidos con mes gratis (Fase P bloque 11)
+  referrals: {
+    title: 'Invita a un compañero',
+    description:
+      'Comparte tu código. Cuando tu referido haga su primer pago confirmado, tú ganas un mes gratis.',
+    needsCloud:
+      'Los referidos necesitan tu cuenta en la nube, porque el mes gratis lo da el servidor. Entra con tu correo para usarlos.',
+    yourCode: 'Tu código',
+    copy: 'Copiar código',
+    copied: 'Código copiado',
+    pending: (n: number) => plural(n, 'referido pendiente', 'referidos pendientes'),
+    completed: (n: number) => plural(n, 'referido concretado', 'referidos concretados'),
+    months: (n: number) => plural(n, 'mes gratis ganado', 'meses gratis ganados'),
+    until: (date: string) => `Tu mes gratis vale hasta el ${date}.`,
+    rule: 'Un referido cuenta cuando hace su primer pago confirmado, no al registrarse.',
+    redeemTitle: 'Tengo un código',
+    redeemLabel: 'Código de quien te invitó',
+    redeem: 'Canjear código',
+    redeemed: 'Listo. Cuando hagas tu primer pago, quien te invitó gana su mes gratis.',
+    alreadyReferred: 'Ya canjeaste el código de quien te invitó.',
+    results: {
+      invalid: 'Ese código no existe. Revísalo.',
+      own: 'No puedes canjear tu propio código.',
+      already: 'Ya canjeaste un código antes.',
+      too_late: 'Ya pasó el tiempo para canjear un código con esta cuenta.',
+      already_paid: 'Ya hiciste un pago, así que no puedes entrar como referido.',
+      failed: 'No pudimos canjear el código. Intenta de nuevo en unos minutos.',
+    },
+    loadFailed: 'No pudimos cargar tus referidos. Intenta de nuevo en unos minutos.',
   },
   insights: insightText,
 } as const;

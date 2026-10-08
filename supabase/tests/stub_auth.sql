@@ -7,7 +7,8 @@ create schema auth;
 create table auth.users (
   id uuid primary key,
   email text,
-  raw_user_meta_data jsonb not null default '{}'::jsonb
+  raw_user_meta_data jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now()
 );
 -- Igual que en Supabase. Los claims del token viajan en request.jwt.claims como JSON. El ajuste
 -- anterior, request.jwt.claim.sub, se sigue aceptando para las pruebas viejas

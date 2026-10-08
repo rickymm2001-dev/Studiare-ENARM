@@ -174,7 +174,7 @@ select
   (select value from public.platform_settings where key = 'device_limits') as limite;
 ```
 
-8. Debe salir bitacora con el valor device_claims, columna_session_id en true, politicas_con_barrera en 22 (23 si ya aplicaste la de sincronización), anon_is_active en false, anon_libera en false, alumno_reclama en true y limite con maxChanges 3 y windowHours 24. Si politicas_con_barrera sale en menos de 22 o cualquier valor de anon sale en true, avísame antes de abrir a alumnos
+8. Debe salir bitacora con el valor device_claims, columna_session_id en true, politicas_con_barrera en 22 (23 si ya aplicaste la de sincronización y 26 con la de pagos), anon_is_active en false, anon_libera en false, alumno_reclama en true y limite con maxChanges 3 y windowHours 24. Si politicas_con_barrera sale en menos de 22 o cualquier valor de anon sale en true, avísame antes de abrir a alumnos
 9. Para que el aviso del límite lleve un enlace de ayuda, crea en GitHub, Settings, Secrets and variables, Actions, pestaña Variables, la variable VITE_SUPPORT_EMAIL con el correo donde quieres recibir las dudas. Es público, lo verán los alumnos. Después corre de nuevo la publicación en Actions, con el flujo pages y Run workflow. Sin esa variable el aviso no muestra enlace y pide al alumno que consulte al equipo por el medio donde le dieron acceso
 
 ### Cómo probarlo con dos navegadores
@@ -383,6 +383,71 @@ No cubre
 - Las sesiones de estudio, los hallazgos del tutor y los ajustes personales no se sincronizan todavía. Las cifras del tutor y de Progreso se reconstruyen con la bitácora, que sí viaja
 - Dos dispositivos que editen lo mismo a la vez sin conexión conservan la edición más reciente completa. No se mezclan campo por campo
 - Los medios de las tarjetas no existen todavía, así que tampoco viajan
+
+## Pagos, plan Gratis y referidos
+
+### Qué hace
+
+- Los pagos con Stripe y con Mercado Pago están listos en modo prueba. El alumno elige la pasarela en Suscripción, paga en la página de la pasarela y vuelve. El servidor recibe el aviso del pago, verifica su firma y activa el plan. El navegador nunca activa un plan de pago por su cuenta cuando hay nube
+- Un aviso repetido no activa dos veces ni cuenta dos pagos. El plan Fundador tiene su cupo de 100, que se verifica al cobrar con un candado, y si dos pagos llegan a la vez no se pasa del cupo. Quien ya es Fundador conserva su lugar al renovar
+- El plan Gratis tiene el tope de 20 preguntas distintas por día de estudio, con corte a las 4 a. m. de Mérida, aplicado en la base de datos. Manipular el navegador no abre más preguntas. La pregunta llega solo si el alumno la abrió antes con grant_question_access. Esto se conecta con el banco cuando el banco se suba a Supabase, y mientras tanto no cambia nada en la app
+- Los referidos viven en Party. Cada alumno tiene un código de 8 caracteres. Quien canjea un código entra como referido pendiente, y cuando hace su primer pago confirmado el referente gana un mes gratis. Solo una vez por referido. Los meses se encadenan, hay un tope de 12 por alumno y el código se puede canjear en los primeros 14 días de la cuenta. Todo eso se cambia en platform_settings, en la clave referral_rules
+- La regla de qué cuenta como referido concretado es la que recomendé en D-080, el primer pago verificado. Si prefieres otra, se cambia en una función de la base
+
+### Cómo aplicar la cuarta migración
+
+No necesitas terminal. Aplica primero las tres anteriores. Mientras no apliques esta, la app sigue como estaba. En Suscripción el pago es simulado y en Party los referidos piden la nube.
+
+1. En supabase.com abre el proyecto Studiare y entra a SQL Editor
+2. Da clic en New query
+3. Abre en GitHub el archivo supabase/migrations/20261008000003_payments_referrals.sql, copia todo su contenido y pégalo
+4. Da clic en Run. Debe decir Success
+5. Es segura de repetir
+6. Para confirmar que quedó, abre otra New query, pega esto y da clic en Run
+
+```sql
+select
+  has_function_privilege('authenticated', 'public.apply_payment_notice(text, text, jsonb, text, uuid, text, text, text, numeric, timestamptz)', 'execute') as alumno_aplica_pagos,
+  has_function_privilege('service_role', 'public.apply_payment_notice(text, text, jsonb, text, uuid, text, text, text, numeric, timestamptz)', 'execute') as servicio_aplica_pagos,
+  has_function_privilege('authenticated', 'public.user_plan(uuid)', 'execute') as alumno_lee_planes_ajenos,
+  has_function_privilege('anon', 'public.my_plan()', 'execute') as anon_plan,
+  has_table_privilege('authenticated', 'public.subscription_grants', 'insert') as alumno_regala_meses,
+  has_table_privilege('authenticated', 'public.question_grants', 'select') as alumno_lee_permisos,
+  (select value from public.platform_settings where key = 'plans') as planes,
+  (select count(*) from pg_policies
+    where schemaname = 'public'
+      and coalesce(qual, '') || coalesce(with_check, '') like '%is_active_device%') as politicas_con_barrera;
+```
+
+7. Debe salir alumno_aplica_pagos en false, servicio_aplica_pagos en true, alumno_lee_planes_ajenos en false, anon_plan en false, alumno_regala_meses en false, alumno_lee_permisos en false, planes con founder 79, monthly 150 y annual 1200, y politicas_con_barrera en 26. Si cualquiera de los permisos sale en true, avísame antes de abrir a alumnos
+8. Si cambiaste los precios en platform_settings antes, esta migración no los pisa. Solo cambia el valor viejo de ejemplo
+
+### Cómo preparar los pagos en modo prueba
+
+Esto sí pide un poco de terminal, para publicar las tres funciones del servidor. Puedo guiarte paso a paso cuando quieras. Ninguna llave se la pasas a nadie ni se escribe en el repo. Se guardan solo en los Secrets de Supabase (Edge Functions, Secrets).
+
+1. En Stripe, con el interruptor de modo prueba encendido, crea tres productos con precio mensual en pesos. Fundador 79, Mensual 150 y Anual 1,200 (el anual cobrado cada 12 meses). Copia el Price ID de cada uno (empieza con price_)
+2. En Stripe, Developers, Webhooks, agrega un endpoint con la dirección https://TU-PROYECTO.supabase.co/functions/v1/payment-webhook-stripe y marca estos eventos: checkout.session.completed, invoice.paid, invoice.payment_failed y customer.subscription.deleted. Copia el secreto de firma (empieza con whsec_)
+3. En Mercado Pago, en tu aplicación, activa las credenciales de prueba. Copia el Access Token de prueba. En Webhooks agrega la dirección https://TU-PROYECTO.supabase.co/functions/v1/payment-webhook-mercadopago, marca el tema Pagos y copia la clave secreta que te da
+4. En Supabase, Edge Functions, Secrets, agrega estos nombres con sus valores. STRIPE_SECRET_KEY (la llave secreta de prueba de Stripe), STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_FOUNDER, STRIPE_PRICE_MONTHLY, STRIPE_PRICE_ANNUAL, MERCADOPAGO_ACCESS_TOKEN, MERCADOPAGO_WEBHOOK_SECRET, APP_URL (la dirección pública de la app, por ejemplo https://rickymm2001-dev.github.io/Studiare-ENARM/) y FUNCTIONS_URL (https://TU-PROYECTO.supabase.co/functions/v1). SUPABASE_URL, SUPABASE_ANON_KEY y SUPABASE_SERVICE_ROLE_KEY ya las pone Supabase en cada función, no las agregues tú
+5. Con la CLI de Supabase conectada a tu proyecto, desde la carpeta del repo, corre estas tres líneas. Los avisos de las pasarelas no llevan sesión de Supabase y se identifican con su firma, por eso llevan la bandera.
+
+```bash
+supabase functions deploy create-checkout
+supabase functions deploy payment-webhook-stripe --no-verify-jwt
+supabase functions deploy payment-webhook-mercadopago --no-verify-jwt
+```
+
+6. Prueba. Entra con tu correo, ve a Suscripción, elige un plan y paga con una tarjeta de prueba (Stripe publica las suyas en su documentación, y Mercado Pago da usuarios de prueba). Al volver, la página dice que está confirmando y en unos segundos el plan aparece activo. En Supabase, Table Editor, deben aparecer filas en subscriptions, payments y payment_webhook_events
+7. Reenvía el mismo evento desde el panel de Stripe (Resend). No debe cambiar nada ni crear un segundo pago
+
+### Qué conviene saber
+
+- Mercado Pago cobra un pago único del periodo y no renueva solo. La renovación automática con Mercado Pago queda para después
+- Los campos de Stripe y de Mercado Pago que lee el servidor salen de sus guías de webhooks. En este entorno no se pudo abrir su documentación, así que la lectura acepta las dos formas de la factura de Stripe (la anterior y la de parent.subscription_details) y falta confirmarla con un pago de prueba real. Si algún evento no activa el plan, el cuerpo del aviso queda guardado tal cual en payment_webhook_events para revisarlo
+- Un reembolso hecho desde el panel de Stripe no quita el plan solo. Para cortar el acceso hay que cancelar la suscripción en Stripe, y el aviso de cancelación deja el plan vigente hasta que termine el periodo pagado. Los reembolsos de Mercado Pago sí quitan el plan en el acto
+- Cancelar desde la app llega con la gestión de pagos. Mientras tanto, la app lo dice
+- Si el cupo de Fundador se llena entre que el alumno elige y paga, el cobro queda en payments con el estado needs_refund y no se activa nada. Ese pago hay que devolverlo a mano en la pasarela
 
 ## Antes de abrir a alumnos
 

@@ -9,7 +9,7 @@
 - Fase C con sus 10 bloques programados y el cierre de 15.1 hecho. Espera la aprobación de Ricardo, ver su sección. Hay 20 de 28 pantallas construidas y 8 siguen como esqueleto con aviso de Próximamente
 - Reunión del equipo del 2026-10-07 aplicada (D-087). Repaso y simulador más prácticos, sin pregunta de confianza por defecto y con retroalimentación al final, Repasar y Mazos unidos, precio mensual de 150 y plan Fundador, banco de 4 a 10 opciones con plantilla de Excel y un solo dispositivo por cuenta. El precio Fundador de 79 ya está confirmado. Falta que Ricardo ejecute el SQL del dispositivo único
 - Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. La Etapa 1 está aprobada y publicada (PR 20). La Etapa 2, carga diaria, está publicada (PR 21) y espera su aprobación. Las Etapas 3 (apuntes tipo RemNote, D-092), 4 (importar y exportar, D-093) 5 (tarjetas con IA desde PDF y textos, D-094) y 6 (sincronización entre dispositivos, D-095) están programadas y Ricardo pidió seguir con todas las etapas sin preguntar, ver sus secciones
-- Fase P en curso (D-060). Bloques 1 a 4 terminados, 7 y 9 a medias, 5, 6 y 8 sin empezar, ver su sección
+- Fase P programada (D-060). Los bloques 1 a 11 están terminados salvo lo que pide las llaves y el proyecto de Ricardo, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
 - Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
 - Formato visual del proyecto ROI Sales Companion publicado en la demo (D-090, PR 22) y llevado a todas las pantallas con cifras, con tarjeta oscura y datos reales (D-091). Axe pasa en claro y oscuro. Falta la revisión de Ricardo
@@ -203,11 +203,13 @@ Cambios aplicables que salieron del acta de Gemini. Todo con pruebas unitarias y
 - [x] 2. Portada de venta, registro con correo, datos de cuenta y foto o avatar (D-068)
 - [x] 3. Esquema de Supabase con permisos por fila y roles, probado en Postgres local (D-069)
 - [x] 4. Usuarios con roles por nivel y asignaciones a médicos, banco del médico solo con lo asignado (D-070)
-- [ ] 5. Pagos con Stripe y Mercado Pago en modo prueba
-- [~] 6. Plan del día (D-081), duelos y compartir logro (D-084) listos. Faltan misiones, ligas e insignias
+- [x] 5. Pagos con Stripe y Mercado Pago en modo prueba (D-096). Funciones, migración y pruebas listas. Falta un pago de prueba real con las llaves de Ricardo
+- [x] 6. Plan del día (D-081), duelos y compartir logro (D-084), misiones, ligas e insignias en Logros (D-097)
 - [x] 7. Progreso con estadísticas de técnica, Conócete (D-074), carga futura y dificultad (D-083)
-- [ ] 8. Subir mazos desde otras apps, CSV, Excel y Word
-- [~] 9. Sincronización con el servidor. Cuenta en la nube con enlace al correo y rol del servidor listos (D-075), falta subir la bitácora y el banco
+- [x] 8. Subir mazos desde otras apps, CSV, Excel y Word (D-093)
+- [x] 9. Sincronización con el servidor. Cuenta en la nube (D-075) y sincronización de mazos, apuntes, Inicio y bitácora (D-095). Falta subir el banco, que espera la revisión médica
+- [x] 10. Plan Gratis aplicado en el servidor con permisos por fila (D-096)
+- [x] 11. Referidos con mes gratis desde el servidor (D-096)
 
 ### Bitácora
 - Bienvenida simple, un solo aviso de privacidad y sin cambio de rol (D-059). Análisis en docs/ANALISIS_PLATAFORMA.md y entrevista (D-060)
@@ -236,6 +238,8 @@ Cambios aplicables que salieron del acta de Gemini. Todo con pruebas unitarias y
   - [x] 4. Marco de pantallas. La explicación de cada pantalla pasa a un ícono de información, el aviso de demo queda en una línea delgada y es la única etiqueta de Datos simulados en los encabezados, Inicio y Perfil ya no repiten racha y nivel, Perfil sin el botón de Configuración duplicado y Agregar mazo dentro de la tarjeta de Repasar
   - [x] 5. Configuración en 4 secciones con pestañas, Estudio, Apariencia, Pomodoro y Cuenta y datos. Una sola barra de guardar por sección que aparece solo con cambios, el tema junto con la apariencia, retención, tope e intervalos por botón plegados en Opciones avanzadas, tamaño del texto como control segmentado y fuentes en cuadrícula de 2. En el teléfono pasó de 5283 px a secciones de 844 a 1244 px
   - [x] 6. Inicio y Mazos. En el teléfono racha y meta diaria van lado a lado y el heatmap ocupa todo el ancho, y Editar tablero pasa al encabezado. Cada mazo es una tarjeta compacta con sus temas plegados y Sube tu mazo y Crear mazo quedan en una sola tarjeta. Inicio pasó de 1422 a 1082 px de alto en el teléfono y Mazos de 1820 a 1376
+- Pagos en modo prueba con Stripe y Mercado Pago, plan Gratis aplicado en el servidor y referidos con mes gratis (D-096). Tres funciones del servidor con firmas verificadas, migración 20261008000003 con 4 bloques de pruebas SQL y 51 pruebas de las funciones. La guía para Ricardo está en docs/SUPABASE.md
+- Misiones, insignias y ligas en la pantalla Logros y tres widgets de Inicio (D-097). Motor puro con pruebas de propiedades y e2e con accesibilidad
 - Siguiente. Orden acordado el 2026-10-06. 1) Poner al día las pruebas e2e y que el CI las corra. 2) Bloques 9 y 10 de la Fase C con planificador, examen completo con alarmas de tiempo, descarte de opciones y tipologías de reactivo (D-080), tutor sin IA, duelos, compartir logro, mazos a mano y los widgets de Inicio que faltan (hechos), y cerrar la fase con 15.1 (en curso, falta la aprobación de Ricardo). 3) Segunda parte de la nube con la bitácora, cuando Ricardo haya probado su cuenta y se haya hecho dueño. 4) Fase D con IA en modo simulado. 5) Pagos con Stripe y Mercado Pago cuando existan las cuentas. El banco y los mazos de Pediatría y Cirugía quedan en pausa
 
 ## Fase C. Pantallas del alumno (esqueleto funcionando)
