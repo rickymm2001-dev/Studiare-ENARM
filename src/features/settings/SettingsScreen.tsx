@@ -1,5 +1,5 @@
 // Configuración (pantalla 27, D-065). Separada de Perfil. En secciones con pestañas (D-078). Estudio
-// con metas y repaso, Apariencia con tema y estilo, Pomodoro, y Cuenta y datos con la base activa,
+// con metas y repaso, Apariencia con tema y estilo, Pomodoro, y Cuenta con la base activa,
 // el modo de IA, exportar y borrar.
 import { FlaskConical, UserRound } from 'lucide-react';
 import { Tabs } from 'radix-ui';

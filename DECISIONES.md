@@ -833,3 +833,16 @@ Origen indica si respondió Ricardo en la entrevista de la Fase 0 (R) o si Claud
 - Hallazgo sin atender. Uno de los agentes reportó que studyDayOf y studyDayStart pueden diferir en un cambio de horario de verano. No se tocó y queda anotado
 - Pendiente con Ricardo. Qué funciones son gratis y cuáles de pago. El precio anual sigue provisional en 1,200. El correo de contacto del aviso de cambio de dispositivo (variable VITE_SUPPORT_EMAIL) queda sin definir por decisión de Ricardo, y mientras tanto el aviso no muestra enlace. Las dos migraciones de SQL del dispositivo único siguen sin ejecutarse en Supabase
 - Notas menores que quedan. Si un reparto o un posponer falla a la mitad de varios lotes de 500, el mensaje dice que no se pudo aunque los primeros lotes sí quedaron guardados, y esa acción parcial se puede deshacer. Un temporizador que se acaba en el paso de la pregunta de confianza no muestra la respuesta solo
+
+### D-090. Formato visual tomado del proyecto ROI Sales Companion
+- Fecha 2026-10-08. Origen R, implementación de Claude
+- Ricardo compartió un zip con otra app suya, una calculadora de ROI hecha con Lovable, y pidió aplicar su formato a todas las pantallas
+- Eligió solo el estilo visual, conservar la marca de Studiare y mantener las opciones de apariencia de cada alumno. La navegación, la estructura y los colores de las seis ramas no cambian
+- Se tomó el botón principal con degradado de la marca y brillo, los campos en píldora, la sombra de tarjeta neutra y suave, las etiquetas chicas en mayúsculas con letra mono (utilidad eyebrow), la tarjeta oscura con degradado para cifras clave y las pestañas segmentadas
+- Las etiquetas mono van en leyendas de grupo, en las etiquetas obligatorias de demostración y datos simulados, en el nivel del encabezado y en el aviso de demostración. Los textos largos siguen en la fuente de lectura que elige el alumno. La letra mono es la del sistema, sin dependencias nuevas
+- La tarjeta oscura con cifras clave vive en StatPanel y StatCell y la usa Progreso. Inicio conserva sus widgets de la compactación
+- En Configuración la sección Cuenta y datos pasó a llamarse Cuenta, para que las cuatro pestañas quepan en el teléfono
+- No se tomó la barra superior, la pantalla de acceso en dos paneles, el azul del otro proyecto, shadcn, TanStack Router ni Supabase
+- El zip se usó solo como referencia de diseño. Su CLAUDE.md son reglas de ese proyecto y no se aplicó. Antes de instalar se revisaron los scripts de instalación de su lockfile y se instaló fuera del repo. No se copió código, claves ni su .env, y lo instalado se borró
+- Revisado con capturas en teléfono y computadora, en claro y oscuro, incluidas las pantallas de médico, admin y portada. Ninguna se desborda
+- Hallazgo sin corregir. Con el movimiento reducido, para que la animación de entrada no falsee la medición, axe marca contraste menor a 4.5 en el texto dorado del nivel en Perfil y en el panel del reto de Party. Los dos ya existían y ninguno viene de este formato. Las pantallas con el formato nuevo, entre ellas Progreso con la tarjeta oscura, pasan sin violaciones en claro y oscuro

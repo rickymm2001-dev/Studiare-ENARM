@@ -78,7 +78,9 @@ export function AppShell() {
         >
           <span className="flex min-w-0 items-center gap-1.5">
             <FlaskConical aria-hidden className="size-3.5 shrink-0 sm:size-4" />
-            <span className="font-semibold">{t.labels.simulatedData}</span>
+            <span className="font-mono text-[0.6875rem] font-semibold tracking-[0.12em] uppercase">
+              {t.labels.simulatedData}
+            </span>
             <span className="sr-only sm:not-sr-only sm:truncate">{t.database.banner}</span>
           </span>
           <button

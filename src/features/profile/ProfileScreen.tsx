@@ -119,7 +119,7 @@ function PhoneShortcuts() {
         .filter(([, items]) => items.length > 0)
         .map(([title, items]) => (
           <Card key={title} className="p-3">
-            <p className="mb-2 text-sm font-semibold text-fg-muted">{title}</p>
+            <p className="eyebrow mb-2 text-fg-muted">{title}</p>
             <div className="grid grid-cols-2 gap-2">
               {items.map((item) => (
                 <Button key={item.path} asChild variant="secondary" className="justify-start">

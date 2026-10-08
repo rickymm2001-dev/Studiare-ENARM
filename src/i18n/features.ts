@@ -252,7 +252,7 @@ export const featureText = {
       study: 'Estudio',
       appearance: 'Apariencia',
       pomodoro: 'Pomodoro',
-      account: 'Cuenta y datos',
+      account: 'Cuenta',
     },
     sectionsLabel: 'Secciones de Configuración',
     dailyTitle: 'Metas del día',

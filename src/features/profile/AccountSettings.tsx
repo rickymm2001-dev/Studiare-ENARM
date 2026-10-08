@@ -96,7 +96,7 @@ export function PomodoroSection({ session }: { session: ReadySession }) {
   );
 }
 
-/** Configuración, sección Cuenta y datos. Exportar y borrar */
+/** Configuración, sección Cuenta. Exportar y borrar */
 export function DataSection({ session }: { session: ReadySession }) {
   const api = useDataApi();
   const { deleteAllData } = api;
