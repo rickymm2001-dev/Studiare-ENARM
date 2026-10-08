@@ -140,10 +140,11 @@ describe('cambios de fecha de repaso', () => {
     const currentDue = (cardId: string) => states.get(cardId)?.due ?? null;
     const action = lastUndoableAction(events, currentDue);
     expect(action?.kind).toBe('postpone');
+    if (!action) throw new Error('Debía haber una acción para deshacer');
     const restored = await undoReschedule(
       api,
       actor,
-      action!,
+      action,
       currentDue,
       new Date(NOW.getTime() + 1000),
     );
