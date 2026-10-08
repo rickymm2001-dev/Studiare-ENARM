@@ -277,6 +277,33 @@ export const featureText = {
       days === null ? 'Sin tope, FSRS puro' : days === 21 ? '21 días, recomendado' : `${days} días`,
     newCardsPerDay: 'Tarjetas nuevas por día',
     reviewsPerDay: 'Repasos máximos por día',
+    unlimitedNewCards: 'Sin límite de tarjetas nuevas',
+    unlimitedNewCardsHint:
+      'Con muchas nuevas juntas, los repasos de los días siguientes se acumulan como una avalancha. Úsalo solo si sabes cuánto tiempo tienes.',
+    cardTimerTitle: 'Temporizador de tarjeta',
+    cardTimerEnabled: 'Mostrar un tiempo sugerido por tarjeta',
+    cardTimerHint:
+      'Apagado por defecto. Solo avisa cuánto tiempo conviene tardar y no califica nada. El tiempo que se guarda de cada tarjeta nunca pasa de 2 minutos.',
+    cardTimerSeconds: 'Tiempo sugerido',
+    cardTimerSecondsOption: (seconds: number) => `${seconds} segundos`,
+    cardTimerAutoReveal: 'Mostrar la respuesta sola cuando se acabe el tiempo',
+    easyDaysTitle: 'Días fáciles',
+    easyDaysHint:
+      'Elige los días de la semana en que quieres menos repasos. Al programar el siguiente repaso de una tarjeta, se mueve unos días para evitarlos. Solo cambia lo que programes desde ahora y la memoria de cada tarjeta no se toca.',
+    easyDaysSummary: (count: number) =>
+      count === 0
+        ? 'Todos los días normales'
+        : `${count === 1 ? '1 día fácil' : `${count} días fáciles`}`,
+    easyLevels: { normal: 'Normal', reduced: 'Menos repasos', minimum: 'Casi ninguno' },
+    weekdays: {
+      mon: 'Lunes',
+      tue: 'Martes',
+      wed: 'Miércoles',
+      thu: 'Jueves',
+      fri: 'Viernes',
+      sat: 'Sábado',
+      sun: 'Domingo',
+    },
     studyTitle: 'Estudio',
     cardConfidenceStep: 'Preguntar qué tan seguro estoy antes de ver la respuesta o de responder',
     cardConfidenceStepHint:
@@ -1111,6 +1138,92 @@ export const featureText = {
     toggle: (branch: string, n: number, of: number) =>
       `Ver las subespecialidades de ${branch}, ${n} de ${of} marcadas`,
     title: 'Ramas y subespecialidades',
+  },
+  // Atrasos y fechas de repaso (D-085, fila 5). Solo cambian la fecha, la memoria de la tarjeta no
+  overdue: {
+    title: 'Atrasos y fechas de repaso',
+    summary: (overdue: number) =>
+      overdue === 0 ? 'Sin atrasos' : plural(overdue, 'atrasada', 'atrasadas'),
+    recoveryTitle: (n: number) => `Tienes ${plural(n, 'tarjeta atrasada', 'tarjetas atrasadas')}`,
+    recoveryBody:
+      'Se juntaron repasos de días anteriores. Repartirlos en varios días evita una avalancha. Tus tarjetas no pierden lo aprendido, solo cambia el día en que las ves.',
+    noOverdue: 'No tienes tarjetas atrasadas.',
+    memoryNote:
+      'La memoria de cada tarjeta no cambia, solo su fecha. En su próximo repaso se toma en cuenta el tiempo que pasó.',
+    spreadTitle: 'Repartir los atrasos',
+    spreadDays: 'Repartir entre',
+    spreadDaysOption: (n: number) => (n === 1 ? '1 día, solo hoy' : `${n} días`),
+    spreadPreview: 'Así quedarían',
+    previewDay: (label: string, count: number) => `${label} ${count.toLocaleString('es-MX')}`,
+    today: 'Hoy',
+    overCapacity:
+      'Son más de las que caben con tu límite de repasos por día. Se reparten parejo de todos modos.',
+    noDays: 'Ya no hay días antes de tu examen para repartir.',
+    spreadButton: (n: number) => `Repartir ${plural(n, 'tarjeta', 'tarjetas')}`,
+    postponeTitle: 'Posponer lo de hoy y lo atrasado',
+    postponeBody: (n: number) =>
+      n === 0
+        ? 'No hay tarjetas que venzan hoy ni antes.'
+        : `${plural(n, 'tarjeta vence', 'tarjetas vencen')} hoy o antes.`,
+    postponeDays: 'Posponer',
+    postponeOption: (n: number) => (n === 1 ? '1 día' : `${n} días`),
+    postponeButton: (n: number) => `Posponer ${plural(n, 'tarjeta', 'tarjetas')}`,
+    advanceTitle: 'Adelantar repasos',
+    advanceBody: (n: number) =>
+      n === 0
+        ? 'No hay repasos programados para los próximos días.'
+        : `Hay ${plural(n, 'repaso programado', 'repasos programados')} para los próximos días.`,
+    advanceCount: 'Cuántos traer a hoy',
+    advanceButton: (n: number) => `Adelantar ${plural(n, 'repaso', 'repasos')}`,
+    undoTitle: 'Deshacer',
+    undoBody: (kind: 'spread' | 'postpone' | 'advance', cards: number) =>
+      `El último cambio fue ${{ spread: 'repartir', postpone: 'posponer', advance: 'adelantar' }[kind]} ${plural(cards, 'tarjeta', 'tarjetas')}. Las que ya repasaste desde entonces no se tocan.`,
+    undoButton: 'Deshacer el último cambio',
+    working: 'Moviendo fechas…',
+    done: {
+      spread: (n: number) => `${plural(n, 'tarjeta repartida', 'tarjetas repartidas')}.`,
+      postpone: (n: number) => `${plural(n, 'tarjeta pospuesta', 'tarjetas pospuestas')}.`,
+      advance: (n: number) => `${plural(n, 'repaso adelantado', 'repasos adelantados')}.`,
+      undo: (n: number) =>
+        `${plural(n, 'tarjeta regresada', 'tarjetas regresadas')} a su fecha de antes.`,
+      nothing: 'No hubo nada que mover.',
+    },
+    error: 'No se pudieron mover las fechas. Intenta de nuevo.',
+  },
+  // Carga diaria. Perfil guía y tarjetas nuevas por día (D-085, fila 6)
+  dailyLoad: {
+    title: 'Carga diaria',
+    guideTitle: 'Perfil guía',
+    guideBody:
+      'Con un toque dejas tu repaso como lo recomienda la guía de Anki. Retención de 90% y repasos que nunca pasan de tu examen.',
+    guideAlready: 'Ya usas el perfil guía.',
+    guideFields: {
+      desiredRetention: 'Retención',
+      maxIntervalDays: 'Intervalo máximo',
+      spacing: 'Botones',
+    },
+    guideChange: (field: string, from: string, to: string) => `${field} pasa de ${from} a ${to}`,
+    guideApply: 'Aplicar perfil guía',
+    guideApplied: 'Listo, aplicamos el perfil guía.',
+    suggestionTitle: 'Tarjetas nuevas por día',
+    needsMinutes:
+      'Para calcular cuántas nuevas aguantas necesitamos saber cuántos minutos estudias al día.',
+    goToPlan: 'Poner mis minutos en Plan',
+    noNewCards: 'No tienes tarjetas nuevas por ahora.',
+    suggested: (n: number) =>
+      `Te sugerimos ${plural(n, 'tarjeta nueva', 'tarjetas nuevas')} por día.`,
+    basis: (budget: number) =>
+      `Con ${plural(Math.round(budget), 'minuto', 'minutos')} al día para tarjetas, que es la mitad de tu tiempo de estudio.`,
+    measuredNote: 'Calculado con tu ritmo real de repaso.',
+    calibratingNote: (reviews: number, needed: number) =>
+      `Calibrando. Por ahora usamos tiempos de referencia, con ${needed} repasos tuyos medimos tu ritmo y llevas ${reviews}.`,
+    backlogOver:
+      'Con los atrasos de ahora ya pasas el tiempo que tienes. Reparte los atrasos antes de sumar nuevas.',
+    peak: (minutes: number, day: string) =>
+      `El día más pesado sería el ${day}, con unos ${Math.round(minutes)} minutos de tarjetas.`,
+    use: (n: number) => `Usar ${n}`,
+    applied: 'Listo, guardamos tu nuevo límite de tarjetas nuevas.',
+    current: (n: number) => `Hoy tienes ${n} por día.`,
   },
   reviewSetup: {
     title: 'Qué quieres repasar',
