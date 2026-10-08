@@ -3,10 +3,13 @@ import type { Table } from 'dexie';
 import type { z } from 'zod';
 import type { EnarmDb } from '../../db/database';
 import { OptionSchema, QuestionSchema, type Option, type Question } from '../../schemas/bank';
+import { CardSchema, NoteSchema } from '../../schemas/decks';
 import type {
   AppendOnlyRepo,
   CacheReader,
+  CardRepo,
   EntityRepo,
+  NoteRepo,
   OptionRepo,
   QuestionRepo,
   SyncableRepo,
@@ -56,6 +59,26 @@ export function createDexieSyncableRepo<T extends { deletedAt?: string | null },
     },
     getRaw: (key) => table.get(key),
     listAll: () => table.toArray(),
+  };
+}
+
+export function createDexieNoteRepo(db: EnarmDb): NoteRepo {
+  return {
+    ...createDexieSyncableRepo(db.notes, NoteSchema),
+    listAllByOutline: (outlineId) => db.notes.where('outlineId').equals(outlineId).toArray(),
+  };
+}
+
+export function createDexieCardRepo(db: EnarmDb): CardRepo {
+  return {
+    ...createDexieSyncableRepo(db.cards, CardSchema),
+    listAllForNotes: (noteIds) =>
+      noteIds.length === 0
+        ? Promise.resolve([])
+        : db.cards
+            .where('noteId')
+            .anyOf([...noteIds])
+            .toArray(),
   };
 }
 

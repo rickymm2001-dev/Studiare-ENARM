@@ -2,13 +2,15 @@
 import type { Repositories } from '../repos/types';
 
 export async function exportUserData(repos: Repositories, userId: string) {
-  const [user, account, consents, events, layout, subscription] = await Promise.all([
+  const [user, account, consents, events, layout, subscription, outlines] = await Promise.all([
     repos.users.get(userId),
     repos.accounts.get(userId),
     repos.consents.list().then((list) => list.filter((consent) => consent.userId === userId)),
     repos.events.query({ userId }),
     repos.widgetLayouts.get(userId),
     repos.subscriptions.get(userId),
+    // Los apuntes son texto del alumno y de ellos salen sus tarjetas (D-090)
+    repos.outlines.list().then((list) => list.filter((outline) => outline.ownerId === userId)),
   ]);
   return {
     exportedAt: new Date().toISOString(),
@@ -18,6 +20,7 @@ export async function exportUserData(repos: Repositories, userId: string) {
     consents,
     subscription: subscription ?? null,
     widgetLayout: layout ?? null,
+    outlines,
     events,
   };
 }
