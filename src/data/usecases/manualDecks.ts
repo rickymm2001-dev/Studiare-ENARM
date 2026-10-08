@@ -6,6 +6,7 @@
 // Borrar pone una marca de borrado en lugar de quitar el registro y toda edición pone su fecha de
 // modificación, para sincronizar entre dispositivos (D-085).
 import { MAX_DECK_DEPTH, deckChain, descendantIds } from '../../engines/deckTree';
+import { normalizeTags } from '../../engines/tagPath';
 import { clozeHoles, clozeOpenings, type ClozeHole } from '../content/cloze';
 import { htmlToText, textToHtml } from '../content/plainText';
 import type { DataApi } from '../context';
@@ -160,11 +161,14 @@ export async function createManualDeck(
   });
 }
 
-/** Guarda una tarjeta nueva o los cambios de una que ya existe, con sus cartas */
+/**
+ * Guarda una tarjeta nueva o los cambios de una que ya existe, con sus cartas. Las etiquetas solo
+ * se cambian si se pasan, y si no se conservan las que ya tenía (los apuntes las mandan de cada línea)
+ */
 export async function saveManualNote(
   api: Repos,
   user: Pick<User, 'id'>,
-  input: { deckId: string; draft: NoteDraft; noteId?: string },
+  input: { deckId: string; draft: NoteDraft; noteId?: string; tags?: readonly string[] },
   now: Date = new Date(),
 ): Promise<Note> {
   const error = validateDraft(input.draft);
@@ -177,7 +181,7 @@ export async function saveManualNote(
   const base = {
     id: existing?.id ?? newId(),
     deckId: input.deckId,
-    tags: existing?.tags ?? [],
+    tags: input.tags ? normalizeTags(input.tags) : (existing?.tags ?? []),
     origin: 'manual' as const,
     editorialStatus: 'draft' as const,
     sourceQuote: null,

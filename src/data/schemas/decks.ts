@@ -9,7 +9,7 @@ import { ContentOriginSchema, EditorialStatusSchema, IdSchema, UtcDateTimeSchema
  * Campos de sincronización. updatedAt dice cuándo cambió por última vez y, si falta, vale lo mismo
  * que createdAt. deletedAt con fecha es una marca de borrado y null o ausente es un registro vivo
  */
-const SyncShape = {
+export const SyncShape = {
   updatedAt: UtcDateTimeSchema.optional(),
   deletedAt: UtcDateTimeSchema.nullable().optional(),
 };

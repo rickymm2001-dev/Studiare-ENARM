@@ -18,6 +18,7 @@ import {
   ReviewAssignmentSchema,
 } from '../../schemas/bank';
 import { CardSchema, DeckSchema, NoteSchema } from '../../schemas/decks';
+import { OutlinePageSchema } from '../../schemas/outlines';
 import {
   ConsentSchema,
   OfficialScoreSchema,
@@ -48,6 +49,7 @@ export function createDexieRepositories(db: EnarmDb): Repositories {
     decks: createDexieSyncableRepo(db.decks, DeckSchema),
     notes: createDexieSyncableRepo(db.notes, NoteSchema),
     cards: createDexieSyncableRepo(db.cards, CardSchema),
+    outlines: createDexieSyncableRepo(db.outlines, OutlinePageSchema),
     cases: createDexieAppendOnlyRepo(db.cases, ClinicalCaseSchema),
     questions: createDexieQuestionRepo(db),
     options: createDexieOptionRepo(db),

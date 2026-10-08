@@ -1,4 +1,4 @@
-// Pestañas de Repasar, Mazos y Explorar (D-087, D-085). Son una sola sección de la navegación y el alumno pasa de
+// Pestañas de Repasar, Mazos, Explorar y Apuntes (D-087, D-085, D-092). Son una sola sección de la navegación y el alumno pasa de
 // elegir qué repasar a administrar sus mazos sin buscar otra sección. Cada pestaña es su propia
 // ruta, así los enlaces de siempre a Mazos siguen funcionando.
 import { Link, useLocation } from 'react-router';
@@ -10,6 +10,7 @@ const TABS = [
   { key: 'review', path: screenPath('review'), label: t.studyTabs.review },
   { key: 'decks', path: screenPath('decks'), label: t.studyTabs.decks },
   { key: 'explore', path: screenPath('explore'), label: t.studyTabs.explore },
+  { key: 'notes', path: screenPath('notes'), label: t.studyTabs.notes },
 ] as const;
 
 export function StudyTabs() {

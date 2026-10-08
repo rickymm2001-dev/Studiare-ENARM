@@ -139,7 +139,7 @@ describe('versiones de la base', () => {
     const db = createEnarmDb('real', { name });
     open.push(db);
     await db.open();
-    expect(db.verno).toBe(5);
+    expect(db.verno).toBe(6);
     // El índice nuevo ya sirve y la nota quedó limpia
     expect(await db.decks.where('parentId').equals('').count()).toBe(0);
     expect((await db.decks.toArray()).filter((deck) => deck.parentId === null)).toHaveLength(1);
@@ -156,12 +156,61 @@ describe('versiones de la base', () => {
     }
   });
 
-  it('una base nueva queda en la versión 5', async () => {
+  it('una base de la versión 5 sube a la 6, gana la tabla de apuntes y conserva sus datos', async () => {
+    const name = `migracion6-${newId()}`;
+    names.push(name);
+    // La versión 5 todavía no tenía la tabla de apuntes
+    const stores = Object.fromEntries(
+      Object.entries(storesFor('real')).filter(([table]) => table !== 'outlines'),
+    );
+    const old = new Dexie(name);
+    old.version(5).stores(stores);
+    await old.open();
+    const stamp = '2026-10-07T10:00:00.000Z';
+    const deckId = newId();
+    await old.table('decks').put({
+      id: deckId,
+      name: 'Mazo de la versión 5',
+      description: '',
+      ownerId: null,
+      origin: 'preloaded',
+      visibility: 'public',
+      isDemo: true,
+      parentId: null,
+      createdAt: stamp,
+      updatedAt: stamp,
+    });
+    old.close();
+
+    const db = createEnarmDb('real', { name });
+    open.push(db);
+    await db.open();
+    expect(db.verno).toBe(6);
+    expect(await db.decks.get(deckId)).toMatchObject({ name: 'Mazo de la versión 5' });
+    expect(await db.outlines.count()).toBe(0);
+    // La tabla nueva ya sirve, con su índice por mazo
+    const pageId = newId();
+    const outlineDeckId = newId();
+    await db.outlines.put({
+      id: pageId,
+      ownerId: newId(),
+      title: 'Apunte',
+      deckId: outlineDeckId,
+      tags: [],
+      lines: [],
+      createdAt: stamp,
+    });
+    expect(
+      (await db.outlines.where('deckId').equals(outlineDeckId).toArray()).map((p) => p.id),
+    ).toEqual([pageId]);
+  });
+
+  it('una base nueva queda en la versión 6', async () => {
     const name = `nueva-${newId()}`;
     names.push(name);
     const db = createEnarmDb('real', { name });
     open.push(db);
     await db.open();
-    expect(db.verno).toBe(5);
+    expect(db.verno).toBe(6);
   });
 });

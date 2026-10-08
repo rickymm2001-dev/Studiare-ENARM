@@ -30,6 +30,7 @@ import type {
 import type { EditorialStatusSchema, Id } from '../schemas/common';
 import type { Card, Deck, Note } from '../schemas/decks';
 import type { AppEvent, EventType } from '../schemas/events';
+import type { OutlinePage } from '../schemas/outlines';
 import type { Account, Consent, OfficialScore, Subscription, User } from '../schemas/people';
 import type { z } from 'zod';
 import type { DatabaseKind } from '../databases';
@@ -129,6 +130,7 @@ export interface Repositories {
   decks: SyncableRepo<Deck>;
   notes: SyncableRepo<Note>;
   cards: SyncableRepo<Card>;
+  outlines: SyncableRepo<OutlinePage>;
   cases: AppendOnlyRepo<ClinicalCase>;
   questions: QuestionRepo;
   options: OptionRepo;

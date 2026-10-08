@@ -74,6 +74,11 @@ const screens: Record<ScreenKey, ScreenText> = {
     description:
       'Busca, filtra y ordena todas tus tarjetas. Suspende, etiqueta o muévelas por lote.',
   },
+  notes: {
+    title: 'Apuntes',
+    description:
+      'Escribe tus apuntes en esquema. Con una marca en la línea, la línea se vuelve tarjeta.',
+  },
   planner: {
     title: 'Planificador',
     description: 'Tu plan del día y de la semana según tu fecha del ENARM y tu carga de repaso.',
@@ -162,10 +167,11 @@ export const t = {
     more: 'Más secciones',
   },
   studyTabs: {
-    label: 'Repasar, mazos y explorar',
+    label: 'Repasar, mazos, explorar y apuntes',
     review: 'Repasar',
     decks: 'Mazos',
     explore: 'Explorar',
+    notes: 'Apuntes',
   },
   navItems: {
     home: 'Inicio',

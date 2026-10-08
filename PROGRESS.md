@@ -8,7 +8,7 @@
 - Bloques 9 y 10 terminados. Bloque 8 (contenido demo) pausado con 4 de 6 lotes y sin mazos (D-050)
 - Fase C con sus 10 bloques programados y el cierre de 15.1 hecho. Espera la aprobación de Ricardo, ver su sección. Hay 20 de 28 pantallas construidas y 8 siguen como esqueleto con aviso de Próximamente
 - Reunión del equipo del 2026-10-07 aplicada (D-087). Repaso y simulador más prácticos, sin pregunta de confianza por defecto y con retroalimentación al final, Repasar y Mazos unidos, precio mensual de 150 y plan Fundador, banco de 4 a 10 opciones con plantilla de Excel y un solo dispositivo por cuenta. El precio Fundador de 79 ya está confirmado. Falta que Ricardo ejecute el SQL del dispositivo único
-- Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. La Etapa 1 está aprobada y publicada (PR 20). La Etapa 2, carga diaria, está programada y en cierre de 15.1, ver su sección
+- Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. La Etapa 1 está aprobada y publicada (PR 20). La Etapa 2, carga diaria, está publicada (PR 21) y espera su aprobación. La Etapa 3, apuntes tipo RemNote, está programada (D-092) y Ricardo pidió seguir con todas las etapas sin preguntar, ver su sección
 - Fase P en curso (D-060). Bloques 1 a 4 terminados, 7 y 9 a medias, 5, 6 y 8 sin empezar, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
 - Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
@@ -24,6 +24,27 @@
 - Logo de Studiare en el encabezado, en modo claro y oscuro (D-056)
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
+
+## Fase C2. Etapa 3, apuntes tipo RemNote (D-085 y D-092)
+
+Ricardo pidió el 2026-10-08 ejecutar todos los pendientes del plan sin preguntar, así que esta etapa se programó sin esperar la aprobación de la Etapa 2.
+
+### Bloques
+- [x] B1. Motor puro de apuntes (src/engines/outline.ts) con marcas, etiquetas heredadas, enlaces, estructura de la lista y marcas con botón
+- [x] B2. Tabla outlines (la base sube a la versión 6), caso de uso que mantiene las tarjetas al día y exportar mis datos con lo que el alumno creó
+- [x] B3. Pantalla Apuntes, cuarta pestaña de Repasar y Mazos, con editor en esquema, guardado automático, teclado, barra de botones, enlaces y borrar
+- [x] B4. Pruebas unitarias, de pantalla y e2e, con axe en teléfono y escritorio
+
+### Bitácora
+- Una marca en la línea la vuelve tarjeta. Pregunta :: Respuesta, Término ;; Definición con inversa, {{hueco}} y #etiqueta::ruta que heredan las líneas de abajo. El texto se guarda como texto plano escapado
+- Guardar dos veces lo mismo no escribe nada y las tarjetas conservan su ID y su historial al editar la línea. Una línea incompleta conserva la última tarjeta buena
+- La prueba e2e encontró un defecto real. El guardador se soltaba en cada pintura y guardaba una copia vieja, perdiendo la última línea. Quedó corregido con una prueba de regresión
+- Las esperas de Testing Library suben a 5 segundos para que las pruebas de pantalla no fallen por la carga de la máquina. Una prueba de Explorar había fallado una vez así en la corrida completa
+- No se tocó SQL, así que test:sql no cambia
+
+### Pendiente con Ricardo para seguir
+- Aprobar las Etapas 2 y 3 en la revisión
+- Decidir qué funciones son gratis y cuáles de pago, con la bandera outlines abierta mientras tanto
 
 ## Fase C2. Etapa 2, carga diaria (D-085 y D-089)
 

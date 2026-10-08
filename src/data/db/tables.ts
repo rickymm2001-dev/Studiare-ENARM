@@ -32,6 +32,7 @@ import {
 } from '../schemas/caches';
 import { CardSchema, DeckSchema, NoteSchema } from '../schemas/decks';
 import { AppEventSchema } from '../schemas/events';
+import { OutlinePageSchema } from '../schemas/outlines';
 import {
   AccountSchema,
   ConsentSchema,
@@ -60,6 +61,8 @@ export const TABLES = {
   decks: { schema: DeckSchema, indexes: 'id, ownerId, origin, parentId', kind: 'entity' },
   notes: { schema: NoteSchema, indexes: 'id, deckId, *tags', kind: 'entity' },
   cards: { schema: CardSchema, indexes: 'id, noteId, deckId', kind: 'entity' },
+  // Apuntes en esquema que generan tarjetas (D-092)
+  outlines: { schema: OutlinePageSchema, indexes: 'id, ownerId, deckId', kind: 'entity' },
 
   cases: { schema: ClinicalCaseSchema, indexes: 'id', kind: 'entity' },
   questions: {
