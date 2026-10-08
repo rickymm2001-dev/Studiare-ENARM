@@ -11,6 +11,9 @@ import {
   UtcDateTimeSchema,
 } from './common';
 
+/** Máximo de tarjetas nuevas por día que acepta el ajuste. Sin límite se guarda aparte */
+export const MAX_NEW_CARDS_PER_DAY = 500;
+
 /** Ajustes del alumno con los valores por defecto de la especificación */
 export const UserSettingsSchema = z.strictObject({
   /** Retención deseada de FSRS, 0.90 por defecto, entre 0.80 y 0.97 (7.1) */
@@ -25,7 +28,7 @@ export const UserSettingsSchema = z.strictObject({
       easy: z.number().min(0.25).max(3),
     })
     .default({ hard: 1, good: 1, easy: 1 }),
-  newCardsPerDay: z.int().min(0).max(500).default(20),
+  newCardsPerDay: z.int().min(0).max(MAX_NEW_CARDS_PER_DAY).default(20),
   reviewsPerDay: z.int().min(0).max(5000).default(200),
   /**
    * Sin límite de tarjetas nuevas por día. Apagado por defecto y se enciende con un aviso, porque

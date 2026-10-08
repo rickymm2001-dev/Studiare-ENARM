@@ -10,6 +10,7 @@ import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import { useDataApi } from '@/data/context';
 import type { Card } from '@/data/schemas/decks';
 import type { AppEvent } from '@/data/schemas/events';
+import { MAX_NEW_CARDS_PER_DAY } from '@/data/schemas/people';
 import { updateProfile } from '@/data/usecases/profile';
 import { estimateCardTimes, suggestNewPerDay } from '@/engines/dailyLoad';
 import { guideProfile, guideProfileChanges } from '@/engines/guideProfile';
@@ -163,7 +164,7 @@ function NewPerDay({
   // La sugerencia no puede pasar de las nuevas que existen ni del máximo que acepta el ajuste
   const useValue =
     suggestion?.status === 'ready' && result
-      ? Math.min(suggestion.suggested, result.unseen, 500)
+      ? Math.min(suggestion.suggested, result.unseen, MAX_NEW_CARDS_PER_DAY)
       : null;
 
   return (

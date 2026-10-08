@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import type { FsrsCardState } from '@/data/schemas/common';
+import { MAX_NEW_CARDS_PER_DAY } from '@/data/schemas/people';
 import { scheduleReview, type QueueCard, type SchedulerConfig } from '@/engines/fsrs';
 import { addDays } from '@/engines/studyDay';
 import type { DaySummary } from '../home/snapshot';
@@ -162,6 +163,18 @@ describe('sobrecarga', () => {
       cards: [...Array.from({ length: 120 }, (_, index) => dueIn(index, -1)), ...newCards(200)],
       declaredMinutes: 10,
     });
+
+  it('sin límite de nuevas, la propuesta de bajarlas cabe en el ajuste', () => {
+    const unlimited = view({
+      cards: [...Array.from({ length: 120 }, (_, index) => dueIn(index, -1)), ...newCards(200)],
+      declaredMinutes: 10,
+      config: { ...config, thresholds: { ...config.thresholds, newCardsPerDay: 100_000 } },
+    });
+    const reduce = unlimited.plan.warnings[0]?.options.find(
+      (option) => option.action === 'reduce_new',
+    );
+    expect(reduce?.value).toBe(MAX_NEW_CARDS_PER_DAY);
+  });
 
   it('avisa con dos opciones y su efecto en minutos al día', () => {
     const [warning] = overloaded().plan.warnings;

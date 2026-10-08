@@ -294,7 +294,10 @@ function OverloadCard({
   const apply = (option: OverloadOption) => {
     const patch =
       option.action === 'reduce_new'
-        ? updateProfile(api, session.user, { settings: { newCardsPerDay: option.value } })
+        ? // Bajar las nuevas también apaga el modo sin límite, si no el número no tendría efecto
+          updateProfile(api, session.user, {
+            settings: { newCardsPerDay: option.value, unlimitedNewCards: false },
+          })
         : updateProfile(api, session.user, { dailyMinutes: Math.min(720, option.value) });
     void patch.then(() => {
       setApplied(true);

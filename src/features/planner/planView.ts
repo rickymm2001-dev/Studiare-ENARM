@@ -1,6 +1,7 @@
 // Entradas del planificador a partir de lo que guarda la app (7.10, 13). Las cuentas las hace el
 // motor planner. Aquí solo se juntan los datos reales del alumno, sin React ni Dexie, para
 // poder probarlo con tarjetas y actividad armadas a mano.
+import { MAX_NEW_CARDS_PER_DAY } from '@/data/schemas/people';
 import { projectLoad, type DayLoad, type QueueCard, type SchedulerConfig } from '@/engines/fsrs';
 import { buildPlan, type PlannerOutput } from '@/engines/planner';
 import { addDays } from '@/engines/studyDay';
@@ -105,7 +106,8 @@ export function buildPlannerView(input: {
     );
   const load = project(limits.newCardsPerDay);
   // Si hay sobrecarga se propone la mitad de nuevas por día. Con cero no hay nada que bajar
-  const fewerNew = Math.floor(limits.newCardsPerDay / 2);
+  // Sin límite de nuevas el tope es enorme, y la mitad tampoco cabría en el ajuste. Se recorta
+  const fewerNew = Math.min(MAX_NEW_CARDS_PER_DAY, Math.floor(limits.newCardsPerDay / 2));
   const measured = measuredMinutes(input.activity, today);
 
   // Lo declarado gana. El motor prefiere los minutos medidos si hay 3 días, así que sin declarar se
