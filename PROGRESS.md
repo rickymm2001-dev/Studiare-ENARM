@@ -31,7 +31,7 @@
 - [x] B2. Motores puros en paralelo. Atrasos (repartir, posponer, adelantar y deshacer), días fáciles dentro del programador, sugerencia de nuevas por día y perfil guía
 - [x] B3. Repasar con tres contadores, temporizador opcional y flujo de sanguijuelas, con aviso en Repasar que lleva a Explorar
 - [x] B4. Pantallas. Herramientas de atrasos con aviso de recuperación, panel de carga diaria dentro de los límites de hoy, ajustes de temporizador y días fáciles en Configuración y banderas de acceso con FeatureGate
-- [ ] B5. Cierre de la etapa según 15.1. Falta la aprobación de Ricardo
+- [x] B5. Cierre de la etapa según 15.1, con pruebas, capturas y revisión independiente. Falta la aprobación de Ricardo
 
 ### Bitácora
 - Los días fáciles se fusionaron al programador y se corrigió su reparto. El domingo en mínimo mandaba todo al sábado y el pico subía hasta 1.7 veces. Con un desempate parejo por hash estable de la tarjeta se reparte entre sábado y lunes y el pico queda dentro de 1.4 veces en 8 semillas distintas
@@ -41,7 +41,11 @@
 - Las banderas de acceso quedan todas abiertas en todos los planes, a la espera de que Ricardo decida qué es de pago
 
 ### Evidencia de cierre (15.1)
-EVIDENCIA
+- npm run check pasa. 1,453 pruebas de Vitest pasan y 2 se omiten, en 156 archivos. Typecheck, ESLint y Prettier limpios
+- Playwright. 146 pruebas pasan, 73 en teléfono y 73 en escritorio, con las nuevas de carga diaria (contadores, temporizador que muestra la respuesta solo, atrasos repartidos y deshacer, perfil guía, sugerencia de nuevas y sin límite), todas con axe sin violaciones serias. Una prueba de práctica en escritorio falló una vez por carga de la máquina y pasó al repetirla, y dos esperas de la prueba nueva se arreglaron para que no dependan de la velocidad
+- Capturas en docs/screenshots/fase-c2-etapa2, 24 imágenes. Ajustes de temporizador y días fáciles, límites de hoy con perfil guía y sugerencia, repaso con contadores y temporizador, aviso de recuperación con 45 atrasadas, herramientas de atrasos y el reparto ya hecho con su opción de deshacer, en teléfono y escritorio, claro y oscuro
+- Revisión independiente por un subagente que no escribió el código. Sin hallazgos críticos ni altos y sin pérdida de datos en la bitácora. Reportó 4 medios y 9 bajos y se atendieron casi todos. Lo más importante. Las tarjetas aprendidas el mismo día tenían la misma semilla de días fáciles y se movían en bloque, así que ahora la semilla incluye el ID de la tarjeta. Con muchas nuevas sin límite la proyección tardaba segundos y ahora tarda milisegundos. Usar la sugerencia dejaba un borrador viejo en el campo de nuevas, el intervalo máximo del perfil guía se mostraba mal en Configuración, y repartir ponía atrasadas en un domingo marcado como casi sin repasos. El detalle está en D-089
+- No se tocó SQL en esta etapa, así que test:sql no cambia
 
 ### Pendiente con Ricardo para seguir
 - Aprobar la Etapa 2 para pasar a la Etapa 3, apuntes tipo RemNote
