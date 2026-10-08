@@ -8,7 +8,7 @@
 - Bloques 9 y 10 terminados. Bloque 8 (contenido demo) pausado con 4 de 6 lotes y sin mazos (D-050)
 - Fase C con sus 10 bloques programados y el cierre de 15.1 hecho. Espera la aprobación de Ricardo, ver su sección. Hay 20 de 28 pantallas construidas y 8 siguen como esqueleto con aviso de Próximamente
 - Reunión del equipo del 2026-10-07 aplicada (D-087). Repaso y simulador más prácticos, sin pregunta de confianza por defecto y con retroalimentación al final, Repasar y Mazos unidos, precio mensual de 150 y plan Fundador, banco de 4 a 10 opciones con plantilla de Excel y un solo dispositivo por cuenta. El precio Fundador de 79 ya está confirmado. Falta que Ricardo ejecute el SQL del dispositivo único
-- Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. La Etapa 1 está aprobada y publicada (PR 20). La Etapa 2, carga diaria, está publicada (PR 21) y espera su aprobación. Las Etapas 3 (apuntes tipo RemNote, D-092), 4 (importar y exportar, D-093) y 5 (tarjetas con IA desde PDF y textos, D-094) están programadas y Ricardo pidió seguir con todas las etapas sin preguntar, ver sus secciones
+- Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. La Etapa 1 está aprobada y publicada (PR 20). La Etapa 2, carga diaria, está publicada (PR 21) y espera su aprobación. Las Etapas 3 (apuntes tipo RemNote, D-092), 4 (importar y exportar, D-093) 5 (tarjetas con IA desde PDF y textos, D-094) y 6 (sincronización entre dispositivos, D-095) están programadas y Ricardo pidió seguir con todas las etapas sin preguntar, ver sus secciones
 - Fase P en curso (D-060). Bloques 1 a 4 terminados, 7 y 9 a medias, 5, 6 y 8 sin empezar, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
 - Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
@@ -24,6 +24,29 @@
 - Logo de Studiare en el encabezado, en modo claro y oscuro (D-056)
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
+
+## Fase C2. Etapa 6, sincronización entre dispositivos (D-085 y D-095)
+
+Ricardo pidió el 2026-10-08 ejecutar todos los pendientes del plan sin preguntar. No se aplicó ninguna migración en su proyecto de Supabase, queda la guía en docs/SUPABASE.md.
+
+### Bloques
+- [x] B1. Migración 20261008000002_sync.sql con la tabla de registros, las funciones de subida y el contador de la bitácora, y sus pruebas SQL contra Postgres local
+- [x] B2. Motor puro de sincronización con la regla de la fecha más reciente, las marcas de agua y el control del reloj, con pruebas de propiedades de dos dispositivos
+- [x] B3. Transporte con Supabase y en memoria, tabla syncState (base versión 7) y runSync por páginas con avance guardado
+- [x] B4. Programador de la sincronización, puente con la nube, tarjeta de estado en Configuración y aviso de la copia en la nube al borrar
+- [x] B5. Guía para aplicar la migración, D-095 y cierre
+
+### Bitácora
+- La simulación de dos dispositivos con operaciones al azar converge siempre, y rompiendo a propósito la regla de empate la prueba falla
+- Las pruebas encontraron dos fallos de diseño que se corrigieron, un envío que no avanzaba cuando muchos registros comparten la misma hora y una bitácora que se reenviaba completa en cada sincronización
+- Se agrega el uso de la tabla syncState en la base local y un caso de migración de la versión 6 a la 7 con datos
+- El JavaScript inicial pasó de unos 495 a unos 500 KB comprimido, contra un presupuesto de 300 KB. Reducirlo con carga diferida por rutas sigue como pendiente de la Fase F
+- La política de lectura de sync_records sube de 22 a 23 las políticas con la barrera del dispositivo único. La prueba SQL de cobertura y la guía ya lo dicen
+
+### Pendiente
+- Que Ricardo aplique la migración y la pruebe con dos navegadores, con la guía
+- Borrar también la copia en la nube con Borrar mis datos, en la Fase E
+- Sincronizar sesiones de estudio, hallazgos y ajustes personales, en IDEAS.md
 
 ## Fase C2. Etapa 5, tarjetas con IA desde PDF y textos (D-085 y D-094)
 

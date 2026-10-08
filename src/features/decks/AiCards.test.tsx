@@ -47,11 +47,20 @@ async function open(plan: 'monthly' | 'free' = 'monthly') {
   return screen.findByRole('region', { name: t.aiCards.title }, WAIT);
 }
 
+/** Pulsa Generar cuando el botón ya se encendió. Antes de conocer el plan no hace nada */
+async function pressGenerate(typing: ReturnType<typeof userEvent.setup>, card: HTMLElement) {
+  const button = within(card).getByRole('button', { name: t.aiCards.generate });
+  await waitFor(() => {
+    expect(button).toBeEnabled();
+  }, WAIT);
+  await typing.click(button);
+}
+
 async function generate(typing: ReturnType<typeof userEvent.setup>, text = MATERIAL) {
   const card = await open();
   // Pegar un texto largo con type tardaría, así que se cambia el valor de golpe
   fireEvent.change(within(card).getByLabelText(t.aiCards.textLabel), { target: { value: text } });
-  await typing.click(within(card).getByRole('button', { name: t.aiCards.generate }));
+  await pressGenerate(typing, card);
   await screen.findByRole('heading', { name: t.aiCards.resultTitle }, WAIT);
   return card;
 }
@@ -83,13 +92,13 @@ describe('tarjetas con IA en Mazos', () => {
   it('pide un texto y no procesa uno demasiado corto', async () => {
     const typing = userEvent.setup();
     const card = await open();
-    await typing.click(within(card).getByRole('button', { name: t.aiCards.generate }));
-    expect(await within(card).findByText(t.aiCards.textRequired)).toBeVisible();
+    await pressGenerate(typing, card);
+    expect(await within(card).findByText(t.aiCards.textRequired, undefined, WAIT)).toBeVisible();
     fireEvent.change(within(card).getByLabelText(t.aiCards.textLabel), {
       target: { value: 'Muy corto' },
     });
-    await typing.click(within(card).getByRole('button', { name: t.aiCards.generate }));
-    expect(await within(card).findByText(t.aiCards.textTooShort)).toBeVisible();
+    await pressGenerate(typing, card);
+    expect(await within(card).findByText(t.aiCards.textTooShort, undefined, WAIT)).toBeVisible();
   });
 
   it('propone tarjetas con su cita, en borrador, y descuenta una generación', async () => {

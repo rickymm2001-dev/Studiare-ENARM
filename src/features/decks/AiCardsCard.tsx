@@ -288,7 +288,11 @@ function AiCards({ session }: { session: ReadySession }) {
             }}
           />
           {notice ? <p className="text-sm text-fg-muted">{notice}</p> : null}
-          <Button type="submit" className="self-start" disabled={busy || reading || left === 0}>
+          <Button
+            type="submit"
+            className="self-start"
+            disabled={busy || reading || left === 0 || plan === undefined}
+          >
             {step.name === 'generating' ? t.aiCards.generating : t.aiCards.generate}
           </Button>
         </form>

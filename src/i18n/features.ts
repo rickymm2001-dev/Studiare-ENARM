@@ -333,6 +333,9 @@ export const featureText = {
     deleteConfirm: 'Sí, borrar todo',
     deleteConfirmText:
       'Se borran todos los perfiles y su historial de Mi cuenta. La demostración no se toca.',
+    // Con la cuenta en la nube conectada y la sincronización encendida (D-095)
+    deleteCloudNote:
+      'Tu copia en la nube sigue ahí y se vuelve a bajar si entras otra vez con tu correo. Borrar también la nube queda para una siguiente versión.',
     cancel: 'Cancelar',
     deleted: 'Tus datos se borraron.',
     subscriptionTitle: 'Suscripción',
@@ -1795,6 +1798,33 @@ export const featureText = {
     },
     // Aparece cuando el servidor no dejó cambiar de dispositivo por el límite de cambios al día
     deviceLimit: deviceLimitText,
+    // Sincronización entre dispositivos (D-095). Se muestra con la cuenta en la nube conectada
+    sync: {
+      title: 'Sincronización entre dispositivos',
+      scope:
+        'Se sincronizan tus mazos propios, notas, tarjetas, apuntes, la distribución de tu Inicio y tu historial de repaso. Lo precargado viene con la app y tu apariencia es de cada dispositivo.',
+      never: 'Todavía no se ha sincronizado en este navegador.',
+      running: 'Sincronizando…',
+      ok: (when: string) => `Todo al día. Última sincronización ${when}.`,
+      okChanges: (pulled: number, pushed: number) =>
+        `Se bajaron ${String(pulled)} y se subieron ${String(pushed)} cambios.`,
+      rejected: (count: number) =>
+        count === 1
+          ? 'Un registro de la nube no se guardó porque no se pudo validar.'
+          : `${String(count)} registros de la nube no se guardaron porque no se pudieron validar.`,
+      network:
+        'No hay conexión con la nube. Tus cambios siguen en este navegador y se subirán cuando vuelva la conexión.',
+      auth: 'Tu sesión venció. Entra de nuevo con tu correo para seguir sincronizando.',
+      device: 'Otro dispositivo tiene tu cuenta en este momento, así que aquí no se sincroniza.',
+      server: 'La nube respondió con un error. Se vuelve a intentar en unos minutos.',
+      local: 'Algo falló al guardar en este navegador. Se vuelve a intentar en unos minutos.',
+      clock:
+        'La nube rechazó cambios con una fecha en el futuro. Activa la fecha y hora automáticas de este dispositivo.',
+      clockSkew: (minutes: number) =>
+        `La hora de este dispositivo difiere ${String(minutes)} minutos de la de la nube. Activa la fecha y hora automáticas para poder sincronizar.`,
+      lastWas: (when: string) => `La última sincronización buena fue ${when}.`,
+      syncNow: 'Sincronizar ahora',
+    },
   },
   insights: insightText,
 } as const;

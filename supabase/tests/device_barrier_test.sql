@@ -809,8 +809,9 @@ begin
   select count(*) into protected from pg_policies
     where schemaname = 'public'
       and coalesce(qual, '') || ' ' || coalesce(with_check, '') like '%is_active_device%';
-  if protected <> 22 then
-    raise exception 'FALLA B11. Debían ser 22 políticas con la barrera y hay %', protected;
+  -- 22 de la barrera y 1 de la sincronización (sync_records_select, migración 20261008000002)
+  if protected <> 23 then
+    raise exception 'FALLA B11. Debían ser 23 políticas con la barrera y hay %', protected;
   end if;
 end $$;
 

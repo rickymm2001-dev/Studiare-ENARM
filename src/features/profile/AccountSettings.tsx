@@ -24,6 +24,7 @@ import { PomodoroSettingsForm } from '../pomodoro/Pomodoro';
 import { FeatureGate } from '../shared/FeatureGate';
 import type { ReadySession } from '../shared/RequireSession';
 import { CardTimerFields, EasyDaysFields } from './StudyDailyFields';
+import { SyncStatus } from './SyncStatus';
 
 function Section({
   id,
@@ -514,12 +515,14 @@ function DeleteCard({
   onDeleted: () => void;
 }) {
   const [confirming, setConfirming] = useState(false);
+  const cloudLinked = useCloud((store) => store.state.status === 'linked');
   return (
     <Section
       id="borrar-titulo"
       title={t.settings.deleteTitle}
       description={t.settings.deleteDescription}
     >
+      {cloudLinked ? <p className="text-sm text-fg-muted">{t.settings.deleteCloudNote}</p> : null}
       {confirming ? (
         <div className="flex flex-col gap-3">
           <p className="text-sm">{t.settings.deleteConfirmText}</p>
@@ -571,9 +574,12 @@ function CloudStatus() {
           ? t.cloud.error
           : t.cloud.notLinked;
   return (
-    <div className="mt-3 rounded-md bg-muted p-3 text-sm">
-      <p className="font-semibold">{t.cloud.statusTitle}</p>
-      <p className="text-fg-muted">{text}</p>
-    </div>
+    <>
+      <div className="mt-3 rounded-md bg-muted p-3 text-sm">
+        <p className="font-semibold">{t.cloud.statusTitle}</p>
+        <p className="text-fg-muted">{text}</p>
+      </div>
+      {state.status === 'linked' ? <SyncStatus /> : null}
+    </>
   );
 }

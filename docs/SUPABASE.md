@@ -174,7 +174,7 @@ select
   (select value from public.platform_settings where key = 'device_limits') as limite;
 ```
 
-8. Debe salir bitacora con el valor device_claims, columna_session_id en true, politicas_con_barrera en 22, anon_is_active en false, anon_libera en false, alumno_reclama en true y limite con maxChanges 3 y windowHours 24. Si politicas_con_barrera sale en menos de 22 o cualquier valor de anon sale en true, avísame antes de abrir a alumnos
+8. Debe salir bitacora con el valor device_claims, columna_session_id en true, politicas_con_barrera en 22 (23 si ya aplicaste la de sincronización), anon_is_active en false, anon_libera en false, alumno_reclama en true y limite con maxChanges 3 y windowHours 24. Si politicas_con_barrera sale en menos de 22 o cualquier valor de anon sale en true, avísame antes de abrir a alumnos
 9. Para que el aviso del límite lleve un enlace de ayuda, crea en GitHub, Settings, Secrets and variables, Actions, pestaña Variables, la variable VITE_SUPPORT_EMAIL con el correo donde quieres recibir las dudas. Es público, lo verán los alumnos. Después corre de nuevo la publicación en Actions, con el flujo pages y Run workflow. Sin esa variable el aviso no muestra enlace y pide al alumno que consulte al equipo por el medio donde le dieron acceso
 
 ### Cómo probarlo con dos navegadores
@@ -314,6 +314,75 @@ No cubre
 - El flujo de revisión médica no está protegido, porque no son datos del alumno. Si más adelante se quiere un solo dispositivo también para médicos, se suma
 - Un navegador manipulado puede saltarse la llamada que asienta un rechazo. El rechazo no quedaría en la bitácora, aunque sí seguiría bloqueado. Los cambios aceptados siempre quedan registrados porque los escribe la base misma
 - El límite se puede leer desde la página, porque platform_settings es pública para la portada. No es un dato secreto
+
+## Sincronización entre dispositivos
+
+### Qué hace
+
+Cuando el alumno entra con su correo, la app guarda en la nube una copia de lo que creó y la baja en cualquier dispositivo donde vuelva a entrar. Cubre sus mazos propios, notas, tarjetas, apuntes, la distribución de su Inicio y su historial de repaso. Lo precargado y lo de demostración no se sube, porque ya viene con la app. La apariencia es de cada dispositivo.
+
+Como la regla es un solo dispositivo activo por cuenta, casi siempre es un relevo. El dispositivo que se va sube sus cambios al irse de la pestaña, y el que entra baja todo al abrir. Si dos dispositivos editaron lo mismo, gana la edición más reciente. Un borrado también es un cambio y se propaga.
+
+### Cómo aplicar la tercera migración
+
+No necesitas terminal. Aplica primero las dos anteriores, que ya deben estar puestas. Mientras no apliques esta, la app sigue funcionando completa en cada navegador, y la tarjeta de sincronización en Configuración, Cuenta, dice que no hay conexión con la nube.
+
+1. En supabase.com abre el proyecto Studiare y entra a SQL Editor
+2. Da clic en New query
+3. Abre en GitHub el archivo supabase/migrations/20261008000002_sync.sql, copia todo su contenido y pégalo
+4. Da clic en Run. Debe decir Success
+5. Si dice que la función is_active_device no existe, falta aplicar la migración de la barrera. Aplícala y vuelve a correr esta
+6. Es segura de repetir. Si la corres otra vez, no duplica ni cambia nada
+7. La bitácora ya tiene filas, y esta migración le agrega una columna contador. Postgres la llena sin editar ninguna fila. Con muchas filas puede tardar unos segundos
+8. Para confirmar que quedó, abre otra New query, pega esto y da clic en Run
+
+```sql
+select
+  to_regclass('public.sync_records') as tabla,
+  exists (select 1 from information_schema.columns
+          where table_schema = 'public' and table_name = 'events' and column_name = 'seq') as events_seq,
+  has_function_privilege('authenticated', 'public.sync_push_records(jsonb)', 'execute') as alumno_sube,
+  has_function_privilege('anon', 'public.sync_push_records(jsonb)', 'execute') as anon_sube,
+  has_table_privilege('authenticated', 'public.sync_records', 'insert') as alumno_inserta,
+  has_table_privilege('authenticated', 'public.sync_records', 'select') as alumno_lee,
+  (select count(*) from pg_policies
+    where schemaname = 'public'
+      and coalesce(qual, '') || coalesce(with_check, '') like '%is_active_device%') as politicas_con_barrera;
+```
+
+9. Debe salir tabla con el valor sync_records, events_seq en true, alumno_sube en true, anon_sube en false, alumno_inserta en false, alumno_lee en true y politicas_con_barrera en 23. Esa cuenta sube de 22 a 23 por la política de lectura de sync_records. Si anon_sube o alumno_inserta salen en true, avísame antes de abrir a alumnos
+
+### Cómo probarlo con dos navegadores
+
+1. Entra con tu correo en un navegador, crea un mazo con una nota y repasa una tarjeta
+2. En Configuración, Cuenta, la tarjeta Sincronización entre dispositivos debe decir Todo al día. Si no, pulsa Sincronizar ahora
+3. Abre un segundo navegador, entra con el mismo correo y abre el enlace del correo. El primero se cierra solo, porque la cuenta tiene un dispositivo activo
+4. En el segundo, el mazo, la nota y el repaso deben aparecer en unos segundos. Si no, pulsa Sincronizar ahora
+5. Edita la nota en el segundo, vuelve al primero y entra otra vez. Debe verse la edición del segundo
+
+### Qué ve el alumno cuando algo falla
+
+- Sin conexión, dice que sus cambios siguen en el navegador y se suben al volver la conexión. La app lo reintenta sola con esperas que crecen hasta 5 minutos
+- Con otro dispositivo activo, dice que aquí no se sincroniza y no insiste
+- Con la sesión vencida, pide entrar de nuevo con el correo
+- Con el reloj del dispositivo desfasado más de 5 minutos respecto al servidor, no sube ni baja nada y pide activar la fecha y la hora automáticas. La regla de la edición más reciente solo vale si los relojes se parecen
+
+### Qué cubre y qué no cubre
+
+Cubre
+
+- Solo el dispositivo activo sube o baja. Un navegador desplazado conserva su sesión pero la base lo rechaza
+- Nadie escribe en la tabla de registros por fuera de la función, que aplica la regla de la fecha más reciente en el servidor y rechaza fechas del futuro lejano
+- Cada alumno ve solo lo suyo
+- La bitácora solo se agrega. Subir dos veces el mismo evento no lo duplica
+- Lo que baja se valida de nuevo en el navegador, así un registro mal formado, con otro dueño o disfrazado de precargado se descarta
+
+No cubre
+
+- Borrar mis datos en Configuración borra solo lo del navegador. La copia en la nube se vuelve a bajar si el alumno entra otra vez. Borrar también la nube queda para la Fase E, junto con el borrado de cuenta
+- Las sesiones de estudio, los hallazgos del tutor y los ajustes personales no se sincronizan todavía. Las cifras del tutor y de Progreso se reconstruyen con la bitácora, que sí viaja
+- Dos dispositivos que editen lo mismo a la vez sin conexión conservan la edición más reciente completa. No se mezclan campo por campo
+- Los medios de las tarjetas no existen todavía, así que tampoco viajan
 
 ## Antes de abrir a alumnos
 
