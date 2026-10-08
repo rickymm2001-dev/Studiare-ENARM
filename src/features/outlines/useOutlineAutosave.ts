@@ -23,6 +23,7 @@ export function useOutlineAutosave(
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const chain = useRef<Promise<void>>(Promise.resolve());
   const mounted = useRef(true);
+  const hasPending = () => pending.current !== null;
   const saveRef = useRef(save);
   useEffect(() => {
     saveRef.current = save;
@@ -45,7 +46,8 @@ export function useOutlineAutosave(
       show('saving');
       try {
         await saveRef.current(payload);
-        show(pending.current ? 'unsaved' : 'saved');
+        // Mientras guardaba pudo llegar otro cambio
+        show(hasPending() ? 'unsaved' : 'saved');
       } catch {
         // Lo que falló no pisa a lo que se escribió después
         pending.current ??= payload;

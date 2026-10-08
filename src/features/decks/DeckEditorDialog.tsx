@@ -4,6 +4,8 @@
 import { Pencil, Trash2, X } from 'lucide-react';
 import { Dialog } from 'radix-ui';
 import { useId, useMemo, useState } from 'react';
+import { Link } from 'react-router';
+import { screenPath } from '@/app/screens';
 import { htmlToText } from '@/data/content/plainText';
 import { useDataApi } from '@/data/context';
 import { useLiveData } from '@/data/hooks';
@@ -18,6 +20,7 @@ import {
   type DraftError,
   type NoteDraft,
   type NoteKind,
+  isFromOutline,
 } from '@/data/usecases/manualDecks';
 import { checkCardQuality } from '@/engines/cardQuality';
 import { buildDuplicateIndex, findDuplicates } from '@/engines/duplicates';
@@ -346,7 +349,20 @@ export function DeckEditorDialog({
                         {text.cards(cardsOf(note.id))}
                       </span>
                     </span>
-                    {confirmingId === note.id ? (
+                    {isFromOutline(note) ? (
+                      <>
+                        <span className="w-full text-xs text-fg-muted">
+                          {t.outlines.fromOutline.note}
+                        </span>
+                        <Button asChild size="sm" variant="secondary">
+                          <Link
+                            to={`${screenPath('outlines')}?apunte=${encodeURIComponent(note.outlineId)}`}
+                          >
+                            {t.outlines.fromOutline.open}
+                          </Link>
+                        </Button>
+                      </>
+                    ) : confirmingId === note.id ? (
                       <>
                         <Button
                           size="sm"

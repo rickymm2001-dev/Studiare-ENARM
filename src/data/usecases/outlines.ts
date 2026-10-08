@@ -22,6 +22,7 @@ import {
   cardOrdinals,
   changesCardFamily,
   createManualDeck,
+  isFromOutline,
   manualNoteOf,
   ownManualDeck,
   reconcileCards,
@@ -56,12 +57,7 @@ export interface OutlineSyncResult {
   issues: PlanIssue[];
 }
 
-/** Si la nota viene de la línea de un apunte. Esas tarjetas se editan desde el apunte */
-export function isFromOutline<T extends Pick<Note, 'outlineId' | 'outlineNodeId'>>(
-  note: T,
-): note is T & { outlineId: string; outlineNodeId: string } {
-  return typeof note.outlineId === 'string' && typeof note.outlineNodeId === 'string';
-}
+export { isFromOutline };
 
 async function ownedOutline(api: Api, user: Actor, outlineId: string): Promise<Outline> {
   const outline = await api.repos.outlines.get(outlineId);

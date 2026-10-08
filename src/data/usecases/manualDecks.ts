@@ -128,6 +128,15 @@ export function contentOf(draft: NoteDraft) {
 
 type Repos = Pick<DataApi, 'repos'>;
 
+const FROM_OUTLINE = 'Esta tarjeta sale de un apunte. Cámbiala o bórrala en el apunte';
+
+/** Si la nota viene de la línea de un apunte. Esas tarjetas se editan desde el apunte */
+export function isFromOutline<T extends Pick<Note, 'outlineId' | 'outlineNodeId'>>(
+  note: T,
+): note is T & { outlineId: string; outlineNodeId: string } {
+  return typeof note.outlineId === 'string' && typeof note.outlineNodeId === 'string';
+}
+
 const isCloze = (kind: NoteKind) => kind === 'cloze';
 
 export async function ownManualDeck(
@@ -281,6 +290,10 @@ export async function saveManualNote(
   const existing = input.noteId ? await api.repos.notes.get(input.noteId) : undefined;
   if (input.noteId && existing?.deckId !== input.deckId)
     throw new Error('La tarjeta no está en este mazo');
+  // Una tarjeta que sale de la línea de un apunte se cambia en el apunte, que es quien la sincroniza.
+  // Si se pudiera editar aquí, la siguiente sincronización la volvería a escribir como estaba
+  if (existing && isFromOutline(existing) && input.outline === undefined)
+    throw new Error(FROM_OUTLINE);
   const stamp = now.toISOString();
   const draft = input.draft;
   const kept: OutlineLink | null =
@@ -317,6 +330,7 @@ export async function deleteManualNote(
 ): Promise<void> {
   const note = await api.repos.notes.get(noteId);
   if (!note) return;
+  if (isFromOutline(note)) throw new Error(FROM_OUTLINE);
   await ownManualDeck(api, user, note.deckId);
   const stamp = now.toISOString();
   const cards = (await api.repos.cards.list()).filter((entry) => entry.noteId === noteId);

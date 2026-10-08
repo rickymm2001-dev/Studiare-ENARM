@@ -376,7 +376,7 @@ describe('etiquetas y unión con un apunte al guardar una tarjeta (D-090)', () =
     expect((await api.repos.notes.get(note.id))?.tags).toEqual([]);
   });
 
-  it('guarda la unión con la línea de un apunte y la conserva en las ediciones siguientes', async () => {
+  it('guarda la unión con la línea de un apunte y la conserva cuando el apunte la vuelve a escribir', async () => {
     const { api, user } = setup();
     const deck = await createManualDeck(api, user, { name: 'Mazo' });
     const note = await saveManualNote(api, user, {
@@ -391,8 +391,32 @@ describe('etiquetas y unión con un apunte al guardar una tarjeta (D-090)', () =
       deckId: deck.id,
       noteId: note.id,
       draft: { kind: 'basic', front: 'otro', back: 'b' },
+      outline: LINK,
     });
     expect(edited).toMatchObject({ outlineId: LINK.outlineId, outlineNodeId: LINK.nodeId });
+  });
+
+  it('una tarjeta que sale de un apunte no se edita ni se borra por fuera del apunte', async () => {
+    const { api, user } = setup();
+    const deck = await createManualDeck(api, user, { name: 'Mazo' });
+    const note = await saveManualNote(api, user, {
+      deckId: deck.id,
+      draft: { kind: 'basic', front: 'f', back: 'b' },
+      outline: LINK,
+    });
+    await expect(
+      saveManualNote(api, user, {
+        deckId: deck.id,
+        noteId: note.id,
+        draft: { kind: 'basic', front: 'otro', back: 'b' },
+      }),
+    ).rejects.toThrow('sale de un apunte');
+    await expect(deleteManualNote(api, user, note.id)).rejects.toThrow('sale de un apunte');
+    // Ni la nota ni sus cartas cambiaron
+    expect(await api.repos.notes.get(note.id)).toEqual(note);
+    expect((await api.repos.cards.list()).filter((card) => card.noteId === note.id)).toHaveLength(
+      1,
+    );
   });
 
   it('una nota con solo la mitad de la unión no se guarda', async () => {
