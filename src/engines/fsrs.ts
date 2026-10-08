@@ -18,6 +18,10 @@
  *     y que introduce las nuevas al ritmo de su límite diario
  *   - Intervalo máximo del alumno sobre Bien con compresión suave, 21 días por defecto. Difícil y
  *     Fácil guardan su proporción con Bien y cada botón tiene su multiplicador (D-064, D-067)
+ *   - Días fáciles (D-085). Después del tope y del multiplicador y antes del recorte al ENARM, el
+ *     vencimiento de intervalos de 3 días o más se mueve unos días para esquivar los días que el
+ *     alumno marcó como reduced o minimum. Las reglas viven en easyDays.ts. Solo cambia la fecha,
+ *     la estabilidad y la dificultad de FSRS no se tocan. Ausente o todo normal no cambia nada
  * Umbrales. Retención 0.90 (0.80 a 0.97), 0.93 en los últimos 30 días, sanguijuela con 8 lapsos,
  * 20 nuevas y 200 repasos por día. Optimizar parámetros por alumno desde 1,000 repasos queda fuera
  * del prototipo. El punto de extensión es config.weights.
@@ -25,6 +29,7 @@
 import { createEmptyCard, fsrs, Rating, State, type Card, type FSRS, type Grade } from 'ts-fsrs';
 import type { Thresholds } from '@/config/thresholds';
 import type { FsrsCardState } from '@/data/schemas/common';
+import { applyEasyDays, hasEasyDays, type EasyDays } from './easyDays';
 import type { FsrsRating } from './mcqGrade';
 import { addDays, DAY_MS, daysBetween, studyDayEnd, studyDayOf, studyDayStart } from './studyDay';
 
@@ -51,6 +56,12 @@ export interface SchedulerConfig {
    * 1 es lo recomendado. Ausente es 1 en los tres
    */
   spacing?: Readonly<Record<'hard' | 'good' | 'easy', number>>;
+  /**
+   * Nivel de cada día de la semana, normal, reduced o minimum (D-085, fila 7). El vencimiento de
+   * los intervalos de 3 días o más se mueve unos días para esquivar los días fáciles. Ausente o
+   * todo normal no cambia nada
+   */
+  easyDays?: EasyDays;
 }
 
 /**
@@ -184,6 +195,22 @@ function notBeforeLastReview(state: FsrsCardState | null, now: Date): Date {
   return now;
 }
 
+/**
+ * Semilla de los días fáciles. Sale del estado nuevo de FSRS y de la calificación, nunca de la hora
+ * exacta de now. Así la vista previa de los botones, que se calcula al abrir la tarjeta, y el
+ * repaso real, que se calcula segundos o minutos después, dan el mismo resultado. Los decimales se
+ * fijan en 6 para que el ruido de coma flotante no cambie la semilla
+ */
+function easyDaysSeed(state: FsrsCardState, rating: FsrsRating): string {
+  return [
+    state.stability.toFixed(6),
+    state.difficulty.toFixed(6),
+    state.reps,
+    state.lapses,
+    rating,
+  ].join('|');
+}
+
 export function scheduleReview(
   state: FsrsCardState | null,
   rating: FsrsRating,
@@ -219,8 +246,29 @@ export function scheduleReview(
       };
     }
   }
-  let examCapped = false;
   const deadline = examDeadline(config);
+  const upcomingDeadline = deadline && deadline.getTime() > now.getTime() ? deadline : null;
+  // Días fáciles (D-085). Solo mueve la fecha de vencimiento, nunca la estabilidad ni la dificultad.
+  // Va después del tope y del multiplicador y antes del recorte al ENARM, que sigue mandando
+  if (rating !== 'again' && next.state === 'review' && hasEasyDays(config.easyDays)) {
+    const due = new Date(next.due);
+    const moved = applyEasyDays({
+      due,
+      now,
+      timeZone: config.timeZone,
+      easyDays: config.easyDays,
+      seed: easyDaysSeed(next, rating),
+      deadline: upcomingDeadline,
+    });
+    if (moved.getTime() !== due.getTime()) {
+      next = {
+        ...next,
+        due: moved.toISOString(),
+        scheduledDays: Math.max(1, Math.round((moved.getTime() - now.getTime()) / DAY_MS)),
+      };
+    }
+  }
+  let examCapped = false;
   if (deadline && deadline.getTime() > now.getTime() && new Date(next.due) > deadline) {
     next = {
       ...next,
