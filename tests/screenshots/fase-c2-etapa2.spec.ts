@@ -46,8 +46,10 @@ test('repaso con contadores y temporizador, y los atrasos repartidos', async ({ 
 
   // Temporizador encendido con 30 segundos y sin mostrar la respuesta sola
   await page.goto(`${SCREENS.settings.path}?seccion=study`);
-  // 50 nuevas por día para juntar más de 40 atrasadas y que salte el aviso de recuperación
+  // 50 nuevas por día y 60 repasos como límite, así 45 atrasadas pasan el mínimo de 40 y de la
+  // mitad del límite, y salta el aviso de recuperación
   await page.getByRole('spinbutton', { name: t.settings.newCardsPerDay }).fill('50');
+  await page.getByRole('spinbutton', { name: t.settings.reviewsPerDay }).fill('60');
   await page.getByRole('checkbox', { name: t.settings.cardTimerEnabled }).check();
   await expect(page.getByRole('combobox', { name: t.settings.cardTimerSeconds })).toBeVisible();
   await page.getByText(t.settings.easyDaysTitle, { exact: true }).first().click();
