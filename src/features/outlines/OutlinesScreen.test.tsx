@@ -28,13 +28,13 @@ beforeAll(() => {
     bottom: 0,
     toJSON: () => ({}),
   };
-  Range.prototype.getBoundingClientRect = () => rect as DOMRect;
+  Range.prototype.getBoundingClientRect = () => rect;
   Range.prototype.getClientRects = () =>
     ({
       length: 0,
       item: () => null,
       [Symbol.iterator]: [][Symbol.iterator],
-    }) as unknown as DOMRectList;
+    });
   document.elementFromPoint = () => null;
 });
 

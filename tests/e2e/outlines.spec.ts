@@ -40,14 +40,15 @@ test('un apunte con marcas da tarjetas, se actualiza al editar y se borra', asyn
   await saved(page);
   await expectNoSeriousA11yViolations(page);
 
-  // Repasar ya trae las tarjetas del apunte
+  // Repasar ya trae las tarjetas del apunte. Hoy salen 3 porque las dos cartas de un mismo concepto
+  // no se repasan el mismo día, la segunda espera a mañana
   await page.goto(SCREENS.review.path);
-  await expect(page.getByRole('button', { name: 'Repasar 4 tarjetas' })).toBeVisible({
+  await expect(page.getByRole('button', { name: 'Repasar 3 tarjetas' })).toBeVisible({
     timeout: 30_000,
   });
 
   // Cambiar el texto de una línea conserva su tarjeta y quitar una marca la quita
-  await page.goto(`${SCREENS.outlines.path}`);
+  await page.goto(SCREENS.outlines.path);
   await page.getByRole('link', { name: t.outlines.open('Asma') }).click();
   await expect(editorOf(page)).toBeVisible();
   await expect(page.getByText(t.outlines.preview.count(4))).toBeVisible();
@@ -58,7 +59,7 @@ test('un apunte con marcas da tarjetas, se actualiza al editar y se borra', asyn
   // Quitar los dos puntos del primer renglón deja esa línea sin marca
   await editorOf(page).getByText('Obstrucción reversible').click();
   await page.keyboard.press('Home');
-  for (let step = 0; step < 'Asma ::'.length; step += 1) await page.keyboard.press('Delete');
+  for (const key of Array.from('Asma ::', () => 'Delete')) await page.keyboard.press(key);
   await expect(page.getByText(t.outlines.preview.count(2))).toBeVisible();
   await saved(page);
 
