@@ -205,6 +205,17 @@ export const EventPayloadSchemas = {
     year: z.int().min(2000).max(2100),
     score: z.number().min(0).max(100),
   }),
+  /**
+   * El alumno saca tarjetas del repaso sin borrarlas (D-085). Un lote lleva hasta 500 tarjetas. El
+   * motivo dice si fue a mano o por una sanguijuela. Reanudar es otro evento, nunca se edita este
+   */
+  cards_suspended: z.strictObject({
+    cardIds: z.array(IdSchema).min(1).max(500),
+    reason: z.enum(['manual', 'leech']),
+  }),
+  cards_unsuspended: z.strictObject({
+    cardIds: z.array(IdSchema).min(1).max(500),
+  }),
 } as const;
 
 export type EventType = keyof typeof EventPayloadSchemas;
@@ -264,6 +275,8 @@ export const AppEventSchema = z.discriminatedUnion('type', [
   eventSchemaFor('settings_changed'),
   eventSchemaFor('subscription_changed'),
   eventSchemaFor('official_score_submitted'),
+  eventSchemaFor('cards_suspended'),
+  eventSchemaFor('cards_unsuspended'),
 ]);
 
 export type AppEvent = z.infer<typeof AppEventSchema>;

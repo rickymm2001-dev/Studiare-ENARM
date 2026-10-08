@@ -5,7 +5,7 @@ import { makeQuestionWithOptions, makeUser, newId } from '../testing/fixtures';
 import { AiArtifactSchema } from './activity';
 import { OptionSchema, QuestionSchema } from './bank';
 import { UtcDateTimeSchema } from './common';
-import { NoteSchema } from './decks';
+import { CardSchema, NoteSchema } from './decks';
 import { AppEventSchema, EVENT_TYPES } from './events';
 import { UserSchema, UserSettingsSchema } from './people';
 
@@ -45,9 +45,9 @@ describe('esquemas y tablas', () => {
     expect(Object.keys(storesFor('demo'))).toHaveLength(TABLE_NAMES.length);
   });
 
-  it('hay un esquema para los 30 tipos de evento de 6.3, el cambio de suscripción simulada y reabrir un artefacto', () => {
-    expect(EVENT_TYPES).toHaveLength(32);
-    expect(AppEventSchema.options).toHaveLength(32);
+  it('hay un esquema para los 30 tipos de evento de 6.3, el cambio de suscripción simulada, reabrir un artefacto y suspender o reanudar tarjetas', () => {
+    expect(EVENT_TYPES).toHaveLength(34);
+    expect(AppEventSchema.options).toHaveLength(34);
   });
 
   it('los ajustes por defecto siguen la especificación', () => {
@@ -166,6 +166,33 @@ describe('esquemas y tablas', () => {
     };
     expect(NoteSchema.parse(anchored).origin).toBe('generated');
     expect(NoteSchema.parse({ ...note, origin: 'manual' }).origin).toBe('manual');
+  });
+
+  it('una básica con tarjeta inversa lleva los mismos campos que la básica y la misma regla de cita', () => {
+    const note = {
+      id: newId(),
+      deckId: newId(),
+      kind: 'basic_reverse',
+      front: 'Frente',
+      back: 'Reverso',
+      tags: [],
+      origin: 'manual',
+      editorialStatus: 'draft',
+      sourceQuote: null,
+      sourceQuestionVersionId: null,
+      isDemo: false,
+      createdAt: '2026-10-01T10:00:00.000Z',
+    };
+    expect(NoteSchema.parse(note)).toMatchObject({ kind: 'basic_reverse', front: 'Frente' });
+    // Es estricta, no mezcla los campos de las cloze
+    expect(() => NoteSchema.parse({ ...note, text: 'x' })).toThrow();
+    expect(() => NoteSchema.parse({ ...note, back: undefined })).toThrow();
+    // Una generada cita su fuente igual que la básica
+    expect(() => NoteSchema.parse({ ...note, origin: 'generated' })).toThrow();
+    // Sus dos cartas son la 0 y la 1
+    const card = { id: newId(), noteId: note.id, deckId: note.deckId, createdAt: note.createdAt };
+    expect(CardSchema.parse({ ...card, ordinal: 0 }).ordinal).toBe(0);
+    expect(CardSchema.parse({ ...card, ordinal: 1 }).ordinal).toBe(1);
   });
 
   it('los esquemas rechazan campos desconocidos', () => {

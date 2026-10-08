@@ -1,26 +1,65 @@
 // Cliente de Supabase falso para las pruebas del dispositivo único y de CloudBridge. Imita solo lo
-// que usa la app. claim_device guarda el dispositivo como lo haría el servidor y device_sessions
-// devuelve esa fila. Solo lo usan las pruebas.
+// que usa la app. claim_device guarda el dispositivo como lo haría el servidor, con el session_id
+// del token, y device_sessions devuelve esa fila. Puede rechazar el reclamo por el límite de cambios
+// con el mismo error que lanza la base. Solo lo usan las pruebas.
 import type { AuthChangeEvent, SupabaseClient } from '@supabase/supabase-js';
 
 export interface FakeCloudOptions {
   /** Fila inicial de device_sessions. null si nadie ha reclamado la cuenta */
-  row?: { device_id: string; label?: string } | null;
-  /** Sesión de Supabase. null para simular que no hay sesión */
-  session?: { id: string; email: string } | null;
+  row?: FakeDeviceRow | null;
+  /** Sesión de Supabase. null para simular que no hay sesión. sessionId va en el token de acceso */
+  session?: FakeSession | null;
+}
+
+export interface FakeDeviceRow {
+  device_id: string;
+  label?: string;
+  /** Sesión del token con la que se reclamó. Falta si el token no la traía */
+  session_id?: string;
+}
+
+export interface FakeSession {
+  id: string;
+  email: string;
+  /** session_id del token de acceso. Sin él el token no trae el claim */
+  sessionId?: string;
 }
 
 export type FakeFailure = 'none' | 'error' | 'throw';
+/** limit rechaza el reclamo con el error de límite de cambios. hang deja la llamada sin responder */
+export type FakeClaimFailure = FakeFailure | 'limit';
+export type FakeReportFailure = FakeFailure | 'hang';
+
+/** Token de acceso con la forma de Supabase. La firma no importa porque el cliente no la verifica */
+export function fakeAccessToken(sessionId?: string): string {
+  const encode = (value: object) =>
+    btoa(JSON.stringify(value)).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
+  return [
+    encode({ alg: 'HS256', typ: 'JWT' }),
+    encode({
+      sub: 'usuario',
+      role: 'authenticated',
+      ...(sessionId ? { session_id: sessionId } : {}),
+    }),
+    'firma-de-prueba',
+  ].join('.');
+}
 
 export interface FakeCloud {
   cloud: SupabaseClient;
   /** Fila que tendría el servidor en device_sessions */
-  row: { device_id: string; label?: string } | null;
-  session: { id: string; email: string } | null;
+  row: FakeDeviceRow | null;
+  session: FakeSession | null;
   /** Cómo falla cada llamada. error responde con error de red y throw lanza la excepción */
-  failClaim: FakeFailure;
+  failClaim: FakeClaimFailure;
   failCheck: FakeFailure;
+  /** Cómo responde log_rejected_claim, la llamada que deja asentado un reclamo rechazado */
+  failReport: FakeReportFailure;
+  /** Hora de reintento que manda el error de límite en su detalle. null si el servidor no la manda */
+  limitRetryAt: string | null;
   claims: { p_device_id: string; p_label: string }[];
+  /** Reclamos rechazados que el cliente reportó con log_rejected_claim */
+  rejections: { p_device_id: string; p_label: string }[];
   /** Cuántas veces se leyó device_sessions y con qué filtros */
   checks: number;
   filters: [column: string, value: unknown][];
@@ -44,7 +83,10 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
         : options.session,
     failClaim: 'none',
     failCheck: 'none',
+    failReport: 'none',
+    limitRetryAt: '2030-01-02T09:30:00Z',
     claims: [],
+    rejections: [],
     checks: 0,
     filters: [],
     signOuts: [],
@@ -95,7 +137,10 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
         Promise.resolve({
           data: {
             session: fake.session
-              ? { user: { id: fake.session.id, email: fake.session.email } }
+              ? {
+                  access_token: fakeAccessToken(fake.session.sessionId),
+                  user: { id: fake.session.id, email: fake.session.email },
+                }
               : null,
           },
         }),
@@ -123,13 +168,37 @@ export function makeFakeCloud(options: FakeCloudOptions = {}): FakeCloud {
     },
     from: table,
     rpc: (name: string, args: { p_device_id: string; p_label: string }) => {
+      if (name === 'log_rejected_claim') {
+        if (fake.failReport === 'hang') return new Promise(() => undefined);
+        return Promise.resolve(
+          outcome(fake.failReport, () => {
+            fake.rejections.push(args);
+            return { data: true, error: null };
+          }),
+        );
+      }
       if (name !== 'claim_device') {
         return Promise.resolve({ data: null, error: { message: `Función ${name} no existe` } });
+      }
+      if (fake.failClaim === 'limit') {
+        return Promise.resolve({
+          data: null,
+          error: {
+            code: 'DV001',
+            message: 'Cambiaste de dispositivo demasiadas veces en poco tiempo',
+            details: fake.limitRetryAt,
+            hint: 'Vuelve a intentarlo a la hora indicada',
+          },
+        });
       }
       return Promise.resolve(
         outcome(fake.failClaim, () => {
           fake.claims.push(args);
-          fake.row = { device_id: args.p_device_id, label: args.p_label };
+          fake.row = {
+            device_id: args.p_device_id,
+            label: args.p_label,
+            ...(fake.session?.sessionId ? { session_id: fake.session.sessionId } : {}),
+          };
           return { data: null, error: null };
         }),
       );

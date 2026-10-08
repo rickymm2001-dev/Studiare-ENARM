@@ -13,6 +13,8 @@ import { screenPath } from '../screens';
 import { useSession } from '../session';
 import { usePreferences } from '../preferences';
 import { BottomNav } from './BottomNav';
+import { DeviceLimitNotice } from './DeviceLimitNotice';
+import { OrganizationSync } from './OrganizationSync';
 import { OtherDeviceNotice } from './OtherDeviceNotice';
 import { PwaUpdatePrompt } from './PwaUpdatePrompt';
 
@@ -102,6 +104,8 @@ export function AppShell() {
       )}
 
       <OtherDeviceNotice className={rail} />
+      <DeviceLimitNotice className={rail} />
+      <OrganizationSync />
 
       <div className={rail}>
         <main

@@ -13,9 +13,15 @@ function setVisibility(state: 'hidden' | 'visible') {
 
 const guards: DeviceGuard[] = [];
 function start(fake: ReturnType<typeof makeFakeCloud>, onOtherDevice = vi.fn()) {
-  const guard = startDeviceGuard({ cloud: fake.cloud, authId: AUTH_ID, onOtherDevice });
+  const onDeviceLimit = vi.fn();
+  const guard = startDeviceGuard({
+    cloud: fake.cloud,
+    authId: AUTH_ID,
+    onOtherDevice,
+    onDeviceLimit,
+  });
   guards.push(guard);
-  return { guard, onOtherDevice };
+  return { guard, onOtherDevice, onDeviceLimit };
 }
 
 /** Deja correr las promesas pendientes sin mover el reloj */
@@ -40,7 +46,7 @@ describe('vigilante del dispositivo', () => {
   it('al empezar reclama la cuenta si este navegador acaba de entrar', async () => {
     const fake = makeFakeCloud();
     const { guard, onOtherDevice } = start(fake);
-    await expect(guard.first).resolves.toBe('claimed');
+    await expect(guard.first).resolves.toEqual({ status: 'claimed' });
     expect(fake.claims).toHaveLength(1);
     expect(fake.row?.device_id).toBe(getDeviceId());
     expect(onOtherDevice).not.toHaveBeenCalled();
@@ -126,7 +132,7 @@ describe('vigilante del dispositivo', () => {
     first.guard.stop();
     fake.row = { device_id: 'otro-navegador' };
     const { guard, onOtherDevice } = start(fake);
-    await expect(guard.first).resolves.toBe('other');
+    await expect(guard.first).resolves.toEqual({ status: 'other' });
     expect(onOtherDevice).toHaveBeenCalledTimes(1);
   });
 
@@ -149,7 +155,7 @@ describe('vigilante del dispositivo', () => {
     const fake = makeFakeCloud();
     fake.failClaim = 'error';
     const { guard } = start(fake);
-    await expect(guard.first).resolves.toBe('failed');
+    await expect(guard.first).resolves.toEqual({ status: 'failed' });
     fake.failClaim = 'none';
     await vi.advanceTimersByTimeAsync(DEVICE_CHECK_INTERVAL_MS);
     expect(fake.claims).toHaveLength(1);
@@ -165,6 +171,65 @@ describe('vigilante del dispositivo', () => {
     fake.row = { device_id: 'otro-navegador' };
     await vi.advanceTimersByTimeAsync(DEVICE_CHECK_INTERVAL_MS);
     expect(failing).toHaveBeenCalledTimes(1);
+  });
+
+  it('si el servidor rechaza el cambio por el límite avisa una sola vez con la hora y se detiene', async () => {
+    const fake = makeFakeCloud();
+    fake.failClaim = 'limit';
+    fake.limitRetryAt = '2030-01-02T09:30:00Z';
+    const { guard, onOtherDevice, onDeviceLimit } = start(fake);
+    await expect(guard.first).resolves.toEqual({
+      status: 'limit',
+      retryAt: Date.parse('2030-01-02T09:30:00Z'),
+    });
+    expect(onDeviceLimit).toHaveBeenCalledTimes(1);
+    expect(onDeviceLimit).toHaveBeenCalledWith(Date.parse('2030-01-02T09:30:00Z'));
+    expect(onOtherDevice).not.toHaveBeenCalled();
+    // Ya no revisa ni reclama
+    await vi.advanceTimersByTimeAsync(DEVICE_CHECK_INTERVAL_MS * 3);
+    window.dispatchEvent(new Event('focus'));
+    await settle();
+    expect(fake.checks).toBe(0);
+    expect(onDeviceLimit).toHaveBeenCalledTimes(1);
+  });
+
+  it('el límite sin hora entendible avisa con null', async () => {
+    const fake = makeFakeCloud();
+    fake.failClaim = 'limit';
+    fake.limitRetryAt = null;
+    const { guard, onDeviceLimit } = start(fake);
+    await guard.first;
+    expect(onDeviceLimit).toHaveBeenCalledWith(null);
+  });
+
+  it('un fallo de red al reclamar no es el límite y se reintenta después', async () => {
+    const fake = makeFakeCloud();
+    fake.failClaim = 'error';
+    const { guard, onDeviceLimit, onOtherDevice } = start(fake);
+    await expect(guard.first).resolves.toEqual({ status: 'failed' });
+    expect(onDeviceLimit).not.toHaveBeenCalled();
+    expect(onOtherDevice).not.toHaveBeenCalled();
+    // El límite aparece en un reintento posterior y entonces sí avisa
+    fake.failClaim = 'limit';
+    await vi.advanceTimersByTimeAsync(DEVICE_CHECK_INTERVAL_MS);
+    expect(onDeviceLimit).toHaveBeenCalledTimes(1);
+  });
+
+  it('un error al avisar el límite no deja una promesa sin atender', async () => {
+    const fake = makeFakeCloud();
+    fake.failClaim = 'limit';
+    const onDeviceLimit = vi.fn(() => {
+      throw new Error('falló al salir');
+    });
+    const guard = startDeviceGuard({
+      cloud: fake.cloud,
+      authId: AUTH_ID,
+      onOtherDevice: vi.fn(),
+      onDeviceLimit,
+    });
+    guards.push(guard);
+    await expect(guard.first).resolves.toEqual({ status: 'failed' });
+    expect(onDeviceLimit).toHaveBeenCalledTimes(1);
   });
 
   it('stop quita el reloj y los avisos del navegador', async () => {

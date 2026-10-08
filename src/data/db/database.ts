@@ -32,6 +32,7 @@ import type {
 import type { Card, Deck, Note } from '../schemas/decks';
 import type { AppEvent } from '../schemas/events';
 import type { Account, Consent, OfficialScore, Subscription, User } from '../schemas/people';
+import { normalizeTags } from '../../engines/tagPath';
 import { DATABASE_NAMES, type DatabaseKind } from '../databases';
 import { storesFor } from './tables';
 
@@ -82,13 +83,15 @@ export class ImmutableEventError extends Error {
 
 /** Versión actual del esquema de Dexie. Cada cambio de índices sube esta versión con su migración */
 // 2 agrega accounts (D-068) y 3 agrega reviewAssignments (D-070). Dexie crea las tablas nuevas sin
-// tocar los datos. 4 apaga una vez la pregunta de confianza previa (D-087)
-export const DB_VERSION = 4;
+// tocar los datos. 4 apaga una vez la pregunta de confianza previa (D-087). 5 agrega el índice del
+// mazo padre y llena las fechas de modificación y las etiquetas sin espacios (D-085)
+export const DB_VERSION = 5;
 
 export function createEnarmDb(kind: DatabaseKind, options?: { name?: string }): EnarmDb {
   const db = new Dexie(options?.name ?? DATABASE_NAMES[kind]) as EnarmDb;
   Object.defineProperty(db, 'kind', { value: kind, enumerable: true });
-  db.version(DB_VERSION)
+  // Cada versión que cambia datos declara su migración, así subir de la 3 a la 5 corre las dos
+  db.version(4)
     .stores(storesFor(kind))
     .upgrade((tx) =>
       // Quien venía con el valor de siempre, encendido, pasa al modo rápido. Se puede volver a
@@ -100,6 +103,31 @@ export function createEnarmDb(kind: DatabaseKind, options?: { name?: string }): 
           user.settings.cardConfidenceStep = false;
         }),
     );
+  db.version(DB_VERSION)
+    .stores(storesFor(kind))
+    .upgrade(async (tx) => {
+      await tx
+        .table<{ createdAt: string; updatedAt?: string; parentId?: string | null }>('decks')
+        .toCollection()
+        .modify((deck) => {
+          deck.updatedAt ??= deck.createdAt;
+          deck.parentId ??= null;
+        });
+      await tx
+        .table<{ createdAt: string; updatedAt?: string; tags: string[] }>('notes')
+        .toCollection()
+        .modify((note) => {
+          note.updatedAt ??= note.createdAt;
+          // Una etiqueta no lleva espacios. Las que traían se limpian una sola vez
+          note.tags = normalizeTags(note.tags);
+        });
+      await tx
+        .table<{ createdAt: string; updatedAt?: string }>('cards')
+        .toCollection()
+        .modify((card) => {
+          card.updatedAt ??= card.createdAt;
+        });
+    });
   db.use({
     stack: 'dbcore',
     name: 'append-only-events',

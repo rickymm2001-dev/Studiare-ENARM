@@ -32,6 +32,7 @@ import {
   createDexieEntityRepo,
   createDexieOptionRepo,
   createDexieQuestionRepo,
+  createDexieSyncableRepo,
 } from './entityRepos';
 import { createDexieEventRepo } from './eventRepo';
 
@@ -44,9 +45,9 @@ export function createDexieRepositories(db: EnarmDb): Repositories {
     consents: createDexieEntityRepo(db.consents, ConsentSchema),
     subscriptions: createDexieEntityRepo(db.subscriptions, SubscriptionSchema),
     officialScores: createDexieEntityRepo(db.officialScores, OfficialScoreSchema),
-    decks: createDexieEntityRepo(db.decks, DeckSchema),
-    notes: createDexieEntityRepo(db.notes, NoteSchema),
-    cards: createDexieEntityRepo(db.cards, CardSchema),
+    decks: createDexieSyncableRepo(db.decks, DeckSchema),
+    notes: createDexieSyncableRepo(db.notes, NoteSchema),
+    cards: createDexieSyncableRepo(db.cards, CardSchema),
     cases: createDexieAppendOnlyRepo(db.cases, ClinicalCaseSchema),
     questions: createDexieQuestionRepo(db),
     options: createDexieOptionRepo(db),

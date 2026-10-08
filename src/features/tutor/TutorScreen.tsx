@@ -5,7 +5,6 @@
 import { useMemo, useState } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { useDataApi } from '@/data/context';
-import type { Note } from '@/data/schemas/decks';
 import type { Option } from '@/data/schemas/bank';
 import { errorIds } from '@/data/usecases/errorCards';
 import { t } from '@/i18n/es-MX';
@@ -26,6 +25,7 @@ import {
 import { enableNegationHighlight, shortenPomodoro } from './tutorActions';
 import { confusedPairs, pickTop, type Hypothesis, type TutorAction } from './tutorModel';
 import { useTutorData, useTutorView, type TutorData } from './useTutorData';
+import { cardLabel } from './cardLabel';
 import { BiasTipsCard, DraftCardsCard, FormingPatterns, WeeklyReportCard } from './TutorSections';
 
 /** Hipótesis abiertas de entrada. Con mucha actividad salen decenas y no se pueden leer todas */
@@ -33,17 +33,6 @@ const TOP_HYPOTHESES = 3;
 
 export function TutorScreen() {
   return <RequireSession screen="tutor">{(session) => <Tutor session={session} />}</RequireSession>;
-}
-
-/** Texto plano de una tarjeta para nombrarla en la evidencia */
-function plainLabel(note: Note): string {
-  const html = note.kind === 'basic' ? note.front : note.text;
-  const text = html
-    .replace(/\{\{c\d+::(.*?)(?:::.*?)?\}\}/g, '[…]')
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-  return text.length > 110 ? `${text.slice(0, 107)}…` : text;
 }
 
 function Tutor({ session }: { session: ReadySession }) {
@@ -119,7 +108,7 @@ function TutorBody({
       }
       const card = content.cards.find((entry) => entry.id === itemId);
       const note = card ? noteById.get(card.noteId) : undefined;
-      return note ? plainLabel(note) : undefined;
+      return note && card ? cardLabel(note, card.ordinal) : undefined;
     },
   };
 

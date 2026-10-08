@@ -1,8 +1,9 @@
-// Rutas de las 26 pantallas. Las que todavía son esqueleto usan ScreenPlaceholder.
+// Rutas de las pantallas. Las que todavía son esqueleto usan ScreenPlaceholder.
 import type { ComponentType } from 'react';
 import { createBrowserRouter, type RouteObject } from 'react-router';
 import { SubscriptionScreen } from '@/features/billing/SubscriptionScreen';
 import { DecksScreen } from '@/features/decks/DecksScreen';
+import { ExploreScreen } from '@/features/explore/ExploreScreen';
 import { ExamResultsScreen } from '@/features/exam/ExamResultsScreen';
 import { ExamScreen } from '@/features/exam/ExamScreen';
 import { HomeScreen } from '@/features/home/HomeScreen';
@@ -38,6 +39,7 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, ComponentType>> = {
   exam: ExamScreen,
   examResults: ExamResultsScreen,
   decks: DecksScreen,
+  explore: ExploreScreen,
   planner: PlannerScreen,
   tutor: TutorScreen,
   subscription: SubscriptionScreen,

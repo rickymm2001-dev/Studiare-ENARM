@@ -1,6 +1,18 @@
 // Mazos, notas y tarjetas (6.2). El estado FSRS de cada tarjeta vive en cardStateCache.
+// Los tres llevan fecha de modificación y marca de borrado para sincronizar entre dispositivos
+// (D-085, fila 12). Borrar es poner la marca y no quitar el registro, así otro dispositivo se entera.
 import { z } from 'zod';
+import { TAG_MAX_LENGTH } from '../../engines/tagPath';
 import { ContentOriginSchema, EditorialStatusSchema, IdSchema, UtcDateTimeSchema } from './common';
+
+/**
+ * Campos de sincronización. updatedAt dice cuándo cambió por última vez y, si falta, vale lo mismo
+ * que createdAt. deletedAt con fecha es una marca de borrado y null o ausente es un registro vivo
+ */
+const SyncShape = {
+  updatedAt: UtcDateTimeSchema.optional(),
+  deletedAt: UtcDateTimeSchema.nullable().optional(),
+};
 
 export const DeckSchema = z.strictObject({
   id: IdSchema,
@@ -13,14 +25,24 @@ export const DeckSchema = z.strictObject({
   visibility: z.enum(['private', 'public']),
   /** Contenido de demostración, lleva la etiqueta visible (4.6) */
   isDemo: z.boolean(),
+  /** Mazo del que cuelga. null o ausente es un mazo de primer nivel (D-085, fila 3) */
+  parentId: IdSchema.nullable().optional(),
   createdAt: UtcDateTimeSchema,
+  ...SyncShape,
 });
 export type Deck = z.infer<typeof DeckSchema>;
+
+/** Una etiqueta de nota. Nunca lleva espacios y sus niveles van separados por :: (D-085) */
+export const NoteTagSchema = z
+  .string()
+  .min(1)
+  .max(TAG_MAX_LENGTH)
+  .regex(/^\S+$/, 'Una etiqueta no lleva espacios');
 
 const NoteBaseShape = {
   id: IdSchema,
   deckId: IdSchema,
-  tags: z.array(z.string().min(1).max(80)).max(50).default([]),
+  tags: z.array(NoteTagSchema).max(50).default([]),
   origin: ContentOriginSchema,
   editorialStatus: EditorialStatusSchema,
   /** Frase exacta de la fuente que respalda una tarjeta generada (4.1). null si no es generada */
@@ -29,6 +51,7 @@ const NoteBaseShape = {
   sourceQuestionVersionId: IdSchema.nullable(),
   isDemo: z.boolean(),
   createdAt: UtcDateTimeSchema,
+  ...SyncShape,
 };
 
 /** Contenido ya saneado (HTML con lista corta de etiquetas en el importador, 14.3) */
@@ -37,6 +60,17 @@ const SanitizedHtmlSchema = z.string().max(20_000);
 export const BasicNoteSchema = z.strictObject({
   ...NoteBaseShape,
   kind: z.literal('basic'),
+  front: SanitizedHtmlSchema,
+  back: SanitizedHtmlSchema,
+});
+
+/**
+ * Básica con tarjeta inversa, como en Anki. Una nota con frente y reverso que genera dos cartas, la
+ * de ordinal 0 que pregunta el frente y la de ordinal 1 que pregunta el reverso
+ */
+export const BasicReverseNoteSchema = z.strictObject({
+  ...NoteBaseShape,
+  kind: z.literal('basic_reverse'),
   front: SanitizedHtmlSchema,
   back: SanitizedHtmlSchema,
 });
@@ -50,7 +84,7 @@ export const ClozeNoteSchema = z.strictObject({
 });
 
 export const NoteSchema = z
-  .discriminatedUnion('kind', [BasicNoteSchema, ClozeNoteSchema])
+  .discriminatedUnion('kind', [BasicNoteSchema, BasicReverseNoteSchema, ClozeNoteSchema])
   // Una tarjeta generada siempre cita la frase y la pregunta del banco que la respaldan (4.1)
   .refine(
     (note) =>
@@ -64,8 +98,19 @@ export const CardSchema = z.strictObject({
   id: IdSchema,
   noteId: IdSchema,
   deckId: IdSchema,
-  /** Número de hueco en cloze, 0 en básicas */
+  /** Número de hueco en cloze, 0 en básicas y 0 o 1 en las inversas (1 pregunta el reverso) */
   ordinal: z.int().min(0).max(100),
   createdAt: UtcDateTimeSchema,
+  ...SyncShape,
 });
 export type Card = z.infer<typeof CardSchema>;
+
+/** Si un registro sigue vivo, es decir, no tiene marca de borrado */
+export function isLive(entity: { deletedAt?: string | null }): boolean {
+  return entity.deletedAt === undefined || entity.deletedAt === null;
+}
+
+/** Cuándo cambió por última vez. Sin fecha de modificación vale la de creación */
+export function modifiedAt(entity: { createdAt: string; updatedAt?: string | undefined }): string {
+  return entity.updatedAt ?? entity.createdAt;
+}

@@ -25,7 +25,7 @@ async function oldDatabase(name: string, userId: string) {
   old.close();
 }
 
-describe('versión 4 de la base', () => {
+describe('versiones de la base', () => {
   it('apaga la confianza previa una sola vez al subir de versión', async () => {
     const name = `migracion-${newId()}`;
     names.push(name);
@@ -50,12 +50,118 @@ describe('versión 4 de la base', () => {
     expect((await again.users.get(userId))?.settings.cardConfidenceStep).toBe(true);
   });
 
-  it('una base nueva queda en la versión 4', async () => {
+  it('sube de la versión 3 a la 5 llenando fechas de modificación y limpiando las etiquetas con espacios', async () => {
+    const name = `migracion5-${newId()}`;
+    names.push(name);
+    const old = new Dexie(name);
+    old.version(3).stores(storesFor('real'));
+    await old.open();
+    const stamp = '2026-10-01T15:00:00.000Z';
+    const deckId = newId();
+    const noteId = newId();
+    const cardId = newId();
+    await old.table('decks').put({
+      id: deckId,
+      name: 'Mazo',
+      description: '',
+      ownerId: null,
+      origin: 'preloaded',
+      visibility: 'public',
+      isDemo: true,
+      createdAt: stamp,
+    });
+    await old.table('notes').put({
+      id: noteId,
+      deckId,
+      tags: ['Medicina Interna', 'Hipertensión Portal::Ascitis refractaria', 'medicina interna'],
+      origin: 'preloaded',
+      editorialStatus: 'draft',
+      sourceQuote: null,
+      sourceQuestionVersionId: null,
+      isDemo: true,
+      createdAt: stamp,
+      kind: 'basic',
+      front: 'a',
+      back: 'b',
+    });
+    await old.table('cards').put({ id: cardId, noteId, deckId, ordinal: 0, createdAt: stamp });
+    old.close();
+
+    const db = createEnarmDb('real', { name });
+    open.push(db);
+    await db.open();
+    const deck = await db.decks.get(deckId);
+    const note = await db.notes.get(noteId);
+    const card = await db.cards.get(cardId);
+    expect(deck).toMatchObject({ parentId: null, updatedAt: stamp });
+    expect(note?.updatedAt).toBe(stamp);
+    // Sin espacios, con los niveles conservados y sin repetir la misma etiqueta
+    expect(note?.tags).toEqual(['Medicina_Interna', 'Hipertensión_Portal::Ascitis_refractaria']);
+    expect(card?.updatedAt).toBe(stamp);
+  });
+
+  it('una base de la versión 4 con el índice viejo de mazos sube a la 5 y abrirla otra vez no cambia nada', async () => {
+    const name = `migracion4-${newId()}`;
+    names.push(name);
+    // La versión 4 todavía no tenía el índice parentId en los mazos
+    const old = new Dexie(name);
+    old.version(4).stores({ ...storesFor('real'), decks: 'id, ownerId, origin' });
+    await old.open();
+    const stamp = '2026-10-02T10:00:00.000Z';
+    const deckId = newId();
+    const noteId = newId();
+    await old.table('decks').put({
+      id: deckId,
+      name: 'Mazo viejo',
+      description: '',
+      ownerId: null,
+      origin: 'preloaded',
+      visibility: 'public',
+      isDemo: true,
+      createdAt: stamp,
+    });
+    await old.table('notes').put({
+      id: noteId,
+      deckId,
+      tags: ['Tema Uno::Subtema Dos'],
+      origin: 'preloaded',
+      editorialStatus: 'draft',
+      sourceQuote: null,
+      sourceQuestionVersionId: null,
+      isDemo: true,
+      createdAt: stamp,
+      kind: 'basic',
+      front: 'a',
+      back: 'b',
+    });
+    old.close();
+
+    const db = createEnarmDb('real', { name });
+    open.push(db);
+    await db.open();
+    expect(db.verno).toBe(5);
+    // El índice nuevo ya sirve y la nota quedó limpia
+    expect(await db.decks.where('parentId').equals('').count()).toBe(0);
+    expect((await db.decks.toArray()).filter((deck) => deck.parentId === null)).toHaveLength(1);
+    const first = JSON.stringify(await db.notes.toArray());
+    expect((await db.notes.get(noteId))?.tags).toEqual(['Tema_Uno::Subtema_Dos']);
+
+    // Abrirla otra vez, y otra, no vuelve a tocar nada
+    for (let round = 0; round < 2; round += 1) {
+      db.close();
+      const again = createEnarmDb('real', { name });
+      open.push(again);
+      await again.open();
+      expect(JSON.stringify(await again.notes.toArray())).toBe(first);
+    }
+  });
+
+  it('una base nueva queda en la versión 5', async () => {
     const name = `nueva-${newId()}`;
     names.push(name);
     const db = createEnarmDb('real', { name });
     open.push(db);
     await db.open();
-    expect(db.verno).toBe(4);
+    expect(db.verno).toBe(5);
   });
 });

@@ -57,7 +57,7 @@ export const TABLES = {
   subscriptions: { schema: SubscriptionSchema, indexes: 'userId', kind: 'entity' },
   officialScores: { schema: OfficialScoreSchema, indexes: 'userId', kind: 'entity' },
 
-  decks: { schema: DeckSchema, indexes: 'id, ownerId, origin', kind: 'entity' },
+  decks: { schema: DeckSchema, indexes: 'id, ownerId, origin, parentId', kind: 'entity' },
   notes: { schema: NoteSchema, indexes: 'id, deckId, *tags', kind: 'entity' },
   cards: { schema: CardSchema, indexes: 'id, noteId, deckId', kind: 'entity' },
 

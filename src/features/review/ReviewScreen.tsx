@@ -24,6 +24,7 @@ import {
   type SchedulerConfig,
 } from '@/engines/fsrs';
 import { studyDayOf } from '@/engines/studyDay';
+import { suspendedCardIds } from '@/engines/suspension';
 import { awardXp } from '@/engines/xp';
 import { t } from '@/i18n/es-MX';
 import { StudyPausedDialog } from '../shared/StudyPausedDialog';
@@ -43,17 +44,18 @@ import { buildSnapshot } from '../home/snapshot';
 import { CardHtml } from '../shared/CardHtml';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
-import { deckIds } from '@/demo/content/deckEntities';
+import { deckIds, ROOT_DECK_KEY } from '@/demo/content/deckEntities';
+import { deckPath, selectionUnitId } from '@/engines/deckTree';
 import { useDeckCatalog } from '../decks/useDeckCatalog';
 import { ReviewSetup } from './ReviewSetup';
 import { StudyTabs } from './StudyTabs';
 import { schedulerConfig } from './schedulerConfig';
 import { cardMatches, type ReviewMode, type ReviewSelection } from './selection';
 import {
+  cardFaces,
   errorsFirst,
   isQuestionNote,
   latestCardStates,
-  renderCloze,
   reviewedToday,
   reviewEndReason,
   topicFromTags,
@@ -63,6 +65,8 @@ import {
 type Confidence = 'dont_know' | 'unsure' | 'sure';
 type Cause = keyof typeof t.review.causes;
 const RATINGS: FsrsRating[] = ['again', 'hard', 'good', 'easy'];
+/** ENARM 2027 solo agrupa a las ramas, así que no se elige como unidad de repaso */
+const CONTAINER_DECKS: ReadonlySet<string> = new Set([deckIds.deck(ROOT_DECK_KEY)]);
 
 /** Reloj de la sesión. Solo se llama desde manejadores de eventos */
 function clock(): number {
@@ -94,28 +98,48 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     return <LoadingState />;
   const followed = followedDeckIds(session, content.decks);
   const noteById = new Map(content.notes.map((note) => [note.id, note]));
+  // Las suspendidas no entran al repaso, pero siguen en el mazo y en Explorar (D-085)
+  const suspended = suspendedCardIds(events);
   const cards = errorsFirst(
-    content.cards.filter((card) => followed.has(card.deckId)),
+    content.cards.filter((card) => followed.has(card.deckId) && !suspended.has(card.id)),
     noteById,
   );
   if (cards.length === 0) {
+    // Si sigues mazos pero todo está suspendido, el aviso lleva a Explorar y no a Mazos
+    const allSuspended = content.cards.some(
+      (card) => followed.has(card.deckId) && suspended.has(card.id),
+    );
     return (
       <>
         <ScreenHeader title={t.screens.review.title} description={t.screens.review.description} />
         <StudyTabs />
         <Card aria-labelledby="sin-mazos">
           <CardHeader>
-            <CardTitle id="sin-mazos">{t.review.noDecksTitle}</CardTitle>
-            <CardDescription>{t.review.noDecksBody}</CardDescription>
+            <CardTitle id="sin-mazos">
+              {allSuspended ? t.review.allSuspendedTitle : t.review.noDecksTitle}
+            </CardTitle>
+            <CardDescription>
+              {allSuspended ? t.review.allSuspendedBody : t.review.noDecksBody}
+            </CardDescription>
           </CardHeader>
           <Button asChild className="self-start">
-            <Link to={screenPath('decks')}>{t.review.goToDecks}</Link>
+            <Link to={screenPath(allSuspended ? 'explore' : 'decks')}>
+              {allSuspended ? t.review.goToExplore : t.review.goToDecks}
+            </Link>
           </Button>
         </Card>
       </>
     );
   }
-  const deckNames = new Map(content.decks.map((deck) => [deck.id, deck.name]));
+  // Se elige y se cuenta por unidad, la rama de un mazo precargado o un mazo propio, y no por cada
+  // materia (D-085). Cada tarjeta dice en qué mazo y materia está
+  const unitOf = (deckId: string) => selectionUnitId(content.decks, deckId, CONTAINER_DECKS);
+  const deckNames = new Map(
+    content.decks.map((deck) => [deck.id, deckPath(content.decks, deck.id).slice(-2).join(' › ')]),
+  );
+  const unitNames = new Map(content.decks.map((deck) => [deck.id, deck.name]));
+  const inSelection = (card: CardEntity, topic: string | null, candidate: ReviewSelection) =>
+    cardMatches({ deckId: unitOf(card.deckId) }, topic, candidate);
   // Subespecialidad de cada tarjeta. Las de mazos precargados la traen en su nota y las de
   // preguntas falladas en una etiqueta
   const noteTopic = new Map<string, string | null>();
@@ -137,8 +161,8 @@ function ReviewLoader({ session }: { session: ReadySession }) {
         <ReviewSetup
           addDeck={<AddDeckButton />}
           hasDemo={content.decks.some((deck) => followed.has(deck.id) && deck.isDemo)}
-          cards={cards}
-          deckNames={deckNames}
+          cards={cards.map((card) => ({ ...card, deckId: unitOf(card.deckId) }))}
+          deckNames={unitNames}
           topicOfCard={topicOfCard}
           limits={{
             newCardsPerDay: session.settings.newCardsPerDay,
@@ -148,7 +172,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
           countFor={(candidate) =>
             buildQueue({
               cards: cards.filter((card) =>
-                cardMatches(card, topicOfCard.get(card.id) ?? null, candidate),
+                inSelection(card, topicOfCard.get(card.id) ?? null, candidate),
               ),
               events,
               config,
@@ -165,7 +189,7 @@ function ReviewLoader({ session }: { session: ReadySession }) {
     <ReviewSession
       key={JSON.stringify([selection.mode, [...selection.decks], [...selection.topics]])}
       session={session}
-      cards={cards.filter((card) => cardMatches(card, topicOfCard.get(card.id) ?? null, selection))}
+      cards={cards.filter((card) => inSelection(card, topicOfCard.get(card.id) ?? null, selection))}
       mode={selection.mode}
       notes={content.notes}
       deckNames={deckNames}
@@ -502,11 +526,7 @@ function ReviewSession({
   const state = states.get(card.id) ?? null;
   const isNew = state === null || state.state === 'new';
   const reveal = step === 'back' || step === 'cause';
-  const front = note.kind === 'basic' ? note.front : renderCloze(note.text, card.ordinal, false);
-  const back =
-    note.kind === 'basic'
-      ? note.back
-      : `${renderCloze(note.text, card.ordinal, true)}${note.extra ? `<br>${note.extra}` : ''}`;
+  const { front, back } = cardFaces(note, card.ordinal);
   const remainingReviews = queue.slice(position).filter((id) => {
     const s = states.get(id);
     return s && s.state !== 'new';

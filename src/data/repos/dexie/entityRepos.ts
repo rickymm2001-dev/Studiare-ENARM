@@ -3,7 +3,14 @@ import type { Table } from 'dexie';
 import type { z } from 'zod';
 import type { EnarmDb } from '../../db/database';
 import { OptionSchema, QuestionSchema, type Option, type Question } from '../../schemas/bank';
-import type { AppendOnlyRepo, CacheReader, EntityRepo, OptionRepo, QuestionRepo } from '../types';
+import type {
+  AppendOnlyRepo,
+  CacheReader,
+  EntityRepo,
+  OptionRepo,
+  QuestionRepo,
+  SyncableRepo,
+} from '../types';
 
 export function createDexieEntityRepo<T, K extends string>(
   table: Table<T, K>,
@@ -25,6 +32,30 @@ export function createDexieEntityRepo<T, K extends string>(
     async remove(key) {
       await table.delete(key);
     },
+  };
+}
+
+/**
+ * Repositorio de lo que se sincroniza. Lo marcado como borrado queda guardado pero get y list no lo
+ * muestran, para que ninguna pantalla lo trate como vivo. getRaw y listAll sí lo devuelven
+ */
+export function createDexieSyncableRepo<T extends { deletedAt?: string | null }, K extends string>(
+  table: Table<T, K>,
+  schema: z.ZodType<T>,
+): SyncableRepo<T, K> {
+  const base = createDexieEntityRepo(table, schema);
+  const live = (entity: T) => entity.deletedAt === undefined || entity.deletedAt === null;
+  return {
+    ...base,
+    async get(key) {
+      const entity = await table.get(key);
+      return entity && live(entity) ? entity : undefined;
+    },
+    async list() {
+      return (await table.toArray()).filter(live);
+    },
+    getRaw: (key) => table.get(key),
+    listAll: () => table.toArray(),
   };
 }
 

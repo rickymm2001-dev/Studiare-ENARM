@@ -1,6 +1,7 @@
 // Vigilante del dispositivo único. Revisa con el servidor al empezar, al volver a enfocar la
-// pestaña y cada minuto mientras esté visible. Si ganó otro dispositivo avisa una sola vez y se
-// detiene. Los fallos de red no hacen nada. No usa React para poder probarlo con relojes falsos.
+// pestaña y cada minuto mientras esté visible. Si ganó otro dispositivo, o si el servidor no dejó
+// cambiar de dispositivo por el límite diario, avisa una sola vez y se detiene. Los fallos de red no
+// hacen nada. No usa React para poder probarlo con relojes falsos.
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { reconcileDevice, type DeviceOutcome } from '@/data/cloud/device';
 
@@ -16,6 +17,8 @@ export interface DeviceGuardOptions {
   authId: string;
   /** Qué hacer cuando ganó otro dispositivo. Se llama una sola vez */
   onOtherDevice: () => void | Promise<void>;
+  /** Qué hacer cuando el servidor rechazó el cambio por el límite diario. retryAt, en ms, o null */
+  onDeviceLimit: (retryAt: number | null) => void | Promise<void>;
   intervalMs?: number;
 }
 
@@ -26,7 +29,13 @@ export interface DeviceGuard {
 }
 
 export function startDeviceGuard(options: DeviceGuardOptions): DeviceGuard {
-  const { cloud, authId, onOtherDevice, intervalMs = DEVICE_CHECK_INTERVAL_MS } = options;
+  const {
+    cloud,
+    authId,
+    onOtherDevice,
+    onDeviceLimit,
+    intervalMs = DEVICE_CHECK_INTERVAL_MS,
+  } = options;
   const state = { stopped: false, running: false, lastStart: Number.NEGATIVE_INFINITY };
 
   const check = async (): Promise<DeviceOutcome> => {
@@ -34,15 +43,18 @@ export function startDeviceGuard(options: DeviceGuardOptions): DeviceGuard {
     state.lastStart = Date.now();
     try {
       const outcome = await reconcileDevice(cloud, authId);
-      if (state.stopped) return 'failed';
-      if (outcome === 'other') {
+      if (state.stopped) return { status: 'failed' };
+      if (outcome.status === 'other') {
         stop();
         await onOtherDevice();
+      } else if (outcome.status === 'limit') {
+        stop();
+        await onDeviceLimit(outcome.retryAt);
       }
       return outcome;
     } catch {
       // Un error inesperado no saca al alumno
-      return 'failed';
+      return { status: 'failed' };
     } finally {
       state.running = false;
     }

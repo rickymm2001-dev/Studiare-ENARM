@@ -9,13 +9,21 @@ import { useDataApi } from '@/data/context';
 import type { Deck } from '@/data/schemas/decks';
 import type { FsrsCardState } from '@/data/schemas/common';
 import { createManualDeck, deleteManualDeck, DECK_NAME_MAX } from '@/data/usecases/manualDecks';
+import {
+  MAX_DECK_DEPTH,
+  deckDepth,
+  deckPath,
+  deckIndent,
+  flattenDeckTree,
+} from '@/engines/deckTree';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
 import { Card, CardHeader, CardTitle } from '@/ui/components/card';
-import { TextField } from '@/ui/components/field';
+import { SelectField, TextField } from '@/ui/components/field';
 import { DemoContentLabel } from '@/ui/components/labels';
 import type { ReadySession } from '../shared/RequireSession';
 import { DeckEditorDialog } from './DeckEditorDialog';
+import { DeckOrganizer } from './DeckOrganizer';
 
 export function OwnDecksCard({
   session,
@@ -32,7 +40,9 @@ export function OwnDecksCard({
   const api = useDataApi();
   const [editing, setEditing] = useState<Deck | null>(null);
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
+  const [organizingId, setOrganizingId] = useState<string | null>(null);
   const [name, setName] = useState('');
+  const [parentId, setParentId] = useState('');
   const [nameError, setNameError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState<string | null>(null);
@@ -46,7 +56,10 @@ export function OwnDecksCard({
     setProblem(null);
     setBusy(true);
     try {
-      const deck = await createManualDeck(api, session.user, { name });
+      const deck = await createManualDeck(api, session.user, {
+        name,
+        parentId: validParent === '' ? null : validParent,
+      });
       setName('');
       // Al crearlo se abre el editor, para escribir la primera tarjeta de una vez
       setEditing(deck);
@@ -67,13 +80,22 @@ export function OwnDecksCard({
     }
   };
 
+  // En orden de árbol, cada mazo después del que lo contiene. El destino solo ofrece mazos a mano
+  const ordered = flattenDeckTree(decks);
+  // Un mazo del último nivel ya no admite submazos
+  const manualTargets = flattenDeckTree(decks.filter((deck) => deck.origin === 'manual')).filter(
+    ({ deck }) => deckDepth(decks, deck.id) < MAX_DECK_DEPTH - 1,
+  );
+  // Si el mazo elegido ya no existe, se crea en el primer nivel
+  const validParent = manualTargets.some(({ deck }) => deck.id === parentId) ? parentId : '';
+
   return (
     <Card aria-labelledby="tus-mazos-titulo">
       <CardHeader>
         <CardTitle id="tus-mazos-titulo">{t.decks.yoursTitle}</CardTitle>
       </CardHeader>
       <ul className="grid gap-3 md:grid-cols-2">
-        {decks.map((deck) => {
+        {ordered.map(({ deck }) => {
           const cardIds = cardsByDeck.get(deck.id) ?? [];
           const studied = cardIds.filter((cardId) => states.has(cardId)).length;
           const manual = deck.origin === 'manual';
@@ -85,6 +107,11 @@ export function OwnDecksCard({
                   {deck.name}
                   {deck.isDemo ? <DemoContentLabel /> : null}
                 </span>
+                {deck.parentId ? (
+                  <span className="text-xs text-fg-muted">
+                    {t.decks.inside(deckPath(decks, deck.parentId).join(' › '))}
+                  </span>
+                ) : null}
                 <span className="text-sm text-fg-muted">
                   {manual && cardIds.length === 0
                     ? t.decks.editor.empty
@@ -134,6 +161,17 @@ export function OwnDecksCard({
                         <Button
                           size="sm"
                           variant="ghost"
+                          aria-label={t.decks.organizeLabel(deck.name)}
+                          aria-expanded={organizingId === deck.id}
+                          onClick={() => {
+                            setOrganizingId(organizingId === deck.id ? null : deck.id);
+                          }}
+                        >
+                          {t.decks.organize}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
                           aria-label={`${t.decks.deleteDeck}. ${deck.name}`}
                           onClick={() => {
                             setConfirmingId(deck.id);
@@ -145,6 +183,9 @@ export function OwnDecksCard({
                     ) : null}
                   </div>
                 )}
+                {organizingId === deck.id ? (
+                  <DeckOrganizer key={deck.id} session={session} deck={deck} decks={decks} />
+                ) : null}
               </div>
             </li>
           );
@@ -178,6 +219,22 @@ export function OwnDecksCard({
                 setName(event.target.value);
               }}
             />
+            {manualTargets.length > 0 ? (
+              <SelectField
+                label={t.decks.parentLabel}
+                value={validParent}
+                options={[
+                  { value: '', label: t.decks.topLevel },
+                  ...manualTargets.map(({ deck, depth }) => ({
+                    value: deck.id,
+                    label: `${deckIndent(depth)}${deck.name}`,
+                  })),
+                ]}
+                onChange={(event) => {
+                  setParentId(event.target.value);
+                }}
+              />
+            ) : null}
             <Button type="submit" size="sm" className="self-start" disabled={busy}>
               {busy ? t.decks.creating : t.decks.createButton}
             </Button>

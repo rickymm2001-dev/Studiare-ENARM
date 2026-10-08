@@ -5,6 +5,7 @@ import { DEFAULT_THRESHOLDS } from '@/config/thresholds';
 import type { AppEvent } from '@/data/schemas/events';
 import type { FsrsCardState } from '@/data/schemas/common';
 import type { User, UserSettings } from '@/data/schemas/people';
+import { suspendedCardIds } from '@/engines/suspension';
 import { computeStreak, type DayActivity, type StreakState } from '@/engines/streak';
 import { addDays, daysBetween, studyDayEnd, studyDayOf } from '@/engines/studyDay';
 import { levelFor, type LevelInfo } from '@/engines/xp';
@@ -41,8 +42,13 @@ export function buildSnapshot(input: {
   user: User;
   settings: UserSettings;
   now: Date;
+  /**
+   * Tarjetas vivas de los mazos que sigue el alumno. Si se pasa, solo ellas cuentan como por
+   * repasar, igual que en Repasar. Sin ella cuentan todas las que tienen repasos
+   */
+  activeCardIds?: ReadonlySet<string>;
 }): Snapshot {
-  const { events, user, settings, now } = input;
+  const { events, user, settings, now, activeCardIds } = input;
   const tz = user.timeZone;
   const today = studyDayOf(now, tz);
   const activity: Record<string, DaySummary> = {};
@@ -83,9 +89,13 @@ export function buildSnapshot(input: {
     entry.focusMinutes = Math.round(Math.max(sessions.get(day) ?? 0, pomodoro.get(day) ?? 0));
   }
   const endOfToday = studyDayEnd(today, tz).getTime();
+  // Una tarjeta suspendida no toca hoy, y tampoco la borrada o la de un mazo que ya no se sigue
+  const suspended = suspendedCardIds(events);
   let dueCards = 0;
-  for (const state of latestCard.values())
+  for (const [cardId, state] of latestCard) {
+    if (suspended.has(cardId) || (activeCardIds && !activeCardIds.has(cardId))) continue;
     if (new Date(state.due).getTime() < endOfToday) dueCards += 1;
+  }
   const weekday = (new Date(`${today}T12:00:00Z`).getUTCDay() + 6) % 7;
   const monday = addDays(today, -weekday);
   let weeklyXp = 0;

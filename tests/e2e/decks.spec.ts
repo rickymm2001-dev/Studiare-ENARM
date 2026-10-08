@@ -106,3 +106,46 @@ test('crea un mazo, escribe tarjetas, las repasa, las edita y borra el mazo', as
   await own.getByRole('button', { name: t.decks.confirmDeleteYes }).click();
   await expect(own.getByText(DECK)).toHaveCount(0);
 });
+
+test('arma un árbol de mazos, mueve un submazo y cambia el nombre', async ({ page }) => {
+  test.setTimeout(120_000);
+  await signUp(page);
+  await page.goto(SCREENS.decks.path);
+  const own = page.getByRole('region', { name: t.decks.yoursTitle });
+  const create = async (name: string) => {
+    await own.getByLabel(t.decks.nameLabel).fill(name);
+    await own.getByRole('button', { name: t.decks.createButton }).click();
+    const dialog = page.getByRole('dialog', { name: t.decks.editor.title(name) });
+    await expect(dialog).toBeVisible();
+    await dialog.getByRole('button', { name: t.decks.editor.close }).click();
+  };
+
+  // Un mazo en el primer nivel y otro dentro de él
+  await create('Medicina interna');
+  await own.getByLabel(t.decks.parentLabel).selectOption({ label: 'Medicina interna' });
+  await create('Nefrología');
+  await expect(own.getByText(t.decks.inside('Medicina interna'))).toBeVisible();
+  await expectNoSeriousA11yViolations(page);
+
+  // El editor avisa de una respuesta larga y sigue pasando axe con los avisos a la vista
+  await own.getByRole('button', { name: `${t.decks.editCards}. Nefrología` }).click();
+  const editor = page.getByRole('dialog', { name: t.decks.editor.title('Nefrología') });
+  await editor.getByLabel(t.decks.editor.front, { exact: true }).fill('¿Qué es la TFG?');
+  await editor
+    .getByLabel(t.decks.editor.back, { exact: true })
+    .fill(Array.from({ length: 60 }, (_, index) => `dato${index}`).join(' '));
+  await expect(editor.getByText(t.cardQuality.footer)).toBeVisible({ timeout: 10_000 });
+  await expectNoSeriousA11yViolations(page);
+  await editor.getByRole('button', { name: t.decks.editor.close }).click();
+
+  // Al organizarlo se puede regresar al primer nivel y cambiarle el nombre
+  await own.getByRole('button', { name: t.decks.organizeLabel('Nefrología') }).click();
+  await own.getByLabel(t.decks.renameLabel).fill('Nefrología clínica');
+  await own.getByRole('button', { name: t.decks.rename }).click();
+  await expect(own.getByText(t.decks.renamed)).toBeVisible();
+  await own.getByLabel(t.decks.moveLabel).selectOption({ label: t.decks.topLevel });
+  await own.getByRole('button', { name: t.decks.move }).click();
+  await expect(own.getByText(t.decks.moved)).toBeVisible();
+  await expect(own.getByText(t.decks.inside('Medicina interna'))).toHaveCount(0);
+  await expect(own.getByText('Nefrología clínica', { exact: true }).first()).toBeVisible();
+});

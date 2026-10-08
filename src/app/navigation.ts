@@ -58,7 +58,7 @@ const studentNav: readonly NavItem[] = [
     path: screenPath('review'),
     label: t.navItems.review,
     icon: BookOpenCheck,
-    alsoActive: [screenPath('decks')],
+    alsoActive: [screenPath('decks'), screenPath('explore')],
   },
   { path: screenPath('simulatorSetup'), label: t.navItems.simulate, icon: ClipboardList },
   { path: screenPath('progress'), label: t.navItems.progress, icon: ChartLine },

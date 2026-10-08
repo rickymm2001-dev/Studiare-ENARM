@@ -108,6 +108,9 @@ describe('aviso de otro dispositivo en el marco de la app', () => {
       </DataProvider>,
     );
     expect(await screen.findByRole('alert')).toHaveTextContent(t.cloud.otherDevice.title);
-    expect(screen.getByRole('heading', { level: 1, name: t.landing.title })).toBeVisible();
+    // La portada carga aparte del aviso, así que se espera igual que el aviso
+    expect(
+      await screen.findByRole('heading', { level: 1, name: t.landing.title }, { timeout: 10_000 }),
+    ).toBeVisible();
   });
 });

@@ -201,6 +201,95 @@ describe('CloudBridge y el dispositivo único', () => {
     });
   });
 
+  it('si el límite de cambios rechaza el reclamo, sale, avisa con la hora y asienta el rechazo', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.failClaim = 'limit';
+    fake.limitRetryAt = '2030-01-02T09:30:00Z';
+    usePreferences.setState({ sessionUserId: 'perfil-local' });
+    mount();
+    const expected = {
+      status: 'signed-out',
+      reason: 'device_limit',
+      retryAt: Date.parse('2030-01-02T09:30:00Z'),
+    };
+    await waitFor(() => {
+      expect(useCloud.getState().state).toEqual(expected);
+    });
+    // Cierra solo la sesión de este navegador y no deja la cuenta marcada como reclamada
+    expect(fake.signOuts).toEqual([{ scope: 'local' }]);
+    expect(usePreferences.getState().sessionUserId).toBeNull();
+    expect(localStorage.getItem(DEVICE_CLAIM_STORAGE_KEY)).toBeNull();
+    expect(fake.row).toBeNull();
+    expect(fake.rejections).toHaveLength(1);
+    // El SIGNED_OUT que manda Supabase al terminar no borra el motivo del aviso
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(useCloud.getState().state).toEqual(expected);
+  });
+
+  it('pasada la hora del límite, volver a entrar reclama y quita el motivo', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.failClaim = 'limit';
+    mount();
+    await waitFor(() => {
+      expect(useCloud.getState().state).toMatchObject({ reason: 'device_limit' });
+    });
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    // Ya pasó el tiempo y el alumno abre un enlace nuevo del correo
+    fake.failClaim = 'none';
+    fake.session = { id: AUTH_ID, email: 'rick@example.com' };
+    act(() => {
+      fake.emit('SIGNED_IN');
+    });
+    await waitFor(() => {
+      expect(fake.claims).toHaveLength(1);
+    });
+    await waitFor(() => {
+      expect(linked()).toBe(true);
+    });
+    expect(fake.row?.device_id).toBe(getDeviceId());
+  });
+
+  it('un fallo de red al reclamar no se confunde con el límite ni saca al alumno', async () => {
+    const fake = useFake(makeFakeCloud());
+    fake.failClaim = 'error';
+    mount();
+    await waitFor(() => {
+      expect(linked()).toBe(true);
+    });
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(useCloud.getState().state.status).toBe('linked');
+    expect(fake.signOuts).toHaveLength(0);
+    expect(fake.rejections).toHaveLength(0);
+    expect(usePreferences.getState().sessionUserId).not.toBeNull();
+  });
+
+  it('al entrar con una sesión nueva en este navegador reclama aunque ya hubiera reclamado antes', async () => {
+    const fake = useFake(
+      makeFakeCloud({ session: { id: AUTH_ID, email: 'a@b.mx', sessionId: 'ses-1' } }),
+    );
+    mount();
+    await waitFor(() => {
+      expect(fake.claims).toHaveLength(1);
+    });
+    expect(fake.row?.session_id).toBe('ses-1');
+    // Otro dispositivo gana y, en este navegador, se abre un enlace nuevo del correo sin cerrar sesión
+    fake.row = { device_id: 'otro-navegador', session_id: 'ses-otro' };
+    fake.session = { id: AUTH_ID, email: 'a@b.mx', sessionId: 'ses-2' };
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(Date.now() + 120_000);
+    act(() => {
+      window.dispatchEvent(new Event('focus'));
+    });
+    vi.useRealTimers();
+    await waitFor(() => {
+      expect(fake.claims).toHaveLength(2);
+    });
+    expect(fake.row.device_id).toBe(getDeviceId());
+    expect(fake.row.session_id).toBe('ses-2');
+    expect(linked()).toBe(true);
+    expect(fake.signOuts).toHaveLength(0);
+  });
+
   it('al salir por voluntad propia no deja motivo y el siguiente ingreso reclama', async () => {
     const fake = useFake(makeFakeCloud());
     mount();

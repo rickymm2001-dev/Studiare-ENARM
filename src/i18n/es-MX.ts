@@ -4,6 +4,7 @@ import { BRAND } from '@/config/brand';
 import type { Phase, ScreenKey } from '@/app/screens';
 import { examText } from './exam';
 import { featureText } from './features';
+import { qualityText } from './quality';
 import { tutorText } from './tutor';
 
 interface ScreenText {
@@ -67,6 +68,11 @@ const screens: Record<ScreenKey, ScreenText> = {
   decks: {
     title: 'Mazos',
     description: 'Mazos precargados que sigues o dejas, los que importas y los que creas a mano.',
+  },
+  explore: {
+    title: 'Explorar',
+    description:
+      'Busca, filtra y ordena todas tus tarjetas. Suspende, etiqueta o muévelas por lote.',
   },
   planner: {
     title: 'Planificador',
@@ -142,6 +148,7 @@ const screens: Record<ScreenKey, ScreenText> = {
 export const t = {
   ...featureText,
   ...examText,
+  ...qualityText,
   ...tutorText,
   app: {
     name: BRAND.name,
@@ -155,9 +162,10 @@ export const t = {
     more: 'Más secciones',
   },
   studyTabs: {
-    label: 'Repasar y mazos',
+    label: 'Repasar, mazos y explorar',
     review: 'Repasar',
     decks: 'Mazos',
+    explore: 'Explorar',
   },
   navItems: {
     home: 'Inicio',
