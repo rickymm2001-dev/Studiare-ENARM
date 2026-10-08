@@ -28,7 +28,7 @@
  *   - El nuevo vencimiento conserva la hora relativa dentro del día de estudio. nuevoDue =
  *     inicio(nuevoDía) + (due - inicio(díaObjetivo)), con studyDayStart y addDays, sin sumar
  *     milisegundos de 24 horas a ciegas. Si el día tiene otra duración por el horario de verano, se
- *     queda dentro del nuevo día
+ *     queda dentro del nuevo día. El resultado siempre es posterior a now y anterior al examen
  *   - La semilla la arma el programador (fsrs.ts) con campos que no dependen de la hora exacta de
  *     now, para que la vista previa de los botones y el repaso real den el mismo día
  *   - El hash es FNV-1a de 32 bits seguido de la mezcla final de MurmurHash3. FNV-1a solo, en su
@@ -156,10 +156,11 @@ export interface EasyDaysInput {
 /** Mismo momento relativo dentro del día de estudio, trasladado de un día a otro */
 function sameTimeOnDay(due: Date, fromDay: string, toDay: string, timeZone: string): Date {
   const offset = due.getTime() - studyDayStart(fromDay, timeZone).getTime();
-  const moved = studyDayStart(toDay, timeZone).getTime() + offset;
-  // Un día de 23 horas por horario de verano no debe empujar el vencimiento al día siguiente
+  const firstInstant = studyDayStart(toDay, timeZone).getTime();
   const lastInstant = studyDayEnd(toDay, timeZone).getTime() - 1;
-  return new Date(Math.min(moved, lastInstant));
+  // El horario de verano hace días de 23 o 25 horas, y studyDayOf corta el día una hora distinto
+  // de studyDayStart en el día del cambio. Se deja dentro del día de destino en ambos extremos
+  return new Date(Math.min(Math.max(firstInstant + offset, firstInstant), lastInstant));
 }
 
 /**
@@ -186,10 +187,18 @@ export function applyEasyDays(input: EasyDaysInput): Date {
   const isUsable = (day: string) =>
     day >= earliest && (deadlineDay === null || day < deadlineDay) && isAcceptable(day);
 
+  // Último seguro, ya sobre el instante y no sobre el día. Con las entradas del programador no se
+  // dispara, pero asegura que nunca se devuelva el pasado ni el examen si studyDayOf y
+  // studyDayStart difieren una hora el día del cambio de horario. Ese candidato se descarta
+  const isFuture = (moved: Date) =>
+    moved.getTime() > now.getTime() && (deadline === null || moved.getTime() < deadline.getTime());
+
   for (let distance = 1; distance <= radius; distance += 1) {
     // Primero el anterior, así con la misma distancia gana el más temprano
     for (const candidate of [addDays(target, -distance), addDays(target, distance)]) {
-      if (isUsable(candidate)) return sameTimeOnDay(due, target, candidate, timeZone);
+      if (!isUsable(candidate)) continue;
+      const moved = sameTimeOnDay(due, target, candidate, timeZone);
+      if (isFuture(moved)) return moved;
     }
   }
   return due;
