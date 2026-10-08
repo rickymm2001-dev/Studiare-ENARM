@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { AI_ENGINES, type AiEngine } from '@/engines/aiContracts';
 import { mockHypothesis } from '@/engines/aiMock';
+import { urlOf } from './testing/fetch';
 import { callEngine, scrubInput, type CallOptions } from './engines';
 import {
   biasTipInput,
@@ -133,14 +134,14 @@ describe('con proxy', () => {
       ...options({ kind: 'real' }),
       names: ['Ricardo Moreno'],
       fetchImpl: (url, init) => {
-        sent = { url: String(url), init: init ?? {} };
+        sent = { url: urlOf(url), init: init ?? {} };
         return Promise.resolve(json({ output: mockHypothesis(input), meta: goodMeta }));
       },
     });
     expect(result.ok).toBe(true);
     expect(sent?.url).toBe('/api/ai/forgetting');
     expect(sent?.init.method).toBe('POST');
-    const body = JSON.parse(String(sent?.init.body)) as Record<string, unknown>;
+    const body = JSON.parse(sent?.init.body as string) as Record<string, unknown>;
     expect(body.studentRef).toBe(STUDENT);
     expect(body.blockedNames).toEqual(['Ricardo Moreno']);
     expect(JSON.stringify(body.input)).not.toContain('ana@correo.com');
@@ -299,7 +300,7 @@ describe('cada motor tiene su URL', () => {
       await callEngine(engine, SAMPLES[engine] as never, {
         ...options({ kind: 'real' }),
         fetchImpl: (url) => {
-          urls.push(String(url));
+          urls.push(urlOf(url));
           return Promise.reject(new Error('sin red'));
         },
       });

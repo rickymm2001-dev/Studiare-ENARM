@@ -27,7 +27,7 @@
     "e2e-ui": "node scripts/playwright.ts test --ui",
     "e2e:install": "node scripts/playwright.ts install chromium",
     "screenshots": "node scripts/playwright.ts test --config playwright.screenshots.config.ts",
-    "eval-ai": "node scripts/not-yet.ts eval-ai D",
+    "eval-ai": "node scripts/eval-ai.ts",
     "demo-seed": "DEMO_SEED_DRY_RUN=1 vitest run tests/demo --silent=false",
     "demo-reset": "node scripts/demo-reset.ts",
     "bank:template": "node scripts/content/bank-template.ts",

@@ -23,7 +23,7 @@ export interface TutorData {
   catalog: NonNullable<ReturnType<typeof useDeckCatalog>>;
   bank: { questions: Question[]; options: Option[]; cases: ClinicalCase[] };
   content: { cards: Card[]; notes: Note[] };
-  /** Las hipótesis del alumno a las que ya respondió o aplicó una acción */
+  /** Lo del tutor que ya tiene artefacto. Hipótesis, informes semanales y consejos por sesgo */
   artifacts: AiArtifact[];
 }
 
@@ -64,7 +64,11 @@ export function useTutorData(
   const artifacts = useLiveData(
     async () =>
       (await api.repos.aiArtifacts.list()).filter(
-        (artifact) => artifact.kind === 'hypothesis' && artifact.userId === userId,
+        (artifact) =>
+          artifact.userId === userId &&
+          (artifact.kind === 'hypothesis' ||
+            artifact.kind === 'weekly_report' ||
+            artifact.kind === 'bias_tip'),
       ),
     [api.repos, userId],
   );

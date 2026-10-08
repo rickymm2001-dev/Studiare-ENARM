@@ -19,6 +19,8 @@ export interface BiasTip {
   /** Texto base del consejo. Es un borrador pendiente de revisión médica */
   tip: string;
   level: 'watch' | 'focus';
+  /** Las preguntas más recientes donde el alumno cayó en esta trampa, hasta 3 */
+  examples: readonly string[];
 }
 
 export interface TutorView {
@@ -32,6 +34,8 @@ export interface TutorView {
   biasCalibration: { have: number; need: number } | null;
   /** Tema base de cada tema, para llevar a practicarlo cuando falla la base */
   baseTopics: ReadonlyMap<string, string>;
+  /** Preguntas que respondió en los últimos 7 días, para el informe semanal */
+  answersThisWeek: number;
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -48,6 +52,27 @@ export interface TutorViewInput {
   today: string;
   desiredRetention: number;
   thresholds: Thresholds;
+}
+
+const BIAS_EXAMPLES = 3;
+
+/** Por trampa, las preguntas más recientes donde el alumno falló eligiendo una opción con esa trampa */
+function biasExamples(events: readonly AppEvent[], bank: BankLookup): Map<string, string[]> {
+  const byTag = new Map<string, string[]>();
+  const answers = events
+    .filter((event) => event.type === 'question_answered')
+    .sort((a, b) => b.at.localeCompare(a.at));
+  for (const event of answers) {
+    if (event.payload.correct) continue;
+    const tag = bank.options.get(event.payload.optionVersionId)?.biasTag;
+    if (!tag) continue;
+    const list = byTag.get(tag) ?? [];
+    if (list.length < BIAS_EXAMPLES && !list.includes(event.payload.questionVersionId)) {
+      list.push(event.payload.questionVersionId);
+    }
+    byTag.set(tag, list);
+  }
+  return byTag;
 }
 
 export function buildTutorView(input: TutorViewInput): TutorView {
@@ -119,6 +144,7 @@ export function buildTutorView(input: TutorViewInput): TutorView {
     }),
   );
 
+  const examplesByTag = biasExamples(events, bank);
   const biasTips = insightReport.insights.flatMap((insight): BiasTip[] => {
     if (!insight.id.startsWith('bias:') || insight.state.kind !== 'ready') return [];
     if (insight.state.level === 'strength') return [];
@@ -129,6 +155,7 @@ export function buildTutorView(input: TutorViewInput): TutorView {
         name: biasByKey.get(tag)?.name ?? tag,
         tip: tipByKey.get(tag) ?? '',
         level: insight.state.level,
+        examples: examplesByTag.get(tag) ?? [],
       },
     ];
   });
@@ -141,5 +168,11 @@ export function buildTutorView(input: TutorViewInput): TutorView {
     biasTips,
     biasCalibration: biasCalibration(insightReport),
     baseTopics,
+    answersThisWeek: events.filter(
+      (event) =>
+        event.type === 'question_answered' &&
+        input.now.getTime() - Date.parse(event.at) < 7 * DAY_MS &&
+        Date.parse(event.at) <= input.now.getTime(),
+    ).length,
   };
 }

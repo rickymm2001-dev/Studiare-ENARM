@@ -123,7 +123,7 @@ export function mergeConfig(base: AiConfig, patch: AiConfigPatch): AiConfig {
       perStudentPerDay: {
         ...base.limits.perStudentPerDay,
         ...patch.limits?.perStudentPerDay,
-      } as Record<AiEngine, number>,
+      },
     },
   };
   // Un modelo sin precio no se puede presupuestar, así que no se acepta

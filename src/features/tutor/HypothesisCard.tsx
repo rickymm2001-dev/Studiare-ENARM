@@ -10,6 +10,8 @@ import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
 import { Disclosure } from '@/ui/components/disclosure';
 import { TOPIC_NAMES } from '../shared/topics';
+import type { HypothesisAi } from './aiContent';
+import { AiWritten } from './AiWritten';
 import type { Hypothesis, TutorAction } from './tutorModel';
 
 const dayFormat = new Intl.DateTimeFormat('es-MX', {
@@ -33,6 +35,7 @@ export function HypothesisCard({
   message,
   busy,
   compact = false,
+  ai,
   onAction,
   onRespond,
 }: {
@@ -47,6 +50,8 @@ export function HypothesisCard({
   busy: boolean;
   /** Sin el marco de tarjeta, para las hipótesis que van dentro de una fila que se abre */
   compact?: boolean;
+  /** Lo que redactó la IA para esta hipótesis. undefined si todavía no hay */
+  ai?: HypothesisAi | undefined;
   onAction: (action: TutorAction) => void;
   onRespond: (helpful: boolean) => void;
 }) {
@@ -55,6 +60,12 @@ export function HypothesisCard({
   const areaName = TOPIC_NAMES.get(hypothesis.area) ?? hypothesis.area;
   const practiceTopic =
     hypothesis.rule === 'foundation_gap' && baseTopic ? baseTopic : hypothesis.area;
+  // La IA solo reemplaza la redacción cuando sí vio evidencia. Si no, se queda la explicación base
+  const written =
+    ai?.hypothesis != null && ai.studentMessage != null
+      ? { ...ai, hypothesis: ai.hypothesis, studentMessage: ai.studentMessage }
+      : null;
+  const actions = ai && ai.actions.length > 0 ? ai.actions : hypothesis.actions;
   const id = `hipotesis-${hypothesis.key.replace(/[^a-z0-9]+/gi, '-')}`;
 
   const Frame = compact ? 'section' : Card;
@@ -74,8 +85,21 @@ export function HypothesisCard({
       <h3 id={id} className="mt-2 text-lg font-bold">
         {rule.title}
       </h3>
-      <p className="mt-1">{rule.hypothesis(areaName)}</p>
-      <p className="mt-2 text-sm text-fg-muted">{rule.message}</p>
+      {written ? (
+        <>
+          <p className="mt-1">{written.hypothesis}</p>
+          <p className="mt-2 text-sm text-fg-muted">{written.studentMessage}</p>
+          <AiWritten mode={written.mode} className="mt-2" />
+        </>
+      ) : (
+        <>
+          <p className="mt-1">{rule.hypothesis(areaName)}</p>
+          <p className="mt-2 text-sm text-fg-muted">{rule.message}</p>
+          {ai?.hypothesis === null ? (
+            <p className="mt-2 text-sm text-fg-muted">{text.ai.noEvidence}</p>
+          ) : null}
+        </>
+      )}
       {hypothesis.causeMismatches > 0 ? (
         <p className="mt-2 text-sm text-fg-muted">
           {text.causeMismatch(hypothesis.causeMismatches, hypothesis.causesReported)}
@@ -113,7 +137,7 @@ export function HypothesisCard({
         <>
           <p className="mt-3 text-sm font-medium">{text.actionsTitle}</p>
           <div className="mt-1.5 flex flex-wrap gap-2">
-            {hypothesis.actions.map((action) => (
+            {actions.map((action) => (
               <ActionButton
                 key={action}
                 action={action}

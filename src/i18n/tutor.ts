@@ -92,7 +92,7 @@ export const tutorText = {
     intro:
       'Tu tutor revisa tus errores de los últimos 14 días y busca patrones. Lo que ves son hipótesis con su evidencia y no verdades. Dile si te sirven.',
     howItWorks:
-      'Sin IA todavía. Estas hipótesis salen de reglas fijas aplicadas a tus propios errores. Nunca agregan datos médicos nuevos.',
+      'Estas hipótesis salen de reglas fijas aplicadas a tus propios errores. Si enciendes el análisis con IA, la IA solo redacta la explicación con esos mismos errores. Nunca agrega datos médicos nuevos.',
     rules,
     hypothesesTitle: 'Hipótesis del tutor',
     confirmedBadge: 'Confirmada',
@@ -176,9 +176,32 @@ export const tutorText = {
       none: 'Ninguna trampa se repite lo bastante en tus errores como para darte un consejo.',
     },
 
+    ai: {
+      title: 'Análisis con IA',
+      freePlan:
+        'El análisis con IA es de los planes de pago. Mientras tanto tu tutor usa plantillas fijas.',
+      seePlans: 'Ver planes',
+      off: 'Está apagado y tu tutor usa plantillas fijas. Si lo enciendes, la IA redacta la explicación de tus hipótesis, tu informe y tus consejos con tus mismos errores. A la IA solo viajan IDs seudónimos y texto del banco, nunca tu nombre ni tu correo.',
+      turnOn: 'Encender análisis con IA',
+      turningOn: 'Encendiendo…',
+      on: 'Encendido. Lo que redacta la IA va en borrador, con la etiqueta de que ningún médico lo ha validado, y se actualiza cada 7 días.',
+      turnOff: 'Apagar en Perfil',
+      working: 'Redactando tus explicaciones…',
+      offline: 'Sin conexión. Tu tutor sigue con plantillas fijas.',
+      notice: (message: string) => `No se pudo usar la IA ahora. ${message}`,
+      written: {
+        real: 'Redactado por IA',
+        mock: 'Redactado por IA simulada',
+        template: 'Redactado con respuestas fijas de demostración',
+      },
+      draft: 'Borrador, no validado por médico',
+      noEvidence:
+        'La IA no encontró evidencia suficiente para añadir una lectura, así que se queda la explicación base.',
+    },
+
     drafts: {
       title: 'Tarjetas en borrador',
-      body: 'Aquí aparecerán las tarjetas que el tutor proponga a partir de tus errores, siempre en borrador, con la frase del banco que las respalda. Tú las apruebas, las editas o las descartas. Llegan con la IA en la siguiente fase.',
+      body: 'Las tarjetas que genera la IA a partir de tus textos y PDF llegan siempre en borrador, con la frase que las respalda. Tú las apruebas, las editas o las descartas.',
       meanwhile:
         'Mientras tanto, cada pregunta que fallas ya pasa a Mis errores para que la repases.',
       mine: (n: number) => `Tienes ${plural(n, 'tarjeta', 'tarjetas')} en Mis errores`,

@@ -11,6 +11,9 @@ import { CalibratingNote } from '@/ui/states/states';
 import { INSIGHT_MINIMUMS } from '@/engines/insights';
 import { DraftBadge } from '../shared/DraftBadge';
 import { TOPIC_NAMES } from '../shared/topics';
+import type { BiasTipAi, ReportAi } from './aiContent';
+import { reportRefOf } from './aiInputs';
+import { AiWritten } from './AiWritten';
 import type { BiasTip } from './tutorView';
 import type { Hypothesis } from './tutorModel';
 import type { ReportLine, WeeklyReport } from './weeklyReport';
@@ -62,8 +65,16 @@ function LineLink({ line, label }: { line: ReportLine; label: string }) {
 }
 
 /** Informe de la semana. Tres prioridades, un hábito y un reto, sin lo que sigue calibrando */
-export function WeeklyReportCard({ report }: { report: WeeklyReport }) {
+export function WeeklyReportCard({
+  report,
+  ai,
+}: {
+  report: WeeklyReport;
+  /** Lo que redactó la IA para la semana. undefined si todavía no hay */
+  ai?: ReportAi | undefined;
+}) {
   const text = t.tutor.report;
+  const aiText = new Map((ai?.priorities ?? []).map((line) => [line.ref, line.text]));
   return (
     <Card aria-labelledby="informe-semana">
       <CardHeader className="mb-3">
@@ -75,6 +86,12 @@ export function WeeklyReportCard({ report }: { report: WeeklyReport }) {
       </CardHeader>
       {report.ready ? (
         <div className="flex flex-col gap-4">
+          {ai ? (
+            <div className="flex flex-col gap-1.5">
+              <p>{ai.summary}</p>
+              <AiWritten mode={ai.mode} />
+            </div>
+          ) : null}
           <section aria-labelledby="informe-prioridades">
             <h3
               id="informe-prioridades"
@@ -96,7 +113,9 @@ export function WeeklyReportCard({ report }: { report: WeeklyReport }) {
                     </span>
                     <div className="flex min-w-0 flex-1 flex-col">
                       <span className="leading-snug font-semibold">{item.title}</span>
-                      <span className="text-sm text-fg-muted">{item.action}</span>
+                      <span className="text-sm text-fg-muted">
+                        {aiText.get(reportRefOf(item.key)) ?? item.action}
+                      </span>
                       {item.draft ? <DraftBadge className="mt-1 self-start" /> : null}
                     </div>
                     <LineLink line={{ ...item, text: item.action }} label={text.go} />
@@ -113,7 +132,7 @@ export function WeeklyReportCard({ report }: { report: WeeklyReport }) {
               <div className="flex items-start gap-3">
                 <div className="flex min-w-0 flex-1 flex-col">
                   <span className="leading-snug font-semibold">{report.habit.title}</span>
-                  <span className="text-sm text-fg-muted">{report.habit.text}</span>
+                  <span className="text-sm text-fg-muted">{ai?.habit ?? report.habit.text}</span>
                 </div>
                 <LineLink line={report.habit} label={text.go} />
               </div>
@@ -127,7 +146,9 @@ export function WeeklyReportCard({ report }: { report: WeeklyReport }) {
               <div className="flex items-start gap-3">
                 <div className="flex min-w-0 flex-1 flex-col">
                   <span className="leading-snug font-semibold">{report.challenge.title}</span>
-                  <span className="text-sm text-fg-muted">{report.challenge.text}</span>
+                  <span className="text-sm text-fg-muted">
+                    {ai?.challenge ?? report.challenge.text}
+                  </span>
                 </div>
                 <LineLink line={report.challenge} label={text.go} />
               </div>
@@ -152,8 +173,11 @@ export function WeeklyReportCard({ report }: { report: WeeklyReport }) {
 export function BiasTipsCard({
   tips,
   calibration,
+  ai,
 }: {
   tips: readonly BiasTip[];
+  /** Lo que redactó la IA por trampa. Falta la que todavía no se pide */
+  ai?: ReadonlyMap<string, BiasTipAi> | undefined;
   /** Errores con trampa etiquetada que lleva y que pide el motor. null si ya no calibra */
   calibration: { have: number; need: number } | null;
 }) {
@@ -177,9 +201,10 @@ export function BiasTipsCard({
             <li key={tip.tag} className="flex flex-col gap-1">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-semibold">{tip.name}</span>
-                <DraftBadge />
+                {ai?.has(tip.tag) ? null : <DraftBadge />}
               </div>
-              <p className="text-sm">{tip.tip}</p>
+              <p className="text-sm">{ai?.get(tip.tag)?.tip ?? tip.tip}</p>
+              {ai?.has(tip.tag) ? <AiWritten mode={ai.get(tip.tag)?.mode ?? 'mock'} /> : null}
             </li>
           ))}
         </ul>

@@ -19,7 +19,7 @@ import { CloudCheckoutCard, PaymentReturnNotice } from './CloudBilling';
 import { useUserEvents } from '../shared/useUserEvents';
 
 /** Funciones que todavía no existen. Se muestran como Próximamente para no prometer de más (D-076) */
-const COMING_SOON: ReadonlySet<keyof PlanAccess> = new Set(['fullExam', 'aiTutor']);
+const COMING_SOON: ReadonlySet<keyof PlanAccess> = new Set(['fullExam']);
 
 const ACCESS_KEYS: (keyof PlanAccess)[] = [
   'dailyQuestions',

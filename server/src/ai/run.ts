@@ -43,9 +43,18 @@ export interface CostReport {
   latencyMs: number;
 }
 
+/** Qué pasó en cada intento, para las evaluaciones. El esquema se mide en el primer intento */
+export interface AttemptTrace {
+  /** La salida cumplió el esquema del motor. false también si no hubo salida que leer */
+  schemaValid: boolean;
+  /** Pasó las guardas de anclaje. null si no llegó a revisarse */
+  guardPassed: boolean | null;
+  issues: string[];
+}
+
 export type RunResult =
-  | { ok: true; output: unknown; meta: AiCallMeta }
-  | { ok: false; error: AiErrorCode; message: string; cost: CostReport };
+  | { ok: true; output: unknown; meta: AiCallMeta; trace: AttemptTrace[] }
+  | { ok: false; error: AiErrorCode; message: string; cost: CostReport; trace: AttemptTrace[] };
 
 const FAIL_MESSAGES = {
   invalid_output: 'La IA no dio una respuesta que se pueda usar. Se usa la versión sin IA.',
@@ -82,6 +91,7 @@ export async function runEngine<E extends AiEngine>(
   });
 
   let issues: string[] = [];
+  const trace: AttemptTrace[] = [];
   for (let attempt = 0; attempt <= VALIDATION_RETRIES; attempt += 1) {
     let raw: unknown;
     try {
@@ -96,17 +106,19 @@ export async function runEngine<E extends AiEngine>(
       usage = addUsage(usage, result.usage);
       if (result.problem !== undefined) {
         issues = [result.problem];
+        trace.push({ schemaValid: false, guardPassed: null, issues });
         continue;
       }
       raw = result.raw;
     } catch (error) {
       const kind = error instanceof ProviderError ? error.kind : 'provider_error';
-      return { ok: false, error: kind, message: FAIL_MESSAGES[kind], cost: report() };
+      return { ok: false, error: kind, message: FAIL_MESSAGES[kind], cost: report(), trace };
     }
 
     const parsed = schema.safeParse(raw);
     if (!parsed.success) {
       issues = describeSchemaIssues(parsed.error.issues);
+      trace.push({ schemaValid: false, guardPassed: null, issues });
       continue;
     }
 
@@ -125,8 +137,10 @@ export async function runEngine<E extends AiEngine>(
     }
     if (!guard.passed) {
       issues = describeGuard(guard);
+      trace.push({ schemaValid: true, guardPassed: false, issues });
       continue;
     }
+    trace.push({ schemaValid: true, guardPassed: true, issues: describeGuard(guard) });
     const cost = report();
     return {
       ok: true,
@@ -145,6 +159,7 @@ export async function runEngine<E extends AiEngine>(
         outcome: attempt === 0 ? 'ok' : 'retried_ok',
         validator: { passed: true, issues: guard.issues.map((code) => GUARD_MESSAGES[code]) },
       },
+      trace,
     };
   }
   return {
@@ -152,5 +167,6 @@ export async function runEngine<E extends AiEngine>(
     error: 'invalid_output',
     message: FAIL_MESSAGES.invalid_output,
     cost: report(),
+    trace,
   };
 }

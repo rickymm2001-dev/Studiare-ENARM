@@ -3,6 +3,7 @@
 // que cuesta una llamada real queda en la bitácora.
 import { describe, expect, it } from 'vitest';
 import { callEngine, type CallOptions } from '@/ai/engines';
+import { urlOf } from '@/ai/testing/fetch';
 import {
   biasTipInput,
   flashcardsInput,
@@ -29,7 +30,7 @@ const SAMPLES = {
 function proxyFetch(app: ReturnType<typeof createApp>): typeof fetch {
   return (url, init) =>
     Promise.resolve(
-      app.request(String(url).replace(/^\/api/, ''), {
+      app.request(urlOf(url).replace(/^\/api/, ''), {
         ...init,
         headers: {
           host: '127.0.0.1:8787',

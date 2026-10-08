@@ -27,7 +27,13 @@ describe('consejos por sesgo', () => {
     render(
       <BiasTipsCard
         tips={[
-          { tag: 'anchoring', name: 'Sesgo de anclaje', tip: 'Nombra el dato.', level: 'focus' },
+          {
+            tag: 'anchoring',
+            name: 'Sesgo de anclaje',
+            tip: 'Nombra el dato.',
+            level: 'focus',
+            examples: [],
+          },
         ]}
         calibration={null}
       />,
