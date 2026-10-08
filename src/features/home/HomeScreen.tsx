@@ -154,7 +154,10 @@ function Dashboard({ session }: { session: ReadySession }) {
           <WidgetFrame
             key={widget.id}
             name={t.widgets.names[widget.type]}
-            className={widgetSpan(widget.type, editing)}
+            className={cn(
+              widgetSpan(widget.type, editing),
+              DARK_WIDGETS.has(widget.type) && DARK_CARD,
+            )}
             editing={editing}
             first={index === 0}
             last={index === layout.widgets.length - 1}
@@ -243,6 +246,14 @@ const HALF_ON_PHONE: ReadonlySet<WidgetType> = new Set(['streak', 'daily_goal'])
  * Columnas que ocupa cada widget. Al editar todos van a todo lo ancho para que quepan los botones
  * de subir, bajar y quitar
  */
+/**
+ * Racha, meta y nivel van en tarjeta oscura con degradado, con el mismo contenido de siempre (D-091).
+ * Los colores de adentro se cambian desde la tarjeta para que los widgets no sepan de ella
+ */
+const DARK_WIDGETS: ReadonlySet<WidgetType> = new Set(['streak', 'daily_goal', 'level_xp']);
+const DARK_CARD =
+  'bg-hero border-transparent text-white shadow-raised [&_h2]:text-white [&_.text-fg-muted]:text-white/80 [&_.text-primary]:text-white [&_[role=progressbar]]:bg-white/20 [&_[role=progressbar]>div]:bg-white [&_button]:text-white [&_button:hover]:bg-white/15';
+
 function widgetSpan(type: WidgetType, editing: boolean): string {
   if (editing) return 'col-span-2 md:col-span-1';
   return cn(

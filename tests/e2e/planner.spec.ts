@@ -30,7 +30,7 @@ test('calibra los minutos, avisa la sobrecarga y cada ajuste cambia el plan', as
   await time.getByRole('button', { name: t.planner.minutesSave }).click();
   await expect(time.getByText(t.planner.minutesSaved)).toBeVisible();
   await expect(time.getByText(new RegExp(`^${t.planner.minutesDeclared(90)}`))).toBeVisible();
-  await expect(today.getByText(/^\d+ de 90 min$/).first()).toBeVisible();
+  await expect(today.getByText(/^\d+\/90$/).first()).toBeVisible();
 
   // Con un mazo seguido entran las tarjetas nuevas al plan de hoy
   await page.goto(SCREENS.decks.path);

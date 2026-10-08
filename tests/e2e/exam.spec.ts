@@ -16,9 +16,11 @@ const QUESTIONS = 20;
 const progress = (page: Page, n: number) =>
   page.getByText(t.exam.progress(n, QUESTIONS), { exact: true });
 
-/** Una cifra del resumen, que se lee como término y valor */
+/** Una cifra del resumen, con su etiqueta arriba y su valor debajo, en la tarjeta de cifras */
 async function expectStat(summary: Locator, label: string, value: number) {
-  await expect(summary.locator('dl > div').filter({ hasText: label })).toContainText(String(value));
+  await expect(summary.locator('section > div').filter({ hasText: label })).toContainText(
+    String(value),
+  );
 }
 
 async function startExam(page: Page) {

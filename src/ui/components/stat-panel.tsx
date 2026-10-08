@@ -7,11 +7,14 @@ import { cn } from '../cn';
  */
 export function StatPanel({
   label,
+  quad = false,
   className,
   children,
 }: {
   /** Nombre de la tarjeta para el lector de pantalla */
   label: string;
+  /** Para cuatro celdas. En el teléfono van dos por dos y desde sm en una fila */
+  quad?: boolean;
   className?: string;
   children: ReactNode;
 }) {
@@ -19,7 +22,10 @@ export function StatPanel({
     <section
       aria-label={label}
       className={cn(
-        'bg-hero animate-rise grid auto-cols-fr grid-flow-col divide-x divide-white/15 rounded-xl text-white shadow-raised',
+        'bg-hero animate-rise grid rounded-xl text-white shadow-raised',
+        quad
+          ? 'grid-cols-2 [&>*]:border-white/15 [&>*:nth-child(even)]:border-l [&>*:nth-child(n+3)]:border-t sm:auto-cols-fr sm:grid-flow-col sm:grid-cols-none sm:[&>*:nth-child(n+3)]:border-t-0 sm:[&>*:not(:first-child)]:border-l'
+          : 'auto-cols-fr grid-flow-col divide-x divide-white/15',
         className,
       )}
     >

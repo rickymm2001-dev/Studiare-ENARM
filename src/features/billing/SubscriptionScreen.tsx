@@ -1,6 +1,6 @@
 // Suscripción simulada (pantalla 16). Planes con sus banderas de acceso, checkout simulado sin datos
 // de tarjeta y recibos marcados como simulados (15.7). Nada se cobra (3.2).
-import { Check, Minus, Receipt } from 'lucide-react';
+import { Check, Crown, Gauge, Minus, Receipt } from 'lucide-react';
 import { useState } from 'react';
 import { ScreenHeader } from '@/app/layout/ScreenHeader';
 import { FOUNDER_SEATS, PLANS, type PlanAccess, type PlanKey } from '@/config/billing';
@@ -12,6 +12,7 @@ import { cn } from '@/ui/cn';
 import { Badge } from '@/ui/components/badge';
 import { Button } from '@/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/ui/components/card';
+import { StatCell, StatPanel } from '@/ui/components/stat-panel';
 import { RequireSession, type ReadySession } from '../shared/RequireSession';
 import { useUserEvents } from '../shared/useUserEvents';
 
@@ -55,7 +56,28 @@ function Billing({ session }: { session: ReadySession }) {
   return (
     <>
       <ScreenHeader title={t.screens.subscription.title} description={t.billing.simulatedNotice} />
-      <p className="font-medium">{t.billing.current(t.billing.plans[current])}</p>
+      <StatPanel label={t.billing.current(t.billing.plans[current])}>
+        <StatCell
+          icon={<Crown />}
+          label={t.billing.stats.plan}
+          value={t.billing.plans[current]}
+          caption={t.billing.periods[current]}
+        />
+        <StatCell
+          icon={<Gauge />}
+          label={t.billing.stats.daily}
+          value={
+            PLANS[current].access.dailyQuestions === null
+              ? '∞'
+              : PLANS[current].access.dailyQuestions.toLocaleString('es-MX')
+          }
+          caption={
+            PLANS[current].access.dailyQuestions === null
+              ? t.billing.stats.unlimited
+              : t.billing.stats.dailyCaption
+          }
+        />
+      </StatPanel>
       {checkout ? (
         <Card aria-labelledby="checkout-titulo">
           <CardHeader>
