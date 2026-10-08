@@ -24,6 +24,27 @@
 - Marco más ancho en computadora con tarjetas en dos columnas (D-057)
 - Ícono de la pestaña con el símbolo de Studiare (D-058)
 
+## Fase C2. Etapa 3, apuntes tipo RemNote (D-085 y D-090)
+
+### Bloques
+- [x] B1. Motor puro de apuntes (src/engines/outline.ts). Lee las marcas de una línea, arma el plan de tarjetas, convierte el árbol al documento del editor y de vuelta, y resuelve enlaces y vínculos de regreso
+- [x] B2. Capa de datos. Apuntes con su tabla (la base sube a la versión 6), las notas guardan el apunte y la línea de donde salen y los casos de uso crean, guardan, renombran, mueven y borran apuntes sincronizando sus tarjetas sin perder el historial
+- [x] B3. Editor con TipTap 3, pantalla de Apuntes como cuarta pestaña de Repasar, tarjetas del apunte al lado, enlaces y marcas rápidas, y autoguardado
+- [x] B4. Cierre de la etapa según 15.1. Sin aprobación, por indicación de Ricardo del 2026-10-08 de seguir sin detenerse
+
+### Bitácora
+- Tres piezas en paralelo. El motor y la interfaz los escribí yo y la capa de datos la hizo un agente en su propia copia, que introdujo errores a propósito en su código para comprobar que sus pruebas los detectan (12 de 12 cazados)
+- Las dos cartas de un mismo concepto no se repasan el mismo día, así que el apunte dice 4 tarjetas y Repasar muestra 3 hoy. El e2e lo verifica
+- Las tarjetas que salen de un apunte ya no se pueden editar ni borrar desde el editor de mazos, solo desde el apunte, que las vuelve a escribir al sincronizar
+- TipTap pesa bastante, así que el editor es una carga diferida y no entra al arranque
+- El registro de pantallas pasa de 29 a 30
+
+### Evidencia de cierre (15.1)
+EVIDENCIA3
+
+### Pendiente
+- Siguen las etapas 4 a 6 sin pausas de aprobación, por indicación de Ricardo
+
 ## Fase C2. Etapa 2, carga diaria (D-085 y D-089)
 
 ### Bloques
