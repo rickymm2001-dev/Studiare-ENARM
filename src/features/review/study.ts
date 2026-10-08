@@ -19,10 +19,22 @@ export function reviewEndReason(
   return explicit ?? (position >= queueLength ? 'completed' : 'abandoned');
 }
 
+/**
+ * Último estado de cada tarjeta repasada. Un cambio de fecha (repartir, posponer, adelantar o
+ * deshacer) solo mueve el vencimiento y deja lo demás del estado como estaba, y un repaso posterior
+ * vuelve a fijar todo el estado
+ */
 export function latestCardStates(events: readonly AppEvent[]): Map<string, FsrsCardState> {
   const states = new Map<string, FsrsCardState>();
   for (const event of events) {
-    if (event.type === 'card_reviewed') states.set(event.payload.cardId, event.payload.stateAfter);
+    if (event.type === 'card_reviewed') {
+      states.set(event.payload.cardId, event.payload.stateAfter);
+    } else if (event.type === 'cards_rescheduled') {
+      for (const entry of event.payload.cards) {
+        const state = states.get(entry.cardId);
+        if (state) states.set(entry.cardId, { ...state, due: entry.to });
+      }
+    }
   }
   return states;
 }

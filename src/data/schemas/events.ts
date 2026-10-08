@@ -216,6 +216,22 @@ export const EventPayloadSchemas = {
   cards_unsuspended: z.strictObject({
     cardIds: z.array(IdSchema).min(1).max(500),
   }),
+  /**
+   * Cambio de fecha de repaso de tarjetas (D-085, fila 5). Repartir atrasos, posponer, adelantar o
+   * deshacer un cambio anterior. Cada tarjeta lleva su fecha de antes y la nueva. La estabilidad de
+   * FSRS no se toca, solo la fecha, y el próximo repaso la corrige con el tiempo transcurrido
+   */
+  cards_rescheduled: z.strictObject({
+    kind: z.enum(['spread', 'postpone', 'advance', 'undo']),
+    cards: z
+      .array(z.strictObject({ cardId: IdSchema, from: UtcDateTimeSchema, to: UtcDateTimeSchema }))
+      .min(1)
+      .max(500),
+    /** Entre cuántos días se repartió o cuántos se pospuso. null al adelantar o deshacer */
+    days: z.int().min(1).max(365).nullable(),
+    /** El evento de cambio que se deshace. null si no es un deshacer */
+    undoes: IdSchema.nullable(),
+  }),
 } as const;
 
 export type EventType = keyof typeof EventPayloadSchemas;
@@ -277,6 +293,7 @@ export const AppEventSchema = z.discriminatedUnion('type', [
   eventSchemaFor('official_score_submitted'),
   eventSchemaFor('cards_suspended'),
   eventSchemaFor('cards_unsuspended'),
+  eventSchemaFor('cards_rescheduled'),
 ]);
 
 export type AppEvent = z.infer<typeof AppEventSchema>;

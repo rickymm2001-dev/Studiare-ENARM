@@ -45,9 +45,52 @@ describe('esquemas y tablas', () => {
     expect(Object.keys(storesFor('demo'))).toHaveLength(TABLE_NAMES.length);
   });
 
-  it('hay un esquema para los 30 tipos de evento de 6.3, el cambio de suscripción simulada, reabrir un artefacto y suspender o reanudar tarjetas', () => {
-    expect(EVENT_TYPES).toHaveLength(34);
-    expect(AppEventSchema.options).toHaveLength(34);
+  it('hay un esquema para los 30 tipos de evento de 6.3, el cambio de suscripción simulada, reabrir un artefacto y suspender o reanudar tarjetas y cambiar su fecha de repaso', () => {
+    expect(EVENT_TYPES).toHaveLength(35);
+    expect(AppEventSchema.options).toHaveLength(35);
+  });
+
+  it('un cambio de fecha de repaso lleva sus tarjetas con la fecha de antes y la nueva', () => {
+    const base = {
+      id: newId(),
+      userId: newId(),
+      at: '2026-10-08T12:00:00.000Z',
+      tz: 'America/Merida',
+      schemaVersion: 1,
+      sessionId: null,
+      type: 'cards_rescheduled',
+    };
+    const entry = {
+      cardId: newId(),
+      from: '2026-10-01T10:00:00.000Z',
+      to: '2026-10-09T10:00:00.000Z',
+    };
+    const payload = { kind: 'spread', cards: [entry], days: 3, undoes: null };
+    expect(AppEventSchema.parse({ ...base, payload }).type).toBe('cards_rescheduled');
+    // Sin tarjetas, con más de 500, con un tipo que no existe o con una fecha sin zona no pasa
+    expect(() => AppEventSchema.parse({ ...base, payload: { ...payload, cards: [] } })).toThrow();
+    expect(() =>
+      AppEventSchema.parse({
+        ...base,
+        payload: { ...payload, cards: Array.from({ length: 501 }, () => entry) },
+      }),
+    ).toThrow();
+    expect(() =>
+      AppEventSchema.parse({ ...base, payload: { ...payload, kind: 'delete' } }),
+    ).toThrow();
+    expect(() =>
+      AppEventSchema.parse({
+        ...base,
+        payload: { ...payload, cards: [{ ...entry, to: '2026-10-09' }] },
+      }),
+    ).toThrow();
+    // Deshacer apunta al cambio que revierte y no lleva días
+    expect(
+      AppEventSchema.parse({
+        ...base,
+        payload: { kind: 'undo', cards: [entry], days: null, undoes: newId() },
+      }).type,
+    ).toBe('cards_rescheduled');
   });
 
   it('los ajustes por defecto siguen la especificación', () => {
@@ -57,6 +100,18 @@ describe('esquemas y tablas', () => {
       spacing: { hard: 1, good: 1, easy: 1 },
       newCardsPerDay: 20,
       reviewsPerDay: 200,
+      unlimitedNewCards: false,
+      // Temporizador apagado y todos los días normales (D-085)
+      cardTimer: { enabled: false, seconds: 30, autoReveal: false },
+      easyDays: {
+        mon: 'normal',
+        tue: 'normal',
+        wed: 'normal',
+        thu: 'normal',
+        fri: 'normal',
+        sat: 'normal',
+        sun: 'normal',
+      },
       cardConfidenceStep: false,
       practiceFeedback: 'end',
       negationHighlightPractice: true,
