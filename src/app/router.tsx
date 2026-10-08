@@ -9,6 +9,7 @@ import { ExamScreen } from '@/features/exam/ExamScreen';
 import { HomeScreen } from '@/features/home/HomeScreen';
 import { ReviewScreen } from '@/features/review/ReviewScreen';
 import { OnboardingScreen } from '@/features/onboarding/OnboardingScreen';
+import { OutlinesScreen } from '@/features/outlines/OutlinesScreen';
 import { PlannerScreen } from '@/features/planner/PlannerScreen';
 import { AdminUsersScreen } from '@/features/admin/AdminUsersScreen';
 import { PartyScreen } from '@/features/party/PartyScreen';
@@ -40,6 +41,7 @@ const BUILT_SCREENS: Partial<Record<ScreenKey, ComponentType>> = {
   examResults: ExamResultsScreen,
   decks: DecksScreen,
   explore: ExploreScreen,
+  outlines: OutlinesScreen,
   planner: PlannerScreen,
   tutor: TutorScreen,
   subscription: SubscriptionScreen,

@@ -9,7 +9,7 @@ import { ContentOriginSchema, EditorialStatusSchema, IdSchema, UtcDateTimeSchema
  * Campos de sincronización. updatedAt dice cuándo cambió por última vez y, si falta, vale lo mismo
  * que createdAt. deletedAt con fecha es una marca de borrado y null o ausente es un registro vivo
  */
-const SyncShape = {
+export const SyncShape = {
   updatedAt: UtcDateTimeSchema.optional(),
   deletedAt: UtcDateTimeSchema.nullable().optional(),
 };
@@ -50,6 +50,13 @@ const NoteBaseShape = {
   /** Pregunta del banco de la que sale una tarjeta generada */
   sourceQuestionVersionId: IdSchema.nullable(),
   isDemo: z.boolean(),
+  /**
+   * Apunte en esquema del que sale la nota (Fase C2, Etapa 3) y la línea que la genera. Van juntos.
+   * Ausentes o null en una tarjeta suelta, hecha a mano o importada. El ID de la línea es lo que une
+   * la línea con su nota, así editar el texto o mover la línea conserva las cartas y su historial
+   */
+  outlineId: IdSchema.nullable().optional(),
+  outlineNodeId: IdSchema.nullable().optional(),
   createdAt: UtcDateTimeSchema,
   ...SyncShape,
 };
@@ -83,6 +90,8 @@ export const ClozeNoteSchema = z.strictObject({
   extra: SanitizedHtmlSchema.default(''),
 });
 
+const isSet = (value: string | null | undefined) => typeof value === 'string';
+
 export const NoteSchema = z
   .discriminatedUnion('kind', [BasicNoteSchema, BasicReverseNoteSchema, ClozeNoteSchema])
   // Una tarjeta generada siempre cita la frase y la pregunta del banco que la respaldan (4.1)
@@ -91,7 +100,12 @@ export const NoteSchema = z
       note.origin !== 'generated' ||
       (note.sourceQuote !== null && note.sourceQuestionVersionId !== null),
     { message: 'Una tarjeta generada cita su fuente', path: ['sourceQuote'] },
-  );
+  )
+  // La nota de un apunte lleva el apunte y la línea juntos, o ninguno de los dos
+  .refine((note) => isSet(note.outlineId) === isSet(note.outlineNodeId), {
+    message: 'Una nota de un apunte lleva el apunte y la línea juntos',
+    path: ['outlineNodeId'],
+  });
 export type Note = z.infer<typeof NoteSchema>;
 
 export const CardSchema = z.strictObject({

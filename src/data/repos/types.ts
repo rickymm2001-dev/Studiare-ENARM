@@ -30,6 +30,7 @@ import type {
 import type { EditorialStatusSchema, Id } from '../schemas/common';
 import type { Card, Deck, Note } from '../schemas/decks';
 import type { AppEvent, EventType } from '../schemas/events';
+import type { Outline } from '../schemas/outlines';
 import type { Account, Consent, OfficialScore, Subscription, User } from '../schemas/people';
 import type { z } from 'zod';
 import type { DatabaseKind } from '../databases';
@@ -81,6 +82,21 @@ export interface SyncableRepo<T, K extends string = Id> extends Omit<EntityRepo<
 }
 
 /**
+ * Notas con la búsqueda por apunte (D-092). Una nota de un apunte guarda el ID del apunte, y la
+ * búsqueda usa su índice en lugar de recorrer todas las notas
+ */
+export interface NoteRepo extends SyncableRepo<Note> {
+  /** Las notas del apunte, también las marcadas como borradas, que reviven si vuelve su marca */
+  listAllByOutline(outlineId: Id): Promise<Note[]>;
+}
+
+/** Cartas con la búsqueda por nota, para leer solo las de las notas que importan */
+export interface CardRepo extends SyncableRepo<Card> {
+  /** Las cartas de esas notas, también las marcadas como borradas */
+  listAllForNotes(noteIds: readonly Id[]): Promise<Card[]>;
+}
+
+/**
  * Registros inmutables. Solo se agregan. Lo usan los casos clínicos, porque su viñeta es parte
  * del contenido de preguntas ya respondidas. Editar una viñeta es agregar un caso nuevo y
  * versiones nuevas de sus preguntas que apunten a él (6.1)
@@ -127,8 +143,9 @@ export interface Repositories {
   subscriptions: EntityRepo<Subscription>;
   officialScores: EntityRepo<OfficialScore>;
   decks: SyncableRepo<Deck>;
-  notes: SyncableRepo<Note>;
-  cards: SyncableRepo<Card>;
+  notes: NoteRepo;
+  cards: CardRepo;
+  outlines: SyncableRepo<Outline>;
   cases: AppendOnlyRepo<ClinicalCase>;
   questions: QuestionRepo;
   options: OptionRepo;
