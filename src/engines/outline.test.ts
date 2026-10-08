@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   backlinks,
+  cardCountOf,
   countNodes,
   docToOutline,
   markTokens,
@@ -370,5 +371,15 @@ describe('markTokens, lo que el editor resalta', () => {
 
   it('una línea sin marcas no resalta nada', () => {
     expect(markTokens('Solo texto')).toEqual([]);
+  });
+});
+
+describe('cardCountOf', () => {
+  it('cuenta las tarjetas que da cada tipo de borrador', () => {
+    expect(cardCountOf({ kind: 'basic', front: 'a', back: 'b' })).toBe(1);
+    expect(cardCountOf({ kind: 'basic_reverse', front: 'a', back: 'b' })).toBe(2);
+    expect(
+      cardCountOf({ kind: 'cloze', text: '{{c1::a}} y {{c2::b}} y {{c1::c}}', extra: '' }),
+    ).toBe(2);
   });
 });

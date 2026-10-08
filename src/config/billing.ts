@@ -23,6 +23,7 @@ export interface PlanAccess {
  */
 export const GATED_FEATURES = [
   'explore',
+  'outlines',
   'overdueTools',
   'guideProfile',
   'newPerDaySuggestion',
@@ -34,6 +35,7 @@ export type FeatureAccess = Record<GatedFeature, boolean>;
 
 const ALL_FEATURES_OPEN: FeatureAccess = {
   explore: true,
+  outlines: true,
   overdueTools: true,
   guideProfile: true,
   newPerDaySuggestion: true,

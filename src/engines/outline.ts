@@ -264,6 +264,18 @@ export type PlanDraft =
   | { kind: 'basic_reverse'; front: string; back: string }
   | { kind: 'cloze'; text: string; extra: string };
 
+/** Cuántas tarjetas da un borrador. Dos con tarjeta inversa y una por número de hueco en un cloze */
+export function cardCountOf(draft: PlanDraft): number {
+  switch (draft.kind) {
+    case 'basic':
+      return 1;
+    case 'basic_reverse':
+      return 2;
+    case 'cloze':
+      return new Set(clozeHoles(draft.text).map((hole) => hole.ordinal)).size;
+  }
+}
+
 export interface CardPlan {
   /** La línea de la que sale la tarjeta. Une la línea con su nota */
   nodeId: string;

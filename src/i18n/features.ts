@@ -365,6 +365,7 @@ export const featureText = {
     comingSoon: 'Próximamente',
     featureNames: {
       explore: 'Explorar tus tarjetas',
+      outlines: 'Apuntes en esquema',
       overdueTools: 'Herramientas de atrasos',
       guideProfile: 'Perfil guía',
       newPerDaySuggestion: 'Sugerencia de tarjetas nuevas',
