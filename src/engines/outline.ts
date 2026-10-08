@@ -68,7 +68,8 @@ export interface ParsedLine {
   plain: string;
 }
 
-const TAG_PATTERN = /(^|\s)#([^\s#]+)/g;
+// La etiqueta empieza con una letra. Así "Causa #1 de muerte" no se come el número
+const TAG_PATTERN = /(^|\s)#(\p{L}[^\s#]*)/gu;
 const LINK_PATTERN = /\[\[([^[\]]+)\]\]/g;
 
 /** Cambia cada carácter de una región por un relleno del mismo largo, para no tocar los índices */
@@ -440,36 +441,72 @@ function textOf(node: DocNode): string {
   return (node.content ?? []).map(textOf).join('');
 }
 
+/** Forma de un id de línea válido, la misma que exige el esquema de datos (un ULID) */
+export const NODE_ID_PATTERN = /^[0-7][0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{25}$/;
+
+/**
+ * Entre líneas con el mismo id, la que lo conserva. Gana la de mayor rango y, entre iguales, la
+ * primera en el orden del documento. El rango lo da quien llama, con el texto como lo primero, así al
+ * partir una línea con Enter al inicio el id se queda con el texto y no con la línea vacía de arriba,
+ * y la tarjeta no pierde su historial
+ */
+export function pickIdOwners<T>(
+  items: readonly { id: string; rank: number; item: T }[],
+): Map<string, T> {
+  const best = new Map<string, { rank: number; item: T }>();
+  for (const entry of items) {
+    if (entry.id === '') continue;
+    const current = best.get(entry.id);
+    if (!current || entry.rank > current.rank) {
+      best.set(entry.id, { rank: entry.rank, item: entry.item });
+    }
+  }
+  return new Map([...best].map(([id, value]) => [id, value.item]));
+}
+
+function itemText(item: DocNode): string {
+  return (item.content ?? [])
+    .filter((part) => part.type === 'paragraph')
+    .map(textOf)
+    .join(' ')
+    .replace(/[^\S\n]+/g, ' ')
+    .trim();
+}
+
 /**
  * El documento del editor como árbol de líneas. El id de cada línea sale de su atributo nodeId.
- * Una línea sin id o con un id que ya salió antes, como la que nace al partir otra con Enter, recibe
- * uno nuevo. La primera en el orden del documento conserva el suyo
+ * Una línea sin id o con un id que otra se queda, como la que nace al partir una con Enter, recibe
+ * uno nuevo. Entre dos con el mismo id lo conserva la que tiene texto y, si ambas, la primera
  */
 export function docToOutline(doc: DocNode, makeId: () => string): OutlineNode[] {
-  const seen = new Set<string>();
-  const readItem = (item: DocNode): OutlineNode => {
+  const declaredOf = (item: DocNode): string => {
     const declared = item.attrs?.nodeId;
-    let id = typeof declared === 'string' && declared !== '' ? declared : '';
-    if (id === '' || seen.has(id)) id = makeId();
-    seen.add(id);
-    const parts = item.content ?? [];
-    const paragraphs = parts.filter((part) => part.type === 'paragraph');
-    const nested = parts.filter(
-      (part) => part.type === 'bulletList' || part.type === 'orderedList',
-    );
+    return typeof declared === 'string' ? declared : '';
+  };
+  const candidates: { id: string; rank: number; item: DocNode }[] = [];
+  const collect = (item: DocNode): void => {
+    candidates.push({ id: declaredOf(item), rank: itemText(item) === '' ? 0 : 1, item });
+    for (const part of item.content ?? []) {
+      if (part.type === 'bulletList' || part.type === 'orderedList') {
+        for (const child of part.content ?? []) collect(child);
+      }
+    }
+  };
+  const isList = (part: DocNode) => part.type === 'bulletList' || part.type === 'orderedList';
+  const lists = (doc.content ?? []).filter(isList);
+  for (const list of lists) for (const item of list.content ?? []) collect(item);
+  const owners = pickIdOwners(candidates);
+
+  const readItem = (item: DocNode): OutlineNode => {
+    const declared = declaredOf(item);
+    const id = declared !== '' && owners.get(declared) === item ? declared : makeId();
+    const nested = (item.content ?? []).filter(isList);
     return {
       id,
-      text: paragraphs
-        .map(textOf)
-        .join(' ')
-        .replace(/[^\S\n]+/g, ' ')
-        .trim(),
+      text: itemText(item),
       children: nested.flatMap((list) => (list.content ?? []).map(readItem)),
     };
   };
-  const lists = (doc.content ?? []).filter(
-    (part) => part.type === 'bulletList' || part.type === 'orderedList',
-  );
   return lists.flatMap((list) => (list.content ?? []).map(readItem));
 }
 

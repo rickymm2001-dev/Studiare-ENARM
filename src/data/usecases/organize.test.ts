@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { suspendedCardIds } from '../../engines/suspension';
 import { makeUser, newId, testApi } from '../testing/fixtures';
 import { createManualDeck, saveManualNote } from './manualDecks';
+import { createOutline, saveOutline } from './outlines';
 import { addTags, moveDeck, moveNotes, removeTag, renameDeck, setSuspended } from './organize';
 
 const disposers: (() => Promise<void>)[] = [];
@@ -90,6 +91,39 @@ describe('mover notas', () => {
       'Solo puedes cambiar',
     );
     await expect(moveNotes(api, makeUser(), [basic.id], newId(), NOW)).rejects.toThrow();
+  });
+});
+
+describe('las notas de un apunte no se cambian por lote', () => {
+  it('mover, etiquetar y quitar etiquetas las cuentan como no editables y no tocan nada', async () => {
+    const { api, user, target } = await setup();
+    const outline = await createOutline(api, user, { title: 'Cardiología' }, NOW);
+    await saveOutline(
+      api,
+      user,
+      {
+        outlineId: outline.id,
+        nodes: [{ id: newId(), text: 'Pregunta >> Respuesta', children: [] }],
+      },
+      NOW,
+    );
+    const note = (await api.repos.notes.listAllByOutline(outline.id))[0];
+    if (!note) throw new Error('la línea debió volverse nota');
+    const before = JSON.stringify(await api.repos.notes.get(note.id));
+
+    expect(await moveNotes(api, user, [note.id], target.id, NOW)).toEqual({
+      changed: 0,
+      skipped: 1,
+    });
+    expect(await addTags(api, user, [note.id], ['cardio'], NOW)).toEqual({
+      changed: 0,
+      skipped: 1,
+    });
+    expect(await removeTag(api, user, [note.id], 'cardio', NOW)).toEqual({
+      changed: 0,
+      skipped: 1,
+    });
+    expect(JSON.stringify(await api.repos.notes.get(note.id))).toBe(before);
   });
 });
 

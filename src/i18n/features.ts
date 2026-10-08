@@ -493,7 +493,7 @@ export const featureText = {
       tagged: (n: number) => `${plural(n, 'nota etiquetada', 'notas etiquetadas')}.`,
       untagged: (n: number) => `Etiqueta quitada de ${plural(n, 'nota', 'notas')}.`,
       skipped: (n: number) =>
-        `${plural(n, 'nota precargada no se edita', 'notas precargadas no se editan')}. Solo se pueden suspender.`,
+        `${plural(n, 'nota no se edita', 'notas no se editan')} porque ${n === 1 ? 'es precargada o sale de un apunte' : 'son precargadas o salen de un apunte'}. Las de un apunte se cambian en el apunte y todas se pueden suspender.`,
       nothingChanged: 'No hubo nada que cambiar.',
     },
   },
@@ -547,6 +547,10 @@ export const featureText = {
     editCards: 'Editar tarjetas',
     deleteDeck: 'Eliminar mazo',
     confirmDelete: (name: string) => `¿Eliminar ${name} con todas sus tarjetas?`,
+    confirmDeleteOutlines: (n: number) =>
+      n === 1
+        ? 'Hay un apunte en este mazo. El apunte no se borra, pero sus tarjetas sí. Después pásalo a otro mazo desde el apunte y las tarjetas regresan.'
+        : `Hay ${String(n)} apuntes en este mazo. Los apuntes no se borran, pero sus tarjetas sí. Después pásalos a otro mazo desde cada apunte y las tarjetas regresan.`,
     confirmDeleteYes: 'Sí, eliminar',
     confirmDeleteNo: 'Cancelar',
     deleteError: 'No se pudo eliminar el mazo. Intenta de nuevo.',

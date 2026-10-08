@@ -7,6 +7,7 @@ import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { SCREENS } from '@/app/screens';
 import { renderApp, resetApp, type RenderedApp } from '@/app/testing/renderApp';
 import { newId } from '@/data/ids';
+import { createManualDeck, deleteManualDeck } from '@/data/usecases/manualDecks';
 import { createOutline, saveOutline } from '@/data/usecases/outlines';
 import { t } from '@/i18n/es-MX';
 
@@ -29,12 +30,11 @@ beforeAll(() => {
     toJSON: () => ({}),
   };
   Range.prototype.getBoundingClientRect = () => rect;
-  Range.prototype.getClientRects = () =>
-    ({
-      length: 0,
-      item: () => null,
-      [Symbol.iterator]: [][Symbol.iterator],
-    });
+  Range.prototype.getClientRects = () => ({
+    length: 0,
+    item: () => null,
+    [Symbol.iterator]: [][Symbol.iterator],
+  });
   document.elementFromPoint = () => null;
 });
 
@@ -144,6 +144,77 @@ describe('pantalla de Apuntes', () => {
     const preview = screen.getByRole('region', { name: t.outlines.preview.title });
     expect(within(preview).getByText(t.outlines.preview.count(1))).toBeInTheDocument();
     expect(within(preview).getByText('Broncodilatador')).toBeInTheDocument();
+  });
+
+  it('si el mazo del apunte se borró deja elegir otro y pasa el apunte con sus tarjetas', async () => {
+    const typing = userEvent.setup();
+    let outlineId = '';
+    let newDeckId = '';
+    app = await renderApp(SCREENS.outlines.path, {
+      seed: async (api, user) => {
+        const asma = await createOutline(api, user, { title: 'Asma' });
+        outlineId = asma.id;
+        await saveOutline(api, user, {
+          outlineId,
+          nodes: [node('Salbutamol >> Broncodilatador')],
+        });
+        await deleteManualDeck(api, user, asma.deckId);
+        newDeckId = (await createManualDeck(api, user, { name: 'Neumología' })).id;
+      },
+    });
+    await typing.click(
+      await screen.findByRole('link', { name: t.outlines.open('Asma') }, { timeout: 10_000 }),
+    );
+    expect(await screen.findByText(t.outlines.editor.deckMissing)).toBeInTheDocument();
+    await typing.selectOptions(screen.getByLabelText(t.outlines.editor.deckLabel), newDeckId);
+    await typing.click(screen.getByRole('button', { name: t.outlines.editor.deckMove }));
+    await waitFor(async () => {
+      expect((await app?.api.repos.outlines.get(outlineId))?.deckId).toBe(newDeckId);
+    });
+    // Las tarjetas regresan al mazo nuevo y el aviso desaparece
+    await waitFor(async () => {
+      const notes = (await app?.api.repos.notes.listAllByOutline(outlineId))?.filter(
+        (note) => note.deletedAt == null,
+      );
+      expect(notes).toHaveLength(1);
+      expect(notes?.[0]?.deckId).toBe(newDeckId);
+    });
+    await waitFor(() => {
+      expect(screen.queryByText(t.outlines.editor.deckMissing)).not.toBeInTheDocument();
+    });
+  });
+
+  it('si otra ventana guardó antes, avisa en lugar de pisar el apunte', async () => {
+    const typing = userEvent.setup();
+    let outlineId = '';
+    app = await renderApp(SCREENS.outlines.path, {
+      seed: async (api, user) => {
+        const asma = await createOutline(api, user, { title: 'Asma' });
+        outlineId = asma.id;
+        await saveOutline(api, user, { outlineId, nodes: [node('Salbutamol >> Broncodilatador')] });
+      },
+    });
+    await typing.click(
+      await screen.findByRole('link', { name: t.outlines.open('Asma') }, { timeout: 10_000 }),
+    );
+    const titleField = await screen.findByLabelText(t.outlines.editor.titleLabel);
+    // Otra ventana agrega una línea con tarjeta mientras esta sigue con la copia vieja
+    const user = (await app.api.repos.outlines.get(outlineId))?.ownerId ?? '';
+    await saveOutline(
+      app.api,
+      { id: user },
+      { outlineId, nodes: [node('Salbutamol >> Broncodilatador'), node('Otra >> Cosa')] },
+      new Date(Date.now() + 60_000),
+    );
+    await typing.type(titleField, ' crónica');
+    expect(
+      await screen.findByText(t.outlines.editor.conflict, {}, { timeout: 10_000 }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: t.outlines.editor.reload })).toBeInTheDocument();
+    // Lo que guardó la otra ventana sigue intacto
+    const stored = await app.api.repos.outlines.get(outlineId);
+    expect(stored?.title).toBe('Asma');
+    expect(stored?.nodes).toHaveLength(2);
   });
 
   it('un apunte que no existe lo dice y regresa a la lista', async () => {

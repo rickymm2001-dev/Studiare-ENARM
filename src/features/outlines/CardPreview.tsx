@@ -49,7 +49,12 @@ export function CardPreview({
         {total === 0 ? text.none : text.count(total)}
       </p>
       {plans.length > 0 ? (
-        <ul className="flex max-h-96 flex-col gap-2 overflow-y-auto">
+        // La lista tiene su propio scroll, así que se puede enfocar para recorrerla con el teclado
+        <ul
+          tabIndex={0}
+          aria-label={text.title}
+          className="flex max-h-96 flex-col gap-2 overflow-y-auto"
+        >
           {plans.map((plan) => (
             <li key={plan.nodeId} className="rounded-md border border-line p-2 text-sm">
               <p className="font-semibold text-fg-muted">{text.kinds[plan.draft.kind]}</p>

@@ -17,6 +17,7 @@ import {
 } from './manualDecks';
 import {
   OUTLINES_ROOT_DECK_NAME,
+  OutlineConflictError,
   createOutline,
   deleteOutline,
   isFromOutline,
@@ -816,6 +817,56 @@ describe('dueño, mazo y límites', () => {
     // Y ya se puede volver a guardar
     const saved = await saveOutline(api, user, { outlineId: outline.id, nodes: edit }, at(6));
     expect(saved.sync).toMatchObject({ created: 1, updated: 1 });
+  });
+
+  it('no pisa un apunte que otra ventana guardó después y avisa con un error propio', async () => {
+    const { api, user } = setup();
+    const outline = await start(api, user);
+    const first = await saveOutline(
+      api,
+      user,
+      { outlineId: outline.id, nodes: [line('Uno >> 1')], expectedUpdatedAt: outline.updatedAt },
+      at(1),
+    );
+    // La otra ventana sigue con la fecha de antes de ese guardado
+    const nueva = line('Dos >> 2');
+    await expect(
+      saveOutline(
+        api,
+        user,
+        { outlineId: outline.id, nodes: [nueva], expectedUpdatedAt: outline.updatedAt },
+        at(2),
+      ),
+    ).rejects.toBeInstanceOf(OutlineConflictError);
+    expect((await api.repos.outlines.get(outline.id))?.nodes).toEqual(first.outline.nodes);
+    // Con la fecha vigente sí guarda, y cada guardado trae la fecha para el siguiente
+    const second = await saveOutline(
+      api,
+      user,
+      {
+        outlineId: outline.id,
+        nodes: [nueva],
+        expectedUpdatedAt: first.outline.updatedAt,
+      },
+      at(3),
+    );
+    expect(second.outline.updatedAt).toBe(at(3).toISOString());
+  });
+
+  it('dos guardados a la vez no dejan dos notas ni dos cartas de la misma línea', async () => {
+    const { api, user } = setup();
+    const outline = await start(api, user);
+    const node = newId();
+    const nodes = [line('Pregunta >> Respuesta', [], node)];
+    await Promise.all([
+      saveOutline(api, user, { outlineId: outline.id, nodes }, at(1)),
+      saveOutline(api, user, { outlineId: outline.id, nodes }, at(1)),
+      saveOutline(api, user, { outlineId: outline.id, nodes }, at(1)),
+    ]);
+    const notes = (await api.repos.notes.listAllByOutline(outline.id)).filter(isLive);
+    expect(notes).toHaveLength(1);
+    const cards = await cardsOf(api, notes[0]?.id ?? '', { live: true });
+    expect(cards).toHaveLength(1);
   });
 
   it('rechaza lo que pasa de los límites y no escribe nada', async () => {

@@ -12,6 +12,7 @@ import {
   outlineTags,
   outlineToDoc,
   parseLine,
+  pickIdOwners,
   planCards,
   resolveLinks,
   type OutlineNode,
@@ -23,6 +24,21 @@ const node = (id: string, text: string, ...children: OutlineNode[]): OutlineNode
   id,
   text,
   children,
+});
+
+describe('pickIdOwners, quién conserva un id repetido', () => {
+  it('gana el mayor rango y, entre iguales, el primero', () => {
+    const owners = pickIdOwners([
+      { id: 'a', rank: 0, item: 'vacío' },
+      { id: 'a', rank: 1, item: 'con texto' },
+      { id: 'a', rank: 1, item: 'otro con texto' },
+      { id: 'b', rank: 0, item: 'único' },
+      { id: '', rank: 5, item: 'sin id' },
+    ]);
+    expect(owners.get('a')).toBe('con texto');
+    expect(owners.get('b')).toBe('único');
+    expect(owners.has('')).toBe(false);
+  });
 });
 
 describe('parseLine, marcas de una línea', () => {
@@ -111,6 +127,12 @@ describe('parseLine, marcas de una línea', () => {
 
   it('una almohadilla pegada a una palabra no es etiqueta', () => {
     expect(parseLine('Caso C#3 del examen').tags).toEqual([]);
+  });
+
+  it('una almohadilla con un número no es etiqueta y el texto no pierde el número', () => {
+    const parsed = parseLine('Causa #1 de muerte >> Isquemia');
+    expect(parsed.tags).toEqual([]);
+    expect(parsed.mark).toMatchObject({ type: 'forward', left: 'Causa #1 de muerte' });
   });
 
   it('un salto de línea dentro del texto cuenta como espacio al buscar marcas', () => {
@@ -259,6 +281,29 @@ describe('conversión entre el árbol y el documento del editor', () => {
     expect(
       new Set([...back, ...back.flatMap((item) => item.children)].map((item) => item.id)).size,
     ).toBe(countNodes(back));
+  });
+
+  it('entre dos líneas con el mismo id lo conserva la que tiene texto, aunque vaya después', () => {
+    const item = (id: string, text: string) => ({
+      type: 'listItem',
+      attrs: { nodeId: id },
+      content: [
+        { type: 'paragraph', ...(text === '' ? {} : { content: [{ type: 'text', text }] }) },
+      ],
+    });
+    // Enter al inicio de la línea a: arriba queda el renglón vacío y abajo el texto, los dos con el id a
+    const back = docToOutline(
+      {
+        type: 'doc',
+        content: [
+          { type: 'bulletList', content: [item('a', ''), item('a', 'Pregunta >> Respuesta')] },
+        ],
+      },
+      makeId,
+    );
+    expect(back[0]?.text).toBe('');
+    expect(back[0]?.id).toMatch(/^gen-/);
+    expect(back[1]).toMatchObject({ id: 'a', text: 'Pregunta >> Respuesta' });
   });
 
   it('una línea sin id recibe uno nuevo y nunca queda vacío', () => {

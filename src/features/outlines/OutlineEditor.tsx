@@ -15,7 +15,7 @@ import {
   ArrowRightLeft,
   ArrowRight,
 } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { newId } from '@/data/ids';
 import {
   docToOutline,
@@ -26,7 +26,7 @@ import {
 } from '@/engines/outline';
 import { t } from '@/i18n/es-MX';
 import { Button } from '@/ui/components/button';
-import { outlineExtensions } from './outlineExtensions';
+import { outlineExtensions, type OutlineLimit } from './outlineExtensions';
 import './outline.css';
 
 export interface OutlineEditorProps {
@@ -49,9 +49,14 @@ export function OutlineEditor({
 }: OutlineEditorProps) {
   const text = t.outlines.editor;
   const [initial] = useState(() => outlineToDoc(nodes, newId));
+  // Cuando un cambio rebasaría un tope del apunte, el editor no lo aplica y aquí se explica por qué
+  const [limit, setLimit] = useState<OutlineLimit | null>(null);
+  const onLimit = useCallback((hit: OutlineLimit) => {
+    setLimit(hit);
+  }, []);
   const extensions = useMemo(
-    () => outlineExtensions({ placeholder: text.placeholder, badgeOf }),
-    [text.placeholder, badgeOf],
+    () => outlineExtensions({ placeholder: text.placeholder, badgeOf, onLimit }),
+    [text.placeholder, badgeOf, onLimit],
   );
   const firstTool = useRef<HTMLButtonElement | null>(null);
 
@@ -75,6 +80,7 @@ export function OutlineEditor({
       },
     },
     onUpdate: ({ editor: current }) => {
+      setLimit(null);
       onChange(docToOutline(current.getJSON() as DocNode, newId));
     },
   });
@@ -200,7 +206,11 @@ export function OutlineEditor({
       <div className="rounded-lg border border-line-strong bg-surface p-3 focus-within:outline-2 focus-within:outline-primary">
         <EditorContent editor={editor} />
       </div>
-      <p className="text-sm text-fg-muted">{text.escapeHint}</p>
+      <p role="status" className="text-sm font-medium text-warning">
+        {limit ? text.limits[limit] : ''}
+      </p>
+      {/* En el teléfono no hay teclas Esc ni Tab, ahí sirven los botones de la barra */}
+      <p className="hidden text-sm text-fg-muted md:block">{text.escapeHint}</p>
     </div>
   );
 }

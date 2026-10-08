@@ -19,6 +19,8 @@ export function useOutlineAutosave(
   delayMs: number = AUTOSAVE_DELAY_MS,
 ) {
   const [status, setStatus] = useState<SaveStatus>('saved');
+  // Por qué falló el último guardado, para que la pantalla diga algo más útil que "no se pudo"
+  const [error, setError] = useState<unknown>(null);
   const pending = useRef<OutlinePayload | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const chain = useRef<Promise<void>>(Promise.resolve());
@@ -46,11 +48,13 @@ export function useOutlineAutosave(
       show('saving');
       try {
         await saveRef.current(payload);
+        if (mounted.current) setError(null);
         // Mientras guardaba pudo llegar otro cambio
         show(hasPending() ? 'unsaved' : 'saved');
-      } catch {
+      } catch (failure) {
         // Lo que falló no pisa a lo que se escribió después
         pending.current ??= payload;
+        if (mounted.current) setError(failure);
         show('error');
       }
     });
@@ -88,5 +92,5 @@ export function useOutlineAutosave(
     };
   }, [flush]);
 
-  return { status, schedule, flush };
+  return { status, error, schedule, flush };
 }

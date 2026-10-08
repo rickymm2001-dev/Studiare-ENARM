@@ -29,7 +29,21 @@ export const outlineText = {
     editor: {
       titleLabel: 'Título',
       deck: (name: string) => `Las tarjetas van al mazo ${name}`,
-      deckMissing: 'El mazo de este apunte ya no existe. Las tarjetas no se pueden guardar.',
+      deckMissing: 'El mazo de este apunte ya no existe. Elige otro y tus tarjetas se pasan a él.',
+      deckChange: 'Cambiar de mazo',
+      deckLabel: 'Mazo de las tarjetas',
+      deckMove: 'Pasar el apunte a este mazo',
+      deckMoving: 'Pasando…',
+      deckMoveFailed: 'No se pudo pasar el apunte a ese mazo. Intenta de nuevo.',
+      deckNone: 'No tienes un mazo propio al que pasarlo. Crea uno en Mazos.',
+      conflict:
+        'Este apunte se cambió en otra ventana. Abre la versión nueva para no pisar sus cambios. Lo que escribiste aquí se queda en pantalla hasta que la cierres.',
+      reload: 'Abrir la versión nueva',
+      limits: {
+        lines: 'Un apunte tiene hasta 2,000 líneas. Esa línea ya no cabe.',
+        depth: 'Un apunte tiene hasta 8 niveles. No se puede meter más.',
+        length: 'Una línea tiene hasta 3,000 caracteres. Lo que pasa de ahí no cabe.',
+      },
       label: 'Líneas del apunte',
       placeholder: 'Escribe una línea. Prueba con Pregunta >> Respuesta',
       saved: 'Guardado',
@@ -37,6 +51,8 @@ export const outlineText = {
       unsaved: 'Cambios sin guardar',
       saveFailed:
         'No se pudo guardar. Tus cambios siguen en la pantalla, se vuelve a intentar con el siguiente cambio.',
+      saveInvalid:
+        'No se pudo guardar porque el apunte pasa de un tope: 2,000 líneas, 8 niveles o 3,000 caracteres por línea. Revisa lo último que escribiste.',
       escapeHint:
         'Con Esc sales del editor hacia las herramientas. Con Tab metes la línea en la de arriba.',
       toolbar: 'Herramientas del apunte',
@@ -81,9 +97,9 @@ export const outlineText = {
           'Una línea con >>> trae marcas en sus líneas de abajo. Esas marcas no crean tarjetas aparte.',
         cloze_unusable: 'Una línea tiene un hueco sin cerrar o sin respuesta.',
         too_long: 'Una línea es demasiado larga para una tarjeta.',
-        too_many_cards: 'Un apunte guarda hasta 500 tarjetas. Las que pasan de ahí no se crean.',
-        too_many_nodes: 'Un apunte tiene hasta 2,000 líneas. Las que pasan de ahí no se guardan.',
-        too_deep: 'Un apunte tiene hasta 8 niveles. Lo que pasa de ahí no se guarda.',
+        too_many_cards: 'Un apunte crea hasta 500 tarjetas. Las que pasan de ahí no se crean.',
+        too_many_nodes: 'Un apunte guarda hasta 2,000 líneas.',
+        too_deep: 'Un apunte guarda hasta 8 niveles.',
       },
     },
 
@@ -141,6 +157,8 @@ export const outlineText = {
     fromOutline: {
       note: 'Esta tarjeta sale de un apunte. Cámbiala en el apunte y se actualiza sola.',
       open: 'Abrir el apunte',
+      leech:
+        'Esta tarjeta sale de un apunte y se cambia en el apunte. Puedes suspenderla, abrir el apunte o seguir con ella.',
     },
   },
 } as const;

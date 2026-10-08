@@ -119,4 +119,26 @@ describe('useOutlineAutosave', () => {
     expect(save).toHaveBeenCalledTimes(1);
     Object.defineProperty(document, 'visibilityState', { value: 'visible', configurable: true });
   });
+
+  it('guarda por qué falló el último guardado y lo limpia cuando uno sale bien', async () => {
+    const failure = new RangeError('pasa de un tope');
+    const save = vi.fn().mockRejectedValueOnce(failure).mockResolvedValue(undefined);
+    const { result } = renderHook(() => useOutlineAutosave(save));
+    act(() => {
+      result.current.schedule(payload('uno'));
+    });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(AUTOSAVE_DELAY_MS);
+    });
+    expect(result.current.status).toBe('error');
+    expect(result.current.error).toBe(failure);
+    act(() => {
+      result.current.schedule(payload('dos'));
+    });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(AUTOSAVE_DELAY_MS);
+    });
+    expect(result.current.status).toBe('saved');
+    expect(result.current.error).toBeNull();
+  });
 });

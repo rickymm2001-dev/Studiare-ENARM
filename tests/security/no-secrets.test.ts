@@ -30,7 +30,8 @@ describe('secretos en el build', () => {
     expect(findSecrets(buildDir, defaultNeedles())).toEqual([]);
   });
 
-  it('dist, si existe, tampoco contiene secretos', () => {
+  // Recorre todo dist, que pesa decenas de megas, y con la suite completa en paralelo pasa de 5 s
+  it('dist, si existe, tampoco contiene secretos', { timeout: 60_000 }, () => {
     const dist = join(ROOT, 'dist');
     if (!existsSync(dist)) return;
     expect(findSecrets(dist, defaultNeedles())).toEqual([]);

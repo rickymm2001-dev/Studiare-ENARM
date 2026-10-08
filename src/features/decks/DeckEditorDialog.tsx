@@ -109,7 +109,8 @@ export function DeckEditorDialog({
   if (!openedInitial && notes !== undefined) {
     setOpenedInitial(true);
     const target = notes.find((note) => note.id === initialNoteId);
-    if (target) {
+    // Las tarjetas de un apunte no se abren para editar aquí, se cambian en el apunte
+    if (target && !isFromOutline(target)) {
       setEditingId(target.id);
       setDraft(draftOf(target));
     }

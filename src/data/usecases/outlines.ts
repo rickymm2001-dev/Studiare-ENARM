@@ -42,6 +42,36 @@ const OUTLINE_MISSING = 'No se encontró el apunte';
 const OUTLINE_DECK_MISSING =
   'El mazo de este apunte ya no existe. Muévelo a otro mazo tuyo para seguir guardando';
 const CHOSEN_DECK_MISSING = 'El mazo elegido ya no existe';
+const OUTLINE_CHANGED = 'El apunte cambió en otra ventana desde que lo abriste';
+
+/** El apunte guardado es más nuevo que la copia con la que se quiso guardar */
+export class OutlineConflictError extends Error {
+  constructor() {
+    super(OUTLINE_CHANGED);
+    this.name = 'OutlineConflictError';
+  }
+}
+
+const queues = new Map<string, Promise<unknown>>();
+
+/**
+ * Una sola escritura a la vez por apunte. Con el candado del navegador vale entre pestañas y ventanas
+ * y, donde no hay, vale dentro de esta. Así dos sincronizaciones no dejan dos notas de la misma línea
+ */
+async function withOutlineLock<T>(outlineId: string, work: () => Promise<T>): Promise<T> {
+  // El candado del navegador no existe en todos los entornos, por eso puede faltar
+  const locks =
+    typeof navigator === 'undefined' ? undefined : (navigator as { locks?: LockManager }).locks;
+  const run = () => (locks ? locks.request(`studiare-outline-${outlineId}`, work) : work());
+  const previous = queues.get(outlineId) ?? Promise.resolve();
+  const next = previous.then(run, run);
+  queues.set(outlineId, next);
+  try {
+    return await next;
+  } finally {
+    if (queues.get(outlineId) === next) queues.delete(outlineId);
+  }
+}
 
 /** Lo que pasó con las notas del apunte en una sincronización. Los números son de notas */
 export interface OutlineSyncResult {
@@ -265,30 +295,42 @@ const sameNodes = (a: readonly OutlineNode[], b: readonly OutlineNode[]) =>
 /**
  * Guarda el texto del apunte, con su título si cambió, y sincroniza sus tarjetas. Valida que sea
  * del alumno, los límites y que el mazo siga siendo suyo antes de escribir. Guardar lo mismo no
- * escribe nada, ni el apunte ni sus notas
+ * escribe nada, ni el apunte ni sus notas. Con expectedUpdatedAt, que es la fecha de la copia que el
+ * alumno tiene abierta, no pisa un apunte que otra ventana guardó después y avisa con
+ * OutlineConflictError
  */
 export async function saveOutline(
   api: Api,
   user: Actor,
-  input: { outlineId: string; title?: string; nodes: readonly OutlineNode[] },
+  input: {
+    outlineId: string;
+    title?: string;
+    nodes: readonly OutlineNode[];
+    expectedUpdatedAt?: string;
+  },
   now: Date = new Date(),
 ): Promise<{ outline: Outline; sync: OutlineSyncResult }> {
-  const stored = await ownedOutline(api, user, input.outlineId);
-  const parsed = OutlineSchema.safeParse({
-    ...stored,
-    title: input.title ?? stored.title,
-    nodes: input.nodes,
-    updatedAt: now.toISOString(),
-  });
-  if (!parsed.success) {
-    throw new RangeError(parsed.error.issues[0]?.message ?? 'El apunte no es válido');
-  }
-  await ownOutlineDeck(api, user, stored.deckId, OUTLINE_DECK_MISSING);
+  return withOutlineLock(input.outlineId, async () => {
+    const stored = await ownedOutline(api, user, input.outlineId);
+    if (input.expectedUpdatedAt !== undefined && stored.updatedAt !== input.expectedUpdatedAt) {
+      throw new OutlineConflictError();
+    }
+    const parsed = OutlineSchema.safeParse({
+      ...stored,
+      title: input.title ?? stored.title,
+      nodes: input.nodes,
+      updatedAt: now.toISOString(),
+    });
+    if (!parsed.success) {
+      throw new RangeError(parsed.error.issues[0]?.message ?? 'El apunte no es válido');
+    }
+    await ownOutlineDeck(api, user, stored.deckId, OUTLINE_DECK_MISSING);
 
-  const unchanged =
-    parsed.data.title === stored.title && sameNodes(parsed.data.nodes, stored.nodes);
-  const outline = unchanged ? stored : await api.repos.outlines.put(parsed.data);
-  return { outline, sync: await syncOutlineCards(api, user, outline, now) };
+    const unchanged =
+      parsed.data.title === stored.title && sameNodes(parsed.data.nodes, stored.nodes);
+    const outline = unchanged ? stored : await api.repos.outlines.put(parsed.data);
+    return { outline, sync: await syncOutlineCards(api, user, outline, now) };
+  });
 }
 
 /** Cambia el título del apunte. No toca el mazo ni las tarjetas */
@@ -316,13 +358,15 @@ export async function moveOutline(
   deckId: string,
   now: Date = new Date(),
 ): Promise<{ outline: Outline; sync: OutlineSyncResult }> {
-  const stored = await ownedOutline(api, user, outlineId);
-  await ownOutlineDeck(api, user, deckId, CHOSEN_DECK_MISSING);
-  const outline =
-    stored.deckId === deckId
-      ? stored
-      : await api.repos.outlines.put({ ...stored, deckId, updatedAt: now.toISOString() });
-  return { outline, sync: await syncOutlineCards(api, user, outline, now) };
+  return withOutlineLock(outlineId, async () => {
+    const stored = await ownedOutline(api, user, outlineId);
+    await ownOutlineDeck(api, user, deckId, CHOSEN_DECK_MISSING);
+    const outline =
+      stored.deckId === deckId
+        ? stored
+        : await api.repos.outlines.put({ ...stored, deckId, updatedAt: now.toISOString() });
+    return { outline, sync: await syncOutlineCards(api, user, outline, now) };
+  });
 }
 
 /**

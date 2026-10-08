@@ -8,7 +8,7 @@
 - Bloques 9 y 10 terminados. Bloque 8 (contenido demo) pausado con 4 de 6 lotes y sin mazos (D-050)
 - Fase C con sus 10 bloques programados y el cierre de 15.1 hecho. Espera la aprobación de Ricardo, ver su sección. Hay 20 de 28 pantallas construidas y 8 siguen como esqueleto con aviso de Próximamente
 - Reunión del equipo del 2026-10-07 aplicada (D-087). Repaso y simulador más prácticos, sin pregunta de confianza por defecto y con retroalimentación al final, Repasar y Mazos unidos, precio mensual de 150 y plan Fundador, banco de 4 a 10 opciones con plantilla de Excel y un solo dispositivo por cuenta. El precio Fundador de 79 ya está confirmado. Falta que Ricardo ejecute el SQL del dispositivo único
-- Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. La Etapa 1 está aprobada y publicada (PR 20). La Etapa 2, carga diaria, está programada y en cierre de 15.1, ver su sección
+- Fase C2 aprobada en plan por Ricardo el 2026-10-07 (D-085 y D-086). Nace de la guía de Anki y su conversación completa está en docs/ANALISIS_GUIA_ANKI.md. Las etapas 1 y 2 están aprobadas y publicadas (PR 20 y PR 21). La Etapa 3, apuntes, está programada y con su cierre de 15.1 hecho, ver su sección. Ricardo pidió seguir con las etapas 4 a 6 sin pausas de aprobación
 - Fase P en curso (D-060). Bloques 1 a 4 terminados, 7 y 9 a medias, 5, 6 y 8 sin empezar, ver su sección
 - Compactación de pantallas terminada con sus 6 bloques e integrada a la rama de trabajo el 2026-10-06 (D-078). Había quedado sin juntar con main
 - Pruebas e2e al día y corriendo en el CI en un trabajo aparte (D-079). 94 pasan, con los flujos 1, 2, 5 y 6 nuevos. Encontraron 4 defectos reales que se corrigieron
@@ -40,7 +40,11 @@
 - El registro de pantallas pasa de 29 a 30
 
 ### Evidencia de cierre (15.1)
-EVIDENCIA3
+- npm run check limpio. Typecheck y lint sin errores y 1,588 pruebas unitarias pasan. En la corrida completa una prueba de seguridad que recorre dist se pasó de sus 5 segundos por la carga en paralelo, pasa sola en 8 segundos y ahora tiene un tope de 60
+- e2e, 158 pasan en móvil y escritorio, con 3 flujos de apuntes nuevos. Escribir marcas y ver las tarjetas en Repasar, partir con Enter al inicio y volver a unir con Backspace comprobando en IndexedDB que la nota y su ID no cambian, y pegar varias líneas
+- Capturas en docs/screenshots/fase-c2-etapa3, la lista de apuntes y un apunte con marcas, en teléfono y escritorio, claro y oscuro
+- Revisión independiente con 14 hallazgos. Se corrigieron los 12 que afectan datos o uso, con pruebas nuevas, y los otros 2 quedaron documentados en D-090 (huecos sin número y un tiempo cuadrático que los topes del editor dejan en menos de 35 ms). Lo más grave era que Enter al inicio y Backspace en los bordes de una línea le quitaban el ID a la tarjeta y se perdía su historial, y que al pasar un tope el guardado rechazaba el apunte entero sin avisar
+- Las pruebas en Playwright necesitan PW_CHROMIUM_PATH=/opt/pw-browsers/chromium en este entorno, porque el Playwright del proyecto espera otra versión del navegador
 
 ### Pendiente
 - Siguen las etapas 4 a 6 sin pausas de aprobación, por indicación de Ricardo

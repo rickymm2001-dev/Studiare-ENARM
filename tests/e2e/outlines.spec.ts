@@ -71,6 +71,82 @@ test('un apunte con marcas da tarjetas, se actualiza al editar y se borra', asyn
   await expect(page.getByRole('button', { name: /^Repasar \d+ tarjetas?$/ })).toHaveCount(0);
 });
 
+/** Las notas que guarda el navegador, tal como están en IndexedDB, con las borradas incluidas */
+async function storedNotes(page: Page) {
+  return page.evaluate(
+    () =>
+      new Promise<{ id: string; outlineNodeId: string | null; deletedAt?: string | null }[]>(
+        (resolve, reject) => {
+          const open = indexedDB.open('enarm_real');
+          open.onerror = () => {
+            reject(new Error('No se pudo abrir la base'));
+          };
+          open.onsuccess = () => {
+            const all = open.result.transaction('notes', 'readonly').objectStore('notes').getAll();
+            all.onerror = () => {
+              reject(new Error('No se pudo leer las notas'));
+            };
+            all.onsuccess = () => {
+              open.result.close();
+              resolve(all.result as never);
+            };
+          };
+        },
+      ),
+  );
+}
+
+test('partir una línea con Enter al inicio y volverla a unir conserva su nota y su historial', async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  await signUp(page);
+  await createOutline(page, 'Historial');
+  await page.keyboard.type('Pregunta >> Respuesta');
+  await saved(page);
+  const [original] = await storedNotes(page);
+  expect(original).toBeDefined();
+
+  // Enter al inicio deja un renglón en blanco arriba. La línea con tarjeta sigue siendo la misma
+  await page.keyboard.press('Home');
+  await page.keyboard.press('Enter');
+  await expect(page.getByText(t.outlines.editor.saved, { exact: true })).toBeVisible({
+    timeout: 15_000,
+  });
+  await expect(page.getByText(t.outlines.preview.count(1))).toBeVisible();
+  let notes = await storedNotes(page);
+  expect(notes).toHaveLength(1);
+  expect(notes[0]).toMatchObject({ id: original?.id, outlineNodeId: original?.outlineNodeId });
+  expect(notes[0]?.deletedAt ?? null).toBeNull();
+
+  // Backspace al inicio quita el renglón en blanco y tampoco cambia la nota
+  await page.keyboard.press('Backspace');
+  await expect(editorOf(page).locator('li')).toHaveCount(1);
+  await expect(page.getByText(t.outlines.editor.saved, { exact: true })).toBeVisible({
+    timeout: 15_000,
+  });
+  notes = await storedNotes(page);
+  expect(notes).toHaveLength(1);
+  expect(notes[0]).toMatchObject({ id: original?.id, outlineNodeId: original?.outlineNodeId });
+  expect(notes[0]?.deletedAt ?? null).toBeNull();
+});
+
+test('pegar varias líneas hace varias líneas con su tarjeta cada una', async ({ page }) => {
+  test.setTimeout(120_000);
+  await signUp(page);
+  await createOutline(page, 'Pegado');
+  await page.evaluate(() => {
+    const target = document.querySelector('[role="textbox"]');
+    const data = new DataTransfer();
+    data.setData('text/plain', 'Q1 >> A1\nQ2 >> A2\nQ3 >> A3');
+    target?.dispatchEvent(
+      new ClipboardEvent('paste', { clipboardData: data, bubbles: true, cancelable: true }),
+    );
+  });
+  await expect(editorOf(page).locator('li')).toHaveCount(3);
+  await expect(page.getByText(t.outlines.preview.count(3))).toBeVisible();
+});
+
 test('los enlaces entre apuntes se resuelven y se crean desde el que los cita', async ({
   page,
 }) => {
